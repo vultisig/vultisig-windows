@@ -1,18 +1,17 @@
+import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 
-import { storage } from '../../../wailsjs/go/models'
 import { DnDList } from '../../lib/dnd/DnDList'
 import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../lib/ui/list/item/DnDItemContainer'
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation'
-import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../vault/state/currentVault'
-import { getStorageVaultId } from '../../vault/utils/storageVault'
 import { VaultListItem } from '../components/VaultListItem'
 import { VaultsContainer } from '../components/VaultsContainer'
 
@@ -32,11 +31,11 @@ export const ManageVaults = () => {
   return (
     <DnDList
       items={items}
-      getItemId={getStorageVaultId}
+      getItemId={getVaultId}
       onChange={(id, { index }) => {
         const order = getNewOrder({
           orders: items.map(item => item.order),
-          sourceIndex: items.findIndex(item => getStorageVaultId(item) === id),
+          sourceIndex: items.findIndex(item => getVaultId(item) === id),
           destinationIndex: index,
         })
 
@@ -47,11 +46,8 @@ export const ManageVaults = () => {
 
         setItems(prev =>
           sortEntitiesWithOrder(
-            prev.map(
-              item =>
-                (getStorageVaultId(item) === id
-                  ? { ...item, order }
-                  : item) as storage.Vault
+            prev.map(item =>
+              getVaultId(item) === id ? { ...item, order } : item
             )
           )
         )
@@ -63,7 +59,7 @@ export const ManageVaults = () => {
             {...draggableProps}
             {...dragHandleProps}
             status={status}
-            key={getStorageVaultId(item)}
+            key={getVaultId(item)}
           >
             <CurrentVaultProvider value={item}>
               <VaultListItem isDraggable />

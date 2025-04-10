@@ -1,11 +1,11 @@
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { HStack, VStack } from '../../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
-import { GradientText, Text } from '../../../../../lib/ui/text'
 import { PageContent } from '../../../../../ui/page/PageContent'
 
 const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000

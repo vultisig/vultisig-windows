@@ -1,9 +1,9 @@
 import { languages } from '@core/ui/i18n/Language'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { useLanguage } from '../../../preferences/state/language'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
@@ -19,9 +19,7 @@ const LanguageSettingsPage = () => {
     <VStack flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>{t('vault_settings_language')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('language')}</PageHeaderTitle>}
       />
       <PageSlice gap={16} flexGrow={true}>
         {languages.map((language, index) => {

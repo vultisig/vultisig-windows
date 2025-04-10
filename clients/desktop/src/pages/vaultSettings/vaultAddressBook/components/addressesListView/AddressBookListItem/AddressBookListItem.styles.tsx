@@ -1,16 +1,7 @@
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
-
-import { Text } from '../../../../../../lib/ui/text'
-import { getColor } from '../../../../../../lib/ui/theme/getters'
-
-export const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 32px;
-`
 
 export const ListItem = styled(motion.button)<{
   isEditModeOn: boolean
@@ -37,7 +28,7 @@ export const ListItem = styled(motion.button)<{
   column-gap: 8px;
 `
 
-export const ItemText = styled(Text)`
+const ItemText = styled(Text)`
   font-size: 14px;
 `
 

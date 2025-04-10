@@ -1,7 +1,7 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChildrenProp, InputProps } from '@lib/ui/props'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
 import { CollapsableStateIndicator } from '../../lib/ui/layout/CollapsableStateIndicator'
 import { PageHeaderTitle } from './PageHeaderTitle'
 

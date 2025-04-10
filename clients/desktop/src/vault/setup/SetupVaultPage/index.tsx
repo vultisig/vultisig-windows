@@ -1,23 +1,24 @@
+import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
+import { Match } from '@lib/ui/base/Match'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
+import { LightningIcon } from '@lib/ui/icons/LightningIcon'
+import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
-import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon'
-import { LightningIcon } from '../../../lib/ui/icons/LightningIcon'
-import ShieldCheckIcon from '../../../lib/ui/icons/ShieldCheckIcon'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { GradientText, Text } from '../../../lib/ui/text'
 import { ToggleSwitch } from '../../../lib/ui/toggle-switch/ToggleSwitch'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { getSetupVaultProperties } from '../type/SetupVaultType'
-import { useSetupVaultType } from '../type/state/setupVaultType'
+import { useVaultSecurityType } from '../type/state/vaultSecurityType'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
@@ -33,7 +34,7 @@ export const SetupVaultPage = () => {
   const { RiveComponent, stateMachineInput, isPlaying, onPlay } =
     useSetupVaultPageAnimation()
   const { t } = useTranslation()
-  const [value, setValue] = useSetupVaultType()
+  const [value, setValue] = useVaultSecurityType()
   const navigate = useAppNavigate()
   const theme = useTheme()
 
@@ -117,24 +118,28 @@ export const SetupVaultPage = () => {
           </div>
           <DescriptionWrapper alignItems="flex-start">
             <DescriptionTitleWrapper>
-              {value === 'fast' ? (
-                <GradientText weight={500}>
-                  {t(`${value}_vault_setup_title`)}
-                </GradientText>
-              ) : (
-                <Text color="primary" weight={500}>
-                  {t(`${value}_vault_setup_title`)}
-                </Text>
-              )}
+              <Match
+                value={value}
+                fast={() => (
+                  <GradientText weight={500}>
+                    {t(`vault_setup_prop.fast.title`)}
+                  </GradientText>
+                )}
+                secure={() => (
+                  <Text color="primary" weight={500}>
+                    {t(`vault_setup_prop.secure.title`)}
+                  </Text>
+                )}
+              />
             </DescriptionTitleWrapper>
             <DescriptionContentWrapper>
-              {getSetupVaultProperties(value).map(prop => (
+              {getVaultSecurityProperties(value, t).map(prop => (
                 <HStack key={prop} alignItems="center" gap={6}>
                   <IconWrapper>
                     <CheckIcon />
                   </IconWrapper>
                   <Text size={14} weight="600" color="contrast">
-                    {t(prop)}
+                    {prop}
                   </Text>
                 </HStack>
               ))}
@@ -153,7 +158,7 @@ const LightningGradientIconWrapper = styled.div`
   margin-top: -1px;
 `
 
-export const LightningIconWrapper = styled.div`
+const LightningIconWrapper = styled.div`
   font-size: 20px;
   margin-right: 3px;
 `

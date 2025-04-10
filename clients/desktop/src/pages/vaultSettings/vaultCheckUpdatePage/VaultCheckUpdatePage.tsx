@@ -1,10 +1,10 @@
+import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { Text } from '../../../lib/ui/text'
 import { ProductLogo } from '../../../ui/logo/ProductLogo'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

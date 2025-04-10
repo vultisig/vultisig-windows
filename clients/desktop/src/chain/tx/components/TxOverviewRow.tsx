@@ -1,7 +1,6 @@
+import { hStack, vStack } from '@lib/ui/layout/Stack'
+import { text } from '@lib/ui/text'
 import styled from 'styled-components'
-
-import { hStack, vStack } from '../../../lib/ui/layout/Stack'
-import { text } from '../../../lib/ui/text'
 
 export const TxOverviewRow = styled.div`
   ${hStack({

@@ -1,6 +1,6 @@
 import { UtxoChain } from '@core/chain/Chain'
 
-export type UtxoScriptType = 'wpkh' | 'pkh'
+type UtxoScriptType = 'wpkh' | 'pkh'
 
 export const utxoChainScriptType: Record<UtxoChain, UtxoScriptType> = {
   [UtxoChain.Bitcoin]: 'wpkh',

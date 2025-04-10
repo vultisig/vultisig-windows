@@ -1,13 +1,14 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text, TextColor } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { TFunction } from 'i18next'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { formatFee } from '../../../../chain/tx/fee/utils/formatFee'
 import { Skeleton } from '../../../../components/skeleton'
-import { VStack } from '../../../../lib/ui/layout/Stack'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
-import { Text, TextColor } from '../../../../lib/ui/text'
-import { getColor } from '../../../../lib/ui/theme/getters'
 import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
@@ -86,13 +87,13 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
           if (!totalBps) return null
 
           const toalBpsPercentage = totalBps / 100
-          const { color, label } = getPriceImpactVariant(toalBpsPercentage)
+          const { color, label } = getPriceImpactVariant(toalBpsPercentage, t)
 
           return (
             <RowComponent>
               <span>Price Impact</span>
               <Text color={color}>
-                {toalBpsPercentage}% ({t(label)})
+                {toalBpsPercentage}% ({label})
               </Text>
             </RowComponent>
           )
@@ -119,7 +120,8 @@ const FeesWrapper = styled(VStack)`
 `
 
 const getPriceImpactVariant = (
-  toalBpsPercentage: number
+  toalBpsPercentage: number,
+  t: TFunction
 ): {
   color: TextColor
   label: string
@@ -127,14 +129,14 @@ const getPriceImpactVariant = (
   toalBpsPercentage < 2.5
     ? {
         color: 'primary',
-        label: 'price_impact_good',
+        label: t('price_impact_good'),
       }
     : toalBpsPercentage < 5
       ? {
           color: 'idle',
-          label: 'price_impact_average',
+          label: t('price_impact_average'),
         }
       : {
           color: 'danger',
-          label: 'price_impact_high',
+          label: t('price_impact_high'),
         }

@@ -1,8 +1,7 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
 import { Currency, currencyName } from '@clients/extension/src/utils/constants'
-import messageKeys from '@clients/extension/src/utils/message-keys'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredCurrency,
   setStoredCurrency,
@@ -25,7 +24,7 @@ const Component = () => {
     setStoredCurrency(currency).then(() => {
       setState(prevState => ({ ...prevState, currency }))
 
-      goBack(routeKeys.settings.root)
+      goBack(appPaths.settings.root)
     })
   }
 
@@ -83,10 +82,10 @@ const Component = () => {
   return (
     <div className="layout currency-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.CURRENCY)}</span>
+        <span className="heading">{t('currency')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">

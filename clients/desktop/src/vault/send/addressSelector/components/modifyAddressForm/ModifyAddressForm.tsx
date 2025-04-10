@@ -1,6 +1,8 @@
 import { Chain } from '@core/chain/Chain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@lib/ui/buttons/Button'
+import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,8 +11,6 @@ import Select from 'react-select'
 import { z } from 'zod'
 
 import { AddressBookItem } from '../../../../../lib/types/address-book'
-import { Button } from '../../../../../lib/ui/buttons/Button'
-import { Text } from '../../../../../lib/ui/text'
 import { useUpdateAddressBookItemMutation } from '../../../../mutations/useUpdateAddressBookItemMutation'
 import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery'
 import { getCoinOptions } from '../../helpers/getCoinOptions'
@@ -47,6 +47,7 @@ const ModifyAddressForm = ({
   const addressSchema = getAddressSchema({
     walletCore,
     addressBookItems,
+    t,
   })
   type AddressFormValues = z.infer<typeof addressSchema>
 
@@ -130,14 +131,12 @@ const ModifyAddressForm = ({
           </FormField>
           {errors.title && (
             <Text color="danger" size={12}>
-              {t(errors.title.message || '')}
+              {errors.title.message}
             </Text>
           )}
         </div>
         <div>
-          <FormFieldLabel htmlFor="address">
-            {t('vault_settings_address_book_address_address_field')}
-          </FormFieldLabel>
+          <FormFieldLabel htmlFor="address">{t('address')}</FormFieldLabel>
           <FormField>
             <FormInput
               id="address"
@@ -147,7 +146,7 @@ const ModifyAddressForm = ({
           </FormField>
           {errors.address && (
             <Text color="danger" size={12}>
-              {t(errors.address.message || '')}
+              {errors.address.message}
             </Text>
           )}
         </div>
@@ -164,7 +163,7 @@ const ModifyAddressForm = ({
         </Button>
         {addAddressBookAddressError && (
           <Text color="danger" size={12}>
-            {t(extractErrorMsg(addAddressBookAddressError))}
+            {extractErrorMsg(addAddressBookAddressError)}
           </Text>
         )}
       </ButtonWrapper>

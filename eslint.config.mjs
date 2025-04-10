@@ -10,6 +10,7 @@ import jsxA11Y from 'eslint-plugin-jsx-a11y'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -46,6 +47,7 @@ export default [
       'jsx-a11y': jsxA11Y,
       'react-hooks': fixupPluginRules(reactHooks),
       'simple-import-sort': simpleImportSort,
+      'unused-imports': fixupPluginRules(unusedImportsPlugin),
     },
 
     languageOptions: {
@@ -68,6 +70,12 @@ export default [
       'jsx-a11y/no-autofocus': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-empty-object-type': [
+        'off',
+        { allowEmptyObject: true },
+      ],
+
+      'unused-imports/no-unused-imports': 'error',
 
       '@typescript-eslint/no-unused-vars': [
         'error',

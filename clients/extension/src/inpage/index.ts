@@ -6,7 +6,6 @@ import {
   ThorchainProviderRequest,
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
-import VULTI_ICON_RAW_SVG from './icon'
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import {
   CosmosMsgType,
@@ -57,6 +56,8 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
+
+import VULTI_ICON_RAW_SVG from './icon'
 
 enum NetworkKey {
   MAINNET = 'mainnet',

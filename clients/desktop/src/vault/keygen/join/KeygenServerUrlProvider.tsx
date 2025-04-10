@@ -1,9 +1,10 @@
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
+import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { ChildrenProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
-import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
@@ -11,11 +12,10 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
-import { useCurrentServiceName } from '../shared/state/currentServiceName'
 
 export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useMpcServerType()
-  const [serviceName] = useCurrentServiceName()
+  const [serviceName] = useMpcServiceName()
 
   const { t } = useTranslation()
 
@@ -31,10 +31,7 @@ export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
         <MpcServerUrlProvider value={value}>{children}</MpcServerUrlProvider>
       )}
       error={() => (
-        <FullPageFlowErrorState
-          title={t('join_keygen')}
-          message={t('failed_to_discover_mediator')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
       )}
       pending={() => (
         <>

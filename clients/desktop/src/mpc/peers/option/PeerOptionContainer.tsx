@@ -1,9 +1,8 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
-
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import { hStack } from '../../../lib/ui/layout/Stack'
-import { getColor } from '../../../lib/ui/theme/getters'
 
 export const peerOption = css`
   padding: 16px;

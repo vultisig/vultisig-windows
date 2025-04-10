@@ -7,7 +7,7 @@ import { GetVaultFolders } from '../../../../wailsjs/go/storage/Store'
 
 export const vaultFoldersQueryKey = ['vaultFolders']
 
-export const vaultFoldersQueryFn = async () => {
+const vaultFoldersQueryFn = async () => {
   const result = await GetVaultFolders()
 
   return sortEntitiesWithOrder(result ?? [])

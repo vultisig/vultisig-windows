@@ -3,15 +3,15 @@ import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder'
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
 import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types'
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index'
+import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import SquareAndPencilIcon from '@lib/ui/icons/SquareAndPencilIcon'
+import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AddressBookItem } from '../../../../../lib/types/address-book'
-import { Button } from '../../../../../lib/ui/buttons/Button'
-import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton'
-import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon'
-import { Text } from '../../../../../lib/ui/text'
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
 import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation'
@@ -216,7 +216,7 @@ const AddressesListView = ({
         </ListContext.Provider>
         <ButtonWrapper>
           <Button isLoading={isLoading} onClick={onOpenAddAddressView}>
-            {t('vault_settings_address_book_add_addresses_button')}
+            {t('add_address')}
           </Button>
           {error && (
             <Text color="danger" size={12}>

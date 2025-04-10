@@ -1,3 +1,4 @@
+import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -8,16 +9,15 @@ import {
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
 } from '../../../chain/tx/components/TxOverviewRow'
-import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { DepositConfirmButton } from '../DepositConfirmButton'
-import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
+import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 import { DepositFee } from '../fee/DepositFee'
 import { DepositFiatFee } from '../fee/DepositFiatFee'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
@@ -57,7 +57,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   const sender = useSender()
   const { t } = useTranslation()
   const actionFields = selectedChainAction
-    ? requiredFieldsPerChainAction[selectedChainAction]?.fields
+    ? getRequiredFieldsPerChainAction(t)[selectedChainAction]?.fields
     : []
 
   return (
@@ -86,7 +86,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
-                    {t(field.label)}
+                    {field.label}
                   </Text>
                   <StrictText>
                     {String(formattedDepositFormData[field.name])}{' '}
@@ -96,7 +96,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               ) : (
                 <TxOverviewColumn key={field.name}>
                   <Text size={18} weight={700}>
-                    {t(field.label)}
+                    {field.label}
                   </Text>
                   <StrictTextContrast>
                     {String(formattedDepositFormData[field.name])}
@@ -114,7 +114,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             )}
             <TxOverviewRow key="memo">
               <Text size={18} weight={700}>
-                {t('chainFunctions.memo')}
+                {t('memo')}
               </Text>
               <StrictTextContrast>
                 {String(formattedDepositFormData['memo'])}

@@ -1,24 +1,28 @@
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { VaultBackupFlow } from '../../backup/flow/VaultBackupFlow'
 import { hasServerSigner } from '../../fast/utils/hasServerSigner'
 import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { CurrentVaultProvider } from '../../state/currentVault'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { useKeygenMutation } from './mutations/useKeygenMutation'
 import { SaveVaultStep } from './SaveVaultStep'
+import { VaultKeygenEnding } from './VaultKeygenEnding'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
-  const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
+  const {
+    step,
+    mutate: startKeygen,
+    ...keygenMutationState
+  } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
 
   const { t } = useTranslation()
@@ -26,9 +30,9 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenType = useCurrentKeygenType()
 
   const title = match(keygenType, {
-    Keygen: () => t('creating_vault'),
-    Reshare: () => t('reshare'),
-    Migrate: () => t('migrate'),
+    create: () => t('creating_vault'),
+    reshare: () => t('reshare'),
+    migrate: () => t('upgrade'),
   })
 
   return (
@@ -42,7 +46,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             )}
             to={() => {
               if (hasServerSigner(vault.signers)) {
-                return <VaultBackupFlow />
+                return <VaultKeygenEnding />
               }
 
               return (
@@ -54,7 +58,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       onForward={onForward}
                     />
                   )}
-                  to={() => <VaultBackupFlow />}
+                  to={() => <VaultKeygenEnding />}
                 />
               )
             }}
@@ -70,7 +74,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       pending={() => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <SetupVaultEducationSlides />
+          <SetupVaultEducationSlides value={step} />
         </>
       )}
     />

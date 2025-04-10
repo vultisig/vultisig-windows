@@ -1,8 +1,8 @@
+import { Vault } from '@core/ui/vault/Vault'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { Transition } from '@lib/ui/base/Transition'
 import { TitleProp, ValueProp } from '@lib/ui/props'
 
-import { storage } from '../../../../wailsjs/go/models'
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { Transition } from '../../../lib/ui/base/Transition'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { KeygenBackup } from './KeygenBackup'
@@ -12,7 +12,7 @@ import { SaveVaultStep } from './SaveVaultStep'
 export const KeygenSuccessStep = ({
   title,
   value,
-}: TitleProp & ValueProp<storage.Vault>) => (
+}: TitleProp & ValueProp<Vault>) => (
   <StepTransition
     from={({ onForward }) => (
       <SaveVaultStep title={title} value={value} onForward={onForward} />

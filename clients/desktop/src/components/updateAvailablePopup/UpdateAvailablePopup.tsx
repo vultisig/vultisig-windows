@@ -1,8 +1,8 @@
+import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useVersionCheck from '../../lib/hooks/useVersionCheck'
-import { Text } from '../../lib/ui/text'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { ProductLogo } from '../../ui/logo/ProductLogo'
 import {

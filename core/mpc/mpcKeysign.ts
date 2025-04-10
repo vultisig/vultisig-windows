@@ -1,6 +1,5 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
-import { EventsEmit } from '@wailsapp/runtime'
 
 import { DKLSKeysign } from './dkls/dklsKeysign'
 import { SchnorrKeysign } from './schnorr/schnorrKeysign'
@@ -41,7 +40,6 @@ export class MPCKeysign {
   ) {
     const result = await match(algo, {
       ecdsa: async () => {
-        EventsEmit('PrepareVault')
         const dklsKeysign = new DKLSKeysign(
           this.serverURL,
           this.localPartyId,
@@ -53,7 +51,6 @@ export class MPCKeysign {
           this.isInitiateDevice,
           keyshare
         )
-        EventsEmit('ECDSA')
         return await dklsKeysign.startKeysign(messagesToSign)
       },
       eddsa: async () => {
@@ -68,7 +65,6 @@ export class MPCKeysign {
           this.isInitiateDevice,
           keyshare
         )
-        EventsEmit('EDDSA')
         return await schnorrKeysign.startKeysign(messagesToSign)
       },
     })

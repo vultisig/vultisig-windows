@@ -1,15 +1,15 @@
 import { degreesInCircle } from '@lib/utils/degreesToRadians'
 import { enforceRange } from '@lib/utils/enforceRange'
 
-export const hslaKeys = ['h', 's', 'l', 'a'] as const
+const hslaKeys = ['h', 's', 'l', 'a'] as const
 
-export type HSLAParameter = (typeof hslaKeys)[number]
+type HSLAParameter = (typeof hslaKeys)[number]
 
-export type ColorModifiers = Partial<
+type ColorModifiers = Partial<
   Record<HSLAParameter, (parameter: number) => number>
 >
 
-export const hslaParamMaxValue: Record<HSLAParameter, number> = {
+const hslaParamMaxValue: Record<HSLAParameter, number> = {
   h: degreesInCircle,
   s: 100,
   l: 100,

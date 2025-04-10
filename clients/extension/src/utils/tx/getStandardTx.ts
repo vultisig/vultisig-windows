@@ -5,6 +5,7 @@ import {
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { ethers } from 'ethers'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
@@ -70,6 +71,17 @@ const transactionHandlers: TransactionHandlers = {
       ? { amount: tx.value, decimals: chain.decimals }
       : undefined,
     data: tx.data,
+    gasSettings: {
+      maxFeePerGas: ethers.isHexString(tx.maxFeePerGas)
+        ? ethers.toBigInt(tx.maxFeePerGas).toString()
+        : tx.maxFeePerGas,
+      maxPriorityFeePerGas: ethers.isHexString(tx.maxPriorityFeePerGas)
+        ? ethers.toBigInt(tx.maxPriorityFeePerGas).toString()
+        : tx.maxPriorityFeePerGas,
+      gasLimit: ethers.isHexString(tx.gas)
+        ? ethers.toBigInt(tx.gas).toString()
+        : tx.gas,
+    },
   }),
 
   Ctrl: tx => ({

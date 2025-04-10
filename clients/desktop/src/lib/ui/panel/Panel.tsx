@@ -1,20 +1,19 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
-
-import { borderRadius } from '../css/borderRadius'
-import { toSizeUnit } from '../css/toSizeUnit'
-import { getColor } from '../theme/getters'
 
 type PanelProps = {
   withSections?: boolean
 }
 
-export const panelPaddingInPx = 16
+const panelPaddingInPx = 16
 
-export const panelPadding = css`
+const panelPadding = css`
   padding: ${toSizeUnit(panelPaddingInPx)};
 `
 
-export const panelBackground = css`
+const panelBackground = css`
   background: ${getColor('foreground')};
 `
 

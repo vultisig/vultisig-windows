@@ -1,24 +1,19 @@
-import { ComponentProps, FC, ReactNode } from 'react'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { IconButton } from '../../../lib/ui/buttons/IconButton'
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator'
-import { ChevronLeftIcon } from '../../../lib/ui/icons/ChevronLeftIcon'
-import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { PageContent } from '../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescriptions'
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations'
 import { RiveWrapper } from './Onobarding.styled'
-
-export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => ReactNode
-  onNextAnimation: () => void
-}
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void

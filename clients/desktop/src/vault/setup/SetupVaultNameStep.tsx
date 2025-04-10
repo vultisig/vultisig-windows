@@ -1,66 +1,66 @@
+import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
+import { useVaultNames } from '@core/ui/vault/state/vaults'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Button } from '@lib/ui/buttons/Button'
+import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
+import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { useMemo } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { ActionInsideInteractiveElement } from '../../lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '../../lib/ui/buttons/Button'
-import { iconButtonIconSizeRecord } from '../../lib/ui/buttons/IconButton'
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '../../lib/ui/css/textInput'
-import { CircledCloseIcon } from '../../lib/ui/icons/CircledCloseIcon'
 import { TextInput } from '../../lib/ui/inputs/TextInput'
-import { VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { useVaultNames } from '../hooks/useVaultNames'
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
 import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
-import { useVaultType } from './shared/state/vaultType'
-import { getDefaultVaultName } from './shared/utils/getDefaultVaultName'
-import { useVaultName } from './state/vaultName'
-
-export const vaultNameSchema = (existingNames: string[]) =>
-  z.object({
-    vaultName: z
-      .string()
-      .min(1, 'vault_name_required')
-      .max(MAX_VAULT_NAME_LENGTH, 'vault_name_max_length_error')
-      .refine(name => !existingNames.includes(name), {
-        message: 'vault_name_already_exists',
-      }),
-  })
-
-type VaultNameSchemaType = z.infer<ReturnType<typeof vaultNameSchema>>
 
 export const SetupVaultNameStep = ({
   onForward,
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
-  const [, setName] = useVaultName()
   const existingVaultNames = useVaultNames()
-  const vaultType = useVaultType()
-  const defaultVaultName = getDefaultVaultName(vaultType, existingVaultNames)
+
+  const vaultNameSchema = useMemo(
+    () =>
+      z.object({
+        vaultName: z
+          .string()
+          .min(1, t('vault_name_required'))
+          .max(MAX_VAULT_NAME_LENGTH, t('vault_name_max_length_error'))
+          .refine(name => !existingVaultNames.includes(name), {
+            message: t('vault_name_already_exists'),
+          }),
+      }),
+    [existingVaultNames, t]
+  )
+  const [name, setName] = useVaultName()
 
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<VaultNameSchemaType>({
-    resolver: zodResolver(vaultNameSchema(existingVaultNames)),
-    defaultValues: { vaultName: defaultVaultName },
+  } = useForm<z.infer<typeof vaultNameSchema>>({
+    resolver: zodResolver(vaultNameSchema),
+    defaultValues: { vaultName: name },
     mode: 'all',
   })
 
-  const onSubmit: SubmitHandler<VaultNameSchemaType> = ({ vaultName }) => {
+  const onSubmit: SubmitHandler<z.infer<typeof vaultNameSchema>> = ({
+    vaultName,
+  }) => {
     setName(vaultName)
     onForward()
   }
@@ -107,7 +107,7 @@ export const SetupVaultNameStep = ({
           />
           {errors.vaultName && errors.vaultName.message && (
             <Text color="danger" size={12}>
-              {t(errors.vaultName.message)}
+              {errors.vaultName.message}
             </Text>
           )}
         </VStack>

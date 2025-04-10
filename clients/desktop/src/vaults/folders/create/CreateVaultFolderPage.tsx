@@ -1,17 +1,17 @@
+import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
+import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NonEmptyOnly } from '../../../lib/ui/base/NonEmptyOnly'
-import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageFooter } from '../../../ui/page/PageFooter'
-import { useFolderlessVaults } from '../../../vault/queries/useVaultsQuery'
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
 import { useCreateVaultFolderMutation } from '../../folder/mutations/useCreateVaultFolderMutation'
 import { useVaultFolders } from '../queries/useVaultFoldersQuery'
@@ -33,7 +33,7 @@ export const CreateVaultFolderPage = () => {
     }
 
     if (names.includes(name)) {
-      return t('folder_already_exists')
+      return t('folder_name_already_exists')
     }
   }, [name, t, names])
 

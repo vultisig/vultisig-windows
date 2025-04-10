@@ -3,7 +3,13 @@ import { Chain } from '@core/chain/Chain'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { LinkIcon } from '@lib/ui/icons/LinkIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
@@ -20,14 +26,7 @@ import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { IconButton } from '../../../lib/ui/buttons/IconButton'
-import { CopyIcon } from '../../../lib/ui/icons/CopyIcon'
-import { LinkIcon } from '../../../lib/ui/icons/LinkIcon'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { Text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo'
 import { SwapTrackingLink } from './SwapTrackingLink'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
@@ -111,38 +110,29 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           {txHash}
         </Text>
       </VStack>
-
-      {swapPayload.value ? (
-        <KeysignSwapTxInfo value={value} />
-      ) : (
-        <>
-          {toAddress && (
-            <TxOverviewRow>
-              <span>{t('to')}</span>
-              <span>{toAddress}</span>
-            </TxOverviewRow>
-          )}
-          <TxOverviewAmount
-            value={fromChainAmount(BigInt(toAmount), decimals)}
-            ticker={coin.ticker}
-          />
-        </>
+      {toAddress && (
+        <TxOverviewRow>
+          <span>{t('to')}</span>
+          <span>{toAddress}</span>
+        </TxOverviewRow>
       )}
+      <TxOverviewAmount
+        value={fromChainAmount(BigInt(toAmount), decimals)}
+        ticker={coin.ticker}
+      />
       {memo && <TxOverviewMemo value={memo} />}
       {formattedToAmount && (
         <>
           <MatchQuery
             value={coinPriceQuery}
-            success={price =>
-              price ? (
-                <TxOverviewRow>
-                  <span>{t('value')}</span>
-                  <span>
-                    {formatAmount(formattedToAmount * price, fiatCurrency)}
-                  </span>
-                </TxOverviewRow>
-              ) : null
-            }
+            success={price => (
+              <TxOverviewRow>
+                <span>{t('value')}</span>
+                <span>
+                  {formatAmount(formattedToAmount * price, fiatCurrency)}
+                </span>
+              </TxOverviewRow>
+            )}
             error={() => null}
             pending={() => null}
           />

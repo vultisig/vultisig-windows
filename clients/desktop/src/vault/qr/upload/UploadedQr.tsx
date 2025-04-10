@@ -1,9 +1,9 @@
+import { ContainImage } from '@lib/ui/images/ContainImage'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnRemoveProp, ValueProp } from '@lib/ui/props'
 
-import { ContainImage } from '../../../lib/ui/images/ContainImage'
 import { DropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
 import { UploadedFileItem } from '../../../lib/ui/inputs/upload/UploadedFileItem'
-import { VStack } from '../../../lib/ui/layout/Stack'
 
 type UploadQrProps = ValueProp<File> & OnRemoveProp
 

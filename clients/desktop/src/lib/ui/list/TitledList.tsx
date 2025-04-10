@@ -1,15 +1,14 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { TitleProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
-
-import { VStack } from '../layout/Stack'
-import { Text } from '../text'
 
 const Container = styled(VStack)`
   gap: 12px;
 `
 
-export type TitledListProps = TitleProp &
+type TitledListProps = TitleProp &
   Omit<ComponentProps<typeof Container>, 'title'>
 
 export const TitledList = ({ children, title }: TitledListProps) => (

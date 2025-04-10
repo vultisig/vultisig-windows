@@ -20,7 +20,7 @@ export type NativeSwapQuote = {
   router?: string
 }
 
-export type NativeSwapFees = {
+type NativeSwapFees = {
   affiliate: string
   asset: string
   outbound: string

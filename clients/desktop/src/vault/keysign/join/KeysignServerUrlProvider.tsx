@@ -1,9 +1,9 @@
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { ChildrenProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
-import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
@@ -38,10 +38,7 @@ export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
         </MpcServerUrlProvider>
       )}
       error={() => (
-        <FullPageFlowErrorState
-          title={t('join_keysign')}
-          message={t('failed_to_discover_mediator')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
       )}
       pending={() => (
         <>

@@ -1,9 +1,9 @@
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Panel } from '../../lib/ui/panel/Panel'
-import { Text } from '../../lib/ui/text'
-import { getColor } from '../../lib/ui/theme/getters'
 import { pageConfig } from '../../ui/page/config'
 import { PageSlice } from '../../ui/page/PageSlice'
 

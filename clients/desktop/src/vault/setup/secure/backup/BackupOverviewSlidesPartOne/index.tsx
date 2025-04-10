@@ -1,23 +1,18 @@
-import { ComponentProps, FC, ReactNode } from 'react'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { IconButton } from '../../../../../lib/ui/buttons/IconButton'
-import { MultistepProgressIndicator } from '../../../../../lib/ui/flow/MultistepProgressIndicator'
-import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon'
-import { VStack } from '../../../../../lib/ui/layout/Stack'
-import { Text } from '../../../../../lib/ui/text'
-import { getColor } from '../../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { useCurrentVault } from '../../../../state/currentVault'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
-
-export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => ReactNode
-  onNextAnimation: () => void
-}
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -28,14 +23,14 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { keyshares } = vault
+  const { signers } = vault
   const {
     animations,
     handleNextAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useBackupOverviewStepsAnimations(keyshares.length)
+  } = useBackupOverviewStepsAnimations(signers.length)
 
   return (
     <PageContent>

@@ -1,5 +1,6 @@
-import { FolderIcon } from '../../../lib/ui/icons/FolderIcon'
-import { HStack } from '../../../lib/ui/layout/Stack'
+import { FolderIcon } from '@lib/ui/icons/FolderIcon'
+import { HStack } from '@lib/ui/layout/Stack'
+
 import { ListItem } from '../../../lib/ui/list/item/ListItem'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 

@@ -1,22 +1,11 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '../../../lib/ui/css/borderRadius'
-import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus'
-import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
-
-export const ChainBox = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  font-weight: 400;
-  font-size: 16px;
-  color: ${getColor('contrast')};
-`
 
 export const ChainButton = styled(UnstyledButton)`
   display: grid;

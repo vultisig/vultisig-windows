@@ -1,14 +1,12 @@
-import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
-
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
-import { ProcessVaultContainer } from './ProcessVaultContainer'
+import { ImportVaultFlow } from './ImportVaultFlow'
 import { ReadBackupFileStep } from './ReadBackupFileStep'
 
 export const ImportVaultFromFilePage = () => {
   return (
-    <ValueTransfer<VaultContainer>
-      from={({ onFinish }) => <ReadBackupFileStep onFinish={onFinish} />}
-      to={({ value }) => <ProcessVaultContainer value={value} />}
+    <ImportVaultFlow
+      renderBackupAcquisitionStep={({ onFinish }) => (
+        <ReadBackupFileStep onFinish={onFinish} />
+      )}
     />
   )
 }

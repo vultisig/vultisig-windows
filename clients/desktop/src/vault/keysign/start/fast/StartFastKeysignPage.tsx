@@ -1,22 +1,23 @@
-import { Match } from '../../../../lib/ui/base/Match'
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
-import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
-import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
+import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
+import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
-import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
-import { GeneratedMpcSessionIdProvider } from '../../../../mpc/session/state/mpcSession'
-import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
-import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password'
-import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey'
-import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType'
 import { useCurrentVault } from '../../../state/currentVault'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../../shared/state/keysignMessagePayload'
@@ -27,7 +28,7 @@ const keysignSteps = ['password', 'server', 'keysign'] as const
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>()
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -38,8 +39,8 @@ export const StartFastKeysignPage = () => {
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <PasswordProvider initialValue="">
-          <MpcLocalPartyIdProvider value={local_party_id}>
-            <GeneratedServiceNameProvider>
+          <MpcLocalPartyIdProvider value={localPartyId}>
+            <GeneratedMpcServiceNameProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <MpcServerTypeProvider initialValue="relay">
@@ -81,7 +82,7 @@ export const StartFastKeysignPage = () => {
                   </MpcServerTypeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedMpcSessionIdProvider>
-            </GeneratedServiceNameProvider>
+            </GeneratedMpcServiceNameProvider>
           </MpcLocalPartyIdProvider>
         </PasswordProvider>
       </KeysignMessagePayloadProvider>

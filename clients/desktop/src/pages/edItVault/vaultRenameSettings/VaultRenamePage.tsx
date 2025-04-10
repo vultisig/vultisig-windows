@@ -1,11 +1,12 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { useEffect, useMemo } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
@@ -19,14 +20,17 @@ import {
   InputFieldWrapper,
 } from './VaultRenamePage.styles'
 
-const renameSchema = z.object({
-  vaultName: z.string().min(2, 'vault_rename_page_name_error').max(50),
-})
-
 const VaultRenamePage = () => {
   const { t } = useTranslation()
   const goBack = useNavigateBack()
   const vault = useCurrentVault()
+  const renameSchema = useMemo(
+    () =>
+      z.object({
+        vaultName: z.string().min(2, t('vault_rename_page_name_error')).max(50),
+      }),
+    [t]
+  )
   const {
     register,
     handleSubmit,
@@ -48,7 +52,7 @@ const VaultRenamePage = () => {
 
   const onSubmit = (data: FieldValues) => {
     renameVault({
-      vault,
+      vaultId: getVaultId(vault),
       newName: data.vaultName,
     })
   }
@@ -71,7 +75,7 @@ const VaultRenamePage = () => {
       />
       <PageSlice gap={16} flexGrow={true}>
         <Text size={16} color="contrast" weight="600">
-          {t('vault_rename_page_name_title')}
+          {t('vault_name')}
         </Text>
         <VStack
           flexGrow={true}
@@ -87,7 +91,7 @@ const VaultRenamePage = () => {
               {errors.vaultName?.message && (
                 <Text size={12} color="danger">
                   {typeof errors.vaultName.message === 'string' &&
-                    t(errors.vaultName.message)}
+                    errors.vaultName.message}
                 </Text>
               )}
             </div>
@@ -97,7 +101,7 @@ const VaultRenamePage = () => {
             isDisabled={!isValid || !isDirty}
             type="submit"
           >
-            {t('vault_rename_page_submit_button_text')}
+            {t('save')}
           </ButtonWithBottomSpace>
           {error && (
             <Text size={12} color="danger">

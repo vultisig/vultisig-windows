@@ -1,14 +1,14 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { interactive } from '@lib/ui/css/interactive'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, OnClickProp } from '@lib/ui/props'
+import { text } from '@lib/ui/text'
+import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
-import { borderRadius } from '../../css/borderRadius'
-import { horizontalPadding } from '../../css/horizontalPadding'
-import { interactive } from '../../css/interactive'
-import { ChevronRightIcon } from '../../icons/ChevronRightIcon'
-import { HStack, hStack } from '../../layout/Stack'
-import { text } from '../../text'
-import { getHoverVariant } from '../../theme/getHoverVariant'
-import { getColor } from '../../theme/getters'
 import { DnDItemContentPrefix } from './DnDItemContentPrefix'
 
 const Container = styled.div<{ isInteractive: boolean }>`

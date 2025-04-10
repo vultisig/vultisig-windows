@@ -1,13 +1,13 @@
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
-import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
@@ -49,10 +49,7 @@ export const JoinKeygenSessionStep = ({
       value={mutationStatus}
       success={() => null}
       error={() => (
-        <FullPageFlowErrorState
-          title={title}
-          message={t('failed_to_join_session')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_join_session')} />
       )}
       pending={() => (
         <>

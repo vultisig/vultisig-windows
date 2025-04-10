@@ -153,5 +153,3 @@ async function getTriggerConstantContractFee(
 
   return totalSun.toString()
 }
-
-export { getTriggerConstantContractFee }

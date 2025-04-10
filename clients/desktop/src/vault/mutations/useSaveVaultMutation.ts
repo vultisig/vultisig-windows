@@ -1,48 +1,41 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
-import { storage } from '../../../wailsjs/go/models'
 import { SaveVault } from '../../../wailsjs/go/storage/Store'
 import { useDefaultChains } from '../../chain/state/defaultChains'
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries'
 import { createVaultDefaultCoins } from '../coins/createVaultDefaultCoins'
-import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery'
+import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { useCurrentVaultId } from '../state/currentVaultId'
-import { getStorageVaultId } from '../utils/storageVault'
+import { toStorageVault } from '../utils/storageVault'
 
 export const useSaveVaultMutation = (
-  options?: UseMutationOptions<any, any, storage.Vault, unknown>
+  options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
   const invalidateQueries = useInvalidateQueries()
   const walletCore = useAssertWalletCore()
-  const vaults = useVaults()
   const [, setCurrentVaultId] = useCurrentVaultId()
 
   const [defaultChains] = useDefaultChains()
 
   return useMutation({
-    mutationFn: async (vault: storage.Vault) => {
-      const order = getLastItemOrder(vaults.map(vault => vault.order))
-      const newVault: storage.Vault = {
-        ...vault,
-        order,
-        convertValues: () => {},
-      }
+    mutationFn: async (vault: Vault) => {
+      const storageVault = toStorageVault(vault)
 
-      await SaveVault(newVault)
+      await SaveVault(storageVault)
 
       await createVaultDefaultCoins({
-        vault: newVault,
+        vault,
         defaultChains,
         walletCore,
       })
 
       await invalidateQueries(vaultsQueryKey)
 
-      setCurrentVaultId(getStorageVaultId(newVault))
+      setCurrentVaultId(getVaultId(vault))
 
-      return newVault
+      return vault
     },
     ...options,
   })

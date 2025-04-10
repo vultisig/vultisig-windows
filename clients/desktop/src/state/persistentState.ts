@@ -1,5 +1,4 @@
 import { createPersistentStateHook } from '../lib/ui/state/createPersistentStateHook'
-import { createPersistentStateManager } from '../lib/ui/state/createPersistentStateManager'
 import { LocalStorage } from '../lib/ui/state/LocalStorage'
 import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
@@ -10,11 +9,8 @@ export enum PersistentStateKey {
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
   FiatCurrency = 'fiatCurrency',
-  AddressBook = 'addressBook',
-  FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',
-  HasAutoDiscoveryBeenDoneForChain = 'HasAutoDiscoveryBeenDoneForChain',
-  IsDklsLibEnabled = 'isDklsLibEnabled',
+  VaultCreationMpcLib = 'vaultCreationMpcLib',
 }
 
 const persistentStorage =
@@ -24,6 +20,3 @@ const persistentStorage =
 
 export const usePersistentState =
   createPersistentStateHook<PersistentStateKey>(persistentStorage)
-
-export const managePersistentState =
-  createPersistentStateManager<PersistentStateKey>(persistentStorage)

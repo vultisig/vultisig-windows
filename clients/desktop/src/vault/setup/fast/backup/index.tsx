@@ -1,18 +1,18 @@
+import { getVaultId } from '@core/ui/vault/Vault'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput'
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { Text } from '../../../../lib/ui/text'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
 import { useCurrentVault } from '../../../state/currentVault'
-import { getStorageVaultId } from '../../../utils/storageVault'
 
 const ON_COMPLETE_DELAY = 1000
 
@@ -22,7 +22,7 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   const { isPending, mutate, error, isSuccess } = useMutation({
     mutationFn: (code: string) =>
       verifyVaultEmailCode({
-        vaultId: getStorageVaultId(vault),
+        vaultId: getVaultId(vault),
         code,
       }),
   })

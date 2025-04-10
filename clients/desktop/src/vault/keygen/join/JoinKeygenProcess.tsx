@@ -1,9 +1,9 @@
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { TitleProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'
@@ -17,7 +17,7 @@ import { KeygenSuccessStep } from '../shared/KeygenSuccessStep'
 import { useKeygenMutation } from '../shared/mutations/useKeygenMutation'
 
 export const JoinKeygenProcess = ({ title }: TitleProp) => {
-  const { mutate: joinKeygen, ...joinKeygenState } = useKeygenMutation()
+  const { mutate: joinKeygen, step, ...joinKeygenState } = useKeygenMutation()
   const { keygenType } = useAppPathState<'joinKeygen'>()
 
   useEffect(joinKeygen, [joinKeygen])
@@ -31,16 +31,18 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
         <CurrentVaultProvider value={vault}>
           <Match
             value={keygenType}
-            Keygen={() => (
+            create={() => (
               <StepTransition
                 from={({ onForward }) => (
                   <SetupVaultSuccessScreen onForward={onForward} />
                 )}
-                to={() => <BackupSecureVault />}
+                to={() => (
+                  <BackupSecureVault onFinish={() => navigate('vault')} />
+                )}
               />
             )}
-            Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
-            Migrate={() => <KeygenSuccessStep value={vault} title={title} />}
+            reshare={() => <KeygenSuccessStep value={vault} title={title} />}
+            migrate={() => <KeygenSuccessStep value={vault} title={title} />}
           />
         </CurrentVaultProvider>
       )}
@@ -58,12 +60,12 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
       pending={() => (
         <Match
           value={keygenType}
-          Keygen={() => <SetupVaultEducationSlides />}
-          Migrate={() => <SetupVaultEducationSlides />}
-          Reshare={() => (
+          create={() => <SetupVaultEducationSlides value={step} />}
+          migrate={() => <SetupVaultEducationSlides value={step} />}
+          reshare={() => (
             <>
               <KeygenPageHeader title={title} />
-              <KeygenPendingState />
+              <KeygenPendingState value={step} />
             </>
           )}
         />

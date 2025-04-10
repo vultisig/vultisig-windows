@@ -1,14 +1,16 @@
+import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { VStack } from '@lib/ui/layout/Stack'
+import { ValueProp } from '@lib/ui/props'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
 
-import { useStepNavigation } from '../../../../../lib/ui/hooks/useStepNavigation'
-import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { DynamicEducationContent } from './components/DynamicEducationalContent'
 import { SlidesLoader } from './components/SlidesLoader'
 
 const SLIDE_DURATION_IN_MS = 6000
-export const steps = [
+const steps = [
   'multiFactor',
   'selfCustodial',
   'crossChain',
@@ -18,7 +20,9 @@ export const steps = [
 
 export type SetupFastVaultEducationSlidesStep = (typeof steps)[number]
 
-export const SetupVaultEducationSlides = () => {
+export const SetupVaultEducationSlides = ({
+  value,
+}: ValueProp<KeygenStep | null>) => {
   const { step, toNextStep } = useStepNavigation({ steps, circular: true })
   useInterval(() => toNextStep(), SLIDE_DURATION_IN_MS)
 
@@ -33,7 +37,7 @@ export const SetupVaultEducationSlides = () => {
         <VStack flexGrow justifyContent="center">
           <DynamicEducationContent value={step} />
         </VStack>
-        <SlidesLoader />
+        <SlidesLoader value={value} />
       </Wrapper>
     </PageContent>
   )

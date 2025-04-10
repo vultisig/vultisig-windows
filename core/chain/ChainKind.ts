@@ -1,6 +1,6 @@
 import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from './Chain'
 
-export const chainKindRecord = {
+const chainKindRecord = {
   [EvmChain.Arbitrum]: 'evm',
   [EvmChain.Avalanche]: 'evm',
   [EvmChain.Base]: 'evm',

@@ -1,4 +1,4 @@
-import { useCurrentVaultAddress } from '../../state/currentVault'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { useCurrentDepositCoin } from './useCurrentDepositCoin'
 
 export const useSender = () => {

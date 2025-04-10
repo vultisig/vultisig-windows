@@ -160,9 +160,9 @@ export class Schnorr {
     this.isKeygenComplete = false
     try {
       let session: KeygenSession
-      if (this.tssType === KeygenType.Keygen) {
+      if (this.tssType === 'create') {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
-      } else if (this.tssType === KeygenType.Migrate) {
+      } else if (this.tssType === 'migrate') {
         session = KeygenSession.migrate(
           this.setupMessage,
           this.localPartyId,
@@ -184,6 +184,7 @@ export class Schnorr {
           chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
         }
       }
+      throw new Error('Schnorr keygen failed')
     } catch (error) {
       if (error instanceof Error) {
         console.error('Schnorr keygen error:', error)
@@ -198,13 +199,12 @@ export class Schnorr {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startKeygen(i)
-        if (result !== undefined) {
-          return result
-        }
+        return result
       } catch (error) {
         console.error('Schnorr keygen error:', error)
       }
     }
+    throw new Error('Schnorr keygen failed')
   }
 
   private async startReshare(
@@ -309,5 +309,6 @@ export class Schnorr {
         console.error('schnorr reshare error:', error)
       }
     }
+    throw new Error('schnorr reshare failed')
   }
 }

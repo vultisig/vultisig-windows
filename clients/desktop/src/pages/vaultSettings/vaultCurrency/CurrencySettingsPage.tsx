@@ -1,10 +1,10 @@
 import { fiatCurrencies } from '@core/config/FiatCurrency'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
@@ -24,11 +24,7 @@ const CurrencySettingsPage = () => {
       <VStack flexGrow gap={16}>
         <PageHeader
           primaryControls={<PageHeaderBackButton />}
-          title={
-            <PageHeaderTitle>
-              {t('vault_currency_settings_page_header_title')}
-            </PageHeaderTitle>
-          }
+          title={<PageHeaderTitle>{t('currency')}</PageHeaderTitle>}
         />
         <StyledPageSlice gap={16} flexGrow={true}>
           {fiatCurrencies.map((fiat, index) => (

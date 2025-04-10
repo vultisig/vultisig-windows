@@ -1,6 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
+import { PartialMatch } from '@lib/ui/base/PartialMatch'
 
-import { PartialMatch } from '../../../../lib/ui/base/PartialMatch'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { ManageEvmFeeSettings } from './evm/ManageEvmFeeSettings'
 import { ManageFeeSettingsFrame } from './ManageFeeSettingsFrame'

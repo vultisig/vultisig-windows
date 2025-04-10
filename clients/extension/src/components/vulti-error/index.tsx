@@ -1,5 +1,5 @@
 import { TriangleWarning } from '@clients/extension/src/icons'
-import messageKeys from '@clients/extension/src/utils/message-keys'
+import { Text } from '@lib/ui/text'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,16 +19,18 @@ const Component: FC<ComponentProps> = ({ onClose, description, title }) => {
         <div className="vulti-error">
           <span className="badge">
             <TriangleWarning />
-            {t(messageKeys.ERROR)}
+            {t('error')}
           </span>
-          <span className="title">{title}</span>
+          <Text as="span" size={32} color="contrast" weight={700}>
+            {title}
+          </Text>
           <span className="description">{description}</span>
         </div>
       </div>
 
       <div className="footer">
         <Button onClick={onClose} type="default" shape="round" block>
-          {t(messageKeys.CLOSE)}
+          {t('close')}
         </Button>
       </div>
     </>

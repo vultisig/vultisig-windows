@@ -1,11 +1,11 @@
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC } from 'react'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { WaitForServerStates } from '../../server/components/WaitForServerStates'
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'
 
-export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
+export const SetupVaultServerStep: FC<OnForwardProp & Partial<OnBackProp>> = ({
   onForward,
   onBack,
 }) => {

@@ -18,5 +18,10 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "index.d.ts", "postcss.config.js"]
+  "include": [
+    "src",
+    "index.d.ts",
+    "postcss.config.js",
+    "../../core/ui/i18n/**/*.d.ts"
+  ]
 }

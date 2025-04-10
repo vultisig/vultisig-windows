@@ -1,7 +1,4 @@
-import { Point } from '@lib/utils/entities/Point'
 import { ElementType, ReactNode, SVGProps } from 'react'
-
-import { HSLA } from '../colors/HSLA'
 
 export type OnCloseProp = {
   onClose: () => void
@@ -45,20 +42,8 @@ export type InputProps<T> = {
   onChange: (value: T) => void
 }
 
-export type ErrorProp = {
-  error?: string
-}
-
 export type TitleProp = {
   title: ReactNode
-}
-
-export type StyledColorProp = {
-  $color: HSLA
-}
-
-export type OnSelectProp<T> = {
-  onSelect: (value: T) => void
 }
 
 export type UiProps = {
@@ -70,38 +55,16 @@ export type LabelProp = {
   label: ReactNode
 }
 
-export type PromptProps = {
-  onSuccess: () => void
-  onCancel: () => void
-}
-
 export type ValueProp<T> = {
   value: T
-}
-
-export type InitialValueProp<T> = {
-  initialValue: T
 }
 
 export type OptionsProp<T> = {
   options: readonly T[]
 }
 
-export type ActionGuardProps<T = () => void | Promise<void>> = {
-  action: T
-  render: (params: { action: T }) => ReactNode
-}
-
-export type WidthProp = {
-  width: number
-}
-
 export type IsActiveProp = {
   isActive?: boolean
-}
-
-export type IsSelectedProp = {
-  isSelected: boolean
 }
 
 export type IsDisabledProp = {
@@ -120,53 +83,12 @@ export type AsProp<T extends ElementType = ElementType> = {
   as?: T
 }
 
-export type IsDraggingProp = {
-  isDragging?: boolean
-}
-
-export type ProgressProps = {
-  target: number
-  current: number
-}
-
-export type PositionProp = {
-  position: Point
-}
-
-export type ColorProp = {
-  color: HSLA
-}
-
 export type ActionProp = {
   action: ReactNode
 }
 
-export type OnSubmitProp = {
-  onSubmit: () => void
-}
-
-export type ItemsProp<T> = {
-  items: readonly T[]
-}
-
-export type RenderItemProp<T> = {
-  renderItem: (item: T) => ReactNode
-}
-
-export type SizeProp<T = number> = {
-  size: T
-}
-
 export type StatusProp<T> = {
   status: T
-}
-
-export type NameProp = {
-  name: string
-}
-
-export type KindProp<T> = {
-  kind: T
 }
 
 export type SvgProps = SVGProps<SVGSVGElement>

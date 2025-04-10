@@ -1,10 +1,10 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup'
-import { toSizeUnit } from '../../lib/ui/css/toSizeUnit'
-import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon'
-import { VStack } from '../../lib/ui/layout/Stack'
 import { makeAppPath } from '../../navigation'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'

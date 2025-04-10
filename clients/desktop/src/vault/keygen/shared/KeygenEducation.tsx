@@ -1,11 +1,10 @@
+import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text, text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
-
-import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text, text } from '../../../lib/ui/text'
 
 type KeygenEducation = {
   title: ReactNode

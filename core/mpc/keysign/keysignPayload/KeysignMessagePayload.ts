@@ -4,9 +4,7 @@ import {
   KeysignPayload,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
-export const keysignMessagePayloadTypes = ['custom', 'keysign'] as const
-export type KeysignMessagePayloadType =
-  (typeof keysignMessagePayloadTypes)[number]
+type KeysignMessagePayloadType = 'custom' | 'keysign'
 
 interface KeysignMessagePayloadMap {
   custom: CustomMessagePayload

@@ -1,10 +1,10 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { Checkbox } from '../../../lib/ui/inputs/checkbox/Checkbox'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
 
 const StyledModal = styled(Modal)`

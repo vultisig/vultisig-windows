@@ -1,27 +1,33 @@
-import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { ActionProp, MessageProp } from '@lib/ui/props'
+import styled from 'styled-components'
 
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../page/PageHeader'
 import { PageHeaderBackButton } from '../page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../page/PageHeaderTitle'
 import { FlowErrorPageContent } from './FlowErrorPageContent'
 
-type FullPageFlowErrorStateProps = TitleProp &
-  Partial<ActionProp> &
+type FullPageFlowErrorStateProps = Partial<ActionProp> &
   MessageProp & {
     errorMessage?: string
   }
 
 export const FullPageFlowErrorState = ({
-  title,
   action,
   message,
   errorMessage,
 }: FullPageFlowErrorStateProps) => {
+  const navigate = useAppNavigate()
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+        secondaryControls={
+          <CloseButton onClick={() => navigate('vault')}>
+            <CloseIcon />
+          </CloseButton>
+        }
       />
       <FlowErrorPageContent
         action={action}
@@ -31,3 +37,7 @@ export const FullPageFlowErrorState = ({
     </>
   )
 }
+
+const CloseButton = styled(UnstyledButton)`
+  font-size: 20px;
+`

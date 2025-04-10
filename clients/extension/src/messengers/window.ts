@@ -1,7 +1,7 @@
 import {
   CallbackFunction,
-  SendMessage,
   createMessenger,
+  SendMessage,
 } from './createMessenger'
 import { isValidReply } from './isValidReply'
 import { isValidSend } from './isValidSend'

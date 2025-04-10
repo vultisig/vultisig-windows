@@ -1,4 +1,3 @@
-
 import { createMessenger } from './createMessenger'
 import { detectScriptType } from './detectScriptType'
 import { tabMessenger } from './tab'
