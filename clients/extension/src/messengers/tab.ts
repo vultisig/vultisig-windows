@@ -75,7 +75,7 @@ export const tabMessenger = createMessenger({
     ) => {
       if (!isValidSend({ message, topic })) return
 
-      const repliedTopic = message.topic.replace('>', '<')
+      const repliedTopic = message.topic.replace(/>/g, '<')
 
       const [tab] = await getActiveTabs()
 

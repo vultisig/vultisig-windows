@@ -48,7 +48,7 @@ export const windowMessenger = createMessenger({
         error = error_
       }
 
-      const repliedTopic = event.data.topic.replace('>', '<')
+      const repliedTopic = event.data.topic.replace(/>/g, '<')
       window.postMessage({
         topic: repliedTopic,
         payload: { error, response },
