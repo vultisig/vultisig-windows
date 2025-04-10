@@ -1,10 +1,17 @@
 import { keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   KeygenVault,
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -15,14 +22,7 @@ import { useCallback, useMemo } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
-import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
-import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { useVaults } from '../../../queries/useVaultsQuery'
-import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
-import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { fromStorageVault, toStorageVault } from '../../../utils/storageVault'
-import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { KeygenResolver } from './KeygenResolver'
 
 export const useGg20Keygen = (): KeygenResolver => {
@@ -61,7 +61,7 @@ export const useGg20Keygen = (): KeygenResolver => {
 
       try {
         return match<KeygenType, Promise<Vault>>(keygenType, {
-          [KeygenType.Keygen]: async () => {
+          create: async () => {
             const { name } = getRecordUnionValue(keygenVault, 'newVault')
 
             const storageVault = await StartKeygen(
@@ -79,7 +79,7 @@ export const useGg20Keygen = (): KeygenResolver => {
               order: getLastItemOrder(vaultOrders),
             }
           },
-          [KeygenType.Reshare]: async () => {
+          reshare: async () => {
             return matchRecordUnion<KeygenVault, Promise<Vault>>(keygenVault, {
               existingVault: async existingVault => {
                 const storageVault = await Reshare(
@@ -126,7 +126,7 @@ export const useGg20Keygen = (): KeygenResolver => {
               },
             })
           },
-          [KeygenType.Migrate]: () => {
+          migrate: () => {
             throw new Error('Migrate is not supported for GG20')
           },
         })

@@ -1,6 +1,6 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 
-import { useVaults } from '../../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../../state/currentVault'
 import { CurrentVaultCoinsProvider } from '../../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../../state/currentVaultId'

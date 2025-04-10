@@ -1,5 +1,5 @@
 import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
+import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
@@ -14,7 +14,7 @@ export type DatBackup = {
   pubKeyEdDSA: string
   hexChainCode: string
   localPartyID: string
-  libType?: MpcLib
+  libType: MpcLib
 }
 
 type DatBackupKeyshare = {
@@ -48,7 +48,7 @@ export const fromDatBackup = (backup: DatBackup): Vault => {
     hexChainCode: backup.hexChainCode,
     localPartyId: backup.localPartyID,
     keyShares,
-    libType: backup.libType ?? defaultMpcLib,
+    libType: backup.libType,
     isBackedUp: true,
     order: 0,
   }

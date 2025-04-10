@@ -160,9 +160,9 @@ export class Schnorr {
     this.isKeygenComplete = false
     try {
       let session: KeygenSession
-      if (this.tssType === KeygenType.Keygen) {
+      if (this.tssType === 'create') {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
-      } else if (this.tssType === KeygenType.Migrate) {
+      } else if (this.tssType === 'migrate') {
         session = KeygenSession.migrate(
           this.setupMessage,
           this.localPartyId,

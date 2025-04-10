@@ -1,10 +1,8 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { Vault } from '@core/ui/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
 
 import { GetVaults } from '../../../wailsjs/go/storage/Store'
 import { fromStorageCoin } from '../../storage/storageCoin'
@@ -39,27 +37,4 @@ export const useVaultsQuery = () => {
     queryKey: vaultsQueryKey,
     queryFn: vaultsQueryFn,
   })
-}
-
-export const useVaults = () => {
-  const { data } = useVaultsQuery()
-  if (!data || data.length === 0) {
-    return []
-  }
-  return shouldBePresent(data)
-}
-
-export const useFolderlessVaults = () => {
-  const vaults = useVaults()
-
-  return useMemo(() => vaults.filter(({ folderId }) => !folderId), [vaults])
-}
-
-export const useFolderVaults = (folderId: string) => {
-  const vaults = useVaults()
-
-  return useMemo(
-    () => vaults.filter(vault => vault.folderId === folderId),
-    [vaults, folderId]
-  )
 }

@@ -75,7 +75,7 @@ import {
 } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
-import { StrictMode, useEffect, useState } from 'react'
+import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
@@ -117,6 +117,7 @@ const Component = () => {
     keysignPayload,
   } = state
   const [messageApi, contextHolder] = message.useMessage()
+  const qrContainerRef = useRef<HTMLDivElement>(null)
 
   const handleApp = (): void => {
     window.open(keySignUrl, '_self')
@@ -142,6 +143,27 @@ const Component = () => {
             content: t('failed_to_copy_link'),
           })
         })
+    }
+  }
+
+  const exportQRCode = () => {
+    if (qrContainerRef.current) {
+      const canvas = qrContainerRef.current.querySelector('canvas')
+
+      if (canvas) {
+        try {
+          const dataURL = canvas.toDataURL('image/png')
+          const link = document.createElement('a')
+          link.href = dataURL
+          link.download = 'qrcode.png'
+          link.click()
+        } catch {
+          messageApi.open({
+            type: 'error',
+            content: 'failed to export qr', // t('failed_to_export_qr'),
+          })
+        }
+      }
     }
   }
 
@@ -608,6 +630,7 @@ const Component = () => {
         components: {
           Button: {
             colorBorder: 'transparent',
+            primaryColor: textPrimary,
             colorText: textPrimary,
             controlHeight: 46,
             fontWeight: 600,
@@ -629,6 +652,7 @@ const Component = () => {
           },
           Tooltip: {
             colorBgSpotlight: backgroundTertiary,
+            colorTextLightSolid: textPrimary,
           },
         },
         token: {
@@ -656,9 +680,19 @@ const Component = () => {
               <div className="card">
                 <div className="header">
                   <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span className="action">
-                    <Close />
-                  </span>
+                  <Tooltip title={t('close')}>
+                    <span
+                      className="action"
+                      onClick={handleClose}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') handleClose()
+                      }}
+                      tabIndex={0}
+                      role="button"
+                    >
+                      <Close />
+                    </span>
+                  </Tooltip>
                 </div>
                 <div className="content">
                   <div className="list">
@@ -720,29 +754,33 @@ const Component = () => {
                               <span className="label">
                                 {t('function_signature')}
                               </span>
-                              <div className="scrollable-x">
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionSignature
-                                }
-                              </div>
+                              <pre
+                                className="extra"
+                                style={{ paddingBottom: 8 }}
+                              >
+                                <code style={{ fontFamily: 'monospace' }}>
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionSignature
+                                  }
+                                </code>
+                              </pre>
                             </div>
                             <div className="item">
                               <span className="label">
                                 {t('function_inputs')}
                               </span>
-                              <div className="scrollable-x monospace-text ">
-                                <div style={{ width: 'max-content' }}>
-                                  <div className="function-inputs">
-                                    {
-                                      (
-                                        transaction.memo
-                                          .value as ParsedMemoParams
-                                      ).functionArguments
-                                    }
-                                  </div>
-                                </div>
-                              </div>
+                              <pre
+                                className="extra"
+                                style={{ paddingBottom: 8 }}
+                              >
+                                <code style={{ fontFamily: 'monospace' }}>
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionArguments
+                                  }
+                                </code>
+                              </pre>
                             </div>
                           </>
                         ) : transaction.memo?.value ? (
@@ -786,7 +824,7 @@ const Component = () => {
                     <ArrowLeft />
                   </span>
                 </div>
-                <div className="content">
+                <div className="content" ref={qrContainerRef}>
                   {fastSign ? (
                     <div className="steps">
                       <div className="item">
@@ -821,12 +859,15 @@ const Component = () => {
                       </div>
                     </div>
                   )}
-                  <QRCode
-                    bordered
-                    size={1000}
-                    value={keySignUrl || ''}
-                    color="white"
-                  />
+                  <Tooltip title={t('download_qr_code')}>
+                    <QRCode
+                      bordered
+                      size={1000}
+                      value={keySignUrl || ''}
+                      color="white"
+                      onClick={exportQRCode}
+                    />
+                  </Tooltip>
                   {fastSign ? null : (
                     <div className="devices">
                       <div

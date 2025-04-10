@@ -1,8 +1,8 @@
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { KeygenServerTypeIcon } from './KeygenServerTypeIcon'
 
 export const KeygenNetworkReminder = () => {

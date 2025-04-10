@@ -2,6 +2,7 @@ import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSig
 import { EvmChain } from '@core/chain/Chain'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW } from '@trustwallet/wallet-core'
+import base58 from 'bs58'
 import { keccak256 } from 'viem'
 
 export const getSignedEvmTx: GetSignedTxResolver<EvmChain> = async ({
@@ -12,11 +13,14 @@ export const getSignedEvmTx: GetSignedTxResolver<EvmChain> = async ({
     throw new Error('Invalid compiledTx: expected non-empty Uint8Array')
   }
   try {
-    const { errorMessage, encoded } =
-      TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
-    assertErrorMessage(errorMessage)
-    const txHash = keccak256(encoded)
-    return { raw: encoded, txResponse: txHash }
+    const output = TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
+
+    assertErrorMessage(output.errorMessage)
+
+    return {
+      raw: base58.encode(output.encoded),
+      txResponse: keccak256(output.encoded),
+    }
   } catch (error) {
     throw new Error(`Failed to decode EVM transaction: ${error}`)
   }
