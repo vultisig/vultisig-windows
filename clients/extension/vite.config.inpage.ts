@@ -12,9 +12,10 @@ export default defineConfig({
     copyPublicDir: false,
     rollupOptions: {
       input: {
-        content: path.resolve(__dirname, manifest.content),
+        inpage: path.resolve(__dirname, manifest.inpage),
       },
       output: {
+        format: 'iife',
         entryFileNames: '[name].js',
       },
     },

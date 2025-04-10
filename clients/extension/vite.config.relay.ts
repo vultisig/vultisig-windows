@@ -5,14 +5,17 @@ import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
-    emptyOutDir: true,
-    manifest: true,
-    outDir: 'dist/relay',
+    emptyOutDir: false,
+    manifest: false,
+    outDir: 'dist',
     assetsDir: '',
     copyPublicDir: false,
     rollupOptions: {
       input: {
-        index: path.resolve(__dirname, manifest.relay),
+        relay: path.resolve(__dirname, manifest.relay),
+      },
+      output: {
+        entryFileNames: '[name].js',
       },
     },
   },
