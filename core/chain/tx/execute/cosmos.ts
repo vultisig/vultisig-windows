@@ -7,7 +7,6 @@ import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
   chain,
-  walletCore, // eslint-disable-line @typescript-eslint/no-unused-vars
   compiledTx,
 }) => {
   const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx)
