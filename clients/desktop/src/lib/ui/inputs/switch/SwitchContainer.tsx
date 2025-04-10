@@ -1,8 +1,8 @@
+import { round } from '@lib/ui/css/round'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { round } from '../../css/round'
-import { toSizeUnit } from '../../css/toSizeUnit'
-import { matchColor } from '../../theme/getters'
 import { getSwitchWidth, switchConfig, SwitchSize } from './config'
 
 export const SwitchContainer = styled.div<{

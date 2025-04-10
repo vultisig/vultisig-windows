@@ -1,6 +1,6 @@
+import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
 import { ValueProp } from '@lib/ui/props'
 
-import { FileUpIcon } from '../../../lib/ui/icons/FileUpIcon'
 import { SaveAsImage } from '../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../ui/qr/PrintableQrCode'

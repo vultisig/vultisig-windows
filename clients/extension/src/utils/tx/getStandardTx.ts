@@ -70,6 +70,11 @@ const transactionHandlers: TransactionHandlers = {
       ? { amount: tx.value, decimals: chain.decimals }
       : undefined,
     data: tx.data,
+    gasSettings: {
+      maxFeePerGas: tx.maxFeePerGas,
+      maxPriorityFeePerGas: tx.maxPriorityFeePerGas,
+      gasLimit: tx.gas,
+    },
   }),
 
   Ctrl: tx => ({

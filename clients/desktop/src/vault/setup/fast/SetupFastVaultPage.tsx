@@ -1,7 +1,7 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { Match } from '@lib/ui/base/Match'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
@@ -21,8 +21,8 @@ import { PasswordProvider } from '../../server/password/state/password'
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep'
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
+import { CreateKeygenVaultProvider } from '../shared/CreateKeygenVaultProvider'
 import { VaultTypeProvider } from '../shared/state/vaultType'
-import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
@@ -63,7 +63,7 @@ export const SetupFastVaultPage = () => {
                           <ServerUrlDerivedFromServerTypeProvider>
                             <GeneratedMpcLocalPartyIdProvider>
                               <SetupVaultNameProvider>
-                                <StartKeygenVaultProvider>
+                                <CreateKeygenVaultProvider>
                                   <CurrentKeygenTypeProvider
                                     value={KeygenType.Keygen}
                                   >
@@ -112,7 +112,7 @@ export const SetupFastVaultPage = () => {
                                       />
                                     </PasswordHintProvider>
                                   </CurrentKeygenTypeProvider>
-                                </StartKeygenVaultProvider>
+                                </CreateKeygenVaultProvider>
                               </SetupVaultNameProvider>
                             </GeneratedMpcLocalPartyIdProvider>
                           </ServerUrlDerivedFromServerTypeProvider>

@@ -1,7 +1,7 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import { VStack } from '../../../../lib/ui/layout/Stack'
 import { ONBOARDING_ANIMATIONS } from '../hooks/useOnboardingStepsAnimations'
 import { VaultBackup } from './VaultBackup'
 import { VaultDevice } from './VaultDevice'

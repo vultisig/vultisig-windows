@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 
-import { Button } from '../../../buttons/Button'
 import { BodyPortal } from '../../../dom/BodyPortal'
-import { VStack } from '../../../layout/Stack'
 import { Backdrop } from '../../../modal/Backdrop'
 import { QueryOverlayContent } from './QueryOverlayContent'
 

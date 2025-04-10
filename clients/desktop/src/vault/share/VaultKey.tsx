@@ -1,8 +1,7 @@
+import { HStack } from '@lib/ui/layout/Stack'
 import { TitleProp, ValueProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import styled from 'styled-components'
-
-import { HStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 
 const StyledText = styled(Text)`
   align-self: flex-start;

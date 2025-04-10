@@ -1,20 +1,18 @@
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { randomIntegerInRange } from '@lib/utils/randomInRange'
 
-export const mpcDevices = [
-  'windows',
-  'mac',
-  'linux',
-  'iphone',
-  'ipad',
-  'android',
-  'server',
-] as const
-export type MpcDevice = (typeof mpcDevices)[number]
+type MpcDevice =
+  | 'windows'
+  | 'mac'
+  | 'linux'
+  | 'iphone'
+  | 'ipad'
+  | 'android'
+  | 'server'
 
 const localPartyIdSeparator = '-'
 
-export const currentMpcDevice: MpcDevice = 'windows'
+const currentMpcDevice: MpcDevice = 'windows'
 
 export const generateLocalPartyId = (device: MpcDevice = currentMpcDevice) => {
   const deviceName =
@@ -64,8 +62,7 @@ export const formatMpcDeviceName = (deviceName: string) => {
   return deviceName
 }
 
-export const deviceTypes = ['phone', 'tablet', 'desktop', 'server'] as const
-export type DeviceType = (typeof deviceTypes)[number]
+type DeviceType = 'phone' | 'tablet' | 'desktop' | 'server'
 
 const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   windows: 'desktop',
@@ -75,13 +72,4 @@ const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   ipad: 'tablet',
   android: 'phone',
   server: 'server',
-}
-
-export const getMpcDeviceType = (deviceName: string): DeviceType => {
-  const mpcDevice = mpcDeviceFromDeviceName(deviceName)
-  if (mpcDevice) {
-    return mpcDeviceType[mpcDevice]
-  }
-
-  return 'phone'
 }

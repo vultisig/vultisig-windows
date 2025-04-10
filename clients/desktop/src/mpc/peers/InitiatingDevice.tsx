@@ -1,8 +1,8 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { formatMpcDeviceName, parseLocalPartyId } from '../localPartyId'
 import { useMpcLocalPartyId } from '../localPartyId/state/mpcLocalPartyId'
 import { peerOption, peerOptionActive } from './option/PeerOptionContainer'
@@ -25,7 +25,7 @@ export const InitiatingDevice = () => {
         <Text color="contrast" size={14} weight="500">
           {formatMpcDeviceName(deviceName)}
           <Text color="shy" size={13} weight="500">
-            {t('thisDevice')}
+            {t('this_device')}
           </Text>
         </Text>
       </VStack>

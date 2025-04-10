@@ -5,9 +5,10 @@ import {
   SettingsTwo,
   Vultisig,
 } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { isSupportedChain } from '@clients/extension/src/utils/constants'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getIsPriority,
   getStoredChains,
@@ -20,9 +21,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
-
-import { isSupportedChain } from '../../../../utils/constants'
+import { Link } from 'react-router-dom'
 
 interface SelectOption {
   value: string
@@ -48,7 +47,7 @@ const ConnectedApp: FC<{ domain: string; onUnlink: () => void }> = ({
       <span className="name">{`${sld}.${tld}`}</span>
       <button className="btn" onClick={onUnlink}>
         <BrokenLink />
-        {t(messageKeys.UNLINK)}
+        {t('unlink')}
       </button>
     </div>
   )
@@ -60,7 +59,7 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { isPriority, networkOptions, selectedNetwork, vault } = state
   const [modal, contextHolder] = Modal.useModal()
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const [messageApi, messageContextHolder] = message.useMessage()
 
   const handleUnlink = (app: string): void => {
@@ -130,7 +129,7 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(messageKeys.RELOAD_MESSAGE),
+      content: t('reload_message'),
     })
   }
 
@@ -175,25 +174,25 @@ const Component = () => {
       <div className="layout main-page">
         <div className="header">
           <Vultisig className="logo" />
-          <span className="logo-type">{t(messageKeys.VULTISIG)}</span>
+          <span className="logo-type">{t('vultisig')}</span>
           <SettingsTwo
             className="icon icon-right"
-            onClick={() => navigate(routeKeys.settings.root, { state: true })}
+            onClick={() => navigate('settings.root')}
           />
         </div>
         <div className="content">
           <div className="list list-action list-arrow">
-            <Link to={routeKeys.vaults} state={true} className="list-item">
+            <Link to={appPaths.vaults} state={true} className="list-item">
               <span className="label">{vault.name}</span>
               <ArrowRight className="action" />
             </Link>
           </div>
           <div className="view">
             <Button onClick={handleViewinWeb} block>
-              {t(messageKeys.VIEW_IN_AIRDROP)}
+              {t('view_in_airdrop')}
             </Button>
           </div>
-          <span className="divider">{t(messageKeys.CURRENT_NETWORK)}</span>
+          <span className="divider">{t('current_network')}</span>
           <div>
             <Select
               className="select"
@@ -202,12 +201,12 @@ const Component = () => {
               onChange={value => handleChangeNetwork(value)}
             />
           </div>
-          <span className="divider">{t(messageKeys.CONNECTED_DAPPS)}</span>
+          <span className="divider">{t('connected_apps')}</span>
           <div className="apps">
             <div className="action">
               <div className="title">
-                {t(messageKeys.PRIORITIZE_VULTICONNECT)}
-                <Tooltip title={t(messageKeys.PRIORITIZE_VULTICONNECT_HINT)}>
+                {t('prioritize_vulticonnect')}
+                <Tooltip title={t('prioritize_vulticonnect_hint')}>
                   <CircleInfo className="icon" />
                 </Tooltip>
               </div>
@@ -225,7 +224,7 @@ const Component = () => {
                 />
               ))
             ) : (
-              <Empty description={t(messageKeys.NO_CONNECTED_APP)} />
+              <Empty description={t('no_connected_app')} />
             )}
           </div>
         </div>

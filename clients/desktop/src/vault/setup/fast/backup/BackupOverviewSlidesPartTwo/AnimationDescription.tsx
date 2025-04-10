@@ -1,8 +1,8 @@
+import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
-import { GradientText, Text } from '../../../../../lib/ui/text'
 
 export const AnimationDescription = () => {
   const { t } = useTranslation()
@@ -12,10 +12,8 @@ export const AnimationDescription = () => {
       <AnimatedVisibility>
         <TextWrapper>
           <Text size={32}>
-            {t('fastVaultSetup.backup.backUp')}{' '}
-            <GradientText as="span">
-              {t('fastVaultSetup.backup.this_vault')}
-            </GradientText>{' '}
+            {t('backup')}{' '}
+            <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
             {t('fastVaultSetup.backup.securely')}{' '}
             <GradientText as="span">
               {t('fastVaultSetup.backup.shareOnlineBackup')}
@@ -32,7 +30,7 @@ const Wrapper = styled.div`
   margin-inline: auto;
 `
 
-export const TextWrapper = styled.div`
+const TextWrapper = styled.div`
   margin-inline: auto;
   max-width: 1200px;
   text-align: center;

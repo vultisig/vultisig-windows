@@ -5,19 +5,22 @@ import {
   ITransaction,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
+import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { assertChainField } from '@core/chain/utils/assertChainField'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
@@ -73,6 +76,20 @@ export const getKeysignPayload = (
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
         })
+        switch (chainSpecific.case) {
+          case 'ethereumSpecific': {
+            chainSpecific.value.maxFeePerGasWei =
+              transaction.transactionDetails.gasSettings?.maxFeePerGas ??
+              chainSpecific.value.maxFeePerGasWei
+            chainSpecific.value.priorityFee =
+              transaction.transactionDetails.gasSettings
+                ?.maxPriorityFeePerGas ?? chainSpecific.value.priorityFee
+            chainSpecific.value.gasLimit =
+              transaction.transactionDetails.gasSettings?.gasLimit ??
+              chainSpecific.value.gasLimit
+            break
+          }
+        }
 
         const coin = create(CoinSchema, {
           chain: transaction.chain.chain,
@@ -116,6 +133,9 @@ export const getKeysignPayload = (
           coin,
           blockchainSpecific: chainSpecific,
         })
+        if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
+          keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
+        }
 
         resolve(keysignPayload)
       } catch (error) {

@@ -1,19 +1,15 @@
+import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { SearchIcon } from '../icons/SearchIcon'
-import { getColor } from '../theme/getters'
 
 interface SearchFieldProps {
   placeholderKey?: string
   onSearch?: (query: string) => void
 }
 
-export const SearchField: React.FC<SearchFieldProps> = ({
-  placeholderKey = 'search_field_placeholder',
-  onSearch,
-}) => {
+export const SearchField: React.FC<SearchFieldProps> = ({ onSearch }) => {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
@@ -38,7 +34,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder={!isFocused ? `  ${t(placeholderKey)}` : ''}
+        placeholder={!isFocused ? `  ${t('search_field_placeholder')}` : ''}
       />
     </Wrapper>
   )

@@ -1,9 +1,9 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button'
-import { VStack } from '../../lib/ui/layout/Stack'
 import { InfoBlock } from '../../lib/ui/status/InfoBlock'
-import { Text } from '../../lib/ui/text'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'

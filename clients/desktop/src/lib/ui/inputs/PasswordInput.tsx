@@ -1,11 +1,14 @@
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { EyeIcon } from '@lib/ui/icons/EyeIcon'
+import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ActionInsideInteractiveElement } from '../base/ActionInsideInteractiveElement'
-import { IconButton, iconButtonSizeRecord } from '../buttons/IconButton'
-import { textInputHeight, textInputHorizontalPadding } from '../css/textInput'
-import { useBoolean } from '../hooks/useBoolean'
-import { EyeIcon } from '../icons/EyeIcon'
-import { EyeOffIcon } from '../icons/EyeOffIcon'
 import { TextInput } from './TextInput'
 
 export const PasswordInput: React.FC<

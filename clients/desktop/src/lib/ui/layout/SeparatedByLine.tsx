@@ -1,8 +1,7 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { VStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { toSizeUnit } from '../css/toSizeUnit'
-import { getColor } from '../theme/getters'
-import { VStack } from './Stack'
 
 export const SeparatedByLine = styled(VStack)`
   > *:not(:last-child) {

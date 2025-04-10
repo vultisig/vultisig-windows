@@ -1,5 +1,9 @@
+import './index.scss'
+
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
   errorKey,
@@ -11,8 +15,6 @@ import {
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -20,10 +22,11 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Text } from '@lib/ui/text'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
 
@@ -41,14 +44,14 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { file, isWindows, loading, status, vault } = state
   const location = useLocation()
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate(routeKeys.main, { state: true })
+    else navigate('main')
   }
 
   const handleStart = (): void => {
@@ -251,11 +254,11 @@ const Component = () => {
   return isWindows ? (
     <div className="layout import-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.IMPORT_VAULT)}</span>
+        <span className="heading">{t('import_vault')}</span>
         {location.state && (
           <ArrowLeft
             className="icon icon-left"
-            onClick={() => goBack(routeKeys.main)}
+            onClick={() => goBack(appPaths.main)}
           />
         )}
       </div>
@@ -263,21 +266,22 @@ const Component = () => {
         <Upload.Dragger {...props} className={status}>
           <div className="state state-default">
             <img src="/images/qr-code.png" className="icon" alt="QR" />
-            <span className="title">{t(messageKeys.ADD_VAULT_QRCODE)}</span>
+            <Text color="contrast" weight={700}>
+              {t('add_vault_qrcode')}
+            </Text>
             <span className="desc">
-              {t(messageKeys.DROP_FILE_HERE_OR)}{' '}
-              <u>{t(messageKeys.UPLOAD_IT)}</u>
+              {t('drop_file_here_or')} <u>{t('upload_it')}</u>
             </span>
           </div>
           <div className="state state-hover">
             <img src="/images/upload.png" className="icon" alt="upload" />
-            <span className="title">{t(messageKeys.DROP_FILE_HERE)}</span>
+            <Text color="contrast" weight={700}>
+              {t('drop_file_here')}
+            </Text>
           </div>
           <div className="state state-done">
             <span className="msg">
-              {status === 'error'
-                ? t(messageKeys.IMPORT_FAILED)
-                : t(messageKeys.IMPORT_SUCCESSED)}
+              {status === 'error' ? t('import_failed') : t('import_successed')}
             </span>
             <img
               src={
@@ -298,7 +302,7 @@ const Component = () => {
           <CloseLG className="clear" onClick={handleClear} />
         )}
 
-        <span className="hint">{t(messageKeys.FIND_YOUR_QRCODE)}</span>
+        <span className="hint">{t('find_your_qrcode')}</span>
       </div>
       <div className="footer">
         <Button
@@ -309,14 +313,14 @@ const Component = () => {
           onClick={handleStart}
           block
         >
-          {t(messageKeys.IMPORT_VAULT)}
+          {t('import_vault')}
         </Button>
       </div>
     </div>
   ) : (
     <div className="layout import-page">
       <div className="content">
-        <div className="hint">{t(messageKeys.CONTINE_IN_NEW_WINDOW)}</div>
+        <div className="hint">{t('contine_in_new_window')}</div>
       </div>
     </div>
   )

@@ -8,13 +8,13 @@ import {
   Edge,
   extractClosestEdge,
 } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { BinIcon } from '@lib/ui/icons/BinIcon'
+import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getChainEntityIconSrc } from '../../../../../../chain/utils/getChainEntityIconSrc'
-import { UnstyledButton } from '../../../../../../lib/ui/buttons/UnstyledButton'
-import { BinIcon } from '../../../../../../lib/ui/icons/BinIcon'
-import { MenuIcon } from '../../../../../../lib/ui/icons/MenuIcon'
 import { useListContext } from '../list-context/useListContext'
 import {
   ColumnOneBothRowsItem,

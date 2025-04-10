@@ -1,4 +1,5 @@
-import { NonEmptyOnly } from '../../../lib/ui/base/NonEmptyOnly'
+import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
+
 import { useVaultFolders } from '../queries/useVaultFoldersQuery'
 import { FolderListItem } from './FolderListItem'
 import { VaultFoldersContainer } from './VaultFoldersContainer'

@@ -1,8 +1,8 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, ArrowRight } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -10,7 +10,6 @@ import {
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 interface InitialState {
   vault?: VaultProps
@@ -22,7 +21,7 @@ const Component = () => {
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
   const { vault, vaults } = state
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
 
   const handleSelect = (uid: string) => {
@@ -30,7 +29,7 @@ const Component = () => {
       vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
     )
       .then(() => {
-        goBack(routeKeys.main)
+        goBack(appPaths.main)
       })
       .catch(error => {
         console.error('Error setting stored vaults:', error)
@@ -50,10 +49,10 @@ const Component = () => {
   return vault ? (
     <div className="layout vaults-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.CHOOSE_VAULT)}</span>
+        <span className="heading">{t('choose_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.main)}
+          onClick={() => goBack(appPaths.main)}
         />
       </div>
       <div className="content">
@@ -61,13 +60,13 @@ const Component = () => {
           <div className="list-item">
             <span className="label">{vault?.name}</span>
             <span className="extra">
-              <span className="text">{t(messageKeys.ACTIVE)}</span>
+              <span className="text">{t('active')}</span>
             </span>
           </div>
         </div>
         {vaults.length > 1 && (
           <>
-            <span className="divider">{t(messageKeys.OTHER_VAULTS)}</span>
+            <span className="divider">{t('other_vaults')}</span>
             <div className="list list-arrow list-action">
               {vaults
                 .filter(({ uid }) => uid !== vault.uid)
@@ -87,11 +86,11 @@ const Component = () => {
       </div>
       <div className="footer">
         <Button
-          onClick={() => navigate(routeKeys.import, { state: true })}
+          onClick={() => navigate('import', { params: { from: 'vaults' } })}
           shape="round"
           block
         >
-          {t(messageKeys.ADD_NEW_VAULT)}
+          {t('add_new_vault')}
         </Button>
       </div>
     </div>

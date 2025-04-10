@@ -1,24 +1,23 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/vaults/index.scss'
 
-import ConfigProvider from '@clients/extension/src/components/config-provider'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
-import i18n from '@clients/extension/src/i18n/config'
 import { Vultisig } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
-  getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
+import { Text } from '@lib/ui/text'
 import { Button, Form, Radio } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   uid: string
@@ -69,99 +68,91 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then(language => {
-      i18n.changeLanguage(language)
-
-      getStoredRequest()
-        .then(({ sender }) => {
-          getStoredVaults().then(vaults => {
-            if (vaults.length) {
-              setState(prevState => ({
-                ...prevState,
-                sender,
-                vaults,
-                hasError: false,
-              }))
-            } else {
-              console.error('Failed to load vaults or request data')
-              setState(prevState => ({
-                ...prevState,
-                errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-                errorTitle: t(messageKeys.GET_VAULT_FAILED),
-                hasError: true,
-              }))
-            }
-          })
+    getStoredRequest()
+      .then(({ sender }) => {
+        getStoredVaults().then(vaults => {
+          if (vaults.length) {
+            setState(prevState => ({
+              ...prevState,
+              sender,
+              vaults,
+              hasError: false,
+            }))
+          } else {
+            console.error('Failed to load vaults or request data')
+            setState(prevState => ({
+              ...prevState,
+              errorDescription: t('get_vault_failed_description'),
+              errorTitle: t('get_vault_failed'),
+              hasError: true,
+            }))
+          }
         })
-        .catch(() => {
-          console.error('Failed to load vaults or request data')
-          setState(prevState => ({
-            ...prevState,
-            errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-            errorTitle: t(messageKeys.GET_VAULT_FAILED),
-            hasError: true,
-          }))
-        })
-    })
+      })
+      .catch(() => {
+        console.error('Failed to load vaults or request data')
+        setState(prevState => ({
+          ...prevState,
+          errorDescription: t('get_vault_failed_description'),
+          errorTitle: t('get_vault_failed'),
+          hasError: true,
+        }))
+      })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(componentDidMount, [])
 
   return (
-    <ConfigProvider>
-      <div className="layout">
-        {hasError ? (
-          <VultiError
-            onClose={handleClose}
-            description={errorDescription ?? ''}
-            title={errorTitle ?? ''}
-          />
-        ) : vaults.length ? (
-          <>
-            <div className="header">
-              <Vultisig className="logo" />
-              <span className="title">
-                {t(messageKeys.CONNECT_WITH_VULTISIG)}
-              </span>
-            </div>
-            <div className="content">
-              <Form form={form} onFinish={handleSubmit}>
-                <Form.Item<FormProps>
-                  name="uid"
-                  rules={[
-                    { required: true, message: t(messageKeys.SELECT_A_VAULT) },
-                  ]}
-                >
-                  <Radio.Group>
-                    {vaults.map(({ name, uid }) => (
-                      <Radio key={uid} value={uid}>
-                        <span className="name">{name}</span>
-                      </Radio>
-                    ))}
-                  </Radio.Group>
-                </Form.Item>
-                <Button htmlType="submit" />
-              </Form>
-            </div>
-            <div className="footer">
-              <Button onClick={handleClose} shape="round" block>
-                {t(messageKeys.CANCEL)}
-              </Button>
-              <Button onClick={handleSubmit} type="primary" shape="round" block>
-                {t(messageKeys.CONNECT)}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <VultiLoading />
-        )}
-      </div>
-    </ConfigProvider>
+    <div className="layout">
+      {hasError ? (
+        <VultiError
+          onClose={handleClose}
+          description={errorDescription ?? ''}
+          title={errorTitle ?? ''}
+        />
+      ) : vaults.length ? (
+        <>
+          <div className="header">
+            <Vultisig className="logo" />
+            <Text>{t('connect_with_vultisig')}</Text>
+          </div>
+          <div className="content">
+            <Form form={form} onFinish={handleSubmit}>
+              <Form.Item<FormProps>
+                name="uid"
+                rules={[{ required: true, message: t('select_vault') }]}
+              >
+                <Radio.Group>
+                  {vaults.map(({ name, uid }) => (
+                    <Radio key={uid} value={uid}>
+                      <span className="name">{name}</span>
+                    </Radio>
+                  ))}
+                </Radio.Group>
+              </Form.Item>
+              <Button htmlType="submit" />
+            </Form>
+          </div>
+          <div className="footer">
+            <Button onClick={handleClose} shape="round" block>
+              {t('cancel')}
+            </Button>
+            <Button onClick={handleSubmit} type="primary" shape="round" block>
+              {t('connect')}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <VultiLoading />
+      )}
+    </div>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <AppProviders>
+      <Component />
+    </AppProviders>
   </StrictMode>
 )

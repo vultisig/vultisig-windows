@@ -1,8 +1,7 @@
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote'
 import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
-export const swapTypes = ['native', 'general'] as const
-export type SwapType = (typeof swapTypes)[number]
+type SwapType = 'native' | 'general'
 
 interface SwapQuoteMap {
   native: NativeSwapQuote

@@ -18,9 +18,7 @@
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.22.0",
     "eslint": "^9.22.0",
-    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -28,19 +26,21 @@
     "prettier": "^3.5.3",
     "typescript": "^5.8.2",
     "vite": "^6.2.2",
-    "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vite-plugin-static-copy": "^2.3.0",
     "vitest": "^3.0.9"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
-    "@cosmjs/stargate": "^0.33.1",
-    "@mysten/sui": "^1.24.0",
-    "@polkadot/api": "^15.8.1",
-    "@solana/web3.js": "^2.0.0",
+    "@core/chain": "workspace:*",
+    "@core/config": "workspace:*",
+    "@core/mpc": "workspace:*",
+    "@core/ui": "workspace:*",
+    "@lib/ui": "workspace:*",
+    "@lib/utils": "workspace:*",
+    "@tanstack/query-core": "^5.69.0",
+    "@wailsapp/runtime": "workspace:^",
     "react-circular-progressbar": "^2.2.0",
-    "styled-components": "^6.1.16",
-    "xrpl": "^4.2.0"
+    "styled-components": "^6.1.16"
   }
 }

@@ -1,11 +1,10 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { InfoIcon } from '@lib/ui/icons/InfoIcon'
+import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, UiProps } from '@lib/ui/props'
+import { text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { borderRadius } from '../css/borderRadius'
-import { InfoIcon } from '../icons/InfoIcon'
-import { hStack } from '../layout/Stack'
-import { text } from '../text'
-import { getColor } from '../theme/getters'
 
 const IconWrapper = styled.div`
   font-size: 16px;

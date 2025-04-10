@@ -1,15 +1,14 @@
-import { OnFinishProp, OptionsProp } from '@lib/ui/props'
+import { VStack } from '@lib/ui/layout/Stack'
+import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
 import { FC, ReactNode, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
 import { SearchField } from '../../../lib/ui/search/SearchField'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
-  OptionsProp<T> & {
-    titleKey: string
+  OptionsProp<T> &
+  TitleProp & {
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
@@ -18,19 +17,18 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
 export const SelectItemModal = <T extends { id: string; chain?: string }>({
   onFinish,
   options,
-  titleKey,
+  title,
   optionComponent: OptionComponent,
   filterFunction,
   renderListHeader,
 }: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
-  const { t } = useTranslation()
 
   return (
     <Modal
       width={480}
       placement="center"
-      title={t(titleKey)}
+      title={title}
       onClose={() => onFinish()}
     >
       <VStack gap={20}>

@@ -57,7 +57,7 @@ func (t *TssService) Keysign(
 			return nil, fmt.Errorf("device %s in not in current vault's signers list", item)
 		}
 	}
-	runtime.EventsEmit(t.ctx, "PrepareVault")
+	runtime.EventsEmit(t.ctx, "prepareVault")
 	vaultShares := make(map[string]string)
 	for _, item := range vault.KeyShares {
 		vaultShares[item.PublicKey] = item.KeyShare
@@ -113,10 +113,10 @@ func (t *TssService) keysignWithRetry(
 	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp, messageID)
 	publicKey := vault.PublicKeyECDSA
 	if t.isEdDSA(tssType) {
-		runtime.EventsEmit(t.ctx, "EDDSA")
+		runtime.EventsEmit(t.ctx, "eddsa")
 		publicKey = vault.PublicKeyEdDSA
 	} else {
-		runtime.EventsEmit(t.ctx, "ECDSA")
+		runtime.EventsEmit(t.ctx, "ecdsa")
 	}
 	var resp *mtss.KeysignResponse
 	client := relay.NewClient(serverURL)

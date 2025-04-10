@@ -1,17 +1,17 @@
 import { Chain } from '@core/chain/Chain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Opener } from '@lib/ui/base/Opener'
+import { Button } from '@lib/ui/buttons/Button'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { Opener } from '../../../lib/ui/base/Opener'
-import { Button } from '../../../lib/ui/buttons/Button'
-import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
-import { IconWrapper } from '../../../lib/ui/icons/IconWrapper'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
@@ -40,7 +40,7 @@ type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
   selectedChainAction: ChainAction
   onSelectChainAction: (action: ChainAction) => void
-  chainActionOptions: string[]
+  chainActionOptions: ChainAction[]
   chain: Chain
 }
 
@@ -54,11 +54,15 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain)
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction)
+  const { data: totalAmountAvailableForChainData } =
+    useGetTotalAmountAvailableForChain(chain)
+  const totalTokenAmount =
+    totalAmountAvailableForChainData?.totalTokenAmount ?? 0
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
     chain,
-    selectedChainAction
+    selectedChainAction,
+    t
   )
   const [{ coin: chainCoinString }] = useAppPathParams<'deposit'>()
   const coin = chainCoinString.split(':')[1]
@@ -67,7 +71,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chainActionSchema,
     chain,
     walletCore,
-    totalAmountAvailable
+    totalTokenAmount
   )
 
   const {
@@ -137,8 +141,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <Container onClick={onOpen}>
                     <HStack alignItems="center" gap={4}>
                       <Text weight="400" family="mono" size={16}>
-                        {selectedBondableAsset ||
-                          t('chainFunctions.bond_with_lp.labels.bondableAsset')}
+                        {selectedBondableAsset || t('asset')}
                       </Text>
                       {!selectedBondableAsset && (
                         <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -171,12 +174,10 @@ export const DepositForm: FC<DepositFormProps> = ({
               {fieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
                   <Text size={15} weight="400">
-                    {t(
-                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                    )}{' '}
+                    {field.label}{' '}
                     {field.name === 'amount' &&
                       selectedChainAction === 'bond' &&
-                      `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}
+                      `(Balance: ${totalTokenAmount.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *

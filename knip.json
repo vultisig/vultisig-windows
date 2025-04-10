@@ -1,0 +1,38 @@
+{
+  "ignore": [
+    "core/mpc/types/**",
+    "clients/desktop/wailsjs/**",
+    "clients/extension/src/inpage/icon.ts",
+    "clients/extension/src/inpage/index.ts",
+    "clients/extension/src/messengers/bridge.ts",
+    "clients/extension/src/utils/functions.ts",
+    "clients/extension/src/messengers/createMessenger.ts",
+    "clients/extension/src/types/thorchain.ts",
+    "clients/extension/src/utils/constants.ts"
+  ],
+  "ignoreBinaries": ["tsx", "wails"],
+  "entry": [
+    "clients/extension/src/pages/popup/index.tsx",
+    "clients/extension/src/background/index.ts",
+    "clients/extension/src/content/index.ts",
+    "clients/extension/src/relay/index.ts",
+    "clients/extension/src/pages/accounts/index.tsx",
+    "clients/extension/src/pages/import/index.tsx",
+    "clients/extension/src/pages/transaction/index.tsx",
+    "clients/extension/src/pages/vault/index.tsx",
+    "clients/extension/src/pages/vaults/index.tsx"
+  ],
+  "ignoreDependencies": [
+    "@types/chrome",
+    "@fontsource/montserrat",
+    "@fontsource/roboto-mono",
+    "@keplr-wallet/provider",
+    "@solana/spl-token",
+    "mipd",
+    "lodash",
+    "@core/config",
+    "@keplr-wallet/types",
+    "@solana/web3.js",
+    "@types/lodash"
+  ]
+}

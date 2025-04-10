@@ -15,6 +15,7 @@ export default defineConfig({
         relay: path.resolve(__dirname, manifest.relay),
       },
       output: {
+        format: 'iife',
         entryFileNames: '[name].js',
       },
     },

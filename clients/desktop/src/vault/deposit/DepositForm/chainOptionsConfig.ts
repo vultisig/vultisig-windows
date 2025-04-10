@@ -1,34 +1,35 @@
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
+import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress'
 
-export const requiredFieldsPerChainAction = {
+export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
   bond: {
     fields: [
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.bond.labels.nodeAddress',
+        label: t('node_address'),
         required: true,
       },
       {
         name: 'provider',
         type: 'text',
-        label: 'chainFunctions.bond.labels.provider',
+        label: t('provider'),
         required: false,
       },
       {
         name: 'operatorFee',
         type: 'number',
-        label: 'chainFunctions.bond.labels.operatorFee',
+        label: t('operator_fee'),
         required: false,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.bond.labels.amount',
+        label: t('amount'),
         required: true,
       },
     ],
@@ -41,7 +42,7 @@ export const requiredFieldsPerChainAction = {
         nodeAddress: z
           .string()
           .refine(address => address.length > 0, {
-            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+            message: t('required_node_address'),
           })
           .refine(
             async address => {
@@ -52,7 +53,7 @@ export const requiredFieldsPerChainAction = {
               })
             },
             {
-              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+              message: t('invalid_node_address'),
             }
           ),
         provider: z.string().optional(),
@@ -67,10 +68,10 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(0.01, 'chainFunctions.bond.validations.amount')
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .min(0.01, t('amount'))
+              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
-                message: 'chainFunctions.bond.validations.amount',
+                message: t('amount'),
               })
           ),
       }),
@@ -105,7 +106,7 @@ export const requiredFieldsPerChainAction = {
         nodeAddress: z
           .string()
           .refine(address => address.length > 0, {
-            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+            message: t('required_node_address'),
           })
           .refine(
             async address => {
@@ -116,12 +117,10 @@ export const requiredFieldsPerChainAction = {
               })
             },
             {
-              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+              message: t('invalid_node_address'),
             }
           ),
-        bondableAsset: z
-          .string()
-          .min(1, 'chainFunctions.unbond_with_lp.validations.bondableAsset'),
+        bondableAsset: z.string().min(1, t('asset')),
         lpUnits: z
           .string()
           .optional()
@@ -130,11 +129,11 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(0.01, 'chainFunctions.bond.validations.lpUnits')
+              .min(0.01, t('lp_units'))
               // TODO: need to find out how to find the max amount of LP tokens
-              // .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
-                message: 'chainFunctions.bond.validations.lpUnits',
+                message: t('lp_units'),
               })
           ),
         amount: z
@@ -148,8 +147,8 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(0.01, 'chainFunctions.bond.validations.amount')
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .min(0.01, t('amount'))
+              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .optional()
           ),
       }),
@@ -175,12 +174,16 @@ export const requiredFieldsPerChainAction = {
         required: false,
       },
     ],
-    schema: (chain: Chain, walletCore: WalletCore) =>
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      _totalAmountAvailable: number
+    ) =>
       z.object({
         nodeAddress: z
           .string()
           .refine(address => address.length > 0, {
-            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+            message: t('required_node_address'),
           })
           .refine(
             async address => {
@@ -191,7 +194,7 @@ export const requiredFieldsPerChainAction = {
               })
             },
             {
-              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+              message: t('invalid_node_address'),
             }
           ),
         amount: z.string().transform(val => Number(val)),
@@ -228,7 +231,7 @@ export const requiredFieldsPerChainAction = {
         nodeAddress: z
           .string()
           .refine(address => address.length > 0, {
-            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+            message: t('required_node_address'),
           })
           .refine(
             async address => {
@@ -239,7 +242,7 @@ export const requiredFieldsPerChainAction = {
               })
             },
             {
-              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+              message: t('invalid_node_address'),
             }
           ),
         lpUnits: z
@@ -250,16 +253,14 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(0.01, 'chainFunctions.bond.validations.lpUnits')
+              .min(0.01, t('lp_units'))
               // TODO: need to find out how to find the max amount of LP tokens
-              // .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
-                message: 'chainFunctions.bond.validations.lpUnits',
+                message: t('lp_units'),
               })
           ),
-        bondableAsset: z
-          .string()
-          .min(1, 'chainFunctions.bond_with_lp.validations.bondableAsset'),
+        bondableAsset: z.string().min(1, t('asset')),
         amount: z
           .string()
           .optional()
@@ -271,8 +272,8 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(0.01, 'chainFunctions.bond.validations.amount')
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .min(0.01, t('amount'))
+              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .optional()
           ),
       }),
@@ -286,12 +287,16 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: (chain: Chain, walletCore: WalletCore) =>
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      _totalAmountAvailable: number
+    ) =>
       z.object({
         nodeAddress: z
           .string()
           .refine(address => address.length > 0, {
-            message: 'chainFunctions.leave.validations.nodeAddressMinLength',
+            message: t('required_node_address'),
           })
           .refine(
             async address => {
@@ -302,7 +307,7 @@ export const requiredFieldsPerChainAction = {
               })
             },
             {
-              message: 'chainFunctions.leave.validations.nodeAddressInvalid',
+              message: t('invalid_node_address'),
             }
           ),
       }),
@@ -323,8 +328,8 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chain: Chain,
-      walletCore: WalletCore,
+      _chain: Chain,
+      _walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
       z.object({
@@ -337,16 +342,16 @@ export const requiredFieldsPerChainAction = {
           .pipe(
             z
               .number()
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
-              .min(0, 'chainFunctions.custom.validations.amount')
+              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
+              .min(0, t('amount'))
               .refine(val => val >= 0, {
-                message: 'chainFunctions.custom.validations.amount',
+                message: t('amount'),
               })
               .optional()
           ),
         customMemo: z
           .string()
-          .min(1, 'chainFunctions.custom.validations.customMemo'),
+          .min(1, t('chainFunctions.custom.validations.customMemo')),
       }),
   },
   vote: {
@@ -364,12 +369,17 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      proposalId: z
-        .string()
-        .min(1, 'chainFunctions.vote.validations.proposalId'),
-      support: z.boolean(),
-    }),
+    schema: (
+      _chain: Chain,
+      _walletCore: WalletCore,
+      _totalAmountAvailable: number
+    ) =>
+      z.object({
+        proposalId: z
+          .string()
+          .min(1, t('chainFunctions.vote.validations.proposalId')),
+        support: z.boolean(),
+      }),
   },
   stake: {
     fields: [
@@ -386,20 +396,18 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      amount: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .positive()
-            .min(0.01, 'chainFunctions.stake.validations.amount')
-        ),
-      validatorAddress: z
-        .string()
-        .min(1, 'chainFunctions.stake.validations.validatorAddress'),
-    }),
+    schema: (
+      _chain: Chain,
+      _walletCore: WalletCore,
+      _totalAmountAvailable: number
+    ) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01, t('amount'))),
+        validatorAddress: z.string().min(1, t('validator_address')),
+      }),
   },
   unstake: {
     fields: [
@@ -410,10 +418,13 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      validatorAddress: z
-        .string()
-        .min(1, 'chainFunctions.unstake.validations.validatorAddress'),
-    }),
+    schema: (
+      _chain: Chain,
+      _walletCore: WalletCore,
+      _totalAmountAvailable: number
+    ) =>
+      z.object({
+        validatorAddress: z.string().min(1, t('validator_address')),
+      }),
   },
-}
+})

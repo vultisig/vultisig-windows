@@ -1,13 +1,13 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import {
+  MatchQuery,
+  MatchQueryWrapperProps,
+} from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import {
-  MatchQuery,
-  MatchQueryWrapperProps,
-} from '../../../../lib/ui/query/components/MatchQuery'
-import { useCurrentVaultCoin } from '../../../state/currentVault'
+import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 
 export const SendCoinBalanceDependant: React.FC<

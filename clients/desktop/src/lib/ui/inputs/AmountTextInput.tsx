@@ -1,10 +1,10 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { HStack } from '@lib/ui/layout/Stack'
+import { text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius'
-import { centerContent } from '../css/centerContent'
-import { HStack } from '../layout/Stack'
-import { text } from '../text'
 import { TextInput, TextInputProps } from './TextInput'
 
 type AmountTextInputProps = Omit<TextInputProps, 'value' | 'onValueChange'> & {
@@ -26,8 +26,8 @@ const UnitContainer = styled.div`
 
 const Input = styled(TextInput)`
   ${text({
-    family: 'mono',
     size: 16,
+    family: 'mono',
     weight: '400',
   })}
 `
@@ -57,7 +57,7 @@ export const AmountTextInput = ({
       label={
         <HStack
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-end"
           gap={16}
           fullWidth
         >

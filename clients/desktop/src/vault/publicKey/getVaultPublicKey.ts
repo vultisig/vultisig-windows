@@ -2,19 +2,16 @@ import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { storage } from '../../../wailsjs/go/models'
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService'
 
 type Input = {
   chain: Chain
   walletCore: WalletCore
-  vault: Pick<
-    storage.Vault,
-    'hex_chain_code' | 'public_key_ecdsa' | 'public_key_eddsa'
-  >
+  vault: Pick<Vault, 'hexChainCode' | 'publicKeys'>
 }
 
 export const getVaultPublicKey = async ({
@@ -37,12 +34,12 @@ export const getVaultPublicKey = async ({
   const derivedPublicKey = await match(keysignType, {
     ecdsa: () =>
       GetDerivedPubKey(
-        vault.public_key_ecdsa,
-        vault.hex_chain_code,
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode,
         walletCore.CoinTypeExt.derivationPath(coinType),
         false
       ),
-    eddsa: async () => vault.public_key_eddsa,
+    eddsa: async () => vault.publicKeys.eddsa,
   })
 
   const pubkey = walletCore.PublicKey.createWithData(

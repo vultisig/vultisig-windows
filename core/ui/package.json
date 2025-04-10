@@ -3,10 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit",
     "translate": "npx tsx i18n/scripts/translate.ts"
   },
   "dependencies": {
+    "@core/chain": "workspace:*",
+    "@core/mpc": "workspace:*",
+    "@lib/codegen": "workspace:*",
+    "@lib/ui": "workspace:*",
+    "@lib/utils": "workspace:*",
     "@trustwallet/wallet-core": "^4.2.15",
     "react": "^19.0.0"
   }

@@ -1,13 +1,13 @@
+import { getVaultId } from '@core/ui/vault/Vault'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
-import { useStateCorrector } from '../../lib/ui/state/useStateCorrector'
 import {
   PersistentStateKey,
   usePersistentState,
 } from '../../state/persistentState'
 import { useVaults } from '../queries/useVaultsQuery'
-import { getStorageVaultId } from '../utils/storageVault'
 
 export const useCurrentVaultId = (): [
   string | null,
@@ -17,7 +17,7 @@ export const useCurrentVaultId = (): [
 
   const getInitialVaultId = useCallback(() => {
     if (isEmpty(vaults)) return null
-    return getStorageVaultId(vaults[0])
+    return getVaultId(vaults[0])
   }, [vaults])
 
   const [currentVaultId, setCurrentVaultId] = useStateCorrector(
@@ -26,7 +26,7 @@ export const useCurrentVaultId = (): [
       getInitialVaultId
     ),
     (id: string | null) => {
-      const vault = vaults.find(vault => getStorageVaultId(vault) === id)
+      const vault = vaults.find(vault => getVaultId(vault) === id)
 
       return vault ? id : getInitialVaultId()
     }

@@ -175,5 +175,3 @@ async function sendRPCRequest<T>(
     throw error
   }
 }
-
-export { fetchTRC20TokenBalance, intRpcCall, sendRPCRequest }

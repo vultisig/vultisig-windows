@@ -1,8 +1,7 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { Button } from '../../../lib/ui/buttons/Button'
-import { VStack, vStack } from '../../../lib/ui/layout/Stack'
-import { getColor } from '../../../lib/ui/theme/getters'
 
 export const ContentWrapper = styled(VStack)`
   width: 550px;

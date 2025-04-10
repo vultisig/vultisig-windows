@@ -11,7 +11,7 @@ export const ManageVaultChainCoinsPrompt = ({ value }: ValueProp<Chain>) => {
 
   return (
     <Link to={makeAppPath('manageVaultChainCoins', { chain: value })}>
-      <ListAddButton as="div">{t('choose_coins')}</ListAddButton>
+      <ListAddButton as="div">{t('choose_tokens')}</ListAddButton>
     </Link>
   )
 }

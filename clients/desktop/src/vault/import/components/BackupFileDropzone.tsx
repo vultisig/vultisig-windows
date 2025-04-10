@@ -1,10 +1,10 @@
+import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
+import { Text } from '@lib/ui/text'
 import { t } from 'i18next'
 import { useDropzone } from 'react-dropzone'
 
-import { CloudUploadIcon } from '../../../lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent'
-import { Text } from '../../../lib/ui/text'
 import { vaultBackupExtensions } from '../VaultBackupExtension'
 
 type BackupFileDropzoneProps = {

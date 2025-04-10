@@ -1,15 +1,8 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { HStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '../../../lib/ui/css/borderRadius'
-import { HStack } from '../../../lib/ui/layout/Stack'
-import { getColor } from '../../../lib/ui/theme/getters'
-
-export const FaqBox = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  color: ${getColor('contrast')};
-`
 
 export const FaqButton = styled(UnstyledButton)`
   display: flex;

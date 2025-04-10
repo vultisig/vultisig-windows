@@ -1,6 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button'
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
@@ -41,9 +41,7 @@ const EmptyAddressesView = ({
             {t('vault_settings_address_book_no_addresses_title')}
           </ResponsiveText>
         </CenteredBox>
-        <Button onClick={onOpenAddAddressView}>
-          {t('vault_settings_address_book_add_addresses_button')}
-        </Button>
+        <Button onClick={onOpenAddAddressView}>{t('add_address')}</Button>
       </Container>
     </>
   )

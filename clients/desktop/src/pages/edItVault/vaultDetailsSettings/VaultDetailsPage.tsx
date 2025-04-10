@@ -1,7 +1,7 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
@@ -23,18 +23,11 @@ const VaultDetailsPage = () => {
     return <></>
   }
 
-  const {
-    name,
-    public_key_eddsa,
-    public_key_ecdsa,
-    signers,
-    local_party_id,
-    lib_type,
-  } = currentVault
+  const { name, publicKeys, signers, localPartyId, libType } = currentVault
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
-      local_party_id,
+      localPartyId,
     })
 
   const vaultTypeText = getVaultTypeText(signers.length, t)
@@ -43,14 +36,12 @@ const VaultDetailsPage = () => {
     <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>{t('vault_details_page_title')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('details')}</PageHeaderTitle>}
       />
       <PageSlice gap={12}>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
-            <Text weight={900}>{t('vault_details_page_vault_name')}</Text>
+            <Text weight={900}>{t('vault_name')}</Text>
             <Text color="supporting" size={13}>
               {name}
             </Text>
@@ -58,10 +49,9 @@ const VaultDetailsPage = () => {
         </ListItemPanel>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
-            <Text weight={900}>{t('vault_details_page_vault_part')}</Text>
+            <Text weight={900}>{t('vault_part')}</Text>
             <Text color="supporting" size={13}>
-              {t('vault_details_page_part_of_vault')} {localPartyIndex}{' '}
-              {t('vault_details_page_of_word')} {totalSigners}
+              {t('share')} {localPartyIndex} {t('of')} {totalSigners}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -69,7 +59,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_type')}</Text>
             <Text color="supporting" size={13}>
-              {lib_type}
+              {libType}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -77,7 +67,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_ECDSA')}</Text>
             <Text color="supporting" size={13}>
-              {public_key_ecdsa}
+              {publicKeys.ecdsa}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -85,7 +75,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_EDDSA')}</Text>
             <Text color="supporting" size={13}>
-              {public_key_eddsa}
+              {publicKeys.eddsa}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -97,8 +87,7 @@ const VaultDetailsPage = () => {
             <VStack fullWidth alignItems="start" justifyContent="space-between">
               <Text color="supporting" weight={900} size={13}>
                 {t('vault_details_page_signer_word')} {index + 1}: {signer}{' '}
-                {signer === local_party_id &&
-                  `(${t('vault_details_page_this_device')})`}
+                {signer === localPartyId && `(${t('this_device')})`}
               </Text>
             </VStack>
           </ListItemPanel>

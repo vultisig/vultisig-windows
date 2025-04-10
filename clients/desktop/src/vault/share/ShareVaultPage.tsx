@@ -1,10 +1,10 @@
+import { Button } from '@lib/ui/buttons/Button'
+import ShareIcon from '@lib/ui/icons/ShareIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { toPng } from 'html-to-image'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button'
-import ShareIcon from '../../lib/ui/icons/ShareIcon'
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { SaveAsImage } from '../../ui/file/SaveAsImage'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
@@ -35,7 +35,7 @@ export const ShareVaultPage = () => {
           await navigator.share({
             files: [file],
             title: t('vault_qr_share_title'),
-            text: t('Check out this vault QR code!'),
+            text: t('vault_qr_share_text'),
           })
         } else {
           alert(t('vault_qr_share_not_supported'))

@@ -1,8 +1,8 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -10,7 +10,6 @@ import {
 import { Button, ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 interface InitialState {
   vault?: VaultProps
@@ -21,7 +20,7 @@ const Component = () => {
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { vault } = state
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
 
   const handleSubmit = (): void => {
@@ -35,11 +34,11 @@ const Component = () => {
           )
         )
 
-        navigate(routeKeys.main, { replace: true })
+        navigate('main', { replace: true })
       } else {
         setStoredVaults([])
 
-        navigate(routeKeys.landing, { replace: true })
+        navigate('landing', { replace: true })
       }
     })
   }
@@ -57,20 +56,19 @@ const Component = () => {
   return (
     <div className="layout delete-vault-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.REMOVE_VAULT)}</span>
+        <span className="heading">{t('remove_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">
         <TriangleWarning className="icon" />
-        <span className="text">{`${t(
-          messageKeys.REMOVING_VAULT_WARNING
-        )}:`}</span>
+        <span className="text">{`${t('removing_vault_warning')}:`}</span>
         <span className="name">{vault?.name}</span>
       </div>
       <div className="footer">
+        {/* TODO: Deprecate Ant Design and start using styled-components instead to be consistent with the desktop client. All the base components should be in @lib/ui. If you need a new compnent, first check in the desktop client if it's not already created, move it to the @lib/ui and reuse it. */}
         <ConfigProvider
           theme={{
             token: {
@@ -79,7 +77,7 @@ const Component = () => {
           }}
         >
           <Button onClick={handleSubmit} type="primary" shape="round" block>
-            {t(messageKeys.REMOVE_VAULT)}
+            {t('remove_vault')}
           </Button>
         </ConfigProvider>
       </div>

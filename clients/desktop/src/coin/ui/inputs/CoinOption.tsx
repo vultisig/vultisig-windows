@@ -2,7 +2,11 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
@@ -10,29 +14,12 @@ import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
 import { Skeleton } from '../../../components/skeleton'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
-import { useCurrentVaultCoin } from '../../../vault/state/currentVault'
+import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
 import { useCoinPriceQuery } from '../../query/useCoinPriceQuery'
-
-const Container = styled(HStack)`
-  ${panel()};
-  padding: 12px 20px;
-  border-radius: 0px;
-  position: relative;
-  cursor: pointer;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
-`
 
 export const CoinOption = ({
   value,
@@ -69,14 +56,16 @@ export const CoinOption = ({
           }
           style={{ fontSize: 32 }}
         />
-        <VStack gap={2}>
+        <HStack gap={8} alignItems="center">
           <Text color="contrast" size={13} weight="500">
             {ticker}
           </Text>
-          <Text color="shy" size={11} weight="500">
-            {chain}
-          </Text>
-        </VStack>
+          <PillWrapper>
+            <Text color="shy" size={11} weight="500">
+              {chain}
+            </Text>
+          </PillWrapper>
+        </HStack>
       </HStack>
       <VStack
         gap={4}
@@ -88,7 +77,7 @@ export const CoinOption = ({
         }}
       >
         <MatchQuery
-          value={{ ...balanceQuery, isPending: true }}
+          value={balanceQuery}
           pending={() => (
             <VStack gap={6} fullHeight fullWidth>
               <VStack flexGrow>
@@ -121,7 +110,9 @@ export const CoinOption = ({
                   pending={() => <Skeleton />}
                   success={price => (
                     <Text as="span" size={12} color="shy" weight={500}>
-                      {formatFiatAmount(Number(balance) * price)}
+                      {formatFiatAmount(
+                        fromChainAmount(balance, decimals) * price
+                      )}
                     </Text>
                   )}
                 />
@@ -133,3 +124,20 @@ export const CoinOption = ({
     </Container>
   )
 }
+
+const Container = styled(HStack)`
+  ${panel()};
+  padding: 12px 20px;
+  border-radius: 0px;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
+`
+
+const PillWrapper = styled.div`
+  display: grid;
+  place-items: center;
+  padding: 8px 12px;
+  border-radius: 99px;
+  border: 1px solid ${getColor('foregroundExtra')};
+`

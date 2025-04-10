@@ -1,6 +1,6 @@
+import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { OnClickProp } from '@lib/ui/props'
 
-import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon'
 import { Spinner } from '../../lib/ui/loaders/Spinner'
 import { PageHeaderIconButton } from './PageHeaderIconButton'
 

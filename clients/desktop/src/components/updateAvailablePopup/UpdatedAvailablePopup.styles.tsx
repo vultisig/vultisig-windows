@@ -1,9 +1,7 @@
+import { Button } from '@lib/ui/buttons/Button'
 import styled from 'styled-components'
 
-import { Button } from '../../lib/ui/buttons/Button'
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
 import { ModalCloseButton } from '../../lib/ui/modal/ModalCloseButton'
-import { Text } from '../../lib/ui/text'
 
 export const FixedWrapper = styled.div`
   position: fixed;
@@ -24,24 +22,6 @@ export const FixedWrapper = styled.div`
 
 export const StyledButton = styled(Button)`
   align-self: stretch;
-`
-
-export const CenteredText = styled(Text)`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-`
-
-export const DownloadButton = styled(UnstyledButton)`
-  margin-left: 8px;
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
-  color: ${({ theme }) => theme.colors.primary.toCssValue()};
-  font-weight: 600;
 `
 
 export const StyledModalCloseButton = styled(ModalCloseButton)`

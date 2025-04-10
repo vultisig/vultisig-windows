@@ -1,15 +1,15 @@
+import { textInput } from '@lib/ui/css/textInput'
+import { VStack } from '@lib/ui/layout/Stack'
 import { LabelProp, UiProps } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { ChangeEvent, ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { textInput } from '../css/textInput'
-import { VStack } from '../layout/Stack'
 import { Spinner } from '../loaders/Spinner'
-import { getColor } from '../theme/getters'
 import { InputContainer } from './InputContainer'
 import { InputLabel } from './InputLabel'
 
-export type SharedTextInputProps = Partial<LabelProp> &
+type SharedTextInputProps = Partial<LabelProp> &
   ComponentProps<typeof TextInputContainer> & {
     onValueChange?: (value: string) => void
     isLoading?: boolean
@@ -62,7 +62,7 @@ const InputWr = styled.div`
   justify-content: space-between;
 `
 
-export const TextInputContainer = styled.input<{
+const TextInputContainer = styled.input<{
   validation?: 'valid' | 'invalid'
 }>`
   ${textInput};
@@ -88,7 +88,7 @@ export const TextInputContainer = styled.input<{
         `}
 `
 
-export const TextInputLoader = (props: UiProps) => (
+const TextInputLoader = (props: UiProps) => (
   <TextInputContainer as="div" {...props}>
     <VStack fullHeight justifyContent="center">
       <Spinner />

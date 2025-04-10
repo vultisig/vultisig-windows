@@ -1,7 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import styled from 'styled-components'
-
-import { Button } from '../../lib/ui/buttons/Button'
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
 
 export const ProductLogoWrapper = styled.div`
   animation: scale-in 0.5s ease-in-out;

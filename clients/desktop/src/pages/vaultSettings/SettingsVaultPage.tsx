@@ -1,14 +1,14 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import DiscordIcon from '@lib/ui/icons/DiscordIcon'
+import GithubIcon from '@lib/ui/icons/GithubIcon'
+import TwitterIcon from '@lib/ui/icons/TwitterIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime'
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon'
-import DiscordIcon from '../../lib/ui/icons/DiscordIcon'
-import GithubIcon from '../../lib/ui/icons/GithubIcon'
-import TwitterIcon from '../../lib/ui/icons/TwitterIcon'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
@@ -17,7 +17,7 @@ import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import {
-  settingsItems,
+  getTranslatedSettingsItems,
   VULTISIG_DISCORD_LINK,
   VULTISIG_GITHUB_LINK,
   VULTISIG_PRIVACY_POLICY_LINK,
@@ -42,27 +42,26 @@ const SettingsVaultPage = () => {
 
   const [fiatCurrency] = useFiatCurrency()
   const [language] = useLanguage()
+  const translatedSettingsItems = getTranslatedSettingsItems(t)
 
   return (
     <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         hasBorder
-        title={
-          <PageHeaderTitle>{t('vault_settings_page_title')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('settings')}</PageHeaderTitle>}
       />
       <ScrollableFlexboxFiller>
         <StyledPageSlice data-testid="SettingsVaultPage-Container" flexGrow>
           <VStack flexGrow>
-            {settingsItems.map(({ sectionTitleKey, items }, index) => (
+            {translatedSettingsItems.map(({ sectionTitle, items }, index) => (
               <StyledVStack key={index} gap={12}>
-                {sectionTitleKey && (
+                {sectionTitle && (
                   <Text weight={500} color="contrast">
-                    {t(sectionTitleKey)}
+                    {sectionTitle}
                   </Text>
                 )}
-                {items.map(({ id, titleKey, icon: Icon, path }) => (
+                {items.map(({ id, title, icon: Icon, path }) => (
                   <UnstyledButton
                     key={id}
                     onClick={() => {
@@ -89,9 +88,7 @@ const SettingsVaultPage = () => {
                           <IconWrapper>
                             <Icon />
                           </IconWrapper>
-                          <OpticallyAdjustedText>
-                            {t(titleKey)}
-                          </OpticallyAdjustedText>
+                          <OpticallyAdjustedText>{title}</OpticallyAdjustedText>
                         </HStack>
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">

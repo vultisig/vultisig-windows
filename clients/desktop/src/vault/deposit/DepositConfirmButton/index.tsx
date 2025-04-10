@@ -5,22 +5,19 @@ import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
-import { Button } from '../../../lib/ui/buttons/Button'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import {
-  useCurrentVault,
-  useCurrentVaultCoin,
-  useVaultServerStatus,
-} from '../../state/currentVault'
+import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
@@ -75,8 +72,8 @@ export const DepositConfirmButton = ({
       }),
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
-      vaultLocalPartyId: vault.local_party_id,
-      vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+      vaultLocalPartyId: vault.localPartyId,
+      vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     })
 
     if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {

@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { makeAppPath } from '../../../navigation'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'

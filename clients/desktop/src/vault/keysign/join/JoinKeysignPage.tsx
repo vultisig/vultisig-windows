@@ -1,9 +1,9 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { Match } from '@lib/ui/base/Match'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useMemo } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
 import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
@@ -32,7 +32,7 @@ export const JoinKeysignPage = () => {
 
   const { sessionId, encryptionKeyHex } = keysignMsg
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
@@ -42,7 +42,7 @@ export const JoinKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={false}>
       <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-        <MpcLocalPartyIdProvider value={local_party_id}>
+        <MpcLocalPartyIdProvider value={localPartyId}>
           <KeysignVaultGuard>
             <KeysignServerUrlProvider>
               <MpcSessionIdProvider value={sessionId}>

@@ -1,18 +1,18 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Opener } from '@lib/ui/base/Opener'
+import { Text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
 import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
-import { Opener } from '../../../lib/ui/base/Opener'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
-import { Text } from '../../../lib/ui/text'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVault'
+} from '../../state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 
@@ -34,7 +34,7 @@ export const ManageSendCoin = () => {
         )}
         renderContent={({ onClose }) => (
           <SelectItemModal
-            titleKey="choose_tokens"
+            title={t('choose_tokens')}
             optionComponent={CoinOption}
             filterFunction={(option, query) =>
               option.ticker.toLowerCase().startsWith(query.toLowerCase())

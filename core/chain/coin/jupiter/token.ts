@@ -12,7 +12,7 @@ export type SolanaJupiterToken = {
   }
 }
 
-export type FromSolanaJupiterTokensInput = {
+type FromSolanaJupiterTokensInput = {
   tokens: SolanaJupiterToken[]
   chain: Chain
 }

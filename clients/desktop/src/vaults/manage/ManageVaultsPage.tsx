@@ -1,6 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
 import { PageContent } from '../../ui/page/PageContent'

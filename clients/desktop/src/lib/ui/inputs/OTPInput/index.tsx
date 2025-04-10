@@ -1,14 +1,13 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { HStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Button } from '../../buttons/Button'
-import { borderRadius } from '../../css/borderRadius'
-import { HStack } from '../../layout/Stack'
-import { getColor } from '../../theme/getters'
 import { useOtp } from './useOTP'
 
-export interface OTPInputProps
-  extends ComponentProps<typeof InputBoxContainer> {
+interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   length?: number
   onCompleted?: (value: string) => void
   onValueChange?: (value: string) => void

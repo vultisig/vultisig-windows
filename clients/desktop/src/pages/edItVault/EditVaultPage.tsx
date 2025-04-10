@@ -1,16 +1,16 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
 import { useCurrentVault } from '../../vault/state/currentVault'
-import { editVaultSettingsItems } from './constants'
+import { getEditVaultSettingsItems } from './constants'
 import {
   AutoCenteredTitle,
   Container,
@@ -28,13 +28,8 @@ const EditVaultPage = () => {
     return <></>
   }
 
-  const { local_party_id } = currentVault
-  let items = editVaultSettingsItems
-  if (currentVault.lib_type === 'DKLS') {
-    items = editVaultSettingsItems.filter(
-      item => item.path !== 'migrateVaultSecure'
-    )
-  }
+  const { localPartyId } = currentVault
+  const items = getEditVaultSettingsItems(t)
 
   return (
     <Container flexGrow gap={16}>
@@ -45,11 +40,11 @@ const EditVaultPage = () => {
       />
       <PageSlice>
         <AutoCenteredTitle size={18} color="contrast" weight={500}>
-          {local_party_id}
+          {localPartyId}
         </AutoCenteredTitle>
         <VStack flexGrow gap={12}>
           {items.map(
-            ({ path, titleKey, subtitleKey, icon: Icon, textColor }, index) => (
+            ({ path, title, subtitle, icon: Icon, textColor }, index) => (
               <UnstyledButton key={index} onClick={() => navigate(path)}>
                 <ListItemPanel>
                   <HStack
@@ -67,10 +62,10 @@ const EditVaultPage = () => {
                           weight="600"
                           color={textColor || 'contrast'}
                         >
-                          {t(titleKey)}
+                          {title}
                         </Text>
                         <Text size={12} color={textColor || 'supporting'}>
-                          {t(subtitleKey)}
+                          {subtitle}
                         </Text>
                       </TextWrapper>
                     </HStack>

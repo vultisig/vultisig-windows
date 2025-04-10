@@ -1,7 +1,8 @@
-import { Match } from '../../../../lib/ui/base/Match'
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
-import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+
 import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
@@ -27,7 +28,7 @@ const keysignSteps = ['password', 'server', 'keysign'] as const
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>()
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -38,7 +39,7 @@ export const StartFastKeysignPage = () => {
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <PasswordProvider initialValue="">
-          <MpcLocalPartyIdProvider value={local_party_id}>
+          <MpcLocalPartyIdProvider value={localPartyId}>
             <GeneratedServiceNameProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
