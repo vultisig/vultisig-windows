@@ -5,7 +5,10 @@ import {
 } from '@core/mpc/keygenComplete'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
-import { KeygenAction } from '@core/ui/mpc/keygen/state/keygenAction'
+import {
+  KeygenAction,
+  KeygenActionProvider,
+} from '@core/ui/mpc/keygen/state/keygenAction'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
@@ -14,6 +17,7 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { ChildrenProp } from '@lib/ui/props'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
@@ -22,7 +26,9 @@ import {
   GetLocalUIEdDSA,
 } from '../../../wailsjs/go/tss/TssService'
 
-export const MigrateVaultKeygenActionProvider = () => {
+export const MigrateVaultKeygenActionProvider = ({
+  children,
+}: ChildrenProp) => {
   const serverUrl = useMpcServerUrl()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const sessionId = useMpcSessionId()
@@ -126,5 +132,7 @@ export const MigrateVaultKeygenActionProvider = () => {
     ]
   )
 
-  return keygenAction
+  return (
+    <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>
+  )
 }

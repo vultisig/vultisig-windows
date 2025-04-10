@@ -1,6 +1,9 @@
 import { keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { MpcLib } from '@core/mpc/mpcLib'
-import { KeygenAction } from '@core/ui/mpc/keygen/state/keygenAction'
+import {
+  KeygenAction,
+  KeygenActionProvider,
+} from '@core/ui/mpc/keygen/state/keygenAction'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
@@ -8,6 +11,7 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaults } from '@core/ui/vault/state/vaults'
+import { ChildrenProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { EventsOff, EventsOn } from '@wailsapp/runtime'
@@ -16,7 +20,9 @@ import { useCallback } from 'react'
 import { StartKeygen } from '../../../../wailsjs/go/tss/TssService'
 import { fromStorageVault } from '../../utils/storageVault'
 
-export const CreateVaultLegacyKeygenActionProvider = () => {
+export const CreateVaultLegacyKeygenActionProvider = ({
+  children,
+}: ChildrenProp) => {
   const serverUrl = useMpcServerUrl()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const sessionId = useMpcSessionId()
@@ -73,5 +79,7 @@ export const CreateVaultLegacyKeygenActionProvider = () => {
     ]
   )
 
-  return keygenAction
+  return (
+    <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>
+  )
 }
