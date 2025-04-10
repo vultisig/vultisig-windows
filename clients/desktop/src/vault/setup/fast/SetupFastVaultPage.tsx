@@ -5,6 +5,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
@@ -38,38 +39,40 @@ export const SetupFastVaultPage = () => {
         <PasswordProvider initialValue="">
           <PasswordHintProvider initialValue="">
             <CreateVaultFlowProviders>
-              <MpcMediatorManager />
-              <Match
-                value={step}
-                name={() => <SetupVaultNameStep onForward={toNextStep} />}
-                email={() => (
-                  <ServerEmailStep
-                    onBack={toPreviousStep}
-                    onForward={toNextStep}
-                  />
-                )}
-                password={() => (
-                  <SetServerPasswordStep
-                    onBack={toPreviousStep}
-                    onForward={toNextStep}
-                  />
-                )}
-                hint={() => (
-                  <ServerPasswordHintStep
-                    onBack={toPreviousStep}
-                    onForward={toNextStep}
-                  />
-                )}
-                setupForCreateVault={() => (
-                  <SetupVaultServerStep
-                    onBack={() => setStep(lastEditableStep)}
-                    onForward={toNextStep}
-                  />
-                )}
-                createVault={() => (
-                  <KeygenFlow onBack={() => setStep(lastEditableStep)} />
-                )}
-              />
+              <CreateVaultKeygenActionProvider>
+                <MpcMediatorManager />
+                <Match
+                  value={step}
+                  name={() => <SetupVaultNameStep onForward={toNextStep} />}
+                  email={() => (
+                    <ServerEmailStep
+                      onBack={toPreviousStep}
+                      onForward={toNextStep}
+                    />
+                  )}
+                  password={() => (
+                    <SetServerPasswordStep
+                      onBack={toPreviousStep}
+                      onForward={toNextStep}
+                    />
+                  )}
+                  hint={() => (
+                    <ServerPasswordHintStep
+                      onBack={toPreviousStep}
+                      onForward={toNextStep}
+                    />
+                  )}
+                  setupForCreateVault={() => (
+                    <SetupVaultServerStep
+                      onBack={() => setStep(lastEditableStep)}
+                      onForward={toNextStep}
+                    />
+                  )}
+                  createVault={() => (
+                    <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+                  )}
+                />
+              </CreateVaultKeygenActionProvider>
             </CreateVaultFlowProviders>
           </PasswordHintProvider>
         </PasswordProvider>
