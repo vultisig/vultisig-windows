@@ -6,10 +6,7 @@ import {
   toCamelCase,
   toSnakeCase,
 } from '@clients/extension/src/utils/functions'
-import {
-  FastSignInput,
-  SignatureProps,
-} from '@clients/extension/src/utils/interfaces'
+import { FastSignInput } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
