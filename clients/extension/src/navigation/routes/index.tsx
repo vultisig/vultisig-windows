@@ -1,6 +1,6 @@
 import { SetupFastVaultPage } from '@clients/desktop/src/vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/desktop/src/vault/setup/secure/SetupSecureVaultPage'
-import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
+//import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
 import { NewVaultPage } from '@clients/desktop/src/vaults/components/NewVaultPage'
 import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
@@ -15,10 +15,22 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import { IncompleteOnboardingOnly } from '@clients/extension/src/components/onboarding/components/IncompleteOnboardingOnly'
+import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
+import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
+
 const routes = [
   {
     path: appPaths.landing,
     element: <NewVaultPage />,
+  },
+  {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
   },
   {
     path: appPaths.setupVault,

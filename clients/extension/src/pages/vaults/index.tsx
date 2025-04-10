@@ -85,7 +85,7 @@ const Component = () => {
         <>
           <div className="header">
             <Vultisig className="logo" />
-            <Text color="contrast" weight={700}>
+            <Text className="title" color="contrast" weight={700}>
               {t('connect_with_vultisig')}
             </Text>
           </div>

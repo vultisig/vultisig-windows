@@ -18,6 +18,7 @@ export const appPaths = {
     delete: '/settings/vault/delete',
     rename: '/settings/vault/rename',
   },
+  onboarding: '/onboarding',
   uploadQr: '/upload-qr',
 } as const
 
