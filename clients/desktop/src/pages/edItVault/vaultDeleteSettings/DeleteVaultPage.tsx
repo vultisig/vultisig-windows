@@ -1,4 +1,5 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { getVaultId } from '@core/ui/vault/Vault'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -16,7 +17,6 @@ import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultM
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '../../../vault/state/currentVault'
 import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
-import { getStorageVaultId } from '../../../vault/utils/storageVault'
 import {
   ActionsWrapper,
   Check,
@@ -51,13 +51,12 @@ const DeleteVaultPage = () => {
   const navigate = useAppNavigate()
   const [fiatCurrency] = useFiatCurrency()
 
-  const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
-    vault
+  const { signers, name, publicKeys, localPartyId } = vault
 
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
-      local_party_id,
+      localPartyId,
     })
 
   const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency]
@@ -72,9 +71,9 @@ const DeleteVaultPage = () => {
       label: t('vault_part'),
       value: `${t('share')} ${localPartyIndex} ${t('of')} ${totalSigners}`,
     },
-    { label: t('vault_delete_page_device_id'), value: local_party_id },
-    { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
-    { label: t('vault_delete_page_eddsa_key'), value: public_key_eddsa },
+    { label: t('vault_delete_page_device_id'), value: localPartyId },
+    { label: t('vault_delete_page_ecdsa_key'), value: publicKeys.ecdsa },
+    { label: t('vault_delete_page_eddsa_key'), value: publicKeys.eddsa },
   ]
 
   const deleteTermsConfig = getDeleteTermsConfig(t)
@@ -152,7 +151,7 @@ const DeleteVaultPage = () => {
             <DeleteButton
               isLoading={isPending}
               onClick={() => {
-                deleteVault(getStorageVaultId(vault), {
+                deleteVault(getVaultId(vault), {
                   onSuccess: () => navigate('vault'),
                 })
               }}

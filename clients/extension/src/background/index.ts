@@ -48,6 +48,7 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
+
 let rpcProvider: JsonRpcProvider
 
 const instance = {
@@ -995,6 +996,9 @@ chrome.runtime.onMessage.addListener(
           if (chain) {
             handleRequest(message, chain, origin)
               .then(response => {
+                if (Array.isArray(response)) {
+                  response = response[0]
+                }
                 if (
                   message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                 ) {
@@ -1024,7 +1028,7 @@ chrome.runtime.onMessage.addListener(
 
                       const account = [
                         {
-                          pubkey: Array.from(keyBytes),
+                          pubKey: Array.from(keyBytes),
                           address: response,
                           algo: 'secp256k1',
                           bech32Address: response,
@@ -1083,7 +1087,7 @@ chrome.runtime.onMessage.addListener(
                             {
                               address: response,
                               algo: 'secp256k1',
-                              pubkey: Array.from(keyBytes),
+                              pubKey: Array.from(keyBytes),
                             },
                           ]
 

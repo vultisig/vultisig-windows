@@ -9,7 +9,8 @@ import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayl
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
@@ -85,8 +86,8 @@ export const useSwapKeysignPayloadQuery = () => {
           }),
           toAmount: amount.toString(),
           blockchainSpecific: chainSpecific,
-          vaultLocalPartyId: vault.local_party_id,
-          vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+          vaultLocalPartyId: vault.localPartyId,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           ...swapSpecificFields,
         })
 

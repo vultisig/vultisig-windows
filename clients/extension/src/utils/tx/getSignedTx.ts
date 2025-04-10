@@ -1,10 +1,12 @@
+import {
+  SendTransactionResponse,
+  SignedTransaction,
+} from '@clients/extension/src/utils/interfaces'
+import { getSignedTx } from '@clients/extension/src/utils/tx/sign'
 import { getChainKind } from '@core/chain/ChainKind'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
 import { match } from '@lib/utils/match'
-
-import { SendTransactionResponse, SignedTransaction } from '../interfaces'
-import { getSignedTx } from './sign'
 
 export const getSignedTransaction = ({
   inputData,

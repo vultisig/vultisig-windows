@@ -1,3 +1,4 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
@@ -7,10 +8,7 @@ import {
   UpdateVaultFolderID,
   UpdateVaultOrder,
 } from '../../../../wailsjs/go/storage/Store'
-import {
-  useVaults,
-  vaultsQueryKey,
-} from '../../../vault/queries/useVaultsQuery'
+import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery'
 
 type AddVaultToFolderInput = {
   vaultId: string
@@ -24,7 +22,7 @@ export const useAddVaultToFolderMutation = () => {
 
   return useMutation({
     mutationFn: async ({ vaultId, folderId }: AddVaultToFolderInput) => {
-      const folderVaults = vaults.filter(vault => vault.folder_id === folderId)
+      const folderVaults = vaults.filter(vault => vault.folderId === folderId)
 
       await UpdateVaultFolderID(vaultId, folderId)
 
