@@ -99,9 +99,10 @@ body {
 
   .label {
     color: $text-extra-light;
+    flex: 1;
     font-weight: 500;
     line-height: rem(16);
-    flex: 1;
+    white-space: nowrap;
   }
 
   .extra {
