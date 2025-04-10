@@ -55,6 +55,7 @@ import { ManageVaultFolderPage } from './vaults/folder/manage/ManageVaultFolderP
 import { VaultFolderPage } from './vaults/folder/VaultFolderPage'
 import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolderPage'
 import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage'
+
 const Root = () => (
   <ErrorBoundary renderFallback={props => <FullSizeErrorFallback {...props} />}>
     <LauncherObserver />

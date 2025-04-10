@@ -12,13 +12,14 @@ import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaults } from '@core/ui/vault/state/vaults'
+import { ChildrenProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
-import { KeygenAction } from '../state/keygenAction'
+import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 
-export const CreateVaultKeygenActionProvider = () => {
+export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const serverUrl = useMpcServerUrl()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const sessionId = useMpcSessionId()
@@ -116,5 +117,7 @@ export const CreateVaultKeygenActionProvider = () => {
     ]
   )
 
-  return keygenAction
+  return (
+    <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>
+  )
 }

@@ -1,6 +1,9 @@
 import { keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { MpcLib } from '@core/mpc/mpcLib'
-import { KeygenAction } from '@core/ui/mpc/keygen/state/keygenAction'
+import {
+  KeygenAction,
+  KeygenActionProvider,
+} from '@core/ui/mpc/keygen/state/keygenAction'
 import {
   KeygenVault,
   useKeygenVault,
@@ -12,6 +15,7 @@ import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
+import { ChildrenProp } from '@lib/ui/props'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { EventsOff, EventsOn } from '@wailsapp/runtime'
@@ -21,7 +25,9 @@ import { storage } from '../../../../wailsjs/go/models'
 import { Reshare } from '../../../../wailsjs/go/tss/TssService'
 import { fromStorageVault, toStorageVault } from '../../utils/storageVault'
 
-export const ReshareVaultLegacyKeygenActionProvider = () => {
+export const ReshareVaultLegacyKeygenActionProvider = ({
+  children,
+}: ChildrenProp) => {
   const serverUrl = useMpcServerUrl()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const sessionId = useMpcSessionId()
@@ -107,5 +113,7 @@ export const ReshareVaultLegacyKeygenActionProvider = () => {
     ]
   )
 
-  return keygenAction
+  return (
+    <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>
+  )
 }
