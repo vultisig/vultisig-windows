@@ -10,7 +10,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useVaults } from '@core/ui/vault/state/vaults'
+import { useVaultOrders } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -29,9 +29,8 @@ export const CreateVaultLegacyKeygenActionProvider = ({
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
   const hexChainCode = useCurrentHexChainCode()
-  const vaults = useVaults()
 
-  const vaultOrders = vaults.map(vault => vault.order)
+  const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange }) => {
