@@ -9,9 +9,10 @@ import { useCoinFinderQueries } from './queries/useCoinFinderQueries'
 export const CoinFinder = () => {
   const queries = useCoinFinderQueries()
 
-  const { mutate: saveCoins } = useSaveCoinsMutation()
+  const { mutate: saveCoins, isPending } = useSaveCoinsMutation()
 
   const coins = useCurrentVaultCoins()
+  console.log('coins', coins)
 
   useEffect(() => {
     const foundCoins = queries.flatMap(query => query.data ?? [])
@@ -20,10 +21,11 @@ export const CoinFinder = () => {
       coin => !coins.some(c => areEqualRecords(c, coin))
     )
 
-    if (!isEmpty(newCoins)) {
+    if (!isEmpty(newCoins) && !isPending) {
+      console.log('CoinFinder: saving new coins', newCoins)
       saveCoins(newCoins)
     }
-  }, [coins, queries, saveCoins])
+  }, [coins, queries, saveCoins, isPending])
 
   return null
 }

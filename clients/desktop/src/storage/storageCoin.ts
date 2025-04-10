@@ -14,7 +14,7 @@ export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
     address: coin.address,
     ticker: coin.ticker,
     logo: coin.logo,
-    priceProviderId: coin.price_provider_id,
+    priceProviderId: coin.price_provider_id || undefined,
     decimals: coin.decimals,
   }
 }
