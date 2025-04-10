@@ -43,9 +43,11 @@ export const ReshareVaultLegacyKeygenActionProvider = ({
         EventsOn(step, () => onStepChange(step))
       })
 
+      const libType: MpcLib = 'GG20'
+
       const sharedFinalVaultFields = {
         localPartyId,
-        libType: 'GG20' as MpcLib,
+        libType,
         isBackedUp: false,
       }
 
