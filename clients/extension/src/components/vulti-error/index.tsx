@@ -21,7 +21,7 @@ const Component: FC<ComponentProps> = ({ onClose, description, title }) => {
             <TriangleWarning />
             {t('error')}
           </span>
-          <Text color="contrast" weight={700}>
+          <Text as="span" size={32} color="contrast" weight={700}>
             {title}
           </Text>
           <span className="description">{description}</span>
