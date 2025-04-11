@@ -1,5 +1,7 @@
-import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import {
+  useCurrentVault,
+  useCurrentVaultSecurityType,
+} from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
@@ -30,6 +32,8 @@ export const VaultSigningInfo = () => {
 
   const index = signers.indexOf(localPartyId)
 
+  const securityType = useCurrentVaultSecurityType()
+
   return (
     <HStack alignItems="center" gap={8}>
       {index >= 0 && (
@@ -37,9 +41,7 @@ export const VaultSigningInfo = () => {
           {t('share_n_of_m', { n: index + 1, m: signers.length })}
         </Text>
       )}
-      {hasServer(signers) && !isServer(localPartyId) && (
-        <Tag>{t('fast_sign')}</Tag>
-      )}
+      {securityType === 'fast' && <Tag>{t('fast_sign')}</Tag>}
     </HStack>
   )
 }
