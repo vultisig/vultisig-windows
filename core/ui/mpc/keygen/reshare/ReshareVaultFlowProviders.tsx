@@ -1,4 +1,6 @@
+import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { CurrentVaultHexChainCodeProvider } from '../../state/currentHexChainCode'
@@ -11,22 +13,26 @@ import { CurrentKeygenVaultProvider } from '../state/keygenVault'
 
 export const ReshareVaultFlowProviders = ({ children }: ChildrenProp) => {
   return (
-    <CurrentKeygenVaultProvider>
-      <CurrentVaultLocalPartyIdProvider>
-        <MpcServerTypeProvider initialValue="relay">
-          <ServerUrlDerivedFromServerTypeProvider>
-            <CurrentVaultHexChainCodeProvider>
-              <IsInitiatingDeviceProvider value={true}>
-                <GeneratedMpcServiceNameProvider>
-                  <MpcPeersSelectionProvider>
-                    {children}
-                  </MpcPeersSelectionProvider>
-                </GeneratedMpcServiceNameProvider>
-              </IsInitiatingDeviceProvider>
-            </CurrentVaultHexChainCodeProvider>
-          </ServerUrlDerivedFromServerTypeProvider>
-        </MpcServerTypeProvider>
-      </CurrentVaultLocalPartyIdProvider>
-    </CurrentKeygenVaultProvider>
+    <GeneratedHexEncryptionKeyProvider>
+      <GeneratedMpcSessionIdProvider>
+        <CurrentKeygenVaultProvider>
+          <CurrentVaultLocalPartyIdProvider>
+            <MpcServerTypeProvider initialValue="relay">
+              <ServerUrlDerivedFromServerTypeProvider>
+                <CurrentVaultHexChainCodeProvider>
+                  <IsInitiatingDeviceProvider value={true}>
+                    <GeneratedMpcServiceNameProvider>
+                      <MpcPeersSelectionProvider>
+                        {children}
+                      </MpcPeersSelectionProvider>
+                    </GeneratedMpcServiceNameProvider>
+                  </IsInitiatingDeviceProvider>
+                </CurrentVaultHexChainCodeProvider>
+              </ServerUrlDerivedFromServerTypeProvider>
+            </MpcServerTypeProvider>
+          </CurrentVaultLocalPartyIdProvider>
+        </CurrentKeygenVaultProvider>
+      </GeneratedMpcSessionIdProvider>
+    </GeneratedHexEncryptionKeyProvider>
   )
 }
