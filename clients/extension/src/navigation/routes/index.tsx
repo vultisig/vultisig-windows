@@ -1,3 +1,7 @@
+import { SetupFastVaultPage } from '@clients/desktop/src/vault/setup/fast/SetupFastVaultPage'
+import { SetupSecureVaultPage } from '@clients/desktop/src/vault/setup/secure/SetupSecureVaultPage'
+//import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
+import { NewVaultPage } from '@clients/desktop/src/vaults/components/NewVaultPage'
 import { IncompleteOnboardingOnly } from '@clients/extension/src/components/onboarding/components/IncompleteOnboardingOnly'
 import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { appPaths } from '@clients/extension/src/navigation'
@@ -5,7 +9,6 @@ import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportPage from '@clients/extension/src/pages/popup/pages/import'
-import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
 import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
@@ -21,12 +24,28 @@ const routes = [
     element: <NewVaultPage />,
   },
   {
-    path: appPaths.import,
-    element: <ImportPage />,
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
   },
   {
     path: appPaths.setupVault,
     element: <SetupVaultPageController />,
+  },
+  {
+    path: appPaths.setupFastVault,
+    element: <SetupFastVaultPage />,
+  },
+  {
+    path: appPaths.setupSecureVault,
+    element: <SetupSecureVaultPage />,
+  },
+  {
+    path: appPaths.import,
+    element: <ImportPage />,
   },
   {
     path: appPaths.root,
@@ -36,15 +55,6 @@ const routes = [
         index: true,
         element: <MainPage />,
       },
-      {
-        path: appPaths.onboarding,
-        element: (
-          <IncompleteOnboardingOnly>
-            <OnboardingPage />
-          </IncompleteOnboardingOnly>
-        ),
-      },
-
       {
         path: appPaths.vaults,
         element: <VaultsPage />,
