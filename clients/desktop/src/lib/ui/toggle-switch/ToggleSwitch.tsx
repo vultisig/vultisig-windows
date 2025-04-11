@@ -8,6 +8,7 @@ type Option<T extends string | number> = {
   label: string
   value: T
   icon?: ReactNode
+  disabled?: boolean
 }
 
 type ToggleSwitchProps<T extends string | number> = {
@@ -33,14 +34,15 @@ export const ToggleSwitch = <T extends string | number>({
 
   return (
     <Wrapper>
-      {options.map(option => (
+      {options.map(({ value, disabled, icon, label }) => (
         <ToggleButton
-          key={option.value}
-          active={active === option.value}
-          onClick={() => handleClick(option.value)}
+          key={value}
+          active={active === value}
+          onClick={() => handleClick(value)}
+          disabled={disabled}
         >
-          {option.icon}
-          {option.label}
+          {icon}
+          {label}
         </ToggleButton>
       ))}
     </Wrapper>
