@@ -15,6 +15,7 @@ import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
+import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
 import { JoinKeygenVaultProvider } from './JoinKeygenVaultProvider'
@@ -52,25 +53,27 @@ export const JoinKeygenPage = () => {
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                 <JoinKeygenVaultProvider>
                   <KeygenServerUrlProvider>
-                    <MpcMediatorManager />
-                    <Match
-                      value={step}
-                      session={() => (
-                        <JoinKeygenSessionStep onForward={toNextStep} />
-                      )}
-                      keygen={() => (
-                        <ValueTransfer<string[]>
-                          from={({ onFinish }) => (
-                            <JoinKeygenPeersStep onFinish={onFinish} />
-                          )}
-                          to={({ value }) => (
-                            <MpcPeersProvider value={value}>
-                              <JoinKeygenProcess title={title} />
-                            </MpcPeersProvider>
-                          )}
-                        />
-                      )}
-                    />
+                    <JoinKeygenActionProvider>
+                      <MpcMediatorManager />
+                      <Match
+                        value={step}
+                        session={() => (
+                          <JoinKeygenSessionStep onForward={toNextStep} />
+                        )}
+                        keygen={() => (
+                          <ValueTransfer<string[]>
+                            from={({ onFinish }) => (
+                              <JoinKeygenPeersStep onFinish={onFinish} />
+                            )}
+                            to={({ value }) => (
+                              <MpcPeersProvider value={value}>
+                                <JoinKeygenProcess title={title} />
+                              </MpcPeersProvider>
+                            )}
+                          />
+                        )}
+                      />
+                    </JoinKeygenActionProvider>
                   </KeygenServerUrlProvider>
                 </JoinKeygenVaultProvider>
               </CurrentHexEncryptionKeyProvider>
