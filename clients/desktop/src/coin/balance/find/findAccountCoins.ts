@@ -10,9 +10,8 @@ export const findAccountCoins = ({
   address,
   chain,
 }: ChainAccount): Promise<Coin[]> | Coin[] => {
-  const evmChain = isOneOf(chain, Object.values(EvmChain))
-  if (evmChain) {
-    return findEvmAccountCoins({ address, chain: evmChain })
+  if (isOneOf(chain, Object.values(EvmChain))) {
+    return findEvmAccountCoins({ address, chain })
   }
 
   if (chain === Chain.Solana) {
