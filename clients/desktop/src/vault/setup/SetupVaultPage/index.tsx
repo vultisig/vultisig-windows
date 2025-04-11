@@ -72,6 +72,7 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
+                  disabled: value == 'secure',
                   label: 'Secure',
                   value: 'secure',
                   icon: (
@@ -90,6 +91,7 @@ export const SetupVaultPage = () => {
                   ),
                 },
                 {
+                  disabled: value == 'fast',
                   label: 'Fast',
                   value: 'fast',
                   icon:
