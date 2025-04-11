@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "Vulticonnect",
+  "description": "VultiConnect is a Chrome extension that integrates Vultisig into web applications, enabling users to securely sign transactions.",
+  "author": {
+    "name": "Vultisig",
+    "email": "info@vultisig.com",
+    "url": "https://vultisig.com"
+  },
+  "version": "0.1.0",
+  "version_name": "version",
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "64": "icon64.png",
+      "128": "icon128.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    },
+    {
+      "js": ["relay.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost;object-src 'self'"
+  },
+  "host_permissions": ["https://*/*"],
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "64": "icon64.png",
+    "128": "icon128.png"
+  },
+  "permissions": ["storage", "scripting", "activeTab"],
+  "web_accessible_resources": [
+    {
+      "matches": ["<all_urls>"],
+      "resources": ["wallet-core.wasm"],
+      "use_dynamic_url": false
+    },
+    {
+      "matches": ["<all_urls>"],
+      "resources": ["content.js", "relay.js", "inpage.js"],
+      "use_dynamic_url": false
+    }
+  ]
+}
