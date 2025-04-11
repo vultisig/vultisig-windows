@@ -6,11 +6,11 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useCurrentVault } from '../../../state/currentVault'
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 
 export const useJoinKeysignUrlQuery = () => {

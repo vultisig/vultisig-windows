@@ -477,7 +477,8 @@ const Component = () => {
           walletCore: walletCore!,
         })
       }
-      const tssType = signatureAlgorithms[getChainKind(transaction.chain.chain)]
+      const signatureAlgorithm =
+        signatureAlgorithms[getChainKind(transaction.chain.chain)]
       form
         .validateFields()
         .then(({ password }: FormProps) => {
@@ -485,7 +486,7 @@ const Component = () => {
             .signWithServer({
               vault_password: password,
               hex_encryption_key: vault?.hexChainCode ?? '',
-              is_ecdsa: tssType === 'ecdsa',
+              is_ecdsa: signatureAlgorithm === 'ecdsa',
               derive_path: walletCore!.CoinTypeExt.derivationPath(
                 getCoinType({
                   walletCore: walletCore!,
@@ -494,7 +495,7 @@ const Component = () => {
               ),
               messages: [imageHash],
               public_key:
-                tssType === 'ecdsa'
+                signatureAlgorithm === 'ecdsa'
                   ? vault.publicKeyEcdsa
                   : vault.publicKeyEddsa,
               session: transaction.id,

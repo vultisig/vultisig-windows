@@ -1,3 +1,4 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -14,7 +15,6 @@ import {
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer'
 import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation'
-import { CurrentVaultProvider } from '../../../vault/state/currentVault'
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'

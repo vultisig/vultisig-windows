@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -13,7 +14,6 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation'
-import { useCurrentVault } from '../../../vault/state/currentVault'
 import {
   ButtonWithBottomSpace,
   InputField,

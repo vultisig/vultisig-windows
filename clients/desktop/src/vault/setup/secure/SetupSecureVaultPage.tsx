@@ -5,6 +5,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
@@ -23,24 +24,28 @@ export const SetupSecureVaultPage = () => {
   return (
     <VaultSecurityTypeProvider value="secure">
       <CreateVaultFlowProviders>
-        <MpcMediatorManager />
-        <Match
-          value={step}
-          name={() => <SetupVaultNameStep onForward={toNextStep} />}
-          peers={() => (
-            <KeygenPeerDiscoveryStep
-              onBack={() => setStep(steps[0])}
-              onForward={toNextStep}
-            />
-          )}
-          startSession={() => (
-            <KeygenStartSessionStep
-              onBack={toPreviousStep}
-              onForward={toNextStep}
-            />
-          )}
-          keygen={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
-        />
+        <CreateVaultKeygenActionProvider>
+          <MpcMediatorManager />
+          <Match
+            value={step}
+            name={() => <SetupVaultNameStep onForward={toNextStep} />}
+            peers={() => (
+              <KeygenPeerDiscoveryStep
+                onBack={() => setStep(steps[0])}
+                onForward={toNextStep}
+              />
+            )}
+            startSession={() => (
+              <KeygenStartSessionStep
+                onBack={toPreviousStep}
+                onForward={toNextStep}
+              />
+            )}
+            keygen={() => (
+              <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+            )}
+          />
+        </CreateVaultKeygenActionProvider>
       </CreateVaultFlowProviders>
     </VaultSecurityTypeProvider>
   )

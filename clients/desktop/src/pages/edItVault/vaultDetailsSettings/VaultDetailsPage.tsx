@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +8,6 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { getVaultTypeText } from '../../../utils/util'
-import { useCurrentVault } from '../../../vault/state/currentVault'
 import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
 import {
   AutoCenteredText,

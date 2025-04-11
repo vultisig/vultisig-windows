@@ -3,6 +3,8 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
+import { useCurrentVault } from '../../vault/state/currentVault'
+
 export const {
   useValue: useCurrentHexChainCode,
   provider: CurrentHexChainCodeProvider,
@@ -13,6 +15,19 @@ export const GeneratedHexChainCodeProvider = ({ children }: ChildrenProp) => {
 
   return (
     <CurrentHexChainCodeProvider value={HexChainCode}>
+      {children}
+    </CurrentHexChainCodeProvider>
+  )
+}
+
+export const CurrentVaultHexChainCodeProvider = ({
+  children,
+}: ChildrenProp) => {
+  const vault = useCurrentVault()
+  const { hexChainCode } = vault
+
+  return (
+    <CurrentHexChainCodeProvider value={hexChainCode}>
       {children}
     </CurrentHexChainCodeProvider>
   )

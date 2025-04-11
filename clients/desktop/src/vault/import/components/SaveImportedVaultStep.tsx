@@ -1,4 +1,4 @@
-import { useVaults } from '@core/ui/vault/state/vaults'
+import { useVaultOrders } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
@@ -14,8 +14,7 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
   const navigate = useAppNavigate()
   const override = useVaultBackupOverride()
 
-  const vaults = useVaults()
-  const vaultOrders = useMemo(() => vaults.map(vault => vault.order), [vaults])
+  const vaultOrders = useVaultOrders()
 
   const finalValue = useMemo(
     () => ({

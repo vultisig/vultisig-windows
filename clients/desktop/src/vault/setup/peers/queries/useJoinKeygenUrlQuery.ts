@@ -2,6 +2,7 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { deepLinkBaseUrl } from '@core/config'
 import { toLibType } from '@core/mpc/types/utils/libType'
+import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
@@ -95,7 +96,7 @@ export const useJoinKeygenUrlQuery = () => {
 
         return addQueryParams(deepLinkBaseUrl, {
           type: 'NewVault',
-          tssType: keygenType,
+          tssType: toTssType(keygenType),
           jsonData,
         })
       },

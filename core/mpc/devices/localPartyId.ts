@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { randomIntegerInRange } from '@lib/utils/randomInRange'
 
-import { MpcDevice } from './MpcDevice'
+import { MpcDevice, mpcDeviceFromDeviceName } from './MpcDevice'
 
 const localPartyIdSeparator = '-'
 
@@ -22,3 +22,8 @@ export const parseLocalPartyId = (localPartyId: string) => {
 
   return { deviceName, hash }
 }
+
+export const hasServer = (signers: string[]) => signers.some(isServer)
+
+export const isServer = (device: string) =>
+  mpcDeviceFromDeviceName(parseLocalPartyId(device).deviceName) === 'server'
