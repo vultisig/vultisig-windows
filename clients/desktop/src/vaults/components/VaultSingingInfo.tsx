@@ -1,3 +1,5 @@
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
@@ -6,11 +8,6 @@ import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import {
-  useCurrentVault,
-  useVaultServerStatus,
-} from '@core/ui/vault/state/currentVault'
 
 const Tag = styled.div`
   height: 22px;
@@ -27,7 +24,6 @@ const Tag = styled.div`
 `
 
 export const VaultSigningInfo = () => {
-  const { hasServer, isBackup } = useVaultServerStatus()
   const { signers, localPartyId } = useCurrentVault()
 
   const { t } = useTranslation()
@@ -41,7 +37,9 @@ export const VaultSigningInfo = () => {
           {t('share_n_of_m', { n: index + 1, m: signers.length })}
         </Text>
       )}
-      {hasServer && !isBackup && <Tag>{t('fast_sign')}</Tag>}
+      {hasServer(signers) && !isServer(localPartyId) && (
+        <Tag>{t('fast_sign')}</Tag>
+      )}
     </HStack>
   )
 }

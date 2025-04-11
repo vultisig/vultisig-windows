@@ -1,3 +1,5 @@
+import { useVaultPassword } from '@core/ui/state/password'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -15,8 +17,6 @@ import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useVaultPassword } from '@core/ui/state/password'
 
 export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
   const { t } = useTranslation()

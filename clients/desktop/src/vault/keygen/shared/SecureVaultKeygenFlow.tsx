@@ -6,6 +6,7 @@ import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
@@ -16,7 +17,6 @@ import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 const reshareVaultSteps = [
   'joinSession',

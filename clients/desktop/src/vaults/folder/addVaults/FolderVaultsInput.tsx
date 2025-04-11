@@ -1,10 +1,10 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { InputProps, OptionsProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { FC } from 'react'
 
-import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer'
 import { FolderVaultOption } from './FolderVaultOption'
 

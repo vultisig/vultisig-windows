@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -9,7 +10,6 @@ import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getEditVaultSettingsItems } from './constants'
 import {
   AutoCenteredTitle,

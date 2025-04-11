@@ -1,3 +1,4 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -11,7 +12,6 @@ import {
   DnDItemHighlight,
 } from '../../lib/ui/list/item/DnDItemContainer'
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation'
-import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { VaultListItem } from '../components/VaultListItem'
 import { VaultsContainer } from '../components/VaultsContainer'
 

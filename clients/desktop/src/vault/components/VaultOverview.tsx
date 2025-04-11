@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
@@ -10,7 +11,6 @@ import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VaultChainItem } from './VaultChainItem'
 import { VaultPrimaryActions } from './VaultPrimaryActions'
 
