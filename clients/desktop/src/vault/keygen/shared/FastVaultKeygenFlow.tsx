@@ -1,13 +1,5 @@
-import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
-import { CurrentHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainCode'
-import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
-import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
-import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
-import {
-  useCurrentVault,
-  useVaultServerStatus,
-} from '@core/ui/vault/state/currentVault'
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
@@ -35,56 +27,40 @@ const reshareVaultSteps = [
 ] as const
 
 export const FastVaultKeygenFlow = () => {
-  const vault = useCurrentVault()
-  const { localPartyId, hexChainCode } = vault
-
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps: reshareVaultSteps,
     onExit: useNavigateBack(),
   })
 
-  const { hasServer, isBackup } = useVaultServerStatus()
+  const { signers, localPartyId } = useCurrentVault()
 
   return (
-    <CurrentHexChainCodeProvider value={hexChainCode}>
-      <MpcServerTypeProvider initialValue="relay">
-        <ServerUrlDerivedFromServerTypeProvider>
-          <MpcLocalPartyIdProvider value={localPartyId}>
-            <KeygenVaultProvider value={{ existingVault: vault }}>
-              <MpcMediatorManager />
-              <Match
-                value={step}
-                email={() => <ServerEmailStep onForward={toNextStep} />}
-                password={() =>
-                  hasServer && !isBackup ? (
-                    <ServerPasswordStep onForward={toNextStep} />
-                  ) : (
-                    <SetServerPasswordStep onForward={toNextStep} />
-                  )
-                }
-                server={() => <KeygenServerStep onFinish={toNextStep} />}
-                joinSession={() => (
-                  <JoinKeygenSessionStep onForward={toNextStep} />
-                )}
-                peers={() => <KeygenPeerDiscoveryStep onForward={toNextStep} />}
-                verify={() => (
-                  <ReshareVerifyStep
-                    onBack={toPreviousStep}
-                    onForward={toNextStep}
-                  />
-                )}
-                startSession={() => (
-                  <KeygenStartSessionStep
-                    onBack={toPreviousStep}
-                    onForward={toNextStep}
-                  />
-                )}
-                keygen={() => <KeygenFlow onBack={() => setStep('verify')} />}
-              />
-            </KeygenVaultProvider>
-          </MpcLocalPartyIdProvider>
-        </ServerUrlDerivedFromServerTypeProvider>
-      </MpcServerTypeProvider>
-    </CurrentHexChainCodeProvider>
+    <>
+      <MpcMediatorManager />
+      <Match
+        value={step}
+        email={() => <ServerEmailStep onForward={toNextStep} />}
+        password={() =>
+          hasServer(signers) && !isServer(localPartyId) ? (
+            <ServerPasswordStep onForward={toNextStep} />
+          ) : (
+            <SetServerPasswordStep onForward={toNextStep} />
+          )
+        }
+        server={() => <KeygenServerStep onFinish={toNextStep} />}
+        joinSession={() => <JoinKeygenSessionStep onForward={toNextStep} />}
+        peers={() => <KeygenPeerDiscoveryStep onForward={toNextStep} />}
+        verify={() => (
+          <ReshareVerifyStep onBack={toPreviousStep} onForward={toNextStep} />
+        )}
+        startSession={() => (
+          <KeygenStartSessionStep
+            onBack={toPreviousStep}
+            onForward={toNextStep}
+          />
+        )}
+        keygen={() => <KeygenFlow onBack={() => setStep('verify')} />}
+      />
+    </>
   )
 }

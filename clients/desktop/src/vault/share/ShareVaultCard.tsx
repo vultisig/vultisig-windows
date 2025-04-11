@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -9,7 +10,6 @@ import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
 
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 import { VaultKey } from './VaultKey'
 

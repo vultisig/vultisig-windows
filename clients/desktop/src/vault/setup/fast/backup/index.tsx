@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
@@ -12,7 +13,6 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 const ON_COMPLETE_DELAY = 1000
 

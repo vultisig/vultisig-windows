@@ -4,6 +4,8 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
+import { useCurrentVault } from '../../vault/state/currentVault'
+
 export const {
   useValue: useMpcLocalPartyId,
   provider: MpcLocalPartyIdProvider,
@@ -20,6 +22,18 @@ export const GeneratedMpcLocalPartyIdProvider = ({
 
   return (
     <MpcLocalPartyIdProvider value={MpcLocalPartyId}>
+      {children}
+    </MpcLocalPartyIdProvider>
+  )
+}
+
+export const CurrentVaultLocalPartyIdProvider = ({
+  children,
+}: ChildrenProp) => {
+  const { localPartyId } = useCurrentVault()
+
+  return (
+    <MpcLocalPartyIdProvider value={localPartyId}>
       {children}
     </MpcLocalPartyIdProvider>
   )

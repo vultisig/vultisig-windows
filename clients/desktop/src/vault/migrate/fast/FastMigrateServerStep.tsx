@@ -2,6 +2,7 @@ import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
+import { useVaultPassword } from '@core/ui/state/password'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -13,7 +14,6 @@ import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
-import { useVaultPassword } from '@core/ui/state/password'
 
 export const FastMigrateServerStep: React.FC<
   OnForwardProp & Partial<OnBackProp>

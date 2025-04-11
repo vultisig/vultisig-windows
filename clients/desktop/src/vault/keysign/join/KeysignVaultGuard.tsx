@@ -1,4 +1,5 @@
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom'
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../state/currentVaultId'
 

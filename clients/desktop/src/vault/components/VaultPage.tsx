@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -16,7 +17,6 @@ import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
 import { VaultOverview } from '../../vault/components/VaultOverview'
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 export const VaultPage = () => {
   const navigate = useAppNavigate()

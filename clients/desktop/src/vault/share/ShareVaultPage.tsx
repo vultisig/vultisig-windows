@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import ShareIcon from '@lib/ui/icons/ShareIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -10,7 +11,6 @@ import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ShareVaultCard } from './ShareVaultCard'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 

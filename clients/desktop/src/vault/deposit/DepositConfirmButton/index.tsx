@@ -2,13 +2,11 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import {
-  useCurrentVault,
-  useVaultServerStatus,
-} from '@core/ui/vault/state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -99,8 +97,6 @@ export const DepositConfirmButton = ({
     })
   }
 
-  const { hasServer, isBackup } = useVaultServerStatus()
-
   if (
     (config.requiresAmount && !Number.isFinite(amount)) ||
     amount < 0 ||
@@ -117,7 +113,7 @@ export const DepositConfirmButton = ({
     return <Text>{t('loading')}</Text>
   }
 
-  if (hasServer && !isBackup) {
+  if (hasServer(vault.signers) && !isServer(vault.localPartyId)) {
     return (
       <VStack gap={20}>
         <Button onClick={() => startKeysign('fast')}>{t('fast_sign')}</Button>

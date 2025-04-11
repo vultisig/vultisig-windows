@@ -1,3 +1,4 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useTranslation } from 'react-i18next'
 
 import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime'
@@ -9,7 +10,6 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
 import { ShareVaultCard } from '../../vault/share/ShareVaultCard'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VULTISIG_WEBSITE_LINK } from '../vaultSettings/constants'
 import {
   ListItem,

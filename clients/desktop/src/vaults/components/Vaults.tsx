@@ -1,8 +1,8 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 
-import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { VaultListItem } from './VaultListItem'
 import { VaultsContainer } from './VaultsContainer'
 

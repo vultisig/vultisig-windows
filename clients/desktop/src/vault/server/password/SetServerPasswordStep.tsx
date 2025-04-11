@@ -1,3 +1,4 @@
+import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
@@ -17,7 +18,6 @@ import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt'
-import { useVaultPassword } from '@core/ui/state/password'
 
 const getPasswordSchema = (t: TFunction) =>
   z
