@@ -13,7 +13,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation'
-import { useCurrentVault } from '../../../vault/state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
   ButtonWithBottomSpace,
   InputField,

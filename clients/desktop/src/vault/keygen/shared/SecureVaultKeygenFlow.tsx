@@ -16,7 +16,7 @@ import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
-import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 const reshareVaultSteps = [
   'joinSession',

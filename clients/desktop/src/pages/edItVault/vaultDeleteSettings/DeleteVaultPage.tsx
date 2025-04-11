@@ -15,7 +15,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation'
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery'
-import { useCurrentVault } from '../../../vault/state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
 import {
   ActionsWrapper,

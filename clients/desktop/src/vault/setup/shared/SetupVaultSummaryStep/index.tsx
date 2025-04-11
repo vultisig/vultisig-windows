@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
 import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
-import { useCurrentVault } from '../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
   IconWrapper,

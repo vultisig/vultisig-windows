@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageContent } from '../../../../../ui/page/PageContent'
-import { useCurrentVault } from '../../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'

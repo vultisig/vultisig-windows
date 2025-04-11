@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { DeleteCoin } from '../../../wailsjs/go/storage/Store'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddreses } from '../state/currentVaultCoins'
 
 export const useDeleteCoinMutation = () => {

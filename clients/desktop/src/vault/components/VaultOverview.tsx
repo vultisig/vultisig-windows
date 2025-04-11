@@ -10,7 +10,7 @@ import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VaultChainItem } from './VaultChainItem'
 import { VaultPrimaryActions } from './VaultPrimaryActions'
 

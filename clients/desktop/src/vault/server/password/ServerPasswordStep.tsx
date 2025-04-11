@@ -15,8 +15,8 @@ import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
-import { useCurrentVault } from '../../state/currentVault'
-import { useVaultPassword } from './state/password'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useVaultPassword } from '@core/ui/state/password'
 
 export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
   const { t } = useTranslation()

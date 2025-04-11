@@ -1,8 +1,7 @@
+import { hasServerSigner } from '@clients/desktop/src/vault/fast/utils/hasServerSigner'
 import { Vault } from '@core/ui/vault/Vault'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
-
-import { hasServerSigner } from '../fast/utils/hasServerSigner'
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
   getValueProviderSetup<Vault>('CurrentVault')

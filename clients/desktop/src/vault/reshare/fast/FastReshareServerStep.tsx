@@ -1,6 +1,7 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useEmail } from '@core/ui/state/email'
 import { OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
@@ -13,9 +14,11 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { reshareWithServer } from '../../fast/api/reshareWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
-import { useVaultEmail } from '../../server/email/state/email'
-import { useVaultPassword } from '../../server/password/state/password'
-import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
+import { useVaultPassword } from '@core/ui/state/password'
+import {
+  useCurrentVault,
+  useVaultServerStatus,
+} from '@core/ui/vault/state/currentVault'
 
 export const FastReshareServerStep: React.FC<OnForwardProp> = ({
   onForward,
@@ -32,7 +35,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
   const { name, signers, hexChainCode, publicKeys, resharePrefix } =
     useCurrentVault()
 
-  const [email] = useVaultEmail()
+  const [email] = useEmail()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () => {

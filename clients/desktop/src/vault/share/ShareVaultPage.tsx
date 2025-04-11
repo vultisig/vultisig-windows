@@ -10,7 +10,7 @@ import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ShareVaultCard } from './ShareVaultCard'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 

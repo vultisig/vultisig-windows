@@ -6,7 +6,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
-import { useCurrentVault } from '../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
 import { EmailConfirmation } from '.'

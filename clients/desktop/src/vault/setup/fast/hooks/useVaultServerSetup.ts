@@ -4,18 +4,18 @@ import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useEmail } from '@core/ui/state/email'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
-import { useVaultEmail } from '../../../server/email/state/email'
-import { useVaultPassword } from '../../../server/password/state/password'
+import { useVaultPassword } from '@core/ui/state/password'
 
 export const useVaultServerSetup = () => {
   const [name] = useVaultName()
   const [password] = useVaultPassword()
-  const [email] = useVaultEmail()
+  const [email] = useEmail()
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()

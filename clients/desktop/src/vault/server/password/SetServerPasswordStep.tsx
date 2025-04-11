@@ -17,7 +17,7 @@ import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt'
-import { useVaultPassword } from './state/password'
+import { useVaultPassword } from '@core/ui/state/password'
 
 const getPasswordSchema = (t: TFunction) =>
   z

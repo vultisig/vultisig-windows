@@ -9,7 +9,7 @@ import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
 
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 import { VaultKey } from './VaultKey'
 

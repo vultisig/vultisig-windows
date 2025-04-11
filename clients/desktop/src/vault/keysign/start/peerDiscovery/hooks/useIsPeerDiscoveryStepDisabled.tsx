@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcSigners } from '../../../../../mpc/signers/state/mpcSigners'
-import { useCurrentVault } from '../../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 export const useIsPeerDiscoveryStepDisabled = () => {
   const { t } = useTranslation()

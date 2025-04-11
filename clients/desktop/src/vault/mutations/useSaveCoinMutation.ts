@@ -9,7 +9,7 @@ import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 export const useSaveCoinMutation = () => {
   const vault = useCurrentVault()

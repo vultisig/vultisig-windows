@@ -13,7 +13,7 @@ import { hasServerSigner } from '../../fast/utils/hasServerSigner'
 import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
-import { CurrentVaultProvider } from '../../state/currentVault'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenEnding } from './VaultKeygenEnding'
 

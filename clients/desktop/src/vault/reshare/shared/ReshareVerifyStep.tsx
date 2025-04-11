@@ -16,7 +16,7 @@ import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
-import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`

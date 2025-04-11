@@ -9,7 +9,7 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
 import { ShareVaultCard } from '../../vault/share/ShareVaultCard'
-import { useCurrentVault } from '../../vault/state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VULTISIG_WEBSITE_LINK } from '../vaultSettings/constants'
 import {
   ListItem,

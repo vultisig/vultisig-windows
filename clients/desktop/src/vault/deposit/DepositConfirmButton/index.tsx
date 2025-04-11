@@ -5,6 +5,10 @@ import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useCurrentVault,
+  useVaultServerStatus,
+} from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -16,7 +20,6 @@ import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
