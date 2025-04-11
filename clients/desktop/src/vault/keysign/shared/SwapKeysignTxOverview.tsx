@@ -28,7 +28,7 @@ import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {

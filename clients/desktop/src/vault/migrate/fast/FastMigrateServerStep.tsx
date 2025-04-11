@@ -1,6 +1,7 @@
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useEmail } from '@core/ui/state/email'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -12,8 +13,7 @@ import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
-import { useVaultEmail } from '../../server/email/state/email'
-import { useVaultPassword } from '../../server/password/state/password'
+import { useVaultPassword } from '@core/ui/state/password'
 
 export const FastMigrateServerStep: React.FC<
   OnForwardProp & Partial<OnBackProp>
@@ -25,7 +25,7 @@ export const FastMigrateServerStep: React.FC<
   const [password] = useVaultPassword()
   const keygenVault = useKeygenVault()
   const { publicKeys } = getRecordUnionValue(keygenVault, 'existingVault')
-  const [email] = useVaultEmail()
+  const [email] = useEmail()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () => {

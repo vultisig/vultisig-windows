@@ -6,7 +6,7 @@ import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
-import { useCurrentVault } from '../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery'
 
 export const DownloadKeysignQrCode = () => {

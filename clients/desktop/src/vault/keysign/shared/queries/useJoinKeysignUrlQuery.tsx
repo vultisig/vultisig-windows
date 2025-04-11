@@ -10,7 +10,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useCurrentVault } from '../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 
 export const useJoinKeysignUrlQuery = () => {

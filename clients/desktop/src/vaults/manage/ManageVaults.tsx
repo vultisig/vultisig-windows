@@ -11,7 +11,7 @@ import {
   DnDItemHighlight,
 } from '../../lib/ui/list/item/DnDItemContainer'
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation'
-import { CurrentVaultProvider } from '../../vault/state/currentVault'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { VaultListItem } from '../components/VaultListItem'
 import { VaultsContainer } from '../components/VaultsContainer'
 

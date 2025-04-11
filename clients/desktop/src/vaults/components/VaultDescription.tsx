@@ -3,7 +3,7 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import styled from 'styled-components'
 
-import { useCurrentVault } from '../../vault/state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VaultSigningInfo } from './VaultSingingInfo'
 
 const Container = styled.div`

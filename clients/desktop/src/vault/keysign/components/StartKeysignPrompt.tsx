@@ -5,7 +5,7 @@ import { IsDisabledProp, ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useVaultServerStatus } from '../../state/currentVault'
+import { useVaultServerStatus } from '@core/ui/vault/state/currentVault'
 
 type StartKeysignPromptProps = ValueProp<KeysignPayload> & IsDisabledProp
 

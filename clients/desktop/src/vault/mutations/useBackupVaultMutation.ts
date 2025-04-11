@@ -11,7 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
-import { useCurrentVault } from '../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length

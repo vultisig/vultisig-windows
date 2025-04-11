@@ -9,7 +9,7 @@ import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
-import { CurrentVaultProvider } from '../../vault/state/currentVault'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { VaultListItem } from '../components/VaultListItem'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 

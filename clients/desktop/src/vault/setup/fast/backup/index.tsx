@@ -12,7 +12,7 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
-import { useCurrentVault } from '../../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 
 const ON_COMPLETE_DELAY = 1000
 

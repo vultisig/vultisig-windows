@@ -4,7 +4,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { CurrentVaultProvider } from '../state/currentVault'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
 import { useCurrentVaultId } from '../state/currentVaultId'
 

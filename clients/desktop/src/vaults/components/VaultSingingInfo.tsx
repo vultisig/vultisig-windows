@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import {
   useCurrentVault,
   useVaultServerStatus,
-} from '../../vault/state/currentVault'
+} from '@core/ui/vault/state/currentVault'
 
 const Tag = styled.div`
   height: 22px;

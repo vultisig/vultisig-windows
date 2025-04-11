@@ -9,7 +9,7 @@ import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayl
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
