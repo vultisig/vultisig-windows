@@ -1,3 +1,5 @@
+import { IncompleteOnboardingOnly } from '@clients/extension/src/components/onboarding/components/IncompleteOnboardingOnly'
+import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
@@ -8,7 +10,7 @@ import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
 import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
 import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
-import { SetupVaultPage } from '@clients/extension/src/pages/popup/pages/setup-vault'
+import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
@@ -23,6 +25,10 @@ const routes = [
     element: <ImportPage />,
   },
   {
+    path: appPaths.setupVault,
+    element: <SetupVaultPageController />,
+  },
+  {
     path: appPaths.root,
     element: <Layout />,
     children: [
@@ -31,9 +37,14 @@ const routes = [
         element: <MainPage />,
       },
       {
-        path: appPaths.setupVault,
-        element: <SetupVaultPage />,
+        path: appPaths.onboarding,
+        element: (
+          <IncompleteOnboardingOnly>
+            <OnboardingPage />
+          </IncompleteOnboardingOnly>
+        ),
       },
+
       {
         path: appPaths.vaults,
         element: <VaultsPage />,

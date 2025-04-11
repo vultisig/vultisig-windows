@@ -266,7 +266,7 @@ const Component = () => {
         <Upload.Dragger {...props} className={status}>
           <div className="state state-default">
             <img src="/images/qr-code.png" className="icon" alt="QR" />
-            <Text color="contrast" weight={700}>
+            <Text className="title" size={16} color="contrast" weight={700}>
               {t('add_vault_qrcode')}
             </Text>
             <span className="desc">
@@ -275,7 +275,7 @@ const Component = () => {
           </div>
           <div className="state state-hover">
             <img src="/images/upload.png" className="icon" alt="upload" />
-            <Text color="contrast" weight={700}>
+            <Text className="title" color="contrast" weight={700}>
               {t('drop_file_here')}
             </Text>
           </div>
