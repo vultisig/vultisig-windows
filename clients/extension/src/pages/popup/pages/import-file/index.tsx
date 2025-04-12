@@ -1,5 +1,6 @@
 import '@clients/extension/src/pages/popup/pages/import/index.scss'
 
+import { fromBinary } from '@bufbuild/protobuf'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
@@ -10,10 +11,7 @@ import {
   isSupportedChain,
   supportedChains,
 } from '@clients/extension/src/utils/constants'
-import {
-  calculateWindowPosition,
-  toCamelCase,
-} from '@clients/extension/src/utils/functions'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -21,14 +19,20 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import {
+  VaultContainer,
+  VaultContainerSchema,
+} from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
+import { Vault, VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Text } from '@lib/ui/text'
 import { Button, Upload, UploadProps } from 'antd'
+//import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
+import { Buffer } from 'buffer'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
-import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
 
 interface InitialState {
   file?: File
@@ -48,6 +52,25 @@ const Component = () => {
   const goBack = useGoBack()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
+
+  const validateBase64 = (str: string): boolean => {
+    const regex =
+      /^(?:[A-Za-z0-9+/]{4})*?(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+
+    return regex.test(str)
+  }
+
+  const decodeData = (data: string): Buffer => {
+    return Buffer.from(data, 'base64')
+  }
+
+  const decodeContainer = (bytes: Buffer): VaultContainer => {
+    return fromBinary(VaultContainerSchema, bytes)
+  }
+
+  const decodeVault = (bytes: Buffer): Vault => {
+    return fromBinary(VaultSchema, bytes)
+  }
 
   const handleFinish = (): void => {
     if (isPopup) window.close()
@@ -144,105 +167,100 @@ const Component = () => {
 
     const reader = new FileReader()
 
-    const imageFormats: string[] = [
-      'image/jpg',
-      'image/jpeg',
-      'image/png',
-      'image/bmp',
-    ]
-
     reader.onload = () => {
-      const readerOptions: ReaderOptions = {
-        tryHarder: true,
-        formats: ['QRCode'],
-        maxNumberOfSymbols: 1,
-      }
+      const data = reader.result as string
 
       setState(prevState => ({ ...prevState, file }))
 
-      readBarcodesFromImageFile(file, readerOptions)
-        .then(([result]) => {
-          if (result) {
-            try {
-              const vault: VaultProps = JSON.parse(result.text)
+      if (data && validateBase64(data)) {
+        const decodedData = decodeData(data)
+        const decodedContainer = decodeContainer(decodedData)
 
+        if (decodedContainer.vault) {
+          if (decodedContainer.isEncrypted) {
+            console.log('isEncrypted')
+
+            // get password and decrypt vault
+            // use decryptWithAesGcm
+          } else {
+            const decodedData = decodeData(decodedContainer.vault)
+            const decodedVault = decodeVault(decodedData)
+
+            if (decodedVault.hexChainCode) {
               setState(prevState => ({
                 ...prevState,
                 vault: {
-                  ...toCamelCase(vault),
+                  ...(decodedVault as any as VaultProps),
                   apps: [],
                   chains: [],
                   transactions: [],
                 },
                 status: 'success',
               }))
-            } catch {
+            } else {
               handleError(errorKey.INVALID_VAULT)
             }
           }
-        })
-        .catch(() => {
-          handleError(errorKey.INVALID_QRCODE)
-        })
+        } else {
+          handleError(errorKey.INVALID_FILE)
+        }
+      } else {
+        handleError(errorKey.INVALID_FILE)
+      }
     }
 
-    reader.onerror = () => {
+    reader.onerror = error => {
       handleError(errorKey.INVALID_FILE)
     }
 
-    if (imageFormats.indexOf(file.type) >= 0) {
-      reader.readAsDataURL(file)
-    } else {
-      handleError(errorKey.INVALID_EXTENSION)
-    }
+    reader.readAsText(file)
 
     return false
   }
 
-  const componentDidMount = (): void => {
-    if (!walletCore) {
-      return
-    }
-    const parser = new UAParser()
-    const parserResult = parser.getResult()
+  const componentDidUpdate = (): void => {
+    if (walletCore) {
+      const parser = new UAParser()
+      const parserResult = parser.getResult()
 
-    if (!isPopup && parserResult.os.name !== 'Windows') {
-      setState({ ...state, isWindows: false })
+      if (!isPopup && parserResult.os.name !== 'Windows') {
+        setState({ ...state, isWindows: false })
 
-      chrome.windows.getCurrent({ populate: true }, currentWindow => {
-        let createdWindowId: number
-        const { height, left, top, width } =
-          calculateWindowPosition(currentWindow)
+        chrome.windows.getCurrent({ populate: true }, currentWindow => {
+          let createdWindowId: number
+          const { height, left, top, width } =
+            calculateWindowPosition(currentWindow)
 
-        chrome.windows.create(
-          {
-            url: chrome.runtime.getURL('import.html?isPopup=true'),
-            type: 'panel',
-            height,
-            left,
-            top,
-            width,
-          },
-          window => {
-            if (window?.id) createdWindowId = window.id
-          }
-        )
+          chrome.windows.create(
+            {
+              url: chrome.runtime.getURL('import.html?isPopup=true'),
+              type: 'panel',
+              height,
+              left,
+              top,
+              width,
+            },
+            window => {
+              if (window?.id) createdWindowId = window.id
+            }
+          )
 
-        chrome.windows.onRemoved.addListener(closedWindowId => {
-          if (closedWindowId === createdWindowId) {
-            getStoredVaults().then(vaults => {
-              const active = vaults.find(({ active }) => active)
+          chrome.windows.onRemoved.addListener(closedWindowId => {
+            if (closedWindowId === createdWindowId) {
+              getStoredVaults().then(vaults => {
+                const active = vaults.find(({ active }) => active)
 
-              if (active) handleFinish()
-            })
-          }
+                if (active) handleFinish()
+              })
+            }
+          })
         })
-      })
+      }
     }
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [walletCore])
+  useEffect(componentDidUpdate, [walletCore])
 
   const props: UploadProps = {
     multiple: false,
@@ -284,13 +302,9 @@ const Component = () => {
               {status === 'error' ? t('import_failed') : t('import_successed')}
             </span>
             <img
-              src={
-                status === 'error'
-                  ? '/images/qr-error.png'
-                  : '/images/qr-success.png'
-              }
+              src={`/images/qr-${status}.png`}
               className="image"
-              alt={status === 'error' ? 'error' : 'success'}
+              alt={status}
             />
             {(file as File)?.name && (
               <span className="name">{(file as File).name}</span>

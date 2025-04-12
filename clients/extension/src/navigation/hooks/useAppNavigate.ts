@@ -1,6 +1,3 @@
-import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-
 import {
   AppPath,
   AppPathParams,
@@ -10,7 +7,9 @@ import {
   AppPathsWithOnlyState,
   AppPathsWithParamsAndState,
   makeAppPath,
-} from '..'
+} from '@clients/extension/src/navigation'
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type CommonOptions = { replace?: boolean }
 

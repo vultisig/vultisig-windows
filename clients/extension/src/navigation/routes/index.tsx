@@ -4,7 +4,7 @@ import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
-import ImportPage from '@clients/extension/src/pages/popup/pages/import'
+import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
@@ -15,6 +15,8 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import ImportQRPage from '../../pages/popup/pages/import'
+
 const routes = [
   {
     path: appPaths.landing,
@@ -22,11 +24,23 @@ const routes = [
   },
   {
     path: appPaths.import,
-    element: <ImportPage />,
+    element: <ImportQRPage />,
+  },
+  {
+    path: appPaths.importFile,
+    element: <ImportFilePage />,
   },
   {
     path: appPaths.setupVault,
     element: <SetupVaultPageController />,
+  },
+  {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
   },
   {
     path: appPaths.root,
@@ -36,15 +50,6 @@ const routes = [
         index: true,
         element: <MainPage />,
       },
-      {
-        path: appPaths.onboarding,
-        element: (
-          <IncompleteOnboardingOnly>
-            <OnboardingPage />
-          </IncompleteOnboardingOnly>
-        ),
-      },
-
       {
         path: appPaths.vaults,
         element: <VaultsPage />,

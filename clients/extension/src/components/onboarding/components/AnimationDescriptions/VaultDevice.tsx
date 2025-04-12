@@ -1,8 +1,7 @@
+import { TextWrapper } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/AnimationDescriptions.styled'
+import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
 import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { AnimatedVisibility } from '../../../shared/AnimatedVisibility'
-import { TextWrapper } from './AnimationDescriptions.styled'
 
 export const VaultDevice = () => {
   const { t } = useTranslation()

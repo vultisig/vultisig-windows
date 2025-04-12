@@ -38,20 +38,10 @@ export const NewVaultPage = ({ withBackButton = true }) => {
             <HorizontalLine />
           </HStack>
           <VStack gap={12}>
-            <ScanQRCodeLink
-              to={makeAppPath('uploadQr', {
-                title: t('scan_qr'),
-              })}
-              style={{ textDecoration: 'none' }}
-            >
-              <Button as="span" kind="secondary">
-                {t('scan_qr')}
-              </Button>
-            </ScanQRCodeLink>
-            <Button
-              onClick={() => navigate('import', { params: {} })}
-              kind="secondary"
-            >
+            <Button onClick={() => navigate('import')} kind="secondary">
+              {t('scan_qr')}
+            </Button>
+            <Button onClick={() => navigate('importFile')} kind="secondary">
               {t('import_vault')}
             </Button>
           </VStack>

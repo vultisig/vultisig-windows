@@ -1,10 +1,9 @@
+import { Checkbox } from '@clients/extension/src/components/shared/checkbox/Checkbox'
+import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { Checkbox } from '../../../shared/checkbox/Checkbox'
-import { PageContent } from '../../../shared/Page/PageContent'
 
 export const Wrapper = styled(PageContent)`
   padding-inline: 12px;

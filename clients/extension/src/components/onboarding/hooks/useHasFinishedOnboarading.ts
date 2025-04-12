@@ -1,6 +1,6 @@
-import { PersistentStateKey } from '../../../state/persistent/PersistentStateKey'
-import { usePersistentStateMutation } from '../../../state/persistent/usePersistentStateMutation'
-import { usePersistentStateQuery } from '../../../state/persistent/usePersistentStateQuery'
+import { PersistentStateKey } from '@clients/extension/src/state/persistent/PersistentStateKey'
+import { usePersistentStateMutation } from '@clients/extension/src/state/persistent/usePersistentStateMutation'
+import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 
 export const useHasFinishedOnboarding = () => {
   return usePersistentStateQuery<boolean>(

@@ -1,3 +1,7 @@
+import { AnimationDescription } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions'
+import { RiveWrapper } from '@clients/extension/src/components/onboarding/components/Onobarding.styled'
+import { useOnboardingStepsAnimations } from '@clients/extension/src/components/onboarding/hooks/useOnboardingStepsAnimations'
+import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
@@ -9,11 +13,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { PageContent } from '../../shared/Page/PageContent'
-import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
-import { AnimationDescription } from './AnimationDescriptions'
-import { RiveWrapper } from './Onobarding.styled'
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void

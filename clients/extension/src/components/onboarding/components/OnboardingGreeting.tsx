@@ -1,10 +1,9 @@
+import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { AnimatedVisibility } from '../../shared/AnimatedVisibility'
 
 const DELAY_BEFORE_NEXT_STEP_IN_MS = 500
 

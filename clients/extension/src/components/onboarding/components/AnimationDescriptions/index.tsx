@@ -1,13 +1,12 @@
+import { VaultBackup } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultBackup'
+import { VaultDevice } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultDevice'
+import { VaultRecovery } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultRecovery'
+import { VaultSharesInfo } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultSharesInfo'
+import { VaultSharesIntro } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultSharesIntro'
+import { VaultUnlock } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions/VaultUnlock'
+import { ONBOARDING_ANIMATIONS } from '@clients/extension/src/components/onboarding/hooks/useOnboardingStepsAnimations'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
-
-import { ONBOARDING_ANIMATIONS } from '../../hooks/useOnboardingStepsAnimations'
-import { VaultBackup } from './VaultBackup'
-import { VaultDevice } from './VaultDevice'
-import { VaultRecovery } from './VaultRecovery'
-import { VaultSharesInfo } from './VaultSharesInfo'
-import { VaultSharesIntro } from './VaultSharesIntro'
-import { VaultUnlock } from './VaultUnlock'
 
 const ANIMATIONS_CONTENT = [
   () => <VaultSharesIntro />,

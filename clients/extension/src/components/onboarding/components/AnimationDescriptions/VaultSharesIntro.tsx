@@ -1,8 +1,7 @@
+import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
 import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { AnimatedVisibility } from '../../../shared/AnimatedVisibility'
 
 const TextWrapper = styled.div`
   margin-inline: auto;

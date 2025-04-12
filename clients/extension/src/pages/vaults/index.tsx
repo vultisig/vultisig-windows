@@ -4,6 +4,7 @@ import '@clients/extension/src/pages/vaults/index.scss'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
+import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -14,8 +15,6 @@ import { Button, Checkbox, Form } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
-import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   uids: string[]

@@ -2,9 +2,10 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  setupVault: '/setup-vault',
+  setupVault: '/vault/setup',
   root: '/',
-  import: '/import',
+  import: '/vault/import/qr',
+  importFile: '/vault/import/file',
   landing: '/landing',
   main: '/main',
   vaults: '/vaults',
@@ -45,9 +46,9 @@ export type AppPathParams = {
 
 export type AppPathState = {}
 
-type AppPathsWithParams = keyof AppPathParams
+export type AppPathsWithParams = keyof AppPathParams
 
-type AppPathsWithState = keyof AppPathState
+export type AppPathsWithState = keyof AppPathState
 
 export type AppPathsWithParamsAndState = Extract<
   AppPathsWithParams,

@@ -1,3 +1,13 @@
+import {
+  ContentWrapper,
+  IconWrapper,
+  PillWrapper,
+  StyledCheckbox,
+  SummaryListItem,
+  Wrapper,
+} from '@clients/extension/src/components/onboarding/components/OnboardingSummary/OnboardingSummary.styles'
+import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -7,17 +17,6 @@ import { TriangleExclamationIcon } from '@lib/ui/icons/TriangleExclamationIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { AnimatedVisibility } from '../../../shared/AnimatedVisibility'
-import { useHasFinishedOnboardingMutation } from '../../hooks/useHasFinishedOnboarading'
-import {
-  ContentWrapper,
-  IconWrapper,
-  PillWrapper,
-  StyledCheckbox,
-  SummaryListItem,
-  Wrapper,
-} from './OnboardingSummary.styles'
 
 export const OnboardingSummary = () => {
   const { t } = useTranslation()

@@ -1,3 +1,6 @@
+import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { ProductEnhancedLogo } from '@clients/extension/src/components/shared/Logo/ProductEnhancedLogo'
+import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -7,10 +10,6 @@ import { Text, text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { ProductEnhancedLogo } from '../../shared/Logo/ProductEnhancedLogo'
-import { PageContent } from '../../shared/Page/PageContent'
-import { useHasFinishedOnboardingMutation } from '../hooks/useHasFinishedOnboarading'
 
 type OnboardingStep = {
   artUrl: string
