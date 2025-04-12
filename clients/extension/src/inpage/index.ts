@@ -1,7 +1,3 @@
-import _ from 'lodash'
-
-window.lodash = _.noConflict()
-
 import {
   ThorchainProviderRequest,
   ThorchainProviderResponse,
@@ -350,7 +346,7 @@ namespace Provider {
       })
     }
 
-    async signPsbt() {
+    async signPsbt(_psbt: string | Buffer) {
       return await this.request({
         method: RequestMethod.CTRL.SIGN_PSBT,
         params: [],
