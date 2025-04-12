@@ -24,6 +24,8 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toUtf8String } from 'ethers'
 import { ParsedSolanaSwapParams } from './solanaSwap'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { data } from 'react-router-dom'
+import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 
 export const getSolanaSwapKeysignPayload = (
   parsedSwapParams: ParsedSolanaSwapParams,
@@ -33,12 +35,17 @@ export const getSolanaSwapKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
-        console.log('transaction:', transaction)
+        const txInputDataArray = Object.values(
+          (transaction as any).serializedTx
+        )
+        const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
 
+        const dataBuffer = Buffer.from(txInputDataBuffer)
+        const baes64Data = base64.encode(dataBuffer)
         const accountCoin = {
           chain: transaction.chain.chain,
           decimals: parsedSwapParams.inputToken.decimals,
-          id: parsedSwapParams.inputToken.address,
+          id: parsedSwapParams.inputToken.symbol,
           logo: parsedSwapParams.inputToken.logoURI || '',
           ticker: parsedSwapParams.inputToken.symbol,
           priceProviderId: parsedSwapParams.inputToken.extensions?.coingeckoId,
@@ -90,6 +97,19 @@ export const getSolanaSwapKeysignPayload = (
             ticker: parsedSwapParams.outputToken.symbol,
           },
           fromAmount: String(parsedSwapParams.inAmount),
+          toAmountDecimal: String(parsedSwapParams.outputToken.decimals),
+          quote: {
+            dstAmount: String(parsedSwapParams.outAmount),
+            tx: {
+              data: baes64Data,
+              from: parsedSwapParams.authority,
+              value: '0',
+              gas: 0n,
+              gasPrice: '0',
+              swapFee: '25000',
+              to: '',
+            },
+          },
         })
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: '',
@@ -99,6 +119,7 @@ export const getSolanaSwapKeysignPayload = (
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,
+          swapPayload: { case: 'oneinchSwapPayload', value: swapPayload },
         })
         if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))

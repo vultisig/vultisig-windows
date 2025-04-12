@@ -81,6 +81,7 @@ import { useTranslation } from 'react-i18next'
 import { AppProviders } from '../../providers/AppProviders'
 import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
+import { Chain } from '@core/chain/Chain'
 
 interface FormProps {
   password: string
@@ -542,7 +543,23 @@ const Component = () => {
             walletCore,
             (transaction as any).serializedTx
           )
-          transaction.transactionDetails.from = parsedSolanaSwap.authority!
+          console.log('parsedSwap', parsedSolanaSwap)
+          console.log(
+            'parsedSolanaSwap.authority!:',
+            parsedSolanaSwap.authority!
+          )
+          transaction.transactionDetails = {
+            asset: {
+              chain: Chain.Solana,
+              ticker: parsedSolanaSwap.inputToken.symbol,
+              symbol: parsedSolanaSwap.inputToken.name,
+            },
+            from: parsedSolanaSwap.authority!,
+            amount: {
+              amount: parsedSolanaSwap.inAmount,
+              decimals: parsedSolanaSwap.inputToken.decimals,
+            },
+          }
         }
 
         const vault = vaults.find(({ chains }) =>

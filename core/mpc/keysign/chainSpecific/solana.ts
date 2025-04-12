@@ -37,6 +37,8 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
   })
 
   if (!isFeeCoin(coin)) {
+    console.log('not fee coin:', coin)
+
     const fromAccount = await getSplAssociatedAccount({
       account: coin.address,
       token: coin.id,

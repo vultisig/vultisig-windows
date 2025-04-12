@@ -7,6 +7,8 @@ import { PartialInstruction } from './types/types'
 import { NATIVE_MINT } from '@solana/spl-token'
 import api from '../../api'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+
 export interface ParsedSolanaSwapParams {
   authority: string | undefined
   inputToken: SolanaJupiterToken
@@ -49,8 +51,26 @@ export async function getParsedSolanaSwap(
     )
   console.log({ authority, inputMint, outputMint, inAmount, outAmount })
 
-  const inputToken = await api.solana.fetchSolanaTokenInfo(inputMint)
-  const outputToken = await api.solana.fetchSolanaTokenInfo(outputMint!)
+  const inputToken =
+    inputMint === NATIVE_MINT.toString()
+      ? ({
+          address: inputMint,
+          name: 'Solana',
+          symbol: chainFeeCoin.Solana.ticker,
+          decimals: chainFeeCoin.Solana.decimals,
+          logoURI: chainFeeCoin.Solana.logo,
+        } as unknown as SolanaJupiterToken)
+      : await api.solana.fetchSolanaTokenInfo(inputMint)
+  const outputToken =
+    outputMint! === NATIVE_MINT.toString()
+      ? ({
+          address: outputMint,
+          name: 'Solana',
+          symbol: chainFeeCoin.Solana.ticker,
+          decimals: chainFeeCoin.Solana.decimals,
+          logoURI: chainFeeCoin.Solana.logo,
+        } as unknown as SolanaJupiterToken)
+      : await api.solana.fetchSolanaTokenInfo(outputMint!)
 
   return { authority, inputToken, outputToken, inAmount, outAmount }
 }
