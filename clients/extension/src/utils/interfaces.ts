@@ -42,7 +42,6 @@ export interface AccountsProps {
 export interface ChainProps {
   active?: boolean
   address?: string
-  cmcId?: number
   decimals: number
   derivationKey?: string
   id: string
