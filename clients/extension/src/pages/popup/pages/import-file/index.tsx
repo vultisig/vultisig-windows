@@ -29,6 +29,7 @@ import { Text } from '@lib/ui/text'
 import { Button, Upload, UploadProps } from 'antd'
 //import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { Buffer } from 'buffer'
+import { createHash } from 'crypto'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
@@ -188,6 +189,17 @@ const Component = () => {
             const decodedVault = decodeVault(decodedData)
 
             if (decodedVault.hexChainCode) {
+              const uid = createHash('sha256')
+                .update(
+                  [
+                    decodedVault.name,
+                    decodedVault.publicKeyEcdsa,
+                    decodedVault.publicKeyEddsa,
+                    decodedVault.hexChainCode,
+                  ].join('-')
+                )
+                .digest('hex')
+
               setState(prevState => ({
                 ...prevState,
                 vault: {
@@ -195,7 +207,7 @@ const Component = () => {
                   name: decodedVault.name,
                   publicKeyEcdsa: decodedVault.publicKeyEcdsa,
                   publicKeyEddsa: decodedVault.publicKeyEddsa,
-                  uid: '',
+                  uid,
                   apps: [],
                   chains: [],
                   transactions: [],
