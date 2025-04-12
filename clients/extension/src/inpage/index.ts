@@ -1022,9 +1022,19 @@ announceProvider({
 
 let prioritize: boolean = true
 
+let attempts = 0
+const maxAttempts = 20
 const intervalRef = setInterval(() => {
-  if ((window.ethereum && window.vultisig) || prioritize == false)
+  attempts++
+
+  if (
+    (window.ethereum && window.vultisig) ||
+    prioritize === false ||
+    attempts >= maxAttempts
+  ) {
     clearInterval(intervalRef)
+    return
+  }
 
   sendToBackgroundViaRelay<
     Messaging.SetPriority.Request,
@@ -1040,6 +1050,7 @@ const intervalRef = setInterval(() => {
         providerCopy.isMetaMask = false
         window.isCtrl = true
         window.xfi.installed = true
+
         announceProvider({
           info: {
             icon: VULTI_ICON_RAW_SVG,
@@ -1049,6 +1060,7 @@ const intervalRef = setInterval(() => {
           },
           provider: providerCopy as Provider.Ethereum as EIP1193Provider,
         })
+
         announceProvider({
           info: {
             icon: VULTI_ICON_RAW_SVG,
@@ -1084,18 +1096,14 @@ const intervalRef = setInterval(() => {
                 ...(window.ethereum ? [window.ethereum] : []),
               ],
               setDefaultProvider(vultiAsDefault: boolean) {
-                if (vultiAsDefault) {
-                  window.vultiConnectRouter.currentProvider = window.vultisig
-                } else {
-                  const nonDefaultProvider =
-                    window.vultiConnectRouter?.lastInjectedProvider ??
-                    window.ethereum
-                  window.vultiConnectRouter.currentProvider = nonDefaultProvider
-                }
+                window.vultiConnectRouter.currentProvider = vultiAsDefault
+                  ? window.vultisig
+                  : (window.vultiConnectRouter?.lastInjectedProvider ??
+                    window.ethereum)
               },
               addProvider(provider: Provider.Ethereum) {
-                if (!window.vultiConnectRouter?.providers?.includes(provider)) {
-                  window.vultiConnectRouter?.providers?.push(provider)
+                if (!window.vultiConnectRouter.providers.includes(provider)) {
+                  window.vultiConnectRouter.providers.push(provider)
                 }
                 if (ethereumProvider !== provider) {
                   window.vultiConnectRouter.lastInjectedProvider = provider
@@ -1155,5 +1163,7 @@ const intervalRef = setInterval(() => {
         prioritize = false
       }
     })
-    .catch(() => {})
+    .catch(error => {
+      console.error(error)
+    })
 }, 500)

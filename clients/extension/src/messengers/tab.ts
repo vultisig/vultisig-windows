@@ -24,10 +24,14 @@ function sendMessage<TPayload>(
   message: SendMessage<TPayload>,
   { tabId }: { tabId?: number } = {}
 ) {
-  if (!tabId) {
-    chrome?.runtime?.sendMessage?.(message)
-  } else {
-    chrome.tabs?.sendMessage(tabId, message)
+  try {
+    if (!tabId) {
+      chrome?.runtime?.sendMessage?.(message)
+    } else {
+      chrome.tabs?.sendMessage(tabId, message)
+    }
+  } catch (error) {
+    console.error('Error sending message:', error)
   }
 }
 
