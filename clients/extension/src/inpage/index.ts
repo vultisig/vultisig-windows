@@ -1158,6 +1158,11 @@ const intervalRef = setInterval(() => {
             configurable: false,
             writable: false,
           },
+          keplr: {
+            value: { ...keplrProvider },
+            configurable: false,
+            writable: false,
+          },
         })
       } else {
         prioritize = false
