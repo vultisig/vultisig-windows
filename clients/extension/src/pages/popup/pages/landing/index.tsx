@@ -4,13 +4,11 @@ import { ProductLogoBlock } from '@clients/extension/src/components/shared/Logo/
 import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { PageHeader } from '@clients/extension/src/components/shared/Page/PageHeader'
 import { PageHeaderBackButton } from '@clients/extension/src/components/shared/Page/PageHeaderBackButton'
-import { makeAppPath } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const NewVaultPage = ({ withBackButton = true }) => {
@@ -38,7 +36,7 @@ export const NewVaultPage = ({ withBackButton = true }) => {
             <HorizontalLine />
           </HStack>
           <VStack gap={12}>
-            <Button onClick={() => navigate('import')} kind="secondary">
+            <Button onClick={() => navigate('importQR')} kind="secondary">
               {t('scan_qr')}
             </Button>
             <Button onClick={() => navigate('importFile')} kind="secondary">
@@ -56,8 +54,4 @@ const Wrapper = styled(AnimatedVisibility)`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-
-const ScanQRCodeLink = styled(Link)`
-  width: 100%;
 `

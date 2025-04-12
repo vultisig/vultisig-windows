@@ -1,4 +1,4 @@
-import { useHasFinishedOnboarding } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboarding } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarding'
 import { OnboardingController } from '@clients/extension/src/components/onboarding/OnboardingController'
 import { SetupVaultPage } from '@clients/extension/src/pages/popup/pages/setup-vault'
 

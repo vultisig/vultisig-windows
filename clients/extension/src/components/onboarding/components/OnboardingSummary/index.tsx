@@ -6,7 +6,7 @@ import {
   SummaryListItem,
   Wrapper,
 } from '@clients/extension/src/components/onboarding/components/OnboardingSummary/OnboardingSummary.styles'
-import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarding'
 import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'

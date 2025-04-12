@@ -1,4 +1,4 @@
-import { useHasFinishedOnboarding } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboarding } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarding'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'

@@ -178,10 +178,11 @@ const Component = () => {
 
         if (decodedContainer.vault) {
           if (decodedContainer.isEncrypted) {
-            console.log('isEncrypted')
+            console.warn(
+              'Encrypted vault detected - decryption not yet implemented'
+            )
 
-            // get password and decrypt vault
-            // use decryptWithAesGcm
+            handleError(errorKey.INVALID_VAULT)
           } else {
             const decodedData = decodeData(decodedContainer.vault)
             const decodedVault = decodeVault(decodedData)
@@ -190,7 +191,11 @@ const Component = () => {
               setState(prevState => ({
                 ...prevState,
                 vault: {
-                  ...(decodedVault as any as VaultProps),
+                  hexChainCode: decodedVault.hexChainCode,
+                  name: decodedVault.name,
+                  publicKeyEcdsa: decodedVault.publicKeyEcdsa,
+                  publicKeyEddsa: decodedVault.publicKeyEddsa,
+                  uid: '',
                   apps: [],
                   chains: [],
                   transactions: [],
@@ -209,7 +214,7 @@ const Component = () => {
       }
     }
 
-    reader.onerror = error => {
+    reader.onerror = () => {
       handleError(errorKey.INVALID_FILE)
     }
 
@@ -219,11 +224,11 @@ const Component = () => {
   }
 
   const componentDidUpdate = (): void => {
-    if (walletCore) {
+    if (walletCore && !isPopup) {
       const parser = new UAParser()
       const parserResult = parser.getResult()
 
-      if (!isPopup && parserResult.os.name !== 'Windows') {
+      if (parserResult.os.name !== 'Windows') {
         setState({ ...state, isWindows: false })
 
         chrome.windows.getCurrent({ populate: true }, currentWindow => {

@@ -1,5 +1,5 @@
 import { AnimationDescription } from '@clients/extension/src/components/onboarding/components/AnimationDescriptions'
-import { RiveWrapper } from '@clients/extension/src/components/onboarding/components/Onobarding.styled'
+import { RiveWrapper } from '@clients/extension/src/components/onboarding/components/Onboarding.styled'
 import { useOnboardingStepsAnimations } from '@clients/extension/src/components/onboarding/hooks/useOnboardingStepsAnimations'
 import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { IconButton } from '@lib/ui/buttons/IconButton'

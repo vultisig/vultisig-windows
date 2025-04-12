@@ -1,4 +1,4 @@
-import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboardingMutation } from '@clients/extension/src/components/onboarding/hooks/useHasFinishedOnboarding'
 import { ProductEnhancedLogo } from '@clients/extension/src/components/shared/Logo/ProductEnhancedLogo'
 import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
 import { Button } from '@lib/ui/buttons/Button'

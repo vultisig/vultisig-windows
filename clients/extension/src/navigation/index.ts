@@ -4,7 +4,7 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 export const appPaths = {
   setupVault: '/vault/setup',
   root: '/',
-  import: '/vault/import/qr',
+  importQR: '/vault/import/qr',
   importFile: '/vault/import/file',
   landing: '/landing',
   main: '/main',
@@ -46,9 +46,9 @@ export type AppPathParams = {
 
 export type AppPathState = {}
 
-export type AppPathsWithParams = keyof AppPathParams
+type AppPathsWithParams = keyof AppPathParams
 
-export type AppPathsWithState = keyof AppPathState
+type AppPathsWithState = keyof AppPathState
 
 export type AppPathsWithParamsAndState = Extract<
   AppPathsWithParams,

@@ -23,7 +23,7 @@ const routes = [
     element: <NewVaultPage />,
   },
   {
-    path: appPaths.import,
+    path: appPaths.importQR,
     element: <ImportQRPage />,
   },
   {
