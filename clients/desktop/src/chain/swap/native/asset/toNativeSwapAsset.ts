@@ -10,13 +10,11 @@ export const toNativeSwapAsset = ({
   id,
   ticker,
 }: CoinKey & EntityWithTicker): string => {
-  const nativeSwapEnabledChain = isOneOf(chain, nativeSwapEnabledChains)
-
-  if (!nativeSwapEnabledChain) {
+  if (!isOneOf(chain, nativeSwapEnabledChains)) {
     throw new Error(`No native swap enabled chain found for ${chain}`)
   }
 
-  const swapChainId = nativeSwapChainIds[nativeSwapEnabledChain]
+  const swapChainId = nativeSwapChainIds[chain]
 
   const key = `${swapChainId}.${ticker}`
 

@@ -20,10 +20,9 @@ export const processKeysignPayload = async (
   const { chain } = coin
 
   if ('swapPayload' in payload && payload.swapPayload.value) {
-    const evmChain = isOneOf(chain, Object.values(EvmChain))
-    if (evmChain && !coin.isNativeToken) {
+    if (isOneOf(chain, Object.values(EvmChain)) && !coin.isNativeToken) {
       const allowance = await getErc20Allowance({
-        chain: evmChain,
+        chain,
         spenderAddress: payload.toAddress as `0x${string}`,
         ownerAddress: coin.address as `0x${string}`,
         address: coin.contractAddress as `0x${string}`,
