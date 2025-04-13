@@ -1,3 +1,4 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -5,7 +6,6 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
-import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentVault } from '../../../state/currentVault'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'

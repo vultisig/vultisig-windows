@@ -1,5 +1,5 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -7,7 +7,6 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import RingProgress from '../../../components/ringProgress/RingProgress'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 const keygenCompletion: Record<KeygenStep, number> = {
   prepareVault: 25,
@@ -23,14 +22,14 @@ export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStep>) => {
   const keygenStageText: Record<KeygenStep, string | null> = {
     prepareVault: t('prepareVault'),
     ecdsa: match(keygenType, {
-      [KeygenType.Keygen]: () => t('generating_ecdsa_key'),
-      [KeygenType.Migrate]: () => t('generating_ecdsa_key'),
-      [KeygenType.Reshare]: () => t('resharing_ecdsa_key'),
+      create: () => t('generating_ecdsa_key'),
+      migrate: () => t('generating_ecdsa_key'),
+      reshare: () => t('resharing_ecdsa_key'),
     }),
     eddsa: match(keygenType, {
-      [KeygenType.Keygen]: () => t('generating_eddsa_key'),
-      [KeygenType.Migrate]: () => t('generating_eddsa_key'),
-      [KeygenType.Reshare]: () => t('resharing_eddsa_key'),
+      create: () => t('generating_eddsa_key'),
+      migrate: () => t('generating_eddsa_key'),
+      reshare: () => t('resharing_eddsa_key'),
     }),
   }
 

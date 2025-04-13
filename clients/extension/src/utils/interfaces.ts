@@ -42,7 +42,6 @@ export interface AccountsProps {
 export interface ChainProps {
   active?: boolean
   address?: string
-  cmcId?: number
   decimals: number
   derivationKey?: string
   id: string
@@ -72,14 +71,6 @@ interface CustomMessage {
   method: string
   address: string
   message: string
-}
-
-export interface SignatureProps {
-  Msg: string
-  R: string
-  S: string
-  DerSignature: string
-  RecoveryID: string
 }
 
 export namespace TransactionType {

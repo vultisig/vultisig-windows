@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@core/chain": "workspace:*",
+    "@core/config": "workspace:*",
     "@core/mpc": "workspace:*",
     "@lib/codegen": "workspace:*",
     "@lib/ui": "workspace:*",

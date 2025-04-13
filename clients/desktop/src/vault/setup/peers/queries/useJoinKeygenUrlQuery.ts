@@ -1,36 +1,34 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { deepLinkBaseUrl } from '@core/config'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   assertKeygenReshareFields,
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { match } from '@lib/utils/match'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
 
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
-import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
-import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { useMpcLib } from '../../../../mpc/state/mpcLib'
-import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
-import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'
-import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
-import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
+import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 
 export const useJoinKeygenUrlQuery = () => {
   const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
-  const serviceName = useCurrentServiceName()
+  const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
-  const mpcLibType = useMpcLib()
 
   const keygenType = useCurrentKeygenType()
 
@@ -38,14 +36,21 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenVault = useKeygenVault()
 
+  const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+
   return useTransformQueryData(
     useSevenZipQuery(),
     useCallback(
       sevenZip => {
-        const libType = toLibType(mpcLibType)
+        const libType = toLibType(
+          'existingVault' in keygenVault
+            ? keygenVault.existingVault.libType
+            : vaultCreationMpcLib
+        )
+
         const useVultisigRelay = serverType === 'relay'
         const binary = match(keygenType, {
-          [KeygenType.Keygen]: () => {
+          create: () => {
             const message = create(KeygenMessageSchema, {
               sessionId,
               hexChainCode,
@@ -57,7 +62,7 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(KeygenMessageSchema, message)
           },
-          [KeygenType.Reshare]: () => {
+          reshare: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
               serviceName,
@@ -69,7 +74,7 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(ReshareMessageSchema, message)
           },
-          [KeygenType.Migrate]: () => {
+          migrate: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
               serviceName,
@@ -99,10 +104,10 @@ export const useJoinKeygenUrlQuery = () => {
         hexEncryptionKey,
         keygenType,
         keygenVault,
-        mpcLibType,
         serverType,
         serviceName,
         sessionId,
+        vaultCreationMpcLib,
         vaultName,
       ]
     )

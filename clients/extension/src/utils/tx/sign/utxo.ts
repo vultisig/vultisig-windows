@@ -1,6 +1,7 @@
 import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSignedTxResolver'
 import { UtxoChain } from '@core/chain/Chain'
 import { TW } from '@trustwallet/wallet-core'
+import base58 from 'bs58'
 
 export const getSignedUtxoTx: GetSignedTxResolver<UtxoChain> = async ({
   compiledTx,
@@ -11,7 +12,11 @@ export const getSignedUtxoTx: GetSignedTxResolver<UtxoChain> = async ({
   }
   try {
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compiledTx)
-    return { raw: output.encoded, txResponse: output.transactionId }
+
+    return {
+      raw: base58.encode(output.encoded),
+      txResponse: output.transactionId,
+    }
   } catch (error) {
     throw new Error(`Failed to decode UTXO transaction: ${error}`)
   }

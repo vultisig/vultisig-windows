@@ -1,11 +1,10 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
 
 import { SecureVaultKeygenFlow } from '../../keygen/shared/SecureVaultKeygenFlow'
-import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 
 export const SecureMigrateVaultPage = () => {
   return (
-    <CurrentKeygenTypeProvider value={KeygenType.Migrate}>
+    <CurrentKeygenTypeProvider value={'migrate'}>
       <SecureVaultKeygenFlow />
     </CurrentKeygenTypeProvider>
   )

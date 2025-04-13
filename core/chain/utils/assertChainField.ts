@@ -5,11 +5,9 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 export const assertChainField = <C extends Chain, T extends { chain?: string }>(
   input: T
 ): T & { chain: C } => {
-  const chain = isOneOf(shouldBePresent(input.chain), Object.values(Chain))
-
-  if (!chain) {
+  if (!isOneOf(shouldBePresent(input.chain), Object.values(Chain))) {
     throw new Error(`Invalid chain value: ${input.chain}`)
   }
 
-  return { ...input, chain: chain as C }
+  return { ...input, chain: input.chain as C }
 }

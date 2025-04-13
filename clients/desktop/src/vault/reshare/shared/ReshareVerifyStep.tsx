@@ -1,4 +1,5 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -12,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
