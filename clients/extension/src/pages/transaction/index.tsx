@@ -565,93 +565,89 @@ const Component = () => {
           )
         )
 
-        if (vault) {
-          api.fastVault
-            .assertVaultExist(vault.publicKeyEcdsa)
-            .then(fastSign => {
-              if (transaction.isCustomMessage) {
-                setState(prevState => ({
-                  ...prevState,
-                  currency,
-                  fastSign,
-                  loaded: true,
-                  transaction,
-                  vault,
-                }))
-              } else if ((transaction as any).serializedTx) {
-                getSolanaSwapKeysignPayload(
-                  parsedSolanaSwap!,
-                  transaction,
-                  vault
-                ).then(keysignPayload => {
-                  setState(prevState => ({
-                    ...prevState,
-                    currency,
-                    fastSign,
-                    loaded: true,
-                    transaction,
-                    keysignPayload,
-                    vault,
-                  }))
-                })
-              } else {
-                getKeysignPayload(transaction, vault).then(keysignPayload => {
-                  transaction.txFee = String(
-                    formatUnits(
-                      getFeeAmount(
-                        keysignPayload.blockchainSpecific as KeysignChainSpecific
-                      ),
-                      transaction.transactionDetails.amount?.decimals
-                    )
-                  )
-
-                  // Parse Memo
-                  transaction.memo = { isParsed: false, value: undefined }
-
-                  if (getChainKind(transaction.chain.chain) == 'evm') {
-                    getParsedMemo(keysignPayload.memo).then(parsedMemo => {
-                      if (parsedMemo) {
-                        setState(prevState => ({
-                          ...prevState,
-                          fastSign,
-                          transaction: {
-                            ...prevState.transaction!,
-                            memo: {
-                              isParsed: true,
-                              value: parsedMemo,
-                            },
-                          },
-                        }))
-                      }
-                    })
-                  }
-
-                  if (!transaction.memo.isParsed) {
-                    try {
-                      transaction.memo.value = toUtf8String(
-                        transaction.transactionDetails.data!
-                      )
-                    } catch {
-                      transaction.memo.value =
-                        transaction.transactionDetails.data
-                    }
-                  }
-
-                  setState(prevState => ({
-                    ...prevState,
-                    currency,
-                    fastSign,
-                    loaded: true,
-                    transaction,
-                    keysignPayload,
-                    vault,
-                  }))
-                })
-              }
-            })
-        } else {
+        if (!vault) {
           setState(prevState => ({
             ...prevState,
+            hasError: true,
+            errorTitle: t('get_vault_failed'),
+            errorDescription: t('get_vault_failed_description'),
+          }))
+          return
+        }
+
+        try {
+          const fastSign = await api.fastVault.assertVaultExist(
+            vault.publicKeyEcdsa
+          )
+
+          if (transaction.isCustomMessage) {
+            setState(prev => ({
+              ...prev,
+              currency,
+              fastSign,
+              loaded: true,
+              transaction,
+              vault,
+            }))
+            return
+          }
+
+          let keysignPayload
+
+          if ((transaction as any).serializedTx && parsedSolanaSwap) {
+            keysignPayload = await getSolanaSwapKeysignPayload(
+              parsedSolanaSwap,
+              transaction,
+              vault
+            )
+          } else {
+            keysignPayload = await getKeysignPayload(transaction, vault)
+
+            transaction.txFee = String(
+              formatUnits(
+                getFeeAmount(
+                  keysignPayload.blockchainSpecific as KeysignChainSpecific
+                ),
+                transaction.transactionDetails.amount?.decimals
+              )
+            )
+
+            transaction.memo = { isParsed: false, value: undefined }
+
+            if (getChainKind(transaction.chain.chain) === 'evm') {
+              const parsedMemo = await getParsedMemo(keysignPayload.memo)
+              if (parsedMemo) {
+                transaction.memo = {
+                  isParsed: true,
+                  value: parsedMemo,
+                }
+              }
+            }
+
+            if (!transaction.memo.isParsed) {
+              try {
+                transaction.memo.value = toUtf8String(
+                  transaction.transactionDetails.data!
+                )
+              } catch {
+                transaction.memo.value = transaction.transactionDetails.data
+              }
+            }
+          }
+
+          setState(prev => ({
+            ...prev,
+            currency,
+            fastSign,
+            loaded: true,
+            transaction,
+            keysignPayload,
+            vault,
+          }))
+        } catch (err) {
+          console.error('Vault or keysign error:', err)
+          setState(prev => ({
+            ...prev,
             hasError: true,
             errorTitle: t('get_vault_failed'),
             errorDescription: t('get_vault_failed_description'),
