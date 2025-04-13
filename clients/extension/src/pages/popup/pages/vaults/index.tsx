@@ -1,15 +1,45 @@
+import {
+  Button,
+  Content,
+  Footer,
+  Header,
+  Layout,
+  List,
+} from '@clients/extension/src/components/ui'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, ArrowRight } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import { rem } from '@clients/extension/src/utils/functions'
+import { borderLight, buttonDisabled } from '@clients/extension/src/colors'
+
+const StyledActiveVault = styled.div`
+  border: solid ${rem(1)} ${borderLight};
+  border-radius: ${rem(12)};
+  display: flex;
+  gap: ${rem(12)};
+  padding: ${rem(16)} ${rem(20)};
+  position: relative;
+
+  &:before {
+    background-color: ${buttonDisabled};
+    bottom: 0;
+    content: '';
+    left: 0;
+    opacity: 0.5;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+`
 
 interface InitialState {
   vault?: VaultProps
@@ -21,19 +51,15 @@ const Component = () => {
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
   const { vault, vaults } = state
-  const navigate = useAppNavigate()
+  const navigate = useNavigate()
   const goBack = useGoBack()
 
   const handleSelect = (uid: string) => {
     setStoredVaults(
       vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
-    )
-      .then(() => {
-        goBack(appPaths.main)
-      })
-      .catch(error => {
-        console.error('Error setting stored vaults:', error)
-      })
+    ).then(() => {
+      goBack(appPaths.main)
+    })
   }
 
   const componentDidMount = (): void => {
@@ -47,53 +73,51 @@ const Component = () => {
   useEffect(componentDidMount, [])
 
   return vault ? (
-    <div className="layout vaults-page">
-      <div className="header">
-        <span className="heading">{t('choose_vault')}</span>
-        <ArrowLeft
-          className="icon icon-left"
-          onClick={() => goBack(appPaths.main)}
-        />
-      </div>
-      <div className="content">
-        <div className="list">
-          <div className="list-item">
-            <span className="label">{vault?.name}</span>
-            <span className="extra">
-              <span className="text">{t('active')}</span>
-            </span>
-          </div>
-        </div>
-        {vaults.length > 1 && (
-          <>
-            <span className="divider">{t('other_vaults')}</span>
-            <div className="list list-arrow list-action">
-              {vaults
-                .filter(({ uid }) => uid !== vault.uid)
-                .map(({ name, uid }) => (
-                  <button
-                    key={uid}
-                    onClick={() => handleSelect(uid)}
-                    className="list-item"
-                  >
-                    <span className="label">{name}</span>
-                    <ArrowRight className="action" />
-                  </button>
-                ))}
-            </div>
-          </>
+    <Layout>
+      <Header
+        heading={t('choose_vault')}
+        addonBefore={
+          <Button onClick={() => goBack(appPaths.main)} ghost>
+            <ArrowLeft />
+          </Button>
+        }
+      />
+      <Content style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {vault && (
+          <StyledActiveVault>
+            <span className="name">{vault.name}</span>
+            <span className="status">{t('active')}</span>
+          </StyledActiveVault>
         )}
-      </div>
-      <div className="footer">
+        {vaults.length > 1 && (
+          <List heading={t('other_vaults')}>
+            {vaults
+              .filter(({ uid }) => uid !== vault.uid)
+              .map(({ name, uid }) => (
+                <button
+                  key={uid}
+                  onClick={() => handleSelect(uid)}
+                  className="list-item"
+                >
+                  <span className="label">{name}</span>
+                  <ArrowRight className="action" />
+                </button>
+              ))}
+          </List>
+        )}
+      </Content>
+      <Footer>
         <Button
-          onClick={() => navigate('import', { params: { from: 'vaults' } })}
+          onClick={() => navigate(appPaths.import)}
           shape="round"
+          size="large"
+          type="primary"
           block
         >
           {t('add_new_vault')}
         </Button>
-      </div>
-    </div>
+      </Footer>
+    </Layout>
   ) : (
     <></>
   )

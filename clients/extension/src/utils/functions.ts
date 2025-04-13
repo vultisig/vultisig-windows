@@ -58,6 +58,10 @@ export const checkERC20Function = async (
   return await api.getIsFunctionSelector(functionSelector)
 }
 
+export const rem = (px: number, base: number = 16): string => {
+  return `${px / base}rem`
+}
+
 export const splitString = (str: string, size: number): string[] => {
   const result: string[] = []
 
