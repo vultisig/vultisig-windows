@@ -32,21 +32,36 @@ export async function getParsedSolanaSwap(
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx!)
   const tx = decodedTx.transaction!.v0!
   const staticAccountsPubkey = tx.accountKeys!.map(key => new PublicKey(key))
-  const accountKeys = decodedTx.transaction?.v0?.accountKeys ?? []
 
   const buildToken = async (mint: string): Promise<SolanaJupiterToken> => {
-    return mint === NATIVE_MINT.toString()
-      ? {
-          address: mint,
-          name: 'Solana',
-          symbol: chainFeeCoin.Solana.ticker,
-          decimals: chainFeeCoin.Solana.decimals,
-          logoURI: chainFeeCoin.Solana.logo,
-        }
-      : await api.solana.fetchSolanaTokenInfo(mint)
+    if (mint === NATIVE_MINT.toString()) {
+      return {
+        address: mint,
+        name: 'Solana',
+        symbol: chainFeeCoin.Solana.ticker,
+        decimals: chainFeeCoin.Solana.decimals,
+        logoURI: chainFeeCoin.Solana.logo,
+      }
+    }
+
+    try {
+      return await api.solana.fetchSolanaTokenInfo(mint)
+    } catch (err) {
+      console.warn(
+        `Failed to fetch token info for ${mint}. Falling back to native SOL:`,
+        err
+      )
+      return {
+        address: mint,
+        name: 'Solana',
+        symbol: chainFeeCoin.Solana.ticker,
+        decimals: chainFeeCoin.Solana.decimals,
+        logoURI: chainFeeCoin.Solana.logo,
+      }
+    }
   }
 
-  if (accountKeys.includes(JUPITER_V6_PROGRAM_ID.toString())) {
+  if (staticAccountsPubkey.some(key => key.equals(JUPITER_V6_PROGRAM_ID))) {
     const parser = new JupiterInstructionParser(JUPITER_V6_PROGRAM_ID)
     const { authority, inputMint, outputMint, inAmount, outAmount } =
       await parser.getInstructionParsedData(
@@ -61,7 +76,7 @@ export async function getParsedSolanaSwap(
     return { authority, inputToken, outputToken, inAmount, outAmount }
   }
 
-  if (accountKeys.includes(Raydium_AMM_Routing.toString())) {
+  if (staticAccountsPubkey.some(key => key.equals(Raydium_AMM_Routing))) {
     const parser = new RaydiumInstructionParser(Raydium_AMM_Routing)
     const { authority, inputMint, outputMint, inAmount, outAmount } =
       await parser.getInstructionParsedData(

@@ -44,7 +44,9 @@ export class RaydiumInstructionParser {
         const buffer = Buffer.from(
           Uint8Array.from(Object.values(instruction.programData))
         )
-
+        if (buffer.length < 17) {
+          continue
+        }
         const authority = accountKeys[0]?.toString() ?? ''
         const inAmount = Number(buffer.readBigUInt64LE(1))
         const outAmount = Number(buffer.readBigUInt64LE(9))
