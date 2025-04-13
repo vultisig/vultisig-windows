@@ -1,31 +1,25 @@
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
-import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
-import { TW, WalletCore } from '@trustwallet/wallet-core'
-import { InstructionParser } from './instruction-parser'
-import { JUPITER_V6_PROGRAM_ID } from './constants'
-import { PartialInstruction } from './types/types'
-import { NATIVE_MINT } from '@solana/spl-token'
-import api from '../../api'
-import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { NATIVE_MINT } from '@solana/spl-token'
+import { Connection, PublicKey } from '@solana/web3.js'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
 
-export interface ParsedSolanaSwapParams {
-  authority: string | undefined
-  inputToken: SolanaJupiterToken
-  outputToken: SolanaJupiterToken
-  inAmount: number
-  outAmount: number
-}
+import api from '../../api'
+import { JUPITER_V6_PROGRAM_ID, Raydium_AMM_Routing } from './constants'
+import { JupiterInstructionParser } from './jupiter-instruction-parser'
+import { RaydiumInstructionParser } from './raydium-instruction-parser'
+import { ParsedSolanaSwapParams, PartialInstruction } from './types/types'
+
 export interface AddressTableLookup {
   accountKey: string
   writableIndexes: number[]
   readonlyIndexes: number[]
 }
-
 export async function getParsedSolanaSwap(
   walletCore: WalletCore,
   inputTx: Uint8Array
-) {
+): Promise<ParsedSolanaSwapParams> {
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
 
@@ -36,43 +30,68 @@ export async function getParsedSolanaSwap(
   )
 
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx!)
-  console.log('Decoded Output:', decodedTx)
   const tx = decodedTx.transaction!.v0!
+  const staticAccountsPubkey = tx.accountKeys!.map(key => new PublicKey(key))
+  const accountKeys = decodedTx.transaction?.v0?.accountKeys ?? []
 
-  console.log('account Key', tx.accountKeys)
-  let staticAccountsPubkey = tx.accountKeys?.map(key => new PublicKey(key))
-
-  const parser = new InstructionParser(JUPITER_V6_PROGRAM_ID)
-  const { authority, inputMint, outputMint, inAmount, outAmount } =
-    await parser.getInstructionParsedData(
-      tx.instructions as PartialInstruction[],
-      staticAccountsPubkey!,
-      tx.addressTableLookups! as AddressTableLookup[]
-    )
-  console.log({ authority, inputMint, outputMint, inAmount, outAmount })
-
-  const inputToken =
-    inputMint === NATIVE_MINT.toString()
-      ? ({
-          address: inputMint,
+  const buildToken = async (mint: string): Promise<SolanaJupiterToken> => {
+    return mint === NATIVE_MINT.toString()
+      ? {
+          address: mint,
           name: 'Solana',
           symbol: chainFeeCoin.Solana.ticker,
           decimals: chainFeeCoin.Solana.decimals,
           logoURI: chainFeeCoin.Solana.logo,
-        } as unknown as SolanaJupiterToken)
-      : await api.solana.fetchSolanaTokenInfo(inputMint)
-  const outputToken =
-    outputMint! === NATIVE_MINT.toString()
-      ? ({
-          address: outputMint,
-          name: 'Solana',
-          symbol: chainFeeCoin.Solana.ticker,
-          decimals: chainFeeCoin.Solana.decimals,
-          logoURI: chainFeeCoin.Solana.logo,
-        } as unknown as SolanaJupiterToken)
-      : await api.solana.fetchSolanaTokenInfo(outputMint!)
+        }
+      : await api.solana.fetchSolanaTokenInfo(mint)
+  }
 
-  return { authority, inputToken, outputToken, inAmount, outAmount }
+  if (accountKeys.includes(JUPITER_V6_PROGRAM_ID.toString())) {
+    const parser = new JupiterInstructionParser(JUPITER_V6_PROGRAM_ID)
+    const { authority, inputMint, outputMint, inAmount, outAmount } =
+      await parser.getInstructionParsedData(
+        tx.instructions as PartialInstruction[],
+        staticAccountsPubkey,
+        tx.addressTableLookups! as AddressTableLookup[]
+      )
+
+    const inputToken = await buildToken(inputMint)
+    const outputToken = await buildToken(outputMint)
+
+    return { authority, inputToken, outputToken, inAmount, outAmount }
+  }
+
+  if (accountKeys.includes(Raydium_AMM_Routing.toString())) {
+    const parser = new RaydiumInstructionParser(Raydium_AMM_Routing)
+    const { authority, inputMint, outputMint, inAmount, outAmount } =
+      await parser.getInstructionParsedData(
+        tx.instructions as PartialInstruction[],
+        staticAccountsPubkey,
+        tx.addressTableLookups! as AddressTableLookup[]
+      )
+
+    const inputToken = await buildToken(inputMint)
+    const outputToken = await buildToken(outputMint)
+
+    return { authority, inputToken, outputToken, inAmount, outAmount }
+  }
+
+  // Default fallback if neither Jupiter nor Raydium
+  const fallbackToken: SolanaJupiterToken = {
+    address: NATIVE_MINT.toString(),
+    name: 'Solana',
+    symbol: chainFeeCoin.Solana.ticker,
+    decimals: chainFeeCoin.Solana.decimals,
+    logoURI: chainFeeCoin.Solana.logo,
+  }
+
+  return {
+    authority: staticAccountsPubkey[0].toString(),
+    inputToken: fallbackToken,
+    outputToken: fallbackToken,
+    inAmount: 0,
+    outAmount: 0,
+  }
 }
 
 export async function resolveAddressTableKeys(
@@ -80,7 +99,7 @@ export async function resolveAddressTableKeys(
 ): Promise<PublicKey[]> {
   const allResolvedKeys: PublicKey[] = []
   const connection = new Connection(chainRpcUrl.Solana)
-  for (const [index, lookup] of lookups.entries()) {
+  for (const lookup of lookups) {
     const tableAccountResult = await connection.getAddressLookupTable(
       new PublicKey(lookup.accountKey)
     )
@@ -92,19 +111,8 @@ export async function resolveAddressTableKeys(
       ...lookup.writableIndexes.map(idx => table.state.addresses[idx]),
       ...lookup.readonlyIndexes.map(idx => table.state.addresses[idx]),
     ]
-    console.log(
-      'resolved:',
-      'index:',
-      index,
-      resolved.map(res => res.toString())
-    )
-
     allResolvedKeys.push(...resolved)
   }
-  console.log(
-    'allResolvedKeys:',
-    allResolvedKeys.map(key => key.toString())
-  )
 
   return allResolvedKeys
 }

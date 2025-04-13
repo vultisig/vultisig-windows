@@ -1,4 +1,4 @@
-export type Jupiter = {
+type Jupiter = {
   version: '0.1.0'
   name: 'jupiter'
   instructions: [

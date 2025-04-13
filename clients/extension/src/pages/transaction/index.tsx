@@ -41,6 +41,7 @@ import {
 import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMessageSignature'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -79,9 +80,8 @@ import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
-import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
-import { Chain } from '@core/chain/Chain'
+import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 
 interface FormProps {
   password: string
@@ -537,16 +537,11 @@ const Component = () => {
         getStoredVaults(),
       ]).then(async ([currency, transactions, vaults]) => {
         let parsedSolanaSwap = undefined
-        let [transaction] = transactions
+        const [transaction] = transactions
         if ((transaction as any).serializedTx) {
           parsedSolanaSwap = await getParsedSolanaSwap(
             walletCore,
             (transaction as any).serializedTx
-          )
-          console.log('parsedSwap', parsedSolanaSwap)
-          console.log(
-            'parsedSolanaSwap.authority!:',
-            parsedSolanaSwap.authority!
           )
           transaction.transactionDetails = {
             asset: {
@@ -556,7 +551,7 @@ const Component = () => {
             },
             from: parsedSolanaSwap.authority!,
             amount: {
-              amount: parsedSolanaSwap.inAmount,
+              amount: String(parsedSolanaSwap.inAmount),
               decimals: parsedSolanaSwap.inputToken.decimals,
             },
           }
