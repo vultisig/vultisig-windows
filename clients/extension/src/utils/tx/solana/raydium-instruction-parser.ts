@@ -22,41 +22,51 @@ export class RaydiumInstructionParser {
     accountKeys: PublicKey[],
     lookups: AddressTableLookup[]
   ): Promise<ParsedInstructionsSolanaSwapParams> {
-    const resolvedLookUps = await resolveAddressTableKeys(lookups)
-    accountKeys = [...accountKeys, ...resolvedLookUps]
+    try {
+      const resolvedLookUps = await resolveAddressTableKeys(lookups)
+      accountKeys = [...accountKeys, ...resolvedLookUps]
 
-    for (const instruction of instructions) {
-      const programIdKey = accountKeys[instruction.programId]
-      if (!programIdKey || !programIdKey.equals(this.programId)) continue
+      for (const instruction of instructions) {
+        const programIdKey = accountKeys[instruction.programId]
+        if (!programIdKey || !programIdKey.equals(this.programId)) continue
 
-      if (!this.isRouting(instruction.programData)) continue
+        if (!this.isRouting(instruction.programData)) continue
 
-      const inputMint = await this.getMintFromAccount(
-        accountKeys,
-        instruction.accounts[5]
-      )
-      const outputMint = await this.getMintFromAccount(
-        accountKeys,
-        instruction.accounts[6]
-      )
+        const inputMint = await this.getMintFromAccount(
+          accountKeys,
+          instruction.accounts[5]
+        )
+        const outputMint = await this.getMintFromAccount(
+          accountKeys,
+          instruction.accounts[6]
+        )
 
-      const buffer = Buffer.from(
-        Uint8Array.from(Object.values(instruction.programData))
-      )
+        const buffer = Buffer.from(
+          Uint8Array.from(Object.values(instruction.programData))
+        )
 
-      const authority = accountKeys[0]?.toString() ?? ''
-      const inAmount = Number(buffer.readBigUInt64LE(1))
-      const outAmount = Number(buffer.readBigUInt64LE(9))
+        const authority = accountKeys[0]?.toString() ?? ''
+        const inAmount = Number(buffer.readBigUInt64LE(1))
+        const outAmount = Number(buffer.readBigUInt64LE(9))
 
+        return {
+          authority,
+          inputMint,
+          outputMint,
+          inAmount,
+          outAmount,
+        }
+      }
+    } catch (error) {
+      console.error(error)
       return {
-        authority,
-        inputMint,
-        outputMint,
-        inAmount,
-        outAmount,
+        authority: accountKeys[0].toString(),
+        inputMint: NATIVE_MINT.toString(),
+        outputMint: NATIVE_MINT.toString(),
+        inAmount: 0,
+        outAmount: 0,
       }
     }
-
     return {
       authority: accountKeys[0].toString(),
       inputMint: NATIVE_MINT.toString(),

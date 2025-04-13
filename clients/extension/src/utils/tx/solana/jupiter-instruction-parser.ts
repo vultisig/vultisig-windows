@@ -25,58 +25,68 @@ export class JupiterInstructionParser {
     accountKeys: PublicKey[],
     lookups: AddressTableLookup[]
   ): Promise<ParsedInstructionsSolanaSwapParams> {
-    const resolvedLookUps = await resolveAddressTableKeys(lookups)
-    accountKeys = [...accountKeys, ...resolvedLookUps]
+    try {
+      const resolvedLookUps = await resolveAddressTableKeys(lookups)
+      accountKeys = [...accountKeys, ...resolvedLookUps]
 
-    for (const instruction of instructions) {
-      const programIdKey = accountKeys[instruction.programId]
-      if (!programIdKey || !programIdKey.equals(this.programId)) continue
+      for (const instruction of instructions) {
+        const programIdKey = accountKeys[instruction.programId]
+        if (!programIdKey || !programIdKey.equals(this.programId)) continue
 
-      const programDataBuffer = new Uint8Array(
-        Object.values(instruction.programData) as any
-      )
-      const ix = this.coder.instruction.decode(
-        base58.encode(programDataBuffer),
-        'base58'
-      )
+        const programDataBuffer = new Uint8Array(
+          Object.values(instruction.programData) as any
+        )
+        const ix = this.coder.instruction.decode(
+          base58.encode(programDataBuffer),
+          'base58'
+        )
 
-      if (!ix || !this.isRouting(ix.name)) continue
+        if (!ix || !this.isRouting(ix.name)) continue
 
-      const currentIns = IDL.instructions.find(ins => ins.name === ix.name)
-      if (!currentIns) continue
+        const currentIns = IDL.instructions.find(ins => ins.name === ix.name)
+        if (!currentIns) continue
 
-      const inAmount = (ix.data as any).inAmount.toNumber()
-      const outAmount = (ix.data as any).quotedOutAmount.toNumber()
+        const inAmount = (ix.data as any).inAmount.toNumber()
+        const outAmount = (ix.data as any).quotedOutAmount.toNumber()
 
-      const authority = this.getAccountFromIndex(
-        currentIns,
-        instruction,
-        accountKeys,
-        'userTransferAuthority'
-      )
-      const outputMint = this.getAccountFromIndex(
-        currentIns,
-        instruction,
-        accountKeys,
-        'destinationMint'
-      )
+        const authority = this.getAccountFromIndex(
+          currentIns,
+          instruction,
+          accountKeys,
+          'userTransferAuthority'
+        )
+        const outputMint = this.getAccountFromIndex(
+          currentIns,
+          instruction,
+          accountKeys,
+          'destinationMint'
+        )
 
-      const inputMint = await this.resolveInputMint(
-        currentIns,
-        instruction,
-        accountKeys,
-        authority
-      )
+        const inputMint = await this.resolveInputMint(
+          currentIns,
+          instruction,
+          accountKeys,
+          authority
+        )
 
+        return {
+          authority,
+          inputMint,
+          outputMint,
+          inAmount,
+          outAmount,
+        }
+      }
+    } catch (error) {
+      console.error(error)
       return {
-        authority,
-        inputMint,
-        outputMint,
-        inAmount,
-        outAmount,
+        authority: accountKeys[0].toString(),
+        inputMint: NATIVE_MINT.toString(),
+        outputMint: NATIVE_MINT.toString(),
+        inAmount: 0,
+        outAmount: 0,
       }
     }
-
     return {
       authority: accountKeys[0].toString(),
       inputMint: NATIVE_MINT.toString(),
