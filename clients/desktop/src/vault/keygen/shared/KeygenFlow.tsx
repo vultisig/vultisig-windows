@@ -41,8 +41,8 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       success={vault => (
         <CurrentVaultProvider value={vault}>
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSuccessScreen onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSuccessScreen onFinish={onFinish} />
             )}
             to={() => {
               if (hasServer(vault.signers)) {
@@ -51,11 +51,11 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
               return (
                 <StepTransition
-                  from={({ onForward }) => (
+                  from={({ onFinish }) => (
                     <SaveVaultStep
                       title={title}
                       value={vault}
-                      onForward={onForward}
+                      onFinish={onFinish}
                     />
                   )}
                   to={() => <VaultKeygenEnding />}

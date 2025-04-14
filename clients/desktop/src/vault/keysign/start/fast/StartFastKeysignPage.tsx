@@ -49,10 +49,10 @@ export const StartFastKeysignPage = () => {
                       <Match
                         value={step}
                         password={() => (
-                          <ServerPasswordStep onForward={toNextStep} />
+                          <ServerPasswordStep onFinish={toNextStep} />
                         )}
                         server={() => (
-                          <FastKeysignServerStep onForward={toNextStep} />
+                          <FastKeysignServerStep onFinish={toNextStep} />
                         )}
                         keysign={() => (
                           <ValueTransfer<string[]>
@@ -62,8 +62,8 @@ export const StartFastKeysignPage = () => {
                             to={({ value }) => (
                               <MpcPeersProvider value={value}>
                                 <StepTransition
-                                  from={({ onForward }) => (
-                                    <StartMpcSessionStep onFinish={onForward} />
+                                  from={({ onFinish }) => (
+                                    <StartMpcSessionStep onFinish={onFinish} />
                                   )}
                                   to={() => (
                                     <KeysignSigningStep

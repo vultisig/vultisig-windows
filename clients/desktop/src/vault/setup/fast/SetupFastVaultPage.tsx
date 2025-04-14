@@ -47,25 +47,25 @@ export const SetupFastVaultPage = () => {
                   email={() => (
                     <ServerEmailStep
                       onBack={toPreviousStep}
-                      onForward={toNextStep}
+                      onFinish={toNextStep}
                     />
                   )}
                   password={() => (
                     <SetServerPasswordStep
                       onBack={toPreviousStep}
-                      onForward={toNextStep}
+                      onFinish={toNextStep}
                     />
                   )}
                   hint={() => (
                     <ServerPasswordHintStep
                       onBack={toPreviousStep}
-                      onForward={toNextStep}
+                      onFinish={toNextStep}
                     />
                   )}
                   setupForCreateVault={() => (
                     <SetupVaultServerStep
                       onBack={() => setStep(lastEditableStep)}
-                      onForward={toNextStep}
+                      onFinish={toNextStep}
                     />
                   )}
                   createVault={() => (

@@ -8,7 +8,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -18,7 +18,7 @@ import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
 
-export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
+export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
 
   const [password, setPassword] = useVaultPassword()
@@ -31,7 +31,7 @@ export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
         vaultId: getVaultId(vault),
         password,
       }),
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   const isDisabled = useMemo(() => {

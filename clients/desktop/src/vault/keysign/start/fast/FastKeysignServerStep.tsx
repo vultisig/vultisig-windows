@@ -12,7 +12,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
@@ -28,9 +28,7 @@ import { customMessageConfig } from '../../customMessage/config'
 import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
 import { getTxInputData } from '../../utils/getTxInputData'
 
-export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
-  onForward,
-}) => {
+export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
 
   const { publicKeys } = useCurrentVault()
@@ -101,7 +99,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
         },
       })
     },
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(mutate, [mutate])

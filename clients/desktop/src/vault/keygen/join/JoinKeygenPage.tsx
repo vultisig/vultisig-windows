@@ -58,7 +58,7 @@ export const JoinKeygenPage = () => {
                       <Match
                         value={step}
                         session={() => (
-                          <JoinKeygenSessionStep onForward={toNextStep} />
+                          <JoinKeygenSessionStep onFinish={toNextStep} />
                         )}
                         keygen={() => (
                           <ValueTransfer<string[]>

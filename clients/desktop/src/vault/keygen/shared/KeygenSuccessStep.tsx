@@ -14,8 +14,8 @@ export const KeygenSuccessStep = ({
   value,
 }: TitleProp & ValueProp<Vault>) => (
   <StepTransition
-    from={({ onForward }) => (
-      <SaveVaultStep title={title} value={value} onForward={onForward} />
+    from={({ onFinish }) => (
+      <SaveVaultStep title={title} value={value} onFinish={onFinish} />
     )}
     to={() => (
       <Transition

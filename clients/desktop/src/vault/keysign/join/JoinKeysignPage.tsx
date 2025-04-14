@@ -50,11 +50,11 @@ export const JoinKeysignPage = () => {
                   <Match
                     value={step}
                     verify={() => (
-                      <JoinKeysignVerifyStep onForward={toNextStep} />
+                      <JoinKeysignVerifyStep onFinish={toNextStep} />
                     )}
                     session={() => (
                       <JoinKeygenSessionStep
-                        onForward={toNextStep}
+                        onFinish={toNextStep}
                         onBack={() => setStep('verify')}
                       />
                     )}

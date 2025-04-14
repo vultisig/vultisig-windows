@@ -15,7 +15,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
@@ -41,7 +41,7 @@ import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryEducation } from './KeygenPeerDiscoveryEducation'
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
-type KeygenPeerDiscoveryStepProps = OnForwardProp & Partial<OnBackProp>
+type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
 const educationUrl: Record<KeygenType, string> = {
   create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
@@ -53,7 +53,7 @@ const educationUrl: Record<KeygenType, string> = {
 const recommendedDevicesTarget = recommendedPeers + 1
 
 export const KeygenPeerDiscoveryStep = ({
-  onForward,
+  onFinish,
   onBack,
 }: KeygenPeerDiscoveryStepProps) => {
   const [serverType] = useMpcServerType()
@@ -126,7 +126,7 @@ export const KeygenPeerDiscoveryStep = ({
       <FitPageContent
         as="form"
         {...getFormProps({
-          onSubmit: onForward,
+          onSubmit: onFinish,
           isDisabled,
         })}
       >

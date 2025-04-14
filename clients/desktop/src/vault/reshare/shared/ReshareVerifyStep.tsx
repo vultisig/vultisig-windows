@@ -9,7 +9,7 @@ import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { without } from '@lib/utils/array/without'
@@ -32,9 +32,9 @@ const Pill = styled.div`
   background: ${getColor('foreground')};
 `
 
-export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
+export const ReshareVerifyStep: React.FC<OnBackProp & OnFinishProp> = ({
   onBack,
-  onForward,
+  onFinish,
 }) => {
   const { t } = useTranslation()
 
@@ -78,7 +78,7 @@ export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('new_vault_setup_disclaimer')}</InfoBlock>
-          <Button onClick={onForward}>{t('start')}</Button>
+          <Button onClick={onFinish}>{t('start')}</Button>
         </VStack>
       </PageContent>
     </>

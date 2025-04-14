@@ -7,7 +7,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import type { TFunction } from 'i18next'
@@ -35,9 +35,9 @@ const getPasswordSchema = (t: TFunction) =>
 type PasswordSchema = z.infer<ReturnType<typeof getPasswordSchema>>
 
 export const SetServerPasswordStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
   const [storedPassword, setStoredPassword] = useVaultPassword()
 
@@ -57,7 +57,7 @@ export const SetServerPasswordStep = ({
 
   const onSubmit = (data: PasswordSchema) => {
     setStoredPassword(data.password)
-    onForward()
+    onFinish()
   }
 
   return (

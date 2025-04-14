@@ -45,10 +45,10 @@ export const StartKeysignPage = () => {
                       <Match
                         value={step}
                         joinSession={() => (
-                          <JoinKeygenSessionStep onForward={toNextStep} />
+                          <JoinKeygenSessionStep onFinish={toNextStep} />
                         )}
                         peers={() => (
-                          <KeysignPeerDiscoveryStep onForward={toNextStep} />
+                          <KeysignPeerDiscoveryStep onFinish={toNextStep} />
                         )}
                         session={() => (
                           <StartMpcSessionStep

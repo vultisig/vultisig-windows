@@ -28,10 +28,10 @@ export const SecureVaultKeygenFlow = () => {
       <MpcMediatorManager />
       <Match
         value={step}
-        joinSession={() => <JoinKeygenSessionStep onForward={toNextStep} />}
-        peers={() => <KeygenPeerDiscoveryStep onForward={toNextStep} />}
+        joinSession={() => <JoinKeygenSessionStep onFinish={toNextStep} />}
+        peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
         verify={() => (
-          <ReshareVerifyStep onBack={toPreviousStep} onForward={toNextStep} />
+          <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
         )}
         startSession={() => (
           <StartMpcSessionStep onBack={toPreviousStep} onFinish={toNextStep} />

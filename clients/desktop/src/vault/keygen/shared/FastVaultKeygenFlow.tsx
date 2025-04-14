@@ -39,19 +39,19 @@ export const FastVaultKeygenFlow = () => {
       <MpcMediatorManager />
       <Match
         value={step}
-        email={() => <ServerEmailStep onForward={toNextStep} />}
+        email={() => <ServerEmailStep onFinish={toNextStep} />}
         password={() =>
           hasServer(signers) && !isServer(localPartyId) ? (
-            <ServerPasswordStep onForward={toNextStep} />
+            <ServerPasswordStep onFinish={toNextStep} />
           ) : (
-            <SetServerPasswordStep onForward={toNextStep} />
+            <SetServerPasswordStep onFinish={toNextStep} />
           )
         }
         server={() => <KeygenServerStep onFinish={toNextStep} />}
-        joinSession={() => <JoinKeygenSessionStep onForward={toNextStep} />}
-        peers={() => <KeygenPeerDiscoveryStep onForward={toNextStep} />}
+        joinSession={() => <JoinKeygenSessionStep onFinish={toNextStep} />}
+        peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
         verify={() => (
-          <ReshareVerifyStep onBack={toPreviousStep} onForward={toNextStep} />
+          <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
         )}
         startSession={() => (
           <StartMpcSessionStep onBack={toPreviousStep} onFinish={toNextStep} />

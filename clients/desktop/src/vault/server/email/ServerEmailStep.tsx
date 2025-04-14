@@ -14,7 +14,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
 import type { TFunction } from 'i18next'
@@ -35,9 +35,9 @@ const getEmailSchema = (t: TFunction) =>
 type EmailSchema = z.infer<ReturnType<typeof getEmailSchema>>
 
 export const ServerEmailStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
   const [storedEmail, setStoredEmail] = useEmail()
 
@@ -56,7 +56,7 @@ export const ServerEmailStep = ({
 
   const onSubmit = (data: EmailSchema) => {
     setStoredEmail(data.email)
-    onForward()
+    onFinish()
   }
 
   return (

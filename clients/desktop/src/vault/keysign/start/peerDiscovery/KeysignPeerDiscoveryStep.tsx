@@ -6,7 +6,7 @@ import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { useEffect } from 'react'
@@ -29,16 +29,16 @@ import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQu
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode'
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled'
 
-export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
+export const KeysignPeerDiscoveryStep = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
   const isDisabled = useIsPeerDiscoveryStepDisabled()
 
   useEffect(() => {
     if (!isDisabled) {
-      onForward()
+      onFinish()
     }
-  }, [isDisabled, onForward])
+  }, [isDisabled, onFinish])
 
   const joinUrlQuery = useJoinKeysignUrlQuery()
 
@@ -62,7 +62,7 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
       <FitPageContent
         as="form"
         {...getFormProps({
-          onSubmit: onForward,
+          onSubmit: onFinish,
           isDisabled,
         })}
       >

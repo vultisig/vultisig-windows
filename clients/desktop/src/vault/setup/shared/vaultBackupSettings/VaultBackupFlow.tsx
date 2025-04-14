@@ -7,10 +7,10 @@ import { VaultBackupWithPassword } from './VaultBackupWithPassword'
 export const VaultBackupFlow = ({ onFinish }: OnFinishProp) => {
   return (
     <StepTransition
-      from={({ onForward }) => (
+      from={({ onFinish }) => (
         <VaultBackupWithoutPassword
           onFinish={onFinish}
-          onPasswordRequest={onForward}
+          onPasswordRequest={onFinish}
         />
       )}
       to={({ onBack }) => (

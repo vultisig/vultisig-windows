@@ -32,7 +32,7 @@ export const SetupSecureVaultPage = () => {
             peers={() => (
               <KeygenPeerDiscoveryStep
                 onBack={() => setStep(steps[0])}
-                onForward={toNextStep}
+                onFinish={toNextStep}
               />
             )}
             startSession={() => (

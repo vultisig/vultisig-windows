@@ -2,7 +2,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { t } from 'i18next'
 import { FC } from 'react'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ import { ManageFromCoin } from './ManageFromCoin'
 import { ManageToCoin } from './ManageToCoin'
 import { ReverseSwap } from './ReverseSwap'
 
-export const SwapForm: FC<OnForwardProp> = ({ onForward }) => {
+export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
   const isDisabled = useIsSwapFormDisabled()
 
   return (
@@ -21,7 +21,7 @@ export const SwapForm: FC<OnForwardProp> = ({ onForward }) => {
       as="form"
       gap={40}
       {...getFormProps({
-        onSubmit: onForward,
+        onSubmit: onFinish,
         isDisabled,
       })}
       justifyContent="space-between"

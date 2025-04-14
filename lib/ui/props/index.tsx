@@ -16,10 +16,6 @@ export type OnBackProp = {
   onBack: () => void
 }
 
-export type OnForwardProp = {
-  onForward: () => void
-}
-
 export type OnClickProp = {
   onClick: () => void
 }

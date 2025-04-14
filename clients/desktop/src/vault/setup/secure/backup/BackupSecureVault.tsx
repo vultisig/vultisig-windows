@@ -43,8 +43,8 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSummaryStep onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onFinish={onFinish} />}
           />

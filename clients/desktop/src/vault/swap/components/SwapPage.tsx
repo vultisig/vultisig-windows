@@ -43,7 +43,7 @@ export const SwapPage = () => {
         />
         <Match
           value={step}
-          form={() => <SwapForm onForward={toNextStep} />}
+          form={() => <SwapForm onFinish={toNextStep} />}
           verify={() => <SwapVerify />}
         />
       </ToCoinProvider>

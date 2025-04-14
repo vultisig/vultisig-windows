@@ -28,7 +28,7 @@ export const SendPage = () => {
             <SendMemoProvider initialValue="">
               <Match
                 value={step}
-                form={() => <SendForm onForward={toNextStep} />}
+                form={() => <SendForm onFinish={toNextStep} />}
                 verify={() => <SendVerify onBack={toPreviousStep} />}
               />
             </SendMemoProvider>

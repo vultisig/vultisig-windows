@@ -6,7 +6,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
@@ -18,9 +18,9 @@ import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 import { PendingKeygenMessage } from './PendingKeygenMessage'
 
 export const JoinKeygenSessionStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const sessionId = useMpcSessionId()
 
   const serverUrl = useMpcServerUrl()
@@ -35,7 +35,7 @@ export const JoinKeygenSessionStep = ({
         localPartyId,
       })
     },
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(() => start(), [start])
