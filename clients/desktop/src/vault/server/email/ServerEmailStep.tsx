@@ -1,3 +1,4 @@
+import { useEmail } from '@core/ui/state/email'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
@@ -21,7 +22,6 @@ import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { useVaultEmail } from './state/email'
 
 const getEmailSchema = (t: TFunction) =>
   z.object({
@@ -40,7 +40,7 @@ export const ServerEmailStep = ({
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
-  const [storedEmail, setStoredEmail] = useVaultEmail()
+  const [storedEmail, setStoredEmail] = useEmail()
 
   const {
     register,
