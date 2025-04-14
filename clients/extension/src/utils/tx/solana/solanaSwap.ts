@@ -30,7 +30,12 @@ export async function getParsedSolanaSwap(
   )
 
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx!)
-  const tx = decodedTx.transaction!.v0!
+
+  if (!decodedTx.transaction || !decodedTx.transaction.v0) {
+    throw new Error('Invalid Solana transaction: missing v0 transaction data')
+  }
+
+  const tx = decodedTx.transaction.v0
   const staticAccountsPubkey = tx.accountKeys!.map(key => new PublicKey(key))
 
   const buildToken = async (mint: string): Promise<SolanaJupiterToken> => {
