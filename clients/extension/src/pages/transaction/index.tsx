@@ -181,8 +181,6 @@ const Component = () => {
     preSignedInputData: Uint8Array
   ): void => {
     if (transaction && walletCore) {
-      console.log('handle pending')
-
       const retryTimeout = setTimeout(() => {
         setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
           setState({
