@@ -1,4 +1,5 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -16,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
-import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`
@@ -38,7 +38,7 @@ export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
 }) => {
   const { t } = useTranslation()
 
-  const devices = useMpcSigners()
+  const devices = useMpcDevices()
   const localPartyId = useMpcLocalPartyId()
   const { signers } = useCurrentVault()
 
