@@ -3,6 +3,7 @@ import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -11,8 +12,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 
 export const KeygenStartSessionStep = ({
   onBack,

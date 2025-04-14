@@ -1,4 +1,5 @@
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
@@ -6,8 +7,6 @@ import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
 
 const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000
 

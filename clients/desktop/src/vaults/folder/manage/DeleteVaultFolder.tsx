@@ -1,7 +1,7 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import TrashIcon from '@lib/ui/icons/TrashIcon'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useDeleteVaultFolderMutation } from '../mutations/useDeleteVaultFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 

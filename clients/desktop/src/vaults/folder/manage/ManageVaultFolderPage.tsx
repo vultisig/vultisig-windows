@@ -10,7 +10,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { PageFooter } from '../../../ui/page/PageFooter'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
@@ -49,14 +48,14 @@ export const ManageVaultFolderPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          type="button"
           onClick={async () => {
             await mutateAsync({ id, name })
             navigate('vaultFolder', { params: { id } })
           }}
+          isLoading={isPending}
         >
           <Text color="reversed" size={14} weight="600">
-            {isPending ? <Spinner /> : t('save_changes')}
+            {t('save_changes')}
           </Text>
         </Button>
       </PageFooter>

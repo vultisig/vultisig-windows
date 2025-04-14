@@ -20,10 +20,6 @@ export type OnForwardProp = {
   onForward: () => void
 }
 
-export type ClassNameProp = {
-  className?: string
-}
-
 export type OnClickProp = {
   onClick: () => void
 }

@@ -1,11 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useEffect } from 'react'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
