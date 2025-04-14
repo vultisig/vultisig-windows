@@ -353,27 +353,50 @@ const Component = () => {
     transaction: ITransaction,
     connectedDevices: any
   ) => {
-    await api.transaction.setStart(transaction.id, connectedDevices)
-    await setStoredTransaction({ ...transaction, status: 'pending' })
+    try {
+      try {
+        await api.transaction.setStart(transaction.id, connectedDevices)
+      } catch (err) {
+        console.error('Failed to set transaction start:', err)
+        messageApi.open({
+          type: 'error',
+          content: t('failed_to_start_keysign'),
+        })
+        return
+      }
+      try {
+        await setStoredTransaction({ ...transaction, status: 'pending' })
+      } catch (err) {
+        console.error('Failed to update stored transaction:', err)
+        return
+      }
 
-    if (transaction.isCustomMessage) {
+      if (transaction.isCustomMessage) {
+        setState(prev => ({ ...prev, step: 4 }))
+        handleCustomMessagePending()
+        return
+      }
+
+      if (!keysignPayload || !walletCore)
+        throw new Error('Missing signing data')
+
+      const inputData = await getTxInputData(keysignPayload)
+      const imageHashes = getPreSigningHashes({
+        chain: transaction.chain.chain,
+        txInputData: inputData,
+        walletCore,
+      })
+      const imageHash = hexEncode({ value: imageHashes[0], walletCore })
+
       setState(prev => ({ ...prev, step: 4 }))
-      handleCustomMessagePending()
-      return
+      handlePending(imageHash, inputData)
+    } catch (err) {
+      console.error('Unexpected error during signing:', err)
+      messageApi.open({
+        type: 'error',
+        content: t('signing_error'),
+      })
     }
-
-    if (!keysignPayload || !walletCore) throw new Error('Missing signing data')
-
-    const inputData = await getTxInputData(keysignPayload)
-    const imageHashes = getPreSigningHashes({
-      chain: transaction.chain.chain,
-      txInputData: inputData,
-      walletCore,
-    })
-    const imageHash = hexEncode({ value: imageHashes[0], walletCore })
-
-    setState(prev => ({ ...prev, step: 4 }))
-    handlePending(imageHash, inputData)
   }
 
   const getTxInputData = async (

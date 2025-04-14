@@ -101,7 +101,8 @@ export async function getParsedSolanaSwap(
   }
 
   return {
-    authority: staticAccountsPubkey[0].toString(),
+    authority:
+      staticAccountsPubkey.length > 0 ? staticAccountsPubkey[0].toString() : '',
     inputToken: fallbackToken,
     outputToken: fallbackToken,
     inAmount: 0,
