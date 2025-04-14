@@ -1,3 +1,4 @@
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
@@ -18,6 +19,8 @@ export const appPaths = {
   },
   onboarding: '/onboarding',
   uploadQr: '/upload-qr',
+  setupFastVault: '/setup-fast-vault',
+  setupSecureVault: '/setup-secure-vault',
 } as const
 
 type AppPaths = typeof appPaths
@@ -41,11 +44,12 @@ export type AppPath = DotNestedKeys<AppPaths>
 export type AppPathParams = {
   uploadQr: { title?: string }
   import: { from?: string }
+  setupVault: { type?: VaultSecurityType }
 }
 
 export type AppPathState = {}
 
-type AppPathsWithParams = keyof AppPathParams
+export type AppPathsWithParams = keyof AppPathParams
 
 type AppPathsWithState = keyof AppPathState
 
