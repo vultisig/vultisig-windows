@@ -1,5 +1,6 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -16,7 +17,6 @@ import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
-import { useCurrentVault } from '../../state/currentVault'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`

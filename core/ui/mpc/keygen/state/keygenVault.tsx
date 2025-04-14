@@ -1,7 +1,11 @@
 import { Vault } from '@core/ui/vault/Vault'
+import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'
+import { useMemo } from 'react'
+
+import { useCurrentVault } from '../../../vault/state/currentVault'
 
 type KeygenReshareFields = {
   oldResharePrefix: string
@@ -56,4 +60,19 @@ export const assertKeygenReshareFields = (
         'hexChainCode',
       ]),
   })
+}
+
+export const CurrentKeygenVaultProvider = ({ children }: ChildrenProp) => {
+  const vault = useCurrentVault()
+
+  const keygenVault: KeygenVault = useMemo(
+    () => ({
+      existingVault: vault,
+    }),
+    [vault]
+  )
+
+  return (
+    <KeygenVaultProvider value={keygenVault}>{children}</KeygenVaultProvider>
+  )
 }

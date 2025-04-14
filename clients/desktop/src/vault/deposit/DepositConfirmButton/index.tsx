@@ -5,6 +5,10 @@ import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useCurrentVault,
+  useCurrentVaultSecurityType,
+} from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -16,7 +20,6 @@ import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
@@ -44,6 +47,8 @@ export const DepositConfirmButton = ({
   const chainSpecificQuery = useDepositChainSpecificQuery()
   const vault = useCurrentVault()
   const config = transactionConfig[action] || {}
+
+  const securityType = useCurrentVaultSecurityType()
 
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
@@ -96,8 +101,6 @@ export const DepositConfirmButton = ({
     })
   }
 
-  const { hasServer, isBackup } = useVaultServerStatus()
-
   if (
     (config.requiresAmount && !Number.isFinite(amount)) ||
     amount < 0 ||
@@ -114,7 +117,7 @@ export const DepositConfirmButton = ({
     return <Text>{t('loading')}</Text>
   }
 
-  if (hasServer && !isBackup) {
+  if (securityType === 'fast') {
     return (
       <VStack gap={20}>
         <Button onClick={() => startKeysign('fast')}>{t('fast_sign')}</Button>

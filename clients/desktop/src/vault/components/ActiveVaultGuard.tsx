@@ -1,3 +1,4 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
@@ -5,7 +6,6 @@ import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { CoinFinder } from '../chain/coin/finder/CoinFinder'
-import { CurrentVaultProvider } from '../state/currentVault'
 import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
 import { useCurrentVaultId } from '../state/currentVaultId'
 

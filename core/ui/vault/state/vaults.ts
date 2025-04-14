@@ -28,3 +28,9 @@ export const useVaultNames = () => {
 
   return useMemo(() => withoutDuplicates(vaults.map(v => v.name)), [vaults])
 }
+
+export const useVaultOrders = () => {
+  const vaults = useVaults()
+
+  return useMemo(() => vaults.map(v => v.order), [vaults])
+}

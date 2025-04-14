@@ -1,3 +1,5 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -13,8 +15,6 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
-import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
-import { useCurrentVault } from '../../../state/currentVault'
 import {
   ContentWrapper,
   IconWrapper,
@@ -34,7 +34,7 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
   const [isAgreed, { toggle }] = useBoolean(false)
   const { signers } = useCurrentVault()
 
-  const isFastVault = hasServerSigner(signers)
+  const isFastVault = hasServer(signers)
 
   const summaryItems = [
     {
