@@ -667,6 +667,9 @@ const Component = () => {
               transaction,
               vault
             )
+          } else if ((transaction as any).serializedTx) {
+            console.error('Failed to parse Solana swap transaction')
+            throw new Error('Failed to parse Solana swap transaction')
           } else {
             keysignPayload = await getKeysignPayload(transaction, vault)
 
