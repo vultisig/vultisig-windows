@@ -1,3 +1,4 @@
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
@@ -5,7 +6,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
 import { ProductLogo } from '../../../ui/logo/ProductLogo'
 import { PageSlice } from '../../../ui/page/PageSlice'
@@ -28,6 +28,8 @@ const VaultCheckUpdatePage = () => {
     isLoading,
   } = useVersionCheck()
 
+  const openUrl = useOpenUrl()
+
   let content: ReactNode
 
   if (!isLocalVersionValid) {
@@ -44,7 +46,7 @@ const VaultCheckUpdatePage = () => {
     content = (
       <CenteredText>
         {t('vaultCheckUpdatePage.newVersionAvailable', { latestVersion })}
-        <DownloadButton onClick={() => BrowserOpenURL(DOWNLOAD_VULTISIG_LINK)}>
+        <DownloadButton onClick={() => openUrl(DOWNLOAD_VULTISIG_LINK)}>
           {t('vaultCheckUpdatePage.downloadButton')}
         </DownloadButton>
       </CenteredText>

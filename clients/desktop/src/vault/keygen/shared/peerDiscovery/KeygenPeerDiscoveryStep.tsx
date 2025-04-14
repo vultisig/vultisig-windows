@@ -6,6 +6,7 @@ import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { Match } from '@lib/ui/base/Match'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
@@ -18,7 +19,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -60,6 +60,8 @@ export const KeygenPeerDiscoveryStep = ({
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = usePeerOptionsQuery()
+
+  const openUrl = useOpenUrl()
 
   const joinUrlQuery = useJoinKeygenUrlQuery()
 
@@ -111,7 +113,7 @@ export const KeygenPeerDiscoveryStep = ({
               <>
                 <PageHeaderIconButton
                   onClick={() => {
-                    BrowserOpenURL(educationUrl[keygenType])
+                    openUrl(educationUrl[keygenType])
                   }}
                   icon={<InfoIcon />}
                 />

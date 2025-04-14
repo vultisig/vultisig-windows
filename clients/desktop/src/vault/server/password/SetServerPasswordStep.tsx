@@ -1,3 +1,4 @@
+import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -17,7 +18,6 @@ import { z } from 'zod'
 
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
-import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt'
 
 const getPasswordSchema = (t: TFunction) =>
   z

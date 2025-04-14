@@ -1,3 +1,4 @@
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import DiscordIcon from '@lib/ui/icons/DiscordIcon'
@@ -10,7 +11,6 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
 import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
@@ -44,6 +44,8 @@ const SettingsVaultPage = () => {
   const [language] = useLanguage()
   const translatedSettingsItems = getTranslatedSettingsItems(t)
 
+  const openUrl = useOpenUrl()
+
   return (
     <Container flexGrow gap={16}>
       <PageHeader
@@ -66,11 +68,11 @@ const SettingsVaultPage = () => {
                     key={id}
                     onClick={() => {
                       if (id === 'privacy-policy') {
-                        BrowserOpenURL(VULTISIG_PRIVACY_POLICY_LINK)
+                        openUrl(VULTISIG_PRIVACY_POLICY_LINK)
                       } else if (id === 'terms-of-service') {
-                        BrowserOpenURL(VULTISIG_TERMS_OF_SERVICE_LINK)
+                        openUrl(VULTISIG_TERMS_OF_SERVICE_LINK)
                       } else if (id === 'share-app') {
-                        BrowserOpenURL(VULTISIG_SHARE_APP_LINK)
+                        openUrl(VULTISIG_SHARE_APP_LINK)
                       } else {
                         navigate(path)
                       }
@@ -113,19 +115,13 @@ const SettingsVaultPage = () => {
           </VStack>
           <Footer>
             <HStack gap={24}>
-              <UnstyledButton
-                onClick={() => BrowserOpenURL(VULTISIG_GITHUB_LINK)}
-              >
+              <UnstyledButton onClick={() => openUrl(VULTISIG_GITHUB_LINK)}>
                 <GithubIcon />
               </UnstyledButton>
-              <UnstyledButton
-                onClick={() => BrowserOpenURL(VULTISIG_TWITTER_LINK)}
-              >
+              <UnstyledButton onClick={() => openUrl(VULTISIG_TWITTER_LINK)}>
                 <TwitterIcon />
               </UnstyledButton>
-              <UnstyledButton
-                onClick={() => BrowserOpenURL(VULTISIG_DISCORD_LINK)}
-              >
+              <UnstyledButton onClick={() => openUrl(VULTISIG_DISCORD_LINK)}>
                 <DiscordIcon />
               </UnstyledButton>
             </HStack>
