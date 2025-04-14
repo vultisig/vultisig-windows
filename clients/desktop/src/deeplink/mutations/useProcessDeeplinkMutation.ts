@@ -1,5 +1,9 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { keygenMsgSchemaRecord, KeygenType } from '@core/mpc/keygen/KeygenType'
+import {
+  fromTssType,
+  tssMessageSchema,
+  TssType,
+} from '@core/mpc/types/utils/tssType'
 import { match } from '@lib/utils/match'
 import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
 import { useMutation } from '@tanstack/react-query'
@@ -18,7 +22,7 @@ type DeeplinkSharedData = {
 type DeeplinkParams = DeeplinkSharedData & {
   type: DeeplinkType
 } & {
-  tssType: KeygenType
+  tssType: TssType
 } & {
   vault: string
 }
@@ -35,12 +39,12 @@ export const useProcessDeeplinkMutation = () => {
       if ('type' in queryParams) {
         return match(queryParams.type, {
           NewVault: async () => {
-            const keygenType = queryParams.tssType
-
             const keygenMsg = fromBinary(
-              keygenMsgSchemaRecord[keygenType],
+              tssMessageSchema[queryParams.tssType],
               payload
             )
+
+            const keygenType = fromTssType(queryParams.tssType)
 
             navigate('joinKeygen', {
               state: {

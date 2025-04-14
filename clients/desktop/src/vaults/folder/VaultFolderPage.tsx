@@ -1,3 +1,4 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { EditIcon } from '@lib/ui/icons/EditIcon'
@@ -9,7 +10,6 @@ import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
-import { CurrentVaultProvider } from '../../vault/state/currentVault'
 import { VaultListItem } from '../components/VaultListItem'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 
