@@ -1,6 +1,8 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
@@ -10,8 +12,6 @@ import styled from 'styled-components'
 
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
 
 const ON_COMPLETE_DELAY = 1000

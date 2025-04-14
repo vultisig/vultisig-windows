@@ -1,6 +1,7 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { makeAppPath } from '../../navigation'
-import { PageContent } from '../page/PageContent'
 
 export const FlowErrorPageContent = ({
   action,

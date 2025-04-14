@@ -1,4 +1,5 @@
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
@@ -6,7 +7,6 @@ import { StrictText } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { PageContent } from '../../../ui/page/PageContent'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 
 export const {

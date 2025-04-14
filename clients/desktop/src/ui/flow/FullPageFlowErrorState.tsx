@@ -1,11 +1,11 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { ActionProp, MessageProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { FlowErrorPageContent } from './FlowErrorPageContent'
 
 type FullPageFlowErrorStateProps = Partial<ActionProp> &

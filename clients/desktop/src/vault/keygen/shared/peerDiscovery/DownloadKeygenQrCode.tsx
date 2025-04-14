@@ -1,11 +1,11 @@
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { ShareIconNew } from '@lib/ui/icons/ShareIconNew'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
 

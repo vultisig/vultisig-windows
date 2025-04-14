@@ -3,13 +3,13 @@ import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { EditIcon } from '@lib/ui/icons/EditIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageContent } from '../../ui/page/PageContent'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { VaultListItem } from '../components/VaultListItem'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 

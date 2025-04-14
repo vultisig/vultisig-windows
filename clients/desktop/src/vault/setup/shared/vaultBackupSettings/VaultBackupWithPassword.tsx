@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import InfoGradientIcon from '@lib/ui/icons/InfoGradientIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,7 +10,6 @@ import { useMemo, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageSlice } from '../../../../ui/page/PageSlice'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
 import {

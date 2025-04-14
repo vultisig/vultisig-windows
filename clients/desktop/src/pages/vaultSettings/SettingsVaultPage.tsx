@@ -4,6 +4,9 @@ import DiscordIcon from '@lib/ui/icons/DiscordIcon'
 import GithubIcon from '@lib/ui/icons/GithubIcon'
 import TwitterIcon from '@lib/ui/icons/TwitterIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
@@ -13,9 +16,6 @@ import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useLanguage } from '../../preferences/state/language'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import {
   getTranslatedSettingsItems,
   VULTISIG_DISCORD_LINK,

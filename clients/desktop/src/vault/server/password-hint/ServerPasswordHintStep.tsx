@@ -8,7 +8,11 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
@@ -17,10 +21,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { TextInput } from '../../../lib/ui/inputs/TextInput'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useVaultPasswordHint } from './state/password-hint'
 
 const getPasswordHintSchema = (t: TFunction) =>

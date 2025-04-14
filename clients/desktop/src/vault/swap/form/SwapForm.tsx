@@ -1,12 +1,12 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { OnForwardProp } from '@lib/ui/props'
 import { t } from 'i18next'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { PageContent } from '../../../ui/page/PageContent'
 import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled'
 import { SwapInfo } from './info/SwapInfo'
 import { ManageFromCoin } from './ManageFromCoin'

@@ -1,11 +1,11 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { PageContent } from '../../../ui/page/PageContent'
 import { KeygenEducation } from './KeygenEducation'
 import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 import { KeygenProgressIndicator } from './KeygenProgressIndicator'

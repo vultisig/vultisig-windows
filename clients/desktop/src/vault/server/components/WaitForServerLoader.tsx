@@ -1,7 +1,7 @@
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { PageContent } from '../../../ui/page/PageContent'
 import { FancyLoader } from '../../../ui/pending/FancyLoader'
 
 export const WaitForServerLoader = () => {

@@ -1,13 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPathState } from '../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent'
 import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation'
 

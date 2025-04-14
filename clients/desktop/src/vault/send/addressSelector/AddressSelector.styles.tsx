@@ -1,7 +1,6 @@
 import { VStack } from '@lib/ui/layout/Stack'
-import styled from 'styled-components'
-
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import styled from 'styled-components'
 
 export const AddressBookPageHeader = styled(PageHeader)`
   padding-inline: 0px;

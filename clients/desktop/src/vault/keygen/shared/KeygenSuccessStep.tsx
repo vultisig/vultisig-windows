@@ -1,10 +1,10 @@
 import { Vault } from '@core/ui/vault/Vault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Transition } from '@lib/ui/base/Transition'
-import { TitleProp, ValueProp } from '@lib/ui/props'
-
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { TitleProp, ValueProp } from '@lib/ui/props'
+
 import { KeygenBackup } from './KeygenBackup'
 import { KeygenSuccessState } from './KeygenSuccessState'
 import { SaveVaultStep } from './SaveVaultStep'

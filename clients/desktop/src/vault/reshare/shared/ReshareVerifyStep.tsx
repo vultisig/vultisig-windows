@@ -5,7 +5,9 @@ import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -15,8 +17,6 @@ import styled from 'styled-components'
 
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { PageContent } from '../../../ui/page/PageContent'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`

@@ -1,7 +1,7 @@
 import { QuestionMarkIcon } from '@lib/ui/icons/QuestionMarkIcon'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
 const resourceUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'

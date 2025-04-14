@@ -1,6 +1,5 @@
+import { PageContent } from '@lib/ui/page/PageContent'
 import styled from 'styled-components'
-
-import { PageContent } from '../../../../ui/page/PageContent'
 
 export const Container = styled(PageContent)`
   position: relative;
