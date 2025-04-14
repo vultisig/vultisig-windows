@@ -514,7 +514,14 @@ const Component = () => {
           keysignPayload.swapPayload.value
         ) {
           if (keysignPayload.swapPayload.case !== 'oneinchSwapPayload') {
-            throw new Error('Only oneinchSwapPayload is supported')
+            console.warn(
+              `Swap payload type ${keysignPayload.swapPayload.case} not explicitly supported, using fallback`
+            )
+            preSignedInputData = getPreSignedInputData({
+              chain: transaction!.chain.chain,
+              keysignPayload: keysignPayload!,
+              walletCore: walletCore!,
+            })
           }
 
           preSignedInputData = await getOneInchSwapTxInputData({
