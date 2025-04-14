@@ -27,7 +27,7 @@ export const NewVaultPage = ({ withBackButton = true }) => {
           <ProductLogoBlock />
         </VStack>
         <VStack gap={20}>
-          <Button onClick={() => navigate('setupVault')}>
+          <Button onClick={() => navigate('setupVault', { params: {} })}>
             {t('create_new_vault')}
           </Button>
           <HStack gap={18} alignItems="center">
