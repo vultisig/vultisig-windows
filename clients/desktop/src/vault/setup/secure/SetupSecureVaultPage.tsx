@@ -1,4 +1,5 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
+import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -9,7 +10,6 @@ import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVault
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
-import { SetupVaultNameStep } from '../SetupVaultNameStep'
 
 const steps = ['name', 'peers', 'startSession', 'keygen'] as const
 
@@ -28,7 +28,7 @@ export const SetupSecureVaultPage = () => {
           <MpcMediatorManager />
           <Match
             value={step}
-            name={() => <SetupVaultNameStep onForward={toNextStep} />}
+            name={() => <CreateVaultNameStep onFinish={toNextStep} />}
             peers={() => (
               <KeygenPeerDiscoveryStep
                 onBack={() => setStep(steps[0])}

@@ -5,6 +5,7 @@ import {
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -14,7 +15,6 @@ import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValu
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput'
 import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner'

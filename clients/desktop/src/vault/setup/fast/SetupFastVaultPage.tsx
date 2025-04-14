@@ -1,4 +1,5 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
+import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
@@ -13,7 +14,6 @@ import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep'
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint'
-import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { SetupVaultServerStep } from './SetupVaultServerStep'
 
 const steps = [
@@ -43,7 +43,7 @@ export const SetupFastVaultPage = () => {
                 <MpcMediatorManager />
                 <Match
                   value={step}
-                  name={() => <SetupVaultNameStep onForward={toNextStep} />}
+                  name={() => <CreateVaultNameStep onFinish={toNextStep} />}
                   email={() => (
                     <ServerEmailStep
                       onBack={toPreviousStep}

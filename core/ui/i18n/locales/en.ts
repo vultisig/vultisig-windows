@@ -88,6 +88,7 @@ export const en = {
   keygen: 'Keygen',
   upgrade: 'Upgrade',
   name_your_vault: 'Name your Vault',
+  vault_name_desciption: 'You can always rename your vault later in settings',
   join: 'Join',
   done: 'Done',
   and: 'and',

@@ -1,12 +1,12 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 
 type DecryptVaultViewProps = {

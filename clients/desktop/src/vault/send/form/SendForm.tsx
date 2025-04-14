@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -9,7 +10,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
