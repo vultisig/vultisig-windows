@@ -606,21 +606,25 @@ const Component = () => {
         let parsedSolanaSwap = undefined
         const [transaction] = transactions
         if ((transaction as any).serializedTx) {
-          parsedSolanaSwap = await getParsedSolanaSwap(
-            walletCore,
-            (transaction as any).serializedTx
-          )
-          transaction.transactionDetails = {
-            asset: {
-              chain: Chain.Solana,
-              ticker: parsedSolanaSwap.inputToken.symbol,
-              symbol: parsedSolanaSwap.inputToken.name,
-            },
-            from: parsedSolanaSwap.authority!,
-            amount: {
-              amount: String(parsedSolanaSwap.inAmount),
-              decimals: parsedSolanaSwap.inputToken.decimals,
-            },
+          try {
+            parsedSolanaSwap = await getParsedSolanaSwap(
+              walletCore,
+              (transaction as any).serializedTx
+            )
+            transaction.transactionDetails = {
+              asset: {
+                chain: Chain.Solana,
+                ticker: parsedSolanaSwap.inputToken.symbol,
+                symbol: parsedSolanaSwap.inputToken.name,
+              },
+              from: parsedSolanaSwap.authority!,
+              amount: {
+                amount: String(parsedSolanaSwap.inAmount),
+                decimals: parsedSolanaSwap.inputToken.decimals,
+              },
+            }
+          } catch (err) {
+            console.error('Failed to parse Solana swap transaction:', err)
           }
         }
 
