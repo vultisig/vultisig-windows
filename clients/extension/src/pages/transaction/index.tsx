@@ -49,6 +49,7 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getOneInchSwapTxInputData } from '@core/chain/swap/general/oneInch/tx/getOneInchSwapTxInputData'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
@@ -180,6 +181,8 @@ const Component = () => {
     preSignedInputData: Uint8Array
   ): void => {
     if (transaction && walletCore) {
+      console.log('handle pending')
+
       const retryTimeout = setTimeout(() => {
         setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
           setState({
@@ -336,50 +339,62 @@ const Component = () => {
   }
 
   const handleStartSigning = () => {
-    if (transaction && !fastSign) {
-      api.transaction
-        .setStart(transaction.id, connectedDevices)
-        .then(() => {
-          setStoredTransaction({ ...transaction, status: 'pending' })
-            .then(() => {
-              if (transaction.isCustomMessage) {
-                setState(prevState => ({
-                  ...prevState,
-                  step: 4,
-                }))
-                handleCustomMessagePending()
-              } else {
-                const preSignedInputData = getPreSignedInputData({
-                  chain: transaction.chain.chain,
-                  keysignPayload: keysignPayload!,
-                  walletCore: walletCore!,
-                })
-                const preSignedImageHashes = getPreSigningHashes({
-                  chain: transaction.chain.chain,
-                  txInputData: preSignedInputData,
-                  walletCore: walletCore!,
-                })
-                const imageHash = hexEncode({
-                  value: preSignedImageHashes[0],
-                  walletCore: walletCore!,
-                })
-                setState(prevState => ({
-                  ...prevState,
-                  step: 4,
-                }))
-                handlePending(imageHash, preSignedInputData)
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
+    if (!transaction || fastSign) {
       handleStep(4)
+      return
     }
+
+    startSigning(transaction, connectedDevices).catch(err => {
+      console.error('Signing failed:', err)
+    })
+  }
+
+  const startSigning = async (
+    transaction: ITransaction,
+    connectedDevices: any
+  ) => {
+    await api.transaction.setStart(transaction.id, connectedDevices)
+    await setStoredTransaction({ ...transaction, status: 'pending' })
+
+    if (transaction.isCustomMessage) {
+      setState(prev => ({ ...prev, step: 4 }))
+      handleCustomMessagePending()
+      return
+    }
+
+    if (!keysignPayload || !walletCore) throw new Error('Missing signing data')
+
+    const inputData = await getTxInputData(keysignPayload)
+    const imageHashes = getPreSigningHashes({
+      chain: transaction.chain.chain,
+      txInputData: inputData,
+      walletCore,
+    })
+    const imageHash = hexEncode({ value: imageHashes[0], walletCore })
+
+    setState(prev => ({ ...prev, step: 4 }))
+    handlePending(imageHash, inputData)
+  }
+
+  const getTxInputData = async (
+    keysignPayload: KeysignPayload
+  ): Promise<Uint8Array> => {
+    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
+      if (keysignPayload.swapPayload.case !== 'oneinchSwapPayload') {
+        throw new Error('Only oneinchSwapPayload is supported')
+      }
+
+      return await getOneInchSwapTxInputData({
+        keysignPayload,
+        walletCore: walletCore!,
+      })
+    }
+
+    return getPreSignedInputData({
+      chain: transaction!.chain.chain,
+      keysignPayload,
+      walletCore: walletCore!,
+    })
   }
 
   const handleStep = (step: number): void => {
@@ -453,7 +468,7 @@ const Component = () => {
     }
   }
 
-  const handleSubmitFastSignPassword = (): void => {
+  const handleSubmitFastSignPassword = async (): Promise<void> => {
     let imageHash = ''
     let preSignedInputData: Uint8Array<ArrayBufferLike>
     if (transaction && vault) {
@@ -465,11 +480,27 @@ const Component = () => {
 
         imageHash = keccak256(messageToHash)
       } else {
-        preSignedInputData = getPreSignedInputData({
-          chain: transaction!.chain.chain,
-          keysignPayload: keysignPayload!,
-          walletCore: walletCore!,
-        })
+        if (!keysignPayload) return
+        if (
+          'swapPayload' in keysignPayload &&
+          keysignPayload.swapPayload.value
+        ) {
+          if (keysignPayload.swapPayload.case !== 'oneinchSwapPayload') {
+            throw new Error('Only oneinchSwapPayload is supported')
+          }
+
+          preSignedInputData = await getOneInchSwapTxInputData({
+            keysignPayload,
+            walletCore: walletCore!,
+          })
+        } else {
+          preSignedInputData = getPreSignedInputData({
+            chain: transaction!.chain.chain,
+            keysignPayload: keysignPayload!,
+            walletCore: walletCore!,
+          })
+        }
+
         const preSignedImageHashes = getPreSigningHashes({
           chain: transaction!.chain.chain,
           txInputData: preSignedInputData,

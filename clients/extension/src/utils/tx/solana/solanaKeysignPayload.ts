@@ -61,7 +61,7 @@ export const getSolanaSwapKeysignPayload = (
           coin: accountCoin,
           amount: Number(0),
           isDeposit: transaction.isDeposit,
-          receiver: transaction.transactionDetails.from,
+          receiver: '',
         })
         chainSpecific.value = {
           ...(chainSpecific.value as SolanaSpecific),
