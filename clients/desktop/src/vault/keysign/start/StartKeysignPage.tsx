@@ -1,3 +1,4 @@
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -14,7 +15,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep'
@@ -51,8 +51,8 @@ export const StartKeysignPage = () => {
                           <KeysignPeerDiscoveryStep onForward={toNextStep} />
                         )}
                         session={() => (
-                          <KeygenStartSessionStep
-                            onForward={toNextStep}
+                          <StartMpcSessionStep
+                            onFinish={toNextStep}
                             onBack={toPreviousStep}
                           />
                         )}

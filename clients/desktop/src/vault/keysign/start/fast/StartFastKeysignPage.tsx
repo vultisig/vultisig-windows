@@ -1,3 +1,4 @@
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -16,7 +17,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
-import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
@@ -63,9 +63,7 @@ export const StartFastKeysignPage = () => {
                               <MpcPeersProvider value={value}>
                                 <StepTransition
                                   from={({ onForward }) => (
-                                    <KeygenStartSessionStep
-                                      onForward={onForward}
-                                    />
+                                    <StartMpcSessionStep onFinish={onForward} />
                                   )}
                                   to={() => (
                                     <KeysignSigningStep

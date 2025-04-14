@@ -5,7 +5,7 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -13,10 +13,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const KeygenStartSessionStep = ({
+export const StartMpcSessionStep = ({
   onBack,
-  onForward,
-}: Partial<OnBackProp> & OnForwardProp) => {
+  onFinish,
+}: Partial<OnBackProp> & OnFinishProp) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
@@ -26,7 +26,7 @@ export const KeygenStartSessionStep = ({
     mutationFn: () => {
       return startMpcSession({ serverUrl, sessionId, devices })
     },
-    onSuccess: () => onForward(),
+    onSuccess: () => onFinish(),
   })
 
   useEffect(() => start(), [start])

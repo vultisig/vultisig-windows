@@ -1,3 +1,4 @@
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -5,7 +6,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 
@@ -34,10 +34,7 @@ export const SecureVaultKeygenFlow = () => {
           <ReshareVerifyStep onBack={toPreviousStep} onForward={toNextStep} />
         )}
         startSession={() => (
-          <KeygenStartSessionStep
-            onBack={toPreviousStep}
-            onForward={toNextStep}
-          />
+          <StartMpcSessionStep onBack={toPreviousStep} onFinish={toNextStep} />
         )}
         keygen={() => <KeygenFlow onBack={() => setStep('verify')} />}
       />
