@@ -7,8 +7,8 @@ import { makeAppPath } from '../../../navigation'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
 import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { HorizontalLine, ScanQRCodeLink, Wrapper } from './NewVaultPage.styled'
 
 export const NewVaultPage = ({ withBackButton = true }) => {

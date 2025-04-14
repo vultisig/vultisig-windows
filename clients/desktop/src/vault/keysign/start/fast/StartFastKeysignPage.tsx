@@ -15,7 +15,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'

@@ -6,9 +6,9 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
 import { getEditVaultSettingsItems } from './constants'
 import {

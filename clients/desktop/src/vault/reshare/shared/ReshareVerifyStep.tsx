@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 

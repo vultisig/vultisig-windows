@@ -2,7 +2,7 @@ import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { OnClickProp } from '@lib/ui/props'
 
 import { Spinner } from '../../lib/ui/loaders/Spinner'
-import { PageHeaderIconButton } from './PageHeaderIconButton'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
 type PageHeaderRefreshProps = OnClickProp & {
   isPending?: boolean

@@ -8,7 +8,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FitPageContent } from '../../../../ui/page/PageContent'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
 

@@ -11,6 +11,8 @@ import {
 } from '@lib/ui/css/textInput'
 import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMemo } from 'react'
@@ -20,8 +22,6 @@ import { z } from 'zod'
 
 import { TextInput } from '../../lib/ui/inputs/TextInput'
 import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
 import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
 

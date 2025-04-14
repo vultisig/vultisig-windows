@@ -15,8 +15,8 @@ import { z } from 'zod'
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
 import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt'
 
 const getPasswordSchema = (t: TFunction) =>

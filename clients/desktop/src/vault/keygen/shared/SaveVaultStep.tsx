@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
 import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation'
 

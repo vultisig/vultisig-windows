@@ -13,9 +13,9 @@ import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
 
 export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {

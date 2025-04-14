@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageContent } from '../../../../../ui/page/PageContent'
-import { PageHeader } from '../../../../../ui/page/PageHeader'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 
 export const BACKUP_LINK =
   'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup'

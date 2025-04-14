@@ -12,7 +12,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'

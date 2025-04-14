@@ -11,7 +11,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'

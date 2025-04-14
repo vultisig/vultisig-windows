@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'

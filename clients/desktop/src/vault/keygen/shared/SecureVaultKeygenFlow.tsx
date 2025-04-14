@@ -2,7 +2,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'

@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
 

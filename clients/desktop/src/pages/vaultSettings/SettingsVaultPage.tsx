@@ -13,9 +13,9 @@ import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useLanguage } from '../../preferences/state/language'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import {
   getTranslatedSettingsItems,
   VULTISIG_DISCORD_LINK,

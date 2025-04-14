@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { ChainAction, chainActionsRecord } from './ChainAction'
 import { DepositEnabledChain } from './DepositEnabledChain'
 import { DepositForm } from './DepositForm'

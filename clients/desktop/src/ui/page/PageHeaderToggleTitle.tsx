@@ -3,7 +3,7 @@ import { ChildrenProp, InputProps } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { CollapsableStateIndicator } from '../../lib/ui/layout/CollapsableStateIndicator'
-import { PageHeaderTitle } from './PageHeaderTitle'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
 type PageHeaderToggleTitleProps = ChildrenProp & InputProps<boolean>
 

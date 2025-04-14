@@ -9,8 +9,8 @@ import styled from 'styled-components'
 
 import { BrowserOpenURL, WindowReload } from '../../../wailsjs/runtime/runtime'
 import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { ErrorState } from './ErrorBoundary'
 
 const reportErrorUrl =

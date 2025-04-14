@@ -2,7 +2,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'

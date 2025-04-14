@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'

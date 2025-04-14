@@ -7,7 +7,7 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '../../../ui/page/PageContent'
 
 type KeygenFailedStatePros = {

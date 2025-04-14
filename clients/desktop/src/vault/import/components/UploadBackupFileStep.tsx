@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '../VaultBakupResult'

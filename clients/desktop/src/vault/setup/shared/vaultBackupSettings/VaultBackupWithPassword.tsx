@@ -9,7 +9,7 @@ import { useMemo, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageSlice } from '../../../../ui/page/PageSlice'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
 import {

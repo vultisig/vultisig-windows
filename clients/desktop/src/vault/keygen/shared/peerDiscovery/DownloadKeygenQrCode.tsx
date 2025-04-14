@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
 

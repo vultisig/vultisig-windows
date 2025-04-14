@@ -6,7 +6,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useNavigateBack } from '../../../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 const Container = styled(UnstyledButton)`
   ${borderRadius.m};

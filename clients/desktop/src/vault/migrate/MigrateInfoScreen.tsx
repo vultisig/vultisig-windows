@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Animation } from '../../ui/animations/Animation'
-import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FitPageContent } from '../../ui/page/PageContent'
 
 type MigrateInfoScreenProps = {

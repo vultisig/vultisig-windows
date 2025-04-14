@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next'
 
 import { SaveAsImage } from '../../ui/file/SaveAsImage'
 import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { ShareVaultCard } from './ShareVaultCard'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 

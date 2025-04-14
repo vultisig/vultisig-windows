@@ -4,8 +4,8 @@ import { ActionProp, MessageProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageHeader } from '../page/PageHeader'
-import { PageHeaderBackButton } from '../page/PageHeaderBackButton'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { FlowErrorPageContent } from './FlowErrorPageContent'
 
 type FullPageFlowErrorStateProps = Partial<ActionProp> &

@@ -6,7 +6,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'

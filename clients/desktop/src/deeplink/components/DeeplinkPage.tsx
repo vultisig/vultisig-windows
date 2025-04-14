@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPathState } from '../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent'
-import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent'
 import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation'
 
