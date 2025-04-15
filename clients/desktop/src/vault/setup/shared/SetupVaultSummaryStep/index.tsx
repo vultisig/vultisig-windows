@@ -9,7 +9,7 @@ import { CloudStackIcon } from '@lib/ui/icons/CloudStackIcon'
 import { EmailIcon } from '@lib/ui/icons/EmailIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,10 +25,10 @@ import {
   Wrapper,
 } from './SetupVaultSummaryStep.styles'
 
-type SetupVaultSummaryStepProps = OnForwardProp
+type SetupVaultSummaryStepProps = OnFinishProp
 
 export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
-  onForward,
+  onFinish,
 }) => {
   const { t } = useTranslation()
   const [isAgreed, { toggle }] = useBoolean(false)
@@ -108,7 +108,7 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
           </HStack>
-          <Button isDisabled={!isAgreed} onClick={onForward}>
+          <Button isDisabled={!isAgreed} onClick={onFinish}>
             {t('fastVaultSetup.summary.start_using_vault')}
           </Button>
         </VStack>

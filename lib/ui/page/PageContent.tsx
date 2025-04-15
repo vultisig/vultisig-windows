@@ -2,9 +2,8 @@ import { centeredContentColumn } from '@lib/ui/css/centeredContentColumn'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { VStack } from '@lib/ui/layout/Stack'
+import { pageConfig } from '@lib/ui/page/config'
 import styled from 'styled-components'
-
-import { pageConfig } from './config'
 
 export const PageContent = styled(VStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};

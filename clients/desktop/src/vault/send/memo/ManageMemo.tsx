@@ -1,12 +1,12 @@
 import { interactive } from '@lib/ui/css/interactive'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
+import { InputLabel } from '@lib/ui/inputs/InputLabel'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
-import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
-import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '../../../lib/ui/layout/CollapsableStateIndicator'
 import { useSendMemo } from '../state/memo'
 

@@ -7,9 +7,8 @@ import {
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { ComponentPropsWithoutRef } from 'react'
-
-import { TextInput } from './TextInput'
 
 export const PasswordInput: React.FC<
   ComponentPropsWithoutRef<typeof TextInput>

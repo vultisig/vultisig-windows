@@ -1,16 +1,16 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
 import { ManageAmount } from '../amount/ManageSendAmount'
@@ -24,7 +24,7 @@ import { ManageReceiver } from '../receiver/ManageReceiver'
 import { RefreshSend } from '../RefreshSend'
 import { Sender } from '../sender/Sender'
 
-export const SendForm = ({ onForward }: OnForwardProp) => {
+export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
   const { error, isLoading, isPending } = useSendFormValidationQuery()
@@ -53,7 +53,7 @@ export const SendForm = ({ onForward }: OnForwardProp) => {
         as="form"
         gap={40}
         {...getFormProps({
-          onSubmit: onForward,
+          onSubmit: onFinish,
           isDisabled,
         })}
       >

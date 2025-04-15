@@ -1,16 +1,16 @@
 import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
-type StartSessionInput = {
+type StartMpcSessionInput = {
   serverUrl: string
   sessionId: string
   devices: string[]
 }
 
-export const startSession = async ({
+export const startMpcSession = async ({
   serverUrl,
   sessionId,
   devices,
-}: StartSessionInput) => {
+}: StartMpcSessionInput) => {
   const response = await fetch(`${serverUrl}/start/${sessionId}`, {
     method: 'POST',
     headers: {

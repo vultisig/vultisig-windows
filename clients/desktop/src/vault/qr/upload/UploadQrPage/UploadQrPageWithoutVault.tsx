@@ -1,11 +1,11 @@
 import { Match } from '@lib/ui/base/Match'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
-import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 import { StyledPageContent } from './UploadQRPage.styled'

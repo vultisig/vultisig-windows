@@ -47,7 +47,7 @@ export const BackupFastVault = ({ onFinish }: OnFinishProp) => {
         <SaveVaultStep
           value={vault}
           title={t('creating_vault')}
-          onForward={toNextStep}
+          onFinish={toNextStep}
         />
       )}
       emailVerification={() => <EmailConfirmation onFinish={toNextStep} />}
@@ -59,8 +59,8 @@ export const BackupFastVault = ({ onFinish }: OnFinishProp) => {
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSummaryStep onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onCompleted={onFinish} />}
           />

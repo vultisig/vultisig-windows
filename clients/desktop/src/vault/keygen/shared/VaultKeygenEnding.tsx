@@ -13,7 +13,7 @@ export const VaultKeygenEnding = () => {
   if (keygenType === 'migrate') {
     return (
       <StepTransition
-        from={({ onForward }) => <VaultKeygenBackupFlow onFinish={onForward} />}
+        from={({ onFinish }) => <VaultKeygenBackupFlow onFinish={onFinish} />}
         to={() => <MigrateSuccess />}
       />
     )

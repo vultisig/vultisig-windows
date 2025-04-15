@@ -6,18 +6,23 @@ import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { Match } from '@lib/ui/base/Match'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { FitPageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
 import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
@@ -29,19 +34,14 @@ import { PeersManagerFrame } from '../../../../mpc/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
 import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
-import { FitPageContent } from '../../../../ui/page/PageContent'
 import { PageFormFrame } from '../../../../ui/page/PageFormFrame'
-import { PageHeader } from '../../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
 import { CurrentPeersCorrector } from './CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryEducation } from './KeygenPeerDiscoveryEducation'
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
-type KeygenPeerDiscoveryStepProps = OnForwardProp & Partial<OnBackProp>
+type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
 const educationUrl: Record<KeygenType, string> = {
   create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
@@ -53,13 +53,15 @@ const educationUrl: Record<KeygenType, string> = {
 const recommendedDevicesTarget = recommendedPeers + 1
 
 export const KeygenPeerDiscoveryStep = ({
-  onForward,
+  onFinish,
   onBack,
 }: KeygenPeerDiscoveryStepProps) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = usePeerOptionsQuery()
+
+  const openUrl = useOpenUrl()
 
   const joinUrlQuery = useJoinKeygenUrlQuery()
 
@@ -111,7 +113,7 @@ export const KeygenPeerDiscoveryStep = ({
               <>
                 <PageHeaderIconButton
                   onClick={() => {
-                    BrowserOpenURL(educationUrl[keygenType])
+                    openUrl(educationUrl[keygenType])
                   }}
                   icon={<InfoIcon />}
                 />
@@ -124,7 +126,7 @@ export const KeygenPeerDiscoveryStep = ({
       <FitPageContent
         as="form"
         {...getFormProps({
-          onSubmit: onForward,
+          onSubmit: onFinish,
           isDisabled,
         })}
       >

@@ -9,7 +9,10 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { OnForwardProp } from '@lib/ui/props'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
@@ -19,18 +22,13 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState'
-import { PageHeader } from '../../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { signWithServer } from '../../../fast/api/signWithServer'
 import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader'
 import { customMessageConfig } from '../../customMessage/config'
 import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
 import { getTxInputData } from '../../utils/getTxInputData'
 
-export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
-  onForward,
-}) => {
+export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
 
   const { publicKeys } = useCurrentVault()
@@ -101,7 +99,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
         },
       })
     },
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(mutate, [mutate])

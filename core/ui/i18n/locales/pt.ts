@@ -800,4 +800,6 @@ export const pt = {
   scan_with_device_name: 'Digitalizar com {{name}}',
   join_upgrade: 'Junte-se à atualização',
   waiting_for_upgrade_start: 'Aguardando o início da atualização...',
+  vault_name_description:
+    'Você sempre pode renomear seu cofre mais tarde nas configurações',
 }

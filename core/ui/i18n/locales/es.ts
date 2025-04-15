@@ -811,4 +811,6 @@ export const es = {
   scan_with_device_name: 'Escanear con {{name}}',
   join_upgrade: 'Únase a Upgrade',
   waiting_for_upgrade_start: 'Esperando que comience la actualización...',
+  vault_name_description:
+    'Siempre puedes cambiar el nombre de tu bóveda más tarde en la configuración',
 }

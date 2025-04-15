@@ -1,16 +1,15 @@
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnForwardProp } from '@lib/ui/props'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { PageContent } from '../../../ui/page/PageContent'
-
 const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500
-export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
+export const SetupVaultSuccessScreen = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const { RiveComponent } = useRive({
     src: '/assets/animations/vault-creation-success/vault_created.riv',
@@ -19,12 +18,12 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
 
   useEffect(() => {
     const timeoutId = setTimeout(
-      onForward,
+      onFinish,
       SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS
     )
 
     return () => clearTimeout(timeoutId)
-  }, [onForward])
+  }, [onFinish])
 
   return (
     <Wrapper justifyContent="center" alignItems="center">

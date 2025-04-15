@@ -1,22 +1,22 @@
 import { Vault } from '@core/ui/vault/Vault'
-import { OnForwardProp, TitleProp, ValueProp } from '@lib/ui/props'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { OnFinishProp, TitleProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
 import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation'
 
 export const SaveVaultStep: React.FC<
-  ValueProp<Vault> & OnForwardProp & TitleProp
-> = ({ value, onForward, title }) => {
+  ValueProp<Vault> & OnFinishProp & TitleProp
+> = ({ value, onFinish, title }) => {
   const { t } = useTranslation()
 
   const { mutate, ...mutationState } = useSaveVaultMutation({
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(() => {

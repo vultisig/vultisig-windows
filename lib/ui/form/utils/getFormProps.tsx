@@ -1,8 +1,7 @@
+import { preventDefault } from '@lib/ui/utils/preventDefault'
+import { stopPropagation } from '@lib/ui/utils/stopPropagation'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { FormEvent, KeyboardEvent } from 'react'
-
-import { preventDefault } from '../../utils/preventDefault'
-import { stopPropagation } from '../../utils/stopPropagation'
 
 type GetFormPropsInput = {
   onClose?: () => void

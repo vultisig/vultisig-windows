@@ -33,8 +33,8 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
             value={keygenType}
             create={() => (
               <StepTransition
-                from={({ onForward }) => (
-                  <SetupVaultSuccessScreen onForward={onForward} />
+                from={({ onFinish }) => (
+                  <SetupVaultSuccessScreen onFinish={onFinish} />
                 )}
                 to={() => (
                   <BackupSecureVault onFinish={() => navigate('vault')} />

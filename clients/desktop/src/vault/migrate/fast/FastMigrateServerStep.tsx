@@ -3,21 +3,21 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
 export const FastMigrateServerStep: React.FC<
-  OnForwardProp & Partial<OnBackProp>
-> = ({ onForward, onBack }) => {
+  OnFinishProp & Partial<OnBackProp>
+> = ({ onFinish, onBack }) => {
   const { t } = useTranslation()
 
   const sessionId = useMpcSessionId()
@@ -37,7 +37,7 @@ export const FastMigrateServerStep: React.FC<
         email,
       })
     },
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(mutate, [mutate])

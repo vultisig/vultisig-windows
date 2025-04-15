@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { LinkIcon } from '@lib/ui/icons/LinkIcon'
@@ -17,7 +18,6 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain'
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount'
@@ -44,6 +44,8 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     blockchainSpecific,
     swapPayload,
   } = value
+
+  const openUrl = useOpenUrl()
 
   const isSwapTx =
     (swapPayload && swapPayload.value) ||
@@ -101,7 +103,7 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           <IconButton icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
           <IconButton
             onClick={() => {
-              BrowserOpenURL(blockExplorerUrl)
+              openUrl(blockExplorerUrl)
             }}
             icon={<LinkIcon />}
           />

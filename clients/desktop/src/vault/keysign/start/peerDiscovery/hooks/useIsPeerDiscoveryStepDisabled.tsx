@@ -1,13 +1,12 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcSigners } from '../../../../../mpc/signers/state/mpcSigners'
-
 export const useIsPeerDiscoveryStepDisabled = () => {
   const { t } = useTranslation()
-  const devices = useMpcSigners()
+  const devices = useMpcDevices()
   const { signers } = useCurrentVault()
 
   return useMemo(() => {

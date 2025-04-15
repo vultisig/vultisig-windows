@@ -1,15 +1,15 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { UserLockIcon } from '@lib/ui/icons/UserLockIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { FitPageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
-import { FitPageContent } from '../../../../ui/page/PageContent'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
 
 type VaultBackupWithoutPasswordProps = OnFinishProp & {
