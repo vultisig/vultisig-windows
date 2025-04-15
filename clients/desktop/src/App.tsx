@@ -12,6 +12,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { RouterProvider } from 'react-router-dom'
 
+import { SaveFile } from '../wailsjs/go/main/App'
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { ToastProvider } from './lib/ui/toast/ToastProvider'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
@@ -20,7 +21,6 @@ import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { router } from './router'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
-import { SaveFile } from './wailsjs/go/main/App'
 
 const queryClient = getQueryClient()
 
