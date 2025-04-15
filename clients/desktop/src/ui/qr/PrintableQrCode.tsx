@@ -3,7 +3,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { FramedQrCode } from '../../lib/ui/qr/FramedQrCode'
+import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { ProductLogo } from '../logo/ProductLogo'
 
 const Container = styled(VStack)`

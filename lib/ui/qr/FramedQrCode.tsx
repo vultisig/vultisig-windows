@@ -1,5 +1,5 @@
+import { Animation } from '@lib/ui/animations/Animation'
 import { ValueProp } from '@lib/ui/props'
-import { useRive } from '@rive-app/react-canvas'
 import { ComponentProps } from 'react'
 import QRCode from 'react-qr-code'
 
@@ -14,15 +14,11 @@ type FramedQrCode = ValueProp<string> &
 
 export const FramedQrCode = ({ value, scaling = true }: FramedQrCode) => {
   const scale = useQRCodeScaleFactor(scaling)
-  const { RiveComponent } = useRive({
-    src: '/assets/animations/keygen-secure-vault/qr-scanned.riv',
-    autoplay: true,
-  })
 
   return (
     <Wrapper scale={scale}>
       <RiveWrapper>
-        <RiveComponent />
+        <Animation value="keygen-secure-vault/qr-scanned" />
       </RiveWrapper>
       <QRCodeWrapper>
         <QRCode

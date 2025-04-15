@@ -8,7 +8,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode'
+import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { DownloadAddressQrCode } from './DownloadAddressQrCode'
 
