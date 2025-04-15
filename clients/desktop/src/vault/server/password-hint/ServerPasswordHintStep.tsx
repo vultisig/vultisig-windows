@@ -8,8 +8,12 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
@@ -17,10 +21,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { TextInput } from '../../../lib/ui/inputs/TextInput'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { useVaultPasswordHint } from './state/password-hint'
 
 const getPasswordHintSchema = (t: TFunction) =>
@@ -31,9 +31,9 @@ const getPasswordHintSchema = (t: TFunction) =>
 type PasswordHintSchema = z.infer<ReturnType<typeof getPasswordHintSchema>>
 
 export const ServerPasswordHintStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
   const [storedPasswordHint, setStoredPasswordHint] = useVaultPasswordHint()
 
@@ -52,7 +52,7 @@ export const ServerPasswordHintStep = ({
 
   const onSubmit = (data: PasswordHintSchema) => {
     setStoredPasswordHint(data.passwordHint)
-    onForward()
+    onFinish()
   }
 
   return (
@@ -106,7 +106,7 @@ export const ServerPasswordHintStep = ({
           <StyledButton
             type="button"
             kind="secondary"
-            onClick={() => onForward()}
+            onClick={() => onFinish()}
           >
             {t('skip')}
           </StyledButton>

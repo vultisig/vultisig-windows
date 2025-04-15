@@ -5,19 +5,19 @@ import {
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
+import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput'
-import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer'
-import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel'
 import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
-import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
 import { Modal } from '../../../../../lib/ui/modal'
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery'
 import {

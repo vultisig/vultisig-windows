@@ -1,15 +1,15 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
-import { PageContent } from '../../../ui/page/PageContent'
 import { WithProgressIndicator } from '../shared/WithProgressIndicator'
 
 export const SignCustomMessagePage = () => {

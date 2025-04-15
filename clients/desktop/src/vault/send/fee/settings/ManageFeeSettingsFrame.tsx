@@ -1,12 +1,12 @@
 import { Opener } from '@lib/ui/base/Opener'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { t } from 'i18next'
 
 import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay'
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQuery'
 import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider'

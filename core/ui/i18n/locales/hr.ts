@@ -790,4 +790,6 @@ export const hr = {
   scan_with_device_name: 'Skeniraj s {{name}}',
   join_upgrade: 'Pridružite se nadogradnji',
   waiting_for_upgrade_start: 'Čeka se početak nadogradnje...',
+  vault_name_description:
+    'Uvijek možete preimenovati svoj trezor kasnije u postavkama',
 }

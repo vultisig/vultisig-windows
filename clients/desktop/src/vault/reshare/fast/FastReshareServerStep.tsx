@@ -4,22 +4,20 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { OnForwardProp } from '@lib/ui/props'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { reshareWithServer } from '../../fast/api/reshareWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
-export const FastReshareServerStep: React.FC<OnForwardProp> = ({
-  onForward,
-}) => {
+export const FastReshareServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
 
   const sessionId = useMpcSessionId()
@@ -47,7 +45,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
         old_reshare_prefix: resharePrefix ?? '',
       })
     },
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   useEffect(mutate, [mutate])

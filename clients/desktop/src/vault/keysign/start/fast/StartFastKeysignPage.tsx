@@ -1,3 +1,4 @@
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -12,11 +13,10 @@ import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
-import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
@@ -49,10 +49,10 @@ export const StartFastKeysignPage = () => {
                       <Match
                         value={step}
                         password={() => (
-                          <ServerPasswordStep onForward={toNextStep} />
+                          <ServerPasswordStep onFinish={toNextStep} />
                         )}
                         server={() => (
-                          <FastKeysignServerStep onForward={toNextStep} />
+                          <FastKeysignServerStep onFinish={toNextStep} />
                         )}
                         keysign={() => (
                           <ValueTransfer<string[]>
@@ -62,10 +62,8 @@ export const StartFastKeysignPage = () => {
                             to={({ value }) => (
                               <MpcPeersProvider value={value}>
                                 <StepTransition
-                                  from={({ onForward }) => (
-                                    <KeygenStartSessionStep
-                                      onForward={onForward}
-                                    />
+                                  from={({ onFinish }) => (
+                                    <StartMpcSessionStep onFinish={onFinish} />
                                   )}
                                   to={() => (
                                     <KeysignSigningStep

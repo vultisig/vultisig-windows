@@ -11,7 +11,7 @@ export const MigrateVaultPage = () => {
 
   return (
     <StepTransition
-      from={({ onForward }) => <MigrateIntro onFinish={onForward} />}
+      from={({ onFinish }) => <MigrateIntro onFinish={onFinish} />}
       to={() => (
         <Match
           value={securityType}

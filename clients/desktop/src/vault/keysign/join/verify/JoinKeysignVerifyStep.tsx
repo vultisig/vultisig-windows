@@ -1,16 +1,16 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel'
-import { PageContent } from '../../../../ui/page/PageContent'
-import { PageHeader } from '../../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { WithProgressIndicator } from '../../shared/WithProgressIndicator'
 import { KeysignTxOverview } from './KeysignTxOverview'
 
-export const JoinKeysignVerifyStep = ({ onForward }: OnForwardProp) => {
+export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
   return (
@@ -25,7 +25,7 @@ export const JoinKeysignVerifyStep = ({ onForward }: OnForwardProp) => {
             <KeysignTxOverview />
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <Button onClick={onForward}>{t('join_keysign')}</Button>
+        <Button onClick={onFinish}>{t('join_keysign')}</Button>
       </PageContent>
     </>
   )

@@ -1,6 +1,11 @@
+import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
+import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -8,38 +13,27 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { startSession } from '../utils/startSession'
-
-export const KeygenStartSessionStep = ({
+export const StartMpcSessionStep = ({
   onBack,
-  onForward,
-}: Partial<OnBackProp> & OnForwardProp) => {
+  onFinish,
+}: Partial<OnBackProp> & OnFinishProp) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
-  const devices = useMpcSigners()
+  const devices = useMpcDevices()
 
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      return startSession({ serverUrl, sessionId, devices })
+      return startMpcSession({ serverUrl, sessionId, devices })
     },
-    onSuccess: () => onForward(),
+    onSuccess: () => onFinish(),
   })
 
   useEffect(() => start(), [start])
 
   return (
     <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
-      />
+      <FlowPageHeader onBack={onBack} title={t('keygen')} />
       <PageContent justifyContent="center" alignItems="center">
         <MatchQuery
           value={status}

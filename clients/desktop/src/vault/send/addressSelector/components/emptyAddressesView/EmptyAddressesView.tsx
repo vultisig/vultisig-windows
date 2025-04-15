@@ -1,8 +1,8 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { useTranslation } from 'react-i18next'
 
-import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
 import { AddressBookPageHeader } from '../../AddressSelector.styles'
 import {
   CenteredBox,

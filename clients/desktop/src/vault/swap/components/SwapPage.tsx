@@ -1,12 +1,12 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'
 import { ToCoinProvider } from '../state/toCoin'
@@ -43,7 +43,7 @@ export const SwapPage = () => {
         />
         <Match
           value={step}
-          form={() => <SwapForm onForward={toNextStep} />}
+          form={() => <SwapForm onFinish={toNextStep} />}
           verify={() => <SwapVerify />}
         />
       </ToCoinProvider>

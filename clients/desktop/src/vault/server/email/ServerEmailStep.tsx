@@ -9,19 +9,18 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
 import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-import { TextInput } from '../../../lib/ui/inputs/TextInput'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 
 const getEmailSchema = (t: TFunction) =>
   z.object({
@@ -36,9 +35,9 @@ const getEmailSchema = (t: TFunction) =>
 type EmailSchema = z.infer<ReturnType<typeof getEmailSchema>>
 
 export const ServerEmailStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
   const [storedEmail, setStoredEmail] = useEmail()
 
@@ -57,7 +56,7 @@ export const ServerEmailStep = ({
 
   const onSubmit = (data: EmailSchema) => {
     setStoredEmail(data.email)
-    onForward()
+    onFinish()
   }
 
   return (
