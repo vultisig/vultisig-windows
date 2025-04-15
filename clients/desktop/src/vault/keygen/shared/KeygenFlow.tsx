@@ -46,7 +46,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             )}
             to={() => {
               if (hasServer(vault.signers)) {
-                return <VaultKeygenEnding />
+                return <VaultKeygenEnding onBack={onBack} />
               }
 
               return (
@@ -56,9 +56,10 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       title={title}
                       value={vault}
                       onFinish={onFinish}
+                      onBack={onBack}
                     />
                   )}
-                  to={() => <VaultKeygenEnding />}
+                  to={() => <VaultKeygenEnding onBack={onBack} />}
                 />
               )
             }}

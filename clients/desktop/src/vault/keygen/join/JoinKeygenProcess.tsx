@@ -2,7 +2,7 @@ import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutati
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { TitleProp } from '@lib/ui/props'
+import { OnBackProp, TitleProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 
@@ -16,7 +16,10 @@ import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { KeygenPendingState } from '../shared/KeygenPendingState'
 import { KeygenSuccessStep } from '../shared/KeygenSuccessStep'
 
-export const JoinKeygenProcess = ({ title }: TitleProp) => {
+export const JoinKeygenProcess = ({
+  title,
+  onBack,
+}: TitleProp & OnBackProp) => {
   const { mutate: joinKeygen, step, ...joinKeygenState } = useKeygenMutation()
   const { keygenType } = useAppPathState<'joinKeygen'>()
 
@@ -41,8 +44,12 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
                 )}
               />
             )}
-            reshare={() => <KeygenSuccessStep value={vault} title={title} />}
-            migrate={() => <KeygenSuccessStep value={vault} title={title} />}
+            reshare={() => (
+              <KeygenSuccessStep value={vault} title={title} onBack={onBack} />
+            )}
+            migrate={() => (
+              <KeygenSuccessStep value={vault} title={title} onBack={onBack} />
+            )}
           />
         </CurrentVaultProvider>
       )}
