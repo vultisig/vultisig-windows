@@ -323,6 +323,7 @@ class XDEFIKeplrProvider extends Keplr {
       from: msg.sender,
       to: msg.receiver,
       data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
+      isIBC: true,
     }
 
     const result: SendTransactionResponse = await cosmosProvider.request({
@@ -1086,6 +1087,7 @@ window.vultisig = vultisigProvider
 window.xfi = xfiProvider
 window.xfi.keplr = keplrProvider
 window.ethereum = ethereumProvider
+window.keplr = keplrProvider
 announceProvider({
   info: {
     icon: VULTI_ICON_RAW_SVG,

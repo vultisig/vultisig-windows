@@ -1,6 +1,7 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 
 import { KeysignChainSpecificValue } from './KeysignChainSpecific'
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 export type ChainSpecificResolverInput<T = any> = {
   coin: AccountCoin
@@ -8,6 +9,7 @@ export type ChainSpecificResolverInput<T = any> = {
   feeSettings?: T
   isDeposit?: boolean
   amount?: number
+  transactionType?: TransactionType
 }
 
 export type ChainSpecificResolver<R = KeysignChainSpecificValue, T = any> = (

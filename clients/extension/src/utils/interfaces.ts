@@ -161,6 +161,7 @@ export interface TransactionDetails {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
+  isIBC?: boolean
 }
 
 export interface ITransaction {

@@ -15,6 +15,7 @@ import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import {
   KeysignPayload,
@@ -75,6 +76,9 @@ export const getKeysignPayload = (
           amount: Number(transaction.transactionDetails.amount?.amount),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
+          transactionType: transaction.transactionDetails.isIBC
+            ? TransactionType.IBC_TRANSFER
+            : TransactionType.UNSPECIFIED,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {
@@ -136,6 +140,7 @@ export const getKeysignPayload = (
         if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
         }
+        console.log('payload:', keysignPayload)
 
         resolve(keysignPayload)
       } catch (error) {

@@ -9,6 +9,7 @@ import {
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 import { ChainsBySpecific } from './KeysignChainSpecific'
+import { getIbcDenomTrace } from '@core/chain/chains/cosmos/block'
 
 type CosmosSpecificChain = ChainsBySpecific<'cosmosSpecific'>
 
@@ -27,19 +28,29 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
 
 export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   coin,
+  transactionType,
 }) => {
   const chain = coin.chain as CosmosSpecificChain
+
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain,
   })
 
-  const gas = BigInt(defaultGasRecord[chain])
-
-  return create(CosmosSpecificSchema, {
+  const basePayload = {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
-    gas,
-    transactionType: TransactionType.UNSPECIFIED,
+    gas: BigInt(defaultGasRecord[chain]),
+    transactionType,
+  }
+
+  if (transactionType !== TransactionType.IBC_TRANSFER) {
+    return create(CosmosSpecificSchema, basePayload)
+  }
+
+  const ibcData = await getIbcDenomTrace(chain)
+  return create(CosmosSpecificSchema, {
+    ...basePayload,
+    ibcDenomTraces: ibcData,
   })
 }
