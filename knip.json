@@ -16,7 +16,10 @@
     "clients/extension/src/pages/import/index.tsx",
     "clients/extension/src/pages/transaction/index.tsx",
     "clients/extension/src/pages/vault/index.tsx",
-    "clients/extension/src/pages/vaults/index.tsx"
+    "clients/extension/src/pages/vaults/index.tsx",
+    "clients/extension/src/messengers/bridge.ts",
+    "clients/extension/src/messengers/createMessenger.ts",
+    "clients/extension/src/inpage/index.ts"
   ],
   "ignoreDependencies": [
     "@types/chrome",
