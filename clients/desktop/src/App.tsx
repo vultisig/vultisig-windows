@@ -1,6 +1,7 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
+import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -12,6 +13,7 @@ import { RouterProvider } from 'react-router-dom'
 
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { ToastProvider } from './lib/ui/toast/ToastProvider'
+import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import OnboardingResetter from './onboarding/OnboardingRessetterProvider'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
@@ -23,31 +25,35 @@ const queryClient = getQueryClient()
 const App = () => {
   const [language] = useLanguage()
 
+  const [mpcLib] = useVaultCreationMpcLib()
+
   return (
-    <OpenUrlProvider value={BrowserOpenURL}>
-      <MpcDeviceProvider value="windows">
-        <WalletCoreProvider>
-          <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={darkTheme}>
-              <I18nProvider language={language}>
-                <GlobalStyle />
-                <VStack fullSize>
-                  <RemoteStateDependant>
-                    <InitializedWalletOnly>
-                      <OnboardingResetter>
-                        <ToastProvider>
-                          <RouterProvider router={router} />
-                        </ToastProvider>
-                      </OnboardingResetter>
-                    </InitializedWalletOnly>
-                  </RemoteStateDependant>
-                </VStack>
-              </I18nProvider>
-            </ThemeProvider>
-          </QueryClientProvider>
-        </WalletCoreProvider>
-      </MpcDeviceProvider>
-    </OpenUrlProvider>
+    <VaultCreationMpcLibProvider value={mpcLib}>
+      <OpenUrlProvider value={BrowserOpenURL}>
+        <MpcDeviceProvider value="windows">
+          <WalletCoreProvider>
+            <QueryClientProvider client={queryClient}>
+              <ThemeProvider theme={darkTheme}>
+                <I18nProvider language={language}>
+                  <GlobalStyle />
+                  <VStack fullSize>
+                    <RemoteStateDependant>
+                      <InitializedWalletOnly>
+                        <OnboardingResetter>
+                          <ToastProvider>
+                            <RouterProvider router={router} />
+                          </ToastProvider>
+                        </OnboardingResetter>
+                      </InitializedWalletOnly>
+                    </RemoteStateDependant>
+                  </VStack>
+                </I18nProvider>
+              </ThemeProvider>
+            </QueryClientProvider>
+          </WalletCoreProvider>
+        </MpcDeviceProvider>
+      </OpenUrlProvider>
+    </VaultCreationMpcLibProvider>
   )
 }
 

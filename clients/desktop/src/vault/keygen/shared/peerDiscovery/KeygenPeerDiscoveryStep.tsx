@@ -13,6 +13,7 @@ import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { KeygenPeerDiscoveryEducation } from '@core/ui/mpc/keygen/education/devices/KeygenPeerDiscoveryEducation'
+import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
@@ -38,7 +39,6 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
