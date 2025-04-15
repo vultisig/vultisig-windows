@@ -1,4 +1,6 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
+import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -23,8 +25,6 @@ import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
 import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
 import { PageFormFrame } from '../../../../ui/page/PageFormFrame'
-import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery'
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode'
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled'
@@ -49,11 +49,11 @@ export const KeysignPeerDiscoveryStep = ({ onFinish }: OnFinishProp) => {
   const requiredSigners = getKeygenThreshold(signers.length)
   const requiredPeers = requiredSigners - 1
 
-  const peerOptionsQuery = usePeerOptionsQuery()
+  const peerOptionsQuery = useMpcPeerOptionsQuery()
 
   return (
     <>
-      <CurrentPeersCorrector />
+      <MpcPeersCorrector />
       <PageHeader
         title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}

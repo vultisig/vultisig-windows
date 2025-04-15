@@ -1,12 +1,11 @@
+import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { useEffect } from 'react'
 
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
-
 export const useVaultPeersSetup = (enabled: boolean) => {
-  const peerOptionsQuery = usePeerOptionsQuery({
+  const peerOptionsQuery = useMpcPeerOptionsQuery({
     enabled: enabled,
   })
 
