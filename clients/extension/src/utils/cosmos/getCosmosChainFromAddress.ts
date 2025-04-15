@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 
 export const getCosmosChainFromAddress = (address: string): string | null => {
-  const prefixToChain: Record<string, Chain> = {
+  const prefixToChain: Record<string, CosmosChain> = {
     cosmos: Chain.Cosmos,
     osmo: Chain.Osmosis,
     terra: Chain.Terra,
