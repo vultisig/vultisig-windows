@@ -5,6 +5,7 @@ import { toLibType } from '@core/mpc/types/utils/libType'
 import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { useSevenZipQuery } from '@core/ui/compression/queries/useSevenZipQuery'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   assertKeygenReshareFields,
@@ -16,13 +17,11 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useVaultCreationMpcLib } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { match } from '@lib/utils/match'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
-
-import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
-import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 
 export const useJoinKeygenUrlQuery = () => {
   const sessionId = useMpcSessionId()
@@ -37,7 +36,7 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenVault = useKeygenVault()
 
-  const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+  const vaultCreationMpcLib = useVaultCreationMpcLib()
 
   return useTransformQueryData(
     useSevenZipQuery(),

@@ -532,6 +532,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
+    "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
     "@core/mpc": "workspace:*"

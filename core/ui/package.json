@@ -6,6 +6,7 @@
     "translate": "npx tsx i18n/scripts/translate.ts"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.2.4",
     "@core/chain": "workspace:*",
     "@core/config": "workspace:*",
     "@core/mpc": "workspace:*",
