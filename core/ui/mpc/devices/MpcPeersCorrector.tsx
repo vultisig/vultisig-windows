@@ -2,12 +2,12 @@ import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { omit } from '@lib/utils/record/omit'
 import { useEffect } from 'react'
 
-import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
+import { useMpcPeerOptionsQuery } from './queries/useMpcPeerOptionsQuery'
 
-export const CurrentPeersCorrector = () => {
+export const MpcPeersCorrector = () => {
   const [value, setValue] = useMpcPeersSelectionRecord()
 
-  const peerOptionsQuery = usePeerOptionsQuery()
+  const peerOptionsQuery = useMpcPeerOptionsQuery()
 
   useEffect(() => {
     const options = peerOptionsQuery.data ?? []

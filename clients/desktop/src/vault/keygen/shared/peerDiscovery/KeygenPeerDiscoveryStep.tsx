@@ -1,6 +1,8 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
+import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
+import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -33,13 +35,12 @@ import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
 import { PeersManagerFrame } from '../../../../mpc/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
+import { useMpcPeersQuery } from '../../../../mpc/peers/queries/useMpcPeersQuery'
 import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
 import { PageFormFrame } from '../../../../ui/page/PageFormFrame'
 import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
-import { CurrentPeersCorrector } from './CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryEducation } from './KeygenPeerDiscoveryEducation'
-import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
@@ -59,7 +60,7 @@ export const KeygenPeerDiscoveryStep = ({
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
-  const peerOptionsQuery = usePeerOptionsQuery()
+  const peerOptionsQuery = useMpcPeerOptionsQuery()
 
   const openUrl = useOpenUrl()
 
@@ -102,7 +103,7 @@ export const KeygenPeerDiscoveryStep = ({
 
   return (
     <>
-      <CurrentPeersCorrector />
+      <MpcPeersCorrector />
       <PageHeader
         title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}

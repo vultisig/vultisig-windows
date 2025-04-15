@@ -7,7 +7,7 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-export const usePeerOptionsQuery = ({ enabled = true } = {}) => {
+export const useMpcPeerOptionsQuery = ({ enabled = true } = {}) => {
   const sessionId = useMpcSessionId()
   const localPartyId = useMpcLocalPartyId()
   const serverUrl = useMpcServerUrl()
