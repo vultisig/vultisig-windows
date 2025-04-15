@@ -15,7 +15,18 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import { SetupFastVaultPage } from '../../components/setup-vault/fast/SetupFastVaultPage'
+import { SetupSecureVaultPage } from '../../components/setup-vault/secure/SetupSecureVaultPage'
+
 const routes = [
+  {
+    path: appPaths.setupFastVault,
+    element: <SetupSecureVaultPage />,
+  },
+  {
+    path: appPaths.setupSecureVault,
+    element: <SetupFastVaultPage />,
+  },
   {
     path: appPaths.landing,
     element: <NewVaultPage />,
