@@ -1,10 +1,9 @@
+import { peerOption } from '@core/ui/mpc/devices/peers/option/PeerOptionContainer'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import styled from 'styled-components'
-
-import { peerOption } from './option/PeerOptionContainer'
 
 const Container = styled.div`
   ${peerOption};

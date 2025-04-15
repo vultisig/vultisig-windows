@@ -40,17 +40,17 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
   )
 }
 
-export const OverlayContent = styled(VStack)`
+const OverlayContent = styled(VStack)`
   background-color: ${getColor('foregroundDark')};
 `
 
-export const OverlayContentWrapper = styled(VStack)`
+const OverlayContentWrapper = styled(VStack)`
   padding: 0px 35px 48px 35px;
   background-color: ${getColor('foreground')};
   max-width: 800px;
 `
 
-export const RiveWrapper = styled.div`
+const RiveWrapper = styled.div`
   position: absolute;
   top: 181px;
   left: 160px;
@@ -59,13 +59,13 @@ export const RiveWrapper = styled.div`
   height: 60px;
 `
 
-export const PhoneImageOverlay = styled.div`
+const PhoneImageOverlay = styled.div`
   position: absolute;
   inset: 0;
   background-color: rgba(42, 83, 150, 0.08);
 `
 
-export const OverlayWrapper = styled(VStack)`
+const OverlayWrapper = styled(VStack)`
   position: fixed;
   width: 100%;
   height: 100%;
@@ -73,7 +73,7 @@ export const OverlayWrapper = styled(VStack)`
   background-color: rgba(0, 0, 0, 0.5);
 `
 
-export const PhoneImageWrapper = styled(VStack)`
+const PhoneImageWrapper = styled(VStack)`
   position: relative;
   border-bottom-left-radius: 44px;
   border-bottom-right-radius: 44px;

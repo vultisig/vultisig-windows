@@ -1,3 +1,4 @@
+import { useMpcPeersQuery } from '@core/ui/mpc/devices/peers/queries/useMpcPeersQuery'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -5,7 +6,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'

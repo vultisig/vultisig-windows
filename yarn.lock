@@ -540,6 +540,7 @@ __metadata:
     "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
     react: "npm:^19.0.0"
+    styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
 
