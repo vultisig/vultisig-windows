@@ -6,10 +6,7 @@ import {
   toCamelCase,
   toSnakeCase,
 } from '@clients/extension/src/utils/functions'
-import {
-  FastSignInput,
-  SignatureProps,
-} from '@clients/extension/src/utils/interfaces'
+import { FastSignInput } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
@@ -158,26 +155,17 @@ export default {
     ): Promise<KeysignResponse> => {
       return new Promise((resolve, reject) => {
         api
-          .get<SignatureProps>(
-            `${apiRef.vultisig.api}router/complete/${uuid}/keysign`,
-            { headers: { message_id: message ?? '' } }
-          )
+          .get(`${apiRef.vultisig.api}router/complete/${uuid}/keysign`, {
+            headers: { message_id: message ?? '' },
+          })
           .then(({ data, status }) => {
             if (status === 200) {
-              const transformed = Object.entries(data).reduce(
-                (acc, [key, value]) => {
-                  const newKey = key.charAt(0).toUpperCase() + key.slice(1)
-                  acc[newKey] = value
-                  return acc
-                },
-                {} as { [key: string]: any }
-              )
               const response: KeysignResponse = {
-                der_signature: transformed.DerSignature,
-                msg: transformed.Msg,
-                r: transformed.R,
-                recovery_id: transformed.RecoveryID,
-                s: transformed.S,
+                der_signature: data.DerSignature || data.derSignature,
+                msg: data.Msg || data.msg,
+                r: data.R || data.r,
+                recovery_id: data.RecoveryID || data.recoveryId,
+                s: data.S || data.s,
               }
 
               resolve(response)

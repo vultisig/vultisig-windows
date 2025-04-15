@@ -1,24 +1,24 @@
+import { useVaultPassword } from '@core/ui/state/password'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
-import { useCurrentVault } from '../../state/currentVault'
-import { getStorageVaultId } from '../../utils/storageVault'
-import { useVaultPassword } from './state/password'
 
-export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
+export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
 
   const [password, setPassword] = useVaultPassword()
@@ -28,10 +28,10 @@ export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
       getVaultFromServer({
-        vaultId: getStorageVaultId(vault),
+        vaultId: getVaultId(vault),
         password,
       }),
-    onSuccess: onForward,
+    onSuccess: onFinish,
   })
 
   const isDisabled = useMemo(() => {

@@ -3,13 +3,14 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
@@ -85,8 +86,8 @@ export const useSwapKeysignPayloadQuery = () => {
           }),
           toAmount: amount.toString(),
           blockchainSpecific: chainSpecific,
-          vaultLocalPartyId: vault.local_party_id,
-          vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+          vaultLocalPartyId: vault.localPartyId,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           ...swapSpecificFields,
         })
 

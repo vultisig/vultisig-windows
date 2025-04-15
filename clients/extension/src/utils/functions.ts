@@ -30,7 +30,7 @@ export const calculateWindowPosition = (
   currentWindow: chrome.windows.Window
 ) => {
   const height = 639
-  const width = 376
+  const width = 416
   let left = 0
   let top = 0
 

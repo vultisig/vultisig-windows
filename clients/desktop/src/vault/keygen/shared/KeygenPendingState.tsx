@@ -1,12 +1,11 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { PageContent } from '../../../ui/page/PageContent'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { KeygenEducation } from './KeygenEducation'
 import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 import { KeygenProgressIndicator } from './KeygenProgressIndicator'
@@ -19,9 +18,9 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
 
   if (!value) {
     const message = match(keygenType, {
-      [KeygenType.Keygen]: () => t('waiting_for_keygen_start'),
-      [KeygenType.Migrate]: () => t('waiting_for_upgrade_start'),
-      [KeygenType.Reshare]: () => t('waiting_for_reshare_start'),
+      create: () => t('waiting_for_keygen_start'),
+      migrate: () => t('waiting_for_upgrade_start'),
+      reshare: () => t('waiting_for_reshare_start'),
     })
 
     return (

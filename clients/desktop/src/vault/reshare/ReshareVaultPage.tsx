@@ -1,19 +1,22 @@
+import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
+import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { InfoBlock } from '../../lib/ui/status/InfoBlock'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 
 export const ReshareVaultPage = () => {
   const { t } = useTranslation()
 
   const navigate = useAppNavigate()
+  const securityType = useCurrentVaultSecurityType()
 
   return (
     <>
@@ -32,7 +35,15 @@ export const ReshareVaultPage = () => {
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
-          <Button onClick={() => navigate('reshareVaultSecure')} kind="primary">
+          <Button
+            onClick={() =>
+              match(securityType, {
+                fast: () => navigate('reshareVaultFast'),
+                secure: () => navigate('reshareVaultSecure'),
+              })
+            }
+            kind="primary"
+          >
             {t('start_reshare')}
           </Button>
           <Button

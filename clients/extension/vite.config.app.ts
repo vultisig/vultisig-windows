@@ -6,7 +6,7 @@ import { manifest } from './package.json'
 export default defineConfig({
   build: {
     emptyOutDir: true,
-    manifest: true,
+    manifest: false,
     rollupOptions: {
       input: {
         accounts: path.resolve(__dirname, manifest.accounts),
@@ -16,6 +16,9 @@ export default defineConfig({
         transaction: path.resolve(__dirname, manifest.transaction),
         vault: path.resolve(__dirname, manifest.vault),
         vaults: path.resolve(__dirname, manifest.vaults),
+      },
+      output: {
+        entryFileNames: '[name].js',
       },
     },
   },

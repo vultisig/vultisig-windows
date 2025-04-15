@@ -1,9 +1,12 @@
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { fromCommCoin } from '../../types/utils/commCoin'
 import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
 
 export const getThorPreSignedInputData: PreSignedInputDataResolver<
@@ -14,14 +17,14 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     chain,
   })
 
-  const coin = assertField(keysignPayload, 'coin')
+  const commCoin = assertField(keysignPayload, 'coin')
 
   const fromAddr = walletCore.AnyAddress.createWithString(
-    coin.address,
+    commCoin.address,
     coinType
   )
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
+  const pubKeyData = Buffer.from(commCoin.hexPublicKey, 'hex')
 
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
   let message: TW.Cosmos.Proto.Message[]
@@ -38,7 +41,7 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     const toAmount = Number(keysignPayload.toAmount || '0')
     if (toAmount > 0) {
       thorchainCoin.amount = keysignPayload.toAmount
-      thorchainCoin.decimals = new Long(coin.decimals)
+      thorchainCoin.decimals = new Long(commCoin.decimals)
     }
 
     message = [
@@ -59,13 +62,15 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     if (!toAddress) {
       throw new Error('invalid to address')
     }
+    const coin = fromCommCoin(commCoin)
+
     message = [
       TW.Cosmos.Proto.Message.create({
         thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
           fromAddress: fromAddr.data(),
           amounts: [
             TW.Cosmos.Proto.Amount.create({
-              denom: 'rune',
+              denom: isFeeCoin(coin) ? cosmosFeeCoinDenom[chain] : coin.id,
               amount: keysignPayload.toAmount,
             }),
           ],

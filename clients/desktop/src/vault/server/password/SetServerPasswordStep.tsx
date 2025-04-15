@@ -1,8 +1,13 @@
+import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
+import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import type { TFunction } from 'i18next'
@@ -13,11 +18,6 @@ import { z } from 'zod'
 
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt'
-import { useVaultPassword } from './state/password'
 
 const getPasswordSchema = (t: TFunction) =>
   z
@@ -35,9 +35,9 @@ const getPasswordSchema = (t: TFunction) =>
 type PasswordSchema = z.infer<ReturnType<typeof getPasswordSchema>>
 
 export const SetServerPasswordStep = ({
-  onForward,
+  onFinish,
   onBack,
-}: OnForwardProp & Partial<OnBackProp>) => {
+}: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
   const [storedPassword, setStoredPassword] = useVaultPassword()
 
@@ -57,7 +57,7 @@ export const SetServerPasswordStep = ({
 
   const onSubmit = (data: PasswordSchema) => {
     setStoredPassword(data.password)
-    onForward()
+    onFinish()
   }
 
   return (

@@ -1,5 +1,9 @@
+import './index.scss'
+
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
   errorKey,
@@ -18,15 +22,13 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Text } from '@lib/ui/text'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
-
-import { appPaths } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   file?: File
@@ -264,14 +266,18 @@ const Component = () => {
         <Upload.Dragger {...props} className={status}>
           <div className="state state-default">
             <img src="/images/qr-code.png" className="icon" alt="QR" />
-            <span className="title">{t('add_vault_qrcode')}</span>
+            <Text className="title" size={16} color="contrast" weight={700}>
+              {t('add_vault_qrcode')}
+            </Text>
             <span className="desc">
               {t('drop_file_here_or')} <u>{t('upload_it')}</u>
             </span>
           </div>
           <div className="state state-hover">
             <img src="/images/upload.png" className="icon" alt="upload" />
-            <span className="title">{t('drop_file_here')}</span>
+            <Text className="title" color="contrast" weight={700}>
+              {t('drop_file_here')}
+            </Text>
           </div>
           <div className="state state-done">
             <span className="msg">

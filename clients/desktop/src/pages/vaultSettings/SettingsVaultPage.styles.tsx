@@ -1,10 +1,10 @@
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { pageConfig } from '@lib/ui/page/config'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { Panel } from '../../lib/ui/panel/Panel'
-import { pageConfig } from '../../ui/page/config'
 import { PageSlice } from '../../ui/page/PageSlice'
 
 export const ListItemPanel = styled(Panel)<{

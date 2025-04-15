@@ -21,7 +21,7 @@ import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class DKLS {
-  private readonly tssType: KeygenType
+  private readonly keygenType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -37,7 +37,7 @@ export class DKLS {
   private readonly publicKey?: string
   private readonly chainCode?: string
   constructor(
-    tssType: KeygenType,
+    keygenType: KeygenType,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
@@ -49,7 +49,7 @@ export class DKLS {
     publicKey?: string,
     chainCode?: string
   ) {
-    this.tssType = tssType
+    this.keygenType = keygenType
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
@@ -186,9 +186,9 @@ export class DKLS {
         )
       }
       let session: KeygenSession
-      if (this.tssType === KeygenType.Keygen) {
+      if (this.keygenType === 'create') {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
-      } else if (this.tssType === KeygenType.Migrate) {
+      } else if (this.keygenType === 'migrate') {
         session = KeygenSession.migrate(
           this.setupMessage,
           this.localPartyId,

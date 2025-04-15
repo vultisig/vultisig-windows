@@ -5,14 +5,17 @@ import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
-    emptyOutDir: true,
-    manifest: true,
-    outDir: 'dist/content',
+    emptyOutDir: false,
+    manifest: false,
+    outDir: 'dist',
     assetsDir: '',
     copyPublicDir: false,
     rollupOptions: {
       input: {
-        index: path.resolve(__dirname, manifest.content),
+        content: path.resolve(__dirname, manifest.content),
+      },
+      output: {
+        entryFileNames: '[name].js',
       },
     },
   },

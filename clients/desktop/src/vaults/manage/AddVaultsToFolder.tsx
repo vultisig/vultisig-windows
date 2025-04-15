@@ -1,8 +1,8 @@
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 
-import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery'
-import { CurrentVaultProvider } from '../../vault/state/currentVault'
-import { getStorageVaultId } from '../../vault/utils/storageVault'
 import { AddVaultsToFolderContainer } from '../folder/addVaults/AddVaultsToFolderContainer'
 import { FolderVaultOption } from '../folder/addVaults/FolderVaultOption'
 import { useAddVaultToFolderMutation } from '../folder/mutations/useAddVaultToFolderMutation'
@@ -20,7 +20,7 @@ export const AddVaultsToFolder = () => {
   return (
     <AddVaultsToFolderContainer>
       {options.map(vault => {
-        const vaultId = getStorageVaultId(vault)
+        const vaultId = getVaultId(vault)
 
         return (
           <CurrentVaultProvider value={vault} key={vaultId}>

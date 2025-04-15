@@ -1,11 +1,11 @@
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 
 export const {

@@ -807,4 +807,6 @@ export const it = {
   scan_with_device_name: 'Scansiona con {{name}}',
   join_upgrade: "Unisciti all'aggiornamento",
   waiting_for_upgrade_start: "In attesa dell'inizio dell'aggiornamento...",
+  vault_name_description:
+    'Puoi sempre rinominare il tuo vault in seguito nelle impostazioni',
 }

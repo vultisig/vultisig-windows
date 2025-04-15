@@ -1,3 +1,5 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -7,14 +9,12 @@ import { CloudStackIcon } from '@lib/ui/icons/CloudStackIcon'
 import { EmailIcon } from '@lib/ui/icons/EmailIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { OnForwardProp } from '@lib/ui/props'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
-import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
-import { useCurrentVault } from '../../../state/currentVault'
 import {
   ContentWrapper,
   IconWrapper,
@@ -25,16 +25,16 @@ import {
   Wrapper,
 } from './SetupVaultSummaryStep.styles'
 
-type SetupVaultSummaryStepProps = OnForwardProp
+type SetupVaultSummaryStepProps = OnFinishProp
 
 export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
-  onForward,
+  onFinish,
 }) => {
   const { t } = useTranslation()
   const [isAgreed, { toggle }] = useBoolean(false)
   const { signers } = useCurrentVault()
 
-  const isFastVault = hasServerSigner(signers)
+  const isFastVault = hasServer(signers)
 
   const summaryItems = [
     {
@@ -108,7 +108,7 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
           </HStack>
-          <Button isDisabled={!isAgreed} onClick={onForward}>
+          <Button isDisabled={!isAgreed} onClick={onFinish}>
             {t('fastVaultSetup.summary.start_using_vault')}
           </Button>
         </VStack>

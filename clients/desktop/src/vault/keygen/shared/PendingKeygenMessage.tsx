@@ -1,11 +1,11 @@
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Panel } from '../../../lib/ui/panel/Panel'
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 
 export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
   const localPartyId = useMpcLocalPartyId()

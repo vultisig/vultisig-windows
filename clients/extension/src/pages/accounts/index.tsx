@@ -12,13 +12,13 @@ import {
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
+import { Text } from '@lib/ui/text'
 import { Button, Form, Radio } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
-import ConfigProvider from '../../providers/config-provider'
 
 interface FormProps {
   uid: string
@@ -95,58 +95,58 @@ const Component = () => {
   }, [t])
 
   return (
-    <ConfigProvider>
-      <div className="layout">
-        {hasError ? (
-          <VultiError
-            onClose={handleClose}
-            description={errorDescription ?? ''}
-            title={errorTitle ?? ''}
-          />
-        ) : vaults.length ? (
-          <>
-            <div className="header">
-              <Vultisig className="logo" />
-              <span className="title">{t('connect_with_vultisig')}</span>
-              <span className="origin">{sender}</span>
-            </div>
-            <div className="content">
-              <Form form={form} onFinish={handleSubmit}>
-                <Form.Item<FormProps>
-                  name="uid"
-                  rules={[{ required: true, message: t('select_a_vault') }]}
-                >
-                  <Radio.Group>
-                    {vaults.map(({ chains, name, uid }) => (
-                      <Radio key={uid} value={uid}>
-                        <span className="name">{name}</span>
-                        <MiddleTruncate
-                          text={
-                            chains.find(({ chain }) => chain === chainKey)
-                              ?.address ?? ''
-                          }
-                        />
-                      </Radio>
-                    ))}
-                  </Radio.Group>
-                </Form.Item>
-                <Button htmlType="submit" />
-              </Form>
-            </div>
-            <div className="footer">
-              <Button onClick={handleClose} shape="round" block>
-                {t('cancel')}
-              </Button>
-              <Button onClick={handleSubmit} type="primary" shape="round" block>
-                {t('connect')}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <VultiLoading />
-        )}
-      </div>
-    </ConfigProvider>
+    <div className="layout">
+      {hasError ? (
+        <VultiError
+          onClose={handleClose}
+          description={errorDescription ?? ''}
+          title={errorTitle ?? ''}
+        />
+      ) : vaults.length ? (
+        <>
+          <div className="header">
+            <Vultisig className="logo" />
+            <Text className="title" as="span" color="contrast" weight={700}>
+              {t('connect_with_vultisig')}
+            </Text>
+            <span className="origin">{sender}</span>
+          </div>
+          <div className="content">
+            <Form form={form} onFinish={handleSubmit}>
+              <Form.Item<FormProps>
+                name="uid"
+                rules={[{ required: true, message: t('select_a_vault') }]}
+              >
+                <Radio.Group>
+                  {vaults.map(({ chains, name, uid }) => (
+                    <Radio key={uid} value={uid}>
+                      <span className="name">{name}</span>
+                      <MiddleTruncate
+                        text={
+                          chains.find(({ chain }) => chain === chainKey)
+                            ?.address ?? ''
+                        }
+                      />
+                    </Radio>
+                  ))}
+                </Radio.Group>
+              </Form.Item>
+              <Button htmlType="submit" />
+            </Form>
+          </div>
+          <div className="footer">
+            <Button onClick={handleClose} shape="round" block>
+              {t('cancel')}
+            </Button>
+            <Button onClick={handleSubmit} type="primary" shape="round" block>
+              {t('connect')}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <VultiLoading />
+      )}
+    </div>
   )
 }
 

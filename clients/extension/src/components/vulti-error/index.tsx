@@ -1,4 +1,5 @@
 import { TriangleWarning } from '@clients/extension/src/icons'
+import { Text } from '@lib/ui/text'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,9 @@ const Component: FC<ComponentProps> = ({ onClose, description, title }) => {
             <TriangleWarning />
             {t('error')}
           </span>
-          <span className="title">{title}</span>
+          <Text as="span" size={32} color="contrast" weight={700}>
+            {title}
+          </Text>
           <span className="description">{description}</span>
         </div>
       </div>

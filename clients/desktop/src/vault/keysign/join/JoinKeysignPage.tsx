@@ -1,18 +1,18 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useMemo } from 'react'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
-import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
-import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
-import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
-import { useCurrentVault } from '../../state/currentVault'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
@@ -32,7 +32,7 @@ export const JoinKeysignPage = () => {
 
   const { sessionId, encryptionKeyHex } = keysignMsg
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
@@ -42,7 +42,7 @@ export const JoinKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={false}>
       <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-        <MpcLocalPartyIdProvider value={local_party_id}>
+        <MpcLocalPartyIdProvider value={localPartyId}>
           <KeysignVaultGuard>
             <KeysignServerUrlProvider>
               <MpcSessionIdProvider value={sessionId}>
@@ -50,11 +50,11 @@ export const JoinKeysignPage = () => {
                   <Match
                     value={step}
                     verify={() => (
-                      <JoinKeysignVerifyStep onForward={toNextStep} />
+                      <JoinKeysignVerifyStep onFinish={toNextStep} />
                     )}
                     session={() => (
                       <JoinKeygenSessionStep
-                        onForward={toNextStep}
+                        onFinish={toNextStep}
                         onBack={() => setStep('verify')}
                       />
                     )}

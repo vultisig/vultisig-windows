@@ -1,12 +1,11 @@
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
+import { Currency } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
-
-import { Currency } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -43,7 +42,6 @@ export interface AccountsProps {
 export interface ChainProps {
   active?: boolean
   address?: string
-  cmcId?: number
   decimals: number
   derivationKey?: string
   id: string
@@ -73,14 +71,6 @@ interface CustomMessage {
   method: string
   address: string
   message: string
-}
-
-export interface SignatureProps {
-  Msg: string
-  R: string
-  S: string
-  DerSignature: string
-  RecoveryID: string
 }
 
 export namespace TransactionType {

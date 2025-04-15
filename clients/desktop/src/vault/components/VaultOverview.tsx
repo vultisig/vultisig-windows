@@ -1,17 +1,16 @@
-import { MpcLib } from '@core/mpc/mpcLib'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import styled from 'styled-components'
 
 import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
-import { PageContent } from '../../ui/page/PageContent'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery'
-import { useCurrentVault } from '../state/currentVault'
 import { VaultChainItem } from './VaultChainItem'
 import { VaultPrimaryActions } from './VaultPrimaryActions'
 
@@ -23,7 +22,7 @@ const PromptsContainer = styled.div`
 
 export const VaultOverview = () => {
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
-  const { is_backed_up, lib_type } = useCurrentVault()
+  const { isBackedUp, libType } = useCurrentVault()
 
   return (
     <ScrollableFlexboxFiller>
@@ -34,8 +33,8 @@ export const VaultOverview = () => {
           )
         }
       >
-        {!is_backed_up && <VaultBackupBanner />}
-        {(lib_type as MpcLib) !== 'DKLS' && <MigrateVaultPrompt />}
+        {!isBackedUp && <VaultBackupBanner />}
+        {libType !== 'DKLS' && <MigrateVaultPrompt />}
       </Wrap>
       <PageContent>
         <VStack gap={32}>

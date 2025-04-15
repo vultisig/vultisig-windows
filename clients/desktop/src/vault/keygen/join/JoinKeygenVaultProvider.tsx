@@ -1,12 +1,19 @@
+import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { generateHexChainCode } from '@core/mpc/utils/generateHexChainCode'
+import {
+  KeygenVault,
+  KeygenVaultProvider,
+} from '@core/ui/mpc/keygen/state/keygenVault'
+import { CurrentHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainCode'
+import { useMpcDevice } from '@core/ui/mpc/state/mpcDevice'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
-import { storage } from '../../../../wailsjs/go/models'
-import { generateLocalPartyId } from '../../../mpc/localPartyId'
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useVaults } from '../../queries/useVaultsQuery'
-import { CurrentVaultProvider } from '../../state/currentVault'
 
 export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,
@@ -15,45 +22,69 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
 
   const vaults = useVaults()
 
-  const { vaultName, hexChainCode } = keygenMsg
-
   const existingVault = useMemo(() => {
     if ('publicKeyEcdsa' in keygenMsg) {
-      const existingVault = vaults.find(
-        vault => vault.public_key_ecdsa === keygenMsg.publicKeyEcdsa
+      return vaults.find(
+        vault => vault.publicKeys.ecdsa === keygenMsg.publicKeyEcdsa
       )
-      if (existingVault) {
-        return existingVault
-      }
     }
   }, [keygenMsg, vaults])
 
-  const value = useMemo(() => {
+  const keygenVault: KeygenVault = useMemo(() => {
     if (existingVault) {
-      return existingVault
+      return { existingVault }
     }
 
-    const vault = new storage.Vault()
-    vault.name = vaultName
-    vault.hex_chain_code = hexChainCode
-    vault.local_party_id = generateLocalPartyId()
+    const vault = {
+      name: keygenMsg.vaultName,
+    }
 
     if ('oldResharePrefix' in keygenMsg) {
-      vault.reshare_prefix = keygenMsg.oldResharePrefix
+      return {
+        newReshareVault: {
+          ...vault,
+          ...pick(keygenMsg, [
+            'oldResharePrefix',
+            'oldParties',
+            'publicKeyEcdsa',
+            'hexChainCode',
+          ]),
+        },
+      }
     }
 
-    if ('oldParties' in keygenMsg) {
-      vault.signers = keygenMsg.oldParties
+    return {
+      newVault: vault,
     }
+  }, [existingVault, keygenMsg])
 
-    return vault
-  }, [existingVault, hexChainCode, keygenMsg, vaultName])
+  const mpcDevice = useMpcDevice()
+
+  const localPartyId = useMemo(
+    () =>
+      existingVault
+        ? existingVault.localPartyId
+        : generateLocalPartyId(mpcDevice),
+    [existingVault, mpcDevice]
+  )
+
+  const hexChainCode = useMemo(
+    () =>
+      matchRecordUnion<KeygenVault, string>(keygenVault, {
+        newVault: () => generateHexChainCode(),
+        newReshareVault: vault => vault.hexChainCode,
+        existingVault: vault => vault.hexChainCode,
+      }),
+    [keygenVault]
+  )
 
   return (
-    <CurrentVaultProvider value={value}>
-      <MpcLocalPartyIdProvider value={value.local_party_id}>
-        {children}
+    <KeygenVaultProvider value={keygenVault}>
+      <MpcLocalPartyIdProvider value={localPartyId}>
+        <CurrentHexChainCodeProvider value={hexChainCode}>
+          {children}
+        </CurrentHexChainCodeProvider>
       </MpcLocalPartyIdProvider>
-    </CurrentVaultProvider>
+    </KeygenVaultProvider>
   )
 }

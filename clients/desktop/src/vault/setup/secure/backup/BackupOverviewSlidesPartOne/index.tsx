@@ -1,15 +1,15 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { PageContent } from '../../../../../ui/page/PageContent'
-import { useCurrentVault } from '../../../../state/currentVault'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
@@ -23,14 +23,14 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { keyshares } = vault
+  const { signers } = vault
   const {
     animations,
     handleNextAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useBackupOverviewStepsAnimations(keyshares.length)
+  } = useBackupOverviewStepsAnimations(signers.length)
 
   return (
     <PageContent>

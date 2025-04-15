@@ -70,19 +70,22 @@ export const findSwapQuote = ({
     })
   }
 
-  const fromLifiChain = isOneOf(from.chain, lifiSwapEnabledChains)
-  const toLifiChain = isOneOf(to.chain, lifiSwapEnabledChains)
+  const fromChain = from.chain
+  const toChain = to.chain
 
-  if (fromLifiChain && toLifiChain) {
+  if (
+    isOneOf(fromChain, lifiSwapEnabledChains) &&
+    isOneOf(toChain, lifiSwapEnabledChains)
+  ) {
     fetchers.push(async (): Promise<SwapQuote> => {
       const general = await getLifiSwapQuote({
         from: {
           ...from,
-          chain: fromLifiChain,
+          chain: fromChain,
         },
         to: {
           ...to,
-          chain: toLifiChain,
+          chain: toChain,
         },
         amount: toChainAmount(amount, from.decimals),
         address: from.address,

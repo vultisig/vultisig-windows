@@ -1,13 +1,13 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
 

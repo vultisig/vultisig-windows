@@ -4,6 +4,8 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -18,7 +20,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useRive } from '@rive-app/react-canvas'
-import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -28,7 +29,6 @@ import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useCurrentVault } from '../../state/currentVault'
 import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
@@ -96,7 +96,9 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     value: txHash,
   })
 
-  const trackTransaction = () => BrowserOpenURL(blockExplorerUrl)
+  const openUrl = useOpenUrl()
+
+  const trackTransaction = () => openUrl(blockExplorerUrl)
 
   return (
     <Wrapper>

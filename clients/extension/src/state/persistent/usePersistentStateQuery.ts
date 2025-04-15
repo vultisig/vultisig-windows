@@ -1,6 +1,5 @@
+import { PersistentStateKey } from '@clients/extension/src/state/persistent/PersistentStateKey'
 import { useQuery } from '@tanstack/react-query'
-
-import { PersistentStateKey } from './PersistentStateKey'
 
 export const getPersistentStateQueryKey = (key: PersistentStateKey) => [
   'persistentState',

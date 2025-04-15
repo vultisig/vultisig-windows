@@ -1,8 +1,9 @@
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/ui/vault/Vault'
+
 import { ListItem } from '../../lib/ui/list/item/ListItem'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { useCurrentVault } from '../../vault/state/currentVault'
 import { useCurrentVaultId } from '../../vault/state/currentVaultId'
-import { getStorageVaultId } from '../../vault/utils/storageVault'
 import { VaultDescription } from './VaultDescription'
 
 type VaultListItemProps = {
@@ -18,7 +19,7 @@ export const VaultListItem = ({ isDraggable }: VaultListItemProps) => {
     <ListItem
       isDraggable={isDraggable}
       onClick={() => {
-        setSelectedVault(getStorageVaultId(vault))
+        setSelectedVault(getVaultId(vault))
         navigate('vault')
       }}
     >

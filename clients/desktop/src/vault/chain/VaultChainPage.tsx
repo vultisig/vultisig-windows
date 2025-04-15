@@ -8,9 +8,16 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { Text } from '@lib/ui/text'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { splitBy } from '@lib/utils/array/splitBy'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
@@ -25,24 +32,16 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon'
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress'
 import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
-import { toHexPublicKey } from '../../chain/utils/toHexPublicKey'
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation'
 import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
-import { Spinner } from '../../lib/ui/loaders/Spinner'
 import { Panel } from '../../lib/ui/panel/Panel'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
-import { toStorageCoin } from '../../storage/storageCoin'
-import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
 import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
@@ -50,7 +49,9 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
-} from '../state/currentVault'
+} from '../state/currentVaultCoins'
+import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
+import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQueries'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultAddressLink } from './VaultAddressLink'
@@ -83,10 +84,13 @@ export const VaultChainPage = () => {
   const findTokensQuery = useTokensAutoDiscoveryQuery(account)
   const { mutate: refreshBalance, isPending } = useMutation({
     mutationFn: () => {
-      return invalidateQueries(
-        invalidateQueryKey,
-        getTokensAutoDiscoveryQueryKey(account)
-      )
+      const keys = [invalidateQueryKey, getTokensAutoDiscoveryQueryKey(account)]
+
+      if (isOneOf(chain, coinFinderChains)) {
+        keys.push(getCoinFinderQueryKey({ address, chain }))
+      }
+
+      return invalidateQueries(...keys)
     },
   })
 
@@ -104,16 +108,12 @@ export const VaultChainPage = () => {
     if (tokens.length > 0 && publicKeyQuery.isSuccess && isValidPublicKey) {
       const publicKey = publicKeyQuery.data
       const address = deriveAddress({ chain, publicKey, walletCore })
-      const hexPublicKey = toHexPublicKey({ publicKey, walletCore })
 
       saveCoins(
-        tokens.map(coin =>
-          toStorageCoin({
-            ...coin,
-            address,
-            hexPublicKey,
-          })
-        )
+        tokens.map(coin => ({
+          ...coin,
+          address,
+        }))
       )
     }
   }, [

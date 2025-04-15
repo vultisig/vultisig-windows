@@ -1,16 +1,17 @@
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { useVaults } from '@core/ui/vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { useVaults } from '../../queries/useVaultsQuery'
+import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../state/currentVaultId'
-import { getStorageVaultId } from '../../utils/storageVault'
-import { CurrentKeysignVaultProvider } from './state/currentKeysignVault'
 
 export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
   const { vaultId } = useAppPathState<'joinKeysign'>()
@@ -20,7 +21,7 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   const [currentVaultId] = useCurrentVaultId()
 
-  const vault = vaults.find(vault => getStorageVaultId(vault) === vaultId)
+  const vault = vaults.find(vault => getVaultId(vault) === vaultId)
 
   if (!vault || vaultId !== currentVaultId) {
     return (
@@ -36,10 +37,12 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
   }
 
   return (
-    <CurrentKeysignVaultProvider value={vault}>
-      <MpcLocalPartyIdProvider value={vault.local_party_id}>
-        {children}
-      </MpcLocalPartyIdProvider>
-    </CurrentKeysignVaultProvider>
+    <CurrentVaultProvider value={vault}>
+      <CurrentVaultCoinsProvider value={vault.coins}>
+        <MpcLocalPartyIdProvider value={vault.localPartyId}>
+          {children}
+        </MpcLocalPartyIdProvider>
+      </CurrentVaultCoinsProvider>
+    </CurrentVaultProvider>
   )
 }

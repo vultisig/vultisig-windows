@@ -1,10 +1,10 @@
+import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
 
-import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
-import { useVaults } from '../../../queries/useVaultsQuery'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
 import { BackupConfirmation } from './BackupConfirmation'
@@ -43,8 +43,8 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSummaryStep onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onFinish={onFinish} />}
           />

@@ -1,3 +1,6 @@
+import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { formatMpcDeviceName } from '@core/mpc/devices/MpcDevice'
+import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -8,8 +11,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { formatMpcDeviceName, parseLocalPartyId } from '../../localPartyId'
-import { useMpcPeersSelectionRecord } from '../state/mpcSelectedPeers'
 import { PeerOptionContainer } from './PeerOptionContainer'
 
 const IconContainer = styled.div`

@@ -12,7 +12,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
 
   return (
     <StepTransition
-      from={({ onForward }) => (
+      from={({ onFinish }) => (
         <MigrateInfoScreen
           animation="upgrade/upgrade"
           title={
@@ -21,7 +21,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
               components={{ b: <b /> }}
             />
           }
-          action={<Button onClick={onForward}>{t('upgrade_now')}</Button>}
+          action={<Button onClick={onFinish}>{t('upgrade_now')}</Button>}
         />
       )}
       to={() => (

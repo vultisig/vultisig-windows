@@ -1,11 +1,10 @@
+import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
-
-import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
-import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
-import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { startSession } from '../../../keygen/utils/startSession'
 
 export const useStartFastVaultKeygenSessionMutation = (enabled: boolean) => {
   const sessionId = useMpcSessionId()
@@ -15,7 +14,7 @@ export const useStartFastVaultKeygenSessionMutation = (enabled: boolean) => {
 
   const { mutate: start, ...state } = useMutation({
     mutationFn: () => {
-      return startSession({ serverUrl, sessionId, devices })
+      return startMpcSession({ serverUrl, sessionId, devices })
     },
   })
 

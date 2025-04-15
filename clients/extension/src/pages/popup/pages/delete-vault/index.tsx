@@ -1,5 +1,7 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -8,9 +10,6 @@ import {
 import { Button, ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { appPaths } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   vault?: VaultProps
@@ -69,6 +68,7 @@ const Component = () => {
         <span className="name">{vault?.name}</span>
       </div>
       <div className="footer">
+        {/* TODO: Deprecate Ant Design and start using styled-components instead to be consistent with the desktop client. All the base components should be in @lib/ui. If you need a new compnent, first check in the desktop client if it's not already created, move it to the @lib/ui and reuse it. */}
         <ConfigProvider
           theme={{
             token: {

@@ -1,24 +1,24 @@
+import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
+import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { ToggleSwitch } from '../../../lib/ui/toggle-switch/ToggleSwitch'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { getSetupVaultProperties } from '../type/SetupVaultType'
-import { useSetupVaultType } from '../type/state/setupVaultType'
+import { useVaultSecurityType } from '../type/state/vaultSecurityType'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
@@ -34,7 +34,7 @@ export const SetupVaultPage = () => {
   const { RiveComponent, stateMachineInput, isPlaying, onPlay } =
     useSetupVaultPageAnimation()
   const { t } = useTranslation()
-  const [value, setValue] = useSetupVaultType()
+  const [value, setValue] = useVaultSecurityType()
   const navigate = useAppNavigate()
   const theme = useTheme()
 
@@ -72,6 +72,7 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
+                  disabled: value == 'secure',
                   label: 'Secure',
                   value: 'secure',
                   icon: (
@@ -90,6 +91,7 @@ export const SetupVaultPage = () => {
                   ),
                 },
                 {
+                  disabled: value == 'fast',
                   label: 'Fast',
                   value: 'fast',
                   icon:
@@ -133,7 +135,7 @@ export const SetupVaultPage = () => {
               />
             </DescriptionTitleWrapper>
             <DescriptionContentWrapper>
-              {getSetupVaultProperties(value, t).map(prop => (
+              {getVaultSecurityProperties(value, t).map(prop => (
                 <HStack key={prop} alignItems="center" gap={6}>
                   <IconWrapper>
                     <CheckIcon />

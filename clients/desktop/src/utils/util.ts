@@ -1,10 +1,6 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { TFunction } from 'i18next'
 
-export function generateRandomNumber(): number {
-  return Math.floor(Math.random() * 900) + 100
-}
-
 export const getVaultTypeText = (signersLength: number, t: TFunction) => {
   const threshold = getKeygenThreshold(signersLength)
 

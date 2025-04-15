@@ -1,4 +1,4 @@
-import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
 export type SwapSide = 'from' | 'to'
 

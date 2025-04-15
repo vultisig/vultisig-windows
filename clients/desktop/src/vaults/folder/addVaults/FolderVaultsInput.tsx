@@ -1,14 +1,15 @@
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { InputProps, OptionsProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { FC } from 'react'
 
-import { storage } from '../../../../wailsjs/go/models'
-import { CurrentVaultProvider } from '../../../vault/state/currentVault'
-import { getStorageVaultId } from '../../../vault/utils/storageVault'
 import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer'
 import { FolderVaultOption } from './FolderVaultOption'
 
-type FolderVaultsInputProps = InputProps<string[]> & OptionsProp<storage.Vault>
+type FolderVaultsInputProps = InputProps<string[]> &
+  OptionsProp<Vault & { coins: AccountCoin[] }>
 
 export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
   value,
@@ -18,7 +19,7 @@ export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
   return (
     <AddVaultsToFolderContainer>
       {options.map(vault => {
-        const vaultId = getStorageVaultId(vault)
+        const vaultId = getVaultId(vault)
 
         return (
           <CurrentVaultProvider value={vault} key={vaultId}>

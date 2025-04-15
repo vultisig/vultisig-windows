@@ -1,20 +1,20 @@
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
+import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
+import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
-import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
-import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
-import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
-import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType'
-import { useCurrentVault } from '../../state/currentVault'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep'
@@ -24,7 +24,7 @@ const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const
 export const StartKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'keysign'>()
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -34,8 +34,8 @@ export const StartKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
-        <MpcLocalPartyIdProvider value={local_party_id}>
-          <GeneratedServiceNameProvider>
+        <MpcLocalPartyIdProvider value={localPartyId}>
+          <GeneratedMpcServiceNameProvider>
             <MpcPeersSelectionProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
@@ -45,14 +45,14 @@ export const StartKeysignPage = () => {
                       <Match
                         value={step}
                         joinSession={() => (
-                          <JoinKeygenSessionStep onForward={toNextStep} />
+                          <JoinKeygenSessionStep onFinish={toNextStep} />
                         )}
                         peers={() => (
-                          <KeysignPeerDiscoveryStep onForward={toNextStep} />
+                          <KeysignPeerDiscoveryStep onFinish={toNextStep} />
                         )}
                         session={() => (
-                          <KeygenStartSessionStep
-                            onForward={toNextStep}
+                          <StartMpcSessionStep
+                            onFinish={toNextStep}
                             onBack={toPreviousStep}
                           />
                         )}
@@ -68,7 +68,7 @@ export const StartKeysignPage = () => {
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedMpcSessionIdProvider>
             </MpcPeersSelectionProvider>
-          </GeneratedServiceNameProvider>
+          </GeneratedMpcServiceNameProvider>
         </MpcLocalPartyIdProvider>
       </KeysignMessagePayloadProvider>
     </IsInitiatingDeviceProvider>

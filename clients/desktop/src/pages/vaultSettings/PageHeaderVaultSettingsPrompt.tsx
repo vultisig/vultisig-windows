@@ -1,7 +1,7 @@
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 
 export const PageHeaderVaultSettingsPrompt = () => {
   const navigate = useAppNavigate()

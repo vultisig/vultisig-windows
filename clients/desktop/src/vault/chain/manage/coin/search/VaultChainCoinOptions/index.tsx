@@ -6,16 +6,16 @@ import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabe
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 import { useTransform } from '@lib/ui/hooks/useTransform'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { t } from 'i18next'
 import { useCallback, useMemo } from 'react'
 
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery'
-import { Spinner } from '../../../../../../lib/ui/loaders/Spinner'
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'
 import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter'
-import { useCurrentVaultChainCoins } from '../../../../../state/currentVault'
+import { useCurrentVaultChainCoins } from '../../../../../state/currentVaultCoins'
 import { useCurrentVaultChain } from '../../../../useCurrentVaultChain'
 import { ManageVaultChainCoin } from '../../ManageVaultChainCoin'
 
