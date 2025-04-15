@@ -1,3 +1,5 @@
+import { SaveAsImage } from '@core/ui/file/SaveAsImage'
+import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import ShareIcon from '@lib/ui/icons/ShareIcon'
@@ -10,9 +12,7 @@ import { toPng } from 'html-to-image'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SaveAsImage } from '../../ui/file/SaveAsImage'
 import { ShareVaultCard } from './ShareVaultCard'
-import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation()
