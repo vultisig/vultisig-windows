@@ -15,10 +15,11 @@ import { processBackgroundResponse } from '@clients/extension/src/utils/function
 import {
   Messaging,
   SendTransactionResponse,
+  TransactionDetails,
   TransactionType,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import {
   CosmJSOfflineSigner,
@@ -58,6 +59,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
+import { getStandardTransactionDetails } from '../utils/tx/getStandardTx'
+import { getChainByChainId } from '@core/chain/coin/ChainId'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getCosmosChainFromAddress } from '../utils/cosmos/getCosmosChainFromAddress'
+import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { JsonRpcProvider } from 'ethers'
+import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
@@ -229,46 +238,85 @@ class XDEFIKeplrProvider extends Keplr {
 
     return cosmSigner as OfflineAminoSigner
   }
-  signDirect(
+
+  async signDirect(
     chainId: string,
     signer: string,
     signDoc: {
-      bodyBytes?: Uint8Array | null
-      authInfoBytes?: Uint8Array | null
-      chainId?: string | null
-      accountNumber?: Long | null
+      bodyBytes: Uint8Array
+      authInfoBytes: Uint8Array
+      chainId: string
+      accountNumber: Long
     },
-    signOptions?: KeplrSignOptions
+    _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
-    console.log('signDirect')
-    console.log({
-      chainId: chainId,
-      signer: signer,
-      signDoc: signDoc,
-      signOptions: signOptions,
-    })
+    const txBody = TxBody.decode(signDoc.bodyBytes)
 
-    const txBody = TxBody.decode(signDoc.bodyBytes!)
+    const [firstMessage] = txBody.messages
+    if (
+      !firstMessage ||
+      firstMessage.typeUrl !== '/ibc.applications.transfer.v1.MsgTransfer'
+    ) {
+      throw new Error('Unsupported message type')
+    }
 
-    console.log('Messages:', txBody.messages)
-    console.log('Memo:', txBody.memo)
-    console.log('Timeout height:', txBody.timeoutHeight.toString())
+    const txChain = getChainByChainId(chainId)
+    if (!txChain) {
+      throw new Error(`Chain not supported: ${chainId}`)
+    }
 
-    const msg0 = MsgSend.decode(txBody.messages[0].value)
-    console.log('msg0,', msg0)
+    const msg = MsgTransfer.decode(firstMessage.value)
+    const receiverChain = getCosmosChainFromAddress(msg.receiver)
+    if (!receiverChain) {
+      throw new Error(`Receiver chain not supported: ${msg.receiver}`)
+    }
 
-    console.log('From:', msg0.fromAddress)
-    console.log('To:', msg0.toAddress)
-    console.log('Amount:', msg0.amount)
+    const standardTx: TransactionDetails = {
+      asset: {
+        chain: txChain,
+        ticker: msg.token.denom,
+      },
+      amount: {
+        amount: msg.token.amount,
+        decimals: chainFeeCoin[txChain].decimals,
+      },
+      from: msg.sender,
+      to: msg.receiver,
+      data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
+    }
 
-    const authInfo = AuthInfo.decode(signDoc.authInfoBytes!)
+    try {
+      const result: SendTransactionResponse = await cosmosProvider.request({
+        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        params: [{ ...standardTx, txType: 'Vultisig' }],
+      })
 
-    console.log('Signer Infos:', authInfo.signerInfos)
-    console.log('Fee:', authInfo.fee)
-    return new Promise((resolve, reject) => {
-      resolve({} as DirectSignResponse)
-    })
+      const accountInfo = await getCosmosAccountInfo({
+        chain: txChain as CosmosChain,
+        address: signer,
+      })
+
+      if (!accountInfo || !accountInfo.pubkey) {
+        throw new Error('No account info or pubkey')
+      }
+
+      const decoded = base58.decode(result.raw)
+      if (!decoded) {
+        throw new Error('Invalid signature')
+      }
+
+      return {
+        signed: signDoc,
+        signature: {
+          pub_key: accountInfo.pubkey,
+          signature: decoded.toString(),
+        },
+      }
+    } catch (error) {
+      throw error
+    }
   }
+
   sendTx(
     _chainId: string,
     _tx: StdTx | Uint8Array,
