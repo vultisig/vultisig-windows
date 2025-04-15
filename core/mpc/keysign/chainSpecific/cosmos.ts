@@ -1,11 +1,9 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
-import { getIbcDenomTrace } from '@core/chain/chains/cosmos/block'
 import {
   CosmosSpecific,
   CosmosSpecificSchema,
-  TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
@@ -31,26 +29,17 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   transactionType,
 }) => {
   const chain = coin.chain as CosmosSpecificChain
-
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain,
   })
 
-  const basePayload = {
+  const gas = BigInt(defaultGasRecord[chain])
+
+  return create(CosmosSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
-    gas: BigInt(defaultGasRecord[chain]),
+    gas,
     transactionType,
-  }
-
-  if (transactionType !== TransactionType.IBC_TRANSFER) {
-    return create(CosmosSpecificSchema, basePayload)
-  }
-
-  const ibcData = await getIbcDenomTrace(chain)
-  return create(CosmosSpecificSchema, {
-    ...basePayload,
-    ibcDenomTraces: ibcData,
   })
 }

@@ -162,6 +162,7 @@ export interface TransactionDetails {
     maxPriorityFeePerGas?: string
   }
   isIBC?: boolean
+  timeoutTimestamp?: string
 }
 
 export interface ITransaction {
