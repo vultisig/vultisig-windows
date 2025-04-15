@@ -10,6 +10,7 @@ import {
   RequestMethod,
   SenderKey,
 } from '@clients/extension/src/utils/constants'
+import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
 import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
 import {
   Messaging,
@@ -61,7 +62,6 @@ import Long from 'long'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getCosmosChainFromAddress } from '../utils/cosmos/getCosmosChainFromAddress'
 import VULTI_ICON_RAW_SVG from './icon'
 enum NetworkKey {
   MAINNET = 'mainnet',

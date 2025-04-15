@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
+import { getIbcDenomTrace } from '@core/chain/chains/cosmos/block'
 import {
   CosmosSpecific,
   CosmosSpecificSchema,
@@ -9,7 +10,6 @@ import {
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 import { ChainsBySpecific } from './KeysignChainSpecific'
-import { getIbcDenomTrace } from '@core/chain/chains/cosmos/block'
 
 type CosmosSpecificChain = ChainsBySpecific<'cosmosSpecific'>
 

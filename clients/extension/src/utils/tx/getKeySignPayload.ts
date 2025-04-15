@@ -140,8 +140,6 @@ export const getKeysignPayload = (
         if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
         }
-        console.log('payload:', keysignPayload)
-
         resolve(keysignPayload)
       } catch (error) {
         reject(error)
