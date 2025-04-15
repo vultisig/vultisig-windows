@@ -5,12 +5,16 @@ import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useMpcLocalModeAvailability } from '../../state/MpcLocalModeAvailability'
+
 const Container = styled.div`
   ${vStack({ alignItems: 'center', gap: 8 })}
 `
 
 export const PeerDiscoveryFormFooter = ({ isDisabled }: IsDisabledProp) => {
   const { t } = useTranslation()
+
+  const localModeAvailable = useMpcLocalModeAvailability()
 
   return (
     <Container>
@@ -22,7 +26,7 @@ export const PeerDiscoveryFormFooter = ({ isDisabled }: IsDisabledProp) => {
       >
         {isDisabled ? t('waitingOnDevices') : t('next')}
       </Button>
-      <MpcServerTypeManager />
+      {localModeAvailable && <MpcServerTypeManager />}
     </Container>
   )
 }

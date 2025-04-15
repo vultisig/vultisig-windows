@@ -1,6 +1,7 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
+import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
@@ -33,34 +34,36 @@ const App = () => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <VaultCreationMpcLibProvider value={mpcLib}>
-      <OpenUrlProvider value={BrowserOpenURL}>
-        <SaveFileProvider value={saveFile}>
-          <MpcDeviceProvider value="windows">
-            <WalletCoreProvider>
-              <QueryClientProvider client={queryClient}>
-                <ThemeProvider theme={darkTheme}>
-                  <I18nProvider language={language}>
-                    <GlobalStyle />
-                    <VStack fullSize>
-                      <RemoteStateDependant>
-                        <InitializedWalletOnly>
-                          <OnboardingResetter>
-                            <ToastProvider>
-                              <RouterProvider router={router} />
-                            </ToastProvider>
-                          </OnboardingResetter>
-                        </InitializedWalletOnly>
-                      </RemoteStateDependant>
-                    </VStack>
-                  </I18nProvider>
-                </ThemeProvider>
-              </QueryClientProvider>
-            </WalletCoreProvider>
-          </MpcDeviceProvider>
-        </SaveFileProvider>
-      </OpenUrlProvider>
-    </VaultCreationMpcLibProvider>
+    <MpcLocalModeAvailabilityProvider value={true}>
+      <VaultCreationMpcLibProvider value={mpcLib}>
+        <OpenUrlProvider value={BrowserOpenURL}>
+          <SaveFileProvider value={saveFile}>
+            <MpcDeviceProvider value="windows">
+              <WalletCoreProvider>
+                <QueryClientProvider client={queryClient}>
+                  <ThemeProvider theme={darkTheme}>
+                    <I18nProvider language={language}>
+                      <GlobalStyle />
+                      <VStack fullSize>
+                        <RemoteStateDependant>
+                          <InitializedWalletOnly>
+                            <OnboardingResetter>
+                              <ToastProvider>
+                                <RouterProvider router={router} />
+                              </ToastProvider>
+                            </OnboardingResetter>
+                          </InitializedWalletOnly>
+                        </RemoteStateDependant>
+                      </VStack>
+                    </I18nProvider>
+                  </ThemeProvider>
+                </QueryClientProvider>
+              </WalletCoreProvider>
+            </MpcDeviceProvider>
+          </SaveFileProvider>
+        </OpenUrlProvider>
+      </VaultCreationMpcLibProvider>
+    </MpcLocalModeAvailabilityProvider>
   )
 }
 
