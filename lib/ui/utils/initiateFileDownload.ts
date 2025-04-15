@@ -1,6 +1,6 @@
 import { NameProp } from '@lib/utils/entities/props'
 
-export type InitiateFileDownloadInput = {
+type InitiateFileDownloadInput = {
   type: string
   value: BlobPart
 } & NameProp
