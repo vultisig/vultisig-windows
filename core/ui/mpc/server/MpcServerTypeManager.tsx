@@ -21,7 +21,6 @@ const Button = styled(UnstyledButton)`
 
 export const MpcServerTypeManager = () => {
   const [serverType, setServerType] = useMpcServerType()
-
   const { t } = useTranslation()
 
   const actionText: Record<MpcServerType, string> = {
