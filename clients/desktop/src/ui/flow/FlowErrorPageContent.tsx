@@ -1,23 +1,16 @@
-import { Button } from '@lib/ui/buttons/Button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { makeAppPath } from '../../navigation'
 
 export const FlowErrorPageContent = ({
   action,
   message,
   title,
 }: Partial<ActionProp> & Partial<MessageProp> & TitleProp) => {
-  const { t } = useTranslation()
-
   return (
     <PageContent>
       <VStack flexGrow gap={24} alignItems="center" justifyContent="center">
@@ -39,11 +32,7 @@ export const FlowErrorPageContent = ({
           )}
         </VStack>
       </VStack>
-      {action ?? (
-        <Link to={makeAppPath('vault')}>
-          <Button as="div">{t('try_again')}</Button>
-        </Link>
-      )}
+      {action}
     </PageContent>
   )
 }

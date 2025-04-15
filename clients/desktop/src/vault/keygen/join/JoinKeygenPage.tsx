@@ -31,9 +31,11 @@ export const JoinKeygenPage = () => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 
+  const onExit = useNavigateBack()
+
   const { step, toNextStep } = useStepNavigation({
     steps: keygenSteps,
-    onExit: useNavigateBack(),
+    onExit,
   })
 
   const { t } = useTranslation()
@@ -67,7 +69,10 @@ export const JoinKeygenPage = () => {
                             )}
                             to={({ value }) => (
                               <MpcPeersProvider value={value}>
-                                <JoinKeygenProcess title={title} />
+                                <JoinKeygenProcess
+                                  title={title}
+                                  onBack={onExit}
+                                />
                               </MpcPeersProvider>
                             )}
                           />
