@@ -1,10 +1,9 @@
+import { MpcServerTypeManager } from '@core/ui/mpc/server/MpcServerTypeManager'
 import { Button } from '@lib/ui/buttons/Button'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { MpcServerTypeManager } from '../serverType/MpcServerTypeManager'
 
 const Container = styled.div`
   ${vStack({ alignItems: 'center', gap: 8 })}
