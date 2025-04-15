@@ -59,7 +59,7 @@ export const CreateVaultNameStep = ({
         <VStack>
           <Text variant="h1Regular">{t('name_your_vault')}</Text>
           <Text size={14} color="shy">
-            {t('vault_name_desciption')}
+            {t('vault_name_description')}
           </Text>
         </VStack>
         <VStack flexGrow gap={4}>

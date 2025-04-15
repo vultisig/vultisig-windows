@@ -812,4 +812,6 @@ export const de = {
   scan_with_device_name: 'Scannen mit {{name}}',
   join_upgrade: 'Upgrade beitreten',
   waiting_for_upgrade_start: 'Warten auf den Beginn des Upgrades ...',
+  vault_name_description:
+    'Sie können Ihren Tresor später jederzeit in den Einstellungen umbenennen',
 }
