@@ -106,6 +106,8 @@ export const en = {
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_image: 'Upload QR',
+  upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
+  upload_vulttshare: 'Upload your Vultishare QR',
   getting_video_permission: 'Getting video permission...',
   failed_to_get_video_permission: 'Failed to get video permission',
   processing_url: 'Processing URL...',
@@ -779,4 +781,6 @@ export const en = {
   backup_password_info:
     "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
   upgrade_your_vault_now: 'Upgrade your vault now',
+  vulti_share_not_saved_hint:
+    'If you didn’t save your VultiShare QR yet, go the app and click on the QR icon in the upper right corner.',
 }

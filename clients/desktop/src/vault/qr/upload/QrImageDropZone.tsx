@@ -39,7 +39,7 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
           </div>
         }
       >
-        {t('upload_qr_code_image')}
+        {t('upload_file_or_drag_and_drop')}
       </DropZoneContent>
       <input {...getInputProps()} />
     </InteractiveDropZoneContainer>

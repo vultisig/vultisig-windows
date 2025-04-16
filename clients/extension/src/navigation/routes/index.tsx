@@ -4,7 +4,8 @@ import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
-import ImportPage from '@clients/extension/src/pages/popup/pages/import'
+import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
+import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
@@ -21,8 +22,12 @@ const routes = [
     element: <NewVaultPage />,
   },
   {
-    path: appPaths.import,
-    element: <ImportPage />,
+    path: appPaths.importQR,
+    element: <ImportQRPage />,
+  },
+  {
+    path: appPaths.importFile,
+    element: <ImportFilePage />,
   },
   {
     path: appPaths.setupVault,

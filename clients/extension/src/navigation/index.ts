@@ -5,7 +5,8 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 export const appPaths = {
   setupVault: '/setup-vault',
   root: '/',
-  import: '/import',
+  importQR: '/import/qr',
+  importFile: '/import/file',
   landing: '/landing',
   main: '/main',
   vaults: '/vaults',
@@ -42,8 +43,8 @@ export type AppPath = DotNestedKeys<AppPaths>
 
 // TODO: to change as required in the extension
 export type AppPathParams = {
-  uploadQr: { title?: string }
-  import: { from?: string }
+  importQR: { title?: string }
+  importFile: { title?: string }
   setupVault: { type?: VaultSecurityType }
 }
 

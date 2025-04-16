@@ -1,8 +1,5 @@
-import './index.scss'
-
-import useGoBack from '@clients/extension/src/hooks/go-back'
-import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
+import { QrImageDropZone } from '@clients/desktop/src/vault/qr/upload/QrImageDropZone'
+import { UploadedQr } from '@clients/desktop/src/vault/qr/upload/UploadedQr'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
@@ -10,10 +7,7 @@ import {
   isSupportedChain,
   supportedChains,
 } from '@clients/extension/src/utils/constants'
-import {
-  calculateWindowPosition,
-  toCamelCase,
-} from '@clients/extension/src/utils/functions'
+import { toCamelCase } from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -22,30 +16,37 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
 import { Text } from '@lib/ui/text'
-import { Button, Upload, UploadProps } from 'antd'
-import { useEffect, useState } from 'react'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
-import { UAParser } from 'ua-parser-js'
-import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
+import { readBarcodes, ReaderOptions } from 'zxing-wasm'
 
+import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 interface InitialState {
   file?: File
   isWindows: boolean
   loading?: boolean
   status: 'default' | 'error' | 'success'
   vault?: VaultProps
+  error?: string
 }
 
 const Component = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = { isWindows: true, status: 'default' }
+  const initialState: InitialState = {
+    isWindows: true,
+    status: 'default',
+    error: '',
+  }
   const [state, setState] = useState(initialState)
-  const { file, isWindows, loading, status, vault } = state
-  const location = useLocation()
+  const { file, isWindows, loading, status, vault, error } = state
   const navigate = useAppNavigate()
-  const goBack = useGoBack()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
@@ -123,18 +124,38 @@ const Component = () => {
     switch (error) {
       case errorKey.INVALID_EXTENSION:
         console.error('Invalid file extension')
+        setState(prevState => ({
+          ...prevState,
+          error: 'Invalid file extension',
+        }))
         break
       case errorKey.INVALID_FILE:
         console.error('Invalid file')
+        setState(prevState => ({
+          ...prevState,
+          error: 'Invalid file',
+        }))
         break
       case errorKey.INVALID_QRCODE:
         console.error('Invalid qr code')
+        setState(prevState => ({
+          ...prevState,
+          error: 'Invalid qr code',
+        }))
         break
       case errorKey.INVALID_VAULT:
         console.error('Invalid vault data')
+        setState(prevState => ({
+          ...prevState,
+          error: 'Invalid vault data',
+        }))
         break
       default:
         console.error('Someting is wrong')
+        setState(prevState => ({
+          ...prevState,
+          error: 'Someting is wrong',
+        }))
         break
     }
   }
@@ -160,7 +181,7 @@ const Component = () => {
 
       setState(prevState => ({ ...prevState, file }))
 
-      readBarcodesFromImageFile(file, readerOptions)
+      readBarcodes(file, readerOptions)
         .then(([result]) => {
           if (result) {
             try {
@@ -175,6 +196,7 @@ const Component = () => {
                   transactions: [],
                 },
                 status: 'success',
+                error: '',
               }))
             } catch {
               handleError(errorKey.INVALID_VAULT)
@@ -199,124 +221,36 @@ const Component = () => {
     return false
   }
 
-  const componentDidMount = (): void => {
-    if (!walletCore) {
-      return
-    }
-    const parser = new UAParser()
-    const parserResult = parser.getResult()
-
-    if (!isPopup && parserResult.os.name !== 'Windows') {
-      setState({ ...state, isWindows: false })
-
-      chrome.windows.getCurrent({ populate: true }, currentWindow => {
-        let createdWindowId: number
-        const { height, left, top, width } =
-          calculateWindowPosition(currentWindow)
-
-        chrome.windows.create(
-          {
-            url: chrome.runtime.getURL('import.html?isPopup=true'),
-            type: 'panel',
-            height,
-            left,
-            top,
-            width,
-          },
-          window => {
-            if (window?.id) createdWindowId = window.id
-          }
-        )
-
-        chrome.windows.onRemoved.addListener(closedWindowId => {
-          if (closedWindowId === createdWindowId) {
-            getStoredVaults().then(vaults => {
-              const active = vaults.find(({ active }) => active)
-
-              if (active) handleFinish()
-            })
-          }
-        })
-      })
-    }
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [walletCore])
-
-  const props: UploadProps = {
-    multiple: false,
-    showUploadList: false,
-    beforeUpload: handleUpload,
-    fileList: [],
-  }
-
+  const [{ title = t('keysign') }] = useAppPathParams<'importQR'>()
   return isWindows ? (
-    <div className="layout import-page">
-      <div className="header">
-        <span className="heading">{t('import_vault')}</span>
-        {location.state && (
-          <ArrowLeft
-            className="icon icon-left"
-            onClick={() => goBack(appPaths.main)}
-          />
-        )}
-      </div>
-      <div className="content">
-        <Upload.Dragger {...props} className={status}>
-          <div className="state state-default">
-            <img src="/images/qr-code.png" className="icon" alt="QR" />
-            <Text className="title" size={16} color="contrast" weight={700}>
-              {t('add_vault_qrcode')}
-            </Text>
-            <span className="desc">
-              {t('drop_file_here_or')} <u>{t('upload_it')}</u>
-            </span>
-          </div>
-          <div className="state state-hover">
-            <img src="/images/upload.png" className="icon" alt="upload" />
-            <Text className="title" color="contrast" weight={700}>
-              {t('drop_file_here')}
-            </Text>
-          </div>
-          <div className="state state-done">
-            <span className="msg">
-              {status === 'error' ? t('import_failed') : t('import_successed')}
-            </span>
-            <img
-              src={
-                status === 'error'
-                  ? '/images/qr-error.png'
-                  : '/images/qr-success.png'
-              }
-              className="image"
-              alt={status === 'error' ? 'error' : 'success'}
-            />
-            {(file as File)?.name && (
-              <span className="name">{(file as File).name}</span>
-            )}
-          </div>
-        </Upload.Dragger>
-
-        {status !== 'default' && (
-          <CloseLG className="clear" onClick={handleClear} />
-        )}
-
-        <span className="hint">{t('find_your_qrcode')}</span>
-      </div>
-      <div className="footer">
+    <StyledPageContent fullHeight>
+      <FlowPageHeader title={title} />
+      <PageContent flexGrow justifyContent="space-between" fullWidth gap={20}>
+        <VStack fullWidth alignItems="center" flexGrow gap={20}>
+          <Text color="contrast" size={16} weight="700">
+            {t('upload_vulttshare')}
+          </Text>
+          {file ? (
+            <UploadedQr value={file} onRemove={handleClear} />
+          ) : (
+            <QrImageDropZone onFinish={handleUpload} />
+          )}
+          {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+        </VStack>
+        <Text color="shy">{t('vulti_share_not_saved_hint')}</Text>
         <Button
-          shape="round"
-          type="primary"
-          disabled={status !== 'success'}
-          loading={loading}
-          onClick={handleStart}
-          block
+          isLoading={loading}
+          onClick={() => {
+            if (file) {
+              handleStart()
+            }
+          }}
+          isDisabled={!file}
         >
-          {t('import_vault')}
+          {t('continue')}
         </Button>
-      </div>
-    </div>
+      </PageContent>
+    </StyledPageContent>
   ) : (
     <div className="layout import-page">
       <div className="content">

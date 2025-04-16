@@ -86,7 +86,13 @@ const Component = () => {
       </div>
       <div className="footer">
         <Button
-          onClick={() => navigate('import', { params: { from: 'vaults' } })}
+          onClick={() =>
+            navigate('importQR', {
+              params: {
+                title: t('import_vault'),
+              },
+            })
+          }
           shape="round"
           block
         >

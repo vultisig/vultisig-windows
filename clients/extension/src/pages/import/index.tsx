@@ -1,7 +1,7 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/popup/index.scss'
 
-import ImportPage from '@clients/extension/src/pages/popup/pages/import'
+import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
@@ -13,7 +13,7 @@ const router = createHashRouter(
   [
     {
       path: appPaths.root,
-      element: <ImportPage />,
+      element: <ImportQRPage />,
     },
     {
       path: '*',
