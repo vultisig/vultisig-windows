@@ -5,10 +5,7 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
 
-import {
-  UpdateVaultFolderID,
-  UpdateVaultOrder,
-} from '../../../../wailsjs/go/storage/Store'
+import { UpdateVault } from '../../../../wailsjs/go/storage/Store'
 
 type AddVaultToFolderInput = {
   vaultId: string
@@ -24,13 +21,16 @@ export const useAddVaultToFolderMutation = () => {
     mutationFn: async ({ vaultId, folderId }: AddVaultToFolderInput) => {
       const folderVaults = vaults.filter(vault => vault.folderId === folderId)
 
-      await UpdateVaultFolderID(vaultId, folderId)
+      const updateParams: any = {
+        folderId,
+      }
 
       if (!isEmpty(folderVaults)) {
         const order = getLastItemOrder(folderVaults.map(({ order }) => order))
-
-        await UpdateVaultOrder(vaultId, order)
+        updateParams.order = order
       }
+
+      await UpdateVault(vaultId, updateParams)
     },
     onSuccess: () => {
       invalidateQueries(vaultsQueryKey)

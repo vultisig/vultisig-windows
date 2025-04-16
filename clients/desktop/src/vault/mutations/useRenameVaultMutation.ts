@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { UpdateVaultName } from '../../../wailsjs/go/storage/Store'
+import { UpdateVault } from '../../../wailsjs/go/storage/Store'
 
 export const useRenameVaultMutation = () => {
   return useMutation({
@@ -11,7 +11,7 @@ export const useRenameVaultMutation = () => {
       vaultId: string
       newName: string
     }) => {
-      await UpdateVaultName(vaultId, newName)
+      await UpdateVault(vaultId, { name: newName })
     },
   })
 }

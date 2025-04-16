@@ -11,7 +11,7 @@ import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
-import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
+import { UpdateVault } from '../../../wailsjs/go/storage/Store'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -63,7 +63,7 @@ export const useBackupVaultMutation = ({
     mutationFn: async ({ password }: { password?: string }) => {
       const base64Data = await createBackup(vault, password)
       await SaveFileBkp(getExportName(vault), base64Data)
-      await UpdateVaultIsBackedUp(getVaultId(vault), true)
+      await UpdateVault(getVaultId(vault), { isBackedUp: true })
       await invalidateQueries(vaultsQueryKey)
     },
     onSuccess,
