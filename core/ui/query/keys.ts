@@ -1,1 +1,1 @@
-export const vaultsQueryKey = ['vaults']
+export const vaultsQueryKey = ['vaults'] as const

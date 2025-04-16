@@ -1,18 +1,13 @@
-import { PersistentStateKey } from '@clients/extension/src/state/persistent/PersistentStateKey'
 import { useQuery } from '@tanstack/react-query'
 
-export const getPersistentStateQueryKey = (key: PersistentStateKey) => [
-  'persistentState',
-  key,
-]
-
 export function usePersistentStateQuery<T>(
-  key: PersistentStateKey,
+  queryKey: readonly [string],
   initialValue: T
 ) {
   return useQuery({
-    queryKey: getPersistentStateQueryKey(key),
+    queryKey,
     queryFn: async () => {
+      const [key] = queryKey
       const result = await chrome.storage.local.get(key)
       const value = result[key]
       if (value === undefined) {

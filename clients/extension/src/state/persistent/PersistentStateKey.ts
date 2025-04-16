@@ -1,5 +1,1 @@
-export enum PersistentStateKey {
-  Language = 'language',
-  HasFinishedOnboarding = 'HasFinishedOnboarding',
-  CurrentVaultId = 'currentVaultId',
-}
+export type PersistentStateKey = readonly [string]
