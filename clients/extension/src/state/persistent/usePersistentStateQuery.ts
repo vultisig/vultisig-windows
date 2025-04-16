@@ -1,20 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
-export function usePersistentStateQuery<T>(
-  queryKey: readonly [string],
-  initialValue: T
-) {
-  return useQuery({
-    queryKey,
-    queryFn: async () => {
-      const [key] = queryKey
-      const result = await chrome.storage.local.get(key)
-      const value = result[key]
-      if (value === undefined) {
-        return initialValue
-      }
+import { getPersistentState } from './getPersistentState'
 
-      return value as T
-    },
+export function usePersistentStateQuery<T>(key: string, initialValue: T) {
+  return useQuery({
+    queryKey: [key],
+    queryFn: async () => getPersistentState(key, initialValue),
   })
 }

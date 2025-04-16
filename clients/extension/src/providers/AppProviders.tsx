@@ -14,6 +14,7 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
+import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
 
 const openUrl = (url: string) => window.open(url, '_blank')
@@ -34,10 +35,12 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                   <I18nProvider>
                     <WalletCoreProvider>
                       <SetCurrentVaultIdProvider>
-                        <AntDesignThemeProvider>
-                          {children}
-                          <GlobalStyle />
-                        </AntDesignThemeProvider>
+                        <CreateVaultProvider>
+                          <AntDesignThemeProvider>
+                            {children}
+                            <GlobalStyle />
+                          </AntDesignThemeProvider>
+                        </CreateVaultProvider>
                       </SetCurrentVaultIdProvider>
                     </WalletCoreProvider>
                   </I18nProvider>
