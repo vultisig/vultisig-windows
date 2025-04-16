@@ -1,5 +1,3 @@
-import { IncompleteOnboardingOnly } from '@clients/extension/src/components/onboarding/components/IncompleteOnboardingOnly'
-import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
@@ -16,6 +14,8 @@ import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
 import { SetupFastVaultPage } from '../../components/setup-vault/fast/SetupFastVaultPage'
+import { IncompleteOnboardingOnly } from '../../components/setup-vault/onboarding/components/IncompleteOnboardingOnly'
+import { OnboardingPage } from '../../components/setup-vault/onboarding/components/OnboardingPage'
 import { SetupSecureVaultPage } from '../../components/setup-vault/secure/SetupSecureVaultPage'
 
 const routes = [
