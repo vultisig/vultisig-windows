@@ -12,9 +12,11 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
+import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
+import { RemoteStateDependant } from './state/RemoteStateDependant'
 import { CreateVaultProvider } from './vault/state/createVault'
 import { SetCurrentVaultIdProvider } from './vault/state/setCurrentVaultId'
 
@@ -38,11 +40,15 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                 <QueryClientProvider client={queryClient}>
                   <ThemeProvider theme={darkTheme}>
                     <I18nProvider language={language}>
-                      <CreateVaultProvider>
-                        <SetCurrentVaultIdProvider>
-                          {children}
-                        </SetCurrentVaultIdProvider>
-                      </CreateVaultProvider>
+                      <InitializedWalletOnly>
+                        <RemoteStateDependant>
+                          <SetCurrentVaultIdProvider>
+                            <CreateVaultProvider>
+                              {children}
+                            </CreateVaultProvider>
+                          </SetCurrentVaultIdProvider>
+                        </RemoteStateDependant>
+                      </InitializedWalletOnly>
                     </I18nProvider>
                   </ThemeProvider>
                 </QueryClientProvider>
