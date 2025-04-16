@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -130,40 +131,55 @@ func (s *Store) SaveVault(vault *Vault) error {
 	return nil
 }
 
-// UpdateVaultName updates the vault name
-func (s *Store) UpdateVaultName(publicKeyECDSA, name string) error {
-	query := `UPDATE vaults SET name = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, name, publicKeyECDSA)
-	return err
+// VaultUpdateParams defines the parameters that can be updated for a vault
+type VaultUpdateParams struct {
+	Name       *string  `json:"name,omitempty"`
+	Order      *float64 `json:"order,omitempty"`
+	FolderID   *string  `json:"folderId,omitempty"`
+	IsBackedUp *bool    `json:"isBackedUp,omitempty"`
 }
 
-// UpdateVaultOrder updates the order of a vault
-func (s *Store) UpdateVaultOrder(publicKeyECDSA string, order float64) error {
-	query := `UPDATE vaults SET "order" = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, order, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault order, err: %w", err)
-	}
-	return nil
-}
+// UpdateVault updates vault properties based on provided parameters
+func (s *Store) UpdateVault(publicKeyECDSA string, params VaultUpdateParams) error {
+	// Build query dynamically based on which fields are provided
+	queryParts := []string{}
+	args := []interface{}{}
 
-// UpdateVaultFolderID updates the folder ID of a vault
-func (s *Store) UpdateVaultFolderID(publicKeyECDSA string, folderID *string) error {
-	query := `UPDATE vaults SET folder_id = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, folderID, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault folder ID, err: %w", err)
+	if params.Name != nil {
+		queryParts = append(queryParts, "name = ?")
+		args = append(args, *params.Name)
 	}
-	return nil
-}
 
-// UpdateVaultIsBackedUp updates the IsBackedUp status of a vault
-func (s *Store) UpdateVaultIsBackedUp(publicKeyECDSA string, isBackedUp bool) error {
-	query := `UPDATE vaults SET is_backedup = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, isBackedUp, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault IsBackedUp status, err: %w", err)
+	if params.Order != nil {
+		queryParts = append(queryParts, `"order" = ?`)
+		args = append(args, *params.Order)
 	}
+
+	if params.FolderID != nil {
+		queryParts = append(queryParts, "folder_id = ?")
+		args = append(args, params.FolderID)
+	}
+
+	if params.IsBackedUp != nil {
+		queryParts = append(queryParts, "is_backedup = ?")
+		args = append(args, *params.IsBackedUp)
+	}
+
+	// If no fields to update, return early
+	if len(queryParts) == 0 {
+		return nil
+	}
+
+	// Build the final query
+	query := fmt.Sprintf("UPDATE vaults SET %s WHERE public_key_ecdsa = ?", strings.Join(queryParts, ", "))
+	args = append(args, publicKeyECDSA)
+
+	// Execute the query
+	_, err := s.db.Exec(query, args...)
+	if err != nil {
+		return fmt.Errorf("could not update vault, err: %w", err)
+	}
+
 	return nil
 }
 

@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import {
   DeleteVaultFolder,
-  UpdateVaultOrder,
+  UpdateVault,
 } from '../../../../wailsjs/go/storage/Store'
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
@@ -39,7 +39,7 @@ export const useDeleteVaultFolderMutation = () => {
         })
 
         await Promise.all(
-          entries.map(({ key, value }) => UpdateVaultOrder(key, value))
+          entries.map(({ key, value }) => UpdateVault(key, { order: value }))
         )
       }
     },

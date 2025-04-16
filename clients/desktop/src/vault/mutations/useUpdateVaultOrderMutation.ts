@@ -2,7 +2,7 @@ import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
-import { UpdateVaultOrder } from '../../../wailsjs/go/storage/Store'
+import { UpdateVault } from '../../../wailsjs/go/storage/Store'
 
 type Input = {
   id: string
@@ -13,7 +13,7 @@ export const useUpdateVaultOrderMutation = () => {
   const invalidate = useInvalidateQueries()
 
   return useMutation({
-    mutationFn: ({ id, order }: Input) => UpdateVaultOrder(id, order),
+    mutationFn: ({ id, order }: Input) => UpdateVault(id, { order }),
     onSuccess: () => {
       invalidate(vaultsQueryKey)
     },

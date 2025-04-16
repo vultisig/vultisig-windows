@@ -78,12 +78,12 @@ export function UpdateAddressBookItem(arg1) {
   return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
 }
 
-export function UpdateVaultFolder(arg1) {
-  return window['go']['storage']['Store']['UpdateVaultFolder'](arg1);
+export function UpdateVault(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVault'](arg1, arg2);
 }
 
-export function UpdateVaultFolderID(arg1, arg2) {
-  return window['go']['storage']['Store']['UpdateVaultFolderID'](arg1, arg2);
+export function UpdateVaultFolder(arg1) {
+  return window['go']['storage']['Store']['UpdateVaultFolder'](arg1);
 }
 
 export function UpdateVaultFolderName(arg1, arg2) {
@@ -92,16 +92,4 @@ export function UpdateVaultFolderName(arg1, arg2) {
 
 export function UpdateVaultFolderOrder(arg1, arg2) {
   return window['go']['storage']['Store']['UpdateVaultFolderOrder'](arg1, arg2);
-}
-
-export function UpdateVaultIsBackedUp(arg1, arg2) {
-  return window['go']['storage']['Store']['UpdateVaultIsBackedUp'](arg1, arg2);
-}
-
-export function UpdateVaultName(arg1, arg2) {
-  return window['go']['storage']['Store']['UpdateVaultName'](arg1, arg2);
-}
-
-export function UpdateVaultOrder(arg1, arg2) {
-  return window['go']['storage']['Store']['UpdateVaultOrder'](arg1, arg2);
 }
