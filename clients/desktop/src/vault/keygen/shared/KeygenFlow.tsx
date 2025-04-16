@@ -1,6 +1,7 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
+import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -13,7 +14,6 @@ import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenEnding } from './VaultKeygenEnding'
 
@@ -41,9 +41,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       success={vault => (
         <CurrentVaultProvider value={vault}>
           <StepTransition
-            from={({ onFinish }) => (
-              <SetupVaultSuccessScreen onFinish={onFinish} />
-            )}
+            from={({ onFinish }) => <KeygenSuccessScreen onFinish={onFinish} />}
             to={() => {
               if (hasServer(vault.signers)) {
                 return <VaultKeygenEnding onBack={onBack} />
