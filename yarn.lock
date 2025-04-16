@@ -532,6 +532,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
+    "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
     "@core/mpc": "workspace:*"
@@ -540,6 +541,7 @@ __metadata:
     "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
     react: "npm:^19.0.0"
+    styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
 

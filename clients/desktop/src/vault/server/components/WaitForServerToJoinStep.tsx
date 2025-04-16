@@ -1,13 +1,13 @@
+import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
-import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { WaitForServerStates } from './WaitForServerStates'
 
 export const WaitForServerToJoinStep: React.FC<
   OnFinishProp<string[]> & Partial<OnBackProp>
 > = ({ onFinish }) => {
-  const peersQuery = usePeerOptionsQuery()
+  const peersQuery = useMpcPeerOptionsQuery()
 
   return (
     <>
