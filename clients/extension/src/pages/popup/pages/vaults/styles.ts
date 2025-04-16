@@ -26,6 +26,8 @@ export const StyledActiveVaultIcon = styled.span`
 export const StyledActiveVaultName = styled.span`
   font-size: ${rem(14)};
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const StyledActiveVault = styled.div`
