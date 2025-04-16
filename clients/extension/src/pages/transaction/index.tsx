@@ -350,6 +350,7 @@ const Component = () => {
                   chain: transaction.chain.chain,
                   keysignPayload: keysignPayload!,
                   walletCore: walletCore!,
+                  ibcTransaction: transaction.transactionDetails.ibcTransaction,
                 })
                 const preSignedImageHashes = getPreSigningHashes({
                   chain: transaction.chain.chain,
@@ -466,6 +467,7 @@ const Component = () => {
           chain: transaction!.chain.chain,
           keysignPayload: keysignPayload!,
           walletCore: walletCore!,
+          ibcTransaction: transaction.transactionDetails.ibcTransaction,
         })
         const preSignedImageHashes = getPreSigningHashes({
           chain: transaction!.chain.chain,
