@@ -80,7 +80,7 @@ export const getKeysignPayload = (
           amount: Number(transaction.transactionDetails.amount?.amount),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
-          transactionType: transaction.transactionDetails.isIBC
+          transactionType: transaction.transactionDetails.ibcTransaction
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
         })
@@ -102,7 +102,8 @@ export const getKeysignPayload = (
               chainSpecific.value.transactionType ===
               TransactionType.IBC_TRANSFER
 
-            const hasTimeout = !!transaction.transactionDetails.timeoutTimestamp
+            const hasTimeout =
+              !!transaction.transactionDetails.ibcTransaction!.timeoutTimestamp
 
             if (isIbcTransfer && hasTimeout) {
               try {
@@ -113,7 +114,8 @@ export const getKeysignPayload = (
 
                 const latestBlockHeight = latestBlock.header.height
                 const timeoutTimestamp =
-                  transaction.transactionDetails.timeoutTimestamp
+                  transaction.transactionDetails.ibcTransaction!
+                    .timeoutTimestamp
 
                 chainSpecific.value.ibcDenomTraces = create(
                   CosmosIbcDenomTraceSchema,

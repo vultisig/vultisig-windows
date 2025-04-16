@@ -18,11 +18,13 @@ import { getThorPreSignedInputData } from './thor'
 import { getTonPreSignedInputData } from './ton'
 import { getTronPreSignedInputData } from './tron'
 import { getUtxoPreSignedInputData } from './utxo'
+import { IMsgTransfer } from './ibc/IMsgTransfer'
 
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   chain: Chain
+  ibcTransaction?: IMsgTransfer
 }
 
 const handlers: Record<

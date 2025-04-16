@@ -323,8 +323,14 @@ class XDEFIKeplrProvider extends Keplr {
       from: msg.sender,
       to: msg.receiver,
       data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-      isIBC: true,
-      timeoutTimestamp: msg.timeoutTimestamp.toString(),
+      ibcTransaction: {
+        ...msg,
+        timeoutHeight: {
+          revisionHeight: msg.timeoutHeight.revisionHeight.toString(),
+          revisionNumber: msg.timeoutHeight.revisionNumber.toString(),
+        },
+        timeoutTimestamp: msg.timeoutTimestamp.toString(),
+      },
     }
 
     const result: SendTransactionResponse = await cosmosProvider.request({

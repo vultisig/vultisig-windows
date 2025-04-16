@@ -5,6 +5,7 @@ import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { TransactionResponse } from 'ethers'
 
 export namespace Messaging {
@@ -161,8 +162,7 @@ export interface TransactionDetails {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  isIBC?: boolean
-  timeoutTimestamp?: string
+  ibcTransaction?: IMsgTransfer
 }
 
 export interface ITransaction {
