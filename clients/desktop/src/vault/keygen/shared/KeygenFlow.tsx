@@ -3,6 +3,7 @@ import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutati
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
@@ -14,7 +15,6 @@ import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenEnding } from './VaultKeygenEnding'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {

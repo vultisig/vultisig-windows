@@ -1,4 +1,5 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Button } from '@lib/ui/buttons/Button'
@@ -13,13 +14,11 @@ import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { makeAppPath } from '../../../navigation'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo'
 import { KeysignSigningState } from './KeysignSigningState'
@@ -43,6 +42,8 @@ export const KeysignSigningStep = ({
 
   useEffect(startKeysign, [startKeysign])
 
+  const navigate = useCoreNavigate()
+
   return (
     <MatchQuery
       value={mutationStatus}
@@ -65,9 +66,9 @@ export const KeysignSigningStep = ({
                           <TxOverviewPanel>
                             <KeysignTxOverview value={payload} />
                           </TxOverviewPanel>
-                          <Link to={makeAppPath('vault')}>
-                            <Button as="div">{t('complete')}</Button>
-                          </Link>
+                          <Button onClick={() => navigate('vault')} as="div">
+                            {t('complete')}
+                          </Button>
                         </>
                       )}
                     />
