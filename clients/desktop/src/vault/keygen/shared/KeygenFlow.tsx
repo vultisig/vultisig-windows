@@ -1,11 +1,11 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
+import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -13,7 +13,6 @@ import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenEnding } from './VaultKeygenEnding'
@@ -69,7 +68,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       )}
       error={error => (
         <>
-          <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
+          <FlowPageHeader title={title} />
           <FlowErrorPageContent
             title={t('keygen_failed')}
             message={extractErrorMsg(error)}
@@ -78,8 +77,8 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       )}
       pending={() => (
         <>
-          <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <SetupVaultEducationSlides value={step} />
+          <FlowPageHeader title={title} />
+          <KeygenPendingState value={step} />
         </>
       )}
     />

@@ -14,7 +14,7 @@ const steps = [
   'seedlessWallet',
 ] as const
 
-type SetupFastVaultEducationSlidesStep = (typeof steps)[number]
+type Step = (typeof steps)[number]
 
 type ContentItem = {
   title: string
@@ -22,9 +22,7 @@ type ContentItem = {
   descriptionTwo: string
 }
 
-const getContents = (
-  t: TFunction
-): Record<SetupFastVaultEducationSlidesStep, ContentItem> => ({
+const getContents = (t: TFunction): Record<Step, ContentItem> => ({
   multiFactor: {
     title: t('while_you_wait_vultisig_is'),
     descriptionOne: t('fastVaultSetup.createVault.multiFactor.descriptionOne'),
@@ -64,7 +62,7 @@ const getContents = (
   },
 })
 
-export const CreateVaultDynamicEducationContent = () => {
+export const KeygenProductEducation = () => {
   const { step, toNextStep } = useStepNavigation({ steps, circular: true })
   useInterval(() => toNextStep(), SLIDE_DURATION_IN_MS)
 
