@@ -8,6 +8,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getCosmosPreSignedInputData } from './cosmos'
 import { getEvmPreSignedInputData } from './evm'
+import { IMsgTransfer } from './ibc/IMsgTransfer'
 import { getMayaPreSignedInputData } from './maya'
 import { getPolkadotPreSignedInputData } from './polkadot'
 import { GetPreSignedInputDataInput } from './PreSignedInputDataResolver'
@@ -18,7 +19,6 @@ import { getThorPreSignedInputData } from './thor'
 import { getTonPreSignedInputData } from './ton'
 import { getTronPreSignedInputData } from './tron'
 import { getUtxoPreSignedInputData } from './utxo'
-import { IMsgTransfer } from './ibc/IMsgTransfer'
 
 type Input = {
   keysignPayload: KeysignPayload
