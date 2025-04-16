@@ -567,6 +567,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
+    "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
     "@core/mpc": "workspace:*"
@@ -575,6 +576,7 @@ __metadata:
     "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
     react: "npm:^19.0.0"
+    styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
 
@@ -1514,28 +1516,39 @@ __metadata:
   linkType: hard
 
 "@keplr-wallet/provider@npm:^0.12.202":
-  version: 0.12.209
-  resolution: "@keplr-wallet/provider@npm:0.12.209"
+  version: 0.12.204
+  resolution: "@keplr-wallet/provider@npm:0.12.204"
   dependencies:
-    "@keplr-wallet/router": "npm:0.12.209"
-    "@keplr-wallet/types": "npm:0.12.209"
+    "@keplr-wallet/router": "npm:0.12.204"
+    "@keplr-wallet/types": "npm:0.12.204"
     buffer: "npm:^6.0.3"
     deepmerge: "npm:^4.2.2"
     long: "npm:^4.0.0"
   peerDependencies:
     starknet: ^6
-  checksum: 10c0/d33d3d54e3feec4642193a26a3263a100df73612ffc6fa3c27638b117aaf3cc8ddd466601a3a136b71afe4f350f6aae8cf53156f5dc21e93847c6be243cd60a5
+  checksum: 10c0/e59ff70c0cbce8b0c848d2258e40f13791b05a946b805362b40ee855a9a59ad52a2d0be399a23a0e41abff6c6302fe5ba2488842e07df16c33105b3319021aa8
   languageName: node
   linkType: hard
 
-"@keplr-wallet/router@npm:0.12.209":
-  version: 0.12.209
-  resolution: "@keplr-wallet/router@npm:0.12.209"
-  checksum: 10c0/cc551d2969a32311c55a1b31157ab2c3c13873fd5b1c3b142f788baaa83b96b64204a56a50652fb7113e4d621e4f8cd0dc0d81c7c7441ea0254e0f4effda0ee7
+"@keplr-wallet/router@npm:0.12.204":
+  version: 0.12.204
+  resolution: "@keplr-wallet/router@npm:0.12.204"
+  checksum: 10c0/81b974aa5041304667062d5f675b8d98a34ea9622db8b8e83644002df3cd1cae5c48cd2537ee59fd19881ed7c2f8a7f266cbbded9a2ba22903b72866c8680f6a
   languageName: node
   linkType: hard
 
-"@keplr-wallet/types@npm:0.12.209, @keplr-wallet/types@npm:^0.12.202":
+"@keplr-wallet/types@npm:0.12.204":
+  version: 0.12.204
+  resolution: "@keplr-wallet/types@npm:0.12.204"
+  dependencies:
+    long: "npm:^4.0.0"
+  peerDependencies:
+    starknet: ^6
+  checksum: 10c0/1b48605d44f25572f97b7e190f73e94dadc9297e4e93f7bce4eb199781daa2d27c027d30cd1afe643d1b492b19cef9dde3cc14382f85d7e164ae0f47cdbb4c5d
+  languageName: node
+  linkType: hard
+
+"@keplr-wallet/types@npm:^0.12.202":
   version: 0.12.209
   resolution: "@keplr-wallet/types@npm:0.12.209"
   dependencies:
@@ -3913,7 +3926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.13.10, @types/node@npm:^22.13.13":
+"@types/node@npm:^22.13.10":
   version: 22.13.13
   resolution: "@types/node@npm:22.13.13"
   dependencies:
@@ -4455,8 +4468,8 @@ __metadata:
   linkType: hard
 
 "antd@npm:^5.24.4":
-  version: 5.24.5
-  resolution: "antd@npm:5.24.5"
+  version: 5.24.4
+  resolution: "antd@npm:5.24.4"
   dependencies:
     "@ant-design/colors": "npm:^7.2.0"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -4480,7 +4493,7 @@ __metadata:
     rc-drawer: "npm:~7.2.0"
     rc-dropdown: "npm:~4.2.1"
     rc-field-form: "npm:~2.7.0"
-    rc-image: "npm:~7.11.1"
+    rc-image: "npm:~7.11.0"
     rc-input: "npm:~1.7.3"
     rc-input-number: "npm:~9.4.0"
     rc-mentions: "npm:~2.19.1"
@@ -4510,7 +4523,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/63697f4e15ee40f7e3c8f2666c493855fb9dc0b2369a6430abbef23fbdd4570568ce5ca95aebc345fd374126b007faf6ec92221661a7ee4378830e5cd2d9ea54
+  checksum: 10c0/ce8597467ae5c9beb850a292337aa652636467d6c5dadf4d8602b82366c4bcbf05d9880c185f5013b8ce189e4a9671ba7a5472db75345189a2179353ce4b9190
   languageName: node
   linkType: hard
 
@@ -9811,7 +9824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-image@npm:~7.11.1":
+"rc-image@npm:~7.11.0":
   version: 7.11.1
   resolution: "rc-image@npm:7.11.1"
   dependencies:
@@ -10225,8 +10238,8 @@ __metadata:
   linkType: hard
 
 "rc-virtual-list@npm:^3.14.2, rc-virtual-list@npm:^3.5.1, rc-virtual-list@npm:^3.5.2":
-  version: 3.18.5
-  resolution: "rc-virtual-list@npm:3.18.5"
+  version: 3.18.4
+  resolution: "rc-virtual-list@npm:3.18.4"
   dependencies:
     "@babel/runtime": "npm:^7.20.0"
     classnames: "npm:^2.2.6"
@@ -10235,7 +10248,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/1d6e0baba24cebcbf59a55cce196fffc575dceeec8b429fe4c82ac258b47a6ff23ce605b2e22a9803a5849363f4d4ebd279d4597e67fdd17cb8b5ca9125b9ed9
+  checksum: 10c0/2566e98418b8072af4591488e028a1e8433d2a190716f47134ee63a506afec9cf472f8a8d3dda55bf2e82ccf1215d324abd280892db4fbf5999fc30184068f62
   languageName: node
   linkType: hard
 
@@ -12001,9 +12014,9 @@ __metadata:
   linkType: hard
 
 "type-fest@npm:^4.35.0":
-  version: 4.38.0
-  resolution: "type-fest@npm:4.38.0"
-  checksum: 10c0/db9990d682a08697cf8ae67ac3cdbca734c742c96615e8888401d7d54e376b390e6a5d3be25fe3b4b439e1bb88a7da461da678a614ece8caccd9c0a07dd2e5f4
+  version: 4.37.0
+  resolution: "type-fest@npm:4.37.0"
+  checksum: 10c0/5bad189f66fbe3431e5d36befa08cab6010e56be68b7467530b7ef94c3cf81ef775a8ac3047c8bbda4dd3159929285870357498d7bc1df062714f9c5c3a84926
   languageName: node
   linkType: hard
 
@@ -12586,7 +12599,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.68.0"
     "@tanstack/react-query-persist-client": "npm:^5.68.0"
     "@trustwallet/wallet-core": "npm:^4.2.15"
-    "@types/node": "npm:^22.13.13"
+    "@types/node": "npm:^22.13.10"
     "@types/react": "npm:^19.0.11"
     "@types/react-dom": "npm:^19.0.4"
     "@types/uuid": "npm:^10.0.0"

@@ -1,9 +1,8 @@
+import { SaveAsImage } from '@core/ui/file/SaveAsImage'
+import { PrintableQrCode } from '@core/ui/qr/PrintableQrCode'
 import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { ValueProp } from '@lib/ui/props'
-
-import { SaveAsImage } from '../../../ui/file/SaveAsImage'
-import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
-import { PrintableQrCode } from '../../../ui/qr/PrintableQrCode'
 
 export const DownloadAddressQrCode = ({ value }: ValueProp<string>) => {
   return (

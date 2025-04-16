@@ -1,13 +1,12 @@
+import { Animation } from '@lib/ui/animations/Animation'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { vStack } from '@lib/ui/layout/Stack'
+import { FitPageContent } from '@lib/ui/page/PageContent'
 import { ActionProp, TitleProp } from '@lib/ui/props'
 import { gradientText, text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { Animation } from '../../ui/animations/Animation'
-import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
-import { FitPageContent } from '../../ui/page/PageContent'
 
 type MigrateInfoScreenProps = {
   animation: string

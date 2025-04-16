@@ -1,9 +1,8 @@
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 
 export const KeysignSigningState = () => {
   const { t } = useTranslation()

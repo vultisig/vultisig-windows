@@ -3,14 +3,14 @@ import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutati
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
@@ -41,24 +41,25 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       success={vault => (
         <CurrentVaultProvider value={vault}>
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSuccessScreen onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSuccessScreen onFinish={onFinish} />
             )}
             to={() => {
               if (hasServer(vault.signers)) {
-                return <VaultKeygenEnding />
+                return <VaultKeygenEnding onBack={onBack} />
               }
 
               return (
                 <StepTransition
-                  from={({ onForward }) => (
+                  from={({ onFinish }) => (
                     <SaveVaultStep
                       title={title}
                       value={vault}
-                      onForward={onForward}
+                      onFinish={onFinish}
+                      onBack={onBack}
                     />
                   )}
-                  to={() => <VaultKeygenEnding />}
+                  to={() => <VaultKeygenEnding onBack={onBack} />}
                 />
               )
             }}

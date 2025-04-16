@@ -8,12 +8,12 @@ import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
@@ -31,9 +31,11 @@ export const JoinKeygenPage = () => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 
+  const onExit = useNavigateBack()
+
   const { step, toNextStep } = useStepNavigation({
     steps: keygenSteps,
-    onExit: useNavigateBack(),
+    onExit,
   })
 
   const { t } = useTranslation()
@@ -58,7 +60,7 @@ export const JoinKeygenPage = () => {
                       <Match
                         value={step}
                         session={() => (
-                          <JoinKeygenSessionStep onForward={toNextStep} />
+                          <JoinKeygenSessionStep onFinish={toNextStep} />
                         )}
                         keygen={() => (
                           <ValueTransfer<string[]>
@@ -67,7 +69,10 @@ export const JoinKeygenPage = () => {
                             )}
                             to={({ value }) => (
                               <MpcPeersProvider value={value}>
-                                <JoinKeygenProcess title={title} />
+                                <JoinKeygenProcess
+                                  title={title}
+                                  onBack={onExit}
+                                />
                               </MpcPeersProvider>
                             )}
                           />

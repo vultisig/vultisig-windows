@@ -3,7 +3,7 @@ import { useVaults } from '@core/ui/vault/state/vaults'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
@@ -25,7 +25,10 @@ const steps = [
   'backupSuccessfulSlideshow',
 ] as const
 
-export const BackupFastVault = ({ onFinish }: OnFinishProp) => {
+export const BackupFastVault = ({
+  onFinish,
+  onBack,
+}: OnFinishProp & OnBackProp) => {
   const { step, toNextStep } = useStepNavigation({
     steps,
   })
@@ -47,7 +50,8 @@ export const BackupFastVault = ({ onFinish }: OnFinishProp) => {
         <SaveVaultStep
           value={vault}
           title={t('creating_vault')}
-          onForward={toNextStep}
+          onFinish={toNextStep}
+          onBack={onBack}
         />
       )}
       emailVerification={() => <EmailConfirmation onFinish={toNextStep} />}
@@ -59,8 +63,8 @@ export const BackupFastVault = ({ onFinish }: OnFinishProp) => {
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSummaryStep onForward={onForward} />
+            from={({ onFinish }) => (
+              <SetupVaultSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onCompleted={onFinish} />}
           />

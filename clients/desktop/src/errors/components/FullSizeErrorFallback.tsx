@@ -1,16 +1,17 @@
+import { useOpenUrl } from '@core/ui/state/openUrl'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text, text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BrowserOpenURL, WindowReload } from '../../../wailsjs/runtime/runtime'
-import { PageContent } from '../../ui/page/PageContent'
-import { PageHeader } from '../../ui/page/PageHeader'
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { WindowReload } from '../../../wailsjs/runtime/runtime'
 import { ErrorState } from './ErrorBoundary'
 
 const reportErrorUrl =
@@ -26,6 +27,8 @@ const StackTrace = styled.pre`
 
 export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
   const { t } = useTranslation()
+
+  const openUrl = useOpenUrl()
 
   return (
     <>
@@ -57,7 +60,7 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
         <UniformColumnGrid gap={20}>
           <Button
             onClick={() => {
-              BrowserOpenURL(reportErrorUrl)
+              openUrl(reportErrorUrl)
             }}
             kind="outlined"
           >

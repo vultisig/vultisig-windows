@@ -3,13 +3,13 @@ import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndica
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text, text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ProductEnhancedLogo } from '../../shared/Logo/ProductEnhancedLogo'
-import { PageContent } from '../../shared/Page/PageContent'
 import { useHasFinishedOnboardingMutation } from '../hooks/useHasFinishedOnboarading'
 
 type OnboardingStep = {

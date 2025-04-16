@@ -1,15 +1,15 @@
 import { ElementSizeAware } from '@lib/ui/base/ElementSizeAware'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
-import { PageContent } from '../../../ui/page/PageContent'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { DownloadAddressQrCode } from './DownloadAddressQrCode'
 
 const Content = styled.div`

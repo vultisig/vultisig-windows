@@ -1,15 +1,15 @@
+import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text, text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ProductLogo } from '../../ui/logo/ProductLogo'
-import { PageContent } from '../../ui/page/PageContent'
 import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding'
 
 type OnboardingStep = {

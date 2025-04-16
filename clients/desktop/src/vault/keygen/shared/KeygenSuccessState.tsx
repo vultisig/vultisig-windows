@@ -3,12 +3,12 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { PageContent } from '../../../ui/page/PageContent'
 import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 
 const Circle = styled.div`

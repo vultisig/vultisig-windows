@@ -22,7 +22,6 @@
     "src",
     "index.d.ts",
     "postcss.config.js",
-    "manifest.config.js",
     "../../core/ui/i18n/**/*.d.ts"
   ]
 }

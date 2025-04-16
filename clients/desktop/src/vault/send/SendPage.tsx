@@ -1,8 +1,8 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
@@ -28,7 +28,7 @@ export const SendPage = () => {
             <SendMemoProvider initialValue="">
               <Match
                 value={step}
-                form={() => <SendForm onForward={toNextStep} />}
+                form={() => <SendForm onFinish={toNextStep} />}
                 verify={() => <SendVerify onBack={toPreviousStep} />}
               />
             </SendMemoProvider>

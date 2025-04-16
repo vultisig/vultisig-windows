@@ -1,12 +1,12 @@
-import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC } from 'react'
 
 import { WaitForServerStates } from '../../server/components/WaitForServerStates'
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'
 
-export const SetupVaultServerStep: FC<OnForwardProp & Partial<OnBackProp>> = ({
-  onForward,
+export const SetupVaultServerStep: FC<OnFinishProp & Partial<OnBackProp>> = ({
+  onFinish,
   onBack,
 }) => {
   const state = useVaultCreationPreparation()
@@ -16,7 +16,7 @@ export const SetupVaultServerStep: FC<OnForwardProp & Partial<OnBackProp>> = ({
       value={state}
       pending={() => <WaitForServerStates state="pending" />}
       success={() => (
-        <WaitForServerStates state="success" onAnimationEnd={onForward} />
+        <WaitForServerStates state="success" onAnimationEnd={onFinish} />
       )}
       error={() => (
         <WaitForServerStates state="error" onAnimationEnd={onBack} />

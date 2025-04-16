@@ -1,14 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
 import DownloadIcon from '@lib/ui/icons/DownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { PageContent } from '../../../../../ui/page/PageContent'
-import { PageHeader } from '../../../../../ui/page/PageHeader'
 
 export const BACKUP_LINK =
   'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup'

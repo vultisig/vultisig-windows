@@ -1,12 +1,12 @@
+import { SaveAsImage } from '@core/ui/file/SaveAsImage'
+import { PrintableQrCode } from '@core/ui/qr/PrintableQrCode'
+import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
-import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
-import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
 import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery'
 
 export const DownloadKeysignQrCode = () => {

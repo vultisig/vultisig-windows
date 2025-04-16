@@ -1,8 +1,10 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { UploadIcon } from '@lib/ui/icons/UploadIcon'
 import { Image } from '@lib/ui/image/Image'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -10,8 +12,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { FlowErrorPageContent } from '../../../../ui/flow/FlowErrorPageContent'
 import { readQrCode } from '../utils/readQrCode'
 import {
   BorderImageWrapper,

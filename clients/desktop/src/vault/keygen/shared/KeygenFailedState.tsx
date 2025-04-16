@@ -2,13 +2,13 @@ import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenTyp
 import { Button } from '@lib/ui/buttons/Button'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
-import { PageContent } from '../../../ui/page/PageContent'
 
 type KeygenFailedStatePros = {
   message: string

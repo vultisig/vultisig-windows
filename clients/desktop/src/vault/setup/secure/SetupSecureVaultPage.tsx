@@ -1,15 +1,15 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
+import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
+import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
+import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
-import { SetupVaultNameStep } from '../SetupVaultNameStep'
 
 const steps = ['name', 'peers', 'startSession', 'keygen'] as const
 
@@ -28,17 +28,17 @@ export const SetupSecureVaultPage = () => {
           <MpcMediatorManager />
           <Match
             value={step}
-            name={() => <SetupVaultNameStep onForward={toNextStep} />}
+            name={() => <CreateVaultNameStep onFinish={toNextStep} />}
             peers={() => (
               <KeygenPeerDiscoveryStep
                 onBack={() => setStep(steps[0])}
-                onForward={toNextStep}
+                onFinish={toNextStep}
               />
             )}
             startSession={() => (
-              <KeygenStartSessionStep
+              <StartMpcSessionStep
                 onBack={toPreviousStep}
-                onForward={toNextStep}
+                onFinish={toNextStep}
               />
             )}
             keygen={() => (
