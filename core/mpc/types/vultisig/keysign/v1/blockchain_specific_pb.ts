@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/keysign/v1/blockchain_specific.proto.
  */
 export const file_vultisig_keysign_v1_blockchain_specific: GenFile = /*@__PURE__*/
-  fileDesc("Ci12dWx0aXNpZy9rZXlzaWduL3YxL2Jsb2NrY2hhaW5fc3BlY2lmaWMucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEiOQoMVVRYT1NwZWNpZmljEhAKCGJ5dGVfZmVlGAEgASgJEhcKD3NlbmRfbWF4X2Ftb3VudBgCIAEoCCJnChBFdGhlcmV1bVNwZWNpZmljEhsKE21heF9mZWVfcGVyX2dhc193ZWkYASABKAkSFAoMcHJpb3JpdHlfZmVlGAIgASgJEg0KBW5vbmNlGAMgASgDEhEKCWdhc19saW1pdBgEIAEoCSJeChFUSE9SQ2hhaW5TcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBILCgNmZWUYAyABKAQSEgoKaXNfZGVwb3NpdBgEIAEoCCJRChFNQVlBQ2hhaW5TcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBISCgppc19kZXBvc2l0GAMgASgIIuUBCg5Db3Ntb3NTcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBILCgNnYXMYAyABKAQSPgoQdHJhbnNhY3Rpb25fdHlwZRgEIAEoDjIkLnZ1bHRpc2lnLmtleXNpZ24udjEuVHJhbnNhY3Rpb25UeXBlEkcKEGliY19kZW5vbV90cmFjZXMYBSABKAsyKC52dWx0aXNpZy5rZXlzaWduLnYxLkNvc21vc0liY0Rlbm9tVHJhY2VIAIgBAUITChFfaWJjX2Rlbm9tX3RyYWNlcyJNChNDb3Ntb3NJYmNEZW5vbVRyYWNlEgwKBHBhdGgYASABKAkSEgoKYmFzZV9kZW5vbRgCIAEoCRIUCgxsYXRlc3RfYmxvY2sYAyABKAkigQIKDlNvbGFuYVNwZWNpZmljEhkKEXJlY2VudF9ibG9ja19oYXNoGAEgASgJEhQKDHByaW9yaXR5X2ZlZRgCIAEoCRIqCh1mcm9tX3Rva2VuX2Fzc29jaWF0ZWRfYWRkcmVzcxgDIAEoCUgAiAEBEigKG3RvX3Rva2VuX2Fzc29jaWF0ZWRfYWRkcmVzcxgEIAEoCUgBiAEBEhcKCnByb2dyYW1faWQYBSABKAhIAogBAUIgCh5fZnJvbV90b2tlbl9hc3NvY2lhdGVkX2FkZHJlc3NCHgocX3RvX3Rva2VuX2Fzc29jaWF0ZWRfYWRkcmVzc0INCgtfcHJvZ3JhbV9pZCKjAQoQUG9sa2Fkb3RTcGVjaWZpYxIZChFyZWNlbnRfYmxvY2tfaGFzaBgBIAEoCRINCgVub25jZRgCIAEoBBIcChRjdXJyZW50X2Jsb2NrX251bWJlchgDIAEoCRIUCgxzcGVjX3ZlcnNpb24YBCABKA0SGwoTdHJhbnNhY3Rpb25fdmVyc2lvbhgFIAEoDRIUCgxnZW5lc2lzX2hhc2gYBiABKAkihAEKB1N1aUNvaW4SEQoJY29pbl90eXBlGAEgASgJEhYKDmNvaW5fb2JqZWN0X2lkGAIgASgJEg8KB3ZlcnNpb24YAyABKAkSDgoGZGlnZXN0GAQgASgJEg8KB2JhbGFuY2UYBSABKAkSHAoUcHJldmlvdXNfdHJhbnNhY3Rpb24YBiABKAkiVwoLU3VpU3BlY2lmaWMSGwoTcmVmZXJlbmNlX2dhc19wcmljZRgBIAEoCRIrCgVjb2lucxgCIAMoCzIcLnZ1bHRpc2lnLmtleXNpZ24udjEuU3VpQ29pbiJNCgtUb25TcGVjaWZpYxIXCg9zZXF1ZW5jZV9udW1iZXIYASABKAQSEQoJZXhwaXJlX2F0GAIgASgEEhIKCmJvdW5jZWFibGUYAyABKAgiLwoOUmlwcGxlU3BlY2lmaWMSEAoIc2VxdWVuY2UYASABKAQSCwoDZ2FzGAIgASgEIpMCCgxUcm9uU3BlY2lmaWMSEQoJdGltZXN0YW1wGAEgASgEEhIKCmV4cGlyYXRpb24YAiABKAQSHgoWYmxvY2tfaGVhZGVyX3RpbWVzdGFtcBgDIAEoBBIbChNibG9ja19oZWFkZXJfbnVtYmVyGAQgASgEEhwKFGJsb2NrX2hlYWRlcl92ZXJzaW9uGAUgASgEEiEKGWJsb2NrX2hlYWRlcl90eF90cmllX3Jvb3QYBiABKAkSIAoYYmxvY2tfaGVhZGVyX3BhcmVudF9oYXNoGAcgASgJEiQKHGJsb2NrX2hlYWRlcl93aXRuZXNzX2FkZHJlc3MYCCABKAkSFgoOZ2FzX2VzdGltYXRpb24YCSABKAQqbQoPVHJhbnNhY3Rpb25UeXBlEiAKHFRSQU5TQUNUSU9OX1RZUEVfVU5TUEVDSUZJRUQQABIZChVUUkFOU0FDVElPTl9UWVBFX1ZPVEUQARIdChlUUkFOU0FDVElPTl9UWVBFX1BST1BPU0FMEAJCVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z");
+  fileDesc("Ci12dWx0aXNpZy9rZXlzaWduL3YxL2Jsb2NrY2hhaW5fc3BlY2lmaWMucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEiOQoMVVRYT1NwZWNpZmljEhAKCGJ5dGVfZmVlGAEgASgJEhcKD3NlbmRfbWF4X2Ftb3VudBgCIAEoCCJnChBFdGhlcmV1bVNwZWNpZmljEhsKE21heF9mZWVfcGVyX2dhc193ZWkYASABKAkSFAoMcHJpb3JpdHlfZmVlGAIgASgJEg0KBW5vbmNlGAMgASgDEhEKCWdhc19saW1pdBgEIAEoCSJeChFUSE9SQ2hhaW5TcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBILCgNmZWUYAyABKAQSEgoKaXNfZGVwb3NpdBgEIAEoCCJRChFNQVlBQ2hhaW5TcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBISCgppc19kZXBvc2l0GAMgASgIIq0CCg5Db3Ntb3NTcGVjaWZpYxIWCg5hY2NvdW50X251bWJlchgBIAEoBBIQCghzZXF1ZW5jZRgCIAEoBBILCgNnYXMYAyABKAQSPgoQdHJhbnNhY3Rpb25fdHlwZRgEIAEoDjIkLnZ1bHRpc2lnLmtleXNpZ24udjEuVHJhbnNhY3Rpb25UeXBlEkcKEGliY19kZW5vbV90cmFjZXMYBSABKAsyKC52dWx0aXNpZy5rZXlzaWduLnYxLkNvc21vc0liY0Rlbm9tVHJhY2VIAIgBARI5CghpYmNfaW5mbxgGIAEoCzIiLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zSWJjSW5mb0gBiAEBQhMKEV9pYmNfZGVub21fdHJhY2VzQgsKCV9pYmNfaW5mbyJNChNDb3Ntb3NJYmNEZW5vbVRyYWNlEgwKBHBhdGgYASABKAkSEgoKYmFzZV9kZW5vbRgCIAEoCRIUCgxsYXRlc3RfYmxvY2sYAyABKAkibgoNQ29zbW9zSWJjSW5mbxITCgtzb3VyY2VfcG9ydBgBIAEoCRIWCg5zb3VyY2VfY2hhbm5lbBgCIAEoCRIXCg9yZXZpc2lvbl9udW1iZXIYAyABKAQSFwoPcmV2aXNpb25faGVpZ2h0GAQgASgEIoECCg5Tb2xhbmFTcGVjaWZpYxIZChFyZWNlbnRfYmxvY2tfaGFzaBgBIAEoCRIUCgxwcmlvcml0eV9mZWUYAiABKAkSKgodZnJvbV90b2tlbl9hc3NvY2lhdGVkX2FkZHJlc3MYAyABKAlIAIgBARIoCht0b190b2tlbl9hc3NvY2lhdGVkX2FkZHJlc3MYBCABKAlIAYgBARIXCgpwcm9ncmFtX2lkGAUgASgISAKIAQFCIAoeX2Zyb21fdG9rZW5fYXNzb2NpYXRlZF9hZGRyZXNzQh4KHF90b190b2tlbl9hc3NvY2lhdGVkX2FkZHJlc3NCDQoLX3Byb2dyYW1faWQiowEKEFBvbGthZG90U3BlY2lmaWMSGQoRcmVjZW50X2Jsb2NrX2hhc2gYASABKAkSDQoFbm9uY2UYAiABKAQSHAoUY3VycmVudF9ibG9ja19udW1iZXIYAyABKAkSFAoMc3BlY192ZXJzaW9uGAQgASgNEhsKE3RyYW5zYWN0aW9uX3ZlcnNpb24YBSABKA0SFAoMZ2VuZXNpc19oYXNoGAYgASgJIoQBCgdTdWlDb2luEhEKCWNvaW5fdHlwZRgBIAEoCRIWCg5jb2luX29iamVjdF9pZBgCIAEoCRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRpZ2VzdBgEIAEoCRIPCgdiYWxhbmNlGAUgASgJEhwKFHByZXZpb3VzX3RyYW5zYWN0aW9uGAYgASgJIlcKC1N1aVNwZWNpZmljEhsKE3JlZmVyZW5jZV9nYXNfcHJpY2UYASABKAkSKwoFY29pbnMYAiADKAsyHC52dWx0aXNpZy5rZXlzaWduLnYxLlN1aUNvaW4iZgoLVG9uU3BlY2lmaWMSFwoPc2VxdWVuY2VfbnVtYmVyGAEgASgEEhEKCWV4cGlyZV9hdBgCIAEoBBISCgpib3VuY2VhYmxlGAMgASgIEhcKD3NlbmRfbWF4X2Ftb3VudBgEIAEoCCIvCg5SaXBwbGVTcGVjaWZpYxIQCghzZXF1ZW5jZRgBIAEoBBILCgNnYXMYAiABKAQikwIKDFRyb25TcGVjaWZpYxIRCgl0aW1lc3RhbXAYASABKAQSEgoKZXhwaXJhdGlvbhgCIAEoBBIeChZibG9ja19oZWFkZXJfdGltZXN0YW1wGAMgASgEEhsKE2Jsb2NrX2hlYWRlcl9udW1iZXIYBCABKAQSHAoUYmxvY2tfaGVhZGVyX3ZlcnNpb24YBSABKAQSIQoZYmxvY2tfaGVhZGVyX3R4X3RyaWVfcm9vdBgGIAEoCRIgChhibG9ja19oZWFkZXJfcGFyZW50X2hhc2gYByABKAkSJAocYmxvY2tfaGVhZGVyX3dpdG5lc3NfYWRkcmVzcxgIIAEoCRIWCg5nYXNfZXN0aW1hdGlvbhgJIAEoBCqQAQoPVHJhbnNhY3Rpb25UeXBlEiAKHFRSQU5TQUNUSU9OX1RZUEVfVU5TUEVDSUZJRUQQABIZChVUUkFOU0FDVElPTl9UWVBFX1ZPVEUQARIdChlUUkFOU0FDVElPTl9UWVBFX1BST1BPU0FMEAISIQodVFJBTlNBQ1RJT05fVFlQRV9JQkNfVFJBTlNGRVIQA0JUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM");
 
 /**
  * @generated from message vultisig.keysign.v1.UTXOSpecific
@@ -153,6 +153,11 @@ export type CosmosSpecific = Message<"vultisig.keysign.v1.CosmosSpecific"> & {
    * @generated from field: optional vultisig.keysign.v1.CosmosIbcDenomTrace ibc_denom_traces = 5;
    */
   ibcDenomTraces?: CosmosIbcDenomTrace;
+
+  /**
+   * @generated from field: optional vultisig.keysign.v1.CosmosIbcInfo ibc_info = 6;
+   */
+  ibcInfo?: CosmosIbcInfo;
 };
 
 /**
@@ -190,6 +195,38 @@ export const CosmosIbcDenomTraceSchema: GenMessage<CosmosIbcDenomTrace> = /*@__P
   messageDesc(file_vultisig_keysign_v1_blockchain_specific, 5);
 
 /**
+ * @generated from message vultisig.keysign.v1.CosmosIbcInfo
+ */
+export type CosmosIbcInfo = Message<"vultisig.keysign.v1.CosmosIbcInfo"> & {
+  /**
+   * @generated from field: string source_port = 1;
+   */
+  sourcePort: string;
+
+  /**
+   * @generated from field: string source_channel = 2;
+   */
+  sourceChannel: string;
+
+  /**
+   * @generated from field: uint64 revision_number = 3;
+   */
+  revisionNumber: bigint;
+
+  /**
+   * @generated from field: uint64 revision_height = 4;
+   */
+  revisionHeight: bigint;
+};
+
+/**
+ * Describes the message vultisig.keysign.v1.CosmosIbcInfo.
+ * Use `create(CosmosIbcInfoSchema)` to create a new message.
+ */
+export const CosmosIbcInfoSchema: GenMessage<CosmosIbcInfo> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 6);
+
+/**
  * @generated from message vultisig.keysign.v1.SolanaSpecific
  */
 export type SolanaSpecific = Message<"vultisig.keysign.v1.SolanaSpecific"> & {
@@ -224,7 +261,7 @@ export type SolanaSpecific = Message<"vultisig.keysign.v1.SolanaSpecific"> & {
  * Use `create(SolanaSpecificSchema)` to create a new message.
  */
 export const SolanaSpecificSchema: GenMessage<SolanaSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 6);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 7);
 
 /**
  * @generated from message vultisig.keysign.v1.PolkadotSpecific
@@ -266,7 +303,7 @@ export type PolkadotSpecific = Message<"vultisig.keysign.v1.PolkadotSpecific"> &
  * Use `create(PolkadotSpecificSchema)` to create a new message.
  */
 export const PolkadotSpecificSchema: GenMessage<PolkadotSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 7);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 8);
 
 /**
  * @generated from message vultisig.keysign.v1.SuiCoin
@@ -308,7 +345,7 @@ export type SuiCoin = Message<"vultisig.keysign.v1.SuiCoin"> & {
  * Use `create(SuiCoinSchema)` to create a new message.
  */
 export const SuiCoinSchema: GenMessage<SuiCoin> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 8);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 9);
 
 /**
  * @generated from message vultisig.keysign.v1.SuiSpecific
@@ -330,7 +367,7 @@ export type SuiSpecific = Message<"vultisig.keysign.v1.SuiSpecific"> & {
  * Use `create(SuiSpecificSchema)` to create a new message.
  */
 export const SuiSpecificSchema: GenMessage<SuiSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 9);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 10);
 
 /**
  * @generated from message vultisig.keysign.v1.TonSpecific
@@ -350,6 +387,11 @@ export type TonSpecific = Message<"vultisig.keysign.v1.TonSpecific"> & {
    * @generated from field: bool bounceable = 3;
    */
   bounceable: boolean;
+
+  /**
+   * @generated from field: bool send_max_amount = 4;
+   */
+  sendMaxAmount: boolean;
 };
 
 /**
@@ -357,7 +399,7 @@ export type TonSpecific = Message<"vultisig.keysign.v1.TonSpecific"> & {
  * Use `create(TonSpecificSchema)` to create a new message.
  */
 export const TonSpecificSchema: GenMessage<TonSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 10);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 11);
 
 /**
  * @generated from message vultisig.keysign.v1.RippleSpecific
@@ -379,7 +421,7 @@ export type RippleSpecific = Message<"vultisig.keysign.v1.RippleSpecific"> & {
  * Use `create(RippleSpecificSchema)` to create a new message.
  */
 export const RippleSpecificSchema: GenMessage<RippleSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 11);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 12);
 
 /**
  * @generated from message vultisig.keysign.v1.TronSpecific
@@ -436,7 +478,7 @@ export type TronSpecific = Message<"vultisig.keysign.v1.TronSpecific"> & {
  * Use `create(TronSpecificSchema)` to create a new message.
  */
 export const TronSpecificSchema: GenMessage<TronSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 12);
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 13);
 
 /**
  * @generated from enum vultisig.keysign.v1.TransactionType
@@ -456,6 +498,11 @@ export enum TransactionType {
    * @generated from enum value: TRANSACTION_TYPE_PROPOSAL = 2;
    */
   PROPOSAL = 2,
+
+  /**
+   * @generated from enum value: TRANSACTION_TYPE_IBC_TRANSFER = 3;
+   */
+  IBC_TRANSFER = 3,
 }
 
 /**
