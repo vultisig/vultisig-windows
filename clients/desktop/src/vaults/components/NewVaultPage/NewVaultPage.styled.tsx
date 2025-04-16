@@ -1,8 +1,7 @@
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { getColor } from '@lib/ui/theme/getters'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 
 export const Wrapper = styled(AnimatedVisibility)`
   overflow-y: hidden;

@@ -1,3 +1,4 @@
+import { useBackupVaultMutation } from '@clients/desktop/src/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -9,8 +10,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
 
 type VaultBackupWithoutPasswordProps = OnFinishProp & {
   onPasswordRequest: () => void

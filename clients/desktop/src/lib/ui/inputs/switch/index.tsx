@@ -1,4 +1,5 @@
 import { interactive } from '@lib/ui/css/interactive'
+import { InvisibleHTMLCheckbox } from '@lib/ui/inputs/checkbox/InvisibleHTMLCheckbox'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps, UiProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -7,7 +8,6 @@ import { match } from '@lib/utils/match'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { InvisibleHTMLCheckbox } from '../checkbox/InvisibleHTMLCheckbox'
 import { SwitchSize } from './config'
 import { SwitchContainer } from './SwitchContainer'
 import { SwitchControl } from './SwitchControl'
