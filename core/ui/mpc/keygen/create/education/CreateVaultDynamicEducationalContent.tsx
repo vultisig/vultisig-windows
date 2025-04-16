@@ -1,14 +1,20 @@
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { GradientText, Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
-import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useInterval } from 'react-use'
 
-import { SetupFastVaultEducationSlidesStep } from '..'
+const SLIDE_DURATION_IN_MS = 6000
+const steps = [
+  'multiFactor',
+  'selfCustodial',
+  'crossChain',
+  'availablePlatforms',
+  'seedlessWallet',
+] as const
 
-type DynamicEducationContentProps = {
-  value: SetupFastVaultEducationSlidesStep
-}
+type SetupFastVaultEducationSlidesStep = (typeof steps)[number]
 
 type ContentItem = {
   title: string
@@ -58,12 +64,13 @@ const getContents = (
   },
 })
 
-export const DynamicEducationContent: FC<DynamicEducationContentProps> = ({
-  value,
-}) => {
+export const CreateVaultDynamicEducationContent = () => {
+  const { step, toNextStep } = useStepNavigation({ steps, circular: true })
+  useInterval(() => toNextStep(), SLIDE_DURATION_IN_MS)
+
   const { t } = useTranslation()
   const contents = getContents(t)
-  const { title, descriptionOne, descriptionTwo } = contents[value]
+  const { title, descriptionOne, descriptionTwo } = contents[step]
 
   return (
     <VStack justifyContent="center" gap={12}>

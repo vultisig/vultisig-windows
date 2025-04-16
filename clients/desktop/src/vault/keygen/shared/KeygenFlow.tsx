@@ -3,15 +3,16 @@ import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutati
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { SaveVaultStep } from './SaveVaultStep'
@@ -66,10 +67,13 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
           />
         </CurrentVaultProvider>
       )}
-      error={() => (
+      error={error => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <FailedSetupVaultKeygenStep onBack={onBack} />
+          <FlowErrorPageContent
+            title={t('keygen_failed')}
+            message={extractErrorMsg(error)}
+          />
         </>
       )}
       pending={() => (
