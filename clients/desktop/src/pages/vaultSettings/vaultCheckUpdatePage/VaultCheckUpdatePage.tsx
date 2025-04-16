@@ -1,3 +1,4 @@
+import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -7,7 +8,6 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { ProductLogo } from '../../../ui/logo/ProductLogo'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { DOWNLOAD_VULTISIG_LINK } from '../constants'
 import {

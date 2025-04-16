@@ -4,12 +4,12 @@ import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useVaultCreationMpcLib } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
 
 export const useVaultServerSetup = () => {
@@ -19,7 +19,7 @@ export const useVaultServerSetup = () => {
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+  const mpcLib = useVaultCreationMpcLib()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () =>
@@ -31,7 +31,7 @@ export const useVaultServerSetup = () => {
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
-        lib_type: toLibType(vaultCreationMpcLib),
+        lib_type: toLibType(mpcLib),
       }),
   })
 

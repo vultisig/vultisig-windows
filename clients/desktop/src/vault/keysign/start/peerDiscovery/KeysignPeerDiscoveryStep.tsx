@@ -1,30 +1,30 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
+import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
+import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
+import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '@core/ui/mpc/devices/peers/PeerPlaceholder'
+import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
+import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
+import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
+import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
+import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
+import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { FitPageContent } from '@lib/ui/page/PageContent'
+import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
+import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
-import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
-import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
-import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
-import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
-import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
-import { PeersManagerFrame } from '../../../../mpc/peers/PeersManagerFrame'
-import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
-import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
-import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
-import { PageFormFrame } from '../../../../ui/page/PageFormFrame'
-import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery'
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode'
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled'
@@ -49,11 +49,11 @@ export const KeysignPeerDiscoveryStep = ({ onFinish }: OnFinishProp) => {
   const requiredSigners = getKeygenThreshold(signers.length)
   const requiredPeers = requiredSigners - 1
 
-  const peerOptionsQuery = usePeerOptionsQuery()
+  const peerOptionsQuery = useMpcPeerOptionsQuery()
 
   return (
     <>
-      <CurrentPeersCorrector />
+      <MpcPeersCorrector />
       <PageHeader
         title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
