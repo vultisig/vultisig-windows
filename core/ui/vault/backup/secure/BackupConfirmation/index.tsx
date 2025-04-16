@@ -9,7 +9,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BACKUP_LINK } from '../../../secure/backup/BackupConfirmation'
+import { backupEducationUrl } from '../../education'
 
 const Wrapper = styled(VStack)`
   max-width: 800px;
@@ -64,22 +64,28 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             </Text>
             <Text centerHorizontally color="shy" size={14}>
               {t('fastVaultSetup.backup.onlineStorageDescription')}{' '}
-              <StyledAnchor href={BACKUP_LINK} target="_blank" rel="noreferrer">
-                <Text centerHorizontally color="supporting" as="span">
+              <StyledAnchor
+                href={backupEducationUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Text as="span" centerHorizontally color="supporting">
                   {t('learnMore')}
                 </Text>
               </StyledAnchor>
             </Text>
           </VStack>
         </Content>
-        <VStack gap={4}>
-          <BackupButton onClick={onCompleted} size="m">
-            <DownloadIcon />
-            <Text as="span" size={14}>
-              {t('backup_now')}
-            </Text>
-          </BackupButton>
-        </VStack>
+        <BottomItemsWrapper>
+          <VStack gap={4}>
+            <BackupButton onClick={onCompleted} size="m">
+              <DownloadIcon />
+              <Text as="span" size={14}>
+                {t('backup_now')}
+              </Text>
+            </BackupButton>
+          </VStack>
+        </BottomItemsWrapper>
       </Wrapper>
     </PageContent>
   )
@@ -88,6 +94,10 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
 const BackupButton = styled(Button)`
   font-size: 20px;
   gap: 8px;
+`
+
+const BottomItemsWrapper = styled(VStack)`
+  min-height: 30px;
 `
 
 const StyledAnchor = styled.a`

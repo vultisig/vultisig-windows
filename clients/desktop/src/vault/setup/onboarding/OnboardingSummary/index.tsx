@@ -4,11 +4,11 @@ import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
 import { CloudStackIcon } from '@lib/ui/icons/CloudStackIcon'
 import { CloudWithToolkeyIcon } from '@lib/ui/icons/CloudWithToolkeyIcon'
 import { TriangleExclamationIcon } from '@lib/ui/icons/TriangleExclamationIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
 import { useHasFinishedOnboarding } from '../../../../onboarding/hooks/useHasFinishedOnboarding'
 import {
   ContentWrapper,

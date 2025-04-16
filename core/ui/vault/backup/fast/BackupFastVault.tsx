@@ -7,8 +7,8 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
-import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
+import { VaultBackupFlow } from '../VaultBackupFlow'
+import { VaultBackupSummaryStep } from '../VaultBackupSummaryStep'
 import { EmailConfirmation } from '.'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
@@ -64,7 +64,7 @@ export const BackupFastVault = ({
         shouldShowBackupSummary ? (
           <StepTransition
             from={({ onFinish }) => (
-              <SetupVaultSummaryStep onFinish={onFinish} />
+              <VaultBackupSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onCompleted={onFinish} />}
           />

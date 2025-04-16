@@ -5,8 +5,8 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
 
-import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
-import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
+import { VaultBackupFlow } from '../VaultBackupFlow'
+import { VaultBackupSummaryStep } from '../VaultBackupSummaryStep'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
 import { BackupSuccessSlide } from './BackupSuccessSlides'
@@ -44,7 +44,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
         shouldShowBackupSummary ? (
           <StepTransition
             from={({ onFinish }) => (
-              <SetupVaultSummaryStep onFinish={onFinish} />
+              <VaultBackupSummaryStep onFinish={onFinish} />
             )}
             to={() => <BackupSuccessSlide onFinish={onFinish} />}
           />

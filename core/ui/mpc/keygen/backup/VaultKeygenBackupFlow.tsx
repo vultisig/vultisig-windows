@@ -2,8 +2,8 @@ import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 
-import { BackupFastVault } from '../../setup/fast/backup/BackupFastVault'
-import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'
+import { BackupFastVault } from '../../../vault/backup/fast/BackupFastVault'
+import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVault'
 
 export const VaultKeygenBackupFlow = ({
   onFinish,
