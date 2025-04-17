@@ -3,12 +3,13 @@ import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
-import { updateVaultIsBackedUp } from '../../utils/storage'
+import { useVaultsMutation } from '../../vault/state/vaults'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -54,6 +55,8 @@ export const useBackupVaultMutation = ({
   onSuccess?: () => void
 } = {}) => {
   const vault = useCurrentVault()
+  const vaults = useVaults()
+  const { mutateAsync: updateVaults } = useVaultsMutation()
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
@@ -71,7 +74,13 @@ export const useBackupVaultMutation = ({
       URL.revokeObjectURL(url)
 
       // TODO: revise this - it's not going to work at the moment
-      await updateVaultIsBackedUp(getVaultId(vault))
+      await updateVaults(
+        vaults.map(currentVault =>
+          getVaultId(currentVault) === getVaultId(vault)
+            ? { ...vault, isBackedUp: true }
+            : currentVault
+        )
+      )
     },
     onSuccess,
   })

@@ -9,7 +9,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const BACKUP_LINK =
+const BACKUP_LINK =
   'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup'
 
 const Wrapper = styled(VStack)`
