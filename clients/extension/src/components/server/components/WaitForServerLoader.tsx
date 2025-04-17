@@ -1,8 +1,7 @@
+import { FancyLoader } from '@lib/ui/loaders/FancyLoader'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { FancyLoader } from '../../../ui/pending/FancyLoader'
 
 export const WaitForServerLoader = () => {
   const { t } = useTranslation()
