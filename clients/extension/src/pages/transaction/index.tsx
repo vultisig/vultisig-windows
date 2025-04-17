@@ -41,6 +41,7 @@ import {
 import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMessageSignature'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -48,6 +49,7 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getOneInchSwapTxInputData } from '@core/chain/swap/general/oneInch/tx/getOneInchSwapTxInputData'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
@@ -79,6 +81,8 @@ import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
+import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
+import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 
 interface FormProps {
   password: string
@@ -333,51 +337,90 @@ const Component = () => {
   }
 
   const handleStartSigning = () => {
-    if (transaction && !fastSign) {
-      api.transaction
-        .setStart(transaction.id, connectedDevices)
-        .then(() => {
-          setStoredTransaction({ ...transaction, status: 'pending' })
-            .then(() => {
-              if (transaction.isCustomMessage) {
-                setState(prevState => ({
-                  ...prevState,
-                  step: 4,
-                }))
-                handleCustomMessagePending()
-              } else {
-                const preSignedInputData = getPreSignedInputData({
-                  chain: transaction.chain.chain,
-                  keysignPayload: keysignPayload!,
-                  walletCore: walletCore!,
-                  ibcTransaction: transaction.transactionDetails.ibcTransaction,
-                })
-                const preSignedImageHashes = getPreSigningHashes({
-                  chain: transaction.chain.chain,
-                  txInputData: preSignedInputData,
-                  walletCore: walletCore!,
-                })
-                const imageHash = hexEncode({
-                  value: preSignedImageHashes[0],
-                  walletCore: walletCore!,
-                })
-                setState(prevState => ({
-                  ...prevState,
-                  step: 4,
-                }))
-                handlePending(imageHash, preSignedInputData)
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
+    if (!transaction || fastSign) {
       handleStep(4)
+      return
     }
+
+    startSigning(transaction, connectedDevices).catch(err => {
+      console.error('Signing failed:', err)
+    })
+  }
+
+  const startSigning = async (
+    transaction: ITransaction,
+    connectedDevices: any
+  ) => {
+    try {
+      await api.transaction.setStart(transaction.id, connectedDevices)
+    } catch (err) {
+      console.error('Failed to set transaction start:', err)
+      messageApi.open({
+        type: 'error',
+        content: t('failed_to_start_keysign'),
+      })
+      return
+    }
+    try {
+      await setStoredTransaction({ ...transaction, status: 'pending' })
+    } catch (err) {
+      console.error('Failed to update stored transaction:', err)
+      return
+    }
+
+    if (transaction.isCustomMessage) {
+      setState(prev => ({ ...prev, step: 4 }))
+      handleCustomMessagePending()
+      return
+    }
+
+    if (!keysignPayload || !walletCore) throw new Error('Missing signing data')
+    try {
+      const inputData = await getTxInputData(keysignPayload)
+      const imageHashes = getPreSigningHashes({
+        chain: transaction.chain.chain,
+        txInputData: inputData,
+        walletCore,
+      })
+      const imageHash = hexEncode({ value: imageHashes[0], walletCore })
+
+      setState(prev => ({ ...prev, step: 4 }))
+      handlePending(imageHash, inputData)
+    } catch (err) {
+      console.error('Unexpected error during signing:', err)
+      messageApi.open({
+        type: 'error',
+        content: t('signing_error'),
+      })
+    }
+  }
+
+  const getTxInputData = async (
+    keysignPayload: KeysignPayload
+  ): Promise<Uint8Array> => {
+    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
+      if (keysignPayload.swapPayload.case !== 'oneinchSwapPayload') {
+        console.warn(
+          `Swap payload type ${keysignPayload.swapPayload.case} not explicitly supported, using fallback`
+        )
+        return getPreSignedInputData({
+          chain: transaction!.chain.chain,
+          keysignPayload,
+          walletCore: walletCore!,
+        })
+      }
+
+      return await getOneInchSwapTxInputData({
+        keysignPayload,
+        walletCore: walletCore!,
+      })
+    }
+
+    return getPreSignedInputData({
+      chain: transaction!.chain.chain,
+      keysignPayload,
+      walletCore: walletCore!,
+    })
   }
 
   const handleStep = (step: number): void => {
@@ -451,7 +494,7 @@ const Component = () => {
     }
   }
 
-  const handleSubmitFastSignPassword = (): void => {
+  const handleSubmitFastSignPassword = async (): Promise<void> => {
     let imageHash = ''
     let preSignedInputData: Uint8Array<ArrayBufferLike>
     if (transaction && vault) {
@@ -463,12 +506,34 @@ const Component = () => {
 
         imageHash = keccak256(messageToHash)
       } else {
-        preSignedInputData = getPreSignedInputData({
-          chain: transaction!.chain.chain,
-          keysignPayload: keysignPayload!,
-          walletCore: walletCore!,
-          ibcTransaction: transaction.transactionDetails.ibcTransaction,
-        })
+        if (!keysignPayload) return
+        if (
+          'swapPayload' in keysignPayload &&
+          keysignPayload.swapPayload.value
+        ) {
+          if (keysignPayload.swapPayload.case !== 'oneinchSwapPayload') {
+            console.warn(
+              `Swap payload type ${keysignPayload.swapPayload.case} not explicitly supported, using fallback`
+            )
+            preSignedInputData = getPreSignedInputData({
+              chain: transaction!.chain.chain,
+              keysignPayload: keysignPayload!,
+              walletCore: walletCore!,
+            })
+          }
+
+          preSignedInputData = await getOneInchSwapTxInputData({
+            keysignPayload,
+            walletCore: walletCore!,
+          })
+        } else {
+          preSignedInputData = getPreSignedInputData({
+            chain: transaction!.chain.chain,
+            keysignPayload: keysignPayload!,
+            walletCore: walletCore!,
+          })
+        }
+
         const preSignedImageHashes = getPreSigningHashes({
           chain: transaction!.chain.chain,
           txInputData: preSignedInputData,
@@ -535,8 +600,31 @@ const Component = () => {
         getStoredCurrency(),
         getStoredTransactions(),
         getStoredVaults(),
-      ]).then(([currency, transactions, vaults]) => {
+      ]).then(async ([currency, transactions, vaults]) => {
+        let parsedSolanaSwap = undefined
         const [transaction] = transactions
+        if ((transaction as any).serializedTx) {
+          try {
+            parsedSolanaSwap = await getParsedSolanaSwap(
+              walletCore,
+              (transaction as any).serializedTx
+            )
+            transaction.transactionDetails = {
+              asset: {
+                chain: Chain.Solana,
+                ticker: parsedSolanaSwap.inputToken.symbol,
+                symbol: parsedSolanaSwap.inputToken.name,
+              },
+              from: parsedSolanaSwap.authority!,
+              amount: {
+                amount: String(parsedSolanaSwap.inAmount),
+                decimals: parsedSolanaSwap.inputToken.decimals,
+              },
+            }
+          } catch (err) {
+            console.error('Failed to parse Solana swap transaction:', err)
+          }
+        }
 
         const vault = vaults.find(({ chains }) =>
           chains.some(
@@ -546,77 +634,92 @@ const Component = () => {
           )
         )
 
-        if (vault) {
-          api.fastVault
-            .assertVaultExist(vault.publicKeyEcdsa)
-            .then(fastSign => {
-              if (transaction.isCustomMessage) {
-                setState(prevState => ({
-                  ...prevState,
-                  currency,
-                  fastSign,
-                  loaded: true,
-                  transaction,
-                  vault,
-                }))
-              } else {
-                getKeysignPayload(transaction, vault).then(keysignPayload => {
-                  transaction.txFee = String(
-                    formatUnits(
-                      getFeeAmount(
-                        keysignPayload.blockchainSpecific as KeysignChainSpecific
-                      ),
-                      transaction.transactionDetails.amount?.decimals
-                    )
-                  )
-
-                  // Parse Memo
-                  transaction.memo = { isParsed: false, value: undefined }
-
-                  if (getChainKind(transaction.chain.chain) == 'evm') {
-                    getParsedMemo(keysignPayload.memo).then(parsedMemo => {
-                      if (parsedMemo) {
-                        setState(prevState => ({
-                          ...prevState,
-                          fastSign,
-                          transaction: {
-                            ...prevState.transaction!,
-                            memo: {
-                              isParsed: true,
-                              value: parsedMemo,
-                            },
-                          },
-                        }))
-                      }
-                    })
-                  }
-
-                  if (!transaction.memo.isParsed) {
-                    try {
-                      transaction.memo.value = toUtf8String(
-                        transaction.transactionDetails.data!
-                      )
-                    } catch {
-                      transaction.memo.value =
-                        transaction.transactionDetails.data
-                    }
-                  }
-
-                  setState(prevState => ({
-                    ...prevState,
-                    currency,
-                    fastSign,
-                    loaded: true,
-                    transaction,
-                    keysignPayload,
-                    vault,
-                  }))
-                })
-              }
-            })
-        } else {
+        if (!vault) {
           setState(prevState => ({
             ...prevState,
+            hasError: true,
+            errorTitle: t('get_vault_failed'),
+            errorDescription: t('get_vault_failed_description'),
+          }))
+          return
+        }
+
+        try {
+          const fastSign = await api.fastVault.assertVaultExist(
+            vault.publicKeyEcdsa
+          )
+
+          if (transaction.isCustomMessage) {
+            setState(prev => ({
+              ...prev,
+              currency,
+              fastSign,
+              loaded: true,
+              transaction,
+              vault,
+            }))
+            return
+          }
+
+          let keysignPayload
+
+          if ((transaction as any).serializedTx && parsedSolanaSwap) {
+            keysignPayload = await getSolanaSwapKeysignPayload(
+              parsedSolanaSwap,
+              transaction,
+              vault
+            )
+          } else if ((transaction as any).serializedTx) {
+            console.error('Failed to parse Solana swap transaction')
+            throw new Error('Failed to parse Solana swap transaction')
+          } else {
+            keysignPayload = await getKeysignPayload(transaction, vault)
+
+            transaction.txFee = String(
+              formatUnits(
+                getFeeAmount(
+                  keysignPayload.blockchainSpecific as KeysignChainSpecific
+                ),
+                transaction.transactionDetails.amount?.decimals
+              )
+            )
+
+            transaction.memo = { isParsed: false, value: undefined }
+
+            if (getChainKind(transaction.chain.chain) === 'evm') {
+              const parsedMemo = await getParsedMemo(keysignPayload.memo)
+              if (parsedMemo) {
+                transaction.memo = {
+                  isParsed: true,
+                  value: parsedMemo,
+                }
+              }
+            }
+
+            if (!transaction.memo.isParsed) {
+              try {
+                transaction.memo.value = toUtf8String(
+                  transaction.transactionDetails.data!
+                )
+              } catch {
+                transaction.memo.value = transaction.transactionDetails.data
+              }
+            }
+          }
+
+          setState(prev => ({
+            ...prev,
+            currency,
+            fastSign,
+            loaded: true,
+            transaction,
+            keysignPayload,
+            vault,
+          }))
+        } catch (err) {
+          console.error('Vault or keysign error:', err)
+          setState(prev => ({
+            ...prev,
             hasError: true,
             errorTitle: t('get_vault_failed'),
             errorDescription: t('get_vault_failed_description'),

@@ -1,5 +1,7 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { lifiSwapEnabledChains } from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
+import { oneInchSwapEnabledChains } from '@core/chain/swap/general/oneInch/OneInchSwapEnabledChains'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
@@ -7,9 +9,7 @@ import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
 import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote'
-import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains'
 import { getOneInchSwapQuote } from '../general/oneInch/api/getOneInchSwapQuote'
-import { oneInchSwapEnabledChains } from '../general/oneInch/OneInchSwapEnabledChains'
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
 import {
   nativeSwapChains,
