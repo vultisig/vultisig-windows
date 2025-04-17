@@ -24,17 +24,13 @@ import { UpdateVaultProvider } from './vault/state/updateVault'
 const queryClient = getQueryClient()
 
 const saveFile: SaveFileFunction = async ({ name, blob }) => {
-  // Convert Blob to ArrayBuffer then to base64 for binary safety
   const arrayBuffer = await blob.arrayBuffer()
-  const uint8Array = new Uint8Array(arrayBuffer)
-
-  // Convert to base64 for safe transfer to Go
-  let binary = ''
-  for (let i = 0; i < uint8Array.length; i++) {
-    binary += String.fromCharCode(uint8Array[i])
-  }
-  const base64Data = btoa(binary)
-
+  const base64Data = btoa(
+    new Uint8Array(arrayBuffer).reduce(
+      (data, byte) => data + String.fromCharCode(byte),
+      ''
+    )
+  )
   await SaveFile(name, base64Data)
 }
 
