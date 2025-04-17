@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -128,58 +127,6 @@ func (s *Store) SaveVault(vault *Vault) error {
 			return fmt.Errorf("could not save coin, err: %w", err)
 		}
 	}
-	return nil
-}
-
-// VaultUpdateParams defines the parameters that can be updated for a vault
-type VaultUpdateParams struct {
-	Name       *string  `json:"name,omitempty"`
-	Order      *float64 `json:"order,omitempty"`
-	FolderID   *string  `json:"folderId,omitempty"`
-	IsBackedUp *bool    `json:"isBackedUp,omitempty"`
-}
-
-// UpdateVault updates vault properties based on provided parameters
-func (s *Store) UpdateVault(publicKeyECDSA string, params VaultUpdateParams) error {
-	// Build query dynamically based on which fields are provided
-	queryParts := []string{}
-	args := []interface{}{}
-
-	if params.Name != nil {
-		queryParts = append(queryParts, "name = ?")
-		args = append(args, *params.Name)
-	}
-
-	if params.Order != nil {
-		queryParts = append(queryParts, `"order" = ?`)
-		args = append(args, *params.Order)
-	}
-
-	if params.FolderID != nil {
-		queryParts = append(queryParts, "folder_id = ?")
-		args = append(args, params.FolderID)
-	}
-
-	if params.IsBackedUp != nil {
-		queryParts = append(queryParts, "is_backedup = ?")
-		args = append(args, *params.IsBackedUp)
-	}
-
-	// If no fields to update, return early
-	if len(queryParts) == 0 {
-		return nil
-	}
-
-	// Build the final query
-	query := fmt.Sprintf("UPDATE vaults SET %s WHERE public_key_ecdsa = ?", strings.Join(queryParts, ", "))
-	args = append(args, publicKeyECDSA)
-
-	// Execute the query
-	_, err := s.db.Exec(query, args...)
-	if err != nil {
-		return fmt.Errorf("could not update vault, err: %w", err)
-	}
-
 	return nil
 }
 

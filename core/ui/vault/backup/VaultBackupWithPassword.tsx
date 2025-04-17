@@ -1,25 +1,63 @@
-import { PageSlice } from '@clients/desktop/src/ui/page/PageSlice'
-import { useBackupVaultMutation } from '@clients/desktop/src/vault/mutations/useBackupVaultMutation'
-import {
-  ActionsWrapper,
-  IconButton,
-  InfoPill,
-  InputField,
-  InputFieldWrapper,
-} from '@clients/desktop/src/vault/setup/shared/vaultBackupSettings/VaultBackupPage.styles'
+import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import InfoGradientIcon from '@lib/ui/icons/InfoGradientIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageSlice } from '@lib/ui/page/PageSlice'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { TFunction } from 'i18next'
 import { useMemo, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 import { z } from 'zod'
+
+const InputFieldWrapper = styled.div`
+  position: relative;
+  background-color: ${getColor('foreground')};
+  ${borderRadius.m};
+`
+
+const InputField = styled.input`
+  padding: 12px;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+  color: ${getColor('text')};
+
+  &::placeholder {
+    font-size: 13px;
+    color: ${getColor('textShy')};
+  }
+
+  &:focus {
+    outline: none;
+  }
+`
+
+const IconButton = styled(UnstyledButton)`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+`
+
+const ActionsWrapper = styled(VStack)`
+  margin-bottom: 32px;
+`
+
+const InfoPill = styled(Button)`
+  pointer-events: none;
+  justify-content: flex-start;
+  gap: 4px;
+  height: 40px;
+`
 
 const createVaultBackupSchema = (t: TFunction) =>
   z

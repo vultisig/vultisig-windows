@@ -1,4 +1,5 @@
 import { vaultsQueryKey } from '@core/ui/query/keys'
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -7,16 +8,15 @@ import { Entry } from '@lib/utils/entities/Entry'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
 
-import {
-  DeleteVaultFolder,
-  UpdateVault,
-} from '../../../../wailsjs/go/storage/Store'
+import { DeleteVaultFolder } from '../../../../wailsjs/go/storage/Store'
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 export const useDeleteVaultFolderMutation = () => {
   const invalidateQueries = useInvalidateQueries()
 
   const vaults = useVaults()
+
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   return useMutation({
     mutationFn: async (folderId: string) => {
@@ -39,7 +39,12 @@ export const useDeleteVaultFolderMutation = () => {
         })
 
         await Promise.all(
-          entries.map(({ key, value }) => UpdateVault(key, { order: value }))
+          entries.map(({ key, value }) =>
+            updateVault({
+              vaultId: key,
+              fields: { order: value },
+            })
+          )
         )
       }
     },

@@ -16,11 +16,12 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
 import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
+import { UpdateVaultProvider } from '../vault/state/updateVault'
 
 const openUrl = (url: string) => window.open(url, '_blank')
 
-const saveFile: SaveFileFunction = async input => {
-  initiateFileDownload(input)
+const saveFile: SaveFileFunction = async ({ name, blob }) => {
+  initiateFileDownload({ name, blob })
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -36,10 +37,12 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <WalletCoreProvider>
                       <SetCurrentVaultIdProvider>
                         <CreateVaultProvider>
-                          <AntDesignThemeProvider>
-                            {children}
-                            <GlobalStyle />
-                          </AntDesignThemeProvider>
+                          <UpdateVaultProvider>
+                            <AntDesignThemeProvider>
+                              {children}
+                              <GlobalStyle />
+                            </AntDesignThemeProvider>
+                          </UpdateVaultProvider>
                         </CreateVaultProvider>
                       </SetCurrentVaultIdProvider>
                     </WalletCoreProvider>

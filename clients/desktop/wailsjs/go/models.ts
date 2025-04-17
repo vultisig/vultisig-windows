@@ -137,24 +137,6 @@ export namespace storage {
 	        this.order = source["order"];
 	    }
 	}
-	export class VaultUpdateParams {
-	    name?: string;
-	    order?: number;
-	    folderId?: string;
-	    isBackedUp?: boolean;
-	
-	    static createFrom(source: any = {}) {
-	        return new VaultUpdateParams(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.name = source["name"];
-	        this.order = source["order"];
-	        this.folderId = source["folderId"];
-	        this.isBackedUp = source["isBackedUp"];
-	    }
-	}
 
 }
 

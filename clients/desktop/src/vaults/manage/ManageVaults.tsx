@@ -1,3 +1,4 @@
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -11,7 +12,6 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../lib/ui/list/item/DnDItemContainer'
-import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation'
 import { VaultListItem } from '../components/VaultListItem'
 import { VaultsContainer } from '../components/VaultsContainer'
 
@@ -24,7 +24,7 @@ export const ManageVaults = () => {
     setItems(sortEntitiesWithOrder(vaults))
   }, [vaults])
 
-  const { mutate } = useUpdateVaultOrderMutation()
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   if (isEmpty(items)) return null
 
@@ -39,9 +39,9 @@ export const ManageVaults = () => {
           destinationIndex: index,
         })
 
-        mutate({
-          id,
-          order,
+        updateVault({
+          vaultId: id,
+          fields: { order },
         })
 
         setItems(prev =>

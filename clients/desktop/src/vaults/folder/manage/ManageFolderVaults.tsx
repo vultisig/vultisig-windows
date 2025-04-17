@@ -1,3 +1,4 @@
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -14,7 +15,6 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer'
-import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation'
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
@@ -25,7 +25,7 @@ export const ManageFolderVaults = () => {
   const vaults = useFolderVaults(id)
   const [items, setItems] = useState(() => sortEntitiesWithOrder(vaults))
   const { mutate: remove } = useRemoveVaultFromFolderMutation()
-  const { mutate: updateOrder } = useUpdateVaultOrderMutation()
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   useEffect(() => {
     setItems(sortEntitiesWithOrder(vaults))
@@ -38,9 +38,9 @@ export const ManageFolderVaults = () => {
       destinationIndex: index,
     })
 
-    updateOrder({
-      id,
-      order,
+    updateVault({
+      vaultId: id,
+      fields: { order },
     })
 
     setItems(prev =>

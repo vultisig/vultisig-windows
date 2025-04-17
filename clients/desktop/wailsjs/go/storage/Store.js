@@ -78,10 +78,6 @@ export function UpdateAddressBookItem(arg1) {
   return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
 }
 
-export function UpdateVault(arg1, arg2) {
-  return window['go']['storage']['Store']['UpdateVault'](arg1, arg2);
-}
-
 export function UpdateVaultFolder(arg1) {
   return window['go']['storage']['Store']['UpdateVaultFolder'](arg1);
 }

@@ -40,8 +40,6 @@ export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
 
 export function UpdateAddressBookItem(arg1:storage.AddressBookItem):Promise<void>;
 
-export function UpdateVault(arg1:string,arg2:storage.VaultUpdateParams):Promise<void>;
-
 export function UpdateVaultFolder(arg1:storage.VaultFolder):Promise<void>;
 
 export function UpdateVaultFolderName(arg1:string,arg2:string):Promise<void>;
