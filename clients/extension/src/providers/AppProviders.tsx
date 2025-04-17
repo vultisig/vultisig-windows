@@ -17,6 +17,7 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
+import { RemoteStateDependant } from './VaultsProvider'
 
 const openUrl = (url: string) => window.open(url, '_blank')
 
@@ -39,7 +40,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <CreateVaultProvider>
                           <UpdateVaultProvider>
                             <AntDesignThemeProvider>
-                              {children}
+                              <RemoteStateDependant>
+                                {children}
+                              </RemoteStateDependant>
                               <GlobalStyle />
                             </AntDesignThemeProvider>
                           </UpdateVaultProvider>

@@ -65,7 +65,12 @@ export const SetServerPasswordStep = ({
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
       />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
+      <PageContent
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        justifyContent="space-between"
+        flexGrow
+      >
         <VStack flexGrow gap={16}>
           <VStack gap={8}>
             <Text variant="h1Regular">{t('vultiserver_password')}</Text>

@@ -1,14 +1,21 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useVaults } from '../../../vault/state/vaults'
 
 const Layout = () => {
   const vaults = useVaults()
   const navigate = useAppNavigate()
 
+  useEffect(() => {
+    if (!vaults.length) {
+      navigate('landing', { replace: true })
+    }
+  }, [vaults, navigate])
+
   if (!vaults.length) {
-    navigate('landing', { replace: true })
+    return null
   }
 
   return <Outlet />

@@ -1,9 +1,9 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 
 import { usePersistentStateMutation } from '../../state/persistent/usePersistentStateMutation'
 import { usePersistentStateQuery } from '../../state/persistent/usePersistentStateQuery'
-import { useVaults } from './vaults'
 
 const key = 'currentVaultId'
 

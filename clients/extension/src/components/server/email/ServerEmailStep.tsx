@@ -62,7 +62,12 @@ export const ServerEmailStep = ({
   return (
     <>
       <PageHeader primaryControls={<PageHeaderBackButton onClick={onBack} />} />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
+      <PageContent
+        flexGrow
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        justifyContent="space-between"
+      >
         <VStack flexGrow gap={16}>
           <VStack>
             <Text variant="h1Regular">{t('fastVaultSetup.enterEmail')}</Text>

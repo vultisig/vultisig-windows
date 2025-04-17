@@ -6,6 +6,7 @@ import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
@@ -38,39 +39,45 @@ export const SetupFastVaultPage = () => {
           <PasswordHintProvider initialValue="">
             <CreateVaultFlowProviders>
               <CreateVaultKeygenActionProvider>
-                <Match
-                  value={step}
-                  name={() => <CreateVaultNameStep onFinish={toNextStep} />}
-                  email={() => (
-                    <ServerEmailStep
-                      onBack={toPreviousStep}
-                      onFinish={toNextStep}
-                    />
-                  )}
-                  password={() => (
-                    <SetServerPasswordStep
-                      onBack={toPreviousStep}
-                      onFinish={toNextStep}
-                    />
-                  )}
-                  hint={() => (
-                    <ServerPasswordHintStep
-                      onBack={toPreviousStep}
-                      onFinish={toNextStep}
-                    />
-                  )}
-                  setupForCreateVault={() => (
-                    <SetupVaultServerStep
-                      onBack={() => setStep(lastEditableStep)}
-                      onFinish={toNextStep}
-                    />
-                  )}
-                  createVault={() => (
-                    <></>
-                    // TODO: to be done when Radzion migrates KeygenFlow to core package
-                    // <KeygenFlow onBack={() => setStep(lastEditableStep)} />
-                  )}
-                />
+                <VStack
+                  style={{
+                    minHeight: '100%',
+                  }}
+                >
+                  <Match
+                    value={step}
+                    name={() => <CreateVaultNameStep onFinish={toNextStep} />}
+                    email={() => (
+                      <ServerEmailStep
+                        onBack={toPreviousStep}
+                        onFinish={toNextStep}
+                      />
+                    )}
+                    password={() => (
+                      <SetServerPasswordStep
+                        onBack={toPreviousStep}
+                        onFinish={toNextStep}
+                      />
+                    )}
+                    hint={() => (
+                      <ServerPasswordHintStep
+                        onBack={toPreviousStep}
+                        onFinish={toNextStep}
+                      />
+                    )}
+                    setupForCreateVault={() => (
+                      <SetupVaultServerStep
+                        onBack={() => setStep(lastEditableStep)}
+                        onFinish={toNextStep}
+                      />
+                    )}
+                    createVault={() => (
+                      <></>
+                      // TODO: to be done when Radzion migrates KeygenFlow to core package
+                      // <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+                    )}
+                  />
+                </VStack>
               </CreateVaultKeygenActionProvider>
             </CreateVaultFlowProviders>
           </PasswordHintProvider>
