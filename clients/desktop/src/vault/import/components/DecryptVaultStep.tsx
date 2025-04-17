@@ -1,10 +1,9 @@
+import { decryptDatBackup } from '@core/ui/vault/import/utils/decryptDatBackup'
+import { fromDatBackupString } from '@core/ui/vault/import/utils/fromDatBackupString'
 import { Vault } from '@core/ui/vault/Vault'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
+import { DecryptVaultView } from '@lib/ui/vault/import/components/DecryptVaultView'
 import { useMutation } from '@tanstack/react-query'
-
-import { decryptDatBackup } from '../utils/decryptDatBackup'
-import { fromDatBackupString } from '../utils/fromDatBackupString'
-import { DecryptVaultView } from './DecryptVaultView'
 
 export const DecryptVaultStep = ({
   value,

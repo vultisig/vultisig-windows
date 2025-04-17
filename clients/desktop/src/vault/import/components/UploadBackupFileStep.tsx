@@ -1,3 +1,7 @@
+import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
+import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
+import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
+import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -10,11 +14,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile'
-import { FileBasedVaultBackupResult } from '../VaultBakupResult'
-import { BackupFileDropzone } from './BackupFileDropzone'
-import { UploadedBackupFile } from './UploadedBackupFile'
 
 export const UploadBackupFileStep = ({
   onFinish,

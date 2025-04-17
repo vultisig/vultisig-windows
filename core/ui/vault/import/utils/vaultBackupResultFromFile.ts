@@ -1,9 +1,8 @@
+import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
+import { vaultBackupResultFromFileContent } from '@core/ui/vault/import/utils/vaultBackupResultFromString'
+import { getVaultBackupExtension } from '@core/ui/vault/import/VaultBackupExtension'
+import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { readFileAsArrayBuffer } from '@lib/utils/file/readFileAsArrayBuffer'
-
-import { getVaultBackupExtension } from '../VaultBackupExtension'
-import { FileBasedVaultBackupResult } from '../VaultBakupResult'
-import { isLikelyToBeDklsVaultBackup } from './isLikelyToBeDklsVaultBackup'
-import { vaultBackupResultFromFileContent } from './vaultBackupResultFromString'
 
 export const vaultBackupResultFromFile = async (
   file: File

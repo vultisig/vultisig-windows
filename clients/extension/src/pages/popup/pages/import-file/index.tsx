@@ -1,8 +1,4 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { BackupFileDropzone } from '@clients/desktop/src/vault/import/components/BackupFileDropzone'
-import { UploadedBackupFile } from '@clients/desktop/src/vault/import/components/UploadedBackupFile'
-import { vaultBackupResultFromFile } from '@clients/desktop/src/vault/import/utils/vaultBackupResultFromFile'
-import { FileBasedVaultBackupResult } from '@clients/desktop/src/vault/import/VaultBakupResult'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
@@ -21,6 +17,12 @@ import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
+import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
+import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
+import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
+import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
+import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -38,6 +40,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface InitialState {
+  file?: File
+  vaultContainer?: VaultContainer
+  isEncrypted?: boolean
   isWindows: boolean
   loading?: boolean
   status: 'default' | 'error' | 'success'
@@ -50,22 +55,30 @@ const Component = () => {
     isWindows: true,
     status: 'default',
   }
-  const [file, setFile] = useState<File | null>(null)
   const [state, setState] = useState(initialState)
-  const { isWindows, loading, status, vault } = state
+  const { isWindows, loading, vault, file, vaultContainer, isEncrypted } = state
 
   const navigate = useAppNavigate()
   const walletCore = useAssertWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
-  const handleProcessVaultContainer = (data: FileBasedVaultBackupResult) => {
-    const handler = {
-      vaultContainer: (vaultContainer: VaultContainer) => {
-        const { vault: vaultAsBase64String, isEncrypted } = vaultContainer
-        if (isEncrypted) {
-          console.error('encrypted vault not supported')
-        }
+  const errorMessages = {
+    [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
+    [errorKey.INVALID_FILE]: 'Invalid file',
+    [errorKey.INVALID_QRCODE]: 'Invalid QR code',
+    [errorKey.INVALID_VAULT]: 'Invalid vault data',
+  }
 
+  const handleProcessVaultContainer = (data: FileBasedVaultBackupResult) => {
+    if ('vaultContainer' in data.result) {
+      const container = data.result.vaultContainer
+      const { vault: vaultAsBase64String, isEncrypted } = container
+      setState(prevState => ({
+        ...prevState,
+        vaultContainer: container,
+        isEncrypted,
+      }))
+      if (!isEncrypted) {
         const decodedVault = pipe(
           vaultAsBase64String,
           fromBase64,
@@ -73,44 +86,11 @@ const Component = () => {
           v => fromBinary(VaultSchema, v),
           fromCommVault
         )
-
-        if (decodedVault.hexChainCode) {
-          const uid = createHash('sha256')
-            .update(
-              [
-                decodedVault.name,
-                decodedVault.publicKeys.ecdsa,
-                decodedVault.publicKeys.eddsa,
-                decodedVault.hexChainCode,
-              ].join('-')
-            )
-            .digest('hex')
-
-          setState(prevState => ({
-            ...prevState,
-            vault: {
-              hexChainCode: decodedVault.hexChainCode,
-              name: decodedVault.name,
-              publicKeyEcdsa: decodedVault.publicKeys.ecdsa,
-              publicKeyEddsa: decodedVault.publicKeys.eddsa,
-              uid,
-              apps: [],
-              chains: [],
-              transactions: [],
-            },
-            status: 'success',
-          }))
-          handleStart()
-        } else {
-          handleError(errorKey.INVALID_VAULT)
-        }
-      },
+        onVaultDecrypted(decodedVault)
+      }
+    } else {
+      handleError(errorKey.INVALID_VAULT)
     }
-
-    const key = Object.keys(data.result)[0] as keyof typeof handler
-    const value = (data.result as any)[key]
-
-    handler[key](value)
   }
 
   const { mutate, error } = useMutation({
@@ -118,22 +98,18 @@ const Component = () => {
     onSuccess: handleProcessVaultContainer,
   })
 
-  const handleStart = (): void => {
-    if (!loading && vault && status === 'success') {
+  const finalizeVaultImport = (): void => {
+    if (!loading && vaultContainer && vault) {
       getStoredVaults().then(vaults => {
         const existed = vaults.findIndex(({ uid }) => uid === vault.uid) >= 0
-
         setState(prevState => ({ ...prevState, loading: true }))
-
         if (existed) {
           const modifiedVaults = vaults.map(item => ({
             ...item,
             active: item.uid === vault.uid,
           }))
-
           setStoredVaults(modifiedVaults).then(() => {
             setState(prevState => ({ ...prevState, loading: false }))
-
             handleFinish()
           })
         } else {
@@ -141,7 +117,6 @@ const Component = () => {
           const promises = Object.keys(supportedChains)
             .filter(key => isSupportedChain(key as Chain))
             .map(key => addressProvider.getAddress(key as Chain, vault))
-
           Promise.all(promises)
             .then(props => {
               vault.chains = Object.keys(supportedChains)
@@ -150,17 +125,14 @@ const Component = () => {
                   ...chainFeeCoin[chainKey as Chain],
                   ...props[index],
                 }))
-
               const modifiedVaults = [
                 { ...vault, active: true },
                 ...vaults
                   .filter(({ uid }) => uid !== vault.uid)
                   .map(vault => ({ ...vault, active: false })),
               ]
-
               setStoredVaults(modifiedVaults).then(() => {
                 setState(prevState => ({ ...prevState, loading: false }))
-
                 handleFinish()
               })
             })
@@ -177,85 +149,104 @@ const Component = () => {
     }
   }
 
+  const onVaultDecrypted = (decodedVault: Vault) => {
+    if (decodedVault.hexChainCode) {
+      const uid = createHash('sha256')
+        .update(
+          [
+            decodedVault.name,
+            decodedVault.publicKeys.ecdsa,
+            decodedVault.publicKeys.eddsa,
+            decodedVault.hexChainCode,
+          ].join('-')
+        )
+        .digest('hex')
+
+      setState(prevState => ({
+        ...prevState,
+        vault: {
+          hexChainCode: decodedVault.hexChainCode,
+          name: decodedVault.name,
+          publicKeyEcdsa: decodedVault.publicKeys.ecdsa,
+          publicKeyEddsa: decodedVault.publicKeys.eddsa,
+          uid,
+          apps: [],
+          chains: [],
+          transactions: [],
+        },
+        status: 'success',
+      }))
+      finalizeVaultImport()
+    } else {
+      handleError(errorKey.INVALID_VAULT)
+    }
+  }
+
   const handleFinish = (): void => {
     if (isPopup) window.close()
     else navigate('main')
   }
 
   const handleError = (error: string) => {
-    setState(prevState => ({ ...prevState, status: 'error' }))
+    const message =
+      errorMessages[error as keyof typeof errorMessages] ||
+      'Something went wrong'
+    console.error(message)
+    setState(prev => ({
+      ...prev,
+      status: 'error',
+      error: message,
+    }))
+  }
 
-    switch (error) {
-      case errorKey.INVALID_EXTENSION:
-        console.error('Invalid file extension')
-        setState(prevState => ({
-          ...prevState,
-          error: 'Invalid file extension',
-        }))
-        break
-      case errorKey.INVALID_FILE:
-        console.error('Invalid file')
-        setState(prevState => ({
-          ...prevState,
-          error: 'Invalid file',
-        }))
-        break
-      case errorKey.INVALID_QRCODE:
-        console.error('Invalid qr code')
-        setState(prevState => ({
-          ...prevState,
-          error: 'Invalid qr code',
-        }))
-        break
-      case errorKey.INVALID_VAULT:
-        console.error('Invalid vault data')
-        setState(prevState => ({
-          ...prevState,
-          error: 'Invalid vault data',
-        }))
-        break
-      default:
-        console.error('Someting is wrong')
-        setState(prevState => ({
-          ...prevState,
-          error: 'Someting is wrong',
-        }))
-        break
-    }
+  const onFileSelected = (file: File) => {
+    setState(prevState => ({ ...prevState, file }))
+    mutate(shouldBePresent(file))
   }
 
   const isDisabled = !file
   return isWindows ? (
-    <>
-      <StyledPageContent fullHeight>
-        <FlowPageHeader title={t('import_vault')} />
-        <PageContent
-          as="form"
-          {...getFormProps({
-            onSubmit: () => {
-              mutate(shouldBePresent(file))
-            },
-            isDisabled,
-          })}
-        >
-          <VStack gap={20} flexGrow>
-            {file ? (
-              <UploadedBackupFile value={file} />
-            ) : (
-              <BackupFileDropzone onFinish={setFile} />
-            )}
-            {error && (
-              <Text centerHorizontally color="danger">
-                {extractErrorMsg(error)}
-              </Text>
-            )}
-          </VStack>
-          <Button isLoading={loading} isDisabled={isDisabled} type="submit">
-            {t('continue')}
-          </Button>
-        </PageContent>
-      </StyledPageContent>
-    </>
+    !isEncrypted ? (
+      <>
+        <StyledPageContent fullHeight>
+          <FlowPageHeader title={t('import_vault')} />
+          <PageContent
+            as="form"
+            {...getFormProps({
+              onSubmit: () => {
+                if (file && !error) {
+                  finalizeVaultImport()
+                }
+              },
+              isDisabled,
+            })}
+          >
+            <VStack gap={20} flexGrow>
+              {file ? (
+                <UploadedBackupFile value={file} />
+              ) : (
+                <BackupFileDropzone onFinish={onFileSelected} />
+              )}
+              {error && (
+                <Text centerHorizontally color="danger">
+                  {extractErrorMsg(error)}
+                </Text>
+              )}
+            </VStack>
+            <Button isLoading={loading} isDisabled={isDisabled} type="submit">
+              {t('continue')}
+            </Button>
+          </PageContent>
+        </StyledPageContent>
+      </>
+    ) : (
+      <>
+        <DecryptVaultContainerStep
+          value={vaultContainer!.vault}
+          onFinish={onVaultDecrypted}
+        />
+      </>
+    )
   ) : (
     <div className="layout import-page">
       <div className="content">

@@ -2,13 +2,13 @@ import { fromBinary } from '@bufbuild/protobuf'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
 import { Vault } from '@core/ui/vault/Vault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ValueProp } from '@lib/ui/props'
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 
-import { DecryptVaultContainerStep } from './DecryptVaultContainerStep'
 import { SaveImportedVaultStep } from './SaveImportedVaultStep'
 
 export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
