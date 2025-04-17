@@ -1,17 +1,45 @@
 import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import {
-  IconWrapper,
-  Loader,
-  ProgressBarWrapper,
-  StyledProgressLine,
-  Wrapper,
-} from './SlidesLoader.styled'
+const Wrapper = styled(VStack)`
+  overflow-y: hidden;
+  position: relative;
+  ${borderRadius.m};
+  border: 1px solid ${getColor('foregroundExtra')};
+  padding: 28px 36px;
+  background-color: ${getColor('foreground')};
+  gap: 24px;
+  width: 100%;
+`
+
+const Loader = styled(Spinner)`
+  font-size: 20px;
+`
+
+const ProgressBarWrapper = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`
+
+const StyledProgressLine = styled(ProgressLine)`
+  height: 4px;
+`
+
+const IconWrapper = styled(VStack)`
+  color: ${getColor('primary')};
+`
 
 const pendingCompletion = 0.25
 
@@ -21,7 +49,9 @@ const completion: Record<KeygenStep, number> = {
   eddsa: 0.9,
 }
 
-export const SlidesLoader = ({ value }: ValueProp<KeygenStep | null>) => {
+export const KeygenProgressIndicator = ({
+  value,
+}: ValueProp<KeygenStep | null>) => {
   const { t } = useTranslation()
 
   const texts: Record<KeygenStep, string> = {

@@ -1,5 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { vaultsQueryKey } from '@core/ui/query/keys'
 import { Vault } from '@core/ui/vault/Vault'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useQuery } from '@tanstack/react-query'
@@ -7,8 +8,6 @@ import { useQuery } from '@tanstack/react-query'
 import { GetVaults } from '../../../wailsjs/go/storage/Store'
 import { fromStorageCoin } from '../../storage/storageCoin'
 import { fromStorageVault } from '../utils/storageVault'
-
-export const vaultsQueryKey = ['vaults']
 
 const vaultsQueryFn = async (): Promise<
   (Vault & { coins: AccountCoin[] })[]

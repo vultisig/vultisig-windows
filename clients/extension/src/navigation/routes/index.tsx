@@ -14,6 +14,7 @@ import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
+import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
 const routes = [
@@ -34,6 +35,14 @@ const routes = [
     element: <SetupVaultPageController />,
   },
   {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
+  },
+  {
     path: appPaths.root,
     element: <Layout />,
     children: [
@@ -41,17 +50,14 @@ const routes = [
         index: true,
         element: <MainPage />,
       },
-      {
-        path: appPaths.onboarding,
-        element: (
-          <IncompleteOnboardingOnly>
-            <OnboardingPage />
-          </IncompleteOnboardingOnly>
-        ),
-      },
 
       {
         path: appPaths.vaults,
+        element: <VaultsPage />,
+      },
+      {
+        path: corePaths.vault,
+        // Temporarily use the same page for both the vaults and the vault page until it aligns with the desktop app.
         element: <VaultsPage />,
       },
       {

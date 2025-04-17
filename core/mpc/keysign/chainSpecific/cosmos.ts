@@ -4,7 +4,6 @@ import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmo
 import {
   CosmosSpecific,
   CosmosSpecificSchema,
-  TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
@@ -27,6 +26,7 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
 
 export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   coin,
+  transactionType,
 }) => {
   const chain = coin.chain as CosmosSpecificChain
   const { accountNumber, sequence } = await getCosmosAccountInfo({
@@ -40,6 +40,6 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
     gas,
-    transactionType: TransactionType.UNSPECIFIED,
+    transactionType,
   })
 }

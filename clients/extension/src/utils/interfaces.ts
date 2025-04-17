@@ -4,6 +4,7 @@ import { Currency } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
+import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
@@ -161,6 +162,7 @@ export interface TransactionDetails {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
+  ibcTransaction?: IMsgTransfer
 }
 
 export interface ITransaction {

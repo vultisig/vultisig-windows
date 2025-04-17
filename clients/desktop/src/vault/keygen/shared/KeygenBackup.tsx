@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { Vault } from '@core/ui/vault/Vault'
 import { Opener } from '@lib/ui/base/Opener'
@@ -12,12 +13,11 @@ import styled from 'styled-components'
 
 import KeygenVaultBackupBanner from '../../../components/vaultBackupBanner/KeygenVaultBackupBanner/KeygenVaultBackupBanner'
 import { makeAppPath } from '../../../navigation'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentionModal'
 
 export const KeygenBackup = ({ vault }: { vault: Vault }) => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const isFastVault = vault.signers.some(signer => signer.startsWith('Server-'))
 
   return (

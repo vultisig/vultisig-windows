@@ -1,4 +1,7 @@
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
+import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
+import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -6,14 +9,10 @@ import { OnBackProp, TitleProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'
-import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
-import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { KeygenFailedState } from '../shared/KeygenFailedState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
-import { KeygenPendingState } from '../shared/KeygenPendingState'
 import { KeygenSuccessStep } from '../shared/KeygenSuccessStep'
 
 export const JoinKeygenProcess = ({
@@ -25,7 +24,7 @@ export const JoinKeygenProcess = ({
 
   useEffect(joinKeygen, [joinKeygen])
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <MatchQuery
@@ -37,7 +36,7 @@ export const JoinKeygenProcess = ({
             create={() => (
               <StepTransition
                 from={({ onFinish }) => (
-                  <SetupVaultSuccessScreen onFinish={onFinish} />
+                  <KeygenSuccessScreen onFinish={onFinish} />
                 )}
                 to={() => (
                   <BackupSecureVault onFinish={() => navigate('vault')} />
@@ -65,17 +64,10 @@ export const JoinKeygenProcess = ({
         </>
       )}
       pending={() => (
-        <Match
-          value={keygenType}
-          create={() => <SetupVaultEducationSlides value={step} />}
-          migrate={() => <SetupVaultEducationSlides value={step} />}
-          reshare={() => (
-            <>
-              <KeygenPageHeader title={title} />
-              <KeygenPendingState value={step} />
-            </>
-          )}
-        />
+        <>
+          <KeygenPageHeader title={title} />
+          <KeygenPendingState value={step} />
+        </>
       )}
     />
   )
