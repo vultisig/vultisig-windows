@@ -26,10 +26,11 @@ import { UploadedQr } from '@lib/ui/qr/upload/UploadedQr'
 import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { readBarcodes, ReaderOptions } from 'zxing-wasm'
 import { UAParser } from 'ua-parser-js'
+import { readBarcodes, ReaderOptions } from 'zxing-wasm'
+
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 interface InitialState {
   file?: File
@@ -52,7 +53,7 @@ const Component = () => {
   const navigate = useAppNavigate()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
-
+  const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {
     if (isPopup) window.close()
     else navigate('main')
@@ -224,12 +225,16 @@ const Component = () => {
     return false
   }
 
+  const navigateToMain = useCallback(() => {
+    navigate('main')
+  }, [navigate])
+
   useEffect(() => {
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
-    if (!isPopup && parserResult.os.name !== 'Windows') {
-      setState({ ...state, isWindows: false })
+    if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
+      setState(prevState => ({ ...prevState, isWindows: false }))
 
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
         let createdWindowId: number
@@ -255,13 +260,16 @@ const Component = () => {
             getStoredVaults().then(vaults => {
               const active = vaults.find(({ active }) => active)
 
-              if (active) handleFinish()
+              if (active) {
+                if (isPopupRef) window.close()
+                else navigateToMain()
+              }
             })
           }
         })
       })
     }
-  }, [])
+  }, [navigateToMain])
 
   const [{ title = t('keysign') }] = useAppPathParams<'importQR'>()
   return isWindows ? (

@@ -36,9 +36,10 @@ import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
 import { createHash } from 'crypto'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
+
 import { calculateWindowPosition } from '../../../../utils/functions'
 
 interface InitialState {
@@ -64,6 +65,7 @@ const Component = () => {
   const navigate = useAppNavigate()
   const walletCore = useAssertWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
+  const isPopupRef = useRef(isPopup)
 
   const errorMessages = {
     [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
@@ -179,6 +181,7 @@ const Component = () => {
         },
         status: 'success',
       }))
+      finalizeVaultImport()
     } else {
       handleError(errorKey.INVALID_VAULT)
     }
@@ -206,17 +209,16 @@ const Component = () => {
     mutate(shouldBePresent(file))
   }
 
-  useEffect(() => {
-    finalizeVaultImport()
-  }, [vault, vaultContainer])
+  const navigateToMain = useCallback(() => {
+    navigate('main')
+  }, [navigate])
 
   useEffect(() => {
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
-    if (!isPopup && parserResult.os.name !== 'Windows') {
-      setState({ ...state, isWindows: false })
-
+    if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
+      setState(prevState => ({ ...prevState, isWindows: false }))
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
         let createdWindowId: number
         const { height, left, top, width } =
@@ -241,13 +243,16 @@ const Component = () => {
             getStoredVaults().then(vaults => {
               const active = vaults.find(({ active }) => active)
 
-              if (active) handleFinish()
+              if (active) {
+                if (isPopupRef.current) window.close()
+                else navigateToMain()
+              }
             })
           }
         })
       })
     }
-  }, [])
+  }, [navigateToMain])
 
   const isDisabled = !file
   return isWindows ? (
