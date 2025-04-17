@@ -8,7 +8,7 @@ import {
 import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { isSupportedChain } from '@clients/extension/src/utils/constants'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
   getStoredChains,
@@ -32,7 +32,7 @@ interface InitialState {
   isPriority: boolean
   networkOptions: SelectOption[]
   selectedNetwork?: SelectOption
-  vault?: VaultProps
+  vault?: Vault
 }
 
 const ConnectedApp: FC<{ domain: string; onUnlink: () => void }> = ({
@@ -84,7 +84,7 @@ const Component = () => {
 
   const handleViewinWeb = () => {
     const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
-    const url = `${VULTISIG_WEB_URL}/redirect/${vault?.publicKeyEcdsa}/${vault?.publicKeyEddsa}`
+    const url = `${VULTISIG_WEB_URL}/redirect/${vault?.publicKeys.ecdsa}/${vault?.publicKeys.eddsa}`
     chrome.tabs.create({ url })
   }
 

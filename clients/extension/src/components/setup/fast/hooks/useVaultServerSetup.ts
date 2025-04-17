@@ -10,7 +10,7 @@ import { useVaultPassword } from '@core/ui/state/password'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
+import { setupVaultWithServer } from '../../../../api/fast/api/setupVaultWithServer'
 
 export const useVaultServerSetup = () => {
   const [name] = useVaultName()

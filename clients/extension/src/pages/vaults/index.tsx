@@ -4,7 +4,7 @@ import '@clients/extension/src/pages/vaults/index.scss'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -25,7 +25,7 @@ interface InitialState {
   errorDescription?: string
   errorTitle?: string
   hasError?: boolean
-  vaults: VaultProps[]
+  vaults: Vault[]
 }
 
 const Component = () => {

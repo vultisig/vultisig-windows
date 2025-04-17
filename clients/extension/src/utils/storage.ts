@@ -3,7 +3,7 @@ import {
   AccountsProps,
   ChainProps,
   ITransaction,
-  VaultProps,
+  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
@@ -21,7 +21,7 @@ interface LocalStorage {
   chains?: ChainProps[]
   currency?: Currency
   language?: Language
-  vaults?: VaultProps[]
+  vaults?: Vault[]
   isPriority?: boolean
   ethProviderState?: EthProviderState
   transactions?: ITransaction[]
@@ -98,7 +98,7 @@ export const setStoredCurrency = (currency: Currency): Promise<void> => {
   })
 }
 
-export const getStoredVaults = (): Promise<VaultProps[]> => {
+export const getStoredVaults = (): Promise<Vault[]> => {
   const keys: LocalStorageKeys[] = ['vaults']
 
   return new Promise(resolve => {
@@ -108,7 +108,7 @@ export const getStoredVaults = (): Promise<VaultProps[]> => {
   })
 }
 
-export const setStoredVaults = (vaults: VaultProps[]): Promise<void> => {
+export const setStoredVaults = (vaults: Vault[]): Promise<void> => {
   const vals: LocalStorage = { vaults }
 
   return new Promise(resolve => {
@@ -169,4 +169,12 @@ export const setStoredTransactions = (
       resolve()
     })
   })
+}
+
+export const updateVaultIsBackedUp = async (vaultId: string): Promise<void> => {
+  const vaults = await getStoredVaults()
+  const updatedVaults = vaults.map(vault =>
+    vault.uid === vaultId ? { ...vault, is_backed_up: true } : vault
+  )
+  await setStoredVaults(updatedVaults)
 }

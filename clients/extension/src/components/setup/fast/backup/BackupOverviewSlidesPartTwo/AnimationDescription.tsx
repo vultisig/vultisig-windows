@@ -2,7 +2,7 @@ import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
+import { AnimatedVisibility } from '../../../../shared/AnimatedVisibility'
 
 export const AnimationDescription = () => {
   const { t } = useTranslation()

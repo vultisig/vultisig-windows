@@ -5,16 +5,21 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-export const Wrapper = styled(PageContent)`
-  padding-inline: 12px;
-  margin-inline: auto;
-  padding-top: 20px;
-  justify-content: space-between;
-  overflow-y: hidden;
-`
-
 export const StyledCheckbox = styled(Checkbox)`
   pointer-events: none;
+`
+
+export const Wrapper = styled(PageContent)`
+  max-width: 550px;
+  margin-inline: auto;
+  padding-top: 100px;
+  justify-content: space-between;
+  overflow-y: hidden;
+  gap: 64px;
+`
+
+export const LightningIconWrapper = styled.div`
+  font-size: 20px;
 `
 
 export const ContentWrapper = styled(VStack)`
@@ -27,7 +32,7 @@ export const ContentWrapper = styled(VStack)`
   ${borderRadius.s};
 `
 
-export const PillWrapper = styled.div`
+export const PillWrapper = styled(HStack)`
   position: relative;
   padding: 8px 12px;
   background-color: ${getColor('foreground')};
@@ -71,4 +76,5 @@ export const IconWrapper = styled(VStack)`
   justify-content: center;
   width: 24px;
   height: 24px;
+  color: #4879fd;
 `

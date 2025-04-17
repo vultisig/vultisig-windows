@@ -20,7 +20,7 @@ import {
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
-  VaultProps,
+  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
@@ -1098,7 +1098,7 @@ const vultisigProvider = {
       >(MessageKey.VAULT, {}).then(vaults => resolve(vaults))
     })
   },
-  getVaults: (): Promise<VaultProps[]> => {
+  getVaults: (): Promise<Vault[]> => {
     return new Promise(resolve => {
       sendToBackgroundViaRelay<
         Messaging.GetVaults.Request,
