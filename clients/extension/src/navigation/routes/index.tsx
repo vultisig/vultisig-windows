@@ -13,7 +13,6 @@ import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
-import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
 const routes = [
@@ -51,32 +50,27 @@ const routes = [
         element: <VaultsPage />,
       },
       {
-        path: corePaths.vault,
-        // Temporarily use the same page for both the vaults and the vault page until it aligns with the desktop app.
-        element: <VaultsPage />,
-      },
-      {
-        path: appPaths.settings.root,
+        path: appPaths.settings,
         element: <SettingsPage />,
       },
       {
-        path: appPaths.settings.currency,
+        path: appPaths.currencySettings,
         element: <CurrencyPage />,
       },
       {
-        path: appPaths.settings.language,
+        path: appPaths.languageSettings,
         element: <LanguagePage />,
       },
       {
-        path: appPaths.settings.vault,
+        path: appPaths.vaultSettings,
         element: <VaultSettingsPage />,
       },
       {
-        path: appPaths.settings.rename,
+        path: appPaths.renameVault,
         element: <RenameVaultPage />,
       },
       {
-        path: appPaths.settings.delete,
+        path: appPaths.deleteVault,
         element: <DeleteVaultPage />,
       },
       {

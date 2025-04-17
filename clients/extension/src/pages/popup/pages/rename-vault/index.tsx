@@ -1,6 +1,5 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -13,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 const Component = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
 
   const handleSubmit = (): void => {
     form
@@ -23,8 +22,6 @@ const Component = () => {
           setStoredVaults(
             vaults.map(item => (item.active ? { ...item, name } : item))
           )
-
-          goBack(appPaths.settings.vault)
         })
       })
       .catch(() => {})
@@ -46,7 +43,7 @@ const Component = () => {
         <span className="heading">{t('rename_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(appPaths.settings.root)}
+          onClick={() => navigate('settings')}
         />
       </div>
       <div className="content">

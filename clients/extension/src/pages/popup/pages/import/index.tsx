@@ -1,8 +1,6 @@
-import './index.scss'
+import '@clients/extension/src/pages/popup/pages/import/index.scss'
 
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
@@ -45,7 +43,6 @@ const Component = () => {
   const { file, isWindows, loading, status, vault } = state
   const location = useLocation()
   const navigate = useAppNavigate()
-  const goBack = useGoBack()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
@@ -258,7 +255,7 @@ const Component = () => {
         {location.state && (
           <ArrowLeft
             className="icon icon-left"
-            onClick={() => goBack(appPaths.main)}
+            onClick={() => navigate('main')}
           />
         )}
       </div>

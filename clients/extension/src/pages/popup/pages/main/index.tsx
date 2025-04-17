@@ -19,7 +19,7 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
-import { type FC, ReactNode, useEffect, useState } from 'react'
+import { FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -177,7 +177,7 @@ const Component = () => {
           <span className="logo-type">{t('vultisig')}</span>
           <SettingsTwo
             className="icon icon-right"
-            onClick={() => navigate('settings.root')}
+            onClick={() => navigate('settings')}
           />
         </div>
         <div className="content">
