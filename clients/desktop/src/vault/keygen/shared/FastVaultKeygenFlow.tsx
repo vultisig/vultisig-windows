@@ -1,4 +1,5 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -8,7 +9,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
-import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { ServerPasswordStep } from '../../server/password/ServerPasswordStep'

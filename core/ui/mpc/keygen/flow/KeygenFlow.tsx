@@ -1,4 +1,5 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
@@ -14,8 +15,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { VaultKeygenEnding } from './VaultKeygenEnding'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const {
@@ -44,7 +43,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             from={({ onFinish }) => <KeygenSuccessScreen onFinish={onFinish} />}
             to={() => {
               if (hasServer(vault.signers)) {
-                return <VaultKeygenEnding onBack={onBack} />
+                return <KeygenFlowEnding onBack={onBack} />
               }
 
               return (
@@ -57,7 +56,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       onBack={onBack}
                     />
                   )}
-                  to={() => <VaultKeygenEnding onBack={onBack} />}
+                  to={() => <KeygenFlowEnding onBack={onBack} />}
                 />
               )
             }}
