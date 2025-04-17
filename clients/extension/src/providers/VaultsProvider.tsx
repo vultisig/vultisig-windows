@@ -1,0 +1,29 @@
+import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
+import { ChildrenProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { StrictText } from '@lib/ui/text'
+import { useTranslation } from 'react-i18next'
+
+import { ProductLogoBlock } from '../components/shared/Logo/ProductLogoBlock'
+import { useVaultsQuery, VaultsProvider } from '../vault/state/vaults'
+
+export const RemoteStateDependant = ({ children }: ChildrenProp) => {
+  const vaultsQuery = useVaultsQuery()
+
+  const { t } = useTranslation()
+
+  return (
+    <MatchQuery
+      value={vaultsQuery}
+      success={vaults => (
+        <VaultsProvider value={vaults}>{children}</VaultsProvider>
+      )}
+      error={() => (
+        <CenterAbsolutely>
+          <StrictText>{t('failed_to_load')}</StrictText>
+        </CenterAbsolutely>
+      )}
+      pending={() => <ProductLogoBlock />}
+    />
+  )
+}
