@@ -1,4 +1,4 @@
-import { FancyLoader } from '@lib/ui/loaders/pending/FancyLoader'
+import { FancyLoader } from '@lib/ui/loaders/FancyLoader'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
