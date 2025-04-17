@@ -10,14 +10,19 @@ import {
   RequestMethod,
   SenderKey,
 } from '@clients/extension/src/utils/constants'
+import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
 import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
 import {
   Messaging,
   SendTransactionResponse,
+  TransactionDetails,
   TransactionType,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
+import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getChainByChainId } from '@core/chain/coin/ChainId'
 import { rootApiUrl } from '@core/config'
 import {
   CosmJSOfflineSigner,
@@ -27,6 +32,7 @@ import {
 import {
   AminoSignResponse,
   BroadcastMode,
+  DirectSignResponse,
   KeplrMode,
   KeplrSignOptions,
   Key,
@@ -49,12 +55,14 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js'
 import base58 from 'bs58'
+import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import EventEmitter from 'events'
+import Long from 'long'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
 import VULTI_ICON_RAW_SVG from './icon'
-
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
@@ -271,7 +279,87 @@ class XDEFIKeplrProvider extends Keplr {
         })
     })
   }
+  async signDirect(
+    chainId: string,
+    signer: string,
+    signDoc: {
+      bodyBytes: Uint8Array
+      authInfoBytes: Uint8Array
+      chainId: string
+      accountNumber: Long
+    },
+    _signOptions: KeplrSignOptions
+  ): Promise<DirectSignResponse> {
+    const txBody = TxBody.decode(signDoc.bodyBytes)
 
+    const [firstMessage] = txBody.messages
+    if (
+      !firstMessage ||
+      firstMessage.typeUrl !== '/ibc.applications.transfer.v1.MsgTransfer'
+    ) {
+      throw new Error('Unsupported message type')
+    }
+
+    const txChain = getChainByChainId(chainId)
+    if (!txChain) {
+      throw new Error(`Chain not supported: ${chainId}`)
+    }
+
+    const msg = MsgTransfer.decode(firstMessage.value)
+    const receiverChain = getCosmosChainFromAddress(msg.receiver)
+    if (!receiverChain) {
+      throw new Error(`Receiver chain not supported: ${msg.receiver}`)
+    }
+
+    const standardTx: TransactionDetails = {
+      asset: {
+        chain: txChain,
+        ticker: msg.token.denom,
+      },
+      amount: {
+        amount: msg.token.amount,
+        decimals: chainFeeCoin[txChain].decimals,
+      },
+      from: msg.sender,
+      to: msg.receiver,
+      data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
+      ibcTransaction: {
+        ...msg,
+        timeoutHeight: {
+          revisionHeight: msg.timeoutHeight.revisionHeight.toString(),
+          revisionNumber: msg.timeoutHeight.revisionNumber.toString(),
+        },
+        timeoutTimestamp: msg.timeoutTimestamp.toString(),
+      },
+    }
+
+    const result: SendTransactionResponse = await cosmosProvider.request({
+      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+      params: [{ ...standardTx, txType: 'Vultisig' }],
+    })
+
+    const accountInfo = await getCosmosAccountInfo({
+      chain: txChain as CosmosChain,
+      address: signer,
+    })
+
+    if (!accountInfo || !accountInfo.pubkey) {
+      throw new Error('No account info or pubkey')
+    }
+
+    const decoded = base58.decode(result.raw)
+    if (!decoded) {
+      throw new Error('Invalid signature')
+    }
+
+    return {
+      signed: signDoc,
+      signature: {
+        pub_key: accountInfo.pubkey,
+        signature: decoded.toString(),
+      },
+    }
+  }
   async experimentalSuggestChain(_chainInfo: any) {
     return
   }
@@ -1006,6 +1094,7 @@ window.vultisig = vultisigProvider
 window.xfi = xfiProvider
 window.xfi.keplr = keplrProvider
 window.ethereum = ethereumProvider
+window.keplr = keplrProvider
 announceProvider({
   info: {
     icon: VULTI_ICON_RAW_SVG,

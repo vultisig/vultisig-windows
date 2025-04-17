@@ -1,3 +1,4 @@
+import { corePaths } from '@core/ui/navigation'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 
 import { AddressPage } from './chain/components/address/AddressPage'
@@ -144,7 +145,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.vault,
+        path: corePaths.vault,
         element: (
           <ActiveVaultGuard>
             <VaultPage />

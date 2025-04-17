@@ -4,6 +4,7 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -28,12 +29,11 @@ import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const { RiveComponent: SuccessAnimation } = useRive({
     src: '/assets/animations/vault-creation-success/vault_created.riv',
     autoplay: true,
