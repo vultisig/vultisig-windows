@@ -352,32 +352,30 @@ const Component = () => {
     connectedDevices: any
   ) => {
     try {
-      try {
-        await api.transaction.setStart(transaction.id, connectedDevices)
-      } catch (err) {
-        console.error('Failed to set transaction start:', err)
-        messageApi.open({
-          type: 'error',
-          content: t('failed_to_start_keysign'),
-        })
-        return
-      }
-      try {
-        await setStoredTransaction({ ...transaction, status: 'pending' })
-      } catch (err) {
-        console.error('Failed to update stored transaction:', err)
-        return
-      }
+      await api.transaction.setStart(transaction.id, connectedDevices)
+    } catch (err) {
+      console.error('Failed to set transaction start:', err)
+      messageApi.open({
+        type: 'error',
+        content: t('failed_to_start_keysign'),
+      })
+      return
+    }
+    try {
+      await setStoredTransaction({ ...transaction, status: 'pending' })
+    } catch (err) {
+      console.error('Failed to update stored transaction:', err)
+      return
+    }
 
-      if (transaction.isCustomMessage) {
-        setState(prev => ({ ...prev, step: 4 }))
-        handleCustomMessagePending()
-        return
-      }
+    if (transaction.isCustomMessage) {
+      setState(prev => ({ ...prev, step: 4 }))
+      handleCustomMessagePending()
+      return
+    }
 
-      if (!keysignPayload || !walletCore)
-        throw new Error('Missing signing data')
-
+    if (!keysignPayload || !walletCore) throw new Error('Missing signing data')
+    try {
       const inputData = await getTxInputData(keysignPayload)
       const imageHashes = getPreSigningHashes({
         chain: transaction.chain.chain,
