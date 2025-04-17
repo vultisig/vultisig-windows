@@ -170,11 +170,3 @@ export const setStoredTransactions = (
     })
   })
 }
-
-export const updateVaultIsBackedUp = async (vaultId: string): Promise<void> => {
-  const vaults = await getStoredVaults()
-  const updatedVaults = vaults.map(vault =>
-    vault.uid === vaultId ? { ...vault, is_backed_up: true } : vault
-  )
-  await setStoredVaults(updatedVaults)
-}
