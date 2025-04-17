@@ -64,15 +64,7 @@ export const useBackupVaultMutation = ({
     mutationFn: async ({ password }: { password?: string }) => {
       const base64Data = await createBackup(vault, password)
 
-      // Convert base64 to binary data
-      const byteCharacters = atob(base64Data)
-      const byteArrays = new Uint8Array(byteCharacters.length)
-
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteArrays[i] = byteCharacters.charCodeAt(i)
-      }
-
-      const blob = new Blob([byteArrays], { type: 'application/octet-stream' })
+      const blob = new Blob([base64Data], { type: 'application/octet-stream' })
 
       await saveFile({
         name: getExportName(vault),
