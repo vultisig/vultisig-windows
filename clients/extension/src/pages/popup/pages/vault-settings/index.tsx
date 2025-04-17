@@ -6,14 +6,14 @@ import {
 } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import type { Vault } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 interface InitialState {
-  vault?: VaultProps
+  vault?: Vault
 }
 
 const Component = () => {

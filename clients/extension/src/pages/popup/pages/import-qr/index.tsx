@@ -9,7 +9,7 @@ import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -38,7 +38,7 @@ interface InitialState {
   isWindows: boolean
   loading?: boolean
   status: 'default' | 'error' | 'success'
-  vault?: VaultProps
+  vault?: Vault
   error?: string
 }
 
@@ -191,7 +191,7 @@ const Component = () => {
         .then(([result]) => {
           if (result) {
             try {
-              const vault: VaultProps = JSON.parse(result.text)
+              const vault: Vault = JSON.parse(result.text)
 
               setState(prevState => ({
                 ...prevState,
