@@ -1,31 +1,17 @@
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { getStoredVaults } from '@clients/extension/src/utils/storage'
-import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
-interface InitialState {
-  loaded: boolean
-}
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { useVaults } from '../../../vault/state/vaults'
 
-const Component = () => {
-  const initialState: InitialState = { loaded: false }
-  const [state, setState] = useState(initialState)
-  const { loaded } = state
+const Layout = () => {
+  const vaults = useVaults()
   const navigate = useAppNavigate()
 
-  const componentDidMount = (): void => {
-    getStoredVaults().then(vaults => {
-      if (vaults.length) {
-        setState(prevState => ({ ...prevState, loaded: true }))
-      } else {
-        navigate('landing')
-      }
-    })
+  if (!vaults.length) {
+    navigate('landing', { replace: true })
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
 
-  return loaded ? <Outlet /> : <></>
+  return <Outlet />
 }
 
-export default Component
+export default Layout

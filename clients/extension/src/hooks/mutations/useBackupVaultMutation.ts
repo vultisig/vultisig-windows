@@ -70,6 +70,7 @@ export const useBackupVaultMutation = ({
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
 
+      // TODO: revise this - it's not going to work at the moment
       await updateVaultIsBackedUp(getVaultId(vault))
     },
     onSuccess,
