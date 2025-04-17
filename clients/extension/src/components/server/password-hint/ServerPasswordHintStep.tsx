@@ -58,7 +58,12 @@ export const ServerPasswordHintStep = ({
   return (
     <>
       <PageHeader primaryControls={<PageHeaderBackButton onClick={onBack} />} />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
+      <PageContent
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        justifyContent="space-between"
+        flexGrow
+      >
         <VStack flexGrow gap={16}>
           <VStack>
             <Text variant="h1Regular">

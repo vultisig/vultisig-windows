@@ -36,7 +36,7 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
           <Text
             centerHorizontally
             variant="h1Regular"
-            size={32}
+            size={24}
             color="contrast"
           >
             {match(state, {
