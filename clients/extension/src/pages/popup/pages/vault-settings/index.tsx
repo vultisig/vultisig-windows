@@ -1,4 +1,3 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import {
   ArrowLeft,
   ArrowRight,
@@ -6,6 +5,7 @@ import {
   Trash,
 } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ const Component = () => {
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { vault } = state
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
 
   const componentDidMount = (): void => {
     getStoredVaults().then(vaults => {
@@ -39,22 +39,18 @@ const Component = () => {
         <span className="heading">{vault?.name}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(appPaths.settings.root)}
+          onClick={() => navigate('settings')}
         />
       </div>
       <div className="content">
         <div className="list list-arrow list-action list-icon">
-          <Link
-            to={appPaths.settings.rename}
-            state={true}
-            className="list-item"
-          >
+          <Link to={appPaths.renameVault} state={true} className="list-item">
             <NoteEdit className="icon" />
             <span className="label">{t('rename_vault')}</span>
             <ArrowRight className="action" />
           </Link>
           <Link
-            to={appPaths.settings.delete}
+            to={appPaths.deleteVault}
             state={true}
             className="list-item warning"
           >

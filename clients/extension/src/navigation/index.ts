@@ -3,24 +3,23 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  setupVault: '/setup-vault',
   root: '/',
   importQR: '/import/qr',
   importFile: '/import/file',
+  currencySettings: '/settings/currency',
+  deleteVault: '/settings/vault/delete',
+  import: '/import',
   landing: '/landing',
+  languageSettings: '/settings/language',
   main: '/main',
-  vaults: '/vaults',
-  settings: {
-    root: '/settings',
-    currency: '/settings/currency',
-    language: '/settings/language',
-    vault: '/settings/vault',
-    delete: '/settings/vault/delete',
-    rename: '/settings/vault/rename',
-  },
   onboarding: '/onboarding',
-  setupFastVault: '/setup-fast-vault',
-  setupSecureVault: '/setup-secure-vault',
+  renameVault: '/settings/vault/rename',
+  settings: '/settings',
+  setupFastVault: '/vault/setup/fast',
+  setupSecureVault: '/vault/setup/secure',
+  setupVault: '/vault/setup',
+  vaults: '/vaults',
+  vaultSettings: '/settings/vault',
 } as const
 
 type AppPaths = typeof appPaths

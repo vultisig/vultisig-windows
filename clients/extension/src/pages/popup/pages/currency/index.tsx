@@ -1,6 +1,5 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Currency, currencyName } from '@clients/extension/src/utils/constants'
 import {
   getStoredCurrency,
@@ -18,13 +17,13 @@ const Component = () => {
   const initialState: InitialState = { currency: Currency.USD }
   const [state, setState] = useState(initialState)
   const { currency } = state
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
 
   const changeCurrency = (currency: Currency) => {
     setStoredCurrency(currency).then(() => {
       setState(prevState => ({ ...prevState, currency }))
 
-      goBack(appPaths.settings.root)
+      navigate('settings')
     })
   }
 
@@ -85,7 +84,7 @@ const Component = () => {
         <span className="heading">{t('currency')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(appPaths.settings.root)}
+          onClick={() => navigate('settings')}
         />
       </div>
       <div className="content">
