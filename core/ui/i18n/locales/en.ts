@@ -725,11 +725,12 @@ export const en = {
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',
   failed_to_copy_link: 'Failed to copy link',
+  failed_to_retrieve_addresses: 'Failed to retrieve addresses',
   timeout_error: 'Timeout Error',
   signing_timeout_description:
     'Signing process has exceeded time limit. Please retry!',
 
-  contine_in_new_window: 'Continue in the opened window',
+  continue_in_new_window: 'Continue in the opened window',
   close: 'Close',
   copy_tx: 'COPY TX',
   current_network: 'Current Network',

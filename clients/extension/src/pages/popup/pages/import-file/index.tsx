@@ -56,7 +56,7 @@ interface InitialState {
 const Component = () => {
   const { t } = useTranslation()
   const initialState: InitialState = {
-    isWindows: true,
+    isWindows: true, // Default to Windows flow, will be updated in useEffect if needed
     status: 'default',
   }
   const [state, setState] = useState(initialState)
@@ -147,6 +147,7 @@ const Component = () => {
                 ...prevState,
                 loading: false,
                 status: 'error',
+                error: t('failed_to_retrieve_addresses'),
               }))
             })
         }
@@ -300,7 +301,7 @@ const Component = () => {
   ) : (
     <div className="layout import-page">
       <div className="content">
-        <div className="hint">{t('contine_in_new_window')}</div>
+        <div className="hint">{t('continue_in_new_window')}</div>
       </div>
     </div>
   )

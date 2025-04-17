@@ -753,7 +753,7 @@ export const es = {
   timeout_error: 'Error de tiempo de espera',
   signing_timeout_description:
     'El proceso de firma ha excedido el tiempo límite. ¡Inténtalo de nuevo!',
-  contine_in_new_window: 'Continuar en la ventana abierta',
+  continue_in_new_window: 'Continuar en la ventana abierta',
   close: 'Cerca',
   copy_tx: 'COPIA TX',
   current_network: 'Red actual',
