@@ -1,3 +1,4 @@
+import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -10,7 +11,6 @@ import {
   DeleteVaultFolder,
   UpdateVaultOrder,
 } from '../../../../wailsjs/go/storage/Store'
-import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery'
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 export const useDeleteVaultFolderMutation = () => {

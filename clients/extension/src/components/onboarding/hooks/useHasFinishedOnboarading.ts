@@ -1,16 +1,12 @@
-import { PersistentStateKey } from '../../../state/persistent/PersistentStateKey'
 import { usePersistentStateMutation } from '../../../state/persistent/usePersistentStateMutation'
 import { usePersistentStateQuery } from '../../../state/persistent/usePersistentStateQuery'
 
+const key = 'hasFinishedOnboarding'
+
 export const useHasFinishedOnboarding = () => {
-  return usePersistentStateQuery<boolean>(
-    PersistentStateKey.HasFinishedOnboarding,
-    false
-  )
+  return usePersistentStateQuery<boolean>(key, false)
 }
 
 export const useHasFinishedOnboardingMutation = () => {
-  return usePersistentStateMutation<boolean>(
-    PersistentStateKey.HasFinishedOnboarding
-  )
+  return usePersistentStateMutation<boolean>(key)
 }

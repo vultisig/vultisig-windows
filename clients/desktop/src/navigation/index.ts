@@ -31,7 +31,6 @@ export const appPaths = {
   joinKeygen: '/join-keygen',
   vaults: '/vaults',
   manageVaults: '/vaults/manage',
-  vault: '/vault',
   manageVaultChains: '/vault/chains',
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',

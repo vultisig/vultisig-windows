@@ -1,4 +1,5 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'
@@ -11,7 +12,6 @@ import { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation'
@@ -48,7 +48,6 @@ const DeleteVaultPage = () => {
   const { data: vaultBalance } = useVaultTotalBalanceQuery()
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation()
   const vault = useCurrentVault()
-  const navigate = useAppNavigate()
   const [fiatCurrency] = useFiatCurrency()
 
   const { signers, name, publicKeys, localPartyId } = vault
@@ -86,6 +85,8 @@ const DeleteVaultPage = () => {
   }
 
   const isDeleteDisabled = !Object.values(deleteTerms).every(Boolean)
+
+  const navigate = useCoreNavigate()
 
   return (
     <Container flexGrow gap={16}>

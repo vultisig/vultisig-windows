@@ -29,6 +29,14 @@ const routes = [
     element: <SetupVaultPageController />,
   },
   {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
+  },
+  {
     path: appPaths.root,
     element: <Layout />,
     children: [
@@ -36,41 +44,33 @@ const routes = [
         index: true,
         element: <MainPage />,
       },
-      {
-        path: appPaths.onboarding,
-        element: (
-          <IncompleteOnboardingOnly>
-            <OnboardingPage />
-          </IncompleteOnboardingOnly>
-        ),
-      },
 
       {
         path: appPaths.vaults,
         element: <VaultsPage />,
       },
       {
-        path: appPaths.settings.root,
+        path: appPaths.settings,
         element: <SettingsPage />,
       },
       {
-        path: appPaths.settings.currency,
+        path: appPaths.currencySettings,
         element: <CurrencyPage />,
       },
       {
-        path: appPaths.settings.language,
+        path: appPaths.languageSettings,
         element: <LanguagePage />,
       },
       {
-        path: appPaths.settings.vault,
+        path: appPaths.vaultSettings,
         element: <VaultSettingsPage />,
       },
       {
-        path: appPaths.settings.rename,
+        path: appPaths.renameVault,
         element: <RenameVaultPage />,
       },
       {
-        path: appPaths.settings.delete,
+        path: appPaths.deleteVault,
         element: <DeleteVaultPage />,
       },
       {

@@ -1,12 +1,12 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { MigrateInfoScreen } from './MigrateInfoScreen'
 
 export const MigrateSuccess = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <MigrateInfoScreen

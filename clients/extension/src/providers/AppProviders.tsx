@@ -14,6 +14,9 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
+import { CreateVaultProvider } from '../vault/state/createVault'
+import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
+
 const openUrl = (url: string) => window.open(url, '_blank')
 
 const saveFile: SaveFileFunction = async input => {
@@ -31,10 +34,14 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                 <QueryProvider>
                   <I18nProvider>
                     <WalletCoreProvider>
-                      <AntDesignThemeProvider>
-                        {children}
-                        <GlobalStyle />
-                      </AntDesignThemeProvider>
+                      <SetCurrentVaultIdProvider>
+                        <CreateVaultProvider>
+                          <AntDesignThemeProvider>
+                            {children}
+                            <GlobalStyle />
+                          </AntDesignThemeProvider>
+                        </CreateVaultProvider>
+                      </SetCurrentVaultIdProvider>
                     </WalletCoreProvider>
                   </I18nProvider>
                 </QueryProvider>

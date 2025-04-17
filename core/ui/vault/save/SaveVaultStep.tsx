@@ -1,3 +1,4 @@
+import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
@@ -9,14 +10,12 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation'
-
 export const SaveVaultStep: React.FC<
   ValueProp<Vault> & OnFinishProp & TitleProp & OnBackProp
 > = ({ value, onFinish, title, onBack }) => {
   const { t } = useTranslation()
 
-  const { mutate, ...mutationState } = useSaveVaultMutation({
+  const { mutate, ...mutationState } = useCreateVaultMutation({
     onSuccess: onFinish,
   })
 

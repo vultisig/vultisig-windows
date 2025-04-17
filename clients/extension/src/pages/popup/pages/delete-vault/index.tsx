@@ -1,8 +1,6 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -21,7 +19,6 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { vault } = state
   const navigate = useAppNavigate()
-  const goBack = useGoBack()
 
   const handleSubmit = (): void => {
     getStoredVaults().then(vaults => {
@@ -34,11 +31,11 @@ const Component = () => {
           )
         )
 
-        navigate('main', { replace: true })
+        navigate('main')
       } else {
         setStoredVaults([])
 
-        navigate('landing', { replace: true })
+        navigate('landing')
       }
     })
   }
@@ -59,7 +56,7 @@ const Component = () => {
         <span className="heading">{t('remove_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(appPaths.settings.root)}
+          onClick={() => navigate('settings')}
         />
       </div>
       <div className="content">

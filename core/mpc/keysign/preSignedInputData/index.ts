@@ -8,6 +8,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getCosmosPreSignedInputData } from './cosmos'
 import { getEvmPreSignedInputData } from './evm'
+import { IMsgTransfer } from './ibc/IMsgTransfer'
 import { getMayaPreSignedInputData } from './maya'
 import { getPolkadotPreSignedInputData } from './polkadot'
 import { GetPreSignedInputDataInput } from './PreSignedInputDataResolver'
@@ -23,6 +24,7 @@ type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   chain: Chain
+  ibcTransaction?: IMsgTransfer
 }
 
 const handlers: Record<

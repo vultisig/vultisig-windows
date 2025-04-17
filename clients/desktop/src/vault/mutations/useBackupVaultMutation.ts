@@ -2,6 +2,7 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -11,7 +12,6 @@ import { useMutation } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
-import { vaultsQueryKey } from '../queries/useVaultsQuery'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length

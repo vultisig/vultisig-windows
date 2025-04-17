@@ -1,13 +1,26 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
-import { ArrowLeft, ArrowRight } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import {
+  StyledActiveVault,
+  StyledActiveVaultIcon,
+  StyledActiveVaultName,
+  StyledDevices,
+  StyledList,
+  StyledListItem,
+} from '@clients/extension/src/pages/popup/pages/vaults/styles'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import { Button } from 'antd'
+import { Button } from '@lib/ui/buttons/Button'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -22,18 +35,13 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { vault, vaults } = state
   const navigate = useAppNavigate()
-  const goBack = useGoBack()
 
   const handleSelect = (uid: string) => {
     setStoredVaults(
       vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
-    )
-      .then(() => {
-        goBack(appPaths.main)
-      })
-      .catch(error => {
-        console.error('Error setting stored vaults:', error)
-      })
+    ).then(() => {
+      navigate('main')
+    })
   }
 
   const componentDidMount = (): void => {
@@ -47,53 +55,74 @@ const Component = () => {
   useEffect(componentDidMount, [])
 
   return vault ? (
-    <div className="layout vaults-page">
-      <div className="header">
-        <span className="heading">{t('choose_vault')}</span>
-        <ArrowLeft
-          className="icon icon-left"
-          onClick={() => goBack(appPaths.main)}
-        />
-      </div>
-      <div className="content">
-        <div className="list">
-          <div className="list-item">
-            <span className="label">{vault?.name}</span>
-            <span className="extra">
-              <span className="text">{t('active')}</span>
-            </span>
-          </div>
-        </div>
+    <>
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <PageHeaderIconButton
+            onClick={() => navigate('settings')}
+            icon={<ChevronLeftIcon />}
+          />
+        }
+        title={<PageHeaderTitle>{t('choose_vault')}</PageHeaderTitle>}
+      />
+      <PageContent gap={20} scrollable>
+        {vault && (
+          <StyledActiveVault>
+            <StyledActiveVaultName>{vault.name}</StyledActiveVaultName>
+            <StyledActiveVaultIcon>{t('active')}</StyledActiveVaultIcon>
+          </StyledActiveVault>
+        )}
         {vaults.length > 1 && (
-          <>
-            <span className="divider">{t('other_vaults')}</span>
-            <div className="list list-arrow list-action">
+          <VStack gap={12}>
+            <Text weight={500} size={12} color="contrast">
+              {t('other_vaults')}
+            </Text>
+            <StyledList gap={1}>
               {vaults
                 .filter(({ uid }) => uid !== vault.uid)
                 .map(({ name, uid }) => (
-                  <button
+                  <StyledListItem
                     key={uid}
                     onClick={() => handleSelect(uid)}
-                    className="list-item"
+                    gap={12}
+                    alignItems="center"
+                    justifyContent="space-between"
                   >
-                    <span className="label">{name}</span>
-                    <ArrowRight className="action" />
-                  </button>
+                    <HStack
+                      gap={12}
+                      flexGrow
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Text weight={500} size={14} color="contrast" cropped>
+                        {name}
+                      </Text>
+                      <StyledDevices
+                        nowrap
+                        size={12}
+                        weight={500}
+                        color="supporting"
+                      >
+                        {t('share_n_of_m', { n: 2, m: 3 })}
+                      </StyledDevices>
+                    </HStack>
+                    <HStack>
+                      <ChevronRightIcon size={16} />
+                    </HStack>
+                  </StyledListItem>
                 ))}
-            </div>
-          </>
+            </StyledList>
+          </VStack>
         )}
-      </div>
-      <div className="footer">
         <Button
-          onClick={() => navigate('import', { params: { from: 'vaults' } })}
-          shape="round"
-          block
+          kind="primary"
+          onClick={() => navigate('import', { params: {} })}
         >
           {t('add_new_vault')}
         </Button>
-      </div>
-    </div>
+      </PageContent>
+    </>
   ) : (
     <></>
   )

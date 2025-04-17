@@ -1,15 +1,15 @@
+import { MigrateSuccess } from '@core/ui/mpc/keygen/migrate/MigrateSuccess'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { MigrateSuccess } from '../../migrate/MigrateSuccess'
 import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
 
 export const VaultKeygenEnding = ({ onBack }: OnBackProp) => {
   const keygenType = useCurrentKeygenType()
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   if (keygenType === 'migrate') {
     return (
