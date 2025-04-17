@@ -5,7 +5,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { ProductLogoBlock } from '../components/shared/Logo/ProductLogoBlock'
 import { useVaultsQuery } from '../vault/state/vaults'
 
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
@@ -16,14 +15,16 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
     <MatchQuery
       value={vaultsQuery}
       success={vaults => (
-        <VaultsProvider value={vaults}>{children}</VaultsProvider>
+        // TODO: fix this when coins are added
+        <VaultsProvider value={vaults.map(vault => ({ ...vault, coins: [] }))}>
+          {children}
+        </VaultsProvider>
       )}
       error={() => (
         <CenterAbsolutely>
           <StrictText>{t('failed_to_load')}</StrictText>
         </CenterAbsolutely>
       )}
-      pending={() => <ProductLogoBlock />}
     />
   )
 }

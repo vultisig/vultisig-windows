@@ -9,6 +9,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
+import { KeygenFlow } from '../../keygen/KeygenFlow'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep'
@@ -72,9 +73,7 @@ export const SetupFastVaultPage = () => {
                       />
                     )}
                     createVault={() => (
-                      <></>
-                      // TODO: to be done when Radzion migrates KeygenFlow to core package
-                      // <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+                      <KeygenFlow onBack={() => setStep(lastEditableStep)} />
                     )}
                   />
                 </VStack>
