@@ -10,13 +10,13 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { without } from '@lib/utils/array/without'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`
