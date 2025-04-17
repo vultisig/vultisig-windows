@@ -5,7 +5,10 @@ import {
   isSupportedChain,
   supportedChains,
 } from '@clients/extension/src/utils/constants'
-import { toCamelCase } from '@clients/extension/src/utils/functions'
+import {
+  calculateWindowPosition,
+  toCamelCase,
+} from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -23,10 +26,10 @@ import { UploadedQr } from '@lib/ui/qr/upload/UploadedQr'
 import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { readBarcodes, ReaderOptions } from 'zxing-wasm'
-
+import { UAParser } from 'ua-parser-js'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 interface InitialState {
   file?: File
@@ -220,6 +223,45 @@ const Component = () => {
 
     return false
   }
+
+  useEffect(() => {
+    const parser = new UAParser()
+    const parserResult = parser.getResult()
+
+    if (!isPopup && parserResult.os.name !== 'Windows') {
+      setState({ ...state, isWindows: false })
+
+      chrome.windows.getCurrent({ populate: true }, currentWindow => {
+        let createdWindowId: number
+        const { height, left, top, width } =
+          calculateWindowPosition(currentWindow)
+
+        chrome.windows.create(
+          {
+            url: chrome.runtime.getURL('import.html?isPopup=true'),
+            type: 'panel',
+            height,
+            left,
+            top,
+            width,
+          },
+          window => {
+            if (window?.id) createdWindowId = window.id
+          }
+        )
+
+        chrome.windows.onRemoved.addListener(closedWindowId => {
+          if (closedWindowId === createdWindowId) {
+            getStoredVaults().then(vaults => {
+              const active = vaults.find(({ active }) => active)
+
+              if (active) handleFinish()
+            })
+          }
+        })
+      })
+    }
+  }, [])
 
   const [{ title = t('keysign') }] = useAppPathParams<'importQR'>()
   return isWindows ? (

@@ -782,5 +782,5 @@ export const en = {
     "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
   upgrade_your_vault_now: 'Upgrade your vault now',
   vulti_share_not_saved_hint:
-    'If you didn’t save your VultiShare QR yet, go the app and click on the QR icon in the upper right corner.',
+    'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
 }

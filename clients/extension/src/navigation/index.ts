@@ -19,7 +19,6 @@ export const appPaths = {
     rename: '/settings/vault/rename',
   },
   onboarding: '/onboarding',
-  uploadQr: '/upload-qr',
   setupFastVault: '/setup-fast-vault',
   setupSecureVault: '/setup-secure-vault',
 } as const

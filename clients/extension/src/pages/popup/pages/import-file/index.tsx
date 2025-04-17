@@ -36,10 +36,13 @@ import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
 import { createHash } from 'crypto'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { UAParser } from 'ua-parser-js'
+import { calculateWindowPosition } from '../../../../utils/functions'
 
 interface InitialState {
+  error?: string
   file?: File
   vaultContainer?: VaultContainer
   isEncrypted?: boolean
@@ -176,7 +179,6 @@ const Component = () => {
         },
         status: 'success',
       }))
-      finalizeVaultImport()
     } else {
       handleError(errorKey.INVALID_VAULT)
     }
@@ -203,6 +205,49 @@ const Component = () => {
     setState(prevState => ({ ...prevState, file }))
     mutate(shouldBePresent(file))
   }
+
+  useEffect(() => {
+    finalizeVaultImport()
+  }, [vault, vaultContainer])
+
+  useEffect(() => {
+    const parser = new UAParser()
+    const parserResult = parser.getResult()
+
+    if (!isPopup && parserResult.os.name !== 'Windows') {
+      setState({ ...state, isWindows: false })
+
+      chrome.windows.getCurrent({ populate: true }, currentWindow => {
+        let createdWindowId: number
+        const { height, left, top, width } =
+          calculateWindowPosition(currentWindow)
+
+        chrome.windows.create(
+          {
+            url: chrome.runtime.getURL('import.html?isPopup=true'),
+            type: 'panel',
+            height,
+            left,
+            top,
+            width,
+          },
+          window => {
+            if (window?.id) createdWindowId = window.id
+          }
+        )
+
+        chrome.windows.onRemoved.addListener(closedWindowId => {
+          if (closedWindowId === createdWindowId) {
+            getStoredVaults().then(vaults => {
+              const active = vaults.find(({ active }) => active)
+
+              if (active) handleFinish()
+            })
+          }
+        })
+      })
+    }
+  }, [])
 
   const isDisabled = !file
   return isWindows ? (
