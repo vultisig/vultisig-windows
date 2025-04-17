@@ -296,6 +296,7 @@ export const en = {
   select_n_devices_other: 'Select {{count}} devices',
   starting_keygen: 'Starting Keygen',
   failed_to_start_keygen: 'Failed to start Keygen',
+  failed_to_start_keysign: 'Failed to start Keysign',
   devices_list_title: 'With those Vault Shares',
   share: 'Share',
   change_vault: 'Change Vault',
