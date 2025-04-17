@@ -9,7 +9,8 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BACKUP_LINK } from '../../../secure/backup/BackupConfirmation'
+export const BACKUP_LINK =
+  'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup'
 
 const Wrapper = styled(VStack)`
   max-width: 800px;

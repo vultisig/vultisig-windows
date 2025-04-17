@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
+import { AnimatedVisibility } from '../../../../shared/AnimatedVisibility'
 import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations'
 
 type AnimationDescriptionProps = {
