@@ -1,9 +1,8 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { PageSlice } from '@lib/ui/page/PageSlice'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { PageSlice } from '../../../ui/page/PageSlice'
 
 export const CurrencyBox = styled.div`
   flex: 1;

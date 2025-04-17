@@ -1,17 +1,13 @@
 import { NameProp } from '@lib/utils/entities/props'
 
 type InitiateFileDownloadInput = {
-  type: string
-  value: BlobPart
+  blob: Blob
 } & NameProp
 
 export const initiateFileDownload = ({
-  type,
-  value,
+  blob,
   name,
 }: InitiateFileDownloadInput) => {
-  const blob = new Blob([value], { type })
-
   const url = URL.createObjectURL(blob)
 
   const anchor = document.createElement('a')

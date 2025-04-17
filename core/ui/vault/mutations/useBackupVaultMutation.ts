@@ -2,16 +2,14 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
-import { vaultsQueryKey } from '@core/ui/query/keys'
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
-import { SaveFileBkp } from '../../../wailsjs/go/main/App'
-import { UpdateVault } from '../../../wailsjs/go/storage/Store'
+import { useSaveFile } from '../../state/saveFile'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -56,15 +54,35 @@ export const useBackupVaultMutation = ({
 }: {
   onSuccess?: () => void
 } = {}) => {
-  const invalidateQueries = useInvalidateQueries()
   const vault = useCurrentVault()
+
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
+
+  const saveFile = useSaveFile()
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
       const base64Data = await createBackup(vault, password)
-      await SaveFileBkp(getExportName(vault), base64Data)
-      await UpdateVault(getVaultId(vault), { isBackedUp: true })
-      await invalidateQueries(vaultsQueryKey)
+
+      // Convert base64 to binary data
+      const byteCharacters = atob(base64Data)
+      const byteArrays = new Uint8Array(byteCharacters.length)
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArrays[i] = byteCharacters.charCodeAt(i)
+      }
+
+      const blob = new Blob([byteArrays], { type: 'application/octet-stream' })
+
+      await saveFile({
+        name: getExportName(vault),
+        blob,
+      })
+
+      await updateVault({
+        vaultId: getVaultId(vault),
+        fields: { isBackedUp: true },
+      })
     },
     onSuccess,
   })

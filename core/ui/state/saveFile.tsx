@@ -3,8 +3,7 @@ import { NameProp } from '@lib/utils/entities/props'
 
 export type SaveFileFunction = (
   input: {
-    type: string
-    value: string
+    blob: Blob
   } & NameProp
 ) => Promise<void>
 
