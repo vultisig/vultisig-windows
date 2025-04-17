@@ -1,5 +1,4 @@
 import packageJson from '@clients/extension/package.json'
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
 import {
   ArrowLeft,
@@ -11,6 +10,7 @@ import {
   Vultisig,
 } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Currency } from '@clients/extension/src/utils/constants'
 import { getStoredCurrency } from '@clients/extension/src/utils/storage'
 import { languageName } from '@core/ui/i18n/Language'
@@ -30,7 +30,7 @@ const Component = () => {
   }
   const [state, setState] = useState(initialState)
   const { currency } = state
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
 
   const componentDidMount = (): void => {
     getStoredCurrency().then(currency => {
@@ -48,12 +48,12 @@ const Component = () => {
         <span className="heading">{t('settings')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(appPaths.main)}
+          onClick={() => navigate('main')}
         />
       </div>
       <div className="content">
         <div className="list list-arrow list-action list-icon">
-          <Link to={appPaths.settings.vault} state={true} className="list-item">
+          <Link to={appPaths.vaultSettings} state={true} className="list-item">
             <SettingsOne className="icon" />
             <span className="label">{t('vault_settings')}</span>
             <ArrowRight className="action" />
@@ -62,7 +62,7 @@ const Component = () => {
             value={languageQuery}
             success={language => (
               <Link
-                to={appPaths.settings.language}
+                to={appPaths.languageSettings}
                 state={true}
                 className="list-item"
               >
@@ -74,7 +74,7 @@ const Component = () => {
             )}
           />
           <Link
-            to={appPaths.settings.currency}
+            to={appPaths.currencySettings}
             state={true}
             className="list-item"
           >

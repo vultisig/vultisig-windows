@@ -1,17 +1,16 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
 import {
   useLanguageMutation,
   useLanguageQuery,
 } from '@clients/extension/src/i18n/state/language'
 import { ArrowLeft } from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName, languages } from '@core/ui/i18n/Language'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 const Component = () => {
   const { t } = useTranslation()
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
   const languageQuery = useLanguageQuery()
   const languageMutation = useLanguageMutation()
 
@@ -24,7 +23,7 @@ const Component = () => {
             <span className="heading">{t('language')}</span>
             <ArrowLeft
               className="icon icon-left"
-              onClick={() => goBack(appPaths.settings.root)}
+              onClick={() => navigate('root')}
             />
           </div>
           <div className="content">

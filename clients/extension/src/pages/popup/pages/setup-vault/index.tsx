@@ -1,3 +1,14 @@
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useSetupVaultPageAnimation } from '@clients/extension/src/pages/popup/pages/setup-vault/hooks/useSetupVaultPageAnimation'
+import {
+  ArtContainer,
+  ContentWrapper,
+  DescriptionContentWrapper,
+  DescriptionTitleWrapper,
+  DescriptionWrapper,
+  IconWrapper,
+} from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPage.styled'
+import { useVaultSecurityType } from '@clients/extension/src/pages/popup/pages/setup-vault/type/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
@@ -15,18 +26,6 @@ import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
-
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
-import {
-  ArtContainer,
-  ContentWrapper,
-  DescriptionContentWrapper,
-  DescriptionTitleWrapper,
-  DescriptionWrapper,
-  IconWrapper,
-} from './SetupVaultPage.styled'
-import { useVaultSecurityType } from './type/state/vaultSecurityType'
 
 export const SetupVaultPage = () => {
   const { RiveComponent, stateMachineInput, isPlaying, onPlay } =

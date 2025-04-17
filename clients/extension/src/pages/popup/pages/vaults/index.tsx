@@ -1,5 +1,4 @@
-import useGoBack from '@clients/extension/src/hooks/go-back'
-import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import {
   StyledActiveVault,
   StyledActiveVaultIcon,
@@ -24,7 +23,6 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 interface InitialState {
   vault?: VaultProps
@@ -36,14 +34,13 @@ const Component = () => {
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
   const { vault, vaults } = state
-  const navigate = useNavigate()
-  const goBack = useGoBack()
+  const navigate = useAppNavigate()
 
   const handleSelect = (uid: string) => {
     setStoredVaults(
       vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
     ).then(() => {
-      goBack(appPaths.main)
+      navigate('main')
     })
   }
 
@@ -63,7 +60,7 @@ const Component = () => {
         hasBorder
         primaryControls={
           <PageHeaderIconButton
-            onClick={() => navigate(appPaths.settings.root)}
+            onClick={() => navigate('settings')}
             icon={<ChevronLeftIcon />}
           />
         }
@@ -118,7 +115,10 @@ const Component = () => {
             </StyledList>
           </VStack>
         )}
-        <Button kind="primary" onClick={() => navigate(appPaths.import)}>
+        <Button
+          kind="primary"
+          onClick={() => navigate('import', { params: {} })}
+        >
           {t('add_new_vault')}
         </Button>
       </PageContent>
