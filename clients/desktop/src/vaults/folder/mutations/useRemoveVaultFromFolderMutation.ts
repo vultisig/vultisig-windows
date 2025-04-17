@@ -1,3 +1,4 @@
+import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -8,7 +9,6 @@ import {
   UpdateVaultFolderID,
   UpdateVaultOrder,
 } from '../../../../wailsjs/go/storage/Store'
-import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery'
 
 type RemoveVaultFromFolderInput = {
   vaultId: string

@@ -1,10 +1,10 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
 
 export const VaultsPageHeaderTitle = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const { t } = useTranslation()
 
   return (

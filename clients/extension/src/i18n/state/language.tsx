@@ -1,15 +1,13 @@
-import { PersistentStateKey } from '@clients/extension/src/state/persistent/PersistentStateKey'
 import { usePersistentStateMutation } from '@clients/extension/src/state/persistent/usePersistentStateMutation'
 import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 import { Language, primaryLanguage } from '@core/ui/i18n/Language'
 
+const key = 'language'
+
 export const useLanguageQuery = () => {
-  return usePersistentStateQuery<Language>(
-    PersistentStateKey.Language,
-    primaryLanguage
-  )
+  return usePersistentStateQuery<Language>(key, primaryLanguage)
 }
 
 export const useLanguageMutation = () => {
-  return usePersistentStateMutation<Language>(PersistentStateKey.Language)
+  return usePersistentStateMutation<Language>(key)
 }

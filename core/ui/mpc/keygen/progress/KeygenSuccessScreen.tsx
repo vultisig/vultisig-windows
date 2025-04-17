@@ -1,20 +1,17 @@
+import { Animation } from '@lib/ui/animations/Animation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
-import { useRive } from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500
-export const SetupVaultSuccessScreen = ({ onFinish }: OnFinishProp) => {
+
+export const KeygenSuccessScreen = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
-  const { RiveComponent } = useRive({
-    src: '/assets/animations/vault-creation-success/vault_created.riv',
-    autoplay: true,
-  })
 
   useEffect(() => {
     const timeoutId = setTimeout(
@@ -29,7 +26,7 @@ export const SetupVaultSuccessScreen = ({ onFinish }: OnFinishProp) => {
     <Wrapper justifyContent="center" alignItems="center">
       <VStack flexGrow justifyContent="center" alignItems="center">
         <RiveWrapper>
-          <RiveComponent />
+          <Animation value="vault-creation-success/vault_created" />
         </RiveWrapper>
         <VStack alignItems="center" gap={16}>
           <Text centerHorizontally size={40}>
