@@ -5,7 +5,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
 
-export const VaultKeygenEnding = ({ onBack }: OnBackProp) => {
+export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
   const keygenType = useCurrentKeygenType()
 
   const navigate = useCoreNavigate()
