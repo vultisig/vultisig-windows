@@ -10,27 +10,49 @@ import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
 
 export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
   'cosmosSpecific'
-> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+> = ({ keysignPayload, walletCore, chain, chainSpecific, ibcTransaction }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
   const denom = cosmosFeeCoinDenom[chain]
-
-  const message: TW.Cosmos.Proto.Message[] = [
-    TW.Cosmos.Proto.Message.create({
-      sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
-        fromAddress: coin.address,
-        toAddress: keysignPayload.toAddress,
-        amounts: [
-          TW.Cosmos.Proto.Amount.create({
-            amount: keysignPayload.toAmount,
-            denom: coin.isNativeToken ? denom : coin.contractAddress,
-          }),
-        ],
+  let message: TW.Cosmos.Proto.Message[]
+  if (
+    chainSpecific.transactionType === TransactionType.IBC_TRANSFER &&
+    ibcTransaction
+  ) {
+    message = [
+      TW.Cosmos.Proto.Message.create({
+        transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
+          ...ibcTransaction,
+          timeoutHeight: {
+            revisionNumber: new Long(
+              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            ),
+            revisionHeight: new Long(
+              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            ),
+          },
+          timeoutTimestamp: new Long(Number(ibcTransaction.timeoutTimestamp)),
+        }),
       }),
-    }),
-  ]
+    ]
+  } else {
+    message = [
+      TW.Cosmos.Proto.Message.create({
+        sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
+          fromAddress: coin.address,
+          toAddress: keysignPayload.toAddress,
+          amounts: [
+            TW.Cosmos.Proto.Amount.create({
+              amount: keysignPayload.toAmount,
+              denom: coin.isNativeToken ? denom : coin.contractAddress,
+            }),
+          ],
+        }),
+      }),
+    ]
+  }
 
   const coinType = getCoinType({
     walletCore,

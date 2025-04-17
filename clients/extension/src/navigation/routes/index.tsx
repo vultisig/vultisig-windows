@@ -30,20 +30,20 @@ const routes = [
     element: <SetupVaultPageController />,
   },
   {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
+    ),
+  },
+  {
     path: appPaths.root,
     element: <Layout />,
     children: [
       {
         index: true,
         element: <MainPage />,
-      },
-      {
-        path: appPaths.onboarding,
-        element: (
-          <IncompleteOnboardingOnly>
-            <OnboardingPage />
-          </IncompleteOnboardingOnly>
-        ),
       },
 
       {
