@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { GradientText, Text } from '@lib/ui/text'
@@ -31,7 +31,11 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
     <Wrapper>
       <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper justifyContent="center">
-          <RiveComponent />
+          <RiveComponent
+            style={{
+              flex: 1,
+            }}
+          />
         </RiveWrapper>
         <VStack alignItems="center" gap={12}>
           <Text centerHorizontally size={32}>
@@ -47,7 +51,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
   )
 }
 
-const RiveWrapper = styled(HStack)`
+const RiveWrapper = styled(VStack)`
   position: relative;
   flex: 1;
 `
