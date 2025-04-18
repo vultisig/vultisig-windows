@@ -3,6 +3,10 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
+import {
+  mediaQuery,
+  useIsTabletDeviceAndUp,
+} from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +16,7 @@ const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500
 
 export const KeygenSuccessScreen = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
+  const isTabletDeviceAndUp = useIsTabletDeviceAndUp()
 
   useEffect(() => {
     const timeoutId = setTimeout(
@@ -29,7 +34,7 @@ export const KeygenSuccessScreen = ({ onFinish }: OnFinishProp) => {
           <Animation value="vault-creation-success/vault_created" />
         </RiveWrapper>
         <VStack alignItems="center" gap={16}>
-          <Text centerHorizontally size={40}>
+          <Text centerHorizontally size={isTabletDeviceAndUp ? 40 : 24}>
             {t('vaultCreated')}{' '}
             <GradientText as="span">{t('successfully')}</GradientText>
           </Text>
@@ -48,6 +53,10 @@ const Wrapper = styled(PageContent)`
 `
 
 const RiveWrapper = styled.div`
-  width: 600px;
+  width: 100%;
   flex: 1;
+
+  @media (${mediaQuery.tabletDeviceAndUp}) {
+    width: 600px;
+  }
 `
