@@ -16,7 +16,7 @@ export const useQueryAnimations = ({
   state,
 }: UseWaitForServerAnimationStatesProps) => {
   const { RiveComponent, rive } = useRive({
-    src: '/assets/animations/keygen-fast-vault/connecting-with-server.riv',
+    src: '/assets/animations/spinner.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
   })
