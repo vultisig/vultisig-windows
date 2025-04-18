@@ -1,3 +1,6 @@
+import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
+import { vaultContainerFromString } from '@core/ui/vault/import/utils/vaultContainerFromString'
+import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -12,9 +15,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ReadTextFile } from '../../../../wailsjs/go/main/App'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { isLikelyToBeDklsVaultBackup } from '../utils/isLikelyToBeDklsVaultBackup'
-import { vaultContainerFromString } from '../utils/vaultContainerFromString'
-import { FileBasedVaultBackupResult } from '../VaultBakupResult'
 
 export const ReadBackupFileStep = ({
   onFinish,

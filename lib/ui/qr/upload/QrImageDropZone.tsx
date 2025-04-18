@@ -1,9 +1,8 @@
 import { ComputerUploadIcon } from '@lib/ui/icons/ComputerUploadIcon'
+import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
+import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
-
-import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
-import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent'
 
 type QrImageDropZoneProps = {
   onFinish: (data: File) => void
@@ -39,7 +38,7 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
           </div>
         }
       >
-        {t('upload_qr_code_image')}
+        {t('upload_file_or_drag_and_drop')}
       </DropZoneContent>
       <input {...getInputProps()} />
     </InteractiveDropZoneContainer>

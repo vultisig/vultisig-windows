@@ -753,7 +753,7 @@ export const de = {
   timeout_error: 'Timeout-Fehler',
   signing_timeout_description:
     'Der Signiervorgang hat das Zeitlimit überschritten. Bitte versuchen Sie es erneut!',
-  contine_in_new_window: 'Weiter im geöffneten Fenster',
+  continue_in_new_window: 'Weiter im geöffneten Fenster',
   close: 'Schließen',
   copy_tx: 'KOPIE TX',
   current_network: 'Aktuelles Netzwerk',

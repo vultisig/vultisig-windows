@@ -733,7 +733,7 @@ export const hr = {
   timeout_error: 'Pogreška isteka vremena',
   signing_timeout_description:
     'Proces potpisivanja je premašio vremensko ograničenje. Molimo pokušajte ponovo!',
-  contine_in_new_window: 'Nastavite u otvorenom prozoru',
+  continue_in_new_window: 'Nastavite u otvorenom prozoru',
   close: 'Zatvoriti',
   copy_tx: 'KOPIRAJ TX',
   current_network: 'Trenutna mreža',
