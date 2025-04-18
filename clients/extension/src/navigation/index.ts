@@ -41,7 +41,7 @@ export type AppPathParams = {
 
 export type AppPathState = {}
 
-export type AppPathsWithParams = keyof AppPathParams
+type AppPathsWithParams = keyof AppPathParams
 
 type AppPathsWithState = keyof AppPathState
 
