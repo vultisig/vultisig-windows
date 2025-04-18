@@ -116,8 +116,14 @@ const Component = () => {
           </VStack>
         )}
         <Button
+          onClick={() =>
+            navigate('importQR', {
+              params: {
+                title: t('import_vault'),
+              },
+            })
+          }
           kind="primary"
-          onClick={() => navigate('import', { params: {} })}
         >
           {t('add_new_vault')}
         </Button>

@@ -2,6 +2,7 @@ import { coinKeyToString } from '@core/chain/coin/Coin'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,7 +13,6 @@ import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
 import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 import { useDeriveChainFromWalletAddress } from '../useDeriveChainFromWalletAddress'
-import { StyledPageContent } from './UploadQRPage.styled'
 
 const uploadQrViews = ['scan', 'upload'] as const
 type UploadQrView = (typeof uploadQrViews)[number]

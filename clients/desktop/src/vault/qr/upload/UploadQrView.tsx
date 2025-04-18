@@ -1,13 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { QrImageDropZone } from '@lib/ui/qr/upload/QrImageDropZone'
+import { UploadedQr } from '@lib/ui/qr/upload/UploadedQr'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { QrImageDropZone } from './QrImageDropZone'
-import { UploadedQr } from './UploadedQr'
 import { useProcessQrMutation } from './useProcessQrMutation'
 
 export const UploadQrView = () => {

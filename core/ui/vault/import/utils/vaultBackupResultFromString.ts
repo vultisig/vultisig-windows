@@ -1,7 +1,7 @@
-import { VaultBackupExtension } from '../VaultBackupExtension'
-import { VaultBackupResult } from '../VaultBakupResult'
-import { fromDatBackupString } from './fromDatBackupString'
-import { vaultContainerFromString } from './vaultContainerFromString'
+import { fromDatBackupString } from '@core/ui/vault/import/utils/fromDatBackupString'
+import { vaultContainerFromString } from '@core/ui/vault/import/utils/vaultContainerFromString'
+import { VaultBackupExtension } from '@core/ui/vault/import/VaultBackupExtension'
+import { VaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 
 type Input = {
   extension: VaultBackupExtension

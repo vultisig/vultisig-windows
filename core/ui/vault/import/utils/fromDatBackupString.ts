@@ -1,4 +1,7 @@
-import { DatBackup, fromDatBackup } from './fromDatBackup'
+import {
+  DatBackup,
+  fromDatBackup,
+} from '@core/ui/vault/import/utils/fromDatBackup'
 
 export const fromDatBackupString = (value: string) => {
   const decodedString = Buffer.from(value, 'hex').toString('utf8')

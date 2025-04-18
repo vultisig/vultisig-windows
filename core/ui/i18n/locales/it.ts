@@ -749,7 +749,7 @@ export const it = {
   timeout_error: 'Errore di timeout',
   signing_timeout_description:
     'Il processo di firma ha superato il limite di tempo. Riprova!',
-  contine_in_new_window: 'Continua nella finestra aperta',
+  continue_in_new_window: 'Continua nella finestra aperta',
   close: 'Vicino',
   copy_tx: 'COPIA TX',
   current_network: 'Rete attuale',

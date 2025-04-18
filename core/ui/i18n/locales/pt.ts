@@ -742,7 +742,7 @@ export const pt = {
   timeout_error: 'Erro de tempo limite',
   signing_timeout_description:
     'O processo de assinatura excedeu o limite de tempo. Tente novamente!',
-  contine_in_new_window: 'Continuar na janela aberta',
+  continue_in_new_window: 'Continuar na janela aberta',
   close: 'Fechar',
   copy_tx: 'CÓPIA TX',
   current_network: 'Rede atual',
