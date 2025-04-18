@@ -15,7 +15,6 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
     <MatchQuery
       value={vaultsQuery}
       success={vaults => (
-        // TODO: fix this when coins are added
         <VaultsProvider value={vaults.map(vault => ({ ...vault, coins: [] }))}>
           {children}
         </VaultsProvider>
