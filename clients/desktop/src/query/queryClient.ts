@@ -1,6 +1,6 @@
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
-import { QueryClient } from '@tanstack/react-query'
+import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
 import { PersistentStateKey } from '../state/persistentState'
@@ -40,8 +40,12 @@ export const getQueryClient = () => {
     maxAge,
     hydrateOptions: {},
     dehydrateOptions: {
-      shouldDehydrateQuery: ({ meta }) => {
-        return !meta?.disablePersist
+      shouldDehydrateQuery: query => {
+        if (query.meta?.disablePersist) {
+          return false
+        }
+
+        return defaultShouldDehydrateQuery(query)
       },
     },
   })
