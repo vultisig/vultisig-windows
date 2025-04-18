@@ -2,6 +2,7 @@ import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutati
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { BackupSecureVault } from '@core/ui/vault/backup/secure/BackupSecureVault'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
@@ -10,7 +11,6 @@ import { OnBackProp, TitleProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { KeygenFailedState } from '../shared/KeygenFailedState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { KeygenSuccessStep } from '../shared/KeygenSuccessStep'
@@ -20,7 +20,7 @@ export const JoinKeygenProcess = ({
   onBack,
 }: TitleProp & OnBackProp) => {
   const { mutate: joinKeygen, step, ...joinKeygenState } = useKeygenMutation()
-  const { keygenType } = useAppPathState<'joinKeygen'>()
+  const { keygenType } = useCorePathState<'joinKeygen'>()
 
   useEffect(joinKeygen, [joinKeygen])
 

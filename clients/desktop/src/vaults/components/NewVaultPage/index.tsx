@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -7,13 +8,12 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { makeAppPath } from '../../../navigation'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
 import { HorizontalLine, ScanQRCodeLink, Wrapper } from './NewVaultPage.styled'
 
 export const NewVaultPage = ({ withBackButton = true }) => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <Wrapper delay={200}>

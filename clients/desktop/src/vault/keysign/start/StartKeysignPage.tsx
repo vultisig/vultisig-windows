@@ -14,12 +14,11 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep'
 
-const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const
+const keysignSteps = ['peers', 'session', 'sign'] as const
 
 export const StartKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'keysign'>()
@@ -44,9 +43,6 @@ export const StartKeysignPage = () => {
                       <MpcMediatorManager />
                       <Match
                         value={step}
-                        joinSession={() => (
-                          <JoinKeygenSessionStep onFinish={toNextStep} />
-                        )}
                         peers={() => (
                           <KeysignPeerDiscoveryStep onFinish={toNextStep} />
                         )}

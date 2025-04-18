@@ -4,21 +4,21 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { AppPathParams, AppPathsWithParams } from '..'
+import { CorePathParams, CorePathsWithParams } from '..'
 
-export function useAppPathParams<P extends AppPathsWithParams>() {
+export function useCorePathParams<P extends CorePathsWithParams>() {
   const [searchParams, setSearchParams] = useSearchParams()
   const searchString = searchParams.toString()
 
   const setParams = useCallback(
     (
       newParams:
-        | Partial<AppPathParams[P]>
-        | ((prevParams: AppPathParams[P]) => Partial<AppPathParams[P]>)
+        | Partial<CorePathParams[P]>
+        | ((prevParams: CorePathParams[P]) => Partial<CorePathParams[P]>)
     ) => {
       setSearchParams(
         prevSearchParams => {
-          const prevParams = parseUrlSearchString<AppPathParams[P]>(
+          const prevParams = parseUrlSearchString<CorePathParams[P]>(
             prevSearchParams.toString()
           )
 
@@ -45,7 +45,7 @@ export function useAppPathParams<P extends AppPathsWithParams>() {
 
   return [
     useMemo(
-      () => parseUrlSearchString<AppPathParams[P]>(searchString),
+      () => parseUrlSearchString<CorePathParams[P]>(searchString),
       [searchString]
     ),
     setParams,

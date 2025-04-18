@@ -1,11 +1,10 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { panel } from '../../../lib/ui/panel/Panel'
 
 const Container = styled(UnstyledButton)<IsActiveProp>`
   ${panel()};

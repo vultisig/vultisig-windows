@@ -14,6 +14,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { Text } from '@lib/ui/text'
@@ -38,7 +39,6 @@ import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
-import { Panel } from '../../lib/ui/panel/Panel'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
