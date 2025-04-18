@@ -7,6 +7,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
@@ -26,6 +27,8 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
       }),
   })
 
+  const isLargeDevice = useIsTabletDeviceAndUp()
+
   useEffect(() => {
     if (isSuccess) {
       const timeoutId = setTimeout(onFinish, ON_COMPLETE_DELAY)
@@ -39,7 +42,10 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
       <PageContent>
         <VStack flexGrow gap={48}>
           <VStack gap={4}>
-            <Text variant="h1Regular">
+            <Text
+              variant={isLargeDevice ? 'h1Regular' : undefined}
+              size={!isLargeDevice ? 24 : undefined}
+            >
               {t('fastVaultSetup.backup.enterCode')}
             </Text>
             <Text size={14} color="shy">
