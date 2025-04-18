@@ -1,4 +1,5 @@
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,10 +13,12 @@ type AnimationDescriptionProps = {
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
+  const isTabletDeviceAndUp = useIsTabletDeviceAndUp()
+  const fontSize = isTabletDeviceAndUp ? 32 : 24
   const { t } = useTranslation()
   const stepToAnimationDescription = [
     () => (
-      <Text size={32}>
+      <Text size={fontSize}>
         {t('fastVaultSetup.backup.vaultShares')}{' '}
         <GradientText as="span">
           {t('fastVaultSetup.backup.backThemUpNow')}
@@ -23,7 +26,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
       </Text>
     ),
     () => (
-      <Text size={32}>
+      <Text size={fontSize}>
         {t('fastVaultSetup.backup.part1')}{' '}
         <GradientText as="span">
           {t('fastVaultSetup.backup.heldByServer')}.
@@ -31,7 +34,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
       </Text>
     ),
     () => (
-      <Text size={32}>
+      <Text size={fontSize}>
         {t('fastVaultSetup.backup.completeCustody')}{' '}
         <GradientText as="span">
           {t('fastVaultSetup.backup.checkEmail')}

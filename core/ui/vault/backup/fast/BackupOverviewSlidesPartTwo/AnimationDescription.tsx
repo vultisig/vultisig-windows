@@ -1,16 +1,17 @@
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const AnimationDescription = () => {
   const { t } = useTranslation()
-
+  const isLargeDevice = useIsTabletDeviceAndUp()
   return (
     <Wrapper>
       <AnimatedVisibility>
         <TextWrapper>
-          <Text size={32}>
+          <Text size={isLargeDevice ? 32 : 18}>
             {t('backup')}{' '}
             <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
             {t('fastVaultSetup.backup.securely')}{' '}
