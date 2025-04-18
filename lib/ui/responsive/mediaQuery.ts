@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export type SupportedMedias =
+type SupportedMedias =
   | 'mobileDeviceAndUp'
   | 'tabletDeviceAndUp'
   | 'desktopDeviceAndUp'
@@ -8,12 +8,9 @@ export type SupportedMedias =
   | 'tabletDeviceOnly'
   | 'desktopDeviceOnly'
 
-export type SupportedMediasWidths =
-  | 'mobileDevice'
-  | 'tabletDevice'
-  | 'desktopDevice'
+type SupportedMediasWidths = 'mobileDevice' | 'tabletDevice' | 'desktopDevice'
 
-export const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
+const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
   mobileDevice: 550,
   tabletDevice: 768,
   desktopDevice: 1100,
