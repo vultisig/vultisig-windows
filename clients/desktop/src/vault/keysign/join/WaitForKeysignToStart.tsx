@@ -7,8 +7,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const WaitForKeysignToStart = ({ onFinish }: OnFinishProp<string[]>) => {
   const peersQuery = useMpcPeersQuery()

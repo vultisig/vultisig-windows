@@ -38,7 +38,7 @@ import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
-import { Panel } from '../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'

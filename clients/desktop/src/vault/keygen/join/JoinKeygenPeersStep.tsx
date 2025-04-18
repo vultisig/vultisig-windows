@@ -6,9 +6,9 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
-import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
   const peersQuery = useMpcPeersQuery()

@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc'
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
-import { Panel } from '../../../../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 
 export const Container = styled.div`
   height: 100%;

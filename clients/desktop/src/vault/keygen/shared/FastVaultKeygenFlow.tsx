@@ -9,7 +9,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { ServerPasswordStep } from '../../server/password/ServerPasswordStep'
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
@@ -18,7 +17,6 @@ import { KeygenServerStep } from './KeygenServerStep'
 const reshareVaultSteps = [
   'email',
   'password',
-  'joinSession',
   'server',
   'peers',
   'verify',
@@ -48,7 +46,6 @@ export const FastVaultKeygenFlow = () => {
           )
         }
         server={() => <KeygenServerStep onFinish={toNextStep} />}
-        joinSession={() => <JoinKeygenSessionStep onFinish={toNextStep} />}
         peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
         verify={() => (
           <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />

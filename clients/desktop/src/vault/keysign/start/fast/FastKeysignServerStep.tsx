@@ -22,7 +22,7 @@ import { keccak256 } from 'js-sha3'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader'
 import { customMessageConfig } from '../../customMessage/config'
 import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'

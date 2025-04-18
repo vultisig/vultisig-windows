@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon'
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
-import { Panel } from '../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'

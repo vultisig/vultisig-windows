@@ -9,9 +9,9 @@ import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
-import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useMpcServerType()

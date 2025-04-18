@@ -1,3 +1,4 @@
+import { joinMpcSession } from '@core/mpc/session/joinMpcSession'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -12,12 +13,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { joinSession } from '../utils/joinSession'
-import { KeygenNetworkReminder } from './KeygenNetworkReminder'
-import { PendingKeygenMessage } from './PendingKeygenMessage'
+import { FullPageFlowErrorState } from '../../../flow/FullPageFlowErrorState'
+import { MpcPendingMessage } from '../../status/MpcPendingMessage'
 
-export const JoinKeygenSessionStep = ({
+export const JoinMpcSessionStep = ({
   onFinish,
   onBack,
 }: OnFinishProp & Partial<OnBackProp>) => {
@@ -29,7 +28,7 @@ export const JoinKeygenSessionStep = ({
 
   const { mutate: start, ...mutationStatus } = useMutation({
     mutationFn: async () => {
-      return joinSession({
+      return joinMpcSession({
         serverUrl,
         sessionId,
         localPartyId,
@@ -60,12 +59,9 @@ export const JoinKeygenSessionStep = ({
           <PageContent data-testid="JoinKeygenStep-PageContent">
             <VStack flexGrow>
               <VStack flexGrow alignItems="center" justifyContent="center">
-                <PendingKeygenMessage>
-                  {t('joining_session')}
-                </PendingKeygenMessage>
+                <MpcPendingMessage>{t('joining_session')}</MpcPendingMessage>
               </VStack>
             </VStack>
-            <KeygenNetworkReminder />
           </PageContent>
         </>
       )}

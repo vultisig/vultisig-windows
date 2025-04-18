@@ -9,7 +9,7 @@ import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
-import { panel } from '../../../lib/ui/panel/Panel'
+import { panel } from '@lib/ui/panel/Panel'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
 import { useSide } from '../../../vault/swap/providers/SideProvider'
 import { useFromCoin } from '../../../vault/swap/state/fromCoin'

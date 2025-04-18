@@ -9,9 +9,9 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery'
-import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
   const {
