@@ -66,10 +66,6 @@ export const NewVaultPage = ({ withBackButton = true }) => {
     </Wrapper>
   )
 }
-console.log('🚀 ~ NewVaultPage ~ NewVaultPage:', NewVaultPage)
-console.log('🚀 ~ NewVaultPage ~ NewVaultPage:', NewVaultPage)
-console.log('🚀 ~ NewVaultPage ~ NewVaultPage:', NewVaultPage)
-console.log('🚀 ~ NewVaultPage ~ NewVaultPage:', NewVaultPage)
 
 const Wrapper = styled(AnimatedVisibility)`
   overflow-y: hidden;
