@@ -6,16 +6,9 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 
-const reshareVaultSteps = [
-  'joinSession',
-  'peers',
-  'verify',
-  'startSession',
-  'keygen',
-] as const
+const reshareVaultSteps = ['peers', 'verify', 'startSession', 'keygen'] as const
 
 export const SecureVaultKeygenFlow = () => {
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
@@ -28,7 +21,6 @@ export const SecureVaultKeygenFlow = () => {
       <MpcMediatorManager />
       <Match
         value={step}
-        joinSession={() => <JoinKeygenSessionStep onFinish={toNextStep} />}
         peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
         verify={() => (
           <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
