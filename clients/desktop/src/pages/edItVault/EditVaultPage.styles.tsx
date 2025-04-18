@@ -1,10 +1,9 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
+import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { Panel } from '@lib/ui/panel/Panel'
 
 export const ListItemPanel = styled(Panel)`
   font-weight: 400;

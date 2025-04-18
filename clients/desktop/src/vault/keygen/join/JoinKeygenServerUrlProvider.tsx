@@ -1,6 +1,8 @@
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -9,9 +11,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
-import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useMpcServerType()
