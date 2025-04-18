@@ -51,7 +51,7 @@ import {
   useCurrentVaultNativeCoin,
 } from '../state/currentVaultCoins'
 import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
-import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQueries'
+import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultAddressLink } from './VaultAddressLink'

@@ -5,19 +5,19 @@ import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useEffect } from 'react'
 
-import { useCoinFinderQueries } from './queries/useCoinFinderQueries'
+import { useCoinFinderQuery } from './queries/useCoinFinderQuery'
 
 export const CoinFinder = () => {
-  const queries = useCoinFinderQueries()
+  const { data } = useCoinFinderQuery()
 
   const { mutate: saveCoins, isPending } = useSaveCoinsMutation()
 
   const coins = useCurrentVaultCoins()
 
   useEffect(() => {
-    const foundCoins = queries.flatMap(query => query.data ?? [])
+    if (!data) return
 
-    const newCoins = foundCoins.filter(
+    const newCoins = data.filter(
       coin =>
         !coins.some(c =>
           areEqualRecords(
@@ -29,9 +29,9 @@ export const CoinFinder = () => {
 
     if (!isEmpty(newCoins) && !isPending) {
       console.log('CoinFinder: saving new coins', newCoins)
-      saveCoins(newCoins)
+      // saveCoins(newCoins)
     }
-  }, [coins, queries, saveCoins, isPending])
+  }, [coins, data, saveCoins, isPending])
 
   return null
 }

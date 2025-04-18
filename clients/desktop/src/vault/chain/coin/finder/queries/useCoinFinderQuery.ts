@@ -1,8 +1,10 @@
 import { useCurrentVaultAddreses } from '@clients/desktop/src/vault/state/currentVaultCoins'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useQueries } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { findCoins, FindCoinsInput } from '../findCoins'
 import { coinFinderChains } from '../findCoins/coinFinderChains'
@@ -12,7 +14,7 @@ export const getCoinFinderQueryKey = (input: FindCoinsInput) => [
   input,
 ]
 
-export const useCoinFinderQueries = () => {
+export const useCoinFinderQuery = () => {
   const addresses = useCurrentVaultAddreses()
 
   const coinFinderInputs = useMemo(() => {
@@ -27,13 +29,15 @@ export const useCoinFinderQueries = () => {
     return result
   }, [addresses])
 
-  return useQueries({
+  const queries = useQueries({
     queries: coinFinderInputs.map(input => ({
       queryKey: getCoinFinderQueryKey(input),
       queryFn: () => findCoins(input),
-      meta: {
-        disablePersist: true,
-      },
     })),
+  })
+
+  return useQueriesToEagerQuery({
+    queries,
+    joinData: useCallback((data: AccountCoin[][]) => data.flat(), []),
   })
 }
