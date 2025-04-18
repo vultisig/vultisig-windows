@@ -17,7 +17,7 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
-import { RemoteStateDependant } from './VaultsProvider'
+import { RemoteStateDependant } from './RemoteStateDependant'
 
 const openUrl = (url: string) => window.open(url, '_blank')
 
