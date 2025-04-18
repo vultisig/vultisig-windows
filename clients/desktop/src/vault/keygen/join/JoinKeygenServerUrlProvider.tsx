@@ -2,7 +2,7 @@ import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
-import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
+import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -40,9 +40,7 @@ export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
             primaryControls={<PageHeaderBackButton />}
           />
           <PageContent justifyContent="center" alignItems="center">
-            <PendingKeygenMessage>
-              {t('discovering_mediator')}
-            </PendingKeygenMessage>
+            <MpcPendingMessage>{t('discovering_mediator')}</MpcPendingMessage>
           </PageContent>
         </>
       )}
