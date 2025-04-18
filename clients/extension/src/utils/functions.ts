@@ -7,6 +7,7 @@ import {
   Messaging,
   SendTransactionResponse,
 } from '@clients/extension/src/utils/interfaces'
+import { VersionedTransaction } from '@solana/web3.js'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -56,6 +57,35 @@ export const checkERC20Function = async (
   const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
 
   return await api.getIsFunctionSelector(functionSelector)
+}
+
+export const hexToRgba = (hex: string, alpha: number = 1): string => {
+  // Ensure the input is a valid hex color
+  const cleanHex = hex.replace('#', '')
+  if (!/^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(cleanHex)) {
+    throw new Error('Invalid HEX color.')
+  }
+
+  // Expand shorthand HEX (e.g., #123 to #112233)
+  const fullHex =
+    cleanHex.length === 3
+      ? cleanHex
+          .split('')
+          .map(char => char + char)
+          .join('')
+      : cleanHex
+
+  // Parse the red, green, and blue values
+  const r = parseInt(fullHex.substring(0, 2), 16)
+  const g = parseInt(fullHex.substring(2, 4), 16)
+  const b = parseInt(fullHex.substring(4, 6), 16)
+
+  // Return the RGBA string
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+export const rem = (px: number, base: number = 16): string => {
+  return `${px / base}rem`
 }
 
 export const splitString = (str: string, size: number): string[] => {
@@ -125,4 +155,14 @@ export const processBackgroundResponse = (
       return result
     }
   }
+}
+
+export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
+  return (
+    typeof tx === 'object' &&
+    'version' in tx &&
+    typeof tx.version === 'number' &&
+    'message' in tx &&
+    'addressTableLookups' in tx.message
+  )
 }

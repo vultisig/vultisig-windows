@@ -1,6 +1,10 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
+import {
+  lifiSwapChainId,
+  LifiSwapEnabledChain,
+} from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { memoize } from '@lib/utils/memoize'
@@ -11,7 +15,6 @@ import { createConfig, getQuote } from '@lifi/sdk'
 import { NoSwapRoutesError } from '../../../NoSwapRoutesError'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 import { lifiConfig } from '../config'
-import { lifiSwapChainId, LifiSwapEnabledChain } from '../LifiSwapEnabledChains'
 
 type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
   address: string
