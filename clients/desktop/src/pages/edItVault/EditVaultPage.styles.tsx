@@ -4,7 +4,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { Panel } from '../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 
 export const ListItemPanel = styled(Panel)`
   font-weight: 400;

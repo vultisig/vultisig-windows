@@ -5,7 +5,7 @@ import { Text } from '@lib/ui/text'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { panel } from '../../../lib/ui/panel/Panel'
+import { panel } from '@lib/ui/panel/Panel'
 
 const Container = styled(UnstyledButton)<IsActiveProp>`
   ${panel()};

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../state/currentVaultId'
 

@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
 
 import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
-import { Panel } from '../../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 
 export const TxOverviewPanel: React.FC<ChildrenProp> = ({ children }) => (
   <Panel>

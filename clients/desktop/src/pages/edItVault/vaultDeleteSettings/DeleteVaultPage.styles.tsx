@@ -5,7 +5,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { Panel } from '../../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 
 export const Container = styled(VStack)`
   margin-bottom: 32px;

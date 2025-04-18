@@ -8,7 +8,7 @@ import { Text } from '@lib/ui/text'
 import { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { Panel } from '../../../lib/ui/panel/Panel'
+import { Panel } from '@lib/ui/panel/Panel'
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'

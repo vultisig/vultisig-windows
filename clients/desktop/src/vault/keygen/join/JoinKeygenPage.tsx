@@ -1,4 +1,5 @@
 import { JoinKeygenProviders } from '@core/ui/mpc/keygen/join/JoinKeygenProviders'
+import { JoinMpcSessionStep } from '@core/ui/mpc/keygen/join/JoinMpcSessionStep'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
@@ -9,7 +10,6 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
@@ -42,7 +42,7 @@ export const JoinKeygenPage = () => {
           <MpcMediatorManager />
           <Match
             value={step}
-            session={() => <JoinKeygenSessionStep onFinish={toNextStep} />}
+            session={() => <JoinMpcSessionStep onFinish={toNextStep} />}
             keygen={() => (
               <ValueTransfer<string[]>
                 from={({ onFinish }) => (
