@@ -1,4 +1,6 @@
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcPeersQuery } from '@core/ui/mpc/devices/peers/queries/useMpcPeersQuery'
+import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
@@ -6,9 +8,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
-import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
 
 export const WaitForKeysignToStart = ({ onFinish }: OnFinishProp<string[]>) => {
   const peersQuery = useMpcPeersQuery()

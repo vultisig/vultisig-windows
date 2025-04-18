@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import React from 'react'
@@ -13,7 +14,6 @@ import styled from 'styled-components'
 
 import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc'
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
-import { Panel } from '@lib/ui/panel/Panel'
 
 export const Container = styled.div`
   height: 100%;
