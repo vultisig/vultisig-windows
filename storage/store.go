@@ -130,43 +130,6 @@ func (s *Store) SaveVault(vault *Vault) error {
 	return nil
 }
 
-// UpdateVaultName updates the vault name
-func (s *Store) UpdateVaultName(publicKeyECDSA, name string) error {
-	query := `UPDATE vaults SET name = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, name, publicKeyECDSA)
-	return err
-}
-
-// UpdateVaultOrder updates the order of a vault
-func (s *Store) UpdateVaultOrder(publicKeyECDSA string, order float64) error {
-	query := `UPDATE vaults SET "order" = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, order, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault order, err: %w", err)
-	}
-	return nil
-}
-
-// UpdateVaultFolderID updates the folder ID of a vault
-func (s *Store) UpdateVaultFolderID(publicKeyECDSA string, folderID *string) error {
-	query := `UPDATE vaults SET folder_id = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, folderID, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault folder ID, err: %w", err)
-	}
-	return nil
-}
-
-// UpdateVaultIsBackedUp updates the IsBackedUp status of a vault
-func (s *Store) UpdateVaultIsBackedUp(publicKeyECDSA string, isBackedUp bool) error {
-	query := `UPDATE vaults SET is_backedup = ? WHERE public_key_ecdsa = ?`
-	_, err := s.db.Exec(query, isBackedUp, publicKeyECDSA)
-	if err != nil {
-		return fmt.Errorf("could not update vault IsBackedUp status, err: %w", err)
-	}
-	return nil
-}
-
 // GetVault gets a vault
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,

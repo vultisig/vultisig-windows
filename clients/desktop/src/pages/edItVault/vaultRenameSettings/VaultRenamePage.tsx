@@ -1,3 +1,4 @@
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,14 +7,13 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { PageSlice } from '@lib/ui/page/PageSlice'
 import { Text } from '@lib/ui/text'
 import { useEffect, useMemo } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { PageSlice } from '../../../ui/page/PageSlice'
-import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation'
 import {
   ButtonWithBottomSpace,
   InputField,
@@ -44,16 +44,16 @@ const VaultRenamePage = () => {
   })
 
   const {
-    mutate: renameVault,
+    mutate: updateVault,
     isPending,
     error,
     isSuccess,
-  } = useRenameVaultMutation()
+  } = useUpdateVaultMutation()
 
   const onSubmit = (data: FieldValues) => {
-    renameVault({
+    updateVault({
       vaultId: getVaultId(vault),
-      newName: data.vaultName,
+      fields: { name: data.vaultName },
     })
   }
 

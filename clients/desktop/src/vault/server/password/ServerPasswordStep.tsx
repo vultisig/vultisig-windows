@@ -1,3 +1,4 @@
+import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -16,7 +17,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
-import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
 
 export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()

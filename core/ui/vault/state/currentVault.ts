@@ -9,5 +9,5 @@ export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
 
-  return hasServer(signers) && !isServer(localPartyId) ? 'secure' : 'fast'
+  return hasServer(signers) && !isServer(localPartyId) ? 'fast' : 'secure'
 }

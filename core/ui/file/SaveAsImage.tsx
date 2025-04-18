@@ -32,10 +32,18 @@ export const SaveAsImage = ({
     mutationFn: async (node: HTMLDivElement) => {
       const dataUrl = await toPng(node)
       const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '')
+      const byteCharacters = atob(base64Data)
+      const byteArrays = new Uint8Array(byteCharacters.length)
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArrays[i] = byteCharacters.charCodeAt(i)
+      }
+
+      const blob = new Blob([byteArrays], { type: 'image/png' })
+
       return saveFile({
         name: `${fileName}.png`,
-        type: 'image/png',
-        value: base64Data,
+        blob,
       })
     },
   })

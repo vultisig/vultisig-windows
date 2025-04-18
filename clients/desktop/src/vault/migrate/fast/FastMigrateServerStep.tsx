@@ -1,3 +1,4 @@
+import { migrateWithServer } from '@core/mpc/fast/api/migrateWithServer'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -12,7 +13,6 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
 export const FastMigrateServerStep: React.FC<

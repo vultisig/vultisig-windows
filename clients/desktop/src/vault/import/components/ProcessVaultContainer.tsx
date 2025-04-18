@@ -32,7 +32,8 @@ export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
     fromBase64,
     v => new Uint8Array(v),
     v => fromBinary(VaultSchema, v),
-    fromCommVault
+    fromCommVault,
+    vault => ({ ...vault, isBackedUp: true })
   )
 
   return <SaveImportedVaultStep value={vault} />

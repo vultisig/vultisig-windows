@@ -25,7 +25,8 @@ export const DecryptVaultContainerStep = ({
           }),
         v => new Uint8Array(v),
         binary => fromBinary(VaultSchema, binary),
-        fromCommVault
+        fromCommVault,
+        vault => ({ ...vault, isBackedUp: true })
       ),
     onSuccess: onFinish,
   })

@@ -19,11 +19,19 @@ import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
 import { CreateVaultProvider } from './vault/state/createVault'
 import { SetCurrentVaultIdProvider } from './vault/state/setCurrentVaultId'
+import { UpdateVaultProvider } from './vault/state/updateVault'
 
 const queryClient = getQueryClient()
 
-const saveFile: SaveFileFunction = async ({ name, value }) => {
-  await SaveFile(name, value)
+const saveFile: SaveFileFunction = async ({ name, blob }) => {
+  const arrayBuffer = await blob.arrayBuffer()
+  const base64Data = btoa(
+    new Uint8Array(arrayBuffer).reduce(
+      (data, byte) => data + String.fromCharCode(byte),
+      ''
+    )
+  )
+  await SaveFile(name, base64Data)
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -44,7 +52,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <RemoteStateDependant>
                           <SetCurrentVaultIdProvider>
                             <CreateVaultProvider>
-                              {children}
+                              <UpdateVaultProvider>
+                                {children}
+                              </UpdateVaultProvider>
                             </CreateVaultProvider>
                           </SetCurrentVaultIdProvider>
                         </RemoteStateDependant>
