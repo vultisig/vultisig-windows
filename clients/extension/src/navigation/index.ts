@@ -8,16 +8,12 @@ export const appPaths = {
   importFile: '/import/file',
   currencySettings: '/settings/currency',
   deleteVault: '/settings/vault/delete',
-  import: '/import',
   landing: '/landing',
   languageSettings: '/settings/language',
   main: '/main',
   onboarding: '/onboarding',
   renameVault: '/settings/vault/rename',
   settings: '/settings',
-  setupFastVault: '/vault/setup/fast',
-  setupSecureVault: '/vault/setup/secure',
-  setupVault: '/vault/setup',
   vaults: '/vaults',
   vaultSettings: '/settings/vault',
 } as const
@@ -44,6 +40,8 @@ export type AppPathParams = {
   importQR: { title?: string }
   importFile: { title?: string }
   setupVault: { type?: VaultSecurityType }
+  uploadQr: { title?: string }
+  import: { from?: string }
 }
 
 export type AppPathState = {}
