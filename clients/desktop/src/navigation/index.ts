@@ -1,8 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
-import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -28,7 +25,6 @@ export const appPaths = {
   root: '/',
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
-  joinKeygen: '/join-keygen',
   vaults: '/vaults',
   manageVaults: '/vaults/manage',
   manageVaultChains: '/vault/chains',
@@ -88,10 +84,6 @@ export type AppPathState = {
     keysignPayload: KeysignMessagePayload
   }
   joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
-  joinKeygen: {
-    keygenType: KeygenType
-    keygenMsg: KeygenMessage | ReshareMessage
-  }
   deeplink: {
     url: string
   }

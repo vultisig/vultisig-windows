@@ -117,7 +117,7 @@ export const router = createBrowserRouter([
         element: <UploadQrPage />,
       },
       {
-        path: appPaths.joinKeygen,
+        path: corePaths.joinKeygen,
         element: <JoinKeygenPage />,
       },
       {

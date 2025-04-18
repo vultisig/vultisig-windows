@@ -5,6 +5,7 @@ import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -13,18 +14,17 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
+import { JoinKeygenServerUrlProvider } from './JoinKeygenServerUrlProvider'
 import { JoinKeygenVaultProvider } from './JoinKeygenVaultProvider'
-import { KeygenServerUrlProvider } from './KeygenServerUrlProvider'
 
 const keygenSteps = ['session', 'keygen'] as const
 
 export const JoinKeygenPage = () => {
-  const { keygenType, keygenMsg } = useAppPathState<'joinKeygen'>()
+  const { keygenType, keygenMsg } = useCorePathState<'joinKeygen'>()
 
   const { sessionId, useVultisigRelay, serviceName, encryptionKeyHex } =
     keygenMsg
@@ -54,7 +54,7 @@ export const JoinKeygenPage = () => {
             <CurrentKeygenTypeProvider value={keygenType}>
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                 <JoinKeygenVaultProvider>
-                  <KeygenServerUrlProvider>
+                  <JoinKeygenServerUrlProvider>
                     <JoinKeygenActionProvider>
                       <MpcMediatorManager />
                       <Match
@@ -79,7 +79,7 @@ export const JoinKeygenPage = () => {
                         )}
                       />
                     </JoinKeygenActionProvider>
-                  </KeygenServerUrlProvider>
+                  </JoinKeygenServerUrlProvider>
                 </JoinKeygenVaultProvider>
               </CurrentHexEncryptionKeyProvider>
             </CurrentKeygenTypeProvider>
