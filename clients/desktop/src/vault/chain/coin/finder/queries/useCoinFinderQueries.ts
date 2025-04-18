@@ -31,6 +31,9 @@ export const useCoinFinderQueries = () => {
     queries: coinFinderInputs.map(input => ({
       queryKey: getCoinFinderQueryKey(input),
       queryFn: () => findCoins(input),
+      meta: {
+        disablePersist: true,
+      },
     })),
   })
 }
