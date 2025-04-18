@@ -10,10 +10,10 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
+import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
 
-export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
+export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useMpcServerType()
   const [serviceName] = useMpcServiceName()
 
