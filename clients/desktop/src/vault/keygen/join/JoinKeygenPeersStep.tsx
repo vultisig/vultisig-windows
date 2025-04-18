@@ -1,6 +1,6 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcPeersQuery } from '@core/ui/mpc/devices/peers/queries/useMpcPeersQuery'
-import { PendingKeygenMessage } from '@core/ui/mpc/status/PendingKeygenMessage'
+import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -37,9 +37,9 @@ export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
         <>
           <KeygenPageHeader title={title} />
           <PageContent alignItems="center" justifyContent="center">
-            <PendingKeygenMessage>
+            <MpcPendingMessage>
               {t('waiting_for_keygen_start')}
-            </PendingKeygenMessage>
+            </MpcPendingMessage>
           </PageContent>
         </>
       )}
