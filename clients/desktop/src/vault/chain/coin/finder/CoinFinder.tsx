@@ -29,7 +29,7 @@ export const CoinFinder = () => {
 
     if (!isEmpty(newCoins) && !isPending) {
       console.log('CoinFinder: saving new coins', newCoins)
-      // saveCoins(newCoins)
+      saveCoins(newCoins)
     }
   }, [coins, data, saveCoins, isPending])
 
