@@ -1,4 +1,5 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
@@ -9,8 +10,6 @@ import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
-
-import { setupVaultWithServer } from '../../../../api/fast/api/setupVaultWithServer'
 
 export const useVaultServerSetup = () => {
   const [name] = useVaultName()
