@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,12 +14,15 @@ type AnimationDescriptionProps = {
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
+  const isTabletDeviceAndUp = useIsTabletDeviceAndUp()
+  const fontSize = isTabletDeviceAndUp ? 32 : 24
+
   const { t } = useTranslation()
   const vault = useCurrentVault()
 
   const stepToAnimationDescription = [
     () => (
-      <Text size={32}>
+      <Text size={fontSize}>
         {t('secureVaultSetup.backup.shares', {
           shares: vault.signers.length,
         })}{' '}
@@ -28,7 +32,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
       </Text>
     ),
     () => (
-      <Text size={32}>
+      <Text size={fontSize}>
         {t('backup')}{' '}
         <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
         {t('fastVaultSetup.backup.shareSecurely')}{' '}

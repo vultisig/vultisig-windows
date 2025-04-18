@@ -35,7 +35,7 @@ export const mediaQuery: Record<SupportedMedias, string> = {
 
 export const useIsTabletDeviceAndUp = () => {
   const [isTabletOrLarger, setIsTabletOrLarger] = useState(
-    window.innerWidth >= 768
+    window.innerWidth >= mediaBreakPoints.tabletDevice - 1
   )
 
   useEffect(() => {

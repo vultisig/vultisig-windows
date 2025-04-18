@@ -1,4 +1,4 @@
-import { GenMessage } from '@bufbuild/protobuf/dist/cjs/codegenv1/types'
+import { GenMessage } from '@bufbuild/protobuf/codegenv1'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 
 import { KeygenType } from '../../keygen/KeygenType'

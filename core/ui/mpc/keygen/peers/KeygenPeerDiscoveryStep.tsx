@@ -34,6 +34,7 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -59,6 +60,7 @@ export const KeygenPeerDiscoveryStep = ({
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = useMpcPeerOptionsQuery()
+  const isLargeScreen = useIsTabletDeviceAndUp()
 
   const openUrl = useOpenUrl()
 
@@ -189,7 +191,8 @@ export const KeygenPeerDiscoveryStep = ({
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </PageFormFrame>
       </FitPageContent>
-      <KeygenPeerDiscoveryEducation />
+      {/* FIXME: only show the overlay on desktop for now. Antonio to make it responsive and add it back for Extension as well. */}
+      {isLargeScreen && <KeygenPeerDiscoveryEducation />}
     </>
   )
 }
