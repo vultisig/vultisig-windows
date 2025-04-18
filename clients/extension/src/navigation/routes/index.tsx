@@ -13,6 +13,7 @@ import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
+import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
 const routes = [
@@ -21,11 +22,11 @@ const routes = [
     element: <NewVaultPage />,
   },
   {
-    path: appPaths.import,
+    path: corePaths.importVault,
     element: <ImportPage />,
   },
   {
-    path: appPaths.setupVault,
+    path: corePaths.setupVault,
     element: <SetupVaultPageController />,
   },
   {

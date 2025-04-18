@@ -1,4 +1,3 @@
-import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
@@ -6,16 +5,12 @@ export const appPaths = {
   root: '/',
   currencySettings: '/settings/currency',
   deleteVault: '/settings/vault/delete',
-  import: '/import',
   landing: '/landing',
   languageSettings: '/settings/language',
   main: '/main',
   onboarding: '/onboarding',
   renameVault: '/settings/vault/rename',
   settings: '/settings',
-  setupFastVault: '/vault/setup/fast',
-  setupSecureVault: '/vault/setup/secure',
-  setupVault: '/vault/setup',
   vaults: '/vaults',
   vaultSettings: '/settings/vault',
   uploadQr: '/vaults/upload/qr',
@@ -42,7 +37,6 @@ export type AppPath = DotNestedKeys<AppPaths>
 export type AppPathParams = {
   uploadQr: { title?: string }
   import: { from?: string }
-  setupVault: { type?: VaultSecurityType }
 }
 
 export type AppPathState = {}

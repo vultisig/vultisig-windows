@@ -1,13 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
   newVault: '/new-vault',
-  importVault: '/vault/import',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
@@ -16,9 +14,6 @@ export const appPaths = {
   reshareVaultFast: '/vault/reshare/fast',
   keysign: '/vault/keysign',
   fastKeysign: '/vault/keysign/fast',
-  setupVault: '/vault/setup',
-  setupSecureVault: '/vault/setup/secure',
-  setupFastVault: '/vault/setup/fast',
   setupActiveVault: '/vault/setup/active',
   address: '/address',
   joinKeysign: '/join-keysign',
@@ -69,7 +64,6 @@ export type AppPathParams = {
   vaultChainDetail: { chain: Chain }
   vaultChainCoinDetail: { chain: Chain; coin: string }
   send: { coin: string; address?: string }
-  setupVault: { type?: VaultSecurityType }
   swap: { coin: string }
   deposit: { coin: string }
   vaultFolder: { id: string }
