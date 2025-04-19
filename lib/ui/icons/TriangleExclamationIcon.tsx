@@ -4,6 +4,7 @@ export const TriangleExclamationIcon = () => (
     width="1em"
     height="0.96em"
     fill="none"
+    viewBox="0 0 25 24"
   >
     <path
       stroke="#FFC25C"
