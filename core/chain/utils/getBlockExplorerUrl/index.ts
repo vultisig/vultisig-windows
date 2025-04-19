@@ -39,8 +39,8 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.TerraClassic]: 'https://finder.terra.money/classic',
   [Chain.Noble]: `${cosmosBlockExplorer}/noble`,
   [Chain.Ripple]: 'https://xrpscan.com',
-  [Chain.THORChain]: 'https://www.xscanner.org',
-  [Chain.MayaChain]: 'https://www.xscanner.org',
+  [Chain.THORChain]: 'https://thorchain.net',
+  [Chain.MayaChain]: 'https://mayascan.org',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
   [Chain.Tron]: 'https://tronscan.org/#',
 }
