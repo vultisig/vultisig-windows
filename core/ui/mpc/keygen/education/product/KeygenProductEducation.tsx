@@ -1,5 +1,6 @@
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
@@ -69,6 +70,7 @@ export const KeygenProductEducation = () => {
   const { t } = useTranslation()
   const contents = getContents(t)
   const { title, descriptionOne, descriptionTwo } = contents[step]
+  const isTabletDeviceAndUp = useIsTabletDeviceAndUp()
 
   return (
     <VStack justifyContent="center" gap={12}>
@@ -76,10 +78,19 @@ export const KeygenProductEducation = () => {
         {title}
       </Text>
       <VStack justifyContent="center">
-        <GradientText centerHorizontally size={42} weight={500}>
+        <GradientText
+          centerHorizontally
+          size={isTabletDeviceAndUp ? 42 : 24}
+          weight={500}
+        >
           {descriptionOne}
         </GradientText>{' '}
-        <Text weight={500} centerHorizontally as="span" size={30}>
+        <Text
+          weight={500}
+          centerHorizontally
+          as="span"
+          size={isTabletDeviceAndUp ? 30 : 18}
+        >
           {descriptionTwo}
         </Text>
       </VStack>

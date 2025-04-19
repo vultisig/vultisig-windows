@@ -1,8 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import {
-  ITransaction,
-  VaultProps,
-} from '@clients/extension/src/utils/interfaces'
+import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
@@ -20,7 +17,7 @@ import { ParsedSolanaSwapParams } from './types/types'
 export const getSolanaSwapKeysignPayload = (
   parsedSwapParams: ParsedSolanaSwapParams,
   transaction: ITransaction,
-  vault: VaultProps
+  vault: Vault
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -80,7 +77,7 @@ export const getSolanaSwapKeysignPayload = (
                 ? ''
                 : parsedSwapParams.inputToken.address,
             decimals: parsedSwapParams.inputToken.decimals,
-            hexPublicKey: vault.publicKeyEcdsa,
+            hexPublicKey: vault.publicKeys.ecdsa,
             priceProviderId:
               parsedSwapParams.inputToken.extensions?.coingeckoId ??
               parsedSwapParams.inputToken.name.toLowerCase(),
@@ -99,7 +96,7 @@ export const getSolanaSwapKeysignPayload = (
                 ? ''
                 : parsedSwapParams.outputToken.address,
             decimals: parsedSwapParams.outputToken.decimals,
-            hexPublicKey: vault.publicKeyEcdsa,
+            hexPublicKey: vault.publicKeys.ecdsa,
             priceProviderId:
               parsedSwapParams.outputToken.extensions?.coingeckoId ??
               parsedSwapParams.outputToken.name.toLowerCase(),
@@ -127,7 +124,7 @@ export const getSolanaSwapKeysignPayload = (
         })
         const keysignPayload = create(KeysignPayloadSchema, {
           toAmount: '10000000',
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,

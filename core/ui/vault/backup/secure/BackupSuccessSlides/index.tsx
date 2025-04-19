@@ -1,7 +1,8 @@
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
@@ -23,7 +24,11 @@ export const BackupSuccessSlide: FC<OnFinishProp> = ({ onFinish }) => {
     <Wrapper>
       <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper justifyContent="center">
-          <RiveComponent />
+          <RiveComponent
+            style={{
+              flex: 1,
+            }}
+          />
         </RiveWrapper>
         <VStack alignItems="center" gap={12}>
           <Text centerHorizontally size={32}>
@@ -37,13 +42,16 @@ export const BackupSuccessSlide: FC<OnFinishProp> = ({ onFinish }) => {
   )
 }
 
-const RiveWrapper = styled(HStack)`
+const RiveWrapper = styled(VStack)`
   position: relative;
   flex: 1;
 `
 
 const Wrapper = styled(PageContent)`
-  margin-top: 48px;
   margin-inline: auto;
   max-width: 800px;
+
+  @media (${mediaQuery.tabletDeviceAndUp}) {
+    margin-top: 48px;
+  }
 `

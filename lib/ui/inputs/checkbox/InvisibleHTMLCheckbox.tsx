@@ -1,7 +1,7 @@
 import { InputProps } from '@lib/ui/props'
 import React from 'react'
 
-import { InvisibleInput } from '../InvisibleInput'
+import { InvisibleInput } from './InvisibleInput'
 
 export type InvisibleHTMLCheckboxProps = InputProps<boolean> & {
   id?: string

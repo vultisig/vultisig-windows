@@ -5,6 +5,7 @@ import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
+import { Vault as VaultCore } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
@@ -21,12 +22,12 @@ export namespace Messaging {
 
   export namespace GetVault {
     export type Request = any
-    export type Response = VaultProps | undefined
+    export type Response = Vault | undefined
   }
 
   export namespace GetVaults {
     export type Request = any
-    export type Response = VaultProps[]
+    export type Response = Vault[]
   }
 
   export namespace SetPriority {
@@ -189,16 +190,13 @@ export interface ITransaction {
   raw?: any
 }
 
-export interface VaultProps {
-  active?: boolean
-  apps?: string[]
-  chains: ChainProps[]
-  hexChainCode: string
-  name: string
-  publicKeyEcdsa: string
-  publicKeyEddsa: string
-  selected?: boolean
+export type Vault = VaultCore & {
+  // Keep legacy fields temporarily (to be removed later)
   transactions: ITransaction[]
+  apps?: string[]
+  selected?: boolean
+  active?: boolean
+  chains: ChainProps[]
   uid: string
 }
 
@@ -206,7 +204,7 @@ export interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignResponse>
   transaction?: ITransaction
-  vault?: VaultProps
+  vault?: Vault
   walletCore: WalletCore
 }
 

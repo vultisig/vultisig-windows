@@ -9,6 +9,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import type { TFunction } from 'i18next'
@@ -16,8 +17,6 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
-
-import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
 
 const getPasswordSchema = (t: TFunction) =>
   z

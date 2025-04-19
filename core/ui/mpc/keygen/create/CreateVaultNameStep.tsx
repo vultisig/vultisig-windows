@@ -54,34 +54,37 @@ export const CreateVaultNameStep = ({
       <PageContent
         as="form"
         {...getFormProps({ onSubmit: onFinish, isDisabled })}
-        gap={16}
+        justifyContent="space-between"
+        flexGrow
       >
-        <VStack>
-          <Text variant="h1Regular">{t('name_your_vault')}</Text>
-          <Text size={14} color="shy">
-            {t('vault_name_description')}
-          </Text>
-        </VStack>
-        <VStack flexGrow gap={4}>
-          <ActionInsideInteractiveElement
-            render={() => (
-              <TextInput
-                placeholder={t('enter_vault_name')}
-                value={name}
-                onValueChange={setName}
-                autoFocus
-              />
-            )}
-            action={
-              <UnstyledButton onClick={() => setName('')}>
-                <CircledCloseIcon />
-              </UnstyledButton>
-            }
-            actionPlacerStyles={{
-              right: textInputHorizontalPadding,
-              bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
-            }}
-          />
+        <VStack gap={16}>
+          <VStack>
+            <Text variant="h1Regular">{t('name_your_vault')}</Text>
+            <Text size={14} color="shy">
+              {t('vault_name_description')}
+            </Text>
+          </VStack>
+          <VStack flexGrow gap={4}>
+            <ActionInsideInteractiveElement
+              render={() => (
+                <TextInput
+                  placeholder={t('enter_vault_name')}
+                  value={name}
+                  onValueChange={setName}
+                  autoFocus
+                />
+              )}
+              action={
+                <UnstyledButton onClick={() => setName('')}>
+                  <CircledCloseIcon />
+                </UnstyledButton>
+              }
+              actionPlacerStyles={{
+                right: textInputHorizontalPadding,
+                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
+              }}
+            />
+          </VStack>
         </VStack>
         <Button type="submit" isDisabled={isDisabled}>
           {t('next')}

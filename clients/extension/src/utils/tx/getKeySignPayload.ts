@@ -1,10 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import {
-  ITransaction,
-  VaultProps,
-} from '@clients/extension/src/utils/interfaces'
+import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -30,7 +27,7 @@ import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
   transaction: ITransaction,
-  vault: VaultProps
+  vault: Vault
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -171,7 +168,7 @@ export const getKeysignPayload = (
               ).toString()
             : '0',
           memo: modifiedMemo ?? transaction.transactionDetails.data,
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,

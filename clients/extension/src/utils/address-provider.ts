@@ -1,6 +1,6 @@
 import api from '@clients/extension/src/utils/api'
 import { errorKey } from '@clients/extension/src/utils/constants'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -17,7 +17,7 @@ export default class AddressProvider {
 
   private getECDSAAddress = (
     chain: Chain,
-    vault: VaultProps,
+    vault: Vault,
     prefix?: string
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ export default class AddressProvider {
 
       api
         .derivePublicKey({
-          publicKeyEcdsa: vault.publicKeyEcdsa,
+          publicKeyEcdsa: vault.publicKeys.ecdsa,
           hexChainCode: vault.hexChainCode,
           derivePath: this.walletCore.CoinTypeExt.derivationPath(coin),
         })
@@ -65,12 +65,12 @@ export default class AddressProvider {
 
   private getEDDSAAddress = (
     chain: Chain,
-    vault: VaultProps
+    vault: Vault
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       const coin = getCoinType({ walletCore: this.walletCore, chain })
 
-      const bytes = this.walletCore.HexCoding.decode(vault.publicKeyEddsa)
+      const bytes = this.walletCore.HexCoding.decode(vault.publicKeys.eddsa)
 
       const publicKey = this.walletCore.PublicKey.createWithData(
         bytes,
@@ -86,10 +86,7 @@ export default class AddressProvider {
     })
   }
 
-  public getAddress = (
-    chain: Chain,
-    vault: VaultProps
-  ): Promise<AddressProps> => {
+  public getAddress = (chain: Chain, vault: Vault): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       switch (chain) {
         // EDDSA

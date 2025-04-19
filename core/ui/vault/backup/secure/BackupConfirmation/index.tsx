@@ -3,6 +3,7 @@ import DownloadIcon from '@lib/ui/icons/DownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
@@ -38,6 +39,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
     src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-splash/backupvault_splash.riv',
     autoplay: true,
   })
+  const isLargeScreen = useIsTabletDeviceAndUp()
 
   return (
     <PageContent>
@@ -56,13 +58,21 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
       >
         <Content alignItems="center" justifyContent="space-between" gap={40}>
           <RivePlaceholder alignItems="center" justifyContent="center">
-            <RiveComponent />
+            <RiveComponent
+              style={{
+                flexGrow: 1,
+              }}
+            />
           </RivePlaceholder>
           <VStack gap={16}>
-            <Text centerHorizontally variant="h1Regular">
+            <Text
+              variant={isLargeScreen ? 'h1Regular' : undefined}
+              size={!isLargeScreen ? 24 : undefined}
+              centerHorizontally
+            >
               {t('fastVaultSetup.backup.backupConfirmationDescription')}
             </Text>
-            <Text centerHorizontally color="shy" size={14}>
+            <Text size={14} centerHorizontally color="shy">
               {t('fastVaultSetup.backup.onlineStorageDescription')}{' '}
               <StyledAnchor
                 href={backupEducationUrl}
