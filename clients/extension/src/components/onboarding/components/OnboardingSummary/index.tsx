@@ -40,7 +40,7 @@ export const OnboardingSummary = () => {
     {
       title: t('fastVaultSetup.summary.summaryItemFourTitle'),
       icon: (
-        <div style={{ fontSize: 24 }}>
+        <div style={{ fontSize: 24, width: 18 }}>
           <TriangleExclamationIcon />
         </div>
       ),

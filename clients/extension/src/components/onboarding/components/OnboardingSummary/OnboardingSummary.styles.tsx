@@ -20,9 +20,6 @@ export const StyledCheckbox = styled(Checkbox)`
 
 export const ContentWrapper = styled(VStack)`
   padding: 24px;
-  background: rgba(92, 167, 255, 0.03);
-  border-top: 1px dashed ${getColor('foregroundExtra')};
-  border-bottom: 1px dashed ${getColor('foregroundExtra')};
   gap: 24px;
   font-size: 24px;
   ${borderRadius.s};
@@ -41,8 +38,8 @@ export const PillWrapper = styled.div`
     content: '';
     position: absolute;
     left: -2px;
-    bottom: -463px;
-    height: 463px;
+    bottom: -470px;
+    height: 470px;
     width: 2px;
     background-color: ${getColor('foreground')};
   }
