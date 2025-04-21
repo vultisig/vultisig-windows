@@ -1,14 +1,10 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { JoinMpcSessionStep } from '@core/ui/mpc/keygen/join/JoinMpcSessionStep'
-import { WaitMpcSessionStart } from '@core/ui/mpc/session/WaitMpcSessionStart'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
-import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useMemo } from 'react'
@@ -20,7 +16,7 @@ import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
 
-const keysignSteps = ['verify', 'session', 'sign'] as const
+const keysignSteps = ['verify', 'keysign'] as const
 
 export const JoinKeysignPage = () => {
   const { step, toNextStep, toPreviousStep } = useStepNavigation({
@@ -52,28 +48,10 @@ export const JoinKeysignPage = () => {
                     verify={() => (
                       <JoinKeysignVerifyStep onFinish={toNextStep} />
                     )}
-                    session={() => (
-                      <JoinMpcSessionStep
-                        onFinish={toNextStep}
+                    keysign={() => (
+                      <KeysignSigningStep
+                        payload={keysignMessagePayload}
                         onBack={toPreviousStep}
-                      />
-                    )}
-                    sign={() => (
-                      <ValueTransfer<string[]>
-                        from={({ onFinish }) => (
-                          <WaitMpcSessionStart
-                            value="keysign"
-                            onFinish={onFinish}
-                          />
-                        )}
-                        to={({ value }) => (
-                          <MpcPeersProvider value={value}>
-                            <KeysignSigningStep
-                              payload={keysignMessagePayload}
-                              onBack={toPreviousStep}
-                            />
-                          </MpcPeersProvider>
-                        )}
                       />
                     )}
                   />
