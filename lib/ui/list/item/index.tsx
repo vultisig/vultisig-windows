@@ -1,11 +1,10 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { getColor } from '@lib/ui/theme/getters'
 import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, HTMLAttributes, JSX } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledDesc = styled.span`
-  color: ${getColor('textExtraLight')};
+  color: ${({ theme }) => theme.colors.textExtraLight.toHex()};
   flex: 1;
   font-size: ${pxToRem(12)};
   font-weight: 500;
@@ -20,7 +19,7 @@ const StyledMeta = styled.span`
 `
 
 const StyledTitle = styled.span`
-  color: ${getColor('textPrimary')};
+  color: ${({ theme }) => theme.colors.textPrimary.toHex()};
   flex: 1;
   font-size: ${14};
   font-weight: 500;
@@ -34,7 +33,7 @@ const StyledListItem = styled.div<{
   hoverable?: boolean
 }>`
   align-items: center;
-  background-color: ${getColor('backgroundsSecondary')};
+  background-color: ${({ theme }) => theme.colors.backgroundsSecondary.toHex()};
   display: flex;
   gap: ${pxToRem(8)};
   padding: ${pxToRem(12)} ${pxToRem(16)};
@@ -45,7 +44,8 @@ const StyledListItem = styled.div<{
           transition: all 0.2s;
 
           &:hover {
-            background-color: ${getColor('backgroundTertiary')};
+            background-color: ${({ theme }) =>
+              theme.colors.backgroundTertiary.toHex()};
           }
         `
       : css``

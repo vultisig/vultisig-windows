@@ -1,10 +1,9 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledList = styled.div<{ bordered?: boolean }>`
-  background-color: ${getColor('borderLight')};
+  background-color: ${({ theme }) => theme.colors.borderLight.toHex()};
   border-radius: ${pxToRem(12)};
   display: flex;
   flex-direction: column;
@@ -13,7 +12,8 @@ const StyledList = styled.div<{ bordered?: boolean }>`
   ${({ bordered }) => {
     return bordered
       ? css`
-          border: solid ${pxToRem(1)} ${getColor('borderLight')};
+          border: solid ${pxToRem(1)}
+            ${({ theme }) => theme.colors.borderLight.toHex()};
         `
       : css``
   }}
