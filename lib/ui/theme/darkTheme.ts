@@ -34,6 +34,7 @@ export const darkTheme: DefaultTheme = {
     // new design system
     alertSuccess: new HSLA(166.93, 78.17, 55.1),
     alertWarning: new HSLA(37.55, 100, 68.04),
+    backgroundPrimary: new HSLA(217.14, 91.3, 9.02),
     backgroundsSecondary: new HSLA(215.77, 81.25, 12.55),
     backgroundTertiary: new HSLA(215.79, 62.64, 17.84),
     borderLight: new HSLA(215.79, 62.64, 17.84),

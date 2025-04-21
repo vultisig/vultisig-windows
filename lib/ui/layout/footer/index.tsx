@@ -1,0 +1,24 @@
+import { pxToRem } from '@lib/utils/pxToRem'
+import { FC, HTMLAttributes } from 'react'
+import styled from 'styled-components'
+
+const StyledComponent = styled.div`
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.backgroundPrimary.toHex()};
+  display: flex;
+  flex: none;
+  gap: ${pxToRem(8)};
+  padding: ${pxToRem(24)};
+  position: sticky;
+  width: 100%;
+  z-index: 1;
+`
+
+const Component: FC<HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  ...rest
+}) => {
+  return <StyledComponent {...rest}>{children}</StyledComponent>
+}
+
+export default Component

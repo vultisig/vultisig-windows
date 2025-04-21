@@ -1,3 +1,4 @@
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { Shield } from '@lib/ui/icons/Shield'
 import { Zap } from '@lib/ui/icons/Zap'
 import { pxToRem } from '@lib/utils/pxToRem'
@@ -35,7 +36,7 @@ export const ListItemExtraDevices: FC<ComponentProps> = ({
 }) => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const least = Math.round(total / 2) // TODO: replace with correct formula
+  const least = getKeygenThreshold(total)
 
   return (
     <StyledListItemExtraDevices {...rest}>

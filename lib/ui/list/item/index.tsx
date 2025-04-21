@@ -53,7 +53,7 @@ const StyledListItem = styled.div<{
 `
 
 interface ListItemProps extends HTMLAttributes<HTMLDivElement> {
-  description?: string
+  description?: JSX.Element
   extra?: JSX.Element
   hoverable?: boolean
   icon?: JSX.Element

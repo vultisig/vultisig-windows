@@ -27,6 +27,7 @@ export type ThemeColors = {
   // new design system
   alertSuccess: HSLA
   alertWarning: HSLA
+  backgroundPrimary: HSLA
   backgroundsSecondary: HSLA
   backgroundTertiary: HSLA
   borderLight: HSLA
