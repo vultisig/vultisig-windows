@@ -2,12 +2,12 @@ import { FC, SVGProps } from 'react'
 
 export const Zap: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
-  height = 24,
+  height = '1em',
   stroke = '#f0f4fc',
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
   strokeWidth = 2,
-  width = 24,
+  width = '1em',
   ...props
 }) => (
   <svg

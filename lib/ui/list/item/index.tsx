@@ -1,22 +1,22 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { rem } from '@lib/utils/pxToRem'
+import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, HTMLAttributes, JSX } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledDesc = styled.span`
   color: ${getColor('textExtraLight')};
   flex: 1;
-  font-size: ${rem(12)};
+  font-size: ${pxToRem(12)};
   font-weight: 500;
-  line-height: ${rem(16)};
+  line-height: ${pxToRem(16)};
 `
 
 const StyledMeta = styled.span`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: ${rem(4)};
+  gap: ${pxToRem(4)};
 `
 
 const StyledTitle = styled.span`
@@ -24,7 +24,7 @@ const StyledTitle = styled.span`
   flex: 1;
   font-size: ${14};
   font-weight: 500;
-  line-height: ${rem(20)};
+  line-height: ${pxToRem(20)};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -36,8 +36,8 @@ const StyledListItem = styled.div<{
   align-items: center;
   background-color: ${getColor('backgroundsSecondary')};
   display: flex;
-  gap: ${rem(8)};
-  padding: ${rem(12)} ${rem(16)};
+  gap: ${pxToRem(8)};
+  padding: ${pxToRem(12)} ${pxToRem(16)};
   ${({ hoverable }) => {
     return hoverable
       ? css`
