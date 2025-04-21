@@ -1,4 +1,5 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -37,9 +38,13 @@ export const JoinKeysignPage = () => {
                     <JoinKeysignVerifyStep onFinish={onFinish} />
                   )}
                   to={({ onBack }) => (
-                    <KeysignSigningStep
-                      payload={keysignMessagePayload}
-                      onBack={onBack}
+                    <JoinMpcSessionFlow
+                      render={() => (
+                        <KeysignSigningStep
+                          payload={keysignMessagePayload}
+                          onBack={onBack}
+                        />
+                      )}
                     />
                   )}
                 />
