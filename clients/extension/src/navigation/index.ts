@@ -15,6 +15,8 @@ export const appPaths = {
   settings: '/settings',
   vaults: '/vaults',
   vaultSettings: '/settings/vault',
+  setupFastVault: '/vault/setup/fast',
+  setupSecureVault: '/vault/setup/secure',
 } as const
 
 type AppPaths = typeof appPaths
