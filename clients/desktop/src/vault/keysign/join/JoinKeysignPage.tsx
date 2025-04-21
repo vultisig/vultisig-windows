@@ -4,9 +4,7 @@ import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevic
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Match } from '@lib/ui/base/Match'
-import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
@@ -16,14 +14,7 @@ import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
 
-const keysignSteps = ['verify', 'keysign'] as const
-
 export const JoinKeysignPage = () => {
-  const { step, toNextStep, toPreviousStep } = useStepNavigation({
-    steps: keysignSteps,
-    onExit: useNavigateBack(),
-  })
-
   const { keysignMsg } = useAppPathState<'joinKeysign'>()
 
   const { sessionId, encryptionKeyHex } = keysignMsg
@@ -43,15 +34,14 @@ export const JoinKeysignPage = () => {
             <KeysignServerUrlProvider>
               <MpcSessionIdProvider value={sessionId}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                  <Match
-                    value={step}
-                    verify={() => (
-                      <JoinKeysignVerifyStep onFinish={toNextStep} />
+                  <StepTransition
+                    from={({ onFinish }) => (
+                      <JoinKeysignVerifyStep onFinish={onFinish} />
                     )}
-                    keysign={() => (
+                    to={({ onBack }) => (
                       <KeysignSigningStep
                         payload={keysignMessagePayload}
-                        onBack={toPreviousStep}
+                        onBack={onBack}
                       />
                     )}
                   />
