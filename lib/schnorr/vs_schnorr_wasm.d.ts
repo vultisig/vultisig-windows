@@ -305,25 +305,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly __wbg_keyexportsession_free: (a: number, b: number) => void;
-  readonly keyexportsession_new: (a: number, b: number, c: number) => number;
-  readonly keyexportsession_setup: (a: number) => [number, number];
-  readonly keyexportsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly keyexportsession_finish: (a: number) => [number, number, number, number];
-  readonly keyexportsession_exportShare: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
-  readonly __wbg_keyshare_free: (a: number, b: number) => void;
-  readonly keyshare_publicKey: (a: number) => [number, number];
-  readonly keyshare_keyId: (a: number) => [number, number];
-  readonly keyshare_toBytes: (a: number) => [number, number];
-  readonly keyshare_fromBytes: (a: number, b: number) => [number, number, number];
-  readonly keyshare_rootChainCode: (a: number) => [number, number];
-  readonly __wbg_qcsession_free: (a: number, b: number) => void;
-  readonly qcsession_new: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
-  readonly qcsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number];
-  readonly qcsession_setupKeyId: (a: number, b: number) => [number, number];
-  readonly qcsession_outputMessage: (a: number) => number;
-  readonly qcsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly qcsession_finish: (a: number) => [number, number, number];
   readonly __wbg_keygensession_free: (a: number, b: number) => void;
   readonly keygensession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
   readonly keygensession_refresh: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
@@ -344,6 +325,25 @@ export interface InitOutput {
   readonly message_body: (a: number) => [number, number];
   readonly message_receivers: (a: number) => [number, number];
   readonly signsession_setupKeyId: (a: number, b: number) => [number, number];
+  readonly __wbg_keyexportsession_free: (a: number, b: number) => void;
+  readonly keyexportsession_new: (a: number, b: number, c: number) => number;
+  readonly keyexportsession_setup: (a: number) => [number, number];
+  readonly keyexportsession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly keyexportsession_finish: (a: number) => [number, number, number, number];
+  readonly keyexportsession_exportShare: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
+  readonly __wbg_keyshare_free: (a: number, b: number) => void;
+  readonly keyshare_publicKey: (a: number) => [number, number];
+  readonly keyshare_keyId: (a: number) => [number, number];
+  readonly keyshare_toBytes: (a: number) => [number, number];
+  readonly keyshare_fromBytes: (a: number, b: number) => [number, number, number];
+  readonly keyshare_rootChainCode: (a: number) => [number, number];
+  readonly __wbg_qcsession_free: (a: number, b: number) => void;
+  readonly qcsession_new: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
+  readonly qcsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number];
+  readonly qcsession_setupKeyId: (a: number, b: number) => [number, number];
+  readonly qcsession_outputMessage: (a: number) => number;
+  readonly qcsession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly qcsession_finish: (a: number) => [number, number, number];
   readonly __wbg_keyimportersession_free: (a: number, b: number) => void;
   readonly keyimportsession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
   readonly keyimportsession_outputMessage: (a: number) => number;
@@ -360,8 +360,8 @@ export interface InitOutput {
   readonly __wbindgen_export_2: WebAssembly.Table;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
-  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __externref_table_dealloc: (a: number) => void;
+  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __externref_drop_slice: (a: number, b: number) => void;
   readonly __wbindgen_start: () => void;
 }
