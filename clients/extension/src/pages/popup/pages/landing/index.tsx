@@ -2,7 +2,7 @@ import { AnimatedVisibility } from '@clients/extension/src/components/shared/Ani
 import { HorizontalLine } from '@clients/extension/src/components/shared/HorizontalLine'
 import { ProductLogoBlock } from '@clients/extension/src/components/shared/Logo/ProductLogoBlock'
 import { makeAppPath } from '@clients/extension/src/navigation'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 export const NewVaultPage = ({ withBackButton = true }) => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <Wrapper delay={200}>
@@ -48,16 +48,7 @@ export const NewVaultPage = ({ withBackButton = true }) => {
                 {t('scan_qr')}
               </Button>
             </ScanQRCodeLink>
-            <Button
-              onClick={() =>
-                navigate('importFile', {
-                  params: {
-                    title: t('import_vault'),
-                  },
-                })
-              }
-              kind="secondary"
-            >
+            <Button onClick={() => navigate('importVault')} kind="secondary">
               {t('import_vault')}
             </Button>
           </VStack>
