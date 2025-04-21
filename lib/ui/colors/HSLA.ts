@@ -94,7 +94,7 @@ export class HSLA {
     return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2]
   }
 
-  toRgba(): [number, number, number, number] {
+  private getRgba(): { r: number; g: number; b: number; a: number } {
     const { h, s, l, a } = this
     const C = (1 - Math.abs((2 * l) / 100 - 1)) * (s / 100)
     const X = C * (1 - Math.abs(((h / 60) % 2) - 1))
@@ -130,7 +130,25 @@ export class HSLA {
       b = X
     }
 
-    return [(r + m) * 255, (g + m) * 255, (b + m) * 255, a]
+    return {
+      r: Math.round((r + m) * 255),
+      g: Math.round((g + m) * 255),
+      b: Math.round((b + m) * 255),
+      a,
+    }
+  }
+
+  toHex(): string {
+    const { r, g, b } = this.getRgba()
+    const hex = (value: number) => value.toString(16).padStart(2, '0')
+
+    return `#${hex(r)}${hex(g)}${hex(b)}`
+  }
+
+  toRgba(alpha: number = 1): string {
+    const { r, g, b } = this.getRgba()
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
   }
 
   private contrastRatio(l1: number, l2: number): number {
@@ -138,7 +156,7 @@ export class HSLA {
   }
 
   private getLuminance(): number {
-    const [r, g, b] = this.toRgba()
+    const { r, g, b } = this.getRgba()
     return this.relativeLuminance(r, g, b)
   }
 
