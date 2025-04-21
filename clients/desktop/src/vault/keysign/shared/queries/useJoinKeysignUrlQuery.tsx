@@ -27,7 +27,7 @@ export const useJoinKeysignUrlQuery = () => {
       serviceName,
       sessionId,
       hexEncryptionKey,
-      keysignPayload,
+      payload: keysignPayload,
       vaultId,
     }),
     [
