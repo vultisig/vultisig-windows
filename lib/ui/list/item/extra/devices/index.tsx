@@ -24,25 +24,25 @@ const StyledListItemExtraDevices = styled.div`
 `
 
 interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
-  devices: number
   secure?: boolean
+  total: number
 }
 
 export const ListItemExtraDevices: FC<ComponentProps> = ({
-  devices,
   secure,
+  total,
   ...rest
 }) => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const least = Math.round(devices / 2) // TODO: replace with correct formula
+  const least = Math.round(total / 2) // TODO: replace with correct formula
 
   return (
     <StyledListItemExtraDevices {...rest}>
       {secure ? (
         <>
           <Shield height={16} stroke={colors.alertSuccess.toHex()} width={16} />
-          <StyledText>{`${least}-${t('of')}-${devices}`}</StyledText>
+          <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
         </>
       ) : (
         <>
