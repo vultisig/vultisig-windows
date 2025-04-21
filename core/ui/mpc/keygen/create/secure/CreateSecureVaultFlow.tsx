@@ -1,17 +1,18 @@
 import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
-import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-const steps = ['name', 'peers', 'startSession', 'keygen'] as const
+import { StartMpcSessionFlow } from '../../../session/StartMpcSessionFlow'
+
+const steps = ['name', 'peers', 'keygen'] as const
 
 const lastEditableStep = steps[0]
 
 export const CreateSecureVaultFlow = () => {
-  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+  const { step, setStep, toNextStep } = useStepNavigation({
     steps,
     onExit: useNavigateBack(),
   })
@@ -26,10 +27,11 @@ export const CreateSecureVaultFlow = () => {
           onFinish={toNextStep}
         />
       )}
-      startSession={() => (
-        <StartMpcSessionStep onBack={toPreviousStep} onFinish={toNextStep} />
+      keygen={() => (
+        <StartMpcSessionFlow
+          render={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
+        />
       )}
-      keygen={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
     />
   )
 }

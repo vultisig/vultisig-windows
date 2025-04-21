@@ -1,4 +1,4 @@
-import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
+import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -10,7 +10,6 @@ import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serve
 import { PasswordProvider } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
-import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -61,11 +60,8 @@ export const StartFastKeysignPage = () => {
                             )}
                             to={({ value }) => (
                               <MpcPeersProvider value={value}>
-                                <StepTransition
-                                  from={({ onFinish }) => (
-                                    <StartMpcSessionStep onFinish={onFinish} />
-                                  )}
-                                  to={() => (
+                                <StartMpcSessionFlow
+                                  render={() => (
                                     <KeysignSigningStep
                                       payload={keysignPayload}
                                     />
