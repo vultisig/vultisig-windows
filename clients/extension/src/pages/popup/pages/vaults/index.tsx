@@ -80,7 +80,7 @@ const Component = () => {
                     key={uid}
                     title={name}
                     onClick={() => handleSelect(uid)}
-                    extra={<ListItemExtraDevices devices={3} secure />}
+                    extra={<ListItemExtraDevices total={3} secure />}
                     hoverable
                     showArrow
                   />
