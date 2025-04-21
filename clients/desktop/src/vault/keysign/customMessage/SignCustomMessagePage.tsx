@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -9,13 +10,12 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { WithProgressIndicator } from '../shared/WithProgressIndicator'
 
 export const SignCustomMessagePage = () => {
   const { t } = useTranslation()
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   const [method, setMethod] = useState('')
   const [message, setMessage] = useState('')

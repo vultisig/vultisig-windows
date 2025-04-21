@@ -6,19 +6,18 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-
-import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 
 export const useJoinKeysignUrlQuery = () => {
   const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const payload = useKeysignMessagePayload()
+  const { keysignPayload } = useCorePathState<'keysign'>()
   const currentVault = useCurrentVault()
   const vaultId = getVaultId(currentVault)
 
@@ -28,10 +27,17 @@ export const useJoinKeysignUrlQuery = () => {
       serviceName,
       sessionId,
       hexEncryptionKey,
-      payload,
+      keysignPayload,
       vaultId,
     }),
-    [hexEncryptionKey, payload, serverType, serviceName, sessionId, vaultId]
+    [
+      hexEncryptionKey,
+      keysignPayload,
+      serverType,
+      serviceName,
+      sessionId,
+      vaultId,
+    ]
   )
 
   return useQuery({

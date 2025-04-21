@@ -9,7 +9,6 @@ import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
-import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
@@ -28,29 +27,27 @@ export const JoinKeysignPage = () => {
 
   return (
     <IsInitiatingDeviceProvider value={false}>
-      <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-        <MpcLocalPartyIdProvider value={localPartyId}>
-          <KeysignVaultGuard>
-            <KeysignServerUrlProvider>
-              <MpcSessionIdProvider value={sessionId}>
-                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                  <StepTransition
-                    from={({ onFinish }) => (
-                      <JoinKeysignVerifyStep onFinish={onFinish} />
-                    )}
-                    to={({ onBack }) => (
-                      <KeysignSigningStep
-                        payload={keysignMessagePayload}
-                        onBack={onBack}
-                      />
-                    )}
-                  />
-                </CurrentHexEncryptionKeyProvider>
-              </MpcSessionIdProvider>
-            </KeysignServerUrlProvider>
-          </KeysignVaultGuard>
-        </MpcLocalPartyIdProvider>
-      </KeysignMessagePayloadProvider>
+      <MpcLocalPartyIdProvider value={localPartyId}>
+        <KeysignVaultGuard>
+          <KeysignServerUrlProvider>
+            <MpcSessionIdProvider value={sessionId}>
+              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                <StepTransition
+                  from={({ onFinish }) => (
+                    <JoinKeysignVerifyStep onFinish={onFinish} />
+                  )}
+                  to={({ onBack }) => (
+                    <KeysignSigningStep
+                      payload={keysignMessagePayload}
+                      onBack={onBack}
+                    />
+                  )}
+                />
+              </CurrentHexEncryptionKeyProvider>
+            </MpcSessionIdProvider>
+          </KeysignServerUrlProvider>
+        </KeysignVaultGuard>
+      </MpcLocalPartyIdProvider>
     </IsInitiatingDeviceProvider>
   )
 }

@@ -1,10 +1,10 @@
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { IsDisabledProp, ValueProp } from '@lib/ui/props'
+import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
-
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 
 type StartKeysignPromptProps = ValueProp<KeysignPayload> & IsDisabledProp
 
@@ -13,28 +13,14 @@ export const StartKeysignPrompt = ({
   isDisabled,
 }: StartKeysignPromptProps) => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   const securityType = useCurrentVaultSecurityType()
 
-  if (securityType === 'fast') {
-    return (
-      <Button
-        onClick={() => {
-          navigate('fastKeysign', {
-            state: {
-              keysignPayload: {
-                keysign: keysignPayload,
-              },
-            },
-          })
-        }}
-        isDisabled={isDisabled}
-      >
-        {t('fast_sign')}
-      </Button>
-    )
-  }
+  const text = match(securityType, {
+    fast: () => t('fast_sign'),
+    secure: () => t('start_transaction'),
+  })
 
   return (
     <Button
@@ -49,7 +35,7 @@ export const StartKeysignPrompt = ({
         })
       }}
     >
-      {t('start_transaction')}
+      {text}
     </Button>
   )
 }

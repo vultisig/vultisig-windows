@@ -1,16 +1,16 @@
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo'
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo'
-import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
 import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo'
 
 export const KeysignTxOverview = () => {
-  const keysignMessagePayload = useKeysignMessagePayload()
+  const { keysignPayload } = useCorePathState<'keysign'>()
 
   return (
     <MatchRecordUnion
-      value={keysignMessagePayload}
+      value={keysignPayload}
       handlers={{
         keysign: payload =>
           payload.swapPayload.value ? (

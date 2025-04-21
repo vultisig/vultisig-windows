@@ -1,4 +1,5 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -13,6 +14,7 @@ export const corePaths = {
   setupSecureVault: '/vault/setup/secure',
   setupVault: '/vault/setup',
   importVault: '/vault/import',
+  keysign: '/vault/keysign',
 } as const
 
 type CorePaths = typeof corePaths
@@ -26,6 +28,9 @@ export type CorePathState = {
   joinKeygen: {
     keygenType: KeygenType
     keygenMsg: KeygenMessage | ReshareMessage
+  }
+  keysign: {
+    keysignPayload: KeysignMessagePayload
   }
 }
 

@@ -9,6 +9,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -25,7 +26,6 @@ import { useTranslation } from 'react-i18next'
 
 import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader'
 import { customMessageConfig } from '../../customMessage/config'
-import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
 import { getTxInputData } from '../../utils/getTxInputData'
 
 export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
@@ -36,7 +36,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
 
-  const payload = useKeysignMessagePayload()
+  const { keysignPayload } = useCorePathState<'keysign'>()
 
   const walletCore = useAssertWalletCore()
 
@@ -44,7 +44,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
-      return matchRecordUnion(payload, {
+      return matchRecordUnion(keysignPayload, {
         keysign: async keysignPayload => {
           const inputs = await getTxInputData({
             keysignPayload,
