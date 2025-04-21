@@ -1,5 +1,6 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { JoinMpcSessionStep } from '@core/ui/mpc/keygen/join/JoinMpcSessionStep'
+import { WaitMpcSessionStart } from '@core/ui/mpc/session/WaitMpcSessionStart'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -18,7 +19,6 @@ import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePay
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
-import { WaitForKeysignToStart } from './WaitForKeysignToStart'
 
 const keysignSteps = ['verify', 'session', 'sign'] as const
 
@@ -61,7 +61,10 @@ export const JoinKeysignPage = () => {
                     sign={() => (
                       <ValueTransfer<string[]>
                         from={({ onFinish }) => (
-                          <WaitForKeysignToStart onFinish={onFinish} />
+                          <WaitMpcSessionStart
+                            value="keysign"
+                            onFinish={onFinish}
+                          />
                         )}
                         to={({ value }) => (
                           <MpcPeersProvider value={value}>

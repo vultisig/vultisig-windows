@@ -1,5 +1,6 @@
 import { JoinKeygenProviders } from '@core/ui/mpc/keygen/join/JoinKeygenProviders'
 import { JoinMpcSessionStep } from '@core/ui/mpc/keygen/join/JoinMpcSessionStep'
+import { WaitMpcSessionStart } from '@core/ui/mpc/session/WaitMpcSessionStart'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
@@ -11,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
-import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
 import { JoinKeygenServerUrlProvider } from './JoinKeygenServerUrlProvider'
 
@@ -46,7 +46,7 @@ export const JoinKeygenPage = () => {
             keygen={() => (
               <ValueTransfer<string[]>
                 from={({ onFinish }) => (
-                  <JoinKeygenPeersStep onFinish={onFinish} />
+                  <WaitMpcSessionStart value="keygen" onFinish={onFinish} />
                 )}
                 to={({ value }) => (
                   <MpcPeersProvider value={value}>
