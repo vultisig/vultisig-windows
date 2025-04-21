@@ -1,20 +1,37 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
+import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
+import { VaultSecurityType } from '../vault/VaultSecurityType'
+
 export const corePaths = {
   vault: '/vault',
+  joinKeygen: '/join-keygen',
+  setupFastVault: '/vault/setup/fast',
+  setupSecureVault: '/vault/setup/secure',
+  setupVault: '/vault/setup',
+  importVault: '/vault/import',
 } as const
 
 type CorePaths = typeof corePaths
 export type CorePath = keyof CorePaths
 
-export type CorePathParams = {}
+export type CorePathParams = {
+  setupVault: { type?: VaultSecurityType }
+}
 
-export type CorePathState = {}
+export type CorePathState = {
+  joinKeygen: {
+    keygenType: KeygenType
+    keygenMsg: KeygenMessage | ReshareMessage
+  }
+}
 
-type CorePathsWithParams = keyof CorePathParams
+export type CorePathsWithParams = keyof CorePathParams
 
-type CorePathsWithState = keyof CorePathState
+export type CorePathsWithState = keyof CorePathState
 
 export type CorePathsWithParamsAndState = Extract<
   CorePathsWithParams,

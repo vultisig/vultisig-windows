@@ -1,5 +1,6 @@
 import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
 import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
@@ -14,7 +15,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
 export const FastReshareServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {

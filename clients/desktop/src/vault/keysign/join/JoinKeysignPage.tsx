@@ -1,4 +1,5 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { JoinMpcSessionStep } from '@core/ui/mpc/keygen/join/JoinMpcSessionStep'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -12,7 +13,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
-import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
@@ -53,7 +53,7 @@ export const JoinKeysignPage = () => {
                       <JoinKeysignVerifyStep onFinish={toNextStep} />
                     )}
                     session={() => (
-                      <JoinKeygenSessionStep
+                      <JoinMpcSessionStep
                         onFinish={toNextStep}
                         onBack={() => setStep('verify')}
                       />
