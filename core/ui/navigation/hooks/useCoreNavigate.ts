@@ -38,7 +38,7 @@ export function useCoreNavigate(): CoreNavigate {
   const coreNavigate = useCallback(
     (path: CorePath, { params, ...options }: any = {}) => {
       const to = params
-        ? makeCorePath(path as never, params as never)
+        ? makeCorePath(path as any, params)
         : makeCorePath(path as any)
 
       navigate(to, options)

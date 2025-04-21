@@ -93,19 +93,19 @@ export const router = createBrowserRouter([
         element: <SettingsVaultPage />,
       },
       {
-        path: appPaths.setupFastVault,
+        path: corePaths.setupFastVault,
         element: <SetupFastVaultPage />,
       },
       {
-        path: appPaths.setupSecureVault,
+        path: corePaths.setupSecureVault,
         element: <SetupSecureVaultPage />,
       },
       {
-        path: appPaths.setupVault,
+        path: corePaths.setupVault,
         element: <SetupVaultPageController />,
       },
       {
-        path: appPaths.importVault,
+        path: corePaths.importVault,
         element: <ImportVaultPage />,
       },
       {
@@ -117,7 +117,7 @@ export const router = createBrowserRouter([
         element: <UploadQrPage />,
       },
       {
-        path: appPaths.joinKeygen,
+        path: corePaths.joinKeygen,
         element: <JoinKeygenPage />,
       },
       {

@@ -1,4 +1,5 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { ReshareDeviceItem } from '@core/ui/mpc/keygen/reshare/verify/ReshareDeviceItem'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -10,14 +11,12 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { without } from '@lib/utils/array/without'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
-import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`
   height: 32px;

@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -17,7 +18,6 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useVaultSecurityType } from '../type/state/vaultSecurityType'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
@@ -35,7 +35,7 @@ export const SetupVaultPage = () => {
     useSetupVaultPageAnimation()
   const { t } = useTranslation()
   const [value, setValue] = useVaultSecurityType()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const theme = useTheme()
 
   const onStart = useCallback(() => {

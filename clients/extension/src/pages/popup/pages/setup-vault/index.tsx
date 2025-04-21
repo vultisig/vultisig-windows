@@ -1,4 +1,3 @@
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useSetupVaultPageAnimation } from '@clients/extension/src/pages/popup/pages/setup-vault/hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
@@ -9,6 +8,7 @@ import {
   IconWrapper,
 } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPage.styled'
 import { useVaultSecurityType } from '@clients/extension/src/pages/popup/pages/setup-vault/type/state/vaultSecurityType'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
@@ -32,7 +32,7 @@ export const SetupVaultPage = () => {
     useSetupVaultPageAnimation()
   const { t } = useTranslation()
   const [value, setValue] = useVaultSecurityType()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const theme = useTheme()
 
   const onStart = useCallback(() => {
