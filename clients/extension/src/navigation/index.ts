@@ -5,7 +5,6 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 export const appPaths = {
   root: '/',
   importQR: '/import/qr',
-  importFile: '/import/file',
   currencySettings: '/settings/currency',
   deleteVault: '/settings/vault/delete',
   landing: '/landing',
@@ -46,7 +45,7 @@ export type AppPathParams = {
 
 export type AppPathState = {}
 
-type AppPathsWithParams = keyof AppPathParams
+export type AppPathsWithParams = keyof AppPathParams
 
 type AppPathsWithState = keyof AppPathState
 

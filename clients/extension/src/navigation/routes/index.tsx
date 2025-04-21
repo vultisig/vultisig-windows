@@ -27,10 +27,6 @@ const routes = [
     element: <ImportQRPage />,
   },
   {
-    path: appPaths.importFile,
-    element: <ImportFilePage />,
-  },
-  {
     path: corePaths.importVault,
     element: <ImportFilePage />,
   },

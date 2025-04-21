@@ -32,6 +32,7 @@ import { UAParser } from 'ua-parser-js'
 import { readBarcodes, ReaderOptions } from 'zxing-wasm'
 
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
+
 interface InitialState {
   file?: File
   isWindows: boolean
@@ -273,6 +274,7 @@ const Component = () => {
   }, [navigateToMain])
 
   const [{ title = t('keysign') }] = useAppPathParams<'importQR'>()
+
   return isWindows ? (
     <StyledPageContent fullHeight>
       <FlowPageHeader title={title} />
