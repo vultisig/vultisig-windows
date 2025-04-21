@@ -23,7 +23,7 @@ import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
 const keysignSteps = ['verify', 'session', 'sign'] as const
 
 export const JoinKeysignPage = () => {
-  const { step, setStep, toNextStep } = useStepNavigation({
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: useNavigateBack(),
   })
@@ -55,7 +55,7 @@ export const JoinKeysignPage = () => {
                     session={() => (
                       <JoinMpcSessionStep
                         onFinish={toNextStep}
-                        onBack={() => setStep('verify')}
+                        onBack={toPreviousStep}
                       />
                     )}
                     sign={() => (
@@ -70,7 +70,7 @@ export const JoinKeysignPage = () => {
                           <MpcPeersProvider value={value}>
                             <KeysignSigningStep
                               payload={keysignMessagePayload}
-                              onBack={() => setStep('verify')}
+                              onBack={toPreviousStep}
                             />
                           </MpcPeersProvider>
                         )}
