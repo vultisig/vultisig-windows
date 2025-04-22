@@ -1,4 +1,5 @@
-import { SwapFee } from '../../../vault/swap/types/SwapFee'
+import { SwapFee } from '@core/chain/swap/SwapFee'
+
 import { GeneralSwapProvider } from './GeneralSwapProvider'
 
 export type GeneralSwapTx =

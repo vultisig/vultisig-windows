@@ -3,6 +3,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   OneInchQuoteSchema,
@@ -17,7 +18,6 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
-import { SwapQuote } from '../quote/SwapQuote'
 
 type Input = {
   amount: bigint

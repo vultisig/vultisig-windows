@@ -1,5 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapProvider'
+import {
+  KeysignSwapPayload,
+  toKeysignSwapPayload,
+} from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   TxOverviewChainDataRow,
@@ -12,12 +17,6 @@ import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValu
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { useTranslation } from 'react-i18next'
-
-import {
-  KeysignSwapPayload,
-  toKeysignSwapPayload,
-} from '../../../chain/keysign/KeysignSwapPayload'
-import { generalSwapProviderName } from '../../../chain/swap/general/GeneralSwapProvider'
 
 export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { erc20ApprovePayload, toAmount: fromAmount } = value
