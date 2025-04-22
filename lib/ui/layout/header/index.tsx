@@ -28,7 +28,7 @@ const StyledHeader = styled.div<{ revert: boolean }>`
   flex-direction: ${({ revert }) => (revert ? 'row-reverse' : 'row')};
   justify-content: space-between;
   min-height: ${pxToRem(60)};
-  padding: ${pxToRem(16)} ${pxToRem(24)};
+  padding: ${pxToRem(16)};
   position: relative;
   width: 100%;
 `

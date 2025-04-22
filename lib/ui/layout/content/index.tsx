@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 const StyledContent = styled.div<{ flex?: boolean; gap: number }>`
   flex-grow: 1;
   overflow-x: hidden;
-  padding: ${pxToRem(24)};
+  padding: ${pxToRem(16)};
   position: relative;
   width: 100%;
   ${({ flex, gap }) => {

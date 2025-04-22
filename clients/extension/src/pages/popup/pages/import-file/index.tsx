@@ -156,6 +156,7 @@ const Component = () => {
   }
 
   const onVaultDecrypted = (decodedVault: Vault) => {
+    console.log('decodedVault:', decodedVault)
     if (decodedVault.hexChainCode) {
       const uid = createHash('sha256')
         .update(
@@ -171,10 +172,7 @@ const Component = () => {
       setState(prevState => ({
         ...prevState,
         vault: {
-          hexChainCode: decodedVault.hexChainCode,
-          name: decodedVault.name,
-          publicKeyEcdsa: decodedVault.publicKeys.ecdsa,
-          publicKeyEddsa: decodedVault.publicKeys.eddsa,
+          ...decodedVault,
           uid,
           apps: [],
           chains: [],

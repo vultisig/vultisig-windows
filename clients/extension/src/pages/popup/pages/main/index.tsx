@@ -3,6 +3,7 @@ import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNa
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { Settings } from '@lib/ui/icons/Settings'
@@ -94,11 +95,18 @@ const Component: FC = () => {
           </ConnectedApp>
         }
       />
-      <Content gap={20} flex>
+      <Content gap={16} flex>
         <List>
           <ListItem
             title={vault.name}
-            extra={<ListItemExtraDevices total={3} secure />}
+            extra={
+              <ListItemExtraDevices
+                total={vault.signers?.length}
+                secure={
+                  !hasServer(vault.signers) || isServer(vault.localPartyId)
+                }
+              />
+            }
           />
         </List>
         <VStack gap={12}>

@@ -1,9 +1,10 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { Vault } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -75,12 +76,17 @@ const Component = () => {
             <List>
               {vaults
                 .filter(({ uid }) => uid !== vault.uid)
-                .map(({ name, uid }) => (
+                .map(({ localPartyId, name, signers, uid }) => (
                   <ListItem
                     key={uid}
                     title={name}
                     onClick={() => handleSelect(uid)}
-                    extra={<ListItemExtraDevices total={3} secure />}
+                    extra={
+                      <ListItemExtraDevices
+                        total={signers?.length}
+                        secure={!hasServer(signers) || isServer(localPartyId)}
+                      />
+                    }
                     hoverable
                     showArrow
                   />

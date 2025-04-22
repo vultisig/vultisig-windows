@@ -30,7 +30,7 @@ interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
 
 export const ListItemExtraDevices: FC<ComponentProps> = ({
   secure,
-  total,
+  total = 0,
   ...rest
 }) => {
   const { t } = useTranslation()
