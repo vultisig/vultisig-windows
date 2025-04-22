@@ -1,8 +1,10 @@
+import buildInfo from '@clients/desktop/build.json'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
+import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
 import { ChildrenProp } from '@lib/ui/props'
@@ -39,34 +41,36 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <MpcLocalModeAvailabilityProvider value={true}>
-      <VaultCreationMpcLibProvider value={mpcLib}>
-        <OpenUrlProvider value={BrowserOpenURL}>
-          <SaveFileProvider value={saveFile}>
-            <MpcDeviceProvider value="windows">
-              <WalletCoreProvider>
-                <QueryClientProvider client={queryClient}>
-                  <ThemeProvider theme={darkTheme}>
-                    <I18nProvider language={language}>
-                      <InitializedWalletOnly>
-                        <RemoteStateDependant>
-                          <SetCurrentVaultIdProvider>
-                            <CreateVaultProvider>
-                              <UpdateVaultProvider>
-                                {children}
-                              </UpdateVaultProvider>
-                            </CreateVaultProvider>
-                          </SetCurrentVaultIdProvider>
-                        </RemoteStateDependant>
-                      </InitializedWalletOnly>
-                    </I18nProvider>
-                  </ThemeProvider>
-                </QueryClientProvider>
-              </WalletCoreProvider>
-            </MpcDeviceProvider>
-          </SaveFileProvider>
-        </OpenUrlProvider>
-      </VaultCreationMpcLibProvider>
-    </MpcLocalModeAvailabilityProvider>
+    <VersionProvider value={buildInfo.version}>
+      <MpcLocalModeAvailabilityProvider value={true}>
+        <VaultCreationMpcLibProvider value={mpcLib}>
+          <OpenUrlProvider value={BrowserOpenURL}>
+            <SaveFileProvider value={saveFile}>
+              <MpcDeviceProvider value="windows">
+                <WalletCoreProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <ThemeProvider theme={darkTheme}>
+                      <I18nProvider language={language}>
+                        <InitializedWalletOnly>
+                          <RemoteStateDependant>
+                            <SetCurrentVaultIdProvider>
+                              <CreateVaultProvider>
+                                <UpdateVaultProvider>
+                                  {children}
+                                </UpdateVaultProvider>
+                              </CreateVaultProvider>
+                            </SetCurrentVaultIdProvider>
+                          </RemoteStateDependant>
+                        </InitializedWalletOnly>
+                      </I18nProvider>
+                    </ThemeProvider>
+                  </QueryClientProvider>
+                </WalletCoreProvider>
+              </MpcDeviceProvider>
+            </SaveFileProvider>
+          </OpenUrlProvider>
+        </VaultCreationMpcLibProvider>
+      </MpcLocalModeAvailabilityProvider>
+    </VersionProvider>
   )
 }

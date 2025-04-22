@@ -6,6 +6,7 @@ import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
+import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
@@ -29,35 +30,37 @@ const saveFile: SaveFileFunction = async ({ name, blob }) => {
 
 export const AppProviders = ({ children }: ChildrenProp) => {
   return (
-    <MpcLocalModeAvailabilityProvider value={false}>
-      <VaultCreationMpcLibProvider value={defaultMpcLib}>
-        <OpenUrlProvider value={openUrl}>
-          <SaveFileProvider value={saveFile}>
-            <MpcDeviceProvider value="extension">
-              <ThemeProvider theme={darkTheme}>
-                <QueryProvider>
-                  <I18nProvider>
-                    <WalletCoreProvider>
-                      <SetCurrentVaultIdProvider>
-                        <CreateVaultProvider>
-                          <UpdateVaultProvider>
-                            <AntDesignThemeProvider>
-                              <RemoteStateDependant>
-                                {children}
-                              </RemoteStateDependant>
-                              <GlobalStyle />
-                            </AntDesignThemeProvider>
-                          </UpdateVaultProvider>
-                        </CreateVaultProvider>
-                      </SetCurrentVaultIdProvider>
-                    </WalletCoreProvider>
-                  </I18nProvider>
-                </QueryProvider>
-              </ThemeProvider>
-            </MpcDeviceProvider>
-          </SaveFileProvider>
-        </OpenUrlProvider>
-      </VaultCreationMpcLibProvider>
-    </MpcLocalModeAvailabilityProvider>
+    <VersionProvider value="1.0.0">
+      <MpcLocalModeAvailabilityProvider value={false}>
+        <VaultCreationMpcLibProvider value={defaultMpcLib}>
+          <OpenUrlProvider value={openUrl}>
+            <SaveFileProvider value={saveFile}>
+              <MpcDeviceProvider value="extension">
+                <ThemeProvider theme={darkTheme}>
+                  <QueryProvider>
+                    <I18nProvider>
+                      <WalletCoreProvider>
+                        <SetCurrentVaultIdProvider>
+                          <CreateVaultProvider>
+                            <UpdateVaultProvider>
+                              <AntDesignThemeProvider>
+                                <RemoteStateDependant>
+                                  {children}
+                                </RemoteStateDependant>
+                                <GlobalStyle />
+                              </AntDesignThemeProvider>
+                            </UpdateVaultProvider>
+                          </CreateVaultProvider>
+                        </SetCurrentVaultIdProvider>
+                      </WalletCoreProvider>
+                    </I18nProvider>
+                  </QueryProvider>
+                </ThemeProvider>
+              </MpcDeviceProvider>
+            </SaveFileProvider>
+          </OpenUrlProvider>
+        </VaultCreationMpcLibProvider>
+      </MpcLocalModeAvailabilityProvider>
+    </VersionProvider>
   )
 }
