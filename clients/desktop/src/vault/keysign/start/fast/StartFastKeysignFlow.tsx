@@ -1,3 +1,5 @@
+import { WaitForServerToJoinStep } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerToJoinStep'
+import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { PasswordProvider } from '@core/ui/state/password'
@@ -7,8 +9,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
-import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
-import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
 import { FastKeysignServerStep } from './FastKeysignServerStep'
 
