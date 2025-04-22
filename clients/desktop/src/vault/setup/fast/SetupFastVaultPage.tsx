@@ -1,5 +1,6 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
 import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
+import { SetupVaultServerStep } from '@core/ui/mpc/keygen/create/fast/SetupVaultServerStep'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { EmailProvider } from '@core/ui/state/email'
@@ -14,7 +15,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'
-import { SetupVaultServerStep } from './SetupVaultServerStep'
 
 const steps = [
   'name',
