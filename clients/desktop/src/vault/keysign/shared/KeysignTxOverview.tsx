@@ -5,7 +5,9 @@ import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
 import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
+import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
@@ -24,10 +26,8 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { SwapTrackingLink } from './SwapTrackingLink'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
