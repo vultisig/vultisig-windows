@@ -1,9 +1,9 @@
 import { Chain, EvmChain, UtxoChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { getUtxoFeeUnit } from '../../../utxo/fee/getUtxoFeeUnit'
-import { gwei } from './evm'
 
 export const getFeeUnit = (chain: Chain): string => {
   if (isOneOf(chain, Object.values(EvmChain))) {
