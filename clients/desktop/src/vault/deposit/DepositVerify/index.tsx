@@ -1,3 +1,9 @@
+import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
+import {
+  TxOverviewColumn,
+  TxOverviewRow,
+  TxOverviewRowDepositsFlow,
+} from '@core/ui/chain/tx/TxOverviewRow'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -7,12 +13,6 @@ import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
-import {
-  TxOverviewColumn,
-  TxOverviewRow,
-  TxOverviewRowDepositsFlow,
-} from '../../../chain/tx/components/TxOverviewRow'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'

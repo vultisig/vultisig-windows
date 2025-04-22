@@ -1,4 +1,3 @@
-import { TxOverviewChainDataRow } from '@clients/desktop/src/chain/tx/components/TxOverviewRow'
 import {
   getParsedMemo,
   ParsedMemoParams,
@@ -6,6 +5,8 @@ import {
 import { ValueProp } from '@lib/ui/props'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { TxOverviewChainDataRow } from './TxOverviewRow'
 
 interface InitialState {
   parsedMemo?: ParsedMemoParams

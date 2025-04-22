@@ -1,4 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
+import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
+import {
+  TxOverviewChainDataRow,
+  TxOverviewPrimaryRowTitle,
+  TxOverviewRow,
+} from '@core/ui/chain/tx/TxOverviewRow'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -12,13 +19,6 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo'
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
-import {
-  TxOverviewChainDataRow,
-  TxOverviewPrimaryRowTitle,
-  TxOverviewRow,
-} from '../../../chain/tx/components/TxOverviewRow'
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
