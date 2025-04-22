@@ -30,6 +30,7 @@ export type CorePathState = {
     keygenMsg: KeygenMessage | ReshareMessage
   }
   keysign: {
+    securityType: VaultSecurityType
     keysignPayload: KeysignMessagePayload
   }
 }

@@ -1,5 +1,5 @@
 import { StartKeysignProviders } from '@core/ui/mpc/keysign/start/StartKeysignProviders'
-import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
@@ -7,7 +7,7 @@ import { StartFastKeysignFlow } from './fast/StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
 
 export const StartKeysignPage = () => {
-  const securityType = useCurrentVaultSecurityType()
+  const { securityType } = useCorePathState<'keysign'>()
 
   return (
     <StartKeysignProviders>
