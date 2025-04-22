@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
@@ -17,7 +18,6 @@ import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 

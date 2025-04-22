@@ -1,4 +1,5 @@
-import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
+import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
