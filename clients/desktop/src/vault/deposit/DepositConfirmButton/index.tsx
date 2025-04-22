@@ -5,28 +5,22 @@ import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import {
-  useCurrentVault,
-  useCurrentVaultSecurityType,
-} from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
+import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 import { transactionConfig } from './config'
-
-type DepositType = 'fast' | 'paired'
 
 type DepositConfirmButtonProps = {
   depositFormData: Record<string, unknown>
@@ -43,12 +37,9 @@ export const DepositConfirmButton = ({
   const { t } = useTranslation()
   const [coinKey] = useCurrentDepositCoin()
   const coin = useCurrentVaultCoin(coinKey)
-  const navigate = useAppNavigate()
   const chainSpecificQuery = useDepositChainSpecificQuery()
   const vault = useCurrentVault()
   const config = transactionConfig[action] || {}
-
-  const securityType = useCurrentVaultSecurityType()
 
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
@@ -64,7 +55,7 @@ export const DepositConfirmButton = ({
 
   const walletCore = useAssertWalletCore()
 
-  const startKeysign = (type: DepositType) => {
+  const keysignPayload = useMemo(() => {
     // TODO: handle affiliate fee and percentage
     const publicKey = shouldBePresent(publicKeyQuery.data)
     const keysignPayload = create(KeysignPayloadSchema, {
@@ -94,12 +85,21 @@ export const DepositConfirmButton = ({
       ).toString()
     }
 
-    navigate(type === 'fast' ? 'fastKeysign' : 'keysign', {
-      state: {
-        keysignPayload: { keysign: keysignPayload },
-      },
-    })
-  }
+    return { keysign: keysignPayload }
+  }, [
+    action,
+    amount,
+    chainSpecificQuery.data,
+    coin,
+    isTonFunction,
+    memo,
+    publicKeyQuery.data,
+    receiver,
+    validatorAddress,
+    vault.localPartyId,
+    vault.publicKeys.ecdsa,
+    walletCore,
+  ])
 
   if (
     (config.requiresAmount && !Number.isFinite(amount)) ||
@@ -117,16 +117,5 @@ export const DepositConfirmButton = ({
     return <Text>{t('loading')}</Text>
   }
 
-  if (securityType === 'fast') {
-    return (
-      <VStack gap={20}>
-        <Button onClick={() => startKeysign('fast')}>{t('fast_sign')}</Button>
-        <Button kind="outlined" onClick={() => startKeysign('paired')}>
-          {t('paired_sign')}
-        </Button>
-      </VStack>
-    )
-  }
-
-  return <Button onClick={() => startKeysign('paired')}>{t('continue')}</Button>
+  return <StartKeysignPrompt value={keysignPayload} />
 }

@@ -88,3 +88,7 @@ export type SvgProps = SVGProps<SVGSVGElement>
 export type MessageProp = {
   message: ReactNode
 }
+
+export type RenderProp = {
+  render: () => ReactNode
+}

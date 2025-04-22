@@ -24,8 +24,8 @@ export const SwapConfirm = () => {
       value={keysignPayloadQuery}
       pending={() => <StrictText>{t('loading')}</StrictText>}
       error={error => <StrictText>{extractErrorMsg(error)}</StrictText>}
-      success={keysignPayload => (
-        <StartKeysignPrompt value={keysignPayload} isDisabled={isDisabled} />
+      success={keysign => (
+        <StartKeysignPrompt value={{ keysign }} isDisabled={isDisabled} />
       )}
     />
   )

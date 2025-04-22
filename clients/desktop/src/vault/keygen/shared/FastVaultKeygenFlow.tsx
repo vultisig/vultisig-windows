@@ -2,7 +2,7 @@ import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { ReshareVerifyStep } from '@core/ui/mpc/keygen/reshare/verify/ReshareVerifyStep'
-import { StartMpcSessionStep } from '@core/ui/mpc/session/StartMpcSessionStep'
+import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -20,7 +20,6 @@ const reshareVaultSteps = [
   'server',
   'peers',
   'verify',
-  'startSession',
   'keygen',
 ] as const
 
@@ -50,10 +49,11 @@ export const FastVaultKeygenFlow = () => {
         verify={() => (
           <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
         )}
-        startSession={() => (
-          <StartMpcSessionStep onBack={toPreviousStep} onFinish={toNextStep} />
+        keygen={() => (
+          <StartMpcSessionFlow
+            render={() => <KeygenFlow onBack={() => setStep('verify')} />}
+          />
         )}
-        keygen={() => <KeygenFlow onBack={() => setStep('verify')} />}
       />
     </>
   )

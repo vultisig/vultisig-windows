@@ -36,7 +36,6 @@ import { ImportVaultPage } from './vault/import/components/ImportVaultPage'
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage'
 import { SignCustomMessagePage } from './vault/keysign/customMessage/SignCustomMessagePage'
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage'
-import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage'
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage'
 import { MigrateVaultPage } from './vault/migrate/MigrateVaultPage'
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage'
@@ -129,18 +128,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.keysign,
+        path: corePaths.keysign,
         element: (
           <ActiveVaultGuard>
             <StartKeysignPage />
-          </ActiveVaultGuard>
-        ),
-      },
-      {
-        path: appPaths.fastKeysign,
-        element: (
-          <ActiveVaultGuard>
-            <StartFastKeysignPage />
           </ActiveVaultGuard>
         ),
       },
