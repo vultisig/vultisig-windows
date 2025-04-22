@@ -1,6 +1,5 @@
+import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { describe, expect, it } from 'vitest'
-
-import { getChainEntityIconSrc } from '../getChainEntityIconSrc'
 
 describe('getChainEntityIconSrc', () => {
   it('should return the correct icon path for a valid chain name', () => {

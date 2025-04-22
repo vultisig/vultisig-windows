@@ -2,7 +2,7 @@ import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, HTMLAttributes } from 'react'
 import styled from 'styled-components'
 
-const StyledComponent = styled.div`
+const StyledFooter = styled.div`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.backgroundPrimary.toHex()};
   display: flex;
@@ -14,11 +14,9 @@ const StyledComponent = styled.div`
   z-index: 1;
 `
 
-const Component: FC<HTMLAttributes<HTMLDivElement>> = ({
+export const Footer: FC<HTMLAttributes<HTMLDivElement>> = ({
   children,
   ...rest
 }) => {
-  return <StyledComponent {...rest}>{children}</StyledComponent>
+  return <StyledFooter {...rest}>{children}</StyledFooter>
 }
-
-export default Component

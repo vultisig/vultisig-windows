@@ -18,7 +18,7 @@ const StyledHeading = styled.h1`
   white-space: nowrap;
 `
 
-const StyledComponent = styled.div<{ revert: boolean }>`
+const StyledHeader = styled.div<{ revert: boolean }>`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.backgroundPrimary.toHex()};
   border-bottom: solid ${pxToRem(1)}
@@ -26,20 +26,21 @@ const StyledComponent = styled.div<{ revert: boolean }>`
   display: flex;
   flex: none;
   flex-direction: ${({ revert }) => (revert ? 'row-reverse' : 'row')};
+  justify-content: space-between;
   min-height: ${pxToRem(60)};
   padding: ${pxToRem(16)} ${pxToRem(24)};
   position: relative;
   width: 100%;
 `
 
-interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
+interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
   addonAfter?: HTMLAttributes<HTMLDivElement>['children']
   addonBefore?: HTMLAttributes<HTMLDivElement>['children']
   heading?: string
   headingProps?: HTMLAttributes<HTMLSpanElement>
 }
 
-const Component: FC<ComponentProps> = ({
+export const Header: FC<HeaderProps> = ({
   addonAfter,
   addonBefore,
   heading,
@@ -47,12 +48,10 @@ const Component: FC<ComponentProps> = ({
   ...rest
 }) => {
   return (
-    <StyledComponent revert={!addonBefore} {...rest}>
+    <StyledHeader revert={!addonBefore} {...rest}>
       {addonBefore && <StyledAddon>{addonBefore}</StyledAddon>}
       {heading && <StyledHeading {...headingProps}>{heading}</StyledHeading>}
       {addonAfter && <StyledAddon>{addonAfter}</StyledAddon>}
-    </StyledComponent>
+    </StyledHeader>
   )
 }
-
-export { Component as Header }

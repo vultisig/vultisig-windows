@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes } from 'react'
 import styled from 'styled-components'
 
-const StyledComponent = styled.div`
+const StyledLayout = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -11,11 +11,9 @@ const StyledComponent = styled.div`
   overflow: hidden;
 `
 
-const Component: FC<HTMLAttributes<HTMLDivElement>> = ({
+export const Layout: FC<HTMLAttributes<HTMLDivElement>> = ({
   children,
   ...props
 }) => {
-  return <StyledComponent {...props}>{children}</StyledComponent>
+  return <StyledLayout {...props}>{children}</StyledLayout>
 }
-
-export { Component as Layout }

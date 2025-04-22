@@ -1,6 +1,6 @@
+import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { UiProps } from '@lib/ui/props'
 
-import { ChainEntityIcon } from './ChainEntityIcon'
 import { WithChainIcon } from './WithChainIcon'
 
 type ChainCoinIconProps = UiProps & {

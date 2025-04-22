@@ -2,7 +2,7 @@ import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
-const StyledComponent = styled.div<{ flex?: boolean; gap: number }>`
+const StyledContent = styled.div<{ flex?: boolean; gap: number }>`
   flex-grow: 1;
   overflow-x: hidden;
   padding: ${pxToRem(24)};
@@ -23,17 +23,15 @@ const StyledComponent = styled.div<{ flex?: boolean; gap: number }>`
   }}
 `
 
-interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
+interface ContentProps extends HTMLAttributes<HTMLDivElement> {
   flex?: boolean
   gap?: number
 }
 
-const Component: FC<ComponentProps> = ({ children, gap = 0, ...rest }) => {
+export const Content: FC<ContentProps> = ({ children, gap = 0, ...rest }) => {
   return (
-    <StyledComponent gap={gap} {...rest}>
+    <StyledContent gap={gap} {...rest}>
       {children}
-    </StyledComponent>
+    </StyledContent>
   )
 }
-
-export { Component as Content }

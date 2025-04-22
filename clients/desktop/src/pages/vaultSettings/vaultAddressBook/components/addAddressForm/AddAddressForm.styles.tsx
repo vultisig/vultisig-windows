@@ -1,3 +1,4 @@
+import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { Button } from '@lib/ui/buttons/Button'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
@@ -12,7 +13,6 @@ import {
 } from 'react-select'
 import styled from 'styled-components'
 
-import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc'
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
 
 export const Container = styled.div`

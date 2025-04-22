@@ -1,3 +1,4 @@
+// TODO: Remove duplicate assets from extension and windows
 export const getChainEntityIconSrc = (name: string) => {
   if (name.includes('.')) {
     // If name includes an extension, return path without adding any extension

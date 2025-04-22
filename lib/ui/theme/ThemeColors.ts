@@ -25,12 +25,14 @@ export type ThemeColors = {
   danger: HSLA
   buttonBackgroundDisabled: HSLA
   // new design system
+  alertInfo: HSLA
   alertSuccess: HSLA
   alertWarning: HSLA
   backgroundPrimary: HSLA
   backgroundsSecondary: HSLA
   backgroundTertiary: HSLA
   borderLight: HSLA
+  buttonsDisabled: HSLA
   textExtraLight: HSLA
   textPrimary: HSLA
 }
