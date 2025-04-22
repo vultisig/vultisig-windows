@@ -4,10 +4,10 @@ import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { getPayloadFromServer } from '@core/ui/mpc/keygen/create/fast/server/utils/getPayloadFromServer'
 
 import { getKeygenServerUrl } from '../../../keygen/server/utils/getKeygenServerUrl'
 import { decompressQrPayload } from '../../../qr/upload/utils/decompressQrPayload'
-import { getPayloadFromServer } from '../../../server/utils/getPayloadFromServer'
 
 export const parseTransferredKeysignMsg = async (
   binary: Uint8Array
