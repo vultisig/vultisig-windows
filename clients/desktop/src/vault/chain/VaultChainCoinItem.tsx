@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -15,7 +16,6 @@ import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
-import { shouldDisplayChainLogo } from './utils'
 
 export const VaultChainCoinItem = ({
   value,

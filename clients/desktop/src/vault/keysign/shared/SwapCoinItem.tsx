@@ -1,5 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -12,7 +13,6 @@ import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSr
 import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { shouldDisplayChainLogo } from '../../chain/utils'
 
 export const SwapCoinItem = ({
   coin,
