@@ -37,7 +37,7 @@ const routes = [
     element: <SetupVaultPageController />,
   },
   {
-    path: appPaths.setupSecureVault,
+    path: corePaths.setupSecureVault,
     element: <SetupSecureVaultPage />,
   },
   {
