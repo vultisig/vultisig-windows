@@ -1,12 +1,4 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import {
-  StyledActiveVault,
-  StyledActiveVaultIcon,
-  StyledActiveVaultName,
-  StyledDevices,
-  StyledList,
-  StyledListItem,
-} from '@clients/extension/src/pages/popup/pages/vaults/styles'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -14,8 +6,11 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
+import { ListItemExtraActive } from '@lib/ui/list/item/extra/active'
+import { ListItemExtraDevices } from '@lib/ui/list/item/extra/devices'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
@@ -68,51 +63,29 @@ const Component = () => {
       />
       <PageContent gap={20} scrollable>
         {vault && (
-          <StyledActiveVault>
-            <StyledActiveVaultName>{vault.name}</StyledActiveVaultName>
-            <StyledActiveVaultIcon>{t('active')}</StyledActiveVaultIcon>
-          </StyledActiveVault>
+          <List bordered>
+            <ListItem title={vault.name} extra={<ListItemExtraActive />} />
+          </List>
         )}
         {vaults.length > 1 && (
           <VStack gap={12}>
-            <Text weight={500} size={12} color="contrast">
+            <Text weight={500} size={12} color="light">
               {t('other_vaults')}
             </Text>
-            <StyledList gap={1}>
+            <List>
               {vaults
                 .filter(({ uid }) => uid !== vault.uid)
                 .map(({ name, uid }) => (
-                  <StyledListItem
+                  <ListItem
                     key={uid}
+                    title={name}
                     onClick={() => handleSelect(uid)}
-                    gap={12}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <HStack
-                      gap={12}
-                      flexGrow
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Text weight={500} size={14} color="contrast" cropped>
-                        {name}
-                      </Text>
-                      <StyledDevices
-                        nowrap
-                        size={12}
-                        weight={500}
-                        color="supporting"
-                      >
-                        {t('share_n_of_m', { n: 2, m: 3 })}
-                      </StyledDevices>
-                    </HStack>
-                    <HStack>
-                      <ChevronRightIcon size={16} />
-                    </HStack>
-                  </StyledListItem>
+                    extra={<ListItemExtraDevices total={3} secure />}
+                    hoverable
+                    showArrow
+                  />
                 ))}
-            </StyledList>
+            </List>
           </VStack>
         )}
         <Button
