@@ -5,6 +5,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
+import { WaitForServerLoader } from '@core/ui/vault/server/components/WaitForServerLoader'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -14,8 +15,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
 export const FastReshareServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()

@@ -11,6 +11,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { useVaultPassword } from '@core/ui/state/password'
+import { WaitForServerLoader } from '@core/ui/vault/server/components/WaitForServerLoader'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -24,7 +25,6 @@ import { keccak256 } from 'js-sha3'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader'
 import { customMessageConfig } from '../../customMessage/config'
 import { getTxInputData } from '../../utils/getTxInputData'
 

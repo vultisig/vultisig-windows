@@ -1,8 +1,8 @@
+import { WaitForServerStates } from '@core/ui/vault/server/components/WaitForServerStates'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC } from 'react'
 
-import { WaitForServerStates } from '../../server/components/WaitForServerStates'
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'
 
 export const SetupVaultServerStep: FC<OnFinishProp & Partial<OnBackProp>> = ({
