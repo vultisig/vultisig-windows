@@ -1,5 +1,5 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import type { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -20,8 +20,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface InitialState {
-  vault?: VaultProps
-  vaults: VaultProps[]
+  vault?: Vault
+  vaults: Vault[]
 }
 
 const Component = () => {

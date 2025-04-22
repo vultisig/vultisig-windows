@@ -12,7 +12,6 @@ export const appPaths = {
   reshareVaultSecure: '/vault/reshare/secure',
   migrateVault: '/vault/migrate',
   reshareVaultFast: '/vault/reshare/fast',
-  keysign: '/vault/keysign',
   fastKeysign: '/vault/keysign/fast',
   setupActiveVault: '/vault/setup/active',
   address: '/address',
@@ -71,9 +70,6 @@ export type AppPathParams = {
 }
 
 export type AppPathState = {
-  keysign: {
-    keysignPayload: KeysignMessagePayload
-  }
   fastKeysign: {
     keysignPayload: KeysignMessagePayload
   }

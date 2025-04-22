@@ -17,6 +17,8 @@ import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import { SetupSecureVaultPage } from '../../components/setup/secure/SetupSecureVaultPage'
+
 const routes = [
   {
     path: appPaths.landing,
@@ -33,6 +35,10 @@ const routes = [
   {
     path: corePaths.setupVault,
     element: <SetupVaultPageController />,
+  },
+  {
+    path: corePaths.setupSecureVault,
+    element: <SetupSecureVaultPage />,
   },
   {
     path: appPaths.onboarding,

@@ -1,6 +1,6 @@
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import type { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface InitialState {
-  vault?: VaultProps
+  vault?: Vault
 }
 
 const Component = () => {

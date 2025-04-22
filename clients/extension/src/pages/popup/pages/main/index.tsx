@@ -1,6 +1,6 @@
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { Button } from '@lib/ui/buttons/Button'
@@ -47,7 +47,7 @@ const ConnectedApp = styled.div`
 `
 
 interface InitialState {
-  vault?: VaultProps
+  vault?: Vault
 }
 
 const Component: FC = () => {

@@ -5,7 +5,7 @@ import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredRequest,
   getStoredVaults,
@@ -30,7 +30,7 @@ interface InitialState {
   errorTitle?: string
   hasError?: boolean
   sender?: string
-  vaults: VaultProps[]
+  vaults: Vault[]
 }
 
 const Component = () => {

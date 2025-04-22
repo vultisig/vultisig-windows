@@ -1,6 +1,6 @@
 import { ArrowLeft } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -17,7 +17,7 @@ const Component = () => {
   const handleSubmit = (): void => {
     form
       .validateFields()
-      .then(({ name }: VaultProps) => {
+      .then(({ name }: Vault) => {
         getStoredVaults().then(vaults => {
           setStoredVaults(
             vaults.map(item => (item.active ? { ...item, name } : item))
@@ -48,7 +48,7 @@ const Component = () => {
       </div>
       <div className="content">
         <Form form={form} onFinish={handleSubmit}>
-          <Form.Item<VaultProps> name="name" rules={[{ required: true }]}>
+          <Form.Item<Vault> name="name" rules={[{ required: true }]}>
             <Input placeholder={t('name')} />
           </Form.Item>
           <Button htmlType="submit" />

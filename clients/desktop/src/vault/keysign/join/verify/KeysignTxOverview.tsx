@@ -1,16 +1,23 @@
+import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { useMemo } from 'react'
 
+import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo'
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo'
-import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
 import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo'
 
 export const KeysignTxOverview = () => {
-  const keysignMessagePayload = useKeysignMessagePayload()
+  const { keysignMsg } = useAppPathState<'joinKeysign'>()
+
+  const keysignPayload = useMemo(
+    () => getKeysignMessagePayload(keysignMsg),
+    [keysignMsg]
+  )
 
   return (
     <MatchRecordUnion
-      value={keysignMessagePayload}
+      value={keysignPayload}
       handlers={{
         keysign: payload =>
           payload.swapPayload.value ? (

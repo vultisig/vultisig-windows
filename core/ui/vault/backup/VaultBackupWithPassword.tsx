@@ -55,6 +55,7 @@ const ActionsWrapper = styled(VStack)`
 const InfoPill = styled(Button)`
   pointer-events: none;
   justify-content: flex-start;
+  white-space: wrap;
   gap: 4px;
   height: 40px;
 `
@@ -177,7 +178,7 @@ export const VaultBackupWithPassword = ({
           <ActionsWrapper gap={16}>
             <InfoPill kind="outlined">
               <InfoGradientIcon />{' '}
-              <Text color="contrast" size={13}>
+              <Text as="span" color="contrast" size={13}>
                 {t('vault_backup_page_password_info')}
               </Text>
             </InfoPill>

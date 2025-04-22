@@ -44,7 +44,11 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
       </ProgressWrapper>
       <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper>
-          <AnimationComponent />
+          <AnimationComponent
+            style={{
+              flexGrow: 1,
+            }}
+          />
         </RiveWrapper>
         <BottomItemsWrapper gap={12} alignItems="center">
           <AnimationDescription animation={currentAnimation} />

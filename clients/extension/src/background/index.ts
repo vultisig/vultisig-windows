@@ -17,7 +17,7 @@ import {
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
-  VaultProps,
+  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
@@ -243,23 +243,11 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
                 resolve(
                   vaults
                     .filter(({ selected }) => selected)
-                    .map(
-                      ({
-                        hexChainCode,
-                        name,
-                        publicKeyEcdsa,
-                        publicKeyEddsa,
-                        uid,
-                      }) => ({
-                        chains: [],
-                        hexChainCode,
-                        name,
-                        publicKeyEcdsa,
-                        publicKeyEddsa,
-                        transactions: [],
-                        uid,
-                      })
-                    )
+                    .map(vault => ({
+                      ...vault,
+                      chains: [],
+                      transactions: [],
+                    }))
                 )
               })
             }
@@ -1026,8 +1014,8 @@ chrome.runtime.onMessage.addListener(
                   message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                 ) {
                   try {
-                    getStoredVaults().then((vaults: VaultProps[]) => {
-                      const vault = vaults.find((vault: VaultProps) => {
+                    getStoredVaults().then((vaults: Vault[]) => {
+                      const vault = vaults.find((vault: Vault) => {
                         return (
                           vault.chains.find(
                             (selectedChain: ChainProps) =>
@@ -1084,8 +1072,8 @@ chrome.runtime.onMessage.addListener(
                     if (
                       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                     ) {
-                      getStoredVaults().then((vaults: VaultProps[]) => {
-                        const vault = vaults.find((vault: VaultProps) => {
+                      getStoredVaults().then((vaults: Vault[]) => {
+                        const vault = vaults.find((vault: Vault) => {
                           return (
                             vault.chains.find(
                               (selectedChain: ChainProps) =>

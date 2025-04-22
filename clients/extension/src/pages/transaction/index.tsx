@@ -28,10 +28,7 @@ import {
 } from '@clients/extension/src/icons'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
-import {
-  ITransaction,
-  VaultProps,
-} from '@clients/extension/src/utils/interfaces'
+import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredCurrency,
   getStoredTransactions,
@@ -94,7 +91,7 @@ interface InitialState {
   keySignUrl?: string
   step: number
   transaction?: ITransaction
-  vault?: VaultProps
+  vault?: Vault
   hasError?: boolean
   errorTitle?: string
   errorDescription?: string
@@ -456,7 +453,7 @@ const Component = () => {
             serverType: 'relay',
             serviceName: 'VultiConnect',
             sessionId: transaction.id,
-            vaultId: vault.publicKeyEcdsa,
+            vaultId: vault.publicKeys.ecdsa,
             payload,
             payloadId: '',
           })
@@ -563,8 +560,8 @@ const Component = () => {
               messages: [imageHash],
               public_key:
                 signatureAlgorithm === 'ecdsa'
-                  ? vault.publicKeyEcdsa
-                  : vault.publicKeyEddsa,
+                  ? vault.publicKeys.ecdsa
+                  : vault.publicKeys.eddsa,
               session: transaction.id,
             })
             .then(() => {
@@ -646,7 +643,7 @@ const Component = () => {
 
         try {
           const fastSign = await api.fastVault.assertVaultExist(
-            vault.publicKeyEcdsa
+            vault.publicKeys.ecdsa
           )
 
           if (transaction.isCustomMessage) {

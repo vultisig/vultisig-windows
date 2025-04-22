@@ -6,7 +6,6 @@ import {
   isSupportedChain,
   supportedChains,
 } from '@clients/extension/src/utils/constants'
-import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -22,7 +21,6 @@ import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/Decr
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -41,6 +39,7 @@ import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
 import { calculateWindowPosition } from '../../../../utils/functions'
+import { Vault } from '../../../../utils/interfaces'
 
 interface InitialState {
   error?: string
@@ -50,7 +49,7 @@ interface InitialState {
   isWindows: boolean
   loading?: boolean
   status: 'default' | 'error' | 'success'
-  vault?: VaultProps
+  vault?: Vault
 }
 
 const Component = () => {
@@ -91,7 +90,8 @@ const Component = () => {
           v => fromBinary(VaultSchema, v),
           fromCommVault
         )
-        onVaultDecrypted(decodedVault)
+        // TODO: Ehsan to fix when we merge the proper type for this
+        onVaultDecrypted(decodedVault as any)
       }
     } else {
       handleError(errorKey.INVALID_VAULT)
@@ -179,7 +179,8 @@ const Component = () => {
           apps: [],
           chains: [],
           transactions: [],
-        },
+          // TODO: Ehsan to fix when we merge the proper type for this
+        } as any,
         status: 'success',
       }))
       finalizeVaultImport()
@@ -294,7 +295,8 @@ const Component = () => {
       <>
         <DecryptVaultContainerStep
           value={vaultContainer!.vault}
-          onFinish={onVaultDecrypted}
+          // TODO: Ehsan to fix when we merge the proper type for this
+          onFinish={onVaultDecrypted as any}
         />
       </>
     )

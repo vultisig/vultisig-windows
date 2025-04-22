@@ -1,7 +1,7 @@
 import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
-import { defaultMpcLib } from '@core/mpc/mpcLib'
+import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
@@ -17,6 +17,9 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
+import { RemoteStateDependant } from './RemoteStateDependant'
+
+const defaultMpcLib: MpcLib = 'DKLS'
 
 const openUrl = (url: string) => window.open(url, '_blank')
 
@@ -39,7 +42,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <CreateVaultProvider>
                           <UpdateVaultProvider>
                             <AntDesignThemeProvider>
-                              {children}
+                              <RemoteStateDependant>
+                                {children}
+                              </RemoteStateDependant>
                               <GlobalStyle />
                             </AntDesignThemeProvider>
                           </UpdateVaultProvider>

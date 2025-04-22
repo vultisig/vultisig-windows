@@ -12,10 +12,9 @@ import { useCurrentVaultId } from '../state/currentVaultId'
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const [currentVaultId] = useCurrentVaultId()
   const vaults = useVaults()
+  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 
   const navigate = useAppNavigate()
-
-  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 
   const isDisabled = !vault
 
