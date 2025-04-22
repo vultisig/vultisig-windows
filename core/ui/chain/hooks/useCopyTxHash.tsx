@@ -1,4 +1,4 @@
-import { useToast } from '@clients/desktop/src/lib/ui/toast/ToastProvider'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
