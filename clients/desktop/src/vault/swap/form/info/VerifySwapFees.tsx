@@ -1,9 +1,9 @@
+import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { formatFee } from '../../../../chain/tx/fee/utils/formatFee'
 import { Skeleton } from '../../../../components/skeleton'
 import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
