@@ -100,13 +100,17 @@ const Component = () => {
     onSuccess: handleProcessVaultContainer,
   })
 
-  const finalizeVaultImport = (): void => {
-    if (decodedVault) {
-      createVault(decodedVault).then(() => {
-        setCurrentVaultId(getVaultId(decodedVault))
-        navigateToMain()
-        // TODO: fetch addresses of the vault
-      })
+  const finalizeVaultImport = async (): Promise<void> => {
+    if (!decodedVault) return
+    setState(p => ({ ...p, loading: true }))
+    try {
+      await createVault(decodedVault)
+      await setCurrentVaultId(getVaultId(decodedVault))
+      navigateToMain()
+    } catch (e) {
+      handleError(extractErrorMsg(e))
+    } finally {
+      setState(p => ({ ...p, loading: false }))
     }
   }
 

@@ -45,7 +45,13 @@ export const useCurrentVaultId = (): [
   }, [storedVaultId, mutate])
 
   useEffect(() => {
-    correctVaultId()
+    let cancelled = false
+    correctVaultId().then(() => {
+      if (cancelled) return
+    })
+    return () => {
+      cancelled = true
+    }
   }, [correctVaultId])
 
   return [currentVaultId, mutate, loading]
