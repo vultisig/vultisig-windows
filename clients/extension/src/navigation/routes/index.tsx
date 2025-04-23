@@ -8,7 +8,6 @@ import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
-import MainPage from '@clients/extension/src/pages/popup/pages/main'
 import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
 import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
@@ -17,8 +16,11 @@ import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import { ReshareFastVault } from '../../components/settings/reshare/ReshareFastVault'
+import { ReshareSecureVault } from '../../components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '../../components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../../components/setup/SetupSecureVaultPage'
+import { ReshareVaultPage } from '../../pages/popup/pages/reshare-vault/ReshareVaultPage'
 import { ActiveVaultGuard } from '../../vault/components/ActiveVaultGuard'
 
 const routes = [
@@ -43,6 +45,19 @@ const routes = [
     element: <SetupSecureVaultPage />,
   },
   {
+    path: corePaths.reshareVault,
+    element: <ReshareVaultPage />,
+  },
+  {
+    path: corePaths.reshareVaultFast,
+    element: <ReshareFastVault />,
+  },
+  {
+    path: corePaths.reshareVaultSecure,
+    element: <ReshareSecureVault />,
+  },
+
+  {
     path: corePaths.setupFastVault,
     element: <SetupFastVaultPage />,
   },
@@ -64,7 +79,7 @@ const routes = [
     children: [
       {
         index: true,
-        element: <MainPage />,
+        element: <ReshareVaultPage />,
       },
 
       {
