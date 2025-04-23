@@ -192,10 +192,10 @@ export interface ITransaction {
 
 export type Vault = VaultCore & {
   // Keep legacy fields temporarily (to be removed later)
+  //TODO: active chain removed, other properties will be extracted in separate PRs
   transactions: ITransaction[]
   apps?: string[]
   selected?: boolean
-  active?: boolean
   chains: ChainProps[]
   uid: string
 }

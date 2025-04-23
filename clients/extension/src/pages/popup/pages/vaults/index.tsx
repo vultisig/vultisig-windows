@@ -1,9 +1,7 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { Vault } from '@clients/extension/src/utils/interfaces'
-import {
-  getStoredVaults,
-  setStoredVaults,
-} from '@clients/extension/src/utils/storage'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -19,8 +17,10 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
+import { getVaults } from '../../../../vault/state/vaults'
+
 interface InitialState {
-  vault?: Vault
   vaults: Vault[]
 }
 
@@ -28,26 +28,23 @@ const Component = () => {
   const { t } = useTranslation()
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
-  const { vault, vaults } = state
+  const { vaults } = state
   const navigate = useAppNavigate()
-
-  const handleSelect = (uid: string) => {
-    setStoredVaults(
-      vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
-    ).then(() => {
-      navigate('main')
-    })
+  const coreNavigate = useCoreNavigate()
+  const vault = useCurrentVault()
+  const [, setCurrentVaultId] = useCurrentVaultId()
+  const handleSelect = (id: string) => {
+    setCurrentVaultId(id)
+    navigate('main')
   }
 
-  const componentDidMount = (): void => {
-    getStoredVaults().then(vaults => {
-      const vault = vaults.find(({ active }) => active)
-
-      setState(prevState => ({ ...prevState, vault, vaults }))
-    })
-  }
-
-  useEffect(componentDidMount, [])
+  useEffect(() => {
+    const componentDidMount = async () => {
+      const vaults = await getVaults()
+      setState(prevState => ({ ...prevState, vaults }))
+    }
+    componentDidMount()
+  }, [])
 
   return vault ? (
     <>
@@ -74,12 +71,12 @@ const Component = () => {
             </Text>
             <List>
               {vaults
-                .filter(({ uid }) => uid !== vault.uid)
-                .map(({ name, uid }) => (
+                .filter(v => getVaultId(v) !== getVaultId(vault))
+                .map(v => (
                   <ListItem
-                    key={uid}
-                    title={name}
-                    onClick={() => handleSelect(uid)}
+                    key={getVaultId(v)}
+                    title={v.name}
+                    onClick={() => handleSelect(getVaultId(v))}
                     extra={<ListItemExtraDevices total={3} secure />}
                     hoverable
                     showArrow
@@ -88,16 +85,7 @@ const Component = () => {
             </List>
           </VStack>
         )}
-        <Button
-          onClick={() =>
-            navigate('importQR', {
-              params: {
-                title: t('import_vault'),
-              },
-            })
-          }
-          kind="primary"
-        >
+        <Button onClick={() => coreNavigate('importVault')} kind="primary">
           {t('add_new_vault')}
         </Button>
       </PageContent>

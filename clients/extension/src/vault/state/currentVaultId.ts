@@ -1,4 +1,10 @@
+import { getVaultId } from '@core/ui/vault/Vault'
+import { isEmpty } from '@lib/utils/array/isEmpty'
+import { useCallback, useEffect, useState } from 'react'
+
 import { usePersistentStateMutation } from '../../state/persistent/usePersistentStateMutation'
+import { usePersistentStateQuery } from '../../state/persistent/usePersistentStateQuery'
+import { getVaults } from './vaults'
 
 const key = 'currentVaultId'
 
@@ -6,19 +12,41 @@ export const useCurrentVaultIdMutation = () => {
   return usePersistentStateMutation<string | null>(key)
 }
 
-// TODO: uncomment when needed
-// export const useCurrentVaultId = () => {
-//   const vaults = useVaults()
-//   const { data: storedVaultId = null } = usePersistentStateQuery<string | null>(
-//     key,
-//     null
-//   )
-//   const { mutate } = usePersistentStateMutation<string | null>(key)
+export const useCurrentVaultId = (): [
+  string | null,
+  (value: string | null) => void,
+  boolean,
+] => {
+  const { data: storedVaultId = null } = usePersistentStateQuery<string | null>(
+    key,
+    null
+  )
+  const { mutate } = usePersistentStateMutation<string | null>(key)
 
-//   const isValid = vaults.some(v => getVaultId(v) === storedVaultId)
-//   const fallbackVaultId = !isEmpty(vaults) ? getVaultId(vaults[0]) : null
+  const [currentVaultId, setCurrentVaultId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-//   const currentVaultId = isValid ? storedVaultId : fallbackVaultId
+  const correctVaultId = useCallback(async () => {
+    const vaults = await getVaults()
+    if (isEmpty(vaults)) {
+      setCurrentVaultId(null)
+      mutate(null)
+      setLoading(false)
+      return
+    }
 
-//   return [currentVaultId, mutate] as const
-// }
+    const isValid = vaults.some(v => getVaultId(v) === storedVaultId)
+    const fallbackVaultId = getVaultId(vaults[0])
+    const finalVaultId = isValid ? storedVaultId : fallbackVaultId
+
+    setCurrentVaultId(finalVaultId)
+    mutate(finalVaultId)
+    setLoading(false)
+  }, [storedVaultId, mutate])
+
+  useEffect(() => {
+    correctVaultId()
+  }, [correctVaultId])
+
+  return [currentVaultId, mutate, loading]
+}

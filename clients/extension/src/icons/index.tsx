@@ -56,34 +56,6 @@ export const ArrowRight: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const BrokenLink: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = 24,
-  stroke = 'white',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 2,
-  width = 24,
-  ...props
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
-  >
-    <path d="M9.75027 5.52371L10.7168 4.55722C13.1264 2.14759 17.0332 2.14759 19.4428 4.55722C21.8524 6.96684 21.8524 10.8736 19.4428 13.2832L18.4742 14.2519M5.52886 9.74513L4.55722 10.7168C2.14759 13.1264 2.1476 17.0332 4.55722 19.4428C6.96684 21.8524 10.8736 21.8524 13.2832 19.4428L14.2478 18.4782" />
-    <path d="M3.8 6.3625L1.75 5.85M6.3625 3.8L5.85 1.75M20.2 17.6375L22.25 18.15M17.6375 20.2L18.15 22.25" />
-  </svg>
-)
-
 export const Check: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,

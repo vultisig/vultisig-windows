@@ -162,7 +162,7 @@ export const currencyName: CurrencyRef = {
   [Currency.USD]: 'United States Dollar',
 }
 
-export const supportedChains: Record<Chain, boolean> = {
+const supportedChains: Record<Chain, boolean> = {
   [Chain.Arbitrum]: true,
   [Chain.Avalanche]: true,
   [Chain.Base]: true,
