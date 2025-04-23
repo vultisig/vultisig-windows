@@ -14,7 +14,6 @@ import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 export const ReshareVaultPage = () => {
   const { t } = useTranslation()
-
   const navigate = useAppNavigate()
   const securityType = useCurrentVaultSecurityType()
 
