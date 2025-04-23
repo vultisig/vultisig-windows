@@ -1,29 +1,29 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { pxToRem } from '@lib/utils/pxToRem'
-import { FC, HTMLAttributes, JSX } from 'react'
+import { getColor } from '@lib/ui/theme/getters'
+import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledDesc = styled.span`
-  color: ${({ theme }) => theme.colors.textExtraLight.toHex()};
+  color: ${getColor('textExtraLight')};
   flex: 1;
-  font-size: ${pxToRem(12)};
+  font-size: 12px;
   font-weight: 500;
-  line-height: ${pxToRem(16)};
+  line-height: 16px;
 `
 
 const StyledMeta = styled.span`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: ${pxToRem(4)};
+  gap: 4px;
 `
 
 const StyledTitle = styled.span`
-  color: ${({ theme }) => theme.colors.textPrimary.toHex()};
+  color: ${getColor('textPrimary')};
   flex: 1;
   font-size: ${14};
   font-weight: 500;
-  line-height: ${pxToRem(20)};
+  line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -33,10 +33,10 @@ const StyledListItem = styled.div<{
   hoverable?: boolean
 }>`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.backgroundsSecondary.toHex()};
+  background-color: ${getColor('backgroundsSecondary')};
   display: flex;
-  gap: ${pxToRem(8)};
-  padding: ${pxToRem(12)} ${pxToRem(16)};
+  gap: 8px;
+  padding: 12px 16px;
   ${({ hoverable }) => {
     return hoverable
       ? css`
@@ -44,21 +44,20 @@ const StyledListItem = styled.div<{
           transition: all 0.2s;
 
           &:hover {
-            background-color: ${({ theme }) =>
-              theme.colors.backgroundTertiary.toHex()};
-          }
+            background-color: ${getColor('backgroundTertiary')};
         `
       : css``
   }}
 `
 
-interface ListItemProps extends HTMLAttributes<HTMLDivElement> {
-  description?: JSX.Element
-  extra?: JSX.Element
+interface ListItemProps
+  extends Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> {
+  description?: ReactNode
+  extra?: ReactNode
   hoverable?: boolean
-  icon?: JSX.Element
+  icon?: ReactNode
   showArrow?: boolean
-  title: string
+  title: ReactNode
 }
 
 export const ListItem: FC<ListItemProps> = ({

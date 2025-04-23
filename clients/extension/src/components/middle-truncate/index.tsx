@@ -1,4 +1,3 @@
-import { pxToRem } from '@lib/utils/pxToRem'
 import { FC, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -7,19 +6,19 @@ const StyledTruncate = styled.span`
   visibility: hidden;
 `
 
-const StyledComponent = styled.span<{ width?: number }>`
+const StyledMiddleTruncate = styled.span<{ width?: number }>`
   display: block;
   position: relative;
   ${({ width }) => {
     return width
       ? css`
-          width: ${pxToRem(width)};
+          width: ${width}px;
         `
       : css``
   }}
 `
 
-interface ComponentProps {
+interface MiddleTruncateProps {
   onClick?: () => void
   text: string
   width?: number
@@ -31,7 +30,11 @@ interface InitialState {
   truncating: boolean
 }
 
-const Component: FC<ComponentProps> = ({ onClick, text, width }) => {
+export const MiddleTruncate: FC<MiddleTruncateProps> = ({
+  onClick,
+  text,
+  width,
+}) => {
   const initialState: InitialState = {
     counter: 0,
     ellipsis: '',
@@ -81,7 +84,7 @@ const Component: FC<ComponentProps> = ({ onClick, text, width }) => {
   useEffect(componentDidUpdate, [text])
 
   return onClick ? (
-    <StyledComponent
+    <StyledMiddleTruncate
       ref={elmRef}
       onClick={handleClick}
       onKeyDown={e => {
@@ -92,14 +95,10 @@ const Component: FC<ComponentProps> = ({ onClick, text, width }) => {
       width={width}
     >
       {truncating ? <StyledTruncate>{ellipsis}</StyledTruncate> : ellipsis}
-    </StyledComponent>
+    </StyledMiddleTruncate>
   ) : (
-    <StyledComponent ref={elmRef} width={width}>
+    <StyledMiddleTruncate ref={elmRef} width={width}>
       {truncating ? <StyledTruncate>{ellipsis}</StyledTruncate> : ellipsis}
-    </StyledComponent>
+    </StyledMiddleTruncate>
   )
 }
-
-export { Component as MiddleTruncate }
-
-export default Component

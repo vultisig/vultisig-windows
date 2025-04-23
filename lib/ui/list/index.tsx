@@ -1,25 +1,28 @@
-import { pxToRem } from '@lib/utils/pxToRem'
+import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledList = styled.div<{ bordered?: boolean }>`
-  background-color: ${({ theme }) => theme.colors.borderLight.toHex()};
-  border-radius: ${pxToRem(12)};
+  background-color: ${getColor('borderLight')};
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: ${pxToRem(1)};
+  gap: 1px;
   overflow: hidden;
   ${({ bordered }) => {
     return bordered
       ? css`
-          border: solid ${pxToRem(1)}
-            ${({ theme }) => theme.colors.borderLight.toHex()};
+          border: solid 1px ${getColor('borderLight')};
         `
       : css``
   }}
 `
 
-interface ListProps extends HTMLAttributes<HTMLDivElement> {
+interface ListProps
+  extends Pick<
+    HTMLAttributes<HTMLDivElement>,
+    'children' | 'onClick' | 'style'
+  > {
   bordered?: boolean
 }
 

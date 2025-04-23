@@ -3,48 +3,44 @@ import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNa
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
-import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { VaultSigners } from '@core/ui/vault/signers'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
-import { Layout } from '@lib/ui/layout'
-import { Content } from '@lib/ui/layout/content'
-import { Footer } from '@lib/ui/layout/footer'
-import { Header } from '@lib/ui/layout/header'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { ListItemExtraDevices } from '@lib/ui/list/item/extra/devices'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { pxToRem } from '@lib/utils/pxToRem'
+import { getColor } from '@lib/ui/theme/getters'
 import { FC, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
-  background-color: ${({ connected, theme }) =>
-    theme.colors[connected ? 'alertSuccess' : 'alertInfo'].toHex()};
-  border: solid ${pxToRem(4)}
-    ${({ theme }) => theme.colors.buttonsDisabled.toHex()};
+  background-color: ${({ connected }) =>
+    getColor(connected ? 'alertSuccess' : 'alertInfo')};
+  border: solid 4px ${getColor('buttonDisabled')};
   border-radius: 50%;
-  height: ${pxToRem(16)};
+  height: 16px;
   position: absolute;
-  right: ${pxToRem(-4)};
-  top: ${pxToRem(-2)};
-  width: ${pxToRem(16)};
+  right: -4px;
+  top: -2px;
+  width: 16px;
 `
 
 const ConnectedApp = styled.div`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.buttonsDisabled.toHex()};
-  border: solid ${pxToRem(1)} ${({ theme }) => theme.colors.borderLight.toHex()};
+  background-color: ${getColor('buttonDisabled')};
+  border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
   cursor: pointer;
   display: flex;
-  height: ${pxToRem(36)};
+  height: 36px;
   justify-content: center;
   position: relative;
-  width: ${pxToRem(36)};
+  width: 36px;
 `
 
 interface InitialState {
@@ -70,21 +66,9 @@ const Component: FC = () => {
   useEffect(componentDidMount, [])
 
   return vault ? (
-    <Layout>
-      <Header
-        addonAfter={
-          <>
-            <Button kind="outlined" size="s">
-              Open Desktop
-            </Button>
-            <Settings
-              height={24}
-              onClick={() => navigate('settings')}
-              width={24}
-            />
-          </>
-        }
-        addonBefore={
+    <VStack alignItems="center" justifyContent="center" fullHeight>
+      <PageHeader
+        primaryControls={
           <ConnectedApp>
             <World
               height={20}
@@ -94,19 +78,27 @@ const Component: FC = () => {
             <ConnectedAppStatus connected />
           </ConnectedApp>
         }
+        secondaryControls={
+          <HStack gap={8} alignItems="center">
+            <Button kind="outlined" size="s">
+              Open Desktop
+            </Button>
+            <Settings
+              height={24}
+              onClick={() => navigate('settings')}
+              width={24}
+            />
+          </HStack>
+        }
+        hasBorder
       />
-      <Content gap={16} flex>
+      <PageContent gap={16} fullWidth scrollable>
         <List>
           <ListItem
+            extra={<VaultSigners vault={vault} />}
             title={vault.name}
-            extra={
-              <ListItemExtraDevices
-                total={vault.signers?.length}
-                secure={
-                  !hasServer(vault.signers) || isServer(vault.localPartyId)
-                }
-              />
-            }
+            onClick={() => navigate('vaults')}
+            hoverable
           />
         </List>
         <VStack gap={12}>
@@ -145,9 +137,8 @@ const Component: FC = () => {
             ))}
           </List>
         </VStack>
-      </Content>
-      <Footer></Footer>
-    </Layout>
+      </PageContent>
+    </VStack>
   ) : (
     <></>
   )
