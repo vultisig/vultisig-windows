@@ -1,9 +1,9 @@
 import { CoinKey } from '@core/chain/coin/Coin'
+import { swapConfig } from '@core/chain/swap/config'
+import { findSwapQuote } from '@core/chain/swap/quote/findSwapQuote'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
 
-import { swapConfig } from '../../../chain/swap/config'
-import { findSwapQuote } from '../../../chain/swap/quote/findSwapQuote'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'

@@ -1,4 +1,5 @@
 import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { useVersion } from '@core/ui/product/state/version'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,22 +15,17 @@ import {
 const UpdateAvailablePopup = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const {
-    localVersion,
-    latestVersion,
-    updateAvailable,
-    isLocalVersionValid,
-    remoteError,
-    isLoading,
-  } = useVersionCheck()
+  const localVersion = useVersion()
+
+  const { latestVersion, updateAvailable, remoteError, isLoading } =
+    useVersionCheck()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const isError = !isLocalVersionValid || remoteError
-    if (!isLoading && !isError && updateAvailable) {
+    if (!isLoading && !remoteError && updateAvailable) {
       setIsOpen(true)
     }
-  }, [isLoading, isLocalVersionValid, remoteError, updateAvailable])
+  }, [isLoading, remoteError, updateAvailable])
 
   if (!isOpen) {
     return null

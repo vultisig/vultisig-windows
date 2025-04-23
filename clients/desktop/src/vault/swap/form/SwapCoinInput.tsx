@@ -2,6 +2,8 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
+import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -13,14 +15,12 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
 import { ChainOption } from '../../../coin/ui/inputs/ChainOption'
 import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
-import { shouldDisplayChainLogo } from '../../chain/utils'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,

@@ -1,6 +1,7 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -13,7 +14,6 @@ import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles'
-import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
 const Container = styled(UnstyledButton)`

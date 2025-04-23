@@ -1,6 +1,12 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { CurrentTxHashProvider } from '@core/ui/chain/state/currentTxHash'
+import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
+import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
+import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useVersion } from '@core/ui/product/state/version'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Button } from '@lib/ui/buttons/Button'
@@ -16,12 +22,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
-import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
-import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo'
-import { KeysignSigningState } from './KeysignSigningState'
 import { KeysignTxOverview } from './KeysignTxOverview'
 import { useKeysignMutation } from './mutations/useKeysignMutation'
 import { SwapKeysignTxOverview } from './SwapKeysignTxOverview'
@@ -35,7 +35,7 @@ export const KeysignSigningStep = ({
   payload,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { localVersion } = useVersionCheck()
+  const localVersion = useVersion()
 
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
