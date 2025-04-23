@@ -1,17 +1,16 @@
 import { Chain } from '@core/chain/Chain'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { corePaths } from '@core/ui/navigation'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
+  ...corePaths,
   newVault: '/new-vault',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
-  reshareVault: '/vault/reshare',
-  reshareVaultSecure: '/vault/reshare/secure',
   migrateVault: '/vault/migrate',
-  reshareVaultFast: '/vault/reshare/fast',
   fastKeysign: '/vault/keysign/fast',
   setupActiveVault: '/vault/setup/active',
   address: '/address',
