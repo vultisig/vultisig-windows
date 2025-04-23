@@ -16,9 +16,10 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { corePaths } from '@core/ui/navigation'
 import { createHashRouter, Navigate } from 'react-router-dom'
-import { ActiveVaultGuard } from '../../vault/components/ActiveVaultGuard'
+
 import { SetupFastVaultPage } from '../../components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../../components/setup/SetupSecureVaultPage'
+import { ActiveVaultGuard } from '../../vault/components/ActiveVaultGuard'
 
 const routes = [
   {

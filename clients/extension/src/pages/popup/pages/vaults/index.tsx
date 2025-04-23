@@ -1,10 +1,9 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import {
-  getStoredVaults,
-  setStoredVaults,
-} from '@clients/extension/src/utils/storage'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultActive } from '@core/ui/vault/active'
 import { VaultSigners } from '@core/ui/vault/signers'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -20,9 +19,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
 import { getVaults } from '../../../../vault/state/vaults'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
 
 interface InitialState {
   vaults: Vault[]
