@@ -29,6 +29,9 @@ import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
 import { calculateWindowPosition } from '../../../../utils/functions'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useDefaultChains } from '@clients/desktop/src/chain/state/defaultChains'
+import { createVaultDefaultCoins } from '../../../../vault/coins/createVaultDefaultCoins'
 
 interface InitialState {
   error?: string
@@ -49,7 +52,8 @@ const Component = () => {
   }
   const createVault = useCreateVault()
   const setCurrentVaultId = useSetCurrentVaultId()
-
+  const walletCore = useAssertWalletCore()
+  const [defaultChains] = useDefaultChains()
   const [state, setState] = useState(initialState)
   const {
     isWindows,
@@ -102,10 +106,13 @@ const Component = () => {
 
   const finalizeVaultImport = (): void => {
     if (decodedVault) {
-      createVault(decodedVault).then(() => {
+      createVault(decodedVault).then(async () => {
         setCurrentVaultId(getVaultId(decodedVault))
-        navigateToMain()
-        // TODO: fetch addresses of the vault
+        createVaultDefaultCoins({
+          vault: decodedVault,
+          defaultChains,
+          walletCore,
+        }).then(() => navigateToMain())
       })
     }
   }
