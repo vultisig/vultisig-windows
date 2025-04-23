@@ -17,7 +17,7 @@ import {
 } from '@clients/extension/src/colors'
 import ButtonPrimary from '@clients/extension/src/components/button-primary'
 import ButtonTertiary from '@clients/extension/src/components/button-tertiary'
-import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import {
@@ -26,6 +26,7 @@ import {
   Close,
   SquareArrow,
 } from '@clients/extension/src/icons'
+import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
@@ -38,6 +39,8 @@ import {
 import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMessageSignature'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
+import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
+import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
@@ -76,10 +79,6 @@ import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
-import { AppProviders } from '../../providers/AppProviders'
-import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
-import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 
 interface FormProps {
   password: string

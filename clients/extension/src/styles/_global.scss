@@ -7,19 +7,7 @@ body {
   font-family: $primary-font;
   margin: 0 auto;
   overflow: hidden;
-  width: rem(360) !important;
-
-  #__plasmo {
-    height: 100%;
-    position: relative;
-    min-height: rem(600) !important;
-    > .vulti-loading {
-      left: 50%;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
+  width: rem(400) !important;
 }
 
 .ant-btn {
