@@ -1,4 +1,4 @@
-import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
+import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 
 export const getCoinLogoSrc = (logo: string) => {
   if (logo.startsWith('https://')) {

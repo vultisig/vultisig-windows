@@ -6,7 +6,7 @@ export const Shield: FC<SVGProps<SVGSVGElement>> = ({
   stroke = '#f0f4fc',
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
-  strokeWidth = 2,
+  strokeWidth = 1.5,
   width = '1em',
   ...props
 }) => (

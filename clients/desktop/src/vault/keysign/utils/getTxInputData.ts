@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getOneInchSwapTxInputData } from '@core/chain/swap/general/oneInch/tx/getOneInchSwapTxInputData'
+import { getThorchainSwapTxInputData } from '@core/chain/swap/native/thor/tx/getThorchainSwapTxInputData'
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData/index'
 import {
   KeysignPayload,
@@ -10,7 +11,6 @@ import {
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { getThorchainSwapTxInputData } from '../../../chain/swap/native/thor/tx/getThorchainSwapTxInputData'
 import { getKeysignChain } from './getKeysignChain'
 
 type Input = {

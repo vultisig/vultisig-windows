@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -8,7 +9,6 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { useEvmBaseFeeQuery } from '../../../../../../chain/evm/queries/useEvmBaseFeeQuery'
-import { gwei } from '../../../../../../chain/tx/fee/utils/evm'
 import { useCurrentSendCoin } from '../../../../state/sendCoin'
 import { FeeContainer } from '../../FeeContainer'
 

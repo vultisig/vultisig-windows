@@ -1,9 +1,8 @@
+import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { TxOverviewRow } from '../../../../chain/tx/components/TxOverviewRow'
 
 export const SwapTxFeesOverviewRow = styled(TxOverviewRow)`
   ${hStack({

@@ -1,14 +1,15 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import {
+  getStoredVaults,
+  setStoredVaults,
+} from '@clients/extension/src/utils/storage'
+import { VaultActive } from '@core/ui/vault/active'
+import { VaultSigners } from '@core/ui/vault/signers'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { ListItemExtraActive } from '@lib/ui/list/item/extra/active'
-import { ListItemExtraDevices } from '@lib/ui/list/item/extra/devices'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
@@ -19,6 +20,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
 import { getVaults } from '../../../../vault/state/vaults'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 
 interface InitialState {
   vaults: Vault[]
@@ -39,15 +43,15 @@ const Component = () => {
   }
 
   useEffect(() => {
-    const componentDidMount = async () => {
+    const initComponent = async () => {
       const vaults = await getVaults()
       setState(prevState => ({ ...prevState, vaults }))
     }
-    componentDidMount()
+    initComponent()
   }, [])
 
   return vault ? (
-    <>
+    <VStack alignItems="center" justifyContent="center" fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
@@ -58,10 +62,10 @@ const Component = () => {
         }
         title={<PageHeaderTitle>{t('choose_vault')}</PageHeaderTitle>}
       />
-      <PageContent gap={20} scrollable>
+      <PageContent gap={16} fullWidth scrollable>
         {vault && (
           <List bordered>
-            <ListItem title={vault.name} extra={<ListItemExtraActive />} />
+            <ListItem title={vault.name} extra={<VaultActive />} />
           </List>
         )}
         {vaults.length > 1 && (
@@ -77,7 +81,7 @@ const Component = () => {
                     key={getVaultId(v)}
                     title={v.name}
                     onClick={() => handleSelect(getVaultId(v))}
-                    extra={<ListItemExtraDevices total={3} secure />}
+                    extra={<VaultSigners vault={v} />}
                     hoverable
                     showArrow
                   />
@@ -89,7 +93,7 @@ const Component = () => {
           {t('add_new_vault')}
         </Button>
       </PageContent>
-    </>
+    </VStack>
   ) : (
     <></>
   )

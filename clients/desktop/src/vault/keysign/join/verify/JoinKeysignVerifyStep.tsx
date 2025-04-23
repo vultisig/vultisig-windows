@@ -1,3 +1,4 @@
+import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { Button } from '@lib/ui/buttons/Button'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -6,7 +7,6 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel'
 import { WithProgressIndicator } from '../../shared/WithProgressIndicator'
 import { KeysignTxOverview } from './KeysignTxOverview'
 
