@@ -20,6 +20,7 @@ import { ReshareFastVault } from '../../components/settings/reshare/ReshareFastV
 import { ReshareSecureVault } from '../../components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '../../components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../../components/setup/SetupSecureVaultPage'
+import { MainPage } from '../../pages/popup/pages/main'
 import { ReshareVaultPage } from '../../pages/popup/pages/reshare-vault/ReshareVaultPage'
 import { ActiveVaultGuard } from '../../vault/components/ActiveVaultGuard'
 
@@ -46,21 +47,13 @@ const routes = [
   },
   {
     path: corePaths.reshareVault,
-    element: <ReshareVaultPage />,
-  },
-  {
-    path: corePaths.reshareVaultFast,
-    element: <ReshareFastVault />,
-  },
-  {
-    path: corePaths.reshareVaultSecure,
-    element: <ReshareSecureVault />,
+    element: (
+      <ActiveVaultGuard>
+        <ReshareVaultPage />
+      </ActiveVaultGuard>
+    ),
   },
 
-  {
-    path: corePaths.setupFastVault,
-    element: <SetupFastVaultPage />,
-  },
   {
     path: appPaths.onboarding,
     element: (
@@ -79,9 +72,29 @@ const routes = [
     children: [
       {
         index: true,
-        element: <ReshareVaultPage />,
+        element: <MainPage />,
+      },
+      {
+        path: corePaths.reshareVaultFast,
+        element: (
+          <ActiveVaultGuard>
+            <ReshareFastVault />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: corePaths.reshareVaultSecure,
+        element: (
+          <ActiveVaultGuard>
+            <ReshareSecureVault />
+          </ActiveVaultGuard>
+        ),
       },
 
+      {
+        path: corePaths.setupFastVault,
+        element: <SetupFastVaultPage />,
+      },
       {
         path: appPaths.vaults,
         element: <VaultsPage />,
