@@ -1,4 +1,7 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { ServerEmailStep } from '@core/ui/mpc/keygen/create/fast/server/email/ServerEmailStep'
+import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
+import { SetServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/SetServerPasswordStep'
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { ReshareVerifyStep } from '@core/ui/mpc/keygen/reshare/verify/ReshareVerifyStep'
@@ -9,9 +12,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { ServerEmailStep } from '../../server/email/ServerEmailStep'
-import { ServerPasswordStep } from '../../server/password/ServerPasswordStep'
-import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
 import { KeygenServerStep } from './KeygenServerStep'
 
 const reshareVaultSteps = [

@@ -1,5 +1,6 @@
 import { migrateWithServer } from '@core/mpc/fast/api/migrateWithServer'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -12,8 +13,6 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 
 export const FastMigrateServerStep: React.FC<
   OnFinishProp & Partial<OnBackProp>
