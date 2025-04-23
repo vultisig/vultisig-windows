@@ -1,10 +1,10 @@
+import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { VaultSigners } from '@core/ui/vault/signers'
-import { Button } from '@lib/ui/buttons/Button'
 import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
@@ -80,19 +80,21 @@ const Component: FC = () => {
         }
         secondaryControls={
           <HStack gap={8} alignItems="center">
-            <Button kind="outlined" size="s">
+            <Button shape="round" size="small">
               Open Desktop
             </Button>
-            <Settings
-              height={24}
-              onClick={() => navigate('settings')}
-              width={24}
-            />
+            <Button ghost>
+              <Settings
+                height={24}
+                onClick={() => navigate('settings')}
+                width={24}
+              />
+            </Button>
           </HStack>
         }
         hasBorder
       />
-      <PageContent gap={16} fullWidth scrollable>
+      <PageContent gap={24} fullWidth scrollable>
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}

@@ -1,3 +1,4 @@
+import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
@@ -6,7 +7,6 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { VaultActive } from '@core/ui/vault/active'
 import { VaultSigners } from '@core/ui/vault/signers'
-import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -61,7 +61,7 @@ const Component = () => {
         }
         title={<PageHeaderTitle>{t('choose_vault')}</PageHeaderTitle>}
       />
-      <PageContent gap={16} fullWidth scrollable>
+      <PageContent gap={24} fullWidth scrollable>
         {vault && (
           <List bordered>
             <ListItem title={vault.name} extra={<VaultActive />} />
@@ -96,7 +96,10 @@ const Component = () => {
               },
             })
           }
-          kind="primary"
+          shape="round"
+          size="large"
+          type="primary"
+          block
         >
           {t('add_new_vault')}
         </Button>
