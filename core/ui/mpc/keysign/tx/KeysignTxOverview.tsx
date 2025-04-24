@@ -5,12 +5,14 @@ import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
 import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
 import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -26,16 +28,13 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
 
   const { t } = useTranslation()
 
   const copyTxHash = useCopyTxHash()
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
   const {
     coin: potentialCoin,
     toAddress,

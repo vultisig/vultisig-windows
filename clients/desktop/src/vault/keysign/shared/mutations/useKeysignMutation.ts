@@ -8,13 +8,11 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { MPCKeysign } from '@core/mpc/mpcKeysign'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
-import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
-import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
-import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
-import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
+import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
+import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
+import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -23,22 +21,13 @@ import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
 import { keccak256 } from 'js-sha3'
 
-import { tss } from '../../../../../wailsjs/go/models'
-import { Keysign } from '../../../../../wailsjs/go/tss/TssService'
 import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey'
-import { toStorageVault } from '../../../utils/storageVault'
-import { customMessageConfig } from '../../customMessage/config'
-import { getKeysignChain } from '../../utils/getKeysignChain'
-import { getTxInputData } from '../../utils/getTxInputData'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const sessionId = useMpcSessionId()
-  const encryptionKeyHex = useCurrentHexEncryptionKey()
-  const serverUrl = useMpcServerUrl()
-  const isInitiateDevice = useIsInitiatingDevice()
-  const peers = useMpcPeers()
+
+  const keysignAction = useKeysignAction()
 
   return useMutation({
     mutationFn: async () => {
@@ -69,47 +58,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           const signatureAlgorithm = signatureAlgorithms[getChainKind(chain)]
 
           const coinType = getCoinType({ walletCore, chain })
-          let signatures: Array<tss.KeysignResponse> = []
-          if (vault.libType == 'GG20') {
-            signatures = await Keysign(
-              toStorageVault(vault),
-              msgs,
-              vault.localPartyId,
-              walletCore.CoinTypeExt.derivationPath(coinType),
-              sessionId,
-              encryptionKeyHex,
-              serverUrl,
-              signatureAlgorithm
-            )
-          } else if (vault.libType == 'DKLS') {
-            const mpc = new MPCKeysign(
-              isInitiateDevice,
-              serverUrl,
-              sessionId,
-              vault.localPartyId,
-              [vault.localPartyId, ...peers],
-              encryptionKeyHex
-            )
-            const keysignPublicKey = vault.publicKeys[signatureAlgorithm]
-            const keyShare = vault.keyShares[signatureAlgorithm]
-
-            const result = await mpc.startKeysign(
-              keyShare,
-              signatureAlgorithm,
-              msgs,
-              keysignPublicKey,
-              walletCore.CoinTypeExt.derivationPath(coinType)
-            )
-            signatures = result.map(sig => {
-              return tss.KeysignResponse.createFrom({
-                msg: sig.msg,
-                r: sig.r,
-                s: sig.s,
-                der_signature: sig.der_signature,
-                recovery_id: sig.recovery_id,
-              })
-            })
-          }
+          const signatures = await keysignAction({
+            msgs,
+            signatureAlgorithm,
+            coinType,
+          })
           const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
             Buffer.from(msg, 'base64').toString('hex')
           )
@@ -141,25 +94,22 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           return getLastItem(hashes)
         },
         custom: async ({ message }) => {
-          const derivePath = walletCore.CoinTypeExt.derivationPath(
-            getCoinType({ walletCore, chain: customMessageConfig.chain })
-          )
           const messageToHash = message.startsWith('0x')
             ? Buffer.from(message.slice(2), 'hex')
             : message
-          const [signature] = await Keysign(
-            toStorageVault(vault),
-            [keccak256(messageToHash)],
-            vault.localPartyId,
-            derivePath,
-            sessionId,
-            encryptionKeyHex,
-            serverUrl,
-            signatureAlgorithms[getChainKind(customMessageConfig.chain)]
-          )
 
-          const signatureFormat =
-            signatureFormats[getChainKind(customMessageConfig.chain)]
+          const { chain } = customMessageConfig
+
+          const [signature] = await keysignAction({
+            msgs: [keccak256(messageToHash)],
+            signatureAlgorithm: signatureAlgorithms[getChainKind(chain)],
+            coinType: getCoinType({
+              walletCore,
+              chain,
+            }),
+          })
+
+          const signatureFormat = signatureFormats[getChainKind(chain)]
 
           const result = generateSignature({
             walletCore,

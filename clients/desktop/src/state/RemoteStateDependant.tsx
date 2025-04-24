@@ -1,10 +1,10 @@
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useMergeQueries } from '../lib/hooks/useMergeQueries'
 import { Center } from '../lib/ui/layout/Center'
 import { ProductLogoBlock } from '../ui/logo/ProductLogoBlock'
 import { useVaultsQuery } from '../vault/queries/useVaultsQuery'

@@ -1,3 +1,4 @@
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -14,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
 import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useLanguage } from '../../preferences/state/language'
 import {
   getTranslatedSettingsItems,
@@ -40,7 +40,7 @@ const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
   const { t } = useTranslation()
 
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
   const [language] = useLanguage()
   const translatedSettingsItems = getTranslatedSettingsItems(t)
 

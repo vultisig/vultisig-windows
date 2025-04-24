@@ -1,9 +1,8 @@
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
-import { Currency } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { Vault as VaultCore } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -54,19 +53,6 @@ export interface ChainProps {
 export interface SendTransactionResponse {
   raw: any
   txResponse: string
-}
-
-export interface CurrencyRef {
-  [Currency.AUD]: string
-  [Currency.CAD]: string
-  [Currency.CNY]: string
-  [Currency.EUR]: string
-  [Currency.GBP]: string
-  [Currency.JPY]: string
-  [Currency.RUB]: string
-  [Currency.SEK]: string
-  [Currency.SGD]: string
-  [Currency.USD]: string
 }
 
 interface CustomMessage {
@@ -202,7 +188,7 @@ export type Vault = VaultCore & {
 
 export interface SignedTransaction {
   inputData?: Uint8Array
-  signatures: Record<string, KeysignResponse>
+  signatures: Record<string, KeysignSignature>
   transaction?: ITransaction
   vault?: Vault
   walletCore: WalletCore

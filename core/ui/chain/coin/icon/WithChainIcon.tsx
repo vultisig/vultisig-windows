@@ -1,4 +1,4 @@
-import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'

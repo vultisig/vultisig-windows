@@ -1,3 +1,5 @@
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -8,8 +10,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -32,7 +32,7 @@ export const AmountInGlobalCurrencyDisplay = () => {
   const [sendAmount] = useSendAmount()
   const [coinKey] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
 
   const priceQuery = useCoinPriceQuery({
     coin,
