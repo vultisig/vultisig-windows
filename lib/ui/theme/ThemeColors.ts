@@ -32,7 +32,9 @@ export type ThemeColors = {
   backgroundsSecondary: HSLA
   backgroundTertiary: HSLA
   borderLight: HSLA
-  buttonDisabled: HSLA
+  buttonPrimaryWeb: HSLA
+  buttonPrimaryWebHover: HSLA
+  buttonTextDisabled: HSLA
   textExtraLight: HSLA
   textPrimary: HSLA
 }

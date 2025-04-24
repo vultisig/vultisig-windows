@@ -1,7 +1,9 @@
+import { Button } from '@clients/extension/src/components/button'
+//import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { VaultSigners } from '@core/ui/vault/signers'
+//import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -17,7 +19,7 @@ import styled, { useTheme } from 'styled-components'
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
     getColor(connected ? 'alertSuccess' : 'alertInfo')};
-  border: solid 4px ${getColor('buttonDisabled')};
+  border: solid 4px ${getColor('buttonBackgroundDisabled')};
   border-radius: 50%;
   height: 16px;
   position: absolute;
@@ -28,7 +30,7 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
 
 const ConnectedApp = styled.div`
   align-items: center;
-  background-color: ${getColor('buttonDisabled')};
+  background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
   cursor: pointer;
@@ -59,19 +61,21 @@ const Component: FC = () => {
         }
         secondaryControls={
           <HStack gap={8} alignItems="center">
-            <Button kind="outlined" size="s">
+            <Button shape="round" size="small">
               Open Desktop
             </Button>
-            <Settings
-              height={24}
-              onClick={() => navigate('settings')}
-              width={24}
-            />
+            <Button ghost>
+              <Settings
+                height={24}
+                onClick={() => navigate('settings')}
+                width={24}
+              />
+            </Button>
           </HStack>
         }
         hasBorder
       />
-      <PageContent gap={16} fullWidth scrollable>
+      <PageContent gap={24} fullWidth scrollable>
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
