@@ -3,12 +3,9 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
@@ -35,7 +32,6 @@ import { Link } from 'react-router-dom'
 
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt'
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress'
-import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation'
 import {
@@ -68,7 +64,6 @@ export const VaultChainPage = () => {
   const invalidateQueryKey = getBalanceQueryKey(
     extractAccountCoinKey(nativeCoin)
   )
-  const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()
   const address = useCurrentVaultAddress(chain)
@@ -94,8 +89,6 @@ export const VaultChainPage = () => {
     },
   })
 
-  const vault = useCurrentVault()
-
   useEffect(() => {
     // Ensure findTokensQuery.data is an array
     const tokens = Array.isArray(findTokensQuery.data)
@@ -103,14 +96,6 @@ export const VaultChainPage = () => {
       : []
 
     if (tokens.length > 0) {
-      const publicKey = getPublicKey({
-        chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
-      const address = deriveAddress({ chain, publicKey, walletCore })
-
       saveCoins(
         tokens.map(coin => ({
           ...coin,
@@ -118,14 +103,7 @@ export const VaultChainPage = () => {
         }))
       )
     }
-  }, [
-    chain,
-    findTokensQuery.data,
-    saveCoins,
-    vault.hexChainCode,
-    vault.publicKeys,
-    walletCore,
-  ])
+  }, [address, findTokensQuery.data, saveCoins])
 
   const hasMultipleCoinsSupport = chain in chainTokens
 
