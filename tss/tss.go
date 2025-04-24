@@ -41,10 +41,6 @@ func (t *TssService) Startup(ctx context.Context) {
 	t.ctx = ctx
 }
 
-// GetDerivedPubKey returns the derived public key
-func (t *TssService) GetDerivedPubKey(hexPubKey, hexChainCode, path string, isEdDSA bool) (string, error) {
-	return mtss.GetDerivedPubKey(hexPubKey, hexChainCode, path, isEdDSA)
-}
 func (t *TssService) GetLocalUIEcdsa(keyshare string) (string, error) {
 	return mtss.GetLocalUIEcdsa(keyshare)
 }
