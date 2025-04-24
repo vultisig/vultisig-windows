@@ -1,4 +1,5 @@
 import { StartKeysignProviders } from '@core/ui/mpc/keysign/start/StartKeysignProviders'
+import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
 
@@ -12,14 +13,16 @@ export const StartKeysignPage = () => {
 
   return (
     <StartKeysignProviders>
-      <KeysignActionProvider>
-        <MpcMediatorManager />
-        <Match
-          value={securityType}
-          secure={() => <StartSecureKeysignFlow />}
-          fast={() => <StartFastKeysignFlow />}
-        />
-      </KeysignActionProvider>
+      <MpcPeersSelectionProvider>
+        <KeysignActionProvider>
+          <MpcMediatorManager />
+          <Match
+            value={securityType}
+            secure={() => <StartSecureKeysignFlow />}
+            fast={() => <StartFastKeysignFlow />}
+          />
+        </KeysignActionProvider>
+      </MpcPeersSelectionProvider>
     </StartKeysignProviders>
   )
 }

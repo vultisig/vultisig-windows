@@ -18,7 +18,7 @@ export const useFiatCurrencyQuery = () => {
 const setFiatCurrency: SetFiatCurrencyFunction = async (
   value: FiatCurrency
 ) => {
-  setPersistentState(key, value)
+  await setPersistentState(key, value)
 }
 
 export const SetFiatCurrencyProvider = ({ children }: ChildrenProp) => {
