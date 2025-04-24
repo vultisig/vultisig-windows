@@ -9,6 +9,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
+import { KeysignActionProvider } from '../../action/KeysignActionProvider'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
 import { FastKeysignServerStep } from './FastKeysignServerStep'
 
@@ -36,7 +37,11 @@ export const StartFastKeysignFlow = () => {
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
-                  render={() => <KeysignSigningStep payload={keysignPayload} />}
+                  render={() => (
+                    <KeysignActionProvider>
+                      <KeysignSigningStep payload={keysignPayload} />
+                    </KeysignActionProvider>
+                  )}
                 />
               </MpcPeersProvider>
             )}

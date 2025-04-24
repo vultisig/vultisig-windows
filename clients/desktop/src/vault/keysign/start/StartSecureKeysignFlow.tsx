@@ -5,6 +5,7 @@ import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
+import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 
 export const StartSecureKeysignFlow = () => {
@@ -22,7 +23,12 @@ export const StartSecureKeysignFlow = () => {
           <MpcPeersProvider value={value}>
             <StartMpcSessionFlow
               render={() => (
-                <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
+                <KeysignActionProvider>
+                  <KeysignSigningStep
+                    payload={keysignPayload}
+                    onBack={onBack}
+                  />
+                </KeysignActionProvider>
               )}
             />
           </MpcPeersProvider>
