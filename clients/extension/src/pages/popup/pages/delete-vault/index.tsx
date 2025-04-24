@@ -1,6 +1,6 @@
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useDeleteVaultMutation } from '@clients/extension/src/vault/state/useDeleteVault'
+import { useDeleteVaultMutation } from '@clients/extension/src/vault/mutations/useDeleteVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button, ConfigProvider } from 'antd'
