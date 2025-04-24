@@ -1,6 +1,5 @@
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { useDeleteVaultMutation } from '@clients/extension/src/vault/state/useDeleteVault'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -11,20 +10,11 @@ const Component = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const currentVault = useCurrentVault()
-  const [, setCurrentVaultId] = useCurrentVaultId()
-  const {
-    mutateAsync: deleteVault,
-    isPending,
-    error,
-  } = useDeleteVaultMutation()
+  const { mutateAsync: deleteVault, isPending } = useDeleteVaultMutation()
   const handleSubmit = async (): Promise<void> => {
-    try {
-      deleteVault(getVaultId(currentVault))
-      setCurrentVaultId(null)
-      navigate('main')
-    } catch {
-      console.error(error)
-    }
+    deleteVault(getVaultId(currentVault), {
+      onSuccess: () => navigate('main'),
+    })
   }
 
   return (
