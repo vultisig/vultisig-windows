@@ -7,8 +7,10 @@ import {
 import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import ReshareIcon from '@lib/ui/icons/ReshareIcon'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 const Component = () => {
   const { t } = useTranslation()
@@ -40,6 +42,13 @@ const Component = () => {
             <span className="label">{t('remove_vault')}</span>
             <ArrowRight className="action" />
           </Link>
+          <Link to={appPaths.reshareVault} state={true} className="list-item">
+            <IconWrapper className="icon">
+              <ReshareIcon />
+            </IconWrapper>
+            <span className="label">{t('reshare')}</span>
+            <ArrowRight className="action" />
+          </Link>
         </div>
       </div>
     </div>
@@ -47,3 +56,7 @@ const Component = () => {
 }
 
 export default Component
+
+const IconWrapper = styled.div`
+  font-size: 24px;
+`

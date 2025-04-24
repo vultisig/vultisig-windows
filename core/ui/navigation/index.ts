@@ -15,6 +15,9 @@ export const corePaths = {
   setupVault: '/vault/setup',
   importVault: '/vault/import',
   keysign: '/vault/keysign',
+  reshareVault: '/vault/reshare',
+  reshareVaultFast: '/vault/reshare/fast',
+  reshareVaultSecure: '/vault/reshare/secure',
 } as const
 
 type CorePaths = typeof corePaths

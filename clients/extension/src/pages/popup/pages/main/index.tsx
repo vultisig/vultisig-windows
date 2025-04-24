@@ -13,7 +13,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
@@ -41,7 +40,7 @@ const ConnectedApp = styled.div`
   width: 36px;
 `
 
-const Component: FC = () => {
+export const MainPage = () => {
   const vault = useCurrentVault()
   const { colors } = useTheme()
   const navigate = useAppNavigate()
@@ -129,5 +128,3 @@ const Component: FC = () => {
     <></>
   )
 }
-
-export default Component

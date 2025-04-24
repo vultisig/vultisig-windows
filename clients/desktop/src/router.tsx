@@ -224,15 +224,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.reshareVault,
-        element: (
-          <ActiveVaultGuard>
-            <ReshareVaultPage />
-          </ActiveVaultGuard>
-        ),
-      },
-      {
-        path: appPaths.reshareVaultFast,
+        path: corePaths.reshareVaultFast,
         element: (
           <ActiveVaultGuard>
             <FastReshareVaultPage />
@@ -248,7 +240,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.reshareVaultSecure,
+        path: corePaths.reshareVaultSecure,
         element: (
           <ActiveVaultGuard>
             <SecureReshareVaultPage />
@@ -304,7 +296,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.reshareVault,
+        path: corePaths.reshareVault,
         element: (
           <ActiveVaultGuard>
             <ReshareVaultPage />

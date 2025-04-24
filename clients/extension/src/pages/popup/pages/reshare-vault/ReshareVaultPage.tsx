@@ -10,7 +10,7 @@ import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 export const ReshareVaultPage = () => {
   const { t } = useTranslation()
