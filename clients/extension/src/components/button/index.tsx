@@ -14,7 +14,6 @@ const baseStyles = css`
   display: flex;
   gap: 8px;
   justify-content: center;
-  padding: 0 16px;
   transition: all 0.2s;
 `
 
@@ -70,6 +69,7 @@ const typeStyles: Record<Type, RuleSet> = {
   default: css`
     border: solid 1px ${getColor('buttonPrimaryWeb')};
     color: ${getColor('buttonPrimaryWeb')};
+    cursor: pointer;
 
     &:hover {
       border-color: ${getColor('buttonPrimaryWebHover')};
@@ -77,15 +77,18 @@ const typeStyles: Record<Type, RuleSet> = {
     }
   `,
   link: css`
-    color: ${getColor('buttonPrimaryWeb')};
+    color: ${getColor('textPrimary')};
+    cursor: pointer;
 
     &:hover {
+      background-color: ${getColor('backgroundTertiary')};
       color: ${getColor('buttonPrimaryWebHover')};
     }
   `,
   primary: css`
     background-color: ${getColor('buttonPrimaryWeb')};
     color: ${getColor('textPrimary')};
+    cursor: pointer;
 
     &:hover {
       background-color: ${getColor('buttonPrimaryWebHover')};
@@ -108,12 +111,7 @@ const StyledButton = styled.button<{
       return css`
         ${baseStyles}
         ${blockStyle}
-        color: ${getColor('textPrimary')};
         padding: 0;
-
-        &:hover {
-          color: ${getColor('textExtraLight')};
-        }
       `
     } else {
       const disabledStyle = disabledStyles[type]
