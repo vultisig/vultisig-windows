@@ -1,22 +1,25 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
-import { derivePublicKey } from '@core/chain/publicKey/derivePublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
+
+import { derivePublicKey } from './ecdsa/derivePublicKey'
+import { PublicKeys } from './PublicKeys'
 
 type Input = {
   chain: Chain
   walletCore: WalletCore
-  vault: Pick<Vault, 'hexChainCode' | 'publicKeys'>
+  hexChainCode: string
+  publicKeys: PublicKeys
 }
 
-export const getVaultPublicKey = async ({
+export const getPublicKey = ({
   chain,
   walletCore,
-  vault,
+  hexChainCode,
+  publicKeys,
 }: Input) => {
   const coinType = getCoinType({
     walletCore,
@@ -33,11 +36,11 @@ export const getVaultPublicKey = async ({
   const derivedPublicKey = match(keysignType, {
     ecdsa: () =>
       derivePublicKey({
-        hexRootPubKey: vault.publicKeys.ecdsa,
-        hexChainCode: vault.hexChainCode,
+        hexRootPubKey: publicKeys.ecdsa,
+        hexChainCode: hexChainCode,
         path: walletCore.CoinTypeExt.derivationPath(coinType),
       }),
-    eddsa: () => vault.publicKeys.eddsa,
+    eddsa: () => publicKeys.eddsa,
   })
 
   const pubkey = walletCore.PublicKey.createWithData(

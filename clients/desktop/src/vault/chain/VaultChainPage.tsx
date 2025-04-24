@@ -3,10 +3,12 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
@@ -44,7 +46,6 @@ import { makeAppPath } from '../../navigation'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
-import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
@@ -61,7 +62,6 @@ export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const invalidateQueries = useInvalidateQueries()
   const fiatCurrency = useFiatCurrency()
-  const publicKeyQuery = useVaultPublicKeyQuery(chain)
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
@@ -94,19 +94,21 @@ export const VaultChainPage = () => {
     },
   })
 
+  const vault = useCurrentVault()
+
   useEffect(() => {
     // Ensure findTokensQuery.data is an array
     const tokens = Array.isArray(findTokensQuery.data)
       ? findTokensQuery.data
       : []
 
-    const isValidPublicKey =
-      publicKeyQuery.data &&
-      typeof publicKeyQuery.data.data === 'function' &&
-      publicKeyQuery.data.data().length > 0 // Ensure it contains meaningful data
-
-    if (tokens.length > 0 && publicKeyQuery.isSuccess && isValidPublicKey) {
-      const publicKey = publicKeyQuery.data
+    if (tokens.length > 0) {
+      const publicKey = getPublicKey({
+        chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
       const address = deriveAddress({ chain, publicKey, walletCore })
 
       saveCoins(
@@ -119,9 +121,9 @@ export const VaultChainPage = () => {
   }, [
     chain,
     findTokensQuery.data,
-    publicKeyQuery.data,
-    publicKeyQuery.isSuccess,
     saveCoins,
+    vault.hexChainCode,
+    vault.publicKeys,
     walletCore,
   ])
 

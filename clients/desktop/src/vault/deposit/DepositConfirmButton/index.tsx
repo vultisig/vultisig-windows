@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -15,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
-import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
@@ -51,13 +51,16 @@ export const DepositConfirmButton = ({
 
   const memo = (depositFormData['memo'] as string) ?? ''
 
-  const publicKeyQuery = useVaultPublicKeyQuery(coin.chain)
-
   const walletCore = useAssertWalletCore()
 
   const keysignPayload = useMemo(() => {
     // TODO: handle affiliate fee and percentage
-    const publicKey = shouldBePresent(publicKeyQuery.data)
+    const publicKey = getPublicKey({
+      chain: coin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
     const keysignPayload = create(KeysignPayloadSchema, {
       coin: toCommCoin({
         ...coin,
@@ -93,11 +96,11 @@ export const DepositConfirmButton = ({
     coin,
     isTonFunction,
     memo,
-    publicKeyQuery.data,
     receiver,
     validatorAddress,
+    vault.hexChainCode,
     vault.localPartyId,
-    vault.publicKeys.ecdsa,
+    vault.publicKeys,
     walletCore,
   ])
 
@@ -109,11 +112,11 @@ export const DepositConfirmButton = ({
     return <Text color="danger">{t('required_field_missing')}</Text>
   }
 
-  if (chainSpecificQuery.error || publicKeyQuery.error) {
+  if (chainSpecificQuery.error) {
     return <Text color="danger">{t('failed_to_load')}</Text>
   }
 
-  if (chainSpecificQuery.isLoading || publicKeyQuery.isLoading) {
+  if (chainSpecificQuery.isLoading) {
     return <Text>{t('loading')}</Text>
   }
 

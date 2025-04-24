@@ -1,5 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
@@ -20,8 +21,6 @@ import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
 import { keccak256 } from 'js-sha3'
-
-import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -67,10 +66,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             Buffer.from(msg, 'base64').toString('hex')
           )
 
-          const publicKey = await getVaultPublicKey({
-            vault,
+          const publicKey = getPublicKey({
             chain,
             walletCore,
+            hexChainCode: vault.hexChainCode,
+            publicKeys: vault.publicKeys,
           })
 
           const hashes = await chainPromises(
