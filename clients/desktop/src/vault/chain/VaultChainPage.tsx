@@ -3,10 +3,11 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -40,7 +41,6 @@ import {
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
 import { makeAppPath } from '../../navigation'
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
@@ -60,7 +60,7 @@ import { VaultChainCoinItem } from './VaultChainCoinItem'
 export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const invalidateQueries = useInvalidateQueries()
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
   const publicKeyQuery = useVaultPublicKeyQuery(chain)
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)

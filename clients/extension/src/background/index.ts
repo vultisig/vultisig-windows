@@ -111,42 +111,44 @@ const handleProvider = (chain: Chain, update?: boolean) => {
 }
 
 const handleFindAccounts = (
-  chain: Chain,
-  sender: string
+  _chain: Chain,
+  _sender: string
 ): Promise<string[]> => {
-  return new Promise(resolve => {
-    getStoredVaults()
-      .then(vaults => {
-        resolve(
-          vaults.flatMap(({ active, apps, chains }) =>
-            active && apps
-              ? chains
-                  .filter(
-                    (selectedChain: ChainProps) =>
-                      selectedChain.chain === chain && apps.indexOf(sender) >= 0
-                  )
-                  .map(({ address }) => address ?? '')
-              : []
-          )
-        )
-      })
-      .catch(() => resolve([]))
+  return new Promise(_resolve => {
+    //TODO: introduce connected apps
+    // getStoredVaults()
+    //   .then(vaults => {
+    //     resolve(
+    //       vaults.flatMap(({ active, apps, chains }) =>
+    //         active && apps
+    //           ? chains
+    //               .filter(
+    //                 (selectedChain: ChainProps) =>
+    //                   selectedChain.chain === chain && apps.indexOf(sender) >= 0
+    //               )
+    //               .map(({ address }) => address ?? '')
+    //           : []
+    //       )
+    //     )
+    //   })
+    //   .catch(() => resolve([]))
   })
 }
 
 const handleFindVault = (
-  sender: string
+  _sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  return new Promise(resolve => {
-    getStoredVaults()
-      .then(vaults => {
-        resolve(
-          vaults.find(
-            ({ active, apps = [] }) => active && apps.indexOf(sender) >= 0
-          )
-        )
-      })
-      .catch(() => resolve(undefined))
+  return new Promise(_resolve => {
+    //TODO: introduce connected apps
+    // getStoredVaults()
+    //   .then(vaults => {
+    //     resolve(
+    //       vaults.find(
+    //         ({ active, apps = [] }) => active && apps.indexOf(sender) >= 0
+    //       )
+    //     )
+    //   })
+    //   .catch(() => resolve(undefined))
   })
 }
 

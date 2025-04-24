@@ -1,4 +1,3 @@
-import type { CurrencyRef } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import keyMirror from 'keymirror'
 
@@ -149,20 +148,7 @@ export const errorKey = keyMirror({
   INVALID_VAULT: true,
 })
 
-export const currencyName: CurrencyRef = {
-  [Currency.AUD]: 'Australian Dollar',
-  [Currency.CAD]: 'Canadian Dollar',
-  [Currency.CNY]: 'Chinese Yuan',
-  [Currency.EUR]: 'European Euro',
-  [Currency.GBP]: 'British Pound',
-  [Currency.JPY]: 'Japanese Yen',
-  [Currency.RUB]: 'Russian Ruble',
-  [Currency.SEK]: 'Swedish Krona',
-  [Currency.SGD]: 'Singapore Dollar',
-  [Currency.USD]: 'United States Dollar',
-}
-
-export const supportedChains: Record<Chain, boolean> = {
+const supportedChains: Record<Chain, boolean> = {
   [Chain.Arbitrum]: true,
   [Chain.Avalanche]: true,
   [Chain.Base]: true,

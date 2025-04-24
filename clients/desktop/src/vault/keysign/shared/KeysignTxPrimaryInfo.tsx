@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import {
@@ -10,6 +11,7 @@ import {
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -17,9 +19,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { toAddress, memo, toAmount, blockchainSpecific } = value
@@ -34,7 +33,7 @@ export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
     coin,
   })
 
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null

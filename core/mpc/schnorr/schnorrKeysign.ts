@@ -13,8 +13,8 @@ import {
   encodeEncryptMessage,
 } from '../encodingAndEncryption'
 import { getMessageHash } from '../getMessageHash'
+import { KeysignSignature } from '../keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '../keysignComplete'
-import { KeysignSignature } from '../keysignSignature'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
@@ -207,12 +207,12 @@ export class SchnorrKeysign {
       const s = signature.slice(32, 64)
 
       const derSignature = encodeDERSignature(r, s)
-      const keysignSig = new KeysignSignature({
+      const keysignSig: KeysignSignature = {
         msg: Buffer.from(messageToSign, 'hex').toString('base64'),
         r: Buffer.from(r).reverse().toString('hex'),
         s: Buffer.from(s).reverse().toString('hex'),
         der_signature: Buffer.from(derSignature).toString('hex'),
-      })
+      }
       await markLocalPartyKeysignComplete({
         serverURL: this.serverURL,
         sessionId: this.sessionId,

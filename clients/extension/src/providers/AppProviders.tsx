@@ -15,8 +15,9 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
+import { SetFiatCurrencyProvider } from '../preferences/fiatCurrency'
 import { CreateVaultProvider } from '../vault/state/createVault'
-import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultId'
+import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultIdProvider'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
 import { RemoteStateDependant } from './RemoteStateDependant'
 
@@ -43,12 +44,14 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <SetCurrentVaultIdProvider>
                           <CreateVaultProvider>
                             <UpdateVaultProvider>
-                              <AntDesignThemeProvider>
-                                <RemoteStateDependant>
-                                  {children}
-                                </RemoteStateDependant>
-                                <GlobalStyle />
-                              </AntDesignThemeProvider>
+                              <SetFiatCurrencyProvider>
+                                <AntDesignThemeProvider>
+                                  <RemoteStateDependant>
+                                    {children}
+                                  </RemoteStateDependant>
+                                  <GlobalStyle />
+                                </AntDesignThemeProvider>
+                              </SetFiatCurrencyProvider>
                             </UpdateVaultProvider>
                           </CreateVaultProvider>
                         </SetCurrentVaultIdProvider>

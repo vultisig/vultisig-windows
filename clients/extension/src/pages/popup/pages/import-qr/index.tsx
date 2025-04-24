@@ -1,22 +1,12 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import AddressProvider from '@clients/extension/src/utils/address-provider'
-import {
-  errorKey,
-  isSupportedChain,
-  supportedChains,
-} from '@clients/extension/src/utils/constants'
+import { errorKey } from '@clients/extension/src/utils/constants'
 import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
-import {
-  getStoredVaults,
-  setStoredVaults,
-} from '@clients/extension/src/utils/storage'
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCreateVault } from '@core/ui/vault/state/createVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -32,6 +22,8 @@ import { UAParser } from 'ua-parser-js'
 import { readBarcodes, ReaderOptions } from 'zxing-wasm'
 
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
+import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
+import { getVaults } from '../../../../vault/state/vaults'
 
 interface InitialState {
   file?: File
@@ -52,7 +44,8 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { file, isWindows, loading, status, vault, error } = state
   const navigate = useAppNavigate()
-  const walletCore = useWalletCore()
+  const [, setCurrentVaultId] = useCurrentVaultId()
+  const createVault = useCreateVault()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {
@@ -60,63 +53,27 @@ const Component = () => {
     else navigate('main')
   }
 
-  const handleStart = (): void => {
+  const handleStart = async (): Promise<void> => {
     if (!loading && vault && status === 'success') {
-      getStoredVaults().then(vaults => {
-        const existed = vaults.findIndex(({ uid }) => uid === vault.uid) >= 0
+      setState(prevState => ({ ...prevState, loading: true }))
+      getVaults()
+        .then(vaults => {
+          const existed =
+            vaults.findIndex(v => getVaultId(v) === getVaultId(vault)) >= 0
 
-        setState(prevState => ({ ...prevState, loading: true }))
-
-        if (existed) {
-          const modifiedVaults = vaults.map(item => ({
-            ...item,
-            active: item.uid === vault.uid,
-          }))
-
-          setStoredVaults(modifiedVaults).then(() => {
-            setState(prevState => ({ ...prevState, loading: false }))
-
+          if (existed) {
+            setCurrentVaultId(getVaultId(vault))
             handleFinish()
-          })
-        } else {
-          const addressProvider = new AddressProvider(walletCore!)
-          const promises = Object.keys(supportedChains)
-            .filter(key => isSupportedChain(key as Chain))
-            .map(key => addressProvider.getAddress(key as Chain, vault))
-
-          Promise.all(promises)
-            .then(props => {
-              vault.chains = Object.keys(supportedChains)
-                .filter(key => isSupportedChain(key as Chain))
-                .map((chainKey, index) => ({
-                  ...chainFeeCoin[chainKey as Chain],
-                  ...props[index],
-                }))
-
-              const modifiedVaults = [
-                { ...vault, active: true },
-                ...vaults
-                  .filter(({ uid }) => uid !== vault.uid)
-                  .map(vault => ({ ...vault, active: false })),
-              ]
-
-              setStoredVaults(modifiedVaults).then(() => {
-                setState(prevState => ({ ...prevState, loading: false }))
-
-                handleFinish()
-              })
+          } else {
+            createVault(vault).then(() => {
+              setCurrentVaultId(getVaultId(vault))
+              navigateToMain()
             })
-            .catch(error => {
-              console.error('Failed to retrieve addresses:', error)
-              setState(prevState => ({
-                ...prevState,
-                loading: false,
-                status: 'error',
-                error: t('failed_to_retrieve_addresses'),
-              }))
-            })
-        }
-      })
+          }
+        })
+        .finally(() => {
+          setState(prevState => ({ ...prevState, loading: false }))
+        })
     }
   }
 
@@ -191,8 +148,22 @@ const Component = () => {
         .then(([result]) => {
           if (result) {
             try {
-              const vault: Vault = JSON.parse(result.text)
+              const {
+                hex_chain_code,
+                name,
+                public_key_ecdsa,
+                public_key_eddsa,
+                uid,
+              } = JSON.parse(result.text)
+              console.log({
+                hex_chain_code,
+                name,
+                public_key_ecdsa,
+                public_key_eddsa,
+                uid,
+              })
 
+              // TODO: create new vault with new flow (JoinKeysgin) in another PR
               setState(prevState => ({
                 ...prevState,
                 vault: {
@@ -259,14 +230,8 @@ const Component = () => {
 
         chrome.windows.onRemoved.addListener(closedWindowId => {
           if (closedWindowId === createdWindowId) {
-            getStoredVaults().then(vaults => {
-              const active = vaults.find(({ active }) => active)
-
-              if (active) {
-                if (isPopupRef) window.close()
-                else navigateToMain()
-              }
-            })
+            if (isPopupRef.current) window.close()
+            else navigateToMain()
           }
         })
       })

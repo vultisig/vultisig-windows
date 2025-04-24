@@ -1,4 +1,8 @@
 import { fiatCurrencies } from '@core/config/FiatCurrency'
+import {
+  useFiatCurrency,
+  useSetFiatCurrencyMutation,
+} from '@core/ui/state/fiatCurrency'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -8,7 +12,6 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import {
   CurrencyBox,
   CurrencyButton,
@@ -17,7 +20,8 @@ import {
 
 const CurrencySettingsPage = () => {
   const { t } = useTranslation()
-  const [fiatCurrency, setFiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
+  const { mutate: setFiatCurrency } = useSetFiatCurrencyMutation()
 
   return (
     <ScrollableFlexboxFiller>
@@ -31,7 +35,7 @@ const CurrencySettingsPage = () => {
             <CurrencyButton key={index} onClick={() => setFiatCurrency(fiat)}>
               <CurrencyBox>
                 <Text size={16} color="contrast" weight="600">
-                  {t(`vault_settings_currency_settings_title_${fiat}`)}
+                  {fiat.toUpperCase()}
                 </Text>
               </CurrencyBox>
               {fiat === fiatCurrency && <CheckIcon />}

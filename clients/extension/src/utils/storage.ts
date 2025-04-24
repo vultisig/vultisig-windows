@@ -60,9 +60,7 @@ export const getStoredChains = (): Promise<ChainProps[]> => {
       if (res.chains?.length) {
         resolve(res.chains)
       } else {
-        const defaultChain = chainFeeCoin.Ethereum
-
-        resolve(defaultChain ? [{ ...defaultChain, active: true }] : [])
+        resolve([chainFeeCoin.Ethereum])
       }
     })
   })
@@ -70,26 +68,6 @@ export const getStoredChains = (): Promise<ChainProps[]> => {
 
 export const setStoredChains = (chains: ChainProps[]): Promise<void> => {
   const vals: LocalStorage = { chains }
-
-  return new Promise(resolve => {
-    chrome.storage.local.set(vals, () => {
-      resolve()
-    })
-  })
-}
-
-export const getStoredCurrency = (): Promise<Currency> => {
-  const keys: LocalStorageKeys[] = ['currency']
-
-  return new Promise(resolve => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(res.currency ?? Currency.USD)
-    })
-  })
-}
-
-export const setStoredCurrency = (currency: Currency): Promise<void> => {
-  const vals: LocalStorage = { currency }
 
   return new Promise(resolve => {
     chrome.storage.local.set(vals, () => {

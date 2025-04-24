@@ -9,7 +9,7 @@ import {
 import { FastSignInput } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
-import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 namespace Derivation {
@@ -152,7 +152,7 @@ export default {
     getComplete: async (
       uuid: string,
       message?: string
-    ): Promise<KeysignResponse> => {
+    ): Promise<KeysignSignature> => {
       return new Promise((resolve, reject) => {
         api
           .get(`${apiRef.vultisig.api}router/complete/${uuid}/keysign`, {
@@ -160,7 +160,7 @@ export default {
           })
           .then(({ data, status }) => {
             if (status === 200) {
-              const response: KeysignResponse = {
+              const response: KeysignSignature = {
                 der_signature: data.DerSignature || data.derSignature,
                 msg: data.Msg || data.msg,
                 r: data.R || data.r,
