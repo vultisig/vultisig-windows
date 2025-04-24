@@ -35,6 +35,7 @@ export const StartKeysignPrompt = ({
       {securityType === 'fast' && (
         <Button
           kind="outlined"
+          isDisabled={isDisabled}
           onClick={() => {
             navigate('keysign', {
               state: {

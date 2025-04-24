@@ -3,6 +3,8 @@ import path from 'path'
 import { defineConfig, normalizePath } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser'
+import topLevelAwait from 'vite-plugin-top-level-await'
+import wasm from 'vite-plugin-wasm'
 
 import * as buildInfo from './build.json'
 
@@ -17,6 +19,8 @@ export default defineConfig(async () => {
     plugins: [
       react(),
       stdLibBrowser(),
+      wasm(),
+      topLevelAwait(),
       viteStaticCopy({
         targets: [
           {
