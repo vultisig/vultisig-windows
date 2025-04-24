@@ -1,42 +1,35 @@
 import { ArrowLeft } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Vault } from '@clients/extension/src/utils/interfaces'
-import {
-  getStoredVaults,
-  setStoredVaults,
-} from '@clients/extension/src/utils/storage'
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { Button, Form, Input } from 'antd'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
 
 const Component = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const navigate = useAppNavigate()
+  const [currentVaultId] = useCurrentVaultId()
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   const handleSubmit = (): void => {
-    form
-      .validateFields()
-      .then(({ name }: Vault) => {
-        getStoredVaults().then(vaults => {
-          setStoredVaults(
-            vaults.map(item => (item.active ? { ...item, name } : item))
-          )
+    if (currentVaultId)
+      form
+        .validateFields()
+        .then(({ name }: Vault) => {
+          updateVault({
+            vaultId: currentVaultId,
+            fields: {
+              name: name,
+            },
+          }).then(() => [navigate('settings')])
         })
-      })
-      .catch(() => {})
+        .catch(error => {
+          console.error('Form validation failed:', error)
+        })
   }
-
-  const componentDidMount = (): void => {
-    getStoredVaults().then(vaults => {
-      const vault = vaults.find(({ active }) => active)
-
-      form.setFieldsValue(vault)
-    })
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
-
   return (
     <div className="layout rename-vault-page">
       <div className="header">

@@ -1,54 +1,21 @@
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import type { Vault } from '@clients/extension/src/utils/interfaces'
-import {
-  getStoredVaults,
-  setStoredVaults,
-} from '@clients/extension/src/utils/storage'
+import { useDeleteVaultMutation } from '@clients/extension/src/vault/mutations/useDeleteVaultMutation'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button, ConfigProvider } from 'antd'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-interface InitialState {
-  vault?: Vault
-}
 
 const Component = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { vault } = state
   const navigate = useAppNavigate()
-
-  const handleSubmit = (): void => {
-    getStoredVaults().then(vaults => {
-      const modifiedVaults = vaults.filter(({ active }) => !active)
-
-      if (modifiedVaults.length) {
-        setStoredVaults(
-          modifiedVaults.map((vault, index) =>
-            index === 0 ? { ...vault, active: true } : vault
-          )
-        )
-
-        navigate('main')
-      } else {
-        setStoredVaults([])
-
-        navigate('landing')
-      }
+  const currentVault = useCurrentVault()
+  const { mutateAsync: deleteVault, isPending } = useDeleteVaultMutation()
+  const handleSubmit = async (): Promise<void> => {
+    deleteVault(getVaultId(currentVault), {
+      onSuccess: () => navigate('main'),
     })
   }
-
-  const componentDidMount = (): void => {
-    getStoredVaults().then(vaults => {
-      const vault = vaults.find(({ active }) => active)
-
-      setState(prevState => ({ ...prevState, vault }))
-    })
-  }
-
-  useEffect(componentDidMount, [])
 
   return (
     <div className="layout delete-vault-page">
@@ -62,7 +29,7 @@ const Component = () => {
       <div className="content">
         <TriangleWarning className="icon" />
         <span className="text">{`${t('removing_vault_warning')}:`}</span>
-        <span className="name">{vault?.name}</span>
+        <span className="name">{currentVault?.name}</span>
       </div>
       <div className="footer">
         {/* TODO: Deprecate Ant Design and start using styled-components instead to be consistent with the desktop client. All the base components should be in @lib/ui. If you need a new compnent, first check in the desktop client if it's not already created, move it to the @lib/ui and reuse it. */}
@@ -73,7 +40,13 @@ const Component = () => {
             },
           }}
         >
-          <Button onClick={handleSubmit} type="primary" shape="round" block>
+          <Button
+            onClick={handleSubmit}
+            type="primary"
+            shape="round"
+            block
+            loading={isPending}
+          >
             {t('remove_vault')}
           </Button>
         </ConfigProvider>

@@ -19,6 +19,7 @@ import { createHashRouter, Navigate } from 'react-router-dom'
 
 import { SetupFastVaultPage } from '../../components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../../components/setup/SetupSecureVaultPage'
+import { ActiveVaultGuard } from '../../vault/components/ActiveVaultGuard'
 
 const routes = [
   {
@@ -55,7 +56,11 @@ const routes = [
   },
   {
     path: appPaths.root,
-    element: <Layout />,
+    element: (
+      <ActiveVaultGuard>
+        <Layout />
+      </ActiveVaultGuard>
+    ),
     children: [
       {
         index: true,

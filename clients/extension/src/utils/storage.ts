@@ -60,9 +60,7 @@ export const getStoredChains = (): Promise<ChainProps[]> => {
       if (res.chains?.length) {
         resolve(res.chains)
       } else {
-        const defaultChain = chainFeeCoin.Ethereum
-
-        resolve(defaultChain ? [{ ...defaultChain, active: true }] : [])
+        resolve([chainFeeCoin.Ethereum])
       }
     })
   })

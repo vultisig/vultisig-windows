@@ -148,7 +148,7 @@ export const errorKey = keyMirror({
   INVALID_VAULT: true,
 })
 
-export const supportedChains: Record<Chain, boolean> = {
+const supportedChains: Record<Chain, boolean> = {
   [Chain.Arbitrum]: true,
   [Chain.Avalanche]: true,
   [Chain.Base]: true,

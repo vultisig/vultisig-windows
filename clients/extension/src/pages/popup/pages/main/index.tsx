@@ -1,10 +1,6 @@
-import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { Vault } from '@clients/extension/src/utils/interfaces'
-import { getStoredVaults } from '@clients/extension/src/utils/storage'
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { VaultSigners } from '@core/ui/vault/signers'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
@@ -15,7 +11,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
@@ -43,27 +39,10 @@ const ConnectedApp = styled.div`
   width: 36px;
 `
 
-interface InitialState {
-  vault?: Vault
-}
-
 const Component: FC = () => {
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { vault } = state
+  const vault = useCurrentVault()
   const { colors } = useTheme()
   const navigate = useAppNavigate()
-
-  const componentDidMount = (): void => {
-    getStoredVaults().then(vaults => {
-      setState(prevState => ({
-        ...prevState,
-        vault: vaults.find(({ active }) => active),
-      }))
-    })
-  }
-
-  useEffect(componentDidMount, [])
 
   return vault ? (
     <VStack alignItems="center" justifyContent="center" fullHeight>
@@ -105,6 +84,8 @@ const Component: FC = () => {
           <Text weight={500} size={12} color="light">
             Portfolio Overview
           </Text>
+          {/* TODO: Fetch addresess */}
+          {/*  
           <List>
             {vault.chains.map(({ address, chain }) => (
               <ListItem
@@ -136,6 +117,7 @@ const Component: FC = () => {
               />
             ))}
           </List>
+          */}
         </VStack>
       </PageContent>
     </VStack>
