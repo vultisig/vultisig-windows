@@ -811,4 +811,5 @@ export const de = {
   failed_to_retrieve_addresses: 'Adressen konnten nicht abgerufen werden',
   vulti_share_not_saved_hint:
     'Wenn Sie Ihren VultiShare-QR noch nicht gespeichert haben, gehen Sie zur App und klicken Sie auf das QR-Symbol in der oberen rechten Ecke.',
+  version: 'Version',
 }

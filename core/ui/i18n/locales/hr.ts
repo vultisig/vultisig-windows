@@ -789,4 +789,5 @@ export const hr = {
   failed_to_retrieve_addresses: 'Dohvaćanje adresa nije uspjelo',
   vulti_share_not_saved_hint:
     'Ako još niste spremili svoj VultiShare QR, idite na aplikaciju i kliknite na QR ikonu u gornjem desnom kutu.',
+  version: 'Verzija',
 }

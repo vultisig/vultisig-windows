@@ -798,4 +798,5 @@ export const pt = {
   failed_to_retrieve_addresses: 'Falha ao recuperar endereços',
   vulti_share_not_saved_hint:
     'Se você ainda não salvou seu QR do VultiShare, acesse o aplicativo e clique no ícone do QR no canto superior direito.',
+  version: 'Versão',
 }
