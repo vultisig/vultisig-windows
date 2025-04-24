@@ -46,14 +46,9 @@ const routes = [
     element: <SetupSecureVaultPage />,
   },
   {
-    path: corePaths.reshareVault,
-    element: (
-      <ActiveVaultGuard>
-        <ReshareVaultPage />
-      </ActiveVaultGuard>
-    ),
+    path: corePaths.setupFastVault,
+    element: <SetupFastVaultPage />,
   },
-
   {
     path: appPaths.onboarding,
     element: (
@@ -70,6 +65,14 @@ const routes = [
       </ActiveVaultGuard>
     ),
     children: [
+      {
+        path: corePaths.reshareVault,
+        element: (
+          <ActiveVaultGuard>
+            <ReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
       {
         index: true,
         element: <MainPage />,
@@ -91,10 +94,6 @@ const routes = [
         ),
       },
 
-      {
-        path: corePaths.setupFastVault,
-        element: <SetupFastVaultPage />,
-      },
       {
         path: appPaths.vaults,
         element: <VaultsPage />,
