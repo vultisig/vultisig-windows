@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
@@ -9,8 +9,15 @@ import { attempt } from '@lib/utils/attempt'
 
 import { FindCoinsResolver } from './FindCoinsResolver'
 
-export const findThorChainCoins: FindCoinsResolver = async ({ address }) => {
-  const chain = Chain.THORChain
+export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
+  address,
+  chain,
+}) => {
+  // While it should work for other cosmos chains, we only support THORChain for now
+  if (chain !== CosmosChain.THORChain) {
+    return []
+  }
+
   const client = await getCosmosClient(chain)
   const balances = await client.getAllBalances(address)
 

@@ -4,11 +4,13 @@ import {
   fromSolanaJupiterTokens,
   SolanaJupiterToken,
 } from '@core/chain/coin/jupiter/token'
+import {
+  fromOneInchTokens,
+  OneInchTokensResponse,
+} from '@core/chain/coin/oneInch/token'
 import { rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
-
-import { fromOneInchTokens, OneInchTokensResponse } from '../oneInch/token'
 
 export const useWhitelistedCoinsQuery = (chain: Chain) => {
   return useQuery({
