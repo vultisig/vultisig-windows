@@ -1,36 +1,29 @@
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
+import { useDeleteVaultMutation } from '@clients/extension/src/vault/state/useDeleteVault'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button, ConfigProvider } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
-import { getVaults, useVaultsMutation } from '../../../../vault/state/vaults'
-
 const Component = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const [, setCurrentVaultId] = useCurrentVaultId()
   const currentVault = useCurrentVault()
-  const { mutateAsync: updateVaults } = useVaultsMutation()
+  const [, setCurrentVaultId] = useCurrentVaultId()
+  const {
+    mutateAsync: deleteVault,
+    isPending,
+    error,
+  } = useDeleteVaultMutation()
   const handleSubmit = async (): Promise<void> => {
-    const vaults = await getVaults()
-    const index = vaults.findIndex(
-      v => getVaultId(v) === getVaultId(currentVault)
-    )
-    if (vaults.length > 1) {
-      const updatedVaults = [
-        ...vaults.slice(0, index),
-        ...vaults.slice(index + 1),
-      ]
-      await updateVaults(updatedVaults)
-      setCurrentVaultId(getVaultId(updatedVaults[0]))
-      navigate('main')
-    } else {
-      await updateVaults([])
+    try {
+      deleteVault(getVaultId(currentVault))
       setCurrentVaultId(null)
-      navigate('landing')
+      navigate('main')
+    } catch {
+      console.error(error)
     }
   }
 
@@ -57,7 +50,13 @@ const Component = () => {
             },
           }}
         >
-          <Button onClick={handleSubmit} type="primary" shape="round" block>
+          <Button
+            onClick={handleSubmit}
+            type="primary"
+            shape="round"
+            block
+            loading={isPending}
+          >
             {t('remove_vault')}
           </Button>
         </ConfigProvider>
