@@ -1,43 +1,30 @@
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { useVaults } from '@core/ui/vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useCurrentVaultId } from '../state/currentVaultId'
-import { getVaults } from '../state/vaults'
 
-export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
-  const [currentVaultId, , loading] = useCurrentVaultId()
+export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
+  const [currentVaultId] = useCurrentVaultId()
+  const vaults = useVaults()
+  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
+
   const navigate = useAppNavigate()
-  const [vault, setVault] = useState<Vault | null>(null)
-  const [checked, setChecked] = useState(false)
+
+  const isDisabled = !vault
 
   useEffect(() => {
-    const checkVault = async () => {
-      if (loading) return
-      const vaults = await getVaults()
-
-      if (isEmpty(vaults)) {
-        navigate('landing')
-        return
-      }
-      const foundVault = vaults.find(v => getVaultId(v) === currentVaultId)
-
-      if (!foundVault) {
-        navigate('landing')
-      } else {
-        setVault(foundVault)
-      }
-
-      setChecked(true)
+    if (isDisabled) {
+      navigate('setupVault', { params: {} })
     }
+  }, [isDisabled, navigate])
 
-    checkVault()
-  }, [currentVaultId, navigate, loading])
-
-  if (loading || !checked || !vault) return null
+  if (isDisabled) {
+    return null
+  }
 
   return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>
 }
