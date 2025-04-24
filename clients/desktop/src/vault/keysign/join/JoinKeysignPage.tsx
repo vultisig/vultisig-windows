@@ -7,6 +7,7 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
+import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
@@ -35,10 +36,12 @@ export const JoinKeysignPage = () => {
                 to={({ onBack }) => (
                   <JoinMpcSessionFlow
                     render={() => (
-                      <KeysignSigningStep
-                        payload={keysignMessagePayload}
-                        onBack={onBack}
-                      />
+                      <KeysignActionProvider>
+                        <KeysignSigningStep
+                          payload={keysignMessagePayload}
+                          onBack={onBack}
+                        />
+                      </KeysignActionProvider>
                     )}
                   />
                 )}

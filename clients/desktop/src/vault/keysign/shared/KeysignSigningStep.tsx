@@ -5,6 +5,8 @@ import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
+import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
+import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVersion } from '@core/ui/product/state/version'
 import { Match } from '@lib/ui/base/Match'
@@ -22,9 +24,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { KeysignTxOverview } from './KeysignTxOverview'
 import { useKeysignMutation } from './mutations/useKeysignMutation'
-import { SwapKeysignTxOverview } from './SwapKeysignTxOverview'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload

@@ -1,5 +1,5 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'

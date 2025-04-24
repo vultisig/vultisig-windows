@@ -1,5 +1,6 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'
@@ -13,7 +14,6 @@ import { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation'
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery'
 import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
@@ -48,7 +48,7 @@ const DeleteVaultPage = () => {
   const { data: vaultBalance } = useVaultTotalBalanceQuery()
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation()
   const vault = useCurrentVault()
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
 
   const { signers, name, publicKeys, localPartyId } = vault
 

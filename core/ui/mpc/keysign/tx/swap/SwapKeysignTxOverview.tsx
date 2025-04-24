@@ -6,6 +6,7 @@ import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
+import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -28,8 +29,6 @@ import { useRive } from '@rive-app/react-canvas'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
-
-import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()

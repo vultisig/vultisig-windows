@@ -12,10 +12,8 @@ import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerO
 import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCode'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
-import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -28,25 +26,30 @@ import { range } from '@lib/utils/array/range'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const KeysignPeerDiscoveryStep = ({ onFinish }: OnFinishProp) => {
+import { useMpcPeers } from '../../state/mpcPeers'
+
+export const KeysignPeerDiscoveryStep = ({
+  onFinish,
+}: OnFinishProp<string[]>) => {
   const { t } = useTranslation()
 
-  const devices = useMpcDevices()
+  const peers = useMpcPeers()
   const { signers } = useCurrentVault()
 
   const isDisabled = useMemo(() => {
     const requiredDevicesNumber = getKeygenThreshold(signers.length)
 
-    if (devices.length !== requiredDevicesNumber) {
-      return t('select_n_devices', { count: requiredDevicesNumber - 1 })
+    const requiredPeersNumber = requiredDevicesNumber - 1
+    if (peers.length < requiredPeersNumber) {
+      return t('select_n_devices', { count: requiredPeersNumber })
     }
-  }, [devices.length, signers.length, t])
+  }, [peers.length, signers.length, t])
 
   useEffect(() => {
     if (!isDisabled) {
-      onFinish()
+      onFinish(peers)
     }
-  }, [isDisabled, onFinish])
+  }, [isDisabled, onFinish, peers])
 
   const joinUrlQuery = useJoinKeysignUrlQuery()
 
@@ -65,13 +68,7 @@ export const KeysignPeerDiscoveryStep = ({ onFinish }: OnFinishProp) => {
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<DownloadKeysignQrCode />}
       />
-      <FitPageContent
-        as="form"
-        {...getFormProps({
-          onSubmit: onFinish,
-          isDisabled,
-        })}
-      >
+      <FitPageContent>
         <PageFormFrame>
           <PeersPageContentFrame>
             <QueryBasedQrCode value={joinUrlQuery} />

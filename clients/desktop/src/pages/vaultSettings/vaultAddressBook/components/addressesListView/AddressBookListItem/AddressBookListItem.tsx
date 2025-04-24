@@ -8,7 +8,7 @@ import {
   Edge,
   extractClosestEdge,
 } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BinIcon } from '@lib/ui/icons/BinIcon'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
