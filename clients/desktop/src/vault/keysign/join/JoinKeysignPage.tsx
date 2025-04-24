@@ -1,4 +1,5 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -8,7 +9,6 @@ import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
-import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
