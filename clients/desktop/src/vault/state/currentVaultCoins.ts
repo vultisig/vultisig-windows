@@ -30,6 +30,11 @@ export const useCurrentVaultAddreses = () => {
   const coins = useCurrentVaultNativeCoins()
 
   return useMemo(() => {
+    console.log(
+      Object.fromEntries(
+        coins.map(coin => [coin.chain, coin.address])
+      ) as Record<Chain, string>
+    )
     return Object.fromEntries(
       coins.map(coin => [coin.chain, coin.address])
     ) as Record<Chain, string>
