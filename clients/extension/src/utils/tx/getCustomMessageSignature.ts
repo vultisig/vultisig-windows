@@ -1,4 +1,5 @@
-import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isHex } from 'viem'
 
@@ -7,12 +8,12 @@ const ensureHexPrefix = (hex: string): string => {
 }
 
 const getCustomMessageSignature = (
-  signature: KeysignResponse,
+  signature: KeysignSignature,
   walletCore: WalletCore
 ): Uint8Array => {
   const rData = walletCore.HexCoding.decode(signature.r)
   const sData = walletCore.HexCoding.decode(signature.s)
-  const vByte = parseInt(signature.recovery_id, 16) // Convert hex string to integer
+  const vByte = parseInt(shouldBePresent(signature.recovery_id), 16) // Convert hex string to integer
   const vData = new Uint8Array([vByte]) // Convert integer to Uint8Array
 
   const combinedData = new Uint8Array(rData.length + sData.length + 1)
@@ -23,7 +24,7 @@ const getCustomMessageSignature = (
 }
 
 export const getEncodedSignature = (
-  signature: KeysignResponse,
+  signature: KeysignSignature,
   walletCore: WalletCore
 ): string => {
   return ensureHexPrefix(

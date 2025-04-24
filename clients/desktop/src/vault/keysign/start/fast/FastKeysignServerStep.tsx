@@ -8,6 +8,8 @@ import { signWithServer } from '@core/mpc/fast/api/signWithServer'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
+import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
+import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
@@ -24,9 +26,6 @@ import { useMutation } from '@tanstack/react-query'
 import { keccak256 } from 'js-sha3'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { customMessageConfig } from '../../customMessage/config'
-import { getTxInputData } from '../../utils/getTxInputData'
 
 export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
@@ -80,6 +79,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
           })
         },
         custom: ({ message }) => {
+          const { chain } = customMessageConfig
           return signWithServer({
             public_key: publicKeys.ecdsa,
             messages: [keccak256(message)],
@@ -88,12 +88,10 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
             derive_path: walletCore.CoinTypeExt.derivationPath(
               getCoinType({
                 walletCore,
-                chain: customMessageConfig.chain,
+                chain,
               })
             ),
-            is_ecdsa:
-              signatureAlgorithms[getChainKind(customMessageConfig.chain)] ===
-              'ecdsa',
+            is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
           })
         },

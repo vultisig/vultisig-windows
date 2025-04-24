@@ -265,16 +265,6 @@ export const pt = {
   save: 'Salvar',
   settings_vault_page_footer: 'APLICAÇÃO VULTISIG V',
   clear: 'Limpar',
-  vault_settings_currency_settings_title_usd: 'USD',
-  vault_settings_currency_settings_title_aud: 'AUD',
-  vault_settings_currency_settings_title_eur: 'EUR',
-  vault_settings_currency_settings_title_gbp: 'GBP',
-  vault_settings_currency_settings_title_chf: 'CHF',
-  vault_settings_currency_settings_title_jpy: 'JPY',
-  vault_settings_currency_settings_title_cny: 'CNY',
-  vault_settings_currency_settings_title_cad: 'CAD',
-  vault_settings_currency_settings_title_sgd: 'SGD',
-  vault_settings_currency_settings_title_sek: 'SEK',
   faq_setup_crypto_vault_title: 'Como configurar meu cofre seguro de cripto?',
   faq_setup_crypto_vault_content:
     'Reúna 2 ou mais de seus dispositivos e conecte-os ao seu Wi-Fi local, ponto de acesso ou Internet. Em seguida, basta emparelhá-los por meio de um código QR e criar um novo cofre. Em seguida, você pode enviar fundos.',
@@ -802,4 +792,10 @@ export const pt = {
   waiting_for_upgrade_start: 'Aguardando o início da atualização...',
   vault_name_description:
     'Você sempre pode renomear seu cofre mais tarde nas configurações',
+  upload_file_or_drag_and_drop: 'Carregar arquivo ou arrastar e soltar aqui',
+  upload_vulttshare: 'Carregue seu QR Code Vultishare',
+  failed_to_start_keysign: 'Falha ao iniciar o Keysign',
+  failed_to_retrieve_addresses: 'Falha ao recuperar endereços',
+  vulti_share_not_saved_hint:
+    'Se você ainda não salvou seu QR do VultiShare, acesse o aplicativo e clique no ícone do QR no canto superior direito.',
 }

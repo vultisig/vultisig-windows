@@ -11,36 +11,19 @@ import {
 } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { Currency } from '@clients/extension/src/utils/constants'
-import { getStoredCurrency } from '@clients/extension/src/utils/storage'
 import { languageName } from '@core/ui/i18n/Language'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-interface InitialState {
-  currency: Currency
-}
-
 const Component = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {
-    currency: Currency.USD,
-  }
-  const [state, setState] = useState(initialState)
-  const { currency } = state
   const navigate = useAppNavigate()
 
-  const componentDidMount = (): void => {
-    getStoredCurrency().then(currency => {
-      setState(prevState => ({ ...prevState, currency }))
-    })
-  }
+  const currency = useFiatCurrency()
 
   const languageQuery = useLanguageQuery()
-
-  useEffect(componentDidMount, [])
 
   return (
     <div className="layout settings-page">

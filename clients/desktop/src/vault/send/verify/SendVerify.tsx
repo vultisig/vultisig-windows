@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import {
@@ -20,7 +21,6 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'

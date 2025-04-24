@@ -275,16 +275,6 @@ export const es = {
   save: 'Guardar',
   settings_vault_page_footer: 'APLICACIÓN VULTISIG V',
   clear: 'Limpiar',
-  vault_settings_currency_settings_title_usd: 'USD',
-  vault_settings_currency_settings_title_aud: 'AUD',
-  vault_settings_currency_settings_title_eur: 'EUR',
-  vault_settings_currency_settings_title_gbp: 'GBP',
-  vault_settings_currency_settings_title_chf: 'CHF',
-  vault_settings_currency_settings_title_jpy: 'JPY',
-  vault_settings_currency_settings_title_cny: 'CNY',
-  vault_settings_currency_settings_title_cad: 'CAD',
-  vault_settings_currency_settings_title_sgd: 'SGD',
-  vault_settings_currency_settings_title_sek: 'SEK',
   faq_setup_crypto_vault_title:
     '¿Cómo configuro mi bóveda segura de criptomonedas?',
   faq_setup_crypto_vault_content:
@@ -813,4 +803,10 @@ export const es = {
   waiting_for_upgrade_start: 'Esperando que comience la actualización...',
   vault_name_description:
     'Siempre puedes cambiar el nombre de tu bóveda más tarde en la configuración',
+  upload_file_or_drag_and_drop: 'Sube el archivo o arrástralo y suéltalo aquí',
+  upload_vulttshare: 'Sube tu código QR de Vultishare',
+  failed_to_start_keysign: 'No se pudo iniciar Keysign',
+  failed_to_retrieve_addresses: 'No se pudieron recuperar las direcciones',
+  vulti_share_not_saved_hint:
+    'Si aún no has guardado tu QR de VultiShare, ve a la aplicación y haz clic en el ícono QR en la esquina superior derecha.',
 }

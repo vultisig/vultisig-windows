@@ -1,12 +1,12 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
@@ -18,7 +18,7 @@ export const DepositFiatFeeValue = () => {
     coin,
   })
 
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
 
   const chainSpecific = useDepositChainSpecific()
 

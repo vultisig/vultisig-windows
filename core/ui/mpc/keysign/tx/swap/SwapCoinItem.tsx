@@ -1,18 +1,17 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
+import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
-
-import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
-import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 
 export const SwapCoinItem = ({
   coin,
@@ -21,7 +20,7 @@ export const SwapCoinItem = ({
   coin: AccountCoin
   tokenAmount: number | null
 }) => {
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
   const coinPriceQuery = useCoinPriceQuery({
     coin,
   })
