@@ -12,28 +12,23 @@ export const StartSecureKeysignFlow = () => {
   const { keysignPayload } = useCorePathState<'keysign'>()
 
   return (
-    <MpcPeersSelectionProvider>
-      <ValueTransfer<string[]>
-        from={({ onFinish }) => (
-          <MpcPeersSelectionProvider>
-            <KeysignPeerDiscoveryStep onFinish={onFinish} />
-          </MpcPeersSelectionProvider>
-        )}
-        to={({ onBack, value }) => (
-          <MpcPeersProvider value={value}>
-            <StartMpcSessionFlow
-              render={() => (
-                <KeysignActionProvider>
-                  <KeysignSigningStep
-                    payload={keysignPayload}
-                    onBack={onBack}
-                  />
-                </KeysignActionProvider>
-              )}
-            />
-          </MpcPeersProvider>
-        )}
-      />
-    </MpcPeersSelectionProvider>
+    <ValueTransfer<string[]>
+      from={({ onFinish }) => (
+        <MpcPeersSelectionProvider>
+          <KeysignPeerDiscoveryStep onFinish={onFinish} />
+        </MpcPeersSelectionProvider>
+      )}
+      to={({ onBack, value }) => (
+        <MpcPeersProvider value={value}>
+          <StartMpcSessionFlow
+            render={() => (
+              <KeysignActionProvider>
+                <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
+              </KeysignActionProvider>
+            )}
+          />
+        </MpcPeersProvider>
+      )}
+    />
   )
 }
