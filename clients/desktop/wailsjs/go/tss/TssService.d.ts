@@ -4,8 +4,6 @@ import {storage} from '../models';
 import {tss} from '../models';
 import {context} from '../models';
 
-export function GetDerivedPubKey(arg1:string,arg2:string,arg3:string,arg4:boolean):Promise<string>;
-
 export function GetLocalUIEcdsa(arg1:string):Promise<string>;
 
 export function GetLocalUIEdDSA(arg1:string):Promise<string>;
