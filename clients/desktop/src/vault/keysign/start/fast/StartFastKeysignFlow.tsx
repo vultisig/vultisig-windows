@@ -1,5 +1,6 @@
 import { WaitForServerToJoinStep } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
+import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
@@ -11,7 +12,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { KeysignActionProvider } from '../../action/KeysignActionProvider'
-import { FastKeysignServerStep } from './FastKeysignServerStep'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
