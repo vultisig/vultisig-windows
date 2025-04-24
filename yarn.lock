@@ -488,6 +488,8 @@ __metadata:
     ua-parser-js: "npm:^2.0.3"
     vite: "npm:^6.2.2"
     vite-plugin-node-polyfills: "npm:^0.23.0"
+    vite-plugin-top-level-await: "npm:^1.5.0"
+    vite-plugin-wasm: "npm:^3.4.1"
     zxing-wasm: "npm:^2.1.0"
   languageName: unknown
   linkType: soft
