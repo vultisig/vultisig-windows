@@ -24,7 +24,6 @@ export const getDerivedPubKey = (
 
   const pathBuf = getDerivePathBytes(path)
   const derivedKey = derivePubKeyFromPath(pubKeyBuf, chainCodeBuf, pathBuf)
-  console.log('derivedKey', derivedKey)
   return Buffer.from(derivedKey).toString('hex')
 }
 
