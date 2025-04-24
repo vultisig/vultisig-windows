@@ -5,7 +5,7 @@ import styled, { css, RuleSet } from 'styled-components'
 
 type Shape = 'default' | 'circle' | 'round'
 type Size = 'default' | 'large' | 'small'
-type Type = 'default' | 'link' | 'primary' | 'text'
+type Type = 'default' | 'link' | 'primary'
 
 const baseStyles = css`
   align-items: center;
@@ -14,6 +14,7 @@ const baseStyles = css`
   display: flex;
   gap: 8px;
   justify-content: center;
+  padding: 0 16px;
   transition: all 0.2s;
 `
 
@@ -23,22 +24,15 @@ const blockStyles = css`
 
 const disabledStyles: Record<Type, RuleSet> = {
   default: css`
-    border: solid 1px ${getColor('buttonDisabledText')};
-    color: ${getColor('buttonDisabledText')};
-    padding: 0 16px;
+    border: solid 1px ${getColor('buttonTextDisabled')};
+    color: ${getColor('buttonTextDisabled')};
   `,
   link: css`
-    color: ${getColor('buttonDisabledText')};
-    padding: 0 16px;
+    color: ${getColor('buttonTextDisabled')};
   `,
   primary: css`
-    background-color: ${getColor('buttonDisabled')};
-    color: ${getColor('buttonDisabledText')};
-    padding: 0 16px;
-  `,
-  text: css`
-    color: ${getColor('buttonDisabledText')};
-    padding: 0 16px;
+    background-color: ${getColor('buttonBackgroundDisabled')};
+    color: ${getColor('buttonTextDisabled')};
   `,
 }
 
@@ -74,43 +68,27 @@ const sizeStyles: Record<Size, RuleSet> = {
 
 const typeStyles: Record<Type, RuleSet> = {
   default: css`
-    border: solid 1px ${getColor('buttonPrimary')};
-    color: ${getColor('buttonPrimary')};
-    cursor: pointer;
-    padding: 0 16px;
+    border: solid 1px ${getColor('buttonPrimaryWeb')};
+    color: ${getColor('buttonPrimaryWeb')};
 
     &:hover {
-      border-color: ${getColor('buttonPrimaryHover')};
-      color: ${getColor('buttonPrimaryHover')};
+      border-color: ${getColor('buttonPrimaryWebHover')};
+      color: ${getColor('buttonPrimaryWebHover')};
     }
   `,
   link: css`
-    color: ${getColor('buttonPrimary')};
-    cursor: pointer;
-    padding: 0 16px;
+    color: ${getColor('buttonPrimaryWeb')};
 
     &:hover {
-      color: ${getColor('buttonPrimaryHover')};
+      color: ${getColor('buttonPrimaryWebHover')};
     }
   `,
   primary: css`
-    background-color: ${getColor('buttonPrimary')};
+    background-color: ${getColor('buttonPrimaryWeb')};
     color: ${getColor('textPrimary')};
-    cursor: pointer;
-    padding: 0 16px;
 
     &:hover {
-      background-color: ${getColor('buttonPrimaryHover')};
-    }
-  `,
-  text: css`
-    color: ${getColor('buttonPrimary')};
-    cursor: pointer;
-    padding: 0 16px;
-
-    &:hover {
-      background-color: ${getColor('buttonPrimary')};
-      color: ${getColor('textPrimary')};
+      background-color: ${getColor('buttonPrimaryWebHover')};
     }
   `,
 }
@@ -131,7 +109,7 @@ const StyledButton = styled.button<{
         ${baseStyles}
         ${blockStyle}
         color: ${getColor('textPrimary')};
-        cursor: pointer;
+        padding: 0;
 
         &:hover {
           color: ${getColor('textExtraLight')};

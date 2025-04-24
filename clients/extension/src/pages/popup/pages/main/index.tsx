@@ -21,7 +21,7 @@ import styled, { useTheme } from 'styled-components'
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
     getColor(connected ? 'alertSuccess' : 'alertInfo')};
-  border: solid 4px ${getColor('buttonDisabled')};
+  border: solid 4px ${getColor('buttonBackgroundDisabled')};
   border-radius: 50%;
   height: 16px;
   position: absolute;
@@ -32,7 +32,7 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
 
 const ConnectedApp = styled.div`
   align-items: center;
-  background-color: ${getColor('buttonDisabled')};
+  background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
   cursor: pointer;
