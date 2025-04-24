@@ -44,7 +44,7 @@ describe('getDerivePubKey', () => {
       name: 'Cosmos',
       path: "m/44'/118'/0'/0/0",
       expected:
-        '03f8ce84e02207f1c4c8e1d993933c510929cae5708a935f4a5154b850ac9f31e7', 
+        '03f8ce84e02207f1c4c8e1d993933c510929cae5708a935f4a5154b850ac9f31e7',
     },
     {
       name: 'Terra',
@@ -68,7 +68,7 @@ describe('getDerivePubKey', () => {
       name: 'Dash',
       path: "m/44'/5'/0'/0/0",
       expected:
-        '036c300a1da08044cab2f34174a5643c66ee246a7fd6ffedd5678aecab4b73fee3', 
+        '036c300a1da08044cab2f34174a5643c66ee246a7fd6ffedd5678aecab4b73fee3',
     },
   ])('should derive $name public key', ({ path, expected }) => {
     const hexRootPubKey =
