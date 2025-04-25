@@ -13,7 +13,6 @@ export const appPaths = {
   onboarding: '/onboarding',
   renameVault: '/settings/vault/rename',
   settings: '/settings',
-  vaults: '/vaults',
   vaultSettings: '/settings/vault',
   manageChains: '/manage-chains',
 } as const

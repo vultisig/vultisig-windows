@@ -144,7 +144,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.vaults,
+        path: corePaths.vaults,
         element: <VaultsPage />,
       },
       {

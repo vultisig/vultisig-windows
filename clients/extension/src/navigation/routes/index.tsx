@@ -85,7 +85,7 @@ const routes = [
         element: <ManageChainsPage />,
       },
       {
-        path: appPaths.vaults,
+        path: corePaths.vaults,
         element: <VaultsPage />,
       },
       {

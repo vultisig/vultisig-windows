@@ -12,7 +12,6 @@ export const appPaths = {
   address: '/address',
   root: '/',
   vaultSettings: '/vault/settings',
-  vaults: '/vaults',
   manageVaults: '/vaults/manage',
   manageVaultChains: '/vault/chains',
   manageVaultChainCoins: '/vault/chains/coins',
