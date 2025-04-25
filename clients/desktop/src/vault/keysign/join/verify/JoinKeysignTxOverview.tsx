@@ -1,14 +1,14 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
+import { JoinKeysignTxPrimaryInfo } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxPrimaryInfo'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { useMemo } from 'react'
 
-import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo'
-import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo'
 
-export const KeysignTxOverview = () => {
-  const { keysignMsg } = useAppPathState<'joinKeysign'>()
+export const JoinKeysignTxOverview = () => {
+  const { keysignMsg } = useCorePathState<'joinKeysign'>()
 
   const keysignPayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
@@ -23,7 +23,7 @@ export const KeysignTxOverview = () => {
           payload.swapPayload.value ? (
             <KeysignSwapTxInfo value={payload} />
           ) : (
-            <KeysignTxPrimaryInfo value={payload} />
+            <JoinKeysignTxPrimaryInfo value={payload} />
           ),
         custom: value => <KeysignCustomMessageInfo value={value} />,
       }}

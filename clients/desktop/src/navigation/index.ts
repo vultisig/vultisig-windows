@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { corePaths } from '@core/ui/navigation'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
@@ -13,7 +12,6 @@ export const appPaths = {
   reshareVaultFast: '/vault/reshare/fast',
   setupActiveVault: '/vault/setup/active',
   address: '/address',
-  joinKeysign: '/join-keysign',
   root: '/',
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
@@ -68,7 +66,6 @@ export type AppPathParams = {
 }
 
 export type AppPathState = {
-  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
   deeplink: {
     url: string
   }

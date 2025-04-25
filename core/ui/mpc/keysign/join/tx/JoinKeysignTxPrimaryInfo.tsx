@@ -20,7 +20,9 @@ import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
+export const JoinKeysignTxPrimaryInfo = ({
+  value,
+}: ValueProp<KeysignPayload>) => {
   const { toAddress, memo, toAmount, blockchainSpecific } = value
 
   const coin = fromCommCoin(assertField(value, 'coin'))
