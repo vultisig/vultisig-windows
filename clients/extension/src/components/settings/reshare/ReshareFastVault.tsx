@@ -1,3 +1,4 @@
+import { FastVaultReshareFlow } from '@core/ui/mpc/keygen/reshare/fast/FastVaultReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
 import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
@@ -10,9 +11,7 @@ export const ReshareFastVault = () => (
       <EmailProvider initialValue="">
         <CurrentKeygenTypeProvider value="reshare">
           <ReshareVaultKeygenActionProvider>
-            <></>
-            {/* TODO: uncomment when ReshareVaultKeygenActionProvider is moved to @core */}
-            {/* <FastVaultKeygenFlow /> */}
+            <FastVaultReshareFlow />
           </ReshareVaultKeygenActionProvider>
         </CurrentKeygenTypeProvider>
       </EmailProvider>
