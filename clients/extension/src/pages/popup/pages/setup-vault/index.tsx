@@ -15,7 +15,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
-import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
+import ShieldIcon from '@lib/ui/icons/ShieldIcon'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -85,7 +85,7 @@ export const SetupVaultPage = () => {
                             : theme.colors.success.toCssValue(),
                       }}
                     >
-                      <ShieldCheckIcon />
+                      <ShieldIcon />
                     </VStack>
                   ),
                 },
