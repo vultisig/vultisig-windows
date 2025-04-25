@@ -1,8 +1,11 @@
 import { Button } from '@clients/extension/src/components/button'
-//import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
+import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { Chain } from '@core/chain/Chain'
+import { getDerivedPubKey } from '@core/mpc/derivePublicKey'
+import { deriveAddress } from '@clients/desktop/src/chain/utils/deriveAddress'
 import { VaultSigners } from '@core/ui/vault/signers'
-//import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
@@ -14,6 +17,9 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { useTheme } from 'styled-components'
+import { useCallback, useMemo } from 'react'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -40,10 +46,61 @@ const ConnectedApp = styled.div`
   width: 36px;
 `
 
+const SUPPORTED_CHAINS = [
+  {
+    chain: Chain.Ethereum,
+    path: "m/44'/60'/0'/0/0"
+  },
+  {
+    chain: Chain.Bitcoin,
+    path: "m/84'/0'/0'/0/0"
+  },
+  {
+    chain: Chain.Cosmos,
+    path: "m/44'/118'/0'/0/0"
+  }
+]
+
 export const MainPage = () => {
   const vault = useCurrentVault()
   const { colors } = useTheme()
   const navigate = useAppNavigate()
+  const walletCore = useWalletCore()
+
+  const derivedAddresses = useMemo(() => {
+    console.log("derivedAddresses")
+    console.log("vault value:", vault)
+    console.log("walletCore value:", walletCore)
+    console.log("SUPPORTED_CHAINS value:", SUPPORTED_CHAINS)
+    
+    if (!vault || !walletCore) return []
+    
+    return SUPPORTED_CHAINS.map(({ chain, path }) => {
+      try {
+        const derivedPubKey = getDerivedPubKey(
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode,
+          path
+        )
+        // Convert the hex string to a PublicKey object
+        const publicKeyData = walletCore.HexCoding.decode(derivedPubKey)
+        const publicKey = walletCore.PublicKey.createWithData(publicKeyData, walletCore.PublicKeyType.secp256k1)
+        
+        const address = deriveAddress({
+          chain,
+          publicKey,
+          walletCore: walletCore!,
+        })
+        return { chain, address }
+      } catch (error) {
+        console.error(`Failed to derive address for ${chain}:`, error)
+        return { chain, address: undefined }
+      }
+    })
+  }, [vault, walletCore])
+
+  console.log("MainPage rendering")
+  console.log("vault value:", vault)
 
   return vault ? (
     <VStack alignItems="center" justifyContent="center" fullHeight>
@@ -87,11 +144,12 @@ export const MainPage = () => {
           <Text weight={500} size={12} color="light">
             Portfolio Overview
           </Text>
-          {/* TODO: Fetch addresess */}
-          {/*  
+          {/* Address list for chains */}
           <List>
-            {vault.chains.map(({ address, chain }) => (
+            {derivedAddresses.map(({ address, chain }) => (
               <ListItem
+                key={`${chain}-${address}`}
+                title={chain}
                 description={
                   address ? (
                     <MiddleTruncate text={address} width={80} />
@@ -99,28 +157,16 @@ export const MainPage = () => {
                 }
                 extra={
                   <VStack gap={4} alignItems="end">
-                    <Text weight={500} size={14} color="contrast">
-                      $1,801.15
-                    </Text>
-                    <Text weight={500} size={12} color="light">
-                      2 assets
-                    </Text>
+                    <ChainEntityIcon
+                      value={getChainEntityIconSrc(chain)}
+                      style={{ fontSize: 24 }}
+                    />
                   </VStack>
                 }
-                icon={
-                  <ChainEntityIcon
-                    value={getChainEntityIconSrc(chain)}
-                    style={{ fontSize: 36 }}
-                  />
-                }
-                key={chain}
-                title={chain}
                 hoverable
-                showArrow
               />
             ))}
           </List>
-          */}
         </VStack>
       </PageContent>
     </VStack>
