@@ -1,8 +1,10 @@
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
-type SetCurrentVaultIdFunction = (
-  id: string | null
-) => Promise<unknown> | unknown
+export type CurrentVaultId = string | null
+
+export type SetCurrentVaultIdFunction = (
+  id: CurrentVaultId
+) => Promise<void> | void
 
 export const {
   useValue: useSetCurrentVaultId,

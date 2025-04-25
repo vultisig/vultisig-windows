@@ -6,9 +6,9 @@ import {
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
-import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
+import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import { useCreateVault } from '@core/ui/vault/state/createVault'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -43,7 +43,7 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { file, isWindows, loading, status, vault, error } = state
   const navigate = useAppNavigate()
-  const [, setCurrentVaultId] = useCurrentVaultId()
+  const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const createVault = useCreateVault()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
@@ -52,27 +52,27 @@ const Component = () => {
     else navigate('main')
   }
 
+  const vaults = useVaults()
+
   const handleStart = async (): Promise<void> => {
     if (!loading && vault && status === 'success') {
       setState(prevState => ({ ...prevState, loading: true }))
-      getVaults()
-        .then(vaults => {
-          const existed =
-            vaults.findIndex(v => getVaultId(v) === getVaultId(vault)) >= 0
+      try {
+        const existed =
+          vaults.findIndex(v => getVaultId(v) === getVaultId(vault)) >= 0
 
-          if (existed) {
+        if (existed) {
+          setCurrentVaultId(getVaultId(vault))
+          handleFinish()
+        } else {
+          createVault(vault).then(() => {
             setCurrentVaultId(getVaultId(vault))
-            handleFinish()
-          } else {
-            createVault(vault).then(() => {
-              setCurrentVaultId(getVaultId(vault))
-              navigateToMain()
-            })
-          }
-        })
-        .finally(() => {
-          setState(prevState => ({ ...prevState, loading: false }))
-        })
+            navigateToMain()
+          })
+        }
+      } finally {
+        setState(prevState => ({ ...prevState, loading: false }))
+      }
     }
   }
 
