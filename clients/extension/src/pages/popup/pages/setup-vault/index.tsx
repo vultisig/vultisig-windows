@@ -71,8 +71,27 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
+                  disabled: value === 'fast',
+                  label: t('fast'),
+                  value: 'fast',
+                  icon: match(value, {
+                    fast: () => (
+                      <LightningGradientIconWrapper>
+                        <LightningGradientIcon />
+                      </LightningGradientIconWrapper>
+                    ),
+                    secure: () => (
+                      <LightningIconWrapper>
+                        <LightningIcon
+                          color={theme.colors.contrast.toCssValue()}
+                        />
+                      </LightningIconWrapper>
+                    ),
+                  }),
+                },
+                {
                   disabled: value == 'secure',
-                  label: 'Secure',
+                  label: t('secure'),
                   value: 'secure',
                   icon: (
                     <VStack
@@ -88,23 +107,6 @@ export const SetupVaultPage = () => {
                       <ShieldIcon />
                     </VStack>
                   ),
-                },
-                {
-                  disabled: value == 'fast',
-                  label: 'Fast',
-                  value: 'fast',
-                  icon:
-                    value === 'fast' ? (
-                      <LightningGradientIconWrapper>
-                        <LightningGradientIcon />
-                      </LightningGradientIconWrapper>
-                    ) : (
-                      <LightningIconWrapper>
-                        <LightningIcon
-                          color={theme.colors.contrast.toCssValue()}
-                        />
-                      </LightningIconWrapper>
-                    ),
                 },
               ]}
               disabled={isPlaying}

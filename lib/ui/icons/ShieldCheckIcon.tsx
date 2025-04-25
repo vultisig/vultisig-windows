@@ -14,7 +14,7 @@ const ShieldCheckIcon = () => (
       d="M3.125 8.333V3.75a.625.625 0 0 1 .625-.625h12.5a.625.625 0 0 1 .625.625v4.583c0 6.564-5.57 8.739-6.683 9.107a.59.59 0 0 1-.384 0c-1.112-.368-6.683-2.543-6.683-9.107Z"
     />
     <path
-      stroke="currentCoSlor"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
