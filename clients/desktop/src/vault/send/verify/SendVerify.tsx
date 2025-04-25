@@ -7,6 +7,7 @@ import {
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
+import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -21,7 +22,6 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'

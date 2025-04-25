@@ -6,6 +6,7 @@ import {
 } from '@clients/extension/src/icons'
 import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { corePaths } from '@core/ui/navigation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import ReshareIcon from '@lib/ui/icons/ReshareIcon'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +43,7 @@ const Component = () => {
             <span className="label">{t('remove_vault')}</span>
             <ArrowRight className="action" />
           </Link>
-          <Link to={appPaths.reshareVault} state={true} className="list-item">
+          <Link to={corePaths.reshareVault} state={true} className="list-item">
             <IconWrapper className="icon">
               <ReshareIcon />
             </IconWrapper>

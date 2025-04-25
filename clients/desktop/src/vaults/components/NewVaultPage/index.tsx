@@ -1,3 +1,4 @@
+import { makeCorePath } from '@core/ui/navigation'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -7,7 +8,6 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { makeAppPath } from '../../../navigation'
 import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
 import { HorizontalLine, ScanQRCodeLink, Wrapper } from './NewVaultPage.styled'
 
@@ -37,7 +37,7 @@ export const NewVaultPage = ({ withBackButton = true }) => {
           </HStack>
           <VStack gap={12}>
             <ScanQRCodeLink
-              to={makeAppPath('uploadQr', {
+              to={makeCorePath('uploadQr', {
                 title: t('scan_qr'),
               })}
               style={{ textDecoration: 'none' }}

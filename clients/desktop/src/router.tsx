@@ -112,7 +112,7 @@ export const router = createBrowserRouter([
         element: <ImportVaultFromFilePage />,
       },
       {
-        path: appPaths.uploadQr,
+        path: corePaths.uploadQr,
         element: <UploadQrPage />,
       },
       {
@@ -120,7 +120,7 @@ export const router = createBrowserRouter([
         element: <JoinKeygenPage />,
       },
       {
-        path: appPaths.joinKeysign,
+        path: corePaths.joinKeysign,
         element: (
           <ActiveVaultGuard>
             <JoinKeysignPage />

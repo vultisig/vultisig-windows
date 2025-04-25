@@ -1,10 +1,8 @@
-import { corePaths } from '@core/ui/navigation'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  ...corePaths,
   root: '/',
   importQR: '/import/qr',
   currencySettings: '/settings/currency',
@@ -41,7 +39,6 @@ export type AppPathParams = {
   importQR: { title?: string }
   importFile: { title?: string }
   setupVault: { type?: VaultSecurityType }
-  uploadQr: { title?: string }
   import: { from?: string }
 }
 
