@@ -2,16 +2,17 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
-import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
@@ -29,19 +30,30 @@ export const useSwapChainSpecificQuery = () => {
 
   const swapQuoteQuery = useSwapQuoteQuery()
 
-  const fromCoinPublicKeyQuery = useVaultPublicKeyQuery(fromCoin.chain)
-  const toCoinPublicKeyQuery = useVaultPublicKeyQuery(toCoin.chain)
-
   const walletCore = useAssertWalletCore()
+
+  const vault = useCurrentVault()
 
   return useStateDependentQuery({
     state: {
       swapQuote: swapQuoteQuery.data,
       fromAmount: fromAmount ?? undefined,
-      fromPublicKey: fromCoinPublicKeyQuery.data,
-      toPublicKey: toCoinPublicKeyQuery.data,
     },
-    getQuery: ({ swapQuote, fromAmount, fromPublicKey, toPublicKey }) => {
+    getQuery: ({ swapQuote, fromAmount }) => {
+      const fromPublicKey = getPublicKey({
+        chain: fromCoin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
+
+      const toPublicKey = getPublicKey({
+        chain: toCoin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
+
       const { toAddress } = getSwapKeysignPayloadFields({
         amount: toChainAmount(fromAmount, fromCoin.decimals),
         quote: swapQuote,

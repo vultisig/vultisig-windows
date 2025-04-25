@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { corePaths } from '@core/ui/navigation'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -11,7 +10,7 @@ export const appPaths = {
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   migrateVault: '/vault/migrate',
-  fastKeysign: '/vault/keysign/fast',
+  reshareVaultFast: '/vault/reshare/fast',
   setupActiveVault: '/vault/setup/active',
   address: '/address',
   joinKeysign: '/join-keysign',
@@ -69,9 +68,6 @@ export type AppPathParams = {
 }
 
 export type AppPathState = {
-  fastKeysign: {
-    keysignPayload: KeysignMessagePayload
-  }
   joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
   deeplink: {
     url: string

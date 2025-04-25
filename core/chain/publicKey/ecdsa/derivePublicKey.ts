@@ -1,11 +1,17 @@
 import BIP32Factory from 'bip32'
 import * as ecc from 'tiny-secp256k1'
 
-export const getDerivedPubKey = (
-  hexRootPubKey: string,
-  hexChainCode: string,
+type DerivePublicKeyInput = {
+  hexRootPubKey: string
+  hexChainCode: string
   path: string
-): string => {
+}
+
+export const derivePublicKey = ({
+  hexRootPubKey,
+  hexChainCode,
+  path,
+}: DerivePublicKeyInput): string => {
   if (!hexRootPubKey) {
     throw new Error('Empty pub key')
   }

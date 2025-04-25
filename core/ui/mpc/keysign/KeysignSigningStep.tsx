@@ -3,6 +3,7 @@ import { CurrentTxHashProvider } from '@core/ui/chain/state/currentTxHash'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
@@ -23,8 +24,6 @@ import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useKeysignMutation } from './mutations/useKeysignMutation'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
@@ -106,7 +105,7 @@ export const KeysignSigningStep = ({
             </VStack>
             <VStack alignItems="center">
               <Text color="shy" size={12}>
-                Version {localVersion}
+                {t('version')} {localVersion}
               </Text>
             </VStack>
           </PageContent>

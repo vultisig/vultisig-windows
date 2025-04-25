@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getDerivedPubKey } from './derivePublicKey'
+import { derivePublicKey } from './derivePublicKey'
 
 describe('getDerivePubKey', () => {
   it.each([
@@ -76,7 +76,11 @@ describe('getDerivePubKey', () => {
     const hexChainCode =
       '4c35b212ca0a817739352b08d819dd19a6db2239f8b303778e54b244021e1a96'
 
-    const derivedPubKey = getDerivedPubKey(hexRootPubKey, hexChainCode, path)
+    const derivedPubKey = derivePublicKey({
+      hexRootPubKey,
+      hexChainCode,
+      path,
+    })
     expect(derivedPubKey).toBe(expected)
   })
 })

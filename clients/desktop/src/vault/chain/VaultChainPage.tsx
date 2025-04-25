@@ -5,7 +5,6 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -33,7 +32,6 @@ import { Link } from 'react-router-dom'
 
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt'
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress'
-import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation'
 import {
@@ -44,7 +42,6 @@ import { makeAppPath } from '../../navigation'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
-import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
@@ -61,14 +58,12 @@ export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const invalidateQueries = useInvalidateQueries()
   const fiatCurrency = useFiatCurrency()
-  const publicKeyQuery = useVaultPublicKeyQuery(chain)
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
   const invalidateQueryKey = getBalanceQueryKey(
     extractAccountCoinKey(nativeCoin)
   )
-  const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()
   const address = useCurrentVaultAddress(chain)
@@ -100,15 +95,7 @@ export const VaultChainPage = () => {
       ? findTokensQuery.data
       : []
 
-    const isValidPublicKey =
-      publicKeyQuery.data &&
-      typeof publicKeyQuery.data.data === 'function' &&
-      publicKeyQuery.data.data().length > 0 // Ensure it contains meaningful data
-
-    if (tokens.length > 0 && publicKeyQuery.isSuccess && isValidPublicKey) {
-      const publicKey = publicKeyQuery.data
-      const address = deriveAddress({ chain, publicKey, walletCore })
-
+    if (tokens.length > 0) {
       saveCoins(
         tokens.map(coin => ({
           ...coin,
@@ -116,14 +103,7 @@ export const VaultChainPage = () => {
         }))
       )
     }
-  }, [
-    chain,
-    findTokensQuery.data,
-    publicKeyQuery.data,
-    publicKeyQuery.isSuccess,
-    saveCoins,
-    walletCore,
-  ])
+  }, [address, findTokensQuery.data, saveCoins])
 
   const hasMultipleCoinsSupport = chain in chainTokens
 
