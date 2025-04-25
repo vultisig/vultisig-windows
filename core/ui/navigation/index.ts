@@ -20,6 +20,7 @@ export const corePaths = {
   reshareVaultFast: '/vault/reshare/fast',
   reshareVaultSecure: '/vault/reshare/secure',
   joinKeysign: '/join-keysign',
+  uploadQr: '/vault/qr/upload',
 } as const
 
 type CorePaths = typeof corePaths
@@ -27,6 +28,7 @@ export type CorePath = keyof CorePaths
 
 export type CorePathParams = {
   setupVault: { type?: VaultSecurityType }
+  uploadQr: { title?: string }
 }
 
 export type CorePathState = {

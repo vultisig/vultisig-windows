@@ -1,4 +1,5 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -8,7 +9,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
 import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
@@ -20,7 +20,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 export const UploadQrPageWithExistingVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const [{ title = t('keysign') }] = useAppPathParams<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
   const coins = useCurrentVaultCoins()
   const { addToast } = useToast()
   const goBack = useNavigateBack()

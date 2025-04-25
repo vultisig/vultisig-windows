@@ -1,10 +1,8 @@
 import { Chain } from '@core/chain/Chain'
-import { corePaths } from '@core/ui/navigation'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  ...corePaths,
   newVault: '/new-vault',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
@@ -14,7 +12,6 @@ export const appPaths = {
   address: '/address',
   root: '/',
   vaultSettings: '/vault/settings',
-  uploadQr: '/vault/qr/upload',
   vaults: '/vaults',
   manageVaults: '/vaults/manage',
   manageVaultChains: '/vault/chains',
@@ -54,7 +51,6 @@ export type AppPath = keyof AppPaths
 
 export type AppPathParams = {
   address: { address: string }
-  uploadQr: { title?: string }
   manageVaultChainCoins: { chain: Chain }
   vaultChainDetail: { chain: Chain }
   vaultChainCoinDetail: { chain: Chain; coin: string }

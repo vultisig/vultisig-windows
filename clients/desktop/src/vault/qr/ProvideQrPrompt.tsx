@@ -1,3 +1,4 @@
+import { makeCorePath } from '@core/ui/navigation'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -6,8 +7,6 @@ import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { makeAppPath } from '../../navigation'
 
 const Container = styled(UnstyledButton)`
   ${round};
@@ -20,7 +19,7 @@ const Container = styled(UnstyledButton)`
 
 export const ProvideQrPrompt = () => {
   return (
-    <Link to={makeAppPath('uploadQr', {})}>
+    <Link to={makeCorePath('uploadQr', {})}>
       <Container as="div">
         <CameraIcon />
       </Container>
