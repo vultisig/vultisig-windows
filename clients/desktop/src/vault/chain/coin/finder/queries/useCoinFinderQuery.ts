@@ -7,6 +7,7 @@ import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
+import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 
@@ -35,9 +36,7 @@ export const useCoinFinderQuery = () => {
     queries: coinFinderInputs.map(input => ({
       queryKey: getCoinFinderQueryKey(input),
       queryFn: () => findCoins(input),
-      meta: {
-        disablePersist: true,
-      },
+      staleTime: convertDuration(1, 'h', 'ms'),
     })),
   })
 
