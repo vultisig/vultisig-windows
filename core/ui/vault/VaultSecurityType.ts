@@ -2,7 +2,7 @@ import { TFunction } from 'i18next'
 
 export type VaultSecurityType = 'fast' | 'secure'
 
-export const defaultVaultSecurityType: VaultSecurityType = 'secure'
+export const defaultVaultSecurityType: VaultSecurityType = 'fast'
 
 const vaultSecurityPropKeys = ['prop_0', 'prop_1', 'prop_2'] as const
 
