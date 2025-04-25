@@ -72,25 +72,27 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
-                  disabled: value == 'fast',
-                  label: 'Fast',
+                  disabled: value === 'fast',
+                  label: t('fast'),
                   value: 'fast',
-                  icon:
-                    value === 'fast' ? (
+                  icon: match(value, {
+                    fast: () => (
                       <LightningGradientIconWrapper>
                         <LightningGradientIcon />
                       </LightningGradientIconWrapper>
-                    ) : (
+                    ),
+                    secure: () => (
                       <LightningIconWrapper>
                         <LightningIcon
                           color={theme.colors.contrast.toCssValue()}
                         />
                       </LightningIconWrapper>
                     ),
+                  }),
                 },
                 {
                   disabled: value == 'secure',
-                  label: 'Secure',
+                  label: t('secure'),
                   value: 'secure',
                   icon: (
                     <VStack
