@@ -1,6 +1,7 @@
 import { currentVaultIdQueryKey } from '@core/ui/query/keys'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import {
+  CurrentVaultId,
   CurrentVaultIdProvider as CoreCurrentVaultIdProvider,
   getInitialVaultId,
   useCurrentVaultIdCorrector,
@@ -23,7 +24,7 @@ export const setCurrentVaultId: SetCurrentVaultIdFunction = async value => {
 
 const useCurrentVaultIdQuery = () => {
   const vaults = useVaults()
-  return usePersistentStateQuery<string | null>(key, getInitialVaultId(vaults))
+  return usePersistentStateQuery<CurrentVaultId>(key, getInitialVaultId(vaults))
 }
 
 const useGuardedCurrentVaultIdProvider = () => {

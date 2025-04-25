@@ -1,6 +1,6 @@
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
-export type CurrentVaultId = string | null
+import { CurrentVaultId } from './currentVaultId'
 
 export type SetCurrentVaultIdFunction = (
   id: CurrentVaultId

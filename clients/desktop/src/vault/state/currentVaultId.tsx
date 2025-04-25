@@ -1,4 +1,5 @@
 import {
+  CurrentVaultId,
   CurrentVaultIdProvider as CoreCurrentVaultIdProvider,
   getInitialVaultId,
   useCurrentVaultIdCorrector,
@@ -15,13 +16,13 @@ import {
 } from '../../state/persistentState'
 
 const useCurrentVaultId = (): [
-  string | null,
-  Dispatch<SetStateAction<string | null>>,
+  CurrentVaultId,
+  Dispatch<SetStateAction<CurrentVaultId>>,
 ] => {
   const vaults = useVaults()
 
   const [currentVaultId, setCurrentVaultId] = useStateCorrector(
-    usePersistentState<string | null>(
+    usePersistentState<CurrentVaultId>(
       PersistentStateKey.CurrentVaultId,
       getInitialVaultId(vaults)
     ),

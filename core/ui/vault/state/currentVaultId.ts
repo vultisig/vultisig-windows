@@ -5,10 +5,12 @@ import { useCallback } from 'react'
 import { getVaultId, Vault } from '../Vault'
 import { useVaults } from './vaults'
 
-export const { useValue: useCurrentVaultId, provider: CurrentVaultIdProvider } =
-  getValueProviderSetup<string | null>('CurrentVaultId')
+export type CurrentVaultId = string | null
 
-export const getInitialVaultId = (vaults: Vault[]): string | null => {
+export const { useValue: useCurrentVaultId, provider: CurrentVaultIdProvider } =
+  getValueProviderSetup<CurrentVaultId>('CurrentVaultId')
+
+export const getInitialVaultId = (vaults: Vault[]): CurrentVaultId => {
   if (isEmpty(vaults)) return null
 
   return getVaultId(vaults[0])
@@ -18,7 +20,7 @@ export const useCurrentVaultIdCorrector = () => {
   const vaults = useVaults()
 
   return useCallback(
-    (id: string | null) => {
+    (id: CurrentVaultId) => {
       const vault = vaults.find(vault => getVaultId(vault) === id)
 
       return vault ? id : getInitialVaultId(vaults)
