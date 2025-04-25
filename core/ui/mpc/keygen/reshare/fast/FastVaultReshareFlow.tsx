@@ -11,8 +11,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { KeygenServerStep } from './KeygenServerStep'
+import { FastVaultReshareServerStep } from './FastVaultReshareServerStep'
 
 const reshareVaultSteps = [
   'email',
@@ -23,7 +22,7 @@ const reshareVaultSteps = [
   'keygen',
 ] as const
 
-export const FastVaultKeygenFlow = () => {
+export const FastVaultReshareFlow = () => {
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps: reshareVaultSteps,
     onExit: useNavigateBack(),
@@ -33,7 +32,6 @@ export const FastVaultKeygenFlow = () => {
 
   return (
     <>
-      <MpcMediatorManager />
       <Match
         value={step}
         email={() => <ServerEmailStep onFinish={toNextStep} />}
@@ -44,7 +42,7 @@ export const FastVaultKeygenFlow = () => {
             <SetServerPasswordStep onFinish={toNextStep} />
           )
         }
-        server={() => <KeygenServerStep onFinish={toNextStep} />}
+        server={() => <FastVaultReshareServerStep onFinish={toNextStep} />}
         peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
         verify={() => (
           <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
