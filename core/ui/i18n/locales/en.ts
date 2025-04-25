@@ -504,7 +504,7 @@ export const en = {
       prop_1: 'Store smaller funds for daily use',
       prop_2: 'Vultiserver co-signs instantly',
       purpose: 'Use as a "hot wallet"',
-      title: 'Quick, 1 device setup',
+      title: 'Fast set-up',
     },
     secure: {
       prop_0: 'Maximum security with multiple devices',

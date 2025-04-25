@@ -15,7 +15,7 @@ export const DescriptionTitleWrapper = styled(VStack)`
 `
 
 export const DescriptionContentWrapper = styled(VStack)`
-  border-top: 1px dotted ${getColor('textDark')};
+  border-top: 1px dotted ${getColor('backgroundTertiary')};
   background-color: ${getColor('foreground')};
   padding: 16px;
   border-bottom-right-radius: 16px;
