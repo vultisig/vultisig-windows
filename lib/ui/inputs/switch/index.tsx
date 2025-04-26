@@ -1,7 +1,7 @@
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import styled, { css } from 'styled-components'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 
 const StyledSpinner = styled(Spinner)`
   left: 4px;
