@@ -5,9 +5,9 @@ import styled, { css, RuleSet } from 'styled-components'
 
 type Shape = 'default' | 'circle' | 'round'
 type Size = 'default' | 'large' | 'small'
-type Type = 'default' | 'link' | 'primary'
+type Type = 'default' | 'primary' | 'secondary'
 
-const baseStyles = css`
+const baseStyles: RuleSet = css`
   align-items: center;
   background-color: transparent;
   border: none;
@@ -20,25 +20,16 @@ const baseStyles = css`
   transition: all 0.2s;
 `
 
-const disabledStyles: Record<Type, RuleSet> = {
-  default: css`
-    border: solid 1px ${getColor('buttonTextDisabled')};
-    color: ${getColor('buttonTextDisabled')};
-    cursor: default;
-    padding: 0 16px;
-  `,
-  link: css`
-    color: ${getColor('buttonTextDisabled')};
-    cursor: default;
-    padding: 0 4px;
-  `,
-  primary: css`
-    background-color: ${getColor('buttonBackgroundDisabled')};
-    color: ${getColor('buttonTextDisabled')};
-    cursor: default;
-    padding: 0 16px;
-  `,
-}
+const blockStyles: RuleSet = css`
+  width: 100%;
+`
+
+const disabledStyles: RuleSet = css`
+  background-color: ${getColor('buttonBackgroundDisabled')};
+  color: ${getColor('buttonTextDisabled')};
+  cursor: default;
+  padding: 0 16px;
+`
 
 const shapeStyles: Record<Shape, RuleSet> = {
   circle: css`
@@ -76,15 +67,6 @@ const typeStyles: Record<Type, RuleSet> = {
       color: ${getColor('buttonPrimaryWebHover')};
     }
   `,
-  link: css`
-    color: ${getColor('textPrimary')};
-    padding: 0 4px;
-
-    &:hover {
-      background-color: ${getColor('backgroundTertiary')};
-      color: ${getColor('buttonPrimaryWebHover')};
-    }
-  `,
   primary: css`
     background-color: ${getColor('buttonPrimaryWeb')};
     color: ${getColor('textPrimary')};
@@ -92,6 +74,15 @@ const typeStyles: Record<Type, RuleSet> = {
 
     &:hover {
       background-color: ${getColor('buttonPrimaryWebHover')};
+    }
+  `,
+  secondary: css`
+    background-color: ${getColor('backgroundTertiary')};
+    color: ${getColor('textPrimary')};
+    padding: 0 16px;
+
+    &:hover {
+      color: ${getColor('buttonPrimaryWeb')};
     }
   `,
 }
@@ -108,7 +99,6 @@ const StyledButton = styled.button<{
     if (ghost) {
       return baseStyles
     } else {
-      const disabledStyle = disabledStyles[type]
       const shapeStyle = shapeStyles[shape]
       const sizeStyle = sizeStyles[size]
       const typeStyle = typeStyles[type]
@@ -117,12 +107,8 @@ const StyledButton = styled.button<{
         ${baseStyles}
         ${shapeStyle}
         ${sizeStyle}
-        ${disabled ? disabledStyle : typeStyle}
-        ${block
-          ? css`
-              width: 100%;
-            `
-          : ''}
+        ${disabled ? disabledStyles : typeStyle}
+        ${block ? blockStyles : ''}
       `
     }
   }}

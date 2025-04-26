@@ -45,7 +45,7 @@ export const VaultsPage = () => {
   }, [])
 
   return vault ? (
-    <VStack alignItems="center" justifyContent="center" fullHeight>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
