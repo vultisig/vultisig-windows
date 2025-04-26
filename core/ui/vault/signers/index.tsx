@@ -1,8 +1,8 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { Vault } from '@core/ui/vault/Vault'
-import { Shield } from '@lib/ui/icons/Shield'
-import { Zap } from '@lib/ui/icons/Zap'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
+import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,12 +42,20 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
     <StyledVaultSigners {...rest}>
       {fast ? (
         <>
-          <Zap height={16} stroke={colors.alertWarning.toHex()} width={16} />
+          <ZapIcon
+            height={16}
+            stroke={colors.alertWarning.toHex()}
+            width={16}
+          />
           <StyledText>{t('fast')}</StyledText>
         </>
       ) : (
         <>
-          <Shield height={16} stroke={colors.alertSuccess.toHex()} width={16} />
+          <ShieldIcon
+            height={16}
+            stroke={colors.alertSuccess.toHex()}
+            width={16}
+          />
           <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
         </>
       )}

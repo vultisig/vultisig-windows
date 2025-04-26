@@ -1,6 +1,6 @@
 export const pageConfig = {
-  horizontalPadding: 20,
-  verticalPadding: 20,
+  horizontalPadding: 16,
+  verticalPadding: 16,
   header: {
     iconButton: {
       offset: 8,
