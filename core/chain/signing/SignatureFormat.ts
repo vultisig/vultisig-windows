@@ -10,6 +10,6 @@ export const signatureFormats: Record<ChainKind, SignatureFormat> = {
   polkadot: 'raw',
   ton: 'raw',
   utxo: 'der',
-  ripple: 'der',
+  ripple: 'rawWithRecoveryId',
   tron: 'rawWithRecoveryId',
 }

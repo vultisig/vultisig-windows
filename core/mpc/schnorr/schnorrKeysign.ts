@@ -222,7 +222,7 @@ export class SchnorrKeysign {
       return keysignSig
     }
   }
-  private async keygienWithRetry(messageToSign: string) {
+  private async keysignWithRetry(messageToSign: string) {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.KeysignOneMessage(messageToSign, i)
@@ -238,7 +238,7 @@ export class SchnorrKeysign {
     await __wbg_init()
     let results: KeysignSignature[] = []
     for (const message of messsagesToSign) {
-      const signResult = await this.keygienWithRetry(message)
+      const signResult = await this.keysignWithRetry(message)
       if (signResult === undefined) {
         throw new Error('failed to sign message')
       }
