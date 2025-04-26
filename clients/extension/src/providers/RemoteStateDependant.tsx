@@ -5,20 +5,19 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useVaultsQuery } from '../vault/state/vaults'
+import { useVaultsQuery } from '../vault/queries/useVaultsQuery'
 
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaultsQuery = useVaultsQuery()
   const { t } = useTranslation()
+  console.log('vaults query', vaultsQuery)
 
   return (
     <MatchQuery
       value={vaultsQuery}
-      success={vaults => (
-        <VaultsProvider value={vaults.map(vault => ({ ...vault, coins: [] }))}>
-          {children}
-        </VaultsProvider>
-      )}
+      success={vaults => {
+        return <VaultsProvider value={vaults}>{children}</VaultsProvider>
+      }}
       error={() => (
         <CenterAbsolutely>
           <StrictText>{t('failed_to_load')}</StrictText>

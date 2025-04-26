@@ -32,6 +32,7 @@ import { calculateWindowPosition } from '../../../../utils/functions'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useDefaultChains } from '@clients/desktop/src/chain/state/defaultChains'
 import { createVaultDefaultCoins } from '../../../../vault/coins/createVaultDefaultCoins'
+import { useVaultCoinsMutation } from '../../../../vault/state/coins'
 
 interface InitialState {
   error?: string
@@ -52,6 +53,7 @@ const Component = () => {
   }
   const createVault = useCreateVault()
   const setCurrentVaultId = useSetCurrentVaultId()
+  const { mutateAsync: updateVaultCoins } = useVaultCoinsMutation()
   const walletCore = useAssertWalletCore()
   const [defaultChains] = useDefaultChains()
   const [state, setState] = useState(initialState)
@@ -108,11 +110,16 @@ const Component = () => {
     if (decodedVault) {
       createVault(decodedVault).then(async () => {
         setCurrentVaultId(getVaultId(decodedVault))
-        createVaultDefaultCoins({
-          vault: decodedVault,
-          defaultChains,
-          walletCore,
-        }).then(() => navigateToMain())
+        // createVaultDefaultCoins({
+        //   vault: decodedVault,
+        //   defaultChains,
+        //   walletCore,
+        //   currentVaultId: getVaultId(decodedVault),
+        //   updateVaultCoins,
+        // })
+        console.log("navigate('main')");
+        
+        navigateToMain()
       })
     }
   }

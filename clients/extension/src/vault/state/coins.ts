@@ -1,6 +1,3 @@
-import { vaultsQueryKey } from '@core/ui/query/keys'
-import { Vault } from '@core/ui/vault/Vault'
-
 import { getPersistentState } from '../../state/persistent/getPersistentState'
 import { usePersistentStateMutation } from '../../state/persistent/usePersistentStateMutation'
 import { usePersistentStateQuery } from '../../state/persistent/usePersistentStateQuery'
@@ -14,7 +11,21 @@ export const getVaultCoins = async () =>
   getPersistentState(vaultCoinsQueryKey, initialValue)
 
 export const useVaultCoinsMutation = () => {
-  return usePersistentStateMutation<VaultCoinsRecord>(vaultCoinsQueryKey)
+  const { mutateAsync: setVaultCoins } =
+    usePersistentStateMutation<VaultCoinsRecord>(vaultCoinsQueryKey)
+
+  const updateVaultCoins = async (vaultId: string, coins: AccountCoin[]) => {
+    const currentVaultCoins = await getVaultCoins()
+
+    const updatedVaultCoins = {
+      ...currentVaultCoins,
+      [vaultId]: coins,
+    }
+
+    await setVaultCoins(updatedVaultCoins)
+  }
+
+  return { mutateAsync: updateVaultCoins }
 }
 
 export const useVaultCoinsQuery = () => {

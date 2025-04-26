@@ -1,3 +1,4 @@
+import { useCurrentVaultCoins } from '@clients/desktop/src/vault/state/currentVaultCoins'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -11,6 +12,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { log } from 'console'
 import { FC } from 'react'
 import styled, { useTheme } from 'styled-components'
 
@@ -43,6 +45,7 @@ const Component: FC = () => {
   const vault = useCurrentVault()
   const { colors } = useTheme()
   const navigate = useAppNavigate()
+
 
   return vault ? (
     <VStack alignItems="center" justifyContent="center" fullHeight>

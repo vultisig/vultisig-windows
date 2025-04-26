@@ -19,7 +19,7 @@ import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultIdProvider'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
 import { RemoteStateDependant } from './RemoteStateDependant'
-
+import { InitializedWalletOnly } from '@clients/desktop/src/components/wallet/InitializedWalletOnly'
 const defaultMpcLib: MpcLib = 'DKLS'
 
 const openUrl = (url: string) => window.open(url, '_blank')
@@ -40,18 +40,21 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                   <QueryProvider>
                     <I18nProvider>
                       <WalletCoreProvider>
-                        <SetCurrentVaultIdProvider>
-                          <CreateVaultProvider>
-                            <UpdateVaultProvider>
-                              <AntDesignThemeProvider>
-                                <RemoteStateDependant>
-                                  {children}
-                                </RemoteStateDependant>
-                                <GlobalStyle />
-                              </AntDesignThemeProvider>
-                            </UpdateVaultProvider>
-                          </CreateVaultProvider>
-                        </SetCurrentVaultIdProvider>
+                        <InitializedWalletOnly>
+                          <RemoteStateDependant>
+                            <SetCurrentVaultIdProvider>
+                              <CreateVaultProvider>
+                                <UpdateVaultProvider>
+                                  <AntDesignThemeProvider>
+                                    {children}
+
+                                    <GlobalStyle />
+                                  </AntDesignThemeProvider>
+                                </UpdateVaultProvider>
+                              </CreateVaultProvider>
+                            </SetCurrentVaultIdProvider>
+                          </RemoteStateDependant>
+                        </InitializedWalletOnly>
                       </WalletCoreProvider>
                     </I18nProvider>
                   </QueryProvider>

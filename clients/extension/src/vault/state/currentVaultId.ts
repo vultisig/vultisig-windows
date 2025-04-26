@@ -1,10 +1,10 @@
 import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { usePersistentStateMutation } from '../../state/persistent/usePersistentStateMutation'
 import { usePersistentStateQuery } from '../../state/persistent/usePersistentStateQuery'
-import { getVaults } from './vaults'
+import { useVaults } from '@core/ui/vault/state/vaults'
 
 const key = 'currentVaultId'
 
@@ -16,7 +16,9 @@ export const useCurrentVaultId = (): [
   string | null,
   (value: string | null) => void,
   boolean,
+  boolean,
 ] => {
+  const vaults = useVaults()
   const { data: storedVaultId = null } = usePersistentStateQuery<string | null>(
     key,
     null
@@ -24,14 +26,15 @@ export const useCurrentVaultId = (): [
   const { mutate } = usePersistentStateMutation<string | null>(key)
 
   const [currentVaultId, setCurrentVaultId] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [ready, setReady] = useState(false)
 
-  const correctVaultId = useCallback(async () => {
-    const vaults = await getVaults()
+  useEffect(() => {
+    if (!vaults) return
+
     if (isEmpty(vaults)) {
       setCurrentVaultId(null)
       mutate(null)
-      setLoading(false)
+      setReady(true)
       return
     }
 
@@ -41,12 +44,10 @@ export const useCurrentVaultId = (): [
 
     setCurrentVaultId(finalVaultId)
     mutate(finalVaultId)
-    setLoading(false)
-  }, [storedVaultId, mutate])
+    setReady(true)
+  }, [vaults, storedVaultId, mutate])
 
-  useEffect(() => {
-    correctVaultId()
-  }, [correctVaultId])
+  const loading = vaults === undefined
 
-  return [currentVaultId, mutate, loading]
+  return [currentVaultId, mutate, loading, ready]
 }

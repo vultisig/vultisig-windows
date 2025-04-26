@@ -8,14 +8,16 @@ import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
-import { getVaults, useVaultsMutation } from './vaults'
+import { useVaultsMutation } from './vaults'
+import { useVaults } from '@core/ui/vault/state/vaults'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 
 export const UpdateVaultProvider = ({ children }: ChildrenProp) => {
   const { mutateAsync: updateVaults } = useVaultsMutation()
-
+  const invalidateQueries = useInvalidateQueries()
+  const vaults = useVaults()
   const updateVault: UpdateVaultFunction = useCallback(
     async ({ vaultId, fields }) => {
-      const vaults = await getVaults()
       const vaultIndex = shouldBePresent(
         vaults.findIndex(vault => getVaultId(vault) === vaultId)
       )
@@ -26,10 +28,10 @@ export const UpdateVaultProvider = ({ children }: ChildrenProp) => {
       }))
 
       await updateVaults(updatedVaults)
-
+      invalidateQueries(['vaults'])
       return updatedVaults[vaultIndex]
     },
-    [updateVaults]
+    [updateVaults, vaults, invalidateQueries]
   )
 
   return (
