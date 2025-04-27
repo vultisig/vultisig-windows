@@ -44,7 +44,7 @@ const Component = () => {
       <PageContent gap={24} flexGrow fullWidth scrollable>
         <VStack gap={12}>
           <Text color="light" size={12} weight={500}>
-            Vault Specific
+            {t('vault_specific')}
           </Text>
           <List>
             <ListItem
@@ -58,7 +58,7 @@ const Component = () => {
         </VStack>
         <VStack gap={12}>
           <Text color="light" size={12} weight={500}>
-            General
+            {t('general')}
           </Text>
           <List>
             <MatchQuery
