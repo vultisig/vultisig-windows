@@ -1,3 +1,4 @@
+import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
@@ -5,7 +6,6 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
 import { usePersistentState } from '../../state/persistentState'
-import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 
 export const useCurrentVaultId = (): [
   string | null,
