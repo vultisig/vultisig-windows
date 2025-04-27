@@ -44,13 +44,13 @@ export const VaultsPage = () => {
     initComponent()
   }, [])
 
-  return vault ? (
+  return (
     <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
           <Button onClick={() => navigate('settings')} ghost>
-            <ChevronLeftIcon height={20} width={20} />
+            <ChevronLeftIcon fontSize={20} />
           </Button>
         }
         title={
@@ -102,7 +102,5 @@ export const VaultsPage = () => {
         </Button>
       </PageFooter>
     </VStack>
-  ) : (
-    <></>
   )
 }
