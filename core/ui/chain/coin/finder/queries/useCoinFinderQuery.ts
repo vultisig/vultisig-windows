@@ -9,7 +9,10 @@ import { useCallback, useMemo } from 'react'
 import { findCoins, FindCoinsInput } from '../findCoins'
 import { coinFinderChains } from '../findCoins/coinFinderChains'
 
-const getCoinFinderQueryKey = (input: FindCoinsInput) => ['coinFinder', input]
+export const getCoinFinderQueryKey = (input: FindCoinsInput) => [
+  'coinFinder',
+  input,
+]
 
 export const useCoinFinderQuery = () => {
   const addresses = useCurrentVaultAddreses()
