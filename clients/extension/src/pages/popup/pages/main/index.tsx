@@ -15,6 +15,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
@@ -39,6 +40,7 @@ const ConnectedApp = styled(Button)`
 `
 
 export const MainPage = () => {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const vault = useCurrentVault()
   const navigate = useAppNavigate()
@@ -129,7 +131,8 @@ export const MainPage = () => {
           type="primary"
           block
         >
-          <LinkTwoIcon height={16} strokeWidth={2} width={16} /> Manage Chains
+          <LinkTwoIcon height={16} strokeWidth={2} width={16} />
+          {t('manage_chains')}
         </Button>
       </PageFooter>
     </VStack>

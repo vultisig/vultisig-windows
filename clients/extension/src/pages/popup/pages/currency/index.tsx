@@ -1,44 +1,58 @@
-import { ArrowLeft } from '@clients/extension/src/icons'
+import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { fiatCurrencies } from '@core/config/FiatCurrency'
 import {
   useFiatCurrency,
   useSetFiatCurrencyMutation,
 } from '@core/ui/state/fiatCurrency'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
+import { ListItemTag } from '@lib/ui/list/item/tag'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-const Component = () => {
+export const CurrencyPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-
-  const value = useFiatCurrency()
-
-  const { mutate: setValue } = useSetFiatCurrencyMutation()
+  const currencyValue = useFiatCurrency()
+  const currencyMutation = useSetFiatCurrencyMutation()
 
   return (
-    <div className="layout currency-page">
-      <div className="header">
-        <span className="heading">{t('currency')}</span>
-        <ArrowLeft
-          className="icon icon-left"
-          onClick={() => navigate('settings')}
-        />
-      </div>
-      <div className="content">
-        <div className="list list-action">
-          {fiatCurrencies.map(option => (
-            <button
-              key={option}
-              className={`list-item${option === value ? ' active' : ''}`}
-              onClick={() => setValue(option)}
-            >
-              <span className="label">{option.toUpperCase()}</span>
-            </button>
+    <VStack fullHeight>
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <Button onClick={() => navigate('settings')} ghost>
+            <ChevronLeftIcon fontSize={20} />
+          </Button>
+        }
+        title={
+          <Text color="contrast" size={18} weight={500}>
+            {t('currency')}
+          </Text>
+        }
+      />
+      <PageContent flexGrow scrollable>
+        <List>
+          {fiatCurrencies.map(key => (
+            <ListItem
+              extra={
+                key === currencyValue && (
+                  <ListItemTag status="success" title={t('active')} />
+                )
+              }
+              key={key}
+              onClick={() => currencyMutation.mutate(key)}
+              title={key.toUpperCase()}
+              hoverable
+            />
           ))}
-        </div>
-      </div>
-    </div>
+        </List>
+      </PageContent>
+    </VStack>
   )
 }
-
-export default Component

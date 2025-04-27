@@ -33,7 +33,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
             <Button onClick={onFinish}>
               <HStack alignItems="center" gap={8}>
                 {t('got_it')}
-                <ChevronRightIcon size={20} />
+                <ChevronRightIcon fontSize={20} />
               </HStack>
             </Button>
           }

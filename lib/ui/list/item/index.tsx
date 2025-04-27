@@ -1,7 +1,9 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes, ReactNode } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
+
+type Status = 'default' | 'error' | 'success' | 'warning'
 
 const StyledDesc = styled.span`
   color: ${getColor('textExtraLight')};
@@ -18,8 +20,7 @@ const StyledMeta = styled.span`
   gap: 4px;
 `
 
-const StyledTitle = styled.span`
-  color: ${getColor('textPrimary')};
+const StyledTitle = styled.span<{ status?: Status }>`
   flex: 1;
   font-size: ${14};
   font-weight: 500;
@@ -27,6 +28,26 @@ const StyledTitle = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  ${({ status }) => {
+    switch (status) {
+      case 'error':
+        return css`
+          color: ${getColor('alertError')};
+        `
+      case 'success':
+        return css`
+          color: ${getColor('alertSuccess')};
+        `
+      case 'warning':
+        return css`
+          color: ${getColor('alertWarning')};
+        `
+      default:
+        return css`
+          color: ${getColor('textPrimary')};
+        `
+    }
+  }}
 `
 
 const StyledListItem = styled.div<{
@@ -36,6 +57,7 @@ const StyledListItem = styled.div<{
   background-color: ${getColor('backgroundsSecondary')};
   display: flex;
   gap: 8px;
+  min-height: 58px;
   padding: 12px 16px;
   ${({ hoverable }) => {
     return hoverable
@@ -45,6 +67,7 @@ const StyledListItem = styled.div<{
 
           &:hover {
             background-color: ${getColor('backgroundTertiary')};
+          }
         `
       : css``
   }}
@@ -57,6 +80,7 @@ interface ListItemProps
   hoverable?: boolean
   icon?: ReactNode
   showArrow?: boolean
+  status?: Status
   title: ReactNode
 }
 
@@ -65,22 +89,41 @@ export const ListItem: FC<ListItemProps> = ({
   extra,
   icon,
   showArrow,
+  status = 'default',
   title,
   ...rest
 }) => {
+  const { colors } = useTheme()
+  let arrowColor: string
+
+  switch (status) {
+    case 'error':
+      arrowColor = colors.alertError.toHex()
+      break
+    case 'success':
+      arrowColor = colors.alertSuccess.toHex()
+      break
+    case 'warning':
+      arrowColor = colors.alertWarning.toHex()
+      break
+    default:
+      arrowColor = colors.textPrimary.toHex()
+      break
+  }
+
   return (
     <StyledListItem {...rest}>
       {icon && icon}
       {description ? (
         <StyledMeta>
-          <StyledTitle>{title}</StyledTitle>
+          <StyledTitle status={status}>{title}</StyledTitle>
           <StyledDesc>{description}</StyledDesc>
         </StyledMeta>
       ) : (
-        <StyledTitle>{title}</StyledTitle>
+        <StyledTitle status={status}>{title}</StyledTitle>
       )}
       {extra && extra}
-      {showArrow && <ChevronRightIcon size={16} />}
+      {showArrow && <ChevronRightIcon fontSize={16} stroke={arrowColor} />}
     </StyledListItem>
   )
 }

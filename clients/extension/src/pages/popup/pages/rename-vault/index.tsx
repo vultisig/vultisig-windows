@@ -1,59 +1,90 @@
-import { ArrowLeft } from '@clients/extension/src/icons'
+import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { Vault } from '@clients/extension/src/utils/interfaces'
+import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { Button, Form, Input } from 'antd'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { TextInput } from '@lib/ui/inputs/TextInput'
+import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Text } from '@lib/ui/text'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
-
-const Component = () => {
-  const { t } = useTranslation()
-  const [form] = Form.useForm()
-  const navigate = useAppNavigate()
-  const [currentVaultId] = useCurrentVaultId()
-  const { mutateAsync: updateVault } = useUpdateVaultMutation()
-
-  const handleSubmit = (): void => {
-    if (currentVaultId)
-      form
-        .validateFields()
-        .then(({ name }: Vault) => {
-          updateVault({
-            vaultId: currentVaultId,
-            fields: {
-              name: name,
-            },
-          }).then(() => [navigate('settings')])
-        })
-        .catch(error => {
-          console.error('Form validation failed:', error)
-        })
-  }
-  return (
-    <div className="layout rename-vault-page">
-      <div className="header">
-        <span className="heading">{t('rename_vault')}</span>
-        <ArrowLeft
-          className="icon icon-left"
-          onClick={() => navigate('settings')}
-        />
-      </div>
-      <div className="content">
-        <Form form={form} onFinish={handleSubmit}>
-          <Form.Item<Vault> name="name" rules={[{ required: true }]}>
-            <Input placeholder={t('name')} />
-          </Form.Item>
-          <Button htmlType="submit" />
-        </Form>
-      </div>
-      <div className="footer">
-        <Button onClick={handleSubmit} type="primary" shape="round" block>
-          {t('save')}
-        </Button>
-      </div>
-    </div>
-  )
+interface InitialState {
+  name?: string
+  submitting?: boolean
 }
 
-export default Component
+export const RenameVaultPage = () => {
+  const { t } = useTranslation()
+  const initialState: InitialState = {}
+  const [state, setState] = useState(initialState)
+  const { name, submitting } = state
+  const [vaultId] = useCurrentVaultId()
+  const navigate = useAppNavigate()
+  const vaultData = useCurrentVault()
+  const vaultMutation = useUpdateVaultMutation()
+
+  const handleChange = (name?: string) => {
+    setState(prevState => ({ ...prevState, name }))
+  }
+
+  const handleSubmit = (): void => {
+    if (!submitting && vaultId) {
+      setState(prevState => ({ ...prevState, submitting: true }))
+
+      vaultMutation
+        .mutateAsync({
+          vaultId,
+          fields: {
+            name: name,
+          },
+        })
+        .then(() => navigate('settings'))
+        .catch(() =>
+          setState(prevState => ({ ...prevState, submitting: false }))
+        )
+    }
+  }
+
+  useEffect(() => {
+    setState(prevState => ({ ...prevState, name: vaultData.name }))
+  }, [vaultData.name])
+
+  return (
+    <VStack fullHeight>
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <Button onClick={() => navigate('vaultSettings')} ghost>
+            <ChevronLeftIcon fontSize={20} />
+          </Button>
+        }
+        title={
+          <Text color="contrast" size={18} weight={500}>
+            {t('rename_vault')}
+          </Text>
+        }
+      />
+      <PageContent gap={24} flexGrow scrollable>
+        {/* TODO: Update search input styles based on Figma */}
+        <TextInput value={name} onValueChange={handleChange} />
+      </PageContent>
+      <PageFooter>
+        <Button
+          loading={submitting}
+          onClick={handleSubmit}
+          shape="round"
+          size="large"
+          type="primary"
+          block
+        >
+          {t('save')}
+        </Button>
+      </PageFooter>
+    </VStack>
+  )
+}
