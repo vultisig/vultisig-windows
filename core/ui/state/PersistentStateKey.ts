@@ -2,7 +2,7 @@ export enum PersistentStateKey {
   CurrentVaultId = 'currentVaultId',
   IsVaultBalanceVisible = 'isVaultBalanceVisible',
   ReactQueryState = 'reactQueryState',
-  HasFinishedOnboarding = 'HasFinishedOnboarding',
+  HasFinishedOnboarding = 'hasFinishedOnboarding',
   Language = 'language',
   FiatCurrency = 'fiatCurrency',
   DefaultChains = 'defaultChains',

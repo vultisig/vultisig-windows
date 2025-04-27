@@ -22,23 +22,30 @@ export const createVaultDefaultCoins = async ({
   currentVaultId,
   updateVaultCoins,
 }: CreateVaultDefaultCoinsInput) => {
-  const coins: AccountCoin[] = await Promise.all(
-    defaultChains.map(async chain => {
-      const publicKey = await getVaultPublicKey({
-        chain,
-        vault,
-        walletCore,
+  try {
+    const coins: AccountCoin[] = await Promise.all(
+      defaultChains.map(async chain => {
+        const publicKey = await getVaultPublicKey({
+          chain,
+          vault,
+          walletCore,
+        })
+        const address = deriveAddress({
+          chain,
+          publicKey,
+          walletCore,
+        })
+        return {
+          ...chainFeeCoin[chain],
+          address,
+        }
       })
-      const address = deriveAddress({
-        chain,
-        publicKey,
-        walletCore,
-      })
-      return {
-        ...chainFeeCoin[chain],
-        address,
-      }
-    })
-  )
-  await updateVaultCoins(currentVaultId, coins)
+    )
+    const validCoins = coins.filter(coin => coin !== null) as AccountCoin[]
+    if (validCoins.length > 0) {
+      await updateVaultCoins(currentVaultId, validCoins)
+    }
+  } catch (error) {
+    console.error('Failed to create default coins:', error)
+  }
 }

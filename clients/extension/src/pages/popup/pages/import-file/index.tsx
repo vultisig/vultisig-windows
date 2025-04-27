@@ -89,7 +89,7 @@ const Component = () => {
     }
   }
 
-  const { mutate, error } = useMutation({
+  const { mutate, error: mutationError } = useMutation({
     mutationFn: vaultBackupResultFromFile,
     onSuccess: handleProcessVaultContainer,
   })
@@ -178,39 +178,46 @@ const Component = () => {
     openPopupIfNeeded()
   }, [openPopupIfNeeded])
 
-  const renderForm = () => (
-    <StyledPageContent fullHeight>
-      <FlowPageHeader title={t('import_vault')} />
-      <PageContent
-        as="form"
-        {...getFormProps({
-          onSubmit: () => {
-            if (file && !error) {
-              setState(prev => ({ ...prev, loading: true }))
-              finalizeVaultImport()
-            }
-          },
-          isDisabled: !file,
-        })}
-      >
-        <VStack gap={20} flexGrow>
-          {file ? (
-            <UploadedBackupFile value={file} />
-          ) : (
-            <BackupFileDropzone onFinish={handleFileSelected} />
-          )}
-          {error && (
-            <Text centerHorizontally color="danger">
-              {extractErrorMsg(error)}
-            </Text>
-          )}
-        </VStack>
-        <Button isLoading={loading} isDisabled={!file} type="submit">
-          {t('continue')}
-        </Button>
-      </PageContent>
-    </StyledPageContent>
-  )
+  const renderForm = () => {
+    const visibleError = state.error ?? mutationError
+    return (
+      <StyledPageContent fullHeight>
+        <FlowPageHeader title={t('import_vault')} />
+        <PageContent
+          as="form"
+          {...getFormProps({
+            onSubmit: () => {
+              if (file && !visibleError) {
+                setState(prev => ({ ...prev, loading: true }))
+                finalizeVaultImport()
+              }
+            },
+            isDisabled: !file,
+          })}
+        >
+          <VStack gap={20} flexGrow>
+            {file ? (
+              <UploadedBackupFile value={file} />
+            ) : (
+              <BackupFileDropzone onFinish={handleFileSelected} />
+            )}
+            {visibleError && (
+              <Text centerHorizontally color="danger">
+                {extractErrorMsg(visibleError)}
+              </Text>
+            )}
+          </VStack>
+          <Button
+            isLoading={loading}
+            isDisabled={!file || Boolean(visibleError)}
+            type="submit"
+          >
+            {t('continue')}
+          </Button>
+        </PageContent>
+      </StyledPageContent>
+    )
+  }
 
   const renderDecryptStep = () => (
     <DecryptVaultContainerStep

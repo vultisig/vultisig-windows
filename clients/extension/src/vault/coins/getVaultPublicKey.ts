@@ -31,12 +31,16 @@ export const getVaultPublicKey = async ({
   })
   const derivedPublicKey = await match(keysignType, {
     ecdsa: async () => {
-      const response = await api.derivePublicKey({
-        publicKeyEcdsa: vault.publicKeys.ecdsa,
-        hexChainCode: vault.hexChainCode,
-        derivePath: walletCore.CoinTypeExt.derivationPath(coinType),
-      })
-      return response.data.publicKey
+      try {
+        const response = await api.derivePublicKey({
+          publicKeyEcdsa: vault.publicKeys.ecdsa,
+          hexChainCode: vault.hexChainCode,
+          derivePath: walletCore.CoinTypeExt.derivationPath(coinType),
+        })
+        return response.data.publicKey
+      } catch (error) {
+        throw new Error(`Failed to derive public key for ${chain}: ${error}`)
+      }
     },
     eddsa: async () => vault.publicKeys.eddsa,
   })
