@@ -1,27 +1,27 @@
+import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { Button } from '@lib/ui/buttons/Button'
-import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
-import { Settings } from '@lib/ui/icons/Settings'
-import { World } from '@lib/ui/icons/World'
+import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
+import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { WorldIcon } from '@lib/ui/icons/WorldIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC } from 'react'
 import styled, { useTheme } from 'styled-components'
-
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
     getColor(connected ? 'alertSuccess' : 'alertInfo')};
-  border: solid 4px ${getColor('buttonDisabled')};
+  border: solid 4px ${getColor('buttonBackgroundDisabled')};
   border-radius: 50%;
   height: 16px;
   position: absolute;
@@ -30,22 +30,18 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   width: 16px;
 `
 
-const ConnectedApp = styled.div`
-  align-items: center;
-  background-color: ${getColor('buttonDisabled')};
+const ConnectedApp = styled(Button)`
+  background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
-  cursor: pointer;
-  display: flex;
   height: 36px;
-  justify-content: center;
   position: relative;
   width: 36px;
 `
 
-const Component: FC = () => {
-  const vault = useCurrentVault()
+export const MainPage = () => {
   const { colors } = useTheme()
+  const vault = useCurrentVault()
   const navigate = useAppNavigate()
   const coins = useCurrentVaultCoins()
 
@@ -53,8 +49,8 @@ const Component: FC = () => {
     <VStack alignItems="center" justifyContent="center" fullHeight>
       <PageHeader
         primaryControls={
-          <ConnectedApp>
-            <World
+          <ConnectedApp ghost>
+            <WorldIcon
               height={20}
               stroke={colors.textExtraLight.toHex()}
               width={20}
@@ -64,19 +60,21 @@ const Component: FC = () => {
         }
         secondaryControls={
           <HStack gap={8} alignItems="center">
-            <Button kind="outlined" size="s">
+            <Button shape="round" size="small">
               Open Desktop
             </Button>
-            <Settings
-              height={24}
-              onClick={() => navigate('settings')}
-              width={24}
-            />
+            <Button ghost>
+              <SettingsIcon
+                height={24}
+                onClick={() => navigate('settings')}
+                width={24}
+              />
+            </Button>
           </HStack>
         }
         hasBorder
       />
-      <PageContent gap={16} fullWidth scrollable>
+      <PageContent gap={24} flexGrow fullWidth scrollable>
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
@@ -123,10 +121,19 @@ const Component: FC = () => {
           </List>
         </VStack>
       </PageContent>
+      <PageFooter fullWidth>
+        <Button
+          onClick={() => navigate('manageChains')}
+          shape="round"
+          size="large"
+          type="primary"
+          block
+        >
+          <LinkTwoIcon height={16} strokeWidth={2} width={16} /> Manage Chains
+        </Button>
+      </PageFooter>
     </VStack>
   ) : (
     <></>
   )
 }
-
-export default Component

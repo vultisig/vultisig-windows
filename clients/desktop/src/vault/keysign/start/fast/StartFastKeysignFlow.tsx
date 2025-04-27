@@ -1,21 +1,22 @@
 import { WaitForServerToJoinStep } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
+import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
+import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
-import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
-import { FastKeysignServerStep } from './FastKeysignServerStep'
+import { KeysignActionProvider } from '../../action/KeysignActionProvider'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = () => {
-  const { keysignPayload } = useAppPathState<'fastKeysign'>()
+  const { keysignPayload } = useCorePathState<'keysign'>()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -36,7 +37,11 @@ export const StartFastKeysignFlow = () => {
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
-                  render={() => <KeysignSigningStep payload={keysignPayload} />}
+                  render={() => (
+                    <KeysignActionProvider>
+                      <KeysignSigningStep payload={keysignPayload} />
+                    </KeysignActionProvider>
+                  )}
                 />
               </MpcPeersProvider>
             )}

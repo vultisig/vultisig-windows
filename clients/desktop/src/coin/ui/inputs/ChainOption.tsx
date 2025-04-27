@@ -1,7 +1,9 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
+import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
@@ -10,11 +12,9 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { useSide } from '../../../vault/swap/providers/SideProvider'
 import { useFromCoin } from '../../../vault/swap/state/fromCoin'
 import { useToCoin } from '../../../vault/swap/state/toCoin'
-import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
 export const ChainOption = ({
   value,

@@ -15,6 +15,7 @@ export const appPaths = {
   settings: '/settings',
   vaults: '/vaults',
   vaultSettings: '/settings/vault',
+  manageChains: '/manage-chains',
 } as const
 
 type AppPaths = typeof appPaths
@@ -39,7 +40,6 @@ export type AppPathParams = {
   importQR: { title?: string }
   importFile: { title?: string }
   setupVault: { type?: VaultSecurityType }
-  uploadQr: { title?: string }
   import: { from?: string }
 }
 

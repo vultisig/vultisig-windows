@@ -2,9 +2,10 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import wasm from 'vite-plugin-wasm'
 
 export default defineConfig({
-  plugins: [react(), nodePolyfills({ exclude: ['fs'] })],
+  plugins: [react(), nodePolyfills({ exclude: ['fs'] }), wasm()],
   css: {
     preprocessorOptions: {
       scss: {

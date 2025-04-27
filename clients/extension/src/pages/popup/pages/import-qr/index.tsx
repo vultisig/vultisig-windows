@@ -230,7 +230,7 @@ const Component = () => {
 
         chrome.windows.onRemoved.addListener(closedWindowId => {
           if (closedWindowId === createdWindowId) {
-            if (isPopupRef) window.close()
+            if (isPopupRef.current) window.close()
             else navigateToMain()
           }
         })

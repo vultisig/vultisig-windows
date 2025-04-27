@@ -1,3 +1,4 @@
+import { SetFiatCurrencyProvider } from '@clients/extension/src/preferences/fiatCurrency'
 import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
@@ -41,19 +42,20 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <I18nProvider>
                       <WalletCoreProvider>
                         <InitializedWalletOnly>
-                          <RemoteStateDependant>
-                            <SetCurrentVaultIdProvider>
-                              <CreateVaultProvider>
-                                <UpdateVaultProvider>
-                                  <AntDesignThemeProvider>
-                                    {children}
-
-                                    <GlobalStyle />
-                                  </AntDesignThemeProvider>
-                                </UpdateVaultProvider>
-                              </CreateVaultProvider>
-                            </SetCurrentVaultIdProvider>
-                          </RemoteStateDependant>
+                          <SetFiatCurrencyProvider>
+                            <RemoteStateDependant>
+                              <SetCurrentVaultIdProvider>
+                                <CreateVaultProvider>
+                                  <UpdateVaultProvider>
+                                    <AntDesignThemeProvider>
+                                      {children}
+                                      <GlobalStyle />
+                                    </AntDesignThemeProvider>
+                                  </UpdateVaultProvider>
+                                </CreateVaultProvider>
+                              </SetCurrentVaultIdProvider>
+                            </RemoteStateDependant>
+                          </SetFiatCurrencyProvider>
                         </InitializedWalletOnly>
                       </WalletCoreProvider>
                     </I18nProvider>

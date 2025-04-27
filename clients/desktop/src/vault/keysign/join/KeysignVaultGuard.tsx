@@ -1,5 +1,6 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 import { useVaults } from '@core/ui/vault/state/vaults'
@@ -10,11 +11,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { makeAppPath } from '../../../navigation'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useCurrentVaultId } from '../../state/currentVaultId'
-
 export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
-  const { vaultId } = useAppPathState<'joinKeysign'>()
+  const { vaultId } = useCorePathState<'joinKeysign'>()
   const vaults = useVaults()
 
   const { t } = useTranslation()

@@ -1,20 +1,31 @@
 import { useVaultsQuery } from '@clients/extension/src/vault/queries/useVaultsQuery'
+import { FiatCurrencyProvider } from '@core/ui/state/fiatCurrency'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useFiatCurrencyQuery } from '../preferences/fiatCurrency'
+
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaultsQuery = useVaultsQuery()
+  const fiatCurrencyQuery = useFiatCurrencyQuery()
+
+  const query = useMergeQueries({
+    vaults: vaultsQuery,
+    fiatCurrency: fiatCurrencyQuery,
+  })
+
   const { t } = useTranslation()
 
   return (
     <MatchQuery
-      value={vaultsQuery}
-      success={vaults => {
-        return (
+      value={query}
+      success={({ vaults, fiatCurrency }) => (
+        <FiatCurrencyProvider value={fiatCurrency}>
           <VaultsProvider
             value={vaults.map(vault => ({
               ...vault,
@@ -23,8 +34,8 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
           >
             {children}
           </VaultsProvider>
-        )
-      }}
+        </FiatCurrencyProvider>
+      )}
       error={() => (
         <CenterAbsolutely>
           <StrictText>{t('failed_to_load')}</StrictText>

@@ -15,7 +15,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
-import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -71,8 +71,27 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
+                  disabled: value === 'fast',
+                  label: t('fast'),
+                  value: 'fast',
+                  icon: match(value, {
+                    fast: () => (
+                      <LightningGradientIconWrapper>
+                        <LightningGradientIcon />
+                      </LightningGradientIconWrapper>
+                    ),
+                    secure: () => (
+                      <LightningIconWrapper>
+                        <LightningIcon
+                          color={theme.colors.contrast.toCssValue()}
+                        />
+                      </LightningIconWrapper>
+                    ),
+                  }),
+                },
+                {
                   disabled: value == 'secure',
-                  label: 'Secure',
+                  label: t('secure'),
                   value: 'secure',
                   icon: (
                     <VStack
@@ -85,26 +104,9 @@ export const SetupVaultPage = () => {
                             : theme.colors.success.toCssValue(),
                       }}
                     >
-                      <ShieldCheckIcon />
+                      <ShieldIcon />
                     </VStack>
                   ),
-                },
-                {
-                  disabled: value == 'fast',
-                  label: 'Fast',
-                  value: 'fast',
-                  icon:
-                    value === 'fast' ? (
-                      <LightningGradientIconWrapper>
-                        <LightningGradientIcon />
-                      </LightningGradientIconWrapper>
-                    ) : (
-                      <LightningIconWrapper>
-                        <LightningIcon
-                          color={theme.colors.contrast.toCssValue()}
-                        />
-                      </LightningIconWrapper>
-                    ),
                 },
               ]}
               disabled={isPlaying}

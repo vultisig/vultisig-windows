@@ -1,9 +1,10 @@
+import { PublicKeys } from '@core/chain/publicKey/PublicKeys'
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 
 export type Vault = {
   name: string
-  publicKeys: Record<SignatureAlgorithm, string>
+  publicKeys: PublicKeys
   signers: string[]
   createdAt?: number
   hexChainCode: string

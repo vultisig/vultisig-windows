@@ -1,28 +1,34 @@
+import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeerDiscoveryStep'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
-import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
-import { KeysignSigningStep } from '../shared/KeysignSigningStep'
+import { KeysignActionProvider } from '../action/KeysignActionProvider'
 
 export const StartSecureKeysignFlow = () => {
   const { keysignPayload } = useCorePathState<'keysign'>()
 
   return (
-    <MpcPeersSelectionProvider>
-      <StepTransition
-        from={({ onFinish }) => (
+    <ValueTransfer<string[]>
+      from={({ onFinish }) => (
+        <MpcPeersSelectionProvider>
           <KeysignPeerDiscoveryStep onFinish={onFinish} />
-        )}
-        to={({ onBack }) => (
+        </MpcPeersSelectionProvider>
+      )}
+      to={({ onBack, value }) => (
+        <MpcPeersProvider value={value}>
           <StartMpcSessionFlow
             render={() => (
-              <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
+              <KeysignActionProvider>
+                <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
+              </KeysignActionProvider>
             )}
           />
-        )}
-      />
-    </MpcPeersSelectionProvider>
+        </MpcPeersProvider>
+      )}
+    />
   )
 }

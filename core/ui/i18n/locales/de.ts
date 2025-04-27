@@ -273,16 +273,6 @@ export const de = {
   save: 'Speichern',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Löschen',
-  vault_settings_currency_settings_title_usd: 'USD',
-  vault_settings_currency_settings_title_aud: 'AUD',
-  vault_settings_currency_settings_title_eur: 'EUR',
-  vault_settings_currency_settings_title_gbp: 'GBP',
-  vault_settings_currency_settings_title_chf: 'CHF',
-  vault_settings_currency_settings_title_jpy: 'JPY',
-  vault_settings_currency_settings_title_cny: 'CNY',
-  vault_settings_currency_settings_title_cad: 'CAD',
-  vault_settings_currency_settings_title_sgd: 'SGD',
-  vault_settings_currency_settings_title_sek: 'SEK',
   faq_setup_crypto_vault_title:
     'Wie richte ich meinen sicheren Krypto-Tresor ein?',
   faq_setup_crypto_vault_content:
@@ -814,4 +804,12 @@ export const de = {
   waiting_for_upgrade_start: 'Warten auf den Beginn des Upgrades ...',
   vault_name_description:
     'Sie können Ihren Tresor später jederzeit in den Einstellungen umbenennen',
+  upload_file_or_drag_and_drop:
+    'Datei hochladen oder per Drag & Drop hierher ziehen',
+  upload_vulttshare: 'Laden Sie Ihren Vultishare-QR hoch',
+  failed_to_start_keysign: 'Keysign konnte nicht gestartet werden',
+  failed_to_retrieve_addresses: 'Adressen konnten nicht abgerufen werden',
+  vulti_share_not_saved_hint:
+    'Wenn Sie Ihren VultiShare-QR noch nicht gespeichert haben, gehen Sie zur App und klicken Sie auf das QR-Symbol in der oberen rechten Ecke.',
+  version: 'Version',
 }

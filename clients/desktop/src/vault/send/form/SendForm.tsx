@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -11,7 +12,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow'
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
 import { ManageAmount } from '../amount/ManageSendAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'

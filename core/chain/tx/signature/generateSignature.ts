@@ -1,20 +1,14 @@
 import { SignatureFormat } from '@core/chain/signing/SignatureFormat'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { match } from '@lib/utils/match'
 import { pick } from '@lib/utils/record/pick'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-export interface KeysignResponse {
-  msg: string
-  r: string
-  s: string
-  der_signature: string
-  recovery_id: string
-}
-
 type Input = {
   walletCore: WalletCore
-  signature: KeysignResponse
+  signature: KeysignSignature
   signatureFormat: SignatureFormat
 }
 
@@ -25,10 +19,11 @@ export const generateSignature = ({
 }: Input) => {
   return match(signatureFormat, {
     rawWithRecoveryId: () => {
-      const { r, s, recovery_id } = recordMap(
-        pick(signature, ['r', 's', 'recovery_id']),
-        value => walletCore.HexCoding.decode(value)
-      )
+      const [r, s, recovery_id] = withoutUndefined([
+        signature.r,
+        signature.s,
+        signature.recovery_id,
+      ]).map(value => walletCore.HexCoding.decode(value))
 
       return new Uint8Array([...r, ...s, ...recovery_id])
     },

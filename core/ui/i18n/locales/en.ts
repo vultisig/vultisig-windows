@@ -1,4 +1,6 @@
 export const en = {
+  available: 'Available',
+  manage_chains: 'Manage Chains',
   secure_crypto_vault: 'SECURE CRYPTO VAULT',
   add_address: 'Add Address',
   vultisig: 'Vultisig',
@@ -240,16 +242,6 @@ export const en = {
   save: 'Save',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Clear',
-  vault_settings_currency_settings_title_usd: 'USD',
-  vault_settings_currency_settings_title_aud: 'AUD',
-  vault_settings_currency_settings_title_eur: 'EUR',
-  vault_settings_currency_settings_title_gbp: 'GBP',
-  vault_settings_currency_settings_title_chf: 'CHF',
-  vault_settings_currency_settings_title_jpy: 'JPY',
-  vault_settings_currency_settings_title_cny: 'CNY',
-  vault_settings_currency_settings_title_cad: 'CAD',
-  vault_settings_currency_settings_title_sgd: 'SGD',
-  vault_settings_currency_settings_title_sek: 'SEK',
   faq_setup_crypto_vault_title: 'How do I set up my crypto vault?',
   faq_setup_crypto_vault_content:
     'Get 2 or more of your devices together and connected to your local WiFi, Hotspot or internet. Then simply pair them via QR code and create a new vault. You can then send funds in.',
@@ -514,7 +506,7 @@ export const en = {
       prop_1: 'Store smaller funds for daily use',
       prop_2: 'Vultiserver co-signs instantly',
       purpose: 'Use as a "hot wallet"',
-      title: 'Quick, 1 device setup',
+      title: 'Fast set-up',
     },
     secure: {
       prop_0: 'Maximum security with multiple devices',
@@ -783,6 +775,7 @@ export const en = {
   backup_password_info:
     "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
   upgrade_your_vault_now: 'Upgrade your vault now',
+  version: 'Version',
   vulti_share_not_saved_hint:
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
 }

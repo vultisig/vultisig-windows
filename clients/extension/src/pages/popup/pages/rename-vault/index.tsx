@@ -26,9 +26,10 @@ const Component = () => {
             },
           }).then(() => [navigate('settings')])
         })
-        .catch(() => {})
+        .catch(error => {
+          console.error('Form validation failed:', error)
+        })
   }
-
   return (
     <div className="layout rename-vault-page">
       <div className="header">

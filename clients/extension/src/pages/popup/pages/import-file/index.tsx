@@ -96,6 +96,19 @@ const Component = () => {
 
   const createVault = useCreateVault()
   const setCurrentVaultId = useSetCurrentVaultId()
+  const finalizeVaultImport = async (): Promise<void> => {
+    if (!decodedVault) return
+    setState(p => ({ ...p, loading: true }))
+    try {
+      await createVault(decodedVault)
+      await setCurrentVaultId(getVaultId(decodedVault))
+      navigate('main')
+    } catch (e) {
+      handleError(extractErrorMsg(e))
+    } finally {
+      setState(p => ({ ...p, loading: false }))
+    }
+  }
 
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
@@ -117,14 +130,6 @@ const Component = () => {
     if (finalize) {
       finalizeVaultImport()
     }
-  }
-
-  const finalizeVaultImport = async () => {
-    if (!decodedVault) return
-    await createVault(decodedVault)
-    setCurrentVaultId(getVaultId(decodedVault))
-    setState(prev => ({ ...prev, loading: false }))
-    navigate('main')
   }
 
   const handleFileSelected = (file: File) => {

@@ -3,15 +3,14 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
-import { deriveAddress } from '@core/chain/utils/deriveAddress'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -44,11 +43,9 @@ import {
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
 import { makeAppPath } from '../../navigation'
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
-import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
 import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
@@ -60,15 +57,13 @@ import { VaultChainCoinItem } from './VaultChainCoinItem'
 export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const invalidateQueries = useInvalidateQueries()
-  const [fiatCurrency] = useFiatCurrency()
-  const publicKeyQuery = useVaultPublicKeyQuery(chain)
+  const fiatCurrency = useFiatCurrency()
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
   const invalidateQueryKey = getBalanceQueryKey(
     extractAccountCoinKey(nativeCoin)
   )
-  const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()
   const address = useCurrentVaultAddress(chain)
@@ -100,15 +95,7 @@ export const VaultChainPage = () => {
       ? findTokensQuery.data
       : []
 
-    const isValidPublicKey =
-      publicKeyQuery.data &&
-      typeof publicKeyQuery.data.data === 'function' &&
-      publicKeyQuery.data.data().length > 0 // Ensure it contains meaningful data
-
-    if (tokens.length > 0 && publicKeyQuery.isSuccess && isValidPublicKey) {
-      const publicKey = publicKeyQuery.data
-      const address = deriveAddress({ chain, publicKey, walletCore })
-
+    if (tokens.length > 0) {
       saveCoins(
         tokens.map(coin => ({
           ...coin,
@@ -116,14 +103,7 @@ export const VaultChainPage = () => {
         }))
       )
     }
-  }, [
-    chain,
-    findTokensQuery.data,
-    publicKeyQuery.data,
-    publicKeyQuery.isSuccess,
-    saveCoins,
-    walletCore,
-  ])
+  }, [address, findTokensQuery.data, saveCoins])
 
   const hasMultipleCoinsSupport = chain in chainTokens
 

@@ -5,7 +5,7 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
-import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -72,8 +72,27 @@ export const SetupVaultPage = () => {
             <ToggleSwitch
               options={[
                 {
+                  disabled: value === 'fast',
+                  label: t('fast'),
+                  value: 'fast',
+                  icon: match(value, {
+                    fast: () => (
+                      <LightningGradientIconWrapper>
+                        <LightningGradientIcon />
+                      </LightningGradientIconWrapper>
+                    ),
+                    secure: () => (
+                      <LightningIconWrapper>
+                        <LightningIcon
+                          color={theme.colors.contrast.toCssValue()}
+                        />
+                      </LightningIconWrapper>
+                    ),
+                  }),
+                },
+                {
                   disabled: value == 'secure',
-                  label: 'Secure',
+                  label: t('secure'),
                   value: 'secure',
                   icon: (
                     <VStack
@@ -86,26 +105,9 @@ export const SetupVaultPage = () => {
                             : theme.colors.success.toCssValue(),
                       }}
                     >
-                      <ShieldCheckIcon />
+                      <ShieldIcon />
                     </VStack>
                   ),
-                },
-                {
-                  disabled: value == 'fast',
-                  label: 'Fast',
-                  value: 'fast',
-                  icon:
-                    value === 'fast' ? (
-                      <LightningGradientIconWrapper>
-                        <LightningGradientIcon />
-                      </LightningGradientIconWrapper>
-                    ) : (
-                      <LightningIconWrapper>
-                        <LightningIcon
-                          color={theme.colors.contrast.toCssValue()}
-                        />
-                      </LightningIconWrapper>
-                    ),
                 },
               ]}
               disabled={isPlaying}
@@ -123,12 +125,12 @@ export const SetupVaultPage = () => {
               <Match
                 value={value}
                 fast={() => (
-                  <GradientText weight={500}>
+                  <GradientText size={15} weight={500}>
                     {t(`vault_setup_prop.fast.title`)}
                   </GradientText>
                 )}
                 secure={() => (
-                  <Text color="primary" weight={500}>
+                  <Text color="primary" size={15} weight={500}>
                     {t(`vault_setup_prop.secure.title`)}
                   </Text>
                 )}
@@ -140,7 +142,7 @@ export const SetupVaultPage = () => {
                   <IconWrapper>
                     <CheckIcon />
                   </IconWrapper>
-                  <Text size={14} weight="600" color="contrast">
+                  <Text size={14} weight="500" color="contrast">
                     {prop}
                   </Text>
                 </HStack>

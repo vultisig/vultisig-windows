@@ -16,6 +16,7 @@ import { BrowserOpenURL } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
+import { FiatCurrencyProviders } from './preferences/state/fiatCurrency'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
@@ -41,36 +42,38 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <VersionProvider value={buildInfo.version}>
-      <MpcLocalModeAvailabilityProvider value={true}>
-        <VaultCreationMpcLibProvider value={mpcLib}>
-          <OpenUrlProvider value={BrowserOpenURL}>
-            <SaveFileProvider value={saveFile}>
-              <MpcDeviceProvider value="windows">
-                <WalletCoreProvider>
-                  <QueryClientProvider client={queryClient}>
-                    <ThemeProvider theme={darkTheme}>
-                      <I18nProvider language={language}>
-                        <InitializedWalletOnly>
-                          <RemoteStateDependant>
-                            <SetCurrentVaultIdProvider>
-                              <CreateVaultProvider>
-                                <UpdateVaultProvider>
-                                  {children}
-                                </UpdateVaultProvider>
-                              </CreateVaultProvider>
-                            </SetCurrentVaultIdProvider>
-                          </RemoteStateDependant>
-                        </InitializedWalletOnly>
-                      </I18nProvider>
-                    </ThemeProvider>
-                  </QueryClientProvider>
-                </WalletCoreProvider>
-              </MpcDeviceProvider>
-            </SaveFileProvider>
-          </OpenUrlProvider>
-        </VaultCreationMpcLibProvider>
-      </MpcLocalModeAvailabilityProvider>
-    </VersionProvider>
+    <FiatCurrencyProviders>
+      <VersionProvider value={buildInfo.version}>
+        <MpcLocalModeAvailabilityProvider value={true}>
+          <VaultCreationMpcLibProvider value={mpcLib}>
+            <OpenUrlProvider value={BrowserOpenURL}>
+              <SaveFileProvider value={saveFile}>
+                <MpcDeviceProvider value="windows">
+                  <WalletCoreProvider>
+                    <QueryClientProvider client={queryClient}>
+                      <ThemeProvider theme={darkTheme}>
+                        <I18nProvider language={language}>
+                          <InitializedWalletOnly>
+                            <RemoteStateDependant>
+                              <SetCurrentVaultIdProvider>
+                                <CreateVaultProvider>
+                                  <UpdateVaultProvider>
+                                    {children}
+                                  </UpdateVaultProvider>
+                                </CreateVaultProvider>
+                              </SetCurrentVaultIdProvider>
+                            </RemoteStateDependant>
+                          </InitializedWalletOnly>
+                        </I18nProvider>
+                      </ThemeProvider>
+                    </QueryClientProvider>
+                  </WalletCoreProvider>
+                </MpcDeviceProvider>
+              </SaveFileProvider>
+            </OpenUrlProvider>
+          </VaultCreationMpcLibProvider>
+        </MpcLocalModeAvailabilityProvider>
+      </VersionProvider>
+    </FiatCurrencyProviders>
   )
 }

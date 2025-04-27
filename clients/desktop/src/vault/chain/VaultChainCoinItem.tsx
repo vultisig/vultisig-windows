@@ -1,8 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/utils/shouldDisplayChainLogo'
+import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -12,9 +15,6 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
-import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon'
-import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc'
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 
 export const VaultChainCoinItem = ({
@@ -27,7 +27,7 @@ export const VaultChainCoinItem = ({
     CoinKey
 >) => {
   const { logo, ticker, amount, decimals, price, id, chain } = value
-  const [fiatCurrency] = useFiatCurrency()
+  const fiatCurrency = useFiatCurrency()
   const balance = fromChainAmount(amount, decimals)
 
   return (

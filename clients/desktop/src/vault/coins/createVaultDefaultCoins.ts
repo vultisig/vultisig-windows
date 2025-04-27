@@ -1,12 +1,12 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { SaveCoins } from '../../../wailsjs/go/storage/Store'
 import { toStorageCoin } from '../../storage/storageCoin'
-import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 
 type CreateVaultDefaultCoinsInput = {
   vault: Vault
@@ -21,10 +21,11 @@ export const createVaultDefaultCoins = async ({
 }: CreateVaultDefaultCoinsInput) => {
   const coins = await Promise.all(
     defaultChains.map(async chain => {
-      const publicKey = await getVaultPublicKey({
+      const publicKey = getPublicKey({
         chain,
-        vault,
         walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
       })
 
       const address = deriveAddress({

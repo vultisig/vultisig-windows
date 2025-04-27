@@ -9,7 +9,6 @@ import { match } from '@lib/utils/match'
 import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
 import { useMutation } from '@tanstack/react-query'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { parseTransferredKeysignMsg } from '../../vault/keysign/shared/utils/parseTransfferedKeysignMsg'
 import { decompressQrPayload } from '../../vault/qr/upload/utils/decompressQrPayload'
 
@@ -29,8 +28,7 @@ type DeeplinkParams = DeeplinkSharedData & {
 }
 
 export const useProcessDeeplinkMutation = () => {
-  const appNavigate = useAppNavigate()
-  const coreNavigate = useCoreNavigate()
+  const navigate = useCoreNavigate()
 
   return useMutation({
     mutationFn: async (url: string) => {
@@ -48,7 +46,7 @@ export const useProcessDeeplinkMutation = () => {
 
             const keygenType = fromTssType(queryParams.tssType)
 
-            coreNavigate('joinKeygen', {
+            navigate('joinKeygen', {
               state: {
                 keygenType,
                 keygenMsg,
@@ -61,7 +59,7 @@ export const useProcessDeeplinkMutation = () => {
 
             const keysignMsg = await parseTransferredKeysignMsg(payload)
 
-            appNavigate('joinKeysign', {
+            navigate('joinKeysign', {
               state: {
                 keysignMsg,
                 vaultId,

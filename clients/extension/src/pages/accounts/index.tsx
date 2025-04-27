@@ -5,7 +5,6 @@ import { MiddleTruncate } from '@clients/extension/src/components/middle-truncat
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
-import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredRequest,
@@ -18,6 +17,8 @@ import { Button, Form, Radio } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   uid: string

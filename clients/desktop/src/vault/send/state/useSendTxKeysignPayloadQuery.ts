@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -8,7 +9,6 @@ import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQue
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
-import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendMemo } from './memo'
@@ -27,19 +27,23 @@ export const useSendTxKeysignPayloadQuery = () => {
 
   const cappedAmountQuery = useSendCappedAmountQuery()
 
-  const publicKeyQuery = useVaultPublicKeyQuery(coin.chain)
-
   const walletCore = useAssertWalletCore()
 
   return useStateDependentQuery({
     state: {
       chainSpecific: chainSpecificQuery.data,
       cappedAmount: cappedAmountQuery.data,
-      publicKey: publicKeyQuery.data,
     },
-    getQuery: ({ chainSpecific, cappedAmount, publicKey }) => ({
+    getQuery: ({ chainSpecific, cappedAmount }) => ({
       queryKey: ['sendKeysignPayload'],
       queryFn: async () => {
+        const publicKey = getPublicKey({
+          chain: coin.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+
         return processKeysignPayload(
           create(KeysignPayloadSchema, {
             coin: toCommCoin({

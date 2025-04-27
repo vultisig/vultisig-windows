@@ -1,9 +1,8 @@
-import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { Button } from '@lib/ui/buttons/Button'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
-import React from 'react'
 import {
   components,
   MenuProps,
