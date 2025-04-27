@@ -4,10 +4,8 @@ import {
   CreateInstallMarker,
   IsFreshInstall,
 } from '../../wailsjs/go/main/InstallMarkerService'
-import {
-  PersistentStateKey,
-  usePersistentState,
-} from '../state/persistentState'
+import { usePersistentState } from '../state/persistentState'
+import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 
 const OnboardingResetter: FC<PropsWithChildren> = ({ children }) => {
   const [, setCompletedOnboarding] = usePersistentState(

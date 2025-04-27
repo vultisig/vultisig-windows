@@ -3,8 +3,9 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
-import { PersistentStateKey } from '../state/persistentState'
+
 import { queryKeyHashFn } from './queryKeyHashFn'
+import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 
 const maxAge = convertDuration(1, 'd', 'ms')
 
