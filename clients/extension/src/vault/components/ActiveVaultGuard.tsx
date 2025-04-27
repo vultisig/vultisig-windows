@@ -1,29 +1,24 @@
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { useEffect, useState } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { CoinFinder } from '../chain/coin/finder/CoinFinder'
+import { useVaultCoinsQuery } from '../state/coins'
 import { useCurrentVaultId } from '../state/currentVaultId'
 
-import { CurrentVaultCoinsProvider } from '@clients/desktop/src/vault/state/currentVaultCoins'
-import { useVaults } from '@core/ui/vault/state/vaults'
-
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { CoinFinder } from '../chain/coin/finder/CoinFinder'
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const [currentVaultId, , loading, ready] = useCurrentVaultId()
   const navigate = useAppNavigate()
   const vaults = useVaults()
-  const [vault, setVault] = useState<
-    | (Vault & {
-        coins: AccountCoin[]
-      })
-    | null
-  >(null)
+  const [vault, setVault] = useState<Vault | null>(null)
   const [checked, setChecked] = useState(false)
-
+  const { data: vaultCoinsRecord = {} } = useVaultCoinsQuery()
+  const coins = (vault && vaultCoinsRecord[getVaultId(vault)]) ?? []
   useEffect(() => {
     const checkVault = async () => {
       if (loading || !ready) return
@@ -48,7 +43,7 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
 
   return (
     <CurrentVaultProvider value={vault}>
-      <CurrentVaultCoinsProvider value={vault.coins}>
+      <CurrentVaultCoinsProvider value={coins}>
         <CoinFinder />
         {children}
       </CurrentVaultCoinsProvider>

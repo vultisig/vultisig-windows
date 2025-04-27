@@ -1,5 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
+import { useDefaultChains } from '@core/ui/vault/state/defaultChains'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -9,7 +10,6 @@ import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useDefaultChains } from '../../../chain/state/defaultChains'
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider'
 import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch'
 import {

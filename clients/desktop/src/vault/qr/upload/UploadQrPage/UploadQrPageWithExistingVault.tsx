@@ -1,4 +1,5 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -9,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
-import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
 import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 import { useDeriveChainFromWalletAddress } from '../useDeriveChainFromWalletAddress'

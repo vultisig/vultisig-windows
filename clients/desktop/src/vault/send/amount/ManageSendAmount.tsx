@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -13,7 +14,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'

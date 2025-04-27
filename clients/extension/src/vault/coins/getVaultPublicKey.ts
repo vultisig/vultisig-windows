@@ -1,3 +1,4 @@
+import api from '@clients/extension/src/utils/api'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
@@ -5,7 +6,6 @@ import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
-import api from '../../utils/api'
 
 type Input = {
   chain: Chain

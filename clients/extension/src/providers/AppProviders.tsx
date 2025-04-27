@@ -9,6 +9,7 @@ import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpc
 import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
+import { InitializedWalletOnly } from '@core/ui/wallet/InitializedWalletOnly'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
@@ -19,7 +20,6 @@ import { CreateVaultProvider } from '../vault/state/createVault'
 import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultIdProvider'
 import { UpdateVaultProvider } from '../vault/state/updateVault'
 import { RemoteStateDependant } from './RemoteStateDependant'
-import { InitializedWalletOnly } from '@clients/desktop/src/components/wallet/InitializedWalletOnly'
 const defaultMpcLib: MpcLib = 'DKLS'
 
 const openUrl = (url: string) => window.open(url, '_blank')

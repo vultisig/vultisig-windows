@@ -3,8 +3,13 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultNativeCoin,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -32,7 +37,6 @@ import { Link } from 'react-router-dom'
 
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt'
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress'
-import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation'
 import {
@@ -46,10 +50,6 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
 import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
-import {
-  useCurrentVaultAddress,
-  useCurrentVaultNativeCoin,
-} from '../state/currentVaultCoins'
 import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
 import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'

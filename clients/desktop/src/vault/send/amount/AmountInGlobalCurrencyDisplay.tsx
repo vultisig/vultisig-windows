@@ -1,3 +1,4 @@
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -10,7 +11,6 @@ import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 

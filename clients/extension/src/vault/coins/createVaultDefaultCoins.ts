@@ -1,12 +1,10 @@
 import { Chain } from '@core/chain/Chain'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { deriveAddress } from '@clients/desktop/src/chain/utils/deriveAddress'
-
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { getVaultCoins, VaultCoinsRecord } from '../state/coins'
 import { getVaultPublicKey } from './getVaultPublicKey'
 
 type CreateVaultDefaultCoinsInput = {

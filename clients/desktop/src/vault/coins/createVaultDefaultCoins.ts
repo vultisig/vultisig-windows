@@ -1,10 +1,10 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { SaveCoins } from '../../../wailsjs/go/storage/Store'
-import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 

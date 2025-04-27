@@ -1,5 +1,5 @@
-import { useCurrentVaultAddreses } from '@clients/desktop/src/vault/state/currentVaultCoins'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
@@ -9,10 +9,7 @@ import { useCallback, useMemo } from 'react'
 import { findCoins, FindCoinsInput } from '../findCoins'
 import { coinFinderChains } from '../findCoins/coinFinderChains'
 
-export const getCoinFinderQueryKey = (input: FindCoinsInput) => [
-  'coinFinder',
-  input,
-]
+const getCoinFinderQueryKey = (input: FindCoinsInput) => ['coinFinder', input]
 
 export const useCoinFinderQuery = () => {
   const addresses = useCurrentVaultAddreses()

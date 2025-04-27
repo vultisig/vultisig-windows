@@ -1,8 +1,8 @@
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
-import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { getSwapQuoteQueryKey } from '../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'

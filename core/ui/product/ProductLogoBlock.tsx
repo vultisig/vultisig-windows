@@ -2,7 +2,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo'
+import { ProductEnhancedLogo } from './ProductEnhancedLogo'
 
 export const ProductLogoBlock = () => {
   const { t } = useTranslation()

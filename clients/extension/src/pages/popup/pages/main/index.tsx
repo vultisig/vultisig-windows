@@ -1,8 +1,11 @@
-import { useCurrentVaultCoins } from '@clients/desktop/src/vault/state/currentVaultCoins'
+import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { getChainEntityIconSrc } from '@core/chain/utils/getChainEntityIconSrc'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { Settings } from '@lib/ui/icons/Settings'
 import { World } from '@lib/ui/icons/World'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -12,7 +15,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { log } from 'console'
 import { FC } from 'react'
 import styled, { useTheme } from 'styled-components'
 
@@ -45,7 +47,7 @@ const Component: FC = () => {
   const vault = useCurrentVault()
   const { colors } = useTheme()
   const navigate = useAppNavigate()
-
+  const coins = useCurrentVaultCoins()
 
   return vault ? (
     <VStack alignItems="center" justifyContent="center" fullHeight>
@@ -87,10 +89,9 @@ const Component: FC = () => {
           <Text weight={500} size={12} color="light">
             Portfolio Overview
           </Text>
-          {/* TODO: Fetch addresess */}
-          {/*  
+
           <List>
-            {vault.chains.map(({ address, chain }) => (
+            {coins.map(({ address, chain }) => (
               <ListItem
                 description={
                   address ? (
@@ -120,7 +121,6 @@ const Component: FC = () => {
               />
             ))}
           </List>
-          */}
         </VStack>
       </PageContent>
     </VStack>

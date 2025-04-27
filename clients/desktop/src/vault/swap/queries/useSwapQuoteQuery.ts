@@ -1,11 +1,11 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { swapConfig } from '@core/chain/swap/config'
 import { findSwapQuote } from '@core/chain/swap/quote/findSwapQuote'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'

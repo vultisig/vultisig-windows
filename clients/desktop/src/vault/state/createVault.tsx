@@ -7,7 +7,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
 import { SaveVault } from '../../../wailsjs/go/storage/Store'
-import { useDefaultChains } from '../../chain/state/defaultChains'
+import { useDefaultChains } from '../../chain/state/useDefaultChains'
 import { createVaultDefaultCoins } from '../coins/createVaultDefaultCoins'
 import { toStorageVault } from '../utils/storageVault'
 

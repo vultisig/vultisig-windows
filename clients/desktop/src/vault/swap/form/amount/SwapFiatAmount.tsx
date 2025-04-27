@@ -1,4 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery'
 import { Skeleton } from '../../../../components/skeleton'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 
 const Container = styled.div`
   pointer-events: none;

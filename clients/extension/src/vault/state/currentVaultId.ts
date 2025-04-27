@@ -1,15 +1,15 @@
+import { usePersistentStateMutation } from '@clients/extension/src/state/persistent/usePersistentStateMutation'
+import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
+import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { useEffect, useState } from 'react'
 
-import { usePersistentStateMutation } from '../../state/persistent/usePersistentStateMutation'
-import { usePersistentStateQuery } from '../../state/persistent/usePersistentStateQuery'
-import { useVaults } from '@core/ui/vault/state/vaults'
-
-const key = 'currentVaultId'
-
 export const useCurrentVaultIdMutation = () => {
-  return usePersistentStateMutation<string | null>(key)
+  return usePersistentStateMutation<string | null>(
+    PersistentStateKey.CurrentVaultId
+  )
 }
 
 export const useCurrentVaultId = (): [
@@ -20,10 +20,12 @@ export const useCurrentVaultId = (): [
 ] => {
   const vaults = useVaults()
   const { data: storedVaultId = null } = usePersistentStateQuery<string | null>(
-    key,
+    PersistentStateKey.CurrentVaultId,
     null
   )
-  const { mutate } = usePersistentStateMutation<string | null>(key)
+  const { mutate } = usePersistentStateMutation<string | null>(
+    PersistentStateKey.CurrentVaultId
+  )
 
   const [currentVaultId, setCurrentVaultId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)

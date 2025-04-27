@@ -1,6 +1,5 @@
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-
-import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock'
+import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 
 export const InitializedWalletOnly: React.FC<React.PropsWithChildren> = ({
   children,

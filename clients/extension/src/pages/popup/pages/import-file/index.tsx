@@ -1,6 +1,7 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { errorKey } from '@clients/extension/src/utils/constants'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
@@ -28,12 +29,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
-import { calculateWindowPosition } from '../../../../utils/functions'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useDefaultChains } from '@clients/desktop/src/chain/state/defaultChains'
-import { createVaultDefaultCoins } from '../../../../vault/coins/createVaultDefaultCoins'
-import { useVaultCoinsMutation } from '../../../../vault/state/coins'
-
 interface InitialState {
   error?: string
   file?: File
@@ -45,18 +40,22 @@ interface InitialState {
   decodedVault?: Vault
 }
 
+const initialState: InitialState = {
+  isWindows: true,
+  status: 'default',
+}
+
+const errorMessages = {
+  [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
+  [errorKey.INVALID_FILE]: 'Invalid file',
+  [errorKey.INVALID_QRCODE]: 'Invalid QR code',
+  [errorKey.INVALID_VAULT]: 'Invalid vault data',
+}
+
 const Component = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {
-    isWindows: true, // Default to Windows flow, will be updated in useEffect if needed
-    status: 'default',
-  }
-  const createVault = useCreateVault()
-  const setCurrentVaultId = useSetCurrentVaultId()
-  const { mutateAsync: updateVaultCoins } = useVaultCoinsMutation()
-  const walletCore = useAssertWalletCore()
-  const [defaultChains] = useDefaultChains()
   const [state, setState] = useState(initialState)
+  const navigate = useAppNavigate()
   const {
     isWindows,
     loading,
@@ -66,23 +65,12 @@ const Component = () => {
     isEncrypted,
   } = state
 
-  const navigate = useAppNavigate()
-  const isPopup = new URLSearchParams(window.location.search).get('isPopup')
-  const isPopupRef = useRef(isPopup)
-
-  const errorMessages = {
-    [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
-    [errorKey.INVALID_FILE]: 'Invalid file',
-    [errorKey.INVALID_QRCODE]: 'Invalid QR code',
-    [errorKey.INVALID_VAULT]: 'Invalid vault data',
-  }
-
   const handleProcessVaultContainer = (data: FileBasedVaultBackupResult) => {
     if ('vaultContainer' in data.result) {
       const container = data.result.vaultContainer
       const { vault: vaultAsBase64String, isEncrypted } = container
-      setState(prevState => ({
-        ...prevState,
+      setState(prev => ({
+        ...prev,
         vaultContainer: container,
         isEncrypted,
       }))
@@ -106,62 +94,51 @@ const Component = () => {
     onSuccess: handleProcessVaultContainer,
   })
 
-  const finalizeVaultImport = (): void => {
-    if (decodedVault) {
-      createVault(decodedVault).then(async () => {
-        setCurrentVaultId(getVaultId(decodedVault))
-        // createVaultDefaultCoins({
-        //   vault: decodedVault,
-        //   defaultChains,
-        //   walletCore,
-        //   currentVaultId: getVaultId(decodedVault),
-        //   updateVaultCoins,
-        // })
-        console.log("navigate('main')");
-        
-        navigateToMain()
-      })
-    }
-  }
+  const createVault = useCreateVault()
+  const setCurrentVaultId = useSetCurrentVaultId()
 
-  const onVaultDecrypted = (decodedVault: Vault, finalize?: boolean) => {
-    setState(prevState => ({
-      ...prevState,
-      status: 'success',
-      decodedVault,
-    }))
-    if (finalize) finalizeVaultImport()
-  }
+  const isPopup = new URLSearchParams(window.location.search).get('isPopup')
+  const isPopupRef = useRef(isPopup)
 
   const handleError = (error: string) => {
     const message =
       errorMessages[error as keyof typeof errorMessages] ||
       'Something went wrong'
     console.error(message)
-    setState(prev => ({
-      ...prev,
-      status: 'error',
-      error: message,
-    }))
+    setState(prev => ({ ...prev, status: 'error', error: message }))
   }
 
-  const onFileSelected = (file: File) => {
-    setState(prevState => ({ ...prevState, file }))
+  const onVaultDecrypted = (decodedVault: Vault, finalize?: boolean) => {
+    setState(prev => ({
+      ...prev,
+      status: 'success',
+      decodedVault,
+    }))
+    if (finalize) {
+      finalizeVaultImport()
+    }
+  }
+
+  const finalizeVaultImport = async () => {
+    if (!decodedVault) return
+    await createVault(decodedVault)
+    setCurrentVaultId(getVaultId(decodedVault))
+    setState(prev => ({ ...prev, loading: false }))
+    navigate('main')
+  }
+
+  const handleFileSelected = (file: File) => {
+    setState(prev => ({ ...prev, file }))
     mutate(shouldBePresent(file))
   }
 
-  const navigateToMain = useCallback(() => {
-    navigate('main')
-  }, [navigate])
-
-  useEffect(() => {
+  const openPopupIfNeeded = useCallback(() => {
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
     if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
-      setState(prevState => ({ ...prevState, isWindows: false }))
+      setState(prev => ({ ...prev, isWindows: false }))
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
-        let createdWindowId: number
         const { height, left, top, width } =
           calculateWindowPosition(currentWindow)
 
@@ -174,71 +151,80 @@ const Component = () => {
             top,
             width,
           },
-          window => {
-            if (window?.id) createdWindowId = window.id
+          popupWindow => {
+            if (popupWindow?.id) {
+              chrome.windows.onRemoved.addListener(closedWindowId => {
+                if (closedWindowId === popupWindow.id) {
+                  if (isPopupRef.current) {
+                    window.close()
+                  } else {
+                    navigate('main')
+                  }
+                }
+              })
+            }
           }
         )
-
-        chrome.windows.onRemoved.addListener(closedWindowId => {
-          if (closedWindowId === createdWindowId) {
-            if (isPopupRef.current) window.close()
-            else navigateToMain()
-          }
-        })
       })
     }
-  }, [navigateToMain])
+  }, [navigate])
 
-  const isDisabled = !file
-  return isWindows ? (
-    !isEncrypted ? (
-      <>
-        <StyledPageContent fullHeight>
-          <FlowPageHeader title={t('import_vault')} />
-          <PageContent
-            as="form"
-            {...getFormProps({
-              onSubmit: () => {
-                if (file && !error) {
-                  finalizeVaultImport()
-                }
-              },
-              isDisabled,
-            })}
-          >
-            <VStack gap={20} flexGrow>
-              {file ? (
-                <UploadedBackupFile value={file} />
-              ) : (
-                <BackupFileDropzone onFinish={onFileSelected} />
-              )}
-              {error && (
-                <Text centerHorizontally color="danger">
-                  {extractErrorMsg(error)}
-                </Text>
-              )}
-            </VStack>
-            <Button isLoading={loading} isDisabled={isDisabled} type="submit">
-              {t('continue')}
-            </Button>
-          </PageContent>
-        </StyledPageContent>
-      </>
-    ) : (
-      <>
-        <DecryptVaultContainerStep
-          value={vaultContainer!.vault}
-          onFinish={vault => onVaultDecrypted(vault, true)}
-        />
-      </>
-    )
-  ) : (
+  useEffect(() => {
+    openPopupIfNeeded()
+  }, [openPopupIfNeeded])
+
+  const renderForm = () => (
+    <StyledPageContent fullHeight>
+      <FlowPageHeader title={t('import_vault')} />
+      <PageContent
+        as="form"
+        {...getFormProps({
+          onSubmit: () => {
+            if (file && !error) {
+              setState(prev => ({ ...prev, loading: true }))
+              finalizeVaultImport()
+            }
+          },
+          isDisabled: !file,
+        })}
+      >
+        <VStack gap={20} flexGrow>
+          {file ? (
+            <UploadedBackupFile value={file} />
+          ) : (
+            <BackupFileDropzone onFinish={handleFileSelected} />
+          )}
+          {error && (
+            <Text centerHorizontally color="danger">
+              {extractErrorMsg(error)}
+            </Text>
+          )}
+        </VStack>
+        <Button isLoading={loading} isDisabled={!file} type="submit">
+          {t('continue')}
+        </Button>
+      </PageContent>
+    </StyledPageContent>
+  )
+
+  const renderDecryptStep = () => (
+    <DecryptVaultContainerStep
+      value={vaultContainer!.vault}
+      onFinish={vault => onVaultDecrypted(vault, true)}
+    />
+  )
+
+  const renderPopupNotice = () => (
     <div className="layout import-page">
       <div className="content">
         <div className="hint">{t('continue_in_new_window')}</div>
       </div>
     </div>
   )
+
+  if (!isWindows) return renderPopupNotice()
+  if (isEncrypted) return renderDecryptStep()
+  return renderForm()
 }
 
 export default Component

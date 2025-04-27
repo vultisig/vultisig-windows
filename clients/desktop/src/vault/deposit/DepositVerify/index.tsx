@@ -4,6 +4,7 @@ import {
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
 } from '@core/ui/chain/tx/TxOverviewRow'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -14,7 +15,6 @@ import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { DepositConfirmButton } from '../DepositConfirmButton'
 import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'

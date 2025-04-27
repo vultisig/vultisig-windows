@@ -1,3 +1,4 @@
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -8,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
 import { getCoinLogoSrc } from '../../../../coin/logo/getCoinLogoSrc'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
