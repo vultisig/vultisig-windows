@@ -44,7 +44,7 @@ export const MainPage = () => {
   const navigate = useAppNavigate()
 
   return vault ? (
-    <VStack alignItems="center" justifyContent="center" fullHeight>
+    <VStack fullHeight>
       <PageHeader
         primaryControls={
           <ConnectedApp ghost>
