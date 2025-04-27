@@ -4,7 +4,6 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -27,7 +26,6 @@ export const ManageChainsPage = () => {
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { search } = state
-  const vault = useCurrentVault()
   const navigate = useAppNavigate()
   const coins = Object.values(chainFeeCoin)
 
@@ -49,18 +47,18 @@ export const ManageChainsPage = () => {
     console.log(coin)
   }
 
-  return vault ? (
+  return (
     <VStack alignItems="center" justifyContent="center" fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
           <Button onClick={() => navigate('main')} ghost>
-            <ChevronLeftIcon height={20} width={20} />
+            <ChevronLeftIcon fontSize={20} />
           </Button>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
-            Manage Chains
+            {t('manage_chains')}
           </Text>
         }
       />
@@ -100,7 +98,7 @@ export const ManageChainsPage = () => {
         </VStack>
         <VStack gap={12}>
           <Text weight={500} size={12} color="light">
-            Available
+            {t('available')}
           </Text>
           <List>
             {coins.filter(handleFilter).map(coin => (
@@ -127,7 +125,5 @@ export const ManageChainsPage = () => {
         </VStack>
       </PageContent>
     </VStack>
-  ) : (
-    <></>
   )
 }
