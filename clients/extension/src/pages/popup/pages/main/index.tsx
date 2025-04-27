@@ -4,12 +4,14 @@ import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNa
 import { VaultSigners } from '@core/ui/vault/signers'
 //import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Settings } from '@lib/ui/icons/Settings'
-import { World } from '@lib/ui/icons/World'
+import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
+import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { WorldIcon } from '@lib/ui/icons/WorldIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -27,30 +29,26 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   width: 16px;
 `
 
-const ConnectedApp = styled.div`
-  align-items: center;
+const ConnectedApp = styled(Button)`
   background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
-  cursor: pointer;
-  display: flex;
   height: 36px;
-  justify-content: center;
   position: relative;
   width: 36px;
 `
 
 export const MainPage = () => {
-  const vault = useCurrentVault()
   const { colors } = useTheme()
+  const vault = useCurrentVault()
   const navigate = useAppNavigate()
 
   return vault ? (
     <VStack alignItems="center" justifyContent="center" fullHeight>
       <PageHeader
         primaryControls={
-          <ConnectedApp>
-            <World
+          <ConnectedApp ghost>
+            <WorldIcon
               height={20}
               stroke={colors.textExtraLight.toHex()}
               width={20}
@@ -64,7 +62,7 @@ export const MainPage = () => {
               Open Desktop
             </Button>
             <Button ghost>
-              <Settings
+              <SettingsIcon
                 height={24}
                 onClick={() => navigate('settings')}
                 width={24}
@@ -74,7 +72,7 @@ export const MainPage = () => {
         }
         hasBorder
       />
-      <PageContent gap={24} fullWidth scrollable>
+      <PageContent gap={24} flexGrow fullWidth scrollable>
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
@@ -123,6 +121,17 @@ export const MainPage = () => {
           */}
         </VStack>
       </PageContent>
+      <PageFooter fullWidth>
+        <Button
+          onClick={() => navigate('manageChains')}
+          shape="round"
+          size="large"
+          type="primary"
+          block
+        >
+          <LinkTwoIcon height={16} strokeWidth={2} width={16} /> Manage Chains
+        </Button>
+      </PageFooter>
     </VStack>
   ) : (
     <></>

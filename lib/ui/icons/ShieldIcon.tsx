@@ -1,19 +1,28 @@
-const ShieldIcon = () => (
+import { FC, SVGProps } from 'react'
+
+export const ShieldIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = '1em',
+  stroke = '#f0f4fc',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
+}) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="0.96em"
-    fill="none"
-    viewBox="0 0 25 24"
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
   >
-    <path
-      stroke="currentColor"
-      strokeLinecap="square"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M20.5 6.22a1 1 0 0 0-.684-.948l-7.25-2.416a1 1 0 0 0-.632 0l-7.25 2.416A1 1 0 0 0 4 6.221v5.691c0 4.973 4.25 7.338 8.25 9.496 4-2.158 8.25-4.523 8.25-9.496V6.221Z"
-    />
+    <path d="M20 13C20 18 16.5 20.5 12.34 21.95C12.1222 22.0238 11.8855 22.0202 11.67 21.94C7.5 20.5 4 18 4 13V5.99996C4 5.73474 4.10536 5.48039 4.29289 5.29285C4.48043 5.10532 4.73478 4.99996 5 4.99996C7 4.99996 9.5 3.79996 11.24 2.27996C11.4519 2.09896 11.7214 1.99951 12 1.99951C12.2786 1.99951 12.5481 2.09896 12.76 2.27996C14.51 3.80996 17 4.99996 19 4.99996C19.2652 4.99996 19.5196 5.10532 19.7071 5.29285C19.8946 5.48039 20 5.73474 20 5.99996V13Z" />
   </svg>
 )
-
-export default ShieldIcon

@@ -15,6 +15,7 @@ export const appPaths = {
   settings: '/settings',
   vaults: '/vaults',
   vaultSettings: '/settings/vault',
+  manageChains: '/manage-chains',
 } as const
 
 type AppPaths = typeof appPaths

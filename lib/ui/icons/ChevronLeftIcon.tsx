@@ -1,21 +1,28 @@
-export const ChevronLeftIcon = ({
-  width = '1em',
+import { FC, SVGProps } from 'react'
+
+export const ChevronLeftIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
   height = '1em',
-}: {
-  width?: string | number
-  height?: string | number
+  stroke = '#f0f4fc',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
 }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
   >
-    <polyline points="15 18 9 12 15 6"></polyline>
+    <path d="M15 18L9 12L15 6" />
   </svg>
 )

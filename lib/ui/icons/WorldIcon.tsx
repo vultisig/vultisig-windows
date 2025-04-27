@@ -1,6 +1,6 @@
 import { FC, SVGProps } from 'react'
 
-export const World: FC<SVGProps<SVGSVGElement>> = ({
+export const WorldIcon: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = '1em',
   stroke = '#f0f4fc',

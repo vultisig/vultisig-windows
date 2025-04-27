@@ -11,27 +11,32 @@ const baseStyles = css`
   align-items: center;
   background-color: transparent;
   border: none;
+  cursor: pointer;
   display: flex;
+  font-size: 12px;
+  font-weight: 500;
   gap: 8px;
   justify-content: center;
   transition: all 0.2s;
-`
-
-const blockStyles = css`
-  width: 100%;
 `
 
 const disabledStyles: Record<Type, RuleSet> = {
   default: css`
     border: solid 1px ${getColor('buttonTextDisabled')};
     color: ${getColor('buttonTextDisabled')};
+    cursor: default;
+    padding: 0 16px;
   `,
   link: css`
     color: ${getColor('buttonTextDisabled')};
+    cursor: default;
+    padding: 0 4px;
   `,
   primary: css`
     background-color: ${getColor('buttonBackgroundDisabled')};
     color: ${getColor('buttonTextDisabled')};
+    cursor: default;
+    padding: 0 16px;
   `,
 }
 
@@ -49,18 +54,13 @@ const shapeStyles: Record<Shape, RuleSet> = {
 
 const sizeStyles: Record<Size, RuleSet> = {
   default: css`
-    font-size: 12px;
-    font-weight: 500;
     height: 36px;
   `,
   large: css`
     font-size: 14px;
-    font-weight: 600;
     height: 46px;
   `,
   small: css`
-    font-size: 12px;
-    font-weight: 500;
     height: 26px;
   `,
 }
@@ -69,7 +69,7 @@ const typeStyles: Record<Type, RuleSet> = {
   default: css`
     border: solid 1px ${getColor('buttonPrimaryWeb')};
     color: ${getColor('buttonPrimaryWeb')};
-    cursor: pointer;
+    padding: 0 16px;
 
     &:hover {
       border-color: ${getColor('buttonPrimaryWebHover')};
@@ -78,7 +78,7 @@ const typeStyles: Record<Type, RuleSet> = {
   `,
   link: css`
     color: ${getColor('textPrimary')};
-    cursor: pointer;
+    padding: 0 4px;
 
     &:hover {
       background-color: ${getColor('backgroundTertiary')};
@@ -88,7 +88,7 @@ const typeStyles: Record<Type, RuleSet> = {
   primary: css`
     background-color: ${getColor('buttonPrimaryWeb')};
     color: ${getColor('textPrimary')};
-    cursor: pointer;
+    padding: 0 16px;
 
     &:hover {
       background-color: ${getColor('buttonPrimaryWebHover')};
@@ -105,14 +105,8 @@ const StyledButton = styled.button<{
   type: Type
 }>`
   ${({ block, disabled, ghost, shape, size, type }) => {
-    const blockStyle = block ? blockStyles : ''
-
     if (ghost) {
-      return css`
-        ${baseStyles}
-        ${blockStyle}
-        padding: 0;
-      `
+      return baseStyles
     } else {
       const disabledStyle = disabledStyles[type]
       const shapeStyle = shapeStyles[shape]
@@ -121,10 +115,14 @@ const StyledButton = styled.button<{
 
       return css`
         ${baseStyles}
-        ${blockStyle}
         ${shapeStyle}
         ${sizeStyle}
         ${disabled ? disabledStyle : typeStyle}
+        ${block
+          ? css`
+              width: 100%;
+            `
+          : ''}
       `
     }
   }}
