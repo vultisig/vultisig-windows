@@ -1,199 +1,100 @@
-const VultisigLogoIcon = ({
-  width = 24,
-  height = 24,
-}: {
-  width?: number | string
-  height?: number | string
+import { FC, SVGProps } from 'react'
+
+export const VultisigLogoIcon: FC<SVGProps<SVGSVGElement>> = ({
+  height = '1em',
+  width = '1em',
+  ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
-    fill="none"
-    viewBox="0 0 20 18"
-  >
+  <svg viewBox="0 0 24 24" {...{ ...props, height, width }}>
     <path
-      fill="url(#a)"
-      d="M9.577 10.504 2.1 14.832 1 13.733l6.556-4.405 2.021 1.176Z"
+      d="M2.06417 19.7173L0.5 18.1532L0.61805 18.0745L9.0193 12.4277L11.8328 14.0608L11.6558 14.1591L2.06417 19.7173Z"
+      fill="url(#linear_paint_0)"
     />
     <path
-      fill="url(#b)"
-      d="M9.746 10.796 2.258 15.11l.402 1.5 7.093-3.475-.007-2.338Z"
+      d="M2.72341 21.9997L2.15283 19.8649L2.23153 19.8157L11.9313 14.228V17.4842L11.8723 17.5138L2.72341 21.9997Z"
+      fill="url(#linear_paint_1)"
     />
     <path
-      fill="url(#c)"
-      d="m10.043 10.796 7.489 4.313-.403 1.5-7.093-3.475.008-2.338Z"
+      d="M21.2768 21.9997L21.149 21.9406L12.0591 17.4842V14.228L21.8474 19.8551L21.2768 21.9898V21.9997Z"
+      fill="url(#linear_paint_2)"
     />
     <path
-      fill="url(#d)"
-      d="m10.213 10.504 7.478 4.328 1.099-1.099-6.556-4.405-2.021 1.176Z"
+      d="M21.9357 19.7173L21.857 19.6682L12.167 14.0608L14.9805 12.4277L23.4998 18.1532L21.9357 19.7173Z"
+      fill="url(#linear_paint_3)"
     />
     <path
-      fill="url(#e)"
-      d="m10.043 10.184-.009-8.641 1.5-.402.538 7.88-2.028 1.163Z"
+      d="M12.0688 13.8542V2.57058L14.1938 2L14.8922 12.2409L12.0688 13.8542Z"
+      fill="url(#linear_paint_4)"
     />
     <path
-      fill="url(#f)"
-      d="m9.705 10.184.01-8.641-1.5-.402-.538 7.88 2.028 1.163Z"
+      d="M11.8722 13.8542L9.04883 12.2409V12.1622L9.74729 2L11.882 2.57058V13.8542H11.8722Z"
+      fill="url(#linear_paint_5)"
     />
-    <path
-      stroke="url(#g)"
-      d="M9.577 10.504 2.1 14.832 1 13.733l6.556-4.405 2.021 1.176Z"
-    />
-    <path
-      stroke="url(#h)"
-      d="M9.746 10.796 2.258 15.11l.402 1.5 7.093-3.475-.007-2.338Z"
-    />
-    <path
-      stroke="url(#i)"
-      d="m10.043 10.796 7.489 4.313-.403 1.5-7.093-3.475.008-2.338Z"
-    />
-    <path
-      stroke="url(#j)"
-      d="m10.213 10.504 7.478 4.328 1.099-1.099-6.556-4.405-2.021 1.176Z"
-    />
-    <path
-      stroke="url(#k)"
-      d="m10.043 10.184-.009-8.641 1.5-.402.538 7.88-2.028 1.163Z"
-    />
-    <path
-      stroke="url(#l)"
-      d="m9.705 10.184.01-8.641-1.5-.402-.538 7.88 2.028 1.163Z"
-    />
-    <defs>
-      <linearGradient
-        id="a"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="b"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="c"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="d"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="e"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="f"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="g"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="h"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="i"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="j"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="k"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-      <linearGradient
-        id="l"
-        x1={9.895}
-        x2={9.895}
-        y1={1.141}
-        y2={16.609}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#33E6BF" />
-        <stop offset={1} stopColor="#0439C7" />
-      </linearGradient>
-    </defs>
+    <linearGradient
+      id="linear_paint_0"
+      x1="6.16641"
+      y1="2.15736"
+      x2="6.16641"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
+    <linearGradient
+      id="linear_paint_1"
+      x1="7.04208"
+      y1="2.15738"
+      x2="7.04208"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
+    <linearGradient
+      id="linear_paint_2"
+      x1="16.9582"
+      y1="2.14755"
+      x2="16.9582"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
+    <linearGradient
+      id="linear_paint_3"
+      x1="17.8334"
+      y1="2.15736"
+      x2="17.8334"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
+    <linearGradient
+      id="linear_paint_4"
+      x1="13.4756"
+      y1="2.1574"
+      x2="13.4756"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
+    <linearGradient
+      id="linear_paint_5"
+      x1="10.4753"
+      y1="2.1574"
+      x2="10.4753"
+      y2="21.8226"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stopColor="#33E6BF" />
+      <stop offset="1" stopColor="#0439C7" />
+    </linearGradient>
   </svg>
 )
-export default VultisigLogoIcon

@@ -11,6 +11,7 @@ const baseStyles: RuleSet = css`
   align-items: center;
   background-color: transparent;
   border: none;
+  color: ${getColor('textExtraLight')};
   cursor: pointer;
   display: flex;
   font-size: 12px;
