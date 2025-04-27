@@ -31,7 +31,7 @@ export const RenameVaultPage = () => {
   }
 
   const handleSubmit = (): void => {
-    if (!updateVault.isPending) {
+    if (!updateVault.isPending && name?.trim()) {
       updateVault
         .mutateAsync({
           vaultId: getVaultId(currentVault),

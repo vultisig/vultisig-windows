@@ -39,7 +39,7 @@ const Component = () => {
         }
         title={
           <Text color="contrast" size={18} weight={500}>
-            {t('rename_vault')}
+            {t('remove_vault')}
           </Text>
         }
       />
