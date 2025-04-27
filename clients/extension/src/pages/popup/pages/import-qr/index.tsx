@@ -1,10 +1,13 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useAppPathParams } from '@clients/extension/src/navigation/hooks/useAppPathParams'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
+import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
+import { getVaults } from '@clients/extension/src/vault/state/vaults'
 import { useCreateVault } from '@core/ui/vault/state/createVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -20,10 +23,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodes, ReaderOptions } from 'zxing-wasm'
-
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
-import { useCurrentVaultId } from '../../../../vault/state/currentVaultId'
-import { getVaults } from '../../../../vault/state/vaults'
 
 interface InitialState {
   file?: File

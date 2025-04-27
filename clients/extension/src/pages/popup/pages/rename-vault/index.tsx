@@ -1,8 +1,8 @@
 import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -15,44 +15,35 @@ import { useTranslation } from 'react-i18next'
 
 interface InitialState {
   name?: string
-  submitting?: boolean
 }
 
 export const RenameVaultPage = () => {
   const { t } = useTranslation()
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
-  const { name, submitting } = state
-  const [vaultId] = useCurrentVaultId()
+  const { name } = state
   const navigate = useAppNavigate()
-  const vaultData = useCurrentVault()
-  const vaultMutation = useUpdateVaultMutation()
+  const currentVault = useCurrentVault()
+  const updateVault = useUpdateVaultMutation()
 
   const handleChange = (name?: string) => {
     setState(prevState => ({ ...prevState, name }))
   }
 
   const handleSubmit = (): void => {
-    if (!submitting && vaultId) {
-      setState(prevState => ({ ...prevState, submitting: true }))
-
-      vaultMutation
+    if (!updateVault.isPending) {
+      updateVault
         .mutateAsync({
-          vaultId,
-          fields: {
-            name: name,
-          },
+          vaultId: getVaultId(currentVault),
+          fields: { name: name },
         })
         .then(() => navigate('settings'))
-        .catch(() =>
-          setState(prevState => ({ ...prevState, submitting: false }))
-        )
     }
   }
 
   useEffect(() => {
-    setState(prevState => ({ ...prevState, name: vaultData.name }))
-  }, [vaultData.name])
+    setState(prevState => ({ ...prevState, name: currentVault.name }))
+  }, [currentVault.name])
 
   return (
     <VStack fullHeight>
@@ -75,7 +66,7 @@ export const RenameVaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          loading={submitting}
+          loading={updateVault.isPending}
           onClick={handleSubmit}
           shape="round"
           size="large"
