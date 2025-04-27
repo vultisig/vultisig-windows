@@ -46,7 +46,7 @@ export const MainPage = () => {
   const coins = useCurrentVaultCoins()
 
   return vault ? (
-    <VStack alignItems="center" justifyContent="center" fullHeight>
+    <VStack fullHeight>
       <PageHeader
         primaryControls={
           <ConnectedApp ghost>

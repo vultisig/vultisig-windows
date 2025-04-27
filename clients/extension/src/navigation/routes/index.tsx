@@ -29,7 +29,7 @@ const routes = [
     element: <NewVaultPage />,
   },
   {
-    path: appPaths.importQR,
+    path: corePaths.uploadQr,
     element: <ImportQRPage />,
   },
   {

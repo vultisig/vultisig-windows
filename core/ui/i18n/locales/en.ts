@@ -1,6 +1,8 @@
 export const en = {
   available: 'Available',
+  general: 'General',
   manage_chains: 'Manage Chains',
+  vault_specific: 'Vault Specific',
   secure_crypto_vault: 'SECURE CRYPTO VAULT',
   add_address: 'Add Address',
   vultisig: 'Vultisig',

@@ -1,106 +1,124 @@
 import packageJson from '@clients/extension/package.json'
+import { Button } from '@clients/extension/src/components/button'
 import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
-import {
-  ArrowLeft,
-  ArrowRight,
-  CircleDollar,
-  CircleHelp,
-  SettingsOne,
-  Translate,
-  Vultisig,
-} from '@clients/extension/src/icons'
-import { appPaths } from '@clients/extension/src/navigation'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName } from '@core/ui/i18n/Language'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
+import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
+import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
+import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 const Component = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-
   const currency = useFiatCurrency()
-
   const languageQuery = useLanguageQuery()
 
   return (
-    <div className="layout settings-page">
-      <div className="header">
-        <span className="heading">{t('settings')}</span>
-        <ArrowLeft
-          className="icon icon-left"
-          onClick={() => navigate('main')}
-        />
-      </div>
-      <div className="content">
-        <div className="list list-arrow list-action list-icon">
-          <Link to={appPaths.vaultSettings} state={true} className="list-item">
-            <SettingsOne className="icon" />
-            <span className="label">{t('vault_settings')}</span>
-            <ArrowRight className="action" />
-          </Link>
-          <MatchQuery
-            value={languageQuery}
-            success={language => (
-              <Link
-                to={appPaths.languageSettings}
-                state={true}
-                className="list-item"
-              >
-                <Translate className="icon" />
-                <span className="label">{t('language')}</span>
-                <span className="extra">{languageName[language]}</span>
-                <ArrowRight className="action" />
-              </Link>
-            )}
-          />
-          <Link
-            to={appPaths.currencySettings}
-            state={true}
-            className="list-item"
-          >
-            <CircleDollar className="icon" />
-            <span className="label">{t('currency')}</span>
-            <span className="extra">{currency}</span>
-            <ArrowRight className="action" />
-          </Link>
-          <a
-            href="https://vultisig.com/faq"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="list-item"
-          >
-            <CircleHelp className="icon" />
-            <span className="label">{t('faq')}</span>
-            <ArrowRight className="action" />
-          </a>
-        </div>
-        <span className="divider">{t('other')}</span>
-        <div className="list list-action list-icon">
-          <a
-            href="https://vultisig.com/vult"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="list-item"
-          >
-            <Vultisig className="icon" />
-            <span className="label">{t('vult_token')}</span>
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <a
-          target="_blank"
-          href="https://chromewebstore.google.com/detail/vulticonnect/ggafhcdaplkhmmnlbfjpnnkepdfjaelb"
-          className="version"
-          rel="noreferrer"
+    <VStack fullHeight>
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <Button onClick={() => navigate('settings')} ghost>
+            <ChevronLeftIcon fontSize={20} />
+          </Button>
+        }
+        title={
+          <Text color="contrast" size={18} weight={500}>
+            {t('settings')}
+          </Text>
+        }
+      />
+      <PageContent gap={24} flexGrow fullWidth scrollable>
+        <VStack gap={12}>
+          <Text color="light" size={12} weight={500}>
+            {t('vault_specific')}
+          </Text>
+          <List>
+            <ListItem
+              icon={<SettingsIcon fontSize={20} />}
+              onClick={() => navigate('vaultSettings')}
+              title={t('vault_settings')}
+              hoverable
+              showArrow
+            />
+          </List>
+        </VStack>
+        <VStack gap={12}>
+          <Text color="light" size={12} weight={500}>
+            {t('general')}
+          </Text>
+          <List>
+            <MatchQuery
+              value={languageQuery}
+              success={language => (
+                <ListItem
+                  extra={languageName[language]}
+                  icon={<LanguagesIcon fontSize={20} />}
+                  onClick={() => navigate('languageSettings')}
+                  title={t('language')}
+                  hoverable
+                  showArrow
+                />
+              )}
+            />
+            <ListItem
+              extra={currency.toUpperCase()}
+              icon={<CircleDollarSignIcon fontSize={20} />}
+              onClick={() => navigate('currencySettings')}
+              title={t('currency')}
+              hoverable
+              showArrow
+            />
+            <ListItem
+              icon={<CircleHelpIcon fontSize={20} />}
+              onClick={() => open('https://vultisig.com/faq', '_blank')}
+              title={t('faq')}
+              hoverable
+              showArrow
+            />
+          </List>
+        </VStack>
+        <VStack gap={12}>
+          <Text color="light" size={12} weight={500}>
+            {t('other')}
+          </Text>
+          <List>
+            <ListItem
+              icon={<VultisigLogoIcon fontSize={20} />}
+              onClick={() => open('https://vultisig.com/vult', '_blank')}
+              title={t('vult_token')}
+              hoverable
+            />
+          </List>
+        </VStack>
+      </PageContent>
+      <PageFooter alignItems="center" fullWidth>
+        <Button
+          onClick={() =>
+            open(
+              'https://chromewebstore.google.com/detail/vulticonnect/ggafhcdaplkhmmnlbfjpnnkepdfjaelb',
+              '_blank'
+            )
+          }
+          ghost
         >
           VULTICONNECT V{packageJson.version}
-        </a>
-      </div>
-    </div>
+        </Button>
+      </PageFooter>
+    </VStack>
   )
 }
 
