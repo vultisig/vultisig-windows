@@ -1,5 +1,6 @@
 export const en = {
   available: 'Available',
+  expand_view: 'Expand View',
   general: 'General',
   manage_chains: 'Manage Chains',
   open_desktop: 'Open Desktop',
