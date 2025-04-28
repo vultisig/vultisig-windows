@@ -12,6 +12,7 @@ export const it = {
   start_transaction: 'Avvia transazione',
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
+  ibc_transfer: 'Trasferimento IBC',
   chain: 'Catena',
   price_impact_good: 'Buono',
   price_impact_average: 'Medio',

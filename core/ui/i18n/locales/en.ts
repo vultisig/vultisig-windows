@@ -381,6 +381,7 @@ export const en = {
   join_upgrade: 'Join Upgrade',
   waiting_for_upgrade_start: 'Waiting for upgrade to begin...',
   reshare: 'Reshare',
+  ibc_transfer: 'IBC Transfer',
   reshare_your_vault: 'Reshare your vault',
   reshare_explanation:
     'Reshare can be used to refresh, expand or reduce the amount of devices in a Vault.',
