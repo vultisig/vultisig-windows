@@ -13,6 +13,7 @@ export const de = {
   youre_swapping: 'Du tauschst',
   chain: 'Kette',
   price_impact_good: 'Gut',
+  ibc_transfer: 'IBC-Übertragung',
   swap_overview: 'Tauschübersicht',
   price_impact_average: 'Durchschnittlich',
   price_impact_high: 'Hohe Auswirkung',
