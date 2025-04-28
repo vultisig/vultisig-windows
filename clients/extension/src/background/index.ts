@@ -49,7 +49,6 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
-import { handleSetupInpage } from '../utils/setupInpage'
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -66,7 +65,6 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
     Boolean.prototype,
   ].forEach(Object.freeze)
 }
-handleSetupInpage()
 
 let rpcProvider: JsonRpcProvider
 

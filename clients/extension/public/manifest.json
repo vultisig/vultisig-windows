@@ -7,8 +7,8 @@
     "email": "info@vultisig.com",
     "url": "https://vultisig.com"
   },
-  "version": "0.1.0",
-  "version_name": "version",
+  "version": "0.1.2",
+  "version_name": "0.1.2",
   "action": {
     "default_icon": {
       "16": "icon16.png",
@@ -44,7 +44,7 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "activeTab"],
   "web_accessible_resources": [
     {
       "matches": ["<all_urls>"],
