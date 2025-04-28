@@ -1,10 +1,10 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'

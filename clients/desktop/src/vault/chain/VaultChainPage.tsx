@@ -6,6 +6,10 @@ import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultNativeCoin,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
@@ -43,10 +47,6 @@ import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
-import {
-  useCurrentVaultAddress,
-  useCurrentVaultNativeCoin,
-} from '../state/currentVaultCoins'
 import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
 import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'

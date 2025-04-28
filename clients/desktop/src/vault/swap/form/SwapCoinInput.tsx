@@ -6,6 +6,10 @@ import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import {
+  useCurrentVaultCoin,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -21,10 +25,6 @@ import { ChainOption } from '../../../coin/ui/inputs/ChainOption'
 import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
-import {
-  useCurrentVaultCoin,
-  useCurrentVaultCoins,
-} from '../../state/currentVaultCoins'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)

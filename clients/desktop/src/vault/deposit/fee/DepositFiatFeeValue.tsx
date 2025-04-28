@@ -3,11 +3,11 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
 

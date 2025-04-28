@@ -1,4 +1,5 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { JoinKeysignVaultGuard } from '@core/ui/mpc/keysign/join/JoinKeysignVaultGuard'
 import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
@@ -11,7 +12,6 @@ import { useMemo } from 'react'
 
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
-import { KeysignVaultGuard } from './KeysignVaultGuard'
 
 export const JoinKeysignPage = () => {
   const { keysignMsg } = useCorePathState<'joinKeysign'>()
@@ -25,7 +25,7 @@ export const JoinKeysignPage = () => {
 
   return (
     <IsInitiatingDeviceProvider value={false}>
-      <KeysignVaultGuard>
+      <JoinKeysignVaultGuard>
         <KeysignServerUrlProvider>
           <MpcSessionIdProvider value={sessionId}>
             <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
@@ -49,7 +49,7 @@ export const JoinKeysignPage = () => {
             </CurrentHexEncryptionKeyProvider>
           </MpcSessionIdProvider>
         </KeysignServerUrlProvider>
-      </KeysignVaultGuard>
+      </JoinKeysignVaultGuard>
     </IsInitiatingDeviceProvider>
   )
 }

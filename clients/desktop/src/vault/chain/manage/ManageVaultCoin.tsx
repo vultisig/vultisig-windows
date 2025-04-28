@@ -1,4 +1,5 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckStatus } from '@lib/ui/inputs/checkbox/CheckStatus'
@@ -11,7 +12,6 @@ import styled from 'styled-components'
 
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 
 const Container = styled(Panel)`
   ${interactive};

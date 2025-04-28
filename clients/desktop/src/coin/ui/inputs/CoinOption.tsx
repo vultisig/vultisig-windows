@@ -7,6 +7,7 @@ import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEn
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
@@ -18,7 +19,6 @@ import styled from 'styled-components'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { Skeleton } from '../../../components/skeleton'
-import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
 
 export const CoinOption = ({

@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -11,7 +12,6 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
-import { useCurrentVaultChainCoins } from '../state/currentVaultCoins'
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &

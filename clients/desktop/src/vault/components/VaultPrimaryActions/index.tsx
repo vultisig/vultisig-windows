@@ -1,12 +1,12 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
+import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { ValueProp } from '@lib/ui/props'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { SendPrompt } from '../../send/SendPrompt'
-import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
 import { SwapPrompt } from '../../swap/components/SwapPrompt'
 import { DepositPrompt } from '../DepositPrompts'
 

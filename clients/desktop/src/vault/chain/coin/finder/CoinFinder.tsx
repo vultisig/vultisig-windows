@@ -1,5 +1,5 @@
 import { useSaveCoinsMutation } from '@clients/desktop/src/coin/query/useSaveCoinsMutation'
-import { useCurrentVaultCoins } from '@clients/desktop/src/vault/state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
