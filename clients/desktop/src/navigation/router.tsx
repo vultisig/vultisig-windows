@@ -1,4 +1,5 @@
-import { CorePath } from '@core/ui/navigation'
+import { CorePath, corePaths } from '@core/ui/navigation'
+import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 
@@ -55,7 +56,7 @@ import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolder
 import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
 import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
 import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
-import { AppPath } from '.'
+import { AppPath, appPaths } from '.'
 
 const Root = () => (
   <ErrorBoundary renderFallback={props => <FullSizeErrorFallback {...props} />}>
@@ -235,17 +236,18 @@ const appRoutes: Record<AppPath, ReactNode> = {
   faq: <FaqVaultPage />,
 }
 
-const routes = {
-  ...coreRoutes,
-  ...appRoutes,
-}
-
 export const router = createBrowserRouter([
   {
     element: <Root />,
-    children: Object.entries(routes).map(([path, element]) => ({
-      path,
-      element,
-    })),
+    children: [
+      ...toEntries(coreRoutes).map(({ key, value }) => ({
+        path: corePaths[key],
+        element: value,
+      })),
+      ...toEntries(appRoutes).map(({ key, value }) => ({
+        path: appPaths[key],
+        element: value,
+      })),
+    ],
   },
 ])

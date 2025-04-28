@@ -20,7 +20,8 @@ import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pag
 import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
 import { ActiveVaultGuard } from '@clients/extension/src/vault/components/ActiveVaultGuard'
-import { CorePath } from '@core/ui/navigation'
+import { CorePath, corePaths } from '@core/ui/navigation'
+import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
 
@@ -95,16 +96,17 @@ const appRoutes: Record<AppPath, ReactNode> = {
   landing: <NewVaultPage />,
 }
 
-const routes = {
-  ...coreRoutes,
-  ...appRoutes,
-}
-
 export const router = createHashRouter(
-  Object.entries(routes).map(([path, element]) => ({
-    path,
-    element,
-  })),
+  [
+    ...toEntries(coreRoutes).map(({ key, value }) => ({
+      path: corePaths[key],
+      element: value,
+    })),
+    ...toEntries(appRoutes).map(({ key, value }) => ({
+      path: appPaths[key],
+      element: value,
+    })),
+  ],
   {
     basename: appPaths.root,
   }

@@ -8,7 +8,7 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 
 import { VaultSecurityType } from '../vault/VaultSecurityType'
 
-const corePaths = {
+export const corePaths = {
   vault: '/vault',
   joinKeygen: '/join-keygen',
   setupFastVault: '/vault/setup/fast',
