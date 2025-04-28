@@ -6,7 +6,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -55,17 +55,23 @@ export const MainPage = () => {
           </ConnectedApp>
         }
         secondaryControls={
-          <HStack alignItems="center" gap={8}>
-            <Button shape="round" size="small">
-              {t('open_desktop')}
-            </Button>
-            <Button ghost>
-              <SettingsIcon
-                fontSize={24}
-                onClick={() => appNavigate('settings')}
-              />
-            </Button>
-          </HStack>
+          <Button ghost>
+            <SettingsIcon
+              fontSize={24}
+              onClick={() => appNavigate('settings')}
+            />
+          </Button>
+        }
+        title={
+          <Text
+            color="contrast"
+            size={18}
+            style={{ maxWidth: '50%' }}
+            weight={500}
+            cropped
+          >
+            {vault.name}
+          </Text>
         }
         hasBorder
       />

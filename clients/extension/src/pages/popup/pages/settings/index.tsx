@@ -7,6 +7,7 @@ import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
+import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
@@ -86,6 +87,18 @@ export const SettingsPage = () => {
               icon={<CircleHelpIcon fontSize={20} />}
               onClick={() => open('https://vultisig.com/faq', '_blank')}
               title={t('faq')}
+              hoverable
+              showArrow
+            />
+            <ListItem
+              icon={<ExpandIcon fontSize={20} />}
+              onClick={() =>
+                open(
+                  `chrome-extension://${chrome.runtime.id}/popup.html`,
+                  '_blank'
+                )
+              }
+              title={t('expand_view')}
               hoverable
               showArrow
             />
