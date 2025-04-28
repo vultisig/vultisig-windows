@@ -2,6 +2,8 @@ export const en = {
   available: 'Available',
   general: 'General',
   manage_chains: 'Manage Chains',
+  open_desktop: 'Open Desktop',
+  portfolio_overview: 'Portfolio Overview',
   remove: 'Remove',
   vault_specific: 'Vault Specific',
   secure_crypto_vault: 'SECURE CRYPTO VAULT',

@@ -13,15 +13,10 @@ export const NewVaultPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageContent
-        alignItems="center"
-        justifyContent="center"
-        flexGrow
-        fullWidth
-      >
+      <PageContent alignItems="center" justifyContent="center" flexGrow>
         <ProductLogoBlock />
       </PageContent>
-      <PageFooter gap={16} fullWidth>
+      <PageFooter gap={16}>
         <Button
           onClick={() => navigate('setupVault', { params: {} })}
           shape="round"
@@ -38,6 +33,7 @@ export const NewVaultPage = () => {
             shape="round"
             size="large"
             type="secondary"
+            block
           >
             {t('scan_qr')}
           </Button>
@@ -46,6 +42,7 @@ export const NewVaultPage = () => {
             shape="round"
             size="large"
             type="secondary"
+            block
           >
             {t('import_vault')}
           </Button>

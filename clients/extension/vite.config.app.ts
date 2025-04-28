@@ -9,12 +9,11 @@ export default defineConfig({
     manifest: false,
     rollupOptions: {
       input: {
-        accounts: path.resolve(__dirname, manifest.accounts),
         background: path.resolve(__dirname, manifest.background),
+        connect: path.resolve(__dirname, manifest.connect),
         import: path.resolve(__dirname, manifest.import),
         popup: path.resolve(__dirname, manifest.popup),
         transaction: path.resolve(__dirname, manifest.transaction),
-        vault: path.resolve(__dirname, manifest.vault),
         vaults: path.resolve(__dirname, manifest.vaults),
       },
       output: {

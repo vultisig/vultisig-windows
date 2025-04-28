@@ -50,7 +50,6 @@ export const ManageChainsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        hasBorder
         primaryControls={
           <Button onClick={() => navigate('main')} ghost>
             <ChevronLeftIcon fontSize={20} />
@@ -61,16 +60,17 @@ export const ManageChainsPage = () => {
             {t('manage_chains')}
           </Text>
         }
+        hasBorder
       />
       <PageContent gap={24} flexGrow fullWidth scrollable>
         {/* TODO: Update search input styles based on Figma */}
         <TextInput
-          value={search}
-          onValueChange={handleSearch}
           placeholder={t('search_field_placeholder')}
+          onValueChange={handleSearch}
+          value={search}
         />
         <VStack gap={12}>
-          <Text weight={500} size={12} color="light">
+          <Text color="light" size={12} weight={500}>
             {t('active')}
           </Text>
           <List>
@@ -86,7 +86,7 @@ export const ManageChainsPage = () => {
                 }
                 title={
                   <HStack gap={12} alignItems="center">
-                    <Text weight={500} size={14} color="contrast">
+                    <Text color="contrast" size={14} weight={500}>
                       {coin.ticker}
                     </Text>
                     <ListItemTag title={coin.chain} />
@@ -97,7 +97,7 @@ export const ManageChainsPage = () => {
           </List>
         </VStack>
         <VStack gap={12}>
-          <Text weight={500} size={12} color="light">
+          <Text color="light" size={12} weight={500}>
             {t('available')}
           </Text>
           <List>
@@ -113,7 +113,7 @@ export const ManageChainsPage = () => {
                 }
                 title={
                   <HStack gap={12} alignItems="center">
-                    <Text weight={500} size={14} color="contrast">
+                    <Text color="contrast" size={14} weight={500}>
                       {coin.ticker}
                     </Text>
                     <ListItemTag title={coin.chain} />
