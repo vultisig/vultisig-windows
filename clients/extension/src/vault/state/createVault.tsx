@@ -1,4 +1,3 @@
-import { useDefaultChains } from '@clients/extension/src/chain/state/useDefaultChains'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   CreateVaultFunction,
@@ -8,6 +7,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
+import { useDefaultChains } from '../../chain/state/defaultChains'
 import { createVaultDefaultCoins } from '../coins/createVaultDefaultCoins'
 import { useVaultCoinsMutation } from './coins'
 import { getVaults, useVaultsMutation } from './vaults'
@@ -16,7 +16,7 @@ export const CreateVaultProvider = ({ children }: ChildrenProp) => {
   const { mutateAsync: updateVaults } = useVaultsMutation()
   const { mutateAsync: updateVaultCoins } = useVaultCoinsMutation()
   const walletCore = useAssertWalletCore()
-  const [defaultChains] = useDefaultChains()
+  const defaultChains = useDefaultChains()
 
   const createVault: CreateVaultFunction = useCallback(
     async vault => {

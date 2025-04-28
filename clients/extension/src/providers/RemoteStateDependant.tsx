@@ -1,4 +1,5 @@
 import { useVaultsQuery } from '@clients/extension/src/vault/queries/useVaultsQuery'
+import { defaultChains } from '@core/ui/chain/state/defaultChains'
 import { FiatCurrencyProvider } from '@core/ui/state/fiatCurrency'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
@@ -8,16 +9,22 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import {
+  DefaultChainsProvider,
+  useDefaultChainsQuery,
+} from '../chain/state/defaultChains'
 import { useFiatCurrencyQuery } from '../preferences/fiatCurrency'
 import { CurrentVaultIdProvider } from '../vault/state/currentVaultId'
 
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaultsQuery = useVaultsQuery()
   const fiatCurrencyQuery = useFiatCurrencyQuery()
+  const defaultChainsQuery = useDefaultChainsQuery()
 
   const query = useMergeQueries({
     vaults: vaultsQuery,
     fiatCurrency: fiatCurrencyQuery,
+    defaultChains: defaultChainsQuery,
   })
 
   const { t } = useTranslation()
@@ -33,7 +40,11 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
               coins: vault.coins ?? [],
             }))}
           >
-            <CurrentVaultIdProvider>{children}</CurrentVaultIdProvider>
+            <CurrentVaultIdProvider>
+              <DefaultChainsProvider value={defaultChains}>
+                {children}
+              </DefaultChainsProvider>
+            </CurrentVaultIdProvider>
           </VaultsProvider>
         </FiatCurrencyProvider>
       )}

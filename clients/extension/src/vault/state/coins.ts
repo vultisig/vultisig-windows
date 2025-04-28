@@ -1,6 +1,5 @@
 import { getPersistentState } from '@clients/extension/src/state/persistent/getPersistentState'
 import { usePersistentStateMutation } from '@clients/extension/src/state/persistent/usePersistentStateMutation'
-import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 
 const initialValue: VaultCoinsRecord = {}
@@ -28,7 +27,4 @@ export const useVaultCoinsMutation = () => {
   return { mutateAsync: updateVaultCoins }
 }
 
-export const useVaultCoinsQuery = () => {
-  return usePersistentStateQuery<VaultCoinsRecord>(vaultCoinsQueryKey, {})
-}
 type VaultCoinsRecord = Record<string, AccountCoin[]>

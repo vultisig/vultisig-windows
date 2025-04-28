@@ -1,4 +1,3 @@
-import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 import {
   CurrentVaultId,
   CurrentVaultIdProvider as CoreCurrentVaultIdProvider,
@@ -10,9 +9,11 @@ import { useVaults } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Dispatch, SetStateAction } from 'react'
-import React from 'react'
 
-import { usePersistentState } from '../../state/persistentState'
+import {
+  PersistentStateKey,
+  usePersistentState,
+} from '../../state/persistentState'
 
 const useCurrentVaultId = (): [
   CurrentVaultId,

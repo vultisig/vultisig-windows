@@ -3,10 +3,12 @@ import {
   FiatCurrencyProvider as BaseFiatCurrencyProvider,
   SetFiatCurrencyProvider,
 } from '@core/ui/state/fiatCurrency'
-import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { usePersistentState } from '../../state/persistentState'
+import {
+  PersistentStateKey,
+  usePersistentState,
+} from '../../state/persistentState'
 
 const useFiatCurrency = () => {
   return usePersistentState<FiatCurrency>(

@@ -8,8 +8,6 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { FC, useEffect, useState } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { CoinFinder } from '../chain/coin/finder/CoinFinder'
-import { useVaultCoinsQuery } from '../state/coins'
 
 export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
   const currentVaultId = useCurrentVaultId()
@@ -18,8 +16,7 @@ export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
 
   const navigate = useAppNavigate()
   const [checked, setChecked] = useState(false)
-  const { data: vaultCoinsRecord = {} } = useVaultCoinsQuery()
-  const coins = (vault && vaultCoinsRecord[getVaultId(vault)]) ?? []
+
   useEffect(() => {
     const checkVault = async () => {
       if (isEmpty(vaults)) {
@@ -40,8 +37,7 @@ export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
 
   return (
     <CurrentVaultProvider value={vault}>
-      <CurrentVaultCoinsProvider value={coins}>
-        <CoinFinder />
+      <CurrentVaultCoinsProvider value={vault.coins}>
         {children}
       </CurrentVaultCoinsProvider>
     </CurrentVaultProvider>

@@ -1,11 +1,13 @@
-import { PersistentStateKey } from '@core/ui/state/PersistentStateKey'
 import { FC, PropsWithChildren, useEffect } from 'react'
 
 import {
   CreateInstallMarker,
   IsFreshInstall,
 } from '../../wailsjs/go/main/InstallMarkerService'
-import { usePersistentState } from '../state/persistentState'
+import {
+  PersistentStateKey,
+  usePersistentState,
+} from '../state/persistentState'
 
 const OnboardingResetter: FC<PropsWithChildren> = ({ children }) => {
   const [, setCompletedOnboarding] = usePersistentState(
