@@ -5,7 +5,72 @@ import { z } from 'zod'
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress'
 
+export const sourceChannelByChain: Partial<
+  Record<Chain, Partial<Record<Chain | string, string>>>
+> = {
+  [Chain.Kujira]: {
+    Gaia: 'channel-0',
+    [Chain.Akash]: 'channel-64',
+    [Chain.Dydx]: 'channel-118',
+    [Chain.Noble]: 'channel-62',
+    [Chain.Osmosis]: 'channel-3',
+  },
+  [Chain.Osmosis]: {
+    Gaia: 'channel-141',
+  },
+}
+
 export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
+  ibc_transfer: {
+    fields: [
+      {
+        name: 'destinationChain',
+        type: 'text',
+        label: 'Destination Chain',
+        required: true,
+      },
+      {
+        name: 'destinationAddress',
+        type: 'text',
+        label: 'Destination Address',
+        required: true,
+      },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'Amount',
+        required: true,
+      },
+      {
+        name: 'memo',
+        type: 'text',
+        label: 'Memo',
+        required: false,
+      },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        destinationChain: z.string().min(1, 'Destination Chain is required'),
+        destinationAddress: z
+          .string()
+          .min(1, 'Destination Address is required'),
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'Amount must be greater than 0')
+              .max(totalAmountAvailable, 'Amount exceeds balance')
+          ),
+        memo: z.string().optional(),
+      }),
+  },
   bond: {
     fields: [
       {
