@@ -21,7 +21,10 @@ import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
 import { CreateVaultProvider } from './vault/state/createVault'
-import { SetCurrentVaultIdProvider } from './vault/state/setCurrentVaultId'
+import {
+  CurrentVaultIdProvider,
+  SetCurrentVaultIdProvider,
+} from './vault/state/currentVaultId'
 import { UpdateVaultProvider } from './vault/state/updateVault'
 
 const queryClient = getQueryClient()
@@ -55,13 +58,15 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <I18nProvider language={language}>
                           <InitializedWalletOnly>
                             <RemoteStateDependant>
-                              <SetCurrentVaultIdProvider>
-                                <CreateVaultProvider>
-                                  <UpdateVaultProvider>
-                                    {children}
-                                  </UpdateVaultProvider>
-                                </CreateVaultProvider>
-                              </SetCurrentVaultIdProvider>
+                              <CurrentVaultIdProvider>
+                                <SetCurrentVaultIdProvider>
+                                  <CreateVaultProvider>
+                                    <UpdateVaultProvider>
+                                      {children}
+                                    </UpdateVaultProvider>
+                                  </CreateVaultProvider>
+                                </SetCurrentVaultIdProvider>
+                              </CurrentVaultIdProvider>
                             </RemoteStateDependant>
                           </InitializedWalletOnly>
                         </I18nProvider>

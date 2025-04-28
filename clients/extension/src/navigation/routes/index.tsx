@@ -5,19 +5,19 @@ import { ReshareSecureVault } from '@clients/extension/src/components/settings/r
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { appPaths } from '@clients/extension/src/navigation'
-import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
+import { CurrencyPage } from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
-import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
+import { LanguagePage } from '@clients/extension/src/pages/popup/pages/language'
 import { MainPage } from '@clients/extension/src/pages/popup/pages/main'
 import { ManageChainsPage } from '@clients/extension/src/pages/popup/pages/manage-chains'
-import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
+import { RenameVaultPage } from '@clients/extension/src/pages/popup/pages/rename-vault'
 import { ReshareVaultPage } from '@clients/extension/src/pages/popup/pages/reshare-vault/ReshareVaultPage'
-import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
+import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
-import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
+import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
 import { ActiveVaultGuard } from '@clients/extension/src/vault/components/ActiveVaultGuard'
 import { corePaths } from '@core/ui/navigation'
@@ -85,7 +85,7 @@ const routes = [
         element: <ManageChainsPage />,
       },
       {
-        path: appPaths.vaults,
+        path: corePaths.vaults,
         element: <VaultsPage />,
       },
       {

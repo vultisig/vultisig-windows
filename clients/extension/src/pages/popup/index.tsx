@@ -1,6 +1,3 @@
-import '@clients/extension/src/styles/index.scss'
-import '@clients/extension/src/pages/popup/index.scss'
-
 import { router } from '@clients/extension/src/navigation/routes'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { StrictMode } from 'react'

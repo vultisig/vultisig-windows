@@ -23,7 +23,7 @@ const VaultBackupBanner = () => {
         {t('vault_backup_banner_title')}
       </Text>
       <ChevronIconWrapper>
-        <ChevronRightIcon size={24} />
+        <ChevronRightIcon fontSize={24} />
       </ChevronIconWrapper>
     </ContentWrapperButton>
   )

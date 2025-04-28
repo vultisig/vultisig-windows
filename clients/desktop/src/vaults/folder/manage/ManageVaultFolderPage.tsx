@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -19,7 +20,8 @@ import { DeleteVaultFolder } from './DeleteVaultFolder'
 import { ManageFolderVaults } from './ManageFolderVaults'
 
 export const ManageVaultFolderPage = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
+  const appNavigate = useAppNavigate()
   const { id, name: initialName } = useCurrentVaultFolder()
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
@@ -50,7 +52,7 @@ export const ManageVaultFolderPage = () => {
         <Button
           onClick={async () => {
             await mutateAsync({ id, name })
-            navigate('vaultFolder', { params: { id } })
+            appNavigate('vaultFolder', { params: { id } })
           }}
           isLoading={isPending}
         >

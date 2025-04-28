@@ -9,6 +9,7 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useFiatCurrencyQuery } from '../preferences/fiatCurrency'
+import { CurrentVaultIdProvider } from '../vault/state/currentVaultId'
 
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaultsQuery = useVaultsQuery()
@@ -32,7 +33,7 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
               coins: vault.coins ?? [],
             }))}
           >
-            {children}
+            <CurrentVaultIdProvider>{children}</CurrentVaultIdProvider>
           </VaultsProvider>
         </FiatCurrencyProvider>
       )}

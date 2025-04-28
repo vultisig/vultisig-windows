@@ -1,18 +1,28 @@
-const TrashIcon = ({ stroke = '#EE2B2B', width = 24, height = 24 }) => (
+import { FC, SVGProps } from 'react'
+
+export const TrashIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = '1em',
+  stroke = '#f0f4fc',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
+}) => (
   <svg
-    xmlns="http://www.w3.height/2000/svg"
-    width={width}
-    height={height}
-    fill="none"
     viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
   >
-    <path
-      stroke={stroke}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M20.25 5.25H3.75M9.75 9.75v6M14.25 9.75v6M18.75 5.25V19.5a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V5.25M15.75 5.25v-1.5a1.5 1.5 0 0 0-1.5-1.5h-4.5a1.5 1.5 0 0 0-1.5 1.5v1.5"
-    />
+    <path d="M3 6H21M19 6V20C19 21 18 22 17 22H7C6 22 5 21 5 20V6M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6M10 11V17M14 11V17" />
   </svg>
 )
-export default TrashIcon

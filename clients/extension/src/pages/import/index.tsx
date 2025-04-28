@@ -1,6 +1,3 @@
-import '@clients/extension/src/styles/index.scss'
-import '@clients/extension/src/pages/popup/index.scss'
-
 import { appPaths } from '@clients/extension/src/navigation'
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'

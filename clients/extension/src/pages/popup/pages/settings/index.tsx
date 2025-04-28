@@ -20,7 +20,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-const Component = () => {
+export const SettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const currency = useFiatCurrency()
@@ -31,7 +31,7 @@ const Component = () => {
       <PageHeader
         hasBorder
         primaryControls={
-          <Button onClick={() => navigate('settings')} ghost>
+          <Button onClick={() => navigate('root')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }
@@ -121,5 +121,3 @@ const Component = () => {
     </VStack>
   )
 }
-
-export default Component

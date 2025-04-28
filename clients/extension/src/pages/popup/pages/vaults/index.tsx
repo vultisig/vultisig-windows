@@ -1,11 +1,11 @@
 import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { useVaults } from '@core/ui/vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -15,34 +15,20 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-interface InitialState {
-  vaults: Vault[]
-}
 
 export const VaultsPage = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = { vaults: [] }
-  const [state, setState] = useState(initialState)
-  const { vaults } = state
   const navigate = useAppNavigate()
   const coreNavigate = useCoreNavigate()
   const vault = useCurrentVault()
-  const [, setCurrentVaultId] = useCurrentVaultId()
+  const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const handleSelect = (id: string) => {
     setCurrentVaultId(id)
     navigate('main')
   }
 
-  useEffect(() => {
-    const initComponent = async () => {
-      const vaults = await getVaults()
-      setState(prevState => ({ ...prevState, vaults }))
-    }
-    initComponent()
-  }, [])
+  const vaults = useVaults()
 
   return (
     <VStack fullHeight>

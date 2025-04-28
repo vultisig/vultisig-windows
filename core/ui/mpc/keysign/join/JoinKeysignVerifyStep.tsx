@@ -1,4 +1,5 @@
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
+import { JoinKeysignTxOverview } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxOverview'
 import { Button } from '@lib/ui/buttons/Button'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -7,8 +8,6 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
-
-import { JoinKeysignTxOverview } from './JoinKeysignTxOverview'
 
 export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()

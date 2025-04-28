@@ -1,28 +1,27 @@
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { CoinFinder } from '../chain/coin/finder/CoinFinder'
 import { useVaultCoinsQuery } from '../state/coins'
-import { useCurrentVaultId } from '../state/currentVaultId'
 
-export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
-  const [currentVaultId, , loading, ready] = useCurrentVaultId()
-  const navigate = useAppNavigate()
+export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
+  const currentVaultId = useCurrentVaultId()
   const vaults = useVaults()
-  const [vault, setVault] = useState<Vault | null>(null)
+  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
+
+  const navigate = useAppNavigate()
   const [checked, setChecked] = useState(false)
   const { data: vaultCoinsRecord = {} } = useVaultCoinsQuery()
   const coins = (vault && vaultCoinsRecord[getVaultId(vault)]) ?? []
   useEffect(() => {
     const checkVault = async () => {
-      if (loading || !ready) return
-
       if (isEmpty(vaults)) {
         navigate('landing')
         return
@@ -31,15 +30,13 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
 
       if (!foundVault) {
         navigate('landing')
-      } else {
-        setVault(foundVault)
       }
       setChecked(true)
     }
     checkVault()
-  }, [currentVaultId, navigate, loading, ready, vaults])
+  }, [currentVaultId, navigate, vaults])
 
-  if (loading || !checked || !vault) return null
+  if (!checked || !vault) return null
 
   return (
     <CurrentVaultProvider value={vault}>
