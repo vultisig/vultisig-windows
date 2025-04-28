@@ -4,8 +4,8 @@ import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { RouterProvider } from 'react-router-dom'
 
 import { AppProviders } from './AppProviders'
+import { router } from './navigation/router'
 import OnboardingResetter from './onboarding/OnboardingRessetterProvider'
-import { router } from './router'
 
 const App = () => {
   return (

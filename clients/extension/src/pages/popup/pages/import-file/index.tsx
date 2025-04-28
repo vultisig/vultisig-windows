@@ -140,7 +140,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('main')
+    navigate('root')
   }, [navigate])
 
   useEffect(() => {

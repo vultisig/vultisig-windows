@@ -2,7 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-export const appPaths = {
+const appPaths = {
   newVault: '/new-vault',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
