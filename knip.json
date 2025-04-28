@@ -1,25 +1,18 @@
 {
-  "ignore": [
-    "core/mpc/types/**",
-    "clients/desktop/wailsjs/**"
-  ],
-  "ignoreBinaries": [
-    "tsx",
-    "wails"
-  ],
+  "ignore": ["core/mpc/types/**", "clients/desktop/wailsjs/**"],
+  "ignoreBinaries": ["tsx", "wails"],
   "entry": [
-    "clients/extension/src/pages/popup/index.tsx",
     "clients/extension/src/background/index.ts",
     "clients/extension/src/content/index.ts",
-    "clients/extension/src/relay/index.ts",
-    "clients/extension/src/pages/accounts/index.tsx",
-    "clients/extension/src/pages/import/index.tsx",
-    "clients/extension/src/pages/transaction/index.tsx",
-    "clients/extension/src/pages/vault/index.tsx",
-    "clients/extension/src/pages/vaults/index.tsx",
+    "clients/extension/src/inpage/index.ts",
     "clients/extension/src/messengers/bridge.ts",
     "clients/extension/src/messengers/createMessenger.ts",
-    "clients/extension/src/inpage/index.ts"
+    "clients/extension/src/pages/popup/index.tsx",
+    "clients/extension/src/pages/connect/index.tsx",
+    "clients/extension/src/pages/import/index.tsx",
+    "clients/extension/src/pages/transaction/index.tsx",
+    "clients/extension/src/pages/vaults/index.tsx",
+    "clients/extension/src/relay/index.ts"
   ],
   "ignoreDependencies": [
     "@types/chrome",

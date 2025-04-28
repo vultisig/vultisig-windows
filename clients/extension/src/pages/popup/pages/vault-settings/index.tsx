@@ -25,7 +25,6 @@ export const VaultSettingsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        hasBorder
         primaryControls={
           <Button onClick={() => navigate('settings')} ghost>
             <ChevronLeftIcon fontSize={20} />
@@ -36,6 +35,7 @@ export const VaultSettingsPage = () => {
             {vault.name}
           </Text>
         }
+        hasBorder
       />
       <PageContent flexGrow scrollable>
         <List>

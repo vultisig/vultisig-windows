@@ -40,9 +40,8 @@ export enum Currency {
 }
 
 export enum Instance {
-  ACCOUNTS = 'accounts',
+  CONNECT = 'connect',
   TRANSACTION = 'transaction',
-  VAULT = 'vault',
   VAULTS = 'vaults',
 }
 

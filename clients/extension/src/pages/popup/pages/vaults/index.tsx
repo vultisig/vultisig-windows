@@ -21,19 +21,19 @@ export const VaultsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const coreNavigate = useCoreNavigate()
+  const vaults = useVaults()
   const vault = useCurrentVault()
-  const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
+  const setCurrentVaultId = useSetCurrentVaultIdMutation()
+
   const handleSelect = (id: string) => {
-    setCurrentVaultId(id)
+    setCurrentVaultId.mutate(id)
+
     navigate('main')
   }
-
-  const vaults = useVaults()
 
   return (
     <VStack fullHeight>
       <PageHeader
-        hasBorder
         primaryControls={
           <Button onClick={() => navigate('settings')} ghost>
             <ChevronLeftIcon fontSize={20} />
@@ -44,13 +44,14 @@ export const VaultsPage = () => {
             {t('choose_vault')}
           </Text>
         }
+        hasBorder
       />
-      <PageContent gap={24} flexGrow fullWidth scrollable>
+      <PageContent gap={24} flexGrow scrollable>
         {vault && (
           <List bordered>
             <ListItem
-              title={vault.name}
               extra={<ListItemTag status="success" title={t('active')} />}
+              title={vault.name}
             />
           </List>
         )}
@@ -64,10 +65,10 @@ export const VaultsPage = () => {
                 .filter(v => getVaultId(v) !== getVaultId(vault))
                 .map(v => (
                   <ListItem
-                    key={getVaultId(v)}
-                    title={v.name}
-                    onClick={() => handleSelect(getVaultId(v))}
                     extra={<VaultSigners vault={v} />}
+                    key={getVaultId(v)}
+                    onClick={() => handleSelect(getVaultId(v))}
+                    title={v.name}
                     hoverable
                     showArrow
                   />
@@ -76,7 +77,7 @@ export const VaultsPage = () => {
           </VStack>
         )}
       </PageContent>
-      <PageFooter fullWidth>
+      <PageFooter>
         <Button
           onClick={() => coreNavigate('importVault')}
           shape="round"

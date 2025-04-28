@@ -13,22 +13,12 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface InitialState {
-  name?: string
-}
-
 export const RenameVaultPage = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { name } = state
+  const [name, setName] = useState<string | undefined>(undefined)
   const navigate = useAppNavigate()
   const currentVault = useCurrentVault()
   const updateVault = useUpdateVaultMutation()
-
-  const handleChange = (name?: string) => {
-    setState(prevState => ({ ...prevState, name }))
-  }
 
   const handleSubmit = (): void => {
     if (!updateVault.isPending && name?.trim()) {
@@ -42,7 +32,7 @@ export const RenameVaultPage = () => {
   }
 
   useEffect(() => {
-    setState(prevState => ({ ...prevState, name: currentVault.name }))
+    setName(currentVault.name)
   }, [currentVault.name])
 
   return (
@@ -62,7 +52,7 @@ export const RenameVaultPage = () => {
       />
       <PageContent gap={24} flexGrow scrollable>
         {/* TODO: Update search input styles based on Figma */}
-        <TextInput value={name} onValueChange={handleChange} />
+        <TextInput value={name} onValueChange={setName} />
       </PageContent>
       <PageFooter>
         <Button

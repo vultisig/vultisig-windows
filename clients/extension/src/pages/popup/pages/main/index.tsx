@@ -1,4 +1,5 @@
 import { Button } from '@clients/extension/src/components/button'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -15,8 +16,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
-
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -46,47 +45,42 @@ export const MainPage = () => {
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
 
-  return vault ? (
+  return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
           <ConnectedApp ghost>
-            <WorldIcon
-              height={20}
-              stroke={colors.textExtraLight.toHex()}
-              width={20}
-            />
+            <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
             <ConnectedAppStatus connected />
           </ConnectedApp>
         }
         secondaryControls={
-          <HStack gap={8} alignItems="center">
+          <HStack alignItems="center" gap={8}>
             <Button shape="round" size="small">
-              Open Desktop
+              {t('open_desktop')}
             </Button>
             <Button ghost>
               <SettingsIcon
-                height={24}
+                fontSize={24}
                 onClick={() => appNavigate('settings')}
-                width={24}
               />
             </Button>
           </HStack>
         }
         hasBorder
       />
-      <PageContent gap={24} flexGrow fullWidth scrollable>
+      <PageContent gap={24} flexGrow scrollable>
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
-            title={vault.name}
             onClick={() => navigate('vaults')}
+            title={vault.name}
             hoverable
           />
         </List>
         <VStack gap={12}>
-          <Text weight={500} size={12} color="light">
-            Portfolio Overview
+          <Text color="light" size={12} weight={500}>
+            {t('portfolio_overview')}
           </Text>
           {/* TODO: Fetch addresess */}
           {/*  
@@ -124,7 +118,7 @@ export const MainPage = () => {
           */}
         </VStack>
       </PageContent>
-      <PageFooter fullWidth>
+      <PageFooter>
         <Button
           onClick={() => appNavigate('manageChains')}
           shape="round"
@@ -132,12 +126,10 @@ export const MainPage = () => {
           type="primary"
           block
         >
-          <LinkTwoIcon height={16} strokeWidth={2} width={16} />
+          <LinkTwoIcon fontSize={16} strokeWidth={2} />
           {t('manage_chains')}
         </Button>
       </PageFooter>
     </VStack>
-  ) : (
-    <></>
   )
 }
