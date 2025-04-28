@@ -7,7 +7,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
 

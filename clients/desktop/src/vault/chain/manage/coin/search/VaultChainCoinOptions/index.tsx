@@ -15,7 +15,7 @@ import { useCallback, useMemo } from 'react'
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery'
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'
 import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter'
-import { useCurrentVaultChainCoins } from '../../../../../state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentVaultChain } from '../../../../useCurrentVaultChain'
 import { ManageVaultChainCoin } from '../../ManageVaultChainCoin'
 

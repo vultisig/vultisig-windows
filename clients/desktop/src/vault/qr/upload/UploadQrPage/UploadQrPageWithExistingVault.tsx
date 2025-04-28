@@ -9,7 +9,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 import { useDeriveChainFromWalletAddress } from '../useDeriveChainFromWalletAddress'

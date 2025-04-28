@@ -24,7 +24,7 @@ import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVaultCoins'
+} from '@core/ui/vault/state/currentVaultCoins'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)

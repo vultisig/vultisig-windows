@@ -8,7 +8,7 @@ import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQue
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendMemo } from './memo'

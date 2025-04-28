@@ -13,7 +13,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'

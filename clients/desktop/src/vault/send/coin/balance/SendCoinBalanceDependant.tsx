@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 
 export const SendCoinBalanceDependant: React.FC<

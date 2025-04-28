@@ -3,7 +3,7 @@ import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 
-import { CurrentVaultCoinsProvider } from '../../../state/currentVaultCoins'
+import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 import { UploadQrPageWithExistingVault } from './UploadQrPageWithExistingVault'
 import { UploadQrPageWithoutVault } from './UploadQrPageWithoutVault'
 

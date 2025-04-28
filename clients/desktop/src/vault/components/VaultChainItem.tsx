@@ -17,7 +17,7 @@ import styled from 'styled-components'
 
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
-import { useCurrentVaultAddreses } from '../state/currentVaultCoins'
+import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
 
 const Pill = styled.div`

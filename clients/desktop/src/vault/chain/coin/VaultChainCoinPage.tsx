@@ -17,7 +17,7 @@ import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
 import { Center } from '../../../lib/ui/layout/Center'
 import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons'
 import { VaultPrimaryActions } from '../../components/VaultPrimaryActions'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VaultChainCoinItem } from '../VaultChainCoinItem'
 import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 

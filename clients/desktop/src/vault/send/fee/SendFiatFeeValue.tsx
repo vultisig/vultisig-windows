@@ -7,7 +7,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useEffect } from 'react'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'

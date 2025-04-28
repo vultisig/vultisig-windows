@@ -3,7 +3,7 @@ import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/Chai
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useFeeSettings } from '../fee/settings/state/feeSettings'
 import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'

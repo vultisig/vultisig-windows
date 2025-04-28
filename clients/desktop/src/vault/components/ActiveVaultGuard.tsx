@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { CoinFinder } from '../chain/coin/finder/CoinFinder'
-import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
+import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const currentVaultId = useCurrentVaultId()

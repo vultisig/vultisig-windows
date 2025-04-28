@@ -12,7 +12,7 @@ import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVaultCoins'
+} from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 

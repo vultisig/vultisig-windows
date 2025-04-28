@@ -3,6 +3,7 @@ import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { makeCorePath } from '@core/ui/navigation'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -11,9 +12,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
-
-export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
+export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
   const { vaultId } = useCorePathState<'joinKeysign'>()
   const vaults = useVaults()
 

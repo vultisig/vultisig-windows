@@ -5,7 +5,7 @@ import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPric
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'

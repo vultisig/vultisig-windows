@@ -8,7 +8,7 @@ import { Text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'

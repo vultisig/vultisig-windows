@@ -10,7 +10,7 @@ import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const vaultCoins = useCurrentVaultCoins()

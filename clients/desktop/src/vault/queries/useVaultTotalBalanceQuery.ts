@@ -8,7 +8,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
-import { useCurrentVaultCoins } from '../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 export const useVaultTotalBalanceQuery = () => {
   const coins = useCurrentVaultCoins()

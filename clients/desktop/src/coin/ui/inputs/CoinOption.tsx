@@ -18,7 +18,7 @@ import styled from 'styled-components'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { Skeleton } from '../../../components/skeleton'
-import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
 
 export const CoinOption = ({

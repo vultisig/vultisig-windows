@@ -14,7 +14,7 @@ import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { DepositConfirmButton } from '../DepositConfirmButton'
 import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'

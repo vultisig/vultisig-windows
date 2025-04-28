@@ -6,7 +6,7 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { SendPrompt } from '../../send/SendPrompt'
-import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
+import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { SwapPrompt } from '../../swap/components/SwapPrompt'
 import { DepositPrompt } from '../DepositPrompts'
 

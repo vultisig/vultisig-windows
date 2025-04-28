@@ -11,7 +11,7 @@ import styled from 'styled-components'
 
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 const Container = styled(Panel)`
   ${interactive};

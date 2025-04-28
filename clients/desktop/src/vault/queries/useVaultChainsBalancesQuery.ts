@@ -14,7 +14,7 @@ import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,
-} from '../state/currentVaultCoins'
+} from '@core/ui/vault/state/currentVaultCoins'
 import { VaultChainCoin } from './useVaultChainCoinsQuery'
 
 export type VaultChainBalance = {

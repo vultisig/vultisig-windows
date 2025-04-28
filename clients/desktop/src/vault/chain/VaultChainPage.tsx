@@ -46,7 +46,7 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
-} from '../state/currentVaultCoins'
+} from '@core/ui/vault/state/currentVaultCoins'
 import { coinFinderChains } from './coin/finder/findCoins/coinFinderChains'
 import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'

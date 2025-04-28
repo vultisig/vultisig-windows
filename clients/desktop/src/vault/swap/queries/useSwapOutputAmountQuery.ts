@@ -6,7 +6,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useCallback } from 'react'
 
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useToCoin } from '../state/toCoin'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 

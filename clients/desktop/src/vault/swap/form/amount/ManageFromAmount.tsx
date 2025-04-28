@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { AmountTextInput } from '../../../../lib/ui/inputs/AmountTextInput'
 import { AmountSuggestion } from '../../../send/amount/AmountSuggestion'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useFromAmount } from '../../state/fromAmount'
 import { useFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'

@@ -6,7 +6,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'

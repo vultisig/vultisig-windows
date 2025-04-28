@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh'
-import { useCurrentVaultCoins } from '../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 export const RefreshVaultBalance = () => {
   const invalidateQueries = useInvalidateQueries()

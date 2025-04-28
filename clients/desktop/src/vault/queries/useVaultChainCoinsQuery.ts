@@ -11,7 +11,7 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
-import { useCurrentVaultChainCoins } from '../state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
