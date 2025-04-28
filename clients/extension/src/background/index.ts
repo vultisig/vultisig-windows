@@ -70,10 +70,9 @@ handleSetupInpage()
 
 let rpcProvider: JsonRpcProvider
 
-const instance = {
-  [Instance.ACCOUNTS]: false,
+const instance: Record<Instance, boolean> = {
+  [Instance.CONNECT]: false,
   [Instance.TRANSACTION]: false,
-  [Instance.VAULT]: false,
   [Instance.VAULTS]: false,
 }
 
@@ -154,20 +153,20 @@ const handleFindVault = (
 
 const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
   return new Promise(resolve => {
-    if (instance[Instance.ACCOUNTS]) {
+    if (instance[Instance.CONNECT]) {
       const interval = setInterval(() => {
-        if (!instance[Instance.ACCOUNTS]) {
+        if (!instance[Instance.CONNECT]) {
           clearInterval(interval)
 
           handleFindAccounts(chain, sender).then(resolve)
         }
       }, 250)
     } else {
-      instance[Instance.ACCOUNTS] = true
+      instance[Instance.CONNECT] = true
 
       handleFindAccounts(chain, sender).then(accounts => {
         if (accounts.length) {
-          instance[Instance.ACCOUNTS] = false
+          instance[Instance.CONNECT] = false
 
           resolve(accounts)
         } else {
@@ -175,10 +174,10 @@ const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
             chain,
             sender,
           }).then(() => {
-            handleOpenPanel(Instance.ACCOUNTS).then(createdWindowId => {
+            handleOpenPanel(Instance.CONNECT).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
-                  instance[Instance.ACCOUNTS] = false
+                  instance[Instance.CONNECT] = false
 
                   handleFindAccounts(chain, sender).then(resolve)
                 }
@@ -195,20 +194,20 @@ const handleGetVault = (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
   return new Promise(resolve => {
-    if (instance[Instance.VAULT]) {
+    if (instance[Instance.CONNECT]) {
       const interval = setInterval(() => {
-        if (!instance[Instance.VAULT]) {
+        if (!instance[Instance.CONNECT]) {
           clearInterval(interval)
 
           handleFindVault(sender).then(resolve)
         }
       }, 250)
     } else {
-      instance[Instance.VAULT] = true
+      instance[Instance.CONNECT] = true
 
       handleFindVault(sender).then(vault => {
         if (vault) {
-          instance[Instance.VAULT] = false
+          instance[Instance.CONNECT] = false
 
           resolve(vault)
         } else {
@@ -216,10 +215,10 @@ const handleGetVault = (
             chain: Chain.Ethereum,
             sender,
           }).then(() => {
-            handleOpenPanel(Instance.VAULT).then(createdWindowId => {
+            handleOpenPanel(Instance.CONNECT).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
-                  instance[Instance.VAULT] = false
+                  instance[Instance.CONNECT] = false
 
                   handleFindVault(sender).then(resolve)
                 }

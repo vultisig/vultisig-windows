@@ -1,5 +1,6 @@
 import { Button } from '@clients/extension/src/components/button'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
+import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
@@ -17,19 +18,20 @@ import { useTranslation } from 'react-i18next'
 
 const App = () => {
   const { t } = useTranslation()
-  const [vaultIds, setVaultIds] = useState<string[]>([])
+  const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const vaults = useVaults()
+  const setCurrentVaultId = useSetCurrentVaultIdMutation()
 
   const handleClose = () => {
     window.close()
   }
 
   const handleSubmit = () => {
-    if (vaultIds.length) {
-      //TODO: add a solution to store multiple selected vaults in storage
-      console.log('vaultIds', vaultIds)
+    if (vaultId) {
+      //TODO: add sender to connected apps
+      setCurrentVaultId.mutate(vaultId)
 
-      //handleClose()
+      handleClose()
     }
   }
 
@@ -52,20 +54,13 @@ const App = () => {
         <List>
           {vaults.map(item => {
             const itemId = getVaultId(item)
-            const checked = vaultIds.includes(itemId)
 
             return (
               <ListItem
-                extra={<Switch checked={checked} />}
+                extra={<Switch checked={itemId === vaultId} />}
                 key={itemId}
                 title={item.name}
-                onClick={() =>
-                  setVaultIds(vaultIds =>
-                    checked
-                      ? vaultIds.filter(id => id !== itemId)
-                      : [...vaultIds, itemId]
-                  )
-                }
+                onClick={() => setVaultId(itemId)}
                 hoverable
               />
             )

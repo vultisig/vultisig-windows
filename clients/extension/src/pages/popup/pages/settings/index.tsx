@@ -29,7 +29,6 @@ export const SettingsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        hasBorder
         primaryControls={
           <Button onClick={() => navigate('root')} ghost>
             <ChevronLeftIcon fontSize={20} />
@@ -40,8 +39,9 @@ export const SettingsPage = () => {
             {t('settings')}
           </Text>
         }
+        hasBorder
       />
-      <PageContent gap={24} flexGrow fullWidth scrollable>
+      <PageContent gap={24} flexGrow scrollable>
         <VStack gap={12}>
           <Text color="light" size={12} weight={500}>
             {t('vault_specific')}
@@ -62,7 +62,6 @@ export const SettingsPage = () => {
           </Text>
           <List>
             <MatchQuery
-              value={languageQuery}
               success={language => (
                 <ListItem
                   extra={languageName[language]}
@@ -73,6 +72,7 @@ export const SettingsPage = () => {
                   showArrow
                 />
               )}
+              value={languageQuery}
             />
             <ListItem
               extra={currency.toUpperCase()}
@@ -105,7 +105,7 @@ export const SettingsPage = () => {
           </List>
         </VStack>
       </PageContent>
-      <PageFooter alignItems="center" fullWidth>
+      <PageFooter alignItems="center">
         <Button
           onClick={() =>
             open(

@@ -1,15 +1,28 @@
-export const CrossIcon = () => (
+import { FC, SVGProps } from 'react'
+
+export const CrossIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = '1em',
+  stroke = '#f0f4fc',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
+}) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="0.94em"
-    fill="none"
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
   >
-    <path
-      stroke="currentColor"
-      strokeLinecap="square"
-      strokeWidth={1.5}
-      d="m3.667 3.167 9.666 9.666m0-9.666-9.666 9.666"
-    />
+    <path d="M18 6L6 18M6 6L18 18" />
   </svg>
 )
