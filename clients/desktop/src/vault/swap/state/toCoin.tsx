@@ -1,9 +1,9 @@
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
+import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { useMemo } from 'react'
 
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useFromCoin } from './fromCoin'
 
 const { useState: useToCoin, provider: ToCoinInternalProvider } =

@@ -3,6 +3,10 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import {
+  useCurrentVaultCoins,
+  useCurrentVaultCoinsByChain,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { EagerQuery } from '@lib/ui/query/Query'
 import { order } from '@lib/utils/array/order'
 import { sum } from '@lib/utils/array/sum'
@@ -11,10 +15,6 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
-import {
-  useCurrentVaultCoins,
-  useCurrentVaultCoinsByChain,
-} from '@core/ui/vault/state/currentVaultCoins'
 import { VaultChainCoin } from './useVaultChainCoinsQuery'
 
 export type VaultChainBalance = {

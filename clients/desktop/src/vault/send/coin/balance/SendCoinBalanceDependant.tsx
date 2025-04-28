@@ -1,4 +1,5 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import {
   MatchQuery,
@@ -7,7 +8,6 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 
 export const SendCoinBalanceDependant: React.FC<

@@ -1,12 +1,12 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 
 export const RefreshVaultBalance = () => {
   const invalidateQueries = useInvalidateQueries()

@@ -1,4 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -17,7 +18,6 @@ import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
 import { Center } from '../../../lib/ui/layout/Center'
 import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons'
 import { VaultPrimaryActions } from '../../components/VaultPrimaryActions'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VaultChainCoinItem } from '../VaultChainCoinItem'
 import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 

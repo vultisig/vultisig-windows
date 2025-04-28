@@ -1,5 +1,6 @@
-import { useChainSpecificQuery } from '../../../coin/query/useChainSpecificQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+
+import { useChainSpecificQuery } from '../../../coin/query/useChainSpecificQuery'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 
 export const useDepositChainSpecificQuery = () => {

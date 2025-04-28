@@ -1,12 +1,12 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'

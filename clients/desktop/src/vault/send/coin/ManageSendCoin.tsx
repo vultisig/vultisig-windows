@@ -1,4 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import {
+  useCurrentVaultCoin,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -9,10 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
 import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
-import {
-  useCurrentVaultCoin,
-  useCurrentVaultCoins,
-} from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 
