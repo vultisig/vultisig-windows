@@ -19,8 +19,18 @@ export const generateMemo = ({
   depositFormData,
   bondableAsset,
 }: MemoParams): string => {
-  const { nodeAddress, amount, lpUnits, customMemo, provider, operatorFee } =
-    extractFormValues(depositFormData)
+  const {
+    nodeAddress,
+    amount,
+    lpUnits,
+    customMemo,
+    provider,
+    operatorFee,
+    destinationChain,
+    destinationChannel,
+    destinationAddress,
+    transferMemo,
+  } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
     stake: () => 'd',
@@ -57,6 +67,13 @@ export const generateMemo = ({
     custom: () => shouldBePresent(customMemo, 'Custom memo'),
     leave: () => `LEAVE:${nodeAddress}`,
     vote: () => 'VOTE',
+    ibc_transfer: () => {
+      shouldBePresent(destinationChain, 'IBC destination chain')
+      shouldBePresent(destinationChannel, 'IBC destination channel')
+      shouldBePresent(destinationAddress, 'IBC destination address')
+      const memo = transferMemo ? `:${transferMemo}` : ''
+      return `${destinationChain}:${destinationChannel}:${destinationAddress}${memo}`
+    },
   })
 }
 
@@ -70,5 +87,9 @@ function extractFormValues(formData: FieldValues) {
     affiliateFee: formData.affiliateFee as number | null,
     provider: formData.provider as string | null,
     operatorFee: formData.operatorFee as string | null,
+    destinationChain: formData.destinationChain as string | null,
+    destinationChannel: formData.destinationChannel as string | null,
+    destinationAddress: formData.destinationAddress as string | null,
+    transferMemo: formData.transferMemo as string | null,
   }
 }
