@@ -42,20 +42,12 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
     <StyledVaultSigners {...rest}>
       {fast ? (
         <>
-          <ZapIcon
-            height={16}
-            stroke={colors.alertWarning.toHex()}
-            width={16}
-          />
+          <ZapIcon fontSize={16} stroke={colors.alertWarning.toHex()} />
           <StyledText>{t('fast')}</StyledText>
         </>
       ) : (
         <>
-          <ShieldIcon
-            height={16}
-            stroke={colors.alertSuccess.toHex()}
-            width={16}
-          />
+          <ShieldIcon fontSize={16} stroke={colors.alertSuccess.toHex()} />
           <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
         </>
       )}

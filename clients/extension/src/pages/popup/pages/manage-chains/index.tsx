@@ -48,7 +48,7 @@ export const ManageChainsPage = () => {
   }
 
   return (
-    <VStack alignItems="center" justifyContent="center" fullHeight>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={

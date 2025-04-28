@@ -1,6 +1,11 @@
+import { SetFiatCurrencyProvider } from '@clients/extension/src/preferences/fiatCurrency'
 import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
+import { RemoteStateDependant } from '@clients/extension/src/providers/RemoteStateDependant'
+import { CreateVaultProvider } from '@clients/extension/src/vault/state/createVault'
+import { SetCurrentVaultIdProvider } from '@clients/extension/src/vault/state/setCurrentVaultIdProvider'
+import { UpdateVaultProvider } from '@clients/extension/src/vault/state/updateVault'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
@@ -14,12 +19,16 @@ import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
+import { createGlobalStyle } from 'styled-components'
 
-import { SetFiatCurrencyProvider } from '../preferences/fiatCurrency'
-import { CreateVaultProvider } from '../vault/state/createVault'
-import { SetCurrentVaultIdProvider } from '../vault/state/setCurrentVaultIdProvider'
-import { UpdateVaultProvider } from '../vault/state/updateVault'
-import { RemoteStateDependant } from './RemoteStateDependant'
+const ExtensionGlobalStyle = createGlobalStyle`
+  body {
+    margin: 0 auto;
+    min-height: 600px;
+    overflow: hidden;
+    width: 400px;
+  }
+`
 
 const defaultMpcLib: MpcLib = 'DKLS'
 
@@ -50,6 +59,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                                     {children}
                                   </RemoteStateDependant>
                                   <GlobalStyle />
+                                  <ExtensionGlobalStyle />
                                 </AntDesignThemeProvider>
                               </SetFiatCurrencyProvider>
                             </UpdateVaultProvider>

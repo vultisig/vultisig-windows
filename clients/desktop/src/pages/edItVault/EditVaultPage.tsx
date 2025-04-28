@@ -6,8 +6,8 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { QuestionMarkIcon } from '@lib/ui/icons/QuestionMarkIcon'
 import ReshareIcon from '@lib/ui/icons/ReshareIcon'
 import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
-import SquareAndPencilIcon from '@lib/ui/icons/SquareAndPencilIcon'
-import TrashIcon from '@lib/ui/icons/TrashIcon'
+import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
+import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -61,7 +61,7 @@ const EditVaultPage = () => {
     {
       title: t('vault_setting_edit_vault_rename_title'),
       subtitle: t('vault_setting_edit_vault_rename_subtitle'),
-      icon: <SquareAndPencilIcon />,
+      icon: <SquarePenIcon />,
       onClick: () => appNavigate('vaultRename'),
     },
     {

@@ -1,12 +1,11 @@
-@use "sass:math";
+@use 'sass:math';
 
-@use "@fontsource/montserrat/latin.css" as montserrat;
-@use "@fontsource/roboto-mono/latin.css" as roboto;
+@use '@fontsource/montserrat/latin.css' as montserrat;
+@use '@fontsource/roboto-mono/latin.css' as roboto;
 
-@use "_variables";
-@use "_normalize";
-@use "_global";
+@use '_variables';
+@use '_normalize';
+@use '_global';
 
-@use "../components/middle-truncate";
-@use "../components/vulti-loading";
-@use "../components/vulti-error";
+@use '../components/vulti-loading';
+@use '../components/vulti-error';

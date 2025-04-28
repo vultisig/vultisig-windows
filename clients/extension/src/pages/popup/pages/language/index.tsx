@@ -1,48 +1,64 @@
+import { Button } from '@clients/extension/src/components/button'
 import {
   useLanguageMutation,
   useLanguageQuery,
 } from '@clients/extension/src/i18n/state/language'
-import { ArrowLeft } from '@clients/extension/src/icons'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName, languages } from '@core/ui/i18n/Language'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
+import { ListItemTag } from '@lib/ui/list/item/tag'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-const Component = () => {
+export const LanguagePage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const languageQuery = useLanguageQuery()
   const languageMutation = useLanguageMutation()
 
   return (
-    <MatchQuery
-      value={languageQuery}
-      success={language => (
-        <div className="layout language-page">
-          <div className="header">
-            <span className="heading">{t('language')}</span>
-            <ArrowLeft
-              className="icon icon-left"
-              onClick={() => navigate('root')}
-            />
-          </div>
-          <div className="content">
-            <div className="list list-action">
-              {languages.map(key => (
-                <button
+    <VStack fullHeight>
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <Button onClick={() => navigate('settings')} ghost>
+            <ChevronLeftIcon fontSize={20} />
+          </Button>
+        }
+        title={
+          <Text color="contrast" size={18} weight={500}>
+            {t('language')}
+          </Text>
+        }
+      />
+      <PageContent flexGrow scrollable>
+        <List>
+          <MatchQuery
+            value={languageQuery}
+            success={language =>
+              languages.map(key => (
+                <ListItem
+                  extra={
+                    key === language && (
+                      <ListItemTag status="success" title={t('active')} />
+                    )
+                  }
                   key={key}
-                  className={`list-item${key === language ? ' active' : ''}`}
                   onClick={() => languageMutation.mutate(key)}
-                >
-                  {languageName[key]}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    />
+                  title={languageName[key]}
+                  hoverable
+                />
+              ))
+            }
+          />
+        </List>
+      </PageContent>
+    </VStack>
   )
 }
-
-export default Component

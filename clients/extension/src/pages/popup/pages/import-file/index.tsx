@@ -1,6 +1,7 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { errorKey } from '@clients/extension/src/utils/constants'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
@@ -27,8 +28,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
-
-import { calculateWindowPosition } from '../../../../utils/functions'
 
 interface InitialState {
   error?: string

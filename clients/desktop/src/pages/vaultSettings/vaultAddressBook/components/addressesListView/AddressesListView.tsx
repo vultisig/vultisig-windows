@@ -5,7 +5,7 @@ import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types'
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import SquareAndPencilIcon from '@lib/ui/icons/SquareAndPencilIcon'
+import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
@@ -190,7 +190,7 @@ const AddressesListView = ({
             </UnstyledButton>
           ) : (
             <UnstyledButton onClick={onEditModeToggle}>
-              <SquareAndPencilIcon />
+              <SquarePenIcon />
             </UnstyledButton>
           )
         }
