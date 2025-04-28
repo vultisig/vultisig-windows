@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -14,7 +15,8 @@ import { VaultListItem } from '../components/VaultListItem'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 
 export const VaultFolderPage = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
+  const appNavigate = useAppNavigate()
   const { id, name } = useCurrentVaultFolder()
 
   const vaults = useFolderVaults(id)
@@ -29,7 +31,7 @@ export const VaultFolderPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => navigate('manageVaultFolder', { params: { id } })}
+            onClick={() => appNavigate('manageVaultFolder', { params: { id } })}
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}

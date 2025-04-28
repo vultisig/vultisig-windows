@@ -1,4 +1,5 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
@@ -11,7 +12,6 @@ import { useMemo } from 'react'
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 import { KeysignVaultGuard } from './KeysignVaultGuard'
-import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep'
 
 export const JoinKeysignPage = () => {
   const { keysignMsg } = useCorePathState<'joinKeysign'>()

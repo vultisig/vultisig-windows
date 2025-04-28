@@ -1,14 +1,14 @@
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { FC, useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { useCurrentVaultId } from '../state/currentVaultId'
 
 export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
-  const [currentVaultId] = useCurrentVaultId()
+  const currentVaultId = useCurrentVaultId()
   const vaults = useVaults()
   const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 

@@ -21,6 +21,7 @@ export const corePaths = {
   reshareVaultSecure: '/vault/reshare/secure',
   joinKeysign: '/join-keysign',
   uploadQr: '/vault/qr/upload',
+  vaults: '/vaults',
 } as const
 
 type CorePaths = typeof corePaths

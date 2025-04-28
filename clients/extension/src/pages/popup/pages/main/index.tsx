@@ -1,8 +1,6 @@
 import { Button } from '@clients/extension/src/components/button'
-//import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate/index'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultSigners } from '@core/ui/vault/signers'
-//import { ChainEntityIcon } from '@lib/ui/chain/ChainEntityIcon'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
@@ -17,6 +15,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
+
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -43,7 +43,8 @@ export const MainPage = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const vault = useCurrentVault()
-  const navigate = useAppNavigate()
+  const appNavigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return vault ? (
     <VStack fullHeight>
@@ -66,7 +67,7 @@ export const MainPage = () => {
             <Button ghost>
               <SettingsIcon
                 height={24}
-                onClick={() => navigate('settings')}
+                onClick={() => appNavigate('settings')}
                 width={24}
               />
             </Button>
@@ -125,7 +126,7 @@ export const MainPage = () => {
       </PageContent>
       <PageFooter fullWidth>
         <Button
-          onClick={() => navigate('manageChains')}
+          onClick={() => appNavigate('manageChains')}
           shape="round"
           size="large"
           type="primary"

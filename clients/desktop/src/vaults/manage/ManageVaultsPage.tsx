@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -12,7 +13,8 @@ import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders'
 import { ManageVaults } from './ManageVaults'
 
 export const ManageVaultsPage = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
+  const appNavigate = useAppNavigate()
   const { t } = useTranslation()
 
   return (
@@ -28,7 +30,10 @@ export const ManageVaultsPage = () => {
         <ManageVaults />
       </PageContent>
       <PageFooter>
-        <Button kind="outlined" onClick={() => navigate('createVaultFolder')}>
+        <Button
+          kind="outlined"
+          onClick={() => appNavigate('createVaultFolder')}
+        >
           {t('create_folder')}
         </Button>
       </PageFooter>

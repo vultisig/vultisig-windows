@@ -1,7 +1,9 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { makeCorePath } from '@core/ui/navigation'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -9,16 +11,15 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { makeAppPath } from '../../../navigation'
 import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
-import { useCurrentVaultId } from '../../state/currentVaultId'
+
 export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
   const { vaultId } = useCorePathState<'joinKeysign'>()
   const vaults = useVaults()
 
   const { t } = useTranslation()
 
-  const [currentVaultId] = useCurrentVaultId()
+  const currentVaultId = useCurrentVaultId()
 
   const vault = vaults.find(vault => getVaultId(vault) === vaultId)
 
@@ -27,7 +28,7 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('wrong_vault_try_again')}
         action={
-          <Link to={makeAppPath('vaults')}>
+          <Link to={makeCorePath('vaults')}>
             <Button as="div">{t('change_vault')}</Button>
           </Link>
         }

@@ -18,7 +18,7 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { useTranslation } from 'react-i18next'
 
-export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
+export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { erc20ApprovePayload, toAmount: fromAmount } = value
 
   const fromCoin = assertField(value, 'coin')
