@@ -3,7 +3,7 @@ import { getRippleAccountInfo } from '@core/chain/chains/ripple/account/getRippl
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 export const getRippleCoinBalance: CoinBalanceResolver = async input => {
-  const { Balance } = await getRippleAccountInfo(input.address)
+  const { Balance } = (await getRippleAccountInfo(input.address)).account_data
 
   return BigInt(Balance)
 }
