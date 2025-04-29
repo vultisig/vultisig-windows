@@ -10,5 +10,5 @@ export const getRippleAccountInfo = async (address: string) => {
     queue: true,
   })
 
-  return result.account_data
+  return result
 }

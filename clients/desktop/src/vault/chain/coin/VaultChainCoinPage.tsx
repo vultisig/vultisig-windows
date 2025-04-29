@@ -47,12 +47,12 @@ export const VaultChainCoinPage = () => {
           <PageHeaderIconButtons>
             <PageHeaderIconButton
               onClick={() =>
-                invalidateQueries(
+                invalidateQueries([
                   getBalanceQueryKey({
                     ...coinKey,
                     address: coin.address,
-                  })
-                )
+                  }),
+                ])
               }
               icon={isInvalidating ? <Spinner /> : <RefreshIcon />}
             />

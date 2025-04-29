@@ -1,22 +1,22 @@
 import { EvmChain } from '@core/chain/Chain'
-import { ChainAccount } from '@core/chain/ChainAccount'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { rootApiUrl } from '@core/config'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { fromOneInchTokens, OneInchToken } from '../../oneInch/token'
+import { FindCoinsResolver } from './FindCoinsResolver'
 
-interface OneInchBalanceResponse {
-  [tokenAddress: string]: string
-}
+export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
+  address,
+  chain,
+}) => {
+  const oneInchChainId = getEvmChainId(chain)
 
-export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
-  const oneInchChainId = getEvmChainId(account.chain)
+  const url = `${rootApiUrl}/1inch/balance/v1.2/${oneInchChainId}/balances/${address}`
 
-  const url = `${rootApiUrl}/1inch/balance/v1.2/${oneInchChainId}/balances/${account.address}`
-
-  const balanceData = await queryUrl<OneInchBalanceResponse>(url)
+  const balanceData = await queryUrl<Record<string, string>>(url)
 
   await new Promise(resolve => setTimeout(resolve, 1000)) // We have some rate limits on 1 inch, so I will wait a bit
 
@@ -44,8 +44,22 @@ export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
     )
   )
 
-  return fromOneInchTokens({
-    tokens,
-    chain: account.chain,
+  const result: AccountCoin[] = []
+
+  tokens.forEach(token => {
+    if (!token.logoURI) {
+      return
+    }
+
+    result.push({
+      chain,
+      id: token.address,
+      decimals: token.decimals,
+      logo: token.logoURI,
+      ticker: token.symbol,
+      address,
+    })
   })
+
+  return result
 }

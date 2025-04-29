@@ -1,16 +1,12 @@
 import { Chain } from '@core/chain/Chain'
-import { ChainAccount } from '@core/chain/ChainAccount'
 import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts'
-import { Coin } from '@core/chain/coin/Coin'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-export const findSolanaAccountCoins = async (account: ChainAccount) => {
-  if (!account.address) {
-    throw new Error('Invalid native token: Address is required')
-  }
+import { FindCoinsResolver } from './FindCoinsResolver'
 
-  const accounts = await getSplAccounts(account.address)
+export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
+  const accounts = await getSplAccounts(address)
   if (!accounts.length) {
     return []
   }
@@ -21,18 +17,15 @@ export const findSolanaAccountCoins = async (account: ChainAccount) => {
 
   const tokenInfos = await fetchSolanaTokenInfoList(tokenAddresses)
 
-  return Object.entries(tokenInfos).map(([, token]) => {
-    const coin: Coin = {
-      chain: Chain.Solana,
-      id: token.address,
-      decimals: token.decimals,
-      logo: token.logoURI || '',
-      ticker: token.symbol,
-      priceProviderId: token.extensions?.coingeckoId || '',
-    }
-
-    return coin
-  })
+  return Object.entries(tokenInfos).map(([, token]) => ({
+    chain: Chain.Solana,
+    id: token.address,
+    decimals: token.decimals,
+    logo: token.logoURI || '',
+    ticker: token.symbol,
+    priceProviderId: token.extensions?.coingeckoId || '',
+    address,
+  }))
 }
 
 const fetchSolanaTokenInfoList = async (

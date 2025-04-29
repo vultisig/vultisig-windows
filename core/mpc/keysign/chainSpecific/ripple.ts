@@ -11,10 +11,11 @@ import { ChainSpecificResolver } from './ChainSpecificResolver'
 export const getRippleSpecific: ChainSpecificResolver<RippleSpecific> = async ({
   coin,
 }) => {
-  const { Sequence } = await getRippleAccountInfo(coin.address)
+  const rippleAccount = await getRippleAccountInfo(coin.address)
 
   return create(RippleSpecificSchema, {
-    sequence: BigInt(Sequence),
+    sequence: BigInt(rippleAccount.account_data.Sequence),
     gas: BigInt(rippleTxFee),
+    lastLedgerSequence: BigInt((rippleAccount.ledger_current_index ?? 0) + 60),
   })
 }

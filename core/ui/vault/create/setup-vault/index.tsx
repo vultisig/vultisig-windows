@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
@@ -18,7 +18,6 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { useVaultSecurityType } from '../type/state/vaultSecurityType'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
@@ -31,8 +30,7 @@ import {
 } from './SetupVaultPage.styled'
 
 export const SetupVaultPage = () => {
-  const { RiveComponent, stateMachineInput, isPlaying, onPlay } =
-    useSetupVaultPageAnimation()
+  const { RiveComponent, isPlaying, onPlay } = useSetupVaultPageAnimation()
   const { t } = useTranslation()
   const [value, setValue] = useVaultSecurityType()
   const navigate = useCoreNavigate()
@@ -48,19 +46,17 @@ export const SetupVaultPage = () => {
   }, [navigate, value])
 
   return (
-    <>
+    <VStack
+      style={{
+        minHeight: '100%',
+      }}
+    >
       <PageHeader
         title={<PageHeaderTitle>{t('chooseSetup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
       />
-      <PageContent
-        gap={40}
-        as="form"
-        {...getFormProps({
-          onSubmit: onStart,
-        })}
-      >
-        <ContentWrapper alignItems="center" gap={48} flexGrow>
+      <PageContent flexGrow as="form" onSubmit={onStart}>
+        <ContentWrapper alignItems="center" gap={20} flexGrow>
           <ArtContainer data-testid="SetupVaultPage-ArtContainer">
             <RiveComponent />
           </ArtContainer>
@@ -116,7 +112,6 @@ export const SetupVaultPage = () => {
                 if (isPlaying) return
                 onPlay()
                 setValue(newValue)
-                stateMachineInput?.fire()
               }}
             />
           </div>
@@ -125,12 +120,12 @@ export const SetupVaultPage = () => {
               <Match
                 value={value}
                 fast={() => (
-                  <GradientText size={15} weight={500}>
+                  <GradientText weight={500}>
                     {t(`vault_setup_prop.fast.title`)}
                   </GradientText>
                 )}
                 secure={() => (
-                  <Text color="primary" size={15} weight={500}>
+                  <Text color="primary" weight={500}>
                     {t(`vault_setup_prop.secure.title`)}
                   </Text>
                 )}
@@ -142,7 +137,7 @@ export const SetupVaultPage = () => {
                   <IconWrapper>
                     <CheckIcon />
                   </IconWrapper>
-                  <Text size={14} weight="500" color="contrast">
+                  <Text size={14} weight="600" color="contrast">
                     {prop}
                   </Text>
                 </HStack>
@@ -152,7 +147,7 @@ export const SetupVaultPage = () => {
           <ConfirmButton type="submit">{t('next')}</ConfirmButton>
         </ContentWrapper>
       </PageContent>
-    </>
+    </VStack>
   )
 }
 

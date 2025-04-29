@@ -1,10 +1,15 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const ContentWrapper = styled(VStack)`
-  width: 550px;
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: 550px;
+  }
+
+  width: 100%;
   align-self: center;
 `
 
@@ -15,7 +20,7 @@ export const DescriptionTitleWrapper = styled(VStack)`
 `
 
 export const DescriptionContentWrapper = styled(VStack)`
-  border-top: 1px dotted ${getColor('backgroundTertiary')};
+  border-top: 1px dotted ${getColor('textDark')};
   background-color: ${getColor('foreground')};
   padding: 16px;
   border-bottom-right-radius: 16px;
@@ -30,7 +35,6 @@ export const ConfirmButton = styled(Button)`
 `
 
 export const DescriptionWrapper = styled(VStack)`
-  width: 550px;
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;
 `
@@ -43,7 +47,7 @@ export const ArtContainer = styled.div`
   ${vStack({
     flexGrow: true,
   })}
-  width: 550px;
+  align-self: stretch;
   flex-basis: 0;
   overflow: hidden;
 `
