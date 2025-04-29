@@ -23,7 +23,6 @@ import { RemoteStateDependant } from './state/RemoteStateDependant'
 import { WriteStorageProvider } from './state/storage/write'
 import { CreateVaultProvider } from './vault/state/createVault'
 import { CurrentVaultIdProvider } from './vault/state/currentVaultId'
-import { UpdateVaultProvider } from './vault/state/updateVault'
 
 const queryClient = getQueryClient()
 
@@ -58,11 +57,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                             <RemoteStateDependant>
                               <CurrentVaultIdProvider>
                                 <CreateVaultProvider>
-                                  <UpdateVaultProvider>
-                                    <WriteStorageProvider>
-                                      {children}
-                                    </WriteStorageProvider>
-                                  </UpdateVaultProvider>
+                                  <WriteStorageProvider>
+                                    {children}
+                                  </WriteStorageProvider>
                                 </CreateVaultProvider>
                               </CurrentVaultIdProvider>
                             </RemoteStateDependant>

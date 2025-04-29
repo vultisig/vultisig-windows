@@ -6,24 +6,19 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
-import { getVaults, useVaultsMutation } from './vaults'
+import { getVaults, updateVaults } from './vaults'
 
 export const CreateVaultProvider = ({ children }: ChildrenProp) => {
-  const { mutateAsync: updateVaults } = useVaultsMutation()
+  const createVault: CreateVaultFunction = useCallback(async vault => {
+    const prevVaults = await getVaults()
 
-  const createVault: CreateVaultFunction = useCallback(
-    async vault => {
-      const prevVaults = await getVaults()
+    await updateVaults([
+      ...prevVaults.filter(v => getVaultId(v) !== getVaultId(vault)),
+      vault,
+    ])
 
-      await updateVaults([
-        ...prevVaults.filter(v => getVaultId(v) !== getVaultId(vault)),
-        vault,
-      ])
-
-      return vault
-    },
-    [updateVaults]
-  )
+    return vault
+  }, [])
 
   return (
     <CreateVaultProviderBase value={createVault}>
