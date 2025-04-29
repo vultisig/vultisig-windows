@@ -1,15 +1,17 @@
+import { getChainKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { findCoins } from '@core/chain/coin/find'
+import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
+import { FindCoinsResolverInput } from '@core/chain/coin/find/FindCoinsResolver'
 import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
+import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 
-import { findCoins, FindCoinsInput } from '../findCoins'
-import { coinFinderChains } from '../findCoins/coinFinderChains'
-
-export const getCoinFinderQueryKey = (input: FindCoinsInput) => [
+export const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
   'coinFinder',
   input,
 ]
@@ -18,10 +20,11 @@ export const useCoinFinderQuery = () => {
   const addresses = useCurrentVaultAddreses()
 
   const coinFinderInputs = useMemo(() => {
-    const result: FindCoinsInput[] = []
+    const result: FindCoinsResolverInput[] = []
 
     toEntries(addresses).forEach(({ key, value }) => {
-      if (isOneOf(key, coinFinderChains)) {
+      const chainKind = getChainKind(key)
+      if (isOneOf(chainKind, coinFinderChainKinds)) {
         result.push({ chain: key, address: value })
       }
     })
@@ -33,9 +36,7 @@ export const useCoinFinderQuery = () => {
     queries: coinFinderInputs.map(input => ({
       queryKey: getCoinFinderQueryKey(input),
       queryFn: () => findCoins(input),
-      meta: {
-        disablePersist: true,
-      },
+      staleTime: convertDuration(1, 'h', 'ms'),
     })),
   })
 
