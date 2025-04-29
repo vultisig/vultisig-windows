@@ -1,4 +1,5 @@
 import { currentVaultIdQueryKey } from '@core/ui/query/keys'
+import { SetCurrentVaultIdFunction } from '@core/ui/state/storage/write'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import {
   CurrentVaultId,
@@ -6,7 +7,6 @@ import {
   getInitialVaultId,
   useCurrentVaultIdCorrector,
 } from '@core/ui/vault/state/currentVaultId'
-import { SetCurrentVaultIdFunction } from '@core/ui/vault/state/setCurrentVaultId'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'

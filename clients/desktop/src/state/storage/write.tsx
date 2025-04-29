@@ -5,14 +5,16 @@ import {
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
-import { useFiatCurrency } from '../preferences/state/fiatCurrency'
+import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
+import { useCurrentVaultId } from '../../vault/state/currentVaultId'
 
-export const StorageProvider = ({ children }: ChildrenProp) => {
+export const WriteStorageProvider = ({ children }: ChildrenProp) => {
   const [, setFiatCurrency] = useFiatCurrency()
+  const [, setCurrentVaultId] = useCurrentVaultId()
 
   const value: CoreWriteStorage = useMemo(
-    () => ({ setFiatCurrency }),
-    [setFiatCurrency]
+    () => ({ setFiatCurrency, setCurrentVaultId }),
+    [setFiatCurrency, setCurrentVaultId]
   )
 
   return (

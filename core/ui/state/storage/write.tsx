@@ -5,8 +5,13 @@ export type SetFiatCurrencyFunction = (
   value: FiatCurrency
 ) => Promise<void> | void
 
+export type SetCurrentVaultIdFunction = (
+  id: string | null
+) => Promise<void> | void
+
 export type CoreWriteStorage = {
   setFiatCurrency: SetFiatCurrencyFunction
+  setCurrentVaultId: SetCurrentVaultIdFunction
 }
 
 export const {

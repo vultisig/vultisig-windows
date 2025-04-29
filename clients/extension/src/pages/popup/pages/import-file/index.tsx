@@ -10,8 +10,8 @@ import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/Decr
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
+import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import { useCreateVault } from '@core/ui/vault/state/createVault'
-import { useSetCurrentVaultId } from '@core/ui/vault/state/setCurrentVaultId'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -47,7 +47,7 @@ const Component = () => {
     status: 'default',
   }
   const createVault = useCreateVault()
-  const setCurrentVaultId = useSetCurrentVaultId()
+  const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
   const [state, setState] = useState(initialState)
   const {

@@ -20,12 +20,9 @@ import { FiatCurrencyProvider } from './preferences/state/fiatCurrency'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
-import { StorageProvider } from './state/storage'
+import { WriteStorageProvider } from './state/storage/write'
 import { CreateVaultProvider } from './vault/state/createVault'
-import {
-  CurrentVaultIdProvider,
-  SetCurrentVaultIdProvider,
-} from './vault/state/currentVaultId'
+import { CurrentVaultIdProvider } from './vault/state/currentVaultId'
 import { UpdateVaultProvider } from './vault/state/updateVault'
 
 const queryClient = getQueryClient()
@@ -60,15 +57,13 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                           <InitializedWalletOnly>
                             <RemoteStateDependant>
                               <CurrentVaultIdProvider>
-                                <SetCurrentVaultIdProvider>
-                                  <CreateVaultProvider>
-                                    <UpdateVaultProvider>
-                                      <StorageProvider>
-                                        {children}
-                                      </StorageProvider>
-                                    </UpdateVaultProvider>
-                                  </CreateVaultProvider>
-                                </SetCurrentVaultIdProvider>
+                                <CreateVaultProvider>
+                                  <UpdateVaultProvider>
+                                    <WriteStorageProvider>
+                                      {children}
+                                    </WriteStorageProvider>
+                                  </UpdateVaultProvider>
+                                </CreateVaultProvider>
                               </CurrentVaultIdProvider>
                             </RemoteStateDependant>
                           </InitializedWalletOnly>

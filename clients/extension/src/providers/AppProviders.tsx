@@ -3,7 +3,6 @@ import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { RemoteStateDependant } from '@clients/extension/src/providers/RemoteStateDependant'
 import { CreateVaultProvider } from '@clients/extension/src/vault/state/createVault'
-import { SetCurrentVaultIdProvider } from '@clients/extension/src/vault/state/setCurrentVaultIdProvider'
 import { UpdateVaultProvider } from '@clients/extension/src/vault/state/updateVault'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -51,21 +50,19 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                   <QueryProvider>
                     <I18nProvider>
                       <WalletCoreProvider>
-                        <SetCurrentVaultIdProvider>
-                          <CreateVaultProvider>
-                            <UpdateVaultProvider>
-                              <WriteStorageProvider>
-                                <AntDesignThemeProvider>
-                                  <RemoteStateDependant>
-                                    {children}
-                                  </RemoteStateDependant>
-                                  <GlobalStyle />
-                                  <ExtensionGlobalStyle />
-                                </AntDesignThemeProvider>
-                              </WriteStorageProvider>
-                            </UpdateVaultProvider>
-                          </CreateVaultProvider>
-                        </SetCurrentVaultIdProvider>
+                        <CreateVaultProvider>
+                          <UpdateVaultProvider>
+                            <WriteStorageProvider>
+                              <AntDesignThemeProvider>
+                                <RemoteStateDependant>
+                                  {children}
+                                </RemoteStateDependant>
+                                <GlobalStyle />
+                                <ExtensionGlobalStyle />
+                              </AntDesignThemeProvider>
+                            </WriteStorageProvider>
+                          </UpdateVaultProvider>
+                        </CreateVaultProvider>
                       </WalletCoreProvider>
                     </I18nProvider>
                   </QueryProvider>

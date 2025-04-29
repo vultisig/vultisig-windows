@@ -1,9 +1,10 @@
 import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useCreateVault } from '@core/ui/vault/state/createVault'
-import { useSetCurrentVaultId } from '@core/ui/vault/state/setCurrentVaultId'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+
+import { useSetCurrentVaultIdMutation } from './useSetCurrentVaultIdMutation'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
@@ -12,7 +13,7 @@ export const useCreateVaultMutation = (
 
   const createVault = useCreateVault()
 
-  const setCurrentVaultId = useSetCurrentVaultId()
+  const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
   return useMutation({
     mutationFn: async (vault: Vault) => {
