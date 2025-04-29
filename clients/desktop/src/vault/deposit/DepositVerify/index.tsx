@@ -30,24 +30,23 @@ type DepositVerifyProps = {
   depositFormData: FieldValues
   selectedChainAction: ChainAction
   onBack: () => void
-  fee: bigint
 }
 
 export const DepositVerify: FC<DepositVerifyProps> = ({
   onBack,
   depositFormData,
   selectedChainAction,
-  fee,
 }) => {
+  const [coinKey] = useCurrentDepositCoin()
+  const coin = useCurrentVaultCoin(coinKey)
+
   const depositFormDataWithMemo = useMemoGenerator({
     depositFormData: depositFormData,
     selectedChainAction: selectedChainAction,
     bondableAsset: depositFormData?.bondableAsset,
-    fee,
+    chain: coin.chain,
   })
 
-  const [coinKey] = useCurrentDepositCoin()
-  const coin = useCurrentVaultCoin(coinKey)
   const formattedDepositFormData = getFormattedFormData(
     depositFormDataWithMemo,
     selectedChainAction,
@@ -78,7 +77,8 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             {actionFields.map(field => {
               if (
                 formattedDepositFormData[field.name] == null ||
-                formattedDepositFormData[field.name] === ''
+                formattedDepositFormData[field.name] === '' ||
+                field?.name === 'memo'
               ) {
                 return null
               }
