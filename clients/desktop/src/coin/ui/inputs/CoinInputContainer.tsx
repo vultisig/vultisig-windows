@@ -14,7 +14,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
-import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles'
+const IconWrapper = styled.div`
+  align-self: center;
+  height: 30px;
+  font-size: 24px;
+`
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};

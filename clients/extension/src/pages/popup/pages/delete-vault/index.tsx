@@ -23,7 +23,7 @@ const Component = () => {
   const handleSubmit = () => {
     if (!deleteVault.isPending) {
       deleteVault.mutateAsync(getVaultId(currentVault)).then(() => {
-        navigate('main')
+        navigate('root')
       })
     }
   }

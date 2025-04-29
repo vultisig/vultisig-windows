@@ -1,4 +1,4 @@
-import { router } from '@clients/extension/src/navigation/routes'
+import { router } from '@clients/extension/src/navigation/router'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
