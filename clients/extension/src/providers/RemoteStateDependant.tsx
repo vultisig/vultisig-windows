@@ -1,4 +1,5 @@
 import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
+import { useFiatCurrencyQuery } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { ChildrenProp } from '@lib/ui/props'
@@ -7,7 +8,6 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrencyQuery } from '../preferences/fiatCurrency'
 import { CurrentVaultIdProvider } from '../vault/state/currentVaultId'
 import { useVaultsQuery } from '../vault/state/vaults'
 

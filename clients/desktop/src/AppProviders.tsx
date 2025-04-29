@@ -51,11 +51,13 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <ThemeProvider theme={darkTheme}>
                       <I18nProvider language={language}>
                         <InitializedWalletOnly>
-                          <RemoteStateDependant>
-                            <CurrentVaultIdProvider>
-                              <StorageProvider>{children}</StorageProvider>
-                            </CurrentVaultIdProvider>
-                          </RemoteStateDependant>
+                          <StorageProvider>
+                            <RemoteStateDependant>
+                              <CurrentVaultIdProvider>
+                                {children}
+                              </CurrentVaultIdProvider>
+                            </RemoteStateDependant>
+                          </StorageProvider>
                         </InitializedWalletOnly>
                       </I18nProvider>
                     </ThemeProvider>
