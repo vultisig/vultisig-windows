@@ -1,5 +1,4 @@
 import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
-import { FiatCurrencyProvider } from '@core/ui/state/fiatCurrency'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { ChildrenProp } from '@lib/ui/props'
@@ -28,14 +27,10 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={query}
-      success={({ vaults, fiatCurrency }) => (
-        <FiatCurrencyProvider value={fiatCurrency}>
-          <VaultsProvider
-            value={vaults.map(vault => ({ ...vault, coins: [] }))}
-          >
-            <CurrentVaultIdProvider>{children}</CurrentVaultIdProvider>
-          </VaultsProvider>
-        </FiatCurrencyProvider>
+      success={({ vaults }) => (
+        <VaultsProvider value={vaults.map(vault => ({ ...vault, coins: [] }))}>
+          <CurrentVaultIdProvider>{children}</CurrentVaultIdProvider>
+        </VaultsProvider>
       )}
       error={() => (
         <CenterAbsolutely>

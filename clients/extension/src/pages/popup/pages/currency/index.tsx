@@ -1,10 +1,8 @@
 import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { fiatCurrencies } from '@core/config/FiatCurrency'
-import {
-  useFiatCurrency,
-  useSetFiatCurrencyMutation,
-} from '@core/ui/state/fiatCurrency'
+import { useSetFiatCurrencyMutation } from '@core/ui/preferences/mutations/useSetFiatCurrencyMutation'
+import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'

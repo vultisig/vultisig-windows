@@ -35,7 +35,10 @@ export type SetDefaultChainsFunction = (chains: Chain[]) => Promise<void> | void
 
 type GetDefaultChainsFunction = () => Promise<Chain[]> | Chain[]
 
+export type GetFiatCurrencyFunction = () => Promise<FiatCurrency> | FiatCurrency
+
 export type CoreStorage = {
+  getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
   setCurrentVaultId: SetCurrentVaultIdFunction
   updateVault: UpdateVaultFunction

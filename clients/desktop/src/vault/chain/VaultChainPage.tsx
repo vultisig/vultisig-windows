@@ -7,7 +7,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,

@@ -1,4 +1,5 @@
 import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
+import { useFiatCurrencyQuery } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -15,11 +16,13 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const defaultChains = useDefaultChainsQuery()
+  const fiatCurrencyQuery = useFiatCurrencyQuery()
 
   const query = useMergeQueries({
     vaults,
     vaultFolders,
     defaultChains,
+    fiatCurrency: fiatCurrencyQuery,
   })
 
   const { t } = useTranslation()

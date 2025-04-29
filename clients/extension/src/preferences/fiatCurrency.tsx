@@ -1,8 +1,12 @@
 import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency'
 import { fiatCurrencyQueryKey } from '@core/ui/query/keys'
-import { SetFiatCurrencyFunction } from '@core/ui/state/storage'
+import {
+  GetFiatCurrencyFunction,
+  SetFiatCurrencyFunction,
+} from '@core/ui/state/storage'
 
+import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
 
 const [key] = fiatCurrencyQueryKey
@@ -10,6 +14,9 @@ const [key] = fiatCurrencyQueryKey
 export const useFiatCurrencyQuery = () => {
   return usePersistentStateQuery<FiatCurrency>(key, defaultFiatCurrency)
 }
+
+export const getFiatCurrency: GetFiatCurrencyFunction = async () =>
+  getPersistentState(key, defaultFiatCurrency)
 
 export const setFiatCurrency: SetFiatCurrencyFunction = async (
   value: FiatCurrency

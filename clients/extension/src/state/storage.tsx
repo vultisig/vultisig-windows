@@ -14,7 +14,7 @@ import {
   getDefaultChains,
   setDefaultChains,
 } from '../chain/state/defaultChains'
-import { setFiatCurrency } from '../preferences/fiatCurrency'
+import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
 import { setCurrentVaultId } from '../vault/state/currentVaultId'
 import { updateVaults } from '../vault/state/vaults'
 import { getVaults } from '../vault/state/vaults'
@@ -68,6 +68,7 @@ const writeStorage: CoreStorage = {
   createVaultCoins,
   setDefaultChains,
   getDefaultChains,
+  getFiatCurrency,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
