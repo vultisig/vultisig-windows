@@ -1,6 +1,7 @@
 import {
   CoreWriteStorage,
   CoreWriteStorageProvider,
+  CreateVaultFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage/write'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -29,10 +30,22 @@ const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   return updatedVaults[vaultIndex]
 }
 
+const createVault: CreateVaultFunction = async vault => {
+  const prevVaults = await getVaults()
+
+  await updateVaults([
+    ...prevVaults.filter(v => getVaultId(v) !== getVaultId(vault)),
+    vault,
+  ])
+
+  return vault
+}
+
 const writeStorage: CoreWriteStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   updateVault,
+  createVault,
 }
 
 export const WriteStorageProvider = ({ children }: ChildrenProp) => {

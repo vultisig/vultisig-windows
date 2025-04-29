@@ -21,7 +21,6 @@ import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
 import { WriteStorageProvider } from './state/storage/write'
-import { CreateVaultProvider } from './vault/state/createVault'
 import { CurrentVaultIdProvider } from './vault/state/currentVaultId'
 
 const queryClient = getQueryClient()
@@ -56,11 +55,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                           <InitializedWalletOnly>
                             <RemoteStateDependant>
                               <CurrentVaultIdProvider>
-                                <CreateVaultProvider>
-                                  <WriteStorageProvider>
-                                    {children}
-                                  </WriteStorageProvider>
-                                </CreateVaultProvider>
+                                <WriteStorageProvider>
+                                  {children}
+                                </WriteStorageProvider>
                               </CurrentVaultIdProvider>
                             </RemoteStateDependant>
                           </InitializedWalletOnly>

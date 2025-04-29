@@ -16,12 +16,15 @@ export type UpdateVaultInput = {
   fields: Partial<Vault>
 }
 
+export type CreateVaultFunction = (vault: Vault) => Promise<Vault>
+
 export type UpdateVaultFunction = (input: UpdateVaultInput) => Promise<Vault>
 
 export type CoreWriteStorage = {
   setFiatCurrency: SetFiatCurrencyFunction
   setCurrentVaultId: SetCurrentVaultIdFunction
   updateVault: UpdateVaultFunction
+  createVault: CreateVaultFunction
 }
 
 export const {

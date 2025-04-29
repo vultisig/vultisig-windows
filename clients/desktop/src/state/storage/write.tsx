@@ -1,6 +1,7 @@
 import {
   CoreWriteStorage,
   CoreWriteStorageProvider,
+  CreateVaultFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage/write'
 import { ChildrenProp } from '@lib/ui/props'
@@ -26,12 +27,20 @@ const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   return newVault
 }
 
+const createVault: CreateVaultFunction = async vault => {
+  const storageVault = toStorageVault(vault)
+
+  await SaveVault(storageVault)
+
+  return vault
+}
+
 export const WriteStorageProvider = ({ children }: ChildrenProp) => {
   const [, setFiatCurrency] = useFiatCurrency()
   const [, setCurrentVaultId] = useCurrentVaultId()
 
   const value: CoreWriteStorage = useMemo(
-    () => ({ setFiatCurrency, setCurrentVaultId, updateVault }),
+    () => ({ setFiatCurrency, setCurrentVaultId, updateVault, createVault }),
     [setFiatCurrency, setCurrentVaultId]
   )
 

@@ -2,7 +2,6 @@ import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesi
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { RemoteStateDependant } from '@clients/extension/src/providers/RemoteStateDependant'
-import { CreateVaultProvider } from '@clients/extension/src/vault/state/createVault'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
@@ -49,17 +48,15 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                   <QueryProvider>
                     <I18nProvider>
                       <WalletCoreProvider>
-                        <CreateVaultProvider>
-                          <WriteStorageProvider>
-                            <AntDesignThemeProvider>
-                              <RemoteStateDependant>
-                                {children}
-                              </RemoteStateDependant>
-                              <GlobalStyle />
-                              <ExtensionGlobalStyle />
-                            </AntDesignThemeProvider>
-                          </WriteStorageProvider>
-                        </CreateVaultProvider>
+                        <WriteStorageProvider>
+                          <AntDesignThemeProvider>
+                            <RemoteStateDependant>
+                              {children}
+                            </RemoteStateDependant>
+                            <GlobalStyle />
+                            <ExtensionGlobalStyle />
+                          </AntDesignThemeProvider>
+                        </WriteStorageProvider>
                       </WalletCoreProvider>
                     </I18nProvider>
                   </QueryProvider>
