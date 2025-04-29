@@ -11,11 +11,11 @@ import { LauncherObserver } from '../launcher/components/LauncherObserver'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '../onboarding/IncompleteOnboardingOnly'
-import EditVaultPage from '../pages/edItVault/EditVaultPage'
-import { VaultBackupPage } from '../pages/edItVault/vaultBackupSettings/VaultBackupPage'
-import DeleteVaultPage from '../pages/edItVault/vaultDeleteSettings/DeleteVaultPage'
-import VaultDetailsPage from '../pages/edItVault/vaultDetailsSettings/VaultDetailsPage'
-import VaultRenamePage from '../pages/edItVault/vaultRenameSettings/VaultRenamePage'
+import EditVaultPage from '../pages/editVault/EditVaultPage'
+import { VaultBackupPage } from '../pages/editVault/vaultBackupSettings/VaultBackupPage'
+import DeleteVaultPage from '../pages/editVault/vaultDeleteSettings/DeleteVaultPage'
+import VaultDetailsPage from '../pages/editVault/vaultDetailsSettings/VaultDetailsPage'
+import VaultRenamePage from '../pages/editVault/vaultRenameSettings/VaultRenamePage'
 import RegisterForAirdropPage from '../pages/registerForAirdrop/RegisterForAirdropPage'
 import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
@@ -228,11 +228,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   ),
   signCustomMessage: <SignCustomMessagePage />,
   dkls: <ManageDklsPage />,
-  reshareVaultFast: (
-    <ActiveVaultGuard>
-      <FastReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
   faq: <FaqVaultPage />,
 }
 

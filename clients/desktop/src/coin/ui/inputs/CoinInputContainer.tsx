@@ -14,7 +14,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
-import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles'
+import { IconWrapper } from '../../../pages/editVault/EditVaultPage.styles'
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};

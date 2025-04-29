@@ -7,7 +7,6 @@ export const appPaths = {
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   migrateVault: '/vault/migrate',
-  reshareVaultFast: '/vault/reshare/fast',
   address: '/address',
   root: '/',
   vaultSettings: '/vault/settings',
