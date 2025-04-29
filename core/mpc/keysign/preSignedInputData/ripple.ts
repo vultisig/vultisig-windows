@@ -10,7 +10,7 @@ export const getRipplePreSignedInputData: PreSignedInputDataResolver<
   const coin = assertField(keysignPayload, 'coin')
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
-  const { gas, sequence } = chainSpecific
+  const { gas, sequence, lastLedgerSequence } = chainSpecific
 
   const payment = TW.Ripple.Proto.OperationPayment.create({
     destination: keysignPayload.toAddress,
@@ -25,6 +25,7 @@ export const getRipplePreSignedInputData: PreSignedInputDataResolver<
     account: coin.address,
     fee: Long.fromString(gas.toString()),
     sequence: Number(sequence),
+    lastLedgerSequence: Number(lastLedgerSequence),
     publicKey: new Uint8Array(pubKeyData),
     opPayment: payment,
   })
