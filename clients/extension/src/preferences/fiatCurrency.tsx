@@ -1,7 +1,7 @@
 import { usePersistentStateQuery } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency'
 import { fiatCurrencyQueryKey } from '@core/ui/query/keys'
-import { SetFiatCurrencyFunction } from '@core/ui/state/storage/write'
+import { SetFiatCurrencyFunction } from '@core/ui/state/storage'
 
 import { setPersistentState } from '../state/persistent/setPersistentState'
 

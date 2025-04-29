@@ -3,7 +3,7 @@ import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
-import { useCoreWriteStorage } from '../../state/storage/write'
+import { useCoreStorage } from '../../state/storage'
 import { useSetCurrentVaultIdMutation } from './useSetCurrentVaultIdMutation'
 
 export const useCreateVaultMutation = (
@@ -11,7 +11,7 @@ export const useCreateVaultMutation = (
 ) => {
   const invalidateQueries = useInvalidateQueries()
 
-  const { createVault } = useCoreWriteStorage()
+  const { createVault } = useCoreStorage()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 

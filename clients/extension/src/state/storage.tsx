@@ -1,21 +1,21 @@
 import {
-  CoreWriteStorage,
-  CoreWriteStorageProvider,
+  CoreStorage,
+  CoreStorageProvider,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
   UpdateVaultFunction,
-} from '@core/ui/state/storage/write'
+} from '@core/ui/state/storage'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { setFiatCurrency } from '../../preferences/fiatCurrency'
-import { setCurrentVaultId } from '../../vault/state/currentVaultId'
-import { updateVaults } from '../../vault/state/vaults'
-import { getVaults } from '../../vault/state/vaults'
-import { getVaultsCoins } from '../../vault/state/vaultsCoins'
-import { updateVaultsCoins } from '../../vault/state/vaultsCoins'
+import { setFiatCurrency } from '../preferences/fiatCurrency'
+import { setCurrentVaultId } from '../vault/state/currentVaultId'
+import { updateVaults } from '../vault/state/vaults'
+import { getVaults } from '../vault/state/vaults'
+import { getVaultsCoins } from '../vault/state/vaultsCoins'
+import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const vaults = await getVaults()
@@ -56,7 +56,7 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   })
 }
 
-const writeStorage: CoreWriteStorage = {
+const writeStorage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   updateVault,
@@ -64,10 +64,8 @@ const writeStorage: CoreWriteStorage = {
   createVaultCoins,
 }
 
-export const WriteStorageProvider = ({ children }: ChildrenProp) => {
+export const StorageProvider = ({ children }: ChildrenProp) => {
   return (
-    <CoreWriteStorageProvider value={writeStorage}>
-      {children}
-    </CoreWriteStorageProvider>
+    <CoreStorageProvider value={writeStorage}>{children}</CoreStorageProvider>
   )
 }

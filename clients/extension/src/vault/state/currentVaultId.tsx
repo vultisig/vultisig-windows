@@ -1,5 +1,5 @@
 import { currentVaultIdQueryKey } from '@core/ui/query/keys'
-import { SetCurrentVaultIdFunction } from '@core/ui/state/storage/write'
+import { SetCurrentVaultIdFunction } from '@core/ui/state/storage'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import {
   CurrentVaultId,

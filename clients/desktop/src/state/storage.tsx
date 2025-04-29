@@ -1,25 +1,18 @@
 import {
-  CoreWriteStorage,
-  CoreWriteStorageProvider,
+  CoreStorage,
+  CoreStorageProvider,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
   UpdateVaultFunction,
-} from '@core/ui/state/storage/write'
+} from '@core/ui/state/storage'
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
-import {
-  GetVault,
-  SaveCoins,
-  SaveVault,
-} from '../../../wailsjs/go/storage/Store'
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
-import { toStorageCoin } from '../../storage/storageCoin'
-import { useCurrentVaultId } from '../../vault/state/currentVaultId'
-import {
-  fromStorageVault,
-  toStorageVault,
-} from '../../vault/utils/storageVault'
+import { GetVault, SaveCoins, SaveVault } from '../../wailsjs/go/storage/Store'
+import { useFiatCurrency } from '../preferences/state/fiatCurrency'
+import { toStorageCoin } from '../storage/storageCoin'
+import { useCurrentVaultId } from '../vault/state/currentVaultId'
+import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const oldStorageVault = await GetVault(vaultId)
@@ -48,11 +41,11 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   await SaveCoins(vaultId, coins.map(toStorageCoin))
 }
 
-export const WriteStorageProvider = ({ children }: ChildrenProp) => {
+export const StorageProvider = ({ children }: ChildrenProp) => {
   const [, setFiatCurrency] = useFiatCurrency()
   const [, setCurrentVaultId] = useCurrentVaultId()
 
-  const value: CoreWriteStorage = useMemo(
+  const value: CoreStorage = useMemo(
     () => ({
       setFiatCurrency,
       setCurrentVaultId,
@@ -63,9 +56,5 @@ export const WriteStorageProvider = ({ children }: ChildrenProp) => {
     [setFiatCurrency, setCurrentVaultId]
   )
 
-  return (
-    <CoreWriteStorageProvider value={value}>
-      {children}
-    </CoreWriteStorageProvider>
-  )
+  return <CoreStorageProvider value={value}>{children}</CoreStorageProvider>
 }

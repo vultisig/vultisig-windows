@@ -4,13 +4,13 @@ import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMutation } from '@tanstack/react-query'
 
 import { fiatCurrencyQueryKey } from '../query/keys'
-import { useCoreWriteStorage } from './storage/write'
+import { useCoreStorage } from './storage'
 
 export const { provider: FiatCurrencyProvider, useValue: useFiatCurrency } =
   getValueProviderSetup<FiatCurrency>('fiatCurrency')
 
 export const useSetFiatCurrencyMutation = () => {
-  const { setFiatCurrency } = useCoreWriteStorage()
+  const { setFiatCurrency } = useCoreStorage()
   const invalidateQueries = useInvalidateQueries()
 
   return useMutation({

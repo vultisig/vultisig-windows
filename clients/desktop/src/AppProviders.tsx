@@ -20,7 +20,7 @@ import { FiatCurrencyProvider } from './preferences/state/fiatCurrency'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
-import { WriteStorageProvider } from './state/storage/write'
+import { StorageProvider } from './state/storage'
 import { CurrentVaultIdProvider } from './vault/state/currentVaultId'
 
 const queryClient = getQueryClient()
@@ -55,9 +55,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                           <InitializedWalletOnly>
                             <RemoteStateDependant>
                               <CurrentVaultIdProvider>
-                                <WriteStorageProvider>
-                                  {children}
-                                </WriteStorageProvider>
+                                <StorageProvider>{children}</StorageProvider>
                               </CurrentVaultIdProvider>
                             </RemoteStateDependant>
                           </InitializedWalletOnly>
