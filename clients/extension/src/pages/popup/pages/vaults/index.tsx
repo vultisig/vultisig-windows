@@ -28,7 +28,7 @@ export const VaultsPage = () => {
   const handleSelect = (id: string) => {
     setCurrentVaultId.mutate(id)
 
-    navigate('main')
+    navigate('root')
   }
 
   return (

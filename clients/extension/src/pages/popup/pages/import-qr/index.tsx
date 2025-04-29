@@ -1,11 +1,11 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useAppPathParams } from '@clients/extension/src/navigation/hooks/useAppPathParams'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
 import { useCreateVault } from '@core/ui/vault/state/createVault'
 import { useVaults } from '@core/ui/vault/state/vaults'
@@ -49,7 +49,7 @@ const Component = () => {
   const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate('main')
+    else navigate('root')
   }
 
   const vaults = useVaults()
@@ -198,7 +198,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('main')
+    navigate('root')
   }, [navigate])
 
   useEffect(() => {
@@ -237,7 +237,7 @@ const Component = () => {
     }
   }, [navigateToMain])
 
-  const [{ title = t('keysign') }] = useAppPathParams<'importQR'>()
+  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
 
   return isWindows ? (
     <StyledPageContent fullHeight>
