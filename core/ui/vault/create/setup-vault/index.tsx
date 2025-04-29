@@ -1,17 +1,7 @@
-import { useSetupVaultPageAnimation } from '@clients/extension/src/pages/popup/pages/setup-vault/hooks/useSetupVaultPageAnimation'
-import {
-  ArtContainer,
-  ContentWrapper,
-  DescriptionContentWrapper,
-  DescriptionTitleWrapper,
-  DescriptionWrapper,
-  IconWrapper,
-} from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPage.styled'
-import { useVaultSecurityType } from '@clients/extension/src/pages/popup/pages/setup-vault/type/state/vaultSecurityType'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/buttons/Button'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
@@ -21,15 +11,26 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
+import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
+import {
+  ArtContainer,
+  ConfirmButton,
+  ContentWrapper,
+  DescriptionContentWrapper,
+  DescriptionTitleWrapper,
+  DescriptionWrapper,
+  IconWrapper,
+} from './SetupVaultPage.styled'
+
 export const SetupVaultPage = () => {
-  const { RiveComponent, stateMachineInput, isPlaying, onPlay } =
-    useSetupVaultPageAnimation()
+  const { RiveComponent, isPlaying, onPlay } = useSetupVaultPageAnimation()
   const { t } = useTranslation()
   const [value, setValue] = useVaultSecurityType()
   const navigate = useCoreNavigate()
@@ -51,11 +52,7 @@ export const SetupVaultPage = () => {
       }}
     >
       <PageHeader
-        title={
-          <Text color="contrast" size={16}>
-            {t('chooseSetup')}
-          </Text>
-        }
+        title={<PageHeaderTitle>{t('chooseSetup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
       />
       <PageContent flexGrow as="form" onSubmit={onStart}>
@@ -115,7 +112,6 @@ export const SetupVaultPage = () => {
                 if (isPlaying) return
                 onPlay()
                 setValue(newValue)
-                stateMachineInput?.fire()
               }}
             />
           </div>
@@ -148,14 +144,7 @@ export const SetupVaultPage = () => {
               ))}
             </DescriptionContentWrapper>
           </DescriptionWrapper>
-          <Button
-            style={{
-              alignSelf: 'stretch',
-            }}
-            type="submit"
-          >
-            {t('next')}
-          </Button>
+          <ConfirmButton type="submit">{t('next')}</ConfirmButton>
         </ContentWrapper>
       </PageContent>
     </VStack>
