@@ -7,6 +7,8 @@ import { useVaults } from './vaults'
 
 export type CurrentVaultId = string | null
 
+export const initialCurrentVaultId: CurrentVaultId = null
+
 export const { useValue: useCurrentVaultId, provider: CurrentVaultIdProvider } =
   getValueProviderSetup<CurrentVaultId>('CurrentVaultId')
 

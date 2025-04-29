@@ -3,14 +3,11 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
+import { CurrentVaultId } from '../vault/state/currentVaultId'
 import { Vault } from '../vault/Vault'
 
 export type SetFiatCurrencyFunction = (
   value: FiatCurrency
-) => Promise<void> | void
-
-export type SetCurrentVaultIdFunction = (
-  id: string | null
 ) => Promise<void> | void
 
 export type UpdateVaultInput = {
@@ -37,9 +34,18 @@ type GetDefaultChainsFunction = () => Promise<Chain[]> | Chain[]
 
 export type GetFiatCurrencyFunction = () => Promise<FiatCurrency> | FiatCurrency
 
+export type GetCurrentVaultIdFunction = () =>
+  | Promise<CurrentVaultId>
+  | CurrentVaultId
+
+export type SetCurrentVaultIdFunction = (
+  id: CurrentVaultId
+) => Promise<void> | void
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
+  getCurrentVaultId: GetCurrentVaultIdFunction
   setCurrentVaultId: SetCurrentVaultIdFunction
   updateVault: UpdateVaultFunction
   createVault: CreateVaultFunction

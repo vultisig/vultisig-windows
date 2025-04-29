@@ -8,13 +8,14 @@ import {
   CreateVaultFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
+import { initialCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
+import { CurrentVaultId } from '@core/ui/vault/state/currentVaultId'
 import { initialDefaultChains } from '@core/ui/vault/state/defaultChains'
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
 import { GetVault, SaveCoins, SaveVault } from '../../wailsjs/go/storage/Store'
 import { toStorageCoin } from '../storage/storageCoin'
-import { useCurrentVaultId } from '../vault/state/currentVaultId'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 import { PersistentStateKey } from './persistentState'
 import { usePersistentState } from './persistentState'
@@ -51,7 +52,11 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
     PersistentStateKey.FiatCurrency,
     defaultFiatCurrency
   )
-  const [, setCurrentVaultId] = useCurrentVaultId()
+  const [currentVaultId, setCurrentVaultId] =
+    usePersistentState<CurrentVaultId>(
+      PersistentStateKey.CurrentVaultId,
+      initialCurrentVaultId
+    )
   const [defaultChains, setDefaultChains] = usePersistentState<Chain[]>(
     PersistentStateKey.DefaultChains,
     initialDefaultChains
@@ -67,13 +72,15 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       setDefaultChains,
       getDefaultChains: () => defaultChains,
       getFiatCurrency: () => fiatCurrency,
+      getCurrentVaultId: () => currentVaultId,
     }),
     [
-      setFiatCurrency,
-      setCurrentVaultId,
-      setDefaultChains,
+      currentVaultId,
       defaultChains,
       fiatCurrency,
+      setCurrentVaultId,
+      setDefaultChains,
+      setFiatCurrency,
     ]
   )
 

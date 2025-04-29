@@ -15,7 +15,10 @@ import {
   setDefaultChains,
 } from '../chain/state/defaultChains'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
-import { setCurrentVaultId } from '../vault/state/currentVaultId'
+import {
+  getCurrentVaultId,
+  setCurrentVaultId,
+} from '../vault/state/currentVaultId'
 import { updateVaults } from '../vault/state/vaults'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
@@ -63,6 +66,7 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
 const writeStorage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
+  getCurrentVaultId,
   updateVault,
   createVault,
   createVaultCoins,
