@@ -5,6 +5,7 @@ import { ReshareSecureVault } from '@clients/extension/src/components/settings/r
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { AppPath, appPaths } from '@clients/extension/src/navigation'
+import { ConnectedDappsPage } from '@clients/extension/src/pages/popup/pages/connected-dapps'
 import { CurrencyPage } from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
@@ -81,6 +82,11 @@ const appRoutes: Record<AppPath, ReactNode> = {
   manageChains: (
     <ActiveVaultGuard>
       <ManageChainsPage />
+    </ActiveVaultGuard>
+  ),
+  connectedDapps: (
+    <ActiveVaultGuard>
+      <ConnectedDappsPage />
     </ActiveVaultGuard>
   ),
   root: (

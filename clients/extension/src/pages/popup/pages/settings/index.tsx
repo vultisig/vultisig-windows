@@ -7,10 +7,12 @@ import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
+import { CircleStopIcon } from '@lib/ui/icons/CircleStopIcon'
 import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
-import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
+import { ShareIcon } from '@lib/ui/icons/ShareIcon'
+import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -48,6 +50,12 @@ export const SettingsPage = () => {
             {t('vault_specific')}
           </Text>
           <List>
+            <ListItem
+              extra={<Switch />}
+              onClick={() => {}}
+              title={t('prioritize_vultisig')}
+              hoverable
+            />
             <ListItem
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate('vaultSettings')}
@@ -110,9 +118,15 @@ export const SettingsPage = () => {
           </Text>
           <List>
             <ListItem
-              icon={<VultisigLogoIcon fontSize={20} />}
+              icon={<CircleStopIcon fontSize={20} />}
               onClick={() => open('https://vultisig.com/vult', '_blank')}
               title={t('vult_token')}
+              hoverable
+            />
+            <ListItem
+              icon={<ShareIcon fontSize={20} />}
+              onClick={() => {}}
+              title={t('share_vault')}
               hoverable
             />
           </List>
