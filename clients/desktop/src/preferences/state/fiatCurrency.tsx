@@ -1,8 +1,5 @@
 import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency'
-import {
-  FiatCurrencyProvider as BaseFiatCurrencyProvider,
-  SetFiatCurrencyProvider,
-} from '@core/ui/state/fiatCurrency'
+import { FiatCurrencyProvider as CoreFiatCurrencyProvider } from '@core/ui/state/fiatCurrency'
 import { ChildrenProp } from '@lib/ui/props'
 
 import {
@@ -10,21 +7,19 @@ import {
   usePersistentState,
 } from '../../state/persistentState'
 
-const useFiatCurrency = () => {
+export const useFiatCurrency = () => {
   return usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
     defaultFiatCurrency
   )
 }
 
-export const FiatCurrencyProviders = ({ children }: ChildrenProp) => {
-  const [fiatCurrency, setFiatCurrency] = useFiatCurrency()
+export const FiatCurrencyProvider = ({ children }: ChildrenProp) => {
+  const [fiatCurrency] = useFiatCurrency()
 
   return (
-    <BaseFiatCurrencyProvider value={fiatCurrency}>
-      <SetFiatCurrencyProvider value={setFiatCurrency}>
-        {children}
-      </SetFiatCurrencyProvider>
-    </BaseFiatCurrencyProvider>
+    <CoreFiatCurrencyProvider value={fiatCurrency}>
+      {children}
+    </CoreFiatCurrencyProvider>
   )
 }

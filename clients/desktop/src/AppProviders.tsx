@@ -16,10 +16,11 @@ import { BrowserOpenURL } from '@wailsapp/runtime'
 import { SaveFile } from '../wailsjs/go/main/App'
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
-import { FiatCurrencyProviders } from './preferences/state/fiatCurrency'
+import { FiatCurrencyProvider } from './preferences/state/fiatCurrency'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
+import { StorageProvider } from './state/storage'
 import { CreateVaultProvider } from './vault/state/createVault'
 import {
   CurrentVaultIdProvider,
@@ -45,7 +46,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <FiatCurrencyProviders>
+    <FiatCurrencyProvider>
       <VersionProvider value={buildInfo.version}>
         <MpcLocalModeAvailabilityProvider value={true}>
           <VaultCreationMpcLibProvider value={mpcLib}>
@@ -62,7 +63,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                                 <SetCurrentVaultIdProvider>
                                   <CreateVaultProvider>
                                     <UpdateVaultProvider>
-                                      {children}
+                                      <StorageProvider>
+                                        {children}
+                                      </StorageProvider>
                                     </UpdateVaultProvider>
                                   </CreateVaultProvider>
                                 </SetCurrentVaultIdProvider>
@@ -79,6 +82,6 @@ export const AppProviders = ({ children }: ChildrenProp) => {
           </VaultCreationMpcLibProvider>
         </MpcLocalModeAvailabilityProvider>
       </VersionProvider>
-    </FiatCurrencyProviders>
+    </FiatCurrencyProvider>
   )
 }

@@ -1,4 +1,3 @@
-import { SetFiatCurrencyProvider } from '@clients/extension/src/preferences/fiatCurrency'
 import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
@@ -20,6 +19,8 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
+
+import { WriteStorageProvider } from '../state/storage/write'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -53,7 +54,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <SetCurrentVaultIdProvider>
                           <CreateVaultProvider>
                             <UpdateVaultProvider>
-                              <SetFiatCurrencyProvider>
+                              <WriteStorageProvider>
                                 <AntDesignThemeProvider>
                                   <RemoteStateDependant>
                                     {children}
@@ -61,7 +62,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                                   <GlobalStyle />
                                   <ExtensionGlobalStyle />
                                 </AntDesignThemeProvider>
-                              </SetFiatCurrencyProvider>
+                              </WriteStorageProvider>
                             </UpdateVaultProvider>
                           </CreateVaultProvider>
                         </SetCurrentVaultIdProvider>
