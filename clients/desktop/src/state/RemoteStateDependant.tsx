@@ -1,3 +1,4 @@
+import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -13,10 +14,12 @@ import { useVaultFoldersQuery } from '../vaults/folders/queries/useVaultFoldersQ
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
+  const defaultChains = useDefaultChainsQuery()
 
   const query = useMergeQueries({
     vaults,
     vaultFolders,
+    defaultChains,
   })
 
   const { t } = useTranslation()

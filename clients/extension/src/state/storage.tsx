@@ -10,6 +10,10 @@ import { ChildrenProp } from '@lib/ui/props'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
+import {
+  getDefaultChains,
+  setDefaultChains,
+} from '../chain/state/defaultChains'
 import { setFiatCurrency } from '../preferences/fiatCurrency'
 import { setCurrentVaultId } from '../vault/state/currentVaultId'
 import { updateVaults } from '../vault/state/vaults'
@@ -62,6 +66,8 @@ const writeStorage: CoreStorage = {
   updateVault,
   createVault,
   createVaultCoins,
+  setDefaultChains,
+  getDefaultChains,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {

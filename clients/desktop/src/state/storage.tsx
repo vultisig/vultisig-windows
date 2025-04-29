@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import {
   CoreStorage,
   CoreStorageProvider,
@@ -5,6 +6,7 @@ import {
   CreateVaultFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
+import { initialDefaultChains } from '@core/ui/vault/state/defaultChains'
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
@@ -13,6 +15,8 @@ import { useFiatCurrency } from '../preferences/state/fiatCurrency'
 import { toStorageCoin } from '../storage/storageCoin'
 import { useCurrentVaultId } from '../vault/state/currentVaultId'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
+import { PersistentStateKey } from './persistentState'
+import { usePersistentState } from './persistentState'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const oldStorageVault = await GetVault(vaultId)
@@ -44,6 +48,10 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [, setFiatCurrency] = useFiatCurrency()
   const [, setCurrentVaultId] = useCurrentVaultId()
+  const [defaultChains, setDefaultChains] = usePersistentState<Chain[]>(
+    PersistentStateKey.DefaultChains,
+    initialDefaultChains
+  )
 
   const value: CoreStorage = useMemo(
     () => ({
@@ -52,8 +60,10 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       updateVault,
       createVault,
       createVaultCoins,
+      setDefaultChains,
+      getDefaultChains: () => defaultChains,
     }),
-    [setFiatCurrency, setCurrentVaultId]
+    [setFiatCurrency, setCurrentVaultId, setDefaultChains, defaultChains]
   )
 
   return <CoreStorageProvider value={value}>{children}</CoreStorageProvider>

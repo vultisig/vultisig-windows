@@ -1,3 +1,4 @@
+import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
 import { FiatCurrencyProvider } from '@core/ui/state/fiatCurrency'
 import { VaultsProvider } from '@core/ui/vault/state/vaults'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
@@ -14,10 +15,12 @@ import { useVaultsQuery } from '../vault/state/vaults'
 export const RemoteStateDependant = ({ children }: ChildrenProp) => {
   const vaultsQuery = useVaultsQuery()
   const fiatCurrencyQuery = useFiatCurrencyQuery()
+  const defaultChainsQuery = useDefaultChainsQuery()
 
   const query = useMergeQueries({
     vaults: vaultsQuery,
     fiatCurrency: fiatCurrencyQuery,
+    defaultChains: defaultChainsQuery,
   })
 
   const { t } = useTranslation()

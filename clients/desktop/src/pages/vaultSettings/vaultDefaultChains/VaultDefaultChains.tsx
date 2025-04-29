@@ -1,5 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { useSetDefaultChainsMutation } from '@core/ui/chain/mutations/useSetDefaultChainsMutation'
+import { useDefaultChains } from '@core/ui/chain/queries/useDefaultChainsQuery'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -9,7 +11,6 @@ import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useDefaultChains } from '../../../chain/state/defaultChains'
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider'
 import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch'
 import {
@@ -25,7 +26,9 @@ const VaultDefaultChains = () => {
   const { t } = useTranslation()
   const [searchQuery] = useCurrentSearch()
 
-  const [value, setValue] = useDefaultChains()
+  const { mutate: setDefaultChains } = useSetDefaultChainsMutation()
+
+  const value = useDefaultChains()
 
   const nativeTokens = Object.values(chainFeeCoin)
   const filteredNativeTokens = useMemo(() => {
@@ -60,8 +63,10 @@ const VaultDefaultChains = () => {
             <ChainButton
               key={index}
               onClick={() =>
-                setValue(prev =>
-                  prev.includes(chain) ? without(prev, chain) : [...prev, chain]
+                setDefaultChains(
+                  value.includes(chain)
+                    ? without(value, chain)
+                    : [...value, chain]
                 )
               }
             >

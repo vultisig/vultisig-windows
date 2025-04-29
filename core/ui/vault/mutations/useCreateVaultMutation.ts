@@ -1,9 +1,14 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { vaultsQueryKey } from '@core/ui/query/keys'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
+import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { useCoreStorage } from '../../state/storage'
+import { useCreateVaultCoinsMutation } from './useCreateVaultCoinsMutations'
 import { useSetCurrentVaultIdMutation } from './useSetCurrentVaultIdMutation'
 
 export const useCreateVaultMutation = (
@@ -11,9 +16,12 @@ export const useCreateVaultMutation = (
 ) => {
   const invalidateQueries = useInvalidateQueries()
 
-  const { createVault } = useCoreStorage()
+  const { createVault, getDefaultChains } = useCoreStorage()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
+  const { mutateAsync: createVaultCoins } = useCreateVaultCoinsMutation()
+
+  const walletCore = useAssertWalletCore()
 
   return useMutation({
     mutationFn: async (vault: Vault) => {
@@ -22,6 +30,34 @@ export const useCreateVaultMutation = (
       await invalidateQueries(vaultsQueryKey)
 
       await setCurrentVaultId(getVaultId(result))
+
+      const defaultChains = await getDefaultChains()
+      const coins = await Promise.all(
+        defaultChains.map(async chain => {
+          const publicKey = getPublicKey({
+            chain,
+            walletCore,
+            hexChainCode: vault.hexChainCode,
+            publicKeys: vault.publicKeys,
+          })
+
+          const address = deriveAddress({
+            chain,
+            publicKey,
+            walletCore,
+          })
+
+          return {
+            ...chainFeeCoin[chain],
+            address,
+          }
+        })
+      )
+
+      await createVaultCoins({
+        vaultId: getVaultId(result),
+        coins,
+      })
 
       return result
     },

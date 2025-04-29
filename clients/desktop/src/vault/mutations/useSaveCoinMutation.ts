@@ -1,5 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -8,7 +9,6 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store'
-import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { toStorageCoin } from '../../storage/storageCoin'
 
 export const useSaveCoinMutation = () => {
