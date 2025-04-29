@@ -6,18 +6,20 @@ import { FieldValues } from 'react-hook-form'
 
 import { MayaChainPool } from '../../../../lib/types/deposit'
 import { ChainAction } from '../../ChainAction'
+import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
 
 interface MemoParams {
   selectedChainAction: ChainAction
   depositFormData: FieldValues
   bondableAsset: MayaChainPool['asset']
-  fee?: number | bigint
+  chain: Chain
 }
 
 export const generateMemo = ({
   selectedChainAction,
   depositFormData,
   bondableAsset,
+  chain,
 }: MemoParams): string => {
   const {
     nodeAddress,
@@ -27,9 +29,8 @@ export const generateMemo = ({
     provider,
     operatorFee,
     destinationChain,
-    destinationChannel,
     destinationAddress,
-    transferMemo,
+    memo,
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
@@ -49,7 +50,7 @@ export const generateMemo = ({
           ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
           : `BOND:${nodeAddress}:${provider}`
       }
-      // If no provider, include only operatorFee (no 'amount' field)
+
       return operatorFee
         ? `BOND:${nodeAddress}:${operatorFee}`
         : `BOND:${nodeAddress}`
@@ -68,11 +69,20 @@ export const generateMemo = ({
     leave: () => `LEAVE:${nodeAddress}`,
     vote: () => 'VOTE',
     ibc_transfer: () => {
-      shouldBePresent(destinationChain, 'IBC destination chain')
-      shouldBePresent(destinationChannel, 'IBC destination channel')
-      shouldBePresent(destinationAddress, 'IBC destination address')
-      const memo = transferMemo ? `:${transferMemo}` : ''
-      return `${destinationChain}:${destinationChannel}:${destinationAddress}${memo}`
+      if (!destinationChain || !destinationAddress) {
+        throw new Error('Invalid IBC transfer parameters')
+      }
+
+      const sourceMap = sourceChannelByChain[chain]
+      const sourceChannel = sourceMap?.[destinationChain]
+
+      if (!sourceChannel) {
+        throw new Error(
+          `Missing source channel for ${chain} -> ${destinationChain}`
+        )
+      }
+
+      return `${destinationChain}:${sourceChannel}:${destinationAddress}${memo ? `:${memo}` : ''}`
     },
   })
 }
@@ -90,6 +100,6 @@ function extractFormValues(formData: FieldValues) {
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
     destinationAddress: formData.destinationAddress as string | null,
-    transferMemo: formData.transferMemo as string | null,
+    memo: formData.memo as string | null,
   }
 }

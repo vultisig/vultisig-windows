@@ -4,6 +4,7 @@ import { Chain } from '@core/chain/Chain'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -37,7 +38,9 @@ export const DepositConfirmButton = ({
   const { t } = useTranslation()
   const [coinKey] = useCurrentDepositCoin()
   const coin = useCurrentVaultCoin(coinKey)
-  const chainSpecificQuery = useDepositChainSpecificQuery()
+  const transactionType =
+    action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
+  const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)
   const vault = useCurrentVault()
   const config = transactionConfig[action] || {}
 
@@ -54,6 +57,8 @@ export const DepositConfirmButton = ({
   const walletCore = useAssertWalletCore()
 
   const keysignPayload = useMemo(() => {
+    if (chainSpecificQuery.isLoading) return
+
     // TODO: handle affiliate fee and percentage
     const publicKey = getPublicKey({
       chain: coin.chain,
@@ -61,6 +66,7 @@ export const DepositConfirmButton = ({
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
     })
+
     const keysignPayload = create(KeysignPayloadSchema, {
       coin: toCommCoin({
         ...coin,
@@ -93,6 +99,7 @@ export const DepositConfirmButton = ({
     action,
     amount,
     chainSpecificQuery.data,
+    chainSpecificQuery.isLoading,
     coin,
     isTonFunction,
     memo,
@@ -116,7 +123,7 @@ export const DepositConfirmButton = ({
     return <Text color="danger">{t('failed_to_load')}</Text>
   }
 
-  if (chainSpecificQuery.isLoading) {
+  if (chainSpecificQuery.isLoading || !keysignPayload) {
     return <Text>{t('loading')}</Text>
   }
 

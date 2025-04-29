@@ -379,6 +379,7 @@ export const en = {
   auto: 'auto',
   join_reshare: 'Join Reshare',
   join_upgrade: 'Join Upgrade',
+  select_destination_chain: 'Select Destination Chain',
   waiting_for_upgrade_start: 'Waiting for upgrade to begin...',
   reshare: 'Reshare',
   ibc_transfer: 'IBC Transfer',
