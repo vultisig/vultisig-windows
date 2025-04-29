@@ -16,6 +16,6 @@ export const getRippleSpecific: ChainSpecificResolver<RippleSpecific> = async ({
   return create(RippleSpecificSchema, {
     sequence: BigInt(rippleAccount.account_data.Sequence),
     gas: BigInt(rippleTxFee),
-    lastLedgerSequence: BigInt(rippleAccount.ledger_current_index ?? 0 + 60),
+    lastLedgerSequence: BigInt((rippleAccount.ledger_current_index ?? 0) + 60),
   })
 }
