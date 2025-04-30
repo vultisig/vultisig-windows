@@ -3,9 +3,15 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import wasm from 'vite-plugin-wasm'
+import topLevelAwait from 'vite-plugin-top-level-await'
 
 export default defineConfig({
-  plugins: [react(), nodePolyfills({ exclude: ['fs'] }), wasm()],
+  plugins: [
+    react(),
+    nodePolyfills({ exclude: ['fs'] }),
+    wasm(),
+    topLevelAwait(),
+  ],
   css: {
     preprocessorOptions: {
       scss: {

@@ -1,6 +1,6 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'

@@ -10,9 +10,8 @@ import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/Decr
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { useCreateVault } from '@core/ui/vault/state/createVault'
-import { useSetCurrentVaultId } from '@core/ui/vault/state/setCurrentVaultId'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
+import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -46,8 +45,7 @@ const Component = () => {
     isWindows: true, // Default to Windows flow, will be updated in useEffect if needed
     status: 'default',
   }
-  const createVault = useCreateVault()
-  const setCurrentVaultId = useSetCurrentVaultId()
+  const { mutateAsync: createVault } = useCreateVaultMutation()
 
   const [state, setState] = useState(initialState)
   const {
@@ -104,7 +102,6 @@ const Component = () => {
     setState(p => ({ ...p, loading: true }))
     try {
       await createVault(decodedVault)
-      await setCurrentVaultId(getVaultId(decodedVault))
       navigateToMain()
     } catch (e) {
       handleError(extractErrorMsg(e))

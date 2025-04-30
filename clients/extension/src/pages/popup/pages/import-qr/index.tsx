@@ -6,8 +6,8 @@ import {
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
 import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
-import { useCreateVault } from '@core/ui/vault/state/createVault'
 import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -44,7 +44,7 @@ const Component = () => {
   const { file, isWindows, loading, status, vault, error } = state
   const navigate = useAppNavigate()
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const createVault = useCreateVault()
+  const { mutateAsync: createVault } = useCreateVaultMutation()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {

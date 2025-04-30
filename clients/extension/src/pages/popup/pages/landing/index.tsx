@@ -1,6 +1,6 @@
 import { Button } from '@clients/extension/src/components/button'
-import { ProductLogoBlock } from '@clients/extension/src/components/shared/Logo/ProductLogoBlock'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { Divider } from '@lib/ui/divider'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
