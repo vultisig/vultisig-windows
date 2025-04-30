@@ -38,7 +38,6 @@ export const SetupVaultPage = () => {
   const theme = useTheme()
 
   const onStart = useCallback(() => {
-    console.log('onStart', value)
     navigate(
       match(value, {
         fast: () => 'setupFastVault',
