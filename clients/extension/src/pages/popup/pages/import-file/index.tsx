@@ -1,10 +1,10 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
 import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
@@ -57,7 +57,7 @@ const Component = () => {
     isEncrypted,
   } = state
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
 

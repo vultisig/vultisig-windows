@@ -2,10 +2,8 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  root: '/',
   currencySettings: '/settings/currency',
   deleteVault: '/settings/vault/delete',
-  landing: '/landing',
   languageSettings: '/settings/language',
   onboarding: '/onboarding',
   renameVault: '/settings/vault/rename',

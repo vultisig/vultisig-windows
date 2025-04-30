@@ -1,10 +1,10 @@
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { Vault } from '@clients/extension/src/utils/interfaces'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
@@ -42,7 +42,7 @@ const Component = () => {
   }
   const [state, setState] = useState(initialState)
   const { file, isWindows, loading, status, vault, error } = state
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createVault } = useCreateVaultMutation()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')

@@ -3,6 +3,7 @@ import { Button } from '@clients/extension/src/components/button'
 import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName } from '@core/ui/i18n/Language'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
@@ -24,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 export const SettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const languageQuery = useLanguageQuery()
 
@@ -31,7 +33,7 @@ export const SettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('root')} ghost>
+          <Button onClick={() => coreNavigate('root')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }

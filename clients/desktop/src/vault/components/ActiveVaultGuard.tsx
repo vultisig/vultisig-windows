@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 import { useCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
@@ -6,7 +7,6 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { CoinFinder } from '../chain/coin/finder/CoinFinder'
 
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
@@ -14,7 +14,7 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const vaults = useVaults()
   const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   const isDisabled = !vault
 

@@ -1,9 +1,9 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -26,7 +26,7 @@ export const ManageChainsPage = () => {
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { search } = state
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const coins = Object.values(chainFeeCoin)
 
   const handleFilter = (coin: Coin) => {

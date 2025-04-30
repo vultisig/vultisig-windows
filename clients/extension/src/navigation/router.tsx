@@ -9,10 +9,10 @@ import { CurrencyPage } from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
-import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import { LanguagePage } from '@clients/extension/src/pages/popup/pages/language'
-import { MainPage } from '@clients/extension/src/pages/popup/pages/main'
+import { VaultPage } from '@clients/extension/src/pages/popup/pages/vault'
 import { ManageChainsPage } from '@clients/extension/src/pages/popup/pages/manage-chains'
+import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/new-vault'
 import { RenameVaultPage } from '@clients/extension/src/pages/popup/pages/rename-vault'
 import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
@@ -26,12 +26,18 @@ import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
 
 const coreRoutes: Record<CorePath, ReactNode> = {
+  root: (
+    <ActiveVaultGuard>
+      <VaultPage />
+    </ActiveVaultGuard>
+  ),
   vault: <ActiveVaultGuard>TODO: Implement vault page</ActiveVaultGuard>,
   joinKeygen: <>TODO: Implement join keygen page</>,
   setupFastVault: <SetupFastVaultPage />,
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportFilePage />,
+  newVault: <NewVaultPage />,
   keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
   reshareVault: (
     <ActiveVaultGuard>
@@ -83,17 +89,11 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <ManageChainsPage />
     </ActiveVaultGuard>
   ),
-  root: (
-    <ActiveVaultGuard>
-      <MainPage />
-    </ActiveVaultGuard>
-  ),
   onboarding: (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  landing: <NewVaultPage />,
 }
 
 export const router = createHashRouter(
@@ -108,6 +108,6 @@ export const router = createHashRouter(
     })),
   ],
   {
-    basename: appPaths.root,
+    basename: corePaths.root,
   }
 )

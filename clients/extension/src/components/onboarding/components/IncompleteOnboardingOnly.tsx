@@ -1,13 +1,13 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarading'
 
 export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {
   const { data: hasFinishedOnboarding } = useHasFinishedOnboarding()
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   useEffect(() => {
     if (hasFinishedOnboarding) {

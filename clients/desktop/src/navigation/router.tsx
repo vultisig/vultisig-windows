@@ -66,6 +66,11 @@ const Root = () => (
 )
 
 const coreRoutes: Record<CorePath, ReactNode> = {
+  root: (
+    <EmptyVaultsOnly>
+      <NewVaultPage withBackButton={false} />
+    </EmptyVaultsOnly>
+  ),
   vault: (
     <ActiveVaultGuard>
       <VaultPage />
@@ -76,6 +81,7 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportVaultPage />,
+  newVault: <NewVaultPage />,
   keysign: (
     <ActiveVaultGuard>
       <StartKeysignPage />
@@ -106,12 +112,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
 }
 
 const appRoutes: Record<AppPath, ReactNode> = {
-  root: (
-    <EmptyVaultsOnly>
-      <NewVaultPage withBackButton={false} />
-    </EmptyVaultsOnly>
-  ),
-  newVault: <NewVaultPage />,
   onboarding: (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
