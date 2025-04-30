@@ -26,14 +26,14 @@ export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
         transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
           ...ibcTransaction,
           timeoutHeight: {
-            revisionNumber: new Long(
-              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            revisionNumber: Long.fromString(
+              ibcTransaction.timeoutHeight.revisionNumber
             ),
-            revisionHeight: new Long(
-              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            revisionHeight: Long.fromString(
+              ibcTransaction.timeoutHeight.revisionHeight
             ),
           },
-          timeoutTimestamp: new Long(Number(ibcTransaction.timeoutTimestamp)),
+          timeoutTimestamp: Long.fromString(ibcTransaction.timeoutTimestamp),
         }),
       }),
     ]
