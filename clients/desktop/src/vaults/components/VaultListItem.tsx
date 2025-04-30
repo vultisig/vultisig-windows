@@ -19,8 +19,11 @@ export const VaultListItem = ({ isDraggable }: VaultListItemProps) => {
     <ListItem
       isDraggable={isDraggable}
       onClick={() => {
-        setCurrentVaultId(getVaultId(vault))
-        navigate('vault')
+        setCurrentVaultId(getVaultId(vault), {
+          onSuccess: () => {
+            navigate('vault')
+          },
+        })
       }}
     >
       <VaultDescription />
