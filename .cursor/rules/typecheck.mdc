@@ -1,0 +1,39 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# TypeScript Type Checking
+
+## Context
+- When fixing TypeScript type issues
+- When asked to fix or improve types
+- When making type-related changes to the codebase
+
+## Requirements
+- Run `yarn typecheck` to identify all type issues
+- Fix all type errors reported by the command
+- Ensure type safety across the codebase
+- Address each error in order of appearance
+- Verify fixes with another `yarn typecheck` run
+
+## Examples
+
+### Process
+1. Run `yarn typecheck` to get the list of type errors
+2. Address each error systematically
+3. After fixing, run `yarn typecheck` again to verify
+4. Continue until all type errors are resolved
+
+### Common Fixes
+- Add missing type declarations
+- Correct incorrect type assertions
+- Fix incompatible type assignments
+- Add necessary type guards
+- Update interface definitions
+
+## Notes
+- Do not ignore type errors with @ts-ignore or similar comments
+- Prefer explicit typing over 'any' type
+- Maintain strict type checking standards
+- Consider the broader impact of type changes on the codebase
