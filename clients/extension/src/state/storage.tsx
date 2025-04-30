@@ -57,9 +57,11 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
 }) => {
   const prevVaultsCoins = await getVaultsCoins()
 
+  const prevVaultCoinis = prevVaultsCoins[vaultId] ?? []
+
   await updateVaultsCoins({
     ...prevVaultsCoins,
-    [vaultId]: [...prevVaultsCoins[vaultId], ...coins],
+    [vaultId]: [...prevVaultCoinis, ...coins],
   })
 }
 
