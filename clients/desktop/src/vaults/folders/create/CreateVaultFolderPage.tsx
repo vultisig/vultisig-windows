@@ -1,4 +1,5 @@
-import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
+import { useVaultFolders } from '@core/ui/storage/vaultFolders'
+import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -14,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import { PageFooter } from '../../../ui/page/PageFooter'
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
 import { useCreateVaultFolderMutation } from '../../folder/mutations/useCreateVaultFolderMutation'
-import { useVaultFolders } from '../queries/useVaultFoldersQuery'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()

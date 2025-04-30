@@ -5,9 +5,9 @@ import { useEffect, useMemo } from 'react'
 
 import { currentVaultIdQueryKey } from '../../query/keys'
 import { useCoreStorage } from '../../state/storage'
+import { useVaults } from '../../storage/vaults'
 import { useSetCurrentVaultIdMutation } from '../mutations/useSetCurrentVaultIdMutation'
 import { getVaultId } from '../Vault'
-import { useVaults } from './vaults'
 
 export type CurrentVaultId = string | null
 

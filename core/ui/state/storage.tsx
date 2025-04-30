@@ -5,6 +5,7 @@ import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
 import { CurrentVaultId } from '../vault/state/currentVaultId'
 import { Vault } from '../vault/Vault'
+import { VaultFolder } from '../vault/VaultFolder'
 
 export type SetFiatCurrencyFunction = (
   value: FiatCurrency
@@ -48,6 +49,8 @@ export type GetVaultsCoinsFunction = () => Promise<
   Record<string, AccountCoin[]>
 >
 
+export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -60,6 +63,7 @@ export type CoreStorage = {
   createVaultCoins: CreateVaultCoinsFunction
   getDefaultChains: GetDefaultChainsFunction
   setDefaultChains: SetDefaultChainsFunction
+  getVaultFolders: GetVaultFoldersFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =

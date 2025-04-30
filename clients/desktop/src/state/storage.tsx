@@ -6,6 +6,7 @@ import {
   CoreStorageProvider,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
+  GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
   UpdateVaultFunction,
@@ -20,6 +21,7 @@ import { useMemo } from 'react'
 import {
   GetCoins,
   GetVault,
+  GetVaultFolders,
   GetVaults,
   SaveCoins,
   SaveVault,
@@ -66,6 +68,11 @@ const getVaultsCoins: GetVaultsCoinsFunction = async () => {
   return recordMap(coins, coins => coins.map(fromStorageCoin))
 }
 
+const getVaultFolders: GetVaultFoldersFunction = async () => {
+  const storageVaultFolders = await GetVaultFolders()
+  return storageVaultFolders
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -94,6 +101,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       getCurrentVaultId: () => currentVaultId,
       getVaults,
       getVaultsCoins,
+      getVaultFolders,
     }),
     [
       currentVaultId,

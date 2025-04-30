@@ -5,18 +5,16 @@ import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
 } from '@core/ui/vault/state/currentVaultId'
-import { VaultsProvider } from '@core/ui/vault/state/vaults'
+import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
-import { StrictText } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
-import { Center } from '../lib/ui/layout/Center'
-import { useVaultsQuery } from '../vault/queries/useVaultsQuery'
-import { useVaultFoldersQuery } from '../vaults/folders/queries/useVaultFoldersQuery'
+import { useVaultFoldersQuery } from './vaultFolders'
+import { useVaultsQuery } from './vaults'
 
-export const RemoteStateDependant = ({ children }: ChildrenProp) => {
+export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const defaultChains = useDefaultChainsQuery()
@@ -31,22 +29,19 @@ export const RemoteStateDependant = ({ children }: ChildrenProp) => {
     currentVaultId,
   })
 
-  const { t } = useTranslation()
-
   return (
     <MatchQuery
       value={query}
-      success={({ vaults, currentVaultId }) => (
-        <VaultsProvider value={vaults}>
-          <CurrentVaultIdProvider value={currentVaultId}>
-            {children}
-          </CurrentVaultIdProvider>
-        </VaultsProvider>
+      success={({ currentVaultId }) => (
+        <CurrentVaultIdProvider value={currentVaultId}>
+          {children}
+        </CurrentVaultIdProvider>
       )}
-      error={() => (
-        <Center>
-          <StrictText>{t('failed_to_load')}</StrictText>
-        </Center>
+      error={error => (
+        <FlowErrorPageContent
+          title="Failed to load essential data from the storage"
+          message={extractErrorMsg(error)}
+        />
       )}
       pending={() => <ProductLogoBlock />}
     />

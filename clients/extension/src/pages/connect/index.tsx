@@ -1,7 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
+import { useVaults } from '@core/ui/storage/vaults'
 import { useSetCurrentVaultIdMutation } from '@core/ui/vault/mutations/useSetCurrentVaultIdMutation'
-import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
