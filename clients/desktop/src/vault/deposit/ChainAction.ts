@@ -22,4 +22,5 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Kujira]: ['ibc_transfer'],
   [Chain.Osmosis]: ['ibc_transfer'],
   [Chain.Akash]: ['ibc_transfer'],
+  [Chain.Cosmos]: ['ibc_transfer'],
 }
