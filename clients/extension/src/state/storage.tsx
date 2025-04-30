@@ -1,6 +1,8 @@
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
   CoreStorageProvider,
+  CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
   DeleteVaultFolderFunction,
@@ -69,17 +71,23 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
 }) => {
   const prevVaultsCoins = await getVaultsCoins()
 
-  const prevVaultCoinis = prevVaultsCoins[vaultId] ?? []
+  const prevCoins = (prevVaultsCoins[vaultId] ?? []).filter(existingCoin =>
+    coins.some(coin => areEqualCoins(existingCoin, coin))
+  )
 
   await updateVaultsCoins({
     ...prevVaultsCoins,
-    [vaultId]: [...prevVaultCoinis, ...coins],
+    [vaultId]: [...prevCoins, ...coins],
   })
 }
 
 const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
   const folders = await getVaultFolders()
   await updateVaultFolders(folders.filter(folder => folder.id !== folderId))
+}
+
+const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
+  await createVaultCoins({ vaultId, coins: [coin] })
 }
 
 const storage: CoreStorage = {
@@ -97,6 +105,7 @@ const storage: CoreStorage = {
   getVaultFolders,
   deleteVault,
   deleteVaultFolder,
+  createVaultCoin,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {

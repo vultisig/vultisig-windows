@@ -4,6 +4,7 @@ import { FiatCurrency } from '@core/config/FiatCurrency'
 import {
   CoreStorage,
   CoreStorageProvider,
+  CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
   DeleteVaultFolderFunction,
@@ -27,6 +28,7 @@ import {
   GetVault,
   GetVaultFolders,
   GetVaults,
+  SaveCoin,
   SaveCoins,
   SaveVault,
 } from '../../wailsjs/go/storage/Store'
@@ -85,6 +87,10 @@ const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
   await DeleteVaultFolder(folderId)
 }
 
+const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
+  await SaveCoin(vaultId, toStorageCoin(coin))
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -116,6 +122,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       getVaultFolders,
       deleteVault,
       deleteVaultFolder,
+      createVaultCoin,
     }),
     [
       currentVaultId,

@@ -6,7 +6,6 @@ The content of this file should be cleared on Pull Request submit.
   - [ ] SaveAddressBookItem
   - [ ] DeleteAddressBookItem (support partial update)
   - [ ] GetAllAddressBookItems -> GetAddressBookItems
-  - [ ] SaveCoin
   - [ ] SaveVaultFolder
   - [ ] GetVaultFolders
   - [ ] UpdateVaultFolder

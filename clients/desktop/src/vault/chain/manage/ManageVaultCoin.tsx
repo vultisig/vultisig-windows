@@ -1,4 +1,5 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
+import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -11,7 +12,6 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
-import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
 
 const Container = styled(Panel)`
   ${interactive};
@@ -28,7 +28,7 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
-  const { mutate: saveCoin } = useSaveCoinMutation()
+  const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
 
   return (

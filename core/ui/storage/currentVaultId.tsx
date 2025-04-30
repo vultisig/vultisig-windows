@@ -1,6 +1,7 @@
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   useMutation,
   UseMutationOptions,
@@ -23,6 +24,12 @@ const {
 } = getValueProviderSetup<CurrentVaultId>('CurrentVaultId')
 
 export { useCurrentVaultId }
+
+export const useAssertCurrentVaultId = () => {
+  const currentVaultId = useCurrentVaultId()
+
+  return shouldBePresent(currentVaultId, 'CurrentVaultId')
+}
 
 export const useCurrentVaultIdQuery = () => {
   const { getCurrentVaultId } = useCoreStorage()
