@@ -24,12 +24,12 @@ export const useCreateVaultMutation = (
   const walletCore = useAssertWalletCore()
 
   return useMutation({
-    mutationFn: async (vault: Vault) => {
-      const result = await createVault(vault)
+    mutationFn: async (input: Vault) => {
+      const vault = await createVault(input)
 
       await invalidateQueries(vaultsQueryKey)
 
-      await setCurrentVaultId(getVaultId(result))
+      await setCurrentVaultId(getVaultId(vault))
 
       const defaultChains = await getDefaultChains()
       const coins = await Promise.all(
@@ -55,11 +55,11 @@ export const useCreateVaultMutation = (
       )
 
       await createVaultCoins({
-        vaultId: getVaultId(result),
+        vaultId: getVaultId(vault),
         coins,
       })
 
-      return result
+      return vault
     },
     ...options,
   })
