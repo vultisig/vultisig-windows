@@ -75,6 +75,8 @@ const writeStorage: CoreStorage = {
   setDefaultChains,
   getDefaultChains,
   getFiatCurrency,
+  getVaults,
+  getVaultsCoins,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {

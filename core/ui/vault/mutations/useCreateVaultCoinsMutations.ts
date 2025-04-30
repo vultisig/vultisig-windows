@@ -1,7 +1,7 @@
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
-import { vaultsCoinsQueryKey, vaultsQueryKey } from '../../query/keys'
+import { vaultsCoinsQueryKey } from '../../query/keys'
 import { useCoreStorage } from '../../state/storage'
 
 export const useCreateVaultCoinsMutation = () => {
@@ -12,7 +12,7 @@ export const useCreateVaultCoinsMutation = () => {
   return useMutation({
     mutationFn: createVaultCoins,
     onSuccess: () => {
-      invalidateQueries(vaultsCoinsQueryKey, vaultsQueryKey)
+      invalidateQueries(vaultsCoinsQueryKey)
     },
   })
 }

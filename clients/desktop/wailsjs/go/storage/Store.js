@@ -30,8 +30,8 @@ export function GetAllAddressBookItems() {
   return window['go']['storage']['Store']['GetAllAddressBookItems']();
 }
 
-export function GetCoins(arg1) {
-  return window['go']['storage']['Store']['GetCoins'](arg1);
+export function GetCoins() {
+  return window['go']['storage']['Store']['GetCoins']();
 }
 
 export function GetVault(arg1) {

@@ -130,7 +130,6 @@ func (s *Store) SaveVault(vault *Vault) error {
 	return nil
 }
 
-// GetVault gets a vault
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
 		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
@@ -171,11 +170,6 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 		return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 	}
 	vault.KeyShares = keyShares
-	coins, err := s.GetCoins(publicKeyEcdsa)
-	if err != nil {
-		return nil, fmt.Errorf("could not get coins, err: %w", err)
-	}
-	vault.Coins = coins
 	return &vault, nil
 }
 
@@ -220,7 +214,6 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 	return keyShares, nil
 }
 
-// GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
 		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type FROM vaults`
@@ -264,11 +257,6 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 		}
 		vault.KeyShares = keyShares
-		coins, err := s.GetCoins(vault.PublicKeyECDSA)
-		if err != nil {
-			return nil, fmt.Errorf("could not get coins, err: %w", err)
-		}
-		vault.Coins = coins
 
 		vaults = append(vaults, &vault)
 	}
@@ -281,18 +269,22 @@ func (s *Store) DeleteVault(publicKeyECDSA string) error {
 	return err
 }
 
-func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
-	var coins []Coin
-	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, decimals FROM coins WHERE public_key_ecdsa = ?`
-	coinsRows, err := s.db.Query(coinsQuery, vaultPublicKeyECDSA)
+func (s *Store) GetCoins() (map[string][]Coin, error) {
+	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, decimals, public_key_ecdsa 
+		FROM coins`
+	rows, err := s.db.Query(coinsQuery)
 	if err != nil {
 		return nil, fmt.Errorf("could not query coins: %w", err)
 	}
-	defer s.closeRows(coinsRows)
+	defer s.closeRows(rows)
 
-	for coinsRows.Next() {
+	// Initialize the map to store coins grouped by vault
+	vaultCoins := make(map[string][]Coin)
+
+	for rows.Next() {
 		var coin Coin
-		if err := coinsRows.Scan(&coin.ID,
+		var publicKeyECDSA string
+		if err := rows.Scan(&coin.ID,
 			&coin.Chain,
 			&coin.Address,
 			&coin.HexPublicKey,
@@ -302,17 +294,19 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 			&coin.Logo,
 			&coin.PriceProviderID,
 			&coin.Decimals,
+			&publicKeyECDSA,
 		); err != nil {
 			return nil, fmt.Errorf("could not scan coin: %w", err)
 		}
-		coins = append(coins, coin)
+		// Add the coin to the appropriate vault's slice
+		vaultCoins[publicKeyECDSA] = append(vaultCoins[publicKeyECDSA], coin)
 	}
 
-	if err = coinsRows.Err(); err != nil {
+	if err = rows.Err(); err != nil {
 		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
 	}
 
-	return coins, nil
+	return vaultCoins, nil
 }
 
 func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {

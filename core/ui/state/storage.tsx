@@ -42,11 +42,19 @@ export type SetCurrentVaultIdFunction = (
   id: CurrentVaultId
 ) => Promise<void> | void
 
+export type GetVaultsFunction = () => Promise<Vault[]>
+
+export type GetVaultsCoinsFunction = () => Promise<
+  Record<string, AccountCoin[]>
+>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
   getCurrentVaultId: GetCurrentVaultIdFunction
   setCurrentVaultId: SetCurrentVaultIdFunction
+  getVaults: GetVaultsFunction
+  getVaultsCoins: GetVaultsCoinsFunction
   updateVault: UpdateVaultFunction
   createVault: CreateVaultFunction
   createVaultCoins: CreateVaultCoinsFunction

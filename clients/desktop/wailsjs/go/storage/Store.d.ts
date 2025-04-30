@@ -16,7 +16,7 @@ export function GetAddressBookItems(arg1:string):Promise<Array<storage.AddressBo
 
 export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>;
 
-export function GetCoins(arg1:string):Promise<Array<storage.Coin>>;
+export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
 
 export function GetVault(arg1:string):Promise<storage.Vault>;
 
