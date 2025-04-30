@@ -1,4 +1,3 @@
-import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
 import { useFiatCurrencyQuery } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import {
@@ -11,6 +10,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
+import { useDefaultChainsQuery } from './defaultChains'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery } from './vaults'
 
