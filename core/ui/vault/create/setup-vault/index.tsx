@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
@@ -37,6 +38,7 @@ export const SetupVaultPage = () => {
   const theme = useTheme()
 
   const onStart = useCallback(() => {
+    console.log('onStart', value)
     navigate(
       match(value, {
         fast: () => 'setupFastVault',
@@ -55,7 +57,7 @@ export const SetupVaultPage = () => {
         title={<PageHeaderTitle>{t('chooseSetup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
       />
-      <PageContent flexGrow as="form" onSubmit={onStart}>
+      <PageContent flexGrow as="form" {...getFormProps({ onSubmit: onStart })}>
         <ContentWrapper alignItems="center" gap={20} flexGrow>
           <ArtContainer data-testid="SetupVaultPage-ArtContainer">
             <RiveComponent />
