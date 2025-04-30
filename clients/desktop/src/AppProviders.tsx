@@ -14,7 +14,6 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
-import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
@@ -45,21 +44,19 @@ export const AppProviders = ({ children }: ChildrenProp) => {
           <OpenUrlProvider value={BrowserOpenURL}>
             <SaveFileProvider value={saveFile}>
               <MpcDeviceProvider value="windows">
-                <WalletCoreProvider>
-                  <QueryClientProvider client={queryClient}>
+                <QueryClientProvider client={queryClient}>
+                  <I18nProvider language={language}>
                     <ThemeProvider theme={darkTheme}>
-                      <I18nProvider language={language}>
-                        <InitializedWalletOnly>
-                          <StorageProvider>
-                            <RemoteStateDependant>
-                              {children}
-                            </RemoteStateDependant>
-                          </StorageProvider>
-                        </InitializedWalletOnly>
-                      </I18nProvider>
+                      <WalletCoreProvider>
+                        <StorageProvider>
+                          <RemoteStateDependant>
+                            {children}
+                          </RemoteStateDependant>
+                        </StorageProvider>
+                      </WalletCoreProvider>
                     </ThemeProvider>
-                  </QueryClientProvider>
-                </WalletCoreProvider>
+                  </I18nProvider>
+                </QueryClientProvider>
               </MpcDeviceProvider>
             </SaveFileProvider>
           </OpenUrlProvider>
