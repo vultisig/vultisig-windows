@@ -1,5 +1,6 @@
 import { useDefaultChainsQuery } from '@core/ui/chain/queries/useDefaultChainsQuery'
 import { useFiatCurrencyQuery } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
+import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
@@ -12,7 +13,6 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { Center } from '../lib/ui/layout/Center'
-import { ProductLogoBlock } from '../ui/logo/ProductLogoBlock'
 import { useVaultsQuery } from '../vault/queries/useVaultsQuery'
 import { useVaultFoldersQuery } from '../vaults/folders/queries/useVaultFoldersQuery'
 

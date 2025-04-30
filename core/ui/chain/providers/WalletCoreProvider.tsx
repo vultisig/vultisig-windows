@@ -1,4 +1,3 @@
-import { ProductLogoBlock } from '@clients/desktop/src/ui/logo/ProductLogoBlock'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -8,6 +7,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useQuery } from '@tanstack/react-query'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { createContext, useContext } from 'react'
+
+import { ProductLogoBlock } from '../../product/ProductLogoBlock'
 
 const WalletCoreContext = createContext<WalletCore | null>(null)
 
