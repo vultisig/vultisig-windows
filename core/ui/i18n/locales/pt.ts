@@ -15,6 +15,7 @@ export const pt = {
   search_field_placeholder: 'Pesquisar..',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
+  select_destination_chain: 'Selecionar blockchain de destino',
   select_asset: 'Selecionar ativo',
   ibc_transfer: 'Transferência IBC',
   price_impact_good: 'Bom',

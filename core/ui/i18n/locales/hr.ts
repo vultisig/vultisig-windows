@@ -15,6 +15,7 @@ export const hr = {
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
   ibc_transfer: 'IBC prijenos',
+  select_destination_chain: 'Odaberite odredišni lanac',
   chain: 'Lanac',
   price_impact_good: 'Dobro',
   price_impact_average: 'Prosječno',

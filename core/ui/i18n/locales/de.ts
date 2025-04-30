@@ -11,6 +11,7 @@ export const de = {
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
   youre_swapping: 'Du tauschst',
+  select_destination_chain: 'Ziel-Blockchain auswählen',
   chain: 'Kette',
   price_impact_good: 'Gut',
   ibc_transfer: 'IBC-Übertragung',
