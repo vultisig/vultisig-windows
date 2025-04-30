@@ -1,5 +1,6 @@
 import { ProductLogoBlock } from '@clients/desktop/src/ui/logo/ProductLogoBlock'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
+import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -10,14 +11,17 @@ import { createContext, useContext } from 'react'
 
 const WalletCoreContext = createContext<WalletCore | null>(null)
 
-export const WalletCoreProvider = ({ children }: { children: any }) => {
+export const WalletCoreProvider = ({ children }: ChildrenProp) => {
   const query = useQuery({
-    queryKey: ['wasmModule'],
+    queryKey: ['walletCore'],
     meta: {
       disablePersist: true,
     },
     ...fixedDataQueryOptions,
-    queryFn: initWasm,
+    queryFn: async () => {
+      const wasm = await initWasm()
+      return wasm
+    },
   })
 
   return (
