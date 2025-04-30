@@ -22,9 +22,11 @@ import { StorageProvider } from '../state/storage'
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
     margin: 0 auto;
+    max-width: 1024px;
     min-height: 600px;
+    min-width: 400px;
     overflow: hidden;
-    width: 400px;
+    width: 100%;
   }
 `
 
