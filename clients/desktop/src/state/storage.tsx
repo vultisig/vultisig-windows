@@ -11,9 +11,9 @@ import {
   GetVaultsFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
-import { initialCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
-import { CurrentVaultId } from '@core/ui/vault/state/currentVaultId'
-import { initialDefaultChains } from '@core/ui/vault/state/defaultChains'
+import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { ChildrenProp } from '@lib/ui/props'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { useMemo } from 'react'

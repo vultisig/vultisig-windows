@@ -12,7 +12,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
-import { useFiatCurrency } from '../../../../preferences/queries/useFiatCurrencyQuery'
+import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 export const SwapCoinItem = ({
   coin,

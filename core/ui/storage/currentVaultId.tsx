@@ -1,13 +1,17 @@
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
-import { useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 
-import { currentVaultIdQueryKey } from '../../query/keys'
-import { useCoreStorage } from '../../state/storage'
-import { useVaults } from '../../storage/vaults'
-import { useSetCurrentVaultIdMutation } from '../mutations/useSetCurrentVaultIdMutation'
-import { getVaultId } from '../Vault'
+import { currentVaultIdQueryKey } from '../query/keys'
+import { useCoreStorage } from '../state/storage'
+import { getVaultId } from '../vault/Vault'
+import { useVaults } from './vaults'
 
 export type CurrentVaultId = string | null
 
@@ -56,4 +60,23 @@ export const CurrentVaultIdProvider = ({
       {children}
     </InternalCurrentVaultIdProvider>
   )
+}
+
+export const useSetCurrentVaultIdMutation = (
+  options?: UseMutationOptions<any, any, CurrentVaultId, unknown>
+) => {
+  const invalidateQueries = useInvalidateQueries()
+
+  const { setCurrentVaultId } = useCoreStorage()
+
+  const mutationFn = async (value: CurrentVaultId) => {
+    await setCurrentVaultId(value)
+
+    await invalidateQueries(currentVaultIdQueryKey)
+  }
+
+  return useMutation({
+    mutationFn,
+    ...options,
+  })
 }

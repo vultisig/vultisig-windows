@@ -3,7 +3,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
-import { CurrentVaultId } from '../vault/state/currentVaultId'
+import { CurrentVaultId } from '../storage/currentVaultId'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 

@@ -61,7 +61,7 @@ import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import {
   Button,

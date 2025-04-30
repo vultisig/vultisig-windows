@@ -1,4 +1,4 @@
-import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useCallback } from 'react'
 

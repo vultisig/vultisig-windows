@@ -6,6 +6,14 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { defaultChainsQueryKey } from '../query/keys'
 
+export const initialDefaultChains = [
+  Chain.Bitcoin,
+  Chain.Ethereum,
+  Chain.THORChain,
+  Chain.Solana,
+  Chain.BSC,
+]
+
 export const useDefaultChainsQuery = () => {
   const { getDefaultChains } = useCoreStorage()
 
