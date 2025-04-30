@@ -19,6 +19,7 @@ export const it = {
   price_impact_high: 'Impatto Alto',
   swap_overview: 'Panoramica dello scambio',
   max_total_fees: 'Tariffa Totale Max.',
+  select_destination_chain: 'Seleziona la blockchain di destinazione',
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:
