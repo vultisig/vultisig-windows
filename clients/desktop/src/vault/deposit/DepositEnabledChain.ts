@@ -8,6 +8,7 @@ export const depositEnabledChains = [
   Chain.Kujira,
   Chain.Osmosis,
   Chain.Akash,
+  Chain.Cosmos,
 ] as const
 
 export type DepositEnabledChain = (typeof depositEnabledChains)[number]

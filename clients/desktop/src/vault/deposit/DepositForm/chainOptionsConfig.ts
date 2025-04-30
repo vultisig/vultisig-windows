@@ -19,6 +19,12 @@ export const sourceChannelByChain: Partial<
   [Chain.Osmosis]: {
     [Chain.Cosmos]: 'channel-141',
   },
+  [Chain.Cosmos]: {
+    [Chain.Kujira]: 'channel-343',
+    [Chain.Osmosis]: 'channel-141',
+    [Chain.Noble]: 'channel-536',
+    [Chain.Akash]: 'channel-184',
+  },
 }
 
 export const getIbcDropdownOptions = (srcChain: Chain) => {
