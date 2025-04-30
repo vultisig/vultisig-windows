@@ -6,6 +6,7 @@ import {
   CoreStorageProvider,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
+  DeleteVaultFolderFunction,
   DeleteVaultFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
@@ -21,6 +22,7 @@ import { useMemo } from 'react'
 
 import {
   DeleteVault,
+  DeleteVaultFolder,
   GetCoins,
   GetVault,
   GetVaultFolders,
@@ -79,6 +81,10 @@ const deleteVault: DeleteVaultFunction = async vaultId => {
   await DeleteVault(vaultId)
 }
 
+const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
+  await DeleteVaultFolder(folderId)
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -109,6 +115,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       getVaultsCoins,
       getVaultFolders,
       deleteVault,
+      deleteVaultFolder,
     }),
     [
       currentVaultId,

@@ -3,6 +3,7 @@ import {
   CoreStorageProvider,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
+  DeleteVaultFolderFunction,
   DeleteVaultFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
@@ -20,7 +21,10 @@ import {
   getCurrentVaultId,
   setCurrentVaultId,
 } from '../vault/state/currentVaultId'
-import { getVaultFolders } from '../vault/state/vaultFolders'
+import {
+  getVaultFolders,
+  updateVaultFolders,
+} from '../vault/state/vaultFolders'
 import { updateVaults } from '../vault/state/vaults'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
@@ -73,6 +77,11 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   })
 }
 
+const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
+  const folders = await getVaultFolders()
+  await updateVaultFolders(folders.filter(folder => folder.id !== folderId))
+}
+
 const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -87,6 +96,7 @@ const storage: CoreStorage = {
   getVaultsCoins,
   getVaultFolders,
   deleteVault,
+  deleteVaultFolder,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
