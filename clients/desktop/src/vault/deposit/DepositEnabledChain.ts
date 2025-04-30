@@ -7,7 +7,6 @@ export const depositEnabledChains = [
   Chain.Ton,
   Chain.Kujira,
   Chain.Osmosis,
-  Chain.Akash,
   Chain.Cosmos,
 ] as const
 
