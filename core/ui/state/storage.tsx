@@ -62,6 +62,15 @@ type CreateCoinInput = {
 
 export type CreateVaultCoinFunction = (input: CreateCoinInput) => Promise<void>
 
+type UpdateVaultFolderInput = {
+  id: string
+  fields: Partial<Omit<VaultFolder, 'id'>>
+}
+
+export type UpdateVaultFolderFunction = (
+  input: UpdateVaultFolderInput
+) => Promise<void>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -77,6 +86,7 @@ export type CoreStorage = {
   getVaultFolders: GetVaultFoldersFunction
   deleteVault: DeleteVaultFunction
   deleteVaultFolder: DeleteVaultFolderFunction
+  updateVaultFolder: UpdateVaultFolderFunction
   createVaultCoin: CreateVaultCoinFunction
 }
 

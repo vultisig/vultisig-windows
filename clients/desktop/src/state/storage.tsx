@@ -12,6 +12,7 @@ import {
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
+  UpdateVaultFolderFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
 import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
@@ -26,11 +27,13 @@ import {
   DeleteVaultFolder,
   GetCoins,
   GetVault,
+  GetVaultFolder,
   GetVaultFolders,
   GetVaults,
   SaveCoin,
   SaveCoins,
   SaveVault,
+  SaveVaultFolder,
 } from '../../wailsjs/go/storage/Store'
 import { fromStorageCoin, toStorageCoin } from '../storage/storageCoin'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
@@ -91,6 +94,20 @@ const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
   await SaveCoin(vaultId, toStorageCoin(coin))
 }
 
+const updateVaultFolder: UpdateVaultFolderFunction = async ({
+  folderId,
+  fields,
+}) => {
+  const folder = await GetVaultFolder(folderId)
+
+  const updatedFolder = {
+    ...folder,
+    ...fields,
+  }
+
+  await SaveVaultFolder(updatedFolder)
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -123,6 +140,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       deleteVault,
       deleteVaultFolder,
       createVaultCoin,
+      updateVaultFolder,
     }),
     [
       currentVaultId,

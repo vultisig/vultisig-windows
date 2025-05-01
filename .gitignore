@@ -97,3 +97,4 @@ clients/desktop/wailsjs/runtime/runtime.d.ts
 clients/desktop/wailsjs/runtime/runtime.js
 
 mcp.json
+task.md

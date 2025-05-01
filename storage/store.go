@@ -470,24 +470,6 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 	return folder.ID, nil
 }
 
-func (s *Store) UpdateVaultFolderName(id string, name string) error {
-	query := `UPDATE vault_folders SET name = ? WHERE id = ?`
-	_, err := s.db.Exec(query, name, id)
-	if err != nil {
-		return fmt.Errorf("could not update vault folder name, err: %w", err)
-	}
-	return nil
-}
-
-func (s *Store) UpdateVaultFolderOrder(id string, order float64) error {
-	query := `UPDATE vault_folders SET "order" = ? WHERE id = ?`
-	_, err := s.db.Exec(query, order, id)
-	if err != nil {
-		return fmt.Errorf("could not update vault folder order, err: %w", err)
-	}
-	return nil
-}
-
 func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 	query := `SELECT id, name, "order" FROM vault_folders ORDER BY "order"`
 	rows, err := s.db.Query(query)
@@ -507,15 +489,6 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 	return folders, nil
 }
 
-func (s *Store) UpdateVaultFolder(folder *VaultFolder) error {
-	query := `UPDATE vault_folders SET name = ?, "order" = ? WHERE id = ?`
-	_, err := s.db.Exec(query, folder.Name, folder.Order, folder.ID)
-	if err != nil {
-		return fmt.Errorf("could not update vault folder, err: %w", err)
-	}
-	return nil
-}
-
 func (s *Store) DeleteVaultFolder(id string) error {
 	// Set folder_id to NULL for all vaults that reference the folder being deleted
 	_, err := s.db.Exec("UPDATE vaults SET folder_id = NULL WHERE folder_id = ?", id)
@@ -529,6 +502,22 @@ func (s *Store) DeleteVaultFolder(id string) error {
 		return fmt.Errorf("could not delete vault folder, err: %w", err)
 	}
 	return nil
+}
+
+func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
+	query := `SELECT id, name, "order" FROM vault_folders WHERE id = ?`
+	row := s.db.QueryRow(query, id)
+	
+	var folder VaultFolder
+	err := row.Scan(&folder.ID, &folder.Name, &folder.Order)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("vault folder not found")
+		}
+		return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
+	}
+	
+	return &folder, nil
 }
 
 // Close the db connection

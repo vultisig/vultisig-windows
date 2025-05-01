@@ -82,3 +82,16 @@ export const useDeleteVaultFolderMutation = () => {
     },
   })
 }
+
+export const useUpdateVaultFolderMutation = () => {
+  const { updateVaultFolder } = useCoreStorage()
+
+  const invalidateQueries = useInvalidateQueries()
+
+  return useMutation({
+    mutationFn: updateVaultFolder,
+    onSuccess: () => {
+      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
+    },
+  })
+}

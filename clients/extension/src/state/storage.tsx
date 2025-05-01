@@ -7,6 +7,7 @@ import {
   CreateVaultFunction,
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
+  UpdateVaultFolderFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -81,6 +82,27 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   })
 }
 
+const updateVaultFolder: UpdateVaultFolderFunction = async ({
+  folderId,
+  fields,
+}) => {
+  const vaultFolders = await getVaultFolders()
+  const vaultFolderIndex = shouldBePresent(
+    vaultFolders.findIndex(vaultFolder => vaultFolder.id === folderId)
+  )
+
+  const updatedVaultFolders = updateAtIndex(
+    vaultFolders,
+    vaultFolderIndex,
+    vaultFolder => ({
+      ...vaultFolder,
+      ...fields,
+    })
+  )
+
+  await updateVaultFolders(updatedVaultFolders)
+}
+
 const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
   const folders = await getVaultFolders()
   await updateVaultFolders(folders.filter(folder => folder.id !== folderId))
@@ -106,6 +128,7 @@ const storage: CoreStorage = {
   deleteVault,
   deleteVaultFolder,
   createVaultCoin,
+  updateVaultFolder,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
