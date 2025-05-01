@@ -89,7 +89,7 @@ const SettingsVaultPage = () => {
           id: 'currency',
           title: t('currency'),
           icon: <CurrencyCircleIcon />,
-          onClick: () => navigate('currencySettings'),
+          onClick: () => coreNavigate('currencySettings'),
         },
         {
           id: 'address-book',

@@ -21,6 +21,7 @@ export const corePaths = {
   reshareVaultFast: '/vault/reshare/fast',
   reshareVaultSecure: '/vault/reshare/secure',
   defaultChains: '/vault/settings/default-chains',
+  currencySettings: '/vault/settings/currency-settings',
   joinKeysign: '/join-keysign',
   uploadQr: '/vault/qr/upload',
   vaults: '/vaults',
