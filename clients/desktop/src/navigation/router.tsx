@@ -1,6 +1,5 @@
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
-import { CurrencyPage } from '@core/ui/preferences/currency/CurrencyPage'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
@@ -162,7 +161,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   ),
   languageSettings: <LanguageSettingsPage />,
   address: <AddressPage />,
-  currencySettings: <CurrencyPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
   defaultChains: <VaultDefaultChainsPage />,

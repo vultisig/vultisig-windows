@@ -19,7 +19,6 @@ import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vaul
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
-import { CurrencyPage } from '@core/ui/preferences/currency/CurrencyPage'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
@@ -77,7 +76,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
     </ActiveVaultGuard>
   ),
   languageSettings: <LanguagePage />,
-  currencySettings: <CurrencyPage />,
   settings: <SettingsPage />,
   manageChains: (
     <ActiveVaultGuard>
