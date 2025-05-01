@@ -18,20 +18,20 @@ import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pag
 import { VaultPage } from '@clients/extension/src/pages/popup/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
-import { ActiveVaultGuard } from '@clients/extension/src/vault/components/ActiveVaultGuard'
-import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
+import { sharedRoutes } from '@core/ui/navigation/routes'
+import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
 
 const coreRoutes: Record<CorePath, ReactNode> = {
-  root: (
+  ...sharedRoutes,
+  vault: (
     <ActiveVaultGuard>
       <VaultPage />
     </ActiveVaultGuard>
   ),
-  vault: <ActiveVaultGuard>TODO: Implement vault page</ActiveVaultGuard>,
   joinKeygen: <>TODO: Implement join keygen page</>,
   setupFastVault: <SetupFastVaultPage />,
   setupSecureVault: <SetupSecureVaultPage />,
@@ -39,11 +39,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   importVault: <ImportFilePage />,
   newVault: <NewVaultPage />,
   keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
-  reshareVault: (
-    <ActiveVaultGuard>
-      <ReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
   reshareVaultFast: (
     <ActiveVaultGuard>
       <ReshareFastVault />
@@ -108,6 +103,6 @@ export const router = createHashRouter(
     })),
   ],
   {
-    basename: corePaths.root,
+    basename: corePaths.vault,
   }
 )
