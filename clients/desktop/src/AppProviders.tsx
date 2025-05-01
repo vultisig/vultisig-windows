@@ -8,6 +8,7 @@ import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -52,7 +53,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                         <StorageProvider>
                           <StorageDependant>
                             {children}
-                            <CoinFinder />
+                            <ActiveVaultOnly>
+                              <CoinFinder />
+                            </ActiveVaultOnly>
                           </StorageDependant>
                         </StorageProvider>
                       </WalletCoreProvider>
