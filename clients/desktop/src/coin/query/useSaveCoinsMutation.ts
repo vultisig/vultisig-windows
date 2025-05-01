@@ -1,5 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { vaultsQueryKey } from '@core/ui/query/keys'
+import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -16,7 +16,7 @@ export const useSaveCoinsMutation = () => {
   return useMutation({
     mutationFn: async (coins: AccountCoin[]) => {
       await SaveCoins(getVaultId(vault), coins.map(toStorageCoin))
-      await invalidateQueries(vaultsQueryKey)
+      await invalidateQueries(vaultsCoinsQueryKey)
     },
   })
 }

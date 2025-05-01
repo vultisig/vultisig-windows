@@ -11,7 +11,6 @@ import {
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -19,6 +18,8 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,

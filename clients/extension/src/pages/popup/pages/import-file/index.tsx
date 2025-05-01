@@ -1,18 +1,17 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
 import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { useCreateVault } from '@core/ui/vault/state/createVault'
-import { useSetCurrentVaultId } from '@core/ui/vault/state/setCurrentVaultId'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
+import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -46,8 +45,7 @@ const Component = () => {
     isWindows: true, // Default to Windows flow, will be updated in useEffect if needed
     status: 'default',
   }
-  const createVault = useCreateVault()
-  const setCurrentVaultId = useSetCurrentVaultId()
+  const { mutateAsync: createVault } = useCreateVaultMutation()
 
   const [state, setState] = useState(initialState)
   const {
@@ -59,7 +57,7 @@ const Component = () => {
     isEncrypted,
   } = state
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
   const isPopupRef = useRef(isPopup)
 
@@ -104,7 +102,6 @@ const Component = () => {
     setState(p => ({ ...p, loading: true }))
     try {
       await createVault(decodedVault)
-      await setCurrentVaultId(getVaultId(decodedVault))
       navigateToMain()
     } catch (e) {
       handleError(extractErrorMsg(e))
@@ -140,7 +137,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('root')
+    navigate('vault')
   }, [navigate])
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { ProductEnhancedLogo } from '@core/ui/product/logo/ProductEnhancedLogo'
 import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -9,7 +10,6 @@ import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ProductEnhancedLogo } from '../../shared/Logo/ProductEnhancedLogo'
 import { useHasFinishedOnboardingMutation } from '../hooks/useHasFinishedOnboarading'
 
 type OnboardingStep = {

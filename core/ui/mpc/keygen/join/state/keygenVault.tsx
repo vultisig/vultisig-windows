@@ -8,7 +8,7 @@ import { CurrentHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainC
 import { useMpcDevice } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
-import { useVaults } from '@core/ui/vault/state/vaults'
+import { useVaults } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'

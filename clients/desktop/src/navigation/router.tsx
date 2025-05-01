@@ -1,5 +1,6 @@
-import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
+import { sharedRoutes } from '@core/ui/navigation/routes'
+import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
@@ -16,16 +17,13 @@ import RegisterForAirdropPage from '../pages/registerForAirdrop/RegisterForAirdr
 import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
-import CurrencySettingsPage from '../pages/vaultSettings/vaultCurrency/CurrencySettingsPage'
-import VaultDefaultChainsPage from '../pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage'
+import { VaultDefaultChainsPage } from '../pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
 import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { ManageVaultChainsPage } from '../vault/chain/manage/ManageVaultChainsPage'
 import { VaultChainPage } from '../vault/chain/VaultChainPage'
-import { ActiveVaultGuard } from '../vault/components/ActiveVaultGuard'
-import { EmptyVaultsOnly } from '../vault/components/EmptyVaultsOnly'
 import { VaultPage } from '../vault/components/VaultPage'
 import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
@@ -66,6 +64,7 @@ const Root = () => (
 )
 
 const coreRoutes: Record<CorePath, ReactNode> = {
+  ...sharedRoutes,
   vault: (
     <ActiveVaultGuard>
       <VaultPage />
@@ -76,14 +75,10 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportVaultPage />,
+  newVault: <NewVaultPage />,
   keysign: (
     <ActiveVaultGuard>
       <StartKeysignPage />
-    </ActiveVaultGuard>
-  ),
-  reshareVault: (
-    <ActiveVaultGuard>
-      <ReshareVaultPage />
     </ActiveVaultGuard>
   ),
   reshareVaultFast: (
@@ -106,12 +101,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
 }
 
 const appRoutes: Record<AppPath, ReactNode> = {
-  root: (
-    <EmptyVaultsOnly>
-      <NewVaultPage withBackButton={false} />
-    </EmptyVaultsOnly>
-  ),
-  newVault: <NewVaultPage />,
   onboarding: (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -172,7 +161,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   ),
   languageSettings: <LanguageSettingsPage />,
   address: <AddressPage />,
-  currencySettings: <CurrencySettingsPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
   defaultChains: <VaultDefaultChainsPage />,

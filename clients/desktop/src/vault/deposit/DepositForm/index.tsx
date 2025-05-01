@@ -26,6 +26,7 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
+import { getIbcDropdownOptions } from './chainOptionsConfig'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
 import {
   AssetRequiredLabel,
@@ -33,6 +34,7 @@ import {
   ErrorText,
   InputFieldWrapper,
 } from './DepositForm.styled'
+import { IBCTransferExplorer } from './IBCTransferExplorer'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
 
 type FormData = Record<string, any>
@@ -93,6 +95,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   }
 
   const selectedBondableAsset = getValues('bondableAsset')
+  const selectedDestinationChain = getValues('destinationChain')
 
   return (
     <>
@@ -169,6 +172,41 @@ export const DepositForm: FC<DepositFormProps> = ({
                 )}
               />
             )}
+          {selectedChainAction === 'ibc_transfer' && (
+            <Opener
+              renderOpener={({ onOpen }) => (
+                <Container onClick={onOpen}>
+                  <HStack alignItems="center" gap={4}>
+                    <Text weight="400" family="mono" size={16}>
+                      {selectedDestinationChain ||
+                        t('select_destination_chain')}
+                    </Text>
+                    {!selectedDestinationChain && (
+                      <AssetRequiredLabel as="span" color="danger" size={14}>
+                        *
+                      </AssetRequiredLabel>
+                    )}
+                  </HStack>
+                  <IconWrapper style={{ fontSize: 20 }}>
+                    <ChevronRightIcon />
+                  </IconWrapper>
+                </Container>
+              )}
+              renderContent={({ onClose }) => (
+                <IBCTransferExplorer
+                  onClose={onClose}
+                  activeOption={watch('destinationChain')}
+                  onOptionClick={selectedChain => {
+                    setValue('destinationChain', selectedChain, {
+                      shouldValidate: true,
+                    })
+                    onClose()
+                  }}
+                  options={getIbcDropdownOptions(chain)}
+                />
+              )}
+            />
+          )}
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => (
@@ -176,7 +214,8 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <Text size={15} weight="400">
                     {field.label}{' '}
                     {field.name === 'amount' &&
-                      selectedChainAction === 'bond' &&
+                      (selectedChainAction === 'bond' ||
+                        selectedChainAction === 'ibc_transfer') &&
                       `(Balance: ${totalTokenAmount.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>

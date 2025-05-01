@@ -4,7 +4,7 @@ import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useVaultNames } from '../../../../vault/state/vaults'
+import { useVaultNames } from '../../../../storage/vaults'
 import { useVaultSecurityType } from './vaultSecurityType'
 
 export const { useState: useVaultName, provider: VaultNameProvider } =

@@ -1,6 +1,6 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'

@@ -1,5 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'

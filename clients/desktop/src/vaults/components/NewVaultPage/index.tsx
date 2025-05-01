@@ -1,5 +1,7 @@
 import { makeCorePath } from '@core/ui/navigation'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -8,16 +10,16 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
 import { HorizontalLine, ScanQRCodeLink, Wrapper } from './NewVaultPage.styled'
 
-export const NewVaultPage = ({ withBackButton = true }) => {
+export const NewVaultPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const vaults = useVaults()
 
   return (
     <Wrapper delay={200}>
-      {withBackButton && (
+      {vaults.length > 0 && (
         <PageHeader primaryControls={<PageHeaderBackButton />} />
       )}
       <PageContent flexGrow>

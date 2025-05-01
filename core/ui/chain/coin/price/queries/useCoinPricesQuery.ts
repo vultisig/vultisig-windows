@@ -4,7 +4,6 @@ import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -15,6 +14,8 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { useQueries } from '@tanstack/react-query'
+
+import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]

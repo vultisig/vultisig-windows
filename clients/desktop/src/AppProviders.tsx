@@ -7,6 +7,8 @@ import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpc
 import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
+import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -14,18 +16,11 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
-import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
-import { FiatCurrencyProviders } from './preferences/state/fiatCurrency'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
-import { RemoteStateDependant } from './state/RemoteStateDependant'
-import { CreateVaultProvider } from './vault/state/createVault'
-import {
-  CurrentVaultIdProvider,
-  SetCurrentVaultIdProvider,
-} from './vault/state/currentVaultId'
-import { UpdateVaultProvider } from './vault/state/updateVault'
+import { StorageProvider } from './state/storage'
+import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
@@ -45,40 +40,33 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <FiatCurrencyProviders>
-      <VersionProvider value={buildInfo.version}>
-        <MpcLocalModeAvailabilityProvider value={true}>
-          <VaultCreationMpcLibProvider value={mpcLib}>
-            <OpenUrlProvider value={BrowserOpenURL}>
-              <SaveFileProvider value={saveFile}>
-                <MpcDeviceProvider value="windows">
-                  <WalletCoreProvider>
-                    <QueryClientProvider client={queryClient}>
-                      <ThemeProvider theme={darkTheme}>
-                        <I18nProvider language={language}>
-                          <InitializedWalletOnly>
-                            <RemoteStateDependant>
-                              <CurrentVaultIdProvider>
-                                <SetCurrentVaultIdProvider>
-                                  <CreateVaultProvider>
-                                    <UpdateVaultProvider>
-                                      {children}
-                                    </UpdateVaultProvider>
-                                  </CreateVaultProvider>
-                                </SetCurrentVaultIdProvider>
-                              </CurrentVaultIdProvider>
-                            </RemoteStateDependant>
-                          </InitializedWalletOnly>
-                        </I18nProvider>
-                      </ThemeProvider>
-                    </QueryClientProvider>
-                  </WalletCoreProvider>
-                </MpcDeviceProvider>
-              </SaveFileProvider>
-            </OpenUrlProvider>
-          </VaultCreationMpcLibProvider>
-        </MpcLocalModeAvailabilityProvider>
-      </VersionProvider>
-    </FiatCurrencyProviders>
+    <VersionProvider value={buildInfo.version}>
+      <MpcLocalModeAvailabilityProvider value={true}>
+        <VaultCreationMpcLibProvider value={mpcLib}>
+          <OpenUrlProvider value={BrowserOpenURL}>
+            <SaveFileProvider value={saveFile}>
+              <MpcDeviceProvider value="windows">
+                <QueryClientProvider client={queryClient}>
+                  <I18nProvider language={language}>
+                    <ThemeProvider theme={darkTheme}>
+                      <WalletCoreProvider>
+                        <StorageProvider>
+                          <StorageDependant>
+                            {children}
+                            <ActiveVaultOnly>
+                              <CoinFinder />
+                            </ActiveVaultOnly>
+                          </StorageDependant>
+                        </StorageProvider>
+                      </WalletCoreProvider>
+                    </ThemeProvider>
+                  </I18nProvider>
+                </QueryClientProvider>
+              </MpcDeviceProvider>
+            </SaveFileProvider>
+          </OpenUrlProvider>
+        </VaultCreationMpcLibProvider>
+      </MpcLocalModeAvailabilityProvider>
+    </VersionProvider>
   )
 }

@@ -1,5 +1,5 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'

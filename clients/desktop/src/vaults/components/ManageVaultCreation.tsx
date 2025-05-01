@@ -1,12 +1,11 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-
 export const ManageVaultCreation = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const { t } = useTranslation()
 
   return (

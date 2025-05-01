@@ -1,11 +1,91 @@
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress'
 
+export const sourceChannelByChain: Partial<
+  Record<Chain, Partial<Record<Chain | string, string>>>
+> = {
+  [Chain.Kujira]: {
+    [Chain.Cosmos]: 'channel-0',
+    [Chain.Akash]: 'channel-64',
+    [Chain.Dydx]: 'channel-118',
+    [Chain.Noble]: 'channel-62',
+    [Chain.Osmosis]: 'channel-3',
+  },
+  [Chain.Osmosis]: {
+    [Chain.Cosmos]: 'channel-141',
+  },
+  [Chain.Cosmos]: {
+    [Chain.Kujira]: 'channel-343',
+    [Chain.Osmosis]: 'channel-141',
+    [Chain.Noble]: 'channel-536',
+    [Chain.Akash]: 'channel-184',
+  },
+}
+
+export const getIbcDropdownOptions = (srcChain: Chain) => {
+  const destinations = sourceChannelByChain[srcChain]
+  if (!destinations) return []
+
+  return Object.keys(destinations).map(dst => {
+    const dstChain = dst as Chain
+    const ticker = chainFeeCoin[dstChain]?.ticker ?? ''
+    return {
+      label: `${dstChain} ${ticker}`,
+      value: dstChain,
+    }
+  })
+}
+
 export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
+  ibc_transfer: {
+    fields: [
+      {
+        name: 'destinationAddress',
+        type: 'text',
+        label: 'Destination Address',
+        required: true,
+      },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'Amount',
+        required: true,
+      },
+      {
+        name: 'memo',
+        type: 'text',
+        label: 'Memo',
+        required: false,
+      },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        destinationChain: z.string().min(1, 'Destination Chain is required'),
+        destinationAddress: z
+          .string()
+          .min(1, 'Destination Address is required'),
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'Amount must be greater than 0')
+              .max(totalAmountAvailable, 'Amount exceeds balance')
+          ),
+        memo: z.string().optional(),
+      }),
+  },
   bond: {
     fields: [
       {

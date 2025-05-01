@@ -3,12 +3,10 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  newVault: '/new-vault',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   migrateVault: '/vault/migrate',
   address: '/address',
-  root: '/',
   vaultSettings: '/vault/settings',
   manageVaults: '/vaults/manage',
   manageVaultChains: '/vault/chains',
@@ -22,7 +20,6 @@ export const appPaths = {
   vaultRename: '/vault/settings/vault-settings/rename-vault',
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
   languageSettings: '/vault/settings/language-settings',
-  currencySettings: '/vault/settings/currency-settings',
   checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   defaultChains: '/vault/settings/default-chains',

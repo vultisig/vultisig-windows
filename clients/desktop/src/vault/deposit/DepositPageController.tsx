@@ -1,5 +1,4 @@
 import { coinKeyFromString } from '@core/chain/coin/Coin'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -11,10 +10,6 @@ import { ChainAction, chainActionsRecord } from './ChainAction'
 import { DepositEnabledChain } from './DepositEnabledChain'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
-import {
-  DepositChainSpecificProvider,
-  useDepositChainSpecific,
-} from './fee/DepositChainSpecificProvider'
 
 const depositSteps = ['form', 'verify'] as const
 
@@ -44,35 +39,30 @@ export const DepositPageController = () => {
     toNextStep()
   }
 
-  const chainSpecific = useDepositChainSpecific()
-
   return (
-    <DepositChainSpecificProvider>
-      <Match
-        value={step}
-        form={() => (
-          <DepositForm
-            selectedChainAction={state.selectedChainAction}
-            onSelectChainAction={action =>
-              setState(prevState => ({
-                ...prevState,
-                selectedChainAction: action,
-              }))
-            }
-            onSubmit={handleDepositFormSubmit}
-            chainActionOptions={chainActionOptions}
-            chain={chain}
-          />
-        )}
-        verify={() => (
-          <DepositVerify
-            selectedChainAction={state.selectedChainAction}
-            onBack={toPreviousStep}
-            depositFormData={state.depositFormData}
-            fee={getFeeAmount(chainSpecific)}
-          />
-        )}
-      />
-    </DepositChainSpecificProvider>
+    <Match
+      value={step}
+      form={() => (
+        <DepositForm
+          selectedChainAction={state.selectedChainAction}
+          onSelectChainAction={action =>
+            setState(prevState => ({
+              ...prevState,
+              selectedChainAction: action,
+            }))
+          }
+          onSubmit={handleDepositFormSubmit}
+          chainActionOptions={chainActionOptions}
+          chain={chain}
+        />
+      )}
+      verify={() => (
+        <DepositVerify
+          selectedChainAction={state.selectedChainAction}
+          onBack={toPreviousStep}
+          depositFormData={state.depositFormData}
+        />
+      )}
+    />
   )
 }

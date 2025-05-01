@@ -3,7 +3,8 @@ import { Button } from '@clients/extension/src/components/button'
 import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName } from '@core/ui/i18n/Language'
-import { useFiatCurrency } from '@core/ui/state/fiatCurrency'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
@@ -26,6 +27,7 @@ import { useTranslation } from 'react-i18next'
 export const SettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const languageQuery = useLanguageQuery()
 
@@ -33,7 +35,7 @@ export const SettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('root')} ghost>
+          <Button onClick={() => coreNavigate('vault')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }
@@ -86,7 +88,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={currency.toUpperCase()}
               icon={<CircleDollarSignIcon fontSize={20} />}
-              onClick={() => navigate('currencySettings')}
+              onClick={() => coreNavigate('currencySettings')}
               title={t('currency')}
               hoverable
               showArrow

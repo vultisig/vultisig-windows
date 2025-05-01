@@ -12,12 +12,14 @@ export const it = {
   start_transaction: 'Avvia transazione',
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
+  ibc_transfer: 'Trasferimento IBC',
   chain: 'Catena',
   price_impact_good: 'Buono',
   price_impact_average: 'Medio',
   price_impact_high: 'Impatto Alto',
   swap_overview: 'Panoramica dello scambio',
   max_total_fees: 'Tariffa Totale Max.',
+  select_destination_chain: 'Seleziona la blockchain di destinazione',
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:

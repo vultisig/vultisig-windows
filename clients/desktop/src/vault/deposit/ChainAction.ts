@@ -12,10 +12,14 @@ export type ChainAction =
   | 'vote'
   | 'stake'
   | 'unstake'
+  | 'ibc_transfer'
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: ['bond', 'unbond', 'leave', 'custom'],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
+  [Chain.Kujira]: ['ibc_transfer'],
+  [Chain.Osmosis]: ['ibc_transfer'],
+  [Chain.Cosmos]: ['ibc_transfer'],
 }
