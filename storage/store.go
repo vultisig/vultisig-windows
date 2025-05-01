@@ -362,6 +362,23 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 	return addressBookItems, nil
 }
 
+// GetAddressBookItem retrieves a single address book item by ID
+func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
+	query := `SELECT id, title, address, chain FROM address_book WHERE id = ?`
+	row := s.db.QueryRow(query, id)
+	
+	var item AddressBookItem
+	err := row.Scan(&item.ID, &item.Title, &item.Address, &item.Chain)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("address book item not found")
+		}
+		return nil, fmt.Errorf("could not scan address book item, err: %w", err)
+	}
+	
+	return &item, nil
+}
+
 func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
 	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND public_key_ecdsa = ?", coinID, vaultPublicKeyECDSA)
 	return err

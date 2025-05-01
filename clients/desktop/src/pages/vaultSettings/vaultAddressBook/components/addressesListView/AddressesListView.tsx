@@ -4,6 +4,8 @@ import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/clo
 import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types'
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index'
 import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
+import { useAddressBookItems } from '@core/ui/storage/addressBook'
+import { useDeleteAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
@@ -14,8 +16,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation'
-import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery'
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
 import ModifyAddressForm from '../modifyAddressForm/ModifyAddressForm'
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem'
@@ -39,11 +39,7 @@ const AddressesListView = ({
   )
   const isModifyViewOpen = modifyAddressItemId !== null
   const { t } = useTranslation()
-  const {
-    data: addressBookItems,
-    isFetching: isFetchingAddressBookItems,
-    error: addressBookItemsError,
-  } = useAddressBookItemsQuery()
+  const addressBookItems = useAddressBookItems()
 
   const [items, setItems] = useState<AddressBookItem[]>([])
   const [registry] = useState(getItemRegistry)
@@ -60,8 +56,8 @@ const AddressesListView = ({
     error: deleteAddressBookItemError,
   } = useDeleteAddressBookItemMutation()
 
-  const isLoading = isFetchingAddressBookItems || isDeleteAddressBookItemLoading
-  const error = addressBookItemsError || deleteAddressBookItemError
+  const isLoading = isDeleteAddressBookItemLoading
+  const error = deleteAddressBookItemError
   const itemToModify = useMemo(
     () => items.find(item => item.id === modifyAddressItemId),
     [items, modifyAddressItemId]

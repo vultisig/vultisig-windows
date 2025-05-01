@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { assertChainField } from '@core/chain/utils/assertChainField'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import {
@@ -10,6 +11,7 @@ import {
   CreateVaultCoinsFunction,
   CreateVaultFolderFunction,
   CreateVaultFunction,
+  DeleteAddressBookItemFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
@@ -17,6 +19,7 @@ import {
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
+  UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
@@ -28,9 +31,11 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import { useMemo } from 'react'
 
 import {
+  DeleteAddressBookItem,
   DeleteCoin,
   DeleteVault,
   DeleteVaultFolder,
+  GetAddressBookItem,
   GetAllAddressBookItems,
   GetCoins,
   GetVault,
@@ -126,11 +131,26 @@ const createVaultFolder: CreateVaultFolderFunction = async folder => {
 
 const getAddressBookItems: GetAddressBookItemsFunction = async () => {
   const addressBookItems = (await GetAllAddressBookItems()) ?? []
-  return addressBookItems
+  return addressBookItems.map(assertChainField)
 }
 
 const createAddressBookItem: CreateAddressBookItemFunction = async item => {
   await SaveAddressBookItem(item)
+}
+
+const updateAddressBookItem: UpdateAddressBookItemFunction = async item => {
+  const oldAddressBookItem = await GetAddressBookItem(item.id)
+
+  const newAddressBookItem = {
+    ...oldAddressBookItem,
+    ...item,
+  }
+
+  await SaveAddressBookItem(newAddressBookItem)
+}
+
+const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
+  await DeleteAddressBookItem(item)
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
@@ -169,6 +189,9 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       deleteVaultCoin,
       createVaultFolder,
       getAddressBookItems,
+      createAddressBookItem,
+      updateAddressBookItem,
+      deleteAddressBookItem,
     }),
     [
       currentVaultId,

@@ -1,5 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useAddressBookItems,
+  useCreateAddressBookItemMutation,
+} from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -9,10 +13,9 @@ import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
+import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
-import { useAddAddressBookItemMutation } from '../../../../mutations/useAddAddressBookItemMutation'
-import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery'
 import { AddressBookPageHeader } from '../../AddressSelector.styles'
 import { getCoinOptions } from '../../helpers/getCoinOptions'
 import { getAddressSchema } from '../../schemas/addressSchema'
@@ -35,7 +38,7 @@ type AddAddressFormProps = {
 }
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
-  const { data: addressBookItems } = useAddressBookItemsQuery()
+  const addressBookItems = useAddressBookItems()
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
   const walletCore = useAssertWalletCore()
@@ -66,18 +69,22 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     mutate: addAddressBookItem,
     isPending: isAddAddressBookAddressPending,
     error: addAddressBookAddressError,
-  } = useAddAddressBookItemMutation({
-    onSuccess: onClose,
-  })
+  } = useCreateAddressBookItemMutation()
 
   const handleAddAddress = (data: AddressFormValues) => {
     const { address, chain, title } = data
 
-    addAddressBookItem({
-      title,
-      address,
-      chain: chain as Chain,
-    })
+    addAddressBookItem(
+      {
+        id: uuidv4(),
+        title,
+        address,
+        chain: chain as Chain,
+      },
+      {
+        onSuccess: onClose,
+      }
+    )
   }
 
   return (

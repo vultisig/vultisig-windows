@@ -1,6 +1,10 @@
 import { Chain } from '@core/chain/Chain'
 import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useAddressBookItems,
+  useUpdateAddressBookItemMutation,
+} from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
@@ -11,8 +15,6 @@ import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 import { z } from 'zod'
 
-import { useUpdateAddressBookItemMutation } from '../../../../mutations/useUpdateAddressBookItemMutation'
-import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery'
 import { getCoinOptions } from '../../helpers/getCoinOptions'
 import { getAddressSchema } from '../../schemas/addressSchema'
 import {
@@ -42,7 +44,7 @@ const ModifyAddressForm = ({
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
-  const { data: addressBookItems } = useAddressBookItemsQuery()
+  const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
   const addressSchema = getAddressSchema({
     walletCore,
@@ -70,21 +72,23 @@ const ModifyAddressForm = ({
     mutate: updateAddressBookItem,
     isPending: isAddAddressBookAddressPending,
     error: addAddressBookAddressError,
-  } = useUpdateAddressBookItemMutation({
-    onSuccess: onClose,
-  })
+  } = useUpdateAddressBookItemMutation()
 
   const handleModifyAddress = (data: AddressFormValues) => {
     const { address, chain, title } = data
-    updateAddressBookItem({
-      addressBookItem: {
-        ...addressBookItem,
-        address,
-        title,
-        chain: chain as Chain,
+    updateAddressBookItem(
+      {
+        id: addressBookItem.id,
+        fields: {
+          address,
+          title,
+          chain: chain as Chain,
+        },
       },
-      chain: chain as Chain,
-    })
+      {
+        onSuccess: onClose,
+      }
+    )
   }
 
   return (
