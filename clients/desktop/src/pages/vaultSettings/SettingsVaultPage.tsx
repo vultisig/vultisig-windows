@@ -101,7 +101,7 @@ const SettingsVaultPage = () => {
           id: 'default-chains',
           title: t('vault_settings_default_chains'),
           icon: <DefaultChainsIcon />,
-          onClick: () => navigate('defaultChains'),
+          onClick: () => coreNavigate('defaultChains'),
         },
         {
           id: 'faq',
