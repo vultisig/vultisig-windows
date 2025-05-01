@@ -310,15 +310,15 @@ func (s *Store) GetCoins() (map[string][]Coin, error) {
 }
 
 func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
-	if item.ID == uuid.Nil {
-		item.ID = uuid.New()
+	if item.ID == "" {
+		item.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO address_book (id, title, address, chain, "order") VALUES (?, ?, ?, ?, ?)`
-	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain, item.Order)
+	query := `INSERT OR REPLACE INTO address_book (id, title, address, chain) VALUES (?, ?, ?, ?)`
+	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert address book item, err: %w", err)
 	}
-	return item.ID.String(), nil
+	return item.ID, nil
 }
 
 // Delete address book item by id
@@ -333,8 +333,8 @@ func (s *Store) DeleteAddressBookItem(id string) error {
 
 // Update address book item by id
 func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
-	query := `UPDATE address_book SET title = ?, address = ?, chain = ?, "order" = ? WHERE id = ?`
-	_, err := s.db.Exec(query, item.Title, item.Address, item.Chain, item.Order, item.ID)
+	query := `UPDATE address_book SET title = ?, address = ?, chain = ? WHERE id = ?`
+	_, err := s.db.Exec(query, item.Title, item.Address, item.Chain, item.ID)
 	if err != nil {
 		return fmt.Errorf("could not update address book item, err: %w", err)
 	}
@@ -343,7 +343,7 @@ func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
 
 // Get all address book items
 func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
-	query := `SELECT id, title, address, chain, "order" FROM address_book`
+	query := `SELECT id, title, address, chain FROM address_book`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query address book, err: %w", err)
@@ -353,14 +353,13 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 	var addressBookItems []AddressBookItem
 	for rows.Next() {
 		var addressBookItem AddressBookItem
-		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
+		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain); err != nil {
 			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 		}
 		addressBookItems = append(addressBookItems, addressBookItem)
 	}
 
 	return addressBookItems, nil
-
 }
 
 func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {

@@ -4,6 +4,7 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
+import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { CurrentVaultId } from '../storage/currentVaultId'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
@@ -56,6 +57,25 @@ export type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
 export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
 
+export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
+
+type CreateAddressBookItemInput = AddressBookItem
+
+export type CreateAddressBookItemFunction = (
+  input: CreateAddressBookItemInput
+) => Promise<void>
+
+type UpdateAddressBookItemInput = {
+  id: string
+  fields: Partial<Omit<AddressBookItem, 'id'>>
+}
+
+export type UpdateAddressBookItemFunction = (
+  input: UpdateAddressBookItemInput
+) => Promise<void>
+
+export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
+
 type CreateCoinInput = {
   vaultId: string
   coin: AccountCoin
@@ -102,6 +122,10 @@ export type CoreStorage = {
   createVaultCoin: CreateVaultCoinFunction
   deleteVaultCoin: DeleteVaultCoinFunction
   createVaultFolder: CreateVaultFolderFunction
+  getAddressBookItems: GetAddressBookItemsFunction
+  createAddressBookItem: CreateAddressBookItemFunction
+  updateAddressBookItem: UpdateAddressBookItemFunction
+  deleteAddressBookItem: DeleteAddressBookItemFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =

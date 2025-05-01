@@ -5,5 +5,4 @@ export type AddressBookItem = {
   address: string
   chain: Chain
   title: string
-  order: number
 }

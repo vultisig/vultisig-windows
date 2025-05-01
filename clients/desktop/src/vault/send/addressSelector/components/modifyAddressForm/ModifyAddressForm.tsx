@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -10,7 +11,6 @@ import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 import { z } from 'zod'
 
-import { AddressBookItem } from '../../../../../lib/types/address-book'
 import { useUpdateAddressBookItemMutation } from '../../../../mutations/useUpdateAddressBookItemMutation'
 import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery'
 import { getCoinOptions } from '../../helpers/getCoinOptions'

@@ -74,7 +74,6 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     const { address, chain, title } = data
 
     addAddressBookItem({
-      order: addressBookItems.length,
       title,
       address,
       chain: chain as Chain,
