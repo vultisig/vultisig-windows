@@ -25,7 +25,6 @@ import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { ManageVaultChainsPage } from '../vault/chain/manage/ManageVaultChainsPage'
 import { VaultChainPage } from '../vault/chain/VaultChainPage'
-import { EmptyVaultsOnly } from '../vault/components/EmptyVaultsOnly'
 import { VaultPage } from '../vault/components/VaultPage'
 import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
@@ -77,6 +76,7 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportVaultPage />,
+  newVault: <NewVaultPage />,
   keysign: (
     <ActiveVaultGuard>
       <StartKeysignPage />
@@ -102,12 +102,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
 }
 
 const appRoutes: Record<AppPath, ReactNode> = {
-  root: (
-    <EmptyVaultsOnly>
-      <NewVaultPage />
-    </EmptyVaultsOnly>
-  ),
-  newVault: <NewVaultPage />,
   onboarding: (
     <IncompleteOnboardingOnly>
       <OnboardingPage />

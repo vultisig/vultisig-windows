@@ -38,7 +38,7 @@ const ConnectedApp = styled(Button)`
   width: 36px;
 `
 
-export const MainPage = () => {
+export const VaultPage = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const vault = useCurrentVault()
