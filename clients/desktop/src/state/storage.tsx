@@ -5,6 +5,7 @@ import { FiatCurrency } from '@core/config/FiatCurrency'
 import {
   CoreStorage,
   CoreStorageProvider,
+  CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFolderFunction,
@@ -12,6 +13,7 @@ import {
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
+  GetAddressBookItemsFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
@@ -29,11 +31,13 @@ import {
   DeleteCoin,
   DeleteVault,
   DeleteVaultFolder,
+  GetAllAddressBookItems,
   GetCoins,
   GetVault,
   GetVaultFolder,
   GetVaultFolders,
   GetVaults,
+  SaveAddressBookItem,
   SaveCoin,
   SaveCoins,
   SaveVault,
@@ -120,6 +124,15 @@ const createVaultFolder: CreateVaultFolderFunction = async folder => {
   await SaveVaultFolder(folder)
 }
 
+const getAddressBookItems: GetAddressBookItemsFunction = async () => {
+  const addressBookItems = (await GetAllAddressBookItems()) ?? []
+  return addressBookItems
+}
+
+const createAddressBookItem: CreateAddressBookItemFunction = async item => {
+  await SaveAddressBookItem(item)
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -155,6 +168,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       updateVaultFolder,
       deleteVaultCoin,
       createVaultFolder,
+      getAddressBookItems,
     }),
     [
       currentVaultId,

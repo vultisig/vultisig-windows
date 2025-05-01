@@ -1,9 +1,8 @@
 package storage
 
-// AddressBookItem represents an item in the address book.
 type AddressBookItem struct {
-	ID      string // Using string ID to be consistent with other entities
-	Title   string
-	Address string
-	Chain   string
+	ID      string `json:"id"`
+	Title   string `json:"title"`
+	Address string `json:"address"`
+	Chain   string `json:"chain"`
 }
