@@ -18,7 +18,6 @@ import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import CurrencySettingsPage from '../pages/vaultSettings/vaultCurrency/CurrencySettingsPage'
-import { VaultDefaultChainsPage } from '../pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
 import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
@@ -165,7 +164,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   currencySettings: <CurrencySettingsPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
-  defaultChains: <VaultDefaultChainsPage />,
   send: (
     <ActiveVaultGuard>
       <SendPage />

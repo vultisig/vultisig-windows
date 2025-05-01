@@ -11,7 +11,7 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 
-import { useCurrentSearch } from '../../../../../lib/ui/search/CurrentSearchProvider'
+import { useCurrentSearch } from '@lib/ui/search/CurrentSearchProvider'
 import { coinSearchConfig } from './config'
 
 const IconContainer = styled(IconWrapper)`

@@ -10,8 +10,8 @@ import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
-import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
+// import { useDeleteCoinMutation } from '@clients/desktop/src/vault/mutations/useDeleteCoinMutation'
+// import { useSaveCoinMutation } from '@clients/desktop/src/vault/mutations/useSaveCoinMutation'
 
 const Container = styled(Panel)`
   ${interactive};
@@ -28,18 +28,18 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
-
-  const { mutate: saveCoin } = useSaveCoinMutation()
-  const { mutate: deleteCoin } = useDeleteCoinMutation()
+  // TODO: add saveCoin and deleteCoin after storage migration
+  // const { mutate: saveCoin } = useSaveCoinMutation()
+  // const { mutate: deleteCoin } = useDeleteCoinMutation()
 
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
       onClick={() => {
         if (isChecked) {
-          deleteCoin(value)
+          // deleteCoin(value)
         } else {
-          saveCoin(value)
+          // saveCoin(value)
         }
       }}
     >

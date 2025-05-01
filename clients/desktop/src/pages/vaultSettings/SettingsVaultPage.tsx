@@ -47,6 +47,7 @@ import {
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
 type SettingItem = {
   id: string
@@ -61,6 +62,7 @@ type SettingSection = {
 
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
@@ -99,7 +101,7 @@ const SettingsVaultPage = () => {
           id: 'default-chains',
           title: t('vault_settings_default_chains'),
           icon: <DefaultChainsIcon />,
-          onClick: () => navigate('defaultChains'),
+          onClick: () => coreNavigate('defaultChains'),
         },
         {
           id: 'faq',

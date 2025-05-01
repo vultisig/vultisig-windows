@@ -8,8 +8,8 @@ import { PageSlice } from '@lib/ui/page/PageSlice'
 import { useTranslation } from 'react-i18next'
 
 import { ScrollableFlexboxFiller } from '../../../../lib/ui/layout/ScrollableFlexboxFiller'
-import { CurrentSearchProvider } from '../../../../lib/ui/search/CurrentSearchProvider'
-import { CoinSearch } from './search/CoinSearch'
+import { CurrentSearchProvider } from '@lib/ui/search/CurrentSearchProvider'
+import { CoinSearch } from '@core/ui/vault/chain/manage/coin/search/CoinSearch'
 import { VaultChainCoinOptions } from './search/VaultChainCoinOptions'
 
 export const ManageVaultChainCoinsPage = () => {

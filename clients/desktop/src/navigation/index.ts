@@ -23,7 +23,6 @@ export const appPaths = {
   currencySettings: '/vault/settings/currency-settings',
   checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
-  defaultChains: '/vault/settings/default-chains',
   faq: '/vault/settings/faq',
   vaultFAQ: '/vault/settings/faq',
   swap: '/vault/item/swap',

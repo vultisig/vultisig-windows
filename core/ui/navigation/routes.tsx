@@ -2,8 +2,9 @@ import { ReactNode } from 'react'
 
 import { ReshareVaultPage } from '../mpc/keygen/reshare/ReshareVaultPage'
 import { ActiveVaultGuard } from '../vault/ActiveVaultGuard'
+import { VaultDefaultChainsPage } from '../vault/settings/vaultDefaultChains/VaultDefaultChainsPage'
 
-type SharedPaths = 'reshareVault'
+type SharedPaths = 'reshareVault' | 'defaultChains'
 
 export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   reshareVault: (
@@ -11,4 +12,5 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
       <ReshareVaultPage />
     </ActiveVaultGuard>
   ),
+  defaultChains: <VaultDefaultChainsPage />,
 }

@@ -11,8 +11,8 @@ import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider'
-import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch'
+import { useCurrentSearch } from '@lib/ui/search/CurrentSearchProvider'
+import { CoinSearch } from '@core/ui/vault/chain/manage/coin/search/CoinSearch'
 import {
   ChainButton,
   Check,
