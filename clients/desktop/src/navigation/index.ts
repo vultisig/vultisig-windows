@@ -22,7 +22,6 @@ export const appPaths = {
   languageSettings: '/vault/settings/language-settings',
   checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
-  defaultChains: '/vault/settings/default-chains',
   faq: '/vault/settings/faq',
   vaultFAQ: '/vault/settings/faq',
   swap: '/vault/item/swap',

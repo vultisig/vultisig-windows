@@ -1,10 +1,10 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
+import { SearchField } from '@lib/ui/search/SearchField'
 import { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { Modal } from '../../../lib/ui/modal'
-import { SearchField } from '../../../lib/ui/search/SearchField'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> &
