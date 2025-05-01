@@ -5,8 +5,6 @@ import { VaultDefaultChainsPage } from '@core/ui/preferences/vaultDefaultChains/
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { ReactNode } from 'react'
 
-import { ReshareVaultPage } from '../mpc/keygen/reshare/ReshareVaultPage'
-
 type SharedPaths = Extract<
   CorePath,
   'currencySettings' | 'reshareVault' | 'defaultChains'
