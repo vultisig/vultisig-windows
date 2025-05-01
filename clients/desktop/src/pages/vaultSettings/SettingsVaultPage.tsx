@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -61,6 +62,7 @@ type SettingSection = {
 
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
@@ -87,7 +89,7 @@ const SettingsVaultPage = () => {
           id: 'currency',
           title: t('currency'),
           icon: <CurrencyCircleIcon />,
-          onClick: () => navigate('currencySettings'),
+          onClick: () => coreNavigate('currencySettings'),
         },
         {
           id: 'address-book',

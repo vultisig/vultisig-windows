@@ -80,7 +80,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={currency.toUpperCase()}
               icon={<CircleDollarSignIcon fontSize={20} />}
-              onClick={() => navigate('currencySettings')}
+              onClick={() => coreNavigate('currencySettings')}
               title={t('currency')}
               hoverable
               showArrow
