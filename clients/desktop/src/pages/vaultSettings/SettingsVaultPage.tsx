@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useOpenUrl } from '@core/ui/state/openUrl'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -47,7 +48,6 @@ import {
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
 type SettingItem = {
   id: string

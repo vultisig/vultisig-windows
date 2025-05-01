@@ -1,5 +1,10 @@
 {
-  "ignore": ["core/mpc/types/**", "clients/desktop/wailsjs/**"],
+  "ignore": [
+    "core/mpc/types/**",
+    "clients/desktop/wailsjs/**",
+    "clients/desktop/src/vault/mutations/useDeleteCoinMutation.ts",
+    "clients/desktop/src/vault/mutations/useSaveCoinMutation.ts"
+  ],
   "ignoreBinaries": ["tsx", "wails"],
   "entry": [
     "clients/extension/src/background/index.ts",

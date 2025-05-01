@@ -9,7 +9,7 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-
+// Temporary added knip ignore list
 // import { useDeleteCoinMutation } from '@clients/desktop/src/vault/mutations/useDeleteCoinMutation'
 // import { useSaveCoinMutation } from '@clients/desktop/src/vault/mutations/useSaveCoinMutation'
 
