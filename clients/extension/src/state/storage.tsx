@@ -2,13 +2,16 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
   CoreStorageProvider,
+  CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFolderFunction,
   CreateVaultFunction,
+  DeleteAddressBookItemFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
+  UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
 } from '@core/ui/state/storage'
@@ -22,6 +25,10 @@ import {
   setDefaultChains,
 } from '../chain/state/defaultChains'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
+import {
+  getAddressBookItems,
+  updateAddressBookItems,
+} from '../storage/addressBook'
 import {
   getCurrentVaultId,
   setCurrentVaultId,
@@ -130,6 +137,31 @@ const createVaultFolder: CreateVaultFolderFunction = async folder => {
   await updateVaultFolders([...folders, folder])
 }
 
+const createAddressBookItem: CreateAddressBookItemFunction = async item => {
+  const items = await getAddressBookItems()
+  await updateAddressBookItems([...items, item])
+}
+
+const updateAddressBookItem: UpdateAddressBookItemFunction = async ({
+  id,
+  fields,
+}) => {
+  const items = await getAddressBookItems()
+  const itemIndex = shouldBePresent(items.findIndex(item => item.id === id))
+
+  const updatedAddressBookItems = updateAtIndex(items, itemIndex, item => ({
+    ...item,
+    ...fields,
+  }))
+
+  await updateAddressBookItems(updatedAddressBookItems)
+}
+
+const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
+  const items = await getAddressBookItems()
+  await updateAddressBookItems(items.filter(i => i.id !== itemId))
+}
+
 const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -149,6 +181,10 @@ const storage: CoreStorage = {
   updateVaultFolder,
   deleteVaultCoin,
   createVaultFolder,
+  getAddressBookItems,
+  createAddressBookItem,
+  updateAddressBookItem,
+  deleteAddressBookItem,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
