@@ -8,16 +8,16 @@ import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
 const router = createHashRouter(
   [
     {
-      path: corePaths.root,
+      path: corePaths.vault,
       element: <ImportQRPage />,
     },
     {
       path: '*',
-      element: <Navigate to={corePaths.root} replace />,
+      element: <Navigate to={corePaths.vault} replace />,
     },
   ],
   {
-    basename: corePaths.root,
+    basename: corePaths.vault,
   }
 )
 

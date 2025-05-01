@@ -137,7 +137,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('root')
+    navigate('vault')
   }, [navigate])
 
   useEffect(() => {

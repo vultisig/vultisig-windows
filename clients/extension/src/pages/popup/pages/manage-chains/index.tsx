@@ -51,7 +51,7 @@ export const ManageChainsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('root')} ghost>
+          <Button onClick={() => navigate('vault')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }

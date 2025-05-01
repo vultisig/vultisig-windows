@@ -11,7 +11,7 @@ export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {
 
   useEffect(() => {
     if (hasFinishedOnboarding) {
-      navigate('root')
+      navigate('vault')
     }
   }, [hasFinishedOnboarding, navigate])
 

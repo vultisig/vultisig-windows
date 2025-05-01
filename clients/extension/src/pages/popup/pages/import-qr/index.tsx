@@ -49,7 +49,7 @@ const Component = () => {
   const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate('root')
+    else navigate('vault')
   }
 
   const vaults = useVaults()
@@ -198,7 +198,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('root')
+    navigate('vault')
   }, [navigate])
 
   useEffect(() => {

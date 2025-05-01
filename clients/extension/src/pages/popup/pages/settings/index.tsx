@@ -33,7 +33,7 @@ export const SettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => coreNavigate('root')} ghost>
+          <Button onClick={() => coreNavigate('vault')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }
