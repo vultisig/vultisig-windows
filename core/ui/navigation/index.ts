@@ -9,13 +9,14 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 import { VaultSecurityType } from '../vault/VaultSecurityType'
 
 export const corePaths = {
-  vault: '/vault',
+  vault: '/',
   joinKeygen: '/join-keygen',
   setupFastVault: '/vault/setup/fast',
   setupSecureVault: '/vault/setup/secure',
   setupVault: '/vault/setup',
   importVault: '/vault/import',
   keysign: '/vault/keysign',
+  newVault: '/vault/new',
   reshareVault: '/vault/reshare',
   reshareVaultFast: '/vault/reshare/fast',
   reshareVaultSecure: '/vault/reshare/secure',
