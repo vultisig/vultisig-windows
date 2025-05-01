@@ -3,7 +3,6 @@ import { areEqualCoins, Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinSearchString } from '@core/chain/coin/utils/getCoinSearchStrings'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
-import { ManageVaultChainCoin } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoin'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 import { useTransform } from '@lib/ui/hooks/useTransform'
@@ -18,6 +17,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery'
 import { useCurrentVaultChain } from '../../../../useCurrentVaultChain'
+import { ManageVaultChainCoin } from '../../ManageVaultChainCoin'
 
 export const VaultChainCoinOptions = () => {
   const chain = useCurrentVaultChain()
