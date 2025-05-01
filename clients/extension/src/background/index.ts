@@ -50,6 +50,14 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 
 import { handleSetupInpage } from '../utils/setupInpage'
+import { getCurrentVaultId } from '../vault/state/currentVaultId'
+import { getVaultSessions } from '../sessions/state/appSessions'
+import { getVaultsCoins } from '../vault/state/vaultsCoins'
+import { getDappHostname } from '../utils/connectedApps'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getVaults } from '../vault/state/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
+
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -109,46 +117,39 @@ const handleProvider = (chain: Chain, update?: boolean) => {
   rpcProvider = new JsonRpcProvider(rpc)
 }
 
-const handleFindAccounts = (
+const handleFindAccounts = async (
   _chain: Chain,
   _sender: string
 ): Promise<string[]> => {
-  return new Promise(_resolve => {
-    //TODO: introduce connected apps
-    // getStoredVaults()
-    //   .then(vaults => {
-    //     resolve(
-    //       vaults.flatMap(({ active, apps, chains }) =>
-    //         active && apps
-    //           ? chains
-    //               .filter(
-    //                 (selectedChain: ChainProps) =>
-    //                   selectedChain.chain === chain && apps.indexOf(sender) >= 0
-    //               )
-    //               .map(({ address }) => address ?? '')
-    //           : []
-    //       )
-    //     )
-    //   })
-    //   .catch(() => resolve([]))
-  })
+  const currentVaultId = await getCurrentVaultId()
+  if (!currentVaultId) return []
+  const vaultSessions = await getVaultSessions(currentVaultId)
+  const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
+  if (currentSession) {
+    const vaultsCoins = await getVaultsCoins()
+    return vaultsCoins[currentVaultId]
+      .filter(
+        accountCoin => isFeeCoin(accountCoin) && accountCoin.chain === _chain
+      )
+      .map(({ address }) => address ?? '')
+  } else {
+    return []
+  }
 }
 
-const handleFindVault = (
+const handleFindVault = async (
   _sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  return new Promise(_resolve => {
-    //TODO: introduce connected apps
-    // getStoredVaults()
-    //   .then(vaults => {
-    //     resolve(
-    //       vaults.find(
-    //         ({ active, apps = [] }) => active && apps.indexOf(sender) >= 0
-    //       )
-    //     )
-    //   })
-    //   .catch(() => resolve(undefined))
-  })
+  const vaults = await getVaults()
+  const currentVaultId = await getCurrentVaultId()
+  if (!currentVaultId) return undefined
+  const vaultSessions = await getVaultSessions(currentVaultId)
+  const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
+  if (currentSession) {
+    return vaults.find(vault => getVaultId(vault) === currentVaultId)
+  } else {
+    return undefined
+  }
 }
 
 const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {

@@ -21,7 +21,7 @@ export namespace Messaging {
 
   export namespace GetVault {
     export type Request = any
-    export type Response = Vault | undefined
+    export type Response = VaultCore | undefined
   }
 
   export namespace GetVaults {

@@ -12,28 +12,53 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { StrictMode, useState } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+import { useAddVaultSessionMutation } from '../../sessions/mutations/useAddVaultSessionMutation'
+import { getStoredRequest } from '../../utils/storage'
+import { Chain } from '@core/chain/Chain'
+import { getDappHost, getDappHostname } from '../../utils/connectedApps'
+import { getChainId } from '@core/chain/coin/ChainId'
+
+interface InitialState {
+  chain?: Chain
+  sender?: string
+}
 
 const App = () => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
+  const initialState: InitialState = {}
+  const [state, setState] = useState(initialState)
+  const { sender, chain } = state
   const vaults = useVaults()
-  const setCurrentVaultId = useSetCurrentVaultIdMutation()
 
+  const { mutateAsync: addSession } = useAddVaultSessionMutation()
   const handleClose = () => {
     window.close()
   }
 
-  const handleSubmit = () => {
-    if (vaultId) {
-      //TODO: add sender to connected apps
-      setCurrentVaultId.mutate(vaultId)
-
-      handleClose()
-    }
+  const handleSubmit = async () => {
+    if (!vaultId || !sender || !chain) return
+    await addSession({
+      vaultId: vaultId,
+      session: {
+        host: getDappHostname(sender),
+        url: getDappHost(sender),
+        chainIds: [getChainId(chain)],
+      },
+    })
+    handleClose()
   }
+
+  useEffect(() => {
+    const initRequest = async () => {
+      const { chain, sender } = await getStoredRequest()
+      setState(prevState => ({ ...prevState, chain, sender }))
+    }
+    initRequest()
+  }, [])
 
   return vaults.length ? (
     <VStack fullHeight>
