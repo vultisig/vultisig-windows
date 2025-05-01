@@ -81,7 +81,13 @@ export const DepositConfirmButton = ({
       vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     })
 
-    if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {
+    if (action === 'ibc_transfer') {
+      keysignPayload.toAddress = shouldBePresent(
+        depositFormData['destinationAddress'] as string
+      )
+    } else if (
+      isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])
+    ) {
       keysignPayload.toAddress = shouldBePresent(
         isTonFunction ? validatorAddress : receiver
       )
@@ -101,6 +107,7 @@ export const DepositConfirmButton = ({
     chainSpecificQuery.data,
     chainSpecificQuery.isLoading,
     coin,
+    depositFormData,
     isTonFunction,
     memo,
     receiver,
