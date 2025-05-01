@@ -2,7 +2,7 @@ import { Chain, CosmosChain } from '@core/chain/Chain'
 
 export const cosmosGasLimitRecord: Record<CosmosChain, number> = {
   [Chain.Cosmos]: 200000,
-  [Chain.Osmosis]: 200000,
+  [Chain.Osmosis]: 300000,
   [Chain.Kujira]: 200000,
   [Chain.Dydx]: 200000,
   [Chain.Noble]: 200000,
