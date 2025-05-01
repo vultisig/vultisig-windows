@@ -13,6 +13,8 @@ export const es = {
   overview: 'Visión general',
   signing_transaction: 'Firma de la transacción',
   chain: 'Cadena',
+  select_destination_chain: 'Seleccionar cadena de destino',
+  ibc_transfer: 'Transferencia IBC',
   start_transaction: 'Iniciar transacción',
   youre_swapping: 'Estás intercambiando',
   price_impact_good: 'Bueno',
