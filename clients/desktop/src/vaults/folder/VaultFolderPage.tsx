@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useFolderVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
-import { useFolderVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { EditIcon } from '@lib/ui/icons/EditIcon'
 import { VStack } from '@lib/ui/layout/Stack'

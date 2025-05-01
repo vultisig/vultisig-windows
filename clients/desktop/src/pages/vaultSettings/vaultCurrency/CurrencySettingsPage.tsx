@@ -1,6 +1,8 @@
 import { fiatCurrencies } from '@core/config/FiatCurrency'
-import { useSetFiatCurrencyMutation } from '@core/ui/preferences/mutations/useSetFiatCurrencyMutation'
-import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
+import {
+  useFiatCurrency,
+  useSetFiatCurrencyMutation,
+} from '@core/ui/storage/fiatCurrency'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'

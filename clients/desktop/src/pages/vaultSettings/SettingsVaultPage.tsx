@@ -1,5 +1,5 @@
-import { useFiatCurrency } from '@core/ui/preferences/queries/useFiatCurrencyQuery'
 import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'

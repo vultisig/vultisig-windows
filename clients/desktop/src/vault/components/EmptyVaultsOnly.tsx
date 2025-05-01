@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useVaults } from '@core/ui/vault/state/vaults'
+import { useVaults } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { useEffect } from 'react'

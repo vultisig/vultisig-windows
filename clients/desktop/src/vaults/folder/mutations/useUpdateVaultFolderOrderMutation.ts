@@ -1,8 +1,8 @@
+import { vaultFoldersQueryKey } from '@core/ui/query/keys'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { UpdateVaultFolderOrder } from '../../../../wailsjs/go/storage/Store'
-import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 type Input = {
   id: string

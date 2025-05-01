@@ -1,6 +1,6 @@
+import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
-import { useFolderlessVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'

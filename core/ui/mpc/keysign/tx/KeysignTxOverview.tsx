@@ -27,7 +27,7 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../preferences/queries/useFiatCurrencyQuery'
+import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()

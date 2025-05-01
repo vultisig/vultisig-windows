@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useVaultOrders } from '@core/ui/storage/vaults'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
-import { useVaultOrders } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
