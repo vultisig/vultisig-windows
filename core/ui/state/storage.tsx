@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
@@ -71,6 +72,15 @@ export type UpdateVaultFolderFunction = (
   input: UpdateVaultFolderInput
 ) => Promise<void>
 
+type DeleteVaultCoinInput = {
+  vaultId: string
+  coinKey: CoinKey
+}
+
+export type DeleteVaultCoinFunction = (
+  input: DeleteVaultCoinInput
+) => Promise<void>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -88,6 +98,7 @@ export type CoreStorage = {
   deleteVaultFolder: DeleteVaultFolderFunction
   updateVaultFolder: UpdateVaultFolderFunction
   createVaultCoin: CreateVaultCoinFunction
+  deleteVaultCoin: DeleteVaultCoinFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =

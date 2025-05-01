@@ -1,5 +1,8 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
-import { useCreateCoinMutation } from '@core/ui/storage/coins'
+import {
+  useCreateCoinMutation,
+  useDeleteCoinMutation,
+} from '@core/ui/storage/coins'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -10,8 +13,6 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-
-import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 
 const Container = styled(Panel)`
   ${interactive};

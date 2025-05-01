@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { coinKeyToString } from '@core/chain/coin/Coin'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import {
@@ -7,6 +8,7 @@ import {
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFunction,
+  DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
   GetVaultFoldersFunction,
@@ -23,6 +25,7 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import { useMemo } from 'react'
 
 import {
+  DeleteCoin,
   DeleteVault,
   DeleteVaultFolder,
   GetCoins,
@@ -105,6 +108,13 @@ const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
   await SaveVaultFolder(updatedFolder)
 }
 
+const deleteVaultCoin: DeleteVaultCoinFunction = async ({
+  vaultId,
+  coinKey,
+}) => {
+  await DeleteCoin(vaultId, coinKeyToString(coinKey))
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -138,6 +148,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       deleteVaultFolder,
       createVaultCoin,
       updateVaultFolder,
+      deleteVaultCoin,
     }),
     [
       currentVaultId,
