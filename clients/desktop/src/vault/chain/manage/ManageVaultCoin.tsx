@@ -28,7 +28,6 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
-
   const { mutate: saveCoin } = useSaveCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
 

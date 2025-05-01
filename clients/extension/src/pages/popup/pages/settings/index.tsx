@@ -9,6 +9,7 @@ import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
 import { CircleStopIcon } from '@lib/ui/icons/CircleStopIcon'
+import DefaultChainsIcon from '@lib/ui/icons/DefaultChainsIcon'
 import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
@@ -90,6 +91,13 @@ export const SettingsPage = () => {
               icon={<CircleDollarSignIcon fontSize={20} />}
               onClick={() => coreNavigate('currencySettings')}
               title={t('currency')}
+              hoverable
+              showArrow
+            />
+            <ListItem
+              icon={<DefaultChainsIcon />}
+              onClick={() => coreNavigate('defaultChains')}
+              title={t('vault_settings_default_chains')}
               hoverable
               showArrow
             />

@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { useCurrentSearch } from '@lib/ui/search/CurrentSearchProvider'
 import { useMemo } from 'react'
 
-import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider'
 import { ManageVaultChain } from '../ManageVaultChain'
 
 const ManageVaultChainsList = () => {
