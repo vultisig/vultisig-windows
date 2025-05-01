@@ -3,7 +3,6 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 
 export const appPaths = {
   deleteVault: '/settings/vault/delete',
-  languageSettings: '/settings/language',
   onboarding: '/onboarding',
   renameVault: '/settings/vault/rename',
   settings: '/settings',

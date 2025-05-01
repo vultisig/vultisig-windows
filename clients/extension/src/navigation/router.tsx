@@ -8,7 +8,6 @@ import { AppPath, appPaths } from '@clients/extension/src/navigation'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
-import { LanguagePage } from '@clients/extension/src/pages/popup/pages/language'
 import { ManageChainsPage } from '@clients/extension/src/pages/popup/pages/manage-chains'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/new-vault'
 import { RenameVaultPage } from '@clients/extension/src/pages/popup/pages/rename-vault'
@@ -75,7 +74,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <VaultSettingsPage />
     </ActiveVaultGuard>
   ),
-  languageSettings: <LanguagePage />,
   settings: <SettingsPage />,
   manageChains: (
     <ActiveVaultGuard>

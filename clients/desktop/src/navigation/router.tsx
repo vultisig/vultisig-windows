@@ -19,7 +19,6 @@ import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/Add
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import { VaultDefaultChainsPage } from '../pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
-import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
 import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { ManageVaultChainsPage } from '../vault/chain/manage/ManageVaultChainsPage'
@@ -159,7 +158,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <DeleteVaultPage />
     </ActiveVaultGuard>
   ),
-  languageSettings: <LanguageSettingsPage />,
   address: <AddressPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,

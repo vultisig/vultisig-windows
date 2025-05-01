@@ -19,7 +19,6 @@ export const appPaths = {
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
   vaultRename: '/vault/settings/vault-settings/rename-vault',
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
-  languageSettings: '/vault/settings/language-settings',
   checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   defaultChains: '/vault/settings/default-chains',
