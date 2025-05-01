@@ -8,6 +8,17 @@ export const getCosmosAccountInfo = async ({
   address,
 }: ChainAccount<CosmosChain>) => {
   const client = await getCosmosClient(chain)
-  const accountInfo = await client.getAccount(address)
-  return shouldBePresent(accountInfo, `Account: ${address}`)
+  const accountInfo = shouldBePresent(await client.getAccount(address))
+  const block = await client.getBlock()
+  const blockTimestampStr = block.header.time
+  const blockTimestampNs =
+    BigInt(new Date(blockTimestampStr).getTime()) * 1_000_000n
+
+  const timeoutNs = blockTimestampNs + 600_000_000_000n // +10 minutes
+  const latestBlock = `${block.header.height}_${timeoutNs}`
+
+  return {
+    ...accountInfo,
+    latestBlock,
+  }
 }

@@ -17,7 +17,7 @@ export const sourceChannelByChain: Partial<
     [Chain.Osmosis]: 'channel-3',
   },
   [Chain.Osmosis]: {
-    [Chain.Cosmos]: 'channel-141',
+    [Chain.Cosmos]: 'channel-0',
   },
   [Chain.Cosmos]: {
     [Chain.Kujira]: 'channel-343',
