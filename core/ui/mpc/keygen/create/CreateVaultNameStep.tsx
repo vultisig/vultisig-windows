@@ -1,6 +1,6 @@
 import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
-import { useVaultNames } from '@core/ui/vault/state/vaults'
+import { useVaultNames } from '@core/ui/storage/vaults'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'

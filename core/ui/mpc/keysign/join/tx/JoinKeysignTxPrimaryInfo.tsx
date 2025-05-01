@@ -19,7 +19,7 @@ import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../../preferences/queries/useFiatCurrencyQuery'
+import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,

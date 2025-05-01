@@ -3,20 +3,19 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { GetVaultFolders } from '../../../../wailsjs/go/storage/Store'
-
-export const vaultFoldersQueryKey = ['vaultFolders']
-
-const vaultFoldersQueryFn = async () => {
-  const result = await GetVaultFolders()
-
-  return sortEntitiesWithOrder(result ?? [])
-}
+import { vaultFoldersQueryKey } from '../query/keys'
+import { useCoreStorage } from '../state/storage'
 
 export const useVaultFoldersQuery = () => {
+  const { getVaultFolders } = useCoreStorage()
+
   return useQuery({
     queryKey: vaultFoldersQueryKey,
-    queryFn: vaultFoldersQueryFn,
+    queryFn: async () => {
+      const result = await getVaultFolders()
+
+      return sortEntitiesWithOrder(result)
+    },
   })
 }
 

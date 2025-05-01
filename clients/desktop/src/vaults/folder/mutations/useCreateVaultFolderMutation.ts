@@ -1,4 +1,5 @@
 import { vaultsQueryKey } from '@core/ui/query/keys'
+import { vaultFoldersQueryKey } from '@core/ui/query/keys'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
@@ -6,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { storage } from '../../../../wailsjs/go/models'
 import { SaveVaultFolder } from '../../../../wailsjs/go/storage/Store'
-import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 type CreateVaultFolderInput = {
   name: string

@@ -3,7 +3,7 @@ import {
   GetCurrentVaultIdFunction,
   SetCurrentVaultIdFunction,
 } from '@core/ui/state/storage'
-import { initialCurrentVaultId } from '@core/ui/vault/state/currentVaultId'
+import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
 
 import { getPersistentState } from '../../state/persistent/getPersistentState'
 import { setPersistentState } from '../../state/persistent/setPersistentState'

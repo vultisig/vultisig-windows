@@ -1,5 +1,5 @@
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
-import { useVaults } from '@core/ui/vault/state/vaults'
+import { useVaults } from '@core/ui/storage/vaults'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'

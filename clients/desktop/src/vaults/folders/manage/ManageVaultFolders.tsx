@@ -1,3 +1,4 @@
+import { useVaultFolders } from '@core/ui/storage/vaultFolders'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
@@ -12,7 +13,6 @@ import {
 import { useUpdateVaultFolderOrderMutation } from '../../folder/mutations/useUpdateVaultFolderOrderMutation'
 import { FolderListItem } from '../components/FolderListItem'
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
-import { useVaultFolders } from '../queries/useVaultFoldersQuery'
 
 export const ManageVaultFolders = () => {
   const folders = useVaultFolders()

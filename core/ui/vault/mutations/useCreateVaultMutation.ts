@@ -8,8 +8,8 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { useCoreStorage } from '../../state/storage'
+import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useCreateVaultCoinsMutation } from './useCreateVaultCoinsMutations'
-import { useSetCurrentVaultIdMutation } from './useSetCurrentVaultIdMutation'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>

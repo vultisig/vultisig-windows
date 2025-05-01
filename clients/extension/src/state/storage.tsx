@@ -19,6 +19,7 @@ import {
   getCurrentVaultId,
   setCurrentVaultId,
 } from '../vault/state/currentVaultId'
+import { getVaultFolders } from '../vault/state/vaultFolders'
 import { updateVaults } from '../vault/state/vaults'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
@@ -65,7 +66,7 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   })
 }
 
-const writeStorage: CoreStorage = {
+const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   getCurrentVaultId,
@@ -75,10 +76,11 @@ const writeStorage: CoreStorage = {
   setDefaultChains,
   getDefaultChains,
   getFiatCurrency,
+  getVaults,
+  getVaultsCoins,
+  getVaultFolders,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {
-  return (
-    <CoreStorageProvider value={writeStorage}>{children}</CoreStorageProvider>
-  )
+  return <CoreStorageProvider value={storage}>{children}</CoreStorageProvider>
 }

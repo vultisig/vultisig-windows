@@ -7,3 +7,5 @@ export const currentVaultIdQueryKey = ['currentVaultId'] as const
 export const vaultsCoinsQueryKey = ['vaultsCoins'] as const
 
 export const defaultChainsQueryKey = ['defaultChains'] as const
+
+export const vaultFoldersQueryKey = ['vaultFolders'] as const

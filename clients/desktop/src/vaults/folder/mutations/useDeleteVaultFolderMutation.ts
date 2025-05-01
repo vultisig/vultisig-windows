@@ -1,6 +1,6 @@
-import { vaultsQueryKey } from '@core/ui/query/keys'
+import { vaultFoldersQueryKey, vaultsQueryKey } from '@core/ui/query/keys'
+import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -9,7 +9,6 @@ import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
 
 import { DeleteVaultFolder } from '../../../../wailsjs/go/storage/Store'
-import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 export const useDeleteVaultFolderMutation = () => {
   const invalidateQueries = useInvalidateQueries()
