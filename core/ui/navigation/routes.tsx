@@ -8,7 +8,7 @@ type SharedPaths = 'reshareVault'
 export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   reshareVault: (
     <ActiveVaultGuard>
-      <ReshareVaultPage />,
+      <ReshareVaultPage />
     </ActiveVaultGuard>
   ),
 }
