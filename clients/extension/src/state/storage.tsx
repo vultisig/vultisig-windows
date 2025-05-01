@@ -82,13 +82,10 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   })
 }
 
-const updateVaultFolder: UpdateVaultFolderFunction = async ({
-  folderId,
-  fields,
-}) => {
+const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
   const vaultFolders = await getVaultFolders()
   const vaultFolderIndex = shouldBePresent(
-    vaultFolders.findIndex(vaultFolder => vaultFolder.id === folderId)
+    vaultFolders.findIndex(vaultFolder => vaultFolder.id === id)
   )
 
   const updatedVaultFolders = updateAtIndex(
