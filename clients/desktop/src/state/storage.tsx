@@ -59,17 +59,17 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
 }
 
 const getVaults: GetVaultsFunction = async () => {
-  const storageVaults = await GetVaults()
+  const storageVaults = (await GetVaults()) ?? []
   return storageVaults.map(fromStorageVault)
 }
 
 const getVaultsCoins: GetVaultsCoinsFunction = async () => {
-  const coins = await GetCoins()
+  const coins = (await GetCoins()) ?? {}
   return recordMap(coins, coins => coins.map(fromStorageCoin))
 }
 
 const getVaultFolders: GetVaultFoldersFunction = async () => {
-  const storageVaultFolders = await GetVaultFolders()
+  const storageVaultFolders = (await GetVaultFolders()) ?? []
   return storageVaultFolders
 }
 

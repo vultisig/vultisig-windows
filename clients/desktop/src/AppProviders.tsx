@@ -8,6 +8,7 @@ import { VersionProvider } from '@core/ui/product/state/version'
 import { OpenUrlProvider } from '@core/ui/state/openUrl'
 import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -19,6 +20,7 @@ import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { StorageProvider } from './state/storage'
+import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
@@ -49,7 +51,12 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <ThemeProvider theme={darkTheme}>
                       <WalletCoreProvider>
                         <StorageProvider>
-                          <StorageDependant>{children}</StorageDependant>
+                          <StorageDependant>
+                            {children}
+                            <ActiveVaultOnly>
+                              <CoinFinder />
+                            </ActiveVaultOnly>
+                          </StorageDependant>
                         </StorageProvider>
                       </WalletCoreProvider>
                     </ThemeProvider>

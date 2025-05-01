@@ -2,7 +2,7 @@ import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { vaultsQueryKey } from '@core/ui/query/keys'
+import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -43,7 +43,7 @@ export const useSaveCoinMutation = () => {
 
       await SaveCoin(getVaultId(vault), storageCoin)
 
-      await invalidate(vaultsQueryKey)
+      await invalidate(vaultsCoinsQueryKey)
     },
   })
 }

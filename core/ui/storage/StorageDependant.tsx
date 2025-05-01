@@ -18,14 +18,14 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const defaultChains = useDefaultChainsQuery()
-  const fiatCurrencyQuery = useFiatCurrencyQuery()
+  const fiatCurrency = useFiatCurrencyQuery()
   const currentVaultId = useCurrentVaultIdQuery()
 
   const query = useMergeQueries({
     vaults,
     vaultFolders,
     defaultChains,
-    fiatCurrency: fiatCurrencyQuery,
+    fiatCurrency,
     currentVaultId,
   })
 

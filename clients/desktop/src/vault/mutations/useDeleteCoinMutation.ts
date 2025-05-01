@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
-import { vaultsQueryKey } from '@core/ui/query/keys'
+import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -29,7 +29,7 @@ export const useDeleteCoinMutation = () => {
         })
       )
 
-      await invalidate(vaultsQueryKey)
+      await invalidate(vaultsCoinsQueryKey)
     },
   })
 }
