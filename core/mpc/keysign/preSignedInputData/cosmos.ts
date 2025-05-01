@@ -67,7 +67,8 @@ export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
     sequence: new Long(Number(chainSpecific.sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo:
-      chainSpecific.transactionType !== TransactionType.VOTE
+      chainSpecific.transactionType !== TransactionType.VOTE &&
+      chainSpecific.transactionType !== TransactionType.IBC_TRANSFER
         ? keysignPayload.memo || ''
         : '',
     messages: message,
