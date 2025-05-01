@@ -5,6 +5,7 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
+import { generateIbcTransaction } from '@core/mpc/keysign/preSignedInputData/ibc/generateIbcTransaction'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
@@ -34,8 +35,8 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-
   const { keysignPayload } = useCorePathState<'keysign'>()
+  const ibcTransaction = generateIbcTransaction(keysignPayload)
 
   const walletCore = useAssertWalletCore()
 
@@ -48,6 +49,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
           const inputs = await getTxInputData({
             keysignPayload,
             walletCore,
+            ibcTransaction,
           })
 
           const coin = assertField(keysignPayload, 'coin')

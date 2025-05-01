@@ -26,14 +26,14 @@ export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
         transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
           ...ibcTransaction,
           timeoutHeight: {
-            revisionNumber: new Long(
-              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            revisionNumber: Long.fromString(
+              ibcTransaction.timeoutHeight.revisionNumber
             ),
-            revisionHeight: new Long(
-              Number(ibcTransaction.timeoutHeight.revisionNumber)
+            revisionHeight: Long.fromString(
+              ibcTransaction.timeoutHeight.revisionHeight
             ),
           },
-          timeoutTimestamp: new Long(Number(ibcTransaction.timeoutTimestamp)),
+          timeoutTimestamp: Long.fromString(ibcTransaction.timeoutTimestamp),
         }),
       }),
     ]
@@ -67,7 +67,8 @@ export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
     sequence: new Long(Number(chainSpecific.sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo:
-      chainSpecific.transactionType !== TransactionType.VOTE
+      chainSpecific.transactionType !== TransactionType.VOTE &&
+      chainSpecific.transactionType !== TransactionType.IBC_TRANSFER
         ? keysignPayload.memo || ''
         : '',
     messages: message,
