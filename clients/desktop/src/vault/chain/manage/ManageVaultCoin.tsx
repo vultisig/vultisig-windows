@@ -7,7 +7,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
@@ -26,30 +26,19 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
 }
 
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
-  const [optimisticIsChecked, setOptimisticIsChecked] = useState(false)
-
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
 
-  const { mutate: saveCoin, isPending: isSaving } = useSaveCoinMutation()
-  const { mutate: deleteCoin, isPending: isDeleting } = useDeleteCoinMutation()
-
-  // Synchronize in case the mutation was unsuccessful and the optimistic update needs to be reverted
-  useEffect(() => {
-    if (isChecked !== optimisticIsChecked && !isSaving && !isDeleting) {
-      setOptimisticIsChecked(isChecked)
-    }
-  }, [isChecked, isDeleting, isSaving, optimisticIsChecked])
+  const { mutate: saveCoin } = useSaveCoinMutation()
+  const { mutate: deleteCoin } = useDeleteCoinMutation()
 
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
       onClick={() => {
         if (isChecked) {
-          setOptimisticIsChecked(false)
           deleteCoin(value)
         } else {
-          setOptimisticIsChecked(true)
           saveCoin(value)
         }
       }}
@@ -66,7 +55,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
             </Text>
           </VStack>
         </HStack>
-        <Check value={optimisticIsChecked} />
+        <Check value={isChecked} />
       </HStack>
     </Container>
   )
