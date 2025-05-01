@@ -1,5 +1,5 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -13,13 +13,13 @@ import { useTranslation } from 'react-i18next'
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('root')} ghost>
+          <Button onClick={() => navigate('vault')} ghost>
             <ChevronLeftIcon fontSize={20} />
           </Button>
         }
