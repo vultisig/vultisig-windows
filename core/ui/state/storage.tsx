@@ -81,6 +81,8 @@ export type DeleteVaultCoinFunction = (
   input: DeleteVaultCoinInput
 ) => Promise<void>
 
+export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -99,6 +101,7 @@ export type CoreStorage = {
   updateVaultFolder: UpdateVaultFolderFunction
   createVaultCoin: CreateVaultCoinFunction
   deleteVaultCoin: DeleteVaultCoinFunction
+  createVaultFolder: CreateVaultFolderFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =

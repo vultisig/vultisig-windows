@@ -4,6 +4,7 @@ import {
   CoreStorageProvider,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
+  CreateVaultFolderFunction,
   CreateVaultFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
@@ -124,6 +125,11 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
   })
 }
 
+const createVaultFolder: CreateVaultFolderFunction = async folder => {
+  const folders = await getVaultFolders()
+  await updateVaultFolders([...folders, folder])
+}
+
 const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -142,6 +148,7 @@ const storage: CoreStorage = {
   createVaultCoin,
   updateVaultFolder,
   deleteVaultCoin,
+  createVaultFolder,
 }
 
 export const StorageProvider = ({ children }: ChildrenProp) => {

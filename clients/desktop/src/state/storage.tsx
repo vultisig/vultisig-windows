@@ -7,6 +7,7 @@ import {
   CoreStorageProvider,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
+  CreateVaultFolderFunction,
   CreateVaultFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
@@ -115,6 +116,10 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
   await DeleteCoin(vaultId, coinKeyToString(coinKey))
 }
 
+const createVaultFolder: CreateVaultFolderFunction = async folder => {
+  await SaveVaultFolder(folder)
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
   const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
     PersistentStateKey.FiatCurrency,
@@ -149,6 +154,7 @@ export const StorageProvider = ({ children }: ChildrenProp) => {
       createVaultCoin,
       updateVaultFolder,
       deleteVaultCoin,
+      createVaultFolder,
     }),
     [
       currentVaultId,
