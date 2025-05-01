@@ -94,11 +94,8 @@ const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
   await SaveCoin(vaultId, toStorageCoin(coin))
 }
 
-const updateVaultFolder: UpdateVaultFolderFunction = async ({
-  folderId,
-  fields,
-}) => {
-  const folder = await GetVaultFolder(folderId)
+const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
+  const folder = await GetVaultFolder(id)
 
   const updatedFolder = {
     ...folder,
