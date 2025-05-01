@@ -19,6 +19,7 @@ import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { StorageProvider } from './state/storage'
+import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
@@ -49,7 +50,10 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <ThemeProvider theme={darkTheme}>
                       <WalletCoreProvider>
                         <StorageProvider>
-                          <StorageDependant>{children}</StorageDependant>
+                          <StorageDependant>
+                            {children}
+                            <CoinFinder />
+                          </StorageDependant>
                         </StorageProvider>
                       </WalletCoreProvider>
                     </ThemeProvider>
