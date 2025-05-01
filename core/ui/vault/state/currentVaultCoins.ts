@@ -8,9 +8,9 @@ import { useMemo } from 'react'
 import { useCurrentVault } from './currentVault'
 
 export const useCurrentVaultCoins = () => {
-  const vault = useCurrentVault()
+  const { coins } = useCurrentVault()
 
-  return vault.coins ?? []
+  return coins ?? []
 }
 
 export const useCurrentVaultNativeCoins = () => {
