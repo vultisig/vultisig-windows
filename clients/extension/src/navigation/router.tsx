@@ -18,14 +18,16 @@ import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
-import { ActiveVaultGuard } from '@clients/extension/src/vault/components/ActiveVaultGuard'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
+import { sharedRoutes } from '@core/ui/navigation/routes'
+import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
 
 const coreRoutes: Record<CorePath, ReactNode> = {
+  ...sharedRoutes,
   vault: <ActiveVaultGuard>TODO: Implement vault page</ActiveVaultGuard>,
   joinKeygen: <>TODO: Implement join keygen page</>,
   setupFastVault: <SetupFastVaultPage />,

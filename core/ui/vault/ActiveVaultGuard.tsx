@@ -5,20 +5,21 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { FC, useEffect } from 'react'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '../navigation/hooks/useCoreNavigate'
 
 export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
   const currentVaultId = useCurrentVaultId()
   const vaults = useVaults()
   const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   const isDisabled = !vault
 
   useEffect(() => {
     if (isDisabled) {
-      navigate('landing')
+      // TODO: replace with 'newVault' route after @ehsanst rearranges routes
+      navigate('setupVault', { params: {} })
     }
   }, [isDisabled, navigate])
 
