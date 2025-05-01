@@ -18,7 +18,6 @@ import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
-import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
@@ -35,11 +34,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupVault: <SetupVaultPageController />,
   importVault: <ImportFilePage />,
   keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
-  reshareVault: (
-    <ActiveVaultGuard>
-      <ReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
   reshareVaultFast: (
     <ActiveVaultGuard>
       <ReshareFastVault />
