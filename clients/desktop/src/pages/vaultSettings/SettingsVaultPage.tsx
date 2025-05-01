@@ -47,6 +47,7 @@ import {
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
 type SettingItem = {
   id: string
@@ -61,6 +62,7 @@ type SettingSection = {
 
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
@@ -87,7 +89,7 @@ const SettingsVaultPage = () => {
           id: 'currency',
           title: t('currency'),
           icon: <CurrencyCircleIcon />,
-          onClick: () => navigate('currencySettings'),
+          onClick: () => coreNavigate('currencySettings'),
         },
         {
           id: 'address-book',
