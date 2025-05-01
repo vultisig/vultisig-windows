@@ -5,7 +5,6 @@ import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
-import { CurrentVaultCoinsProvider } from '@core/ui/vault/state/currentVaultCoins'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChildrenProp } from '@lib/ui/props'
@@ -37,11 +36,9 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   return (
     <CurrentVaultProvider value={vault}>
-      <CurrentVaultCoinsProvider value={vault.coins}>
-        <MpcLocalPartyIdProvider value={vault.localPartyId}>
-          {children}
-        </MpcLocalPartyIdProvider>
-      </CurrentVaultCoinsProvider>
+      <MpcLocalPartyIdProvider value={vault.localPartyId}>
+        {children}
+      </MpcLocalPartyIdProvider>
     </CurrentVaultProvider>
   )
 }
