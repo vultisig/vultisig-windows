@@ -8,6 +8,7 @@
     "clients/extension/src/messengers/bridge.ts",
     "clients/extension/src/messengers/createMessenger.ts",
     "clients/extension/src/pages/popup/index.tsx",
+    "clients/extension/src/pages/popup/pages/currency/index.tsx",
     "clients/extension/src/pages/connect/index.tsx",
     "clients/extension/src/pages/import/index.tsx",
     "clients/extension/src/pages/transaction/index.tsx",

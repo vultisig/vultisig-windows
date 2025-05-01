@@ -1,5 +1,6 @@
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
+import { CurrencyPage } from '@core/ui/preferences/currency/CurrencyPage'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
@@ -17,7 +18,6 @@ import RegisterForAirdropPage from '../pages/registerForAirdrop/RegisterForAirdr
 import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
-import CurrencySettingsPage from '../pages/vaultSettings/vaultCurrency/CurrencySettingsPage'
 import { VaultDefaultChainsPage } from '../pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
@@ -162,7 +162,7 @@ const appRoutes: Record<AppPath, ReactNode> = {
   ),
   languageSettings: <LanguageSettingsPage />,
   address: <AddressPage />,
-  currencySettings: <CurrencySettingsPage />,
+  currencySettings: <CurrencyPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
   defaultChains: <VaultDefaultChainsPage />,
