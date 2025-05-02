@@ -1,12 +1,11 @@
 import buildInfo from '@clients/desktop/build.json'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
-import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { VersionProvider } from '@core/ui/product/state/version'
-import { OpenUrlProvider } from '@core/ui/state/openUrl'
-import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
+import { CoreProvider, CoreState } from '@core/ui/state/core'
+import { SaveFileFunction } from '@core/ui/state/saveFile'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ChildrenProp } from '@lib/ui/props'
@@ -35,6 +34,12 @@ const saveFile: SaveFileFunction = async ({ name, blob }) => {
   await SaveFile(name, base64Data)
 }
 
+const coreState: CoreState = {
+  openUrl: BrowserOpenURL,
+  saveFile,
+  mpcDevice: 'windows',
+}
+
 export const AppProviders = ({ children }: ChildrenProp) => {
   const [language] = useLanguage()
   const [mpcLib] = useVaultCreationMpcLib()
@@ -43,28 +48,24 @@ export const AppProviders = ({ children }: ChildrenProp) => {
     <VersionProvider value={buildInfo.version}>
       <MpcLocalModeAvailabilityProvider value={true}>
         <VaultCreationMpcLibProvider value={mpcLib}>
-          <OpenUrlProvider value={BrowserOpenURL}>
-            <SaveFileProvider value={saveFile}>
-              <MpcDeviceProvider value="windows">
-                <QueryClientProvider client={queryClient}>
-                  <I18nProvider language={language}>
-                    <ThemeProvider theme={darkTheme}>
-                      <WalletCoreProvider>
-                        <StorageProvider>
-                          <StorageDependant>
-                            {children}
-                            <ActiveVaultOnly>
-                              <CoinFinder />
-                            </ActiveVaultOnly>
-                          </StorageDependant>
-                        </StorageProvider>
-                      </WalletCoreProvider>
-                    </ThemeProvider>
-                  </I18nProvider>
-                </QueryClientProvider>
-              </MpcDeviceProvider>
-            </SaveFileProvider>
-          </OpenUrlProvider>
+          <CoreProvider value={coreState}>
+            <QueryClientProvider client={queryClient}>
+              <I18nProvider language={language}>
+                <ThemeProvider theme={darkTheme}>
+                  <WalletCoreProvider>
+                    <StorageProvider>
+                      <StorageDependant>
+                        {children}
+                        <ActiveVaultOnly>
+                          <CoinFinder />
+                        </ActiveVaultOnly>
+                      </StorageDependant>
+                    </StorageProvider>
+                  </WalletCoreProvider>
+                </ThemeProvider>
+              </I18nProvider>
+            </QueryClientProvider>
+          </CoreProvider>
         </VaultCreationMpcLibProvider>
       </MpcLocalModeAvailabilityProvider>
     </VersionProvider>

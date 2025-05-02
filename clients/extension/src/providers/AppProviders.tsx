@@ -2,12 +2,11 @@ import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { VersionProvider } from '@core/ui/product/state/version'
-import { OpenUrlProvider } from '@core/ui/state/openUrl'
-import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
+import { CoreState } from '@core/ui/state/core'
+import { SaveFileFunction } from '@core/ui/state/saveFile'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
@@ -35,6 +34,12 @@ const openUrl = (url: string) => window.open(url, '_blank')
 
 const saveFile: SaveFileFunction = async ({ name, blob }) => {
   initiateFileDownload({ name, blob })
+}
+
+const coreState: CoreState = {
+  openUrl,
+  saveFile,
+  mpcDevice: 'extension',
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
