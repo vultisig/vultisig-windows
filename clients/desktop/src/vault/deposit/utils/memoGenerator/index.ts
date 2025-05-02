@@ -1,5 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { getDenom } from '@core/chain/coin/balance/cosmos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Coin } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { FieldValues } from 'react-hook-form'
@@ -31,6 +33,7 @@ export const generateMemo = ({
     destinationChain,
     destinationAddress,
     memo,
+    selectedCoin,
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
@@ -84,6 +87,14 @@ export const generateMemo = ({
 
       return `${destinationChain}:${sourceChannel}:${destinationAddress}${memo ? `:${memo}` : ''}`
     },
+    merge: () => {
+      const token = shouldBePresent(selectedCoin, 'Token to merge')
+      return `merge:${getDenom(token)}`
+    },
+    switch: () => {
+      const token = shouldBePresent(selectedCoin, 'Token to switch')
+      return `switch:${getDenom(token)}`
+    },
   })
 }
 
@@ -101,5 +112,6 @@ function extractFormValues(formData: FieldValues) {
     destinationChannel: formData.destinationChannel as string | null,
     destinationAddress: formData.destinationAddress as string | null,
     memo: formData.memo as string | null,
+    selectedCoin: formData.selectedCoin as Coin | null,
   }
 }
