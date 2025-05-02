@@ -3,20 +3,16 @@ import { LocalStorage } from '../lib/ui/state/LocalStorage'
 import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
 export enum PersistentStateKey {
-  CurrentVaultId = 'currentVaultId',
   IsVaultBalanceVisible = 'isVaultBalanceVisible',
   ReactQueryState = 'reactQueryState',
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
-  FiatCurrency = 'fiatCurrency',
-  DefaultChains = 'defaultChains',
   VaultCreationMpcLib = 'vaultCreationMpcLib',
 }
 
-export const persistentStorage =
-  typeof window !== 'undefined'
-    ? new LocalStorage<PersistentStateKey>()
-    : new TemporaryStorage<PersistentStateKey>()
+const Storage = typeof window !== 'undefined' ? LocalStorage : TemporaryStorage
+
+export const persistentStorage = new Storage()
 
 export const usePersistentState =
   createPersistentStateHook<PersistentStateKey>(persistentStorage)

@@ -4,6 +4,11 @@ import { assertChainField } from '@core/chain/utils/assertChainField'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import {
+  currentVaultIdQueryKey,
+  defaultChainsQueryKey,
+  fiatCurrencyQueryKey,
+} from '@core/ui/query/keys'
+import {
   CoreStorage,
   CoreStorageProvider,
   CreateAddressBookItemFunction,
@@ -51,7 +56,7 @@ import {
 } from '../../wailsjs/go/storage/Store'
 import { fromStorageCoin, toStorageCoin } from '../storage/storageCoin'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
-import { PersistentStateKey, persistentStorage } from './persistentState'
+import { persistentStorage } from './persistentState'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const oldStorageVault = await GetVault(vaultId)
@@ -153,10 +158,10 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
   await DeleteAddressBookItem(item)
 }
 
+const [defaultChainsKey] = defaultChainsQueryKey
+
 const getDefaultChains: GetDefaultChainsFunction = async () => {
-  const value = persistentStorage.getItem<Chain[]>(
-    PersistentStateKey.DefaultChains
-  )
+  const value = persistentStorage.getItem<Chain[]>(defaultChainsKey)
 
   if (value === undefined) {
     return initialDefaultChains
@@ -166,13 +171,13 @@ const getDefaultChains: GetDefaultChainsFunction = async () => {
 }
 
 const setDefaultChains: SetDefaultChainsFunction = async chains => {
-  persistentStorage.setItem(PersistentStateKey.DefaultChains, chains)
+  persistentStorage.setItem(defaultChainsKey, chains)
 }
 
+const [fiatCurrencyKey] = fiatCurrencyQueryKey
+
 const getFiatCurrency = async () => {
-  const value = persistentStorage.getItem<FiatCurrency>(
-    PersistentStateKey.FiatCurrency
-  )
+  const value = persistentStorage.getItem<FiatCurrency>(fiatCurrencyKey)
 
   if (value === undefined) {
     return defaultFiatCurrency
@@ -182,13 +187,13 @@ const getFiatCurrency = async () => {
 }
 
 const setFiatCurrency = async (currency: FiatCurrency) => {
-  persistentStorage.setItem(PersistentStateKey.FiatCurrency, currency)
+  persistentStorage.setItem(fiatCurrencyKey, currency)
 }
 
+const [currentVaultIdKey] = currentVaultIdQueryKey
+
 const getCurrentVaultId = async () => {
-  const value = persistentStorage.getItem<CurrentVaultId>(
-    PersistentStateKey.CurrentVaultId
-  )
+  const value = persistentStorage.getItem<CurrentVaultId>(currentVaultIdKey)
 
   if (value === undefined) {
     return initialCurrentVaultId
@@ -198,7 +203,7 @@ const getCurrentVaultId = async () => {
 }
 
 const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
-  persistentStorage.setItem(PersistentStateKey.CurrentVaultId, vaultId)
+  persistentStorage.setItem(currentVaultIdKey, vaultId)
 }
 
 const storage: CoreStorage = {
