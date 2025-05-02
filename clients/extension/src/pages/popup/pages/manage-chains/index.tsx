@@ -4,6 +4,7 @@ import { Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -17,17 +18,12 @@ import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface InitialState {
-  search?: string
-}
-
 export const ManageChainsPage = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { search } = state
+  const [search, setSearch] = useState<string | undefined>(undefined)
   const navigate = useCoreNavigate()
   const coins = Object.values(chainFeeCoin)
+  const selectedCoins = useCurrentVaultNativeCoins()
 
   const handleFilter = (coin: Coin) => {
     const str = search?.toLowerCase()
@@ -37,10 +33,6 @@ export const ManageChainsPage = () => {
       coin.chain.toLowerCase().includes(str) ||
       coin.ticker.toLowerCase().includes(str)
     )
-  }
-
-  const handleSearch = (search: string) => {
-    setState(prevState => ({ ...prevState, search }))
   }
 
   const handleSwitch = (coin: Coin) => {
@@ -66,7 +58,7 @@ export const ManageChainsPage = () => {
         {/* TODO: Update search input styles based on Figma */}
         <TextInput
           placeholder={t('search_field_placeholder')}
-          onValueChange={handleSearch}
+          onValueChange={setSearch}
           value={search}
         />
         <VStack gap={12}>
@@ -74,26 +66,31 @@ export const ManageChainsPage = () => {
             {t('active')}
           </Text>
           <List>
-            {coins.filter(handleFilter).map(coin => (
-              <ListItem
-                extra={<Switch onChange={() => handleSwitch(coin)} checked />}
-                key={`${coin.chain}-${coin.ticker}`}
-                icon={
-                  <ChainEntityIcon
-                    value={getChainEntityIconSrc(coin.chain)}
-                    style={{ fontSize: 32 }}
-                  />
-                }
-                title={
-                  <HStack gap={12} alignItems="center">
-                    <Text color="contrast" size={14} weight={500}>
-                      {coin.ticker}
-                    </Text>
-                    <ListItemTag title={coin.chain} />
-                  </HStack>
-                }
-              />
-            ))}
+            {coins
+              .filter(coin =>
+                selectedCoins.some(({ chain }) => chain === coin.chain)
+              )
+              .filter(handleFilter)
+              .map(coin => (
+                <ListItem
+                  extra={<Switch onChange={() => handleSwitch(coin)} checked />}
+                  key={`${coin.chain}-${coin.ticker}`}
+                  icon={
+                    <ChainEntityIcon
+                      value={getChainEntityIconSrc(coin.chain)}
+                      style={{ fontSize: 32 }}
+                    />
+                  }
+                  title={
+                    <HStack gap={12} alignItems="center">
+                      <Text color="contrast" size={14} weight={500}>
+                        {coin.ticker}
+                      </Text>
+                      <ListItemTag title={coin.chain} />
+                    </HStack>
+                  }
+                />
+              ))}
           </List>
         </VStack>
         <VStack gap={12}>
@@ -101,26 +98,31 @@ export const ManageChainsPage = () => {
             {t('available')}
           </Text>
           <List>
-            {coins.filter(handleFilter).map(coin => (
-              <ListItem
-                extra={<Switch onChange={() => handleSwitch(coin)} />}
-                key={`${coin.chain}-${coin.ticker}`}
-                icon={
-                  <ChainEntityIcon
-                    value={getChainEntityIconSrc(coin.chain)}
-                    style={{ fontSize: 32 }}
-                  />
-                }
-                title={
-                  <HStack gap={12} alignItems="center">
-                    <Text color="contrast" size={14} weight={500}>
-                      {coin.ticker}
-                    </Text>
-                    <ListItemTag title={coin.chain} />
-                  </HStack>
-                }
-              />
-            ))}
+            {coins
+              .filter(coin =>
+                selectedCoins.every(({ chain }) => chain !== coin.chain)
+              )
+              .filter(handleFilter)
+              .map(coin => (
+                <ListItem
+                  extra={<Switch onChange={() => handleSwitch(coin)} />}
+                  key={`${coin.chain}-${coin.ticker}`}
+                  icon={
+                    <ChainEntityIcon
+                      value={getChainEntityIconSrc(coin.chain)}
+                      style={{ fontSize: 32 }}
+                    />
+                  }
+                  title={
+                    <HStack gap={12} alignItems="center">
+                      <Text color="contrast" size={14} weight={500}>
+                        {coin.ticker}
+                      </Text>
+                      <ListItemTag title={coin.chain} />
+                    </HStack>
+                  }
+                />
+              ))}
           </List>
         </VStack>
       </PageContent>
