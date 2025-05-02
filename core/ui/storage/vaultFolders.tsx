@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -9,13 +10,12 @@ import { useMemo } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { vaultFoldersQueryKey, vaultsQueryKey } from '../query/keys'
-import { useCoreStorage } from '../state/storage'
 import { useUpdateVaultMutation } from '../vault/mutations/useUpdateVaultMutation'
 import { getVaultId } from '../vault/Vault'
 import { useVaults } from './vaults'
 
 export const useVaultFoldersQuery = () => {
-  const { getVaultFolders } = useCoreStorage()
+  const { getVaultFolders } = useCore()
 
   return useQuery({
     queryKey: vaultFoldersQueryKey,
@@ -44,7 +44,7 @@ export const useDeleteVaultFolderMutation = () => {
 
   const vaults = useVaults()
 
-  const { deleteVaultFolder } = useCoreStorage()
+  const { deleteVaultFolder } = useCore()
 
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
@@ -85,7 +85,7 @@ export const useDeleteVaultFolderMutation = () => {
 }
 
 export const useUpdateVaultFolderMutation = () => {
-  const { updateVaultFolder } = useCoreStorage()
+  const { updateVaultFolder } = useCore()
 
   const invalidateQueries = useInvalidateQueries()
 
@@ -106,7 +106,7 @@ type CreateVaultFolderInput = {
 export const useCreateVaultFolderMutation = () => {
   const invalidateQueries = useInvalidateQueries()
 
-  const { createVaultFolder, updateVault } = useCoreStorage()
+  const { createVaultFolder, updateVault } = useCore()
 
   return useMutation({
     mutationFn: async ({ name, order, vaultIds }: CreateVaultFolderInput) => {

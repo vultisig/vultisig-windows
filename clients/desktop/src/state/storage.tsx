@@ -10,7 +10,6 @@ import {
 } from '@core/ui/query/keys'
 import {
   CoreStorage,
-  CoreStorageProvider,
   CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
@@ -29,11 +28,10 @@ import {
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
-} from '@core/ui/state/storage'
+} from '@core/ui/storage/CoreStorage'
 import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
-import { ChildrenProp } from '@lib/ui/props'
 import { recordMap } from '@lib/utils/record/recordMap'
 
 import {
@@ -206,7 +204,7 @@ const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
   persistentStorage.setItem(currentVaultIdKey, vaultId)
 }
 
-const storage: CoreStorage = {
+export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   getFiatCurrency,
@@ -229,8 +227,4 @@ const storage: CoreStorage = {
   createAddressBookItem,
   updateAddressBookItem,
   deleteAddressBookItem,
-}
-
-export const StorageProvider = ({ children }: ChildrenProp) => {
-  return <CoreStorageProvider value={storage}>{children}</CoreStorageProvider>
 }

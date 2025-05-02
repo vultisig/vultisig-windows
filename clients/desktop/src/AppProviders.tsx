@@ -16,12 +16,13 @@ import { SaveFile } from '../wailsjs/go/main/App'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
-import { StorageProvider } from './state/storage'
+import { storage } from './state/storage'
 import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
 const coreState: CoreState = {
+  ...storage,
   openUrl: BrowserOpenURL,
   saveFile: async ({ name, blob }) => {
     const arrayBuffer = await blob.arrayBuffer()
@@ -50,14 +51,12 @@ export const AppProviders = ({ children }: ChildrenProp) => {
             <I18nProvider language={language}>
               <ThemeProvider theme={darkTheme}>
                 <WalletCoreProvider>
-                  <StorageProvider>
-                    <StorageDependant>
-                      {children}
-                      <ActiveVaultOnly>
-                        <CoinFinder />
-                      </ActiveVaultOnly>
-                    </StorageDependant>
-                  </StorageProvider>
+                  <StorageDependant>
+                    {children}
+                    <ActiveVaultOnly>
+                      <CoinFinder />
+                    </ActiveVaultOnly>
+                  </StorageDependant>
                 </WalletCoreProvider>
               </ThemeProvider>
             </I18nProvider>

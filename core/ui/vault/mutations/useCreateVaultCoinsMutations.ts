@@ -1,11 +1,11 @@
+import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { vaultsCoinsQueryKey } from '../../query/keys'
-import { useCoreStorage } from '../../state/storage'
 
 export const useCreateVaultCoinsMutation = () => {
-  const { createVaultCoins } = useCoreStorage()
+  const { createVaultCoins } = useCore()
 
   const invalidateQueries = useInvalidateQueries()
 

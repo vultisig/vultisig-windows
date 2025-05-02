@@ -1,12 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
-import { CurrentVaultId } from '../storage/currentVaultId'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
+import { CurrentVaultId } from './currentVaultId'
 
 export type SetFiatCurrencyFunction = (
   value: FiatCurrency
@@ -124,6 +123,3 @@ export type CoreStorage = {
   updateAddressBookItem: UpdateAddressBookItemFunction
   deleteAddressBookItem: DeleteAddressBookItemFunction
 }
-
-export const { useValue: useCoreStorage, provider: CoreStorageProvider } =
-  getValueProviderSetup<CoreStorage>('CoreStorage')

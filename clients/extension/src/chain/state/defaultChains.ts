@@ -1,5 +1,5 @@
 import { defaultChainsQueryKey } from '@core/ui/query/keys'
-import { SetDefaultChainsFunction } from '@core/ui/state/storage'
+import { SetDefaultChainsFunction } from '@core/ui/storage/CoreStorage'
 import { initialDefaultChains } from '@core/ui/vault/state/defaultChains'
 
 import { getPersistentState } from '../../state/persistent/getPersistentState'

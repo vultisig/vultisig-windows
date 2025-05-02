@@ -1,12 +1,12 @@
+import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { addressBookItemsQueryKey } from '../query/keys'
-import { useCoreStorage } from '../state/storage'
 
 export const useAddressBookItemsQuery = () => {
-  const { getAddressBookItems } = useCoreStorage()
+  const { getAddressBookItems } = useCore()
 
   return useQuery({
     queryKey: addressBookItemsQueryKey,
@@ -21,7 +21,7 @@ export const useAddressBookItems = () => {
 }
 
 export const useCreateAddressBookItemMutation = () => {
-  const { createAddressBookItem } = useCoreStorage()
+  const { createAddressBookItem } = useCore()
 
   const invalidateQueries = useInvalidateQueries()
 
@@ -34,7 +34,7 @@ export const useCreateAddressBookItemMutation = () => {
 }
 
 export const useDeleteAddressBookItemMutation = () => {
-  const { deleteAddressBookItem } = useCoreStorage()
+  const { deleteAddressBookItem } = useCore()
 
   const invalidateQueries = useInvalidateQueries()
 
@@ -47,7 +47,7 @@ export const useDeleteAddressBookItemMutation = () => {
 }
 
 export const useUpdateAddressBookItemMutation = () => {
-  const { updateAddressBookItem } = useCoreStorage()
+  const { updateAddressBookItem } = useCore()
 
   const invalidateQueries = useInvalidateQueries()
 

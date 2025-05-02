@@ -1,7 +1,6 @@
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
-  CoreStorageProvider,
   CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
@@ -14,9 +13,8 @@ import {
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
-} from '@core/ui/state/storage'
+} from '@core/ui/storage/CoreStorage'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { ChildrenProp } from '@lib/ui/props'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
@@ -162,7 +160,7 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
   await updateAddressBookItems(items.filter(i => i.id !== itemId))
 }
 
-const storage: CoreStorage = {
+export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   getCurrentVaultId,
@@ -185,8 +183,4 @@ const storage: CoreStorage = {
   createAddressBookItem,
   updateAddressBookItem,
   deleteAddressBookItem,
-}
-
-export const StorageProvider = ({ children }: ChildrenProp) => {
-  return <CoreStorageProvider value={storage}>{children}</CoreStorageProvider>
 }

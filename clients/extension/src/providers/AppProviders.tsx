@@ -14,7 +14,7 @@ import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
-import { StorageProvider } from '../state/storage'
+import { storage } from '../state/storage'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -30,6 +30,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
 const defaultMpcLib: MpcLib = 'DKLS'
 
 const coreState: CoreState = {
+  ...storage,
   openUrl: url => window.open(url, '_blank'),
   saveFile: async ({ name, blob }) => {
     initiateFileDownload({ name, blob })
