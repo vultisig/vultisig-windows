@@ -1,7 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useDeleteVaultMutation } from '@clients/extension/src/vault/mutations/useDeleteVaultMutation'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useDeleteVaultMutation } from '@core/ui/storage/vaults'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -24,8 +24,10 @@ const Component = () => {
 
   const handleSubmit = () => {
     if (!deleteVault.isPending) {
-      deleteVault.mutateAsync(getVaultId(currentVault)).then(() => {
-        coreNavigate('vault')
+      deleteVault.mutateAsync(getVaultId(currentVault), {
+        onSuccess: () => {
+          coreNavigate('vault')
+        },
       })
     }
   }

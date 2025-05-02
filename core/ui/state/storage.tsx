@@ -51,6 +51,26 @@ export type GetVaultsCoinsFunction = () => Promise<
 
 export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
 
+export type DeleteVaultFunction = (vaultId: string) => Promise<void>
+
+export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
+
+type CreateCoinInput = {
+  vaultId: string
+  coin: AccountCoin
+}
+
+export type CreateVaultCoinFunction = (input: CreateCoinInput) => Promise<void>
+
+type UpdateVaultFolderInput = {
+  id: string
+  fields: Partial<Omit<VaultFolder, 'id'>>
+}
+
+export type UpdateVaultFolderFunction = (
+  input: UpdateVaultFolderInput
+) => Promise<void>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -64,6 +84,10 @@ export type CoreStorage = {
   getDefaultChains: GetDefaultChainsFunction
   setDefaultChains: SetDefaultChainsFunction
   getVaultFolders: GetVaultFoldersFunction
+  deleteVault: DeleteVaultFunction
+  deleteVaultFolder: DeleteVaultFolderFunction
+  updateVaultFolder: UpdateVaultFolderFunction
+  createVaultCoin: CreateVaultCoinFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =
