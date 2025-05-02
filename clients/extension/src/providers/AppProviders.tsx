@@ -36,6 +36,7 @@ const coreState: CoreState = {
   },
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
+  version: '1.0.0',
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {

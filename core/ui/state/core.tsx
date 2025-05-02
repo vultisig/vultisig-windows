@@ -13,6 +13,7 @@ export type CoreState = {
   saveFile: SaveFileFunction
   mpcDevice: MpcDevice
   getClipboardText: () => Promise<string>
+  version: string
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

@@ -3,7 +3,6 @@ import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
-import { VersionProvider } from '@core/ui/product/state/version'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
@@ -36,6 +35,7 @@ const coreState: CoreState = {
   },
   mpcDevice: 'windows',
   getClipboardText: ClipboardGetText,
+  version: buildInfo.version,
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -43,29 +43,27 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <VersionProvider value={buildInfo.version}>
-      <MpcLocalModeAvailabilityProvider value={true}>
-        <VaultCreationMpcLibProvider value={mpcLib}>
-          <CoreProvider value={coreState}>
-            <QueryClientProvider client={queryClient}>
-              <I18nProvider language={language}>
-                <ThemeProvider theme={darkTheme}>
-                  <WalletCoreProvider>
-                    <StorageProvider>
-                      <StorageDependant>
-                        {children}
-                        <ActiveVaultOnly>
-                          <CoinFinder />
-                        </ActiveVaultOnly>
-                      </StorageDependant>
-                    </StorageProvider>
-                  </WalletCoreProvider>
-                </ThemeProvider>
-              </I18nProvider>
-            </QueryClientProvider>
-          </CoreProvider>
-        </VaultCreationMpcLibProvider>
-      </MpcLocalModeAvailabilityProvider>
-    </VersionProvider>
+    <MpcLocalModeAvailabilityProvider value={true}>
+      <VaultCreationMpcLibProvider value={mpcLib}>
+        <CoreProvider value={coreState}>
+          <QueryClientProvider client={queryClient}>
+            <I18nProvider language={language}>
+              <ThemeProvider theme={darkTheme}>
+                <WalletCoreProvider>
+                  <StorageProvider>
+                    <StorageDependant>
+                      {children}
+                      <ActiveVaultOnly>
+                        <CoinFinder />
+                      </ActiveVaultOnly>
+                    </StorageDependant>
+                  </StorageProvider>
+                </WalletCoreProvider>
+              </ThemeProvider>
+            </I18nProvider>
+          </QueryClientProvider>
+        </CoreProvider>
+      </VaultCreationMpcLibProvider>
+    </MpcLocalModeAvailabilityProvider>
   )
 }
