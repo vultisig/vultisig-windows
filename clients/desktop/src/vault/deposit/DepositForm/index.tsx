@@ -36,6 +36,8 @@ import {
 } from './DepositForm.styled'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
+import { MergeTokenExplorer } from './MergeTokenExplorer'
+import { SwitchTokenExplorer } from './SwitchTokenExplorer'
 
 type FormData = Record<string, any>
 type DepositFormProps = {
@@ -90,12 +92,15 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onSubmit',
   })
 
+  console.log('## errors', errors)
+
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
 
   const selectedBondableAsset = getValues('bondableAsset')
   const selectedDestinationChain = getValues('destinationChain')
+  const selectedCoin = getValues('selectedCoin')
 
   return (
     <>
@@ -207,6 +212,70 @@ export const DepositForm: FC<DepositFormProps> = ({
               )}
             />
           )}
+          {selectedChainAction === 'merge' && (
+            <Opener
+              renderOpener={({ onOpen }) => (
+                <Container onClick={onOpen}>
+                  <HStack alignItems="center" gap={4}>
+                    <Text weight="400" family="mono" size={16}>
+                      {selectedCoin?.ticker || t('select_token')}
+                    </Text>
+                    {!selectedCoin && (
+                      <AssetRequiredLabel as="span" color="danger" size={14}>
+                        *
+                      </AssetRequiredLabel>
+                    )}
+                  </HStack>
+                  <IconWrapper style={{ fontSize: 20 }}>
+                    <ChevronRightIcon />
+                  </IconWrapper>
+                </Container>
+              )}
+              renderContent={({ onClose }) => (
+                <MergeTokenExplorer
+                  activeOption={watch('selectedCoin')}
+                  onOptionClick={token =>
+                    setValue('selectedCoin', token, {
+                      shouldValidate: true,
+                    })
+                  }
+                  onClose={onClose}
+                />
+              )}
+            />
+          )}
+
+          {selectedChainAction === 'switch' && (
+            <Opener
+              renderOpener={({ onOpen }) => (
+                <Container onClick={onOpen}>
+                  <HStack alignItems="center" gap={4}>
+                    <Text weight="400" family="mono" size={16}>
+                      {selectedCoin?.ticker || t('select_token')}
+                    </Text>
+                    {!selectedCoin && (
+                      <AssetRequiredLabel as="span" color="danger" size={14}>
+                        *
+                      </AssetRequiredLabel>
+                    )}
+                  </HStack>
+                  <IconWrapper style={{ fontSize: 20 }}>
+                    <ChevronRightIcon />
+                  </IconWrapper>
+                </Container>
+              )}
+              renderContent={({ onClose }) => (
+                <SwitchTokenExplorer
+                  activeOption={watch('selectedCoin')}
+                  onOptionClick={token =>
+                    setValue('selectedCoin', token, { shouldValidate: true })
+                  }
+                  onClose={onClose}
+                />
+              )}
+            />
+          )}
+
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => (
