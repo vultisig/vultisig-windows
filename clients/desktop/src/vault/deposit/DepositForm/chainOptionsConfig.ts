@@ -41,13 +41,53 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
   })
 }
 
+const CoinSchema = z.object({
+  chain: z.string(),
+  id: z.string(),
+  priceProviderId: z.string().optional(),
+  decimals: z.number(),
+  ticker: z.string(),
+  logo: z.string(),
+})
+
 export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
-  ibc_transfer: {
+  merge: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'Amount',
+        required: true,
+      },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) => {
+      return z.object({
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+      })
+    },
+  },
+
+  switch: {
     fields: [
       {
         name: 'destinationAddress',
         type: 'text',
-        label: 'Destination Address',
+        label: t('destination_address'),
+        required: true,
+      },
+      {
+        // TODO: double check this
+        name: 'nodeAddress',
+        type: 'text',
+        label: t('thorchain_address'),
         required: true,
       },
       {
@@ -56,10 +96,39 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
         label: 'Amount',
         required: true,
       },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        selectedCoin: CoinSchema,
+        destinationAddress: z.string().min(1, 'Required'),
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+      }),
+  },
+  ibc_transfer: {
+    fields: [
+      {
+        name: 'destinationAddress',
+        type: 'text',
+        label: t('destination_address'),
+        required: true,
+      },
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true,
+      },
       {
         name: 'memo',
         type: 'text',
-        label: 'Memo',
+        label: t('memo'),
         required: false,
       },
     ],
