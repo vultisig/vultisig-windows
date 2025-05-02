@@ -13,7 +13,7 @@ export enum PersistentStateKey {
   VaultCreationMpcLib = 'vaultCreationMpcLib',
 }
 
-const persistentStorage =
+export const persistentStorage =
   typeof window !== 'undefined'
     ? new LocalStorage<PersistentStateKey>()
     : new TemporaryStorage<PersistentStateKey>()

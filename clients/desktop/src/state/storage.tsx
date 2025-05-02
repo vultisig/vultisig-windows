@@ -16,9 +16,11 @@ import {
   DeleteVaultFolderFunction,
   DeleteVaultFunction,
   GetAddressBookItemsFunction,
+  GetDefaultChainsFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
+  SetDefaultChainsFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
@@ -28,7 +30,6 @@ import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { ChildrenProp } from '@lib/ui/props'
 import { recordMap } from '@lib/utils/record/recordMap'
-import { useMemo } from 'react'
 
 import {
   DeleteAddressBookItem,
@@ -50,8 +51,7 @@ import {
 } from '../../wailsjs/go/storage/Store'
 import { fromStorageCoin, toStorageCoin } from '../storage/storageCoin'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
-import { PersistentStateKey } from './persistentState'
-import { usePersistentState } from './persistentState'
+import { PersistentStateKey, persistentStorage } from './persistentState'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const oldStorageVault = await GetVault(vaultId)
@@ -153,55 +153,79 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
   await DeleteAddressBookItem(item)
 }
 
+const getDefaultChains: GetDefaultChainsFunction = async () => {
+  const value = persistentStorage.getItem<Chain[]>(
+    PersistentStateKey.DefaultChains
+  )
+
+  if (value === undefined) {
+    return initialDefaultChains
+  }
+
+  return value
+}
+
+const setDefaultChains: SetDefaultChainsFunction = async chains => {
+  persistentStorage.setItem(PersistentStateKey.DefaultChains, chains)
+}
+
+const getFiatCurrency = async () => {
+  const value = persistentStorage.getItem<FiatCurrency>(
+    PersistentStateKey.FiatCurrency
+  )
+
+  if (value === undefined) {
+    return defaultFiatCurrency
+  }
+
+  return value
+}
+
+const setFiatCurrency = async (currency: FiatCurrency) => {
+  persistentStorage.setItem(PersistentStateKey.FiatCurrency, currency)
+}
+
+const getCurrentVaultId = async () => {
+  const value = persistentStorage.getItem<CurrentVaultId>(
+    PersistentStateKey.CurrentVaultId
+  )
+
+  if (value === undefined) {
+    return initialCurrentVaultId
+  }
+
+  return value
+}
+
+const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
+  persistentStorage.setItem(PersistentStateKey.CurrentVaultId, vaultId)
+}
+
+const storage: CoreStorage = {
+  setFiatCurrency,
+  setCurrentVaultId,
+  getFiatCurrency,
+  getCurrentVaultId,
+  updateVault,
+  createVault,
+  createVaultCoins,
+  setDefaultChains,
+  getDefaultChains,
+  getVaults,
+  getVaultsCoins,
+  getVaultFolders,
+  deleteVault,
+  deleteVaultFolder,
+  createVaultCoin,
+  updateVaultFolder,
+  deleteVaultCoin,
+  createVaultFolder,
+  getAddressBookItems,
+  createAddressBookItem,
+  updateAddressBookItem,
+  deleteAddressBookItem,
+}
+
 export const StorageProvider = ({ children }: ChildrenProp) => {
-  const [fiatCurrency, setFiatCurrency] = usePersistentState<FiatCurrency>(
-    PersistentStateKey.FiatCurrency,
-    defaultFiatCurrency
-  )
-  const [currentVaultId, setCurrentVaultId] =
-    usePersistentState<CurrentVaultId>(
-      PersistentStateKey.CurrentVaultId,
-      initialCurrentVaultId
-    )
-  const [defaultChains, setDefaultChains] = usePersistentState<Chain[]>(
-    PersistentStateKey.DefaultChains,
-    initialDefaultChains
-  )
-
-  const value: CoreStorage = useMemo(
-    () => ({
-      setFiatCurrency,
-      setCurrentVaultId,
-      updateVault,
-      createVault,
-      createVaultCoins,
-      setDefaultChains,
-      getDefaultChains: () => defaultChains,
-      getFiatCurrency: () => fiatCurrency,
-      getCurrentVaultId: () => currentVaultId,
-      getVaults,
-      getVaultsCoins,
-      getVaultFolders,
-      deleteVault,
-      deleteVaultFolder,
-      createVaultCoin,
-      updateVaultFolder,
-      deleteVaultCoin,
-      createVaultFolder,
-      getAddressBookItems,
-      createAddressBookItem,
-      updateAddressBookItem,
-      deleteAddressBookItem,
-    }),
-    [
-      currentVaultId,
-      defaultChains,
-      fiatCurrency,
-      setCurrentVaultId,
-      setDefaultChains,
-      setFiatCurrency,
-    ]
-  )
-
-  return <CoreStorageProvider value={value}>{children}</CoreStorageProvider>
+  return <CoreStorageProvider value={storage}>{children}</CoreStorageProvider>
 }
