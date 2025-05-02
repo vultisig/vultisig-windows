@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
@@ -68,7 +68,7 @@ const SettingsVaultPage = () => {
   const fiatCurrency = useFiatCurrency()
   const [language] = useLanguage()
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   const sections: SettingSection[] = [
     {

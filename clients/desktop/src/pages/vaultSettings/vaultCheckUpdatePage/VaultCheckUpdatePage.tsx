@@ -1,6 +1,6 @@
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useVersion } from '@core/ui/product/state/version'
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageSlice } from '@lib/ui/page/PageSlice'
@@ -25,7 +25,7 @@ const VaultCheckUpdatePage = () => {
 
   const localVersion = useVersion()
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   let content: ReactNode
 

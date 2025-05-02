@@ -8,7 +8,6 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useOpenUrl } from '@core/ui/state/openUrl'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -29,6 +28,8 @@ import { useRive } from '@rive-app/react-canvas'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
+
+import { useCore } from '../../../../state/core'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
@@ -95,7 +96,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     value: txHash,
   })
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   const trackTransaction = () => openUrl(blockExplorerUrl)
 

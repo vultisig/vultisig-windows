@@ -1,4 +1,4 @@
-import { useSaveFile } from '@core/ui/state/saveFile'
+import { useCore } from '@core/ui/state/core'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation } from '@tanstack/react-query'
@@ -26,7 +26,7 @@ export const SaveAsImage = ({
   renderTrigger,
 }: SaveAsImageProps) => {
   const [node, setNode] = useState<HTMLDivElement | null>(null)
-  const saveFile = useSaveFile()
+  const { saveFile } = useCore()
 
   const { mutate: saveImage } = useMutation({
     mutationFn: async (node: HTMLDivElement) => {

@@ -12,6 +12,7 @@ export type CoreState = {
   openUrl: (url: string) => void
   saveFile: SaveFileFunction
   mpcDevice: MpcDevice
+  getClipboardText: () => Promise<string>
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

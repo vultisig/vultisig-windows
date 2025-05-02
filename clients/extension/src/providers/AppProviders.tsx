@@ -6,7 +6,6 @@ import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalMod
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { VersionProvider } from '@core/ui/product/state/version'
 import { CoreState } from '@core/ui/state/core'
-import { SaveFileFunction } from '@core/ui/state/saveFile'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
@@ -30,16 +29,13 @@ const ExtensionGlobalStyle = createGlobalStyle`
 
 const defaultMpcLib: MpcLib = 'DKLS'
 
-const openUrl = (url: string) => window.open(url, '_blank')
-
-const saveFile: SaveFileFunction = async ({ name, blob }) => {
-  initiateFileDownload({ name, blob })
-}
-
 const coreState: CoreState = {
-  openUrl,
-  saveFile,
+  openUrl: url => window.open(url, '_blank'),
+  saveFile: async ({ name, blob }) => {
+    initiateFileDownload({ name, blob })
+  },
   mpcDevice: 'extension',
+  getClipboardText: () => navigator.clipboard.readText(),
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
