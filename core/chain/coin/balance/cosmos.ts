@@ -4,7 +4,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { getCosmosClient } from '../../chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '../../chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosWasmTokenBalanceUrl } from '../../chains/cosmos/cosmosRpcUrl'
-import { Coin, CoinKey } from '../Coin'
+import { CoinKey } from '../Coin'
 import { isFeeCoin } from '../utils/isFeeCoin'
 import { isNativeCoin } from '../utils/isNativeCoin'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
@@ -18,9 +18,6 @@ const isCosmosNativeCoin = (coin: CoinKey) => {
 
   return isNativeCoin(coin)
 }
-
-export const getDenom = (token: Coin): string =>
-  isFeeCoin(token) ? cosmosFeeCoinDenom[token.chain as CosmosChain] : token.id
 
 export const getCosmosCoinBalance: CoinBalanceResolver<
   CosmosChain
