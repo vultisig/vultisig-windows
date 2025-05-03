@@ -8,7 +8,7 @@ export const getDappHost = (url?: string) => {
       return host
     }
     return ''
-  } catch (e) {
+  } catch {
     return ''
   }
 }

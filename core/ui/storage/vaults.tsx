@@ -1,11 +1,12 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { vaultsCoinsQueryKey, vaultsQueryKey } from '../query/keys'
@@ -84,4 +85,16 @@ export const useVaultOrders = () => {
   const vaults = useVaults()
 
   return useMemo(() => vaults.map(v => v.order), [vaults])
+}
+
+export const useDeleteVaultMutation = () => {
+  const { deleteVault } = useCoreStorage()
+  const invalidateQueries = useInvalidateQueries()
+
+  return useMutation({
+    mutationFn: deleteVault,
+    onSuccess: () => {
+      invalidateQueries(vaultsQueryKey)
+    },
+  })
 }

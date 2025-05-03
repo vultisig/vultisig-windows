@@ -40,7 +40,9 @@ import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { getVaultId } from '@core/ui/vault/Vault'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -49,14 +51,12 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
+import { getVaultAppSessions } from '../sessions/state/appSessions'
+import { getDappHostname } from '../utils/connectedApps'
 import { handleSetupInpage } from '../utils/setupInpage'
 import { getCurrentVaultId } from '../vault/state/currentVaultId'
-import { getVaultSessions } from '../sessions/state/appSessions'
-import { getVaultsCoins } from '../vault/state/vaultsCoins'
-import { getDappHostname } from '../utils/connectedApps'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getVaults } from '../vault/state/vaults'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultsCoins } from '../vault/state/vaultsCoins'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -123,7 +123,7 @@ const handleFindAccounts = async (
 ): Promise<string[]> => {
   const currentVaultId = await getCurrentVaultId()
   if (!currentVaultId) return []
-  const vaultSessions = await getVaultSessions(currentVaultId)
+  const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
   if (currentSession) {
     const vaultsCoins = await getVaultsCoins()
@@ -143,7 +143,7 @@ const handleFindVault = async (
   const vaults = await getVaults()
   const currentVaultId = await getCurrentVaultId()
   if (!currentVaultId) return undefined
-  const vaultSessions = await getVaultSessions(currentVaultId)
+  const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
   if (currentSession) {
     return vaults.find(vault => getVaultId(vault) === currentVaultId)

@@ -1,4 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useUpdateVaultFolderMutation } from '@core/ui/storage/vaultFolders'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -14,7 +15,6 @@ import styled from 'styled-components'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { PageFooter } from '../../../ui/page/PageFooter'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
-import { useUpdateVaultFolderNameMutation } from '../mutations/useUpdateVaultFoderNameMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 import { DeleteVaultFolder } from './DeleteVaultFolder'
 import { ManageFolderVaults } from './ManageFolderVaults'
@@ -26,7 +26,7 @@ export const ManageVaultFolderPage = () => {
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
 
-  const { mutateAsync, isPending } = useUpdateVaultFolderNameMutation()
+  const { mutateAsync, isPending } = useUpdateVaultFolderMutation()
 
   return (
     <>
@@ -51,7 +51,10 @@ export const ManageVaultFolderPage = () => {
       <PageFooter>
         <Button
           onClick={async () => {
-            await mutateAsync({ id, name })
+            await mutateAsync({
+              id,
+              fields: { name },
+            })
             appNavigate('vaultFolder', { params: { id } })
           }}
           isLoading={isPending}

@@ -12,8 +12,6 @@ export function DeleteVault(arg1:string):Promise<void>;
 
 export function DeleteVaultFolder(arg1:string):Promise<void>;
 
-export function GetAddressBookItems(arg1:string):Promise<Array<storage.AddressBookItem>>;
-
 export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>;
 
 export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
@@ -39,9 +37,3 @@ export function SaveVault(arg1:storage.Vault):Promise<void>;
 export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
 
 export function UpdateAddressBookItem(arg1:storage.AddressBookItem):Promise<void>;
-
-export function UpdateVaultFolder(arg1:storage.VaultFolder):Promise<void>;
-
-export function UpdateVaultFolderName(arg1:string,arg2:string):Promise<void>;
-
-export function UpdateVaultFolderOrder(arg1:string,arg2:number):Promise<void>;

@@ -1,12 +1,10 @@
-import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import {
-  useVaultsAppSessionsQuery,
-  useVaultsAppSessionsMutation,
-  appSessionsQueryKey,
-} from '../state/appSessions'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+
+import { useExtensionStorage } from '../../state/extensionStorage'
+import { appSessionsQueryKey } from '../state/appSessions'
 import { AppSession } from '../state/appSessions'
-import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
+import { useAppSessions } from '../state/useAppSessions'
 
 type AddVaultSessionInput = {
   vaultId: string
@@ -16,19 +14,16 @@ type AddVaultSessionInput = {
 export const useAddVaultSessionMutation = (
   options?: UseMutationOptions<any, any, AddVaultSessionInput, unknown>
 ) => {
+  const allSessions = useAppSessions()
   const invalidate = useInvalidateQueries()
-  const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const { data: allSessions = {} } = useVaultsAppSessionsQuery()
-  const { mutateAsync: setAllSessions } = useVaultsAppSessionsMutation()
+  const { setVaultsAppSessions } = useExtensionStorage()
 
   return useMutation({
     mutationFn: async ({ vaultId, session }) => {
       const vaultSessions = allSessions[vaultId] ?? {}
       const updatedVaultSessions = { ...vaultSessions, [session.host]: session }
       const updatedAll = { ...allSessions, [vaultId]: updatedVaultSessions }
-
-      await setAllSessions(updatedAll)
-      await setCurrentVaultId(vaultId)
+      await setVaultsAppSessions(updatedAll)
       return updatedVaultSessions
     },
     onSuccess: async (_result, { vaultId }) => {

@@ -2,7 +2,6 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  currencySettings: '/settings/currency',
   deleteVault: '/settings/vault/delete',
   languageSettings: '/settings/language',
   onboarding: '/onboarding',
@@ -10,6 +9,7 @@ export const appPaths = {
   settings: '/settings',
   vaultSettings: '/settings/vault',
   manageChains: '/manage-chains',
+  connectedDapps: '/connected-dapps',
 } as const
 
 type AppPaths = typeof appPaths

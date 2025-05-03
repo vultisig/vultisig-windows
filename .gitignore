@@ -92,8 +92,6 @@ credentials.json
 
 .expo/
 .expo-shared/
-clients/desktop/wailsjs/runtime/package.json
-clients/desktop/wailsjs/runtime/runtime.d.ts
-clients/desktop/wailsjs/runtime/runtime.js
 
 mcp.json
+task.md

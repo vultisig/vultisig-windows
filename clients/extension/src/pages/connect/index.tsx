@@ -1,6 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
-import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
+import { Chain } from '@core/chain/Chain'
+import { getChainId } from '@core/chain/coin/ChainId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
@@ -15,11 +16,10 @@ import { Text } from '@lib/ui/text'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
 import { useAddVaultSessionMutation } from '../../sessions/mutations/useAddVaultSessionMutation'
-import { getStoredRequest } from '../../utils/storage'
-import { Chain } from '@core/chain/Chain'
 import { getDappHost, getDappHostname } from '../../utils/connectedApps'
-import { getChainId } from '@core/chain/coin/ChainId'
+import { getStoredRequest } from '../../utils/storage'
 
 interface InitialState {
   chain?: Chain
