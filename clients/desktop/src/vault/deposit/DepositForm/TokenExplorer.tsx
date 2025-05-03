@@ -2,9 +2,9 @@ import { Coin } from '@core/chain/coin/Coin'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
 
-import { Modal } from '../../../../lib/ui/modal'
-import { useMergeAcceptedTokens } from '../../hooks/useMergeAcceptedTokens'
-import { DepositActionOption } from '../DepositActionOption'
+import { Modal } from '../../../lib/ui/modal'
+import { useMergeAcceptedTokens } from '../hooks/useMergeAcceptedTokens'
+import { DepositActionOption } from './DepositActionOption'
 
 type Props = {
   activeOption?: Coin
@@ -12,7 +12,7 @@ type Props = {
   onClose: () => void
 }
 
-export const SwitchTokenExplorer: FC<Props> = ({
+export const TokenExplorer: FC<Props> = ({
   onClose,
   onOptionClick,
   activeOption,

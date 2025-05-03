@@ -22,7 +22,7 @@ import {
   Container,
   InputFieldWrapper,
 } from '../DepositForm.styled'
-import { SwitchTokenExplorer } from './SwitchTokenExplorer'
+import { TokenExplorer } from '../TokenExplorer'
 
 export const SwitchSpecificFields = ({
   watch,
@@ -116,7 +116,7 @@ export const SwitchSpecificFields = ({
           </Container>
         )}
         renderContent={({ onClose }) => (
-          <SwitchTokenExplorer
+          <TokenExplorer
             activeOption={watch('selectedCoin')}
             onOptionClick={token =>
               setValue('selectedCoin', token, { shouldValidate: true })
