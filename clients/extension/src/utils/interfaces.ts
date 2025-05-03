@@ -40,16 +40,6 @@ export interface AccountsProps {
   sender: string
 }
 
-export interface ChainProps {
-  active?: boolean
-  address?: string
-  decimals: number
-  derivationKey?: string
-  id: string
-  chain: Chain
-  ticker: string
-}
-
 export interface SendTransactionResponse {
   raw: any
   txResponse: string
@@ -182,7 +172,6 @@ export type Vault = VaultCore & {
   transactions: ITransaction[]
   apps?: string[]
   selected?: boolean
-  chains: ChainProps[]
   uid: string
 }
 
@@ -190,7 +179,7 @@ export interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignSignature>
   transaction?: ITransaction
-  vault?: Vault
+  vault?: VaultCore
   walletCore: WalletCore
 }
 

@@ -1,7 +1,9 @@
 import { create } from '@bufbuild/protobuf'
-import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
+import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { SolanaSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -10,14 +12,16 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { Vault } from '@core/ui/vault/Vault'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
 import { ParsedSolanaSwapParams } from './types/types'
-
 export const getSolanaSwapKeysignPayload = (
   parsedSwapParams: ParsedSolanaSwapParams,
   transaction: ITransaction,
-  vault: Vault
+  vault: Vault,
+  walletCore: WalletCore
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -25,6 +29,13 @@ export const getSolanaSwapKeysignPayload = (
         const txInputDataArray = Object.values(
           (transaction as any).serializedTx
         )
+        const publicKey = getPublicKey({
+          chain: transaction.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+
         const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
         const dataBuffer = Buffer.from(txInputDataBuffer)
         const base64Data = base64.encode(dataBuffer)
@@ -33,9 +44,10 @@ export const getSolanaSwapKeysignPayload = (
           ticker: parsedSwapParams.inputToken.symbol.toUpperCase(),
           address: transaction.transactionDetails.from,
           decimals: parsedSwapParams.inputToken.decimals,
-          hexPublicKey: vault.chains.find(
-            chain => chain.chain === transaction.chain
-          )?.derivationKey,
+          hexPublicKey: toHexPublicKey({
+            publicKey,
+            walletCore,
+          }),
           logo: parsedSwapParams.inputToken.name.toLowerCase(),
           priceProviderId:
             parsedSwapParams.inputToken.symbol === 'SOL'

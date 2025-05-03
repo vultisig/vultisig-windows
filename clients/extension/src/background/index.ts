@@ -11,21 +11,17 @@ import {
 } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
-  ChainProps,
   ITransaction,
   Messaging,
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
-  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
-  getStoredChains,
   getStoredTransactions,
   getStoredVaults,
   setIsPriority,
-  setStoredChains,
   setStoredRequest,
   setStoredTransactions,
   setStoredVaults,
@@ -38,7 +34,6 @@ import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import {
   CosmosChainId,
   EVMChainId,
@@ -46,8 +41,10 @@ import {
   getChainId,
 } from '@core/chain/coin/ChainId'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   JsonRpcProvider,
@@ -67,6 +64,7 @@ import { handleSetupInpage } from '../utils/setupInpage'
 import { getCurrentVaultId } from '../vault/state/currentVaultId'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
+import { getWalletCore } from './walletCore'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -610,37 +608,54 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.WALLET_ADD_CHAIN:
       case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN: {
-        if (Array.isArray(params)) {
-          const [param] = params
-
-          if (param?.chainId) {
-            const chainFromId = getChainByChainId(param.chainId)
-            const supportedChain = isSupportedChain(chainFromId)
-              ? chainFromId
-              : null
-            if (supportedChain) {
-              getStoredChains().then(storedChains => {
-                setStoredChains([
-                  { ...chainFeeCoin[supportedChain], active: true },
-                  ...storedChains
-                    .filter(
-                      (storedChain: ChainProps) =>
-                        storedChain.chain !== supportedChain
-                    )
-                    .map(chain => ({ ...chain, active: false })),
-                ])
-                  .then(() => resolve(param.chainId))
-                  .catch(reject)
-              })
-            } else {
-              reject()
-            }
-          } else {
-            reject()
-          }
-        } else {
+        if (!Array.isArray(params)) {
           reject()
+          break
         }
+        const [param] = params
+        if (!param?.chainId) {
+          reject()
+          break
+        }
+        const chain = getChainByChainId(param.chainId)
+        if (!chain) {
+          reject()
+          return
+        }
+        const supportedChain = isSupportedChain(chain) ? chain : null
+        if (!supportedChain) {
+          reject()
+          return
+        }
+        getCurrentVaultId().then(async vaultId => {
+          const safeVaultId = shouldBePresent(vaultId)
+          const host = getDappHostname(sender)
+          const allSessions = await getVaultsAppSessions()
+          const previousSession = allSessions?.[safeVaultId]?.[host]
+          if (!previousSession) throw new Error(`No session found for ${host}`)
+          const isEVM = getChainKind(chain) === 'evm'
+          const isCosmos = getChainKind(chain) === 'cosmos'
+          try {
+            await updateAppSession({
+              vaultId: safeVaultId,
+              host: host,
+              fields: {
+                selectedEVMChainId: isEVM
+                  ? (param.chainId as EVMChainId)
+                  : previousSession.selectedEVMChainId,
+                selectedCosmosChainId: isCosmos
+                  ? (param.chainId as CosmosChainId)
+                  : previousSession.selectedCosmosChainId,
+                chainIds: Array.from(
+                  new Set([...(previousSession.chainIds ?? []), param.chainId])
+                ),
+              },
+            })
+            resolve(param.chainId)
+          } catch (e) {
+            reject(e)
+          }
+        })
 
         break
       }
@@ -1025,31 +1040,48 @@ chrome.runtime.onMessage.addListener(
             getChainId(Chain.Cosmos) as CosmosChainId
           )
           const chain = getChainByChainId(selectedCosmosChainId)
+          if (!chain) {
+            return
+          }
           handleRequest(message, shouldBePresent(chain), origin)
             .then(response => {
               if (message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS) {
                 try {
-                  getStoredVaults().then((vaults: Vault[]) => {
-                    const vault = vaults.find((vault: Vault) => {
-                      return (
-                        vault.chains.find(
-                          (selectedChain: ChainProps) =>
-                            selectedChain.chain === chain
-                        )?.address === response
+                  getVaults().then(async (vaults: Vault[]) => {
+                    const allCoins = await getVaultsCoins()
+                    console.log('allCoins', allCoins)
+
+                    const vault = vaults.find(vault => {
+                      const coins = allCoins[getVaultId(vault)] ?? []
+                      return coins.some(
+                        coin =>
+                          isFeeCoin(coin) &&
+                          coin.chain === chain &&
+                          coin.address === response
                       )
                     })
-
-                    const storedChain = vault!.chains.find(
-                      (selectedChain: ChainProps) =>
-                        selectedChain.chain === chain
-                    )!
-                    const derivationKey = storedChain.derivationKey
-                    if (!derivationKey) {
-                      throw new Error('Derivation key is missing!')
+                    if (!vault) {
+                      throw new Error('Vault not found!')
                     }
+                    const walletCore = await getWalletCore()
+                    if (!walletCore) {
+                      throw new Error('WalletCore is not initialized!')
+                    }
+                    const publicKey = getPublicKey({
+                      chain: chain,
+                      walletCore,
+                      hexChainCode: vault.hexChainCode,
+                      publicKeys: vault.publicKeys,
+                    })
 
                     const keyBytes = Uint8Array.from(
-                      Buffer.from(derivationKey, 'hex')
+                      Buffer.from(
+                        toHexPublicKey({
+                          publicKey,
+                          walletCore,
+                        }),
+                        'hex'
+                      )
                     )
 
                     const account = [

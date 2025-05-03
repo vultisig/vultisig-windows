@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
+import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -11,7 +11,9 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
+import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   CosmosIbcDenomTraceSchema,
@@ -22,12 +24,15 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
   transaction: ITransaction,
-  vault: Vault
+  vault: Vault,
+  walletCore: WalletCore
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -131,14 +136,22 @@ export const getKeysignPayload = (
           }
         }
 
+        const publicKey = getPublicKey({
+          chain: transaction.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+
         const coin = create(CoinSchema, {
           chain: transaction.chain,
           ticker: accountCoin.ticker,
           address: transaction.transactionDetails.from,
           decimals: accountCoin.decimals,
-          hexPublicKey: vault.chains.find(
-            chain => chain.chain === transaction.chain
-          )?.derivationKey,
+          hexPublicKey: toHexPublicKey({
+            publicKey,
+            walletCore,
+          }),
           isNativeToken: isFeeCoin(accountCoin),
           logo: accountCoin.logo,
           priceProviderId: localCoin?.priceProviderId ?? '',
