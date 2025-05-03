@@ -17,10 +17,12 @@ export const useMergeAcceptedTokens = () => {
   return useMemo(
     () =>
       coins
-        .filter(coin => MERGE_ACCEPTED_TOKENS.includes(coin.ticker))
+        .filter(coin =>
+          MERGE_ACCEPTED_TOKENS.includes(coin.ticker.toUpperCase())
+        )
         .map(coin => ({
           ...coin,
-          thorchainContractAddresss: TOKEN_MERGE_CONTRACTS[coin.ticker],
+          thorchainContractAddress: TOKEN_MERGE_CONTRACTS[coin.ticker],
         })),
     [coins]
   )

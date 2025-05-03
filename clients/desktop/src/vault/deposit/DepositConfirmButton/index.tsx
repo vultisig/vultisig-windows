@@ -41,16 +41,17 @@ export const DepositConfirmButton = ({
   const isTonFunction = chain === Chain.Ton
   const { t } = useTranslation()
   const [coinKey] = useCurrentDepositCoin()
-  const selectedCoin = depositFormData['selectedCoin'] as AccountCoin
+  const selectedCoin = depositFormData['selectedCoin']
+    ? (depositFormData['selectedCoin'] as AccountCoin)
+    : null
   const coin = useCurrentVaultCoin(
-    extractAccountCoinKey(selectedCoin) ?? coinKey
+    selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
   const transactionType =
     action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)
   const vault = useCurrentVault()
   const config = transactionConfig[action] || {}
-
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : ''
@@ -96,6 +97,7 @@ export const DepositConfirmButton = ({
         'stake',
         'bond',
         'ibc_transfer',
+        'switch',
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(

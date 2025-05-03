@@ -31,7 +31,6 @@ export const generateMemo = ({
     provider,
     operatorFee,
     destinationChain,
-    destinationAddress,
     memo,
     selectedCoin,
     thorchainAddress,
@@ -73,7 +72,7 @@ export const generateMemo = ({
     leave: () => `LEAVE:${nodeAddress}`,
     vote: () => 'VOTE',
     ibc_transfer: () => {
-      if (!destinationChain || !destinationAddress) {
+      if (!destinationChain || !nodeAddress) {
         throw new Error('Invalid IBC transfer parameters')
       }
 
@@ -86,7 +85,7 @@ export const generateMemo = ({
         )
       }
 
-      return `${destinationChain}:${sourceChannel}:${destinationAddress}${memo ? `:${memo}` : ''}`
+      return `${destinationChain}:${sourceChannel}:${nodeAddress}${memo ? `:${memo}` : ''}`
     },
     merge: () => {
       const token = shouldBePresent(selectedCoin, 'Token to merge')
@@ -110,9 +109,8 @@ function extractFormValues(formData: FieldValues) {
     operatorFee: formData.operatorFee as string | null,
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
-    destinationAddress: formData.destinationAddress as string | null,
     memo: formData.memo as string | null,
     selectedCoin: formData.selectedCoin as Coin | null,
-    thorchainAddress: formData.thorchain_address as string | null,
+    thorchainAddress: formData.thorchainAddress as string | null,
   }
 }

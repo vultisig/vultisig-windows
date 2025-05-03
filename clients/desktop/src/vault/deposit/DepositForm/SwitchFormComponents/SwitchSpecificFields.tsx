@@ -54,7 +54,7 @@ export const SwitchSpecificFields = ({
 
   useEffect(() => {
     if (throchainCoin) {
-      setValue('thorchain_address', throchainCoin.address, {
+      setValue('thorchainAddress', throchainCoin.address, {
         shouldValidate: true,
       })
     }
