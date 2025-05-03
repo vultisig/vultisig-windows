@@ -11,7 +11,7 @@ const baseStyles: RuleSet = css`
   align-items: center;
   background-color: transparent;
   border: none;
-  color: ${getColor('textExtraLight')};
+  color: ${getColor('textPrimary')};
   cursor: pointer;
   display: flex;
   font-size: 12px;
@@ -19,6 +19,10 @@ const baseStyles: RuleSet = css`
   gap: 8px;
   justify-content: center;
   transition: all 0.2s;
+
+  &:hover {
+    color: ${getColor('textExtraLight')};
+  }
 `
 
 const blockStyles: RuleSet = css`
@@ -27,7 +31,7 @@ const blockStyles: RuleSet = css`
 
 const disabledStyles: RuleSet = css`
   background-color: ${getColor('buttonBackgroundDisabled')};
-  color: ${getColor('buttonTextDisabled')};
+  color: ${getColor('buttonTextDisabled')} !important;
   cursor: default;
   padding: 0 16px;
 `
