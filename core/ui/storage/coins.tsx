@@ -1,0 +1,47 @@
+import { Coin } from '@core/chain/coin/Coin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { deriveAddress } from '@core/chain/utils/deriveAddress'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useMutation } from '@tanstack/react-query'
+
+import { useCoreStorage } from '../state/storage'
+import { useAssertCurrentVaultId } from './currentVaultId'
+
+export const useCreateCoinMutation = () => {
+  const vault = useCurrentVault()
+
+  const walletCore = useAssertWalletCore()
+
+  const invalidate = useInvalidateQueries()
+
+  const { createVaultCoin } = useCoreStorage()
+
+  const vaultId = useAssertCurrentVaultId()
+
+  const mutationFn = async (coin: Coin) => {
+    const publicKey = getPublicKey({
+      chain: coin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
+
+    const address = deriveAddress({
+      chain: coin.chain,
+      publicKey,
+      walletCore,
+    })
+
+    await createVaultCoin({ vaultId, coin: { ...coin, address } })
+  }
+
+  return useMutation({
+    mutationFn,
+    onSuccess: () => {
+      invalidate(vaultsCoinsQueryKey)
+    },
+  })
+}

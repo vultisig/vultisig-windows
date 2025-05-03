@@ -1,4 +1,7 @@
-import { useVaultFolders } from '@core/ui/storage/vaultFolders'
+import {
+  useUpdateVaultFolderMutation,
+  useVaultFolders,
+} from '@core/ui/storage/vaultFolders'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
@@ -10,7 +13,6 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer'
-import { useUpdateVaultFolderOrderMutation } from '../../folder/mutations/useUpdateVaultFolderOrderMutation'
 import { FolderListItem } from '../components/FolderListItem'
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
 
@@ -23,7 +25,7 @@ export const ManageVaultFolders = () => {
     setItems(sortEntitiesWithOrder(folders))
   }, [folders])
 
-  const { mutate } = useUpdateVaultFolderOrderMutation()
+  const { mutate } = useUpdateVaultFolderMutation()
 
   if (isEmpty(items)) return null
 
@@ -40,7 +42,7 @@ export const ManageVaultFolders = () => {
 
         mutate({
           id,
-          order,
+          fields: { order },
         })
 
         setItems(prev =>

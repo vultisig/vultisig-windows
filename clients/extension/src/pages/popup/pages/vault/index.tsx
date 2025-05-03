@@ -1,8 +1,12 @@
 import { Button } from '@clients/extension/src/components/button'
+import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -44,6 +48,7 @@ export const VaultPage = () => {
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
+  const coins = useCurrentVaultNativeCoins()
 
   return (
     <VStack fullHeight>
@@ -88,15 +93,12 @@ export const VaultPage = () => {
           <Text color="light" size={12} weight={500}>
             {t('portfolio_overview')}
           </Text>
-          {/* TODO: Fetch addresess */}
-          {/*  
+
           <List>
-            {vault.chains.map(({ address, chain }) => (
+            {coins.map(({ address, chain }) => (
               <ListItem
                 description={
-                  address ? (
-                    <MiddleTruncate text={address} width={80} />
-                  ) : undefined
+                  address && <MiddleTruncate text={address} width={80} />
                 }
                 extra={
                   <VStack gap={4} alignItems="end">
@@ -121,7 +123,6 @@ export const VaultPage = () => {
               />
             ))}
           </List>
-          */}
         </VStack>
       </PageContent>
       <PageFooter>
