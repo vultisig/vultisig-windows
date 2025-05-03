@@ -9,6 +9,7 @@ export const appPaths = {
   settings: '/settings',
   vaultSettings: '/settings/vault',
   manageChains: '/manage-chains',
+  connectedDapps: '/connected-dapps',
 } as const
 
 type AppPaths = typeof appPaths
