@@ -19,6 +19,11 @@ export const hr = {
   chain: 'Lanac',
   price_impact_good: 'Dobro',
   price_impact_average: 'Prosječno',
+  select_token: 'Odaberi token',
+  destination_address: 'Odredišna adresa',
+  thorchain_address: 'THORChain adresa',
+  merge: 'Spoji',
+  switch: 'Zamijeni',
   max_total_fees: 'Maks. Ukupna Naknada',
   price_impact_high: 'Visok Utjecaj',
   email_confirmation_code_label:
