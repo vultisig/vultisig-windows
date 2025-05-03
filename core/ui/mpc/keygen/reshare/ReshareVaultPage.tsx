@@ -3,6 +3,7 @@ import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -17,43 +18,42 @@ export const ReshareVaultPage = () => {
   const securityType = useCurrentVaultSecurityType()
 
   return (
-    <>
+    <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('reshare')}</PageHeaderTitle>}
+        hasBorder
       />
-      <PageContent>
-        <VStack gap={8} flexGrow alignItems="center" justifyContent="center">
-          <Text size={20} color="contrast" weight="600">
-            {t('reshare_your_vault')}
-          </Text>
-          <Text size={14} color="supporting">
-            {t('reshare_explanation')}
-          </Text>
-        </VStack>
-        <VStack gap={20}>
-          <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
-          <Button
-            onClick={() =>
-              match(securityType, {
-                fast: () => navigate('reshareVaultFast'),
-                secure: () => navigate('reshareVaultSecure'),
-              })
-            }
-            kind="primary"
-          >
-            {t('start_reshare')}
-          </Button>
-          <Button
-            onClick={() =>
-              navigate('uploadQr', { params: { title: t('join_reshare') } })
-            }
-            kind="outlined"
-          >
-            {t('join_reshare')}
-          </Button>
-        </VStack>
+      <PageContent gap={8} alignItems="center" justifyContent="center" flexGrow>
+        <Text color="contrast" size={20} weight="600">
+          {t('reshare_your_vault')}
+        </Text>
+        <Text color="supporting" size={14}>
+          {t('reshare_explanation')}
+        </Text>
       </PageContent>
-    </>
+      <PageFooter gap={16}>
+        <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
+        <Button
+          kind="primary"
+          onClick={() =>
+            match(securityType, {
+              fast: () => navigate('reshareVaultFast'),
+              secure: () => navigate('reshareVaultSecure'),
+            })
+          }
+        >
+          {t('start_reshare')}
+        </Button>
+        <Button
+          kind="outlined"
+          onClick={() =>
+            navigate('uploadQr', { params: { title: t('join_reshare') } })
+          }
+        >
+          {t('join_reshare')}
+        </Button>
+      </PageFooter>
+    </VStack>
   )
 }
