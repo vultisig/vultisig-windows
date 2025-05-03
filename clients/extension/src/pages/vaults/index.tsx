@@ -37,9 +37,12 @@ const App = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <Button onClick={handleClose} ghost>
-            <CrossIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<CrossIcon fontSize={20} />}
+            onClick={handleClose}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -73,13 +76,7 @@ const App = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button
-          onClick={handleSubmit}
-          shape="round"
-          size="large"
-          type="primary"
-          block
-        >
+        <Button onClick={handleSubmit} type="primary" block rounded>
           {t('connect')}
         </Button>
       </PageFooter>

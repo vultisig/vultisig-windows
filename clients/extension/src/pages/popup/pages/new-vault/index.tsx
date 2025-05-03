@@ -19,10 +19,9 @@ export const NewVaultPage = () => {
       <PageFooter gap={16}>
         <Button
           onClick={() => navigate('setupVault', { params: {} })}
-          shape="round"
-          size="large"
           type="primary"
           block
+          rounded
         >
           {t('create_new_vault')}
         </Button>
@@ -30,19 +29,17 @@ export const NewVaultPage = () => {
         <VStack gap={12}>
           <Button
             onClick={() => navigate('uploadQr', { params: {} })}
-            shape="round"
-            size="large"
             type="secondary"
             block
+            rounded
           >
             {t('scan_qr')}
           </Button>
           <Button
             onClick={() => navigate('importVault')}
-            shape="round"
-            size="large"
             type="secondary"
             block
+            rounded
           >
             {t('import_vault')}
           </Button>

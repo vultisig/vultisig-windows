@@ -19,7 +19,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -37,14 +37,16 @@ const ConnectedApp = styled(Button)`
   background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
-  height: 36px;
+  color: ${getColor('textExtraLight')};
   position: relative;
-  width: 36px;
+
+  &:hover {
+    color: ${getColor('textPrimary')};
+  }
 `
 
 export const VaultPage = () => {
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
@@ -54,18 +56,22 @@ export const VaultPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
-            <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
+          <ConnectedApp
+            onClick={() => appNavigate('connectedDapps')}
+            size="md"
+            fitContent
+          >
+            <WorldIcon fontSize={20} />
             <ConnectedAppStatus connected />
           </ConnectedApp>
         }
         secondaryControls={
-          <Button ghost>
-            <SettingsIcon
-              fontSize={24}
-              onClick={() => appNavigate('settings')}
-            />
-          </Button>
+          <Button
+            icon={<SettingsIcon fontSize={20} />}
+            onClick={() => appNavigate('settings')}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text
@@ -127,13 +133,12 @@ export const VaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
+          icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
           onClick={() => appNavigate('manageChains')}
-          shape="round"
-          size="large"
           type="primary"
           block
+          rounded
         >
-          <LinkTwoIcon fontSize={16} strokeWidth={2} />
           {t('manage_chains')}
         </Button>
       </PageFooter>

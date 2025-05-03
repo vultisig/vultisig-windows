@@ -18,6 +18,7 @@ import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -28,6 +29,7 @@ import { useTranslation } from 'react-i18next'
 export const SettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
+  const navigateBack = useNavigateBack()
   const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const languageQuery = useLanguageQuery()
@@ -36,9 +38,12 @@ export const SettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => coreNavigate('vault')} ghost>
-            <ChevronLeftIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<ChevronLeftIcon fontSize={20} />}
+            onClick={navigateBack}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -150,7 +155,9 @@ export const SettingsPage = () => {
               '_blank'
             )
           }
-          ghost
+          size="xs"
+          type="link"
+          fitContent
         >
           VULTICONNECT V{packageJson.version}
         </Button>
