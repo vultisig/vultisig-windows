@@ -74,7 +74,6 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       })
     },
   },
-
   switch: {
     fields: [
       {
