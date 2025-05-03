@@ -18,7 +18,7 @@ export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   vote: { requiresAmount: false, requiresNodeAddress: false },
   bond_with_lp: { requiresAmount: false, requiresNodeAddress: true },
   unbond_with_lp: { requiresAmount: true, requiresNodeAddress: true },
-  ibc_transfer: { requiresAmount: true, requiresNodeAddress: false },
+  ibc_transfer: { requiresAmount: true, requiresNodeAddress: true },
   merge: { requiresAmount: true, requiresNodeAddress: true },
   switch: { requiresAmount: true, requiresNodeAddress: true },
 }
