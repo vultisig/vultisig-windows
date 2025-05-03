@@ -34,6 +34,7 @@ export const generateMemo = ({
     destinationAddress,
     memo,
     selectedCoin,
+    thorchainAddress,
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
@@ -92,8 +93,7 @@ export const generateMemo = ({
       return `merge:${getDenom(token)}`
     },
     switch: () => {
-      const token = shouldBePresent(selectedCoin, 'Token to switch')
-      return `switch:${getDenom(token)}`
+      return `switch:${thorchainAddress}`
     },
   })
 }
@@ -113,5 +113,6 @@ function extractFormValues(formData: FieldValues) {
     destinationAddress: formData.destinationAddress as string | null,
     memo: formData.memo as string | null,
     selectedCoin: formData.selectedCoin as Coin | null,
+    thorchainAddress: formData.thorchain_address as string | null,
   }
 }
