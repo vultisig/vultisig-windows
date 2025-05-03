@@ -77,19 +77,6 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
   switch: {
     fields: [
       {
-        name: 'destinationAddress',
-        type: 'text',
-        label: t('destination_address'),
-        required: true,
-      },
-      {
-        // TODO: double check this
-        name: 'nodeAddress',
-        type: 'text',
-        label: t('thorchain_address'),
-        required: true,
-      },
-      {
         name: 'amount',
         type: 'number',
         label: 'Amount',
@@ -108,12 +95,14 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
           .string()
           .transform(val => Number(val))
           .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+        nodeAddress: z.string().min(1, 'Required'),
+        thorchainAddress: z.string().min(1, 'Required'),
       }),
   },
   ibc_transfer: {
     fields: [
       {
-        name: 'destinationAddress',
+        name: 'nodeAddress',
         type: 'text',
         label: t('destination_address'),
         required: true,

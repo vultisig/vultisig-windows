@@ -17,6 +17,8 @@ export const en = {
   secure_crypto_vault: 'SECURE CRYPTO VAULT',
   add_address: 'Add Address',
   vultisig: 'Vultisig',
+  missing_thorchain_address: 'Missing THORChain Address',
+  missing_destination_address: 'Missing Destination Address',
   onboarding_view1_description:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
   onboarding_view2_description:

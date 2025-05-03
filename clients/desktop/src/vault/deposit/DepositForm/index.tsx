@@ -37,9 +37,9 @@ import {
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
 import { MergeTokenExplorer } from './MergeTokenExplorer'
-import { SwitchTokenExplorer } from './SwitchTokenExplorer'
+import { SwitchSpecificFields } from './SwitchFormComponents/SwitchSpecificFields'
 
-type FormData = Record<string, any>
+export type FormData = Record<string, any>
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
   selectedChainAction: ChainAction
@@ -231,6 +231,8 @@ export const DepositForm: FC<DepositFormProps> = ({
               )}
               renderContent={({ onClose }) => (
                 <MergeTokenExplorer
+                  getValues={getValues}
+                  setValue={setValue}
                   activeOption={watch('selectedCoin')}
                   onOptionClick={token =>
                     setValue('selectedCoin', token, {
@@ -244,33 +246,10 @@ export const DepositForm: FC<DepositFormProps> = ({
           )}
 
           {selectedChainAction === 'switch' && (
-            <Opener
-              renderOpener={({ onOpen }) => (
-                <Container onClick={onOpen}>
-                  <HStack alignItems="center" gap={4}>
-                    <Text weight="400" family="mono" size={16}>
-                      {selectedCoin?.ticker || t('select_token')}
-                    </Text>
-                    {!selectedCoin && (
-                      <AssetRequiredLabel as="span" color="danger" size={14}>
-                        *
-                      </AssetRequiredLabel>
-                    )}
-                  </HStack>
-                  <IconWrapper style={{ fontSize: 20 }}>
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                </Container>
-              )}
-              renderContent={({ onClose }) => (
-                <SwitchTokenExplorer
-                  activeOption={watch('selectedCoin')}
-                  onOptionClick={token =>
-                    setValue('selectedCoin', token, { shouldValidate: true })
-                  }
-                  onClose={onClose}
-                />
-              )}
+            <SwitchSpecificFields
+              watch={watch}
+              setValue={setValue}
+              getValues={getValues}
             />
           )}
 
