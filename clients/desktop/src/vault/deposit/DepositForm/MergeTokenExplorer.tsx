@@ -29,9 +29,9 @@ export const MergeTokenExplorer: FC<Props> = ({
   useEffect(() => {
     const selectedMergeAddress = tokens.find(
       t => t.ticker === selectedCoin?.ticker
-    )
+    )?.address
 
-    setValue('nodeAddress', selectedMergeAddress?.address, {
+    setValue('nodeAddress', selectedMergeAddress, {
       shouldValidate: true,
     })
   }, [selectedCoin?.ticker, setValue, tokens])
