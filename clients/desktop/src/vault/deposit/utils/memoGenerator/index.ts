@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
-import { getDenom } from '@core/chain/coin/balance/cosmos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
+import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { FieldValues } from 'react-hook-form'
