@@ -1,6 +1,5 @@
 import api from '@clients/extension/src/utils/api'
 import {
-  ChainProps,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'

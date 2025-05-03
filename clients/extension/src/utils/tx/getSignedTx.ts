@@ -23,8 +23,7 @@ export const getSignedTransaction = ({
       if (!derivationKey) {
         return reject('Derivation key not found for the specified chain')
       }
-      const keysignType =
-        signatureAlgorithms[getChainKind(transaction.chain)]
+      const keysignType = signatureAlgorithms[getChainKind(transaction.chain)]
 
       const publicKeyType = match(keysignType, {
         ecdsa: () => walletCore.PublicKeyType.secp256k1,

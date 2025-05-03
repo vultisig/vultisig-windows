@@ -46,6 +46,7 @@ import {
   getParsedMemo,
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getOneInchSwapTxInputData } from '@core/chain/swap/general/oneInch/tx/getOneInchSwapTxInputData'
@@ -79,7 +80,6 @@ import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 interface FormProps {
   password: string

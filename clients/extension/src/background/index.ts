@@ -48,6 +48,7 @@ import {
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -66,7 +67,6 @@ import { handleSetupInpage } from '../utils/setupInpage'
 import { getCurrentVaultId } from '../vault/state/currentVaultId'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[

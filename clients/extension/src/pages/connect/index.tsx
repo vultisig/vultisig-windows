@@ -1,6 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
 import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -20,7 +21,6 @@ import { useTranslation } from 'react-i18next'
 import { useAddVaultSessionMutation } from '../../sessions/mutations/useAddVaultSessionMutation'
 import { getDappHost, getDappHostname } from '../../utils/connectedApps'
 import { getStoredRequest } from '../../utils/storage'
-import { getChainKind } from '@core/chain/ChainKind'
 
 interface InitialState {
   chain?: Chain

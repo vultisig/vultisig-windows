@@ -1,4 +1,5 @@
 import { CosmosChainId, EVMChainId } from '@core/chain/coin/ChainId'
+
 import { getPersistentState } from '../../state/persistent/getPersistentState'
 import { setPersistentState } from '../../state/persistent/setPersistentState'
 
