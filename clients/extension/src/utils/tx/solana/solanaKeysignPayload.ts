@@ -29,12 +29,12 @@ export const getSolanaSwapKeysignPayload = (
         const dataBuffer = Buffer.from(txInputDataBuffer)
         const base64Data = base64.encode(dataBuffer)
         const coin = create(CoinSchema, {
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           ticker: parsedSwapParams.inputToken.symbol.toUpperCase(),
           address: transaction.transactionDetails.from,
           decimals: parsedSwapParams.inputToken.decimals,
           hexPublicKey: vault.chains.find(
-            chain => chain.chain === transaction.chain.chain
+            chain => chain.chain === transaction.chain
           )?.derivationKey,
           logo: parsedSwapParams.inputToken.name.toLowerCase(),
           priceProviderId:
@@ -71,7 +71,7 @@ export const getSolanaSwapKeysignPayload = (
         const swapPayload = create(OneInchSwapPayloadSchema, {
           fromCoin: {
             address: transaction.transactionDetails.from,
-            chain: transaction.chain.chain,
+            chain: transaction.chain,
             contractAddress:
               parsedSwapParams.inputToken.symbol === 'SOL'
                 ? ''
@@ -90,7 +90,7 @@ export const getSolanaSwapKeysignPayload = (
           },
           toCoin: {
             address: transaction.transactionDetails.from,
-            chain: transaction.chain.chain,
+            chain: transaction.chain,
             contractAddress:
               parsedSwapParams.outputToken.symbol === 'SOL'
                 ? ''

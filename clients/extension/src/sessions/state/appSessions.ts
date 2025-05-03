@@ -1,13 +1,21 @@
+import { CosmosChainId, EVMChainId } from '@core/chain/coin/ChainId'
 import { getPersistentState } from '../../state/persistent/getPersistentState'
 import { setPersistentState } from '../../state/persistent/setPersistentState'
 
 export const appSessionsQueryKey = 'appSessions'
+type UpdateAppSessionFieldsInput = {
+  vaultId: string
+  host: string
+  fields: Partial<AppSession>
+}
 
 export interface AppSession {
   host: string
   chainIds?: string[]
   addresses?: string[]
   url: string
+  selectedEVMChainId?: EVMChainId
+  selectedCosmosChainId?: CosmosChainId
 }
 
 export type SetVaultsAppSessionsFunction = (
@@ -33,4 +41,36 @@ export const getVaultAppSessions = async (
 ): Promise<Record<string, AppSession>> => {
   const allSessions = await getVaultsAppSessions()
   return allSessions[vaultId] ?? {}
+}
+
+export const updateAppSession = async ({
+  vaultId,
+  host,
+  fields,
+}: UpdateAppSessionFieldsInput): Promise<AppSession> => {
+  const allSessions = await getVaultsAppSessions()
+  const vaultSessions = allSessions[vaultId] ?? {}
+  const existing = vaultSessions[host]
+
+  if (!existing) {
+    throw new Error(`No session found for host: ${host}`)
+  }
+
+  const updatedSession: AppSession = {
+    ...existing,
+    ...fields,
+  }
+
+  const updatedVaultSessions = {
+    ...vaultSessions,
+    [host]: updatedSession,
+  }
+
+  const updatedAll = {
+    ...allSessions,
+    [vaultId]: updatedVaultSessions,
+  }
+
+  await setVaultsAppSessions(updatedAll)
+  return updatedSession
 }

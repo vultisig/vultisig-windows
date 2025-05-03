@@ -33,12 +33,12 @@ export const getKeysignPayload = (
     ;(async () => {
       try {
         let localCoin = getCoinFromCoinKey({
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
         })
 
         if (!localCoin) {
-          if (transaction.chain.chain === Chain.Solana) {
+          if (transaction.chain === Chain.Solana) {
             if (!transaction.transactionDetails.asset.mint) {
               throw new Error('Mint address not provided')
             }
@@ -46,7 +46,7 @@ export const getKeysignPayload = (
               transaction.transactionDetails.asset.mint
             )
             localCoin = {
-              chain: transaction.chain.chain,
+              chain: transaction.chain,
               decimals: splToken.decimals,
               id: transaction.transactionDetails.asset.mint,
               logo: splToken.logoURI || '',
@@ -55,14 +55,14 @@ export const getKeysignPayload = (
             }
           } else if (
             Object.values(CosmosChain).includes(
-              transaction.chain.chain as CosmosChain
+              transaction.chain as CosmosChain
             )
           ) {
             if (
-              cosmosFeeCoinDenom[transaction.chain.chain as CosmosChain] ===
+              cosmosFeeCoinDenom[transaction.chain as CosmosChain] ===
               transaction.transactionDetails.asset.ticker
             ) {
-              localCoin = { ...chainFeeCoin[transaction.chain.chain] }
+              localCoin = { ...chainFeeCoin[transaction.chain] }
             }
           }
         }
@@ -132,12 +132,12 @@ export const getKeysignPayload = (
         }
 
         const coin = create(CoinSchema, {
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           ticker: accountCoin.ticker,
           address: transaction.transactionDetails.from,
           decimals: accountCoin.decimals,
           hexPublicKey: vault.chains.find(
-            chain => chain.chain === transaction.chain.chain
+            chain => chain.chain === transaction.chain
           )?.derivationKey,
           isNativeToken: isFeeCoin(accountCoin),
           logo: accountCoin.logo,
@@ -146,7 +146,7 @@ export const getKeysignPayload = (
         })
 
         let modifiedMemo = null
-        if (getChainKind(transaction.chain.chain) === 'evm') {
+        if (getChainKind(transaction.chain) === 'evm') {
           try {
             const isMemoFunction = await checkERC20Function(
               transaction.transactionDetails.data!
@@ -173,7 +173,7 @@ export const getKeysignPayload = (
           coin,
           blockchainSpecific: chainSpecific,
         })
-        if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
+        if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
         }
         resolve(keysignPayload)

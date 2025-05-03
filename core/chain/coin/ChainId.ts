@@ -38,6 +38,9 @@ const chainIdRecord = {
 } as const
 
 type DeriveChainId<T> = T extends Chain ? (typeof chainIdRecord)[T] : never
+type ChainIdRecord = typeof chainIdRecord
+export type EVMChainId = ChainIdRecord[EvmChain]
+export type CosmosChainId = ChainIdRecord[CosmosChain]
 
 export function getChainId<T extends Chain>(chain: T): DeriveChainId<T> {
   return chainIdRecord[chain] as DeriveChainId<T>

@@ -79,6 +79,7 @@ import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 interface FormProps {
   password: string
@@ -374,7 +375,7 @@ const Component = () => {
     try {
       const inputData = await getTxInputData(keysignPayload)
       const imageHashes = getPreSigningHashes({
-        chain: transaction.chain.chain,
+        chain: transaction.chain,
         txInputData: inputData,
         walletCore,
       })
@@ -400,7 +401,7 @@ const Component = () => {
           `Swap payload type ${keysignPayload.swapPayload.case} not explicitly supported, using fallback`
         )
         return getPreSignedInputData({
-          chain: transaction!.chain.chain,
+          chain: transaction!.chain,
           keysignPayload,
           walletCore: walletCore!,
         })
@@ -413,7 +414,7 @@ const Component = () => {
     }
 
     return getPreSignedInputData({
-      chain: transaction!.chain.chain,
+      chain: transaction!.chain,
       keysignPayload,
       walletCore: walletCore!,
     })
@@ -512,7 +513,7 @@ const Component = () => {
               `Swap payload type ${keysignPayload.swapPayload.case} not explicitly supported, using fallback`
             )
             preSignedInputData = getPreSignedInputData({
-              chain: transaction!.chain.chain,
+              chain: transaction!.chain,
               keysignPayload: keysignPayload!,
               walletCore: walletCore!,
             })
@@ -524,14 +525,14 @@ const Component = () => {
           })
         } else {
           preSignedInputData = getPreSignedInputData({
-            chain: transaction!.chain.chain,
+            chain: transaction!.chain,
             keysignPayload: keysignPayload!,
             walletCore: walletCore!,
           })
         }
 
         const preSignedImageHashes = getPreSigningHashes({
-          chain: transaction!.chain.chain,
+          chain: transaction!.chain,
           txInputData: preSignedInputData,
           walletCore: walletCore!,
         })
@@ -541,7 +542,7 @@ const Component = () => {
         })
       }
       const signatureAlgorithm =
-        signatureAlgorithms[getChainKind(transaction.chain.chain)]
+        signatureAlgorithms[getChainKind(transaction.chain)]
       form
         .validateFields()
         .then(({ password }: FormProps) => {
@@ -553,7 +554,7 @@ const Component = () => {
               derive_path: walletCore!.CoinTypeExt.derivationPath(
                 getCoinType({
                   walletCore: walletCore!,
-                  chain: transaction.chain.chain,
+                  chain: transaction.chain,
                 })
               ),
               messages: [imageHash],
@@ -582,7 +583,7 @@ const Component = () => {
 
   const getFormattedTxHash = (transaction: ITransaction): string => {
     if (!transaction.txHash) return ''
-    const chainKind = getChainKind(transaction.chain.chain)
+    const chainKind = getChainKind(transaction.chain)
     const hash =
       chainKind === 'evm'
         ? transaction.txHash
@@ -681,7 +682,7 @@ const Component = () => {
 
               transaction.memo = { isParsed: false, value: undefined }
 
-              if (getChainKind(transaction.chain.chain) === 'evm') {
+              if (getChainKind(transaction.chain) === 'evm') {
                 const parsedMemo = await getParsedMemo(keysignPayload.memo)
                 if (parsedMemo) {
                   transaction.memo = {
@@ -841,14 +842,12 @@ const Component = () => {
                         )}
                         <div className="item">
                           <span className="label">Network</span>
-                          <span className="extra">
-                            {transaction.chain.chain}
-                          </span>
+                          <span className="extra">{transaction.chain}</span>
                         </div>
                         <div className="item">
                           <span className="label">{t('network_fee')}</span>
                           <span className="extra">
-                            {`${transaction.txFee} ${transaction.chain.ticker}`}
+                            {`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
                           </span>
                         </div>
                         {transaction.memo?.isParsed ? (
@@ -1276,7 +1275,7 @@ const Component = () => {
                         </Tooltip>
                         <Tooltip title={t('view_tx')}>
                           <a
-                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="action"
@@ -1310,11 +1309,11 @@ const Component = () => {
                       )}
                       <div className="item">
                         <span className="label">Network</span>
-                        <span className="extra">{transaction.chain.chain}</span>
+                        <span className="extra">{transaction.chain}</span>
                       </div>
                       <div className="item">
                         <span className="label">{t('network_fee')}</span>
-                        <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
+                        <span className="extra">{`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}</span>
                       </div>
                       {transaction.memo?.value &&
                         !transaction.memo?.isParsed && (

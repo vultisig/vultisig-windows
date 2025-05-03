@@ -154,7 +154,7 @@ export interface TransactionDetails {
 
 export interface ITransaction {
   transactionDetails: TransactionDetails
-  chain: ChainProps
+  chain: Chain
   contract?: string
   customMessage?: CustomMessage
   customSignature?: string

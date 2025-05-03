@@ -18,13 +18,13 @@ export const getSignedTransaction = ({
   return new Promise((resolve, reject) => {
     if (inputData && vault && transaction) {
       const derivationKey = vault.chains.find(
-        chain => chain.chain === transaction.chain.chain
+        chain => chain.chain === transaction.chain
       )?.derivationKey
       if (!derivationKey) {
         return reject('Derivation key not found for the specified chain')
       }
       const keysignType =
-        signatureAlgorithms[getChainKind(transaction.chain.chain)]
+        signatureAlgorithms[getChainKind(transaction.chain)]
 
       const publicKeyType = match(keysignType, {
         ecdsa: () => walletCore.PublicKeyType.secp256k1,
@@ -39,14 +39,14 @@ export const getSignedTransaction = ({
       if (pubkey) {
         const compiledTx = compileTx({
           txInputData: inputData,
-          chain: transaction?.chain.chain,
+          chain: transaction?.chain,
           publicKey: pubkey,
           signatures,
           walletCore: walletCore,
         })
 
         getSignedTx({
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           compiledTx,
         })
           .then(result => resolve(result as SendTransactionResponse))
