@@ -1,9 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useSetDefaultChainsMutation } from '@core/ui/storage/defaultChains'
+import { useDefaultChains } from '@core/ui/storage/defaultChains'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -15,6 +15,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
+import { without } from '@lib/utils/array/without'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -45,15 +46,17 @@ const NativeCoinItem: FC<{
   )
 }
 
-export const ManageChainsPage = () => {
+export const DefaultChainsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState<string | undefined>(undefined)
   const nativeCoins = Object.values(chainFeeCoin)
-  const currentNativeCoins = useCurrentVaultNativeCoins()
+  const defaultChains = useDefaultChains()
+  const setDefaultChains = useSetDefaultChainsMutation()
 
-  const handleSwitch = (coin: Coin, isSelected?: boolean) => {
-    console.log('coin:', coin)
-    console.log('isSelected:', isSelected)
+  const handleSwitch = (chain: Chain, isSelected?: boolean) => {
+    setDefaultChains.mutate(
+      isSelected ? without(defaultChains, chain) : [...defaultChains, chain]
+    )
   }
 
   const filteredNativeCoins = useMemo(() => {
@@ -70,7 +73,11 @@ export const ManageChainsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('manage_chains')}</PageHeaderTitle>}
+        title={
+          <PageHeaderTitle>
+            {t('vault_settings_default_chains')}
+          </PageHeaderTitle>
+        }
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
@@ -85,15 +92,13 @@ export const ManageChainsPage = () => {
           </Text>
           <List>
             {filteredNativeCoins
-              .filter(coin =>
-                currentNativeCoins.some(({ chain }) => chain === coin.chain)
-              )
-              .map(coin => (
+              .filter(({ chain }) => defaultChains.includes(chain))
+              .map(({ chain, ticker }) => (
                 <NativeCoinItem
-                  chain={coin.chain}
-                  key={`${coin.chain}-${coin.ticker}`}
-                  onChange={() => handleSwitch(coin, true)}
-                  ticker={coin.ticker}
+                  chain={chain}
+                  key={`${chain}-${ticker}`}
+                  onChange={() => handleSwitch(chain, true)}
+                  ticker={ticker}
                   checked
                 />
               ))}
@@ -105,15 +110,15 @@ export const ManageChainsPage = () => {
           </Text>
           <List>
             {filteredNativeCoins
-              .filter(coin =>
-                currentNativeCoins.every(({ chain }) => chain !== coin.chain)
+              .filter(({ chain }) =>
+                defaultChains.every(item => item !== chain)
               )
-              .map(coin => (
+              .map(({ chain, ticker }) => (
                 <NativeCoinItem
-                  chain={coin.chain}
-                  key={`${coin.chain}-${coin.ticker}`}
-                  onChange={() => handleSwitch(coin)}
-                  ticker={coin.ticker}
+                  chain={chain}
+                  key={`${chain}-${ticker}`}
+                  onChange={() => handleSwitch(chain)}
+                  ticker={ticker}
                 />
               ))}
           </List>

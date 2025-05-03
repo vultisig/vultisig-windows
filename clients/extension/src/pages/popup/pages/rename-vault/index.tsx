@@ -51,7 +51,6 @@ export const RenameVaultPage = () => {
         }
       />
       <PageContent gap={24} flexGrow scrollable>
-        {/* TODO: Update search input styles based on Figma */}
         <TextInput value={name} onValueChange={setName} />
       </PageContent>
       <PageFooter>
