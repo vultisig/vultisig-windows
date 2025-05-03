@@ -1,4 +1,4 @@
-import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
+import ImportPage from '@clients/extension/src/pages/popup/pages/import-file'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import { corePaths } from '@core/ui/navigation'
 import { StrictMode } from 'react'
@@ -9,7 +9,7 @@ const router = createHashRouter(
   [
     {
       path: corePaths.vault,
-      element: <ImportQRPage />,
+      element: <ImportPage />,
     },
     {
       path: '*',
