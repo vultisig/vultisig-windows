@@ -59,7 +59,7 @@ export const VaultPage = () => {
           <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
             <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
             <ConnectedAppStatus
-              connected={Object.values(sessions).length ? true : false}
+               connected={Object.values(sessions).length > 0}
             />
           </ConnectedApp>
         }
