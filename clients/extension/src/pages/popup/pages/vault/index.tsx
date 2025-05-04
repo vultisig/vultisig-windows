@@ -1,6 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCurrentVaultAppSessions } from '@clients/extension/src/sessions/state/useAppSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -20,8 +21,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
-
-import { useCurrentVaultAppSessions } from '../../../../sessions/state/useAppSessions'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -59,7 +58,7 @@ export const VaultPage = () => {
           <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
             <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
             <ConnectedAppStatus
-               connected={Object.values(sessions).length > 0}
+              connected={Object.values(sessions).length > 0}
             />
           </ConnectedApp>
         }
