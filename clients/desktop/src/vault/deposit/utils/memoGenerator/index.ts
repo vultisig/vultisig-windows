@@ -31,7 +31,6 @@ export const generateMemo = ({
     provider,
     operatorFee,
     destinationChain,
-    memo,
     selectedCoin,
     thorchainAddress,
   } = extractFormValues(depositFormData)
@@ -85,7 +84,7 @@ export const generateMemo = ({
         )
       }
 
-      return `${destinationChain}:${sourceChannel}:${nodeAddress}${memo ? `:${memo}` : ''}`
+      return `${destinationChain}:${sourceChannel}:${nodeAddress}`
     },
     merge: () => {
       const token = shouldBePresent(selectedCoin, 'Token to merge')
@@ -109,7 +108,6 @@ function extractFormValues(formData: FieldValues) {
     operatorFee: formData.operatorFee as string | null,
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
-    memo: formData.memo as string | null,
     selectedCoin: formData.selectedCoin as Coin | null,
     thorchainAddress: formData.thorchainAddress as string | null,
   }

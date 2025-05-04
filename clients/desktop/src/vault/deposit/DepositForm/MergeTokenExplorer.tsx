@@ -1,12 +1,28 @@
+import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { getMergeAcceptedTokens } from '@core/chain/coin/ibcTokens'
+import { getMergeAcceptedTokens } from '@core/chain/coin/ibc'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
-import { FC, useEffect } from 'react'
+import { Text } from '@lib/ui/text'
+import { FC, useEffect, useMemo } from 'react'
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../lib/ui/modal'
 import { FormData } from '.'
 import { DepositActionOption } from './DepositActionOption'
+
+const useUserMergeAcceptedTokens = () => {
+  const userCoins = useCurrentVaultCoins()
+
+  return useMemo(() => {
+    const userCoinIds = new Set(userCoins.map(c => c.id))
+
+    return getMergeAcceptedTokens().filter(
+      token => token.chain === Chain.THORChain && userCoinIds.has(token.id)
+    )
+  }, [userCoins])
+}
 
 type Props = {
   activeOption?: Coin
@@ -23,8 +39,9 @@ export const MergeTokenExplorer: FC<Props> = ({
   getValues,
   setValue,
 }) => {
-  const tokens = getMergeAcceptedTokens()
+  const tokens = useUserMergeAcceptedTokens()
   const selectedCoin = getValues('selectedCoin')
+  const { t } = useTranslation()
 
   useEffect(() => {
     const selectedMergeAddress = tokens.find(
@@ -39,19 +56,25 @@ export const MergeTokenExplorer: FC<Props> = ({
   return (
     <Modal width={480} placement="top" title="Select Token" onClose={onClose}>
       <VStack gap={20}>
-        {tokens.map((token, index) => {
-          return (
-            <DepositActionOption
-              key={index}
-              value={token.ticker}
-              isActive={activeOption?.ticker === token.ticker}
-              onClick={() => {
-                onOptionClick(token)
-                onClose()
-              }}
-            />
-          )
-        })}
+        {tokens.length > 0 ? (
+          tokens.map((token, index) => {
+            return (
+              <DepositActionOption
+                key={index}
+                value={token.ticker}
+                isActive={activeOption?.ticker === token.ticker}
+                onClick={() => {
+                  onOptionClick(token)
+                  onClose()
+                }}
+              />
+            )
+          })
+        ) : (
+          <Text size={16} color="contrast">
+            {t('no_tokens_found')}
+          </Text>
+        )}
       </VStack>
     </Modal>
   )

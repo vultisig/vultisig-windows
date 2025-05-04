@@ -7,7 +7,7 @@ import {
   CHAINS_WITH_IBC_TOKENS,
   IBC_TOKENS,
   IBC_TRANSFERRABLE_TOKENS_PER_CHAIN,
-} from './ibcTokens'
+} from './ibc'
 
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   [Chain.MayaChain]: [

@@ -1,10 +1,14 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
+import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { useEffect } from 'react'
 import {
   UseFormGetValues,
   UseFormSetValue,
@@ -15,7 +19,11 @@ import { useTranslation } from 'react-i18next'
 import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { FormData } from '..'
 import { getIbcDropdownOptions } from '../chainOptionsConfig'
-import { AssetRequiredLabel, Container } from '../DepositForm.styled'
+import {
+  AssetRequiredLabel,
+  Container,
+  InputFieldWrapper,
+} from '../DepositForm.styled'
 import { TokenExplorer } from '../TokenExplorer'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 
@@ -34,6 +42,21 @@ export const IBCTransferSpecific = ({
   const selectedDestinationChain = getValues('destinationChain')
   const tokens = useIBCAcceptedTokens(selectedDestinationChain)
   const selectedCoin = getValues('selectedCoin') as Coin
+  const vaultCoins = useCurrentVaultCoins()
+  const selectedAddress = getValues('nodeAddress') as string
+
+  useEffect(() => {
+    if (selectedDestinationChain) {
+      const newValue =
+        vaultCoins.find(
+          coin => coin.chain === selectedDestinationChain && isNativeCoin(coin)
+        )?.address || ''
+
+      setValue('nodeAddress', newValue, {
+        shouldValidate: true,
+      })
+    }
+  }, [selectedDestinationChain, setValue, vaultCoins])
 
   return (
     <VStack gap={28}>
@@ -107,6 +130,15 @@ export const IBCTransferSpecific = ({
           />
         )}
       />
+      <InputContainer>
+        <Text size={15} weight="400" color="contrast">
+          {t('destination_address')}{' '}
+          <Text as="span" color="danger" size={14}>
+            *
+          </Text>
+        </Text>
+        <InputFieldWrapper as="input" value={selectedAddress} />
+      </InputContainer>
     </VStack>
   )
 }

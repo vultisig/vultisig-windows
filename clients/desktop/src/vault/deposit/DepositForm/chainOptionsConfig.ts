@@ -101,22 +101,10 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
   ibc_transfer: {
     fields: [
       {
-        name: 'nodeAddress',
-        type: 'text',
-        label: t('destination_address'),
-        required: true,
-      },
-      {
         name: 'amount',
         type: 'number',
         label: t('amount'),
         required: true,
-      },
-      {
-        name: 'memo',
-        type: 'text',
-        label: t('memo'),
-        required: false,
       },
     ],
     schema: (
@@ -135,10 +123,9 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
             z
               .number()
               .positive()
-              .min(0.01, 'Amount must be greater than 0')
+              .min(0.001, 'Amount must be greater than 0')
               .max(totalAmountAvailable, 'Amount exceeds balance')
           ),
-        memo: z.string().optional(),
       }),
   },
   bond: {

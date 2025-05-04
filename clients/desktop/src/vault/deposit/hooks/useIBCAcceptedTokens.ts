@@ -1,6 +1,7 @@
 import { Chain, CosmosChain } from '@core/chain/Chain'
-import { CHAINS_WITH_IBC_TOKENS, IBC_TOKENS } from '@core/chain/coin/ibcTokens'
+import { CHAINS_WITH_IBC_TOKENS, IBC_TOKENS } from '@core/chain/coin/ibc'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
   const coins = useCurrentVaultCoins()
@@ -12,12 +13,16 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
     return []
   }
 
-  return coins.filter(coin => {
-    const isIbcToken = IBC_TOKENS.some(
-      ibc =>
-        ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
-        ibc.decimals === coin.decimals
-    )
-    return isIbcToken && coin.chain === destinationChain
-  })
+  return withoutDuplicates(
+    coins.filter(coin => {
+      const isIbcToken = IBC_TOKENS.some(
+        ibc =>
+          ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
+          ibc.decimals === coin.decimals
+      )
+      return isIbcToken && coin.chain === destinationChain
+    }),
+    (tokenA, tokenB) =>
+      tokenA.ticker.toUpperCase() === tokenB.ticker.toUpperCase()
+  )
 }
