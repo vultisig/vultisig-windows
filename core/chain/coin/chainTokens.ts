@@ -3,6 +3,8 @@ import { Coin } from '@core/chain/coin/Coin'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
 
+import { CHAINS_WITH_IBC_TOKENS, IBC_TOKENS } from './ibcTokens'
+
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   [Chain.MayaChain]: [
     {
@@ -922,3 +924,19 @@ export const chainTokens: Partial<Record<Chain, Coin[]>> = recordMap(
   mergedLeanChainTokens as Record<Chain, Omit<Coin, 'chain'>[]>,
   (tokens, chain) => tokens.map(token => ({ ...token, chain }))
 )
+
+for (const chain of CHAINS_WITH_IBC_TOKENS) {
+  const existingTokens = chainTokens[chain] ?? []
+
+  const existingKeys = new Set(
+    existingTokens.map(t => `${t.ticker}:${t.decimals}`)
+  )
+
+  const newTokens = IBC_TOKENS.filter(
+    t => !existingKeys.has(`${t.ticker}:${t.decimals}`)
+  ).map(t => ({ ...t, chain }))
+
+  if (newTokens.length > 0) {
+    chainTokens[chain] = [...existingTokens, ...newTokens]
+  }
+}

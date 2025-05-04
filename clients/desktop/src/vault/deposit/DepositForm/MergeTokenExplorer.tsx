@@ -1,10 +1,10 @@
 import { Coin } from '@core/chain/coin/Coin'
+import { getMergeAcceptedTokens } from '@core/chain/coin/ibcTokens'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FC, useEffect } from 'react'
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
 import { Modal } from '../../../lib/ui/modal'
-import { useMergeAcceptedTokens } from '../hooks/useMergeAcceptedTokens'
 import { FormData } from '.'
 import { DepositActionOption } from './DepositActionOption'
 
@@ -23,13 +23,13 @@ export const MergeTokenExplorer: FC<Props> = ({
   getValues,
   setValue,
 }) => {
-  const tokens = useMergeAcceptedTokens()
+  const tokens = getMergeAcceptedTokens()
   const selectedCoin = getValues('selectedCoin')
 
   useEffect(() => {
     const selectedMergeAddress = tokens.find(
       t => t.ticker === selectedCoin?.ticker
-    )?.address
+    )?.thorchainAddress
 
     setValue('nodeAddress', selectedMergeAddress, {
       shouldValidate: true,
