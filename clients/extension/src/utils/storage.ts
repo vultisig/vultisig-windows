@@ -2,7 +2,6 @@ import { Currency } from '@clients/extension/src/utils/constants'
 import {
   AccountsProps,
   ITransaction,
-  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { Language } from '@core/ui/i18n/Language'
@@ -18,7 +17,6 @@ interface LocalStorage {
   accounts?: AccountsProps
   currency?: Currency
   language?: Language
-  vaults?: Vault[]
   isPriority?: boolean
   ethProviderState?: EthProviderState
   transactions?: ITransaction[]
@@ -41,26 +39,6 @@ export const getStoredRequest = (): Promise<AccountsProps> => {
 
 export const setStoredRequest = (accounts: AccountsProps): Promise<void> => {
   const vals: LocalStorage = { accounts }
-
-  return new Promise(resolve => {
-    chrome.storage.local.set(vals, () => {
-      resolve()
-    })
-  })
-}
-
-export const getStoredVaults = (): Promise<Vault[]> => {
-  const keys: LocalStorageKeys[] = ['vaults']
-
-  return new Promise(resolve => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(res.vaults ?? [])
-    })
-  })
-}
-
-export const setStoredVaults = (vaults: Vault[]): Promise<void> => {
-  const vals: LocalStorage = { vaults }
 
   return new Promise(resolve => {
     chrome.storage.local.set(vals, () => {

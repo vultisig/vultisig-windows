@@ -21,18 +21,26 @@ export namespace Messaging {
 
   export namespace GetVault {
     export type Request = any
-    export type Response = VaultCore | undefined
+    export type Response = VaultExport | undefined
   }
 
   export namespace GetVaults {
     export type Request = any
-    export type Response = Vault[]
+    export type Response = VaultExport[]
   }
 
   export namespace SetPriority {
     export type Request = { priority?: boolean }
     export type Response = any
   }
+}
+
+export type VaultExport = {
+  uid: string
+  name: string
+  publicKeyEcdsa: string
+  publicKeyEddsa: string
+  hexChainCode: string
 }
 
 export interface AccountsProps {
@@ -164,15 +172,6 @@ export interface ITransaction {
   txHash?: string
   windowId?: number
   raw?: any
-}
-
-export type Vault = VaultCore & {
-  // Keep legacy fields temporarily (to be removed later)
-  //TODO: active chain removed, other properties will be extracted in separate PRs
-  transactions: ITransaction[]
-  apps?: string[]
-  selected?: boolean
-  uid: string
 }
 
 export interface SignedTransaction {

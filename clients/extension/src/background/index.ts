@@ -16,15 +16,14 @@ import {
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
+  VaultExport,
 } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
   getStoredTransactions,
-  getStoredVaults,
   setIsPriority,
   setStoredRequest,
   setStoredTransactions,
-  setStoredVaults,
 } from '@clients/extension/src/utils/storage'
 import {
   getStandardTransactionDetails,
@@ -44,6 +43,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
+import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
@@ -54,10 +54,13 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
+import { initializeMessenger } from '../messengers/initializeMessenger'
 import {
   getVaultAppSessions,
   getVaultsAppSessions,
+  setVaultsAppSessions,
   updateAppSession,
+  VaultsAppSessions,
 } from '../sessions/state/appSessions'
 import { getDappHostname } from '../utils/connectedApps'
 import { handleSetupInpage } from '../utils/setupInpage'
@@ -83,7 +86,7 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ].forEach(Object.freeze)
 }
 handleSetupInpage()
-
+const popupMessenger = initializeMessenger({ connect: 'popup' })
 let rpcProvider: JsonRpcProvider
 
 const instance: Record<Instance, boolean> = {
@@ -149,12 +152,30 @@ const handleFindVault = async (
   _sender: string
 ): Promise<Messaging.GetVault.Response> => {
   const vaults = await getVaults()
+  console.log('vaults', vaults)
+
   const currentVaultId = await getCurrentVaultId()
+  console.log('currentVaultId', currentVaultId)
+
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
+  console.log('vaultSessions', vaultSessions)
+
   const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
+  console.log('currentSession', currentSession)
+
   if (currentSession) {
-    return vaults.find(vault => getVaultId(vault) === currentVaultId)
+    const selected = vaults.find(vault => getVaultId(vault) === currentVaultId)
+    if (!selected) return undefined
+    const { uid, hex_chain_code, name, public_key_ecdsa, public_key_eddsa } =
+      getVaultPublicKeyExport(selected)
+    return {
+      name,
+      uid,
+      hexChainCode: hex_chain_code,
+      publicKeyEcdsa: public_key_ecdsa,
+      publicKeyEddsa: public_key_eddsa,
+    }
   } else {
     return undefined
   }
@@ -240,31 +261,16 @@ const handleGetVault = (
   })
 }
 
-const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
+const handleGetVaults = async (): Promise<Messaging.GetVaults.Response> => {
   return new Promise(resolve => {
-    getStoredVaults().then(vaults => {
-      setStoredVaults(
-        vaults.map(vault => ({ ...vault, selected: false }))
-      ).then(() => {
-        handleOpenPanel('vaults').then(createdWindowId => {
-          chrome.windows.onRemoved.addListener(closedWindowId => {
-            if (closedWindowId === createdWindowId) {
-              getStoredVaults().then(vaults => {
-                resolve(
-                  vaults
-                    .filter(({ selected }) => selected)
-                    .map(vault => ({
-                      ...vault,
-                      chains: [],
-                      transactions: [],
-                    }))
-                )
-              })
-            }
-          })
-        })
-      })
-    })
+    handleOpenPanel('vaults')
+    popupMessenger.reply(
+      'vaults:connect',
+      async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {
+        resolve(selectedVaults)
+        return
+      }
+    )
   })
 }
 
@@ -315,28 +321,19 @@ const handleSendTransaction = (
                       ).then(reject)
                     })
                   } else {
-                    getStoredVaults().then(vaults => {
-                      setStoredVaults(
-                        vaults.map(vault => ({
-                          ...vault,
-                          transactions: [transaction, ...vault.transactions],
-                        }))
-                      ).then(() => {
-                        if (transaction.customSignature) {
-                          resolve({
-                            txResponse: transaction.customSignature,
-                            raw: transaction.raw,
-                          })
-                        } else if (transaction.txHash) {
-                          resolve({
-                            txResponse: transaction.txHash,
-                            raw: transaction.raw,
-                          })
-                        } else {
-                          reject()
-                        }
+                    if (transaction.customSignature) {
+                      resolve({
+                        txResponse: transaction.customSignature,
+                        raw: transaction.raw,
                       })
-                    })
+                    } else if (transaction.txHash) {
+                      resolve({
+                        txResponse: transaction.txHash,
+                        raw: transaction.raw,
+                      })
+                    } else {
+                      reject()
+                    }
                   }
                 } else {
                   reject()
@@ -670,13 +667,20 @@ const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-        getStoredVaults().then(vaults => {
-          setStoredVaults(
-            vaults.map(vault => ({
-              ...vault,
-              apps: vault.apps?.filter(app => app !== sender),
-            }))
-          ).then(() => resolve(''))
+        const host = getDappHostname(sender)
+        getVaultsAppSessions().then(async sessions => {
+          const updatedSessions: VaultsAppSessions = {}
+
+          for (const [vaultId, vaultSessions] of Object.entries(sessions)) {
+            if (vaultSessions[host]) {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { [host]: _, ...rest } = vaultSessions
+              updatedSessions[vaultId] = rest
+            } else {
+              updatedSessions[vaultId] = vaultSessions
+            }
+          }
+          await setVaultsAppSessions(updatedSessions)
         })
 
         break

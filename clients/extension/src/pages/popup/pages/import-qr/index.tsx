@@ -3,13 +3,12 @@ import {
   calculateWindowPosition,
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
-import { Vault } from '@clients/extension/src/utils/interfaces'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
