@@ -7,6 +7,7 @@ import styled, { css, RuleSet } from 'styled-components'
 type Size = 'xs' | 'sm' | 'md' | 'lg'
 type Status = 'default' | 'error' | 'success' | 'warning'
 type Type = 'default' | 'link' | 'primary' | 'secondary'
+type Weight = 400 | 500 | 600 | 700
 
 const StyledButton = styled.button<{
   block?: boolean
@@ -16,8 +17,9 @@ const StyledButton = styled.button<{
   size: Size
   status: Status
   type: Type
+  weight: Weight
 }>`
-  ${({ block, disabled, fitContent, rounded, size, status, type }) => {
+  ${({ block, disabled, fitContent, rounded, size, status, type, weight }) => {
     const statusColors: Record<Status, string> = {
       default: `${getColor('textPrimary')}`,
       error: `${getColor('alertError')}`,
@@ -97,7 +99,7 @@ const StyledButton = styled.button<{
       border: none;
       cursor: pointer;
       display: flex;
-      font-weight: 500;
+      font-weight: ${weight};
       gap: 8px;
       justify-content: center;
       transition: all 0.2s;
@@ -129,6 +131,7 @@ interface ButtonProps
   size?: Size
   status?: Status
   type?: Type
+  weight?: Weight
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -138,10 +141,11 @@ export const Button: FC<ButtonProps> = ({
   size = 'lg',
   status = 'default',
   type = 'default',
+  weight = 500,
   ...props
 }) => {
   return (
-    <StyledButton {...{ size, status, type }} {...props}>
+    <StyledButton {...{ size, status, type, weight }} {...props}>
       {loading ? <Spinner /> : icon}
       {children}
     </StyledButton>

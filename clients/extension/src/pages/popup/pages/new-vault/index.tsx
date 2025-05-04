@@ -20,6 +20,7 @@ export const NewVaultPage = () => {
         <Button
           onClick={() => navigate('setupVault', { params: {} })}
           type="primary"
+          weight={600}
           block
           rounded
         >
@@ -30,6 +31,7 @@ export const NewVaultPage = () => {
           <Button
             onClick={() => navigate('uploadQr', { params: {} })}
             type="secondary"
+            weight={600}
             block
             rounded
           >
@@ -38,6 +40,7 @@ export const NewVaultPage = () => {
           <Button
             onClick={() => navigate('importVault')}
             type="secondary"
+            weight={600}
             block
             rounded
           >
