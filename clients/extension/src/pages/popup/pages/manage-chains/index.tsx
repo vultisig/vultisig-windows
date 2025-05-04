@@ -51,9 +51,8 @@ export const ManageChainsPage = () => {
   const nativeCoins = Object.values(chainFeeCoin)
   const currentNativeCoins = useCurrentVaultNativeCoins()
 
-  const handleSwitch = (coin: Coin, isSelected?: boolean) => {
-    console.log('coin:', coin)
-    console.log('isSelected:', isSelected)
+  const handleSwitch = (_coin: Coin, _isSelected?: boolean) => {
+    // TODO: add functionality to add/remove native coins from the vault
   }
 
   const filteredNativeCoins = useMemo(() => {
