@@ -19,7 +19,7 @@ export const useRemoveVaultSessionMutation = (
 
   return useMutation({
     mutationFn: async ({ vaultId, host }) => {
-      const vaultSessions = { ...allSessions[vaultId] }
+      const vaultSessions = { ...(allSessions[vaultId] || {}) }
       delete vaultSessions[host]
 
       const updatedAll = {

@@ -14,15 +14,19 @@ export const getDappHost = (url?: string) => {
 }
 
 export const getDappHostname = (url: string) => {
-  const urlObject = new URL(url)
-  let hostname
-  const subdomains = urlObject.hostname.split('.')
-  if (subdomains.length === 2) {
-    hostname = urlObject.hostname
-  } else {
-    hostname = `${subdomains[subdomains.length - 2]}.${
-      subdomains[subdomains.length - 1]
-    }`
+  try {
+    const urlObject = new URL(url)
+    let hostname
+    const subdomains = urlObject.hostname.split('.')
+    if (subdomains.length === 2) {
+      hostname = urlObject.hostname
+    } else {
+      hostname = `${subdomains[subdomains.length - 2]}.${
+        subdomains[subdomains.length - 1]
+      }`
+    }
+    return hostname
+  } catch {
+    return ''
   }
-  return hostname
 }

@@ -63,8 +63,12 @@ const App = () => {
 
   useEffect(() => {
     const initRequest = async () => {
-      const { chain, sender } = await getStoredRequest()
-      setState(prevState => ({ ...prevState, chain, sender }))
+      try {
+        const { chain, sender } = await getStoredRequest()
+        setState(prevState => ({ ...prevState, chain, sender }))
+      } catch (error) {
+        console.error('Failed to get stored request:', error)
+      }
     }
     initRequest()
   }, [])
