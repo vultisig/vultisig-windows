@@ -1,4 +1,5 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -15,6 +16,8 @@ import {
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
+import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { useSwitchTransferTargetQuery } from '../../hooks/useSwitchTransferTarget'
 import { FormData } from '..'
 import {
@@ -43,6 +46,9 @@ export const SwitchSpecificFields = ({
   const throchainCoin = useCurrentVaultCoins().find(
     coin => coin.ticker === chainFeeCoin.THORChain.ticker
   )
+
+  const [{ coin }] = useAppPathParams<'deposit'>()
+  const tokens = useIBCAcceptedTokens(coinKeyFromString(coin).chain)
 
   useEffect(() => {
     if (destinationAddress) {
@@ -117,6 +123,7 @@ export const SwitchSpecificFields = ({
         )}
         renderContent={({ onClose }) => (
           <TokenExplorer
+            options={tokens}
             activeOption={watch('selectedCoin')}
             onOptionClick={token =>
               setValue('selectedCoin', token, { shouldValidate: true })

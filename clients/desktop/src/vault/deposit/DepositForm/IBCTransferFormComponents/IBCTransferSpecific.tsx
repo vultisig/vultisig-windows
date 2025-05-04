@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { FormData } from '..'
 import { getIbcDropdownOptions } from '../chainOptionsConfig'
 import { AssetRequiredLabel, Container } from '../DepositForm.styled'
@@ -31,6 +32,7 @@ export const IBCTransferSpecific = ({
 }) => {
   const { t } = useTranslation()
   const selectedDestinationChain = getValues('destinationChain')
+  const tokens = useIBCAcceptedTokens(selectedDestinationChain)
   const selectedCoin = getValues('selectedCoin') as Coin
 
   return (
@@ -69,7 +71,13 @@ export const IBCTransferSpecific = ({
       />
       <Opener
         renderOpener={({ onOpen }) => (
-          <Container onClick={onOpen}>
+          <Container
+            onClick={() => {
+              if (selectedDestinationChain) {
+                onOpen()
+              }
+            }}
+          >
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
                 {selectedCoin?.ticker || t('select_token')}
@@ -87,6 +95,7 @@ export const IBCTransferSpecific = ({
         )}
         renderContent={({ onClose }) => (
           <TokenExplorer
+            options={tokens}
             onClose={onClose}
             activeOption={watch('selectedCoin')}
             onOptionClick={selectedCoin => {
