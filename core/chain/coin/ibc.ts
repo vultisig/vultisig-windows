@@ -15,10 +15,6 @@ export const IBC_TRANSFERRABLE_TOKENS_PER_CHAIN: Partial<
 > = {
   [Chain.Kujira]: [
     {
-      ticker: 'USDC',
-      id: 'ibc/FE98AAD68F02F03565E9FA39A5E627946699B2B07115889ED812D8BA639576A9',
-    },
-    {
       ticker: 'LUNC',
       id: 'ibc/119334C55720942481F458C9C462F5C0CD1F1E7EEAC4679D674AA67221916AEA',
     },
@@ -115,8 +111,6 @@ export const IBC_TOKENS: Omit<Coin, 'chain' | 'id'>[] = [
     decimals: 6,
     priceProviderId: 'kujira',
   },
-  { ticker: 'USDC', logo: 'usdc', decimals: 6, priceProviderId: 'usd-coin' },
-  { ticker: 'LUNC', logo: 'lunc', decimals: 6, priceProviderId: 'terra-luna' },
   {
     ticker: 'ASTRO',
     logo: 'terra-astroport.png',
@@ -144,21 +138,15 @@ export const IBC_TOKENS: Omit<Coin, 'chain' | 'id'>[] = [
   },
   { ticker: 'FUZN', logo: 'fuzn.png', decimals: 6, priceProviderId: 'fuzion' },
   { ticker: 'USK', logo: 'usk.png', decimals: 6, priceProviderId: 'usk' },
-  {
-    ticker: 'USDC.eth.axl',
-    logo: 'usdc',
-    decimals: 6,
-    priceProviderId: 'usd-coin',
-  },
 ]
 
 export const CHAINS_WITH_IBC_TOKENS: CosmosChain[] = [
   Chain.Kujira,
   Chain.Cosmos,
   Chain.Osmosis,
-  Chain.Akash, // still empty but kept for future
-  Chain.Dydx, // still empty but kept for future
-  Chain.Noble, // still empty but kept for future
+  Chain.Akash,
+  Chain.Dydx,
+  Chain.Noble,
 ]
 
 export const getMergeAcceptedTokens = (): (Coin & {

@@ -91,8 +91,6 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onSubmit',
   })
 
-  console.log('## errors', errors)
-
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
@@ -234,7 +232,8 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {field.label}{' '}
                     {field.name === 'amount' &&
                       (selectedChainAction === 'bond' ||
-                        selectedChainAction === 'ibc_transfer') &&
+                        selectedChainAction === 'ibc_transfer' ||
+                        selectedChainAction === 'switch') &&
                       `(Balance: ${totalTokenAmount.toFixed(2)}${selectedChainAction !== 'ibc_transfer' ? ` ${coin}` : ''}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
@@ -250,7 +249,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                     as="input"
                     onWheel={e => e.currentTarget.blur()}
                     type={field.type}
-                    step="0.01"
+                    step="0.0001"
                     min={0}
                     {...register(field.name)}
                     required={field.required}
