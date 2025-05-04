@@ -30,8 +30,8 @@ export const useRemoveVaultSessionMutation = (
       await setVaultsAppSessions(updatedAll)
       return vaultSessions
     },
-    onSuccess: async (_result, { vaultId }) => {
-      await invalidate([appSessionsQueryKey, vaultId])
+    onSuccess: async () => {
+      await invalidate([appSessionsQueryKey])
     },
     ...options,
   })

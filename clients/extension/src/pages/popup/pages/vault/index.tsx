@@ -21,6 +21,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
+import { useCurrentVaultAppSessions } from '../../../../sessions/state/useAppSessions'
+
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
     getColor(connected ? 'alertSuccess' : 'alertInfo')};
@@ -49,14 +51,16 @@ export const VaultPage = () => {
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
-
+  const sessions = useCurrentVaultAppSessions()
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
           <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
             <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
-            <ConnectedAppStatus connected />
+            <ConnectedAppStatus
+              connected={Object.values(sessions).length ? true : false}
+            />
           </ConnectedApp>
         }
         secondaryControls={

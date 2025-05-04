@@ -51,7 +51,7 @@ export const ConnectedDappsPage = () => {
           {Object.entries(sessions).map(([host]) => (
             <ListItem
               key={host}
-              extra={<Switch onChange={() => handleDisconnect(host)} />}
+              extra={<Switch checked onChange={() => handleDisconnect(host)} />}
               title={host}
               hoverable
             />

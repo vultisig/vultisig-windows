@@ -26,8 +26,8 @@ export const useAddVaultSessionMutation = (
       await setVaultsAppSessions(updatedAll)
       return updatedVaultSessions
     },
-    onSuccess: async (_result, { vaultId }) => {
-      await invalidate([appSessionsQueryKey, vaultId])
+    onSuccess: async () => {
+      await invalidate([appSessionsQueryKey])
     },
     ...options,
   })

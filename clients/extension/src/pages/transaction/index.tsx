@@ -82,6 +82,8 @@ import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
+import { ParsedSolanaSwapParams } from '../../utils/tx/solana/types/types'
+
 interface FormProps {
   password: string
 }
@@ -107,7 +109,7 @@ const Component = () => {
   const initialState: InitialState = { step: 1, hasError: false }
   const [connectedDevices, setConnectedDevices] = useState([''])
   const [form] = Form.useForm()
-  const vaults = useVaults()
+  const vaults = useVaults() ?? []
   const [state, setState] = useState(initialState)
   const {
     fastSign,
@@ -598,7 +600,8 @@ const Component = () => {
   const componentDidUpdate = () => {
     if (walletCore) {
       Promise.all([getStoredTransactions()]).then(async ([transactions]) => {
-        let parsedSolanaSwap = undefined
+        if (!transactions.length) return
+        let parsedSolanaSwap: ParsedSolanaSwapParams | undefined
         const [transaction] = transactions
         if ((transaction as any).serializedTx) {
           try {
