@@ -4,7 +4,7 @@ import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
-import { Vault as VaultCore } from '@core/ui/vault/Vault'
+import { Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
@@ -178,7 +178,7 @@ export interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignSignature>
   transaction?: ITransaction
-  vault?: VaultCore
+  vault?: Vault
   walletCore: WalletCore
 }
 
