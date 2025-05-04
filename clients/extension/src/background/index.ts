@@ -152,18 +152,10 @@ const handleFindVault = async (
   _sender: string
 ): Promise<Messaging.GetVault.Response> => {
   const vaults = await getVaults()
-  console.log('vaults', vaults)
-
   const currentVaultId = await getCurrentVaultId()
-  console.log('currentVaultId', currentVaultId)
-
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  console.log('vaultSessions', vaultSessions)
-
   const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
-  console.log('currentSession', currentSession)
-
   if (currentSession) {
     const selected = vaults.find(vault => getVaultId(vault) === currentVaultId)
     if (!selected) return undefined
@@ -1053,8 +1045,6 @@ chrome.runtime.onMessage.addListener(
                 try {
                   getVaults().then(async (vaults: Vault[]) => {
                     const allCoins = await getVaultsCoins()
-                    console.log('allCoins', allCoins)
-
                     const vault = vaults.find(vault => {
                       const coins = allCoins[getVaultId(vault)] ?? []
                       return coins.some(
