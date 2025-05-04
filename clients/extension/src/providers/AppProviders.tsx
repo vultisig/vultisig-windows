@@ -1,4 +1,3 @@
-import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
 import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
@@ -40,32 +39,30 @@ const saveFile: SaveFileFunction = async ({ name, blob }) => {
 
 export const AppProviders = ({ children }: ChildrenProp) => {
   return (
-    <VersionProvider value="1.0.0">
-      <MpcLocalModeAvailabilityProvider value={false}>
-        <VaultCreationMpcLibProvider value={defaultMpcLib}>
-          <OpenUrlProvider value={openUrl}>
-            <SaveFileProvider value={saveFile}>
-              <MpcDeviceProvider value="extension">
-                <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={darkTheme}>
+      <GlobalStyle />
+      <ExtensionGlobalStyle />
+      <VersionProvider value="1.0.0">
+        <MpcLocalModeAvailabilityProvider value={false}>
+          <VaultCreationMpcLibProvider value={defaultMpcLib}>
+            <OpenUrlProvider value={openUrl}>
+              <SaveFileProvider value={saveFile}>
+                <MpcDeviceProvider value="extension">
                   <QueryProvider>
                     <I18nProvider>
                       <WalletCoreProvider>
                         <StorageProvider>
-                          <AntDesignThemeProvider>
-                            <StorageDependant>{children}</StorageDependant>
-                            <GlobalStyle />
-                            <ExtensionGlobalStyle />
-                          </AntDesignThemeProvider>
+                          <StorageDependant>{children}</StorageDependant>
                         </StorageProvider>
                       </WalletCoreProvider>
                     </I18nProvider>
                   </QueryProvider>
-                </ThemeProvider>
-              </MpcDeviceProvider>
-            </SaveFileProvider>
-          </OpenUrlProvider>
-        </VaultCreationMpcLibProvider>
-      </MpcLocalModeAvailabilityProvider>
-    </VersionProvider>
+                </MpcDeviceProvider>
+              </SaveFileProvider>
+            </OpenUrlProvider>
+          </VaultCreationMpcLibProvider>
+        </MpcLocalModeAvailabilityProvider>
+      </VersionProvider>
+    </ThemeProvider>
   )
 }

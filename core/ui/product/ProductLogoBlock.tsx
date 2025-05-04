@@ -7,7 +7,7 @@ export const ProductLogoBlock = () => {
   const { t } = useTranslation()
 
   return (
-    <VStack flexGrow alignItems="center" justifyContent="center">
+    <VStack alignItems="center" justifyContent="center" flexGrow fullHeight>
       <ProductEnhancedLogo style={{ fontSize: 250 }} />
       <Text color="contrast" weight="500" size={42}>
         {t('vultisig')}
