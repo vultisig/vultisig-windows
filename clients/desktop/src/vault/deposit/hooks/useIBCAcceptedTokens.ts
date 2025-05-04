@@ -20,7 +20,7 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
           ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
           ibc.decimals === coin.decimals
       )
-      return isIbcToken && coin.chain === destinationChain
+      return isIbcToken
     }),
     (tokenA, tokenB) =>
       tokenA.ticker.toUpperCase() === tokenB.ticker.toUpperCase()
