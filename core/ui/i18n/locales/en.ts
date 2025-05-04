@@ -380,6 +380,7 @@ export const en = {
   choose_tokens: 'Choose Tokens',
   chain: 'Chain',
   overview: 'Overview',
+  no_tokens_found: 'No tokens found. Add tokens under the desired Chain.',
   signing_transaction: 'Signing Transaction',
   select_asset: 'Select asset',
   optional: 'optional',

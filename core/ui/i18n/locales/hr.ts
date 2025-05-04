@@ -17,6 +17,7 @@ export const hr = {
   ibc_transfer: 'IBC prijenos',
   select_destination_chain: 'Odaberite odredišni lanac',
   chain: 'Lanac',
+  no_tokens_found: 'Nema pronađenih tokena. Dodajte tokene pod željeni lanac.',
   price_impact_good: 'Dobro',
   price_impact_average: 'Prosječno',
   select_token: 'Odaberi token',

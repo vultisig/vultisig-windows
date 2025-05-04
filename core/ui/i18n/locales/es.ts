@@ -14,6 +14,8 @@ export const es = {
   signing_transaction: 'Firma de la transacción',
   chain: 'Cadena',
   select_destination_chain: 'Seleccionar cadena de destino',
+  no_tokens_found:
+    'No se encontraron tokens. Agrega tokens bajo la cadena deseada.',
   ibc_transfer: 'Transferencia IBC',
   start_transaction: 'Iniciar transacción',
   select_token: 'Seleccionar token',

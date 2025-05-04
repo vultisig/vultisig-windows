@@ -3,7 +3,11 @@ import { Coin } from '@core/chain/coin/Coin'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
 
-import { CHAINS_WITH_IBC_TOKENS, IBC_TOKENS } from './ibcTokens'
+import {
+  CHAINS_WITH_IBC_TOKENS,
+  IBC_TOKENS,
+  IBC_TRANSFERRABLE_TOKENS_PER_CHAIN,
+} from './ibcTokens'
 
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   [Chain.MayaChain]: [
@@ -926,17 +930,30 @@ export const chainTokens: Partial<Record<Chain, Coin[]>> = recordMap(
 )
 
 for (const chain of CHAINS_WITH_IBC_TOKENS) {
-  const existingTokens = chainTokens[chain] ?? []
+  const chainIBC = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
 
-  const existingKeys = new Set(
-    existingTokens.map(t => `${t.ticker}:${t.decimals}`)
+  /*  @tony: ensure tokens that are already present get their id */
+  const patched = (chainTokens[chain] ?? []).map(t => {
+    if (!t.id) {
+      const hit = chainIBC.find(i => i.ticker === t.ticker)
+      return hit ? { ...t, id: hit.id } : t
+    }
+    return t
+  })
+
+  // @tony: add any brand‑new IBC tokens that are missing
+  const haveKey = new Set(patched.map(t => `${t.ticker}:${t.decimals}`))
+
+  const additions = IBC_TOKENS.filter(
+    t => !haveKey.has(`${t.ticker}:${t.decimals}`)
   )
+    .map(t => {
+      const hit = chainIBC.find(i => i.ticker === t.ticker)
+      return hit ? { ...t, chain, id: hit.id } : null
+    })
+    .filter(Boolean) as Coin[]
 
-  const newTokens = IBC_TOKENS.filter(
-    t => !existingKeys.has(`${t.ticker}:${t.decimals}`)
-  ).map(t => ({ ...t, chain }))
-
-  if (newTokens.length > 0) {
-    chainTokens[chain] = [...existingTokens, ...newTokens]
+  if (patched.length || additions.length) {
+    chainTokens[chain] = [...patched, ...additions]
   }
 }

@@ -16,6 +16,8 @@ export const it = {
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
+  no_tokens_found:
+    'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
   destination_address: 'Indirizzo di destinazione',
   thorchain_address: 'Indirizzo THORChain',
   merge: 'Unisci',

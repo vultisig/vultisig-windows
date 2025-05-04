@@ -12,6 +12,8 @@ export const de = {
   start_transaction: 'Transaktion starten',
   youre_swapping: 'Du tauschst',
   select_destination_chain: 'Ziel-Blockchain auswählen',
+  no_tokens_found:
+    'Keine Tokens gefunden. Füge Tokens unter der gewünschten Chain hinzu.',
   chain: 'Kette',
   select_token: 'Token auswählen',
   destination_address: 'Zieladresse',
