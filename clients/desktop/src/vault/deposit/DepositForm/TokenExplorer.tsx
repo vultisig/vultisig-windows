@@ -2,6 +2,7 @@ import { Coin } from '@core/chain/coin/Coin'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../lib/ui/modal'
 import { DepositActionOption } from './DepositActionOption'
@@ -19,6 +20,8 @@ export const TokenExplorer: FC<Props> = ({
   activeOption,
   options,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Modal width={480} placement="top" title="Select Token" onClose={onClose}>
       <VStack gap={20}>
@@ -38,7 +41,7 @@ export const TokenExplorer: FC<Props> = ({
           })
         ) : (
           <Text size={16} color="contrast">
-            No tokens found. Add tokens under the desired Chain.
+            {t('no_tokens_found')}
           </Text>
         )}
       </VStack>
