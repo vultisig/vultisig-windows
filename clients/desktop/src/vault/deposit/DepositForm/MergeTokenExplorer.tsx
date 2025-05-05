@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { getMergeAcceptedTokens } from '@core/chain/coin/ibc'
+import { IBC_TOKENS, TOKEN_MERGE_CONTRACTS } from '@core/chain/coin/ibc'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { FC, useEffect, useMemo } from 'react'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { FC, useMemo } from 'react'
+import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../lib/ui/modal'
@@ -16,11 +16,20 @@ const useUserMergeAcceptedTokens = () => {
   const userCoins = useCurrentVaultCoins()
 
   return useMemo(() => {
-    const userCoinIds = new Set(userCoins.map(c => c.id))
-
-    return getMergeAcceptedTokens().filter(
-      token => token.chain === Chain.THORChain && userCoinIds.has(token.id)
-    )
+    return userCoins
+      .filter(
+        coin =>
+          coin.chain === Chain.THORChain &&
+          IBC_TOKENS.some(
+            ibcToken =>
+              ibcToken.ticker.toUpperCase() === coin.ticker.toUpperCase()
+          ) &&
+          TOKEN_MERGE_CONTRACTS[coin.ticker.toUpperCase()]
+      )
+      .map(coin => ({
+        ...coin,
+        thorchainAddress: TOKEN_MERGE_CONTRACTS[coin.ticker.toUpperCase()],
+      }))
   }, [userCoins])
 }
 
@@ -28,7 +37,6 @@ type Props = {
   activeOption?: Coin
   onOptionClick: (option: Coin) => void
   onClose: () => void
-  getValues: UseFormGetValues<FormData>
   setValue: UseFormSetValue<FormData>
 }
 
@@ -36,22 +44,10 @@ export const MergeTokenExplorer: FC<Props> = ({
   onClose,
   onOptionClick,
   activeOption,
-  getValues,
   setValue,
 }) => {
   const tokens = useUserMergeAcceptedTokens()
-  const selectedCoin = getValues('selectedCoin')
   const { t } = useTranslation()
-
-  useEffect(() => {
-    const selectedMergeAddress = tokens.find(
-      t => t.ticker === selectedCoin?.ticker
-    )?.thorchainAddress
-
-    setValue('nodeAddress', selectedMergeAddress, {
-      shouldValidate: true,
-    })
-  }, [selectedCoin?.ticker, setValue, tokens])
 
   return (
     <Modal
@@ -70,6 +66,14 @@ export const MergeTokenExplorer: FC<Props> = ({
                 isActive={activeOption?.ticker === token.ticker}
                 onClick={() => {
                   onOptionClick(token)
+                  const selectedMergeAddress = tokens.find(
+                    t => t.ticker === token?.ticker
+                  )?.thorchainAddress
+
+                  setValue('nodeAddress', selectedMergeAddress, {
+                    shouldValidate: true,
+                  })
+
                   onClose()
                 }}
               />

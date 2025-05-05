@@ -202,7 +202,6 @@ export const DepositForm: FC<DepositFormProps> = ({
               )}
               renderContent={({ onClose }) => (
                 <MergeTokenExplorer
-                  getValues={getValues}
                   setValue={setValue}
                   activeOption={watch('selectedCoin')}
                   onOptionClick={token =>
@@ -233,8 +232,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {field.name === 'amount' &&
                       (selectedChainAction === 'bond' ||
                         selectedChainAction === 'ibc_transfer' ||
-                        selectedChainAction === 'switch') &&
-                      `(Balance: ${totalTokenAmount.toFixed(2)}${selectedChainAction !== 'ibc_transfer' ? ` ${coin}` : ''}) `}
+                        selectedChainAction === 'switch' ||
+                        selectedChainAction === 'merge') &&
+                      `(Balance: ${totalTokenAmount.toFixed(2)}${selectedChainAction !== 'ibc_transfer' && selectedChainAction !== 'merge' ? ` ${coin}` : ''}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *

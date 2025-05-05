@@ -98,6 +98,7 @@ export const DepositConfirmButton = ({
         'bond',
         'ibc_transfer',
         'switch',
+        'merge',
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
