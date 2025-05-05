@@ -1,10 +1,10 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -13,15 +13,18 @@ import { useTranslation } from 'react-i18next'
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
+  const navigateBack = useNavigateBack()
 
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('vault')} ghost>
-            <ChevronLeftIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<ChevronLeftIcon fontSize={20} />}
+            onClick={navigateBack}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -43,13 +46,7 @@ export const ConnectedDappsPage = () => {
         </List>
       </PageContent>
       <PageFooter alignItems="center">
-        <Button
-          onClick={() => {}}
-          shape="round"
-          size="large"
-          type="primary"
-          block
-        >
+        <Button onClick={() => {}} type="primary" block rounded>
           {t('disconnect_all')}
         </Button>
       </PageFooter>
