@@ -1,4 +1,3 @@
-import { IncompleteOnboardingOnly } from '@clients/extension/src/components/onboarding/components/IncompleteOnboardingOnly'
 import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
@@ -19,6 +18,7 @@ import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vaul
 import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
+import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
