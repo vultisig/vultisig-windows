@@ -2,7 +2,6 @@ import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
@@ -37,6 +36,7 @@ const coreState: CoreState = {
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
   version: '1.0.0',
+  isLocalModeAvailable: false,
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -44,19 +44,17 @@ export const AppProviders = ({ children }: ChildrenProp) => {
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       <ExtensionGlobalStyle />
-      <MpcLocalModeAvailabilityProvider value={false}>
-        <VaultCreationMpcLibProvider value={defaultMpcLib}>
-          <CoreProvider value={coreState}>
-            <QueryProvider>
-              <I18nProvider>
-                <WalletCoreProvider>
-                  <StorageDependant>{children}</StorageDependant>
-                </WalletCoreProvider>
-              </I18nProvider>
-            </QueryProvider>
-          </CoreProvider>
-        </VaultCreationMpcLibProvider>
-      </MpcLocalModeAvailabilityProvider>
+      <VaultCreationMpcLibProvider value={defaultMpcLib}>
+        <CoreProvider value={coreState}>
+          <QueryProvider>
+            <I18nProvider>
+              <WalletCoreProvider>
+                <StorageDependant>{children}</StorageDependant>
+              </WalletCoreProvider>
+            </I18nProvider>
+          </QueryProvider>
+        </CoreProvider>
+      </VaultCreationMpcLibProvider>
     </ThemeProvider>
   )
 }

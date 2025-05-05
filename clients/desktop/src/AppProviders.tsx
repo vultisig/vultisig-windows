@@ -1,7 +1,6 @@
 import buildInfo from '@clients/desktop/build.json'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
-import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
@@ -37,6 +36,7 @@ const coreState: CoreState = {
   mpcDevice: 'windows',
   getClipboardText: ClipboardGetText,
   version: buildInfo.version,
+  isLocalModeAvailable: true,
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -44,25 +44,23 @@ export const AppProviders = ({ children }: ChildrenProp) => {
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
-    <MpcLocalModeAvailabilityProvider value={true}>
-      <VaultCreationMpcLibProvider value={mpcLib}>
-        <CoreProvider value={coreState}>
-          <QueryClientProvider client={queryClient}>
-            <I18nProvider language={language}>
-              <ThemeProvider theme={darkTheme}>
-                <WalletCoreProvider>
-                  <StorageDependant>
-                    {children}
-                    <ActiveVaultOnly>
-                      <CoinFinder />
-                    </ActiveVaultOnly>
-                  </StorageDependant>
-                </WalletCoreProvider>
-              </ThemeProvider>
-            </I18nProvider>
-          </QueryClientProvider>
-        </CoreProvider>
-      </VaultCreationMpcLibProvider>
-    </MpcLocalModeAvailabilityProvider>
+    <VaultCreationMpcLibProvider value={mpcLib}>
+      <CoreProvider value={coreState}>
+        <QueryClientProvider client={queryClient}>
+          <I18nProvider language={language}>
+            <ThemeProvider theme={darkTheme}>
+              <WalletCoreProvider>
+                <StorageDependant>
+                  {children}
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
+                </StorageDependant>
+              </WalletCoreProvider>
+            </ThemeProvider>
+          </I18nProvider>
+        </QueryClientProvider>
+      </CoreProvider>
+    </VaultCreationMpcLibProvider>
   )
 }

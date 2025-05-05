@@ -16,6 +16,7 @@ export type CoreState = CoreStorage & {
   mpcDevice: MpcDevice
   getClipboardText: () => Promise<string>
   version: string
+  isLocalModeAvailable: boolean
 }
 
 export const { useValue: useCore, provider: CoreProvider } =
