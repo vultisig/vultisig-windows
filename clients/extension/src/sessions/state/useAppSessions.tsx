@@ -7,6 +7,8 @@ import {
   getVaultsAppSessions,
 } from './appSessions'
 
+export const currentVaultAppSessionsQueryKey = ['currentVaultAppSessions']
+
 export const useAppSessionsQuery = () => {
   return useQuery({
     queryKey: appSessionsQueryKey,
@@ -15,10 +17,13 @@ export const useAppSessionsQuery = () => {
   })
 }
 
-export const useCurrentVaultAppSessions = async (): Promise<
-  Record<string, AppSession>
-> => {
-  const vaultId = await getCurrentVaultId()
-  const sessions = await getVaultsAppSessions()
-  return vaultId ? (sessions[vaultId] ?? {}) : {}
+export const useCurrentVaultAppSessions = () => {
+  return useQuery({
+    queryKey: currentVaultAppSessionsQueryKey,
+    queryFn: async (): Promise<Record<string, AppSession>> => {
+      const vaultId = await getCurrentVaultId()
+      const sessions = await getVaultsAppSessions()
+      return vaultId ? (sessions[vaultId] ?? {}) : {}
+    },
+  })
 }

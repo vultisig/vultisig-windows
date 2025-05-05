@@ -1049,8 +1049,6 @@ chrome.runtime.onMessage.addListener(
                 try {
                   getVaults().then(async (vaults: Vault[]) => {
                     const allCoins = await getVaultsCoins()
-                    console.log('allCoins', allCoins)
-
                     const vault = vaults.find(vault => {
                       const coins = allCoins[getVaultId(vault)] ?? []
                       return coins.some(

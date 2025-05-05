@@ -1,10 +1,9 @@
+import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { Match } from '@lib/ui/base/Match'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageSlice } from '@lib/ui/page/PageSlice'
-import { Text } from '@lib/ui/text'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { useAddressBookItemsQuery } from '../../../vault/queries/useAddressBookItemsQuery'
 import AddAddressView from './components/addAddressForm/AddAddressForm'
 import AddressesListView from './components/addressesListView/AddressesListView'
 import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView'
@@ -12,34 +11,23 @@ import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesVi
 const AddressBookSettingsPage = () => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false)
   const [isEditModeOn, setIsEditModeOn] = useState(false)
-  const {
-    data: addressBookItems,
-    isFetching: isFetchingAddressBookItems,
-    refetch,
-  } = useAddressBookItemsQuery()
+  const addressBookItems = useAddressBookItems()
 
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true)
   }
-
-  useEffect(() => {
-    refetch()
-  }, [refetch])
 
   return (
     <VStack flexGrow gap={16}>
       <PageSlice gap={16} flexGrow={true}>
         <Match
           value={
-            isFetchingAddressBookItems
-              ? 'loading'
-              : isAddAddressViewOpen
-                ? 'addAddress'
-                : addressBookItems.length === 0
-                  ? 'empty'
-                  : 'list'
+            isAddAddressViewOpen
+              ? 'addAddress'
+              : addressBookItems.length === 0
+                ? 'empty'
+                : 'list'
           }
-          loading={() => <Text>Loading...</Text>}
           addAddress={() => (
             <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
           )}

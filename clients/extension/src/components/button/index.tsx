@@ -1,117 +1,127 @@
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css, RuleSet } from 'styled-components'
 
-type Shape = 'default' | 'circle' | 'round'
-type Size = 'default' | 'large' | 'small'
-type Type = 'default' | 'primary' | 'secondary'
-
-const baseStyles: RuleSet = css`
-  align-items: center;
-  background-color: transparent;
-  border: none;
-  color: ${getColor('textExtraLight')};
-  cursor: pointer;
-  display: flex;
-  font-size: 12px;
-  font-weight: 500;
-  gap: 8px;
-  justify-content: center;
-  transition: all 0.2s;
-`
-
-const blockStyles: RuleSet = css`
-  width: 100%;
-`
-
-const disabledStyles: RuleSet = css`
-  background-color: ${getColor('buttonBackgroundDisabled')};
-  color: ${getColor('buttonTextDisabled')};
-  cursor: default;
-  padding: 0 16px;
-`
-
-const shapeStyles: Record<Shape, RuleSet> = {
-  circle: css`
-    border-radius: 50%;
-  `,
-  default: css`
-    border-radius: 12px;
-  `,
-  round: css`
-    border-radius: 24px;
-  `,
-}
-
-const sizeStyles: Record<Size, RuleSet> = {
-  default: css`
-    height: 36px;
-  `,
-  large: css`
-    font-size: 14px;
-    height: 46px;
-  `,
-  small: css`
-    height: 26px;
-  `,
-}
-
-const typeStyles: Record<Type, RuleSet> = {
-  default: css`
-    border: solid 1px ${getColor('buttonPrimaryWeb')};
-    color: ${getColor('buttonPrimaryWeb')};
-    padding: 0 16px;
-
-    &:hover {
-      border-color: ${getColor('buttonPrimaryWebHover')};
-      color: ${getColor('buttonPrimaryWebHover')};
-    }
-  `,
-  primary: css`
-    background-color: ${getColor('buttonPrimaryWeb')};
-    color: ${getColor('textPrimary')};
-    padding: 0 16px;
-
-    &:hover {
-      background-color: ${getColor('buttonPrimaryWebHover')};
-    }
-  `,
-  secondary: css`
-    background-color: ${getColor('backgroundTertiary')};
-    color: ${getColor('textPrimary')};
-    padding: 0 16px;
-
-    &:hover {
-      color: ${getColor('buttonPrimaryWeb')};
-    }
-  `,
-}
+type Size = 'xs' | 'sm' | 'md' | 'lg'
+type Status = 'default' | 'error' | 'success' | 'warning'
+type Type = 'default' | 'link' | 'primary' | 'secondary'
+type Weight = 400 | 500 | 600 | 700
 
 const StyledButton = styled.button<{
   block?: boolean
   disabled?: boolean
-  ghost?: boolean
-  shape: Shape
+  fitContent?: boolean
+  rounded?: boolean
   size: Size
+  status: Status
   type: Type
+  weight: Weight
 }>`
-  ${({ block, disabled, ghost, shape, size, type }) => {
-    if (ghost) {
-      return baseStyles
-    } else {
-      const shapeStyle = shapeStyles[shape]
-      const sizeStyle = sizeStyles[size]
-      const typeStyle = typeStyles[type]
-
-      return css`
-        ${baseStyles}
-        ${shapeStyle}
-        ${sizeStyle}
-        ${disabled ? disabledStyles : typeStyle}
-        ${block ? blockStyles : ''}
-      `
+  ${({ block, disabled, fitContent, rounded, size, status, type, weight }) => {
+    const statusColors: Record<Status, RuleSet> = {
+      default: css`
+        color: ${getColor('textPrimary')};
+      `,
+      error: css`
+        color: ${getColor('alertError')};
+      `,
+      success: css`
+        color: ${getColor('alertSuccess')};
+      `,
+      warning: css`
+        color: ${getColor('alertWarning')};
+      `,
     }
+
+    const sizeStyles: Record<Size, RuleSet> = {
+      xs: css`
+        border-radius: ${rounded ? '20px' : '4px'};
+        font-size: 12px;
+        height: 20px;
+        min-width: 20px;
+        ${!fitContent && horizontalPadding(10)}
+      `,
+      sm: css`
+        border-radius: ${rounded ? '24px' : '6px'};
+        font-size: 12px;
+        height: 24px;
+        min-width: 24px;
+        ${!fitContent && horizontalPadding(12)}
+      `,
+      md: css`
+        border-radius: ${rounded ? '36px' : '8px'};
+        font-size: 12px;
+        height: 36px;
+        min-width: 36px;
+        ${!fitContent && horizontalPadding(16)}
+      `,
+      lg: css`
+        border-radius: ${rounded ? '46px' : '12px'};
+        font-size: 14px;
+        height: 46px;
+        min-width: 46px;
+        ${!fitContent && horizontalPadding(16)}
+      `,
+    }
+
+    const typeStyles: Record<Type, RuleSet> = {
+      default: css`
+        background-color: transparent;
+        color: ${getColor('textPrimary')};
+
+        &:hover {
+          background-color: ${getColor('backgroundTertiary')};
+          ${statusColors[status]}
+        }
+      `,
+      link: css`
+        background-color: transparent;
+        color: ${getColor('textExtraLight')};
+
+        &:hover {
+          color: ${getColor('textPrimary')};
+        }
+      `,
+      primary: css`
+        background-color: ${getColor('buttonPrimaryWeb')};
+        color: ${getColor('textPrimary')};
+
+        &:hover {
+          background-color: ${getColor('buttonPrimaryWebHover')};
+        }
+      `,
+      secondary: css`
+        background-color: ${getColor('backgroundTertiary')};
+        color: ${getColor('textPrimary')};
+
+        &:hover {
+          color: ${getColor('buttonPrimaryWeb')};
+        }
+      `,
+    }
+
+    return css`
+      align-items: center;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      font-weight: ${weight};
+      gap: 8px;
+      justify-content: center;
+      transition: all 0.2s;
+      width: ${block ? '100%' : 'auto'};
+      ${sizeStyles[size]}
+
+      ${disabled
+        ? css`
+            background-color: ${getColor('buttonBackgroundDisabled')};
+            color: ${getColor('buttonTextDisabled')};
+            cursor: default;
+          `
+        : typeStyles[type]}
+    `
   }}
 `
 
@@ -122,24 +132,29 @@ interface ButtonProps
   > {
   block?: boolean
   disabled?: boolean
-  ghost?: boolean
+  fitContent?: boolean
+  icon?: ReactNode
   loading?: boolean
-  shape?: Shape
+  rounded?: boolean
   size?: Size
+  status?: Status
   type?: Type
+  weight?: Weight
 }
 
 export const Button: FC<ButtonProps> = ({
   children,
+  icon,
   loading,
-  shape = 'default',
-  size = 'default',
+  size = 'lg',
+  status = 'default',
   type = 'default',
+  weight = 500,
   ...props
 }) => {
   return (
-    <StyledButton {...{ shape, size, type }} {...props}>
-      {loading && <Spinner />}
+    <StyledButton {...{ size, status, type, weight }} {...props}>
+      {loading ? <Spinner /> : icon}
       {children}
     </StyledButton>
   )

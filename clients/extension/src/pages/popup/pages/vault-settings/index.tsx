@@ -9,6 +9,7 @@ import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -20,15 +21,19 @@ export const VaultSettingsPage = () => {
   const { colors } = useTheme()
   const coreNavigate = useCoreNavigate()
   const navigate = useAppNavigate()
+  const navigateBack = useNavigateBack()
   const vault = useCurrentVault()
 
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('settings')} ghost>
-            <ChevronLeftIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<ChevronLeftIcon fontSize={20} />}
+            onClick={navigateBack}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>

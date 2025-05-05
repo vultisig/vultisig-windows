@@ -2,7 +2,10 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { appSessionsQueryKey, setVaultsAppSessions } from '../state/appSessions'
-import { useAppSessionsQuery } from '../state/useAppSessions'
+import {
+  currentVaultAppSessionsQueryKey,
+  useAppSessionsQuery,
+} from '../state/useAppSessions'
 
 type ClearVaultSessionsInput = {
   vaultId: string
@@ -21,6 +24,7 @@ export const useClearVaultSessionsMutation = (
       await setVaultsAppSessions(updated)
     },
     onSuccess: async () => {
+      await invalidate(currentVaultAppSessionsQueryKey)
       await invalidate(appSessionsQueryKey)
     },
     ...options,

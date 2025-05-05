@@ -12,6 +12,8 @@ export function DeleteVault(arg1:string):Promise<void>;
 
 export function DeleteVaultFolder(arg1:string):Promise<void>;
 
+export function GetAddressBookItem(arg1:string):Promise<storage.AddressBookItem>;
+
 export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>;
 
 export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;

@@ -3,7 +3,10 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { appSessionsQueryKey, setVaultsAppSessions } from '../state/appSessions'
 import { AppSession } from '../state/appSessions'
-import { useAppSessionsQuery } from '../state/useAppSessions'
+import {
+  currentVaultAppSessionsQueryKey,
+  useAppSessionsQuery,
+} from '../state/useAppSessions'
 
 type AddVaultSessionInput = {
   vaultId: string
@@ -25,6 +28,7 @@ export const useAddVaultSessionMutation = (
       return updatedVaultSessions
     },
     onSuccess: async () => {
+      await invalidate(currentVaultAppSessionsQueryKey)
       await invalidate(appSessionsQueryKey)
     },
     ...options,
