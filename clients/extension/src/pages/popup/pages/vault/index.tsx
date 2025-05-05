@@ -47,6 +47,7 @@ export const VaultPage = () => {
   const { colors } = useTheme()
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
 
@@ -127,7 +128,7 @@ export const VaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          onClick={() => appNavigate('manageChains')}
+          onClick={() => coreNavigate('manageVaultChains')}
           shape="round"
           size="large"
           type="primary"

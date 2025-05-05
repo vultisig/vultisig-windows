@@ -8,7 +8,6 @@ export const appPaths = {
   renameVault: '/settings/vault/rename',
   settings: '/settings',
   vaultSettings: '/settings/vault',
-  manageChains: '/manage-chains',
   connectedDapps: '/connected-dapps',
 } as const
 

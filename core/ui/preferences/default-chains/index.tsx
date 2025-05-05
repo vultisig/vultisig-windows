@@ -22,12 +22,20 @@ import { useTranslation } from 'react-i18next'
 const NativeCoinItem: FC<{
   chain: Chain
   checked?: boolean
-  onChange: () => void
   ticker: string
-}> = ({ chain, checked, onChange, ticker }) => {
+}> = ({ chain, checked, ticker }) => {
+  const defaultChains = useDefaultChains()
+  const setDefaultChains = useSetDefaultChainsMutation()
+
+  const handleChange = () => {
+    setDefaultChains.mutate(
+      checked ? without(defaultChains, chain) : [...defaultChains, chain]
+    )
+  }
+
   return (
     <ListItem
-      extra={<Switch onChange={onChange} checked={checked} />}
+      extra={<Switch onChange={handleChange} checked={checked} />}
       icon={
         <ChainEntityIcon
           value={getChainEntityIconSrc(chain)}
@@ -51,13 +59,6 @@ export const DefaultChainsPage = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
   const nativeCoins = Object.values(chainFeeCoin)
   const defaultChains = useDefaultChains()
-  const setDefaultChains = useSetDefaultChainsMutation()
-
-  const handleSwitch = (chain: Chain, isSelected?: boolean) => {
-    setDefaultChains.mutate(
-      isSelected ? without(defaultChains, chain) : [...defaultChains, chain]
-    )
-  }
 
   const filteredNativeCoins = useMemo(() => {
     if (!search) return nativeCoins
@@ -68,6 +69,18 @@ export const DefaultChainsPage = () => {
         ticker.toLowerCase().includes(search)
     )
   }, [nativeCoins, search])
+
+  const activeNativeCoins = useMemo(() => {
+    return filteredNativeCoins.filter(coin =>
+      defaultChains.some(chain => chain === coin.chain)
+    )
+  }, [filteredNativeCoins, defaultChains])
+
+  const availableNativeCoins = useMemo(() => {
+    return filteredNativeCoins.filter(coin =>
+      defaultChains.every(chain => chain !== coin.chain)
+    )
+  }, [filteredNativeCoins, defaultChains])
 
   return (
     <VStack fullHeight>
@@ -86,43 +99,39 @@ export const DefaultChainsPage = () => {
           onValueChange={setSearch}
           value={search}
         />
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
-            {t('active')}
-          </Text>
-          <List>
-            {filteredNativeCoins
-              .filter(({ chain }) => defaultChains.includes(chain))
-              .map(({ chain, ticker }) => (
+        {activeNativeCoins.length ? (
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('active')}
+            </Text>
+            <List>
+              {activeNativeCoins.map((coin, index) => (
                 <NativeCoinItem
-                  chain={chain}
-                  key={`${chain}-${ticker}`}
-                  onChange={() => handleSwitch(chain, true)}
-                  ticker={ticker}
+                  chain={coin.chain}
+                  key={index}
+                  ticker={coin.ticker}
                   checked
                 />
               ))}
-          </List>
-        </VStack>
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
-            {t('available')}
-          </Text>
-          <List>
-            {filteredNativeCoins
-              .filter(({ chain }) =>
-                defaultChains.every(item => item !== chain)
-              )
-              .map(({ chain, ticker }) => (
+            </List>
+          </VStack>
+        ) : null}
+        {availableNativeCoins.length ? (
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('available')}
+            </Text>
+            <List>
+              {availableNativeCoins.map((coin, index) => (
                 <NativeCoinItem
-                  chain={chain}
-                  key={`${chain}-${ticker}`}
-                  onChange={() => handleSwitch(chain)}
-                  ticker={ticker}
+                  chain={coin.chain}
+                  key={index}
+                  ticker={coin.ticker}
                 />
               ))}
-          </List>
-        </VStack>
+            </List>
+          </VStack>
+        ) : null}
       </PageContent>
     </VStack>
   )

@@ -1,8 +1,11 @@
-import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
+import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import {
+  useCreateCoinMutation,
+  useDeleteCoinMutation,
+} from '@core/ui/storage/coins'
 import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -18,42 +21,51 @@ import { Text } from '@lib/ui/text'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const NativeCoinItem: FC<{
-  chain: Chain
-  checked?: boolean
-  onChange: () => void
-  ticker: string
-}> = ({ chain, checked, onChange, ticker }) => {
+const NativeCoinItem: FC<Coin> = coin => {
+  const currentCoins = useCurrentVaultNativeCoins()
+  const createCoin = useCreateCoinMutation()
+  const deleteCoin = useDeleteCoinMutation()
+
+  const currentCoin = useMemo(() => {
+    return currentCoins.find(c => areEqualCoins(c, coin))
+  }, [currentCoins, coin])
+
+  const handleChange = async () => {
+    if (currentCoin) {
+      await deleteCoin.mutateAsync(currentCoin)
+    } else {
+      await createCoin.mutateAsync(coin)
+    }
+  }
+
   return (
     <ListItem
-      extra={<Switch onChange={onChange} checked={checked} />}
+      extra={
+        <Switch onChange={handleChange} checked={currentCoin ? true : false} />
+      }
       icon={
         <ChainEntityIcon
-          value={getChainEntityIconSrc(chain)}
+          value={getChainEntityIconSrc(coin.chain)}
           style={{ fontSize: 32 }}
         />
       }
       title={
         <HStack gap={12} alignItems="center">
           <Text color="contrast" size={14} weight={500}>
-            {ticker}
+            {coin.ticker}
           </Text>
-          <ListItemTag title={chain} />
+          <ListItemTag title={coin.chain} />
         </HStack>
       }
     />
   )
 }
 
-export const ManageChainsPage = () => {
+export const ManageVaultChainsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState<string | undefined>(undefined)
   const nativeCoins = Object.values(chainFeeCoin)
   const currentNativeCoins = useCurrentVaultNativeCoins()
-
-  const handleSwitch = (_coin: Coin, _isSelected?: boolean) => {
-    // TODO: add functionality to add/remove native coins from the vault
-  }
 
   const filteredNativeCoins = useMemo(() => {
     if (!search) return nativeCoins
@@ -64,6 +76,18 @@ export const ManageChainsPage = () => {
         ticker.toLowerCase().includes(search)
     )
   }, [nativeCoins, search])
+
+  const activeNativeCoins = useMemo(() => {
+    return filteredNativeCoins.filter(coin =>
+      currentNativeCoins.some(c => areEqualCoins(c, coin))
+    )
+  }, [currentNativeCoins, filteredNativeCoins])
+
+  const availableNativeCoins = useMemo(() => {
+    return filteredNativeCoins.filter(coin =>
+      currentNativeCoins.every(c => !areEqualCoins(c, coin))
+    )
+  }, [currentNativeCoins, filteredNativeCoins])
 
   return (
     <VStack fullHeight>
@@ -78,45 +102,30 @@ export const ManageChainsPage = () => {
           onValueChange={setSearch}
           value={search}
         />
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
-            {t('active')}
-          </Text>
-          <List>
-            {filteredNativeCoins
-              .filter(coin =>
-                currentNativeCoins.some(({ chain }) => chain === coin.chain)
-              )
-              .map(coin => (
-                <NativeCoinItem
-                  chain={coin.chain}
-                  key={`${coin.chain}-${coin.ticker}`}
-                  onChange={() => handleSwitch(coin, true)}
-                  ticker={coin.ticker}
-                  checked
-                />
+        {activeNativeCoins.length ? (
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('active')}
+            </Text>
+            <List>
+              {activeNativeCoins.map((coin, index) => (
+                <NativeCoinItem key={index} {...coin} />
               ))}
-          </List>
-        </VStack>
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
-            {t('available')}
-          </Text>
-          <List>
-            {filteredNativeCoins
-              .filter(coin =>
-                currentNativeCoins.every(({ chain }) => chain !== coin.chain)
-              )
-              .map(coin => (
-                <NativeCoinItem
-                  chain={coin.chain}
-                  key={`${coin.chain}-${coin.ticker}`}
-                  onChange={() => handleSwitch(coin)}
-                  ticker={coin.ticker}
-                />
+            </List>
+          </VStack>
+        ) : null}
+        {availableNativeCoins.length ? (
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('available')}
+            </Text>
+            <List>
+              {availableNativeCoins.map((coin, index) => (
+                <NativeCoinItem key={index} {...coin} />
               ))}
-          </List>
-        </VStack>
+            </List>
+          </VStack>
+        ) : null}
       </PageContent>
     </VStack>
   )
