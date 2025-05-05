@@ -32,8 +32,7 @@ export const useRemoveVaultSessionMutation = (
       return vaultSessions
     },
     onSuccess: async () => {
-      await invalidate(currentVaultAppSessionsQueryKey)
-      await invalidate(appSessionsQueryKey)
+      await invalidate(currentVaultAppSessionsQueryKey, appSessionsQueryKey)
     },
     ...options,
   })

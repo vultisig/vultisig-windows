@@ -1,7 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultAppSessions } from '@clients/extension/src/sessions/state/useAppSessions'
+import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -52,7 +52,7 @@ export const VaultPage = () => {
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
-  const { data: sessions = {} } = useCurrentVaultAppSessions()
+  const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   return (
     <VStack fullHeight>
       <PageHeader

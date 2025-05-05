@@ -17,7 +17,7 @@ export const useAppSessionsQuery = () => {
   })
 }
 
-export const useCurrentVaultAppSessions = () => {
+export const useCurrentVaultAppSessionsQuery = () => {
   return useQuery({
     queryKey: currentVaultAppSessionsQueryKey,
     queryFn: async (): Promise<Record<string, AppSession>> => {

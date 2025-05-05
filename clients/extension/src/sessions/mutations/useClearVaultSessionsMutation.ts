@@ -24,8 +24,7 @@ export const useClearVaultSessionsMutation = (
       await setVaultsAppSessions(updated)
     },
     onSuccess: async () => {
-      await invalidate(currentVaultAppSessionsQueryKey)
-      await invalidate(appSessionsQueryKey)
+      await invalidate(currentVaultAppSessionsQueryKey, appSessionsQueryKey)
     },
     ...options,
   })

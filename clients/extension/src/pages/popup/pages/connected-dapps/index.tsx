@@ -1,7 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/mutations/useClearVaultSessionsMutation'
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
-import { useCurrentVaultAppSessions } from '@clients/extension/src/sessions/state/useAppSessions'
+import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
@@ -30,7 +30,7 @@ const StyledText = styled(Text)`
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
-  const { data: sessions = {} } = useCurrentVaultAppSessions()
+  const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const currentVaultId = useCurrentVaultId()
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
