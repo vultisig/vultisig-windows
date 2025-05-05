@@ -60,10 +60,7 @@ export const fromStorageVault = (
   )
   return {
     name: vault.name,
-    publicKeys: {
-      ecdsa: vault.public_key_ecdsa,
-      eddsa: vault.public_key_eddsa,
-    },
+    publicKeys,
     signers: vault.signers,
     createdAt: new Date(vault.created_at).getTime(),
     hexChainCode: vault.hex_chain_code,

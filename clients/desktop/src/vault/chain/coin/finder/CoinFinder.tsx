@@ -1,4 +1,4 @@
-import { useSaveCoinsMutation } from '@clients/desktop/src/coin/query/useSaveCoinsMutation'
+import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
@@ -10,7 +10,7 @@ import { useCoinFinderQuery } from './queries/useCoinFinderQuery'
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
 
-  const { mutate: saveCoins, isPending } = useSaveCoinsMutation()
+  const { mutate: saveCoins, isPending } = useCreateCoinsMutation()
 
   const coins = useCurrentVaultCoins()
 

@@ -1,8 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
+import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { CurrentVaultId } from '../storage/currentVaultId'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
@@ -31,7 +32,7 @@ export type CreateVaultCoinsFunction = (
 
 export type SetDefaultChainsFunction = (chains: Chain[]) => Promise<void> | void
 
-type GetDefaultChainsFunction = () => Promise<Chain[]> | Chain[]
+export type GetDefaultChainsFunction = () => Promise<Chain[]> | Chain[]
 
 export type GetFiatCurrencyFunction = () => Promise<FiatCurrency> | FiatCurrency
 
@@ -55,6 +56,25 @@ export type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
 export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
 
+export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
+
+type CreateAddressBookItemInput = AddressBookItem
+
+export type CreateAddressBookItemFunction = (
+  input: CreateAddressBookItemInput
+) => Promise<void>
+
+type UpdateAddressBookItemInput = {
+  id: string
+  fields: Partial<Omit<AddressBookItem, 'id'>>
+}
+
+export type UpdateAddressBookItemFunction = (
+  input: UpdateAddressBookItemInput
+) => Promise<void>
+
+export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
+
 type CreateCoinInput = {
   vaultId: string
   coin: AccountCoin
@@ -70,6 +90,17 @@ type UpdateVaultFolderInput = {
 export type UpdateVaultFolderFunction = (
   input: UpdateVaultFolderInput
 ) => Promise<void>
+
+type DeleteVaultCoinInput = {
+  vaultId: string
+  coinKey: AccountCoinKey
+}
+
+export type DeleteVaultCoinFunction = (
+  input: DeleteVaultCoinInput
+) => Promise<void>
+
+export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
 
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
@@ -88,6 +119,12 @@ export type CoreStorage = {
   deleteVaultFolder: DeleteVaultFolderFunction
   updateVaultFolder: UpdateVaultFolderFunction
   createVaultCoin: CreateVaultCoinFunction
+  deleteVaultCoin: DeleteVaultCoinFunction
+  createVaultFolder: CreateVaultFolderFunction
+  getAddressBookItems: GetAddressBookItemsFunction
+  createAddressBookItem: CreateAddressBookItemFunction
+  updateAddressBookItem: UpdateAddressBookItemFunction
+  deleteAddressBookItem: DeleteAddressBookItemFunction
 }
 
 export const { useValue: useCoreStorage, provider: CoreStorageProvider } =

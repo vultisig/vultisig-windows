@@ -22,6 +22,10 @@ export function DeleteVaultFolder(arg1) {
   return window['go']['storage']['Store']['DeleteVaultFolder'](arg1);
 }
 
+export function GetAddressBookItem(arg1) {
+  return window['go']['storage']['Store']['GetAddressBookItem'](arg1);
+}
+
 export function GetAllAddressBookItems() {
   return window['go']['storage']['Store']['GetAllAddressBookItems']();
 }
