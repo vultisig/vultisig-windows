@@ -8,7 +8,7 @@ Fixes # (issue)
 - [ ] Create vault ( Secure / Fast) - Please make sure you created a Secure vault & fast vault
 - [ ] Sending  - [Please attach a tx link here]
 - [ ] Swap - Please attach a tx link for the swap here
-- [ ] New Chain / Chain related feature  -  Please attach a 
+- [ ] New Chain / Chain related feature  -  Please attach tx link here
 
 ## Checklist
 
