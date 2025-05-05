@@ -23,7 +23,12 @@ export const TokenExplorer: FC<Props> = ({
   const { t } = useTranslation()
 
   return (
-    <Modal width={480} placement="top" title="Select Token" onClose={onClose}>
+    <Modal
+      width={480}
+      placement="top"
+      title={t('select_token')}
+      onClose={onClose}
+    >
       <VStack gap={20}>
         {options.length > 0 ? (
           options.map((token, index) => {
