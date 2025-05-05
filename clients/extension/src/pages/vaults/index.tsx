@@ -18,41 +18,42 @@ import { useTranslation } from 'react-i18next'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import { VaultExport } from '../../utils/interfaces'
-
+const backgroundMessenger = initializeMessenger({ connect: 'background' })
 const App = () => {
   const { t } = useTranslation()
   const [vaultIds, setVaultIds] = useState<string[]>([])
   const vaults = useVaults()
-  const backgroundMessenger = initializeMessenger({ connect: 'background' })
   const handleClose = () => {
     window.close()
   }
 
   const handleSubmit = async () => {
-    if (vaultIds.length) {
-      const selectedVaults = vaults
-        .filter(vault => vaultIds.includes(getVaultId(vault)))
-        .map(vault => {
-          const {
-            hex_chain_code,
-            name,
-            public_key_ecdsa,
-            public_key_eddsa,
-            uid,
-          } = getVaultPublicKeyExport(vault)
-          return {
-            name,
-            uid,
-            hexChainCode: hex_chain_code,
-            publicKeyEcdsa: public_key_ecdsa,
-            publicKeyEddsa: public_key_eddsa,
-          } as VaultExport
-        })
+    const selectedVaults = vaults
+      .filter(vault => vaultIds.includes(getVaultId(vault)))
+      .map(vault => {
+        const {
+          hex_chain_code,
+          name,
+          public_key_ecdsa,
+          public_key_eddsa,
+          uid,
+        } = getVaultPublicKeyExport(vault)
+        return {
+          name,
+          uid,
+          hexChainCode: hex_chain_code,
+          publicKeyEcdsa: public_key_ecdsa,
+          publicKeyEddsa: public_key_eddsa,
+        } as VaultExport
+      })
+    try {
       await backgroundMessenger.send('vaults:connect', {
         selectedVaults,
       })
-      handleClose()
+    } catch (error) {
+      console.error('Failed to send message to background:', error)
     }
+    handleClose()
   }
 
   return vaults.length ? (
@@ -98,7 +99,13 @@ const App = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button onClick={handleSubmit} type="primary" block rounded>
+        <Button
+          onClick={handleSubmit}
+          disabled={!vaultIds.length}
+          type="primary"
+          block
+          rounded
+        >
           {t('connect')}
         </Button>
       </PageFooter>

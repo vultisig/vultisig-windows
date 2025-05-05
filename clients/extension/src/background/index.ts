@@ -660,20 +660,25 @@ const handleRequest = (
       }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
         const host = getDappHostname(sender)
-        getVaultsAppSessions().then(async sessions => {
-          const updatedSessions: VaultsAppSessions = {}
+        getVaultsAppSessions()
+          .then(async sessions => {
+            const updatedSessions: VaultsAppSessions = {}
 
-          for (const [vaultId, vaultSessions] of Object.entries(sessions)) {
-            if (vaultSessions[host]) {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { [host]: _, ...rest } = vaultSessions
-              updatedSessions[vaultId] = rest
-            } else {
-              updatedSessions[vaultId] = vaultSessions
+            for (const [vaultId, vaultSessions] of Object.entries(
+              sessions ?? {}
+            )) {
+              if (vaultSessions[host]) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { [host]: _, ...rest } = vaultSessions
+                updatedSessions[vaultId] = rest
+              } else {
+                updatedSessions[vaultId] = vaultSessions
+              }
             }
-          }
-          await setVaultsAppSessions(updatedSessions)
-        })
+            await setVaultsAppSessions(updatedSessions)
+            resolve([])
+          })
+          .catch(reject)
 
         break
       }

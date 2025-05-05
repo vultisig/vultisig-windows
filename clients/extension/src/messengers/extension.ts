@@ -52,7 +52,7 @@ export const extensionMessenger = createMessenger({
     ) => {
       if (!isValidSend({ message, topic })) return
 
-      const repliedTopic = message.topic.replace('>', '<')
+      const repliedTopic = message.topic.replace(/>/g, '<')
 
       try {
         const response = await callback(message.payload, {
