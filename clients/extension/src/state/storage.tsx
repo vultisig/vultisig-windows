@@ -29,6 +29,10 @@ import {
 } from '../storage/addressBook'
 import { getLanguage, setLanguage } from '../storage/language'
 import {
+  getIsVaultBalanceVisible,
+  setIsVaultBalanceVisible,
+} from '../storage/vaultBalanceVisibility'
+import {
   getCurrentVaultId,
   setCurrentVaultId,
 } from '../vault/state/currentVaultId'
@@ -186,4 +190,6 @@ export const storage: CoreStorage = {
   deleteAddressBookItem,
   getLanguage,
   setLanguage,
+  getIsVaultBalanceVisible,
+  setIsVaultBalanceVisible,
 }

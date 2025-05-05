@@ -12,6 +12,7 @@ import {
 } from './currentVaultId'
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
+import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery } from './vaults'
@@ -24,6 +25,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const currentVaultId = useCurrentVaultIdQuery()
   const addressBookItems = useAddressBookItemsQuery()
   const language = useLanguageQuery()
+  const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -33,6 +35,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     currentVaultId,
     addressBookItems,
     language,
+    isVaultBalanceVisible,
   })
 
   return (

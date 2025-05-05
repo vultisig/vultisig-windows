@@ -9,6 +9,7 @@ import {
   currentVaultIdQueryKey,
   defaultChainsQueryKey,
   fiatCurrencyQueryKey,
+  isVaultBalanceVisibleQueryKey,
   languageQueryKey,
 } from '@core/ui/query/keys'
 import {
@@ -24,11 +25,14 @@ import {
   DeleteVaultFunction,
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
+  GetIsVaultBalanceVisibleFunction,
   GetLanguageFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
+  isVaultBalanceInitallyVisible,
   SetDefaultChainsFunction,
+  SetIsVaultBalanceVisibleFunction,
   SetLanguageFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
@@ -225,6 +229,23 @@ const setLanguage: SetLanguageFunction = async language => {
   persistentStorage.setItem(languageKey, language)
 }
 
+const [isVaultBalanceVisibleKey] = isVaultBalanceVisibleQueryKey
+
+const getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction = async () => {
+  const value = persistentStorage.getItem<boolean>(isVaultBalanceVisibleKey)
+
+  if (value === undefined) {
+    return isVaultBalanceInitallyVisible
+  }
+
+  return value
+}
+
+const setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction =
+  async isVaultBalanceVisible => {
+    persistentStorage.setItem(isVaultBalanceVisibleKey, isVaultBalanceVisible)
+  }
+
 export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -250,4 +271,6 @@ export const storage: CoreStorage = {
   deleteAddressBookItem,
   getLanguage,
   setLanguage,
+  getIsVaultBalanceVisible,
+  setIsVaultBalanceVisible,
 }

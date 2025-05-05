@@ -100,6 +100,14 @@ export type GetLanguageFunction = () => Promise<Language>
 
 export type SetLanguageFunction = (language: Language) => Promise<void>
 
+export const isVaultBalanceInitallyVisible = true
+
+export type SetIsVaultBalanceVisibleFunction = (
+  isVaultBalanceVisible: boolean
+) => Promise<void>
+
+export type GetIsVaultBalanceVisibleFunction = () => Promise<boolean>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -125,4 +133,6 @@ export type CoreStorage = {
   deleteAddressBookItem: DeleteAddressBookItemFunction
   getLanguage: GetLanguageFunction
   setLanguage: SetLanguageFunction
+  getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction
+  setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction
 }
