@@ -1,5 +1,4 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
@@ -11,6 +10,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 
 export const VaultsPage = () => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigateBack = useNavigateBack()
   const coreNavigate = useCoreNavigate()
   const vaults = useVaults()
   const vault = useCurrentVault()
@@ -35,9 +35,12 @@ export const VaultsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button onClick={() => navigate('settings')} ghost>
-            <ChevronLeftIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<ChevronLeftIcon fontSize={20} />}
+            onClick={navigateBack}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -80,10 +83,9 @@ export const VaultsPage = () => {
       <PageFooter>
         <Button
           onClick={() => coreNavigate('importVault')}
-          shape="round"
-          size="large"
           type="primary"
           block
+          rounded
         >
           {t('add_new_vault')}
         </Button>
