@@ -1,5 +1,5 @@
 import { Button } from '@clients/extension/src/components/button'
-import { languageName, languages } from '@core/ui/i18n/language'
+import { languageName, languages } from '@core/ui/i18n/Language'
 import { useLanguage, useSetLanguageMutation } from '@core/ui/storage/language'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
