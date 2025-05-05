@@ -2,11 +2,11 @@
 
 Please include a summary of the change and which issue is fixed. 
 
-Fixes # (issue)
+Fixes #<issue-number>
 
 ## Which feature is affected?
-- [ ] Create vault ( Secure / Fast) - Please make sure you created a Secure vault & fast vault
-- [ ] Sending  - [Please attach a tx link here]
+- [ ] Create vault ( Secure / Fast) - Please ensure you created a Secure vault & fast vault
+- [ ] Sending  - Please attach a tx link here
 - [ ] Swap - Please attach a tx link for the swap here
 - [ ] New Chain / Chain related feature  -  Please attach tx link here
 
