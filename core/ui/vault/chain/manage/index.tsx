@@ -30,11 +30,11 @@ const NativeCoinItem: FC<Coin> = coin => {
     return currentCoins.find(c => areEqualCoins(c, coin))
   }, [currentCoins, coin])
 
-  const handleChange = async () => {
+  const handleChange = () => {
     if (currentCoin) {
-      await deleteCoin.mutateAsync(currentCoin)
+      deleteCoin.mutate(currentCoin)
     } else {
-      await createCoin.mutateAsync(coin)
+      createCoin.mutate(coin)
     }
   }
 
