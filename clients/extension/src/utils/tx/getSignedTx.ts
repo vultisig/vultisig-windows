@@ -3,10 +3,8 @@ import {
   SignedTransaction,
 } from '@clients/extension/src/utils/interfaces'
 import { getSignedTx } from '@clients/extension/src/utils/tx/sign'
-import { getChainKind } from '@core/chain/ChainKind'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
-import { match } from '@lib/utils/match'
 
 export const getSignedTransaction = ({
   inputData,
@@ -17,36 +15,24 @@ export const getSignedTransaction = ({
 }: SignedTransaction): Promise<SendTransactionResponse> => {
   return new Promise((resolve, reject) => {
     if (inputData && vault && transaction) {
-      const derivationKey = vault.chains.find(
-        chain => chain.chain === transaction.chain.chain
-      )?.derivationKey
-      if (!derivationKey) {
-        return reject('Derivation key not found for the specified chain')
-      }
-      const keysignType =
-        signatureAlgorithms[getChainKind(transaction.chain.chain)]
-
-      const publicKeyType = match(keysignType, {
-        ecdsa: () => walletCore.PublicKeyType.secp256k1,
-        eddsa: () => walletCore.PublicKeyType.ed25519,
+      const pubkey = getPublicKey({
+        chain: transaction.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
       })
-
-      const pubkey = walletCore.PublicKey.createWithData(
-        Buffer.from(derivationKey, 'hex'),
-        publicKeyType
-      )
 
       if (pubkey) {
         const compiledTx = compileTx({
           txInputData: inputData,
-          chain: transaction?.chain.chain,
+          chain: transaction?.chain,
           publicKey: pubkey,
           signatures,
           walletCore: walletCore,
         })
 
         getSignedTx({
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           compiledTx,
         })
           .then(result => resolve(result as SendTransactionResponse))

@@ -21,7 +21,7 @@ export namespace Messaging {
 
   export namespace GetVault {
     export type Request = any
-    export type Response = Vault | undefined
+    export type Response = VaultCore | undefined
   }
 
   export namespace GetVaults {
@@ -38,16 +38,6 @@ export namespace Messaging {
 export interface AccountsProps {
   chain: Chain
   sender: string
-}
-
-export interface ChainProps {
-  active?: boolean
-  address?: string
-  decimals: number
-  derivationKey?: string
-  id: string
-  chain: Chain
-  ticker: string
 }
 
 export interface SendTransactionResponse {
@@ -154,7 +144,7 @@ export interface TransactionDetails {
 
 export interface ITransaction {
   transactionDetails: TransactionDetails
-  chain: ChainProps
+  chain: Chain
   contract?: string
   customMessage?: CustomMessage
   customSignature?: string
@@ -182,7 +172,6 @@ export type Vault = VaultCore & {
   transactions: ITransaction[]
   apps?: string[]
   selected?: boolean
-  chains: ChainProps[]
   uid: string
 }
 
@@ -190,7 +179,7 @@ export interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignSignature>
   transaction?: ITransaction
-  vault?: Vault
+  vault?: VaultCore
   walletCore: WalletCore
 }
 

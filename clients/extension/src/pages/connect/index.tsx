@@ -1,6 +1,8 @@
 import { Button } from '@clients/extension/src/components/button'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
-import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
+import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
@@ -12,28 +14,64 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { StrictMode, useState } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { useAddVaultSessionMutation } from '../../sessions/mutations/useAddVaultSessionMutation'
+import { getDappHost, getDappHostname } from '../../utils/connectedApps'
+import { getStoredRequest } from '../../utils/storage'
+
+interface InitialState {
+  chain?: Chain
+  sender?: string
+}
 
 const App = () => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
+  const initialState: InitialState = {}
+  const [state, setState] = useState(initialState)
+  const { sender, chain } = state
   const vaults = useVaults()
-  const setCurrentVaultId = useSetCurrentVaultIdMutation()
 
+  const { mutateAsync: addSession } = useAddVaultSessionMutation()
   const handleClose = () => {
     window.close()
   }
 
-  const handleSubmit = () => {
-    if (vaultId) {
-      //TODO: add sender to connected apps
-      setCurrentVaultId.mutate(vaultId)
-
-      handleClose()
-    }
+  const handleSubmit = async () => {
+    if (!vaultId || !sender || !chain) return
+    await addSession({
+      vaultId: vaultId,
+      session: {
+        host: getDappHostname(sender),
+        url: getDappHost(sender),
+        chainIds: [getChainId(chain)],
+        selectedCosmosChainId:
+          getChainKind(chain) === 'cosmos'
+            ? (getChainId(chain) as CosmosChainId)
+            : undefined,
+        selectedEVMChainId:
+          getChainKind(chain) === 'evm'
+            ? (getChainId(chain) as EVMChainId)
+            : undefined,
+      },
+    })
+    handleClose()
   }
+
+  useEffect(() => {
+    const initRequest = async () => {
+      try {
+        const { chain, sender } = await getStoredRequest()
+        setState(prevState => ({ ...prevState, chain, sender }))
+      } catch (error) {
+        console.error('Failed to get stored request:', error)
+      }
+    }
+    initRequest()
+  }, [])
 
   return vaults.length ? (
     <VStack fullHeight>
