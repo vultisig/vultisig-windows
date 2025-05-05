@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { CoinKey } from '@core/chain/coin/Coin'
+import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
@@ -94,7 +93,7 @@ export type UpdateVaultFolderFunction = (
 
 type DeleteVaultCoinInput = {
   vaultId: string
-  coinKey: CoinKey
+  coinKey: AccountCoinKey
 }
 
 export type DeleteVaultCoinFunction = (

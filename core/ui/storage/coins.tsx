@@ -1,5 +1,5 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -70,8 +70,8 @@ export const useDeleteCoinMutation = () => {
   const vaultId = useAssertCurrentVaultId()
 
   return useMutation({
-    mutationFn: async (key: CoinKey) =>
-      deleteVaultCoin({ vaultId, coinKey: key }),
+    mutationFn: async (coinKey: AccountCoinKey) =>
+      deleteVaultCoin({ vaultId, coinKey }),
     onSuccess: () => {
       invalidate(vaultsCoinsQueryKey)
     },

@@ -3,7 +3,10 @@ import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCurrentVaultAddreses,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckStatus } from '@lib/ui/inputs/checkbox/CheckStatus'
@@ -31,13 +34,17 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const isChecked = coins.some(c => areEqualCoins(c, value))
   const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
+  const addresses = useCurrentVaultAddreses()
 
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
       onClick={() => {
         if (isChecked) {
-          deleteCoin(value)
+          deleteCoin({
+            address: addresses[value.chain],
+            ...value,
+          })
         } else {
           saveCoin(value)
         }

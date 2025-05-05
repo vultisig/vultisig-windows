@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { coinKeyToString } from '@core/chain/coin/Coin'
+import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
@@ -127,7 +127,7 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
   vaultId,
   coinKey,
 }) => {
-  await DeleteCoin(vaultId, coinKeyToString(coinKey))
+  await DeleteCoin(vaultId, accountCoinKeyToString(coinKey))
 }
 
 const createVaultFolder: CreateVaultFolderFunction = async folder => {
