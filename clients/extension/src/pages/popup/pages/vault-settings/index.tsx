@@ -46,7 +46,7 @@ export const VaultSettingsPage = () => {
         <List>
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
-            onClick={() => navigate('renameVault')}
+            onClick={() => coreNavigate('renameVault')}
             title={t('rename_vault')}
             hoverable
             showArrow

@@ -28,7 +28,6 @@ import EditVaultPage from '../vault/edit/EditVaultPage'
 import { VaultBackupPage } from '../vault/edit/vaultBackupSettings/VaultBackupPage'
 import DeleteVaultPage from '../vault/edit/vaultDeleteSettings/DeleteVaultPage'
 import VaultDetailsPage from '../vault/edit/vaultDetailsSettings/VaultDetailsPage'
-import VaultRenamePage from '../vault/edit/vaultRenameSettings/VaultRenamePage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
 import { ImportVaultPage } from '../vault/import/components/ImportVaultPage'
 import { JoinKeygenPage } from '../vault/keygen/join/JoinKeygenPage'
@@ -140,11 +139,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   vaultBackup: (
     <ActiveVaultGuard>
       <VaultBackupPage />
-    </ActiveVaultGuard>
-  ),
-  vaultRename: (
-    <ActiveVaultGuard>
-      <VaultRenamePage />
     </ActiveVaultGuard>
   ),
   vaultDelete: (

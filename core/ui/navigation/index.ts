@@ -21,11 +21,12 @@ export const corePaths = {
   reshareVaultFast: '/vault/reshare/fast',
   reshareVaultSecure: '/vault/reshare/secure',
   defaultChains: '/vault/settings/default-chains',
-  currencySettings: '/vault/settings/currency-settings',
+  currencySettings: '/settings/currency',
   joinKeysign: '/join-keysign',
   uploadQr: '/vault/qr/upload',
   vaults: '/vaults',
   manageVaultChains: '/vault/chains/manage',
+  renameVault: '/vault/settings/rename',
 } as const
 
 type CorePaths = typeof corePaths
