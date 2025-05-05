@@ -41,7 +41,11 @@ const NativeCoinItem: FC<Coin> = coin => {
   return (
     <ListItem
       extra={
-        <Switch onChange={handleChange} checked={currentCoin ? true : false} />
+        <Switch
+          checked={!!currentCoin}
+          onChange={handleChange}
+          loading={createCoin.isPending || deleteCoin.isPending}
+        />
       }
       icon={
         <ChainEntityIcon
@@ -70,10 +74,12 @@ export const ManageVaultChainsPage = () => {
   const filteredNativeCoins = useMemo(() => {
     if (!search) return nativeCoins
 
+    const normalizedSearch = search.toLowerCase()
+
     return nativeCoins.filter(
       ({ chain, ticker }) =>
-        chain.toLowerCase().includes(search) ||
-        ticker.toLowerCase().includes(search)
+        chain.toLowerCase().includes(normalizedSearch) ||
+        ticker.toLowerCase().includes(normalizedSearch)
     )
   }, [nativeCoins, search])
 
