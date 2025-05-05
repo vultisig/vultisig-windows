@@ -54,7 +54,12 @@ export const MergeTokenExplorer: FC<Props> = ({
   }, [selectedCoin?.ticker, setValue, tokens])
 
   return (
-    <Modal width={480} placement="top" title="Select Token" onClose={onClose}>
+    <Modal
+      width={480}
+      placement="top"
+      title={t('select_token')}
+      onClose={onClose}
+    >
       <VStack gap={20}>
         {tokens.length > 0 ? (
           tokens.map((token, index) => {
