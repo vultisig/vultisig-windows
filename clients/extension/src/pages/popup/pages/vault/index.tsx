@@ -54,7 +54,7 @@ export const VaultPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <ConnectedApp ghost>
+          <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
             <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
             <ConnectedAppStatus connected />
           </ConnectedApp>

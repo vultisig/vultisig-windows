@@ -1,6 +1,6 @@
 import { FC, SVGProps } from 'react'
 
-export const ExpandIcon: FC<SVGProps<SVGSVGElement>> = ({
+export const CircleStopIcon: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = '1em',
   stroke = 'currentColor',
@@ -23,6 +23,7 @@ export const ExpandIcon: FC<SVGProps<SVGSVGElement>> = ({
       width,
     }}
   >
-    <path d="M21 21L15 15M21 21V16.2M21 21H16.2M3 16.2V21M3 21H7.8M3 21L9 15M21 7.8V3M21 3H16.2M21 3L15 9M3 7.8V3M3 3H7.8M3 3L9 9" />
+    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+    <path d="M14 9H10C9.44772 9 9 9.44772 9 10V14C9 14.5523 9.44772 15 10 15H14C14.5523 15 15 14.5523 15 14V10C15 9.44772 14.5523 9 14 9Z" />
   </svg>
 )
