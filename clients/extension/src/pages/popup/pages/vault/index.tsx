@@ -136,6 +136,7 @@ export const VaultPage = () => {
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
           onClick={() => coreNavigate('manageVaultChains')}
+          type="primary"
           block
           rounded
         >
