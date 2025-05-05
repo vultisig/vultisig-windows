@@ -1,9 +1,8 @@
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
-import { useExtensionStorage } from '../../state/extensionStorage'
-import { appSessionsQueryKey } from '../state/appSessions'
-import { useAppSessions } from '../state/useAppSessions'
+import { appSessionsQueryKey, setVaultsAppSessions } from '../state/appSessions'
+import { useAppSessionsQuery } from '../state/useAppSessions'
 
 type RemoveVaultSessionInput = {
   vaultId: string
@@ -14,9 +13,8 @@ export const useRemoveVaultSessionMutation = (
   options?: UseMutationOptions<any, any, RemoveVaultSessionInput, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
-  const allSessions = useAppSessions()
-  const { setVaultsAppSessions } = useExtensionStorage()
 
+  const { data: allSessions } = useAppSessionsQuery()
   return useMutation({
     mutationFn: async ({ vaultId, host }) => {
       const vaultSessions = { ...(allSessions[vaultId] || {}) }
@@ -31,7 +29,7 @@ export const useRemoveVaultSessionMutation = (
       return vaultSessions
     },
     onSuccess: async () => {
-      await invalidate([appSessionsQueryKey])
+      await invalidate(appSessionsQueryKey)
     },
     ...options,
   })

@@ -17,7 +17,6 @@ import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
-import { ExtensionStorageProvider } from '../state/extensionStorage'
 import { StorageProvider } from '../state/storage'
 
 const ExtensionGlobalStyle = createGlobalStyle`
@@ -52,13 +51,11 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                     <I18nProvider>
                       <WalletCoreProvider>
                         <StorageProvider>
-                          <ExtensionStorageProvider>
-                            <AntDesignThemeProvider>
-                              <StorageDependant>{children}</StorageDependant>
-                              <GlobalStyle />
-                              <ExtensionGlobalStyle />
-                            </AntDesignThemeProvider>
-                          </ExtensionStorageProvider>
+                          <AntDesignThemeProvider>
+                            <StorageDependant>{children}</StorageDependant>
+                            <GlobalStyle />
+                            <ExtensionGlobalStyle />
+                          </AntDesignThemeProvider>
                         </StorageProvider>
                       </WalletCoreProvider>
                     </I18nProvider>

@@ -3,7 +3,9 @@ import { CosmosChainId, EVMChainId } from '@core/chain/coin/ChainId'
 import { getPersistentState } from '../../state/persistent/getPersistentState'
 import { setPersistentState } from '../../state/persistent/setPersistentState'
 
-export const appSessionsQueryKey = 'appSessions'
+export const appSessionsQueryKey = ['appSessions']
+const [key] = appSessionsQueryKey
+
 type UpdateAppSessionFieldsInput = {
   vaultId: string
   host: string
@@ -19,22 +21,16 @@ export interface AppSession {
   selectedCosmosChainId?: CosmosChainId
 }
 
-export type SetVaultsAppSessionsFunction = (
-  sessions: VaultsAppSessions
-) => Promise<void>
-
-export type GetVaultsAppSessionsFunction = () => Promise<VaultsAppSessions>
-
-export type VaultsAppSessions = Record<string, Record<string, AppSession>>
+type VaultsAppSessions = Record<string, Record<string, AppSession>>
 
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
 ): Promise<void> => {
-  await setPersistentState<VaultsAppSessions>(appSessionsQueryKey, sessions)
+  await setPersistentState<VaultsAppSessions>(key, sessions)
 }
 
 export const getVaultsAppSessions = async (): Promise<VaultsAppSessions> => {
-  return getPersistentState<VaultsAppSessions>(appSessionsQueryKey, {})
+  return getPersistentState<VaultsAppSessions>(key, {})
 }
 
 export const getVaultAppSessions = async (
