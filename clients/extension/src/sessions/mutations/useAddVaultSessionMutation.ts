@@ -1,10 +1,12 @@
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
-import { useExtensionStorage } from '../../state/extensionStorage'
-import { appSessionsQueryKey } from '../state/appSessions'
+import { appSessionsQueryKey, setVaultsAppSessions } from '../state/appSessions'
 import { AppSession } from '../state/appSessions'
-import { useAppSessions } from '../state/useAppSessions'
+import {
+  currentVaultAppSessionsQueryKey,
+  useAppSessionsQuery,
+} from '../state/useAppSessions'
 
 type AddVaultSessionInput = {
   vaultId: string
@@ -14,9 +16,8 @@ type AddVaultSessionInput = {
 export const useAddVaultSessionMutation = (
   options?: UseMutationOptions<any, any, AddVaultSessionInput, unknown>
 ) => {
-  const allSessions = useAppSessions()
+  const { data: allSessions } = useAppSessionsQuery()
   const invalidate = useInvalidateQueries()
-  const { setVaultsAppSessions } = useExtensionStorage()
 
   return useMutation({
     mutationFn: async ({ vaultId, session }) => {
@@ -27,7 +28,7 @@ export const useAddVaultSessionMutation = (
       return updatedVaultSessions
     },
     onSuccess: async () => {
-      await invalidate([appSessionsQueryKey])
+      await invalidate(currentVaultAppSessionsQueryKey, appSessionsQueryKey)
     },
     ...options,
   })

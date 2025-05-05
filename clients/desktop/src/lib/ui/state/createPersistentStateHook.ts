@@ -5,7 +5,7 @@ import { PersistentStorage } from './PersistentStorage'
 
 type NonUndefined<T> = T extends undefined ? never : T
 
-export function createPersistentStateHook<T extends string>(
+export function createPersistentStateHook<T extends string = string>(
   storage: PersistentStorage<T>
 ) {
   function usePersistentState<V>(

@@ -1,9 +1,8 @@
+import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { Match } from '@lib/ui/base/Match'
 import { PageSlice } from '@lib/ui/page/PageSlice'
-import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 
-import { useAddressBookItemsQuery } from '../../queries/useAddressBookItemsQuery'
 import { Wrapper } from './AddressSelector.styles'
 import AddAddressView from './components/addAddressForm/AddAddressForm'
 import AddressesListView from './components/addressesListView/AddressesListView'
@@ -17,8 +16,7 @@ type AddressSelectorProps = {
 const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false)
   const [isEditModeOn, setIsEditModeOn] = useState(false)
-  const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
-    useAddressBookItemsQuery()
+  const addressBookItems = useAddressBookItems()
 
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true)
@@ -29,15 +27,12 @@ const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
       <PageSlice gap={16} flexGrow={true}>
         <Match
           value={
-            isFetchingAddressBookItems
-              ? 'loading'
-              : isAddAddressViewOpen
-                ? 'addAddress'
-                : addressBookItems.length === 0
-                  ? 'empty'
-                  : 'list'
+            isAddAddressViewOpen
+              ? 'addAddress'
+              : addressBookItems.length === 0
+                ? 'empty'
+                : 'list'
           }
-          loading={() => <Text>Loading...</Text>}
           addAddress={() => (
             <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
           )}

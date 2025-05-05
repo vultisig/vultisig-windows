@@ -1,6 +1,12 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
-import { useCreateCoinMutation } from '@core/ui/storage/coins'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCreateCoinMutation,
+  useDeleteCoinMutation,
+} from '@core/ui/storage/coins'
+import {
+  useCurrentVaultAddreses,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckStatus } from '@lib/ui/inputs/checkbox/CheckStatus'
@@ -10,8 +16,6 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-
-import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 
 const Container = styled(Panel)`
   ${interactive};
@@ -25,18 +29,23 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
   icon: ReactNode
 }
 
+console.log('test')
+
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
   const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
-
+  const addresses = useCurrentVaultAddreses()
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
       onClick={() => {
         if (isChecked) {
-          deleteCoin(value)
+          deleteCoin({
+            address: addresses[value.chain],
+            ...value,
+          })
         } else {
           saveCoin(value)
         }

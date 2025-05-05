@@ -21,7 +21,6 @@ import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
 import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
-import { ManageVaultChainsPage } from '../vault/chain/manage/ManageVaultChainsPage'
 import { VaultChainPage } from '../vault/chain/VaultChainPage'
 import { VaultPage } from '../vault/components/VaultPage'
 import { DepositPage } from '../vault/deposit/DepositPage'
@@ -108,11 +107,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   vaultSettings: <SettingsVaultPage />,
   importVaultFromFile: <ImportVaultFromFilePage />,
   manageVaults: <ManageVaultsPage />,
-  manageVaultChains: (
-    <ActiveVaultGuard>
-      <ManageVaultChainsPage />
-    </ActiveVaultGuard>
-  ),
   shareVault: (
     <ActiveVaultGuard>
       <ShareVaultPage />

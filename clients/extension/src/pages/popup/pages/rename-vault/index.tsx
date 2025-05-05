@@ -1,11 +1,11 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 export const RenameVaultPage = () => {
   const { t } = useTranslation()
   const [name, setName] = useState<string | undefined>(undefined)
-  const navigate = useAppNavigate()
+  const navigateBack = useNavigateBack()
   const currentVault = useCurrentVault()
   const updateVault = useUpdateVaultMutation()
 
@@ -27,7 +27,7 @@ export const RenameVaultPage = () => {
           vaultId: getVaultId(currentVault),
           fields: { name: name },
         })
-        .then(() => navigate('settings'))
+        .then(navigateBack)
     }
   }
 
@@ -40,9 +40,12 @@ export const RenameVaultPage = () => {
       <PageHeader
         hasBorder
         primaryControls={
-          <Button onClick={() => navigate('vaultSettings')} ghost>
-            <ChevronLeftIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<ChevronLeftIcon fontSize={20} />}
+            onClick={navigateBack}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -51,17 +54,15 @@ export const RenameVaultPage = () => {
         }
       />
       <PageContent gap={24} flexGrow scrollable>
-        {/* TODO: Update search input styles based on Figma */}
         <TextInput value={name} onValueChange={setName} />
       </PageContent>
       <PageFooter>
         <Button
           loading={updateVault.isPending}
           onClick={handleSubmit}
-          shape="round"
-          size="large"
           type="primary"
           block
+          rounded
         >
           {t('save')}
         </Button>

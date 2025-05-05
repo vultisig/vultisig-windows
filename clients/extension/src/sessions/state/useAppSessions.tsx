@@ -1,30 +1,29 @@
-import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useQuery } from '@tanstack/react-query'
 
-import { useExtensionStorage } from '../../state/extensionStorage'
 import {
   AppSession,
   appSessionsQueryKey,
-  VaultsAppSessions,
+  getVaultsAppSessions,
 } from './appSessions'
 
-const useAppSessionsQuery = () => {
-  const { getVaultsAppSessions } = useExtensionStorage()
+export const currentVaultAppSessionsQueryKey = ['currentVaultAppSessions']
 
+export const useAppSessionsQuery = () => {
   return useQuery({
-    queryKey: [appSessionsQueryKey],
+    queryKey: appSessionsQueryKey,
     queryFn: getVaultsAppSessions,
     initialData: {},
   })
 }
 
-export const useAppSessions = (): VaultsAppSessions => {
-  const { data } = useAppSessionsQuery()
-  return data
-}
-
-export const useCurrentVaultAppSessions = (): Record<string, AppSession> => {
-  const vaultId = useCurrentVaultId()
-  const sessions = useAppSessions()
-  return vaultId ? (sessions[vaultId] ?? {}) : {}
+export const useCurrentVaultAppSessionsQuery = () => {
+  const vaultId = useAssertCurrentVaultId()
+  return useQuery({
+    queryKey: currentVaultAppSessionsQueryKey,
+    queryFn: async (): Promise<Record<string, AppSession>> => {
+      const sessions = await getVaultsAppSessions()
+      return vaultId ? (sessions[vaultId] ?? {}) : {}
+    },
+  })
 }

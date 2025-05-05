@@ -1,4 +1,7 @@
-import { useVaultFolders } from '@core/ui/storage/vaultFolders'
+import {
+  useCreateVaultFolderMutation,
+  useVaultFolders,
+} from '@core/ui/storage/vaultFolders'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 import { Button } from '@lib/ui/buttons/Button'
@@ -14,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 
 import { PageFooter } from '../../../ui/page/PageFooter'
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
-import { useCreateVaultFolderMutation } from '../../folder/mutations/useCreateVaultFolderMutation'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()

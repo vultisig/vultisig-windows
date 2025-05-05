@@ -3,7 +3,7 @@ import { FC, SVGProps } from 'react'
 export const LinkTwoIcon: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = '1em',
-  stroke = '#f0f4fc',
+  stroke = 'currentColor',
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
   strokeWidth = 1.5,

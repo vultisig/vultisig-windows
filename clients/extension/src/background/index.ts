@@ -54,19 +54,19 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
-import { initializeMessenger } from '../messengers/initializeMessenger'
+import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
   getVaultAppSessions,
   getVaultsAppSessions,
   setVaultsAppSessions,
   updateAppSession,
   VaultsAppSessions,
-} from '../sessions/state/appSessions'
-import { getDappHostname } from '../utils/connectedApps'
-import { handleSetupInpage } from '../utils/setupInpage'
-import { getCurrentVaultId } from '../vault/state/currentVaultId'
-import { getVaults } from '../vault/state/vaults'
-import { getVaultsCoins } from '../vault/state/vaultsCoins'
+} from '@clients/extension/src/sessions/state/appSessions'
+import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
+import { handleSetupInpage } from '@clients/extension/src/utils/setupInpage'
+import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
+import { getVaults } from '@clients/extension/src/vault/state/vaults'
+import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
 import { getWalletCore } from './walletCore'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {

@@ -1,7 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultAppSessions } from '@clients/extension/src/sessions/state/useAppSessions'
+import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -20,7 +20,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -38,37 +38,44 @@ const ConnectedApp = styled(Button)`
   background-color: ${getColor('buttonBackgroundDisabled')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
-  height: 36px;
+  color: ${getColor('textExtraLight')};
   position: relative;
-  width: 36px;
+
+  &:hover {
+    color: ${getColor('textPrimary')};
+  }
 `
 
 export const VaultPage = () => {
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
-  const sessions = useCurrentVaultAppSessions()
+  const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <ConnectedApp onClick={() => appNavigate('connectedDapps')} ghost>
-            <WorldIcon fontSize={20} stroke={colors.textExtraLight.toHex()} />
+          <ConnectedApp
+            onClick={() => appNavigate('connectedDapps')}
+            size="md"
+            fitContent
+          >
+            <WorldIcon fontSize={20} />
             <ConnectedAppStatus
               connected={Object.values(sessions).length > 0}
             />
           </ConnectedApp>
         }
         secondaryControls={
-          <Button ghost>
-            <SettingsIcon
-              fontSize={24}
-              onClick={() => appNavigate('settings')}
-            />
-          </Button>
+          <Button
+            icon={<SettingsIcon fontSize={20} />}
+            onClick={() => appNavigate('settings')}
+            size="sm"
+            fitContent
+          />
         }
         title={
           <Text
@@ -130,13 +137,12 @@ export const VaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          onClick={() => appNavigate('manageChains')}
-          shape="round"
-          size="large"
+          icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
+          onClick={() => coreNavigate('manageVaultChains')}
           type="primary"
           block
+          rounded
         >
-          <LinkTwoIcon fontSize={16} strokeWidth={2} />
           {t('manage_chains')}
         </Button>
       </PageFooter>
