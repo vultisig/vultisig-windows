@@ -66,6 +66,7 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       totalAmountAvailable: number
     ) => {
       return z.object({
+        nodeAddress: z.string().min(1, 'Required'),
         selectedCoin: CoinSchema,
         amount: z
           .string()

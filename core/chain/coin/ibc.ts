@@ -1,7 +1,7 @@
 import { Chain, CosmosChain } from '../Chain'
 import { Coin } from './Coin'
 
-const TOKEN_MERGE_CONTRACTS: Record<string, string> = {
+export const TOKEN_MERGE_CONTRACTS: Record<string, string> = {
   KUJI: 'thor14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s3p2nzy',
   RKUJI: 'thor1yyca08xqdgvjz0psg56z67ejh9xms6l436u8y58m82npdqqhmmtqrsjrgh',
   FUZN: 'thor1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrsw5xx2d',
@@ -148,30 +148,3 @@ export const CHAINS_WITH_IBC_TOKENS: CosmosChain[] = [
   Chain.Dydx,
   Chain.Noble,
 ]
-
-export const getMergeAcceptedTokens = (): (Coin & {
-  thorchainAddress: string
-})[] => {
-  const out: (Coin & { thorchainAddress: string })[] = []
-
-  for (const chain of CHAINS_WITH_IBC_TOKENS) {
-    const ibcList = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
-
-    for (const base of IBC_TOKENS) {
-      const ticker = base.ticker.toUpperCase()
-      const thorchainAddress = TOKEN_MERGE_CONTRACTS[ticker]
-      const id = ibcList.find(i => i.ticker === base.ticker)?.id
-
-      if (thorchainAddress && id) {
-        out.push({
-          ...base,
-          chain,
-          id,
-          thorchainAddress,
-        })
-      }
-    }
-  }
-
-  return out
-}
