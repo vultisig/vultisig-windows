@@ -82,7 +82,7 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   const prevVaultsCoins = await getVaultsCoins()
 
   const prevCoins = (prevVaultsCoins[vaultId] ?? []).filter(existingCoin =>
-    coins.some(coin => areEqualCoins(existingCoin, coin))
+    coins.every(coin => !areEqualCoins(existingCoin, coin))
   )
 
   await updateVaultsCoins({
