@@ -4,11 +4,16 @@ import { CurrencyPage } from '@core/ui/preferences/currency'
 import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
+import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { ReactNode } from 'react'
 
 type SharedPaths = Extract<
   CorePath,
-  'currencySettings' | 'defaultChains' | 'manageVaultChains' | 'reshareVault'
+  | 'currencySettings'
+  | 'defaultChains'
+  | 'manageVaultChains'
+  | 'reshareVault'
+  | 'vaultDetails'
 >
 
 export const sharedRoutes: Record<SharedPaths, ReactNode> = {
@@ -22,6 +27,11 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   reshareVault: (
     <ActiveVaultGuard>
       <ReshareVaultPage />
+    </ActiveVaultGuard>
+  ),
+  vaultDetails: (
+    <ActiveVaultGuard>
+      <VaultDetailsPage />
     </ActiveVaultGuard>
   ),
 }

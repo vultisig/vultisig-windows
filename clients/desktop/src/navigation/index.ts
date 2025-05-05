@@ -14,7 +14,6 @@ export const appPaths = {
   vaultChainCoinDetail: '/vault/item/detail/coin',
   send: '/vault/send',
   editVault: '/vault/settings/vault-settings',
-  vaultDetails: '/vault/settings/vault-settings/details',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
   vaultRename: '/vault/settings/vault-settings/rename-vault',
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
