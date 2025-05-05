@@ -6,7 +6,6 @@ export enum PersistentStateKey {
   IsVaultBalanceVisible = 'isVaultBalanceVisible',
   ReactQueryState = 'reactQueryState',
   HasFinishedOnboarding = 'HasFinishedOnboarding',
-  Language = 'language',
   VaultCreationMpcLib = 'vaultCreationMpcLib',
 }
 

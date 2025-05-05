@@ -1,6 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { useLanguage } from '@core/ui/storage/language'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -29,7 +30,6 @@ import { useTranslation } from 'react-i18next'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
 import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { useLanguage } from '../../preferences/state/language'
 import {
   VULTISIG_DISCORD_LINK,
   VULTISIG_GITHUB_LINK,
@@ -66,7 +66,7 @@ const SettingsVaultPage = () => {
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
-  const [language] = useLanguage()
+  const language = useLanguage()
 
   const { openUrl } = useCore()
 
