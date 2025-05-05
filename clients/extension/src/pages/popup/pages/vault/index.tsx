@@ -50,6 +50,7 @@ export const VaultPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
@@ -137,7 +138,7 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
-          onClick={() => appNavigate('manageChains')}
+          onClick={() => coreNavigate('manageVaultChains')}
           type="primary"
           block
           rounded
