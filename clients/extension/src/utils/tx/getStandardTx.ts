@@ -1,26 +1,29 @@
 import api from '@clients/extension/src/utils/api'
 import {
-  ChainProps,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ethers } from 'ethers'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
     tx: Extract<TransactionType.WalletTransaction, { txType: K }>,
-    chain: ChainProps
+    chain: Chain
   ) => Promise<TransactionDetails> | TransactionDetails
 }
 
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => ({
     asset: {
-      chain: chain.chain,
+      chain: chain,
       ticker: tx.amount[0].denom,
     },
-    amount: { amount: tx.amount[0].amount, decimals: chain.decimals },
+    amount: {
+      amount: tx.amount[0].amount,
+      decimals: chainFeeCoin[chain].decimals,
+    },
     from: tx.from_address,
     to: tx.to_address,
   }),
@@ -29,10 +32,10 @@ const transactionHandlers: TransactionHandlers = {
     if (tx.asset.ticker && tx.asset.ticker === chainFeeCoin.Solana.ticker) {
       return {
         asset: {
-          chain: chain.chain,
+          chain: chain,
           ticker: tx.asset.ticker,
         },
-        amount: { amount: tx.amount, decimals: chain.decimals },
+        amount: { amount: tx.amount, decimals: chainFeeCoin[chain].decimals },
         from: tx.from,
         to: tx.to,
       }
@@ -45,7 +48,7 @@ const transactionHandlers: TransactionHandlers = {
 
         return {
           asset: {
-            chain: chain.chain,
+            chain: chain,
             ticker: token.symbol,
             symbol: token.name,
             mint: tx.asset.mint,
@@ -64,11 +67,11 @@ const transactionHandlers: TransactionHandlers = {
     from: tx.from,
     to: tx.to,
     asset: {
-      chain: chain.chain,
-      ticker: chain.ticker,
+      chain: chain,
+      ticker: chainFeeCoin[chain].ticker,
     },
     amount: tx.value
-      ? { amount: tx.value, decimals: chain.decimals }
+      ? { amount: tx.value, decimals: chainFeeCoin[chain].decimals }
       : undefined,
     data: tx.data,
     gasSettings: {
@@ -100,7 +103,7 @@ const transactionHandlers: TransactionHandlers = {
 
 export const getStandardTransactionDetails = async (
   tx: TransactionType.WalletTransaction,
-  chain: ChainProps
+  chain: Chain
 ): Promise<TransactionDetails> => {
   if (!tx || !tx.txType) {
     throw new Error('Invalid transaction object or missing txType')

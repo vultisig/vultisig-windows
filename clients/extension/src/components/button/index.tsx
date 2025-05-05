@@ -20,11 +20,19 @@ const StyledButton = styled.button<{
   weight: Weight
 }>`
   ${({ block, disabled, fitContent, rounded, size, status, type, weight }) => {
-    const statusColors: Record<Status, string> = {
-      default: `${getColor('textPrimary')}`,
-      error: `${getColor('alertError')}`,
-      success: `${getColor('alertSuccess')}`,
-      warning: `${getColor('alertWarning')}`,
+    const statusColors: Record<Status, RuleSet> = {
+      default: css`
+        color: ${getColor('textPrimary')};
+      `,
+      error: css`
+        color: ${getColor('alertError')};
+      `,
+      success: css`
+        color: ${getColor('alertSuccess')};
+      `,
+      warning: css`
+        color: ${getColor('alertWarning')};
+      `,
     }
 
     const sizeStyles: Record<Size, RuleSet> = {
@@ -65,7 +73,7 @@ const StyledButton = styled.button<{
 
         &:hover {
           background-color: ${getColor('backgroundTertiary')};
-          color: ${statusColors[status]};
+          ${statusColors[status]}
         }
       `,
       link: css`

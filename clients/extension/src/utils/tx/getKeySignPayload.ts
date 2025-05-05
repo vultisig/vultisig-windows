@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import { ITransaction, Vault } from '@clients/extension/src/utils/interfaces'
+import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -11,7 +11,9 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
+import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   CosmosIbcDenomTraceSchema,
@@ -22,23 +24,26 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
   transaction: ITransaction,
-  vault: Vault
+  vault: Vault,
+  walletCore: WalletCore
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
         let localCoin = getCoinFromCoinKey({
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
         })
 
         if (!localCoin) {
-          if (transaction.chain.chain === Chain.Solana) {
+          if (transaction.chain === Chain.Solana) {
             if (!transaction.transactionDetails.asset.mint) {
               throw new Error('Mint address not provided')
             }
@@ -46,7 +51,7 @@ export const getKeysignPayload = (
               transaction.transactionDetails.asset.mint
             )
             localCoin = {
-              chain: transaction.chain.chain,
+              chain: transaction.chain,
               decimals: splToken.decimals,
               id: transaction.transactionDetails.asset.mint,
               logo: splToken.logoURI || '',
@@ -55,14 +60,14 @@ export const getKeysignPayload = (
             }
           } else if (
             Object.values(CosmosChain).includes(
-              transaction.chain.chain as CosmosChain
+              transaction.chain as CosmosChain
             )
           ) {
             if (
-              cosmosFeeCoinDenom[transaction.chain.chain as CosmosChain] ===
+              cosmosFeeCoinDenom[transaction.chain as CosmosChain] ===
               transaction.transactionDetails.asset.ticker
             ) {
-              localCoin = { ...chainFeeCoin[transaction.chain.chain] }
+              localCoin = { ...chainFeeCoin[transaction.chain] }
             }
           }
         }
@@ -131,14 +136,22 @@ export const getKeysignPayload = (
           }
         }
 
+        const publicKey = getPublicKey({
+          chain: transaction.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+
         const coin = create(CoinSchema, {
-          chain: transaction.chain.chain,
+          chain: transaction.chain,
           ticker: accountCoin.ticker,
           address: transaction.transactionDetails.from,
           decimals: accountCoin.decimals,
-          hexPublicKey: vault.chains.find(
-            chain => chain.chain === transaction.chain.chain
-          )?.derivationKey,
+          hexPublicKey: toHexPublicKey({
+            publicKey,
+            walletCore,
+          }),
           isNativeToken: isFeeCoin(accountCoin),
           logo: accountCoin.logo,
           priceProviderId: localCoin?.priceProviderId ?? '',
@@ -146,7 +159,7 @@ export const getKeysignPayload = (
         })
 
         let modifiedMemo = null
-        if (getChainKind(transaction.chain.chain) === 'evm') {
+        if (getChainKind(transaction.chain) === 'evm') {
           try {
             const isMemoFunction = await checkERC20Function(
               transaction.transactionDetails.data!
@@ -173,7 +186,7 @@ export const getKeysignPayload = (
           coin,
           blockchainSpecific: chainSpecific,
         })
-        if (isOneOf(transaction.chain.chain, Object.values(UtxoChain))) {
+        if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
         }
         resolve(keysignPayload)

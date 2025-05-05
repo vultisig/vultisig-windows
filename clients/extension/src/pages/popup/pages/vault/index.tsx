@@ -1,6 +1,7 @@
 import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -52,7 +53,7 @@ export const VaultPage = () => {
   const coreNavigate = useCoreNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
-
+  const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   return (
     <VStack fullHeight>
       <PageHeader
@@ -63,7 +64,9 @@ export const VaultPage = () => {
             fitContent
           >
             <WorldIcon fontSize={20} />
-            <ConnectedAppStatus connected />
+            <ConnectedAppStatus
+              connected={Object.values(sessions).length > 0}
+            />
           </ConnectedApp>
         }
         secondaryControls={

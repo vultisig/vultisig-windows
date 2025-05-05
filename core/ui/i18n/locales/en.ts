@@ -5,6 +5,9 @@ export const en = {
   expand_view: 'Expand View',
   general: 'General',
   manage_chains: 'Manage Chains',
+  no_connected_dapps: 'No connected dApps',
+  no_connected_dapps_desc:
+    'dApps will appear here whenever you interact with them',
   open_desktop: 'Open Desktop',
   portfolio_overview: 'Portfolio Overview',
   prioritize_vultisig: 'Prioritize Vultisig',

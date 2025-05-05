@@ -11,21 +11,17 @@ import {
 } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
-  ChainProps,
   ITransaction,
   Messaging,
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
-  Vault,
 } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
-  getStoredChains,
   getStoredTransactions,
   getStoredVaults,
   setIsPriority,
-  setStoredChains,
   setStoredRequest,
   setStoredTransactions,
   setStoredVaults,
@@ -38,9 +34,18 @@ import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
+import {
+  CosmosChainId,
+  EVMChainId,
+  getChainByChainId,
+  getChainId,
+} from '@core/chain/coin/ChainId'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -49,7 +54,18 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  getVaultAppSessions,
+  getVaultsAppSessions,
+  updateAppSession,
+} from '../sessions/state/appSessions'
+import { getDappHostname } from '../utils/connectedApps'
 import { handleSetupInpage } from '../utils/setupInpage'
+import { getCurrentVaultId } from '../vault/state/currentVaultId'
+import { getVaults } from '../vault/state/vaults'
+import { getVaultsCoins } from '../vault/state/vaultsCoins'
+import { getWalletCore } from './walletCore'
+
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -109,46 +125,39 @@ const handleProvider = (chain: Chain, update?: boolean) => {
   rpcProvider = new JsonRpcProvider(rpc)
 }
 
-const handleFindAccounts = (
+const handleFindAccounts = async (
   _chain: Chain,
   _sender: string
 ): Promise<string[]> => {
-  return new Promise(_resolve => {
-    //TODO: introduce connected apps
-    // getStoredVaults()
-    //   .then(vaults => {
-    //     resolve(
-    //       vaults.flatMap(({ active, apps, chains }) =>
-    //         active && apps
-    //           ? chains
-    //               .filter(
-    //                 (selectedChain: ChainProps) =>
-    //                   selectedChain.chain === chain && apps.indexOf(sender) >= 0
-    //               )
-    //               .map(({ address }) => address ?? '')
-    //           : []
-    //       )
-    //     )
-    //   })
-    //   .catch(() => resolve([]))
-  })
+  const currentVaultId = await getCurrentVaultId()
+  if (!currentVaultId) return []
+  const vaultSessions = await getVaultAppSessions(currentVaultId)
+  const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
+  if (currentSession) {
+    const vaultsCoins = await getVaultsCoins()
+    return vaultsCoins[currentVaultId]
+      .filter(
+        accountCoin => isFeeCoin(accountCoin) && accountCoin.chain === _chain
+      )
+      .map(({ address }) => address ?? '')
+  } else {
+    return []
+  }
 }
 
-const handleFindVault = (
+const handleFindVault = async (
   _sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  return new Promise(_resolve => {
-    //TODO: introduce connected apps
-    // getStoredVaults()
-    //   .then(vaults => {
-    //     resolve(
-    //       vaults.find(
-    //         ({ active, apps = [] }) => active && apps.indexOf(sender) >= 0
-    //       )
-    //     )
-    //   })
-    //   .catch(() => resolve(undefined))
-  })
+  const vaults = await getVaults()
+  const currentVaultId = await getCurrentVaultId()
+  if (!currentVaultId) return undefined
+  const vaultSessions = await getVaultAppSessions(currentVaultId)
+  const currentSession = vaultSessions[getDappHostname(_sender)] ?? null
+  if (currentSession) {
+    return vaults.find(vault => getVaultId(vault) === currentVaultId)
+  } else {
+    return undefined
+  }
 }
 
 const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
@@ -261,7 +270,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
 
 const handleSendTransaction = (
   transaction: ITransaction,
-  chain: ChainProps
+  chain: Chain
 ): Promise<SendTransactionResponse> => {
   return new Promise((resolve, reject) => {
     getStoredTransactions().then(transactions => {
@@ -343,7 +352,7 @@ const handleSendTransaction = (
 
 const handleRequest = (
   body: Messaging.Chain.Request,
-  chain: ChainProps,
+  chain: Chain,
   sender: string
 ): Promise<
   | Messaging.Chain.Response
@@ -352,16 +361,16 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
-    if (getChainKind(chain.chain) === 'evm') {
-      if (!rpcProvider) handleProvider(chain.chain)
+    if (getChainKind(chain) === 'evm') {
+      if (!rpcProvider) handleProvider(chain)
     }
 
     switch (method) {
       case RequestMethod.VULTISIG.GET_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_ACCOUNTS: {
-        handleFindAccounts(chain.chain, sender)
+        handleFindAccounts(chain, sender)
           .then(([account]) => {
-            switch (chain.chain) {
+            switch (chain) {
               case Chain.Dydx:
               case Chain.Cosmos:
               case Chain.Kujira:
@@ -383,9 +392,9 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-        handleGetAccounts(chain.chain, sender)
+        handleGetAccounts(chain, sender)
           .then(([account]) => {
-            switch (chain.chain) {
+            switch (chain) {
               case Chain.Dydx:
               case Chain.Cosmos:
               case Chain.Kujira:
@@ -408,15 +417,15 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.CHAIN_ID:
       case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        handleProvider(chain.chain, true)
+        handleProvider(chain, true)
 
-        resolve(getChainId(chain.chain))
+        resolve(getChainId(chain))
 
         break
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        if (chain.chain === Chain.Solana && _transaction.serializedTx) {
+        if (chain === Chain.Solana && _transaction.serializedTx) {
           handleSendTransaction(_transaction as ITransaction, chain)
             .then(result => resolve(result))
             .catch(reject)
@@ -518,7 +527,7 @@ const handleRequest = (
           const [hash] = params
 
           if (hash) {
-            switch (chain.chain) {
+            switch (chain) {
               // Thor
               case Chain.THORChain: {
                 api.thorchain
@@ -534,7 +543,7 @@ const handleRequest = (
               case Chain.Kujira:
               case Chain.MayaChain:
               case Chain.Osmosis: {
-                getCosmosClient(chain.chain)
+                getCosmosClient(chain)
                   .then(client => {
                     client
                       .getTx(String(hash))
@@ -555,7 +564,7 @@ const handleRequest = (
               case Chain.Ethereum:
               case Chain.Optimism:
               case Chain.Polygon: {
-                const client = getEvmClient(chain.chain)
+                const client = getEvmClient(chain)
                 client
                   .getTransaction({ hash: String(hash) as `0x${string}` })
                   .then(result => {
@@ -566,7 +575,7 @@ const handleRequest = (
               }
               default: {
                 api.utxo
-                  .blockchairGetTx(chain.chain, String(hash))
+                  .blockchairGetTx(chain, String(hash))
                   .then(res => resolve(JSON.stringify(res)))
                   .catch(reject)
 
@@ -599,37 +608,54 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.WALLET_ADD_CHAIN:
       case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN: {
-        if (Array.isArray(params)) {
-          const [param] = params
-
-          if (param?.chainId) {
-            const chainFromId = getChainByChainId(param.chainId)
-            const supportedChain = isSupportedChain(chainFromId)
-              ? chainFromId
-              : null
-            if (supportedChain) {
-              getStoredChains().then(storedChains => {
-                setStoredChains([
-                  { ...chainFeeCoin[supportedChain], active: true },
-                  ...storedChains
-                    .filter(
-                      (storedChain: ChainProps) =>
-                        storedChain.chain !== supportedChain
-                    )
-                    .map(chain => ({ ...chain, active: false })),
-                ])
-                  .then(() => resolve(param.chainId))
-                  .catch(reject)
-              })
-            } else {
-              reject()
-            }
-          } else {
-            reject()
-          }
-        } else {
+        if (!Array.isArray(params)) {
           reject()
+          break
         }
+        const [param] = params
+        if (!param?.chainId) {
+          reject()
+          break
+        }
+        const chain = getChainByChainId(param.chainId)
+        if (!chain) {
+          reject()
+          return
+        }
+        const supportedChain = isSupportedChain(chain) ? chain : null
+        if (!supportedChain) {
+          reject()
+          return
+        }
+        getCurrentVaultId().then(async vaultId => {
+          const safeVaultId = shouldBePresent(vaultId)
+          const host = getDappHostname(sender)
+          const allSessions = await getVaultsAppSessions()
+          const previousSession = allSessions?.[safeVaultId]?.[host]
+          if (!previousSession) throw new Error(`No session found for ${host}`)
+          const isEVM = getChainKind(chain) === 'evm'
+          const isCosmos = getChainKind(chain) === 'cosmos'
+          try {
+            await updateAppSession({
+              vaultId: safeVaultId,
+              host: host,
+              fields: {
+                selectedEVMChainId: isEVM
+                  ? (param.chainId as EVMChainId)
+                  : previousSession.selectedEVMChainId,
+                selectedCosmosChainId: isCosmos
+                  ? (param.chainId as CosmosChainId)
+                  : previousSession.selectedCosmosChainId,
+                chainIds: Array.from(
+                  new Set([...(previousSession.chainIds ?? []), param.chainId])
+                ),
+              },
+            })
+            resolve(param.chainId)
+          } catch (e) {
+            reject(e)
+          }
+        })
 
         break
       }
@@ -675,50 +701,49 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN:
       case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-        if (Array.isArray(params)) {
-          const [param] = params
-
-          if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
-              : null
-            if (supportedChain) {
-              getStoredChains().then(storedChains => {
-                const existed =
-                  storedChains.findIndex(
-                    ({ chain }) => chain === supportedChain
-                  ) >= 0
-
-                if (existed) {
-                  setStoredChains(
-                    storedChains.map(chain => ({
-                      ...chain,
-                      active: chain.chain === supportedChain,
-                    }))
-                  )
-                    .then(() => resolve(param.chainId))
-                    .catch(reject)
-                } else {
-                  handleRequest(
-                    { method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN, params },
-                    chain,
-                    sender
-                  )
-                    .then(resolve)
-                    .catch(reject)
-                }
-              })
-            } else {
-              reject(`Chain ${param?.chainId} not supported`)
-            }
-          } else {
-            reject()
-          }
-        } else {
+        if (!Array.isArray(params)) {
           reject()
+          break
         }
+        const [param] = params
+        if (!param?.chainId) {
+          reject()
+          break
+        }
+
+        const chain = getChainByChainId(param.chainId)
+        const supportedChain = isSupportedChain(chain) ? chain : null
+        if (!supportedChain) {
+          reject(`Chain ${param?.chainId} not supported`)
+          break
+        }
+
+        getCurrentVaultId().then(async vaultId => {
+          const safeVaultId = shouldBePresent(vaultId)
+          const host = getDappHostname(sender)
+
+          const allSessions = await getVaultsAppSessions()
+          const previousSession = allSessions?.[safeVaultId]?.[host]
+
+          if (!previousSession) throw new Error(`No session found for ${host}`)
+
+          const isEVM = getChainKind(supportedChain) === 'evm'
+          const isCosmos = getChainKind(supportedChain) === 'cosmos'
+          const chainId = getChainId(supportedChain)
+
+          await updateAppSession({
+            vaultId: safeVaultId,
+            host,
+            fields: {
+              selectedEVMChainId: isEVM
+                ? (chainId as EVMChainId)
+                : previousSession.selectedEVMChainId,
+              selectedCosmosChainId: isCosmos
+                ? (chainId as CosmosChainId)
+                : previousSession.selectedCosmosChainId,
+            },
+          })
+        })
 
         break
       }
@@ -898,7 +923,7 @@ const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        resolve(String(parseInt(getChainId(chain.chain), 16)))
+        resolve(String(parseInt(getChainId(chain), 16)))
         break
       }
       case RequestMethod.CTRL.DEPOSIT: {
@@ -988,207 +1013,160 @@ chrome.runtime.onMessage.addListener(
 
     switch (type) {
       case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Bitcoin, origin)
+        handleRequest(message, Chain.Bitcoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, chainFeeCoin['Bitcoin-Cash'], origin)
+        handleRequest(message, Chain.BitcoinCash, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.COSMOS_REQUEST: {
-        getStoredChains().then(storedChains => {
-          const chain = storedChains.find(
-            (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.chain) === 'cosmos'
+        getVaultsAppSessions().then(sessions => {
+          const dappHostname = getDappHostname(origin)
+          const selectedCosmosChainId = Object.values(sessions).reduce(
+            (acc: CosmosChainId, vault) => {
+              const session = vault[dappHostname]
+              if (session && session.selectedCosmosChainId) {
+                return session.selectedCosmosChainId
+              }
+              return acc
+            },
+            getChainId(Chain.Cosmos) as CosmosChainId
           )
-
-          if (chain) {
-            handleRequest(message, chain, origin)
-              .then(response => {
-                if (
-                  message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
-                ) {
-                  try {
-                    getStoredVaults().then((vaults: Vault[]) => {
-                      const vault = vaults.find((vault: Vault) => {
-                        return (
-                          vault.chains.find(
-                            (selectedChain: ChainProps) =>
-                              selectedChain.chain === chain.chain
-                          )?.address === response
-                        )
-                      })
-
-                      const storedChain = vault!.chains.find(
-                        (selectedChain: ChainProps) =>
-                          selectedChain.chain === chain.chain
-                      )!
-                      const derivationKey = storedChain.derivationKey
-                      if (!derivationKey) {
-                        throw new Error('Derivation key is missing!')
-                      }
-
-                      const keyBytes = Uint8Array.from(
-                        Buffer.from(derivationKey, 'hex')
-                      )
-
-                      const account = [
-                        {
-                          pubkey: Array.from(keyBytes),
-                          address: response,
-                          algo: 'secp256k1',
-                          bech32Address: response,
-                          isKeystone: false,
-                          isNanoLedger: false,
-                        },
-                      ]
-                      sendResponse(account)
-                    })
-                  } catch (e) {
-                    console.error(e)
-                  }
-                } else {
-                  sendResponse(response)
-                }
-              })
-              .catch(error => sendResponse({ error }))
-          } else {
-            handleRequest(
-              {
-                method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN,
-                params: [{ chainId: getChainId(Chain.Cosmos) }],
-              },
-              chainFeeCoin.Cosmos,
-              origin
-            )
-              .then(() =>
-                handleRequest(message, chainFeeCoin.Cosmos, origin)
-                  .then(response => {
-                    if (
-                      message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
-                    ) {
-                      getStoredVaults().then((vaults: Vault[]) => {
-                        const vault = vaults.find((vault: Vault) => {
-                          return (
-                            vault.chains.find(
-                              (selectedChain: ChainProps) =>
-                                selectedChain.chain === Chain.Cosmos
-                            )?.address === response
-                          )
-                        })
-                        const storedChain = vault!.chains.find(
-                          (storedChain: ChainProps) =>
-                            storedChain.chain === Chain.Cosmos
-                        )!
-                        const derivationKey = storedChain.derivationKey
-                        if (!derivationKey) {
-                          throw new Error('Derivation key is missing!')
-                        }
-                        try {
-                          const keyBytes = Uint8Array.from(
-                            Buffer.from(derivationKey, 'hex')
-                          )
-
-                          const account = [
-                            {
-                              address: response,
-                              algo: 'secp256k1',
-                              pubkey: Array.from(keyBytes),
-                            },
-                          ]
-
-                          sendResponse(account)
-                        } catch (e) {
-                          console.error(e)
-                        }
-                      })
-                    } else {
-                      sendResponse(response)
-                    }
-                  })
-
-                  .catch(error => sendResponse({ error }))
-              )
-              .catch(error => sendResponse({ error }))
+          const chain = getChainByChainId(selectedCosmosChainId)
+          if (!chain) {
+            return
           }
+          handleRequest(message, shouldBePresent(chain), origin)
+            .then(response => {
+              if (message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS) {
+                try {
+                  getVaults().then(async (vaults: Vault[]) => {
+                    const allCoins = await getVaultsCoins()
+                    const vault = vaults.find(vault => {
+                      const coins = allCoins[getVaultId(vault)] ?? []
+                      return coins.some(
+                        coin =>
+                          isFeeCoin(coin) &&
+                          coin.chain === chain &&
+                          coin.address === response
+                      )
+                    })
+                    if (!vault) {
+                      throw new Error('Vault not found!')
+                    }
+                    const walletCore = await getWalletCore()
+                    if (!walletCore) {
+                      throw new Error('WalletCore is not initialized!')
+                    }
+                    const publicKey = getPublicKey({
+                      chain: chain,
+                      walletCore,
+                      hexChainCode: vault.hexChainCode,
+                      publicKeys: vault.publicKeys,
+                    })
+
+                    const keyBytes = Uint8Array.from(
+                      Buffer.from(
+                        toHexPublicKey({
+                          publicKey,
+                          walletCore,
+                        }),
+                        'hex'
+                      )
+                    )
+
+                    const account = [
+                      {
+                        pubkey: Array.from(keyBytes),
+                        address: response,
+                        algo: 'secp256k1',
+                        bech32Address: response,
+                        isKeystone: false,
+                        isNanoLedger: false,
+                      },
+                    ]
+                    sendResponse(account)
+                  })
+                } catch (e) {
+                  console.error(e)
+                }
+              } else {
+                sendResponse(response)
+              }
+            })
+            .catch(error => sendResponse({ error }))
         })
 
         break
       }
       case MessageKey.DASH_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dash, origin)
+        handleRequest(message, Chain.Dash, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dogecoin, origin)
+        handleRequest(message, Chain.Dogecoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.ETHEREUM_REQUEST: {
-        getStoredChains().then(storedChains => {
-          const chain = storedChains.find(
-            (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.chain) === 'evm'
+        getVaultsAppSessions().then(sessions => {
+          const dappHostname = getDappHostname(origin)
+          const selectedEVMChainId = Object.values(sessions).reduce(
+            (acc: EVMChainId, vault) => {
+              const session = vault[dappHostname]
+              if (session && session.selectedEVMChainId) {
+                return session.selectedEVMChainId
+              }
+              return acc
+            },
+            getChainId(Chain.Ethereum) as EVMChainId
           )
-
-          if (chain) {
-            handleRequest(message, chain, origin)
-              .then(sendResponse)
-              .catch(error => sendResponse({ error }))
-          } else {
-            handleRequest(
-              {
-                method: RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN,
-                params: [{ chainId: getChainId(Chain.Ethereum) }],
-              },
-              chainFeeCoin.Ethereum,
-              origin
-            )
-              .then(() =>
-                handleRequest(message, chainFeeCoin.Ethereum, origin)
-                  .then(sendResponse)
-                  .catch(error => sendResponse({ error }))
-              )
-              .catch(error => sendResponse({ error }))
-          }
+          handleRequest(
+            message,
+            shouldBePresent(getChainByChainId(selectedEVMChainId)),
+            origin
+          )
+            .then(sendResponse)
+            .catch(error => sendResponse({ error }))
         })
 
         break
       }
       case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Litecoin, origin)
+        handleRequest(message, Chain.Litecoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, chainFeeCoin.MayaChain, origin)
+        handleRequest(message, Chain.MayaChain, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, chainFeeCoin.Solana, origin)
+        handleRequest(message, Chain.Solana, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.THOR_REQUEST: {
-        handleRequest(message, chainFeeCoin.THORChain, origin)
+        handleRequest(message, Chain.THORChain, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
