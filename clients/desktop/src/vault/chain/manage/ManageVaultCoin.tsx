@@ -29,13 +29,14 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
   icon: ReactNode
 }
 
+console.log('test')
+
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
   const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
   const addresses = useCurrentVaultAddreses()
-
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
