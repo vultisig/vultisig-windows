@@ -1,5 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useUpdateAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
@@ -10,8 +12,6 @@ import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 import { z } from 'zod'
 
-import { AddressBookItem } from '../../../../../lib/types/address-book'
-import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation'
 import { getCoinOptions } from '../../helpers/getCoinOptions'
 import { getModifyAddressSchema } from '../../schemas/addressSchema'
 import {
@@ -67,21 +67,23 @@ const ModifyAddressForm = ({
     mutate: updateAddressBookItem,
     isPending: isAddAddressBookAddressPending,
     error: addAddressBookAddressError,
-  } = useUpdateAddressBookItemMutation({
-    onSuccess: onClose,
-  })
+  } = useUpdateAddressBookItemMutation()
 
   const handleModifyAddress = (data: AddressFormValues) => {
     const { address, chain, title } = data
-    updateAddressBookItem({
-      addressBookItem: {
-        ...addressBookItem,
-        address,
-        title,
-        chain: chain as Chain,
+    updateAddressBookItem(
+      {
+        id: addressBookItem.id,
+        fields: {
+          address,
+          title,
+          chain: chain as Chain,
+        },
       },
-      chain: chain as Chain,
-    })
+      {
+        onSuccess: onClose,
+      }
+    )
   }
 
   return (

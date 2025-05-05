@@ -1,3 +1,4 @@
+import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
@@ -40,6 +41,37 @@ export const useCreateCoinMutation = () => {
 
   return useMutation({
     mutationFn,
+    onSuccess: () => {
+      invalidate(vaultsCoinsQueryKey)
+    },
+  })
+}
+
+export const useCreateCoinsMutation = () => {
+  const invalidate = useInvalidateQueries()
+
+  const { createVaultCoins } = useCoreStorage()
+
+  const vaultId = useAssertCurrentVaultId()
+
+  return useMutation({
+    mutationFn: (coins: AccountCoin[]) => createVaultCoins({ vaultId, coins }),
+    onSuccess: () => {
+      invalidate(vaultsCoinsQueryKey)
+    },
+  })
+}
+
+export const useDeleteCoinMutation = () => {
+  const invalidate = useInvalidateQueries()
+
+  const { deleteVaultCoin } = useCoreStorage()
+
+  const vaultId = useAssertCurrentVaultId()
+
+  return useMutation({
+    mutationFn: async (coinKey: AccountCoinKey) =>
+      deleteVaultCoin({ vaultId, coinKey }),
     onSuccess: () => {
       invalidate(vaultsCoinsQueryKey)
     },
