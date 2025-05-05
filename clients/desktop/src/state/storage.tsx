@@ -3,10 +3,13 @@ import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
+import { Language } from '@core/ui/i18n/Language'
+import { primaryLanguage } from '@core/ui/i18n/Language'
 import {
   currentVaultIdQueryKey,
   defaultChainsQueryKey,
   fiatCurrencyQueryKey,
+  languageQueryKey,
 } from '@core/ui/query/keys'
 import {
   CoreStorage,
@@ -21,10 +24,12 @@ import {
   DeleteVaultFunction,
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
+  GetLanguageFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
   SetDefaultChainsFunction,
+  SetLanguageFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
@@ -204,6 +209,22 @@ const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
   persistentStorage.setItem(currentVaultIdKey, vaultId)
 }
 
+const [languageKey] = languageQueryKey
+
+const getLanguage: GetLanguageFunction = async () => {
+  const value = persistentStorage.getItem<Language>(languageKey)
+
+  if (value === undefined) {
+    return primaryLanguage
+  }
+
+  return value
+}
+
+const setLanguage: SetLanguageFunction = async language => {
+  persistentStorage.setItem(languageKey, language)
+}
+
 export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -227,4 +248,6 @@ export const storage: CoreStorage = {
   createAddressBookItem,
   updateAddressBookItem,
   deleteAddressBookItem,
+  getLanguage,
+  setLanguage,
 }

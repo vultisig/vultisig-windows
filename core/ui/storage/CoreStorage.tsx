@@ -3,13 +3,12 @@ import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
+import { Language } from '../i18n/Language'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 import { CurrentVaultId } from './currentVaultId'
 
-export type SetFiatCurrencyFunction = (
-  value: FiatCurrency
-) => Promise<void> | void
+export type SetFiatCurrencyFunction = (value: FiatCurrency) => Promise<void>
 
 export type UpdateVaultInput = {
   vaultId: string
@@ -29,17 +28,15 @@ export type CreateVaultCoinsFunction = (
   input: CreateVaultCoinsInput
 ) => Promise<void>
 
-export type SetDefaultChainsFunction = (chains: Chain[]) => Promise<void> | void
+export type SetDefaultChainsFunction = (chains: Chain[]) => Promise<void>
 
-export type GetDefaultChainsFunction = () => Promise<Chain[]> | Chain[]
+export type GetDefaultChainsFunction = () => Promise<Chain[]>
 
-export type GetFiatCurrencyFunction = () => Promise<FiatCurrency> | FiatCurrency
+export type GetFiatCurrencyFunction = () => Promise<FiatCurrency>
 
-type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId> | CurrentVaultId
+export type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
 
-export type SetCurrentVaultIdFunction = (
-  id: CurrentVaultId
-) => Promise<void> | void
+export type SetCurrentVaultIdFunction = (id: CurrentVaultId) => Promise<void>
 
 export type GetVaultsFunction = () => Promise<Vault[]>
 
@@ -99,6 +96,10 @@ export type DeleteVaultCoinFunction = (
 
 export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
 
+export type GetLanguageFunction = () => Promise<Language>
+
+export type SetLanguageFunction = (language: Language) => Promise<void>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -122,4 +123,6 @@ export type CoreStorage = {
   createAddressBookItem: CreateAddressBookItemFunction
   updateAddressBookItem: UpdateAddressBookItemFunction
   deleteAddressBookItem: DeleteAddressBookItemFunction
+  getLanguage: GetLanguageFunction
+  setLanguage: SetLanguageFunction
 }

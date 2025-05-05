@@ -27,6 +27,7 @@ import {
   getAddressBookItems,
   updateAddressBookItems,
 } from '../storage/addressBook'
+import { getLanguage, setLanguage } from '../storage/language'
 import {
   getCurrentVaultId,
   setCurrentVaultId,
@@ -183,4 +184,6 @@ export const storage: CoreStorage = {
   createAddressBookItem,
   updateAddressBookItem,
   deleteAddressBookItem,
+  getLanguage,
+  setLanguage,
 }

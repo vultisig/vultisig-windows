@@ -13,7 +13,6 @@ import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
-import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { storage } from './state/storage'
 import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
@@ -40,25 +39,24 @@ const coreState: CoreState = {
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
-  const [language] = useLanguage()
   const [mpcLib] = useVaultCreationMpcLib()
 
   return (
     <VaultCreationMpcLibProvider value={mpcLib}>
       <CoreProvider value={coreState}>
         <QueryClientProvider client={queryClient}>
-          <I18nProvider language={language}>
-            <ThemeProvider theme={darkTheme}>
-              <WalletCoreProvider>
-                <StorageDependant>
+          <ThemeProvider theme={darkTheme}>
+            <WalletCoreProvider>
+              <StorageDependant>
+                <I18nProvider>
                   {children}
                   <ActiveVaultOnly>
                     <CoinFinder />
                   </ActiveVaultOnly>
-                </StorageDependant>
-              </WalletCoreProvider>
-            </ThemeProvider>
-          </I18nProvider>
+                </I18nProvider>
+              </StorageDependant>
+            </WalletCoreProvider>
+          </ThemeProvider>
         </QueryClientProvider>
       </CoreProvider>
     </VaultCreationMpcLibProvider>
