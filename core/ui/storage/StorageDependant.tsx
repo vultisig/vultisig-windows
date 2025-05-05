@@ -5,6 +5,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
+import { useAddressBookItemsQuery } from './addressBook'
 import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
@@ -20,6 +21,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const defaultChains = useDefaultChainsQuery()
   const fiatCurrency = useFiatCurrencyQuery()
   const currentVaultId = useCurrentVaultIdQuery()
+  const addressBookItems = useAddressBookItemsQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -27,6 +29,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     defaultChains,
     fiatCurrency,
     currentVaultId,
+    addressBookItems,
   })
 
   return (

@@ -6,6 +6,7 @@ import { Entry } from '@lib/utils/entities/Entry'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 import { vaultFoldersQueryKey, vaultsQueryKey } from '../query/keys'
 import { useCoreStorage } from '../state/storage'
@@ -90,6 +91,42 @@ export const useUpdateVaultFolderMutation = () => {
 
   return useMutation({
     mutationFn: updateVaultFolder,
+    onSuccess: () => {
+      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
+    },
+  })
+}
+
+type CreateVaultFolderInput = {
+  name: string
+  order: number
+  vaultIds: string[]
+}
+
+export const useCreateVaultFolderMutation = () => {
+  const invalidateQueries = useInvalidateQueries()
+
+  const { createVaultFolder, updateVault } = useCoreStorage()
+
+  return useMutation({
+    mutationFn: async ({ name, order, vaultIds }: CreateVaultFolderInput) => {
+      const folder = {
+        name,
+        order,
+        id: uuidv4(),
+      }
+
+      await createVaultFolder(folder)
+
+      await Promise.all(
+        vaultIds.map(vaultId =>
+          updateVault({
+            vaultId,
+            fields: { folderId: folder.id },
+          })
+        )
+      )
+    },
     onSuccess: () => {
       invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
     },
