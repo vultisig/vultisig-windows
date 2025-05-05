@@ -102,11 +102,19 @@ export type SetLanguageFunction = (language: Language) => Promise<void>
 
 export const isVaultBalanceInitallyVisible = true
 
+export const isHasFinishedOnboardingInitially = false
+
 export type SetIsVaultBalanceVisibleFunction = (
   isVaultBalanceVisible: boolean
 ) => Promise<void>
 
 export type GetIsVaultBalanceVisibleFunction = () => Promise<boolean>
+
+export type SetHasFinishedOnboardingFunction = (
+  hasFinishedOnboarding: boolean
+) => Promise<void>
+
+export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
@@ -135,4 +143,6 @@ export type CoreStorage = {
   setLanguage: SetLanguageFunction
   getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction
   setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction
+  getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
+  setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
 }

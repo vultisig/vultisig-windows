@@ -4,7 +4,6 @@ import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
 export enum PersistentStateKey {
   ReactQueryState = 'reactQueryState',
-  HasFinishedOnboarding = 'HasFinishedOnboarding',
   VaultCreationMpcLib = 'vaultCreationMpcLib',
 }
 

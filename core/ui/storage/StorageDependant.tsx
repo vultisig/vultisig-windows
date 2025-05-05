@@ -14,6 +14,7 @@ import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
+import { useHasFinishedOnboardingQuery } from './onboarding'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery } from './vaults'
 
@@ -26,6 +27,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const addressBookItems = useAddressBookItemsQuery()
   const language = useLanguageQuery()
   const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
+  const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -36,6 +38,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     addressBookItems,
     language,
     isVaultBalanceVisible,
+    hasFinishedOnboarding,
   })
 
   return (

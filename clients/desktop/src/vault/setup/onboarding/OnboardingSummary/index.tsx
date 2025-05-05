@@ -1,3 +1,4 @@
+import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -9,7 +10,6 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useHasFinishedOnboarding } from '../../../../onboarding/hooks/useHasFinishedOnboarding'
 import {
   ContentWrapper,
   IconWrapper,
@@ -21,7 +21,8 @@ import {
 
 export const OnboardingSummary = () => {
   const { t } = useTranslation()
-  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding()
+  const { mutate: setHasFinishedOnboarding } =
+    useSetHasFinishedOnboardingMutation()
   const [isChecked, { toggle }] = useBoolean(false)
 
   const items = [

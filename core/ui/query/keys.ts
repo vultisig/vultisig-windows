@@ -15,3 +15,5 @@ export const addressBookItemsQueryKey = ['addressBookItems'] as const
 export const languageQueryKey = ['language'] as const
 
 export const isVaultBalanceVisibleQueryKey = ['isVaultBalanceVisible'] as const
+
+export const hasFinishedOnboardingQueryKey = ['hasFinishedOnboarding'] as const

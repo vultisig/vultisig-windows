@@ -29,6 +29,10 @@ import {
 } from '../storage/addressBook'
 import { getLanguage, setLanguage } from '../storage/language'
 import {
+  getHasFinishedOnboarding,
+  setHasFinishedOnboarding,
+} from '../storage/onboarding'
+import {
   getIsVaultBalanceVisible,
   setIsVaultBalanceVisible,
 } from '../storage/vaultBalanceVisibility'
@@ -192,4 +196,6 @@ export const storage: CoreStorage = {
   setLanguage,
   getIsVaultBalanceVisible,
   setIsVaultBalanceVisible,
+  getHasFinishedOnboarding,
+  setHasFinishedOnboarding,
 }
