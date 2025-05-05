@@ -1,8 +1,17 @@
+import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+import {
+  getVaultAppSessions,
+  getVaultsAppSessions,
+  setVaultsAppSessions,
+  updateAppSession,
+  VaultsAppSessions,
+} from '@clients/extension/src/sessions/state/appSessions'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
+import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
   Instance,
   isSupportedChain,
@@ -18,6 +27,7 @@ import {
   TransactionType,
   VaultExport,
 } from '@clients/extension/src/utils/interfaces'
+import { handleSetupInpage } from '@clients/extension/src/utils/setupInpage'
 import {
   getIsPriority,
   getStoredTransactions,
@@ -29,6 +39,9 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '@clients/extension/src/utils/tx/getStandardTx'
+import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
+import { getVaults } from '@clients/extension/src/vault/state/vaults'
+import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -54,19 +67,6 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import {
-  getVaultAppSessions,
-  getVaultsAppSessions,
-  setVaultsAppSessions,
-  updateAppSession,
-  VaultsAppSessions,
-} from '@clients/extension/src/sessions/state/appSessions'
-import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
-import { handleSetupInpage } from '@clients/extension/src/utils/setupInpage'
-import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
-import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
 import { getWalletCore } from './walletCore'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
