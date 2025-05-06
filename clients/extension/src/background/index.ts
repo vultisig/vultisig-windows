@@ -1,4 +1,6 @@
+import { getWalletCore } from '@clients/extension/src/background/walletCore'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+import { appPaths } from '@clients/extension/src/navigation'
 import {
   getVaultAppSessions,
   getVaultsAppSessions,
@@ -66,9 +68,6 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-
-import { getWalletCore } from '@clients/extension/src/background/walletCore'
-import { appPaths } from '@clients/extension/src/navigation'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
