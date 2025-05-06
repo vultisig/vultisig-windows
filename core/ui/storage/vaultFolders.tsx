@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { vaultFoldersQueryKey, vaultsQueryKey } from '../query/keys'
 import { useUpdateVaultMutation } from '../vault/mutations/useUpdateVaultMutation'
 import { getVaultId } from '../vault/Vault'
+import { UpdateVaultFolderFunction } from './CoreStorage'
 import { useVaults } from './vaults'
 
 export const useVaultFoldersQuery = () => {
@@ -76,9 +77,10 @@ export const useDeleteVaultFolderMutation = () => {
             })
           )
         )
+
+        await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
       }
     },
-    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
   })
 }
 
@@ -87,9 +89,13 @@ export const useUpdateVaultFolderMutation = () => {
 
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: UpdateVaultFolderFunction = async input => {
+    await updateVaultFolder(input)
+    await invalidateQueries(vaultFoldersQueryKey)
+  }
+
   return useMutation({
-    mutationFn: updateVaultFolder,
-    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
+    mutationFn,
   })
 }
 
@@ -122,7 +128,8 @@ export const useCreateVaultFolderMutation = () => {
           })
         )
       )
+
+      await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
     },
-    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
   })
 }

@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 
 import { vaultsCoinsQueryKey, vaultsQueryKey } from '../query/keys'
 import { getVaultId, Vault } from '../vault/Vault'
+import { DeleteVaultFunction } from './CoreStorage'
 
 type MergeVaultsWithCoinsInput = {
   vaults: Vault[]
@@ -91,8 +92,12 @@ export const useDeleteVaultMutation = () => {
   const { deleteVault } = useCore()
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: DeleteVaultFunction = async input => {
+    await deleteVault(input)
+    await invalidateQueries(vaultsQueryKey)
+  }
+
   return useMutation({
-    mutationFn: deleteVault,
-    onSuccess: () => invalidateQueries(vaultsQueryKey),
+    mutationFn,
   })
 }

@@ -4,7 +4,7 @@ import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
-
+import { SetHasFinishedOnboardingFunction } from './CoreStorage'
 export const useHasFinishedOnboardingQuery = () => {
   const { getHasFinishedOnboarding } = useCore()
 
@@ -24,8 +24,12 @@ export const useSetHasFinishedOnboardingMutation = () => {
   const { setHasFinishedOnboarding } = useCore()
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: SetHasFinishedOnboardingFunction = async input => {
+    await setHasFinishedOnboarding(input)
+    await invalidateQueries(hasFinishedOnboardingQueryKey)
+  }
+
   return useMutation({
-    mutationFn: setHasFinishedOnboarding,
-    onSuccess: () => invalidateQueries(hasFinishedOnboardingQueryKey),
+    mutationFn,
   })
 }

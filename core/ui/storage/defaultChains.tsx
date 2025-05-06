@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { defaultChainsQueryKey } from '../query/keys'
 import { useCore } from '../state/core'
+import { SetDefaultChainsFunction } from './CoreStorage'
 
 export const initialDefaultChains = [
   Chain.Bitcoin,
@@ -33,10 +34,12 @@ export const useSetDefaultChainsMutation = () => {
   const { setDefaultChains } = useCore()
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: SetDefaultChainsFunction = async input => {
+    await setDefaultChains(input)
+    await invalidateQueries(defaultChainsQueryKey)
+  }
+
   return useMutation({
-    mutationFn: async (chains: Chain[]) => {
-      await setDefaultChains(chains)
-    },
-    onSuccess: () => invalidateQueries(defaultChainsQueryKey),
+    mutationFn,
   })
 }

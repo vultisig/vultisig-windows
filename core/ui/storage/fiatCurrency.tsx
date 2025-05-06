@@ -28,7 +28,7 @@ export const useSetFiatCurrencyMutation = () => {
   return useMutation({
     mutationFn: async (value: FiatCurrency) => {
       await setFiatCurrency(value)
+      await invalidateQueries(fiatCurrencyQueryKey)
     },
-    onSuccess: () => invalidateQueries(fiatCurrencyQueryKey),
   })
 }

@@ -4,6 +4,11 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { addressBookItemsQueryKey } from '../query/keys'
+import {
+  CreateAddressBookItemFunction,
+  DeleteAddressBookItemFunction,
+  UpdateAddressBookItemFunction,
+} from './CoreStorage'
 
 export const useAddressBookItemsQuery = () => {
   const { getAddressBookItems } = useCore()
@@ -25,9 +30,13 @@ export const useCreateAddressBookItemMutation = () => {
 
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: CreateAddressBookItemFunction = async input => {
+    await createAddressBookItem(input)
+    await invalidateQueries(addressBookItemsQueryKey)
+  }
+
   return useMutation({
-    mutationFn: createAddressBookItem,
-    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
+    mutationFn,
   })
 }
 
@@ -36,9 +45,13 @@ export const useDeleteAddressBookItemMutation = () => {
 
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: DeleteAddressBookItemFunction = async input => {
+    await deleteAddressBookItem(input)
+    await invalidateQueries(addressBookItemsQueryKey)
+  }
+
   return useMutation({
-    mutationFn: deleteAddressBookItem,
-    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
+    mutationFn,
   })
 }
 
@@ -47,8 +60,12 @@ export const useUpdateAddressBookItemMutation = () => {
 
   const invalidateQueries = useInvalidateQueries()
 
+  const mutationFn: UpdateAddressBookItemFunction = async input => {
+    await updateAddressBookItem(input)
+    await invalidateQueries(addressBookItemsQueryKey)
+  }
+
   return useMutation({
-    mutationFn: updateAddressBookItem,
-    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
+    mutationFn,
   })
 }
