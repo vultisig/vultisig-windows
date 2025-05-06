@@ -5,11 +5,11 @@ import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
+    assetsDir: '',
+    copyPublicDir: false,
     emptyOutDir: false,
     manifest: false,
     outDir: 'dist',
-    assetsDir: '',
-    copyPublicDir: false,
     rollupOptions: {
       input: {
         content: path.resolve(__dirname, manifest.content),

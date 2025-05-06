@@ -1,5 +1,10 @@
 import { Button } from '@clients/extension/src/components/button'
-import { AppProviders } from '@clients/extension/src/providers/AppProviders'
+import { useAddVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useAddVaultSessionMutation'
+import {
+  getDappHost,
+  getDappHostname,
+} from '@clients/extension/src/utils/connectedApps'
+import { getStoredRequest } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
@@ -14,34 +19,30 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { StrictMode, useEffect, useState } from 'react'
-import ReactDOM from 'react-dom/client'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useAddVaultSessionMutation } from '../../sessions/mutations/useAddVaultSessionMutation'
-import { getDappHost, getDappHostname } from '../../utils/connectedApps'
-import { getStoredRequest } from '../../utils/storage'
 
 interface InitialState {
   chain?: Chain
   sender?: string
 }
 
-const App = () => {
+export const ConnectDAppPage = () => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { sender, chain } = state
   const vaults = useVaults()
-
   const { mutateAsync: addSession } = useAddVaultSessionMutation()
+
   const handleClose = () => {
     window.close()
   }
 
   const handleSubmit = async () => {
     if (!vaultId || !sender || !chain) return
+
     await addSession({
       vaultId: vaultId,
       session: {
@@ -58,6 +59,7 @@ const App = () => {
             : undefined,
       },
     })
+
     handleClose()
   }
 
@@ -118,11 +120,3 @@ const App = () => {
     <></>
   )
 }
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
-  </StrictMode>
-)

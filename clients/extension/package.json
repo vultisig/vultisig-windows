@@ -10,10 +10,10 @@
   },
   "type": "module",
   "scripts": {
-    "build:app": "tsc -b && cross-env CHUNK=app vite build",
-    "build:content": "tsc -b && cross-env CHUNK=content vite build",
-    "build:inpage": "tsc -b && cross-env CHUNK=inpage vite build",
-    "build:relay": "tsc -b && cross-env CHUNK=relay vite build",
+    "build:app": "tsc -b && vite build",
+    "build:content": "tsc -b && vite build --config vite.config.content.ts",
+    "build:inpage": "tsc -b && vite build --config vite.config.inpage.ts",
+    "build:relay": "tsc -b && vite build --config vite.config.relay.ts",
     "build": "npm-run-all --serial build:app build:content build:inpage build:relay",
     "dev": "nodemon --watch src --ext ts,tsx,scss --exec \"npm run build\"",
     "lint": "eslint .",
@@ -53,7 +53,6 @@
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
-    "cross-env": "^7.0.3",
     "eslint": "^9.22.0",
     "nodemon": "^3.1.9",
     "npm-run-all": "^4.1.5",
@@ -67,13 +66,8 @@
   },
   "manifest": {
     "background": "src/background/index.ts",
-    "connect": "connect.html",
     "content": "src/content/index.ts",
     "inpage": "src/inpage/index.ts",
-    "import": "import.html",
-    "popup": "popup.html",
-    "relay": "src/relay/index.ts",
-    "transaction": "transaction.html",
-    "vaults": "vaults.html"
+    "relay": "src/relay/index.ts"
   }
 }

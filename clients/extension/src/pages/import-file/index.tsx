@@ -1,4 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
+import { appPaths } from '@clients/extension/src/navigation'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
@@ -26,6 +27,7 @@ import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 
 interface InitialState {
@@ -46,7 +48,6 @@ const Component = () => {
     status: 'default',
   }
   const { mutateAsync: createVault } = useCreateVaultMutation()
-
   const [state, setState] = useState(initialState)
   const {
     isWindows,
@@ -56,10 +57,9 @@ const Component = () => {
     vaultContainer,
     isEncrypted,
   } = state
-
   const navigate = useCoreNavigate()
-  const isPopup = new URLSearchParams(window.location.search).get('isPopup')
-  const isPopupRef = useRef(isPopup)
+  const { pathname } = useLocation()
+  const isPopupRef = useRef(pathname === appPaths.importTab)
 
   const errorMessages = {
     [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
@@ -153,7 +153,7 @@ const Component = () => {
 
         chrome.windows.create(
           {
-            url: chrome.runtime.getURL('import.html?isPopup=true'),
+            url: chrome.runtime.getURL(`index.html#${appPaths.importTab}`),
             type: 'panel',
             height,
             left,

@@ -26,7 +26,6 @@ import {
   Close,
   SquareArrow,
 } from '@clients/extension/src/icons'
-import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
@@ -39,6 +38,7 @@ import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPay
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
 import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
+import { ParsedSolanaSwapParams } from '@clients/extension/src/utils/tx/solana/types/types'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
@@ -78,11 +78,8 @@ import {
 } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
-import { StrictMode, useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom/client'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { ParsedSolanaSwapParams } from '../../utils/tx/solana/types/types'
 
 interface FormProps {
   password: string
@@ -101,7 +98,7 @@ interface InitialState {
   keysignPayload?: KeysignPayload
 }
 
-const Component = () => {
+export const TransactionPage = () => {
   const { t } = useTranslation()
   const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
@@ -1357,13 +1354,3 @@ const Component = () => {
     </ConfigProvider>
   )
 }
-
-export default Component
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppProviders>
-      <Component />
-    </AppProviders>
-  </StrictMode>
-)
