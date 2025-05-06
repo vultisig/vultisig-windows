@@ -12,7 +12,6 @@ import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
-import { useOpenUrl } from '@core/ui/state/openUrl'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { LinkIcon } from '@lib/ui/icons/LinkIcon'
@@ -27,6 +26,7 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCore } from '../../../state/core'
 import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
@@ -45,7 +45,7 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     swapPayload,
   } = value
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   const isSwapTx =
     (swapPayload && swapPayload.value) ||

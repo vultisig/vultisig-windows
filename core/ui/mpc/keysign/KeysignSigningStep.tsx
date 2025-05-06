@@ -9,7 +9,6 @@ import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningSta
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useVersion } from '@core/ui/product/state/version'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Button } from '@lib/ui/buttons/Button'
@@ -25,6 +24,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCore } from '../../state/core'
+
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
 } & Partial<OnBackProp>
@@ -34,7 +35,7 @@ export const KeysignSigningStep = ({
   payload,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const localVersion = useVersion()
+  const { version } = useCore()
 
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
@@ -105,7 +106,7 @@ export const KeysignSigningStep = ({
             </VStack>
             <VStack alignItems="center">
               <Text color="shy" size={12}>
-                {t('version')} {localVersion}
+                {t('version')} {version}
               </Text>
             </VStack>
           </PageContent>

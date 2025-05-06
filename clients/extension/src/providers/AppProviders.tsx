@@ -1,13 +1,9 @@
-import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
-import { MpcLocalModeAvailabilityProvider } from '@core/ui/mpc/state/MpcLocalModeAvailability'
+import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
-import { VersionProvider } from '@core/ui/product/state/version'
-import { OpenUrlProvider } from '@core/ui/state/openUrl'
-import { SaveFileFunction, SaveFileProvider } from '@core/ui/state/saveFile'
+import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
@@ -16,7 +12,7 @@ import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
-import { StorageProvider } from '../state/storage'
+import { storage } from '../state/storage'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -31,10 +27,16 @@ const ExtensionGlobalStyle = createGlobalStyle`
 
 const defaultMpcLib: MpcLib = 'DKLS'
 
-const openUrl = (url: string) => window.open(url, '_blank')
-
-const saveFile: SaveFileFunction = async ({ name, blob }) => {
-  initiateFileDownload({ name, blob })
+const coreState: CoreState = {
+  ...storage,
+  openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
+  saveFile: async ({ name, blob }) => {
+    initiateFileDownload({ name, blob })
+  },
+  mpcDevice: 'extension',
+  getClipboardText: () => navigator.clipboard.readText(),
+  version: '1.0.0',
+  isLocalModeAvailable: false,
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -42,27 +44,17 @@ export const AppProviders = ({ children }: ChildrenProp) => {
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       <ExtensionGlobalStyle />
-      <VersionProvider value="1.0.0">
-        <MpcLocalModeAvailabilityProvider value={false}>
-          <VaultCreationMpcLibProvider value={defaultMpcLib}>
-            <OpenUrlProvider value={openUrl}>
-              <SaveFileProvider value={saveFile}>
-                <MpcDeviceProvider value="extension">
-                  <QueryProvider>
-                    <I18nProvider>
-                      <WalletCoreProvider>
-                        <StorageProvider>
-                          <StorageDependant>{children}</StorageDependant>
-                        </StorageProvider>
-                      </WalletCoreProvider>
-                    </I18nProvider>
-                  </QueryProvider>
-                </MpcDeviceProvider>
-              </SaveFileProvider>
-            </OpenUrlProvider>
-          </VaultCreationMpcLibProvider>
-        </MpcLocalModeAvailabilityProvider>
-      </VersionProvider>
+      <VaultCreationMpcLibProvider value={defaultMpcLib}>
+        <CoreProvider value={coreState}>
+          <QueryProvider>
+            <WalletCoreProvider>
+              <StorageDependant>
+                <I18nProvider>{children}</I18nProvider>
+              </StorageDependant>
+            </WalletCoreProvider>
+          </QueryProvider>
+        </CoreProvider>
+      </VaultCreationMpcLibProvider>
     </ThemeProvider>
   )
 }

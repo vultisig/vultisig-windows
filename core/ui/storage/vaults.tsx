@@ -1,5 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
@@ -10,7 +11,6 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { vaultsCoinsQueryKey, vaultsQueryKey } from '../query/keys'
-import { useCoreStorage } from '../state/storage'
 import { getVaultId, Vault } from '../vault/Vault'
 
 type MergeVaultsWithCoinsInput = {
@@ -31,7 +31,7 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
 }
 
 export const useVaultsQuery = () => {
-  const { getVaults, getVaultsCoins } = useCoreStorage()
+  const { getVaults, getVaultsCoins } = useCore()
 
   const vaults = useQuery({
     queryKey: vaultsQueryKey,
@@ -88,13 +88,11 @@ export const useVaultOrders = () => {
 }
 
 export const useDeleteVaultMutation = () => {
-  const { deleteVault } = useCoreStorage()
+  const { deleteVault } = useCore()
   const invalidateQueries = useInvalidateQueries()
 
   return useMutation({
     mutationFn: deleteVault,
-    onSuccess: () => {
-      invalidateQueries(vaultsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultsQueryKey),
   })
 }

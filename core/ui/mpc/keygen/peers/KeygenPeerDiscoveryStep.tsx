@@ -21,7 +21,7 @@ import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndic
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
@@ -62,7 +62,7 @@ export const KeygenPeerDiscoveryStep = ({
   const peerOptionsQuery = useMpcPeerOptionsQuery()
   const isLargeScreen = useIsTabletDeviceAndUp()
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   const joinUrlQuery = useJoinKeygenUrlQuery()
 
