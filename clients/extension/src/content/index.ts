@@ -1,4 +1,6 @@
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
+import { initializeMessenger } from '../messengers/initializeMessenger'
+import { getPrioritizeWallet } from '../state/currentSettings/isPrioritized'
 
 const insertInpageScript = () => {
   if (document.getElementById('inpage')) {
@@ -19,3 +21,10 @@ try {
 } catch (error) {
   console.error('Error setting up extension communications:', error)
 }
+const inpageMessenger = initializeMessenger({ connect: 'inpage' })
+
+setTimeout(async () => {
+  inpageMessenger.send('setDefaultProvider', {
+    vultisigDefaultProvider: await getPrioritizeWallet(),
+  })
+}, 1)
