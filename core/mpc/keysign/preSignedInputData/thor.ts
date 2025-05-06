@@ -17,6 +17,8 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     chain,
   })
 
+  const isMerge = keysignPayload?.memo?.startsWith('merge:')
+
   const commCoin = assertField(keysignPayload, 'coin')
 
   const fromAddr = walletCore.AnyAddress.createWithString(
@@ -29,7 +31,30 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
   let message: TW.Cosmos.Proto.Message[]
 
-  if (chainSpecific.isDeposit) {
+  if (isMerge) {
+    const mergeToken = keysignPayload.memo?.toLowerCase().replace('merge:', '')
+
+    const wasmExecuteMsg = {
+      deposit: {},
+    }
+
+    message = [
+      TW.Cosmos.Proto.Message.create({
+        wasmExecuteContractGeneric:
+          TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+            senderAddress: commCoin.address,
+            contractAddress: keysignPayload.toAddress,
+            executeMsg: JSON.stringify(wasmExecuteMsg),
+            coins: [
+              TW.Cosmos.Proto.Amount.create({
+                denom: mergeToken,
+                amount: keysignPayload.toAmount,
+              }),
+            ],
+          }),
+      }),
+    ]
+  } else if (chainSpecific.isDeposit) {
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
         chain: 'THOR',
@@ -90,7 +115,7 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     memo: keysignPayload.memo || '',
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
-      gas: new Long(cosmosGasLimitRecord[chain]),
+      gas: new Long(isMerge ? 20_000_000 : cosmosGasLimitRecord[chain]),
     }),
   })
 

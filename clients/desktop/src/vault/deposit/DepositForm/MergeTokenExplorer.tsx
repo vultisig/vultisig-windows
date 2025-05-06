@@ -70,6 +70,10 @@ export const MergeTokenExplorer: FC<Props> = ({
                     t => t.ticker === token?.ticker
                   )?.thorchainAddress
 
+                  setValue('selectedCoin', token, {
+                    shouldValidate: true,
+                  })
+
                   setValue('nodeAddress', selectedMergeAddress, {
                     shouldValidate: true,
                   })
