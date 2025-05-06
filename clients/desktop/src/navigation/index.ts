@@ -15,7 +15,6 @@ export const appPaths = {
   send: '/vault/send',
   editVault: '/vault/settings/vault-settings',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
-  vaultRename: '/vault/settings/vault-settings/rename-vault',
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
   languageSettings: '/vault/settings/language-settings',
   checkUpdate: '/vault/settings/check-update',
