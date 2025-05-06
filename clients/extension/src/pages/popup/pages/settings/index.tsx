@@ -80,7 +80,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={languageName[language]}
               icon={<LanguagesIcon fontSize={20} />}
-              onClick={() => navigate('languageSettings')}
+              onClick={() => coreNavigate('languageSettings')}
               title={t('language')}
               hoverable
               showArrow

@@ -14,6 +14,7 @@ export const corePaths = {
   joinKeygen: '/join-keygen',
   joinKeysign: '/join-keysign',
   keysign: '/vault/keysign',
+  languageSettings: '/settings/language',
   manageVaultChains: '/vault/chains/manage',
   newVault: '/vault/new',
   renameVault: '/settings/vault/rename',
