@@ -1,19 +1,27 @@
-export const vaultsQueryKey = ['vaults', 'v3'] as const
+const version = 'v3'
 
-export const fiatCurrencyQueryKey = ['fiatCurrency'] as const
+export const vaultsQueryKey = ['vaults', version] as const
 
-export const currentVaultIdQueryKey = ['currentVaultId'] as const
+export const fiatCurrencyQueryKey = ['fiatCurrency', version] as const
 
-export const vaultsCoinsQueryKey = ['vaultsCoins'] as const
+export const currentVaultIdQueryKey = ['currentVaultId', version] as const
 
-export const defaultChainsQueryKey = ['defaultChains'] as const
+export const vaultsCoinsQueryKey = ['vaultsCoins', version] as const
 
-export const vaultFoldersQueryKey = ['vaultFolders'] as const
+export const defaultChainsQueryKey = ['defaultChains', version] as const
 
-export const addressBookItemsQueryKey = ['addressBookItems'] as const
+export const vaultFoldersQueryKey = ['vaultFolders', version] as const
 
-export const languageQueryKey = ['language'] as const
+export const addressBookItemsQueryKey = ['addressBookItems', version] as const
 
-export const isVaultBalanceVisibleQueryKey = ['isVaultBalanceVisible'] as const
+export const languageQueryKey = ['language', version] as const
 
-export const hasFinishedOnboardingQueryKey = ['hasFinishedOnboarding'] as const
+export const isVaultBalanceVisibleQueryKey = [
+  'isVaultBalanceVisible',
+  version,
+] as const
+
+export const hasFinishedOnboardingQueryKey = [
+  'hasFinishedOnboarding',
+  version,
+] as const
