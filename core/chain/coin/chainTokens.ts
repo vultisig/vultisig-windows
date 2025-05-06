@@ -949,7 +949,9 @@ for (const chain of CHAINS_WITH_IBC_TOKENS) {
   )
     .map(t => {
       const hit = chainIBC.find(i => i.ticker === t.ticker)
-      return hit ? { ...t, chain, id: hit.id } : null
+      return hit
+        ? { ...t, chain, id: `thor.${hit.ticker.toLowerCase()}` }
+        : null
     })
     .filter(Boolean) as Coin[]
 
