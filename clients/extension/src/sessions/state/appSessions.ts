@@ -21,7 +21,7 @@ export interface AppSession {
   selectedCosmosChainId?: CosmosChainId
 }
 
-type VaultsAppSessions = Record<string, Record<string, AppSession>>
+export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
