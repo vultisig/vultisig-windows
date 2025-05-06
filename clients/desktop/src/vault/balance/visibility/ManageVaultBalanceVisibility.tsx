@@ -1,17 +1,21 @@
+import {
+  useIsVaultBalanceVisible,
+  useSetIsVaultBalanceVisibleMutation,
+} from '@core/ui/storage/isVaultBalanceVisible'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
 
-import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible'
-
 export const ManageVaultBalanceVisibility = () => {
-  const [value, setValue] = useIsVaultBalanceVisible()
+  const value = useIsVaultBalanceVisible()
+  const { mutateAsync: setIsVaultBalanceVisible } =
+    useSetIsVaultBalanceVisibleMutation()
 
   return (
     <IconButton
       size="l"
       icon={value ? <EyeIcon /> : <EyeOffIcon />}
-      onClick={() => setValue(!value)}
+      onClick={() => setIsVaultBalanceVisible(!value)}
       title={value ? 'Hide balance' : 'Show balance'}
     />
   )

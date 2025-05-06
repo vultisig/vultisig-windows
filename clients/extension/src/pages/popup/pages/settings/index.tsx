@@ -1,10 +1,10 @@
 import packageJson from '@clients/extension/package.json'
 import { Button } from '@clients/extension/src/components/button'
-import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { useLanguage } from '@core/ui/storage/language'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
@@ -22,7 +22,6 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
@@ -32,7 +31,7 @@ export const SettingsPage = () => {
   const navigateBack = useNavigateBack()
   const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
-  const languageQuery = useLanguageQuery()
+  const language = useLanguage()
 
   return (
     <VStack fullHeight>
@@ -78,18 +77,13 @@ export const SettingsPage = () => {
             {t('general')}
           </Text>
           <List>
-            <MatchQuery
-              success={language => (
-                <ListItem
-                  extra={languageName[language]}
-                  icon={<LanguagesIcon fontSize={20} />}
-                  onClick={() => navigate('languageSettings')}
-                  title={t('language')}
-                  hoverable
-                  showArrow
-                />
-              )}
-              value={languageQuery}
+            <ListItem
+              extra={languageName[language]}
+              icon={<LanguagesIcon fontSize={20} />}
+              onClick={() => navigate('languageSettings')}
+              title={t('language')}
+              hoverable
+              showArrow
             />
             <ListItem
               extra={currency.toUpperCase()}

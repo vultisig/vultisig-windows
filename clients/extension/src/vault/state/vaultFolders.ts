@@ -1,5 +1,5 @@
 import { vaultFoldersQueryKey } from '@core/ui/query/keys'
-import { GetVaultFoldersFunction } from '@core/ui/state/storage'
+import { GetVaultFoldersFunction } from '@core/ui/storage/CoreStorage'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
 
 import { getPersistentState } from '../../state/persistent/getPersistentState'

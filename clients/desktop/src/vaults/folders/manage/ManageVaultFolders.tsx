@@ -2,12 +2,12 @@ import {
   useUpdateVaultFolderMutation,
   useVaultFolders,
 } from '@core/ui/storage/vaultFolders'
+import { VaultFolder } from '@core/ui/vault/VaultFolder'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 
-import { storage } from '../../../../wailsjs/go/models'
 import { DnDList } from '../../../lib/dnd/DnDList'
 import {
   DnDItemContainer,
@@ -30,7 +30,7 @@ export const ManageVaultFolders = () => {
   if (isEmpty(items)) return null
 
   return (
-    <DnDList<string, storage.VaultFolder>
+    <DnDList<string, VaultFolder>
       items={items}
       getItemId={item => item.id}
       onChange={(id, { index }) => {
@@ -47,12 +47,7 @@ export const ManageVaultFolders = () => {
 
         setItems(prev =>
           sortEntitiesWithOrder(
-            prev.map(
-              item =>
-                (item.id === id
-                  ? { ...item, order }
-                  : item) as storage.VaultFolder
-            )
+            prev.map(item => (item.id === id ? { ...item, order } : item))
           )
         )
       }}

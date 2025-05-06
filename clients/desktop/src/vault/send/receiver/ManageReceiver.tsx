@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
@@ -16,7 +17,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime'
 import { Modal } from '../../../lib/ui/modal'
 import { ScanQrView } from '../../qr/upload/ScanQrView'
 import AddressSelector from '../addressSelector/AddressSelector'
@@ -40,6 +40,8 @@ export const ManageReceiver = () => {
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const { t } = useTranslation()
+
+  const { getClipboardText } = useCore()
 
   const onScanSuccess = useCallback(
     (address: string) => {
@@ -90,7 +92,7 @@ export const ManageReceiver = () => {
               <IconButton
                 icon={<PasteIcon />}
                 onClick={async () => {
-                  const { data } = await attempt(ClipboardGetText)
+                  const { data } = await attempt(getClipboardText)
 
                   if (data) {
                     setValue(data)

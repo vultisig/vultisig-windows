@@ -1,6 +1,6 @@
 {
   "name": "vultisig-windows",
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.9.1",
   "workspaces": [
     "./**",
     "!vendor/**"
