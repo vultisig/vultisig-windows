@@ -26,7 +26,7 @@ export const ManageVaultFolderPage = () => {
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
 
-  const { mutateAsync, isPending } = useUpdateVaultFolderMutation()
+  const { mutate, isPending } = useUpdateVaultFolderMutation()
 
   return (
     <>
@@ -51,11 +51,15 @@ export const ManageVaultFolderPage = () => {
       <PageFooter>
         <Button
           onClick={async () => {
-            await mutateAsync({
-              id,
-              fields: { name },
-            })
-            appNavigate('vaultFolder', { params: { id } })
+            mutate(
+              {
+                id,
+                fields: { name },
+              },
+              {
+                onSuccess: () => appNavigate('vaultFolder', { params: { id } }),
+              }
+            )
           }}
           isLoading={isPending}
         >
