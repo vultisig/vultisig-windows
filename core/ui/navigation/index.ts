@@ -25,6 +25,7 @@ export const corePaths = {
   setupVault: '/vault/setup',
   uploadQr: '/vault/qr/upload',
   vault: '/',
+  vaultDetails: '/vault/settings/details',
   vaults: '/vaults',
 } as const
 
