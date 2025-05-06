@@ -29,7 +29,7 @@ const defaultMpcLib: MpcLib = 'DKLS'
 
 const coreState: CoreState = {
   ...storage,
-  openUrl: url => window.open(url, '_blank'),
+  openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
   saveFile: async ({ name, blob }) => {
     initiateFileDownload({ name, blob })
   },
