@@ -50,7 +50,7 @@ const EditVaultPage = () => {
       title: t('details'),
       subtitle: t('vault_setting_edit_vault_details_subtitle'),
       icon: <QuestionMarkIcon />,
-      onClick: () => appNavigate('vaultDetails'),
+      onClick: () => navigate('vaultDetails'),
     },
     {
       title: t('backup'),
@@ -62,7 +62,7 @@ const EditVaultPage = () => {
       title: t('vault_setting_edit_vault_rename_title'),
       subtitle: t('vault_setting_edit_vault_rename_subtitle'),
       icon: <SquarePenIcon />,
-      onClick: () => appNavigate('vaultRename'),
+      onClick: () => navigate('renameVault'),
     },
     {
       title: t('reshare'),

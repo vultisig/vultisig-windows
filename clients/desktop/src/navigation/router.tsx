@@ -18,7 +18,6 @@ import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
-import LanguageSettingsPage from '../pages/vaultSettings/vaultLanguage/LanguageSettingsPage'
 import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { VaultChainPage } from '../vault/chain/VaultChainPage'
@@ -27,8 +26,6 @@ import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
 import { VaultBackupPage } from '../vault/edit/vaultBackupSettings/VaultBackupPage'
 import DeleteVaultPage from '../vault/edit/vaultDeleteSettings/DeleteVaultPage'
-import VaultDetailsPage from '../vault/edit/vaultDetailsSettings/VaultDetailsPage'
-import VaultRenamePage from '../vault/edit/vaultRenameSettings/VaultRenamePage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
 import { ImportVaultPage } from '../vault/import/components/ImportVaultPage'
 import { JoinKeygenPage } from '../vault/keygen/join/JoinKeygenPage'
@@ -132,19 +129,9 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <EditVaultPage />
     </ActiveVaultGuard>
   ),
-  vaultDetails: (
-    <ActiveVaultGuard>
-      <VaultDetailsPage />
-    </ActiveVaultGuard>
-  ),
   vaultBackup: (
     <ActiveVaultGuard>
       <VaultBackupPage />
-    </ActiveVaultGuard>
-  ),
-  vaultRename: (
-    <ActiveVaultGuard>
-      <VaultRenamePage />
     </ActiveVaultGuard>
   ),
   vaultDelete: (
@@ -152,7 +139,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <DeleteVaultPage />
     </ActiveVaultGuard>
   ),
-  languageSettings: <LanguageSettingsPage />,
   address: <AddressPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,

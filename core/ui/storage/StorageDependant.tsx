@@ -16,7 +16,7 @@ import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { useVaultFoldersQuery } from './vaultFolders'
-import { useVaultsQuery } from './vaults'
+import { useVaultsQuery, VaultsProvider } from './vaults'
 
 export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
@@ -44,10 +44,12 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId }) => (
-        <CurrentVaultIdProvider value={currentVaultId}>
-          {children}
-        </CurrentVaultIdProvider>
+      success={({ currentVaultId, vaults }) => (
+        <VaultsProvider value={vaults}>
+          <CurrentVaultIdProvider value={currentVaultId}>
+            {children}
+          </CurrentVaultIdProvider>
+        </VaultsProvider>
       )}
       error={error => (
         <FlowErrorPageContent

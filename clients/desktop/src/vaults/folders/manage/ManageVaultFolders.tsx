@@ -19,10 +19,10 @@ import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
 export const ManageVaultFolders = () => {
   const folders = useVaultFolders()
 
-  const [items, setItems] = useState(() => sortEntitiesWithOrder(folders))
+  const [items, setItems] = useState(folders)
 
   useEffect(() => {
-    setItems(sortEntitiesWithOrder(folders))
+    setItems(folders)
   }, [folders])
 
   const { mutate } = useUpdateVaultFolderMutation()
