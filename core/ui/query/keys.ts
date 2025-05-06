@@ -1,4 +1,4 @@
-export const vaultsQueryKey = ['vaults'] as const
+export const vaultsQueryKey = ['vaults', 'v3'] as const
 
 export const fiatCurrencyQueryKey = ['fiatCurrency'] as const
 
