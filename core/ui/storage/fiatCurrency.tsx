@@ -1,6 +1,7 @@
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { fiatCurrencyQueryKey } from '@core/ui/query/keys'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -12,6 +13,7 @@ export const useFiatCurrencyQuery = () => {
   return useQuery({
     queryKey: fiatCurrencyQueryKey,
     queryFn: getFiatCurrency,
+    ...fixedDataQueryOptions,
   })
 }
 

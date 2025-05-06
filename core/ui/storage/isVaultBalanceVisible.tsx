@@ -1,5 +1,6 @@
 import { isVaultBalanceVisibleQueryKey } from '@core/ui/query/keys'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -12,6 +13,7 @@ export const useIsVaultBalanceVisibleQuery = () => {
   return useQuery({
     queryKey: isVaultBalanceVisibleQueryKey,
     queryFn: getIsVaultBalanceVisible,
+    ...fixedDataQueryOptions,
   })
 }
 

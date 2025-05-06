@@ -7,8 +7,5 @@ export const useSevenZipQuery = () => {
     queryKey: ['seven-zip'],
     queryFn: getSevenZip,
     ...fixedDataQueryOptions,
-    meta: {
-      disablePersist: true,
-    },
   })
 }

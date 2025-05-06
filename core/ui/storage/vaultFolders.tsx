@@ -1,5 +1,6 @@
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
@@ -25,6 +26,7 @@ export const useVaultFoldersQuery = () => {
 
       return sortEntitiesWithOrder(result)
     },
+    ...fixedDataQueryOptions,
   })
 }
 

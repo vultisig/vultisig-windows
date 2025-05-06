@@ -1,5 +1,6 @@
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -16,6 +17,7 @@ export const useAddressBookItemsQuery = () => {
   return useQuery({
     queryKey: addressBookItemsQueryKey,
     queryFn: getAddressBookItems,
+    ...fixedDataQueryOptions,
   })
 }
 

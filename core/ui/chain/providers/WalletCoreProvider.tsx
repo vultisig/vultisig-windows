@@ -15,9 +15,6 @@ const WalletCoreContext = createContext<WalletCore | null>(null)
 export const WalletCoreProvider = ({ children }: ChildrenProp) => {
   const query = useQuery({
     queryKey: ['walletCore'],
-    meta: {
-      disablePersist: true,
-    },
     ...fixedDataQueryOptions,
     queryFn: async () => {
       const wasm = await initWasm()
