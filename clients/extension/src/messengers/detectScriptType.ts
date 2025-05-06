@@ -10,7 +10,11 @@ export function detectScriptType() {
     if (window.location.pathname.includes('contentscript'))
       return 'contentScript'
     if (
-      window.location.pathname.includes('popup') &&
+      (window.location.pathname.includes('popup') ||
+        window.location.pathname.includes('connect') ||
+        window.location.pathname.includes('import') ||
+        window.location.pathname.includes('transaction') ||
+        window.location.pathname.includes('vaults')) &&
       !window.location.origin.includes('trezor')
     )
       return 'popup'
@@ -20,3 +24,5 @@ export function detectScriptType() {
   if (!hasChromeRuntime && hasWindow) return 'inpage'
   throw new Error('Undetected script.')
 }
+
+export type ScriptType = ReturnType<typeof detectScriptType>

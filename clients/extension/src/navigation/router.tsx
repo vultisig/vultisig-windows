@@ -9,7 +9,6 @@ import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vau
 import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
 import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/new-vault'
-import { RenameVaultPage } from '@clients/extension/src/pages/popup/pages/rename-vault'
 import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
 import { VaultPage } from '@clients/extension/src/pages/popup/pages/vault'
@@ -62,11 +61,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   deleteVault: (
     <ActiveVaultGuard>
       <DeleteVaultPage />
-    </ActiveVaultGuard>
-  ),
-  renameVault: (
-    <ActiveVaultGuard>
-      <RenameVaultPage />
     </ActiveVaultGuard>
   ),
   vaultSettings: (

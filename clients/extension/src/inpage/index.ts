@@ -20,7 +20,7 @@ import {
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
-  Vault,
+  VaultExport,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
@@ -66,6 +66,7 @@ import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
 import VULTI_ICON_RAW_SVG from './icon'
+
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
@@ -1098,7 +1099,7 @@ const vultisigProvider = {
       >(MessageKey.VAULT, {}).then(vaults => resolve(vaults))
     })
   },
-  getVaults: (): Promise<Vault[]> => {
+  getVaults: (): Promise<VaultExport[]> => {
     return new Promise(resolve => {
       sendToBackgroundViaRelay<
         Messaging.GetVaults.Request,

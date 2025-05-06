@@ -3,33 +3,34 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { VaultSecurityType } from '../vault/VaultSecurityType'
-
 export const corePaths = {
-  vault: '/',
-  joinKeygen: '/join-keygen',
-  setupFastVault: '/vault/setup/fast',
-  setupSecureVault: '/vault/setup/secure',
-  setupVault: '/vault/setup',
+  currencySettings: '/settings/currency',
+  defaultChains: '/settings/default-chains',
   importVault: '/vault/import',
+  joinKeygen: '/join-keygen',
+  joinKeysign: '/join-keysign',
   keysign: '/vault/keysign',
+  languageSettings: '/settings/language',
+  manageVaultChains: '/vault/chains/manage',
   newVault: '/vault/new',
+  renameVault: '/settings/vault/rename',
   reshareVault: '/vault/reshare',
   reshareVaultFast: '/vault/reshare/fast',
   reshareVaultSecure: '/vault/reshare/secure',
-  defaultChains: '/vault/settings/default-chains',
-  currencySettings: '/vault/settings/currency-settings',
-  joinKeysign: '/join-keysign',
+  setupFastVault: '/vault/setup/fast',
+  setupSecureVault: '/vault/setup/secure',
+  setupVault: '/vault/setup',
   uploadQr: '/vault/qr/upload',
+  vault: '/',
   vaults: '/vaults',
-  languageSettings: '/settings/language',
-  manageVaultChains: '/vault/chains/manage',
 } as const
 
 type CorePaths = typeof corePaths
+
 export type CorePath = keyof CorePaths
 
 export type CorePathParams = {
@@ -74,9 +75,11 @@ export function makeCorePath<P extends keyof CorePathParams>(
   path: P,
   variables: CorePathParams[P]
 ): string
+
 export function makeCorePath<P extends Exclude<CorePath, keyof CorePathParams>>(
   path: P
 ): string
+
 export function makeCorePath(path: CorePath, variables?: any): string {
   const basePath = corePaths[path]
   if (variables) {
