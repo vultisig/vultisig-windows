@@ -10,7 +10,7 @@ import { useCoinFinderQuery } from './queries/useCoinFinderQuery'
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
 
-  const { mutate: saveCoins, isPending } = useCreateCoinsMutation()
+  const { mutate: saveCoins, isPending, error } = useCreateCoinsMutation()
 
   const coins = useCurrentVaultCoins()
 
@@ -27,11 +27,11 @@ export const CoinFinder = () => {
         )
     )
 
-    if (!isEmpty(newCoins) && !isPending) {
+    if (!isEmpty(newCoins) && !isPending && !error) {
       console.log('CoinFinder: saving new coins', newCoins)
       saveCoins(newCoins)
     }
-  }, [coins, data, saveCoins, isPending])
+  }, [coins, data, saveCoins, isPending, error])
 
   return null
 }
