@@ -3,6 +3,12 @@ import { Coin } from '@core/chain/coin/Coin'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
 
+import {
+  CHAINS_WITH_IBC_TOKENS,
+  IBC_TOKENS,
+  IBC_TRANSFERRABLE_TOKENS_PER_CHAIN,
+} from './ibc'
+
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   [Chain.MayaChain]: [
     {
@@ -725,6 +731,55 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       priceProviderId: 'usd-coin',
       id: 'ibc/F663521BF1836B00F5F177680F74BFB9A8B5654A694D0D2BC249E03CF2509013',
     },
+    {
+      ticker: 'WINK',
+      logo: 'wink.png',
+      decimals: 6,
+      priceProviderId: 'winkhub',
+      id: 'ibc/4363FD2EF60A7090E405B79A6C4337C5E9447062972028F5A99FB041B9571942',
+    },
+    {
+      ticker: 'LVN',
+      logo: 'levana',
+      decimals: 6,
+      priceProviderId: 'levana-protocol',
+      id: 'ibc/6C95083ADD352D5D47FB4BA427015796E5FEF17A829463AD05ECD392EB38D889',
+    },
+    {
+      ticker: 'NSTK',
+      logo: 'nstk.png',
+      decimals: 6,
+      priceProviderId: 'unstake-fi',
+      id: 'ibc/0B99C4EFF1BD05E56DEDEE1D88286DB79680C893724E0E7573BC369D79B5DDF3',
+    },
+    {
+      ticker: 'USK',
+      logo: 'usk.png',
+      decimals: 6,
+      priceProviderId: 'usk',
+      id: 'ibc/A47E814B0E8AE12D044637BCB4576FCA675EF66300864873FA712E1B28492B78',
+    },
+    {
+      ticker: 'NAMI',
+      logo: 'nami.png',
+      decimals: 6,
+      priceProviderId: 'nami-protocol',
+      id: 'ibc/4622E82B845FFC6AA8B45C1EB2F507133A9E876A5FEA1BA64585D5F564405453',
+    },
+    {
+      ticker: 'FUZN',
+      logo: 'fuzn.png',
+      decimals: 6,
+      priceProviderId: 'fuzion',
+      id: 'ibc/6BBBB4B63C51648E9B8567F34505A9D5D8BAAC4C31D768971998BE8C18431C26',
+    },
+    {
+      ticker: 'rKUJI',
+      logo: 'rkuji.png',
+      decimals: 6,
+      priceProviderId: 'kujira',
+      id: 'ibc/50A69DC508ACCADE2DAC4B8B09AA6D9C9062FCBFA72BB4C6334367DECD972B06',
+    },
   ],
   [Chain.Osmosis]: [
     {
@@ -873,3 +928,34 @@ export const chainTokens: Partial<Record<Chain, Coin[]>> = recordMap(
   mergedLeanChainTokens as Record<Chain, Omit<Coin, 'chain'>[]>,
   (tokens, chain) => tokens.map(token => ({ ...token, chain }))
 )
+
+for (const chain of CHAINS_WITH_IBC_TOKENS) {
+  const chainIBC = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
+
+  /*  @tony: ensure tokens that are already present get their id */
+  const patched = (chainTokens[chain] ?? []).map(t => {
+    if (!t.id) {
+      const hit = chainIBC.find(i => i.ticker === t.ticker)
+      return hit ? { ...t, id: hit.id } : t
+    }
+    return t
+  })
+
+  // @tony: add any brand‑new IBC tokens that are missing
+  const haveKey = new Set(patched.map(t => `${t.ticker}:${t.decimals}`))
+
+  const additions = IBC_TOKENS.filter(
+    t => !haveKey.has(`${t.ticker}:${t.decimals}`)
+  )
+    .map(t => {
+      const hit = chainIBC.find(i => i.ticker === t.ticker)
+      return hit
+        ? { ...t, chain, id: `thor.${hit.ticker.toLowerCase()}` }
+        : null
+    })
+    .filter(Boolean) as Coin[]
+
+  if (patched.length || additions.length) {
+    chainTokens[chain] = [...patched, ...additions]
+  }
+}

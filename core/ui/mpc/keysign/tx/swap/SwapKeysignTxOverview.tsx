@@ -15,7 +15,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { SquareArrowTopIcon } from '@lib/ui/icons/SquareArrowTopIcon'
+import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -160,7 +160,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
               <IconButton
                 size="s"
                 onClick={trackTransaction}
-                icon={<SquareArrowTopIcon />}
+                icon={<SquareArrowOutUpRightIcon />}
               />
             </HStack>
           </HStack>

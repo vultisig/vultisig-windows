@@ -37,7 +37,6 @@ export const getChainSpecific = async (
   input: ChainSpecificResolverInput
 ): Promise<KeysignChainSpecific> => {
   const chainSpecificCase = chainSpecificRecord[input.coin.chain]
-
   const value = await handlers[chainSpecificCase](input)
 
   return {
