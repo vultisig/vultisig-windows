@@ -83,7 +83,7 @@ const SettingsVaultPage = () => {
           id: 'language',
           title: t('language'),
           icon: <GlobeIcon />,
-          onClick: () => navigate('languageSettings'),
+          onClick: () => coreNavigate('languageSettings'),
         },
         {
           id: 'currency',
