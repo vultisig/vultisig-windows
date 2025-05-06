@@ -1,6 +1,6 @@
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -25,7 +25,7 @@ const RegisterForAirdropPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   return (
     <PageSlice flexGrow>

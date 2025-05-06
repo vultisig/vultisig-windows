@@ -1,4 +1,4 @@
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
@@ -28,7 +28,7 @@ const StackTrace = styled.pre`
 export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
   const { t } = useTranslation()
 
-  const openUrl = useOpenUrl()
+  const { openUrl } = useCore()
 
   return (
     <>

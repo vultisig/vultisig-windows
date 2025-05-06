@@ -9,7 +9,7 @@ import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGc
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
-import { useSaveFile } from '../../state/saveFile'
+import { useCore } from '../../state/core'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -58,7 +58,7 @@ export const useBackupVaultMutation = ({
 
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
-  const saveFile = useSaveFile()
+  const { saveFile } = useCore()
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {

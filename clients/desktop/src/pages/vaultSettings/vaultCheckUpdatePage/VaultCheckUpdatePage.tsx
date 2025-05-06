@@ -1,6 +1,5 @@
 import { ProductLogo } from '@core/ui/product/ProductLogo'
-import { useVersion } from '@core/ui/product/state/version'
-import { useOpenUrl } from '@core/ui/state/openUrl'
+import { useCore } from '@core/ui/state/core'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageSlice } from '@lib/ui/page/PageSlice'
@@ -23,9 +22,7 @@ const VaultCheckUpdatePage = () => {
   const { latestVersion, updateAvailable, remoteError, isLoading } =
     useVersionCheck()
 
-  const localVersion = useVersion()
-
-  const openUrl = useOpenUrl()
+  const { openUrl, version } = useCore()
 
   let content: ReactNode
 
@@ -63,7 +60,7 @@ const VaultCheckUpdatePage = () => {
           </Text>
           {!updateAvailable && (
             <Text color="contrast" size={14}>
-              {localVersion}
+              {version}
             </Text>
           )}
         </Content>

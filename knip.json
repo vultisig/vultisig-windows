@@ -1,6 +1,14 @@
 {
-  "ignore": ["core/mpc/types/**", "clients/desktop/wailsjs/**"],
-  "ignoreBinaries": ["tsx", "wails"],
+  "ignore": [
+    "core/mpc/types/**",
+    "clients/desktop/wailsjs/**",
+    "clients/extension/src/state/persistent/usePersistentStateMutation.ts",
+    "clients/extension/src/state/persistent/usePersistentStateQuery.ts"
+  ],
+  "ignoreBinaries": [
+    "tsx",
+    "wails"
+  ],
   "entry": [
     "clients/extension/src/background/index.ts",
     "clients/extension/src/content/index.ts",
