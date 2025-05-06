@@ -4,8 +4,8 @@ import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -29,6 +29,9 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
     }
   })
 }
+
+export const { useValue: useVaults, provider: VaultsProvider } =
+  getValueProviderSetup<(Vault & { coins: AccountCoin[] })[]>('VaultsProvider')
 
 export const useVaultsQuery = () => {
   const { getVaults, getVaultsCoins } = useCore()
@@ -55,12 +58,6 @@ export const useVaultsQuery = () => {
     ),
     mergeVaultsWithCoins
   )
-}
-
-export const useVaults = () => {
-  const { data } = useVaultsQuery()
-
-  return shouldBePresent(data)
 }
 
 export const useFolderlessVaults = () => {
