@@ -67,7 +67,8 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getWalletCore } from './walletCore'
+import { getWalletCore } from '@clients/extension/src/background/walletCore'
+import { appPaths } from '@clients/extension/src/navigation'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -95,7 +96,7 @@ const instance: Record<Instance, boolean> = {
   [Instance.VAULTS]: false,
 }
 
-const handleOpenPanel = (name: string): Promise<number> => {
+const handleOpenPanel = (path: string): Promise<number> => {
   return new Promise(resolve => {
     chrome.windows.getCurrent({ populate: true }, currentWindow => {
       const { height, left, top, width } =
@@ -103,7 +104,7 @@ const handleOpenPanel = (name: string): Promise<number> => {
 
       chrome.windows.create(
         {
-          url: chrome.runtime.getURL(`${name}.html`),
+          url: chrome.runtime.getURL(`index.html#${path}`),
           type: 'panel',
           height,
           left,
@@ -196,7 +197,7 @@ const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
             chain,
             sender,
           }).then(() => {
-            handleOpenPanel(Instance.CONNECT).then(createdWindowId => {
+            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -237,7 +238,7 @@ const handleGetVault = (
             chain: Chain.Ethereum,
             sender,
           }).then(() => {
-            handleOpenPanel(Instance.CONNECT).then(createdWindowId => {
+            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -255,7 +256,7 @@ const handleGetVault = (
 
 const handleGetVaults = async (): Promise<Messaging.GetVaults.Response> => {
   return new Promise(resolve => {
-    handleOpenPanel('vaults')
+    handleOpenPanel(appPaths.vaultsTab)
     popupMessenger.reply(
       'vaults:connect',
       async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {
@@ -283,7 +284,7 @@ const handleSendTransaction = (
         },
         ...transactions,
       ]).then(() => {
-        handleOpenPanel('transaction').then(createdWindowId => {
+        handleOpenPanel(appPaths.transactionTab).then(createdWindowId => {
           getStoredTransactions().then(transactions => {
             setStoredTransactions(
               transactions.map(transaction =>
