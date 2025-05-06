@@ -11,10 +11,11 @@
   "type": "module",
   "scripts": {
     "build:app": "tsc -b && vite build",
-    "build:content": "tsc -b && vite build --config vite.config.content.ts",
-    "build:inpage": "tsc -b && vite build --config vite.config.inpage.ts",
-    "build:relay": "tsc -b && vite build --config vite.config.relay.ts",
-    "build": "npm-run-all --serial build:app build:content build:inpage build:relay",
+    "build:background": "tsc -b && cross-env CHUNK=background vite build",
+    "build:content": "tsc -b && cross-env CHUNK=content vite build",
+    "build:inpage": "tsc -b && cross-env CHUNK=inpage vite build",
+    "build:relay": "tsc -b && cross-env CHUNK=relay vite build",
+    "build": "npm-run-all --serial build:app build:background build:content build:inpage build:relay",
     "dev": "nodemon --watch src --ext ts,tsx,scss --exec \"npm run build\"",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -51,6 +52,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "eslint": "^9.22.0",
     "nodemon": "^3.1.9",
     "npm-run-all": "^4.1.5",
@@ -59,11 +61,5 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1"
-  },
-  "manifest": {
-    "background": "src/background/index.ts",
-    "content": "src/content/index.ts",
-    "inpage": "src/inpage/index.ts",
-    "relay": "src/relay/index.ts"
   }
 }

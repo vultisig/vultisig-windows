@@ -13,10 +13,7 @@
     "clients/extension/src/messengers/bridge.ts",
     "clients/extension/src/messengers/createMessenger.ts",
     "clients/extension/src/pages/index.tsx",
-    "clients/extension/src/relay/index.ts",
-    "clients/extension/vite.config.content.ts",
-    "clients/extension/vite.config.inpage.ts",
-    "clients/extension/vite.config.relay.ts"
+    "clients/extension/src/relay/index.ts"
   ],
   "ignoreDependencies": [
     "@types/chrome",
