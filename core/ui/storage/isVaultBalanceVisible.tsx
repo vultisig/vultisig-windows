@@ -26,8 +26,6 @@ export const useSetIsVaultBalanceVisibleMutation = () => {
 
   return useMutation({
     mutationFn: setIsVaultBalanceVisible,
-    onSuccess: () => {
-      invalidateQueries(isVaultBalanceVisibleQueryKey)
-    },
+    onSuccess: () => invalidateQueries(isVaultBalanceVisibleQueryKey),
   })
 }

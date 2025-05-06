@@ -26,8 +26,6 @@ export const useSetHasFinishedOnboardingMutation = () => {
 
   return useMutation({
     mutationFn: setHasFinishedOnboarding,
-    onSuccess: () => {
-      invalidateQueries(hasFinishedOnboardingQueryKey)
-    },
+    onSuccess: () => invalidateQueries(hasFinishedOnboardingQueryKey),
   })
 }

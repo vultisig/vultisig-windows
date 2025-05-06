@@ -78,9 +78,7 @@ export const useDeleteVaultFolderMutation = () => {
         )
       }
     },
-    onSuccess: () => {
-      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
   })
 }
 
@@ -91,9 +89,7 @@ export const useUpdateVaultFolderMutation = () => {
 
   return useMutation({
     mutationFn: updateVaultFolder,
-    onSuccess: () => {
-      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
   })
 }
 
@@ -127,8 +123,6 @@ export const useCreateVaultFolderMutation = () => {
         )
       )
     },
-    onSuccess: () => {
-      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey),
   })
 }

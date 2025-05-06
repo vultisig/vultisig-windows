@@ -41,9 +41,7 @@ export const useCreateCoinMutation = () => {
 
   return useMutation({
     mutationFn,
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
@@ -56,9 +54,7 @@ export const useCreateCoinsMutation = () => {
 
   return useMutation({
     mutationFn: (coins: AccountCoin[]) => createVaultCoins({ vaultId, coins }),
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
@@ -72,8 +68,6 @@ export const useDeleteCoinMutation = () => {
   return useMutation({
     mutationFn: async (coinKey: AccountCoinKey) =>
       deleteVaultCoin({ vaultId, coinKey }),
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }

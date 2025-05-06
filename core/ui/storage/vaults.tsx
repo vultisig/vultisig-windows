@@ -93,8 +93,6 @@ export const useDeleteVaultMutation = () => {
 
   return useMutation({
     mutationFn: deleteVault,
-    onSuccess: () => {
-      invalidateQueries(vaultsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultsQueryKey),
   })
 }

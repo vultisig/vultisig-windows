@@ -11,8 +11,6 @@ export const useCreateVaultCoinsMutation = () => {
 
   return useMutation({
     mutationFn: createVaultCoins,
-    onSuccess: () => {
-      invalidateQueries(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(vaultsCoinsQueryKey),
   })
 }

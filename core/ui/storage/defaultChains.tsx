@@ -37,8 +37,6 @@ export const useSetDefaultChainsMutation = () => {
     mutationFn: async (chains: Chain[]) => {
       await setDefaultChains(chains)
     },
-    onSuccess: () => {
-      invalidateQueries(defaultChainsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(defaultChainsQueryKey),
   })
 }

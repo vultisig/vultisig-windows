@@ -29,8 +29,6 @@ export const useSetLanguageMutation = () => {
     mutationFn: async (value: Language) => {
       await setLanguage(value)
     },
-    onSuccess: () => {
-      invalidateQueries(languageQueryKey)
-    },
+    onSuccess: () => invalidateQueries(languageQueryKey),
   })
 }

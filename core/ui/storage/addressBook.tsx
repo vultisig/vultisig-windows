@@ -27,9 +27,7 @@ export const useCreateAddressBookItemMutation = () => {
 
   return useMutation({
     mutationFn: createAddressBookItem,
-    onSuccess: () => {
-      invalidateQueries(addressBookItemsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
   })
 }
 
@@ -40,9 +38,7 @@ export const useDeleteAddressBookItemMutation = () => {
 
   return useMutation({
     mutationFn: deleteAddressBookItem,
-    onSuccess: () => {
-      invalidateQueries(addressBookItemsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
   })
 }
 
@@ -53,8 +49,6 @@ export const useUpdateAddressBookItemMutation = () => {
 
   return useMutation({
     mutationFn: updateAddressBookItem,
-    onSuccess: () => {
-      invalidateQueries(addressBookItemsQueryKey)
-    },
+    onSuccess: () => invalidateQueries(addressBookItemsQueryKey),
   })
 }
