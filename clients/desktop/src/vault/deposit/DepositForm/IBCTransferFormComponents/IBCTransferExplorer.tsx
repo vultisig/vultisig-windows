@@ -2,8 +2,8 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../lib/ui/modal'
-import { DepositActionOption } from './DepositActionOption'
+import { Modal } from '../../../../lib/ui/modal'
+import { DepositActionOption } from '../DepositActionOption'
 
 type IBCDesitinationChainOption = {
   label: string

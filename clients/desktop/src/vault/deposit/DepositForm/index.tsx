@@ -26,7 +26,6 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
-import { getIbcDropdownOptions } from './chainOptionsConfig'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
 import {
   AssetRequiredLabel,
@@ -34,10 +33,12 @@ import {
   ErrorText,
   InputFieldWrapper,
 } from './DepositForm.styled'
-import { IBCTransferExplorer } from './IBCTransferExplorer'
+import { IBCTransferSpecific } from './IBCTransferFormComponents/IBCTransferSpecific'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
+import { MergeTokenExplorer } from './MergeTokenExplorer'
+import { SwitchSpecificFields } from './SwitchFormComponents/SwitchSpecificFields'
 
-type FormData = Record<string, any>
+export type FormData = Record<string, any>
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
   selectedChainAction: ChainAction
@@ -95,7 +96,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   }
 
   const selectedBondableAsset = getValues('bondableAsset')
-  const selectedDestinationChain = getValues('destinationChain')
+  const selectedCoin = getValues('selectedCoin')
 
   return (
     <>
@@ -173,15 +174,22 @@ export const DepositForm: FC<DepositFormProps> = ({
               />
             )}
           {selectedChainAction === 'ibc_transfer' && (
+            <IBCTransferSpecific
+              getValues={getValues}
+              setValue={setValue}
+              watch={watch}
+              chain={chain}
+            />
+          )}
+          {selectedChainAction === 'merge' && (
             <Opener
               renderOpener={({ onOpen }) => (
                 <Container onClick={onOpen}>
                   <HStack alignItems="center" gap={4}>
                     <Text weight="400" family="mono" size={16}>
-                      {selectedDestinationChain ||
-                        t('select_destination_chain')}
+                      {selectedCoin?.ticker || t('select_token')}
                     </Text>
-                    {!selectedDestinationChain && (
+                    {!selectedCoin && (
                       <AssetRequiredLabel as="span" color="danger" size={14}>
                         *
                       </AssetRequiredLabel>
@@ -193,20 +201,28 @@ export const DepositForm: FC<DepositFormProps> = ({
                 </Container>
               )}
               renderContent={({ onClose }) => (
-                <IBCTransferExplorer
-                  onClose={onClose}
-                  activeOption={watch('destinationChain')}
-                  onOptionClick={selectedChain => {
-                    setValue('destinationChain', selectedChain, {
+                <MergeTokenExplorer
+                  setValue={setValue}
+                  activeOption={watch('selectedCoin')}
+                  onOptionClick={token =>
+                    setValue('selectedCoin', token, {
                       shouldValidate: true,
                     })
-                    onClose()
-                  }}
-                  options={getIbcDropdownOptions(chain)}
+                  }
+                  onClose={onClose}
                 />
               )}
             />
           )}
+
+          {selectedChainAction === 'switch' && (
+            <SwitchSpecificFields
+              watch={watch}
+              setValue={setValue}
+              getValues={getValues}
+            />
+          )}
+
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => (
@@ -215,8 +231,10 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {field.label}{' '}
                     {field.name === 'amount' &&
                       (selectedChainAction === 'bond' ||
-                        selectedChainAction === 'ibc_transfer') &&
-                      `(Balance: ${totalTokenAmount.toFixed(2)} ${coin}) `}
+                        selectedChainAction === 'ibc_transfer' ||
+                        selectedChainAction === 'switch' ||
+                        selectedChainAction === 'merge') &&
+                      `(Balance: ${totalTokenAmount.toFixed(2)}${selectedChainAction !== 'ibc_transfer' && selectedChainAction !== 'merge' ? ` ${coin}` : ''}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *
@@ -231,7 +249,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                     as="input"
                     onWheel={e => e.currentTarget.blur()}
                     type={field.type}
-                    step="0.01"
+                    step="0.0001"
                     min={0}
                     {...register(field.name)}
                     required={field.required}
