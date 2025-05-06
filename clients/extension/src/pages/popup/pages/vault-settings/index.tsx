@@ -3,6 +3,7 @@ import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNa
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
@@ -44,6 +45,13 @@ export const VaultSettingsPage = () => {
       />
       <PageContent flexGrow scrollable>
         <List>
+          <ListItem
+            icon={<CircleInfoIcon fontSize={20} />}
+            onClick={() => coreNavigate('vaultDetails')}
+            title={t('details')}
+            hoverable
+            showArrow
+          />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
             onClick={() => coreNavigate('renameVault')}
