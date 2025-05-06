@@ -88,7 +88,7 @@ export const generateMemo = ({
     },
     merge: () => {
       const token = shouldBePresent(selectedCoin, 'Token to merge')
-      return `merge:thor.${getDenom(token).toLowerCase()}`
+      return `merge:THOR.${getDenom(token)}`
     },
     switch: () => {
       return `switch:${thorchainAddress}`
