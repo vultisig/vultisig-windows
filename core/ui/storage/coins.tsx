@@ -4,11 +4,11 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
-import { useCoreStorage } from '../state/storage'
 import { useAssertCurrentVaultId } from './currentVaultId'
 
 export const useCreateCoinMutation = () => {
@@ -18,7 +18,7 @@ export const useCreateCoinMutation = () => {
 
   const invalidate = useInvalidateQueries()
 
-  const { createVaultCoin } = useCoreStorage()
+  const { createVaultCoin } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
@@ -41,39 +41,33 @@ export const useCreateCoinMutation = () => {
 
   return useMutation({
     mutationFn,
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
 export const useCreateCoinsMutation = () => {
   const invalidate = useInvalidateQueries()
 
-  const { createVaultCoins } = useCoreStorage()
+  const { createVaultCoins } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
   return useMutation({
     mutationFn: (coins: AccountCoin[]) => createVaultCoins({ vaultId, coins }),
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
 export const useDeleteCoinMutation = () => {
   const invalidate = useInvalidateQueries()
 
-  const { deleteVaultCoin } = useCoreStorage()
+  const { deleteVaultCoin } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
   return useMutation({
     mutationFn: async (coinKey: AccountCoinKey) =>
       deleteVaultCoin({ vaultId, coinKey }),
-    onSuccess: () => {
-      invalidate(vaultsCoinsQueryKey)
-    },
+    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }

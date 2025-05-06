@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
@@ -10,7 +11,6 @@ import {
 import { useEffect, useMemo } from 'react'
 
 import { currentVaultIdQueryKey } from '../query/keys'
-import { useCoreStorage } from '../state/storage'
 import { getVaultId } from '../vault/Vault'
 import { useVaults } from './vaults'
 
@@ -32,7 +32,7 @@ export const useAssertCurrentVaultId = () => {
 }
 
 export const useCurrentVaultIdQuery = () => {
-  const { getCurrentVaultId } = useCoreStorage()
+  const { getCurrentVaultId } = useCore()
 
   return useQuery({
     queryKey: currentVaultIdQueryKey,
@@ -74,7 +74,7 @@ export const useSetCurrentVaultIdMutation = (
 ) => {
   const invalidateQueries = useInvalidateQueries()
 
-  const { setCurrentVaultId } = useCoreStorage()
+  const { setCurrentVaultId } = useCore()
 
   const mutationFn = async (value: CurrentVaultId) => {
     await setCurrentVaultId(value)

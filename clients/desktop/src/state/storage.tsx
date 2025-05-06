@@ -3,14 +3,18 @@ import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
+import { Language } from '@core/ui/i18n/Language'
+import { primaryLanguage } from '@core/ui/i18n/Language'
 import {
   currentVaultIdQueryKey,
   defaultChainsQueryKey,
   fiatCurrencyQueryKey,
+  hasFinishedOnboardingQueryKey,
+  isVaultBalanceVisibleQueryKey,
+  languageQueryKey,
 } from '@core/ui/query/keys'
 import {
   CoreStorage,
-  CoreStorageProvider,
   CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
@@ -22,18 +26,25 @@ import {
   DeleteVaultFunction,
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
+  GetHasFinishedOnboardingFunction,
+  GetIsVaultBalanceVisibleFunction,
+  GetLanguageFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
   GetVaultsFunction,
+  isHasFinishedOnboardingInitially,
+  isVaultBalanceInitallyVisible,
   SetDefaultChainsFunction,
+  SetHasFinishedOnboardingFunction,
+  SetIsVaultBalanceVisibleFunction,
+  SetLanguageFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
-} from '@core/ui/state/storage'
+} from '@core/ui/storage/CoreStorage'
 import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
-import { ChildrenProp } from '@lib/ui/props'
 import { recordMap } from '@lib/utils/record/recordMap'
 
 import {
@@ -206,7 +217,57 @@ const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
   persistentStorage.setItem(currentVaultIdKey, vaultId)
 }
 
-const storage: CoreStorage = {
+const [languageKey] = languageQueryKey
+
+const getLanguage: GetLanguageFunction = async () => {
+  const value = persistentStorage.getItem<Language>(languageKey)
+
+  if (value === undefined) {
+    return primaryLanguage
+  }
+
+  return value
+}
+
+const setLanguage: SetLanguageFunction = async language => {
+  persistentStorage.setItem(languageKey, language)
+}
+
+const [isVaultBalanceVisibleKey] = isVaultBalanceVisibleQueryKey
+
+const getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction = async () => {
+  const value = persistentStorage.getItem<boolean>(isVaultBalanceVisibleKey)
+
+  if (value === undefined) {
+    return isVaultBalanceInitallyVisible
+  }
+
+  return value
+}
+
+const setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction =
+  async isVaultBalanceVisible => {
+    persistentStorage.setItem(isVaultBalanceVisibleKey, isVaultBalanceVisible)
+  }
+
+const [hasFinishedOnboardingKey] = hasFinishedOnboardingQueryKey
+
+const getHasFinishedOnboarding: GetHasFinishedOnboardingFunction = async () => {
+  const value = persistentStorage.getItem<boolean>(hasFinishedOnboardingKey)
+
+  if (value === undefined) {
+    return isHasFinishedOnboardingInitially
+  }
+
+  return value
+}
+
+const setHasFinishedOnboarding: SetHasFinishedOnboardingFunction =
+  async hasFinishedOnboarding => {
+    persistentStorage.setItem(hasFinishedOnboardingKey, hasFinishedOnboarding)
+  }
+
+export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
   getFiatCurrency,
@@ -229,8 +290,10 @@ const storage: CoreStorage = {
   createAddressBookItem,
   updateAddressBookItem,
   deleteAddressBookItem,
-}
-
-export const StorageProvider = ({ children }: ChildrenProp) => {
-  return <CoreStorageProvider value={storage}>{children}</CoreStorageProvider>
+  getLanguage,
+  setLanguage,
+  getIsVaultBalanceVisible,
+  setIsVaultBalanceVisible,
+  getHasFinishedOnboarding,
+  setHasFinishedOnboarding,
 }

@@ -2,12 +2,12 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { vaultsQueryKey } from '@core/ui/query/keys'
+import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import { useCoreStorage } from '../../state/storage'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useCreateVaultCoinsMutation } from './useCreateVaultCoinsMutations'
 
@@ -16,7 +16,7 @@ export const useCreateVaultMutation = (
 ) => {
   const invalidateQueries = useInvalidateQueries()
 
-  const { createVault, getDefaultChains } = useCoreStorage()
+  const { createVault, getDefaultChains } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createVaultCoins } = useCreateVaultCoinsMutation()

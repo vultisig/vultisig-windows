@@ -1,4 +1,5 @@
 import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
 import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -9,8 +10,6 @@ import { Text, text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding'
 
 type OnboardingStep = {
   artUrl: string
@@ -46,10 +45,11 @@ export const OnboardingPage = () => {
 
   const [stepIndex, setStepIndex] = useState(0)
 
-  const [, hasFinishedOnboarding] = useHasFinishedOnboarding()
+  const { mutate: setHasFinishedOnboarding } =
+    useSetHasFinishedOnboardingMutation()
 
   const completeOnboarding = () => {
-    hasFinishedOnboarding(true)
+    setHasFinishedOnboarding(true)
   }
 
   const steps: OnboardingStep[] = [

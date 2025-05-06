@@ -1,3 +1,4 @@
+import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -9,7 +10,6 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { AnimatedVisibility } from '../../../shared/AnimatedVisibility'
-import { useHasFinishedOnboardingMutation } from '../../hooks/useHasFinishedOnboarading'
 import {
   ContentWrapper,
   IconWrapper,
@@ -21,7 +21,8 @@ import {
 
 export const OnboardingSummary = () => {
   const { t } = useTranslation()
-  const hasFinishedOnboardingMutation = useHasFinishedOnboardingMutation()
+  const { mutateAsync: setHasFinishedOnboarding } =
+    useSetHasFinishedOnboardingMutation()
   const [isChecked, { toggle }] = useBoolean(false)
 
   const items = [
@@ -89,7 +90,7 @@ export const OnboardingSummary = () => {
           </HStack>
           <Button
             isDisabled={!isChecked}
-            onClick={() => hasFinishedOnboardingMutation.mutate(true)}
+            onClick={() => setHasFinishedOnboarding(true)}
           >
             {t('fastVaultSetup.summary.ctaText')}
           </Button>

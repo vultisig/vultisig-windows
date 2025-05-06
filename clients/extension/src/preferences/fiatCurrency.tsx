@@ -3,7 +3,7 @@ import { fiatCurrencyQueryKey } from '@core/ui/query/keys'
 import {
   GetFiatCurrencyFunction,
   SetFiatCurrencyFunction,
-} from '@core/ui/state/storage'
+} from '@core/ui/storage/CoreStorage'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'

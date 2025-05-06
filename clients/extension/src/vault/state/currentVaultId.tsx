@@ -1,5 +1,5 @@
 import { currentVaultIdQueryKey } from '@core/ui/query/keys'
-import { SetCurrentVaultIdFunction } from '@core/ui/state/storage'
+import { SetCurrentVaultIdFunction } from '@core/ui/storage/CoreStorage'
 import {
   CurrentVaultId,
   initialCurrentVaultId,
