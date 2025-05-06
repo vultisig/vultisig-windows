@@ -46,10 +46,13 @@ export const useVaultsQuery = () => {
   })
 
   return useTransformQueriesData(
-    {
-      vaults,
-      coins,
-    },
+    useMemo(
+      () => ({
+        vaults,
+        coins,
+      }),
+      [vaults, coins]
+    ),
     mergeVaultsWithCoins
   )
 }

@@ -15,6 +15,7 @@ export function useTransformQueriesData<
   transform: (data: { [K in keyof T]: NonUndefined<T[K]['data']> }) => R
 ): Query<R, E> {
   return useMemo(() => {
+    console.log('useTransformQueriesData memo', queriesRecord)
     const dataRecord = withoutUndefinedFields(
       recordMap(queriesRecord, ({ data }) => data)
     )
