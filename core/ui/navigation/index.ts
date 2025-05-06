@@ -25,6 +25,7 @@ export const corePaths = {
   joinKeysign: '/join-keysign',
   uploadQr: '/vault/qr/upload',
   vaults: '/vaults',
+  languageSettings: '/settings/language',
   manageVaultChains: '/vault/chains/manage',
 } as const
 
