@@ -34,7 +34,7 @@ export type GetDefaultChainsFunction = () => Promise<Chain[]>
 
 export type GetFiatCurrencyFunction = () => Promise<FiatCurrency>
 
-export type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
+type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
 
 export type SetCurrentVaultIdFunction = (id: CurrentVaultId) => Promise<void>
 
