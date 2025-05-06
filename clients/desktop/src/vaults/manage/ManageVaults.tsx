@@ -18,10 +18,10 @@ import { VaultsContainer } from '../components/VaultsContainer'
 export const ManageVaults = () => {
   const vaults = useFolderlessVaults()
 
-  const [items, setItems] = useState(() => sortEntitiesWithOrder(vaults))
+  const [items, setItems] = useState(vaults)
 
   useEffect(() => {
-    setItems(sortEntitiesWithOrder(vaults))
+    setItems(vaults)
   }, [vaults])
 
   const { mutateAsync: updateVault } = useUpdateVaultMutation()

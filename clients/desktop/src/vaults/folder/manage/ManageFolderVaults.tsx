@@ -23,12 +23,12 @@ export const ManageFolderVaults = () => {
   const { id } = useCurrentVaultFolder()
   const { t } = useTranslation()
   const vaults = useFolderVaults(id)
-  const [items, setItems] = useState(() => sortEntitiesWithOrder(vaults))
+  const [items, setItems] = useState(vaults)
   const { mutate: remove } = useRemoveVaultFromFolderMutation()
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   useEffect(() => {
-    setItems(sortEntitiesWithOrder(vaults))
+    setItems(vaults)
   }, [vaults])
 
   const handleOnItemChange = (id: string, { index }: ItemChangeParams) => {
