@@ -4,8 +4,8 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 
-import { queryOneInch } from './evm/queryOneInch'
-import { FindCoinsResolver } from './FindCoinsResolver'
+import { FindCoinsResolver } from '../FindCoinsResolver'
+import { queryOneInch } from './queryOneInch'
 
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
@@ -16,8 +16,6 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   const balanceData = await queryOneInch<Record<string, string>>(
     `/balance/v1.2/${oneInchChainId}/balances/${address}`
   )
-
-  await new Promise(resolve => setTimeout(resolve, 1000)) // We have some rate limits on 1 inch, so I will wait a bit
 
   // Filter tokens with non-zero balance
   const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
@@ -32,7 +30,7 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     return []
   }
 
-  // Fetch token information for the non-zero balance tokens
+  // Fetch token information for the non-zero balance tokens using queryOneInch
   const tokenInfoData = await queryOneInch<Record<string, OneInchToken>>(
     `/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
   )
