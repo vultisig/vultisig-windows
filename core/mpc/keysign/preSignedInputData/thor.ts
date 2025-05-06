@@ -34,17 +34,13 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
   if (isMerge) {
     const fullDenom = keysignPayload.memo!.toLowerCase().replace('merge:', '')
 
-    const wasmExecuteMsg = {
-      deposit: {},
-    }
-
     message = [
       TW.Cosmos.Proto.Message.create({
         wasmExecuteContractGeneric:
           TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
             senderAddress: commCoin.address,
             contractAddress: keysignPayload.toAddress,
-            executeMsg: JSON.stringify(wasmExecuteMsg),
+            executeMsg: '{ "deposit": {} }',
             coins: [
               TW.Cosmos.Proto.Amount.create({
                 denom: fullDenom,
