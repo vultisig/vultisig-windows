@@ -1,4 +1,6 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Opener } from '@lib/ui/base/Opener'
@@ -18,6 +20,10 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
+import {
+  useVaultChainCoinsQuery,
+  VaultChainCoin,
+} from '../../queries/useVaultChainCoinsQuery'
 import { ChainAction } from '../ChainAction'
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance'
 import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery'
@@ -91,12 +97,21 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onSubmit',
   })
 
+  const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
+  const selectedCoin = getValues('selectedCoin') as Coin | null
+  const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
+    coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
+    ({} as VaultChainCoin)
+
+  const selectedCoinBalance = fromChainAmount(
+    selectedCoinAmount,
+    selectedCoinDecimals
+  )
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
 
   const selectedBondableAsset = getValues('bondableAsset')
-  const selectedCoin = getValues('selectedCoin')
 
   return (
     <>
@@ -225,44 +240,64 @@ export const DepositForm: FC<DepositFormProps> = ({
 
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
-              {fieldsForChainAction.map(field => (
-                <InputContainer key={field.name}>
-                  <Text size={15} weight="400">
-                    {field.label}{' '}
-                    {field.name === 'amount' &&
-                      (selectedChainAction === 'bond' ||
-                        selectedChainAction === 'ibc_transfer' ||
-                        selectedChainAction === 'switch' ||
-                        selectedChainAction === 'merge') &&
-                      `(Balance: ${totalTokenAmount.toFixed(2)}${selectedChainAction !== 'ibc_transfer' && selectedChainAction !== 'merge' ? ` ${coin}` : ''}) `}
-                    {field.required ? (
-                      <Text as="span" color="danger" size={14}>
-                        *
-                      </Text>
-                    ) : (
-                      <Text as="span" size={14}>
-                        ({t('chainFunctions.optional_validation')})
-                      </Text>
+              {fieldsForChainAction.map(field => {
+                const showBalance =
+                  field.name === 'amount' &&
+                  ['bond', 'ibc_transfer', 'switch', 'merge'].includes(
+                    selectedChainAction
+                  )
+
+                const balance = selectedCoin
+                  ? selectedCoinBalance
+                  : totalTokenAmount.toFixed(2)
+
+                const ticker =
+                  selectedChainAction !== 'ibc_transfer' &&
+                  selectedChainAction !== 'merge'
+                    ? (selectedCoin?.ticker ?? coin)
+                    : ''
+
+                return (
+                  <InputContainer key={field.name}>
+                    <Text size={15} weight="400">
+                      {field.label}{' '}
+                      {showBalance && (
+                        <>
+                          (Balance: {balance}
+                          {ticker && ` ${ticker}`})
+                        </>
+                      )}
+                      {field.required ? (
+                        <Text as="span" color="danger" size={14}>
+                          *
+                        </Text>
+                      ) : (
+                        <Text as="span" size={14}>
+                          ({t('chainFunctions.optional_validation')})
+                        </Text>
+                      )}
+                    </Text>
+
+                    <InputFieldWrapper
+                      as="input"
+                      onWheel={e => e.currentTarget.blur()}
+                      type={field.type}
+                      step="0.0001"
+                      min={0}
+                      {...register(field.name)}
+                      required={field.required}
+                    />
+
+                    {errors[field.name] && (
+                      <ErrorText color="danger" size={13} className="error">
+                        {t(errors[field.name]?.message as string, {
+                          defaultValue: t('chainFunctions.default_validation'),
+                        })}
+                      </ErrorText>
                     )}
-                  </Text>
-                  <InputFieldWrapper
-                    as="input"
-                    onWheel={e => e.currentTarget.blur()}
-                    type={field.type}
-                    step="0.0001"
-                    min={0}
-                    {...register(field.name)}
-                    required={field.required}
-                  />
-                  {errors[field.name] && (
-                    <ErrorText color="danger" size={13} className="error">
-                      {t(errors[field.name]?.message as string, {
-                        defaultValue: t('chainFunctions.default_validation'),
-                      })}
-                    </ErrorText>
-                  )}
-                </InputContainer>
-              ))}
+                  </InputContainer>
+                )
+              })}
             </VStack>
           )}
         </WithProgressIndicator>
