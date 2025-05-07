@@ -11,7 +11,7 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
-
+import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { storage } from '../state/storage'
 
 const ExtensionGlobalStyle = createGlobalStyle`
@@ -49,7 +49,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
           <QueryProvider>
             <WalletCoreProvider>
               <StorageDependant>
-                <I18nProvider>{children}</I18nProvider>
+                <ToastProvider>
+                  <I18nProvider>{children}</I18nProvider>
+                </ToastProvider>
               </StorageDependant>
             </WalletCoreProvider>
           </QueryProvider>

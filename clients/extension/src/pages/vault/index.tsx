@@ -2,6 +2,7 @@ import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
+import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -50,7 +51,6 @@ export const VaultPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
-  const coreNavigate = useCoreNavigate()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
@@ -105,7 +105,7 @@ export const VaultPage = () => {
           </Text>
 
           <List>
-            {coins.map(({ address, chain }) => (
+            {coins.map(({ address, chain, id }) => (
               <ListItem
                 description={
                   address && <MiddleTruncate text={address} width={80} />
@@ -130,6 +130,11 @@ export const VaultPage = () => {
                 title={chain}
                 hoverable
                 showArrow
+                onClick={() => {
+                  appNavigate('vaultChainDetail', {
+                    params: { chain: chain as Chain },
+                  })
+                }}
               />
             ))}
           </List>
@@ -138,7 +143,7 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
-          onClick={() => coreNavigate('manageVaultChains')}
+          onClick={() => navigate('manageVaultChains')}
           type="primary"
           block
           rounded

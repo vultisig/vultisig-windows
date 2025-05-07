@@ -24,6 +24,8 @@ import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
+import { VaultChainPage } from '@clients/desktop/src/vault/chain/VaultChainPage'
+import { VaultChainCoinPage } from '@clients/desktop/src/vault/chain/coin/VaultChainCoinPage'
 
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,
@@ -60,7 +62,7 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   ),
 }
 
-const appRoutes: Record<AppPath, ReactNode> = {
+const appRoutes = {
   deleteVault: (
     <ActiveVaultGuard>
       <DeleteVaultPage />
@@ -86,6 +88,16 @@ const appRoutes: Record<AppPath, ReactNode> = {
   importTab: <ImportFilePage />,
   vaultsTab: <GetVaultsPage />,
   transactionTab: <TransactionPage />,
+  vaultChainDetail: (
+    <ActiveVaultGuard>
+      <VaultChainPage />
+    </ActiveVaultGuard>
+  ),
+  vaultChainCoinDetail: (
+    <ActiveVaultGuard>
+      <VaultChainCoinPage />
+    </ActiveVaultGuard>
+  ),
 }
 
 export const router = createHashRouter(
