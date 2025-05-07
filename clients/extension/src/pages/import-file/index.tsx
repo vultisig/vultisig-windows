@@ -114,10 +114,10 @@ const Component = () => {
       try {
         await createVault(decodedVault)
 
-        if (isWindows) {
-          navigateToMain()
-        } else {
+        if (isPopupRef.current) {
           window.close()
+        } else {
+          navigateToMain()
         }
       } catch (e) {
         handleError(extractErrorMsg(e))
