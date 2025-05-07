@@ -9,6 +9,8 @@ import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { ReactNode } from 'react'
 
+import { SendPage } from '../vault/send/SendPage'
+
 type SharedPaths = Extract<
   CorePath,
   | 'currencySettings'
@@ -18,6 +20,9 @@ type SharedPaths = Extract<
   | 'renameVault'
   | 'reshareVault'
   | 'vaultDetails'
+  | 'manageVaultChains'
+  | 'reshareVault'
+  | 'send'
 >
 
 export const sharedRoutes: Record<SharedPaths, ReactNode> = {
@@ -42,6 +47,11 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   vaultDetails: (
     <ActiveVaultGuard>
       <VaultDetailsPage />
+    </ActiveVaultGuard>
+  ),
+  send: (
+    <ActiveVaultGuard>
+      <SendPage />
     </ActiveVaultGuard>
   ),
 }

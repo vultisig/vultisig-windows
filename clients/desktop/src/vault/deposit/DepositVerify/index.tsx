@@ -10,7 +10,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { Text } from '@lib/ui/text'
+import { StrictText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +23,7 @@ import { DepositFiatFee } from '../fee/DepositFiatFee'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useMemoGenerator } from '../hooks/useMemoGenerator'
 import { useSender } from '../hooks/useSender'
-import { StrictText, StrictTextContrast } from './DepositVerify.styled'
+import { StrictTextContrast } from './DepositVerify.styled'
 import { getFormattedFormData } from './utils'
 
 type DepositVerifyProps = {
@@ -88,7 +88,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                   <Text size={18} weight={700}>
                     {field.label}
                   </Text>
-                  <StrictText>
+                  <StrictText family="mono">
                     {String(formattedDepositFormData[field.name])}{' '}
                     {field.name === 'amount' && coin.ticker}
                   </StrictText>
@@ -109,7 +109,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 <Text size={18} weight={700}>
                   {t('amount')}
                 </Text>
-                <StrictText>0 {coin.ticker}</StrictText>
+                <StrictText family="mono">0 {coin.ticker}</StrictText>
               </TxOverviewRowDepositsFlow>
             )}
             <TxOverviewRow key="memo">

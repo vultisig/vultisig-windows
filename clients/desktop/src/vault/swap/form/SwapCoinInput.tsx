@@ -6,12 +6,14 @@ import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
+import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -22,8 +24,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ChainOption } from '../../../coin/ui/inputs/ChainOption'
-import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
-import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {

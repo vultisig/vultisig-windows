@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
+import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
@@ -9,8 +10,6 @@ import { Text, text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 
 const Container = styled.div`
   ${text({

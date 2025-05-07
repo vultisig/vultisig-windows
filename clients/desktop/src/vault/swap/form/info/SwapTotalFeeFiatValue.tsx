@@ -1,8 +1,8 @@
 import { SwapFee } from '@core/chain/swap/SwapFee'
+import { Skeleton } from '@lib/ui/loaders/Sceleton'
 import { ValueProp } from '@lib/ui/props'
 import { MatchEagerQuery } from '@lib/ui/query/components/MatchEagerQuery'
 
-import { Skeleton } from '../../../../components/skeleton'
 import { useSwapFiatFeesQuery } from '../../queries/useSwapFiatFeesQuery'
 
 export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {

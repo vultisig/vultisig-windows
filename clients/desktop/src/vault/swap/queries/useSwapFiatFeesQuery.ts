@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin'
 import { SwapFee } from '@core/chain/swap/SwapFee'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { sum } from '@lib/utils/array/sum'
@@ -9,8 +10,6 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { useCallback, useMemo } from 'react'
-
-import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const vaultCoins = useCurrentVaultCoins()

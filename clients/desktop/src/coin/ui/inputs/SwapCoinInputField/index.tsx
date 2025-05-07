@@ -5,6 +5,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -16,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 import { ManageFromAmount } from '../../../../vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '../../../../vault/swap/form/amount/ToAmount'
 import { SwapCoinBalance } from '../../../../vault/swap/form/SwapCoinBalance'
-import { useSide } from '../../../../vault/swap/providers/SideProvider'
 import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
@@ -33,7 +33,7 @@ export const SwapCoinInputField = ({
 }: CoinInputContainerProps) => {
   const { ticker, chain, id } = value
   const { t } = useTranslation()
-  const side = useSide()
+  const side = useTransferDirection()
 
   return (
     <Container side={side} justifyContent="center" gap={16}>

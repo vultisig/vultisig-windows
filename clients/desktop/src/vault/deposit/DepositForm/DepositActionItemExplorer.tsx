@@ -1,8 +1,8 @@
 import { VStack } from '@lib/ui/layout/Stack'
+import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../lib/ui/modal'
 import { ChainAction } from '../ChainAction'
 import { DepositActionOption } from './DepositActionOption'
 

@@ -2,12 +2,11 @@ import { textInputBackground } from '@lib/ui/css/textInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { TransferDirection } from '@lib/utils/TransferDirection'
 import styled from 'styled-components'
 
-import { SwapSide } from '../../../../vault/swap/providers/SideProvider'
-
 export const Container = styled(VStack)<{
-  side: SwapSide
+  side: TransferDirection
 }>`
   min-height: 112px;
   ${textInputBackground};

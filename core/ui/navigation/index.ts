@@ -28,6 +28,8 @@ export const corePaths = {
   vault: '/',
   vaultDetails: '/vault/settings/details',
   vaults: '/vaults',
+  send: '/vault/send',
+  manageVaultChains: '/vault/chains/manage',
 } as const
 
 type CorePaths = typeof corePaths
@@ -37,6 +39,7 @@ export type CorePath = keyof CorePaths
 export type CorePathParams = {
   setupVault: { type?: VaultSecurityType }
   uploadQr: { title?: string }
+  send: { coin: string; address?: string }
 }
 
 export type CorePathState = {

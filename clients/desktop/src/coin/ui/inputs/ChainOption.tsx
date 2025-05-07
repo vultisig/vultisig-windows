@@ -1,9 +1,12 @@
+import { useFromCoin } from '@clients/desktop/src/vault/swap/state/fromCoin'
+import { useToCoin } from '@clients/desktop/src/vault/swap/state/toCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
@@ -12,10 +15,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { useSide } from '../../../vault/swap/providers/SideProvider'
-import { useFromCoin } from '../../../vault/swap/state/fromCoin'
-import { useToCoin } from '../../../vault/swap/state/toCoin'
-
 export const ChainOption = ({
   value,
   onClick,
@@ -23,7 +22,7 @@ export const ChainOption = ({
   const { chain, logo, ticker, id } = value
   const [currentFromCoin] = useFromCoin()
   const [currentToCoin] = useToCoin()
-  const side = useSide()
+  const side = useTransferDirection()
 
   const isSelected =
     side === 'from'
