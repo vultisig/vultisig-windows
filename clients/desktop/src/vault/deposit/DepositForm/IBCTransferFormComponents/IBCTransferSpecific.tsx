@@ -41,6 +41,10 @@ export const IBCTransferSpecific = ({
   const { t } = useTranslation()
   const selectedDestinationChain = getValues('destinationChain')
   const tokens = useIBCAcceptedTokens(selectedDestinationChain)
+  const filteredTokens = tokens.filter(
+    token =>
+      selectedDestinationChain === Chain.Osmosis || token.ticker !== 'LVN'
+  )
   const selectedCoin = getValues('selectedCoin') as Coin
   const vaultCoins = useCurrentVaultCoins()
   const selectedAddress = getValues('nodeAddress') as string
@@ -118,7 +122,7 @@ export const IBCTransferSpecific = ({
         )}
         renderContent={({ onClose }) => (
           <TokenExplorer
-            options={tokens}
+            options={filteredTokens}
             onClose={onClose}
             activeOption={watch('selectedCoin')}
             onOptionClick={selectedCoin => {

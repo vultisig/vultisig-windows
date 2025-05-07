@@ -37,7 +37,8 @@ export const useRemoveVaultFromFolderMutation = () => {
         vaultId,
         fields: updateParams,
       })
+
+      await invalidateQueries(vaultsQueryKey)
     },
-    onSuccess: () => invalidateQueries(vaultsQueryKey),
   })
 }

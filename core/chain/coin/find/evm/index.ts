@@ -2,11 +2,10 @@ import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
-import { rootApiUrl } from '@core/config'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { FindCoinsResolver } from './FindCoinsResolver'
+import { FindCoinsResolver } from '../FindCoinsResolver'
+import { queryOneInch } from './queryOneInch'
 
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
@@ -14,11 +13,9 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
 }) => {
   const oneInchChainId = getEvmChainId(chain)
 
-  const url = `${rootApiUrl}/1inch/balance/v1.2/${oneInchChainId}/balances/${address}`
-
-  const balanceData = await queryUrl<Record<string, string>>(url)
-
-  await new Promise(resolve => setTimeout(resolve, 1000)) // We have some rate limits on 1 inch, so I will wait a bit
+  const balanceData = await queryOneInch<Record<string, string>>(
+    `/balance/v1.2/${oneInchChainId}/balances/${address}`
+  )
 
   // Filter tokens with non-zero balance
   const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
@@ -33,10 +30,10 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     return []
   }
 
-  // Fetch token information for the non-zero balance tokens
-  const tokenInfoUrl = `${rootApiUrl}/1inch/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
-  const tokenInfoData =
-    await queryUrl<Record<string, OneInchToken>>(tokenInfoUrl)
+  // Fetch token information for the non-zero balance tokens using queryOneInch
+  const tokenInfoData = await queryOneInch<Record<string, OneInchToken>>(
+    `/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
+  )
 
   const tokens = withoutUndefined(
     nonZeroBalanceTokenAddresses.map(
