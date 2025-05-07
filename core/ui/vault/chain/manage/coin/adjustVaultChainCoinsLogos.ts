@@ -1,7 +1,12 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { Coin } from '@core/chain/coin/Coin'
 
-export const adjustVaultChainCoinsLogos = (coin: AccountCoin): AccountCoin => ({
+export const adjustVaultChainCoinsLogos = <T extends Coin>(coin: T): T => ({
   ...coin,
-  // Enrich raw logos for auto-discovered coins from IBC Transfer
-  logo: coin.id.startsWith('thor') ? `${coin.logo}.png` : coin.logo,
+  // Specific requirement for raw logos for auto-discovered coins from IBC Transfer
+  logo:
+    coin.id.startsWith('thor') &&
+    coin.ticker !== 'KUJI' &&
+    coin.ticker !== 'LVN'
+      ? `${coin.logo}.png`
+      : coin.logo,
 })

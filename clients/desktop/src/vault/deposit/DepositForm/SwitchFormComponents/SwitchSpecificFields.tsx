@@ -99,6 +99,7 @@ export const SwitchSpecificFields = ({
           </Text>
           <InputFieldWrapper
             as="input"
+            readOnly
             value={throchainCoin?.address ?? t('missing_thorchain_address')}
           />
         </InputContainer>

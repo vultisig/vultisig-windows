@@ -17,6 +17,8 @@ export const es = {
   no_tokens_found:
     'No se encontraron tokens. Agrega tokens bajo la cadena deseada.',
   ibc_transfer: 'Transferencia IBC',
+  selected_chain_missing_in_your_vault:
+    'La cadena seleccionada falta en tu bóveda',
   start_transaction: 'Iniciar transacción',
   select_token: 'Seleccionar token',
   destination_address: 'Dirección de destino',

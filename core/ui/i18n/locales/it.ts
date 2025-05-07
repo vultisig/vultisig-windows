@@ -13,6 +13,8 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
+  selected_chain_missing_in_your_vault:
+    'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',

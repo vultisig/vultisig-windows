@@ -11,6 +11,9 @@ export const de = {
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
   youre_swapping: 'Du tauschst',
+  selected_chain_missing_in_your_vault:
+    'Ausgewählte Blockchain fehlt in deinem Tresor',
+
   select_destination_chain: 'Ziel-Blockchain auswählen',
   no_tokens_found:
     'Keine Tokens gefunden. Füge Tokens unter der gewünschten Chain hinzu.',

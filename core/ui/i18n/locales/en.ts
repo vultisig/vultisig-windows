@@ -16,6 +16,7 @@ export const en = {
   vault_specific: 'Vault Specific',
   secure_crypto_vault: 'SECURE CRYPTO VAULT',
   add_address: 'Add Address',
+  selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
   missing_destination_address: 'Missing Destination Address',

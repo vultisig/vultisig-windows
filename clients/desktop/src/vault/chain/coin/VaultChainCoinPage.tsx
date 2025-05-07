@@ -1,4 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -23,7 +24,7 @@ import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 
 export const VaultChainCoinPage = () => {
   const coinKey = useCurrentVaultCoinKey()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = adjustVaultChainCoinsLogos(useCurrentVaultCoin(coinKey))
 
   const balanceQuery = useBalanceQuery({
     ...coinKey,

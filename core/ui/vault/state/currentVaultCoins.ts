@@ -5,13 +5,12 @@ import { groupItems } from '@lib/utils/array/groupItems'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
-import { adjustVaultChainCoinsLogos } from '../chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVault } from './currentVault'
 
 export const useCurrentVaultCoins = () => {
   const { coins } = useCurrentVault()
 
-  return coins?.map(adjustVaultChainCoinsLogos) ?? []
+  return coins ?? []
 }
 
 export const useCurrentVaultNativeCoins = () => {

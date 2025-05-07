@@ -16,6 +16,8 @@ export const hr = {
   swap_overview: 'Pregled zamjene',
   ibc_transfer: 'IBC prijenos',
   select_destination_chain: 'Odaberite odredišni lanac',
+  selected_chain_missing_in_your_vault:
+    'Odabrani lanac nedostaje u vašem trezoru',
   chain: 'Lanac',
   no_tokens_found: 'Nema pronađenih tokena. Dodajte tokene pod željeni lanac.',
   price_impact_good: 'Dobro',
