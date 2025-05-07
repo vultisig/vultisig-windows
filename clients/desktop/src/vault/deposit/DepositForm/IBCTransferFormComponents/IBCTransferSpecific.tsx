@@ -8,7 +8,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import {
   UseFormGetValues,
   UseFormSetValue,
@@ -48,19 +48,7 @@ export const IBCTransferSpecific = ({
   const selectedCoin = getValues('selectedCoin') as Coin
   const vaultCoins = useCurrentVaultCoins()
   const selectedAddress = getValues('nodeAddress') as string
-
-  useEffect(() => {
-    if (selectedDestinationChain) {
-      const newValue =
-        vaultCoins.find(
-          coin => coin.chain === selectedDestinationChain && isNativeCoin(coin)
-        )?.address || ''
-
-      setValue('nodeAddress', newValue, {
-        shouldValidate: true,
-      })
-    }
-  }, [selectedDestinationChain, setValue, vaultCoins])
+  const ibcOptions = useMemo(() => getIbcDropdownOptions(chain), [chain])
 
   return (
     <VStack gap={28}>
@@ -90,21 +78,23 @@ export const IBCTransferSpecific = ({
               setValue('destinationChain', selectedChain, {
                 shouldValidate: true,
               })
-              onClose()
+
+              const newNodeAddress =
+                vaultCoins.find(
+                  coin => coin.chain === selectedChain && isNativeCoin(coin)
+                )?.address || ''
+
+              setValue('nodeAddress', newNodeAddress, {
+                shouldValidate: true,
+              })
             }}
-            options={getIbcDropdownOptions(chain)}
+            options={ibcOptions}
           />
         )}
       />
       <Opener
         renderOpener={({ onOpen }) => (
-          <Container
-            onClick={() => {
-              if (selectedDestinationChain) {
-                onOpen()
-              }
-            }}
-          >
+          <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
                 {selectedCoin?.ticker || t('select_token')}
@@ -141,7 +131,17 @@ export const IBCTransferSpecific = ({
             *
           </Text>
         </Text>
-        <InputFieldWrapper as="input" value={selectedAddress} />
+        <InputFieldWrapper
+          as="input"
+          readOnly
+          value={
+            selectedAddress
+              ? selectedAddress
+              : selectedDestinationChain
+                ? t('missing_destination_address')
+                : ''
+          }
+        />
       </InputContainer>
     </VStack>
   )

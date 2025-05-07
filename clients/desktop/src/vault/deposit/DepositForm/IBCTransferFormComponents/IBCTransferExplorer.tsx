@@ -28,21 +28,17 @@ export const IBCTransferExplorer: FC<IBCTransferExplorerProps> = ({
   return (
     <Modal width={480} placement="top" title={t('chain')} onClose={onClose}>
       <VStack gap={20}>
-        {options.map((option, index) => {
-          const assetName = option.label
-
-          return (
-            <DepositActionOption
-              key={index}
-              value={assetName}
-              isActive={activeOption === assetName}
-              onClick={() => {
-                onOptionClick(option.value)
-                onClose()
-              }}
-            />
-          )
-        })}
+        {options.map(option => (
+          <DepositActionOption
+            key={option.label}
+            value={option.label}
+            isActive={activeOption === option.value}
+            onClick={() => {
+              onOptionClick(option.value)
+              onClose()
+            }}
+          />
+        ))}
       </VStack>
     </Modal>
   )

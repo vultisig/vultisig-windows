@@ -863,7 +863,7 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
     },
     {
       ticker: 'FUZN',
-      logo: 'FUZN.png',
+      logo: 'fuzn.png',
       decimals: 6,
       priceProviderId: 'fuzion',
       id: 'factory/kujira1sc6a0347cc5q3k890jj0pf3ylx2s38rh4sza4t/ufuzn',
