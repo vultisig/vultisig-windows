@@ -15,8 +15,17 @@ export const pt = {
   search_field_placeholder: 'Pesquisar..',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
+  selected_chain_missing_in_your_vault:
+    'A blockchain selecionada está ausente no seu cofre',
   select_destination_chain: 'Selecionar blockchain de destino',
   select_asset: 'Selecionar ativo',
+  no_tokens_found:
+    'Nenhum token encontrado. Adicione tokens na cadeia desejada.',
+  select_token: 'Selecionar token',
+  destination_address: 'Endereço de destino',
+  thorchain_address: 'Endereço THORChain',
+  merge: 'Mesclar',
+  switch: 'Trocar',
   ibc_transfer: 'Transferência IBC',
   price_impact_good: 'Bom',
   swap_overview: 'Visão geral da troca',

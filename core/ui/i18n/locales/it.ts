@@ -13,8 +13,17 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
+  selected_chain_missing_in_your_vault:
+    'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',
   price_impact_good: 'Buono',
+  select_token: 'Seleziona token',
+  no_tokens_found:
+    'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
+  destination_address: 'Indirizzo di destinazione',
+  thorchain_address: 'Indirizzo THORChain',
+  merge: 'Unisci',
+  switch: 'Cambia',
   price_impact_average: 'Medio',
   price_impact_high: 'Impatto Alto',
   swap_overview: 'Panoramica dello scambio',

@@ -9,6 +9,7 @@ import {
 
 const isPrioritizedQueryKey = ['isPrioritized']
 const [key] = isPrioritizedQueryKey
+
 const setPrioritizeWallet = async (isPrioritized: boolean): Promise<void> => {
   await setPersistentState<boolean>(key, isPrioritized)
 }

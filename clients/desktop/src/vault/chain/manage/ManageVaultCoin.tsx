@@ -29,8 +29,6 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
   icon: ReactNode
 }
 
-console.log('test')
-
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))

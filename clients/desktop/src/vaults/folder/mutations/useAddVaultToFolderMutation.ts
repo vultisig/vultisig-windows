@@ -36,7 +36,8 @@ export const useAddVaultToFolderMutation = () => {
         vaultId,
         fields: updateParams,
       })
+
+      await invalidateQueries(vaultsQueryKey)
     },
-    onSuccess: () => invalidateQueries(vaultsQueryKey),
   })
 }

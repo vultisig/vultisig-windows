@@ -8,6 +8,7 @@ import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
@@ -169,7 +170,7 @@ export const VaultChainPage = () => {
                   .map(sortCoinsByBalance)
                   .flat(),
                 (one, another) => one.ticker === another.ticker
-              )
+              ).map(adjustVaultChainCoinsLogos)
 
               return orderedCoins.map(coin => (
                 <Link

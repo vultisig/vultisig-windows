@@ -30,10 +30,7 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
               key={index}
               value={t(option)}
               isActive={activeOption === option}
-              onClick={() => {
-                onOptionClick(option)
-                onClose()
-              }}
+              onClick={() => onOptionClick(option)}
             />
           )
         })}

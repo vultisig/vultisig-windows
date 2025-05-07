@@ -1,18 +1,28 @@
-export const CheckIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="feather feather-check"
-    >
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
-  )
-}
+import { FC, SVGProps } from 'react'
+
+export const CheckIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = '1em',
+  stroke = 'currentColor',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
+  >
+    <path d="M20 6L9 17L4 12" />
+  </svg>
+)

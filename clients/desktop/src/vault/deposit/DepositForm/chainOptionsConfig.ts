@@ -41,26 +41,47 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
   })
 }
 
+const CoinSchema = z.object({
+  chain: z.string(),
+  id: z.string(),
+  priceProviderId: z.string().optional(),
+  decimals: z.number(),
+  ticker: z.string(),
+  logo: z.string(),
+})
+
 export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
-  ibc_transfer: {
+  merge: {
     fields: [
-      {
-        name: 'destinationAddress',
-        type: 'text',
-        label: 'Destination Address',
-        required: true,
-      },
       {
         name: 'amount',
         type: 'number',
         label: 'Amount',
         required: true,
       },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) => {
+      return z.object({
+        nodeAddress: z.string().min(1, 'Required'),
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+      })
+    },
+  },
+  switch: {
+    fields: [
       {
-        name: 'memo',
-        type: 'text',
-        label: 'Memo',
-        required: false,
+        name: 'amount',
+        type: 'number',
+        label: 'Amount',
+        required: true,
       },
     ],
     schema: (
@@ -69,10 +90,33 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       totalAmountAvailable: number
     ) =>
       z.object({
-        destinationChain: z.string().min(1, 'Destination Chain is required'),
-        destinationAddress: z
+        selectedCoin: CoinSchema,
+        amount: z
           .string()
-          .min(1, 'Destination Address is required'),
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+        nodeAddress: z.string().min(1, 'Required'),
+        thorchainAddress: z.string().min(1, 'Required'),
+      }),
+  },
+  ibc_transfer: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true,
+      },
+    ],
+    schema: (
+      chain: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        selectedCoin: CoinSchema,
+        destinationChain: z.string().min(1, 'Destination Chain is required'),
+        nodeAddress: z.string().min(1, 'Destination Address is required'),
         amount: z
           .string()
           .transform(val => Number(val))
@@ -80,10 +124,9 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
             z
               .number()
               .positive()
-              .min(0.01, 'Amount must be greater than 0')
+              .min(0.001, 'Amount must be greater than 0')
               .max(totalAmountAvailable, 'Amount exceeds balance')
           ),
-        memo: z.string().optional(),
       }),
   },
   bond: {
