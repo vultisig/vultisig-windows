@@ -29,7 +29,6 @@ export const corePaths = {
   vaultDetails: '/vault/settings/details',
   vaults: '/vaults',
   send: '/vault/send',
-  manageVaultChains: '/vault/chains/manage',
 } as const
 
 type CorePaths = typeof corePaths
