@@ -114,7 +114,11 @@ const Component = () => {
       try {
         await createVault(decodedVault)
 
-        isWindows ? navigateToMain() : window.close()
+        if (isWindows) {
+          navigateToMain()
+        } else {
+          window.close()
+        }
       } catch (e) {
         handleError(extractErrorMsg(e))
       } finally {
