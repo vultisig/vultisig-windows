@@ -14,7 +14,7 @@ const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000
 export const BackupSuccessSlide: FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
   const { RiveComponent } = useRive({
-    src: '/assets/animations/secure-vault-backup/secure-vault-backup-screen-part-3/index.riv',
+    src: '/core/animations/secure-vault-backup/secure-vault-backup-screen-part-3/index.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
     onStateChange: () => setTimeout(onFinish, BACKUP_SUCCESS_WAIT_TIME_IN_MS),

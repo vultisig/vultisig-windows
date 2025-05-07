@@ -7,7 +7,7 @@ type AnimationProps = ValueProp<string> & {
 
 export const Animation = ({ value, ...props }: AnimationProps) => {
   const { RiveComponent } = useRive({
-    src: `/assets/animations/${value}.riv`,
+    src: `/core/animations/${value}.riv`,
     autoplay: true,
     ...props,
   })
