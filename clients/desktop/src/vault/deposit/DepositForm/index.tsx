@@ -148,7 +148,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 options={chainActionOptions}
                 onOptionClick={option => {
                   onClose()
-                  setTimeout(() => onSelectChainAction(option), 0)
+                  onSelectChainAction(option)
                 }}
               />
             )}
