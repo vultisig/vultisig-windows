@@ -23,6 +23,7 @@ try {
 }
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
+// There is a 1ms delay for initializing both sides of messengers
 setTimeout(async () => {
   inpageMessenger.send('setDefaultProvider', {
     vultisigDefaultProvider: await getPrioritizeWallet(),

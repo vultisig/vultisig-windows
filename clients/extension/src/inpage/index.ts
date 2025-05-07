@@ -1184,7 +1184,7 @@ messenger.reply(
             ],
             setDefaultProvider(vultiAsDefault: boolean) {
               window.vultiConnectRouter.currentProvider = vultiAsDefault
-                ? window.vultisig
+                ? (window.vultisig?.ethereum ?? ethereumProvider)
                 : (window.vultiConnectRouter?.lastInjectedProvider ??
                   window.ethereum)
             },
