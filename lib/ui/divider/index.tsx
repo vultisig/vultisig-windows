@@ -14,6 +14,7 @@ const StyledText = styled.span`
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
+  white-space: nowrap;
 `
 
 const StyledDivider = styled.div<{ placement: Placement }>`

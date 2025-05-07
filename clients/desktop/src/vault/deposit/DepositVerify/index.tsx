@@ -44,7 +44,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
     depositFormData: depositFormData,
     selectedChainAction: selectedChainAction,
     bondableAsset: depositFormData?.bondableAsset,
-    chain: coin.chain,
+    chain: coin?.chain,
   })
 
   const formattedDepositFormData = getFormattedFormData(

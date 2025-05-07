@@ -1,6 +1,10 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
@@ -37,13 +41,17 @@ export const DepositConfirmButton = ({
   const isTonFunction = chain === Chain.Ton
   const { t } = useTranslation()
   const [coinKey] = useCurrentDepositCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const selectedCoin = depositFormData['selectedCoin']
+    ? (depositFormData['selectedCoin'] as AccountCoin)
+    : null
+  const coin = useCurrentVaultCoin(
+    selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
+  )
   const transactionType =
     action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)
   const vault = useCurrentVault()
   const config = transactionConfig[action] || {}
-
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : ''
@@ -81,12 +89,17 @@ export const DepositConfirmButton = ({
       vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     })
 
-    if (action === 'ibc_transfer') {
-      keysignPayload.toAddress = shouldBePresent(
-        depositFormData['destinationAddress'] as string
-      )
-    } else if (
-      isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])
+    if (
+      isOneOf(action, [
+        'unstake',
+        'leave',
+        'unbound',
+        'stake',
+        'bond',
+        'ibc_transfer',
+        'switch',
+        'merge',
+      ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
         isTonFunction ? validatorAddress : receiver
@@ -107,7 +120,6 @@ export const DepositConfirmButton = ({
     chainSpecificQuery.data,
     chainSpecificQuery.isLoading,
     coin,
-    depositFormData,
     isTonFunction,
     memo,
     receiver,
