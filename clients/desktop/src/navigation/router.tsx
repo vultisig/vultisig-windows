@@ -40,7 +40,6 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { SwapPage } from '../vault/swap/components/SwapPage'
 import { NewVaultPage } from '../vaults/components/NewVaultPage'
 import { VaultsPage } from '../vaults/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
@@ -141,11 +140,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   address: <AddressPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
-  swap: (
-    <ActiveVaultGuard>
-      <SwapPage />
-    </ActiveVaultGuard>
-  ),
   migrateVault: (
     <ActiveVaultGuard>
       <MigrateVaultPage />

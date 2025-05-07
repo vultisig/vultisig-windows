@@ -6,6 +6,9 @@ import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEn
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
+import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
+import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
+import { SwapCoinBalance } from '@core/ui/vault/swap/form/SwapCoinBalance'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -14,9 +17,6 @@ import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { ManageFromAmount } from '../../../../vault/swap/form/amount/ManageFromAmount'
-import { ToAmount } from '../../../../vault/swap/form/amount/ToAmount'
-import { SwapCoinBalance } from '../../../../vault/swap/form/SwapCoinBalance'
 import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<

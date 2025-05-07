@@ -23,8 +23,8 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ChainOption } from '../../../coin/ui/inputs/ChainOption'
-import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
+import { ChainOption } from '../components/ChainOption'
+import { SwapCoinInputField } from '../components/SwapCoinInputField'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)

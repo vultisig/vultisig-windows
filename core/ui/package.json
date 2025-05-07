@@ -15,6 +15,7 @@
     "@lib/utils": "workspace:*",
     "@trustwallet/wallet-core": "^4.2.15",
     "react": "^19.0.0",
+    "react-circular-progressbar": "^2.2.0",
     "styled-components": "^6.1.16"
   }
 }

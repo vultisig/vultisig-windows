@@ -29,6 +29,7 @@ export const corePaths = {
   vaultDetails: '/vault/settings/details',
   vaults: '/vaults',
   send: '/vault/send',
+  swap: '/vault/item/swap',
 } as const
 
 type CorePaths = typeof corePaths
@@ -39,6 +40,7 @@ export type CorePathParams = {
   setupVault: { type?: VaultSecurityType }
   uploadQr: { title?: string }
   send: { coin: string; address?: string }
+  swap: { coin: string }
 }
 
 export type CorePathState = {

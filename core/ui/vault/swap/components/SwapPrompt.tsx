@@ -4,14 +4,14 @@ import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { makeAppPath } from '../../../navigation'
+import { makeCorePath } from '../../../navigation'
 
 export const SwapPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
 
   return (
     <Link
-      to={makeAppPath('swap', {
+      to={makeCorePath('swap', {
         coin: coinKeyToString(value),
       })}
     >

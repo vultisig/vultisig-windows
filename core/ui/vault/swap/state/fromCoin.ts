@@ -5,10 +5,10 @@ import {
 } from '@core/chain/coin/Coin'
 import { useCallback, useMemo } from 'react'
 
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
+import { useCorePathParams } from '../../../navigation/hooks/useCorePathParams'
 
 export const useFromCoin = () => {
-  const [{ coin }, setParams] = useAppPathParams<'swap'>()
+  const [{ coin }, setParams] = useCorePathParams<'swap'>()
 
   const value = useMemo(() => coinKeyFromString(coin), [coin])
 

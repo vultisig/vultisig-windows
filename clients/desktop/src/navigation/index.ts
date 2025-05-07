@@ -19,7 +19,6 @@ export const appPaths = {
   addressBook: '/vault/settings/address-book',
   faq: '/vault/settings/faq',
   vaultFAQ: '/vault/settings/faq',
-  swap: '/vault/item/swap',
   signCustomMessage: '/vault/sign-custom-message',
   registerForAirdrop: '/register-for-airdrop',
   onboarding: '/onboarding',
@@ -39,7 +38,6 @@ export type AppPathParams = {
   manageVaultChainCoins: { chain: Chain }
   vaultChainDetail: { chain: Chain }
   vaultChainCoinDetail: { chain: Chain; coin: string }
-  swap: { coin: string }
   deposit: { coin: string }
   vaultFolder: { id: string }
   manageVaultFolder: { id: string }

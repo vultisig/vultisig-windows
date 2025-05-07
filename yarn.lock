@@ -337,7 +337,6 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
-    react-circular-progressbar: "npm:^2.2.0"
     styled-components: "npm:^6.1.16"
     typescript: "npm:^5.8.2"
     vite: "npm:^6.2.2"
@@ -481,6 +480,7 @@ __metadata:
     "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
     react: "npm:^19.0.0"
+    react-circular-progressbar: "npm:^2.2.0"
     styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
