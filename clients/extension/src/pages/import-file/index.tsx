@@ -114,7 +114,7 @@ const Component = () => {
       try {
         await createVault(decodedVault)
 
-        navigateToMain()
+        isWindows ? navigateToMain() : window.close()
       } catch (e) {
         handleError(extractErrorMsg(e))
       } finally {
@@ -160,6 +160,7 @@ const Component = () => {
 
     if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
       setState(prevState => ({ ...prevState, isWindows: false }))
+
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
         let createdWindowId: number
         const { height, left, top, width } =
@@ -181,8 +182,7 @@ const Component = () => {
 
         chrome.windows.onRemoved.addListener(closedWindowId => {
           if (closedWindowId === createdWindowId) {
-            if (isPopupRef.current) window.close()
-            else navigateToMain()
+            navigateToMain()
           }
         })
       })
