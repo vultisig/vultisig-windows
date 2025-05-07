@@ -3,12 +3,12 @@ import { Coin } from '@core/chain/coin/Coin'
 import { IBC_TOKENS, TOKEN_MERGE_CONTRACTS } from '@core/chain/coin/ibc'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { FC, useMemo } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../lib/ui/modal'
 import { FormData } from '.'
 import { DepositActionOption } from './DepositActionOption'
 

@@ -3,7 +3,7 @@ import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DepositActionOption } from './DepositActionOption'
+import { DepositActionOption } from '../DepositActionOption'
 
 type IBCDesitinationChainOption = {
   label: string

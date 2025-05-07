@@ -1,5 +1,6 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
