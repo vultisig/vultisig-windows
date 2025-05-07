@@ -14,12 +14,15 @@ import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupRes
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { fromBase64 } from '@lib/utils/fromBase64'
@@ -28,7 +31,14 @@ import { useMutation } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 import { UAParser } from 'ua-parser-js'
+
+const StyledEmptyState = styled(VStack)`
+  background-color: ${getColor('backgroundsSecondary')};
+  border-radius: 12px;
+  padding: 64px;
+`
 
 interface InitialState {
   error?: string
@@ -97,16 +107,19 @@ const Component = () => {
     onSuccess: handleProcessVaultContainer,
   })
 
-  const finalizeVaultImport = async (): Promise<void> => {
-    if (!decodedVault) return
-    setState(p => ({ ...p, loading: true }))
-    try {
-      await createVault(decodedVault)
-      navigateToMain()
-    } catch (e) {
-      handleError(extractErrorMsg(e))
-    } finally {
-      setState(p => ({ ...p, loading: false }))
+  const finalizeVaultImport = async (decodedVault?: Vault) => {
+    if (decodedVault) {
+      setState(prevState => ({ ...prevState, loading: true }))
+
+      try {
+        await createVault(decodedVault)
+
+        navigateToMain()
+      } catch (e) {
+        handleError(extractErrorMsg(e))
+      } finally {
+        setState(prevState => ({ ...prevState, loading: false }))
+      }
     }
   }
 
@@ -116,7 +129,8 @@ const Component = () => {
       status: 'success',
       decodedVault,
     }))
-    if (finalize) finalizeVaultImport()
+
+    if (finalize) finalizeVaultImport(decodedVault)
   }
 
   const handleError = (error: string) => {
@@ -176,54 +190,63 @@ const Component = () => {
   }, [navigateToMain])
 
   const isDisabled = !file
+
   return isWindows ? (
-    !isEncrypted ? (
-      <>
-        <StyledPageContent fullHeight>
-          <FlowPageHeader title={t('import_vault')} />
-          <PageContent
-            as="form"
-            {...getFormProps({
-              onSubmit: () => {
-                if (file && !error) {
-                  finalizeVaultImport()
-                }
-              },
-              isDisabled,
-            })}
-          >
-            <VStack gap={20} flexGrow>
-              {file ? (
-                <UploadedBackupFile value={file} />
-              ) : (
-                <BackupFileDropzone onFinish={onFileSelected} />
-              )}
-              {error && (
-                <Text centerHorizontally color="danger">
-                  {extractErrorMsg(error)}
-                </Text>
-              )}
-            </VStack>
-            <Button isLoading={loading} isDisabled={isDisabled} type="submit">
-              {t('continue')}
-            </Button>
-          </PageContent>
-        </StyledPageContent>
-      </>
-    ) : (
-      <>
+    isEncrypted ? (
+      vaultContainer?.vault ? (
         <DecryptVaultContainerStep
-          value={vaultContainer!.vault}
+          value={vaultContainer.vault}
           onFinish={vault => onVaultDecrypted(vault, true)}
         />
-      </>
+      ) : null
+    ) : (
+      <VStack
+        as="form"
+        {...getFormProps({
+          onSubmit: () => {
+            if (file && !error) finalizeVaultImport(decodedVault)
+          },
+          isDisabled,
+        })}
+        fullHeight
+      >
+        <PageHeader
+          primaryControls={<PageHeaderBackButton />}
+          title={<PageHeaderTitle>{t('import_vault')}</PageHeaderTitle>}
+          hasBorder
+        />
+        <PageContent gap={12} flexGrow scrollable>
+          {file ? (
+            <UploadedBackupFile value={file} />
+          ) : (
+            <BackupFileDropzone onFinish={onFileSelected} />
+          )}
+          {error && (
+            <Text color="danger" centerHorizontally>
+              {extractErrorMsg(error)}
+            </Text>
+          )}
+        </PageContent>
+        <PageFooter>
+          <Button isLoading={loading} isDisabled={isDisabled} type="submit">
+            {t('continue')}
+          </Button>
+        </PageFooter>
+      </VStack>
     )
   ) : (
-    <div className="layout import-page">
-      <div className="content">
-        <div className="hint">{t('continue_in_new_window')}</div>
-      </div>
-    </div>
+    <PageContent
+      alignItems="center"
+      justifyContent="center"
+      flexGrow
+      scrollable
+    >
+      <StyledEmptyState alignItems="center" gap={24} justifyContent="center">
+        <Text color="contrast" size={17} weight={500} centerHorizontally>
+          {t('continue_in_new_window')}
+        </Text>
+      </StyledEmptyState>
+    </PageContent>
   )
 }
 
