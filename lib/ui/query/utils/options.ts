@@ -9,6 +9,7 @@ type UseQueryGenericOptions = Partial<
     | 'staleTime'
     | 'refetchInterval'
     | 'refetchIntervalInBackground'
+    | 'meta'
   >
 >
 
@@ -21,6 +22,7 @@ const noRefetchQueryOptions: UseQueryGenericOptions = {
 export const fixedDataQueryOptions: UseQueryGenericOptions = {
   ...noRefetchQueryOptions,
   staleTime: Infinity,
+  meta: { disablePersist: true },
 }
 
 export const pollingQueryOptions = (
