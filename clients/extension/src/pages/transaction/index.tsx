@@ -1,7 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
-import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
@@ -56,8 +55,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
-import { StrictMode, useEffect, useMemo, useRef, useState } from 'react'
-import ReactDOM from 'react-dom/client'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
@@ -86,7 +84,7 @@ interface InitialState {
   keysignPayload?: KeysignPayload
 }
 
-const Component = () => {
+export const TransactionPage = () => {
   const { t } = useTranslation()
   const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
@@ -1280,13 +1278,3 @@ const Component = () => {
     </VStack>
   )
 }
-
-export default Component
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppProviders>
-      <Component />
-    </AppProviders>
-  </StrictMode>
-)

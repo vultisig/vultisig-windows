@@ -10,11 +10,12 @@
   },
   "type": "module",
   "scripts": {
-    "build:app": "tsc -b && cross-env CHUNK=app vite build",
+    "build:app": "tsc -b && vite build",
+    "build:background": "tsc -b && cross-env CHUNK=background vite build",
     "build:content": "tsc -b && cross-env CHUNK=content vite build",
     "build:inpage": "tsc -b && cross-env CHUNK=inpage vite build",
     "build:relay": "tsc -b && cross-env CHUNK=relay vite build",
-    "build": "npm-run-all --serial build:app build:content build:inpage build:relay",
+    "build": "npm-run-all --serial build:app build:background build:content build:inpage build:relay",
     "dev": "nodemon --watch src --ext ts,tsx,scss --exec \"npm run build\"",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -60,16 +61,5 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1"
-  },
-  "manifest": {
-    "background": "src/background/index.ts",
-    "connect": "connect.html",
-    "content": "src/content/index.ts",
-    "inpage": "src/inpage/index.ts",
-    "import": "import.html",
-    "popup": "popup.html",
-    "relay": "src/relay/index.ts",
-    "transaction": "transaction.html",
-    "vaults": "vaults.html"
   }
 }

@@ -4,16 +4,19 @@ import { ReshareSecureVault } from '@clients/extension/src/components/settings/r
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { AppPath, appPaths } from '@clients/extension/src/navigation'
-import { ConnectedDappsPage } from '@clients/extension/src/pages/popup/pages/connected-dapps'
-import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
-import ImportFilePage from '@clients/extension/src/pages/popup/pages/import-file'
-import ImportQRPage from '@clients/extension/src/pages/popup/pages/import-qr'
-import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/new-vault'
-import { SettingsPage } from '@clients/extension/src/pages/popup/pages/settings'
-import { SetupVaultPageController } from '@clients/extension/src/pages/popup/pages/setup-vault/SetupVaultPageController'
-import { VaultPage } from '@clients/extension/src/pages/popup/pages/vault'
-import { VaultSettingsPage } from '@clients/extension/src/pages/popup/pages/vault-settings'
-import { VaultsPage } from '@clients/extension/src/pages/popup/pages/vaults'
+import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
+import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
+import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
+import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
+import ImportFilePage from '@clients/extension/src/pages/import-file'
+import ImportQRPage from '@clients/extension/src/pages/import-qr'
+import { NewVaultPage } from '@clients/extension/src/pages/new-vault'
+import { SettingsPage } from '@clients/extension/src/pages/settings'
+import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
+import { TransactionPage } from '@clients/extension/src/pages/transaction'
+import { VaultPage } from '@clients/extension/src/pages/vault'
+import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
+import { VaultsPage } from '@clients/extension/src/pages/vaults'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
@@ -79,6 +82,10 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
+  connectTab: <ConnectDAppPage />,
+  importTab: <ImportFilePage />,
+  vaultsTab: <GetVaultsPage />,
+  transactionTab: <TransactionPage />,
 }
 
 export const router = createHashRouter(

@@ -111,7 +111,7 @@ export const SettingsPage = () => {
               icon={<ExpandIcon fontSize={20} />}
               onClick={() =>
                 open(
-                  `chrome-extension://${chrome.runtime.id}/popup.html`,
+                  `chrome-extension://${chrome.runtime.id}/index.html`,
                   '_blank'
                 )
               }

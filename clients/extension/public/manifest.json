@@ -17,7 +17,7 @@
       "64": "icon64.png",
       "128": "icon128.png"
     },
-    "default_popup": "popup.html"
+    "default_popup": "index.html"
   },
   "background": {
     "service_worker": "background.js",
