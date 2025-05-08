@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "global.d.ts", "../../core/ui/i18n/**/*.d.ts"],
+  "include": ["src", "global.d.ts", "../../core/ui/i18n/**/*.d.ts", "../../core/ui/inputs", "../../lib/ui/dnd", "../../core/ui/page", "../../lib/ui/inputs/switchControlContainer", "../../lib/ui/inputs/text-input", "../../lib/ui/inputs/AmountTextInput.tsx", "../../lib/ui/inputs/RadioInput.tsx"],
   "exclude": ["node_modules", "dist"],
   "references": [
     {

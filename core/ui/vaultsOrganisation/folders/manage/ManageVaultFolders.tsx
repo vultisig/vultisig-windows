@@ -8,13 +8,13 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 
-import { DnDList } from '@clients/desktop/src/lib/dnd/DnDList'
 import {
   DnDItemContainer,
   DnDItemHighlight,
-} from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
+} from '../../../../../lib/list/item/DnDItemContainer'
 import { FolderListItem } from '../components/FolderListItem'
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
+import { DnDList } from '@lib/ui/dnd/DnDList'
 
 export const ManageVaultFolders = () => {
   const folders = useVaultFolders()

@@ -5,7 +5,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import styled, { css } from 'styled-components'
 
-import { DnDItemStatus } from '../../../dnd/DnDItemStatus'
+import { DnDItemStatus } from '@lib/ui/dnd/DnDItemStatus'
 
 export const DnDItemHighlight = styled.div`
   position: absolute;

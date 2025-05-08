@@ -1,4 +1,4 @@
-import { PageHeaderToggleTitle } from '@clients/desktop/src/ui/page/PageHeaderToggleTitle'
+import { PageHeaderToggleTitle } from '@core/ui/page/PageHeaderToggleTitle'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useTranslation } from 'react-i18next'
 
