@@ -17,14 +17,10 @@ import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/vaults'
-import { AddressPage } from '@core/ui/chain/components/address/AddressPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
-import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
-import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
@@ -61,22 +57,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
       <VaultsPage />
     </ActiveVaultGuard>
   ),
-  vaultChainDetail: (
-    <ActiveVaultGuard>
-      <VaultChainPage />
-    </ActiveVaultGuard>
-  ),
-  vaultChainCoinDetail: (
-    <ActiveVaultGuard>
-      <VaultChainCoinPage />
-    </ActiveVaultGuard>
-  ),
-  manageVaultChainCoins: (
-    <ActiveVaultGuard>
-      <ManageVaultChainCoinsPage />
-    </ActiveVaultGuard>
-  ),
-  address: <AddressPage />,
   deposit: (
     <ActiveVaultGuard>
       <>{/* <>TODO: Implement Deposit page</> */}</>
