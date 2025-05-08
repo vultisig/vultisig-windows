@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next'
 
 import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders'
 import { ManageVaults } from './ManageVaults'
-import { PageHeaderVaultSettingsPrompt } from '@clients/desktop/src/pages/vaultSettings/PageHeaderVaultSettingsPrompt'
 import { VaultsPageHeaderTitle } from '@core/ui/vaultsOrganisation/components/VaultsPageHeaderTitle'
 import { FinishEditing } from '@core/ui/vaultsOrganisation/components/FinishEditing'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 
+import { PageHeaderVaultSettingsPrompt } from '../components/PageHeaderVaultSettingsPrompt'
 export const ManageVaultsPage = () => {
   const navigate = useCoreNavigate()
   const appNavigate = useCoreNavigate()
