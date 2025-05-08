@@ -96,7 +96,7 @@ interface SwitchProps {
   checked?: boolean
   disabled?: boolean
   loading?: boolean
-  onChange?: (value?: boolean) => void
+  onChange?: (value: boolean) => void
 }
 
 export const Switch: FC<SwitchProps> = ({
