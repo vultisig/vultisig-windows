@@ -9,6 +9,7 @@ import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
+import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
@@ -49,7 +50,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
           <QueryProvider>
             <WalletCoreProvider>
               <StorageDependant>
-                <I18nProvider>{children}</I18nProvider>
+                <I18nProvider>
+                  <ToastProvider>{children}</ToastProvider>
+                </I18nProvider>
               </StorageDependant>
             </WalletCoreProvider>
           </QueryProvider>
