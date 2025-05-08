@@ -1,5 +1,4 @@
 import { ChildrenProp, UiProps } from '@lib/ui/props'
-import React from 'react'
 
 export const ScrollableFlexboxFiller = ({
   children,

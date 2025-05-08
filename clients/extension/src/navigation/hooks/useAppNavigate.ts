@@ -1,22 +1,12 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import {
-  AppPath,
-  AppPathParams,
-  AppPathsWithNoParamsOrState,
-  AppPathsWithParams,
-  makeAppPath,
-} from '..'
+import { AppPath, makeAppPath } from '..'
 
 type CommonOptions = { replace?: boolean }
 
 type AppNavigate = {
-  <P extends AppPathsWithParams>(
-    path: P,
-    options: CommonOptions & { params: AppPathParams[P] }
-  ): void
-  (path: AppPathsWithNoParamsOrState, options?: CommonOptions): void
+  (path: AppPath, options?: CommonOptions): void
 }
 
 export function useAppNavigate(): AppNavigate {

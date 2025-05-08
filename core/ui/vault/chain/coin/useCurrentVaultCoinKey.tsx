@@ -1,9 +1,8 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 
 export const useCurrentVaultCoinKey = (): CoinKey => {
-  const [{ chain, coin }] = useAppPathParams<'vaultChainCoinDetail'>()
+  const [{ chain, coin }] = useCorePathParams<'vaultChainCoinDetail'>()
 
   return {
     chain: chain,

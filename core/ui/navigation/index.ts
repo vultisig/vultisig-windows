@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -8,14 +9,19 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const corePaths = {
+  address: '/address',
   currencySettings: '/settings/currency',
   defaultChains: '/settings/default-chains',
+  deposit: '/vault/item/deposit',
   importVault: '/vault/import',
   joinKeygen: '/join-keygen',
   joinKeysign: '/join-keysign',
   keysign: '/vault/keysign',
   languageSettings: '/settings/language',
   manageVaultChains: '/vault/chains/manage',
+  manageVaultChainCoins: '/vault/chains/coins',
+  vaultChainDetail: '/vault/item/detail',
+  vaultChainCoinDetail: '/vault/item/detail/coin',
   newVault: '/vault/new',
   renameVault: '/settings/vault/rename',
   reshareVault: '/vault/reshare',
@@ -37,7 +43,12 @@ type CorePaths = typeof corePaths
 export type CorePath = keyof CorePaths
 
 export type CorePathParams = {
+  address: { address: string }
+  deposit: { coin: string }
   setupVault: { type?: VaultSecurityType }
+  manageVaultChainCoins: { chain: Chain }
+  vaultChainDetail: { chain: Chain }
+  vaultChainCoinDetail: { chain: Chain; coin: string }
   uploadQr: { title?: string }
   send: { coin: string; address?: string }
   swap: { coin: string }

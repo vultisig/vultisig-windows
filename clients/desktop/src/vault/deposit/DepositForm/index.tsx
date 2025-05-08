@@ -2,6 +2,10 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  useVaultChainCoinsQuery,
+  VaultChainCoin,
+} from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
@@ -20,10 +24,6 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
-import {
-  useVaultChainCoinsQuery,
-  VaultChainCoin,
-} from '../../queries/useVaultChainCoinsQuery'
 import { ChainAction } from '../ChainAction'
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance'
 import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery'

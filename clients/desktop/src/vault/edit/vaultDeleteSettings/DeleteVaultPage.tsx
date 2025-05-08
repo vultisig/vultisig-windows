@@ -2,6 +2,7 @@ import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useDeleteVaultMutation } from '@core/ui/storage/vaults'
+import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'
@@ -15,7 +16,6 @@ import { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery'
 import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
 import {
   ActionsWrapper,

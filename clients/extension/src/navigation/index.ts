@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
@@ -12,21 +11,10 @@ export const appPaths = {
   importTab: '/tabs/import',
   vaultsTab: '/tabs/vaults',
   transactionTab: '/tabs/transaction',
-  vaultChainCoinDetail: '/vault/item/detail/coin',
-  vaultChainDetail: '/vault/item/detail',
 } as const
 
 type AppPaths = typeof appPaths
 export type AppPath = keyof AppPaths
-
-export type AppPathParams = {
-  manageVaultChainCoins: { chain: Chain }
-  vaultChainDetail: { chain: Chain }
-  vaultChainCoinDetail: { chain: Chain; coin: string }
-}
-
-export type AppPathsWithParams = keyof AppPathParams
-export type AppPathsWithNoParamsOrState = Exclude<AppPath, AppPathsWithParams>
 
 function resolveAppPath(path: string, obj: any): string {
   const parts = path.split('.')
@@ -39,14 +27,6 @@ function resolveAppPath(path: string, obj: any): string {
   }
   return result
 }
-
-export function makeAppPath<P extends keyof AppPathParams>(
-  path: P,
-  variables: AppPathParams[P]
-): string
-export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
-  path: P
-): string
 
 export function makeAppPath(path: AppPath, variables?: any): string {
   const basePath = resolveAppPath(path, appPaths)

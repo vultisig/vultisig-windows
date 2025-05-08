@@ -131,7 +131,7 @@ export const VaultPage = () => {
                 hoverable
                 showArrow
                 onClick={() => {
-                  appNavigate('vaultChainDetail', {
+                  navigate('vaultChainDetail', {
                     params: { chain: chain as Chain },
                   })
                 }}
