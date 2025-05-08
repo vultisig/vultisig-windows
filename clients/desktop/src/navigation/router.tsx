@@ -40,7 +40,6 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { NewVaultPage } from '../vaults/components/NewVaultPage'
 import { VaultsPage } from '../vaults/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolderPage'
@@ -68,7 +67,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportVaultPage />,
-  newVault: <NewVaultPage />,
   keysign: (
     <ActiveVaultGuard>
       <StartKeysignPage />
