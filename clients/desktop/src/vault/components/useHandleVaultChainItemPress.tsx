@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useEffect, useState } from 'react'
-
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 type Input = {
   chain: string
@@ -14,7 +13,7 @@ export const useHandleVaultChainItemPress = ({ chain, address }: Input) => {
   const [copiedAt, setCopiedAt] = useState<number | null>(null)
   const copyAddress = useCopyAddress()
 
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   useEffect(() => {
     if (!pressedAt || !address || copiedAt) {

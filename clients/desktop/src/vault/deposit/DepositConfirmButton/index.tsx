@@ -13,6 +13,7 @@ import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Text } from '@lib/ui/text'
@@ -21,7 +22,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
@@ -36,7 +36,7 @@ export const DepositConfirmButton = ({
   depositFormData,
   action,
 }: DepositConfirmButtonProps) => {
-  const [{ coin: coinName }] = useAppPathParams<'deposit'>()
+  const [{ coin: coinName }] = useCorePathParams<'deposit'>()
   const { chain: chain } = coinKeyFromString(coinName)
   const isTonFunction = chain === Chain.Ton
   const { t } = useTranslation()
