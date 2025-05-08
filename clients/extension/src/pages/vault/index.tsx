@@ -3,9 +3,12 @@ import { MiddleTruncate } from '@clients/extension/src/components/middle-truncat
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { Chain } from '@core/chain/Chain'
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -20,6 +23,8 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { sum } from '@lib/utils/array/sum'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -54,6 +59,8 @@ export const VaultPage = () => {
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultNativeCoins()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
+  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const fiatCurrency = useFiatCurrency()
   return (
     <VStack fullHeight>
       <PageHeader
@@ -105,38 +112,56 @@ export const VaultPage = () => {
           </Text>
 
           <List>
-            {coins.map(({ address, chain }) => (
-              <ListItem
-                description={
-                  address && <MiddleTruncate text={address} width={80} />
-                }
-                extra={
-                  <VStack gap={4} alignItems="end">
-                    <Text weight={500} size={14} color="contrast">
-                      $1,801.15
-                    </Text>
-                    <Text weight={500} size={12} color="light">
-                      2 assets
-                    </Text>
-                  </VStack>
-                }
-                icon={
-                  <ChainEntityIcon
-                    value={getChainEntityIconSrc(chain)}
-                    style={{ fontSize: 36 }}
-                  />
-                }
-                key={chain}
-                title={chain}
-                hoverable
-                showArrow
-                onClick={() => {
-                  navigate('vaultChainDetail', {
-                    params: { chain: chain as Chain },
-                  })
-                }}
-              />
-            ))}
+            {coins.map(({ address, chain }) => {
+              const balances = vaultChainBalances.find(
+                vault => vault.chain === chain
+              )
+              return (
+                <ListItem
+                  description={
+                    address && <MiddleTruncate text={address} width={80} />
+                  }
+                  extra={
+                    <VStack gap={4} alignItems="end">
+                      <Text weight={500} size={14} color="contrast">
+                        {formatAmount(
+                          balances
+                            ? sum(
+                                balances.coins.map(coin =>
+                                  getCoinValue({
+                                    price: coin.price ?? 0,
+                                    amount: coin.amount,
+                                    decimals: coin.decimals,
+                                  })
+                                )
+                              )
+                            : 0,
+                          fiatCurrency
+                        )}
+                      </Text>
+                      <Text weight={500} size={12} color="light">
+                        {balances ? balances.coins.length : 0} {t('assets')}
+                      </Text>
+                    </VStack>
+                  }
+                  icon={
+                    <ChainEntityIcon
+                      value={getChainEntityIconSrc(chain)}
+                      style={{ fontSize: 36 }}
+                    />
+                  }
+                  key={chain}
+                  title={chain}
+                  hoverable
+                  showArrow
+                  onClick={() => {
+                    navigate('vaultChainDetail', {
+                      params: { chain: chain as Chain },
+                    })
+                  }}
+                />
+              )
+            })}
           </List>
         </VStack>
       </PageContent>
