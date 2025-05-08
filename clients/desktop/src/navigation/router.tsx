@@ -180,7 +180,11 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <DeeplinkPage />
     </ActiveVaultGuard>
   ),
-  signCustomMessage: <SignCustomMessagePage />,
+  signCustomMessage: (
+    <ActiveVaultGuard>
+      <SignCustomMessagePage />
+    </ActiveVaultGuard>
+  ),
   dkls: <ManageDklsPage />,
   faq: <FaqVaultPage />,
 }
