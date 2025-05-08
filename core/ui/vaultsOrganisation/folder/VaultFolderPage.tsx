@@ -10,9 +10,9 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { VaultListItem } from '../components/VaultListItem'
+import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
+import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 
 export const VaultFolderPage = () => {
   const navigate = useCoreNavigate()

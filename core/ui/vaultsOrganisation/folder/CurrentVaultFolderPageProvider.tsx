@@ -3,7 +3,7 @@ import { useVaultFolder } from '@core/ui/storage/vaultFolders'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppViewState } from '../../navigation/hooks/useAppViewState'
+import { useAppViewState } from '../../../navigation/hooks/useAppViewState'
 import { VaultFolderProvider } from './state/currentVaultFolder'
 
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {

@@ -12,12 +12,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { PageFooter } from '../../../ui/page/PageFooter'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 import { DeleteVaultFolder } from './DeleteVaultFolder'
 import { ManageFolderVaults } from './ManageFolderVaults'
+import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 
 export const ManageVaultFolderPage = () => {
   const navigate = useCoreNavigate()
@@ -48,7 +48,7 @@ export const ManageVaultFolderPage = () => {
         <ManageFolderVaults />
         <AddVaultsToFolder />
       </PageContent>
-      <PageFooter>
+      <PageFooter >
         <Button
           onClick={async () => {
             mutate(

@@ -10,14 +10,13 @@ import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DnDList, ItemChangeParams } from '../../../lib/dnd/DnDList'
-import {
-  DnDItemContainer,
-  DnDItemHighlight,
-} from '../../../lib/ui/list/item/DnDItemContainer'
+
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
+import { DnDList, ItemChangeParams } from '@clients/desktop/src/lib/dnd/DnDList'
+import { DnDItemHighlight } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
+import { DnDItemContainer } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
 
 export const ManageFolderVaults = () => {
   const { id } = useCurrentVaultFolder()
