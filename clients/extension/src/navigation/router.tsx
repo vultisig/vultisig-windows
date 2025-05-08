@@ -1,9 +1,11 @@
+import { VaultChainCoinPage } from '@clients/desktop/src/vault/chain/coin/VaultChainCoinPage'
+import { VaultChainPage } from '@clients/desktop/src/vault/chain/VaultChainPage'
 import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { AppPath, appPaths } from '@clients/extension/src/navigation'
+import { appPaths } from '@clients/extension/src/navigation'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
@@ -24,8 +26,6 @@ import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
-import { VaultChainPage } from '@clients/desktop/src/vault/chain/VaultChainPage'
-import { VaultChainCoinPage } from '@clients/desktop/src/vault/chain/coin/VaultChainCoinPage'
 
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,

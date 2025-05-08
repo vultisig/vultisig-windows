@@ -105,7 +105,7 @@ export const VaultPage = () => {
           </Text>
 
           <List>
-            {coins.map(({ address, chain, id }) => (
+            {coins.map(({ address, chain }) => (
               <ListItem
                 description={
                   address && <MiddleTruncate text={address} width={80} />

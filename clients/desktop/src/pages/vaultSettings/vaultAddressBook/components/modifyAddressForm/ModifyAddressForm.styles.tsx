@@ -1,11 +1,9 @@
+import { UnstyledInput } from '@lib/ui/inputs/UnstyledInput'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { MenuProps, StylesConfig } from 'react-select'
 import styled from 'styled-components'
-
-import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
 
 export const Container = styled.div`
   height: 100%;
@@ -41,7 +39,7 @@ export const FormFieldLabel = styled.label`
   margin-bottom: 6px;
 `
 
-export const FormInput = styled(Input)`
+export const FormInput = styled(UnstyledInput)`
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
 

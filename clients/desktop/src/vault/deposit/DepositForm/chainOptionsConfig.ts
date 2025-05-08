@@ -1,10 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
-
-import { isValidAddress } from '../../../chain/utils/isValidAddress'
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>

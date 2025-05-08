@@ -8,6 +8,7 @@ import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
+import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 
@@ -49,10 +50,12 @@ export const AppProviders = ({ children }: ChildrenProp) => {
             <WalletCoreProvider>
               <StorageDependant>
                 <I18nProvider>
-                  {children}
-                  <ActiveVaultOnly>
-                    <CoinFinder />
-                  </ActiveVaultOnly>
+                  <ToastProvider>
+                    {children}
+                    <ActiveVaultOnly>
+                      <CoinFinder />
+                    </ActiveVaultOnly>
+                  </ToastProvider>
                 </I18nProvider>
               </StorageDependant>
             </WalletCoreProvider>
