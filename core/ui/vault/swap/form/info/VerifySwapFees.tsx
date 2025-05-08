@@ -1,5 +1,5 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { Skeleton } from '@lib/ui/loaders/Sceleton'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { ComponentType, FC, PropsWithChildren } from 'react'

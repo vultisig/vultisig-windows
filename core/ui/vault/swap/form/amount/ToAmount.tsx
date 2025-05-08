@@ -1,6 +1,6 @@
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Skeleton } from '@lib/ui/loaders/Sceleton'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'

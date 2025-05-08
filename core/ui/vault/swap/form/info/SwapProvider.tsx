@@ -1,6 +1,6 @@
 import { getSwapQuoteProviderName } from '@core/chain/swap/quote/getSwapQuoteProviderName'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
-import { Skeleton } from '@lib/ui/loaders/Sceleton'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'

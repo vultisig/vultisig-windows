@@ -1,5 +1,5 @@
 import { SwapFee } from '@core/chain/swap/SwapFee'
-import { Skeleton } from '@lib/ui/loaders/Sceleton'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { ValueProp } from '@lib/ui/props'
 import { MatchEagerQuery } from '@lib/ui/query/components/MatchEagerQuery'
 

@@ -1,6 +1,6 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Skeleton } from '@lib/ui/loaders/Sceleton'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, TextColor } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
