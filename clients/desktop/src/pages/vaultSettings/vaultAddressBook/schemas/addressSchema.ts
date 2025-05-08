@@ -1,10 +1,9 @@
 import { Chain } from '@core/chain/Chain'
+import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
 import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
-
-import { isValidAddress } from '../../../../chain/utils/isValidAddress'
 
 export const getAddressSchema = ({
   walletCore,

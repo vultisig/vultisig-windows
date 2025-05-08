@@ -1,4 +1,5 @@
 import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -7,7 +8,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 
 const uploadQrViews = ['scan', 'upload'] as const

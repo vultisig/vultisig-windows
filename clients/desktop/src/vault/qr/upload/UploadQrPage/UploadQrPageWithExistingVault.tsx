@@ -1,5 +1,7 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -10,7 +12,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { ScanQrView } from '../ScanQrView'
 import { UploadQrView } from '../UploadQrView'
 import { useDeriveChainFromWalletAddress } from '../useDeriveChainFromWalletAddress'
 
@@ -20,6 +21,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 export const UploadQrPageWithExistingVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
   const coins = useCurrentVaultCoins()
   const { addToast } = useToast()
@@ -43,7 +45,7 @@ export const UploadQrPageWithExistingVault = () => {
       const coin = coins.find(coin => coin.chain === chain)
 
       if (coin) {
-        navigate('send', {
+        coreNavigate('send', {
           params: { coin: coinKeyToString(coin), address: value },
         })
       } else {
@@ -52,7 +54,7 @@ export const UploadQrPageWithExistingVault = () => {
         })
       }
     },
-    [addToast, coins, deriveChainFromWalletAddress, navigate, t]
+    [addToast, coins, coreNavigate, deriveChainFromWalletAddress, navigate, t]
   )
 
   return (
