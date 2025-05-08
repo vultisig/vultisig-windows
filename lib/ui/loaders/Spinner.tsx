@@ -15,7 +15,7 @@ const SpinnerWrapper = styled.div<SpinnerWrapperProps>`
 export const Spinner: FC<ComponentProps<typeof SpinnerWrapper>> = props => {
   return (
     <SpinnerWrapper {...props}>
-      <Animation value="spinner" />
+      <Animation src="core/animations/spinner" />
     </SpinnerWrapper>
   )
 }

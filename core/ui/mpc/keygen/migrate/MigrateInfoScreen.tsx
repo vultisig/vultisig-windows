@@ -56,7 +56,7 @@ export const MigrateInfoScreen = ({
       <FitPageContent contentMaxWidth={contentMaxWidth}>
         <Container>
           <Content>
-            <Animation value={animation} />
+            <Animation src={animation} />
             <PrimaryText>{title}</PrimaryText>
           </Content>
           {action}

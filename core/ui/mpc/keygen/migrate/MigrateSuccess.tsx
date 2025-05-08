@@ -10,7 +10,7 @@ export const MigrateSuccess = () => {
 
   return (
     <MigrateInfoScreen
-      animation="upgrade-success"
+      animation="core/animations/upgrade-success"
       title={<Trans i18nKey="upgrade_success" components={{ b: <b /> }} />}
       action={
         <Button onClick={() => navigate('vault')}>{t('go_to_vault')}</Button>
