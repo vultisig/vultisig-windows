@@ -14,6 +14,7 @@ export const JoinKeygenPage = () => {
     <JoinKeygenProviders>
       <MpcServerUrlProvider value={mpcServerUrl.relay}>
         <JoinMpcSessionFlow
+          value="keygen"
           render={() => (
             <JoinKeygenActionProvider>
               <KeygenFlow onBack={onExit} />

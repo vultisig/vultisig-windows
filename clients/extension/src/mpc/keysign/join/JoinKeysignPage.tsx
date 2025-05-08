@@ -25,6 +25,7 @@ export const JoinKeysignPage = () => {
           from={({ onFinish }) => <JoinKeysignVerifyStep onFinish={onFinish} />}
           to={({ onBack }) => (
             <JoinMpcSessionFlow
+              value="keysign"
               render={() => (
                 <KeysignActionProvider>
                   <KeysignSigningStep
