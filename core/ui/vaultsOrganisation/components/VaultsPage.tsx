@@ -8,10 +8,10 @@ import { VaultFolders } from '@core/ui/vaultsOrganisation/folders/components/Vau
 import { ManageVaultCreation } from './ManageVaultCreation'
 import { Vaults } from './Vaults'
 import { VaultsPageHeaderTitle } from './VaultsPageHeaderTitle'
-import { PageHeaderVaultSettingsPrompt } from '@clients/desktop/src/pages/vaultSettings/PageHeaderVaultSettingsPrompt'
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
+import { PageHeaderVaultSettingsPrompt } from './PageHeaderVaultSettingsPrompt'
 export const VaultsPage = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <>

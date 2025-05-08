@@ -85,6 +85,25 @@ const coreRoutes: Record<CorePath, ReactNode> = {
       <JoinKeysignPage />
     </ActiveVaultGuard>
   ),
+  createVaultFolder: (
+    <ActiveVaultGuard>
+      <CreateVaultFolderPage />
+    </ActiveVaultGuard>
+  ),
+  vaultFolder: (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <VaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    </ActiveVaultGuard>
+  ),
+  manageVaultFolder: (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <ManageVaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    </ActiveVaultGuard>
+  ),
   uploadQr: <UploadQrPage />,
   vaults: <VaultsPage />,
   deposit: (

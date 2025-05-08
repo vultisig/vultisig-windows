@@ -10,13 +10,12 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 
 export const VaultFolderPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useAppNavigate()
+  const appNavigate = useCoreNavigate()
   const { id, name } = useCurrentVaultFolder()
 
   const vaults = useFolderVaults(id)
