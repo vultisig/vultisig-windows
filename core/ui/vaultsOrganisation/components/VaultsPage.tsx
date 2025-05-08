@@ -3,14 +3,13 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
-import { PageFooter } from '../../ui/page/PageFooter'
-import { VaultFolders } from '../folders/components/VaultFolders'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { VaultFolders } from '@core/ui/vaultsOrganisation/folders/components/VaultFolders'
 import { ManageVaultCreation } from './ManageVaultCreation'
 import { Vaults } from './Vaults'
 import { VaultsPageHeaderTitle } from './VaultsPageHeaderTitle'
-
+import { PageHeaderVaultSettingsPrompt } from '@clients/desktop/src/pages/vaultSettings/PageHeaderVaultSettingsPrompt'
+import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 export const VaultsPage = () => {
   const navigate = useAppNavigate()
 

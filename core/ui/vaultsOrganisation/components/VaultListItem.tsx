@@ -3,7 +3,7 @@ import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 
-import { ListItem } from '../../lib/ui/list/item/ListItem'
+import { ListItem } from '@clients/desktop/src/lib/ui/list/item/ListItem'
 import { VaultDescription } from './VaultDescription'
 
 type VaultListItemProps = {

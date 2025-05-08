@@ -1,3 +1,8 @@
+import { DnDList } from '@clients/desktop/src/lib/dnd/DnDList'
+import { DnDItemHighlight } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
+import { DnDItemContainer } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
+import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
+import { VaultsContainer } from '@core/ui/vaultsOrganisation/components/VaultsContainer'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
@@ -7,13 +12,6 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 
-import { DnDList } from '../../lib/dnd/DnDList'
-import {
-  DnDItemContainer,
-  DnDItemHighlight,
-} from '../../lib/ui/list/item/DnDItemContainer'
-import { VaultListItem } from '../components/VaultListItem'
-import { VaultsContainer } from '../components/VaultsContainer'
 
 export const ManageVaults = () => {
   const vaults = useFolderlessVaults()

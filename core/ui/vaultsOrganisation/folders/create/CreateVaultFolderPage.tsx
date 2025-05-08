@@ -15,8 +15,8 @@ import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PageFooter } from '../../../ui/page/PageFooter'
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()

@@ -1,3 +1,7 @@
+import { SwitchContainer } from '@clients/desktop/src/lib/ui/inputs/switch/SwitchContainer'
+import { SwitchControl } from '@clients/desktop/src/lib/ui/inputs/switch/SwitchControl'
+import { DnDItemContentPrefix } from '@clients/desktop/src/lib/ui/list/item/DnDItemContentPrefix'
+import { VaultDescription } from '@core/ui/vaultsOrganisation/components/VaultDescription'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { interactive } from '@lib/ui/css/interactive'
@@ -8,10 +12,7 @@ import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer'
-import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl'
-import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix'
-import { VaultDescription } from '../../components/VaultDescription'
+
 
 const Container = styled.label`
   height: 52px;
