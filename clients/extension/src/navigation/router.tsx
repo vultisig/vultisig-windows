@@ -1,4 +1,3 @@
-import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
@@ -20,9 +19,14 @@ import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
+import { NewVaultPage } from '@core/ui/vault/new'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
+
+import { OnboardingPage } from '../components/onboarding/components/OnboardingPage'
+import { StartKeysignPage } from '../mpc/keysign/start/StartKeysignPage'
+
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,
   vault: (
@@ -35,7 +39,12 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportFilePage />,
-  keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
+  newVault: <NewVaultPage />,
+  keysign: (
+    <ActiveVaultGuard>
+      <StartKeysignPage />
+    </ActiveVaultGuard>
+  ),
   reshareVaultFast: (
     <ActiveVaultGuard>
       <ReshareFastVault />
