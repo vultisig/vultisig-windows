@@ -1,7 +1,7 @@
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { useChainSpecificQuery } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 
-import { useChainSpecificQuery } from '../../../coin/query/useChainSpecificQuery'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 
 export const useDepositChainSpecificQuery = (

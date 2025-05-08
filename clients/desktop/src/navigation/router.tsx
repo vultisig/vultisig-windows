@@ -36,12 +36,10 @@ import { MigrateVaultPage } from '../vault/migrate/MigrateVaultPage'
 import { UploadQrPage } from '../vault/qr/upload/UploadQrPage'
 import { FastReshareVaultPage } from '../vault/reshare/fast/FastReshareVaultPage'
 import { SecureReshareVaultPage } from '../vault/reshare/secure/SecureReshareVaultPage'
-import { SendPage } from '../vault/send/SendPage'
 import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { SwapPage } from '../vault/swap/components/SwapPage'
 import { NewVaultPage } from '../vaults/components/NewVaultPage'
 import { VaultsPage } from '../vaults/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
@@ -142,16 +140,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   address: <AddressPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
-  send: (
-    <ActiveVaultGuard>
-      <SendPage />
-    </ActiveVaultGuard>
-  ),
-  swap: (
-    <ActiveVaultGuard>
-      <SwapPage />
-    </ActiveVaultGuard>
-  ),
   migrateVault: (
     <ActiveVaultGuard>
       <MigrateVaultPage />

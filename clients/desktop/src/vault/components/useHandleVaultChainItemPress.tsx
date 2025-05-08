@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
 import { useEffect, useState } from 'react'
 
-import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 type Input = {
