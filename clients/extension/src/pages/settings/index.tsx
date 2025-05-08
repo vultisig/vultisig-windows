@@ -1,6 +1,10 @@
 import packageJson from '@clients/extension/package.json'
 import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import {
+  useIsPrioritizedWalletQuery,
+  useSetPrioritizeWalletMutation,
+} from '@clients/extension/src/state/currentSettings/isPrioritized'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -32,7 +36,8 @@ export const SettingsPage = () => {
   const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
-
+  const { data: isPrioritized } = useIsPrioritizedWalletQuery()
+  const { mutate: setPrioritize } = useSetPrioritizeWalletMutation()
   return (
     <VStack fullHeight>
       <PageHeader
@@ -58,7 +63,9 @@ export const SettingsPage = () => {
           </Text>
           <List>
             <ListItem
-              extra={<Switch />}
+              extra={
+                <Switch checked={isPrioritized} onChange={setPrioritize} />
+              }
               onClick={() => {}}
               title={t('prioritize_vultisig')}
               hoverable
