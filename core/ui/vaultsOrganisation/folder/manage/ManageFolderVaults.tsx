@@ -14,9 +14,10 @@ import { useTranslation } from 'react-i18next'
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
-import { DnDList, ItemChangeParams } from '@clients/desktop/src/lib/dnd/DnDList'
-import { DnDItemHighlight } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
-import { DnDItemContainer } from '@clients/desktop/src/lib/ui/list/item/DnDItemContainer'
+import { DnDItemHighlight } from '../../../../../lib/list/item/DnDItemContainer'
+import { DnDItemContainer } from '../../../../../lib/list/item/DnDItemContainer'
+import { DnDList, ItemChangeParams } from '@lib/ui/dnd/DnDList'
+
 
 export const ManageFolderVaults = () => {
   const { id } = useCurrentVaultFolder()

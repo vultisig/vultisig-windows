@@ -1,7 +1,7 @@
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 
-import { ListItem } from '@clients/desktop/src/lib/ui/list/item/ListItem'
+import { ListItem } from '../../../../../lib/list/item/ListItem'
 import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 
 type FolderListItemProps = {

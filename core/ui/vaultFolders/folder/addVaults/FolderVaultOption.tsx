@@ -1,6 +1,7 @@
 import { SwitchContainer } from '@lib/ui/inputs/switchControlContainer/SwitchContainer'
 import { SwitchControl } from '@lib/ui/inputs/switchControlContainer/SwitchControl'
-import { VaultDescription } from '@core/ui/vaultsOrganisation/components/VaultDescription'
+import { DnDItemContentPrefix } from '@clients/desktop/src/lib/ui/list/item/DnDItemContentPrefix'
+import { VaultDescription } from '@core/ui/vaultFolders/components/VaultDescription'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { interactive } from '@lib/ui/css/interactive'
@@ -10,7 +11,6 @@ import { InputProps } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-import { DnDItemContentPrefix } from '../../../../../lib/list/item/DnDItemContentPrefix'
 
 
 
