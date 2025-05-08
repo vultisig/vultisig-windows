@@ -31,7 +31,7 @@ import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const rawTxHash = useCurrentTxHash()
-  const shouldStripPrefix = /switch|merge/.test(value?.memo ?? '')
+  const shouldStripPrefix = /switch|merge|channel/.test(value?.memo ?? '')
   const txHash = shouldStripPrefix ? rawTxHash.slice(2) : rawTxHash
 
   const { t } = useTranslation()
