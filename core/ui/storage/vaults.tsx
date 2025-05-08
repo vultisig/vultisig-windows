@@ -20,8 +20,11 @@ type MergeVaultsWithCoinsInput = {
 }
 
 const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
+  console.log('mergeVaultsWithCoins', vaults, coins)
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
+    console.log('vault: ', vault)
+    console.log('vaultCoins: ', vaultCoins)
     const vaultChains = vaultCoins.filter(isFeeCoin).map(coin => coin.chain)
 
     return {
