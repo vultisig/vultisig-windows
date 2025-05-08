@@ -1,12 +1,11 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { KeysignActionProvider } from '@core/ui/mpc/keysign/action/KeysignActionProvider'
-import { JoinKeysignVaultGuard } from '@core/ui/mpc/keysign/join/JoinKeysignVaultGuard'
+import { JoinKeysignProviders } from '@core/ui/mpc/keysign/join/JoinKeysignProviders'
 import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
-import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
-import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
-import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
@@ -14,40 +13,30 @@ import { useMemo } from 'react'
 export const JoinKeysignPage = () => {
   const { keysignMsg } = useCorePathState<'joinKeysign'>()
 
-  const { sessionId, encryptionKeyHex } = keysignMsg
-
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]
   )
 
   return (
-    <IsInitiatingDeviceProvider value={false}>
-      <JoinKeysignVaultGuard>
-        <KeysignServerUrlProvider>
-          <MpcSessionIdProvider value={sessionId}>
-            <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-              <StepTransition
-                from={({ onFinish }) => (
-                  <JoinKeysignVerifyStep onFinish={onFinish} />
-                )}
-                to={({ onBack }) => (
-                  <JoinMpcSessionFlow
-                    render={() => (
-                      <KeysignActionProvider>
-                        <KeysignSigningStep
-                          payload={keysignMessagePayload}
-                          onBack={onBack}
-                        />
-                      </KeysignActionProvider>
-                    )}
+    <JoinKeysignProviders>
+      <MpcServerUrlProvider value={mpcServerUrl.relay}>
+        <StepTransition
+          from={({ onFinish }) => <JoinKeysignVerifyStep onFinish={onFinish} />}
+          to={({ onBack }) => (
+            <JoinMpcSessionFlow
+              render={() => (
+                <KeysignActionProvider>
+                  <KeysignSigningStep
+                    payload={keysignMessagePayload}
+                    onBack={onBack}
                   />
-                )}
-              />
-            </CurrentHexEncryptionKeyProvider>
-          </MpcSessionIdProvider>
-        </KeysignServerUrlProvider>
-      </JoinKeysignVaultGuard>
-    </IsInitiatingDeviceProvider>
+                </KeysignActionProvider>
+              )}
+            />
+          )}
+        />
+      </MpcServerUrlProvider>
+    </JoinKeysignProviders>
   )
 }
