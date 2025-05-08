@@ -16,12 +16,11 @@ import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 import { DeleteVaultFolder } from './DeleteVaultFolder'
 import { ManageFolderVaults } from './ManageFolderVaults'
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 
 export const ManageVaultFolderPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useAppNavigate()
+  const appNavigate = useCoreNavigate()
   const { id, name: initialName } = useCurrentVaultFolder()
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
