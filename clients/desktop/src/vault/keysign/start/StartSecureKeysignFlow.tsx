@@ -29,6 +29,7 @@ export const StartSecureKeysignFlow = () => {
       to={({ onBack, value }) => (
         <MpcPeersProvider value={value}>
           <StartMpcSessionFlow
+            value="keysign"
             render={() => (
               <KeysignActionProvider>
                 <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
