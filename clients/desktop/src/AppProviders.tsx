@@ -5,6 +5,7 @@ import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpc
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
+import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -16,7 +17,6 @@ import { SaveFile } from '../wailsjs/go/main/App'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { getQueryClient } from './query/queryClient'
 import { storage } from './state/storage'
-import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
