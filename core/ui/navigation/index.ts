@@ -60,6 +60,8 @@ export type CorePathParams = {
   uploadQr: { title?: string }
   send: { coin: string; address?: string }
   swap: { coin: string }
+  vaultFolder: { id: string }
+  manageVaultFolder: { id: string }
 }
 
 export type CorePathState = {
