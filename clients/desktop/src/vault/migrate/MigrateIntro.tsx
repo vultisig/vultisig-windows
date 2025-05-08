@@ -13,7 +13,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
     <StepTransition
       from={({ onFinish }) => (
         <MigrateInfoScreen
-          animation="upgrade/upgrade"
+          animation="upgrade"
           title={
             <Trans
               i18nKey="upgrade_vault_description"

@@ -35,7 +35,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
   const navigate = useCoreNavigate()
   const { RiveComponent: SuccessAnimation } = useRive({
-    src: '/core/animations/vault-creation-success/vault_created.riv',
+    src: 'vault-created.riv',
     autoplay: true,
   })
 

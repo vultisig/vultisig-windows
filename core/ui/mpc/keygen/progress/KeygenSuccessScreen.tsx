@@ -31,7 +31,7 @@ export const KeygenSuccessScreen = ({ onFinish }: OnFinishProp) => {
     <Wrapper justifyContent="center" alignItems="center">
       <VStack flexGrow justifyContent="center" alignItems="center">
         <RiveWrapper>
-          <Animation value="vault-creation-success/vault_created" />
+          <Animation value="vault-created" />
         </RiveWrapper>
         <VStack alignItems="center" gap={16}>
           <Text centerHorizontally size={isTabletDeviceAndUp ? 40 : 24}>
