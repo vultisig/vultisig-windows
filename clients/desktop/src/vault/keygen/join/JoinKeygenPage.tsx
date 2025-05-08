@@ -13,6 +13,7 @@ export const JoinKeygenPage = () => {
     <JoinKeygenProviders>
       <JoinMpcServerUrlProvider mpcSession="keygen">
         <JoinMpcSessionFlow
+          value="keygen"
           render={() => (
             <JoinKeygenActionProvider>
               <KeygenFlow onBack={onExit} />
