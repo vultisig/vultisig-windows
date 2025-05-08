@@ -19,16 +19,19 @@ import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { JoinKeygenPage } from '../mpc/keygen/join/JoinKeygenPage'
+import { JoinKeysignPage } from '../mpc/keysign/join/JoinKeysignPage'
+
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
-  joinKeygen: () => <>TODO: Implement join keygen page</>,
+  joinKeygen: JoinKeygenPage,
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: SetupVaultPageController,
   keysign: () => <>TODO: Implement keysign page</>,
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
-  joinKeysign: () => <>TODO: Implement join keysign page</>,
+  joinKeysign: JoinKeysignPage,
   uploadQr: ImportQRPage,
   vaults: VaultsPage,
   deposit: () => <>{/* <>TODO: Implement Deposit page</> */}</>,
