@@ -2,13 +2,12 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { sum } from '@lib/utils/array/sum'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
-
-import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 
 export const useVaultTotalBalanceQuery = () => {
   const coins = useCurrentVaultCoins()

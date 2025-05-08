@@ -3,6 +3,7 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,
@@ -14,7 +15,6 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 
-import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { VaultChainCoin } from './useVaultChainCoinsQuery'
 
 export type VaultChainBalance = {
