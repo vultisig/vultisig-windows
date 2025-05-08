@@ -37,6 +37,7 @@ export const StartFastKeysignFlow = () => {
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
+                  value="keysign"
                   render={() => (
                     <KeysignActionProvider>
                       <KeysignSigningStep payload={keysignPayload} />

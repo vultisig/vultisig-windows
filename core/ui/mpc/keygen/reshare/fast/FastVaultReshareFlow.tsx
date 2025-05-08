@@ -49,6 +49,7 @@ export const FastVaultReshareFlow = () => {
         )}
         keygen={() => (
           <StartMpcSessionFlow
+            value="keygen"
             render={() => <KeygenFlow onBack={() => setStep('verify')} />}
           />
         )}

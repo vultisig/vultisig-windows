@@ -35,6 +35,7 @@ export const CreateSecureVaultFlow = () => {
         )}
         keygen={() => (
           <StartMpcSessionFlow
+            value="keygen"
             render={() => (
               <KeygenFlow onBack={() => setStep(lastEditableStep)} />
             )}
