@@ -22,7 +22,7 @@ import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
-import { createHashRouter } from 'react-router-dom'
+import { createMemoryRouter } from 'react-router-dom'
 
 import { OnboardingPage } from '../components/onboarding/components/OnboardingPage'
 import { StartKeysignPage } from '../mpc/keysign/start/StartKeysignPage'
@@ -99,7 +99,7 @@ const appRoutes = {
   transactionTab: <TransactionPage />,
 }
 
-export const router = createHashRouter(
+export const router = createMemoryRouter(
   [
     ...toEntries(coreRoutes).map(({ key, value }) => ({
       path: corePaths[key],
