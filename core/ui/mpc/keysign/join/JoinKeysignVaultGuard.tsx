@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
-  const { vaultId } = useCorePathState<'joinKeysign'>()
+  const [{ vaultId }] = useCorePathState<'joinKeysign'>()
   const vaults = useVaults()
 
   const { t } = useTranslation()

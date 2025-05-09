@@ -2,7 +2,6 @@ import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
-import { Chain } from '@core/chain/Chain'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
@@ -156,7 +155,7 @@ export const VaultPage = () => {
                   showArrow
                   onClick={() => {
                     navigate('vaultChainDetail', {
-                      params: { chain: chain as Chain },
+                      state: { chain },
                     })
                   }}
                 />

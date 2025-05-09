@@ -10,7 +10,7 @@ import { CreateVaultLegacyKeygenActionProvider as GG20CreateKeygenActionProvider
 import { ReshareVaultLegacyKeygenActionProvider as GG20ReshareKeygenActionProvider } from '../reshare/ReshareVaultLegacyKeygenActionProvider'
 
 export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
-  const { keygenType, keygenMsg } = useCorePathState<'joinKeygen'>()
+  const [{ keygenType, keygenMsg }] = useCorePathState<'joinKeygen'>()
   const { libType } = keygenMsg
   const mpcLib = fromLibType(libType)
 

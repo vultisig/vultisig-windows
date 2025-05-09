@@ -14,7 +14,7 @@ import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 
 export const JoinKeysignPage = () => {
-  const { keysignMsg } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCorePathState<'joinKeysign'>()
 
   const { sessionId, encryptionKeyHex } = keysignMsg
 

@@ -3,11 +3,11 @@ import { useVaultFolder } from '@core/ui/storage/vaultFolders'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
+import { useAppPathState } from '../../navigation/hooks/useAppPathState'
 import { VaultFolderProvider } from './state/currentVaultFolder'
 
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
-  const [{ id }] = useAppPathParams<'vaultFolder'>()
+  const [{ id }] = useAppPathState<'vaultFolder'>()
 
   const value = useVaultFolder(id)
 

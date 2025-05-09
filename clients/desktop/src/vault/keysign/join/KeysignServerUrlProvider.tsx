@@ -14,9 +14,9 @@ import { useTranslation } from 'react-i18next'
 import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery'
 
 export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
-  const {
-    keysignMsg: { serviceName, useVultisigRelay },
-  } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCorePathState<'joinKeysign'>()
+
+  const { serviceName, useVultisigRelay } = keysignMsg
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 

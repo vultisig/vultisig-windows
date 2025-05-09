@@ -14,7 +14,7 @@ import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutat
 export const DeeplinkPage = () => {
   const { t } = useTranslation()
 
-  const { url } = useAppPathState<'deeplink'>()
+  const [{ url }] = useAppPathState<'deeplink'>()
 
   const { mutate, ...mutationState } = useProcessDeeplinkMutation()
 

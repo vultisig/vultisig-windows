@@ -9,7 +9,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
 
 export const StartSecureKeysignFlow = () => {
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCorePathState<'keysign'>()
 
   return (
     <ValueTransfer<string[]>

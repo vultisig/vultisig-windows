@@ -18,7 +18,7 @@ export const useJoinKeysignUrlQuery = () => {
   const [serverType] = useMpcServerType()
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCorePathState<'keysign'>()
   const currentVault = useCurrentVault()
   const vaultId = getVaultId(currentVault)
 

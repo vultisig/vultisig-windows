@@ -35,7 +35,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCorePathState<'keysign'>()
   const ibcTransaction = generateIbcTransaction(keysignPayload)
 
   const walletCore = useAssertWalletCore()
