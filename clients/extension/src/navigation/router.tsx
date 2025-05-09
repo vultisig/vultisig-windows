@@ -10,7 +10,6 @@ import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
 import ImportFilePage from '@clients/extension/src/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/import-qr'
-import { NewVaultPage } from '@clients/extension/src/pages/new-vault'
 import { SettingsPage } from '@clients/extension/src/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
@@ -37,7 +36,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportFilePage />,
-  newVault: <NewVaultPage />,
   keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
   reshareVaultFast: (
     <ActiveVaultGuard>
