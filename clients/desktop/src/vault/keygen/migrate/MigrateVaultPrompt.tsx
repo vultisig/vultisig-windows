@@ -1,15 +1,15 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { UpgradeIcon } from '@lib/ui/icons/UpgradeIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { makeAppPath } from '../../../navigation'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 
-const Container = styled(Link)`
+const Container = styled(UnstyledButton)`
   ${hStack({
     alignItems: 'center',
     justifyContent: 'center',
@@ -27,9 +27,10 @@ const Container = styled(Link)`
 
 export const MigrateVaultPrompt = () => {
   const { t } = useTranslation()
+  const appNavigate = useAppNavigate()
 
   return (
-    <Container to={makeAppPath('migrateVault')}>
+    <Container onClick={() => appNavigate('migrateVault')}>
       <UpgradeIcon style={{ fontSize: 24 }} />
       <Text weight="500" size={13}>
         {t('upgrade_your_vault_now')}

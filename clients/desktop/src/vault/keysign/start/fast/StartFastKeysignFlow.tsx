@@ -9,7 +9,7 @@ import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigateBack } from '@lib/ui/navigation/state'
 
 import { KeysignActionProvider } from '../../action/KeysignActionProvider'
 

@@ -1,13 +1,17 @@
-import { router } from '@clients/extension/src/navigation/router'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
+import { NavigationProvider } from '@core/ui/navigation/NavigationProvider'
+import { ActiveRoute } from '@lib/ui/navigation/state'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+
+import { routes } from '../navigation/router'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProviders>
-      <RouterProvider router={router} />
+      <NavigationProvider>
+        <ActiveRoute routes={routes} />
+      </NavigationProvider>
     </AppProviders>
   </StrictMode>
 )

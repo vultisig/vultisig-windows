@@ -14,7 +14,7 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { ReactNode } from 'react'
+import { Routes } from '@lib/ui/navigation/state'
 
 type SharedPaths = Extract<
   CorePath,
@@ -34,55 +34,57 @@ type SharedPaths = Extract<
   | 'swap'
 >
 
-export const sharedRoutes: Record<SharedPaths, ReactNode> = {
-  currencySettings: <CurrencyPage />,
-  defaultChains: <DefaultChainsPage />,
-  languageSettings: <LanguagePage />,
-  manageVaultChains: (
+export const initialPath: CorePath = 'vault'
+
+export const sharedRoutes: Routes<SharedPaths> = {
+  currencySettings: CurrencyPage,
+  defaultChains: DefaultChainsPage,
+  languageSettings: LanguagePage,
+  manageVaultChains: () => (
     <ActiveVaultGuard>
       <ManageVaultChainsPage />
     </ActiveVaultGuard>
   ),
-  newVault: <NewVaultPage />,
-  renameVault: (
+  newVault: NewVaultPage,
+  renameVault: () => (
     <ActiveVaultGuard>
       <VaultRenamePage />
     </ActiveVaultGuard>
   ),
-  reshareVault: (
+  reshareVault: () => (
     <ActiveVaultGuard>
       <ReshareVaultPage />
     </ActiveVaultGuard>
   ),
-  vaultDetails: (
+  vaultDetails: () => (
     <ActiveVaultGuard>
       <VaultDetailsPage />
     </ActiveVaultGuard>
   ),
-  send: (
+  send: () => (
     <ActiveVaultGuard>
       <SendPage />
     </ActiveVaultGuard>
   ),
-  swap: (
+  swap: () => (
     <ActiveVaultGuard>
       <SwapPage />
     </ActiveVaultGuard>
   ),
-  vaultChainDetail: (
+  vaultChainDetail: () => (
     <ActiveVaultGuard>
       <VaultChainPage />
     </ActiveVaultGuard>
   ),
-  vaultChainCoinDetail: (
+  vaultChainCoinDetail: () => (
     <ActiveVaultGuard>
       <VaultChainCoinPage />
     </ActiveVaultGuard>
   ),
-  manageVaultChainCoins: (
+  manageVaultChainCoins: () => (
     <ActiveVaultGuard>
       <ManageVaultChainCoinsPage />
     </ActiveVaultGuard>
   ),
-  address: <AddressPage />,
+  address: () => <AddressPage />,
 }

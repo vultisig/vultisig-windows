@@ -5,7 +5,6 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled(UnstyledButton)`

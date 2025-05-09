@@ -1,6 +1,3 @@
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
-
 export const appPaths = {
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
@@ -27,12 +24,9 @@ export const appPaths = {
 type AppPaths = typeof appPaths
 export type AppPath = keyof AppPaths
 
-export type AppPathParams = {
+export type AppPathState = {
   vaultFolder: { id: string }
   manageVaultFolder: { id: string }
-}
-
-export type AppPathState = {
   deeplink: {
     url: string
   }
@@ -41,39 +35,6 @@ export type AppPathState = {
   }
 }
 
-export type AppPathsWithParams = keyof AppPathParams
-
 export type AppPathsWithState = keyof AppPathState
 
-export type AppPathsWithParamsAndState = Extract<
-  AppPathsWithParams,
-  AppPathsWithState
->
-export type AppPathsWithOnlyParams = Exclude<
-  AppPathsWithParams,
-  AppPathsWithParamsAndState
->
-export type AppPathsWithOnlyState = Exclude<
-  AppPathsWithState,
-  AppPathsWithParamsAndState
->
-export type AppPathsWithNoParamsOrState = Exclude<
-  AppPath,
-  AppPathsWithParams | AppPathsWithState
->
-
-export function makeAppPath<P extends keyof AppPathParams>(
-  path: P,
-  variables: AppPathParams[P]
-): string
-export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
-  path: P
-): string
-export function makeAppPath(path: AppPath, variables?: any): string {
-  const basePath = appPaths[path]
-  if (variables) {
-    return addQueryParams(basePath, withoutUndefinedFields(variables))
-  } else {
-    return basePath
-  }
-}
+export type AppPathsWithoutState = Exclude<AppPath, AppPathsWithState>

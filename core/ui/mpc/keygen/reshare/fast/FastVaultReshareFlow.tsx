@@ -9,7 +9,7 @@ import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigateBack } from '@lib/ui/navigation/state'
 
 import { FastVaultReshareServerStep } from './FastVaultReshareServerStep'
 

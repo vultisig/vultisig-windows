@@ -5,8 +5,6 @@ import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const corePaths = {
   address: '/address',
@@ -42,7 +40,17 @@ type CorePaths = typeof corePaths
 
 export type CorePath = keyof CorePaths
 
-export type CorePathParams = {
+export type CorePathState = {
+  joinKeygen: {
+    keygenType: KeygenType
+    keygenMsg: KeygenMessage | ReshareMessage
+  }
+  keysign: {
+    securityType: VaultSecurityType
+    keysignPayload: KeysignMessagePayload
+  }
+  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
+
   address: { address: string }
   deposit: { coin: string }
   setupVault: { type?: VaultSecurityType }
@@ -54,53 +62,6 @@ export type CorePathParams = {
   swap: { coin: string }
 }
 
-export type CorePathState = {
-  joinKeygen: {
-    keygenType: KeygenType
-    keygenMsg: KeygenMessage | ReshareMessage
-  }
-  keysign: {
-    securityType: VaultSecurityType
-    keysignPayload: KeysignMessagePayload
-  }
-  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
-}
-
-export type CorePathsWithParams = keyof CorePathParams
-
 export type CorePathsWithState = keyof CorePathState
 
-export type CorePathsWithParamsAndState = Extract<
-  CorePathsWithParams,
-  CorePathsWithState
->
-export type CorePathsWithOnlyParams = Exclude<
-  CorePathsWithParams,
-  CorePathsWithParamsAndState
->
-export type CorePathsWithOnlyState = Exclude<
-  CorePathsWithState,
-  CorePathsWithParamsAndState
->
-export type CorePathsWithNoParamsOrState = Exclude<
-  CorePath,
-  CorePathsWithParams | CorePathsWithState
->
-
-export function makeCorePath<P extends keyof CorePathParams>(
-  path: P,
-  variables: CorePathParams[P]
-): string
-
-export function makeCorePath<P extends Exclude<CorePath, keyof CorePathParams>>(
-  path: P
-): string
-
-export function makeCorePath(path: CorePath, variables?: any): string {
-  const basePath = corePaths[path]
-  if (variables) {
-    return addQueryParams(basePath, withoutUndefinedFields(variables))
-  } else {
-    return basePath
-  }
-}
+export type CorePathsWithoutState = Exclude<CorePath, CorePathsWithState>

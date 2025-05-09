@@ -1,82 +1,48 @@
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useCallback,
-  useState,
-} from 'react'
+import { ReactNode, useCallback } from 'react'
 
-import { ChildrenProp } from '../props'
-import { createContextHook } from '../state/createContextHook'
+import { getStateProviderSetup } from '../state/getStateProviderSetup'
 
 type HistoryEntry = {
   id: string
   state?: any
 }
 
-type RouterState = {
+type NavigationState = {
   history: HistoryEntry[]
-  historyIndex: number
+  currentIndex: number
 }
 
-type RouterContextState = RouterState & {
-  setState: Dispatch<SetStateAction<RouterState>>
-}
+export const { useState: useNavigation, provider: NavigationProvider } =
+  getStateProviderSetup<NavigationState>('Navigation')
 
-const RouterContext = createContext<RouterContextState | undefined>(undefined)
-
-type RouterProviderProps = ChildrenProp & {
-  initialHistoryEntry: HistoryEntry
-  router: Record<string, () => ReactNode>
-}
-
-export const RouterProvider = ({
-  children,
-  router,
-  initialHistoryEntry,
-}: RouterProviderProps) => {
-  const [state, setState] = useState<RouterState>({
-    history: [initialHistoryEntry],
-    historyIndex: 0,
-  })
-
-  const render = router[state.history[state.historyIndex].id]
-
-  return (
-    <RouterContext.Provider value={{ ...state, setState }}>
-      {children}
-      {render()}
-    </RouterContext.Provider>
-  )
-}
-
-const useRouter = createContextHook(RouterContext, 'RouterContext')
-
-type NavigationOptions = {
+export type NavigateInput = {
   replace?: boolean
+  state?: any
+  id: string
 }
 
 export const useNavigate = () => {
-  const { setState } = useRouter()
+  const [, setState] = useNavigation()
 
   return useCallback(
-    (id: string, state?: any, options?: NavigationOptions) => {
-      setState(({ history, historyIndex }) => {
-        if (options?.replace) {
+    ({ id, state, replace }: NavigateInput) => {
+      setState(prev => {
+        if (replace) {
           return {
-            history: updateAtIndex(history, historyIndex, () => ({
+            ...prev,
+            history: updateAtIndex(prev.history, prev.currentIndex, () => ({
               id,
               state,
             })),
-            historyIndex,
           }
         }
 
+        const newHistory = [...prev.history, { id, state }]
+
         return {
-          history: [...history, { id, state }],
-          historyIndex: history.length + 1,
+          history: newHistory,
+          currentIndex: newHistory.length - 1,
         }
       })
     },
@@ -85,18 +51,36 @@ export const useNavigate = () => {
 }
 
 export const useNavigateBack = () => {
-  const { setState } = useRouter()
+  const [, setState] = useNavigation()
 
   return useCallback(() => {
     setState(state => {
-      if (state.historyIndex <= 0) {
+      if (state.currentIndex <= 0) {
         return state
       }
 
       return {
         ...state,
-        historyIndex: state.historyIndex - 1,
+        currentIndex: state.currentIndex - 1,
       }
     })
   }, [setState])
+}
+
+export const useRouteState = () => {
+  const [state] = useNavigation()
+
+  return state.history[state.currentIndex].state
+}
+
+export type Routes<T extends string = string> = Record<T, () => ReactNode>
+
+type ActiveRouteProps = {
+  routes: Routes
+}
+
+export const ActiveRoute = ({ routes }: ActiveRouteProps) => {
+  const [state] = useNavigation()
+
+  return routes[state.history[state.currentIndex].id]()
 }

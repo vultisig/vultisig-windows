@@ -27,7 +27,6 @@ import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 
 interface InitialState {
@@ -58,7 +57,7 @@ const Component = () => {
     isEncrypted,
   } = state
   const navigate = useCoreNavigate()
-  const { pathname } = useLocation()
+  const pathname = window.location.pathname
   const isPopupRef = useRef(pathname === appPaths.importTab)
 
   const errorMessages = {

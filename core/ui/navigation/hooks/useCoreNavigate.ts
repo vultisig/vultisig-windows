@@ -1,50 +1,36 @@
+import { useNavigate } from '@lib/ui/navigation/state'
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import {
   CorePath,
-  CorePathParams,
   CorePathState,
-  CorePathsWithNoParamsOrState,
-  CorePathsWithOnlyParams,
-  CorePathsWithOnlyState,
-  CorePathsWithParamsAndState,
-  makeCorePath,
+  CorePathsWithoutState,
+  CorePathsWithState,
 } from '..'
 
-type CommonOptions = { replace?: boolean }
-
-type CoreNavigate = {
-  <P extends CorePathsWithParamsAndState>(
-    path: P,
-    options: CommonOptions & {
-      params: CorePathParams[P]
-      state: CorePathState[P]
-    }
-  ): void
-  <P extends CorePathsWithOnlyParams>(
-    path: P,
-    options: CommonOptions & { params: CorePathParams[P] }
-  ): void
-  <P extends CorePathsWithOnlyState>(
-    path: P,
-    options: CommonOptions & { state: CorePathState[P] }
-  ): void
-  (path: CorePathsWithNoParamsOrState, options?: CommonOptions): void
+type StateOptions<P extends CorePathsWithState> = {
+  state: CorePathState[P]
+  replace?: boolean
 }
 
-export function useCoreNavigate(): CoreNavigate {
-  const navigate = useNavigate()
-  const coreNavigate = useCallback(
-    (path: CorePath, { params, ...options }: any = {}) => {
-      const to = params
-        ? makeCorePath(path as any, params)
-        : makeCorePath(path as any)
+type NoStateOptions = {
+  replace?: boolean
+}
 
-      navigate(to, options)
+export function useCoreNavigate() {
+  const navigate = useNavigate()
+
+  type CoreNavigate = {
+    <P extends CorePathsWithState>(id: P, options: StateOptions<P>): void
+    (id: CorePathsWithoutState, options?: NoStateOptions): void
+  }
+
+  const coreNavigate = useCallback(
+    (id: CorePath, options: any = {}) => {
+      navigate({ id, ...options })
     },
     [navigate]
-  )
+  ) as CoreNavigate
 
-  return coreNavigate as CoreNavigate
+  return coreNavigate
 }

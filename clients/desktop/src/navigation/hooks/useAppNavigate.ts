@@ -1,50 +1,37 @@
+import { useNavigate } from '@lib/ui/navigation/state'
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-import {
-  AppPath,
-  AppPathParams,
-  AppPathState,
-  AppPathsWithNoParamsOrState,
-  AppPathsWithOnlyParams,
-  AppPathsWithOnlyState,
-  AppPathsWithParamsAndState,
-  makeAppPath,
-} from '..'
+import { AppPathState, AppPathsWithoutState, AppPathsWithState } from '..'
 
-type CommonOptions = { replace?: boolean }
-
-type AppNavigate = {
-  <P extends AppPathsWithParamsAndState>(
-    path: P,
-    options: CommonOptions & {
-      params: AppPathParams[P]
-      state: AppPathState[P]
-    }
-  ): void
-  <P extends AppPathsWithOnlyParams>(
-    path: P,
-    options: CommonOptions & { params: AppPathParams[P] }
-  ): void
-  <P extends AppPathsWithOnlyState>(
-    path: P,
-    options: CommonOptions & { state: AppPathState[P] }
-  ): void
-  (path: AppPathsWithNoParamsOrState, options?: CommonOptions): void
+type StateOptions<P extends AppPathsWithState> = {
+  state: AppPathState[P]
+  replace?: boolean
 }
 
-export function useAppNavigate(): AppNavigate {
-  const navigate = useNavigate()
-  const appNavigate = useCallback(
-    (path: AppPath, { params, ...options }: any = {}) => {
-      const to = params
-        ? makeAppPath(path as any, params)
-        : makeAppPath(path as any)
+type NoStateOptions = {
+  replace?: boolean
+}
 
-      navigate(to, options)
+export function useAppNavigate() {
+  const navigate = useNavigate()
+
+  type AppNavigate = {
+    <P extends AppPathsWithState>(id: P, options: StateOptions<P>): void
+    (id: AppPathsWithoutState, options?: NoStateOptions): void
+  }
+
+  const appNavigate = useCallback(
+    (id: any, options: any = {}) => {
+      const { state, replace } = options
+
+      navigate({
+        id,
+        state,
+        replace,
+      })
     },
     [navigate]
-  )
+  ) as AppNavigate
 
-  return appNavigate as AppNavigate
+  return appNavigate
 }

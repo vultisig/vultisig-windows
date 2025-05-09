@@ -1,13 +1,16 @@
-import { makeCorePath } from '@core/ui/navigation'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const ManageVaultChainsPrompt = () => {
   const { t } = useTranslation()
+  const navigate = useCoreNavigate()
+
   return (
-    <Link to={makeCorePath('manageVaultChains')}>
+    <UnstyledButton onClick={() => navigate('manageVaultChains')}>
       <ListAddButton as="div">{t('choose_chains')}</ListAddButton>
-    </Link>
+    </UnstyledButton>
   )
 }
