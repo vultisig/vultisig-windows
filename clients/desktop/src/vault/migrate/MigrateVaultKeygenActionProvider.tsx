@@ -55,6 +55,19 @@ export const MigrateVaultKeygenActionProvider = ({
 
       const localUIEcdsa = await GetLocalUIEcdsa(existingVault.keyShares.ecdsa)
       const localUIEddsa = await GetLocalUIEdDSA(existingVault.keyShares.eddsa)
+      console.log(
+        'dkls keygen',
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        existingVault.signers,
+        encryptionKeyHex,
+        localUIEcdsa,
+        existingVault.publicKeys.ecdsa,
+        hexChainCode
+      )
 
       const dklsKeygen = new DKLS(
         'migrate',
