@@ -12,7 +12,7 @@ export const useSetupVaultPageAnimation = () => {
   const [isReady, setIsReady] = useState(false)
 
   const { RiveComponent, rive } = useRive({
-    src: '/assets/animations/choose-vault/index.riv',
+    src: '/core/animations/choose-vault.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })

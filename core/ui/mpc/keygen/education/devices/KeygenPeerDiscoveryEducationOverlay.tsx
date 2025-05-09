@@ -21,7 +21,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
             <PhoneImageOverlay />
             <img src="/assets/images/vultisig-peak.svg" alt="" />
             <RiveWrapper>
-              <Animation value="keygen-secure-vault/pulse" />
+              <Animation src="/core/animations/pulse" />
             </RiveWrapper>
           </PhoneImageWrapper>
           <VStack gap={12} justifyContent="center">

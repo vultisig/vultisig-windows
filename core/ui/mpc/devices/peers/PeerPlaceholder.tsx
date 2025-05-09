@@ -16,7 +16,7 @@ const Animation = styled.div`
 
 export const PeerPlaceholder = ({ children }: ChildrenProp) => {
   const { RiveComponent } = useRive({
-    src: '/assets/animations/keygen-secure-vault/waiting-on-device.riv',
+    src: '/core/animations/waiting-on-device.riv',
     autoplay: true,
   })
 

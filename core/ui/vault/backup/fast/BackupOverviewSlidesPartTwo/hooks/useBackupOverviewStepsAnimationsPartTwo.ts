@@ -6,7 +6,7 @@ const STATE_MACHINE_NAME = 'State Machine 1'
 
 export const useBackupOverviewStepsAnimationsPartTwo = () => {
   const { RiveComponent, rive } = useRive({
-    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-2/backup_vault.riv',
+    src: '/core/animations/fast-vault-backup-vault.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })
