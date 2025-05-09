@@ -4,11 +4,11 @@ import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 import { VaultsContainer } from '@core/ui/vaultsOrganisation/components/VaultsContainer'
+import { DnDList } from '@lib/ui/dnd/DnDList'
 import {
   DnDItemContainer,
   DnDItemHighlight,
-} from '@lib/list/item/DnDItemContainer'
-import { DnDList } from '@lib/ui/dnd/DnDList'
+} from '@lib/ui/list/item/DnDItemContainer'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'

@@ -1,5 +1,4 @@
 import { VaultDescription } from '@core/ui/vaultsOrganisation/components/VaultDescription'
-import { DnDItemContentPrefix } from '@lib/list/item/DnDItemContentPrefix'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { interactive } from '@lib/ui/css/interactive'
@@ -7,6 +6,7 @@ import { InvisibleHTMLCheckbox } from '@lib/ui/inputs/checkbox/InvisibleHTMLChec
 import { SwitchContainer } from '@lib/ui/inputs/switchControlContainer/SwitchContainer'
 import { SwitchControl } from '@lib/ui/inputs/switchControlContainer/SwitchControl'
 import { hStack } from '@lib/ui/layout/Stack'
+import { DnDItemContentPrefix } from '@lib/ui/list/item/DnDItemContentPrefix'
 import { InputProps } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'

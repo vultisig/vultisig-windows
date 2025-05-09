@@ -2,12 +2,12 @@ import { useFolderVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { DnDList, ItemChangeParams } from '@lib/ui/dnd/DnDList'
+import { VStack } from '@lib/ui/layout/Stack'
 import {
   DnDItemContainer,
   DnDItemHighlight,
-} from '@lib/list/item/DnDItemContainer'
-import { DnDList, ItemChangeParams } from '@lib/ui/dnd/DnDList'
-import { VStack } from '@lib/ui/layout/Stack'
+} from '@lib/ui/list/item/DnDItemContainer'
 import { Text } from '@lib/ui/text'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
