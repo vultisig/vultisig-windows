@@ -270,7 +270,7 @@ func (s *Store) DeleteVault(publicKeyECDSA string) error {
 }
 
 func (s *Store) GetCoins() (map[string][]Coin, error) {
-	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, decimals, public_key_ecdsa 
+	coinsQuery := `SELECT id, chain, address, ticker, contract_address, is_native_token, logo, price_provider_id, decimals, public_key_ecdsa 
 		FROM coins`
 	rows, err := s.db.Query(coinsQuery)
 	if err != nil {
@@ -287,7 +287,6 @@ func (s *Store) GetCoins() (map[string][]Coin, error) {
 		if err := rows.Scan(&coin.ID,
 			&coin.Chain,
 			&coin.Address,
-			&coin.HexPublicKey,
 			&coin.Ticker,
 			&coin.ContractAddress,
 			&coin.IsNativeToken,
@@ -392,7 +391,6 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 				id, 
 				chain, 
 				address,
-				hex_public_key, 
 				ticker, 
 				contract_address, 
 				is_native_token, 
@@ -401,7 +399,7 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 				decimals,
 				public_key_ecdsa
 				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.Decimals, vaultPublicKeyECDSA)
+	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.Decimals, vaultPublicKeyECDSA)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}
@@ -426,7 +424,6 @@ func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, e
 		id, 
 		chain, 
 		address,
-		hex_public_key, 
 		ticker, 
 		contract_address, 
 		is_native_token, 
@@ -453,7 +450,6 @@ func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, e
 			coin.ID,
 			coin.Chain,
 			coin.Address,
-			coin.HexPublicKey,
 			coin.Ticker,
 			coin.ContractAddress,
 			coin.IsNativeToken,
