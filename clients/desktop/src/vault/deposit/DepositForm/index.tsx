@@ -2,7 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import {
   useVaultChainCoinsQuery,
   VaultChainCoin,
@@ -73,7 +73,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
-  const [{ coin: chainCoinString }] = useCorePathParams<'deposit'>()
+  const [{ coin: chainCoinString }] = useCorePathState<'deposit'>()
   const coin = chainCoinString.split(':')[1]
 
   const schemaForChainAction = resolveSchema(

@@ -2,7 +2,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/state'
 
-import { useCorePathParams } from '../../navigation/hooks/useCorePathParams'
+import { useCorePathState } from '../../navigation/hooks/useCorePathState'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
@@ -18,7 +18,7 @@ export const SendPage = () => {
     steps: sendSteps,
     onExit: useNavigateBack(),
   })
-  const [{ address }] = useCorePathParams<'send'>()
+  const { address } = useCorePathState<'send'>()
 
   return (
     <SendFeesProvider initialValue={null}>

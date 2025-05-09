@@ -1,7 +1,7 @@
-import { useCorePathParams } from '../../navigation/hooks/useCorePathParams'
+import { useCorePathState } from '../../navigation/hooks/useCorePathState'
 
 export const useCurrentVaultChain = () => {
-  const [{ chain }] = useCorePathParams<'vaultChainDetail'>()
+  const [{ chain }] = useCorePathState<'vaultChainDetail'>()
 
   return chain
 }

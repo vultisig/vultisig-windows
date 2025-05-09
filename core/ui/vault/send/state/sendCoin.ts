@@ -5,10 +5,10 @@ import {
 } from '@core/chain/coin/Coin'
 import { useCallback, useMemo } from 'react'
 
-import { useCorePathParams } from '../../../navigation/hooks/useCorePathParams'
+import { useCorePathState } from '../../../navigation/hooks/useCorePathState'
 
 export const useCurrentSendCoin = () => {
-  const [{ coin }, setParams] = useCorePathParams<'send'>()
+  const [{ coin }, setParams] = useCorePathState<'send'>()
 
   const value = useMemo(() => coinKeyFromString(coin), [coin])
 

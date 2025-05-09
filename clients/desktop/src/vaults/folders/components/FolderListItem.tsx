@@ -20,7 +20,7 @@ export const FolderListItem = ({
   return (
     <ListItem
       isDraggable={isDraggable}
-      onClick={() => navigate('vaultFolder', { params: { id } })}
+      onClick={() => navigate('vaultFolder', { state: { id } })}
     >
       <HStack alignItems="center" gap={12}>
         <FolderIcon style={{ fontSize: 24 }} />

@@ -1,4 +1,4 @@
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -16,7 +16,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 export const UploadQrPageWithoutVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCorePathState<'uploadQr'>()
 
   const goBack = useNavigateBack()
 

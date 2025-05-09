@@ -1,5 +1,5 @@
 import { coinKeyFromString } from '@core/chain/coin/Coin'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -14,7 +14,7 @@ import { DepositVerify } from './DepositVerify'
 const depositSteps = ['form', 'verify'] as const
 
 export const DepositPageController = () => {
-  const [{ coin: coinName }] = useCorePathParams<'deposit'>()
+  const [{ coin: coinName }] = useCorePathState<'deposit'>()
   const { chain: chain } = coinKeyFromString(coinName)
   const chainActionOptions = chainActionsRecord[chain as DepositEnabledChain]
 
