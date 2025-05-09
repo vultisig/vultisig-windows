@@ -11,12 +11,12 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()
@@ -68,7 +68,7 @@ export const CreateVaultFolderPage = () => {
           },
         })}
       >
-        <PageContent gap={20} scrollable fullHeight >
+        <PageContent gap={20} scrollable fullHeight>
           <TextInput
             placeholder={t('enter_folder_name')}
             label={t('folder_name')}

@@ -3,6 +3,7 @@ import {
   useVaultFolders,
 } from '@core/ui/storage/vaultFolders'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import { DnDList } from '@lib/ui/dnd/DnDList'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
@@ -14,7 +15,6 @@ import {
 } from '../../../../../lib/list/item/DnDItemContainer'
 import { FolderListItem } from '../components/FolderListItem'
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
-import { DnDList } from '@lib/ui/dnd/DnDList'
 
 export const ManageVaultFolders = () => {
   const folders = useVaultFolders()

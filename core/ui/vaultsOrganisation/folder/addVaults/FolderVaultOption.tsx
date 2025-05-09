@@ -1,18 +1,17 @@
-import { SwitchContainer } from '@lib/ui/inputs/switchControlContainer/SwitchContainer'
-import { SwitchControl } from '@lib/ui/inputs/switchControlContainer/SwitchControl'
 import { VaultDescription } from '@core/ui/vaultsOrganisation/components/VaultDescription'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { interactive } from '@lib/ui/css/interactive'
 import { InvisibleHTMLCheckbox } from '@lib/ui/inputs/checkbox/InvisibleHTMLCheckbox'
+import { SwitchContainer } from '@lib/ui/inputs/switchControlContainer/SwitchContainer'
+import { SwitchControl } from '@lib/ui/inputs/switchControlContainer/SwitchControl'
 import { hStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
+
 import { DnDItemContentPrefix } from '../../../../../lib/list/item/DnDItemContentPrefix'
-
-
 
 const Container = styled.label`
   height: 52px;

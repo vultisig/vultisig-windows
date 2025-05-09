@@ -1,17 +1,15 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { FinishEditing } from '@core/ui/vaultsOrganisation/components/FinishEditing'
+import { VaultsPageHeaderTitle } from '@core/ui/vaultsOrganisation/components/VaultsPageHeaderTitle'
 import { Button } from '@lib/ui/buttons/Button'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
 
-
+import { PageHeaderVaultSettingsPrompt } from '../components/PageHeaderVaultSettingsPrompt'
 import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders'
 import { ManageVaults } from './ManageVaults'
-import { VaultsPageHeaderTitle } from '@core/ui/vaultsOrganisation/components/VaultsPageHeaderTitle'
-import { FinishEditing } from '@core/ui/vaultsOrganisation/components/FinishEditing'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-
-import { PageHeaderVaultSettingsPrompt } from '../components/PageHeaderVaultSettingsPrompt'
 export const ManageVaultsPage = () => {
   const navigate = useCoreNavigate()
   const appNavigate = useCoreNavigate()

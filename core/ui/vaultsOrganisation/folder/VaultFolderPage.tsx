@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFolderVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 import { EditIcon } from '@lib/ui/icons/EditIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -11,7 +12,6 @@ import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
-import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 
 export const VaultFolderPage = () => {
   const navigate = useCoreNavigate()

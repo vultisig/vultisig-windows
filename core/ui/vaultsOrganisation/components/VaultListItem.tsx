@@ -3,8 +3,8 @@ import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 
-import { VaultDescription } from './VaultDescription'
 import { ListItem } from '../../../../lib/list/item/ListItem'
+import { VaultDescription } from './VaultDescription'
 
 type VaultListItemProps = {
   isDraggable?: boolean

@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useAppViewState } from '../../../navigation/hooks/useAppViewState'
 import { VaultFolderProvider } from './state/currentVaultFolder'
 import { useCorePathParams } from '../../navigation/hooks/useCorePathParams'
+import { VaultFolderProvider } from './state/currentVaultFolder'
 
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
   const [{ id }] = useAppViewState<'vaultFolder'>()
