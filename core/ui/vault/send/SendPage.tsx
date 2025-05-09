@@ -18,7 +18,7 @@ export const SendPage = () => {
     steps: sendSteps,
     onExit: useNavigateBack(),
   })
-  const { address } = useCorePathState<'send'>()
+  const [{ address }] = useCorePathState<'send'>()
 
   return (
     <SendFeesProvider initialValue={null}>

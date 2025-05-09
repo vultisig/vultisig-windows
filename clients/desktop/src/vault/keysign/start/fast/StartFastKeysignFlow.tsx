@@ -16,7 +16,7 @@ import { KeysignActionProvider } from '../../action/KeysignActionProvider'
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = () => {
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCorePathState<'keysign'>()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,

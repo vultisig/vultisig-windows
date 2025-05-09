@@ -46,7 +46,7 @@ export const UploadQrPageWithExistingVault = () => {
 
       if (coin) {
         coreNavigate('send', {
-          params: { coin: coinKeyToString(coin), address: value },
+          state: { coin: coinKeyToString(coin), address: value },
         })
       } else {
         addToast({

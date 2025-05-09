@@ -10,7 +10,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { JoinKeygenVaultProvider } from './state/keygenVault'
 
 export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
-  const { keygenType, keygenMsg } = useCorePathState<'joinKeygen'>()
+  const [{ keygenType, keygenMsg }] = useCorePathState<'joinKeygen'>()
 
   const { sessionId, useVultisigRelay, serviceName, encryptionKeyHex } =
     keygenMsg

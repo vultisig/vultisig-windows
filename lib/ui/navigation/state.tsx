@@ -68,9 +68,30 @@ export const useNavigateBack = () => {
 }
 
 export const useRouteState = () => {
-  const [state] = useNavigation()
+  const [state, setState] = useNavigation()
+  const currentState = state.history[state.currentIndex].state
 
-  return state.history[state.currentIndex].state
+  const setRouteState = useCallback(
+    (newState: any | ((prevState: any) => any)) => {
+      setState(prev => {
+        const updatedState =
+          typeof newState === 'function'
+            ? newState(prev.history[prev.currentIndex].state)
+            : newState
+
+        return {
+          ...prev,
+          history: updateAtIndex(prev.history, prev.currentIndex, entry => ({
+            ...entry,
+            state: updatedState,
+          })),
+        }
+      })
+    },
+    [setState]
+  )
+
+  return [currentState, setRouteState]
 }
 
 export type Routes<T extends string = string> = Record<T, () => ReactNode>

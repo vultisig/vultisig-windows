@@ -19,7 +19,7 @@ import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 export const ReadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
-  const { filePath } = useAppPathState<'importVaultFromFile'>()
+  const [{ filePath }] = useAppPathState<'importVaultFromFile'>()
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {

@@ -18,7 +18,7 @@ import { useCore } from '../../../../state/core'
 export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,
 }) => {
-  const { keygenMsg } = useCorePathState<'joinKeygen'>()
+  const [{ keygenMsg }] = useCorePathState<'joinKeygen'>()
 
   const vaults = useVaults()
 

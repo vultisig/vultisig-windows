@@ -7,7 +7,7 @@ import { StartFastKeysignFlow } from './fast/StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
 
 export const StartKeysignPage = () => {
-  const { securityType } = useCorePathState<'keysign'>()
+  const [{ securityType }] = useCorePathState<'keysign'>()
 
   return (
     <StartKeysignProviders>

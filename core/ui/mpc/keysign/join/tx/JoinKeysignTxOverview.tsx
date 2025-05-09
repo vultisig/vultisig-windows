@@ -7,7 +7,7 @@ import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { useMemo } from 'react'
 
 export const JoinKeysignTxOverview = () => {
-  const { keysignMsg } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCorePathState<'joinKeysign'>()
 
   const keysignPayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
