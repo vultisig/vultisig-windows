@@ -19,7 +19,6 @@ import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { NewVaultPage } from '@core/ui/vaultsOrganisation/components/NewVaultPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
@@ -29,6 +28,7 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVault
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
+
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,
   vault: (
@@ -65,6 +65,26 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   deposit: (
     <ActiveVaultGuard>
       <>{/* <>TODO: Implement Deposit page</> */}</>
+    </ActiveVaultGuard>
+  ),
+  vaultSettings: <VaultSettingsPage />,
+  createVaultFolder: (
+    <ActiveVaultGuard>
+      <CreateVaultFolderPage />
+    </ActiveVaultGuard>
+  ),
+  manageVaultFolder: (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <ManageVaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    </ActiveVaultGuard>
+  ),
+  vaultFolder: (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <VaultFolderPage />
+      </CurrentVaultFolderPageProvider>
     </ActiveVaultGuard>
   ),
 }

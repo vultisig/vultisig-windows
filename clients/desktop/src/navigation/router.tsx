@@ -2,7 +2,6 @@ import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { NewVaultPage } from '@core/ui/vaultsOrganisation/components/NewVaultPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
@@ -110,6 +109,8 @@ const coreRoutes: Record<CorePath, ReactNode> = {
       <DepositPage />
     </ActiveVaultGuard>
   ),
+  manageVaults: <ManageVaultsPage />,
+  vaultSettings: <SettingsVaultPage />,
 }
 
 const appRoutes: Record<AppPath, ReactNode> = {

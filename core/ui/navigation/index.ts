@@ -19,13 +19,10 @@ export const corePaths = {
   keysign: '/vault/keysign',
   languageSettings: '/settings/language',
   manageVaultChains: '/vault/chains/manage',
-<<<<<<< HEAD
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
   vaultChainCoinDetail: '/vault/item/detail/coin',
-=======
   manageVaults: '/vaults/manage',
->>>>>>> c98b9877 (feat: use useCoreNavigate hook instead of useAppNavigate for vaults organisation)
   newVault: '/vault/new',
   renameVault: '/settings/vault/rename',
   reshareVault: '/vault/reshare',
