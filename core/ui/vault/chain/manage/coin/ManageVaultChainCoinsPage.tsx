@@ -1,3 +1,4 @@
+import { ScrollableFlexboxFiller } from '@core/ui/layout/ScrollableFlexboxFiller'
 import { CoinSearch } from '@core/ui/vault/chain/manage/coin/search/CoinSearch'
 import { useScrollTo } from '@lib/ui/hooks/useScrollTo'
 import { ScrollableFlexboxFiller } from '@lib/ui/layout/ScrollableFlexboxFiller'

@@ -1,11 +1,10 @@
 import { absoluteOutline } from '@lib/ui/css/absoluteOutline'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { DnDItemStatus } from '@lib/ui/dnd/DnDItemStatus'
 import { StatusProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import styled, { css } from 'styled-components'
-
-import { DnDItemStatus } from '@lib/ui/dnd/DnDItemStatus'
 
 export const DnDItemHighlight = styled.div`
   position: absolute;

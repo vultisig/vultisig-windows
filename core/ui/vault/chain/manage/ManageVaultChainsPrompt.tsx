@@ -7,7 +7,7 @@ export const ManageVaultChainsPrompt = () => {
   const { t } = useTranslation()
   return (
     <Link to={makeCorePath('manageVaultChains')}>
-      <ListAddButton  as="div">{t('choose_chains')}</ListAddButton>
+      <ListAddButton as="div">{t('choose_chains')}</ListAddButton>
     </Link>
   )
 }
