@@ -38,6 +38,19 @@ export default defineConfig(async () => {
             ),
             dest: '7z-wasm',
           },
+          {
+            src: normalizePath(
+              path.resolve(__dirname, '../../core/ui/public/**/*')
+            ),
+            dest: 'core',
+            rename: (fileName, fileExtension, fullPath) => {
+              const relativePath = path.relative(
+                path.resolve(__dirname, '../../core/ui/public'),
+                fullPath
+              )
+              return relativePath
+            },
+          },
         ],
       }),
       circleDependency({

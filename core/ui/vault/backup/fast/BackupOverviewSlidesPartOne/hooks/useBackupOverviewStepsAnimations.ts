@@ -14,7 +14,7 @@ export const useBackupOverviewStepsAnimations = () => {
     })
 
   const { RiveComponent, rive } = useRive({
-    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-1/fastvault-overview.riv',
+    src: '/core/animations/fast-vault-backup-overview.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })

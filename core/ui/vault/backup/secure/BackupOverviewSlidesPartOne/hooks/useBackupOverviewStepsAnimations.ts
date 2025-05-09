@@ -14,7 +14,7 @@ export const useBackupOverviewStepsAnimations = (numberOfShares: number) => {
     })
 
   const { RiveComponent, rive } = useRive({
-    src: `/assets/animations/secure-vault-backup/${numberOfShares === 2 || numberOfShares === 3 ? '2of3' : numberOfShares === 4 ? '3of4' : '5plus'}.riv`,
+    src: `/core/animations/secure-vault-backup-${numberOfShares === 2 || numberOfShares === 3 ? '2of3' : numberOfShares === 4 ? '3of4' : '5plus'}.riv`,
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })
