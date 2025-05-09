@@ -5,6 +5,8 @@ import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
+import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
@@ -52,6 +54,9 @@ export const AppProviders = ({ children }: ChildrenProp) => {
               <StorageDependant>
                 <I18nProvider>
                   <ToastProvider>{children}</ToastProvider>
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
                 </I18nProvider>
               </StorageDependant>
             </WalletCoreProvider>

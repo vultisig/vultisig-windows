@@ -1,5 +1,6 @@
 export const en = {
   available: 'Available',
+  assets: 'assets',
   connected_dapps: 'Connected dApps',
   disconnect_all: 'Disconnect All',
   expand_view: 'Expand View',

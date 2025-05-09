@@ -1,12 +1,11 @@
 import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { makeCorePath } from '@core/ui/navigation'
+import { depositEnabledChains } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { makeAppPath } from '../../navigation'
-import { depositEnabledChains } from '../deposit/DepositEnabledChain'
 
 export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
@@ -19,7 +18,7 @@ export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Link
-      to={makeAppPath('deposit', {
+      to={makeCorePath('deposit', {
         coin: coinKeyToString(value),
       })}
     >

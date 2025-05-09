@@ -1,11 +1,10 @@
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
+import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useEffect } from 'react'
-
-import { useCoinFinderQuery } from './queries/useCoinFinderQuery'
 
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()

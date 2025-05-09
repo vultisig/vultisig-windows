@@ -1,5 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -16,7 +17,6 @@ import {
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { useSwitchTransferTargetQuery } from '../../hooks/useSwitchTransferTarget'
 import { FormData } from '..'
@@ -47,7 +47,7 @@ export const SwitchSpecificFields = ({
     coin => coin.ticker === chainFeeCoin.THORChain.ticker
   )
 
-  const [{ coin }] = useAppPathParams<'deposit'>()
+  const [{ coin }] = useCorePathParams<'deposit'>()
   const tokens = useIBCAcceptedTokens(coinKeyFromString(coin).chain)
 
   useEffect(() => {

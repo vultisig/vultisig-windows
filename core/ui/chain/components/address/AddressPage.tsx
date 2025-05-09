@@ -1,3 +1,4 @@
+import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
 import { ElementSizeAware } from '@lib/ui/base/ElementSizeAware'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -9,7 +10,6 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { DownloadAddressQrCode } from './DownloadAddressQrCode'
 
 const Content = styled.div`
@@ -23,7 +23,7 @@ const Content = styled.div`
 `
 
 export const AddressPage = () => {
-  const [{ address }] = useAppPathParams<'address'>()
+  const [{ address }] = useCorePathParams<'address'>()
 
   const { t } = useTranslation()
 

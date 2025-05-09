@@ -1,18 +1,18 @@
+import { ManageVaultChainsPrompt } from '@core/ui/vault/chain/manage/ManageVaultChainsPrompt'
+import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
+import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
+import { ScrollableFlexboxFiller } from '@lib/ui/layout/ScrollableFlexboxFiller'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import styled from 'styled-components'
 
 import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
-import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
-import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
-import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery'
 import { VaultChainItem } from './VaultChainItem'
-import { VaultPrimaryActions } from './VaultPrimaryActions'
 
 const PromptsContainer = styled.div`
   padding-inline: 20px;

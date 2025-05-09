@@ -8,9 +8,17 @@ import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { AddressPageShyPrompt } from '@core/ui/chain/components/address/AddressPageShyPrompt'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { getCoinFinderQueryKey } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
+import { ManageVaultChainCoinsPrompt } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPrompt'
+import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
+import { VaultAddressLink } from '@core/ui/vault/chain/VaultAddressLink'
+import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
+import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
@@ -24,6 +32,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -39,16 +48,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt'
-import { makeAppPath } from '../../navigation'
-import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
-import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
-import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
-import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
-import { getCoinFinderQueryKey } from './coin/finder/queries/useCoinFinderQuery'
-import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'
-import { useCurrentVaultChain } from './useCurrentVaultChain'
-import { VaultAddressLink } from './VaultAddressLink'
+import { makeCorePath } from '../../navigation'
 import { VaultChainCoinItem } from './VaultChainCoinItem'
 
 export const VaultChainPage = () => {
@@ -175,7 +175,7 @@ export const VaultChainPage = () => {
               return orderedCoins.map(coin => (
                 <Link
                   key={coin.id}
-                  to={makeAppPath('vaultChainCoinDetail', {
+                  to={makeCorePath('vaultChainCoinDetail', {
                     chain: chain,
                     coin: coin.id,
                   })}
