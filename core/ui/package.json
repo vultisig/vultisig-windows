@@ -11,6 +11,7 @@
     "@core/config": "workspace:*",
     "@core/mpc": "workspace:*",
     "@lib/codegen": "workspace:*",
+    "@lib/list": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/utils": "workspace:*",
     "@trustwallet/wallet-core": "^4.2.15",

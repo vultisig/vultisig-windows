@@ -326,6 +326,7 @@ __metadata:
     "@eslint/compat": "npm:^1.2.7"
     "@eslint/eslintrc": "npm:^3.3.0"
     "@eslint/js": "npm:^9.22.0"
+    "@lib/list": "workspace:*"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
     "@tanstack/query-core": "npm:^5.69.0"
@@ -476,6 +477,7 @@ __metadata:
     "@core/config": "workspace:*"
     "@core/mpc": "workspace:*"
     "@lib/codegen": "workspace:*"
+    "@lib/list": "workspace:*"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
@@ -1462,6 +1464,14 @@ __metadata:
 "@lib/dkls@workspace:lib/dkls":
   version: 0.0.0-use.local
   resolution: "@lib/dkls@workspace:lib/dkls"
+  languageName: unknown
+  linkType: soft
+
+"@lib/list@workspace:*, @lib/list@workspace:lib/list":
+  version: 0.0.0-use.local
+  resolution: "@lib/list@workspace:lib/list"
+  dependencies:
+    styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
 

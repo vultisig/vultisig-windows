@@ -2,6 +2,10 @@ import { useFolderVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
+import {
+  DnDItemContainer,
+  DnDItemHighlight,
+} from '@lib/list/item/DnDItemContainer'
 import { DnDList, ItemChangeParams } from '@lib/ui/dnd/DnDList'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -11,8 +15,6 @@ import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DnDItemHighlight } from '../../../../../lib/list/item/DnDItemContainer'
-import { DnDItemContainer } from '../../../../../lib/list/item/DnDItemContainer'
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
