@@ -1,5 +1,4 @@
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
-import { randomIntegerInRange } from '@lib/utils/randomInRange'
 
 import { MpcDevice, mpcDeviceFromDeviceName } from './MpcDevice'
 
@@ -9,10 +8,7 @@ export const generateLocalPartyId = (device: MpcDevice) => {
   const deviceName =
     device === 'server' ? capitalizeFirstLetter(device) : device
 
-  const number =
-    device === 'server'
-      ? randomIntegerInRange(1000, 9999)
-      : randomIntegerInRange(100, 999)
+  const number = Math.floor(1000 + Math.random() * 9000)
 
   return [deviceName, number].join(localPartyIdSeparator)
 }
