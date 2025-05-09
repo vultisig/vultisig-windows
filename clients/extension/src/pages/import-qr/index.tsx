@@ -4,7 +4,7 @@ import {
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
@@ -236,7 +236,7 @@ const Component = () => {
     }
   }, [navigateToMain])
 
-  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCorePathState<'uploadQr'>()
 
   return isWindows ? (
     <StyledPageContent fullHeight>

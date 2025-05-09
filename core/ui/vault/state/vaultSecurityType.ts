@@ -1,4 +1,4 @@
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import {
   defaultVaultSecurityType,
   VaultSecurityType,
@@ -6,7 +6,7 @@ import {
 import { useCallback } from 'react'
 
 export const useVaultSecurityType = () => {
-  const [{ type }, setParams] = useCorePathParams<'setupVault'>()
+  const [{ type }, setParams] = useCorePathState<'setupVault'>()
 
   const value: VaultSecurityType = type ?? defaultVaultSecurityType
 

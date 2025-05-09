@@ -48,7 +48,7 @@ export const ReshareVaultPage = () => {
         <Button
           kind="outlined"
           onClick={() =>
-            navigate('uploadQr', { params: { title: t('join_reshare') } })
+            navigate('uploadQr', { state: { title: t('join_reshare') } })
           }
         >
           {t('join_reshare')}
