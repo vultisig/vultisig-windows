@@ -71,37 +71,40 @@ func (r *Server) StopAdvertiseMediator() error {
 	return nil
 }
 func (r *Server) DiscoveryService(name string) (string, error) {
-	entriesCh := make(chan *m.ServiceEntry, 4)
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
-	var err error
-	var serviceHost string
-	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case <-time.After(2 * time.Second):
-				err = fmt.Errorf("fail to find service, timeout")
-				return
-			case entry := <-entriesCh:
-				if entry.Info == name {
-					serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
-					return
-				}
-			}
-		}
-	}()
+    entriesCh := make(chan *m.ServiceEntry, 4)
+    wg := &sync.WaitGroup{}
+    wg.Add(1)
+    var err error
+    var serviceHost string
 
-	param := &m.QueryParam{
-		Service:     "_http._tcp",
-		Timeout:     2 * time.Second,
-		Entries:     entriesCh,
-		DisableIPv6: true,
-	}
+    go func() {
+        defer wg.Done()
+        for {
+            select {
+            case <-time.After(2 * time.Second):
+                err = fmt.Errorf("fail to find service, timeout")
+                return
+            case entry := <-entriesCh:
+                for _, txt := range entry.InfoFields {
+                    if txt == name {
+                        serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
+                        return
+                    }
+                }
+            }
+        }
+    }()
 
-	if err := m.Query(param); err != nil {
-		return "", fmt.Errorf("fail to query service,err:%w", err)
-	}
-	wg.Wait()
-	return serviceHost, err
+    param := &m.QueryParam{
+        Service:     "_http._tcp",
+        Timeout:     5 * time.Second,
+        Entries:     entriesCh,
+        DisableIPv6: true,
+    }
+
+    if err := m.Query(param); err != nil {
+        return "", fmt.Errorf("fail to query service, err: %w", err)
+    }
+    wg.Wait()
+    return serviceHost, err
 }
