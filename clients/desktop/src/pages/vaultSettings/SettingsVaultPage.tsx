@@ -1,4 +1,3 @@
-import { ScrollableFlexboxFiller } from '@core/ui/layout/ScrollableFlexboxFiller'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'

@@ -38,7 +38,6 @@
     "@core/config": "workspace:*",
     "@core/mpc": "workspace:*",
     "@core/ui": "workspace:*",
-    "@lib/list": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/utils": "workspace:*",
     "@tanstack/query-core": "^5.69.0",

@@ -1,4 +1,4 @@
-import { TitledList } from '@lib/list/TitledList'
+import { TitledList } from '@lib/ui/list/TitledList'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
