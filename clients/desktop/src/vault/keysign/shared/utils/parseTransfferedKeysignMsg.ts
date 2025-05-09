@@ -6,7 +6,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getPayloadFromServer } from '@core/ui/mpc/keygen/create/fast/server/utils/getPayloadFromServer'
 
-import { getKeygenServerUrl } from '../../../keygen/server/utils/getKeygenServerUrl'
+import { getMpcServerUrl } from '../../../keygen/server/utils/getMpcServerUrl'
 import { decompressQrPayload } from '../../../qr/upload/utils/decompressQrPayload'
 
 export const parseTransferredKeysignMsg = async (
@@ -16,7 +16,7 @@ export const parseTransferredKeysignMsg = async (
 
   if (keysignMsg.payloadId) {
     const serverType = keysignMsg.useVultisigRelay ? 'relay' : 'local'
-    const serverUrl = await getKeygenServerUrl({
+    const serverUrl = await getMpcServerUrl({
       serverType,
       serviceName: keysignMsg.serviceName,
     })

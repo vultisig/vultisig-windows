@@ -24,6 +24,9 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
 
+import { JoinKeygenPage } from '../mpc/keygen/join/JoinKeygenPage'
+import { JoinKeysignPage } from '../mpc/keysign/join/JoinKeysignPage'
+
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,
   vault: (
@@ -31,7 +34,11 @@ const coreRoutes: Record<CorePath, ReactNode> = {
       <VaultPage />
     </ActiveVaultGuard>
   ),
-  joinKeygen: <>TODO: Implement join keygen page</>,
+  joinKeygen: (
+    <ActiveVaultGuard>
+      <JoinKeygenPage />
+    </ActiveVaultGuard>
+  ),
   setupFastVault: <SetupFastVaultPage />,
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
@@ -48,7 +55,9 @@ const coreRoutes: Record<CorePath, ReactNode> = {
     </ActiveVaultGuard>
   ),
   joinKeysign: (
-    <ActiveVaultGuard>TODO: Implement join keysign page</ActiveVaultGuard>
+    <ActiveVaultGuard>
+      <JoinKeysignPage />
+    </ActiveVaultGuard>
   ),
   uploadQr: <ImportQRPage />,
   vaults: (
