@@ -3,7 +3,8 @@
     "core/mpc/types/**",
     "clients/desktop/wailsjs/**",
     "clients/extension/src/state/persistent/usePersistentStateMutation.ts",
-    "clients/extension/src/state/persistent/usePersistentStateQuery.ts"
+    "clients/extension/src/state/persistent/usePersistentStateQuery.ts",
+    "eslint.config.mjs"
   ],
   "ignoreBinaries": ["tsx", "wails"],
   "entry": [
@@ -17,6 +18,11 @@
   "ignoreDependencies": [
     "@types/chrome",
     "@fontsource/montserrat",
-    "@fontsource/roboto-mono"
+    "@fontsource/roboto-mono",
+    "@eslint/compat",
+    "@eslint/eslintrc",
+    "@eslint/js",
+    "eslint-plugin-unused-imports",
+    "globals"
   ]
 }
