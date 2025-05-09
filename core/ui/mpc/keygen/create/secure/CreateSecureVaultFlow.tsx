@@ -4,7 +4,7 @@ import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDis
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigateBack } from '@lib/ui/navigation/state'
 
 import { StartMpcSessionFlow } from '../../../session/StartMpcSessionFlow'
 

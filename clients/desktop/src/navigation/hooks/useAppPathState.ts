@@ -1,9 +1,9 @@
-import { useLocation } from 'react-router-dom'
+import { useRouteState } from '@lib/ui/navigation/state'
 
 import { AppPathState, AppPathsWithState } from '..'
 
 export function useAppPathState<P extends AppPathsWithState>() {
-  const { state } = useLocation()
+  const state = useRouteState()
 
   return state as AppPathState[P]
 }

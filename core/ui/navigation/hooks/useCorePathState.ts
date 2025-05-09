@@ -1,9 +1,9 @@
-import { useLocation } from 'react-router-dom'
+import { useRouteState } from '@lib/ui/navigation/state'
 
 import { CorePathState, CorePathsWithState } from '..'
 
 export function useCorePathState<P extends CorePathsWithState>() {
-  const { state } = useLocation()
+  const state = useRouteState()
 
   return state as CorePathState[P]
 }

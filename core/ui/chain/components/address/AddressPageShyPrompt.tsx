@@ -1,13 +1,18 @@
-import { makeCorePath } from '@core/ui/navigation'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { ValueProp } from '@lib/ui/props'
-import { Link } from 'react-router-dom'
+
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const AddressPageShyPrompt = ({ value }: ValueProp<string>) => {
+  const navigate = useCoreNavigate()
+
   return (
-    <Link to={makeCorePath('address', { address: value })}>
-      <IconButton as="div" title="Address QR code" icon={<QrCodeIcon />} />
-    </Link>
+    <IconButton
+      as="div"
+      title="Address QR code"
+      icon={<QrCodeIcon />}
+      onClick={() => navigate('address', { state: { address: value } })}
+    />
   )
 }

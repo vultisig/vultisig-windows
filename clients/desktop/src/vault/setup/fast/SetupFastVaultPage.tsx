@@ -11,7 +11,7 @@ import { ServerPasswordHintStep } from '@core/ui/vault/server/password-hint/Serv
 import { PasswordHintProvider } from '@core/ui/vault/server/password-hint/state/password-hint'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigateBack } from '@lib/ui/navigation/state'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { CreateVaultKeygenActionProvider } from '../../keygen/create/CreateVaultKeygenActionProvider'

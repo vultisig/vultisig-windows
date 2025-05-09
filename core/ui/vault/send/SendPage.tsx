@@ -1,6 +1,6 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigateBack } from '@lib/ui/navigation/state'
 
 import { useCorePathParams } from '../../navigation/hooks/useCorePathParams'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
