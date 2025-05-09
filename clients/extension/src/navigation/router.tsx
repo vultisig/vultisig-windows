@@ -15,7 +15,13 @@ import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vau
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
-import { VaultsPage } from '@clients/extension/src/pages/vaults'
+import { NewVaultPage } from '@core/ui/vaultsOrganisation/components/NewVaultPage'
+import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
+import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
+import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
+import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
+import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { CorePath, corePaths } from '@core/ui/navigation'
 import { sharedRoutes } from '@core/ui/navigation/routes'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
@@ -36,6 +42,7 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupVault: <SetupVaultPageController />,
   importVault: <ImportFilePage />,
   keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
+  manageVaults: <ManageVaultsPage />,
   reshareVaultFast: (
     <ActiveVaultGuard>
       <ReshareFastVault />

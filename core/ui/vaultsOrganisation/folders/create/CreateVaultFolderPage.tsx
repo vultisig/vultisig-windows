@@ -50,6 +50,7 @@ export const CreateVaultFolderPage = () => {
       <VStack
         as="form"
         flexGrow
+        halfHeight
         {...getFormProps({
           isDisabled,
           isPending,
@@ -67,7 +68,7 @@ export const CreateVaultFolderPage = () => {
           },
         })}
       >
-        <PageContent gap={20} scrollable>
+        <PageContent gap={20} scrollable fullHeight >
           <TextInput
             placeholder={t('enter_folder_name')}
             label={t('folder_name')}
