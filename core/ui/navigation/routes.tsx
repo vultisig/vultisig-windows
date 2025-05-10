@@ -14,7 +14,7 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { Routes } from '@lib/ui/navigation/state'
+import { HistoryEntry, Routes } from '@lib/ui/navigation/state'
 
 type SharedPaths = Extract<
   CorePath,
@@ -34,7 +34,9 @@ type SharedPaths = Extract<
   | 'swap'
 >
 
-export const initialPath: CorePath = 'vault'
+export const initialRoute: HistoryEntry<CorePath> = {
+  id: 'vault',
+}
 
 export const sharedRoutes: Routes<SharedPaths> = {
   currencySettings: CurrencyPage,

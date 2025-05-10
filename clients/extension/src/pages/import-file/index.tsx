@@ -29,6 +29,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
+import { setInitialRoute } from '../../navigation/state'
+
 interface InitialState {
   error?: string
   file?: File
@@ -139,12 +141,9 @@ const Component = () => {
     navigate('vault')
   }, [navigate])
 
-  useEffect(() => {
-    const parser = new UAParser()
-    const parserResult = parser.getResult()
-
-    if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
-      setState(prevState => ({ ...prevState, isWindows: false }))
+  const { mutate: redirectToImportTab } = useMutation({
+    mutationFn: async () => {
+      await setInitialRoute({ id: 'importTab' })
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
         let createdWindowId: number
         const { height, left, top, width } =
@@ -152,7 +151,7 @@ const Component = () => {
 
         chrome.windows.create(
           {
-            url: chrome.runtime.getURL(`index.html#${appPaths.importTab}`),
+            url: chrome.runtime.getURL(`index.html`),
             type: 'panel',
             height,
             left,
@@ -171,8 +170,18 @@ const Component = () => {
           }
         })
       })
+    },
+  })
+
+  useEffect(() => {
+    const parser = new UAParser()
+    const parserResult = parser.getResult()
+
+    if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
+      setState(prevState => ({ ...prevState, isWindows: false }))
+      redirectToImportTab()
     }
-  }, [navigateToMain])
+  }, [redirectToImportTab])
 
   const isDisabled = !file
   return isWindows ? (

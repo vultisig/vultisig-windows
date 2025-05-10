@@ -3,8 +3,8 @@ import { ReactNode, useCallback } from 'react'
 
 import { getStateProviderSetup } from '../state/getStateProviderSetup'
 
-type HistoryEntry = {
-  id: string
+export type HistoryEntry<T extends string = string> = {
+  id: T
   state?: any
 }
 
