@@ -1,15 +1,15 @@
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
-import { initialRouteQueryKey } from '../query/keys'
+import { initialViewQueryKey } from '../query/keys'
 import { useCore } from '../state/core'
 
-export const useInitialRouteQuery = () => {
-  const { getInitialRoute } = useCore()
+export const useInitialViewQuery = () => {
+  const { getInitialView } = useCore()
 
   return useQuery({
-    queryKey: initialRouteQueryKey,
-    queryFn: getInitialRoute,
+    queryKey: initialViewQueryKey,
+    queryFn: getInitialView,
     ...fixedDataQueryOptions,
   })
 }

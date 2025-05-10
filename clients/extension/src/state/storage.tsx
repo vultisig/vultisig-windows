@@ -22,7 +22,7 @@ import {
   getDefaultChains,
   setDefaultChains,
 } from '../chain/state/defaultChains'
-import { getInitialRoute } from '../navigation/state'
+import { getInitialView } from '../navigation/state'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
 import {
   getAddressBookItems,
@@ -199,5 +199,5 @@ export const storage: CoreStorage = {
   setIsVaultBalanceVisible,
   getHasFinishedOnboarding,
   setHasFinishedOnboarding,
-  getInitialRoute,
+  getInitialView,
 }

@@ -70,7 +70,7 @@ import {
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 
-import { setInitialRoute } from '../navigation/state'
+import { setInitialView } from '../navigation/state'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -100,7 +100,7 @@ const instance: Record<Instance, boolean> = {
 }
 
 const handleOpenPanel = async (path: AppPath | CorePath): Promise<number> => {
-  await setInitialRoute({ id: path })
+  await setInitialView({ id: path })
 
   return new Promise(resolve => {
     chrome.windows.getCurrent({ populate: true }, currentWindow => {

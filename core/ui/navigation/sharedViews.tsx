@@ -13,7 +13,7 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { Routes } from '@lib/ui/navigation/state'
+import { Views } from '@lib/ui/navigation/Views'
 
 import { CoreViewId } from './CoreView'
 
@@ -35,7 +35,7 @@ type SharedViewId = Extract<
   | 'swap'
 >
 
-export const sharedViews: Routes<SharedViewId> = {
+export const sharedViews: Views<SharedViewId> = {
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,
   languageSettings: LanguagePage,

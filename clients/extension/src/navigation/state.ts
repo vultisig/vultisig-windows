@@ -1,17 +1,18 @@
-import { initialRoute } from '@core/ui/navigation/routes'
-import { initialRouteQueryKey } from '@core/ui/query/keys'
-import { HistoryEntry } from '@lib/ui/navigation/state'
+import { CoreView, initialCoreView } from '@core/ui/navigation/CoreView'
+import { initialViewQueryKey } from '@core/ui/query/keys'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { removePersistentState } from '../state/persistent/removePersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
-const [key] = initialRouteQueryKey
+import { AppView } from './AppView'
 
-export const getInitialRoute = async () => {
+const [key] = initialViewQueryKey
+
+export const getInitialView = async () => {
   const value = await getPersistentState(key, undefined)
 
   if (value === undefined) {
-    return initialRoute
+    return initialCoreView
   }
 
   await removePersistentState(key)
@@ -19,6 +20,6 @@ export const getInitialRoute = async () => {
   return value
 }
 
-export const setInitialRoute = async (route: HistoryEntry) => {
-  await setPersistentState(key, route)
+export const setInitialView = async (view: AppView | CoreView) => {
+  await setPersistentState(key, view)
 }
