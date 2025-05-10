@@ -424,26 +424,25 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await backgroundMessenger
-        .send<any, Messaging.Chain.Response>('providerRequest', {
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
           type: this.providerType,
           message: data,
         })
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            this.providerType,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
-        })
-        .catch(error => {
-          if (callback) callback(error)
-
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          this.providerType,
+          response
+        )
+        if (callback) callback(null, result)
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        throw error
+      }
     }
   }
 
