@@ -25,3 +25,5 @@ export const hasFinishedOnboardingQueryKey = [
   'hasFinishedOnboarding',
   version,
 ] as const
+
+export const initialRouteQueryKey = ['initialRoute', version] as const

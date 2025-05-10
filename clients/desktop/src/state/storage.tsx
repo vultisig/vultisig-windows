@@ -5,6 +5,7 @@ import { defaultFiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
+import { initialRoute } from '@core/ui/navigation/routes'
 import {
   currentVaultIdQueryKey,
   defaultChainsQueryKey,
@@ -27,6 +28,7 @@ import {
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
   GetHasFinishedOnboardingFunction,
+  GetInitialRouteFunction,
   GetIsVaultBalanceVisibleFunction,
   GetLanguageFunction,
   GetVaultFoldersFunction,
@@ -267,6 +269,8 @@ const setHasFinishedOnboarding: SetHasFinishedOnboardingFunction =
     persistentStorage.setItem(hasFinishedOnboardingKey, hasFinishedOnboarding)
   }
 
+const getInitialRoute: GetInitialRouteFunction = async () => initialRoute
+
 export const storage: CoreStorage = {
   setFiatCurrency,
   setCurrentVaultId,
@@ -296,4 +300,5 @@ export const storage: CoreStorage = {
   setIsVaultBalanceVisible,
   getHasFinishedOnboarding,
   setHasFinishedOnboarding,
+  getInitialRoute,
 }

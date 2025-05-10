@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
+import { HistoryEntry } from '@lib/ui/navigation/state'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
@@ -116,6 +117,8 @@ export type SetHasFinishedOnboardingFunction = (
 
 export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
+export type GetInitialRouteFunction = () => Promise<HistoryEntry>
+
 export type CoreStorage = {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -145,4 +148,5 @@ export type CoreStorage = {
   setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction
   getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
   setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
+  getInitialRoute: GetInitialRouteFunction
 }
