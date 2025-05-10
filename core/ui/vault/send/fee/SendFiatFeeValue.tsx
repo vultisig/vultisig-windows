@@ -8,12 +8,12 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useEffect } from 'react'
 
-import { useCurrentSendCoin } from '../state/sendCoin'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const [, setFees] = useSendFees()
   const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
