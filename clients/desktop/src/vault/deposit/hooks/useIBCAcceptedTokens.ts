@@ -1,5 +1,4 @@
 import { Chain, CosmosChain } from '@core/chain/Chain'
-import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { CHAINS_WITH_IBC_TOKENS, IBC_TOKENS } from '@core/chain/coin/ibc'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -7,8 +6,7 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
   const coins = useCurrentVaultCoins()
-  const [{ coin: coinName }] = useCoreViewState<'deposit'>()
-  const { chain: chain } = coinKeyFromString(coinName)
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
 
   if (
     !destinationChain ||
@@ -23,7 +21,7 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
         ibc =>
           ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
           ibc.decimals === coin.decimals &&
-          coin.chain === chain
+          coin.chain === coinKey.chain
       )
       return isIbcToken
     }),

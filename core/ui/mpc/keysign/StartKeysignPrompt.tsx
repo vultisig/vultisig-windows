@@ -22,7 +22,8 @@ export const StartKeysignPrompt = ({
       <Button
         isDisabled={isDisabled}
         onClick={() => {
-          navigate('keysign', {
+          navigate({
+            id: 'keysign',
             state: {
               securityType: 'secure',
               keysignPayload,
@@ -37,7 +38,8 @@ export const StartKeysignPrompt = ({
           kind="outlined"
           isDisabled={isDisabled}
           onClick={() => {
-            navigate('keysign', {
+            navigate({
+              id: 'keysign',
               state: {
                 securityType: 'fast',
                 keysignPayload,
