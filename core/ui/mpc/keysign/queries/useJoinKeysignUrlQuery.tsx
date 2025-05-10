@@ -6,7 +6,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
@@ -18,7 +18,7 @@ export const useJoinKeysignUrlQuery = () => {
   const [serverType] = useMpcServerType()
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const [{ keysignPayload }] = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
   const currentVault = useCurrentVault()
   const vaultId = getVaultId(currentVault)
 

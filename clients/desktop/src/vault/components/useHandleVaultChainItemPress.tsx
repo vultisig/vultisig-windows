@@ -39,7 +39,7 @@ export const useHandleVaultChainItemPress = ({ chain, address }: Input) => {
     },
     onPointerUp: () => {
       if (!copiedAt) {
-        navigate('vaultChainDetail', { state: { chain: chain as Chain } })
+        navigate({ id: 'vaultChainDetail', state: { chain: chain as Chain } })
       }
 
       setPressedAt(null)

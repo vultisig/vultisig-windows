@@ -4,7 +4,7 @@ import { ReshareVerifyStep } from '@core/ui/mpc/keygen/reshare/verify/ReshareVer
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 const reshareVaultSteps = ['peers', 'verify', 'keygen'] as const
 

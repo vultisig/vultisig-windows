@@ -1,4 +1,4 @@
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
@@ -12,11 +12,7 @@ export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
-      onClick={() =>
-        navigate('send', {
-          state: { coin: coinKeyToString(value) },
-        })
-      }
+      onClick={() => navigate({ id: 'send', state: { coin: value } })}
       kind="outlined"
       style={{ textTransform: 'uppercase' }}
     >

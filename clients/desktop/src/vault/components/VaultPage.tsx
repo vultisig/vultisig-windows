@@ -33,7 +33,7 @@ export const VaultPage = () => {
               <PageHeaderIconButton
                 as="div"
                 icon={<QrCodeIcon />}
-                onClick={() => appNavigate('shareVault')}
+                onClick={() => appNavigate({ id: 'shareVault' })}
               />
               <RefreshVaultBalance />
             </PageHeaderIconButtons>
@@ -42,7 +42,7 @@ export const VaultPage = () => {
             <PageHeaderToggleTitle
               value={false}
               onChange={() => {
-                navigate('vaults')
+                navigate({ id: 'vaults' })
               }}
             >
               {name}

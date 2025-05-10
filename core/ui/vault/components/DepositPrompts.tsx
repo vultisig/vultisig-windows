@@ -1,4 +1,4 @@
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { depositEnabledChains } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
@@ -20,11 +20,7 @@ export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
-      onClick={() =>
-        navigate('deposit', {
-          state: { coin: coinKeyToString(value) },
-        })
-      }
+      onClick={() => navigate({ id: 'deposit', state: { coin: value } })}
       kind="outlined"
       style={{ textTransform: 'uppercase' }}
     >

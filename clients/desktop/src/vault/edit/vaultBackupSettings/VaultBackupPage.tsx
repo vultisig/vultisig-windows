@@ -7,7 +7,7 @@ export const VaultBackupPage = () => {
   return (
     <VaultBackupFlow
       onFinish={() => {
-        navigate('vault')
+        navigate({ id: 'vault' })
       }}
     />
   )

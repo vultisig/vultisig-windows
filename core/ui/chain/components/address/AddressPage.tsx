@@ -1,4 +1,4 @@
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ElementSizeAware } from '@lib/ui/base/ElementSizeAware'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -23,7 +23,7 @@ const Content = styled.div`
 `
 
 export const AddressPage = () => {
-  const [{ address }] = useCorePathState<'address'>()
+  const [{ address }] = useCoreViewState<'address'>()
 
   const { t } = useTranslation()
 

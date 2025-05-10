@@ -71,7 +71,10 @@ export const KeysignSigningStep = ({
                           <TxOverviewPanel>
                             <KeysignTxOverview value={payload} />
                           </TxOverviewPanel>
-                          <Button onClick={() => navigate('vault')} as="div">
+                          <Button
+                            onClick={() => navigate({ id: 'vault' })}
+                            as="div"
+                          >
                             {t('complete')}
                           </Button>
                         </>

@@ -1,8 +1,8 @@
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { Match } from '@lib/ui/base/Match'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.styled'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +16,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 export const UploadQrPageWithoutVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const [{ title = t('keysign') }] = useCorePathState<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
 
   const goBack = useNavigateBack()
 

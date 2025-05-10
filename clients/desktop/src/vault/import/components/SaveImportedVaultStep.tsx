@@ -26,8 +26,8 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
 
   return (
     <SaveVaultStep
-      onBack={() => navigate('vault')}
-      onFinish={() => navigate('vault')}
+      onBack={() => navigate({ id: 'vault' })}
+      onFinish={() => navigate({ id: 'vault' })}
       value={finalValue}
       title={t('import_vault')}
     />

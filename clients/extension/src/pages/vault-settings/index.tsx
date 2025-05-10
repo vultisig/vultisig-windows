@@ -10,7 +10,7 @@ import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -47,14 +47,14 @@ export const VaultSettingsPage = () => {
         <List>
           <ListItem
             icon={<CircleInfoIcon fontSize={20} />}
-            onClick={() => coreNavigate('vaultDetails')}
+            onClick={() => coreNavigate({ id: 'vaultDetails' })}
             title={t('details')}
             hoverable
             showArrow
           />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
-            onClick={() => coreNavigate('renameVault')}
+            onClick={() => coreNavigate({ id: 'renameVault' })}
             title={t('rename_vault')}
             hoverable
             showArrow
@@ -71,7 +71,7 @@ export const VaultSettingsPage = () => {
           />
           <ListItem
             icon={<ShareIcon fontSize={20} />}
-            onClick={() => coreNavigate('reshareVault')}
+            onClick={() => coreNavigate({ id: 'reshareVault' })}
             title={t('reshare')}
             hoverable
             showArrow

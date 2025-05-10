@@ -10,7 +10,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -28,7 +28,7 @@ export const VaultsPage = () => {
   const handleSelect = (id: string) => {
     setCurrentVaultId.mutate(id)
 
-    coreNavigate('vault')
+    coreNavigate({ id: 'vault' })
   }
 
   return (
@@ -82,7 +82,7 @@ export const VaultsPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          onClick={() => coreNavigate('importVault')}
+          onClick={() => coreNavigate({ id: 'importVault' })}
           type="primary"
           block
           rounded

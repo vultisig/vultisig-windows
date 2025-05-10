@@ -1,7 +1,7 @@
-import { useCorePathState } from '../../navigation/hooks/useCoreViewState'
+import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 
 export const useCurrentVaultChain = () => {
-  const [{ chain }] = useCorePathState<'vaultChainDetail'>()
+  const [{ chain }] = useCoreViewState<'vaultChainDetail'>()
 
   return chain
 }

@@ -24,7 +24,7 @@ export const getSwapQuoteQueryKey = ({
   withoutNullOrUndefined(['swapQuote', fromCoinKey, toCoinKey, fromAmount])
 
 export const useSwapQuoteQuery = () => {
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useFromCoin()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
 

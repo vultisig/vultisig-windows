@@ -153,7 +153,7 @@ const DeleteVaultPage = () => {
               isLoading={isPending}
               onClick={() => {
                 deleteVault(getVaultId(vault), {
-                  onSuccess: () => navigate('vault'),
+                  onSuccess: () => navigate({ id: 'vault' }),
                 })
               }}
               isDisabled={isDeleteDisabled}

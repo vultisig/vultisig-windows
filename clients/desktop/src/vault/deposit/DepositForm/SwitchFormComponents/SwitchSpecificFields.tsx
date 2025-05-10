@@ -1,6 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { coinKeyFromString } from '@core/chain/coin/Coin'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -47,7 +47,7 @@ export const SwitchSpecificFields = ({
     coin => coin.ticker === chainFeeCoin.THORChain.ticker
   )
 
-  const [{ coin }] = useCorePathState<'deposit'>()
+  const [{ coin }] = useCoreViewState<'deposit'>()
   const tokens = useIBCAcceptedTokens(coinKeyFromString(coin).chain)
 
   useEffect(() => {

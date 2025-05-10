@@ -27,7 +27,7 @@ import {
 
 export const SwapVerify = () => {
   const { t } = useTranslation()
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useFromCoin()
   const [toCoinKey] = useToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)

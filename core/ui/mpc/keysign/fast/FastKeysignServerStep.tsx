@@ -13,7 +13,7 @@ import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -35,7 +35,7 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const [{ keysignPayload }] = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
   const ibcTransaction = generateIbcTransaction(keysignPayload)
 
   const walletCore = useAssertWalletCore()

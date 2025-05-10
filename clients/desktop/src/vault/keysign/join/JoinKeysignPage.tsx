@@ -6,7 +6,7 @@ import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
 
@@ -14,7 +14,7 @@ import { KeysignActionProvider } from '../action/KeysignActionProvider'
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider'
 
 export const JoinKeysignPage = () => {
-  const [{ keysignMsg }] = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
 
   const { sessionId, encryptionKeyHex } = keysignMsg
 

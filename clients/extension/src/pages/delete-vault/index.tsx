@@ -6,7 +6,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -26,7 +26,7 @@ const Component = () => {
     if (!deleteVault.isPending) {
       deleteVault.mutateAsync(getVaultId(currentVault), {
         onSuccess: () => {
-          coreNavigate('vault')
+          coreNavigate({ id: 'vault' })
         },
       })
     }

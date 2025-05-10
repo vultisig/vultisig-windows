@@ -1,8 +1,8 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 
 export const useCurrentVaultCoinKey = (): CoinKey => {
-  const [{ chain, coin }] = useCorePathState<'vaultChainCoinDetail'>()
+  const [{ chain, coin }] = useCoreViewState<'vaultChainCoinDetail'>()
 
   return {
     chain: chain,

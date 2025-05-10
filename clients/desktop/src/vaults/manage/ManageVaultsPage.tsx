@@ -22,7 +22,9 @@ export const ManageVaultsPage = () => {
       <PageHeader
         hasBorder
         primaryControls={<PageHeaderVaultSettingsPrompt />}
-        secondaryControls={<FinishEditing onClick={() => navigate('vaults')} />}
+        secondaryControls={
+          <FinishEditing onClick={() => navigate({ id: 'vaults' })} />
+        }
         title={<VaultsPageHeaderTitle />}
       />
       <PageContent scrollable gap={20}>

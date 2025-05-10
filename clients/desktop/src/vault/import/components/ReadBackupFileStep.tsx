@@ -5,7 +5,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -14,12 +14,12 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ReadTextFile } from '../../../../wailsjs/go/main/App'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
+import { useAppViewState } from '../../../navigation/hooks/useAppViewState'
 
 export const ReadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
-  const [{ filePath }] = useAppPathState<'importVaultFromFile'>()
+  const [{ filePath }] = useAppViewState<'importVaultFromFile'>()
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
