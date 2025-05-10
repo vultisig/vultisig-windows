@@ -3,16 +3,16 @@ import {
   useVaultFolders,
 } from '@core/ui/storage/vaultFolders'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import { DnDList } from '@lib/ui/dnd/DnDList'
+import {
+  DnDItemContainer,
+  DnDItemHighlight,
+} from '@lib/ui/list/item/DnDItemContainer'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 
-import { DnDList } from '../../../lib/dnd/DnDList'
-import {
-  DnDItemContainer,
-  DnDItemHighlight,
-} from '../../../lib/ui/list/item/DnDItemContainer'
 import { FolderListItem } from '../components/FolderListItem'
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer'
 

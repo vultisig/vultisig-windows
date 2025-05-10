@@ -1,8 +1,8 @@
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { ListItem } from '@lib/ui/list/item/ListItem'
 
-import { ListItem } from '../../../lib/ui/list/item/ListItem'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 type FolderListItemProps = {
   isDraggable?: boolean
@@ -15,7 +15,7 @@ export const FolderListItem = ({
   isDraggable,
   id,
 }: FolderListItemProps) => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <ListItem

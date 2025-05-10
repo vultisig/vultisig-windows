@@ -22,6 +22,7 @@ export const corePaths = {
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
   vaultChainCoinDetail: '/vault/item/detail/coin',
+  manageVaults: '/vaults/manage',
   newVault: '/vault/new',
   renameVault: '/settings/vault/rename',
   reshareVault: '/vault/reshare',
@@ -31,6 +32,10 @@ export const corePaths = {
   setupSecureVault: '/vault/setup/secure',
   setupVault: '/vault/setup',
   uploadQr: '/vault/qr/upload',
+  vaultSettings: '/vault/settings',
+  createVaultFolder: '/vault/create-folder',
+  manageVaultFolder: '/vault/folder/manage',
+  vaultFolder: '/vault/folder',
   vault: '/',
   vaultDetails: '/vault/settings/details',
   vaults: '/vaults',
@@ -52,6 +57,8 @@ export type CorePathParams = {
   uploadQr: { title?: string }
   send: { coin: string; address?: string }
   swap: { coin: string }
+  vaultFolder: { id: string }
+  manageVaultFolder: { id: string }
 }
 
 export type CorePathState = {

@@ -4,6 +4,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -12,8 +13,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { PageFooter } from '../../../ui/page/PageFooter'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 import { DeleteVaultFolder } from './DeleteVaultFolder'
@@ -21,7 +20,7 @@ import { ManageFolderVaults } from './ManageFolderVaults'
 
 export const ManageVaultFolderPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useAppNavigate()
+  const appNavigate = useCoreNavigate()
   const { id, name: initialName } = useCurrentVaultFolder()
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
