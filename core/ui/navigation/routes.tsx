@@ -9,6 +9,7 @@ import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { ImportVaultPage } from '@core/ui/vault/import'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
@@ -20,6 +21,7 @@ type SharedPaths = Extract<
   CorePath,
   | 'currencySettings'
   | 'defaultChains'
+  | 'importVault'
   | 'languageSettings'
   | 'newVault'
   | 'renameVault'
@@ -38,6 +40,7 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   currencySettings: <CurrencyPage />,
   defaultChains: <DefaultChainsPage />,
   languageSettings: <LanguagePage />,
+  importVault: <ImportVaultPage />,
   manageVaultChains: (
     <ActiveVaultGuard>
       <ManageVaultChainsPage />

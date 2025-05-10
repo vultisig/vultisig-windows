@@ -339,6 +339,7 @@ __metadata:
     prettier: "npm:^3.5.3"
     styled-components: "npm:^6.1.16"
     typescript: "npm:^5.8.2"
+    ua-parser-js: "npm:^2.0.3"
     vite: "npm:^6.2.2"
     vite-plugin-node-stdlib-browser: "npm:^0.2.1"
     vite-plugin-static-copy: "npm:^2.3.0"

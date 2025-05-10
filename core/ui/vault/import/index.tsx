@@ -51,7 +51,7 @@ interface InitialState {
   decodedVault?: Vault
 }
 
-const Component = () => {
+export const ImportVaultPage = () => {
   const { t } = useTranslation()
   const initialState: InitialState = {
     isWindows: true, // Default to Windows flow, will be updated in useEffect if needed
@@ -253,5 +253,3 @@ const Component = () => {
     </PageContent>
   )
 }
-
-export default Component
