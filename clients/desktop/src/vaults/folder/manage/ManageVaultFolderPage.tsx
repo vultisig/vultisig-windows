@@ -57,7 +57,8 @@ export const ManageVaultFolderPage = () => {
                 fields: { name },
               },
               {
-                onSuccess: () => appNavigate('vaultFolder', { state: { id } }),
+                onSuccess: () =>
+                  appNavigate({ id: 'vaultFolder', state: { id } }),
               }
             )
           }}

@@ -5,7 +5,7 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { useFromCoin } from '../state/fromCoin'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useToCoin } from '../state/toCoin'
 import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
@@ -13,7 +13,7 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
 
-  const [{ coin: fromCoinKey }] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const toCoin = useCurrentVaultCoin(toCoinKey)
 

@@ -24,7 +24,7 @@ export const useProcessQrMutation = () => {
         image: imageBitmap,
       })
 
-      navigate('deeplink', { state: { url } })
+      navigate({ id: 'deeplink', state: { url } })
     },
   })
 }

@@ -8,12 +8,11 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../chain/coin/queries/useBalanceQuery'
-import { useCurrentSendCoin } from '../../state/sendCoin'
-
+import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 export const SendCoinBalanceDependant: React.FC<
   MatchQueryWrapperProps<bigint>
 > = props => {
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
 
   const query = useBalanceQuery(extractAccountCoinKey(coin))

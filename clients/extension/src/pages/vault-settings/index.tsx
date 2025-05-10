@@ -63,7 +63,7 @@ export const VaultSettingsPage = () => {
             icon={
               <TrashIcon fontSize={20} stroke={colors.alertWarning.toHex()} />
             }
-            onClick={() => navigate('deleteVault')}
+            onClick={() => navigate({ id: 'deleteVault' })}
             status="warning"
             title={t('remove_vault')}
             hoverable

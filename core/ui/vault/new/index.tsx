@@ -19,7 +19,7 @@ export const NewVaultPage = () => {
       <PageFooter gap={16}>
         <Button
           kind="primary"
-          onClick={() => navigate('setupVault', { state: {} })}
+          onClick={() => navigate({ id: 'setupVault', state: {} })}
         >
           {t('create_new_vault')}
         </Button>
@@ -28,7 +28,7 @@ export const NewVaultPage = () => {
           <Button
             kind="secondary"
             onClick={() =>
-              navigate('uploadQr', { state: { title: t('scan_qr') } })
+              navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
           >
             {t('scan_qr')}
