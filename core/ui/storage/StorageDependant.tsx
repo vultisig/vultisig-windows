@@ -13,7 +13,7 @@ import {
 } from './currentVaultId'
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
-import { useInitialRouteQuery } from './initialRoute'
+import { useInitialViewQuery } from './initialView'
 import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
@@ -30,7 +30,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const language = useLanguageQuery()
   const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
-  const initialRoute = useInitialRouteQuery()
+  const initialView = useInitialViewQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -42,17 +42,17 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     language,
     isVaultBalanceVisible,
     hasFinishedOnboarding,
-    initialRoute,
+    initialView,
   })
 
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId, vaults, initialRoute }) => (
+      success={({ currentVaultId, vaults, initialView }) => (
         <VaultsProvider value={vaults}>
           <CurrentVaultIdProvider value={currentVaultId}>
             <NavigationProvider
-              initialValue={{ history: [initialRoute], currentIndex: 0 }}
+              initialValue={{ history: [initialView], currentIndex: 0 }}
             >
               {children}
             </NavigationProvider>

@@ -26,4 +26,4 @@ export const hasFinishedOnboardingQueryKey = [
   version,
 ] as const
 
-export const initialRouteQueryKey = ['initialRoute', version] as const
+export const initialViewQueryKey = ['initialView', version] as const

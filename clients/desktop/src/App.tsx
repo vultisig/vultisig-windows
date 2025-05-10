@@ -1,12 +1,12 @@
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { VStack } from '@lib/ui/layout/Stack'
-import { ActiveRoute } from '@lib/ui/navigation/state'
+import { ActiveView } from '@lib/ui/navigation/ActiveView'
 
 import { AppProviders } from './AppProviders'
 import { ErrorBoundary } from './errors/components/ErrorBoundary'
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
-import { routes } from './navigation/views'
+import { views } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
           renderFallback={props => <FullSizeErrorFallback {...props} />}
         >
           <LauncherObserver />
-          <ActiveRoute routes={routes} />
+          <ActiveView views={views} />
           <OnboardingResetter />
         </ErrorBoundary>
       </VStack>

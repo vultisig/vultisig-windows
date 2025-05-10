@@ -3,7 +3,6 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { AppPath } from '@clients/extension/src/navigation'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
@@ -16,14 +15,16 @@ import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/vaults'
-import { CorePath } from '@core/ui/navigation'
-import { sharedRoutes } from '@core/ui/navigation/routes'
+import { CoreViewId } from '@core/ui/navigation/CoreView'
+import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { Routes } from '@lib/ui/navigation/state'
+import { Views } from '@lib/ui/navigation/Views'
 
-const coreRoutes: Routes<CorePath> = {
-  ...sharedRoutes,
+import { AppViewId } from './AppView'
+
+const coreViews: Views<CoreViewId> = {
+  ...sharedViews,
   vault: () => (
     <ActiveVaultGuard>
       <VaultPage />
@@ -63,7 +64,7 @@ const coreRoutes: Routes<CorePath> = {
   ),
 }
 
-const appRoutes: Routes<AppPath> = {
+const appViews: Views<AppViewId> = {
   deleteVault: () => (
     <ActiveVaultGuard>
       <DeleteVaultPage />
@@ -90,7 +91,7 @@ const appRoutes: Routes<AppPath> = {
   transactionTab: () => <TransactionPage />,
 }
 
-export const routes = {
-  ...coreRoutes,
-  ...appRoutes,
+export const views = {
+  ...coreViews,
+  ...appViews,
 }

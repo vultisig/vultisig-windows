@@ -1,8 +1,8 @@
-import { CorePath } from '@core/ui/navigation'
-import { sharedRoutes } from '@core/ui/navigation/routes'
+import { CoreViewId } from '@core/ui/navigation/CoreView'
+import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { Routes } from '@lib/ui/navigation/state'
+import { Views } from '@lib/ui/navigation/Views'
 
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
@@ -37,10 +37,10 @@ import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolder
 import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
 import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
 import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
-import { AppPath } from '.'
+import { AppViewId } from './AppView'
 
-const coreRoutes: Routes<CorePath> = {
-  ...sharedRoutes,
+const coreViews: Views<CoreViewId> = {
+  ...sharedViews,
   vault: () => (
     <ActiveVaultGuard>
       <VaultPage />
@@ -80,7 +80,7 @@ const coreRoutes: Routes<CorePath> = {
   ),
 }
 
-const appRoutes: Routes<AppPath> = {
+const appViews: Views<AppViewId> = {
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -155,7 +155,7 @@ const appRoutes: Routes<AppPath> = {
   faq: () => <FaqVaultPage />,
 }
 
-export const routes = {
-  ...coreRoutes,
-  ...appRoutes,
+export const views = {
+  ...coreViews,
+  ...appViews,
 }
