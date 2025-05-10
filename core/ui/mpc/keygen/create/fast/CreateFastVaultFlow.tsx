@@ -1,7 +1,7 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { CreateVaultNameStep } from '../CreateVaultNameStep'

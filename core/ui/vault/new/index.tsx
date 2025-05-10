@@ -33,7 +33,10 @@ export const NewVaultPage = () => {
           >
             {t('scan_qr')}
           </Button>
-          <Button kind="secondary" onClick={() => navigate('importVault')}>
+          <Button
+            kind="secondary"
+            onClick={() => navigate({ id: 'importVault' })}
+          >
             {t('import_vault')}
           </Button>
         </VStack>

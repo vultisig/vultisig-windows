@@ -22,6 +22,9 @@ export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
   }
 
   return (
-    <VaultKeygenBackupFlow onFinish={() => navigate('vault')} onBack={onBack} />
+    <VaultKeygenBackupFlow
+      onFinish={() => navigate({ id: 'vault' })}
+      onBack={onBack}
+    />
   )
 }

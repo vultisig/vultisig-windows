@@ -96,7 +96,7 @@ const Component = () => {
     setState(p => ({ ...p, loading: true }))
     try {
       await createVault(decodedVault)
-      navigate('vault')
+      navigate({ id: 'vault' })
     } catch (e) {
       handleError(extractErrorMsg(e))
     } finally {

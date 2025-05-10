@@ -229,9 +229,12 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           </Button>
           <StyledButton
             onClick={() =>
-              navigate('vault', {
-                replace: true,
-              })
+              navigate(
+                { id: 'vault' },
+                {
+                  replace: true,
+                }
+              )
             }
           >
             {t('done')}

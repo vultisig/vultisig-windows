@@ -100,7 +100,7 @@ export const VaultPage = () => {
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
-            onClick={() => navigate('vaults')}
+            onClick={() => navigate({ id: 'vaults' })}
             title={vault.name}
             hoverable
           />

@@ -26,7 +26,7 @@ export const VaultFolderPage = () => {
       <PageHeader
         hasBorder
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate('vaults')} />
+          <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
         }
         secondaryControls={
           <PageHeaderIconButton

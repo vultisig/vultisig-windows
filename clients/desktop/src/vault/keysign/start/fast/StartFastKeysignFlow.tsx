@@ -4,19 +4,19 @@ import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServ
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/state'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { KeysignActionProvider } from '../../action/KeysignActionProvider'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = () => {
-  const [{ keysignPayload }] = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
