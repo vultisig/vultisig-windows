@@ -1,58 +1,82 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { FC, useMemo } from 'react'
+import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
 
-type DecryptVaultViewProps = {
+interface DecryptVaultViewProps {
   isPending: boolean
   error: Error | null
   onSubmit: (password: string) => void
 }
 
-export const DecryptVaultView = ({
+export const DecryptVaultView: FC<DecryptVaultViewProps> = ({
   isPending,
   error,
   onSubmit,
-}: DecryptVaultViewProps) => {
+}) => {
   const { t } = useTranslation()
-  const [password, setPassword] = useState('')
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        password: z.string().min(1, t('password_required')).max(50),
+      }),
+    [t]
+  )
 
-  const isDisabled = useMemo(() => {
-    if (!password) {
-      return t('password_required')
-    }
-  }, [password, t])
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isDirty },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+    mode: 'onBlur',
+  })
 
   return (
-    <>
-      <FlowPageHeader title={t('password')} />
-      <PageContent
-        as="form"
-        {...getFormProps({
-          onSubmit: () => onSubmit(password),
-          isDisabled,
-        })}
-      >
-        <VStack gap={20} flexGrow>
+    <VStack
+      as="form"
+      onSubmit={handleSubmit(({ password }: FieldValues) => onSubmit(password))}
+      fullHeight
+    >
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('password')}</PageHeaderTitle>}
+        hasBorder
+      />
+      <PageContent flexGrow scrollable>
+        <VStack gap={12} flexGrow>
           <PasswordInput
             placeholder={t('enter_password')}
-            value={password}
-            onValueChange={setPassword}
-            label={t('vault_password')}
+            {...register('password')}
           />
-        </VStack>
-        <VStack gap={20}>
-          <Button isLoading={isPending} type="submit">
-            {t('continue')}
-          </Button>
-          {error && <Text color="danger">{t('incorrect_password')}</Text>}
+          {typeof errors.password?.message === 'string' ? (
+            <Text color="danger" size={12}>
+              {errors.password.message}
+            </Text>
+          ) : (
+            error && <Text color="danger">{t('incorrect_password')}</Text>
+          )}
         </VStack>
       </PageContent>
-    </>
+      <PageFooter>
+        <Button
+          isDisabled={!isValid || !isDirty}
+          isLoading={isPending}
+          type="submit"
+        >
+          {t('continue')}
+        </Button>
+      </PageFooter>
+    </VStack>
   )
 }
