@@ -10,7 +10,7 @@ import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 
 export const useSendChainSpecificQuery = () => {
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const [feeSettings] = useFeeSettings()
 

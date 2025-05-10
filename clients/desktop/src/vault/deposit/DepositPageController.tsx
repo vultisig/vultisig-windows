@@ -1,4 +1,3 @@
-import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
@@ -14,9 +13,9 @@ import { DepositVerify } from './DepositVerify'
 const depositSteps = ['form', 'verify'] as const
 
 export const DepositPageController = () => {
-  const [{ coin: coinName }] = useCoreViewState<'deposit'>()
-  const { chain: chain } = coinKeyFromString(coinName)
-  const chainActionOptions = chainActionsRecord[chain as DepositEnabledChain]
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const chainActionOptions =
+    chainActionsRecord[coinKey.chain as DepositEnabledChain]
 
   const [state, setState] = useState<{
     depositFormData: FieldValues
@@ -53,7 +52,7 @@ export const DepositPageController = () => {
           }
           onSubmit={handleDepositFormSubmit}
           chainActionOptions={chainActionOptions}
-          chain={chain}
+          chain={coinKey.chain}
         />
       )}
       verify={() => (

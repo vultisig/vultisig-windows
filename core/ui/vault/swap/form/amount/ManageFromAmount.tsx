@@ -16,7 +16,7 @@ const suggestions = [0.25, 0.5]
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
-  const [fromCoin] = useFromCoin()
+  const [{ coin: fromCoin }] = useFromCoin()
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
 

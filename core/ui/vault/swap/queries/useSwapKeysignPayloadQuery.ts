@@ -18,7 +18,7 @@ import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapKeysignPayloadQuery = () => {
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useFromCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
 
   const [toCoinKey] = useToCoin()
