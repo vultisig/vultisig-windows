@@ -24,7 +24,7 @@ export const useBackupOverviewStepsAnimations = (
         : '5plus'
 
   const { RiveComponent, rive } = useRive({
-    src: `/assets/animations/secure-vault-overview-${extensionBasedOnNumOfDevices}/${deviceNumber >= 5 ? '5' : deviceNumber}.riv`,
+    src: `/core/animations/secure-vault-overview-${extensionBasedOnNumOfDevices}${deviceNumber >= 5 ? '' : `-${deviceNumber}`}.riv`,
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })

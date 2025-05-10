@@ -1,16 +1,18 @@
-import { ValueProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 
-type AnimationProps = ValueProp<string> & {
+type AnimationProps = {
   stateMachines?: string
+  src: string
 }
 
-export const Animation = ({ value, ...props }: AnimationProps) => {
+export const Animation = ({ src: partialSrc, ...props }: AnimationProps) => {
+  const src = `/${partialSrc}.riv`
+
   const { RiveComponent } = useRive({
-    src: `/assets/animations/${value}.riv`,
+    src,
     autoplay: true,
     ...props,
   })
 
-  return <RiveComponent key={value} />
+  return <RiveComponent key={src} />
 }

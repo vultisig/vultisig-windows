@@ -12,13 +12,14 @@ type AppNavigate = {
 export function useAppNavigate(): AppNavigate {
   const navigate = useNavigate()
   const appNavigate = useCallback(
-    (path: AppPath, options: any = {}) => {
-      const to = makeAppPath(path as never)
+    (path: AppPath, { params, ...options }: any = {}) => {
+      const to = params
+        ? makeAppPath(path as any, params)
+        : makeAppPath(path as any)
 
       navigate(to, options)
     },
     [navigate]
   )
-
   return appNavigate as AppNavigate
 }

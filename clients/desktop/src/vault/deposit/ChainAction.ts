@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-
-import { DepositEnabledChain } from './DepositEnabledChain'
+import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 
 export type ChainAction =
   | 'bond'

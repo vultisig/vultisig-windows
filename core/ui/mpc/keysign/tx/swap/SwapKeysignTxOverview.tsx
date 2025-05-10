@@ -9,6 +9,7 @@ import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -24,7 +25,6 @@ import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
-import { useRive } from '@rive-app/react-canvas'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -34,10 +34,6 @@ import { useCore } from '../../../../state/core'
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
   const navigate = useCoreNavigate()
-  const { RiveComponent: SuccessAnimation } = useRive({
-    src: '/assets/animations/vault-creation-success/vault_created.riv',
-    autoplay: true,
-  })
 
   const vault = useCurrentVault()
 
@@ -103,7 +99,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   return (
     <Wrapper>
       <AnimationWrapper>
-        <SuccessAnimation />
+        <Animation src="core/animations/vault-created" />
         <AnimatedVisibility delay={300}>
           <SuccessText centerHorizontally size={24}>
             {t('transaction_successful')}

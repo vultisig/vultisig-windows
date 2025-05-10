@@ -36,7 +36,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
 }) => {
   const { t } = useTranslation()
   const { RiveComponent } = useRive({
-    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-splash/backupvault_splash.riv',
+    src: '/core/animations/fast-vault-backup-splash.riv',
     autoplay: true,
   })
 

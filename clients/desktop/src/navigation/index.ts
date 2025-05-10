@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
@@ -6,12 +5,8 @@ export const appPaths = {
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   migrateVault: '/vault/migrate',
-  address: '/address',
   vaultSettings: '/vault/settings',
   manageVaults: '/vaults/manage',
-  manageVaultChainCoins: '/vault/chains/coins',
-  vaultChainDetail: '/vault/item/detail',
-  vaultChainCoinDetail: '/vault/item/detail/coin',
   editVault: '/vault/settings/vault-settings',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
@@ -25,7 +20,6 @@ export const appPaths = {
   createVaultFolder: '/vault/create-folder',
   vaultFolder: '/vault/folder',
   manageVaultFolder: '/vault/folder/manage',
-  deposit: '/vault/item/deposit',
   deeplink: '/deeplink',
   dkls: '/dkls',
 } as const
@@ -34,11 +28,6 @@ type AppPaths = typeof appPaths
 export type AppPath = keyof AppPaths
 
 export type AppPathParams = {
-  address: { address: string }
-  manageVaultChainCoins: { chain: Chain }
-  vaultChainDetail: { chain: Chain }
-  vaultChainCoinDetail: { chain: Chain; coin: string }
-  deposit: { coin: string }
   vaultFolder: { id: string }
   manageVaultFolder: { id: string }
 }

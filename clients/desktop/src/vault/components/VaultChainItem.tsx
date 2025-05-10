@@ -3,6 +3,8 @@ import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
@@ -16,8 +18,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
-import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
-import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
 
 const Pill = styled.div`

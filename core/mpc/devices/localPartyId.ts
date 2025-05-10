@@ -9,10 +9,7 @@ export const generateLocalPartyId = (device: MpcDevice) => {
   const deviceName =
     device === 'server' ? capitalizeFirstLetter(device) : device
 
-  const number =
-    device === 'server'
-      ? randomIntegerInRange(1000, 9999)
-      : randomIntegerInRange(100, 999)
+  const number = randomIntegerInRange(1000, 9999)
 
   return [deviceName, number].join(localPartyIdSeparator)
 }

@@ -6,7 +6,6 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 
-import { AddressPage } from '../chain/components/address/AddressPage'
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
 import { ErrorBoundary } from '../errors/components/ErrorBoundary'
 import { FullSizeErrorFallback } from '../errors/components/FullSizeErrorFallback'
@@ -18,9 +17,6 @@ import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
-import { VaultChainCoinPage } from '../vault/chain/coin/VaultChainCoinPage'
-import { ManageVaultChainCoinsPage } from '../vault/chain/manage/coin/ManageVaultChainCoinsPage'
-import { VaultChainPage } from '../vault/chain/VaultChainPage'
 import { VaultPage } from '../vault/components/VaultPage'
 import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
@@ -40,7 +36,6 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { NewVaultPage } from '../vaults/components/NewVaultPage'
 import { VaultsPage } from '../vaults/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolderPage'
@@ -68,7 +63,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   setupSecureVault: <SetupSecureVaultPage />,
   setupVault: <SetupVaultPageController />,
   importVault: <ImportVaultPage />,
-  newVault: <NewVaultPage />,
   keysign: (
     <ActiveVaultGuard>
       <StartKeysignPage />
@@ -91,6 +85,11 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   ),
   uploadQr: <UploadQrPage />,
   vaults: <VaultsPage />,
+  deposit: (
+    <ActiveVaultGuard>
+      <DepositPage />
+    </ActiveVaultGuard>
+  ),
 }
 
 const appRoutes: Record<AppPath, ReactNode> = {
@@ -105,21 +104,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
   shareVault: (
     <ActiveVaultGuard>
       <ShareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  manageVaultChainCoins: (
-    <ActiveVaultGuard>
-      <ManageVaultChainCoinsPage />
-    </ActiveVaultGuard>
-  ),
-  vaultChainDetail: (
-    <ActiveVaultGuard>
-      <VaultChainPage />
-    </ActiveVaultGuard>
-  ),
-  vaultChainCoinDetail: (
-    <ActiveVaultGuard>
-      <VaultChainCoinPage />
     </ActiveVaultGuard>
   ),
   editVault: (
@@ -137,7 +121,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <DeleteVaultPage />
     </ActiveVaultGuard>
   ),
-  address: <AddressPage />,
   vaultFAQ: <FaqVaultPage />,
   addressBook: <AddressBookSettingsPage />,
   migrateVault: (
@@ -168,11 +151,6 @@ const appRoutes: Record<AppPath, ReactNode> = {
       <CurrentVaultFolderPageProvider>
         <ManageVaultFolderPage />
       </CurrentVaultFolderPageProvider>
-    </ActiveVaultGuard>
-  ),
-  deposit: (
-    <ActiveVaultGuard>
-      <DepositPage />
     </ActiveVaultGuard>
   ),
   deeplink: (

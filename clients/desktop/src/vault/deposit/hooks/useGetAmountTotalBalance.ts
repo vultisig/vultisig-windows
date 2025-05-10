@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useCallback } from 'react'
-
-import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
 
 export const useGetTotalAmountAvailableForChain = (chain: Chain) => {
   const coinsQuery = useVaultChainCoinsQuery(chain)

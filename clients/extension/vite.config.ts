@@ -2,10 +2,11 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import wasm from 'vite-plugin-wasm'
 import topLevelAwait from 'vite-plugin-top-level-await'
+import wasm from 'vite-plugin-wasm'
 
-export default () => {
+export default async () => {
+  const { viteStaticCopy } = await import('vite-plugin-static-copy')
   const chunk = process.env.CHUNK
 
   if (chunk) {
@@ -44,13 +45,36 @@ export default () => {
       },
     })
   } else {
+    const plugins: PluginOption[] = [
+      react(),
+      nodePolyfills({ exclude: ['fs'] }),
+      wasm(),
+      topLevelAwait(),
+    ]
+
+    // Add static copy plugin when not in chunk mode
+    if (!chunk) {
+      plugins.push(
+        viteStaticCopy({
+          targets: [
+            {
+              src: path.resolve(__dirname, '../../core/ui/public/**/*'),
+              dest: 'core',
+              rename: (fileName, fileExtension, fullPath) => {
+                const relativePath = path.relative(
+                  path.resolve(__dirname, '../../core/ui/public'),
+                  fullPath
+                )
+                return relativePath
+              },
+            },
+          ],
+        })
+      )
+    }
+
     return defineConfig({
-      plugins: [
-        react(),
-        nodePolyfills({ exclude: ['fs'] }),
-        wasm(),
-        topLevelAwait(),
-      ],
+      plugins,
       build: {
         emptyOutDir: true,
         manifest: false,
