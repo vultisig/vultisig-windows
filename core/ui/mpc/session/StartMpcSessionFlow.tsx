@@ -1,12 +1,18 @@
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { RenderProp } from '@lib/ui/props'
+import { RenderProp, ValueProp } from '@lib/ui/props'
 
+import { MpcSession } from './MpcSession'
 import { StartMpcSessionStep } from './StartMpcSessionStep'
 
-export const StartMpcSessionFlow = ({ render }: RenderProp) => {
+export const StartMpcSessionFlow = ({
+  render,
+  value,
+}: RenderProp & ValueProp<MpcSession>) => {
   return (
     <StepTransition
-      from={({ onFinish }) => <StartMpcSessionStep onFinish={onFinish} />}
+      from={({ onFinish }) => (
+        <StartMpcSessionStep onFinish={onFinish} value={value} />
+      )}
       to={() => render()}
     />
   )

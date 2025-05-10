@@ -11,11 +11,13 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { KeysignActionProvider } from '../../action/KeysignActionProvider'
+import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
-export const StartFastKeysignFlow = () => {
+export const StartFastKeysignFlow = ({
+  keysignActionProvider: KeysignActionProvider,
+}: KeysignActionProviderProp) => {
   const { keysignPayload } = useCorePathState<'keysign'>()
 
   const { step, toNextStep } = useStepNavigation({
@@ -37,6 +39,7 @@ export const StartFastKeysignFlow = () => {
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
+                  value="keysign"
                   render={() => (
                     <KeysignActionProvider>
                       <KeysignSigningStep payload={keysignPayload} />
