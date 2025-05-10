@@ -1,6 +1,5 @@
 import { AddressPage } from '@core/ui/chain/components/address/AddressPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
-import { CorePath } from '@core/ui/navigation'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
@@ -14,10 +13,12 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { HistoryEntry, Routes } from '@lib/ui/navigation/state'
+import { Routes } from '@lib/ui/navigation/state'
 
-type SharedPaths = Extract<
-  CorePath,
+import { CoreViewId } from './CoreView'
+
+type SharedViewId = Extract<
+  CoreViewId,
   | 'currencySettings'
   | 'defaultChains'
   | 'languageSettings'
@@ -34,11 +35,7 @@ type SharedPaths = Extract<
   | 'swap'
 >
 
-export const initialRoute: HistoryEntry<CorePath> = {
-  id: 'vault',
-}
-
-export const sharedRoutes: Routes<SharedPaths> = {
+export const sharedViews: Routes<SharedViewId> = {
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,
   languageSettings: LanguagePage,
