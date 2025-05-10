@@ -59,7 +59,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   JsonRpcProvider,
@@ -87,6 +87,7 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
 }
 handleSetupInpage()
 const popupMessenger = initializeMessenger({ connect: 'popup' })
+const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 let rpcProvider: JsonRpcProvider
 
 const instance: Record<Instance, boolean> = {
@@ -1004,195 +1005,135 @@ const handleSetPriority = (body: Messaging.SetPriority.Request) => {
   })
 }
 
-chrome.runtime.onMessage.addListener(
-  (
-    { message, type }: { message: any; type: MessageKey },
-    sender,
-    sendResponse
-  ) => {
+inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
+  'providerRequest',
+  async ({ type, message }, { sender }) => {
     const { origin = '' } = sender
 
     switch (type) {
-      case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, Chain.Bitcoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.BITCOIN_REQUEST:
+        return handleRequest(message, Chain.Bitcoin, origin)
 
-        break
-      }
-      case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, Chain.BitcoinCash, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.BITCOIN_CASH_REQUEST:
+        return handleRequest(message, Chain.BitcoinCash, origin)
 
-        break
-      }
       case MessageKey.COSMOS_REQUEST: {
-        getVaultsAppSessions().then(sessions => {
-          const dappHostname = getDappHostname(origin)
-          const selectedCosmosChainId = Object.values(sessions).reduce(
-            (acc: CosmosChainId, vault) => {
-              const session = vault[dappHostname]
-              if (session && session.selectedCosmosChainId) {
-                return session.selectedCosmosChainId
-              }
-              return acc
-            },
-            getChainId(Chain.Cosmos) as CosmosChainId
-          )
-          const chain = getChainByChainId(selectedCosmosChainId)
-          if (!chain) {
+        const sessions = await getVaultsAppSessions()
+        const dappHostname = getDappHostname(origin)
+        const selectedCosmosChainId = Object.values(sessions).reduce(
+          (acc: CosmosChainId, vault) => {
+            const session = vault[dappHostname]
+            return session?.selectedCosmosChainId ?? acc
+          },
+          getChainId(Chain.Cosmos) as CosmosChainId
+        )
+
+        const chain = getChainByChainId(selectedCosmosChainId)
+        if (!chain) return
+
+        const response = await handleRequest(
+          message,
+          shouldBePresent(chain),
+          origin
+        )
+
+        if (message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS) {
+          try {
+            const vaults = await getVaults()
+            const allCoins = await getVaultsCoins()
+            const vault = vaults.find(vault => {
+              const coins = allCoins[getVaultId(vault)] ?? []
+              return coins.some(
+                coin =>
+                  isFeeCoin(coin) &&
+                  coin.chain === chain &&
+                  coin.address === response
+              )
+            })
+
+            if (!vault) throw new Error('Vault not found!')
+
+            const walletCore = await getWalletCore()
+            if (!walletCore) throw new Error('WalletCore is not initialized!')
+
+            const publicKey = getPublicKey({
+              chain,
+              walletCore,
+              hexChainCode: vault.hexChainCode,
+              publicKeys: vault.publicKeys,
+            })
+
+            const keyBytes = Uint8Array.from(
+              Buffer.from(toHexPublicKey({ publicKey, walletCore }), 'hex')
+            )
+
+            return [
+              {
+                pubkey: Array.from(keyBytes),
+                address: response,
+                algo: 'secp256k1',
+                bech32Address: response,
+                isKeystone: false,
+                isNanoLedger: false,
+              },
+            ]
+          } catch (e) {
+            console.error(e)
             return
           }
-          handleRequest(message, shouldBePresent(chain), origin)
-            .then(response => {
-              if (message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS) {
-                try {
-                  getVaults().then(async (vaults: Vault[]) => {
-                    const allCoins = await getVaultsCoins()
-                    const vault = vaults.find(vault => {
-                      const coins = allCoins[getVaultId(vault)] ?? []
-                      return coins.some(
-                        coin =>
-                          isFeeCoin(coin) &&
-                          coin.chain === chain &&
-                          coin.address === response
-                      )
-                    })
-                    if (!vault) {
-                      throw new Error('Vault not found!')
-                    }
-                    const walletCore = await getWalletCore()
-                    if (!walletCore) {
-                      throw new Error('WalletCore is not initialized!')
-                    }
-                    const publicKey = getPublicKey({
-                      chain: chain,
-                      walletCore,
-                      hexChainCode: vault.hexChainCode,
-                      publicKeys: vault.publicKeys,
-                    })
+        }
 
-                    const keyBytes = Uint8Array.from(
-                      Buffer.from(
-                        toHexPublicKey({
-                          publicKey,
-                          walletCore,
-                        }),
-                        'hex'
-                      )
-                    )
-
-                    const account = [
-                      {
-                        pubkey: Array.from(keyBytes),
-                        address: response,
-                        algo: 'secp256k1',
-                        bech32Address: response,
-                        isKeystone: false,
-                        isNanoLedger: false,
-                      },
-                    ]
-                    sendResponse(account)
-                  })
-                } catch (e) {
-                  console.error(e)
-                }
-              } else {
-                sendResponse(response)
-              }
-            })
-            .catch(error => sendResponse({ error }))
-        })
-
-        break
+        return response
       }
-      case MessageKey.DASH_REQUEST: {
-        handleRequest(message, Chain.Dash, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
 
-        break
-      }
-      case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, Chain.Dogecoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.DASH_REQUEST:
+        return handleRequest(message, Chain.Dash, origin)
 
-        break
-      }
+      case MessageKey.DOGECOIN_REQUEST:
+        return handleRequest(message, Chain.Dogecoin, origin)
+
       case MessageKey.ETHEREUM_REQUEST: {
-        getVaultsAppSessions().then(sessions => {
-          const dappHostname = getDappHostname(origin)
-          const selectedEVMChainId = Object.values(sessions).reduce(
-            (acc: EVMChainId, vault) => {
-              const session = vault[dappHostname]
-              if (session && session.selectedEVMChainId) {
-                return session.selectedEVMChainId
-              }
-              return acc
-            },
-            getChainId(Chain.Ethereum) as EVMChainId
-          )
-          handleRequest(
-            message,
-            shouldBePresent(getChainByChainId(selectedEVMChainId)),
-            origin
-          )
-            .then(sendResponse)
-            .catch(error => sendResponse({ error }))
-        })
+        const sessions = await getVaultsAppSessions()
+        const dappHostname = getDappHostname(origin)
+        const selectedEVMChainId = Object.values(sessions).reduce(
+          (acc: EVMChainId, vault) => {
+            const session = vault[dappHostname]
+            return session?.selectedEVMChainId ?? acc
+          },
+          getChainId(Chain.Ethereum) as EVMChainId
+        )
 
-        break
+        return handleRequest(
+          message,
+          shouldBePresent(getChainByChainId(selectedEVMChainId)),
+          origin
+        )
       }
-      case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, Chain.Litecoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
 
-        break
-      }
-      case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, Chain.MayaChain, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.LITECOIN_REQUEST:
+        return handleRequest(message, Chain.Litecoin, origin)
 
-        break
-      }
-      case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, Chain.Solana, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.MAYA_REQUEST:
+        return handleRequest(message, Chain.MayaChain, origin)
 
-        break
-      }
-      case MessageKey.THOR_REQUEST: {
-        handleRequest(message, Chain.THORChain, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+      case MessageKey.SOLANA_REQUEST:
+        return handleRequest(message, Chain.Solana, origin)
 
-        break
-      }
-      case MessageKey.PRIORITY: {
-        handleSetPriority(message).then(sendResponse)
+      case MessageKey.THOR_REQUEST:
+        return handleRequest(message, Chain.THORChain, origin)
 
-        break
-      }
-      case MessageKey.VAULT: {
-        handleGetVault(origin).then(sendResponse)
+      case MessageKey.PRIORITY:
+        return handleSetPriority(message)
 
-        break
-      }
-      case MessageKey.VAULTS: {
-        handleGetVaults().then(sendResponse)
+      case MessageKey.VAULT:
+        return handleGetVault(origin)
 
-        break
-      }
-      default: {
-        break
-      }
+      case MessageKey.VAULTS:
+        return handleGetVaults()
+
+      default:
+        console.warn(`Unhandled message type: ${type}`)
+        return
     }
-
-    return true
   }
 )
