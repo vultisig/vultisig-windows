@@ -16,7 +16,7 @@ type NavigationState = {
 export const { useState: useNavigation, provider: NavigationProvider } =
   getStateProviderSetup<NavigationState>('Navigation')
 
-export type NavigateInput = {
+type NavigateInput = {
   replace?: boolean
   state?: any
   id: string
