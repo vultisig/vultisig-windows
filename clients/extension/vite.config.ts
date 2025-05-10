@@ -18,7 +18,6 @@ export default async () => {
         plugins = [nodePolyfills({ exclude: ['fs'] }), wasm(), topLevelAwait()]
         break
       case 'inpage':
-      case 'relay':
         format = 'iife'
         break
       default:
@@ -58,7 +57,7 @@ export default async () => {
         viteStaticCopy({
           targets: [
             {
-              src: path.resolve(__dirname, '../../core/ui/public/**/*'),
+              src: '../../core/ui/public/**/*',
               dest: 'core',
               rename: (fileName, fileExtension, fullPath) => {
                 const relativePath = path.relative(

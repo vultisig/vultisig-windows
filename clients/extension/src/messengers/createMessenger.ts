@@ -7,10 +7,10 @@ export type CallbackOptions = {
   id?: number | string
 }
 
-export type CallbackFunction<TPayload, TResponse> = (
+export type CallbackFunction<TPayload = any, TResponse = any> = (
   payload: TPayload,
-  callbackOptions: CallbackOptions
-) => Promise<TResponse>
+  options: CallbackOptions
+) => Promise<TResponse> | TResponse
 
 export type Source = 'background' | 'content' | 'inpage' | 'popup'
 
