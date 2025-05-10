@@ -8,6 +8,9 @@ import {
   IBC_TOKENS,
   IBC_TRANSFERRABLE_TOKENS_PER_CHAIN,
 } from './ibc'
+import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
+import { initializeChainTokens } from './utils/initializeChainTokens'
+import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   [Chain.MayaChain]: [
@@ -924,38 +927,30 @@ const mergedLeanChainTokens = Object.values(Chain).reduce(
   {} as Partial<Record<Chain, Omit<Coin, 'chain'>[]>>
 )
 
-export const chainTokens: Partial<Record<Chain, Coin[]>> = recordMap(
-  mergedLeanChainTokens as Record<Chain, Omit<Coin, 'chain'>[]>,
-  (tokens, chain) => tokens.map(token => ({ ...token, chain }))
-)
+type TokenWithoutChain = Omit<Coin, 'chain'>
 
-for (const chain of CHAINS_WITH_IBC_TOKENS) {
-  const chainIBC = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
-
-  /*  @tony: ensure tokens that are already present get their id */
-  const patched = (chainTokens[chain] ?? []).map(t => {
-    if (!t.id) {
-      const hit = chainIBC.find(i => i.ticker === t.ticker)
-      return hit ? { ...t, id: hit.id } : t
-    }
-    return t
-  })
-
-  // @tony: add any brand‑new IBC tokens that are missing
-  const haveKey = new Set(patched.map(t => `${t.ticker}:${t.decimals}`))
-
-  const additions = IBC_TOKENS.filter(
-    t => !haveKey.has(`${t.ticker}:${t.decimals}`)
+export const chainTokens: Partial<Record<Chain, Coin[]>> = (() => {
+  const base = initializeChainTokens(
+    mergedLeanChainTokens as Record<Chain, TokenWithoutChain[]>
   )
-    .map(t => {
-      const hit = chainIBC.find(i => i.ticker === t.ticker)
-      return hit
-        ? { ...t, chain, id: `thor.${hit.ticker.toLowerCase()}` }
-        : null
-    })
-    .filter(Boolean) as Coin[]
 
-  if (patched.length || additions.length) {
-    chainTokens[chain] = [...patched, ...additions]
+  for (const chain of CHAINS_WITH_IBC_TOKENS) {
+    const ibcMeta = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
+    const current = base[chain] ?? []
+
+    const patched = patchTokensWithIBCIds(current, ibcMeta)
+    const additions = getMissingIBCTokens(patched, ibcMeta, chain)
+
+    if (patched.length || additions.length) {
+      base[chain] = [...patched, ...additions]
+    }
   }
-}
+
+  base[Chain.THORChain] = IBC_TOKENS.map(t => ({
+    ...t,
+    chain: Chain.THORChain,
+    id: `thor.${t.ticker.toLowerCase()}`,
+  }))
+
+  return base
+})()
