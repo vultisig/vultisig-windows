@@ -3,8 +3,8 @@ import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { AppView } from '../AppView'
 
 type AppViewWithState = Extract<AppView, { state: any }>
-export type AppViewWithStateId = AppViewWithState['id']
-export type AppViewStateMap = {
+type AppViewWithStateId = AppViewWithState['id']
+type AppViewStateMap = {
   [K in AppViewWithStateId]: Extract<AppView, { id: K }>['state']
 }
 
