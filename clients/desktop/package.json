@@ -42,7 +42,6 @@
     "@lib/utils": "workspace:*",
     "@tanstack/query-core": "^5.69.0",
     "@wailsapp/runtime": "workspace:^",
-    "styled-components": "^6.1.16",
-    "ua-parser-js": "^2.0.3"
+    "styled-components": "^6.1.16"
   }
 }

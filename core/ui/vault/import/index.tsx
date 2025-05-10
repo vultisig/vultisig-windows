@@ -1,10 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { appPaths } from '@clients/extension/src/navigation'
-import { errorKey } from '@clients/extension/src/utils/constants'
-import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { corePaths } from '@core/ui/navigation'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
 import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
@@ -69,13 +67,13 @@ export const ImportVaultPage = () => {
   } = state
   const navigate = useCoreNavigate()
   const { pathname } = useLocation()
-  const isPopupRef = useRef(pathname === appPaths.importTab)
+  const isPopupRef = useRef(pathname !== corePaths.importVault)
 
   const errorMessages = {
-    [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
-    [errorKey.INVALID_FILE]: 'Invalid file',
-    [errorKey.INVALID_QRCODE]: 'Invalid QR code',
-    [errorKey.INVALID_VAULT]: 'Invalid vault data',
+    INVALID_EXTENSION: 'Invalid file extension',
+    INVALID_FILE: 'Invalid file',
+    INVALID_QRCODE: 'Invalid QR code',
+    INVALID_VAULT: 'Invalid vault data',
   }
 
   const handleProcessVaultContainer = (data: FileBasedVaultBackupResult) => {
@@ -98,7 +96,7 @@ export const ImportVaultPage = () => {
         onVaultDecrypted(decodedVault)
       }
     } else {
-      handleError(errorKey.INVALID_VAULT)
+      handleError('INVALID_VAULT')
     }
   }
 
@@ -167,12 +165,24 @@ export const ImportVaultPage = () => {
 
       chrome.windows.getCurrent({ populate: true }, currentWindow => {
         let createdWindowId: number
-        const { height, left, top, width } =
-          calculateWindowPosition(currentWindow)
+        const height = 639
+        const width = 416
+        let left = 0
+        let top = 0
+
+        if (
+          currentWindow &&
+          currentWindow.left !== undefined &&
+          currentWindow.top !== undefined &&
+          currentWindow.width !== undefined
+        ) {
+          left = currentWindow.left + currentWindow.width - width
+          top = currentWindow.top
+        }
 
         chrome.windows.create(
           {
-            url: chrome.runtime.getURL(`index.html#${appPaths.importTab}`),
+            url: chrome.runtime.getURL(`index.html#/tabs/import`),
             type: 'panel',
             height,
             left,
