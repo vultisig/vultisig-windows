@@ -13,7 +13,7 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
 
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useFromCoin()
   const [toCoinKey] = useToCoin()
   const toCoin = useCurrentVaultCoin(toCoinKey)
 

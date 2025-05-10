@@ -1,5 +1,4 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
@@ -48,7 +47,7 @@ export const SwitchSpecificFields = ({
   )
 
   const [{ coin }] = useCoreViewState<'deposit'>()
-  const tokens = useIBCAcceptedTokens(coinKeyFromString(coin).chain)
+  const tokens = useIBCAcceptedTokens(coin.chain)
 
   useEffect(() => {
     if (destinationAddress) {

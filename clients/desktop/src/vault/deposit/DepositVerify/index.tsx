@@ -4,6 +4,7 @@ import {
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
 } from '@core/ui/chain/tx/TxOverviewRow'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -20,7 +21,6 @@ import { DepositConfirmButton } from '../DepositConfirmButton'
 import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 import { DepositFee } from '../fee/DepositFee'
 import { DepositFiatFee } from '../fee/DepositFiatFee'
-import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useMemoGenerator } from '../hooks/useMemoGenerator'
 import { useSender } from '../hooks/useSender'
 import { StrictTextContrast } from './DepositVerify.styled'
@@ -37,7 +37,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
-  const [coinKey] = useCurrentDepositCoin()
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const coin = useCurrentVaultCoin(coinKey)
 
   const depositFormDataWithMemo = useMemoGenerator({

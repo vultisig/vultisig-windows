@@ -12,7 +12,7 @@ export const AddressPageShyPrompt = ({ value }: ValueProp<string>) => {
       as="div"
       title="Address QR code"
       icon={<QrCodeIcon />}
-      onClick={() => navigate('address', { state: { address: value } })}
+      onClick={() => navigate({ id: 'address', state: { address: value } })}
     />
   )
 }
