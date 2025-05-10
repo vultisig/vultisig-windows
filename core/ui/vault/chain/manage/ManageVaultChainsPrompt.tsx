@@ -9,7 +9,7 @@ export const ManageVaultChainsPrompt = () => {
   const navigate = useCoreNavigate()
 
   return (
-    <UnstyledButton onClick={() => navigate('manageVaultChains')}>
+    <UnstyledButton onClick={() => navigate({ id: 'manageVaultChains' })}>
       <ListAddButton as="div">{t('choose_chains')}</ListAddButton>
     </UnstyledButton>
   )

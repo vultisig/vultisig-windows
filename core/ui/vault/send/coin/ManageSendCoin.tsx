@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinInputContainer } from '@core/ui/chain/coin/inputs/CoinInputContainer'
-import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
@@ -14,11 +13,12 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 
 export const ManageSendCoin = () => {
-  const [value, setValue] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(value)
+  const [{ coin: coinKey }, setViewState] = useCoreViewState<'send'>()
+  const coin = useCurrentVaultCoin(coinKey)
   const { t } = useTranslation()
   const options = useCurrentVaultCoins()
 
@@ -28,7 +28,7 @@ export const ManageSendCoin = () => {
       <Opener
         renderOpener={({ onOpen }) => (
           <CoinInputContainer
-            value={{ ...value, logo: coin.logo, ticker: coin.ticker }}
+            value={{ ...coinKey, logo: coin.logo, ticker: coin.ticker }}
             onClick={onOpen}
           />
         )}
@@ -41,7 +41,7 @@ export const ManageSendCoin = () => {
             }
             onFinish={newValue => {
               if (newValue) {
-                setValue(newValue)
+                setViewState(prev => ({ ...prev, coin: newValue }))
               }
               onClose()
             }}

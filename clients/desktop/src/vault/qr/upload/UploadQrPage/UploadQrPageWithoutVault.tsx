@@ -26,7 +26,7 @@ export const UploadQrPageWithoutVault = () => {
 
   const onScanSuccess = useCallback(
     (value: string) => {
-      navigate('deeplink', { state: { url: value } })
+      navigate({ id: 'deeplink', state: { url: value } })
     },
     [navigate]
   )

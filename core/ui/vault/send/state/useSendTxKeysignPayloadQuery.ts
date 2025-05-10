@@ -9,14 +9,14 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendMemo } from './memo'
 import { useSendReceiver } from './receiver'
-import { useCurrentSendCoin } from './sendCoin'
 
 export const useSendTxKeysignPayloadQuery = () => {
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()

@@ -34,7 +34,7 @@ export const ManageVaultsPage = () => {
       <PageFooter>
         <Button
           kind="outlined"
-          onClick={() => appNavigate('createVaultFolder')}
+          onClick={() => appNavigate({ id: 'createVaultFolder' })}
         >
           {t('create_folder')}
         </Button>

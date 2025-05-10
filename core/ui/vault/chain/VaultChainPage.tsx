@@ -178,8 +178,9 @@ export const VaultChainPage = () => {
                 <UnstyledButton
                   key={coin.id}
                   onClick={() =>
-                    navigate('vaultChainCoinDetail', {
-                      state: { chain, coin: coin.id },
+                    navigate({
+                      id: 'vaultChainCoinDetail',
+                      state: { chain, coin: coin },
                     })
                   }
                 >

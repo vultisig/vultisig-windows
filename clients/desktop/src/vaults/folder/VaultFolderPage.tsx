@@ -31,7 +31,9 @@ export const VaultFolderPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => appNavigate('manageVaultFolder', { state: { id } })}
+            onClick={() =>
+              appNavigate({ id: 'manageVaultFolder', state: { id } })
+            }
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}

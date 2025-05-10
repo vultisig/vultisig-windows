@@ -38,8 +38,8 @@ export const ReshareVaultPage = () => {
           kind="primary"
           onClick={() =>
             match(securityType, {
-              fast: () => navigate('reshareVaultFast'),
-              secure: () => navigate('reshareVaultSecure'),
+              fast: () => navigate({ id: 'reshareVaultFast' }),
+              secure: () => navigate({ id: 'reshareVaultSecure' }),
             })
           }
         >
@@ -48,7 +48,7 @@ export const ReshareVaultPage = () => {
         <Button
           kind="outlined"
           onClick={() =>
-            navigate('uploadQr', { state: { title: t('join_reshare') } })
+            navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
           }
         >
           {t('join_reshare')}

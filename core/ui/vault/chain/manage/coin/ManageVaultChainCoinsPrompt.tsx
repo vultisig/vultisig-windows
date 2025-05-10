@@ -13,7 +13,7 @@ export const ManageVaultChainCoinsPrompt = ({ value }: ValueProp<Chain>) => {
   return (
     <ListAddButton
       onClick={() =>
-        navigate('manageVaultChainCoins', { state: { chain: value } })
+        navigate({ id: 'manageVaultChainCoins', state: { chain: value } })
       }
     >
       {t('choose_tokens')}

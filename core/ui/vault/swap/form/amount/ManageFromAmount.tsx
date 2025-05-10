@@ -6,8 +6,8 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
+import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../../state/fromAmount'
-import { useFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
@@ -16,11 +16,11 @@ const suggestions = [0.25, 0.5]
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
-  const [{ coin: fromCoin }] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
 
-  const swapCoin = useCurrentVaultCoin(fromCoin)
+  const swapCoin = useCurrentVaultCoin(fromCoinKey)
   const { decimals } = swapCoin
 
   const handleInputValueChange = useCallback(
@@ -79,7 +79,7 @@ export const ManageFromAmount = () => {
       />
 
       {value !== null && (
-        <SwapFiatAmount value={{ amount: value, ...fromCoin }} />
+        <SwapFiatAmount value={{ amount: value, ...fromCoinKey }} />
       )}
     </AmountContainer>
   )
