@@ -24,6 +24,7 @@ import {
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -46,9 +47,8 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
-import { makeCorePath } from '../../navigation'
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 import { VaultChainCoinItem } from './VaultChainCoinItem'
 
 export const VaultChainPage = () => {
@@ -78,6 +78,8 @@ export const VaultChainPage = () => {
   }, [address, chain, invalidateQueries, nativeCoin])
 
   const hasMultipleCoinsSupport = chain in chainTokens
+
+  const navigate = useCoreNavigate()
 
   return (
     <VStack flexGrow>
@@ -173,15 +175,17 @@ export const VaultChainPage = () => {
               ).map(adjustVaultChainCoinsLogos)
 
               return orderedCoins.map(coin => (
-                <Link
+                <UnstyledButton
                   key={coin.id}
-                  to={makeCorePath('vaultChainCoinDetail', {
-                    chain: chain,
-                    coin: coin.id,
-                  })}
+                  onClick={() =>
+                    navigate({
+                      id: 'vaultChainCoinDetail',
+                      state: { chain, coin: coin },
+                    })
+                  }
                 >
                   <VaultChainCoinItem value={coin} />
-                </Link>
+                </UnstyledButton>
               ))
             }}
           />

@@ -19,7 +19,7 @@ export const NewVaultPage = () => {
       <PageFooter gap={16}>
         <Button
           kind="primary"
-          onClick={() => navigate('setupVault', { params: {} })}
+          onClick={() => navigate({ id: 'setupVault', state: {} })}
         >
           {t('create_new_vault')}
         </Button>
@@ -28,12 +28,15 @@ export const NewVaultPage = () => {
           <Button
             kind="secondary"
             onClick={() =>
-              navigate('uploadQr', { params: { title: t('scan_qr') } })
+              navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
           >
             {t('scan_qr')}
           </Button>
-          <Button kind="secondary" onClick={() => navigate('importVault')}>
+          <Button
+            kind="secondary"
+            onClick={() => navigate({ id: 'importVault' })}
+          >
             {t('import_vault')}
           </Button>
         </VStack>

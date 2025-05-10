@@ -1,8 +1,20 @@
 import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+
+import { useNavigation } from '../state'
 
 export const useNavigateBack = () => {
-  const navigate = useNavigate()
+  const [, setState] = useNavigation()
 
-  return useCallback(() => navigate(-1), [navigate])
+  return useCallback(() => {
+    setState(state => {
+      if (state.currentIndex <= 0) {
+        return state
+      }
+
+      return {
+        ...state,
+        currentIndex: state.currentIndex - 1,
+      }
+    })
+  }, [setState])
 }

@@ -13,7 +13,7 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 import { capSendAmountToMax } from '../utils/capSendAmountToMax'
 
 export const useSendCappedAmountQuery = () => {
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const [amount] = useSendAmount()
 

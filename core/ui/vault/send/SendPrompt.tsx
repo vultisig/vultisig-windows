@@ -1,23 +1,22 @@
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
-import { makeCorePath } from '../../navigation'
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 
 export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
 
+  const navigate = useCoreNavigate()
+
   return (
-    <Link
-      to={makeCorePath('send', {
-        coin: coinKeyToString(value),
-      })}
+    <Button
+      onClick={() => navigate({ id: 'send', state: { coin: value } })}
+      kind="outlined"
+      style={{ textTransform: 'uppercase' }}
     >
-      <Button as="div" kind="outlined" style={{ textTransform: 'uppercase' }}>
-        {t('send')}
-      </Button>
-    </Link>
+      {t('send')}
+    </Button>
   )
 }

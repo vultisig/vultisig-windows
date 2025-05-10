@@ -1,7 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { appPaths } from '@clients/extension/src/navigation'
 import { errorKey } from '@clients/extension/src/utils/constants'
-import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
@@ -25,10 +23,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
-import { UAParser } from 'ua-parser-js'
 
 interface InitialState {
   error?: string
@@ -58,8 +54,6 @@ const Component = () => {
     isEncrypted,
   } = state
   const navigate = useCoreNavigate()
-  const { pathname } = useLocation()
-  const isPopupRef = useRef(pathname === appPaths.importTab)
 
   const errorMessages = {
     [errorKey.INVALID_EXTENSION]: 'Invalid file extension',
@@ -102,7 +96,7 @@ const Component = () => {
     setState(p => ({ ...p, loading: true }))
     try {
       await createVault(decodedVault)
-      navigateToMain()
+      navigate({ id: 'vault' })
     } catch (e) {
       handleError(extractErrorMsg(e))
     } finally {
@@ -135,45 +129,6 @@ const Component = () => {
     setState(prevState => ({ ...prevState, file }))
     mutate(shouldBePresent(file))
   }
-
-  const navigateToMain = useCallback(() => {
-    navigate('vault')
-  }, [navigate])
-
-  useEffect(() => {
-    const parser = new UAParser()
-    const parserResult = parser.getResult()
-
-    if (!isPopupRef.current && parserResult.os.name !== 'Windows') {
-      setState(prevState => ({ ...prevState, isWindows: false }))
-      chrome.windows.getCurrent({ populate: true }, currentWindow => {
-        let createdWindowId: number
-        const { height, left, top, width } =
-          calculateWindowPosition(currentWindow)
-
-        chrome.windows.create(
-          {
-            url: chrome.runtime.getURL(`index.html#${appPaths.importTab}`),
-            type: 'panel',
-            height,
-            left,
-            top,
-            width,
-          },
-          window => {
-            if (window?.id) createdWindowId = window.id
-          }
-        )
-
-        chrome.windows.onRemoved.addListener(closedWindowId => {
-          if (closedWindowId === createdWindowId) {
-            if (isPopupRef.current) window.close()
-            else navigateToMain()
-          }
-        })
-      })
-    }
-  }, [navigateToMain])
 
   const isDisabled = !file
   return isWindows ? (

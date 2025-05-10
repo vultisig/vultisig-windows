@@ -22,7 +22,9 @@ export const ManageVaultsPage = () => {
       <PageHeader
         hasBorder
         primaryControls={<PageHeaderVaultSettingsPrompt />}
-        secondaryControls={<FinishEditing onClick={() => navigate('vaults')} />}
+        secondaryControls={
+          <FinishEditing onClick={() => navigate({ id: 'vaults' })} />
+        }
         title={<VaultsPageHeaderTitle />}
       />
       <PageContent scrollable gap={20}>
@@ -32,7 +34,7 @@ export const ManageVaultsPage = () => {
       <PageFooter>
         <Button
           kind="outlined"
-          onClick={() => appNavigate('createVaultFolder')}
+          onClick={() => appNavigate({ id: 'createVaultFolder' })}
         >
           {t('create_folder')}
         </Button>

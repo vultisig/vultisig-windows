@@ -6,8 +6,8 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../state/fromAmount'
-import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 
 type GetSwapQuoteQueryKey = {
@@ -24,7 +24,7 @@ export const getSwapQuoteQueryKey = ({
   withoutNullOrUndefined(['swapQuote', fromCoinKey, toCoinKey, fromAmount])
 
 export const useSwapQuoteQuery = () => {
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
 

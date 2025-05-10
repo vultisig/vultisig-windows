@@ -11,7 +11,7 @@ export const NavigateToDklsPage = ({ children }: ChildrenProp) => {
   const handleClick = () => {
     clickCount.current += 1
     if (clickCount.current >= 5) {
-      navigate('dkls')
+      navigate({ id: 'dkls' })
     }
   }
 

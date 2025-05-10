@@ -1,13 +1,14 @@
-import { router } from '@clients/extension/src/navigation/router'
 import { AppProviders } from '@clients/extension/src/providers/AppProviders'
+import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+
+import { views } from '../navigation/views'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProviders>
-      <RouterProvider router={router} />
+      <ActiveView views={views} />
     </AppProviders>
   </StrictMode>
 )

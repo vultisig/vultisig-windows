@@ -1,12 +1,12 @@
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
-import { FC, PropsWithChildren, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import {
   CreateInstallMarker,
   IsFreshInstall,
 } from '../../wailsjs/go/main/InstallMarkerService'
 
-const OnboardingResetter: FC<PropsWithChildren> = ({ children }) => {
+export const OnboardingResetter = () => {
   const { mutateAsync: setHasFinishedOnboarding } =
     useSetHasFinishedOnboardingMutation()
 
@@ -25,7 +25,5 @@ const OnboardingResetter: FC<PropsWithChildren> = ({ children }) => {
     checkAndSetInstallMarker()
   }, [setHasFinishedOnboarding])
 
-  return <>{children}</>
+  return null
 }
-
-export default OnboardingResetter

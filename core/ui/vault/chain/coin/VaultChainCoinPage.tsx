@@ -20,10 +20,10 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 
 export const VaultChainCoinPage = () => {
-  const coinKey = useCurrentVaultCoinKey()
+  const [{ coin: coinKey }] = useCoreViewState<'vaultChainCoinDetail'>()
   const coin = adjustVaultChainCoinsLogos(useCurrentVaultCoin(coinKey))
 
   const balanceQuery = useBalanceQuery({

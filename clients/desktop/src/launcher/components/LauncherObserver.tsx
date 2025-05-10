@@ -16,9 +16,9 @@ export const LauncherObserver = () => {
       const filePath = args.find(arg => arg.endsWith('.vult'))
 
       if (url) {
-        navigate('deeplink', { state: { url } })
+        navigate({ id: 'deeplink', state: { url } })
       } else if (filePath) {
-        navigate('importVaultFromFile', { state: { filePath } })
+        navigate({ id: 'importVaultFromFile', state: { filePath } })
       }
     },
   })

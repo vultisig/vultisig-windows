@@ -47,14 +47,14 @@ export const VaultSettingsPage = () => {
         <List>
           <ListItem
             icon={<CircleInfoIcon fontSize={20} />}
-            onClick={() => coreNavigate('vaultDetails')}
+            onClick={() => coreNavigate({ id: 'vaultDetails' })}
             title={t('details')}
             hoverable
             showArrow
           />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
-            onClick={() => coreNavigate('renameVault')}
+            onClick={() => coreNavigate({ id: 'renameVault' })}
             title={t('rename_vault')}
             hoverable
             showArrow
@@ -63,7 +63,7 @@ export const VaultSettingsPage = () => {
             icon={
               <TrashIcon fontSize={20} stroke={colors.alertWarning.toHex()} />
             }
-            onClick={() => navigate('deleteVault')}
+            onClick={() => navigate({ id: 'deleteVault' })}
             status="warning"
             title={t('remove_vault')}
             hoverable
@@ -71,7 +71,7 @@ export const VaultSettingsPage = () => {
           />
           <ListItem
             icon={<ShareIcon fontSize={20} />}
-            onClick={() => coreNavigate('reshareVault')}
+            onClick={() => coreNavigate({ id: 'reshareVault' })}
             title={t('reshare')}
             hoverable
             showArrow

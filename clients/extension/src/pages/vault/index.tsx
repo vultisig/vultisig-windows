@@ -2,7 +2,6 @@ import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
-import { Chain } from '@core/chain/Chain'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
@@ -66,7 +65,7 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
-            onClick={() => appNavigate('connectedDapps')}
+            onClick={() => appNavigate({ id: 'connectedDapps' })}
             size="md"
             fitContent
           >
@@ -79,7 +78,7 @@ export const VaultPage = () => {
         secondaryControls={
           <Button
             icon={<SettingsIcon fontSize={20} />}
-            onClick={() => appNavigate('settings')}
+            onClick={() => appNavigate({ id: 'settings' })}
             size="sm"
             fitContent
           />
@@ -101,7 +100,7 @@ export const VaultPage = () => {
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
-            onClick={() => navigate('vaults')}
+            onClick={() => navigate({ id: 'vaults' })}
             title={vault.name}
             hoverable
           />
@@ -155,8 +154,9 @@ export const VaultPage = () => {
                   hoverable
                   showArrow
                   onClick={() => {
-                    navigate('vaultChainDetail', {
-                      params: { chain: chain as Chain },
+                    navigate({
+                      id: 'vaultChainDetail',
+                      state: { chain },
                     })
                   }}
                 />
@@ -168,7 +168,7 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
-          onClick={() => navigate('manageVaultChains')}
+          onClick={() => navigate({ id: 'manageVaultChains' })}
           type="primary"
           block
           rounded

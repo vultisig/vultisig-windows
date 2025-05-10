@@ -14,13 +14,13 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../state/fromAmount'
-import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapChainSpecificQuery = () => {
-  const [fromCoinKey] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
 
   const [toCoinKey] = useToCoin()

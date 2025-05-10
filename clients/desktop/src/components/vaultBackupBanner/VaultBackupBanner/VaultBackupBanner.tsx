@@ -15,7 +15,7 @@ const VaultBackupBanner = () => {
 
   return (
     <ContentWrapperButton
-      onClick={() => navigate('vaultBackup')}
+      onClick={() => navigate({ id: 'vaultBackup' })}
       data-testid="VaultBackupBanner-Content"
     >
       <TriangleAlertIcon height={24} width={24} />

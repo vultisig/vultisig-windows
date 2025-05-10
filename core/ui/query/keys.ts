@@ -25,3 +25,5 @@ export const hasFinishedOnboardingQueryKey = [
   'hasFinishedOnboarding',
   version,
 ] as const
+
+export const initialViewQueryKey = ['initialView', version] as const

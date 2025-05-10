@@ -33,7 +33,7 @@ export const ManageVaultFolderPage = () => {
       <StyledHeader
         hasBorder
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate('vaults')} />
+          <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
         }
         secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
@@ -57,7 +57,8 @@ export const ManageVaultFolderPage = () => {
                 fields: { name },
               },
               {
-                onSuccess: () => appNavigate('vaultFolder', { params: { id } }),
+                onSuccess: () =>
+                  appNavigate({ id: 'vaultFolder', state: { id } }),
               }
             )
           }}

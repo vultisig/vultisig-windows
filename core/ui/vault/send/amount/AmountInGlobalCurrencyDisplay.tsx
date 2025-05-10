@@ -30,7 +30,7 @@ const Container = styled.div`
 export const AmountInGlobalCurrencyDisplay = () => {
   const { t } = useTranslation()
   const [sendAmount] = useSendAmount()
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const fiatCurrency = useFiatCurrency()
 

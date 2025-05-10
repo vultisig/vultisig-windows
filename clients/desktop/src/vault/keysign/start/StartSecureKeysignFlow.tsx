@@ -3,13 +3,13 @@ import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeer
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
 
 export const StartSecureKeysignFlow = () => {
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   return (
     <ValueTransfer<string[]>
