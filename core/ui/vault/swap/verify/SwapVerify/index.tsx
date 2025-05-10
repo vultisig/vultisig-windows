@@ -9,10 +9,10 @@ import { Text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
-import { useFromCoin } from '../../state/fromCoin'
 import { useToCoin } from '../../state/toCoin'
 import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
 import { SwapAllowance } from '../SwapAllowance'
@@ -27,7 +27,7 @@ import {
 
 export const SwapVerify = () => {
   const { t } = useTranslation()
-  const [{ coin: fromCoinKey }] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)

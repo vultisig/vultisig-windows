@@ -19,7 +19,7 @@ const Container = styled(UnstyledButton)`
 export const ProvideQrPrompt = () => {
   const navigate = useCoreNavigate()
   return (
-    <Container onClick={() => navigate('uploadQr', { state: {} })}>
+    <Container onClick={() => navigate({ id: 'uploadQr', state: {} })}>
       <CameraIcon />
     </Container>
   )
