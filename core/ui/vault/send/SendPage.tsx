@@ -2,7 +2,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/state'
 
-import { useCorePathState } from '../../navigation/hooks/useCorePathState'
+import { useCorePathState } from '../../navigation/hooks/useCoreViewState'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'

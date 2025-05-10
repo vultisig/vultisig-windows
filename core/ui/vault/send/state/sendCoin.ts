@@ -5,7 +5,7 @@ import {
 } from '@core/chain/coin/Coin'
 import { useCallback, useMemo } from 'react'
 
-import { useCorePathState } from '../../../navigation/hooks/useCorePathState'
+import { useCorePathState } from '../../../navigation/hooks/useCoreViewState'
 
 export const useCurrentSendCoin = () => {
   const [{ coin }, setParams] = useCorePathState<'send'>()

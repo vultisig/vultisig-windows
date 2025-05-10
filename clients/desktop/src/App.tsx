@@ -6,7 +6,7 @@ import { AppProviders } from './AppProviders'
 import { ErrorBoundary } from './errors/components/ErrorBoundary'
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
-import { routes } from './navigation/router'
+import { routes } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
 
 const App = () => {
