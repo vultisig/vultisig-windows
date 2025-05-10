@@ -86,7 +86,6 @@ const appRoutes: Routes<AppPath> = {
     </IncompleteOnboardingOnly>
   ),
   connectTab: () => <ConnectDAppPage />,
-  importTab: () => <ImportFilePage />,
   vaultsTab: () => <GetVaultsPage />,
   transactionTab: () => <TransactionPage />,
 }
