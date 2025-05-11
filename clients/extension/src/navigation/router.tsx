@@ -6,7 +6,6 @@ import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/Se
 import { appPaths } from '@clients/extension/src/navigation'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
-import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
 import ImportFilePage from '@clients/extension/src/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/import-qr'
@@ -23,6 +22,7 @@ import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { ReactNode } from 'react'
 import { createHashRouter } from 'react-router-dom'
+
 const coreRoutes: Record<CorePath, ReactNode> = {
   ...sharedRoutes,
   vault: (
@@ -63,11 +63,6 @@ const coreRoutes: Record<CorePath, ReactNode> = {
 }
 
 const appRoutes = {
-  deleteVault: (
-    <ActiveVaultGuard>
-      <DeleteVaultPage />
-    </ActiveVaultGuard>
-  ),
   vaultSettings: (
     <ActiveVaultGuard>
       <VaultSettingsPage />

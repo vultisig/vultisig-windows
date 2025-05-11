@@ -11,6 +11,7 @@ import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/Mana
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
+import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
@@ -18,29 +19,41 @@ import { ReactNode } from 'react'
 
 type SharedPaths = Extract<
   CorePath,
+  | 'address'
   | 'currencySettings'
   | 'defaultChains'
+  | 'deleteVault'
   | 'languageSettings'
+  | 'manageVaultChains'
+  | 'manageVaultChainCoins'
   | 'newVault'
   | 'renameVault'
-  | 'vaultDetails'
-  | 'vaultChainDetail'
-  | 'vaultChainCoinDetail'
-  | 'manageVaultChainCoins'
-  | 'address'
-  | 'manageVaultChains'
   | 'reshareVault'
   | 'send'
   | 'swap'
+  | 'vaultDetails'
+  | 'vaultChainDetail'
+  | 'vaultChainCoinDetail'
 >
 
 export const sharedRoutes: Record<SharedPaths, ReactNode> = {
+  address: <AddressPage />,
   currencySettings: <CurrencyPage />,
   defaultChains: <DefaultChainsPage />,
+  deleteVault: (
+    <ActiveVaultGuard>
+      <DeleteVaultPage />
+    </ActiveVaultGuard>
+  ),
   languageSettings: <LanguagePage />,
   manageVaultChains: (
     <ActiveVaultGuard>
       <ManageVaultChainsPage />
+    </ActiveVaultGuard>
+  ),
+  manageVaultChainCoins: (
+    <ActiveVaultGuard>
+      <ManageVaultChainCoinsPage />
     </ActiveVaultGuard>
   ),
   newVault: <NewVaultPage />,
@@ -52,11 +65,6 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
   reshareVault: (
     <ActiveVaultGuard>
       <ReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultDetails: (
-    <ActiveVaultGuard>
-      <VaultDetailsPage />
     </ActiveVaultGuard>
   ),
   send: (
@@ -79,10 +87,9 @@ export const sharedRoutes: Record<SharedPaths, ReactNode> = {
       <VaultChainCoinPage />
     </ActiveVaultGuard>
   ),
-  manageVaultChainCoins: (
+  vaultDetails: (
     <ActiveVaultGuard>
-      <ManageVaultChainCoinsPage />
+      <VaultDetailsPage />
     </ActiveVaultGuard>
   ),
-  address: <AddressPage />,
 }

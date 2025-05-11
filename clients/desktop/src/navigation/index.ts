@@ -9,7 +9,6 @@ export const appPaths = {
   manageVaults: '/vaults/manage',
   editVault: '/vault/settings/vault-settings',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
-  vaultDelete: '/vault/settings/vault-settings/delete-vault',
   checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   faq: '/vault/settings/faq',

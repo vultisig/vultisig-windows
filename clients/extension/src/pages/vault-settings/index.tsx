@@ -14,12 +14,16 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'styled-components'
+import styled from 'styled-components'
+
+const StyledIcon = styled(TrashIcon)`
+  color: ${getColor('alertError')};
+`
 
 export const VaultSettingsPage = () => {
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const coreNavigate = useCoreNavigate()
   const navigate = useAppNavigate()
   const navigateBack = useNavigateBack()
@@ -55,17 +59,15 @@ export const VaultSettingsPage = () => {
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
             onClick={() => coreNavigate('renameVault')}
-            title={t('rename_vault')}
+            title={t('rename')}
             hoverable
             showArrow
           />
           <ListItem
-            icon={
-              <TrashIcon fontSize={20} stroke={colors.alertWarning.toHex()} />
-            }
+            icon={<StyledIcon fontSize={20} />}
             onClick={() => navigate('deleteVault')}
-            status="warning"
-            title={t('remove_vault')}
+            status="error"
+            title={t('delete')}
             hoverable
             showArrow
           />

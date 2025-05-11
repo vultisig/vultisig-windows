@@ -6,6 +6,8 @@ export const en = {
   expand_view: 'Expand View',
   general: 'General',
   manage_chains: 'Manage Chains',
+  rename: 'Rename',
+  terms: 'Terms',
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',

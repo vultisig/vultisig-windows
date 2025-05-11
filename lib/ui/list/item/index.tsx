@@ -11,6 +11,9 @@ const StyledDesc = styled.span`
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `
 
 const StyledMeta = styled.span`
@@ -18,6 +21,7 @@ const StyledMeta = styled.span`
   flex: 1;
   flex-direction: column;
   gap: 4px;
+  max-width: 100%;
 `
 
 const StyledTitle = styled.span<{ status?: Status }>`

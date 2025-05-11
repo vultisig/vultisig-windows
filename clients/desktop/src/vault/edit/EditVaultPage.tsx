@@ -80,7 +80,7 @@ const EditVaultPage = () => {
       title: t('delete'),
       subtitle: t('vault_setting_edit_vault_delete_subtitle'),
       icon: <TrashIcon />,
-      onClick: () => appNavigate('vaultDelete'),
+      onClick: () => navigate('deleteVault'),
       textColor: 'danger',
     },
   ]
