@@ -2,11 +2,11 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
 export default async () => {
-  const { viteStaticCopy } = await import('vite-plugin-static-copy')
   const chunk = process.env.CHUNK
 
   if (chunk) {
@@ -28,16 +28,17 @@ export default async () => {
     return defineConfig({
       plugins,
       build: {
-        assetsDir: '',
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
-        outDir: 'dist',
         rollupOptions: {
           input: {
             [chunk]: path.resolve(__dirname, `src/${chunk}/index.ts`),
           },
+          onwarn: () => {},
           output: {
+            assetFileNames: 'assets/[name].[ext]',
+            chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
             format,
           },
@@ -45,54 +46,45 @@ export default async () => {
       },
     })
   } else {
-    const plugins: PluginOption[] = [
-      react(),
-      nodePolyfills({ exclude: ['fs'] }),
-      wasm(),
-      topLevelAwait(),
-    ]
+    const publicFolderPath = '../../core/ui/public'
 
-    // Add static copy plugin when not in chunk mode
-    if (!chunk) {
-      plugins.push(
+    return defineConfig({
+      plugins: [
+        react(),
+        nodePolyfills({ exclude: ['fs'] }),
+        wasm(),
+        topLevelAwait(),
         viteStaticCopy({
           targets: [
             {
-              src: path.resolve(__dirname, '../../core/ui/public/**/*'),
+              src: `${publicFolderPath}/**/*`,
               dest: 'core',
-              rename: (fileName, fileExtension, fullPath) => {
+              rename: (_fileName, _fileExtension, fullPath) => {
                 const relativePath = path.relative(
-                  path.resolve(__dirname, '../../core/ui/public'),
+                  path.resolve(__dirname, publicFolderPath),
                   fullPath
                 )
                 return relativePath
               },
             },
           ],
-        })
-      )
-    }
-
-    return defineConfig({
-      plugins,
+        }),
+      ],
       build: {
-        emptyOutDir: true,
+        emptyOutDir: false,
         manifest: false,
-      },
-      css: {
-        preprocessorOptions: {
-          scss: {
-            additionalData: `@use "~variables" as *;`,
-            api: 'modern-compiler',
+        rollupOptions: {
+          input: {
+            index: path.resolve(__dirname, 'index.html'),
+          },
+          onwarn: () => {},
+          output: {
+            assetFileNames: 'assets/[name].[ext]',
+            chunkFileNames: 'assets/[name].js',
+            entryFileNames: '[name].js',
           },
         },
       },
-      resolve: {
-        alias: {
-          '~variables': path.resolve(__dirname, 'src/styles/_variables'),
-        },
-      },
-      server: { port: 3000 },
     })
   }
 }
