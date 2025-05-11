@@ -35,6 +35,7 @@ export default async () => {
           input: {
             [chunk]: path.resolve(__dirname, `src/${chunk}/index.ts`),
           },
+          onwarn: () => {},
           output: {
             entryFileNames: '[name].js',
             format,
@@ -72,6 +73,7 @@ export default async () => {
           input: {
             index: path.resolve(__dirname, 'index.html'),
           },
+          onwarn: () => {},
           output: {
             entryFileNames: '[name].js',
           },
