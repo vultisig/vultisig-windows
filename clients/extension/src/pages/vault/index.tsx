@@ -2,7 +2,7 @@ import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
-import { Chain } from '@core/chain/Chain'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
@@ -11,7 +11,7 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -25,6 +25,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -57,10 +58,11 @@ export const VaultPage = () => {
   const vault = useCurrentVault()
   const appNavigate = useAppNavigate()
   const navigate = useCoreNavigate()
-  const coins = useCurrentVaultNativeCoins()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const addresses = useCurrentVaultAddreses()
   const fiatCurrency = useFiatCurrency()
+
   return (
     <VStack fullHeight>
       <PageHeader
@@ -112,35 +114,36 @@ export const VaultPage = () => {
           </Text>
 
           <List>
-            {coins.map(({ address, chain }) => {
-              const balances = vaultChainBalances.find(
-                vault => vault.chain === chain
-              )
+            {vaultChainBalances.map(({ chain, coins }) => {
+              const address = addresses[chain]
+              const assets = coins.length
+              const [coin] = coins
+
               return (
                 <ListItem
-                  description={
-                    address && <MiddleTruncate text={address} width={80} />
-                  }
+                  description={<MiddleTruncate text={address} width={80} />}
                   extra={
                     <VStack gap={4} alignItems="end">
                       <Text weight={500} size={14} color="contrast">
                         {formatAmount(
-                          balances
-                            ? sum(
-                                balances.coins.map(coin =>
-                                  getCoinValue({
-                                    price: coin.price ?? 0,
-                                    amount: coin.amount,
-                                    decimals: coin.decimals,
-                                  })
-                                )
-                              )
-                            : 0,
+                          sum(
+                            coins.map(coin =>
+                              getCoinValue({
+                                price: coin.price ?? 0,
+                                amount: coin.amount,
+                                decimals: coin.decimals,
+                              })
+                            )
+                          ),
                           fiatCurrency
                         )}
                       </Text>
                       <Text weight={500} size={12} color="light">
-                        {balances ? balances.coins.length : 0} {t('assets')}
+                        {assets > 1
+                          ? `${assets} ${t('assets')}`
+                          : formatTokenAmount(
+                              fromChainAmount(coin.amount, coin.decimals)
+                            )}
                       </Text>
                     </VStack>
                   }
@@ -154,11 +157,9 @@ export const VaultPage = () => {
                   title={chain}
                   hoverable
                   showArrow
-                  onClick={() => {
-                    navigate('vaultChainDetail', {
-                      params: { chain: chain as Chain },
-                    })
-                  }}
+                  onClick={() =>
+                    navigate('vaultChainDetail', { params: { chain } })
+                  }
                 />
               )
             })}
