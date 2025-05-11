@@ -28,11 +28,9 @@ export default async () => {
     return defineConfig({
       plugins,
       build: {
-        assetsDir: '',
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
-        outDir: 'dist',
         rollupOptions: {
           input: {
             [chunk]: path.resolve(__dirname, `src/${chunk}/index.ts`),
@@ -70,6 +68,14 @@ export default async () => {
       build: {
         emptyOutDir: false,
         manifest: false,
+        rollupOptions: {
+          input: {
+            index: path.resolve(__dirname, 'index.html'),
+          },
+          output: {
+            entryFileNames: '[name].js',
+          },
+        },
       },
       server: { port: 3000 },
     })
