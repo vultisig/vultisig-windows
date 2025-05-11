@@ -24,8 +24,7 @@ const StyledIcon = styled(TrashIcon)`
 
 export const VaultSettingsPage = () => {
   const { t } = useTranslation()
-  const coreNavigate = useCoreNavigate()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const navigateBack = useNavigateBack()
   const vault = useCurrentVault()
 
@@ -51,14 +50,14 @@ export const VaultSettingsPage = () => {
         <List>
           <ListItem
             icon={<CircleInfoIcon fontSize={20} />}
-            onClick={() => coreNavigate('vaultDetails')}
+            onClick={() => navigate('vaultDetails')}
             title={t('details')}
             hoverable
             showArrow
           />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
-            onClick={() => coreNavigate('renameVault')}
+            onClick={() => navigate('renameVault')}
             title={t('rename')}
             hoverable
             showArrow
@@ -73,7 +72,7 @@ export const VaultSettingsPage = () => {
           />
           <ListItem
             icon={<ShareIcon fontSize={20} />}
-            onClick={() => coreNavigate('reshareVault')}
+            onClick={() => navigate('reshareVault')}
             title={t('reshare')}
             hoverable
             showArrow

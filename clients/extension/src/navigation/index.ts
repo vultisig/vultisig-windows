@@ -2,7 +2,6 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
-  deleteVault: '/settings/vault/delete',
   onboarding: '/onboarding',
   settings: '/settings',
   vaultSettings: '/settings/vault',

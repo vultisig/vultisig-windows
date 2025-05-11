@@ -3,7 +3,7 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { appPaths } from '@clients/extension/src/navigation'
+import { AppPath, appPaths } from '@clients/extension/src/navigation'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
@@ -62,7 +62,7 @@ const coreRoutes: Record<CorePath, ReactNode> = {
   ),
 }
 
-const appRoutes = {
+const appRoutes: Record<AppPath, ReactNode> = {
   vaultSettings: (
     <ActiveVaultGuard>
       <VaultSettingsPage />
