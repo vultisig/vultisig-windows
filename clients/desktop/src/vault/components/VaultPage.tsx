@@ -1,5 +1,4 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { PageHeaderToggleTitle } from '@core/ui/page/PageHeaderToggleTitle'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'

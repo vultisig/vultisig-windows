@@ -33,6 +33,9 @@ type SharedViewId = Extract<
   | 'reshareVault'
   | 'send'
   | 'swap'
+  | 'createVaultFolder'
+  | 'vaultFolder'
+  | 'manageVaultFolder'
 >
 
 export const sharedViews: Views<SharedViewId> = {
