@@ -27,10 +27,6 @@
     {
       "js": ["content.js"],
       "matches": ["http://*/*", "https://*/*"]
-    },
-    {
-      "js": ["relay.js"],
-      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {
@@ -53,7 +49,7 @@
     },
     {
       "matches": ["<all_urls>"],
-      "resources": ["content.js", "relay.js", "inpage.js"],
+      "resources": ["content.js", "inpage.js"],
       "use_dynamic_url": false
     }
   ]
