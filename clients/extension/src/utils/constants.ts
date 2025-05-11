@@ -21,11 +21,6 @@ export enum MessageKey {
   VAULTS = 'vaults',
 }
 
-export enum SenderKey {
-  PAGE = 'page',
-  RELAY = 'relay',
-}
-
 export enum Currency {
   AUD = 'AUD',
   CAD = 'CAD',
