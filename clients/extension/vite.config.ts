@@ -37,6 +37,8 @@ export default async () => {
           },
           onwarn: () => {},
           output: {
+            assetFileNames: 'assets/[name].[ext]',
+            chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
             format,
           },
@@ -44,6 +46,8 @@ export default async () => {
       },
     })
   } else {
+    const publicFolderPath = '../../core/ui/public'
+
     return defineConfig({
       plugins: [
         react(),
@@ -53,11 +57,11 @@ export default async () => {
         viteStaticCopy({
           targets: [
             {
-              src: '../../core/ui/public/**/*',
+              src: `${publicFolderPath}/**/*`,
               dest: 'core',
               rename: (_fileName, _fileExtension, fullPath) => {
                 const relativePath = path.relative(
-                  path.resolve(__dirname, '../../core/ui/public'),
+                  path.resolve(__dirname, publicFolderPath),
                   fullPath
                 )
                 return relativePath
@@ -75,11 +79,12 @@ export default async () => {
           },
           onwarn: () => {},
           output: {
+            assetFileNames: 'assets/[name].[ext]',
+            chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
           },
         },
       },
-      server: { port: 3000 },
     })
   }
 }
