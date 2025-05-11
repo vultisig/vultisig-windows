@@ -8,5 +8,7 @@ type ActiveViewProps = {
 export const ActiveView = ({ views }: ActiveViewProps) => {
   const [state] = useNavigation()
 
-  return views[state.history[state.currentIndex].id]()
+  const View = views[state.history[state.currentIndex].id]
+
+  return <View />
 }
