@@ -1,5 +1,4 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
