@@ -8,7 +8,6 @@ import {
   EventMethod,
   MessageKey,
   RequestMethod,
-  SenderKey,
 } from '@clients/extension/src/utils/constants'
 import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
 import {
@@ -76,45 +75,7 @@ window.ctrlKeplrProviders = {}
 type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void
 
 const messenger = initializeMessenger({ connect: 'contentScript' })
-const sendToBackgroundViaRelay = <Request, Response>(
-  type: MessageKey,
-  message: Request
-): Promise<Response> => {
-  return new Promise((resolve, reject) => {
-    const id = uuidv4()
-
-    const callback = ({
-      data,
-      source,
-    }: MessageEvent<{
-      error: string
-      id: string
-      message: Response
-      sender: SenderKey
-      type: MessageKey
-    }>) => {
-      if (
-        source !== window ||
-        data.id !== id ||
-        data.sender !== SenderKey.RELAY ||
-        data.type !== type
-      )
-        return
-
-      window.removeEventListener('message', callback)
-
-      if (data.error) {
-        reject(data.error)
-      } else {
-        resolve(data.message)
-      }
-    }
-
-    window.postMessage({ id, message, sender: SenderKey.PAGE, type }, '*')
-
-    window.addEventListener('message', callback)
-  })
-}
+const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
 class XDEFIMessageRequester {
   constructor() {
@@ -463,25 +424,25 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
-      >(this.providerType, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            this.providerType,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
+          type: this.providerType,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
-
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          this.providerType,
+          response
+        )
+        if (callback) callback(null, result)
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        throw error
+      }
     }
   }
 
@@ -494,25 +455,28 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
-      >(MessageKey.COSMOS_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.COSMOS_REQUEST,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
+          type: MessageKey.COSMOS_REQUEST,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
 
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.COSMOS_REQUEST,
+          response
+        )
+
+        if (callback) callback(null, result)
+
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error
+      }
     }
   }
 
@@ -538,25 +502,28 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
-      >(MessageKey.DASH_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.DASH_REQUEST,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
+          type: MessageKey.DASH_REQUEST,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
 
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.DASH_REQUEST,
+          response
+        )
+
+        if (callback) callback(null, result)
+
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error
+      }
     }
   }
 
@@ -649,39 +616,40 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
-      >(MessageKey.ETHEREUM_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.ETHEREUM_REQUEST,
-            response
-          )
-          switch (data.method) {
-            case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
-            case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-              this.emitUpdateNetwork({ chainId: result as string })
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
+          type: MessageKey.ETHEREUM_REQUEST,
+          message: data,
+        })
 
-              break
-            }
-            case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-              this.emit(EventMethod.DISCONNECT, result)
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.ETHEREUM_REQUEST,
+          response
+        )
 
-              break
-            }
+        switch (data.method) {
+          case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
+          case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
+            this.emitUpdateNetwork({ chainId: result as string })
+            break
           }
+          case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+            this.emit(EventMethod.DISCONNECT, result)
+            break
+          }
+        }
 
-          if (callback) callback(null, result)
+        if (callback) callback(null, result)
 
-          return result
-        })
-        .catch(error => {
-          if (callback) callback(error)
-
-          return error
-        })
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error
+      }
     }
 
     _connect = (): void => {
@@ -831,25 +799,28 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
-      return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
-      >(MessageKey.SOLANA_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.SOLANA_REQUEST,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          Messaging.Chain.Response
+        >('providerRequest', {
+          type: MessageKey.SOLANA_REQUEST,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
 
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.SOLANA_REQUEST,
+          response
+        )
+
+        if (callback) callback(null, result)
+
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error
+      }
     }
 
     async signAllTransactions(transactions: Transaction[]) {
@@ -950,25 +921,28 @@ namespace Provider {
         result?: ThorchainProviderResponse<T>
       ) => void
     ): Promise<ThorchainProviderResponse<T>> {
-      return await sendToBackgroundViaRelay<
-        ThorchainProviderRequest<T>,
-        ThorchainProviderResponse<T>
-      >(MessageKey.MAYA_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.MAYA_REQUEST,
-            response
-          )
-          if (callback) callback(null, result)
-
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          ThorchainProviderResponse<T>
+        >('providerRequest', {
+          type: MessageKey.MAYA_REQUEST,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
 
-          return error
-        })
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.MAYA_REQUEST,
+          response
+        )
+
+        if (callback) callback(null, result)
+
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error as ThorchainProviderResponse<T>
+      }
     }
   }
 
@@ -1010,23 +984,28 @@ namespace Provider {
         result?: ThorchainProviderResponse<T>
       ) => void
     ): Promise<ThorchainProviderResponse<T>> {
-      return await sendToBackgroundViaRelay<
-        ThorchainProviderRequest<T>,
-        ThorchainProviderResponse<T>
-      >(MessageKey.THOR_REQUEST, data)
-        .then(response => {
-          const result = processBackgroundResponse(
-            data,
-            MessageKey.THOR_REQUEST,
-            response
-          )
-          if (callback) callback(null, result)
-          return result
+      try {
+        const response = await backgroundMessenger.send<
+          any,
+          ThorchainProviderResponse<T>
+        >('providerRequest', {
+          type: MessageKey.THOR_REQUEST,
+          message: data,
         })
-        .catch(error => {
-          if (callback) callback(error)
-          return error
-        })
+
+        const result = processBackgroundResponse(
+          data,
+          MessageKey.THOR_REQUEST,
+          response
+        )
+
+        if (callback) callback(null, result)
+
+        return result
+      } catch (error) {
+        if (callback) callback(error as Error)
+        return error as ThorchainProviderResponse<T>
+      }
     }
   }
 }
@@ -1093,20 +1072,22 @@ const vultisigProvider = {
   maya: mayachainProvider,
   solana: solanaProvider,
   thorchain: thorchainProvider,
-  getVault: (): Promise<Messaging.GetVault.Response> => {
-    return new Promise(resolve => {
-      sendToBackgroundViaRelay<
-        Messaging.GetVault.Request,
-        Messaging.GetVault.Response
-      >(MessageKey.VAULT, {}).then(vaults => resolve(vaults))
+  getVault: async (): Promise<Messaging.GetVault.Response> => {
+    return await backgroundMessenger.send<
+      Messaging.GetVault.Request,
+      Messaging.GetVault.Response
+    >('providerRequest', {
+      type: MessageKey.VAULT,
+      message: {},
     })
   },
-  getVaults: (): Promise<VaultExport[]> => {
-    return new Promise(resolve => {
-      sendToBackgroundViaRelay<
-        Messaging.GetVaults.Request,
-        Messaging.GetVaults.Response
-      >(MessageKey.VAULTS, {}).then(vaults => resolve(vaults))
+  getVaults: async (): Promise<VaultExport[]> => {
+    return await backgroundMessenger.send<
+      Messaging.GetVaults.Request,
+      Messaging.GetVaults.Response
+    >('providerRequest', {
+      type: MessageKey.VAULTS,
+      message: {},
     })
   },
 }

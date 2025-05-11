@@ -18,7 +18,6 @@ export default async () => {
         plugins = [nodePolyfills({ exclude: ['fs'] }), wasm(), topLevelAwait()]
         break
       case 'inpage':
-      case 'relay':
         format = 'iife'
         break
       default:

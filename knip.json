@@ -12,8 +12,7 @@
     "clients/extension/src/inpage/index.ts",
     "clients/extension/src/messengers/bridge.ts",
     "clients/extension/src/messengers/createMessenger.ts",
-    "clients/extension/src/pages/index.tsx",
-    "clients/extension/src/relay/index.ts"
+    "clients/extension/src/pages/index.tsx"
   ],
   "ignoreDependencies": [
     "@types/chrome",
