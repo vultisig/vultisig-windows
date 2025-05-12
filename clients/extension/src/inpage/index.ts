@@ -1162,7 +1162,7 @@ const vultisigProvider = {
 
 if (shouldInjectProvider()) {
   Object.defineProperty(window, 'vultisig', {
-    value: { ...vultisigProvider },
+    value: vultisigProvider,
     configurable: false,
     enumerable: false,
     writable: false,
@@ -1270,52 +1270,52 @@ if (shouldInjectProvider()) {
             writable: false,
           },
           bitcoin: {
-            value: { ...bitcoinProvider },
+            value: bitcoinProvider,
             configurable: false,
             writable: false,
           },
           bitcoincash: {
-            value: { ...bitcoinCashProvider },
+            value: bitcoinCashProvider,
             configurable: false,
             writable: false,
           },
           cosmos: {
-            value: { ...cosmosProvider },
+            value: cosmosProvider,
             configurable: false,
             writable: false,
           },
           dash: {
-            value: { ...dashProvider },
+            value: dashProvider,
             configurable: false,
             writable: false,
           },
           dogecoin: {
-            value: { ...dogecoinProvider },
+            value: dogecoinProvider,
             configurable: false,
             writable: false,
           },
           litecoin: {
-            value: { ...litecoinProvider },
+            value: litecoinProvider,
             configurable: false,
             writable: false,
           },
           maya: {
-            value: { ...mayachainProvider },
+            value: mayachainProvider,
             configurable: false,
             writable: false,
           },
           thorchain: {
-            value: { ...thorchainProvider },
+            value: thorchainProvider,
             configurable: false,
             writable: false,
           },
           phantom: {
-            value: { ...phantomProvider },
+            value: phantomProvider,
             configurable: false,
             writable: false,
           },
           keplr: {
-            value: { ...keplrProvider },
+            value: keplrProvider,
             configurable: false,
             writable: false,
           },

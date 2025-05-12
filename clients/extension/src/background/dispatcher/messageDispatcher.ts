@@ -28,7 +28,7 @@ export const dispatchMessage = async (
   const sessions = (await getVaultsAppSessions()) ?? {}
   const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
   if (!dappHostname) {
-    console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
+    console.warn('dispatcher: Cannot resolve dapp hostname – aborting request')
     return
   }
   const chainSelectors = {
