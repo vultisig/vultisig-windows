@@ -7,7 +7,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
-import { FullSizeErrorFallback } from '../errors/FullSizeErrorFallback'
+import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { useAddressBookItemsQuery } from './addressBook'
 import {
@@ -53,17 +53,15 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       value={query}
       success={({ currentVaultId, vaults, initialView }) => (
         <I18nProvider>
-          <ErrorBoundary
-            renderFallback={props => <FullSizeErrorFallback {...props} />}
-          >
-            <VaultsProvider value={vaults}>
-              <CurrentVaultIdProvider value={currentVaultId}>
-                <NavigationProvider initialValue={{ history: [initialView] }}>
+          <NavigationProvider initialValue={{ history: [initialView] }}>
+            <ErrorBoundary fallback={RootErrorFallback}>
+              <VaultsProvider value={vaults}>
+                <CurrentVaultIdProvider value={currentVaultId}>
                   {children}
-                </NavigationProvider>
-              </CurrentVaultIdProvider>
-            </VaultsProvider>
-          </ErrorBoundary>
+                </CurrentVaultIdProvider>
+              </VaultsProvider>
+            </ErrorBoundary>
+          </NavigationProvider>
         </I18nProvider>
       )}
       error={error => (

@@ -1,13 +1,17 @@
 import { ChildrenProp } from '@lib/ui/props'
-import React from 'react'
+import React, { ComponentType } from 'react'
 
 export type ErrorState = {
   error: Error
   info: React.ErrorInfo | null
 }
 
+export type ErrorBoundaryFallbackProps = ErrorState & {
+  clearError: () => void
+}
+
 type ErrorBoundaryProps = ChildrenProp & {
-  renderFallback?: (params: ErrorState) => React.ReactNode
+  fallback?: ComponentType<ErrorBoundaryFallbackProps>
 }
 
 type ErrorBoundaryState = {
@@ -31,12 +35,17 @@ export class ErrorBoundary extends React.Component<
     this.setState({ error: { error, info } })
   }
 
-  render() {
-    const { children, renderFallback } = this.props
+  render = () => {
+    const { children, fallback: Fallback } = this.props
 
     if (this.state.error) {
-      if (renderFallback) {
-        return renderFallback(this.state.error)
+      if (Fallback) {
+        return (
+          <Fallback
+            {...this.state.error}
+            clearError={() => this.setState({ error: null })}
+          />
+        )
       }
 
       return null

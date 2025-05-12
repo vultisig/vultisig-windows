@@ -2,7 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
-import { ErrorState } from '@lib/ui/errors/ErrorBoundary'
+import { ErrorBoundaryFallbackProps } from '@lib/ui/errors/ErrorBoundary'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -24,7 +24,11 @@ const StackTrace = styled.pre`
   })}
 `
 
-export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
+export const RootErrorFallback = ({
+  error,
+  info,
+  clearError,
+}: ErrorBoundaryFallbackProps) => {
   const { t } = useTranslation()
 
   const { openUrl } = useCore()
@@ -70,6 +74,7 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
           <Button
             onClick={() => {
               navigate({ id: 'vaults' })
+              clearError()
             }}
           >
             {t('try_again')}
