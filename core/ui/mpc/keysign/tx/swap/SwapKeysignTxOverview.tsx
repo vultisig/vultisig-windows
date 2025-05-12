@@ -99,7 +99,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   return (
     <Wrapper>
       <AnimationWrapper>
-        <Animation src="core/animations/vault-created" />
+        <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
           <SuccessText centerHorizontally size={24}>
             {t('transaction_successful')}
