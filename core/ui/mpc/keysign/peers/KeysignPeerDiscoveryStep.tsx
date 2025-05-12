@@ -1,4 +1,5 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
 import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
@@ -19,7 +20,6 @@ import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnFinishProp } from '@lib/ui/props'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
@@ -28,9 +28,15 @@ import { useTranslation } from 'react-i18next'
 
 import { useMpcPeers } from '../../state/mpcPeers'
 
+type KeysignPeerDiscoveryStepProps = {
+  payload: KeysignMessagePayload
+  onFinish: (peers: string[]) => void
+}
+
 export const KeysignPeerDiscoveryStep = ({
   onFinish,
-}: OnFinishProp<string[]>) => {
+  payload,
+}: KeysignPeerDiscoveryStepProps) => {
   const { t } = useTranslation()
 
   const peers = useMpcPeers()
@@ -51,7 +57,7 @@ export const KeysignPeerDiscoveryStep = ({
     }
   }, [isDisabled, onFinish, peers])
 
-  const joinUrlQuery = useJoinKeysignUrlQuery()
+  const joinUrlQuery = useJoinKeysignUrlQuery(payload)
 
   const [serverType] = useMpcServerType()
 
