@@ -11,6 +11,7 @@ export type CoreView =
   | { id: 'address'; state: { address: string } }
   | { id: 'currencySettings' }
   | { id: 'defaultChains' }
+  | { id: 'deleteVault' }
   | { id: 'deposit'; state: { coin: CoinKey } }
   | { id: 'importVault' }
   | {
