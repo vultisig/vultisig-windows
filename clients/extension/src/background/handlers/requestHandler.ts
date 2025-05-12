@@ -50,7 +50,11 @@ const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
 
 const getRpcProvider = (chain: Chain) => {
   if (!rpcProviderCache[chain]) {
-    rpcProviderCache[chain] = new JsonRpcProvider(chainRpcUrl[chain])
+    const rpcUrl = chainRpcUrl[chain]
+    if (!rpcUrl) {
+      throw new Error(`No RPC URL configured for chain ${chain}`)
+    }
+    rpcProviderCache[chain] = new JsonRpcProvider(rpcUrl)
   }
   return rpcProviderCache[chain]!
 }
@@ -295,6 +299,7 @@ export const handleRequest = (
         getRpcProvider(chain)
           .getTransactionCount(String(address), String(tag))
           .then(count => resolve(String(count)))
+          .catch(reject)
         break
       }
       case RequestMethod.METAMASK.ETH_BLOCK_NUMBER: {
@@ -489,7 +494,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_GAS_PRICE: {
         getRpcProvider(chain)
           .getFeeData()
-          .then(({ gasPrice }) => resolve(gasPrice!.toString()))
+          .then(({ gasPrice, maxFeePerGas }) =>
+            resolve((gasPrice ?? maxFeePerGas ?? 0n).toString())
+          )
           .catch(reject)
 
         break
@@ -497,7 +504,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_MAX_PRIORITY_FEE_PER_GAS: {
         getRpcProvider(chain)
           .getFeeData()
-          .then(({ maxFeePerGas }) => resolve(maxFeePerGas!.toString()))
+          .then(({ maxPriorityFeePerGas }) =>
+            resolve((maxPriorityFeePerGas ?? 0n).toString())
+          )
 
         break
       }

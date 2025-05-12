@@ -71,14 +71,22 @@ const handleFindVault = async (
 function handleWithConnection<T>(
   findFn: () => Promise<T>,
   sender: string,
-  options?: { chain?: Chain }
+  options?: { chain?: Chain; timeoutMs?: number; maxRetries?: number }
 ): Promise<T> {
-  return new Promise(resolve => {
+  const timeoutMs = options?.timeoutMs ?? 60000 // Default 60 seconds timeout
+  const maxRetries = options?.maxRetries ?? 120 // 120 retries * 250ms = 30s
+
+  return new Promise((resolve, reject) => {
     if (instance[Instance.CONNECT]) {
+      let retries = 0
       const interval = setInterval(() => {
         if (!instance[Instance.CONNECT]) {
           clearInterval(interval)
           findFn().then(resolve)
+        } else if (retries++ >= maxRetries) {
+          clearInterval(interval)
+          instance[Instance.CONNECT] = false // Reset the stuck state
+          reject(new Error('Connection timeout. Please try again.'))
         }
       }, 250)
     } else {
@@ -94,15 +102,22 @@ function handleWithConnection<T>(
             sender,
           }).then(() => {
             handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
-              chrome.windows.onRemoved.addListener(
-                function onRemoved(closedWindowId) {
-                  if (closedWindowId === createdWindowId) {
-                    instance[Instance.CONNECT] = false
-                    findFn().then(resolve)
-                    chrome.windows.onRemoved.removeListener(onRemoved)
-                  }
+              const timeoutId = setTimeout(() => {
+                instance[Instance.CONNECT] = false
+                chrome.windows.onRemoved.removeListener(onRemoved)
+                reject(new Error('User did not respond in time.'))
+              }, timeoutMs)
+
+              function onRemoved(closedWindowId: number) {
+                if (closedWindowId === createdWindowId) {
+                  clearTimeout(timeoutId)
+                  instance[Instance.CONNECT] = false
+                  findFn().then(resolve)
+                  chrome.windows.onRemoved.removeListener(onRemoved)
                 }
-              )
+              }
+
+              chrome.windows.onRemoved.addListener(onRemoved)
             })
           })
         }
