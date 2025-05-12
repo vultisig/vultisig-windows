@@ -24,10 +24,13 @@ export const dispatchMessage = async (
   sender: chrome.runtime.MessageSender,
   popupMessenger: Messenger
 ) => {
-  const { origin = '' } = sender
-  const sessions = await getVaultsAppSessions()
-  const dappHostname = getDappHostname(origin)
-
+  const safeOrigin = typeof sender.origin === 'string' ? sender.origin : ''
+  const sessions = (await getVaultsAppSessions()) ?? {}
+  const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
+  if (!dappHostname) {
+    console.warn('dispatcher: Cannot resolve dapp hostname – aborting request')
+    return
+  }
   const chainSelectors = {
     [MessageKey.COSMOS_REQUEST]: () => {
       const selectedCosmosChainId = Object.values(sessions).reduce(

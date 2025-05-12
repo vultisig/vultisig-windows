@@ -26,6 +26,10 @@ export const handleSendTransaction = (
         ...transactions,
       ]).then(() => {
         handleOpenPanel({ id: 'transactionTab' }).then(createdWindowId => {
+          if (!createdWindowId) {
+            reject(new Error('Failed to open transaction panel window'))
+            return
+          }
           getStoredTransactions().then(transactions => {
             setStoredTransactions(
               transactions.map(transaction =>
@@ -36,45 +40,48 @@ export const handleSendTransaction = (
             )
           })
 
-          chrome.windows.onRemoved.addListener(closedWindowId => {
-            if (closedWindowId === createdWindowId) {
-              getStoredTransactions().then(transactions => {
-                const transaction = transactions.find(
-                  ({ windowId }) => windowId === createdWindowId
-                )
+          chrome.windows.onRemoved.addListener(
+            function onRemoved(closedWindowId) {
+              if (closedWindowId === createdWindowId) {
+                getStoredTransactions().then(transactions => {
+                  const transaction = transactions.find(
+                    ({ windowId }) => windowId === createdWindowId
+                  )
 
-                if (transaction) {
-                  if (transaction.status === 'default') {
-                    getStoredTransactions().then(transactions => {
-                      setStoredTransactions(
-                        transactions.filter(
-                          transaction =>
-                            transaction.id !== uuid &&
-                            transaction.windowId !== createdWindowId
-                        )
-                      ).then(reject)
-                    })
-                  } else {
-                    if (transaction.customSignature) {
-                      resolve({
-                        txResponse: transaction.customSignature,
-                        raw: transaction.raw,
-                      })
-                    } else if (transaction.txHash) {
-                      resolve({
-                        txResponse: transaction.txHash,
-                        raw: transaction.raw,
+                  if (transaction) {
+                    if (transaction.status === 'default') {
+                      getStoredTransactions().then(transactions => {
+                        setStoredTransactions(
+                          transactions.filter(
+                            transaction =>
+                              transaction.id !== uuid &&
+                              transaction.windowId !== createdWindowId
+                          )
+                        ).then(reject)
                       })
                     } else {
-                      reject()
+                      if (transaction.customSignature) {
+                        resolve({
+                          txResponse: transaction.customSignature,
+                          raw: transaction.raw,
+                        })
+                      } else if (transaction.txHash) {
+                        resolve({
+                          txResponse: transaction.txHash,
+                          raw: transaction.raw,
+                        })
+                      } else {
+                        reject()
+                      }
                     }
+                  } else {
+                    reject()
                   }
-                } else {
-                  reject()
-                }
-              })
+                })
+                chrome.windows.onRemoved.removeListener(onRemoved)
+              }
             }
-          })
+          )
         })
       })
     })

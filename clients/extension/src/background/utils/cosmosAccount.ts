@@ -6,7 +6,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultId } from '@core/ui/vault/Vault'
-
+import { hexToBytes } from '@lib/utils/hexToBytes'
 interface CosmosAccount {
   pubkey: number[]
   address: string
@@ -46,9 +46,7 @@ export const generateCosmosAccount = async (
       publicKeys: targetVault.publicKeys,
     })
 
-    const keyBytes = Uint8Array.from(
-      Buffer.from(toHexPublicKey({ publicKey, walletCore }), 'hex')
-    )
+    const keyBytes = hexToBytes(toHexPublicKey({ publicKey, walletCore }))
 
     return [
       {
@@ -62,6 +60,7 @@ export const generateCosmosAccount = async (
     ]
   } catch (error) {
     console.error('[generateCosmosAccount] Error:', error)
-    return
+    Promise.reject(error)
+    throw error
   }
 }

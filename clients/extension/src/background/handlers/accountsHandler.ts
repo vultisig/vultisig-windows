@@ -95,12 +95,15 @@ export const handleGetAccounts = (
             sender,
           }).then(() => {
             handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
-              chrome.windows.onRemoved.addListener(closedWindowId => {
-                if (closedWindowId === createdWindowId) {
-                  instance[Instance.CONNECT] = false
-                  handleFindAccounts(chain, sender).then(resolve)
+              chrome.windows.onRemoved.addListener(
+                function onRemoved(closedWindowId) {
+                  if (closedWindowId === createdWindowId) {
+                    instance[Instance.CONNECT] = false
+                    handleFindAccounts(chain, sender).then(resolve)
+                    chrome.windows.onRemoved.removeListener(onRemoved)
+                  }
                 }
-              })
+              )
             })
           })
         }
@@ -135,13 +138,15 @@ export const handleGetVault = (
             sender,
           }).then(() => {
             handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
-              chrome.windows.onRemoved.addListener(closedWindowId => {
-                if (closedWindowId === createdWindowId) {
-                  instance[Instance.CONNECT] = false
-
-                  handleFindVault(sender).then(resolve)
+              chrome.windows.onRemoved.addListener(
+                function onRemoved(closedWindowId) {
+                  if (closedWindowId === createdWindowId) {
+                    instance[Instance.CONNECT] = false
+                    handleFindVault(sender).then(resolve)
+                    chrome.windows.onRemoved.removeListener(onRemoved)
+                  }
                 }
-              })
+              )
             })
           })
         }

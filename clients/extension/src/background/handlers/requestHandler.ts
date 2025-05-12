@@ -448,6 +448,7 @@ export const handleRequest = (
                 : previousSession.selectedCosmosChainId,
             },
           })
+          resolve(param.chainId)
         })
 
         break
