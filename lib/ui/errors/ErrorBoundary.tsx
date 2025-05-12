@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
 import React, { ComponentType } from 'react'
 
-export type ErrorState = {
+type ErrorState = {
   error: Error
   info: React.ErrorInfo | null
 }
