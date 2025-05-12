@@ -7,11 +7,10 @@ import { pageConfig } from '@lib/ui/page/config'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup'
-import { makeAppPath } from '../../navigation'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
 import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
@@ -21,6 +20,7 @@ import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
 export const VaultPage = () => {
   const navigate = useCoreNavigate()
   const { name } = useCurrentVault()
+  const appNavigate = useAppNavigate()
 
   return (
     <>
@@ -30,9 +30,10 @@ export const VaultPage = () => {
           primaryControls={<PageHeaderVaultSettingsPrompt />}
           secondaryControls={
             <PageHeaderIconButtons>
-              <Link to={makeAppPath('shareVault')}>
-                <PageHeaderIconButton as="div" icon={<QrCodeIcon />} />
-              </Link>
+              <PageHeaderIconButton
+                icon={<QrCodeIcon />}
+                onClick={() => appNavigate({ id: 'shareVault' })}
+              />
               <RefreshVaultBalance />
             </PageHeaderIconButtons>
           }
@@ -40,7 +41,7 @@ export const VaultPage = () => {
             <PageHeaderToggleTitle
               value={false}
               onChange={() => {
-                navigate('vaults')
+                navigate({ id: 'vaults' })
               }}
             >
               {name}

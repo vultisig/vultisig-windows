@@ -46,26 +46,36 @@ export const useProcessDeeplinkMutation = () => {
 
             const keygenType = fromTssType(queryParams.tssType)
 
-            navigate('joinKeygen', {
-              state: {
-                keygenType,
-                keygenMsg,
+            navigate(
+              {
+                id: 'joinKeygen',
+                state: {
+                  keygenType,
+                  keygenMsg,
+                },
               },
-              replace: true,
-            })
+              {
+                replace: true,
+              }
+            )
           },
           SignTransaction: async () => {
             const vaultId = queryParams.vault
 
             const keysignMsg = await parseTransferredKeysignMsg(payload)
 
-            navigate('joinKeysign', {
-              state: {
-                keysignMsg,
-                vaultId,
+            navigate(
+              {
+                id: 'joinKeysign',
+                state: {
+                  keysignMsg,
+                  vaultId,
+                },
               },
-              replace: true,
-            })
+              {
+                replace: true,
+              }
+            )
           },
         })
       }

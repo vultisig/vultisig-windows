@@ -18,7 +18,7 @@ export const FramedQrCode = ({ value, scaling = true }: FramedQrCode) => {
   return (
     <Wrapper scale={scale}>
       <RiveWrapper>
-        <Animation src="core/animations/qr-scanned" />
+        <Animation src="/core/animations/qr-scanned.riv" />
       </RiveWrapper>
       <QRCodeWrapper>
         <QRCode

@@ -28,7 +28,7 @@ export const VaultsPage = () => {
   const handleSelect = (id: string) => {
     setCurrentVaultId.mutate(id)
 
-    coreNavigate('vault')
+    coreNavigate({ id: 'vault' })
   }
 
   return (
@@ -82,7 +82,7 @@ export const VaultsPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          onClick={() => coreNavigate('importVault')}
+          onClick={() => coreNavigate({ id: 'importVault' })}
           type="primary"
           block
           rounded

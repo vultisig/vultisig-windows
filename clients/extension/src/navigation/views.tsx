@@ -3,7 +3,6 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { appPaths } from '@clients/extension/src/navigation'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
@@ -16,92 +15,74 @@ import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/vaults'
-import { CorePath, corePaths } from '@core/ui/navigation'
-import { sharedRoutes } from '@core/ui/navigation/routes'
+import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { toEntries } from '@lib/utils/record/toEntries'
-import { ReactNode } from 'react'
-import { createHashRouter } from 'react-router-dom'
-const coreRoutes: Record<CorePath, ReactNode> = {
-  ...sharedRoutes,
-  vault: (
+import { Views } from '@lib/ui/navigation/Views'
+
+import { AppViewId } from './AppView'
+
+export const views: Views<AppViewId> = {
+  ...sharedViews,
+  vault: () => (
     <ActiveVaultGuard>
       <VaultPage />
     </ActiveVaultGuard>
   ),
-  joinKeygen: <>TODO: Implement join keygen page</>,
-  setupFastVault: <SetupFastVaultPage />,
-  setupSecureVault: <SetupSecureVaultPage />,
-  setupVault: <SetupVaultPageController />,
-  importVault: <ImportFilePage />,
-  keysign: <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>,
-  reshareVaultFast: (
+  joinKeygen: () => <>TODO: Implement join keygen page</>,
+  setupFastVault: () => <SetupFastVaultPage />,
+  setupSecureVault: () => <SetupSecureVaultPage />,
+  setupVault: () => <SetupVaultPageController />,
+  importVault: () => <ImportFilePage />,
+  keysign: () => (
+    <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>
+  ),
+  reshareVaultFast: () => (
     <ActiveVaultGuard>
       <ReshareFastVault />
     </ActiveVaultGuard>
   ),
-  reshareVaultSecure: (
+  reshareVaultSecure: () => (
     <ActiveVaultGuard>
       <ReshareSecureVault />
     </ActiveVaultGuard>
   ),
-  joinKeysign: (
+  joinKeysign: () => (
     <ActiveVaultGuard>TODO: Implement join keysign page</ActiveVaultGuard>
   ),
-  uploadQr: <ImportQRPage />,
-  vaults: (
+  uploadQr: () => <ImportQRPage />,
+  vaults: () => (
     <ActiveVaultGuard>
       <VaultsPage />
     </ActiveVaultGuard>
   ),
-  deposit: (
+  deposit: () => (
     <ActiveVaultGuard>
       <>{/* <>TODO: Implement Deposit page</> */}</>
     </ActiveVaultGuard>
   ),
-}
-
-const appRoutes = {
-  deleteVault: (
+  deleteVault: () => (
     <ActiveVaultGuard>
       <DeleteVaultPage />
     </ActiveVaultGuard>
   ),
-  vaultSettings: (
+  vaultSettings: () => (
     <ActiveVaultGuard>
       <VaultSettingsPage />
     </ActiveVaultGuard>
   ),
-  settings: <SettingsPage />,
-  connectedDapps: (
+  settings: () => <SettingsPage />,
+  connectedDapps: () => (
     <ActiveVaultGuard>
       <ConnectedDappsPage />
     </ActiveVaultGuard>
   ),
-  onboarding: (
+  onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  connectTab: <ConnectDAppPage />,
-  importTab: <ImportFilePage />,
-  vaultsTab: <GetVaultsPage />,
-  transactionTab: <TransactionPage />,
+  connectTab: () => <ConnectDAppPage />,
+  vaultsTab: () => <GetVaultsPage />,
+  transactionTab: () => <TransactionPage />,
 }
-
-export const router = createHashRouter(
-  [
-    ...toEntries(coreRoutes).map(({ key, value }) => ({
-      path: corePaths[key],
-      element: value,
-    })),
-    ...toEntries(appRoutes).map(({ key, value }) => ({
-      path: appPaths[key],
-      element: value,
-    })),
-  ],
-  {
-    basename: corePaths.vault,
-  }
-)

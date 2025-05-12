@@ -68,7 +68,7 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
-            onClick={() => appNavigate('connectedDapps')}
+            onClick={() => appNavigate({ id: 'connectedDapps' })}
             size="md"
             fitContent
           >
@@ -81,7 +81,7 @@ export const VaultPage = () => {
         secondaryControls={
           <Button
             icon={<SettingsIcon fontSize={20} />}
-            onClick={() => appNavigate('settings')}
+            onClick={() => appNavigate({ id: 'settings' })}
             size="sm"
             fitContent
           />
@@ -103,7 +103,7 @@ export const VaultPage = () => {
         <List>
           <ListItem
             extra={<VaultSigners vault={vault} />}
-            onClick={() => navigate('vaults')}
+            onClick={() => navigate({ id: 'vaults' })}
             title={vault.name}
             hoverable
           />
@@ -157,9 +157,12 @@ export const VaultPage = () => {
                   title={chain}
                   hoverable
                   showArrow
-                  onClick={() =>
-                    navigate('vaultChainDetail', { params: { chain } })
-                  }
+                  onClick={() => {
+                    navigate({
+                      id: 'vaultChainDetail',
+                      state: { chain },
+                    })
+                  }}
                 />
               )
             })}
@@ -169,7 +172,7 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
-          onClick={() => navigate('manageVaultChains')}
+          onClick={() => navigate({ id: 'manageVaultChains' })}
           type="primary"
           block
           rounded

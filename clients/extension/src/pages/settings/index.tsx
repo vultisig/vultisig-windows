@@ -72,7 +72,7 @@ export const SettingsPage = () => {
             />
             <ListItem
               icon={<SettingsIcon fontSize={20} />}
-              onClick={() => navigate('vaultSettings')}
+              onClick={() => navigate({ id: 'vaultSettings' })}
               title={t('vault_settings')}
               hoverable
               showArrow
@@ -87,7 +87,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={languageName[language]}
               icon={<LanguagesIcon fontSize={20} />}
-              onClick={() => coreNavigate('languageSettings')}
+              onClick={() => coreNavigate({ id: 'languageSettings' })}
               title={t('language')}
               hoverable
               showArrow
@@ -95,14 +95,14 @@ export const SettingsPage = () => {
             <ListItem
               extra={currency.toUpperCase()}
               icon={<CircleDollarSignIcon fontSize={20} />}
-              onClick={() => coreNavigate('currencySettings')}
+              onClick={() => coreNavigate({ id: 'currencySettings' })}
               title={t('currency')}
               hoverable
               showArrow
             />
             <ListItem
               icon={<DefaultChainsIcon fontSize={20} />}
-              onClick={() => coreNavigate('defaultChains')}
+              onClick={() => coreNavigate({ id: 'defaultChains' })}
               title={t('vault_settings_default_chains')}
               hoverable
               showArrow

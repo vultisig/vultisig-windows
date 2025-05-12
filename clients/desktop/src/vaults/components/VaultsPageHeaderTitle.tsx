@@ -11,7 +11,7 @@ export const VaultsPageHeaderTitle = () => {
     <PageHeaderToggleTitle
       value={true}
       onChange={() => {
-        navigate('vault')
+        navigate({ id: 'vault' })
       }}
     >
       {t('vaults')}

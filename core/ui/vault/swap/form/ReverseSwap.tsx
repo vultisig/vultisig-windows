@@ -7,7 +7,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { useFromCoin } from '../state/fromCoin'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useToCoin } from '../state/toCoin'
 
 const Wrapper = styled(HStack)`
@@ -57,14 +57,17 @@ const Button = styled(UnstyledButton)`
 `
 
 export const ReverseSwap = () => {
-  const [fromCoin, setFromCoin] = useFromCoin()
+  const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
   const [toCoin, setToCoin] = useToCoin()
 
   return (
     <Wrapper justifyContent="center" alignItems="center">
       <Button
         onClick={() => {
-          setFromCoin(toCoin)
+          setViewState(prev => ({
+            ...prev,
+            coin: toCoin,
+          }))
           setToCoin(fromCoin)
         }}
       >

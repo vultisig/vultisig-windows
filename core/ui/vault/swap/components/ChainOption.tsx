@@ -5,7 +5,6 @@ import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEn
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
-import { useFromCoin } from '@core/ui/vault/swap/state/fromCoin'
 import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -15,18 +14,20 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+
 export const ChainOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, logo, ticker, id } = value
-  const [currentFromCoin] = useFromCoin()
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
 
   const isSelected =
     side === 'from'
-      ? chain === currentFromCoin.chain
+      ? chain === fromCoinKey.chain
       : chain === currentToCoin.chain
 
   return (

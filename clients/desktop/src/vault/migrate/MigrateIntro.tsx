@@ -13,7 +13,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
     <StepTransition
       from={({ onFinish }) => (
         <MigrateInfoScreen
-          animation="core/animations/upgrade"
+          animation="/core/animations/upgrade.riv"
           title={
             <Trans
               i18nKey="upgrade_vault_description"
@@ -25,7 +25,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
       )}
       to={() => (
         <MigrateInfoScreen
-          animation="core/animations/choose-vault"
+          animation="/core/animations/choose-vault.riv"
           title={
             <Trans i18nKey="upgrade_all_devices" components={{ b: <b /> }} />
           }

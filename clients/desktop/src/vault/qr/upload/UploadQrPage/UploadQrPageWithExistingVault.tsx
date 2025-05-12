@@ -1,6 +1,5 @@
-import { coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
@@ -22,7 +21,7 @@ export const UploadQrPageWithExistingVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const coreNavigate = useCoreNavigate()
-  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
   const coins = useCurrentVaultCoins()
   const { addToast } = useToast()
   const goBack = useNavigateBack()
@@ -37,7 +36,7 @@ export const UploadQrPageWithExistingVault = () => {
       const isURL = value.startsWith('http')
 
       if (isURL) {
-        navigate('deeplink', { state: { url: value } })
+        navigate({ id: 'deeplink', state: { url: value } })
         return
       }
 
@@ -45,9 +44,7 @@ export const UploadQrPageWithExistingVault = () => {
       const coin = coins.find(coin => coin.chain === chain)
 
       if (coin) {
-        coreNavigate('send', {
-          params: { coin: coinKeyToString(coin), address: value },
-        })
+        coreNavigate({ id: 'send', state: { coin, address: value } })
       } else {
         addToast({
           message: t('coin_not_found_in_current_vault'),
