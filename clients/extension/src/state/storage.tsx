@@ -119,6 +119,14 @@ const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
 
 const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
   const folders = await getVaultFolders()
+  const vaults = await getVaults()
+
+  // Update vaults to remove folder reference
+  const updatedVaults = vaults.map(vault =>
+    vault.folderId === folderId ? { ...vault, folderId: undefined } : vault
+  )
+
+  await updateVaults(updatedVaults)
   await updateVaultFolders(folders.filter(folder => folder.id !== folderId))
 }
 
