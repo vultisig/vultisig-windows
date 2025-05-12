@@ -45,8 +45,14 @@ import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 
+const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
+  {} as Record<Chain, JsonRpcProvider | undefined>
+
 const getRpcProvider = (chain: Chain) => {
-  return new JsonRpcProvider(chainRpcUrl[chain])
+  if (!rpcProviderCache[chain]) {
+    rpcProviderCache[chain] = new JsonRpcProvider(chainRpcUrl[chain])
+  }
+  return rpcProviderCache[chain]!
 }
 
 export const handleRequest = (

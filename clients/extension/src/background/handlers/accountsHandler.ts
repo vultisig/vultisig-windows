@@ -68,30 +68,29 @@ const handleFindVault = async (
   }
 }
 
-export const handleGetAccounts = (
-  chain: Chain,
-  sender: string
-): Promise<string[]> => {
+function handleWithConnection<T>(
+  findFn: () => Promise<T>,
+  sender: string,
+  options?: { chain?: Chain }
+): Promise<T> {
   return new Promise(resolve => {
     if (instance[Instance.CONNECT]) {
       const interval = setInterval(() => {
         if (!instance[Instance.CONNECT]) {
           clearInterval(interval)
-
-          handleFindAccounts(chain, sender).then(resolve)
+          findFn().then(resolve)
         }
       }, 250)
     } else {
       instance[Instance.CONNECT] = true
 
-      handleFindAccounts(chain, sender).then(accounts => {
-        if (accounts.length) {
+      findFn().then(result => {
+        if (result && (!Array.isArray(result) || result.length)) {
           instance[Instance.CONNECT] = false
-
-          resolve(accounts)
+          resolve(result)
         } else {
           setStoredRequest({
-            chain,
+            chain: options?.chain ?? Chain.Ethereum,
             sender,
           }).then(() => {
             handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
@@ -99,7 +98,7 @@ export const handleGetAccounts = (
                 function onRemoved(closedWindowId) {
                   if (closedWindowId === createdWindowId) {
                     instance[Instance.CONNECT] = false
-                    handleFindAccounts(chain, sender).then(resolve)
+                    findFn().then(resolve)
                     chrome.windows.onRemoved.removeListener(onRemoved)
                   }
                 }
@@ -112,47 +111,19 @@ export const handleGetAccounts = (
   })
 }
 
+export const handleGetAccounts = (
+  chain: Chain,
+  sender: string
+): Promise<string[]> => {
+  return handleWithConnection(() => handleFindAccounts(chain, sender), sender, {
+    chain,
+  })
+}
+
 export const handleGetVault = (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  return new Promise(resolve => {
-    if (instance[Instance.CONNECT]) {
-      const interval = setInterval(() => {
-        if (!instance[Instance.CONNECT]) {
-          clearInterval(interval)
-
-          handleFindVault(sender).then(resolve)
-        }
-      }, 250)
-    } else {
-      instance[Instance.CONNECT] = true
-
-      handleFindVault(sender).then(vault => {
-        if (vault) {
-          instance[Instance.CONNECT] = false
-
-          resolve(vault)
-        } else {
-          setStoredRequest({
-            chain: Chain.Ethereum,
-            sender,
-          }).then(() => {
-            handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
-              chrome.windows.onRemoved.addListener(
-                function onRemoved(closedWindowId) {
-                  if (closedWindowId === createdWindowId) {
-                    instance[Instance.CONNECT] = false
-                    handleFindVault(sender).then(resolve)
-                    chrome.windows.onRemoved.removeListener(onRemoved)
-                  }
-                }
-              )
-            })
-          })
-        }
-      })
-    }
-  })
+  return handleWithConnection(() => handleFindVault(sender), sender)
 }
 
 export const handleGetVaults = async (
