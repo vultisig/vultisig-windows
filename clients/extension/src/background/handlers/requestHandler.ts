@@ -273,6 +273,7 @@ export const handleRequest = (
                   .then(result => {
                     resolve(JSON.stringify(result))
                   })
+                  .catch(reject)
 
                 break
               }
@@ -507,6 +508,7 @@ export const handleRequest = (
           .then(({ maxPriorityFeePerGas }) =>
             resolve((maxPriorityFeePerGas ?? 0n).toString())
           )
+          .catch(reject)
 
         break
       }

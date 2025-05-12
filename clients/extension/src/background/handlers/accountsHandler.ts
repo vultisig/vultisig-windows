@@ -144,11 +144,15 @@ export const handleGetVault = (
 export const handleGetVaults = async (
   popupMessenger: Messenger
 ): Promise<Messaging.GetVaults.Response> => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error('Vault selection timeout. Please try again.'))
+    }, 60000) // 60 second timeout
     handleOpenPanel({ id: 'vaultsTab' })
     popupMessenger.reply(
       'vaults:connect',
       async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {
+        clearTimeout(timeoutId)
         resolve(selectedVaults)
         return
       }
