@@ -1,4 +1,3 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { useTranslation } from 'react-i18next'
 
@@ -9,8 +8,8 @@ export const ManageVaultChainsPrompt = () => {
   const navigate = useCoreNavigate()
 
   return (
-    <UnstyledButton onClick={() => navigate({ id: 'manageVaultChains' })}>
-      <ListAddButton as="div">{t('choose_chains')}</ListAddButton>
-    </UnstyledButton>
+    <ListAddButton onClick={() => navigate({ id: 'manageVaultChains' })}>
+      {t('choose_chains')}
+    </ListAddButton>
   )
 }

@@ -31,7 +31,6 @@ export const VaultPage = () => {
           secondaryControls={
             <PageHeaderIconButtons>
               <PageHeaderIconButton
-                as="div"
                 icon={<QrCodeIcon />}
                 onClick={() => appNavigate({ id: 'shareVault' })}
               />
