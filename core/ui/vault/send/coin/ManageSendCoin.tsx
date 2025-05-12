@@ -27,10 +27,7 @@ export const ManageSendCoin = () => {
       <InputLabel>{t('asset')}</InputLabel>
       <Opener
         renderOpener={({ onOpen }) => (
-          <CoinInputContainer
-            value={{ ...coinKey, logo: coin.logo, ticker: coin.ticker }}
-            onClick={onOpen}
-          />
+          <CoinInputContainer value={coin} onClick={onOpen} />
         )}
         renderContent={({ onClose }) => (
           <SelectItemModal
