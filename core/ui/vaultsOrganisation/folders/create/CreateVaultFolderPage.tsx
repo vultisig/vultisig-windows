@@ -68,7 +68,7 @@ export const CreateVaultFolderPage = () => {
           },
         })}
       >
-        <PageContent gap={20} scrollable fullHeight>
+        <PageContent gap={20} scrollable>
           <TextInput
             placeholder={t('enter_folder_name')}
             label={t('folder_name')}
