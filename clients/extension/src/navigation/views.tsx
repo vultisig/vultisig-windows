@@ -14,7 +14,6 @@ import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vau
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
-import { VaultsPage } from '@clients/extension/src/pages/vaults'
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'

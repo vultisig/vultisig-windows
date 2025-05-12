@@ -1,12 +1,10 @@
+import { useAppViewState } from '@clients/desktop/src/navigation/hooks/useAppViewState'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaultFolder } from '@core/ui/storage/vaultFolders'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
+import { VaultFolderProvider } from './state/currentVaultFolder'
 
-import { useAppViewState } from '../../../navigation/hooks/useAppViewState'
-import { VaultFolderProvider } from './state/currentVaultFolder'
-import { useCorePathParams } from '../../navigation/hooks/useCorePathParams'
-import { VaultFolderProvider } from './state/currentVaultFolder'
 
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
   const [{ id }] = useAppViewState<'vaultFolder'>()

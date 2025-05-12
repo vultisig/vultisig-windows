@@ -30,13 +30,12 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { VaultsPage } from '../vaults/components/VaultsPage'
-import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
-import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
+import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { AppViewId } from './AppView'
+import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
+import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
+import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
+import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
 
 export const views: Views<AppViewId> = {
   ...sharedViews,
@@ -84,7 +83,7 @@ export const views: Views<AppViewId> = {
   ),
   vaultSettings: () => <SettingsVaultPage />,
   importVaultFromFile: () => <ImportVaultFromFilePage />,
-  manageVaults: () => <ManageVaultsPage />,
+  manageVaults: () => <ManageDklsPage />,
   shareVault: () => (
     <ActiveVaultGuard>
       <ShareVaultPage />

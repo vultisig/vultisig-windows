@@ -16,6 +16,10 @@ import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { CoreViewId } from './CoreView'
+import { CreateVaultFolderPage } from '../vaultsOrganisation/folders/create/CreateVaultFolderPage'
+import { CurrentVaultFolderPageProvider } from '../vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
+import { ManageVaultFolderPage } from '../vaultsOrganisation/folder/manage/ManageVaultFolderPage'
+import { VaultFolderPage } from '../vaultsOrganisation/folder/VaultFolderPage'
 
 type SharedViewId = Extract<
   CoreViewId,
@@ -86,6 +90,26 @@ export const sharedViews: Views<SharedViewId> = {
   manageVaultChainCoins: () => (
     <ActiveVaultGuard>
       <ManageVaultChainCoinsPage />
+    </ActiveVaultGuard>
+  ),
+
+  createVaultFolder: () => (
+    <ActiveVaultGuard>
+      <CreateVaultFolderPage />
+    </ActiveVaultGuard>
+  ),
+  vaultFolder: () => (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <VaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    </ActiveVaultGuard>
+  ),
+  manageVaultFolder: () => (
+    <ActiveVaultGuard>
+      <CurrentVaultFolderPageProvider>
+        <ManageVaultFolderPage />
+      </CurrentVaultFolderPageProvider>
     </ActiveVaultGuard>
   ),
   address: () => <AddressPage />,
