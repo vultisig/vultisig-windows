@@ -13,8 +13,12 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
+import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { ManageVaultFolderPage } from '../vaultsOrganisation/folder/manage/ManageVaultFolderPage'
+import { VaultFolderPage } from '../vaultsOrganisation/folder/VaultFolderPage'
+import { WrapWithVaultFolderContext } from '../vaultsOrganisation/folder/withVaultFolder'
 import { CoreViewId } from './CoreView'
 
 type SharedViewId = Extract<
@@ -33,6 +37,9 @@ type SharedViewId = Extract<
   | 'reshareVault'
   | 'send'
   | 'swap'
+  | 'createVaultFolder'
+  | 'vaultFolder'
+  | 'manageVaultFolder'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -84,6 +91,21 @@ export const sharedViews: Views<SharedViewId> = {
     <ActiveVaultGuard>
       <ManageVaultChainCoinsPage />
     </ActiveVaultGuard>
+  ),
+  createVaultFolder: () => (
+    <ActiveVaultGuard>
+      <CreateVaultFolderPage />
+    </ActiveVaultGuard>
+  ),
+  vaultFolder: () => (
+    <WrapWithVaultFolderContext>
+      <VaultFolderPage />
+    </WrapWithVaultFolderContext>
+  ),
+  manageVaultFolder: () => (
+    <WrapWithVaultFolderContext>
+      <ManageVaultFolderPage />
+    </WrapWithVaultFolderContext>
   ),
   address: () => <AddressPage />,
 }
