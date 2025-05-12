@@ -8,7 +8,7 @@ export const PageHeaderVaultSettingsPrompt = () => {
 
   return (
     <PageHeaderIconButton
-      onClick={() => navigate('vaultSettings')}
+      onClick={() => navigate({ id: 'vaultSettings' })}
       icon={<MenuIcon />}
     />
   )

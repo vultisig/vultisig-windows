@@ -118,7 +118,7 @@ export const useCreateVaultFolderMutation = () => {
         name,
         order,
         id: uuidv4(),
-        vaultIds
+        vaultIds,
       }
 
       await createVaultFolder(folder)

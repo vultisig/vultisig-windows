@@ -17,6 +17,8 @@ import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
+import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { AppViewId } from './AppView'
@@ -33,6 +35,7 @@ export const views: Views<AppViewId> = {
   setupSecureVault: () => <SetupSecureVaultPage />,
   setupVault: () => <SetupVaultPageController />,
   importVault: () => <ImportFilePage />,
+  manageVaults: () => <ManageVaultsPage />,
   keysign: () => (
     <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>
   ),
