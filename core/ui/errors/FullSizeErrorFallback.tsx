@@ -1,6 +1,8 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
+import { ErrorState } from '@lib/ui/errors/ErrorBoundary'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -10,9 +12,6 @@ import { Text, text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { WindowReload } from '../../../wailsjs/runtime/runtime'
-import { ErrorState } from './ErrorBoundary'
 
 const reportErrorUrl =
   'https://discord.com/channels/1203844257220395078/1294500829482450944'
@@ -29,6 +28,8 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
   const { t } = useTranslation()
 
   const { openUrl } = useCore()
+
+  const navigate = useCoreNavigate()
 
   return (
     <>
@@ -68,7 +69,7 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
           </Button>
           <Button
             onClick={() => {
-              WindowReload()
+              navigate({ id: 'vaults' })
             }}
           >
             {t('try_again')}

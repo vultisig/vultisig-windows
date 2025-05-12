@@ -1,10 +1,10 @@
+import { FullSizeErrorFallback } from '@core/ui/errors/FullSizeErrorFallback'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 
 import { AppProviders } from './AppProviders'
-import { ErrorBoundary } from './errors/components/ErrorBoundary'
-import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { views } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
