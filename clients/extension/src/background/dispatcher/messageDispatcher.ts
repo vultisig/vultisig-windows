@@ -28,7 +28,7 @@ export const dispatchMessage = async (
   const sessions = (await getVaultsAppSessions()) ?? {}
   const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
   if (!dappHostname) {
-    console.warn('dispatcher: Cannot resolve dapp hostname – aborting request')
+    console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
     return
   }
   const chainSelectors = {
@@ -62,7 +62,7 @@ export const dispatchMessage = async (
   ] as const
 
   for (const [key, chain] of basicRequests) {
-    if (type === key) return handleRequest(message, chain, origin)
+    if (type === key) return handleRequest(message, chain, safeOrigin)
   }
   if (type in chainSelectors) {
     const selector = chainSelectors[type as keyof typeof chainSelectors]
@@ -71,7 +71,7 @@ export const dispatchMessage = async (
     const response = await handleRequest(
       message,
       shouldBePresent(chain),
-      origin
+      safeOrigin
     )
 
     // Handle Cosmos Account Generation
@@ -97,7 +97,7 @@ export const dispatchMessage = async (
 
   switch (type) {
     case MessageKey.VAULT:
-      return handleGetVault(origin)
+      return handleGetVault(safeOrigin)
     case MessageKey.VAULTS:
       return handleGetVaults(popupMessenger)
     default:
