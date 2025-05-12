@@ -5,6 +5,7 @@ import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
+import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -46,6 +47,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
       <CoreProvider value={coreState}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={darkTheme}>
+            <GlobalStyle />
             <WalletCoreProvider>
               <StorageDependant>
                 <ToastProvider>

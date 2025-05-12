@@ -1,4 +1,3 @@
-import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 
@@ -10,7 +9,6 @@ import { OnboardingResetter } from './onboarding/OnboardingResetter'
 const App = () => {
   return (
     <AppProviders>
-      <GlobalStyle />
       <VStack fullSize>
         <LauncherObserver />
         <ActiveView views={views} />
