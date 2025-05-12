@@ -1,6 +1,4 @@
-import { FullSizeErrorFallback } from '@core/ui/errors/FullSizeErrorFallback'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
-import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 
@@ -14,13 +12,9 @@ const App = () => {
     <AppProviders>
       <GlobalStyle />
       <VStack fullSize>
-        <ErrorBoundary
-          renderFallback={props => <FullSizeErrorFallback {...props} />}
-        >
-          <LauncherObserver />
-          <ActiveView views={views} />
-          <OnboardingResetter />
-        </ErrorBoundary>
+        <LauncherObserver />
+        <ActiveView views={views} />
+        <OnboardingResetter />
       </VStack>
     </AppProviders>
   )

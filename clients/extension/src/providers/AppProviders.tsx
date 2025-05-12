@@ -1,7 +1,6 @@
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
@@ -52,12 +51,10 @@ export const AppProviders = ({ children }: ChildrenProp) => {
           <QueryProvider>
             <WalletCoreProvider>
               <StorageDependant>
-                <I18nProvider>
-                  <ToastProvider>{children}</ToastProvider>
-                  <ActiveVaultOnly>
-                    <CoinFinder />
-                  </ActiveVaultOnly>
-                </I18nProvider>
+                <ToastProvider>{children}</ToastProvider>
+                <ActiveVaultOnly>
+                  <CoinFinder />
+                </ActiveVaultOnly>
               </StorageDependant>
             </WalletCoreProvider>
           </QueryProvider>

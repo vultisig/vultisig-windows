@@ -1,4 +1,5 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
@@ -6,6 +7,8 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
+import { FullSizeErrorFallback } from '../errors/FullSizeErrorFallback'
+import { I18nProvider } from '../i18n/I18nProvider'
 import { useAddressBookItemsQuery } from './addressBook'
 import {
   CurrentVaultIdProvider,
@@ -49,13 +52,19 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     <MatchQuery
       value={query}
       success={({ currentVaultId, vaults, initialView }) => (
-        <VaultsProvider value={vaults}>
-          <CurrentVaultIdProvider value={currentVaultId}>
-            <NavigationProvider initialValue={{ history: [initialView] }}>
-              {children}
-            </NavigationProvider>
-          </CurrentVaultIdProvider>
-        </VaultsProvider>
+        <I18nProvider>
+          <ErrorBoundary
+            renderFallback={props => <FullSizeErrorFallback {...props} />}
+          >
+            <VaultsProvider value={vaults}>
+              <CurrentVaultIdProvider value={currentVaultId}>
+                <NavigationProvider initialValue={{ history: [initialView] }}>
+                  {children}
+                </NavigationProvider>
+              </CurrentVaultIdProvider>
+            </VaultsProvider>
+          </ErrorBoundary>
+        </I18nProvider>
       )}
       error={error => (
         <FlowErrorPageContent
