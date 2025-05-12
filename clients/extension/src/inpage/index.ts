@@ -428,10 +428,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: this.providerType,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: this.providerType,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
         const result = processBackgroundResponse(
           data,
           this.providerType,
@@ -459,10 +463,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.COSMOS_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.COSMOS_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -506,10 +514,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.DASH_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.DASH_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -620,10 +632,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.ETHEREUM_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.ETHEREUM_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -803,10 +819,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.SOLANA_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.SOLANA_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -925,10 +945,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           ThorchainProviderResponse<T>
-        >('providerRequest', {
-          type: MessageKey.MAYA_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.MAYA_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -988,10 +1012,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           ThorchainProviderResponse<T>
-        >('providerRequest', {
-          type: MessageKey.THOR_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.THOR_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -1076,19 +1104,27 @@ const vultisigProvider = {
     return await backgroundMessenger.send<
       Messaging.GetVault.Request,
       Messaging.GetVault.Response
-    >('providerRequest', {
-      type: MessageKey.VAULT,
-      message: {},
-    })
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.VAULT,
+        message: {},
+      },
+      { id: uuidv4() }
+    )
   },
   getVaults: async (): Promise<VaultExport[]> => {
     return await backgroundMessenger.send<
       Messaging.GetVaults.Request,
       Messaging.GetVaults.Response
-    >('providerRequest', {
-      type: MessageKey.VAULTS,
-      message: {},
-    })
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.VAULTS,
+        message: {},
+      },
+      { id: uuidv4() }
+    )
   },
 }
 
