@@ -1142,7 +1142,7 @@ announceProvider({
   provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
 })
 
-window.dispatchEvent(new Event('inpage:ready'))
+window.dispatchEvent(new Event('vulticonnect:inpage:ready'))
 
 messenger.reply(
   'setDefaultProvider',
