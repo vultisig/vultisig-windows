@@ -36,7 +36,7 @@ export const RootErrorFallback = ({
   const navigate = useCoreNavigate()
 
   return (
-    <>
+    <VStack fullSize>
       <PageHeader
         title={<PageHeaderTitle>{t('something_went_wrong')}</PageHeaderTitle>}
       />
@@ -81,6 +81,6 @@ export const RootErrorFallback = ({
           </Button>
         </UniformColumnGrid>
       </PageContent>
-    </>
+    </VStack>
   )
 }
