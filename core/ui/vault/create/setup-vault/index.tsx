@@ -38,12 +38,10 @@ export const SetupVaultPage = () => {
   const theme = useTheme()
 
   const onStart = useCallback(() => {
-    navigate(
-      match(value, {
-        fast: () => 'setupFastVault',
-        secure: () => 'setupSecureVault',
-      })
-    )
+    match(value, {
+      fast: () => navigate({ id: 'setupFastVault' }),
+      secure: () => navigate({ id: 'setupSecureVault' }),
+    })
   }, [navigate, value])
 
   return (

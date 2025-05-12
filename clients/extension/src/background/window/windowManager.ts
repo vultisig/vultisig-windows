@@ -1,6 +1,7 @@
+import { AppViewId } from '../../navigation/AppView'
 import { calculateWindowPosition } from '../../utils/functions'
 
-export const handleOpenPanel = (path: string): Promise<number> => {
+export const handleOpenPanel = (path: AppViewId): Promise<number> => {
   return new Promise(resolve => {
     chrome.windows.getCurrent({ populate: true }, currentWindow => {
       const { height, left, top, width } =

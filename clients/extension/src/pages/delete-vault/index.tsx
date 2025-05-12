@@ -26,7 +26,7 @@ const Component = () => {
     if (!deleteVault.isPending) {
       deleteVault.mutateAsync(getVaultId(currentVault), {
         onSuccess: () => {
-          coreNavigate('vault')
+          coreNavigate({ id: 'vault' })
         },
       })
     }

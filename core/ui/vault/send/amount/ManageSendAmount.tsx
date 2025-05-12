@@ -14,9 +14,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { useSendAmount } from '../state/amount'
-import { useCurrentSendCoin } from '../state/sendCoin'
 import { AmountSuggestion } from './AmountSuggestion'
 
 const suggestions = [0.25, 0.5]
@@ -47,7 +47,7 @@ export const ManageAmount = () => {
   const [value, setValue] = useSendAmount()
   const { t } = useTranslation()
 
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const { decimals } = useCurrentVaultCoin(coinKey)
 
   return (

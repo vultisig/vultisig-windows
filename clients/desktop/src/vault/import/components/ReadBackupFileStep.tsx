@@ -14,12 +14,12 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ReadTextFile } from '../../../../wailsjs/go/main/App'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
+import { useAppViewState } from '../../../navigation/hooks/useAppViewState'
 
 export const ReadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
-  const { filePath } = useAppPathState<'importVaultFromFile'>()
+  const [{ filePath }] = useAppViewState<'importVaultFromFile'>()
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {

@@ -24,7 +24,7 @@ export const FullPageFlowErrorState = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <CloseButton onClick={() => navigate('vault')}>
+          <CloseButton onClick={() => navigate({ id: 'vault' })}>
             <CloseIcon />
           </CloseButton>
         }

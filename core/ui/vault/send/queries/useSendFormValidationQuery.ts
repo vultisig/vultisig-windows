@@ -15,7 +15,7 @@ import { useSendChainSpecificQuery } from './useSendChainSpecificQuery'
 
 export const useSendFormValidationQuery = () => {
   const [receiver] = useSendReceiver()
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
 
   const { t } = useTranslation()
   const coin = useCurrentVaultCoin(coinKey)

@@ -1,5 +1,6 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
+import { NavigationProvider } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
@@ -12,6 +13,7 @@ import {
 } from './currentVaultId'
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
+import { useInitialViewQuery } from './initialView'
 import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
@@ -28,6 +30,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const language = useLanguageQuery()
   const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
+  const initialView = useInitialViewQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -39,15 +42,18 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     language,
     isVaultBalanceVisible,
     hasFinishedOnboarding,
+    initialView,
   })
 
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId, vaults }) => (
+      success={({ currentVaultId, vaults, initialView }) => (
         <VaultsProvider value={vaults}>
           <CurrentVaultIdProvider value={currentVaultId}>
-            {children}
+            <NavigationProvider initialValue={{ history: [initialView] }}>
+              {children}
+            </NavigationProvider>
           </CurrentVaultIdProvider>
         </VaultsProvider>
       )}

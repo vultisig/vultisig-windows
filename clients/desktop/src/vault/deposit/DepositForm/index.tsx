@@ -2,7 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import {
   useVaultChainCoinsQuery,
   VaultChainCoin,
@@ -73,8 +73,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
-  const [{ coin: chainCoinString }] = useCorePathParams<'deposit'>()
-  const coin = chainCoinString.split(':')[1]
+  const [{ coin }] = useCoreViewState<'deposit'>()
 
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
@@ -255,7 +254,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge'
-                    ? (selectedCoin?.ticker ?? coin)
+                    ? (selectedCoin?.ticker ?? coin.id)
                     : ''
 
                 return (

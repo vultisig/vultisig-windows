@@ -5,7 +5,7 @@ import {
   setStoredTransactions,
 } from '../../utils/storage'
 import { v4 as uuidv4 } from 'uuid'
-import { appPaths } from '../../navigation'
+
 import { handleOpenPanel } from '../window/windowManager'
 
 export const handleSendTransaction = (
@@ -25,7 +25,7 @@ export const handleSendTransaction = (
         },
         ...transactions,
       ]).then(() => {
-        handleOpenPanel(appPaths.transactionTab).then(createdWindowId => {
+        handleOpenPanel('transactionTab').then(createdWindowId => {
           getStoredTransactions().then(transactions => {
             setStoredTransactions(
               transactions.map(transaction =>

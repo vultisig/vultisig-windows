@@ -36,7 +36,7 @@ import { sendTerms, SendTermsProvider } from './state/sendTerms'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const sender = useSender()
   const coin = useCurrentVaultCoin(coinKey)
   const [receiver] = useSendReceiver()

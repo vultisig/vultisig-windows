@@ -1,12 +1,11 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 
-import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
 
 export const DepositFeeValue = () => {
   const chainSpecific = useDepositChainSpecific()
-  const [coinKey] = useCurrentDepositCoin()
-  const { chain } = coinKey
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
 
-  return <>{formatFee({ chain: chain, chainSpecific })}</>
+  return <>{formatFee({ chain: coinKey.chain, chainSpecific })}</>
 }

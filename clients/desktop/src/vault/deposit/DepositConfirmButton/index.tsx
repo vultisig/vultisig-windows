@@ -5,7 +5,6 @@ import {
   AccountCoin,
   extractAccountCoinKey,
 } from '@core/chain/coin/AccountCoin'
-import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
@@ -13,7 +12,7 @@ import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Text } from '@lib/ui/text'
@@ -23,7 +22,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ChainAction } from '../ChainAction'
-import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 import { transactionConfig } from './config'
 
@@ -36,11 +34,9 @@ export const DepositConfirmButton = ({
   depositFormData,
   action,
 }: DepositConfirmButtonProps) => {
-  const [{ coin: coinName }] = useCorePathParams<'deposit'>()
-  const { chain: chain } = coinKeyFromString(coinName)
-  const isTonFunction = chain === Chain.Ton
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const isTonFunction = coinKey.chain === Chain.Ton
   const { t } = useTranslation()
-  const [coinKey] = useCurrentDepositCoin()
   const selectedCoin = depositFormData['selectedCoin']
     ? (depositFormData['selectedCoin'] as AccountCoin)
     : null

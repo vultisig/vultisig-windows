@@ -4,7 +4,7 @@ import {
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCorePathParams } from '@core/ui/navigation/hooks/useCorePathParams'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
@@ -48,7 +48,7 @@ const Component = () => {
   const isPopupRef = useRef(isPopup)
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate('vault')
+    else navigate({ id: 'vault' })
   }
 
   const vaults = useVaults()
@@ -197,7 +197,7 @@ const Component = () => {
   }
 
   const navigateToMain = useCallback(() => {
-    navigate('vault')
+    navigate({ id: 'vault' })
   }, [navigate])
 
   useEffect(() => {
@@ -236,7 +236,7 @@ const Component = () => {
     }
   }, [navigateToMain])
 
-  const [{ title = t('keysign') }] = useCorePathParams<'uploadQr'>()
+  const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
 
   return isWindows ? (
     <StyledPageContent fullHeight>

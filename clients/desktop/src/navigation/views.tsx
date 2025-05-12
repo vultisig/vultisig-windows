@@ -1,15 +1,9 @@
-import { CorePath, corePaths } from '@core/ui/navigation'
-import { sharedRoutes } from '@core/ui/navigation/routes'
+import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
-import { toEntries } from '@lib/utils/record/toEntries'
-import { ReactNode } from 'react'
-import { createBrowserRouter, Outlet } from 'react-router-dom'
+import { Views } from '@lib/ui/navigation/Views'
 
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
-import { ErrorBoundary } from '../errors/components/ErrorBoundary'
-import { FullSizeErrorFallback } from '../errors/components/FullSizeErrorFallback'
-import { LauncherObserver } from '../launcher/components/LauncherObserver'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import RegisterForAirdropPage from '../pages/registerForAirdrop/RegisterForAirdropPage'
@@ -42,143 +36,117 @@ import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolder
 import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
 import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
 import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
-import { AppPath, appPaths } from '.'
+import { AppViewId } from './AppView'
 
-const Root = () => (
-  <ErrorBoundary renderFallback={props => <FullSizeErrorFallback {...props} />}>
-    <LauncherObserver />
-    <Outlet />
-  </ErrorBoundary>
-)
-
-const coreRoutes: Record<CorePath, ReactNode> = {
-  ...sharedRoutes,
-  vault: (
+export const views: Views<AppViewId> = {
+  ...sharedViews,
+  vault: () => (
     <ActiveVaultGuard>
       <VaultPage />
     </ActiveVaultGuard>
   ),
-  joinKeygen: <JoinKeygenPage />,
-  setupFastVault: <SetupFastVaultPage />,
-  setupSecureVault: <SetupSecureVaultPage />,
-  setupVault: <SetupVaultPageController />,
-  importVault: <ImportVaultPage />,
-  keysign: (
+  joinKeygen: () => <JoinKeygenPage />,
+  setupFastVault: () => <SetupFastVaultPage />,
+  setupSecureVault: () => <SetupSecureVaultPage />,
+  setupVault: () => <SetupVaultPageController />,
+  importVault: () => <ImportVaultPage />,
+  keysign: () => (
     <ActiveVaultGuard>
       <StartKeysignPage />
     </ActiveVaultGuard>
   ),
-  reshareVaultFast: (
+  reshareVaultFast: () => (
     <ActiveVaultGuard>
       <FastReshareVaultPage />
     </ActiveVaultGuard>
   ),
-  reshareVaultSecure: (
+  reshareVaultSecure: () => (
     <ActiveVaultGuard>
       <SecureReshareVaultPage />
     </ActiveVaultGuard>
   ),
-  joinKeysign: (
+  joinKeysign: () => (
     <ActiveVaultGuard>
       <JoinKeysignPage />
     </ActiveVaultGuard>
   ),
-  uploadQr: <UploadQrPage />,
-  vaults: <VaultsPage />,
-  deposit: (
+  uploadQr: () => <UploadQrPage />,
+  vaults: () => <VaultsPage />,
+  deposit: () => (
     <ActiveVaultGuard>
       <DepositPage />
     </ActiveVaultGuard>
   ),
-}
-
-const appRoutes: Record<AppPath, ReactNode> = {
-  onboarding: (
+  onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  vaultSettings: <SettingsVaultPage />,
-  importVaultFromFile: <ImportVaultFromFilePage />,
-  manageVaults: <ManageVaultsPage />,
-  shareVault: (
+  vaultSettings: () => <SettingsVaultPage />,
+  importVaultFromFile: () => <ImportVaultFromFilePage />,
+  manageVaults: () => <ManageVaultsPage />,
+  shareVault: () => (
     <ActiveVaultGuard>
       <ShareVaultPage />
     </ActiveVaultGuard>
   ),
-  editVault: (
+  editVault: () => (
     <ActiveVaultGuard>
       <EditVaultPage />
     </ActiveVaultGuard>
   ),
-  vaultBackup: (
+  vaultBackup: () => (
     <ActiveVaultGuard>
       <VaultBackupPage />
     </ActiveVaultGuard>
   ),
-  vaultDelete: (
+  vaultDelete: () => (
     <ActiveVaultGuard>
       <DeleteVaultPage />
     </ActiveVaultGuard>
   ),
-  vaultFAQ: <FaqVaultPage />,
-  addressBook: <AddressBookSettingsPage />,
-  migrateVault: (
+  vaultFAQ: () => <FaqVaultPage />,
+  addressBook: () => <AddressBookSettingsPage />,
+  migrateVault: () => (
     <ActiveVaultGuard>
       <MigrateVaultPage />
     </ActiveVaultGuard>
   ),
-  registerForAirdrop: (
+  registerForAirdrop: () => (
     <ActiveVaultGuard>
       <RegisterForAirdropPage />
     </ActiveVaultGuard>
   ),
-  checkUpdate: <VaultCheckUpdatePage />,
-  createVaultFolder: (
+  checkUpdate: () => <VaultCheckUpdatePage />,
+  createVaultFolder: () => (
     <ActiveVaultGuard>
       <CreateVaultFolderPage />
     </ActiveVaultGuard>
   ),
-  vaultFolder: (
+  vaultFolder: () => (
     <ActiveVaultGuard>
       <CurrentVaultFolderPageProvider>
         <VaultFolderPage />
       </CurrentVaultFolderPageProvider>
     </ActiveVaultGuard>
   ),
-  manageVaultFolder: (
+  manageVaultFolder: () => (
     <ActiveVaultGuard>
       <CurrentVaultFolderPageProvider>
         <ManageVaultFolderPage />
       </CurrentVaultFolderPageProvider>
     </ActiveVaultGuard>
   ),
-  deeplink: (
+  deeplink: () => (
     <ActiveVaultGuard>
       <DeeplinkPage />
     </ActiveVaultGuard>
   ),
-  signCustomMessage: (
+  signCustomMessage: () => (
     <ActiveVaultGuard>
       <SignCustomMessagePage />
     </ActiveVaultGuard>
   ),
-  dkls: <ManageDklsPage />,
-  faq: <FaqVaultPage />,
+  dkls: () => <ManageDklsPage />,
+  faq: () => <FaqVaultPage />,
 }
-
-export const router = createBrowserRouter([
-  {
-    element: <Root />,
-    children: [
-      ...toEntries(coreRoutes).map(({ key, value }) => ({
-        path: corePaths[key],
-        element: value,
-      })),
-      ...toEntries(appRoutes).map(({ key, value }) => ({
-        path: appPaths[key],
-        element: value,
-      })),
-    ],
-  },
-])

@@ -17,7 +17,7 @@ export const ActiveVaultGuard: FC<ChildrenProp> = ({ children }) => {
 
   useEffect(() => {
     if (isDisabled) {
-      navigate('newVault')
+      navigate({ id: 'newVault' })
     }
   }, [isDisabled, navigate])
 

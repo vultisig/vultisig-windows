@@ -1,19 +1,26 @@
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { VStack } from '@lib/ui/layout/Stack'
-import { RouterProvider } from 'react-router-dom'
+import { ActiveView } from '@lib/ui/navigation/ActiveView'
 
 import { AppProviders } from './AppProviders'
-import { router } from './navigation/router'
-import OnboardingResetter from './onboarding/OnboardingRessetterProvider'
+import { ErrorBoundary } from './errors/components/ErrorBoundary'
+import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
+import { LauncherObserver } from './launcher/components/LauncherObserver'
+import { views } from './navigation/views'
+import { OnboardingResetter } from './onboarding/OnboardingResetter'
 
 const App = () => {
   return (
     <AppProviders>
       <GlobalStyle />
       <VStack fullSize>
-        <OnboardingResetter>
-          <RouterProvider router={router} />
-        </OnboardingResetter>
+        <ErrorBoundary
+          renderFallback={props => <FullSizeErrorFallback {...props} />}
+        >
+          <LauncherObserver />
+          <ActiveView views={views} />
+          <OnboardingResetter />
+        </ErrorBoundary>
       </VStack>
     </AppProviders>
   )

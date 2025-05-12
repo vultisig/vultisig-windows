@@ -12,7 +12,6 @@ import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPubl
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Messenger } from '../../messengers/createMessenger'
 import { handleOpenPanel } from '../window/windowManager'
-import { appPaths } from '../../navigation'
 
 const instance: Record<Instance, boolean> = {
   [Instance.CONNECT]: false,
@@ -94,7 +93,7 @@ export const handleGetAccounts = (
             chain,
             sender,
           }).then(() => {
-            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
+            handleOpenPanel('connectTab').then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -134,7 +133,7 @@ export const handleGetVault = (
             chain: Chain.Ethereum,
             sender,
           }).then(() => {
-            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
+            handleOpenPanel('connectTab').then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -154,7 +153,7 @@ export const handleGetVaults = async (
   popupMessenger: Messenger
 ): Promise<Messaging.GetVaults.Response> => {
   return new Promise(resolve => {
-    handleOpenPanel(appPaths.vaultsTab)
+    handleOpenPanel('vaultsTab')
     popupMessenger.reply(
       'vaults:connect',
       async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {

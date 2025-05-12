@@ -14,9 +14,9 @@ import { useTranslation } from 'react-i18next'
 export const BaseFee = () => {
   const { t } = useTranslation()
 
-  const [{ chain }] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
 
-  const query = useEvmBaseFeeQuery(chain as EvmChain)
+  const query = useEvmBaseFeeQuery(coinKey.chain as EvmChain)
 
   return (
     <InputContainer>

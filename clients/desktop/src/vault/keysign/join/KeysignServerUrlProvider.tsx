@@ -2,7 +2,7 @@ import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -14,9 +14,9 @@ import { useTranslation } from 'react-i18next'
 import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery'
 
 export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
-  const {
-    keysignMsg: { serviceName, useVultisigRelay },
-  } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
+
+  const { serviceName, useVultisigRelay } = keysignMsg
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 
