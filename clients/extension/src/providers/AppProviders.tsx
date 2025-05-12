@@ -21,7 +21,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
   body {
     margin: 0 auto;
     max-width: 1024px;
-    min-height: 600px;
+    min-height: 700px;
     min-width: 400px;
     overflow: hidden;
     width: 100%;

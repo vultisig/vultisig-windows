@@ -50,7 +50,7 @@ export const CreateVaultFolderPage = () => {
       <VStack
         as="form"
         flexGrow
-        halfHeight
+        fullHeight
         {...getFormProps({
           isDisabled,
           isPending,

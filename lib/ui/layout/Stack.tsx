@@ -9,7 +9,6 @@ type FixedDirectionStackProps = {
   wrap?: React.CSSProperties['flexWrap']
   fullWidth?: boolean
   fullHeight?: boolean
-  halfHeight?: boolean
   fullSize?: boolean
   flexGrow?: boolean
   children?: React.ReactNode
@@ -39,7 +38,6 @@ const stack = ({
   wrap,
   fullWidth,
   fullHeight,
-  halfHeight,
   fullSize,
   direction,
   flexGrow,
@@ -70,10 +68,6 @@ const stack = ({
   ${fullHeight &&
   css`
     height: 100%;
-  `}
-    ${halfHeight &&
-  css`
-    height: 50%;
   `}
   ${fullSize &&
   css`
