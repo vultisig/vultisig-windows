@@ -1,3 +1,4 @@
+import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
 import { useNavigation } from '../state'
@@ -17,7 +18,13 @@ export function useViewState<T = any>(): [T, Dispatch<SetStateAction<T>>] {
               )
             : newState
 
-        const history = [...prev.history, { id, state }]
+        const isLastView = prev.history.length === prev.currentIndex + 1
+
+        const view = { id, state }
+
+        const history = isLastView
+          ? updateAtIndex(prev.history, prev.currentIndex, () => view)
+          : [...prev.history, view]
 
         return {
           ...prev,
