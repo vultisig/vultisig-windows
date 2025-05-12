@@ -17,7 +17,6 @@ import EditVaultPage from '../vault/edit/EditVaultPage'
 import { VaultBackupPage } from '../vault/edit/vaultBackupSettings/VaultBackupPage'
 import DeleteVaultPage from '../vault/edit/vaultDeleteSettings/DeleteVaultPage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
-import { ImportVaultPage } from '../vault/import/components/ImportVaultPage'
 import { JoinKeygenPage } from '../vault/keygen/join/JoinKeygenPage'
 import { SignCustomMessagePage } from '../vault/keysign/customMessage/SignCustomMessagePage'
 import { JoinKeysignPage } from '../vault/keysign/join/JoinKeysignPage'
@@ -49,7 +48,6 @@ export const views: Views<AppViewId> = {
   setupFastVault: () => <SetupFastVaultPage />,
   setupSecureVault: () => <SetupSecureVaultPage />,
   setupVault: () => <SetupVaultPageController />,
-  importVault: () => <ImportVaultPage />,
   keysign: () => (
     <ActiveVaultGuard>
       <StartKeysignPage />
