@@ -51,9 +51,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       success={({ currentVaultId, vaults, initialView }) => (
         <VaultsProvider value={vaults}>
           <CurrentVaultIdProvider value={currentVaultId}>
-            <NavigationProvider
-              initialValue={{ history: [initialView], currentIndex: 0 }}
-            >
+            <NavigationProvider initialValue={{ history: [initialView] }}>
               {children}
             </NavigationProvider>
           </CurrentVaultIdProvider>
