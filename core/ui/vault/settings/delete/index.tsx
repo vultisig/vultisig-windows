@@ -22,24 +22,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
-
-const StyledButton = styled(Button)`
-  ${({ isDisabled }) =>
-    isDisabled
-      ? ''
-      : css`
-          background-color: ${getColor('danger')};
-          color: ${getColor('textDark')};
-
-          &:hover {
-            background-color: ${({ theme }) =>
-              theme.colors.danger
-                .getVariant({ l: (l: number) => l * 0.92 })
-                .toCssValue()};
-          }
-        `}
-`
+import styled from 'styled-components'
 
 const StyledCheck = styled(CheckStatus)`
   ${sameDimensions(14)};
@@ -155,9 +138,10 @@ export const DeleteVaultPage = () => {
         )}
       </PageContent>
       <PageFooter>
-        <StyledButton
+        <Button
           isDisabled={isDisabled}
           isLoading={isPending}
+          kind="alert"
           onClick={() => {
             if (!isDisabled && !isPending) {
               deleteVault(getVaultId(vault), {
@@ -167,7 +151,7 @@ export const DeleteVaultPage = () => {
           }}
         >
           {t('delete')}
-        </StyledButton>
+        </Button>
       </PageFooter>
     </VStack>
   )

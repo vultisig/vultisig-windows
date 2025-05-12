@@ -15,7 +15,13 @@ import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 
-type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'ghost' | 'idle'
+type ButtonKind =
+  | 'primary'
+  | 'secondary'
+  | 'outlined'
+  | 'ghost'
+  | 'idle'
+  | 'alert'
 
 interface ContainerProps {
   size: ButtonSize
@@ -69,24 +75,12 @@ const Container = styled(UnstyledButton)<ContainerProps>`
           ? getColor('buttonBackgroundDisabled')
           : getColor('primary')};
         color: ${isDisabled ? getColor('mistExtra') : getColor('textDark')};
-
-        &:hover {
-          background: ${isDisabled
-            ? getColor('buttonBackgroundDisabled')
-            : getColor('primary')};
-        }
       `,
       secondary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
           : getColor('foregroundExtra')};
         color: ${isDisabled ? getColor('mistExtra') : getColor('contrast')};
-
-        &:hover {
-          background: ${isDisabled
-            ? getColor('buttonBackgroundDisabled')
-            : getColor('foregroundExtra')};
-        }
       `,
       outlined: () => css`
         font-weight: 700;
@@ -103,6 +97,12 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         font-weight: 700;
         color: ${getColor('background')};
         background: ${getColor('idle')};
+      `,
+      alert: () => css`
+        background: ${isDisabled
+          ? getColor('buttonBackgroundDisabled')
+          : getColor('danger')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textDark')};
       `,
     })}
   
@@ -124,6 +124,12 @@ const Container = styled(UnstyledButton)<ContainerProps>`
           `,
           idle: () => css`
             background: ${getHoverVariant('idle')};
+          `,
+          alert: () => css`
+            background: ${({ theme }) =>
+              theme.colors.danger
+                .getVariant({ l: (l: number) => l * 0.92 })
+                .toCssValue()};
           `,
         })}
       }
