@@ -1,4 +1,3 @@
-import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
@@ -39,7 +38,7 @@ import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolde
 import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
 import { AppViewId } from './AppView'
 
-const coreViews: Views<CoreViewId> = {
+export const views: Views<AppViewId> = {
   ...sharedViews,
   vault: () => (
     <ActiveVaultGuard>
@@ -78,9 +77,6 @@ const coreViews: Views<CoreViewId> = {
       <DepositPage />
     </ActiveVaultGuard>
   ),
-}
-
-const appViews: Views<AppViewId> = {
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -153,9 +149,4 @@ const appViews: Views<AppViewId> = {
   ),
   dkls: () => <ManageDklsPage />,
   faq: () => <FaqVaultPage />,
-}
-
-export const views = {
-  ...coreViews,
-  ...appViews,
 }

@@ -15,7 +15,6 @@ import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { VaultsPage } from '@clients/extension/src/pages/vaults'
-import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
@@ -23,7 +22,7 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { AppViewId } from './AppView'
 
-const coreViews: Views<CoreViewId> = {
+export const views: Views<AppViewId> = {
   ...sharedViews,
   vault: () => (
     <ActiveVaultGuard>
@@ -62,9 +61,6 @@ const coreViews: Views<CoreViewId> = {
       <>{/* <>TODO: Implement Deposit page</> */}</>
     </ActiveVaultGuard>
   ),
-}
-
-const appViews: Views<AppViewId> = {
   deleteVault: () => (
     <ActiveVaultGuard>
       <DeleteVaultPage />
@@ -89,9 +85,4 @@ const appViews: Views<AppViewId> = {
   connectTab: () => <ConnectDAppPage />,
   vaultsTab: () => <GetVaultsPage />,
   transactionTab: () => <TransactionPage />,
-}
-
-export const views = {
-  ...coreViews,
-  ...appViews,
 }

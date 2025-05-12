@@ -1,4 +1,7 @@
+import { CoreView } from '@core/ui/navigation/CoreView'
+
 export type AppView =
+  | CoreView
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'shareVault' }
   | { id: 'migrateVault' }

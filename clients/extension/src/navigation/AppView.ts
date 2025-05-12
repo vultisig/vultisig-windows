@@ -1,4 +1,7 @@
+import { CoreView } from '@core/ui/navigation/CoreView'
+
 export type AppView =
+  | CoreView
   | { id: 'deleteVault' }
   | { id: 'onboarding' }
   | { id: 'settings' }
