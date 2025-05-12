@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useUpdateVaultFolderMutation } from '@core/ui/storage/vaultFolders'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -13,6 +12,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
 import { DeleteVaultFolder } from './DeleteVaultFolder'
@@ -20,7 +20,6 @@ import { ManageFolderVaults } from './ManageFolderVaults'
 
 export const ManageVaultFolderPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useCoreNavigate()
   const { id, name: initialName } = useCurrentVaultFolder()
   const [name, setName] = useState(initialName)
   const { t } = useTranslation()
@@ -56,8 +55,7 @@ export const ManageVaultFolderPage = () => {
                 fields: { name },
               },
               {
-                onSuccess: () =>
-                  appNavigate({ id: 'vaultFolder', state: { id } }),
+                onSuccess: () => navigate({ id: 'vaultFolder', state: { id } }),
               }
             )
           }}
