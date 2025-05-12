@@ -50,7 +50,7 @@ export const CreateVaultFolderPage = () => {
       <VStack
         as="form"
         flexGrow
-        style={{ minHeight: '50%' }}
+        style={{ height: '90%' }}
         {...getFormProps({
           isDisabled,
           isPending,
