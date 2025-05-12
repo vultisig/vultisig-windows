@@ -50,7 +50,11 @@ export type CoreView =
   | { id: 'vaults' }
   | { id: 'send'; state: { coin: CoinKey; address?: string } }
   | { id: 'swap'; state: { coin: CoinKey } }
-
+  | { id: 'createVaultFolder' }
+  | { id: 'vaultFolder'; state: { id: string } }
+  | { id: 'manageVaultFolder'; state: { id: string } }
+  | { id: 'vaultSettings' }
+  | { id: 'manageVaults' }
 export type CoreViewId = CoreView['id']
 
 export const initialCoreView: CoreView = {

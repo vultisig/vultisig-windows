@@ -1,6 +1,8 @@
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
+import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
@@ -30,12 +32,6 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { VaultsPage } from '../vaults/components/VaultsPage'
-import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
-import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
 import { AppViewId } from './AppView'
 
 export const views: Views<AppViewId> = {
@@ -118,25 +114,6 @@ export const views: Views<AppViewId> = {
     </ActiveVaultGuard>
   ),
   checkUpdate: () => <VaultCheckUpdatePage />,
-  createVaultFolder: () => (
-    <ActiveVaultGuard>
-      <CreateVaultFolderPage />
-    </ActiveVaultGuard>
-  ),
-  vaultFolder: () => (
-    <ActiveVaultGuard>
-      <CurrentVaultFolderPageProvider>
-        <VaultFolderPage />
-      </CurrentVaultFolderPageProvider>
-    </ActiveVaultGuard>
-  ),
-  manageVaultFolder: () => (
-    <ActiveVaultGuard>
-      <CurrentVaultFolderPageProvider>
-        <ManageVaultFolderPage />
-      </CurrentVaultFolderPageProvider>
-    </ActiveVaultGuard>
-  ),
   deeplink: () => (
     <ActiveVaultGuard>
       <DeeplinkPage />
