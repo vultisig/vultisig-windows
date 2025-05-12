@@ -263,6 +263,7 @@ export const handleRequest = (
                   .then(result => {
                     resolve(JSON.stringify(result))
                   })
+                  .catch(reject)
 
                 break
               }
@@ -492,7 +493,7 @@ export const handleRequest = (
         getRpcProvider(chain)
           .getFeeData()
           .then(({ maxFeePerGas }) => resolve(maxFeePerGas!.toString()))
-
+          .catch(reject)
         break
       }
       case RequestMethod.METAMASK.ETH_CALL: {
