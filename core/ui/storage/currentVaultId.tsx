@@ -60,7 +60,7 @@ export const CurrentVaultIdProvider = ({
 
   const invalidateQueries = useInvalidateQueries()
   const core = useCore()
-  
+
   // Store setCurrentVaultId in a ref to avoid dependency changes
   const setCurrentVaultIdRef = useRef(core.setCurrentVaultId)
   useEffect(() => {
@@ -68,16 +68,19 @@ export const CurrentVaultIdProvider = ({
   }, [core.setCurrentVaultId])
 
   // Stable mutation function with useCallback
-  const mutationFn = useCallback(async (newValue: CurrentVaultId) => {
-    if (newValue === previousValueRef.current) return
-    previousValueRef.current = newValue
-    await setCurrentVaultIdRef.current(newValue)
-    await invalidateQueries(currentVaultIdQueryKey)
-  }, [invalidateQueries]); // Only depends on invalidateQueries (and not core to avoid infinite calls)
+  const mutationFn = useCallback(
+    async (newValue: CurrentVaultId) => {
+      if (newValue === previousValueRef.current) return
+      previousValueRef.current = newValue
+      await setCurrentVaultIdRef.current(newValue)
+      await invalidateQueries(currentVaultIdQueryKey)
+    },
+    [invalidateQueries]
+  ) // Only depends on invalidateQueries (and not core to avoid infinite calls)
 
   // Use the stable mutation function
   const { mutate, isPending } = useMutation({
-    mutationFn
+    mutationFn,
   })
 
   // Only trigger mutation when guardedValue changes, not on every render
@@ -100,10 +103,13 @@ export const useSetCurrentVaultIdMutation = (
   const invalidateQueries = useInvalidateQueries()
   const { setCurrentVaultId } = useCore()
 
-  const mutationFn = useCallback(async (value: CurrentVaultId) => {
-    await setCurrentVaultId(value)
-    await invalidateQueries(currentVaultIdQueryKey)
-  }, [invalidateQueries, setCurrentVaultId])
+  const mutationFn = useCallback(
+    async (value: CurrentVaultId) => {
+      await setCurrentVaultId(value)
+      await invalidateQueries(currentVaultIdQueryKey)
+    },
+    [invalidateQueries, setCurrentVaultId]
+  )
 
   return useMutation({
     mutationFn,
