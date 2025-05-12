@@ -10,8 +10,11 @@ export type ErrorBoundaryFallbackProps = ErrorState & {
   clearError: () => void
 }
 
+export type ErrorBoundaryProcessError = (error: Error) => Error | null
+
 type ErrorBoundaryProps = ChildrenProp & {
   fallback?: ComponentType<ErrorBoundaryFallbackProps>
+  processError?: ErrorBoundaryProcessError
 }
 
 type ErrorBoundaryState = {
@@ -32,14 +35,24 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    this.setState({ error: { error, info } })
+    const { processError } = this.props
+    if (processError) {
+      const processedError = processError(error)
+      if (processedError) {
+        this.setState({ error: { error: processedError, info } })
+      } else {
+        this.setState({ error: null })
+      }
+    } else {
+      this.setState({ error: { error, info } })
+    }
   }
 
   render = () => {
     const { children, fallback: Fallback } = this.props
 
     if (this.state.error) {
-      if (Fallback) {
+      if (Fallback && this.state.error.info) {
         return (
           <Fallback
             {...this.state.error}

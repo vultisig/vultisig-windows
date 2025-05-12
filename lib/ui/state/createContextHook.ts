@@ -1,14 +1,16 @@
 import { Context as ReactContext, useContext } from 'react'
 
+import { NoContextError } from './NoContextError'
+
 export function createContextHook<T>(
   Context: ReactContext<T | undefined>,
-  contextName: string
+  contextId: string
 ) {
   return () => {
     const context = useContext(Context)
 
     if (context === undefined) {
-      throw new Error(`${contextName} is not provided`)
+      throw new NoContextError(contextId)
     }
 
     return context
