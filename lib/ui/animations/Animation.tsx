@@ -5,9 +5,7 @@ type AnimationProps = {
   src: string
 }
 
-export const Animation = ({ src: partialSrc, ...props }: AnimationProps) => {
-  const src = `/${partialSrc}.riv`
-
+export const Animation = ({ src, ...props }: AnimationProps) => {
   const { RiveComponent } = useRive({
     src,
     autoplay: true,
