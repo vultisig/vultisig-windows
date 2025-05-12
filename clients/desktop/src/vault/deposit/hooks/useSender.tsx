@@ -1,8 +1,7 @@
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 
-import { useCurrentDepositCoin } from './useCurrentDepositCoin'
-
 export const useSender = () => {
-  const [{ chain }] = useCurrentDepositCoin()
-  return useCurrentVaultAddress(chain)
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  return useCurrentVaultAddress(coinKey.chain)
 }

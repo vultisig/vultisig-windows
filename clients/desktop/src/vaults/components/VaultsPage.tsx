@@ -22,7 +22,7 @@ export const VaultsPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => navigate('manageVaults')}
+            onClick={() => navigate({ id: 'manageVaults' })}
           />
         }
         title={<VaultsPageHeaderTitle />}

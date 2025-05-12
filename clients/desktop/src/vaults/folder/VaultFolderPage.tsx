@@ -26,12 +26,14 @@ export const VaultFolderPage = () => {
       <PageHeader
         hasBorder
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate('vaults')} />
+          <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
         }
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => appNavigate('manageVaultFolder', { params: { id } })}
+            onClick={() =>
+              appNavigate({ id: 'manageVaultFolder', state: { id } })
+            }
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}

@@ -8,13 +8,13 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppPathState } from '../../navigation/hooks/useAppPathState'
+import { useAppViewState } from '../../navigation/hooks/useAppViewState'
 import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation'
 
 export const DeeplinkPage = () => {
   const { t } = useTranslation()
 
-  const { url } = useAppPathState<'deeplink'>()
+  const [{ url }] = useAppViewState<'deeplink'>()
 
   const { mutate, ...mutationState } = useProcessDeeplinkMutation()
 

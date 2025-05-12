@@ -6,16 +6,16 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../../state/fromAmount'
-import { useFromCoin } from '../../state/fromCoin'
 
 export const useIsSwapFormDisabled = () => {
   const [amount] = useFromAmount()
 
-  const [coinKey] = useFromCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const coin = useCurrentVaultCoin(fromCoinKey)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const swapFeesQuery = useSwapFeesQuery()
 

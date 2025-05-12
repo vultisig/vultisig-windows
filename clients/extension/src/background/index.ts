@@ -1,6 +1,5 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { appPaths } from '@clients/extension/src/navigation'
 import {
   getVaultAppSessions,
   getVaultsAppSessions,
@@ -58,6 +57,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
+import { CoreView } from '@core/ui/navigation/CoreView'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -68,6 +68,9 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
+
+import { AppView } from '../navigation/AppView'
+import { setInitialView } from '../navigation/state'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -96,7 +99,9 @@ const instance: Record<Instance, boolean> = {
   [Instance.VAULTS]: false,
 }
 
-const handleOpenPanel = (path: string): Promise<number> => {
+const handleOpenPanel = async (view: AppView | CoreView): Promise<number> => {
+  await setInitialView(view)
+
   return new Promise(resolve => {
     chrome.windows.getCurrent({ populate: true }, currentWindow => {
       const { height, left, top, width } =
@@ -104,7 +109,7 @@ const handleOpenPanel = (path: string): Promise<number> => {
 
       chrome.windows.create(
         {
-          url: chrome.runtime.getURL(`index.html#${path}`),
+          url: chrome.runtime.getURL(`index.html`),
           type: 'panel',
           height,
           left,
@@ -197,7 +202,7 @@ const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
             chain,
             sender,
           }).then(() => {
-            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
+            handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -238,7 +243,7 @@ const handleGetVault = (
             chain: Chain.Ethereum,
             sender,
           }).then(() => {
-            handleOpenPanel(appPaths.connectTab).then(createdWindowId => {
+            handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -256,7 +261,7 @@ const handleGetVault = (
 
 const handleGetVaults = async (): Promise<Messaging.GetVaults.Response> => {
   return new Promise(resolve => {
-    handleOpenPanel(appPaths.vaultsTab)
+    handleOpenPanel({ id: 'vaultsTab' })
     popupMessenger.reply(
       'vaults:connect',
       async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {
@@ -284,7 +289,7 @@ const handleSendTransaction = (
         },
         ...transactions,
       ]).then(() => {
-        handleOpenPanel(appPaths.transactionTab).then(createdWindowId => {
+        handleOpenPanel({ id: 'transactionTab' }).then(createdWindowId => {
           getStoredTransactions().then(transactions => {
             setStoredTransactions(
               transactions.map(transaction =>

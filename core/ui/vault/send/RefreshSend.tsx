@@ -10,7 +10,7 @@ import { useCurrentSendCoin } from './state/sendCoin'
 export const RefreshSend = () => {
   const invalidateQueries = useInvalidateQueries()
 
-  const [coinKey] = useCurrentSendCoin()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const address = useCurrentVaultAddress(coinKey.chain)
 
   const { mutate: refresh, isPending } = useMutation({
