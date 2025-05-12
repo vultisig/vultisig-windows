@@ -1142,6 +1142,8 @@ announceProvider({
   provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
 })
 
+window.dispatchEvent(new Event('inpage:ready'))
+
 messenger.reply(
   'setDefaultProvider',
   async ({ vultisigDefaultProvider }: { vultisigDefaultProvider: boolean }) => {
