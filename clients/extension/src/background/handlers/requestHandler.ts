@@ -1,4 +1,35 @@
 import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { getEvmClient } from '@core/chain/chains/evm/client'
+import {
+  CosmosChainId,
+  EVMChainId,
+  getChainByChainId,
+  getChainId,
+} from '@core/chain/coin/ChainId'
+import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import {
+  JsonRpcProvider,
+  toUtf8String,
+  TransactionRequest,
+  TypedDataEncoder,
+} from 'ethers'
+
+import {
+  getVaultsAppSessions,
+  setVaultsAppSessions,
+  updateAppSession,
+  VaultsAppSessions,
+} from '../../sessions/state/appSessions'
+import {
+  ThorchainProviderMethod,
+  ThorchainProviderResponse,
+} from '../../types/thorchain'
+import api from '../../utils/api'
+import { getDappHostname } from '../../utils/connectedApps'
+import { isSupportedChain, RequestMethod } from '../../utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -7,42 +38,12 @@ import {
   TransactionType,
 } from '../../utils/interfaces'
 import {
-  ThorchainProviderMethod,
-  ThorchainProviderResponse,
-} from '../../types/thorchain'
-import { getChainKind } from '@core/chain/ChainKind'
-import { isSupportedChain, RequestMethod } from '../../utils/constants'
-import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
-import {
-  CosmosChainId,
-  EVMChainId,
-  getChainByChainId,
-  getChainId,
-} from '@core/chain/coin/ChainId'
-import { handleSendTransaction } from './transactionsHandler'
-import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '../../utils/tx/getStandardTx'
-import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { getEvmClient } from '@core/chain/chains/evm/client'
-import api from '../../utils/api'
 import { getCurrentVaultId } from '../../vault/state/currentVaultId'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getDappHostname } from '../../utils/connectedApps'
-import {
-  getVaultsAppSessions,
-  setVaultsAppSessions,
-  updateAppSession,
-  VaultsAppSessions,
-} from '../../sessions/state/appSessions'
-import {
-  JsonRpcProvider,
-  toUtf8String,
-  TransactionRequest,
-  TypedDataEncoder,
-} from 'ethers'
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
+import { handleSendTransaction } from './transactionsHandler'
 
 const getRpcProvider = (chain: Chain) => {
   return new JsonRpcProvider(chainRpcUrl[chain])

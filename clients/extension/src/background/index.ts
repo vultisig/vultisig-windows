@@ -1,6 +1,7 @@
-import { dispatchMessage } from './dispatcher/messageDispatcher'
-import { MessageKey } from '../utils/constants'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+
+import { MessageKey } from '../utils/constants'
+import { dispatchMessage } from './dispatcher/messageDispatcher'
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,

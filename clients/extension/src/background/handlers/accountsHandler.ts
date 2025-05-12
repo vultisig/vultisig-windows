@@ -1,16 +1,17 @@
 import { Chain } from '@core/chain/Chain'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
-import { getVaultAppSessions } from '../../sessions/state/appSessions'
-import { getDappHostname } from '../../utils/connectedApps'
-import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { Instance } from '../../utils/constants'
-import { setStoredRequest } from '../../utils/storage'
-import { Messaging, VaultExport } from '../../utils/interfaces'
-import { getVaults } from '../../vault/state/vaults'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
+
 import { Messenger } from '../../messengers/createMessenger'
+import { getVaultAppSessions } from '../../sessions/state/appSessions'
+import { getDappHostname } from '../../utils/connectedApps'
+import { Instance } from '../../utils/constants'
+import { Messaging, VaultExport } from '../../utils/interfaces'
+import { setStoredRequest } from '../../utils/storage'
+import { getCurrentVaultId } from '../../vault/state/currentVaultId'
+import { getVaults } from '../../vault/state/vaults'
+import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { handleOpenPanel } from '../window/windowManager'
 
 const instance: Record<Instance, boolean> = {
@@ -42,7 +43,7 @@ export const handleFindAccounts = async (
   }
 }
 
-export const handleFindVault = async (
+const handleFindVault = async (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
   const vaults = await getVaults()
@@ -93,7 +94,7 @@ export const handleGetAccounts = (
             chain,
             sender,
           }).then(() => {
-            handleOpenPanel('connectTab').then(createdWindowId => {
+            handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -133,7 +134,7 @@ export const handleGetVault = (
             chain: Chain.Ethereum,
             sender,
           }).then(() => {
-            handleOpenPanel('connectTab').then(createdWindowId => {
+            handleOpenPanel({ id: 'connectTab' }).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.CONNECT] = false
@@ -153,7 +154,7 @@ export const handleGetVaults = async (
   popupMessenger: Messenger
 ): Promise<Messaging.GetVaults.Response> => {
   return new Promise(resolve => {
-    handleOpenPanel('vaultsTab')
+    handleOpenPanel({ id: 'vaultsTab' })
     popupMessenger.reply(
       'vaults:connect',
       async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {

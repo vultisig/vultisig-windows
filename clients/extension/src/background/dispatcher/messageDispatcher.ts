@@ -1,24 +1,22 @@
-import { getWalletCore } from '@clients/extension/src/background/walletCore'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
-import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
-import { Chain } from '@core/chain/Chain'
-import {
-  getChainId,
-  getChainByChainId,
-  EVMChainId,
-  CosmosChainId,
-} from '@core/chain/coin/ChainId'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { handleRequest } from '../handlers/requestHandler'
-import { handleGetVault, handleGetVaults } from '../handlers/accountsHandler'
+import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
-import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
-import { generateCosmosAccount } from '../utils/cosmosAccount'
+import { Chain } from '@core/chain/Chain'
+import {
+  CosmosChainId,
+  EVMChainId,
+  getChainByChainId,
+  getChainId,
+} from '@core/chain/coin/ChainId'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+
 import { Messenger } from '../../messengers/createMessenger'
+import { handleGetVault, handleGetVaults } from '../handlers/accountsHandler'
+import { handleRequest } from '../handlers/requestHandler'
+import { generateCosmosAccount } from '../utils/cosmosAccount'
 
 export const dispatchMessage = async (
   type: MessageKey,

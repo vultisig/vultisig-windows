@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain'
+import { v4 as uuidv4 } from 'uuid'
+
 import { ITransaction, SendTransactionResponse } from '../../utils/interfaces'
 import {
   getStoredTransactions,
   setStoredTransactions,
 } from '../../utils/storage'
-import { v4 as uuidv4 } from 'uuid'
-
 import { handleOpenPanel } from '../window/windowManager'
 
 export const handleSendTransaction = (
@@ -25,7 +25,7 @@ export const handleSendTransaction = (
         },
         ...transactions,
       ]).then(() => {
-        handleOpenPanel('transactionTab').then(createdWindowId => {
+        handleOpenPanel({ id: 'transactionTab' }).then(createdWindowId => {
           getStoredTransactions().then(transactions => {
             setStoredTransactions(
               transactions.map(transaction =>

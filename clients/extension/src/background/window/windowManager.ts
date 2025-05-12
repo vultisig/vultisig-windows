@@ -1,7 +1,13 @@
-import { AppViewId } from '../../navigation/AppView'
-import { calculateWindowPosition } from '../../utils/functions'
+import { AppView } from '@clients/extension/src/navigation/AppView'
+import { setInitialView } from '@clients/extension/src/navigation/state'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
+import { CoreView } from '@core/ui/navigation/CoreView'
 
-export const handleOpenPanel = (path: AppViewId): Promise<number> => {
+export const handleOpenPanel = async (
+  view: AppView | CoreView
+): Promise<number> => {
+  await setInitialView(view)
+
   return new Promise(resolve => {
     chrome.windows.getCurrent({ populate: true }, currentWindow => {
       const { height, left, top, width } =
@@ -9,7 +15,7 @@ export const handleOpenPanel = (path: AppViewId): Promise<number> => {
 
       chrome.windows.create(
         {
-          url: chrome.runtime.getURL(`index.html#${path}`),
+          url: chrome.runtime.getURL(`index.html`),
           type: 'panel',
           height,
           left,

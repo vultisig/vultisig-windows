@@ -1,11 +1,11 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaults } from '@clients/extension/src/vault/state/vaults'
+import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
+import { Chain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
-import { Chain } from '@core/chain/Chain'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
-import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
+import { getVaultId } from '@core/ui/vault/Vault'
 
 interface CosmosAccount {
   pubkey: number[]
