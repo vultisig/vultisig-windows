@@ -8,10 +8,10 @@ import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { useCorePathState } from '../../navigation/hooks/useCorePathState'
+import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 
 export const DownloadKeysignQrCode = () => {
-  const { keysignPayload } = useCorePathState<'keysign'>()
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
   const joinKeysignUrlQuery = useJoinKeysignUrlQuery(keysignPayload)
   const { t } = useTranslation()
   const vault = useCurrentVault()
