@@ -11,11 +11,11 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PageFooter } from '../../../ui/page/PageFooter'
 import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
 
 export const CreateVaultFolderPage = () => {
@@ -50,6 +50,7 @@ export const CreateVaultFolderPage = () => {
       <VStack
         as="form"
         flexGrow
+        style={{ height: '90%' }}
         {...getFormProps({
           isDisabled,
           isPending,
