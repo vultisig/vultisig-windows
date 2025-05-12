@@ -9,7 +9,7 @@ import {
   UseMutationOptions,
   useQuery,
 } from '@tanstack/react-query'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { currentVaultIdQueryKey } from '../query/keys'
 import { getVaultId } from '../vault/Vault'
@@ -47,6 +47,8 @@ export const CurrentVaultIdProvider = ({
   value,
 }: ChildrenProp & ValueProp<string>) => {
   const vaults = useVaults()
+  const previousValueRef = useRef<string | null>(null)
+  const previousGuardedValueRef = useRef<string | null>(null)
 
   const guardedValue = useMemo(() => {
     if (!vaults.length) return null
@@ -56,13 +58,34 @@ export const CurrentVaultIdProvider = ({
     return vault ? value : getVaultId(vaults[0])
   }, [vaults, value])
 
-  const { mutate, isPending } = useSetCurrentVaultIdMutation()
-
+  const invalidateQueries = useInvalidateQueries()
+  const core = useCore()
+  
+  // Store setCurrentVaultId in a ref to avoid dependency changes
+  const setCurrentVaultIdRef = useRef(core.setCurrentVaultId)
   useEffect(() => {
-    if (isPending || guardedValue === value) return
+    setCurrentVaultIdRef.current = core.setCurrentVaultId
+  }, [core.setCurrentVaultId])
 
-    mutate(value)
-  }, [guardedValue, value, isPending, mutate])
+  // Stable mutation function with useCallback
+  const mutationFn = useCallback(async (newValue: CurrentVaultId) => {
+    if (newValue === previousValueRef.current) return
+    previousValueRef.current = newValue
+    await setCurrentVaultIdRef.current(newValue)
+    await invalidateQueries(currentVaultIdQueryKey)
+  }, [invalidateQueries]); // Only depends on invalidateQueries (and not core to avoid infinite calls)
+
+  // Use the stable mutation function
+  const { mutate, isPending } = useMutation({
+    mutationFn
+  })
+
+  // Only trigger mutation when guardedValue changes, not on every render
+  useEffect(() => {
+    if (guardedValue === previousGuardedValueRef.current || isPending) return
+    previousGuardedValueRef.current = guardedValue
+    mutate(guardedValue)
+  }, [guardedValue, isPending, mutate])
 
   return (
     <InternalCurrentVaultIdProvider value={guardedValue}>
@@ -75,14 +98,12 @@ export const useSetCurrentVaultIdMutation = (
   options?: UseMutationOptions<any, any, CurrentVaultId, unknown>
 ) => {
   const invalidateQueries = useInvalidateQueries()
-
   const { setCurrentVaultId } = useCore()
 
-  const mutationFn = async (value: CurrentVaultId) => {
+  const mutationFn = useCallback(async (value: CurrentVaultId) => {
     await setCurrentVaultId(value)
-
     await invalidateQueries(currentVaultIdQueryKey)
-  }
+  }, [invalidateQueries, setCurrentVaultId])
 
   return useMutation({
     mutationFn,
