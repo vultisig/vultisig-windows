@@ -8,6 +8,7 @@ import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
@@ -24,6 +25,7 @@ export type SharedViewId = Extract<
   CoreViewId,
   | 'currencySettings'
   | 'defaultChains'
+  | 'importVault'
   | 'deleteVault'
   | 'languageSettings'
   | 'newVault'
@@ -48,6 +50,7 @@ export const sharedViews: Views<SharedViewId> = {
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,
   deleteVault: DeleteVaultPage,
+  importVault: ImportVaultPage,
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
