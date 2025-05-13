@@ -3,9 +3,9 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
+import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
-import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
 import ImportFilePage from '@clients/extension/src/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/import-qr'
@@ -19,8 +19,6 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
-
-import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
@@ -36,7 +34,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   uploadQr: ImportQRPage,
   vaults: VaultsPage,
   deposit: () => <>{/* <>TODO: Implement Deposit page</> */}</>,
-  deleteVault: DeleteVaultPage,
   vaultSettings: VaultSettingsPage,
   settings: SettingsPage,
   connectedDapps: ConnectedDappsPage,

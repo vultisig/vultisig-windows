@@ -16,7 +16,6 @@ import { VaultPage } from '../vault/components/VaultPage'
 import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
 import { VaultBackupPage } from '../vault/edit/vaultBackupSettings/VaultBackupPage'
-import DeleteVaultPage from '../vault/edit/vaultDeleteSettings/DeleteVaultPage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
 import { ImportVaultPage } from '../vault/import/components/ImportVaultPage'
 import { JoinKeygenPage } from '../vault/keygen/join/JoinKeygenPage'
@@ -58,7 +57,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   shareVault: ShareVaultPage,
   editVault: EditVaultPage,
   vaultBackup: VaultBackupPage,
-  vaultDelete: DeleteVaultPage,
   vaultFAQ: FaqVaultPage,
   addressBook: AddressBookSettingsPage,
   migrateVault: MigrateVaultPage,
