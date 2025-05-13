@@ -11,6 +11,7 @@ import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
+import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
@@ -25,6 +26,7 @@ export type SharedViewId = Extract<
   | 'currencySettings'
   | 'defaultChains'
   | 'importVault'
+  | 'deleteVault'
   | 'languageSettings'
   | 'newVault'
   | 'renameVault'
@@ -47,6 +49,7 @@ export const sharedViews: Views<SharedViewId> = {
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,
+  deleteVault: DeleteVaultPage,
   importVault: ImportVaultPage,
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
@@ -59,11 +62,11 @@ export const sharedViews: Views<SharedViewId> = {
   newVault: NewVaultPage,
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
-  vaultDetails: VaultDetailsPage,
   send: SendPage,
   swap: SwapPage,
   vaultChainDetail: VaultChainPage,
   vaultChainCoinDetail: VaultChainCoinPage,
+  vaultDetails: VaultDetailsPage,
   vaultFolder: () => (
     <CurrentVaultFolderPageProvider>
       <VaultFolderPage />

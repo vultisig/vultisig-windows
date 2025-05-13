@@ -1,5 +1,4 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -15,13 +14,10 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'styled-components'
 
 export const VaultSettingsPage = () => {
   const { t } = useTranslation()
-  const { colors } = useTheme()
-  const coreNavigate = useCoreNavigate()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const navigateBack = useNavigateBack()
   const vault = useCurrentVault()
 
@@ -47,31 +43,29 @@ export const VaultSettingsPage = () => {
         <List>
           <ListItem
             icon={<CircleInfoIcon fontSize={20} />}
-            onClick={() => coreNavigate({ id: 'vaultDetails' })}
+            onClick={() => navigate({ id: 'vaultDetails' })}
             title={t('details')}
             hoverable
             showArrow
           />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
-            onClick={() => coreNavigate({ id: 'renameVault' })}
-            title={t('rename_vault')}
+            onClick={() => navigate({ id: 'renameVault' })}
+            title={t('rename')}
             hoverable
             showArrow
           />
           <ListItem
-            icon={
-              <TrashIcon fontSize={20} stroke={colors.alertWarning.toHex()} />
-            }
+            icon={<TrashIcon fontSize={20} />}
             onClick={() => navigate({ id: 'deleteVault' })}
-            status="warning"
-            title={t('remove_vault')}
+            status="error"
+            title={t('delete')}
             hoverable
             showArrow
           />
           <ListItem
             icon={<ShareIcon fontSize={20} />}
-            onClick={() => coreNavigate({ id: 'reshareVault' })}
+            onClick={() => navigate({ id: 'reshareVault' })}
             title={t('reshare')}
             hoverable
             showArrow
