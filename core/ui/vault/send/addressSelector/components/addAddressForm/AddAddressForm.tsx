@@ -1,24 +1,21 @@
 import { Chain } from '@core/chain/Chain'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import {
-  useAddressBookItems,
-  useCreateAddressBookItemMutation,
-} from '@core/ui/storage/addressBook'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useCreateAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 import { v4 as uuidv4 } from 'uuid'
-import { z } from 'zod'
 
 import { AddressBookPageHeader } from '../../AddressSelector.styles'
 import { getCoinOptions } from '../../helpers/getCoinOptions'
-import { getAddressSchema } from '../../schemas/addressSchema'
+import {
+  AddressFormValues,
+  useAddressSchema,
+} from '../../hooks/useAddressSchema'
 import {
   AddButton,
   ChainOption,
@@ -38,31 +35,16 @@ type AddAddressFormProps = {
 }
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
-  const addressBookItems = useAddressBookItems()
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
-  const walletCore = useAssertWalletCore()
-  const addressSchema = getAddressSchema({
-    walletCore,
-    addressBookItems,
-    t,
-  })
-
-  type AddressFormValues = z.infer<typeof addressSchema>
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
     control,
-  } = useForm<AddressFormValues>({
-    resolver: zodResolver(addressSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      chain: chainOptions[0].value,
-      title: '',
-      address: '',
-    },
+  } = useAddressSchema({
+    type: 'add',
   })
 
   const {
