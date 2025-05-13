@@ -54,3 +54,39 @@ export const getAddressSchema = ({
         })
       }
     })
+
+export const getModifyAddressSchema = ({
+  walletCore,
+  t,
+}: {
+  walletCore: WalletCore
+  t: TFunction
+}) =>
+  z
+    .object({
+      title: z
+        .string()
+        .min(1, t('vault_settings_address_book_title_min_length_error'))
+        .max(50, t('vault_settings_address_book_title_max_length_error')),
+      address: z
+        .string()
+        .min(1, t('vault_settings_address_book_address_min_length_error')),
+      chain: z.string(),
+    })
+    .superRefine(async (data, ctx) => {
+      const { address, chain } = data
+
+      const isValid = isValidAddress({
+        chain: chain as Chain,
+        address,
+        walletCore,
+      })
+
+      if (!isValid) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['address'],
+          message: t('vault_settings_address_book_invalid_address_error'),
+        })
+      }
+    })

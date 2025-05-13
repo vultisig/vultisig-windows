@@ -1,10 +1,10 @@
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
+import AddAddressForm from '@core/ui/vault/send/addressSelector/components/addAddressForm/AddAddressForm'
 import { Match } from '@lib/ui/base/Match'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageSlice } from '@lib/ui/page/PageSlice'
 import { useState } from 'react'
 
-import AddAddressView from './components/addAddressForm/AddAddressForm'
 import AddressesListView from './components/addressesListView/AddressesListView'
 import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView'
 
@@ -29,7 +29,7 @@ const AddressBookSettingsPage = () => {
                 : 'list'
           }
           addAddress={() => (
-            <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
+            <AddAddressForm onClose={() => setIsAddAddressViewOpen(false)} />
           )}
           empty={() => (
             <EmptyAddressesView

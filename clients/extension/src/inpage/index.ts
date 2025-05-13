@@ -67,11 +67,42 @@ import { v4 as uuidv4 } from 'uuid'
 import { initializeMessenger } from '../messengers/initializeMessenger'
 import VULTI_ICON_RAW_SVG from './icon'
 
+function doctypeCheck() {
+  const { doctype } = window.document
+  if (doctype) {
+    return doctype.name === 'html'
+  }
+  return true
+}
+
+function suffixCheck() {
+  const prohibitedTypes = [/\.xml$/u, /\.pdf$/u]
+  const currentUrl = window.location.pathname
+  for (let i = 0; i < prohibitedTypes.length; i++) {
+    if (prohibitedTypes[i].test(currentUrl)) {
+      return false
+    }
+  }
+  return true
+}
+
+function documentElementCheck() {
+  const documentElement = document.documentElement.nodeName
+  if (documentElement) {
+    return documentElement.toLowerCase() === 'html'
+  }
+  return true
+}
+
+function shouldInjectProvider() {
+  return doctypeCheck() && suffixCheck() && documentElementCheck()
+}
+
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
 }
-window.ctrlKeplrProviders = {}
+
 type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void
 
 const messenger = initializeMessenger({ connect: 'contentScript' })
@@ -113,6 +144,7 @@ class XDEFIKeplrProvider extends Keplr {
     super(version, mode, requester)
     this.isXDEFI = true
     this.isVulticonnect = true
+    window.ctrlKeplrProviders = {}
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
   }
   enable(_chainIds: string | string[]): Promise<void> {
@@ -428,10 +460,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: this.providerType,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: this.providerType,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
         const result = processBackgroundResponse(
           data,
           this.providerType,
@@ -459,10 +495,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.COSMOS_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.COSMOS_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -506,10 +546,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.DASH_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.DASH_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -620,10 +664,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.ETHEREUM_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.ETHEREUM_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -803,10 +851,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           Messaging.Chain.Response
-        >('providerRequest', {
-          type: MessageKey.SOLANA_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.SOLANA_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -925,10 +977,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           ThorchainProviderResponse<T>
-        >('providerRequest', {
-          type: MessageKey.MAYA_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.MAYA_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -988,10 +1044,14 @@ namespace Provider {
         const response = await backgroundMessenger.send<
           any,
           ThorchainProviderResponse<T>
-        >('providerRequest', {
-          type: MessageKey.THOR_REQUEST,
-          message: data,
-        })
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.THOR_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
 
         const result = processBackgroundResponse(
           data,
@@ -1076,162 +1136,191 @@ const vultisigProvider = {
     return await backgroundMessenger.send<
       Messaging.GetVault.Request,
       Messaging.GetVault.Response
-    >('providerRequest', {
-      type: MessageKey.VAULT,
-      message: {},
-    })
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.VAULT,
+        message: {},
+      },
+      { id: uuidv4() }
+    )
   },
   getVaults: async (): Promise<VaultExport[]> => {
     return await backgroundMessenger.send<
       Messaging.GetVaults.Request,
       Messaging.GetVaults.Response
-    >('providerRequest', {
-      type: MessageKey.VAULTS,
-      message: {},
-    })
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.VAULTS,
+        message: {},
+      },
+      { id: uuidv4() }
+    )
   },
 }
 
-window.vultisig = vultisigProvider
-window.xfi = xfiProvider
-window.xfi.keplr = keplrProvider
-window.keplr = keplrProvider
-announceProvider({
-  info: {
-    icon: VULTI_ICON_RAW_SVG,
-    name: 'Vultisig',
-    rdns: 'me.vultisig',
-    uuid: uuidv4(),
-  },
-  provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
-})
+if (shouldInjectProvider()) {
+  Object.defineProperty(window, 'vultisig', {
+    value: vultisigProvider,
+    configurable: false,
+    enumerable: false,
+    writable: false,
+  })
 
-messenger.reply(
-  'setDefaultProvider',
-  async ({ vultisigDefaultProvider }: { vultisigDefaultProvider: boolean }) => {
-    if (vultisigDefaultProvider) {
-      const providerCopy = Object.create(
-        Object.getPrototypeOf(ethereumProvider),
-        Object.getOwnPropertyDescriptors(ethereumProvider)
-      )
-
-      providerCopy.isMetaMask = false
-      window.isCtrl = true
-      window.xfi.installed = true
-
-      announceProvider({
-        info: {
-          icon: VULTI_ICON_RAW_SVG,
-          name: 'Vultisig',
-          rdns: 'me.vultisig',
-          uuid: uuidv4(),
-        },
-        provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-      })
-
-      announceProvider({
-        info: {
-          icon: VULTI_ICON_RAW_SVG,
-          name: 'Ctrl Wallet',
-          rdns: 'io.xdefi',
-          uuid: uuidv4(),
-        },
-        provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-      })
-
-      Object.defineProperties(window, {
-        vultisig: {
-          value: vultisigProvider,
-          configurable: false,
-          writable: false,
-        },
-        ethereum: {
-          get() {
-            return window.vultiConnectRouter.currentProvider
-          },
-          set(newProvider) {
-            window.vultiConnectRouter?.addProvider(newProvider)
-          },
-          configurable: false,
-        },
-        vultiConnectRouter: {
-          value: {
-            ethereumProvider,
-            lastInjectedProvider: window.ethereum,
-            currentProvider: ethereumProvider,
-            providers: [
-              ethereumProvider,
-              ...(window.ethereum ? [window.ethereum] : []),
-            ],
-            setDefaultProvider(vultiAsDefault: boolean) {
-              window.vultiConnectRouter.currentProvider = vultiAsDefault
-                ? (window.vultisig?.ethereum ?? ethereumProvider)
-                : (window.vultiConnectRouter?.lastInjectedProvider ??
-                  window.ethereum)
-            },
-            addProvider(provider: Provider.Ethereum) {
-              if (!window.vultiConnectRouter.providers.includes(provider)) {
-                window.vultiConnectRouter.providers.push(provider)
-              }
-              if (ethereumProvider !== provider) {
-                window.vultiConnectRouter.lastInjectedProvider = provider
-              }
-            },
-          },
-          configurable: false,
-          writable: false,
-        },
-        bitcoin: {
-          value: { ...bitcoinProvider },
-          configurable: false,
-          writable: false,
-        },
-        bitcoincash: {
-          value: { ...bitcoinCashProvider },
-          configurable: false,
-          writable: false,
-        },
-        cosmos: {
-          value: { ...cosmosProvider },
-          configurable: false,
-          writable: false,
-        },
-        dash: {
-          value: { ...dashProvider },
-          configurable: false,
-          writable: false,
-        },
-        dogecoin: {
-          value: { ...dogecoinProvider },
-          configurable: false,
-          writable: false,
-        },
-        litecoin: {
-          value: { ...litecoinProvider },
-          configurable: false,
-          writable: false,
-        },
-        maya: {
-          value: { ...mayachainProvider },
-          configurable: false,
-          writable: false,
-        },
-        thorchain: {
-          value: { ...thorchainProvider },
-          configurable: false,
-          writable: false,
-        },
-        phantom: {
-          value: { ...phantomProvider },
-          configurable: false,
-          writable: false,
-        },
-        keplr: {
-          value: { ...keplrProvider },
-          configurable: false,
-          writable: false,
-        },
-      })
-    }
+  if (!window.ethereum) {
+    Object.defineProperty(window, 'ethereum', {
+      value: ethereumProvider,
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    })
   }
-)
+
+  announceProvider({
+    info: {
+      icon: VULTI_ICON_RAW_SVG,
+      name: 'Vultisig',
+      rdns: 'me.vultisig',
+      uuid: uuidv4(),
+    },
+    provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
+  })
+
+  window.dispatchEvent(new Event('vulticonnect:inpage:ready'))
+
+  messenger.reply(
+    'setDefaultProvider',
+    async ({
+      vultisigDefaultProvider,
+    }: {
+      vultisigDefaultProvider: boolean
+    }) => {
+      if (vultisigDefaultProvider) {
+        const providerCopy = Object.create(
+          Object.getPrototypeOf(ethereumProvider),
+          Object.getOwnPropertyDescriptors(ethereumProvider)
+        )
+        providerCopy.isMetaMask = false
+        announceProvider({
+          info: {
+            icon: VULTI_ICON_RAW_SVG,
+            name: 'Vultisig',
+            rdns: 'me.vultisig',
+            uuid: uuidv4(),
+          },
+          provider: providerCopy as Provider.Ethereum as EIP1193Provider,
+        })
+
+        announceProvider({
+          info: {
+            icon: VULTI_ICON_RAW_SVG,
+            name: 'Ctrl Wallet',
+            rdns: 'io.xdefi',
+            uuid: uuidv4(),
+          },
+          provider: providerCopy as Provider.Ethereum as EIP1193Provider,
+        })
+
+        Object.defineProperties(window, {
+          ethereum: {
+            get() {
+              return window.vultiConnectRouter.currentProvider
+            },
+            set(newProvider) {
+              window.vultiConnectRouter?.addProvider(newProvider)
+            },
+            configurable: false,
+          },
+          xfi: {
+            value: xfiProvider,
+            configurable: false,
+            writable: false,
+          },
+          isCtrl: {
+            value: true,
+            configurable: false,
+            writable: false,
+          },
+          vultiConnectRouter: {
+            value: {
+              ethereumProvider,
+              lastInjectedProvider: window.ethereum,
+              currentProvider: ethereumProvider,
+              providers: [
+                ethereumProvider,
+                ...(window.ethereum ? [window.ethereum] : []),
+              ],
+              setDefaultProvider(vultiAsDefault: boolean) {
+                window.vultiConnectRouter.currentProvider = vultiAsDefault
+                  ? (window.vultisig?.ethereum ?? ethereumProvider)
+                  : (window.vultiConnectRouter?.lastInjectedProvider ??
+                    window.ethereum)
+              },
+              addProvider(provider: Provider.Ethereum) {
+                if (!window.vultiConnectRouter.providers.includes(provider)) {
+                  window.vultiConnectRouter.providers.push(provider)
+                }
+                if (ethereumProvider !== provider) {
+                  window.vultiConnectRouter.lastInjectedProvider = provider
+                }
+              },
+            },
+            configurable: false,
+            writable: false,
+          },
+          bitcoin: {
+            value: bitcoinProvider,
+            configurable: false,
+            writable: false,
+          },
+          bitcoincash: {
+            value: bitcoinCashProvider,
+            configurable: false,
+            writable: false,
+          },
+          cosmos: {
+            value: cosmosProvider,
+            configurable: false,
+            writable: false,
+          },
+          dash: {
+            value: dashProvider,
+            configurable: false,
+            writable: false,
+          },
+          dogecoin: {
+            value: dogecoinProvider,
+            configurable: false,
+            writable: false,
+          },
+          litecoin: {
+            value: litecoinProvider,
+            configurable: false,
+            writable: false,
+          },
+          maya: {
+            value: mayachainProvider,
+            configurable: false,
+            writable: false,
+          },
+          thorchain: {
+            value: thorchainProvider,
+            configurable: false,
+            writable: false,
+          },
+          phantom: {
+            value: phantomProvider,
+            configurable: false,
+            writable: false,
+          },
+          keplr: {
+            value: keplrProvider,
+            configurable: false,
+            writable: false,
+          },
+        })
+      }
+    }
+  )
+}
