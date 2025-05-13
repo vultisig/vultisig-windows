@@ -1,6 +1,5 @@
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
-import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
@@ -36,94 +35,38 @@ import { AppViewId } from './AppView'
 
 export const views: Views<AppViewId> = {
   ...sharedViews,
-  vault: () => (
-    <ActiveVaultGuard>
-      <VaultPage />
-    </ActiveVaultGuard>
-  ),
-  joinKeygen: () => <JoinKeygenPage />,
-  setupFastVault: () => <SetupFastVaultPage />,
-  setupSecureVault: () => <SetupSecureVaultPage />,
-  setupVault: () => <SetupVaultPageController />,
-  importVault: () => <ImportVaultPage />,
-  keysign: () => (
-    <ActiveVaultGuard>
-      <StartKeysignPage />
-    </ActiveVaultGuard>
-  ),
-  reshareVaultFast: () => (
-    <ActiveVaultGuard>
-      <FastReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  reshareVaultSecure: () => (
-    <ActiveVaultGuard>
-      <SecureReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  joinKeysign: () => (
-    <ActiveVaultGuard>
-      <JoinKeysignPage />
-    </ActiveVaultGuard>
-  ),
-  uploadQr: () => <UploadQrPage />,
-  vaults: () => <VaultsPage />,
-  deposit: () => (
-    <ActiveVaultGuard>
-      <DepositPage />
-    </ActiveVaultGuard>
-  ),
+  vault: VaultPage,
+  joinKeygen: JoinKeygenPage,
+  setupFastVault: SetupFastVaultPage,
+  setupSecureVault: SetupSecureVaultPage,
+  setupVault: SetupVaultPageController,
+  importVault: ImportVaultPage,
+  keysign: StartKeysignPage,
+  reshareVaultFast: FastReshareVaultPage,
+  reshareVaultSecure: SecureReshareVaultPage,
+  joinKeysign: JoinKeysignPage,
+  uploadQr: UploadQrPage,
+  vaults: VaultsPage,
+  deposit: DepositPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  vaultSettings: () => <SettingsVaultPage />,
-  importVaultFromFile: () => <ImportVaultFromFilePage />,
-  manageVaults: () => <ManageVaultsPage />,
-  shareVault: () => (
-    <ActiveVaultGuard>
-      <ShareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  editVault: () => (
-    <ActiveVaultGuard>
-      <EditVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultBackup: () => (
-    <ActiveVaultGuard>
-      <VaultBackupPage />
-    </ActiveVaultGuard>
-  ),
-  vaultDelete: () => (
-    <ActiveVaultGuard>
-      <DeleteVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultFAQ: () => <FaqVaultPage />,
-  addressBook: () => <AddressBookSettingsPage />,
-  migrateVault: () => (
-    <ActiveVaultGuard>
-      <MigrateVaultPage />
-    </ActiveVaultGuard>
-  ),
-  registerForAirdrop: () => (
-    <ActiveVaultGuard>
-      <RegisterForAirdropPage />
-    </ActiveVaultGuard>
-  ),
-  checkUpdate: () => <VaultCheckUpdatePage />,
-  deeplink: () => (
-    <ActiveVaultGuard>
-      <DeeplinkPage />
-    </ActiveVaultGuard>
-  ),
-  signCustomMessage: () => (
-    <ActiveVaultGuard>
-      <SignCustomMessagePage />
-    </ActiveVaultGuard>
-  ),
-  dkls: () => <ManageDklsPage />,
-  faq: () => <FaqVaultPage />,
+  vaultSettings: SettingsVaultPage,
+  importVaultFromFile: ImportVaultFromFilePage,
+  manageVaults: ManageVaultsPage,
+  shareVault: ShareVaultPage,
+  editVault: EditVaultPage,
+  vaultBackup: VaultBackupPage,
+  vaultDelete: DeleteVaultPage,
+  vaultFAQ: FaqVaultPage,
+  addressBook: AddressBookSettingsPage,
+  migrateVault: MigrateVaultPage,
+  registerForAirdrop: RegisterForAirdropPage,
+  checkUpdate: VaultCheckUpdatePage,
+  deeplink: DeeplinkPage,
+  signCustomMessage: SignCustomMessagePage,
+  dkls: ManageDklsPage,
+  faq: FaqVaultPage,
 }
