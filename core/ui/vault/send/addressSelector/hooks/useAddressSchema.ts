@@ -14,11 +14,22 @@ import {
 
 export type AddressFormValues = z.infer<ReturnType<typeof getAddressSchema>>
 
-export const useAddressSchema = (type: 'add' | 'modify') => {
+export const useAddressSchema = ({
+  type,
+  defaultValues,
+}: {
+  type: 'add' | 'modify'
+  defaultValues?: AddressFormValues
+}) => {
   const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
+  const derivedDefaultValues = defaultValues || {
+    chain: chainOptions[0].value,
+    title: '',
+    address: '',
+  }
 
   const addressSchema = useMemo(
     () =>
@@ -38,11 +49,7 @@ export const useAddressSchema = (type: 'add' | 'modify') => {
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(addressSchema),
     mode: 'onBlur',
-    defaultValues: {
-      chain: chainOptions[0].value,
-      title: '',
-      address: '',
-    },
+    defaultValues: derivedDefaultValues,
   })
 
   const watchedChain = useWatch({ control: form.control, name: 'chain' })

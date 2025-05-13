@@ -41,13 +41,21 @@ const ModifyAddressForm = ({
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
+  const { address, chain, title, id } = addressBookItem
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
     control,
-  } = useAddressSchema('modify')
+  } = useAddressSchema({
+    type: 'modify',
+    defaultValues: {
+      title: title,
+      address: address,
+      chain: chain,
+    },
+  })
 
   const {
     mutate: updateAddressBookItem,
@@ -59,7 +67,7 @@ const ModifyAddressForm = ({
     const { address, chain, title } = data
     updateAddressBookItem(
       {
-        id: addressBookItem.id,
+        id,
         fields: {
           address,
           title,

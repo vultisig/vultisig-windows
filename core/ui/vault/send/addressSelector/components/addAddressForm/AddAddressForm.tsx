@@ -43,7 +43,9 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
     control,
-  } = useAddressSchema('add')
+  } = useAddressSchema({
+    type: 'add',
+  })
 
   const {
     mutate: addAddressBookItem,
