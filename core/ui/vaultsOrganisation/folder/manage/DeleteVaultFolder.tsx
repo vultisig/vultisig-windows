@@ -7,7 +7,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
+import { Opener } from '@lib/ui/base/Opener'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
@@ -17,36 +17,39 @@ export const DeleteVaultFolder = () => {
   const navigate = useCoreNavigate()
   const { id, name } = useCurrentVaultFolder()
   const { mutate, isPending } = useDeleteVaultFolderMutation()
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <>
-      <UnstyledButton onClick={() => setIsModalOpen(true)}>
-        {isPending ? (
-          <Spinner />
-        ) : (
-          <TrashIcon width={20} height={20} stroke="#FFA500" />
-        )}
-      </UnstyledButton>
-
-      {isModalOpen && (
+    <Opener
+      renderOpener={({ onOpen }) => (
+        <UnstyledButton onClick={onOpen}>
+          {isPending ? (
+            <Spinner />
+          ) : (
+            <TrashIcon width={20} height={20} stroke="#FFA500" />
+          )}
+        </UnstyledButton>
+      )}
+      renderContent={({ onClose }) => (
         <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={true}
+          onClose={onClose}
           title={t('delete_folder')}
         >
           <VStack gap={16}>
             <Text color="contrast" size={16}>
-              {t('delete_folder_confirmation', { name })}
+              {t('delete_folder_confirmation', { name })} 
             </Text>
             <VStack gap={8}>
               <Button
                 onClick={() => {
                   mutate(id, {
                     onSuccess: () => {
-                      setIsModalOpen(false)
+                      onClose()
                       navigate({ id: 'vaults' })
                     },
+                    onError: (error) => {
+                      console.error(error)
+                    }
                   })
                 }}
                 isLoading={isPending}
@@ -54,13 +57,13 @@ export const DeleteVaultFolder = () => {
               >
                 {t('delete')}
               </Button>
-              <Button onClick={() => setIsModalOpen(false)} kind="secondary">
+              <Button onClick={onClose} kind="secondary">
                 {t('cancel')}
               </Button>
             </VStack>
           </VStack>
         </Modal>
       )}
-    </>
+    />
   )
 }
