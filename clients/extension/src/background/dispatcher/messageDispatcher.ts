@@ -12,6 +12,7 @@ import {
   getChainId,
 } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { handleGetVault, handleGetVaults } from '../handlers/accountsHandler'
@@ -28,7 +29,7 @@ export const dispatchMessage = async (
   const sessions = (await getVaultsAppSessions()) ?? {}
   const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
   if (!dappHostname) {
-    console.warn('dispatcher: Cannot resolve dapp hostname – aborting request')
+    console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
     return
   }
   const chainSelectors = {
@@ -95,13 +96,13 @@ export const dispatchMessage = async (
     return response
   }
 
-  switch (type) {
-    case MessageKey.VAULT:
-      return handleGetVault(safeOrigin)
-    case MessageKey.VAULTS:
-      return handleGetVaults(popupMessenger)
-    default:
-      console.warn(`Unhandled message type: ${type}`)
-      return
+  try {
+    return match(type, {
+      [MessageKey.VAULT]: () => handleGetVault(safeOrigin),
+      [MessageKey.VAULTS]: () => handleGetVaults(popupMessenger),
+    } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
+  } catch {
+    console.warn(`Unhandled message type: ${type}`)
+    return
   }
 }
