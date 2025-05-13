@@ -6,12 +6,12 @@ import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVeri
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
 
 export const JoinKeysignPage = () => {
-  const { keysignMsg } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
 
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),

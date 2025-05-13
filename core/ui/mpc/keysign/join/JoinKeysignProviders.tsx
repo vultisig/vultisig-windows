@@ -3,13 +3,13 @@ import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevic
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { JoinKeysignVaultGuard } from './JoinKeysignVaultGuard'
 
 export const JoinKeysignProviders = ({ children }: ChildrenProp) => {
-  const { keysignMsg } = useCorePathState<'joinKeysign'>()
+  const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
 
   const { sessionId, encryptionKeyHex, useVultisigRelay, serviceName } =
     keysignMsg
