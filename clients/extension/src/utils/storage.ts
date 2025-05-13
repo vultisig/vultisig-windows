@@ -59,25 +59,6 @@ export const setStoredTransaction = (
   })
 }
 
-export const getIsPriority = (): Promise<boolean> => {
-  const keys: LocalStorageKeys[] = ['isPriority']
-  return new Promise(resolve => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(res.isPriority ?? true)
-    })
-  })
-}
-
-export const setIsPriority = (isPriority: boolean): Promise<void> => {
-  const vals: LocalStorage = { isPriority }
-
-  return new Promise(resolve => {
-    chrome.storage.local.set(vals, () => {
-      resolve()
-    })
-  })
-}
-
 export const getStoredTransactions = (): Promise<ITransaction[]> => {
   const keys: LocalStorageKeys[] = ['transactions']
 
