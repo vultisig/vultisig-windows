@@ -1,5 +1,6 @@
 import { MigrateInfoScreen } from '@core/ui/mpc/keygen/migrate/MigrateInfoScreen'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
+import { Animation } from '@lib/ui/animations/Animation'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
@@ -12,7 +13,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
 
   const renderFinalScreen = () => (
     <MigrateInfoScreen
-      animation="core/animations/upgrade_shares"
+      art={<Animation src="/core/animations/upgrade_shares.riv" />}
       title={<Trans i18nKey="upgrade_shares_info" components={{ b: <b /> }} />}
       action={<Button onClick={onFinish}>{t('next')}</Button>}
     />
@@ -22,7 +23,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
     <StepTransition
       from={({ onFinish }) => (
         <MigrateInfoScreen
-          animation="/core/animations/upgrade.riv"
+          art={<Animation src="/core/animations/upgrade.riv" />}
           title={
             <Trans
               i18nKey="upgrade_vault_description"
@@ -40,7 +41,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
             <StepTransition
               from={({ onFinish }) => (
                 <MigrateInfoScreen
-                  animation="/core/animations/choose-vault.riv"
+                  art={<Animation src="/core/animations/choose-vault.riv" />}
                   title={
                     <Trans
                       i18nKey="upgrade_all_devices"
