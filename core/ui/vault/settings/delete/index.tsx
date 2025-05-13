@@ -108,6 +108,7 @@ export const DeleteVaultPage = () => {
           {terms.map((term, index) => (
             <ListItem
               extra={<StyledCheck value={termsAccepted[index]} />}
+              key={index}
               onClick={() => toggleCheckbox(index)}
               title={t(term)}
               hoverable
