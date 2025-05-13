@@ -1,30 +1,30 @@
 import { AddressPage } from '@core/ui/chain/components/address/AddressPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
+import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
-import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
+import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
+import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
+import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
+import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { Views } from '@lib/ui/navigation/Views'
 
-import { ManageVaultFolderPage } from '../vaultsOrganisation/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '../vaultsOrganisation/folder/VaultFolderPage'
-import { WrapWithVaultFolderContext } from '../vaultsOrganisation/folder/withVaultFolder'
-import { CoreViewId } from './CoreView'
-
-type SharedViewId = Extract<
+export type SharedViewId = Extract<
   CoreViewId,
   | 'currencySettings'
   | 'defaultChains'
+  | 'deleteVault'
   | 'languageSettings'
   | 'newVault'
   | 'renameVault'
@@ -43,69 +43,30 @@ type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  address: AddressPage,
+  createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,
+  deleteVault: DeleteVaultPage,
   languageSettings: LanguagePage,
-  manageVaultChains: () => (
-    <ActiveVaultGuard>
-      <ManageVaultChainsPage />
-    </ActiveVaultGuard>
+  manageVaultChains: ManageVaultChainsPage,
+  manageVaultChainCoins: ManageVaultChainCoinsPage,
+  manageVaultFolder: () => (
+    <CurrentVaultFolderPageProvider>
+      <ManageVaultFolderPage />
+    </CurrentVaultFolderPageProvider>
   ),
   newVault: NewVaultPage,
-  renameVault: () => (
-    <ActiveVaultGuard>
-      <VaultRenamePage />
-    </ActiveVaultGuard>
-  ),
-  reshareVault: () => (
-    <ActiveVaultGuard>
-      <ReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultDetails: () => (
-    <ActiveVaultGuard>
-      <VaultDetailsPage />
-    </ActiveVaultGuard>
-  ),
-  send: () => (
-    <ActiveVaultGuard>
-      <SendPage />
-    </ActiveVaultGuard>
-  ),
-  swap: () => (
-    <ActiveVaultGuard>
-      <SwapPage />
-    </ActiveVaultGuard>
-  ),
-  vaultChainDetail: () => (
-    <ActiveVaultGuard>
-      <VaultChainPage />
-    </ActiveVaultGuard>
-  ),
-  vaultChainCoinDetail: () => (
-    <ActiveVaultGuard>
-      <VaultChainCoinPage />
-    </ActiveVaultGuard>
-  ),
-  manageVaultChainCoins: () => (
-    <ActiveVaultGuard>
-      <ManageVaultChainCoinsPage />
-    </ActiveVaultGuard>
-  ),
-  createVaultFolder: () => (
-    <ActiveVaultGuard>
-      <CreateVaultFolderPage />
-    </ActiveVaultGuard>
-  ),
+  renameVault: VaultRenamePage,
+  reshareVault: ReshareVaultPage,
+  send: SendPage,
+  swap: SwapPage,
+  vaultChainDetail: VaultChainPage,
+  vaultChainCoinDetail: VaultChainCoinPage,
+  vaultDetails: VaultDetailsPage,
   vaultFolder: () => (
-    <WrapWithVaultFolderContext>
+    <CurrentVaultFolderPageProvider>
       <VaultFolderPage />
-    </WrapWithVaultFolderContext>
+    </CurrentVaultFolderPageProvider>
   ),
-  manageVaultFolder: () => (
-    <WrapWithVaultFolderContext>
-      <ManageVaultFolderPage />
-    </WrapWithVaultFolderContext>
-  ),
-  address: () => <AddressPage />,
 }
