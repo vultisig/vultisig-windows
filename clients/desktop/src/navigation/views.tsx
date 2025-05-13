@@ -1,9 +1,5 @@
 import { sharedViews } from '@core/ui/navigation/sharedViews'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
-import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
@@ -64,17 +60,6 @@ export const views: Views<AppViewId> = {
   migrateVault: MigrateVaultPage,
   registerForAirdrop: RegisterForAirdropPage,
   checkUpdate: VaultCheckUpdatePage,
-  createVaultFolder: CreateVaultFolderPage,
-  vaultFolder: () => (
-    <CurrentVaultFolderPageProvider>
-      <VaultFolderPage />
-    </CurrentVaultFolderPageProvider>
-  ),
-  manageVaultFolder: () => (
-    <CurrentVaultFolderPageProvider>
-      <ManageVaultFolderPage />
-    </CurrentVaultFolderPageProvider>
-  ),
   deeplink: DeeplinkPage,
   signCustomMessage: SignCustomMessagePage,
   dkls: ManageDklsPage,
