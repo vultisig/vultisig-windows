@@ -22,6 +22,7 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { JoinKeygenPage } from '../mpc/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '../mpc/keysign/join/JoinKeysignPage'
+import { StartKeysignPage } from '../mpc/keysign/start/StartKeysignPage'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
@@ -29,7 +30,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: SetupVaultPageController,
-  keysign: () => <>TODO: Implement keysign page</>,
+  keysign: StartKeysignPage,
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
   joinKeysign: JoinKeysignPage,
