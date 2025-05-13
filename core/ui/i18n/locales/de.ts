@@ -824,4 +824,6 @@ export const de = {
   vulti_share_not_saved_hint:
     'Wenn Sie Ihren VultiShare-QR noch nicht gespeichert haben, gehen Sie zur App und klicken Sie auf das QR-Symbol in der oberen rechten Ecke.',
   version: 'Version',
+  delete_folder_confirmation:
+    'Sind Sie sicher, dass Sie den Ordner "{{name}}" löschen möchten?',
 }

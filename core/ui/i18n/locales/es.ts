@@ -821,4 +821,6 @@ export const es = {
   vulti_share_not_saved_hint:
     'Si aún no has guardado tu QR de VultiShare, ve a la aplicación y haz clic en el ícono QR en la esquina superior derecha.',
   version: 'Versión',
+  delete_folder_confirmation:
+    '¿Está seguro de que desea eliminar la carpeta "{{name}}"?',
 }

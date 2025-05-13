@@ -800,4 +800,6 @@ export const hr = {
   vulti_share_not_saved_hint:
     'Ako još niste spremili svoj VultiShare QR, idite na aplikaciju i kliknite na QR ikonu u gornjem desnom kutu.',
   version: 'Verzija',
+  delete_folder_confirmation:
+    'Jeste li sigurni da želite izbrisati mapu "{{name}}"?',
 }
