@@ -6,6 +6,12 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { OnFinishProp } from '@lib/ui/props'
 import { Trans, useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+const PartToShareArt = styled.img`
+  flex: 1;
+  object-fit: cover;
+`
 
 export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
@@ -13,7 +19,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
 
   const renderFinalScreen = () => (
     <MigrateInfoScreen
-      art={<Animation src="/core/animations/upgrade_shares.riv" />}
+      art={<PartToShareArt src="/core/images/part-to-share.png" />}
       title={<Trans i18nKey="upgrade_shares_info" components={{ b: <b /> }} />}
       action={<Button onClick={onFinish}>{t('next')}</Button>}
     />
