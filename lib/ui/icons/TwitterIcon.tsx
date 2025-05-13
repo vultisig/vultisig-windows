@@ -1,9 +1,20 @@
-const TwitterIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={25} height={24} fill="none">
-    <path
-      fill="#33E6BF"
-      d="M21.907 0H3.093A2.593 2.593 0 0 0 .5 2.593v18.814A2.593 2.593 0 0 0 3.093 24h18.814a2.593 2.593 0 0 0 2.593-2.593V2.593A2.593 2.593 0 0 0 21.907 0Zm-6.099 20.352-4.46-6.49-5.584 6.49H4.321l6.386-7.422-6.386-9.295h4.871l4.223 6.147 5.288-6.147h1.443l-6.09 7.079 6.623 9.638h-4.871Z"
-    />
+import { FC, SVGProps } from 'react'
+
+export const TwitterIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'currentColor',
+  height = '1em',
+  width = '1em',
+  ...props
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      width,
+    }}
+  >
+    <path d="M13.6,10.7l6.1-7.1h-1.4l-5.3,6.1-4.2-6.1H3.8l6.4,9.3-6.4,7.4h1.4l5.6-6.5,4.5,6.5h4.9l-6.6-9.6ZM11.6,13h0s-.6-.9-.6-.9l-5.1-7.4h2.2l4.2,5.9.6.9,5.4,7.7h-2.2l-4.4-6.3Z" />
   </svg>
 )
-export default TwitterIcon
