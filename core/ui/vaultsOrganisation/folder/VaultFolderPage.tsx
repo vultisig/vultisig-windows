@@ -1,4 +1,3 @@
-import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useFolderVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -11,10 +10,11 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 
 export const VaultFolderPage = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const { id, name } = useCurrentVaultFolder()
 
   const vaults = useFolderVaults(id)
