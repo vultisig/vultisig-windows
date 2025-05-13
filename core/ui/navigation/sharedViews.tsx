@@ -15,9 +15,9 @@ import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { CurrentVaultFolderPageProvider } from '../vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from '../vaultsOrganisation/folder/manage/ManageVaultFolderPage'
 import { VaultFolderPage } from '../vaultsOrganisation/folder/VaultFolderPage'
-import { WrapWithVaultFolderContext } from '../vaultsOrganisation/folder/withVaultFolder'
 import { CoreViewId } from './CoreView'
 
 type SharedViewId = Extract<
@@ -58,13 +58,13 @@ export const sharedViews: Views<SharedViewId> = {
   address: AddressPage,
   createVaultFolder: CreateVaultFolderPage,
   vaultFolder: () => (
-    <WrapWithVaultFolderContext>
+    <CurrentVaultFolderPageProvider>
       <VaultFolderPage />
-    </WrapWithVaultFolderContext>
+    </CurrentVaultFolderPageProvider>
   ),
   manageVaultFolder: () => (
-    <WrapWithVaultFolderContext>
+    <CurrentVaultFolderPageProvider>
       <ManageVaultFolderPage />
-    </WrapWithVaultFolderContext>
+    </CurrentVaultFolderPageProvider>
   ),
 }
