@@ -1,19 +1,19 @@
 import { Chain } from '@core/chain/Chain'
 import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useUpdateAddressBookItemMutation } from '@core/ui/storage/addressBook'
-import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  AddressFormValues,
+  useAddressSchema,
+} from '@core/ui/vault/send/addressSelector/hooks/useAddressSchema'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
-import { z } from 'zod'
 
 import { getCoinOptions } from '../../helpers/getCoinOptions'
-import { getModifyAddressSchema } from '../../schemas/addressSchema'
 import {
   customSelectOption,
   customSingleValue,
@@ -41,27 +41,13 @@ const ModifyAddressForm = ({
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
-  const walletCore = useAssertWalletCore()
-  const addressSchema = getModifyAddressSchema({
-    walletCore,
-    t,
-  })
-  type AddressFormValues = z.infer<typeof addressSchema>
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
     control,
-  } = useForm<AddressFormValues>({
-    resolver: zodResolver(addressSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      title: addressBookItem.title,
-      address: addressBookItem.address,
-      chain: addressBookItem.chain,
-    },
-  })
+  } = useAddressSchema('modify')
 
   const {
     mutate: updateAddressBookItem,
