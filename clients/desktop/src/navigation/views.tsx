@@ -1,4 +1,5 @@
 import { sharedViews } from '@core/ui/navigation/sharedViews'
+import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
@@ -47,7 +48,11 @@ export const views: Views<AppViewId> = {
   uploadQr: UploadQrPage,
   vaults: VaultsPage,
   deposit: DepositPage,
-  onboarding: OnboardingPage,
+  onboarding: () => (
+    <IncompleteOnboardingOnly>
+      <OnboardingPage />
+    </IncompleteOnboardingOnly>
+  ),
   vaultSettings: SettingsVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   manageVaults: ManageVaultsPage,
