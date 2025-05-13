@@ -32,27 +32,35 @@ const StyledIcon = styled(TriangleAlertIcon)`
   color: ${getColor('alertError')};
 `
 
-interface InitialState {
-  firstTermAccepted: boolean
-  secondTermAccepted: boolean
-  thirdTermAccepted: boolean
-}
+const terms = [
+  'vault_delete_page_term_1',
+  'vault_delete_page_term_2',
+  'vault_delete_page_term_3',
+] as const
 
 export const DeleteVaultPage = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {
-    firstTermAccepted: false,
-    secondTermAccepted: false,
-    thirdTermAccepted: false,
-  }
-  const [state, setState] = useState(initialState)
-  const { firstTermAccepted, secondTermAccepted, thirdTermAccepted } = state
+  const [termsAccepted, setTermsAccepted] = useState(terms.map(() => false))
   const { data: vaultBalance } = useVaultTotalBalanceQuery()
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const vault = useCurrentVault()
-  const isDisabled = !Object.values(state).every(Boolean)
+  const isDisabled = !termsAccepted.every(Boolean)
+
+  const handleConfirm = () => {
+    if (!isDisabled && !isPending) {
+      deleteVault(getVaultId(vault), {
+        onSuccess: () => navigate({ id: 'vault' }),
+      })
+    }
+  }
+
+  const toggleCheckbox = (index: number) => {
+    setTermsAccepted(prev =>
+      prev.map((value, i) => (i === index ? !value : value))
+    )
+  }
 
   return (
     <VStack fullHeight>
@@ -97,39 +105,14 @@ export const DeleteVaultPage = () => {
         </List>
         <Divider text={t('terms')} />
         <List>
-          <ListItem
-            extra={<StyledCheck value={firstTermAccepted} />}
-            onClick={() =>
-              setState(prevState => ({
-                ...prevState,
-                firstTermAccepted: !prevState.firstTermAccepted,
-              }))
-            }
-            title={t('vault_delete_page_term_1')}
-            hoverable
-          />
-          <ListItem
-            extra={<StyledCheck value={secondTermAccepted} />}
-            onClick={() =>
-              setState(prevState => ({
-                ...prevState,
-                secondTermAccepted: !prevState.secondTermAccepted,
-              }))
-            }
-            title={t('vault_delete_page_term_2')}
-            hoverable
-          />
-          <ListItem
-            extra={<StyledCheck value={thirdTermAccepted} />}
-            onClick={() =>
-              setState(prevState => ({
-                ...prevState,
-                thirdTermAccepted: !prevState.thirdTermAccepted,
-              }))
-            }
-            title={t('vault_delete_page_term_3')}
-            hoverable
-          />
+          {terms.map((term, index) => (
+            <ListItem
+              extra={<StyledCheck value={termsAccepted[index]} />}
+              onClick={() => toggleCheckbox(index)}
+              title={t(term)}
+              hoverable
+            />
+          ))}
         </List>
         {error && (
           <Text color="danger" size={12}>
@@ -142,13 +125,7 @@ export const DeleteVaultPage = () => {
           isDisabled={isDisabled}
           isLoading={isPending}
           kind="alert"
-          onClick={() => {
-            if (!isDisabled && !isPending) {
-              deleteVault(getVaultId(vault), {
-                onSuccess: () => navigate({ id: 'vault' }),
-              })
-            }
-          }}
+          onClick={handleConfirm}
         >
           {t('delete')}
         </Button>
