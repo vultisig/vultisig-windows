@@ -1,10 +1,9 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-
 export const PageHeaderVaultSettingsPrompt = () => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   return (
     <PageHeaderIconButton

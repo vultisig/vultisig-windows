@@ -1,11 +1,11 @@
 import buildInfo from '@clients/desktop/build.json'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { I18nProvider } from '@core/ui/i18n/I18nProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
+import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -47,16 +47,15 @@ export const AppProviders = ({ children }: ChildrenProp) => {
       <CoreProvider value={coreState}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={darkTheme}>
+            <GlobalStyle />
             <WalletCoreProvider>
               <StorageDependant>
-                <I18nProvider>
-                  <ToastProvider>
-                    {children}
-                    <ActiveVaultOnly>
-                      <CoinFinder />
-                    </ActiveVaultOnly>
-                  </ToastProvider>
-                </I18nProvider>
+                <ToastProvider>
+                  {children}
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
+                </ToastProvider>
               </StorageDependant>
             </WalletCoreProvider>
           </ThemeProvider>

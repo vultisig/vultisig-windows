@@ -64,10 +64,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             </TxOverviewChainDataRow>
             <TxOverviewChainDataRow>
               <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
-              {receiver}
+              <span>{receiver}</span>
             </TxOverviewChainDataRow>
             {memo && <TxOverviewMemo value={memo} />}
-
             <TxOverviewRow>
               <span>{t('amount')}</span>
               <span>
