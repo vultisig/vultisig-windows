@@ -1,6 +1,7 @@
-import { sharedViews } from '@core/ui/navigation/sharedViews'
+import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
-import { ActiveVaultGuard } from '@core/ui/vault/ActiveVaultGuard'
+import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
@@ -29,122 +30,45 @@ import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
-import { VaultsPage } from '../vaults/components/VaultsPage'
-import { CurrentVaultFolderPageProvider } from '../vaults/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '../vaults/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '../vaults/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '../vaults/folders/create/CreateVaultFolderPage'
-import { ManageVaultsPage } from '../vaults/manage/ManageVaultsPage'
 import { AppViewId } from './AppView'
 
-export const views: Views<AppViewId> = {
-  ...sharedViews,
-  vault: () => (
-    <ActiveVaultGuard>
-      <VaultPage />
-    </ActiveVaultGuard>
-  ),
-  joinKeygen: () => <JoinKeygenPage />,
-  setupFastVault: () => <SetupFastVaultPage />,
-  setupSecureVault: () => <SetupSecureVaultPage />,
-  setupVault: () => <SetupVaultPageController />,
-  keysign: () => (
-    <ActiveVaultGuard>
-      <StartKeysignPage />
-    </ActiveVaultGuard>
-  ),
-  reshareVaultFast: () => (
-    <ActiveVaultGuard>
-      <FastReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  reshareVaultSecure: () => (
-    <ActiveVaultGuard>
-      <SecureReshareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  joinKeysign: () => (
-    <ActiveVaultGuard>
-      <JoinKeysignPage />
-    </ActiveVaultGuard>
-  ),
-  uploadQr: () => <UploadQrPage />,
-  vaults: () => <VaultsPage />,
-  deposit: () => (
-    <ActiveVaultGuard>
-      <DepositPage />
-    </ActiveVaultGuard>
-  ),
+const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
+  vault: VaultPage,
+  joinKeygen: JoinKeygenPage,
+  setupFastVault: SetupFastVaultPage,
+  setupSecureVault: SetupSecureVaultPage,
+  setupVault: SetupVaultPageController,
+  keysign: StartKeysignPage,
+  reshareVaultFast: FastReshareVaultPage,
+  reshareVaultSecure: SecureReshareVaultPage,
+  joinKeysign: JoinKeysignPage,
+  uploadQr: UploadQrPage,
+  vaults: VaultsPage,
+  deposit: DepositPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  vaultSettings: () => <SettingsVaultPage />,
-  importVaultFromFile: () => <ImportVaultFromFilePage />,
-  manageVaults: () => <ManageVaultsPage />,
-  shareVault: () => (
-    <ActiveVaultGuard>
-      <ShareVaultPage />
-    </ActiveVaultGuard>
-  ),
-  editVault: () => (
-    <ActiveVaultGuard>
-      <EditVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultBackup: () => (
-    <ActiveVaultGuard>
-      <VaultBackupPage />
-    </ActiveVaultGuard>
-  ),
-  vaultDelete: () => (
-    <ActiveVaultGuard>
-      <DeleteVaultPage />
-    </ActiveVaultGuard>
-  ),
-  vaultFAQ: () => <FaqVaultPage />,
-  addressBook: () => <AddressBookSettingsPage />,
-  migrateVault: () => (
-    <ActiveVaultGuard>
-      <MigrateVaultPage />
-    </ActiveVaultGuard>
-  ),
-  registerForAirdrop: () => (
-    <ActiveVaultGuard>
-      <RegisterForAirdropPage />
-    </ActiveVaultGuard>
-  ),
-  checkUpdate: () => <VaultCheckUpdatePage />,
-  createVaultFolder: () => (
-    <ActiveVaultGuard>
-      <CreateVaultFolderPage />
-    </ActiveVaultGuard>
-  ),
-  vaultFolder: () => (
-    <ActiveVaultGuard>
-      <CurrentVaultFolderPageProvider>
-        <VaultFolderPage />
-      </CurrentVaultFolderPageProvider>
-    </ActiveVaultGuard>
-  ),
-  manageVaultFolder: () => (
-    <ActiveVaultGuard>
-      <CurrentVaultFolderPageProvider>
-        <ManageVaultFolderPage />
-      </CurrentVaultFolderPageProvider>
-    </ActiveVaultGuard>
-  ),
-  deeplink: () => (
-    <ActiveVaultGuard>
-      <DeeplinkPage />
-    </ActiveVaultGuard>
-  ),
-  signCustomMessage: () => (
-    <ActiveVaultGuard>
-      <SignCustomMessagePage />
-    </ActiveVaultGuard>
-  ),
-  dkls: () => <ManageDklsPage />,
-  faq: () => <FaqVaultPage />,
+  vaultSettings: SettingsVaultPage,
+  importVaultFromFile: ImportVaultFromFilePage,
+  manageVaults: ManageVaultsPage,
+  shareVault: ShareVaultPage,
+  editVault: EditVaultPage,
+  vaultBackup: VaultBackupPage,
+  vaultDelete: DeleteVaultPage,
+  vaultFAQ: FaqVaultPage,
+  addressBook: AddressBookSettingsPage,
+  migrateVault: MigrateVaultPage,
+  registerForAirdrop: RegisterForAirdropPage,
+  checkUpdate: VaultCheckUpdatePage,
+  deeplink: DeeplinkPage,
+  signCustomMessage: SignCustomMessagePage,
+  dkls: ManageDklsPage,
+  faq: FaqVaultPage,
+}
+
+export const views: Views<AppViewId> = {
+  ...sharedViews,
+  ...appCustomViews,
 }

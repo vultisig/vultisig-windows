@@ -7,15 +7,23 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
+import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
 
 export const StartSecureKeysignFlow = () => {
-  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
+    useCoreViewState<'keysign'>()
+  const keysignPayload = useRefreshedKeysignPayload(
+    potentiallyStaleKeysignPayload
+  )
 
   return (
     <ValueTransfer<string[]>
       from={({ onFinish }) => (
         <MpcPeersSelectionProvider>
-          <KeysignPeerDiscoveryStep onFinish={onFinish} />
+          <KeysignPeerDiscoveryStep
+            payload={keysignPayload}
+            onFinish={onFinish}
+          />
         </MpcPeersSelectionProvider>
       )}
       to={({ onBack, value }) => (
