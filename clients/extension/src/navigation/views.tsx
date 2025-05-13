@@ -7,7 +7,6 @@ import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import DeleteVaultPage from '@clients/extension/src/pages/delete-vault'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
-import ImportFilePage from '@clients/extension/src/pages/import-file'
 import ImportQRPage from '@clients/extension/src/pages/import-qr'
 import { SettingsPage } from '@clients/extension/src/pages/settings'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
@@ -33,7 +32,6 @@ export const views: Views<AppViewId> = {
   setupFastVault: () => <SetupFastVaultPage />,
   setupSecureVault: () => <SetupSecureVaultPage />,
   setupVault: () => <SetupVaultPageController />,
-  importVault: () => <ImportFilePage />,
   keysign: () => (
     <ActiveVaultGuard>TODO: Implement keysign page</ActiveVaultGuard>
   ),
