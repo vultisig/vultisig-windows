@@ -20,7 +20,7 @@ import { ManageVaultFolderPage } from '../vaultsOrganisation/folder/manage/Manag
 import { VaultFolderPage } from '../vaultsOrganisation/folder/VaultFolderPage'
 import { CoreViewId } from './CoreView'
 
-type SharedViewId = Extract<
+export type SharedViewId = Extract<
   CoreViewId,
   | 'currencySettings'
   | 'defaultChains'

@@ -14,7 +14,7 @@ import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vau
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
-import { sharedViews } from '@core/ui/navigation/sharedViews'
+import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
@@ -22,8 +22,7 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { AppViewId } from './AppView'
 
-export const views: Views<AppViewId> = {
-  ...sharedViews,
+const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
   joinKeygen: () => <>TODO: Implement join keygen page</>,
   setupFastVault: SetupFastVaultPage,
@@ -50,4 +49,9 @@ export const views: Views<AppViewId> = {
   vaultsTab: GetVaultsPage,
   transactionTab: TransactionPage,
   manageVaults: ManageVaultsPage,
+}
+
+export const views: Views<AppViewId> = {
+  ...sharedViews,
+  ...appCustomViews,
 }

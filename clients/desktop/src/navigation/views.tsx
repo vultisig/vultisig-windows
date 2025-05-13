@@ -1,4 +1,4 @@
-import { sharedViews } from '@core/ui/navigation/sharedViews'
+import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
@@ -33,8 +33,7 @@ import { SetupVaultPageController } from '../vault/setup/SetupVaultPageControlle
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { AppViewId } from './AppView'
 
-export const views: Views<AppViewId> = {
-  ...sharedViews,
+const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
   joinKeygen: JoinKeygenPage,
   setupFastVault: SetupFastVaultPage,
@@ -69,4 +68,9 @@ export const views: Views<AppViewId> = {
   signCustomMessage: SignCustomMessagePage,
   dkls: ManageDklsPage,
   faq: FaqVaultPage,
+}
+
+export const views: Views<AppViewId> = {
+  ...sharedViews,
+  ...appCustomViews,
 }
