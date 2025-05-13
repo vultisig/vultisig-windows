@@ -1,6 +1,6 @@
-import { useCorePathState } from '@core/ui/navigation/hooks/useCorePathState'
 import { Match } from '@lib/ui/base/Match'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
@@ -8,7 +8,7 @@ import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
 export const StartKeysignFlow = ({
   keysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const { securityType } = useCorePathState<'keysign'>()
+  const [{ securityType }] = useCoreViewState<'keysign'>()
 
   return (
     <Match
