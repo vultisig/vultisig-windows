@@ -6,7 +6,15 @@ import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
+
+const StyledSuccessIcon = styled(ShieldIcon)`
+  color: ${getColor('alertWarning')};
+`
+
+const StyledWarningIcon = styled(ZapIcon)`
+  color: ${getColor('alertWarning')};
+`
 
 const StyledText = styled.span`
   color: ${getColor('textExtraLight')};
@@ -33,7 +41,6 @@ interface VaultSignersProps
 
 export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const total = vault.signers.length
   const least = getKeygenThreshold(total)
   const fast = hasServer(vault.signers) && !isServer(vault.localPartyId)
@@ -42,12 +49,12 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
     <StyledVaultSigners {...rest}>
       {fast ? (
         <>
-          <ZapIcon fontSize={16} stroke={colors.alertWarning.toHex()} />
+          <StyledWarningIcon fontSize={16} />
           <StyledText>{t('fast')}</StyledText>
         </>
       ) : (
         <>
-          <ShieldIcon fontSize={16} stroke={colors.alertSuccess.toHex()} />
+          <StyledSuccessIcon fontSize={16} />
           <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
         </>
       )}

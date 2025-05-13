@@ -60,7 +60,6 @@ export const generateCosmosAccount = async (
     ]
   } catch (error) {
     console.error('[generateCosmosAccount] Error:', error)
-    Promise.reject(error)
     throw error
   }
 }

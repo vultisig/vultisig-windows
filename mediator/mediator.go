@@ -3,6 +3,7 @@ package mediator
 import (
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -45,7 +46,15 @@ func (r *Server) AdvertiseMediator(name string) error {
 	if err != nil {
 		return fmt.Errorf("could not determine host: %v", err)
 	}
-	hostName = fmt.Sprintf("%s.local.", hostName)
+	
+	const localSuffix = ".local"
+	
+	// Remove .local if it already exists to avoid duplicate
+	if strings.HasSuffix(hostName, localSuffix) {
+		hostName = strings.TrimSuffix(hostName, localSuffix)
+	}
+	
+	hostName = fmt.Sprintf("%s%s.", hostName, localSuffix)
 	mdns, err := m.NewMDNSService(name, "_http._tcp", "", hostName, MediatorPort, nil, []string{
 		name,
 	})
@@ -59,6 +68,7 @@ func (r *Server) AdvertiseMediator(name string) error {
 		return fmt.Errorf("fail to start mdns server,err:%w", err)
 	}
 	r.mdns = s
+	fmt.Printf("Successfully advertising mediator '%s' on %s:%d\n", name, hostName, MediatorPort)
 	return nil
 }
 
