@@ -194,7 +194,7 @@ export const SettingsPage = () => {
           <VStack gap={24}>
             <VStack gap={14}>
               <Text color="light" size={13} weight={500}>
-                Share the app
+                {t('extension_share_app')}
               </Text>
               <HStack gap={8} alignItems="center">
                 <IconButton

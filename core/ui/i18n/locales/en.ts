@@ -4,6 +4,7 @@ export const en = {
   connected_dapps: 'Connected dApps',
   disconnect_all: 'Disconnect All',
   expand_view: 'Expand View',
+  extension_share_app: 'Share the app',
   general: 'General',
   manage_chains: 'Manage Chains',
   rename: 'Rename',
