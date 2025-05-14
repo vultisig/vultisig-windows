@@ -14,9 +14,19 @@ export type ChainAction =
   | 'ibc_transfer'
   | 'merge'
   | 'switch'
+  | 'stake_tcy'
+  | 'unstake_tcy'
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
-  [Chain.THORChain]: ['bond', 'unbond', 'leave', 'custom', 'merge'],
+  [Chain.THORChain]: [
+    'bond',
+    'unbond',
+    'leave',
+    'custom',
+    'merge',
+    'stake_tcy',
+    'unstake_tcy',
+  ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
