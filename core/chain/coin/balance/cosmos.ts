@@ -11,9 +11,7 @@ import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 const isCosmosNativeCoin = (coin: CoinKey) => {
   if (
-    ['ibc/', 'factory/', '/', '.', '-', 'tcy'].some(prefix =>
-      coin.id.includes(prefix)
-    )
+    ['ibc/', 'factory/', '/', '.', '-'].some(prefix => coin.id.includes(prefix))
   ) {
     return true
   }
