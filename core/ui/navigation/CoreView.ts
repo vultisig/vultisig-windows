@@ -7,6 +7,8 @@ import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_messa
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
+import { CustomTokenEnabledChainKind } from '../chain/coin/addCustomToken/core/CustomTokenEnabledChainKind'
+
 export type CoreView =
   | { id: 'address'; state: { address: string } }
   | { id: 'airdropRegister' }
@@ -58,6 +60,8 @@ export type CoreView =
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'addressBook' }
+  | { id: 'addCustomToken'; state: { chain: CustomTokenEnabledChainKind } }
+
 export type CoreViewId = CoreView['id']
 
 export const initialCoreView: CoreView = {

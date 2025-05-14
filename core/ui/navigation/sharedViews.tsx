@@ -22,6 +22,8 @@ import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderP
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
+
 export type SharedViewId = Extract<
   CoreViewId,
   | 'airdropRegister'
@@ -44,6 +46,7 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'vaultFolder'
   | 'manageVaultFolder'
+  | 'addCustomToken'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -75,4 +78,5 @@ export const sharedViews: Views<SharedViewId> = {
       <VaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
+  addCustomToken: AddCustomTokenPage,
 }
