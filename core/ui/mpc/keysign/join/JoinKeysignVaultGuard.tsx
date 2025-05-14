@@ -1,4 +1,3 @@
-import { MpcLib } from '@core/mpc/mpcLib'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -39,7 +38,7 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   const payload = keysignMsg.keysignPayload
 
-  if (payload && (payload.libType as MpcLib) !== vault.libType) {
+  if (payload && payload.libType && payload.libType !== vault.libType) {
     return (
       <FullPageFlowErrorState
         message={t('vault_type_does_not_match')}
