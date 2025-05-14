@@ -30,6 +30,9 @@ export const ListItem = styled(motion.button)<{
 
 const ItemText = styled(Text)`
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const ColumnOneBothRowsItem = styled(ItemText)`
@@ -65,4 +68,5 @@ export const ItemWrapper = styled(motion.div)`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  width: 100%;
 `

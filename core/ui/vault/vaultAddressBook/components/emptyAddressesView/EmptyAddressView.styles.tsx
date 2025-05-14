@@ -1,5 +1,7 @@
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -31,12 +33,6 @@ export const ResponsiveText = styled(Text)`
   }
 `
 
-export const ResponsiveImage = styled.img`
-  width: 120px;
-  height: 120px;
-
-  @media (${mediaQuery.desktopDeviceAndUp}) {
-    width: 150px;
-    height: 150px;
-  }
+export const StyledTriangleWarningIcon = styled(TriangleAlertIcon)`
+  color: ${getColor('alertWarning')};
 `

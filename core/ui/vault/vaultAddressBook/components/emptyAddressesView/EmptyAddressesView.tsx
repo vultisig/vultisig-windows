@@ -7,8 +7,8 @@ import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
 import {
   CenteredBox,
   Container,
-  ResponsiveImage,
   ResponsiveText,
+  StyledTriangleWarningIcon,
 } from './EmptyAddressView.styles'
 
 type EmptyAddressesViewProps = {
@@ -31,12 +31,7 @@ const EmptyAddressesView = ({
       />
       <Container>
         <CenteredBox>
-          <ResponsiveImage
-            src="/assets/images/warningYellow.svg"
-            alt="warning"
-            width={120}
-            height={120}
-          />
+          <StyledTriangleWarningIcon width={120} height={120} />
           <ResponsiveText weight={700} color="contrast">
             {t('vault_settings_address_book_no_addresses_title')}
           </ResponsiveText>

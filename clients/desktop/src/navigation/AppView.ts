@@ -3,11 +3,11 @@ import { CoreView } from '@core/ui/navigation/CoreView'
 export type AppView =
   | CoreView
   | { id: 'addressBook' }
-  | { id: 'editVault' }
   | { id: 'checkUpdate' }
   | { id: 'createVaultFolder' }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'dkls' }
+  | { id: 'editVault' }
   | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'manageVaults' }
