@@ -25,7 +25,7 @@ export const UnstakeTCYSpecific = ({ setValue }: Props) => {
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address!)
   //See if you can handle this getter
-  const coin = chainTokens.THORChain!.find(c => c.id === 'tcy')
+  const coin = chainTokens.THORChain?.find(c => c.id === 'tcy')
 
   // TODO:  Do transactions need to be any different for stake / unstake tyc as per ios / android?
 
@@ -47,7 +47,9 @@ export const UnstakeTCYSpecific = ({ setValue }: Props) => {
     <VStack gap={12}>
       <InputContainer>
         <Text size={15} weight="400">
-          {t('percentage')} (Balance: {0} TYC)
+          {t('percentage')} ({t('balance')}:{' '}
+          {fromChainAmount(unstakableTcy, coin?.decimals ?? 8)}{' '}
+          {coin?.ticker ?? 'TCY'})
           <Text as="span" color="danger" size={14}>
             *
           </Text>
@@ -58,7 +60,7 @@ export const UnstakeTCYSpecific = ({ setValue }: Props) => {
           onWheel={e => e.currentTarget.blur()}
           name="percentage"
           type="number"
-          max={fromChainAmount(unstakableTcy, coin!.decimals)}
+          max={fromChainAmount(unstakableTcy, coin?.decimals ?? 8)}
           step="0.0001"
           min={0}
         />
