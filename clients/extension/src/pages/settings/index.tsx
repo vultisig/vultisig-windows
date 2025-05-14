@@ -51,7 +51,7 @@ export const SettingsPage = () => {
   const { data: isPrioritized } = useIsPrioritizedWalletQuery()
   const { mutate: setPrioritize } = useSetPrioritizeWalletMutation()
   const chromeStore =
-    'https://.google.com/detail/vulticonnect/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
+    'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
   const handleCopy = () => {
     navigator.clipboard
@@ -175,12 +175,7 @@ export const SettingsPage = () => {
         </PageContent>
         <PageFooter alignItems="center">
           <Button
-            onClick={() =>
-              open(
-                'https://chromewebstore.google.com/detail/vulticonnect/ggafhcdaplkhmmnlbfjpnnkepdfjaelb',
-                '_blank'
-              )
-            }
+            onClick={() => open(chromeStore, '_blank')}
             size="xs"
             type="link"
             fitContent
@@ -206,7 +201,7 @@ export const SettingsPage = () => {
                   icon={<LinkedinIcon fontSize={38} />}
                   onClick={() =>
                     open(
-                      'https://www.linkedin.com/sharing/share-offsite/?url=https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb?utm_source=item-share-linkedin',
+                      `https://www.linkedin.com/sharing/share-offsite/?url=${chromeStore}?utm_source=item-share-linkedin`,
                       '_blank'
                     )
                   }
@@ -216,7 +211,7 @@ export const SettingsPage = () => {
                   icon={<FacebookIcon fontSize={38} />}
                   onClick={() =>
                     open(
-                      'https://www.facebook.com/sharer/sharer.php?u=https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb?utm_source=item-share-facebook',
+                      `https://www.facebook.com/sharer/sharer.php?u=${chromeStore}?utm_source=item-share-facebook`,
                       '_blank'
                     )
                   }
@@ -226,7 +221,7 @@ export const SettingsPage = () => {
                   icon={<RedditIcon fontSize={38} />}
                   onClick={() =>
                     open(
-                      'https://www.reddit.com/submit?url=https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb?utm_source=item-share-reddit',
+                      `https://www.reddit.com/submit?url=${chromeStore}?utm_source=item-share-reddit`,
                       '_blank'
                     )
                   }
@@ -236,7 +231,7 @@ export const SettingsPage = () => {
                   icon={<WhatsAppIcon fontSize={38} />}
                   onClick={() =>
                     open(
-                      'https://wa.me/?text=https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb?utm_source=item-share-whatsapp',
+                      `https://wa.me/?text=${chromeStore}?utm_source=item-share-whatsapp`,
                       '_blank'
                     )
                   }
@@ -246,7 +241,7 @@ export const SettingsPage = () => {
                   icon={<TwitterIcon fontSize={38} />}
                   onClick={() =>
                     open(
-                      'https://twitter.com/intent/tweet?url=https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb?utm_source=item-share-x',
+                      `https://twitter.com/intent/tweet?url=${chromeStore}?utm_source=item-share-x`,
                       '_blank'
                     )
                   }
