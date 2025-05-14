@@ -802,4 +802,27 @@ export const hr = {
   version: 'Verzija',
   delete_folder_confirmation:
     'Jeste li sigurni da želite izbrisati mapu "{{name}}"?',
+  available: 'Dostupno',
+  assets: 'imovina',
+  connected_dapps: 'Povezane dApp-ove',
+  disconnect_all: 'Isključi sve',
+  expand_view: 'Proširi prikaz',
+  general: 'General',
+  manage_chains: 'Upravljanje lancima',
+  rename: 'Preimenovati',
+  terms: 'Uvjeti',
+  no_connected_dapps: 'Nema povezanih dApp-ova',
+  no_connected_dapps_desc:
+    'dApps će se ovdje pojaviti kad god s njima komunicirate',
+  open_desktop: 'Otvori radnu površinu',
+  portfolio_overview: 'Pregled portfelja',
+  prioritize_vultisig: 'Dajte prioritet Vultisigu',
+  remove: 'Ukloniti',
+  share_vault: 'Dijeli trezor',
+  vault_specific: 'Specifično za trezor',
+  missing_thorchain_address: 'Nedostaje THORChain adresa',
+  missing_destination_address: 'Nedostaje odredišna adresa',
+  upgrade_shares_info:
+    '<b>Izradit ćete nove sigurnosne kopije Vault Sharea</b> i pohraniti ih kao i prije',
+  vault_type_does_not_match: 'Vrsta trezora se ne podudara',
 }

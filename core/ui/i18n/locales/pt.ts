@@ -812,4 +812,27 @@ export const pt = {
   version: 'Versão',
   delete_folder_confirmation:
     'Tem certeza que deseja excluir a pasta "{{name}}"?',
+  available: 'Disponível',
+  assets: 'ativos',
+  connected_dapps: 'dApps conectados',
+  disconnect_all: 'Desconectar tudo',
+  expand_view: 'Expandir visualização',
+  general: 'Em geral',
+  manage_chains: 'Gerenciar cadeias',
+  rename: 'Renomear',
+  terms: 'Termos',
+  no_connected_dapps: 'Nenhum dApp conectado',
+  no_connected_dapps_desc:
+    'Os dApps aparecerão aqui sempre que você interagir com eles',
+  open_desktop: 'Área de trabalho aberta',
+  portfolio_overview: 'Visão geral do portfólio',
+  prioritize_vultisig: 'Priorizar Vultisig',
+  remove: 'Remover',
+  share_vault: 'Compartilhar Cofre',
+  vault_specific: 'Específico do Vault',
+  missing_thorchain_address: 'Endereço THORChain ausente',
+  missing_destination_address: 'Endereço de destino ausente',
+  upgrade_shares_info:
+    '<b>Você criará novos backups do Vault Share</b> e os armazenará como fez antes',
+  vault_type_does_not_match: 'O tipo de cofre não corresponde',
 }
