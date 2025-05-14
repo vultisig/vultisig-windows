@@ -7,8 +7,8 @@ import { Text } from '@lib/ui/text'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FormData } from '..'
-import { AssetRequiredLabel, Container } from '../DepositForm.styled'
+import { FormData } from '../..'
+import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MergeTokenExplorer } from './MergeTokenExplorer'
 
 type MergeSpecificProps = {

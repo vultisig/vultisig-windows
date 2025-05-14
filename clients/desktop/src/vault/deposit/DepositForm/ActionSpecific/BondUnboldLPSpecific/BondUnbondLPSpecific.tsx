@@ -6,9 +6,9 @@ import { Text } from '@lib/ui/text'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { MayaChainPool } from '../../../../lib/types/deposit'
-import { FormData } from '..'
-import { AssetRequiredLabel, Container } from '../DepositForm.styled'
+import { MayaChainPool } from '../../../../../lib/types/deposit'
+import { FormData } from '../..'
+import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
 
 type BondUnbondLPSpecificProps = {

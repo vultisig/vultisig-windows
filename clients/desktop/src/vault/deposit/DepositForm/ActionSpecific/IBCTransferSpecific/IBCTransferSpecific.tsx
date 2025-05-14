@@ -16,15 +16,15 @@ import {
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
-import { FormData } from '..'
-import { getIbcDropdownOptions } from '../chainOptionsConfig'
+import { useIBCAcceptedTokens } from '../../../hooks/useIBCAcceptedTokens'
+import { FormData } from '../..'
+import { getIbcDropdownOptions } from '../../chainOptionsConfig'
 import {
   AssetRequiredLabel,
   Container,
   InputFieldWrapper,
-} from '../DepositForm.styled'
-import { TokenExplorer } from '../TokenExplorer'
+} from '../../DepositForm.styled'
+import { TokenExplorer } from '../../TokenExplorer'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 
 export const IBCTransferSpecific = ({

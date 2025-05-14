@@ -7,7 +7,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { InputFieldWrapper } from '../DepositForm.styled'
+import { InputFieldWrapper } from '../../DepositForm.styled'
 import { useUnstakableTcyQuery } from './hooks/useUnstakableTcyQuery'
 
 export const UnstakeTYCSpecific = () => {

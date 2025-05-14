@@ -39,7 +39,6 @@ export const useCurrentVaultAddresses = () => {
 
 export const useCurrentVaultAddress = (chain: string) => {
   const addresses = useCurrentVaultAddresses()
-  console.log('🚀 ~ useCurrentVaultAddress ~ addresses:', addresses)
 
   return shouldBePresent(addresses[chain as Chain])
 }

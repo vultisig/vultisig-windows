@@ -32,13 +32,13 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
-import { BondUnbondLPSpecific } from './BondUnbondLPFormComponents/BondUnbondLPSpecific'
+import { BondUnbondLPSpecific } from './ActionSpecific/BondUnboldLPSpecific/BondUnbondLPSpecific'
+import { IBCTransferSpecific } from './ActionSpecific/IBCTransferSpecific/IBCTransferSpecific'
+import { MergeSpecific } from './ActionSpecific/MergeSpecific/MergeSpecific'
+import { SwitchSpecific } from './ActionSpecific/SwitchSpecificFields'
+import { UnstakeTYCSpecific } from './ActionSpecific/UnstakeTYCSpecific/UnstakeTYCSpecific'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
 import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled'
-import { IBCTransferSpecific } from './IBCTransferFormComponents/IBCTransferSpecific'
-import { MergeSpecific } from './MergeFormComponents/MergeSpecific'
-import { SwitchSpecificFields } from './SwitchFormComponents/SwitchSpecificFields'
-import { UnstakeTYCSpecific } from './UnstakeTYCFormComponents/UnstakeTYCSpecific'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -95,9 +95,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
   const isTCYAction =
     selectedChainAction === 'stake_tcy' || selectedChainAction === 'unstake_tcy'
-  const selectedCoin = isTCYAction
-    ? coinsWithAmount.find(coin => coin.id === 'tcy') || null
-    : (getValues('selectedCoin') as Coin | null)
+  const selectedCoin = getValues('selectedCoin') as Coin | null
 
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
@@ -182,7 +180,7 @@ export const DepositForm: FC<DepositFormProps> = ({
           )}
 
           {selectedChainAction === 'switch' && (
-            <SwitchSpecificFields
+            <SwitchSpecific
               watch={watch}
               setValue={setValue}
               getValues={getValues}
