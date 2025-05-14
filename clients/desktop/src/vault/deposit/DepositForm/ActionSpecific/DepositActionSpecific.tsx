@@ -15,7 +15,7 @@ import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { StakeTCYSpecific } from './StakeTCYSpecific'
 import { SwitchSpecific } from './SwitchSpecificFields'
-import { UnstakeTCYSpecific } from './UnstakeTYCSpecific/UnstakeTCYSpecific'
+import { UnstakeTCYSpecific } from './UnstakeTCYSpecific/UnstakeTCYSpecific'
 
 type Props = {
   chain: Chain

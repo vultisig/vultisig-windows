@@ -703,6 +703,7 @@ export const en = {
       },
     },
   },
+  percentage_limit: 'Percentage must be 0-100',
   amount_must_be_positive: 'Amount must be positive',
   lp_units: 'LP Units',
   validator_address: 'Validator Address',

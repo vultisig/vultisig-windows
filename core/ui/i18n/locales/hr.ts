@@ -12,6 +12,7 @@ export const hr = {
   search_field_placeholder: 'Pretraži..',
   select_asset: 'Odaberite imovinu',
   start_transaction: 'Pokreni transakciju',
+  percentage_limit: 'Postotak mora biti između 0 i 100',
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
   ibc_transfer: 'IBC prijenos',

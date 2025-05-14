@@ -33,6 +33,7 @@ export const de = {
   price_impact_high: 'Hohe Auswirkung',
   max_total_fees: 'Max. Gesamtgebühr',
   select_asset: 'Asset auswählen',
+  percentage_limit: 'Prozentsatz muss zwischen 0 und 100 liegen',
   waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
   coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:

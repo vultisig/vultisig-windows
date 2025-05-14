@@ -15,6 +15,7 @@ export const pt = {
   search_field_placeholder: 'Pesquisar..',
   percentage: 'Percentagem',
   stake_tcy: 'Stake TCY',
+  percentage_limit: 'A porcentagem deve estar entre 0 e 100',
   unstake_tcy: 'Unstake TCY',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',

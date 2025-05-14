@@ -364,13 +364,13 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'nodeAddress',
+        label: t('node_address'),
         required: true,
       },
       {
         name: 'lpUnits',
         type: 'number',
-        label: 'lpUnits',
+        label: t('lp_units'),
         required: true,
       },
       {

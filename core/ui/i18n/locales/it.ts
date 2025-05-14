@@ -16,6 +16,7 @@ export const it = {
   percentage: 'Percentuale',
   stake_tcy: 'Stake TCY',
   unstake_tcy: 'Unstake TCY',
+  percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',

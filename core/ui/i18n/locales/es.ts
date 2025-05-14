@@ -17,6 +17,7 @@ export const es = {
   signing_transaction: 'Firma de la transacción',
   chain: 'Cadena',
   select_destination_chain: 'Seleccionar cadena de destino',
+  percentage_limit: 'El porcentaje debe estar entre 0 y 100',
   no_tokens_found:
     'No se encontraron tokens. Agrega tokens bajo la cadena deseada.',
   ibc_transfer: 'Transferencia IBC',

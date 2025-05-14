@@ -56,6 +56,7 @@ export const UnstakeTCYSpecific = ({ setValue }: Props) => {
         <InputFieldWrapper
           as="input"
           onWheel={e => e.currentTarget.blur()}
+          name="percentage"
           type="number"
           max={fromChainAmount(unstakableTcy, coin!.decimals)}
           step="0.0001"
