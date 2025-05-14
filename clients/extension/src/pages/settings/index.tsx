@@ -10,6 +10,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
@@ -122,6 +123,13 @@ export const SettingsPage = () => {
                 icon={<CircleDollarSignIcon fontSize={20} />}
                 onClick={() => navigate({ id: 'currencySettings' })}
                 title={t('currency')}
+                hoverable
+                showArrow
+              />
+              <ListItem
+                icon={<AddressBookIcon size={20} />}
+                onClick={() => navigate({ id: 'addressBook' })}
+                title={t('vault_settings_address_book')}
                 hoverable
                 showArrow
               />

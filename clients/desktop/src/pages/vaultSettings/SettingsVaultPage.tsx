@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
@@ -61,6 +62,7 @@ type SettingSection = {
 
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
@@ -93,7 +95,7 @@ const SettingsVaultPage = () => {
           id: 'address-book',
           title: t('vault_settings_address_book'),
           icon: <AddressBookIcon />,
-          onClick: () => navigate({ id: 'addressBook' }),
+          onClick: () => coreNavigate({ id: 'addressBook' }),
         },
         {
           id: 'default-chains',
