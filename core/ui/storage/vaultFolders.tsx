@@ -79,9 +79,9 @@ export const useDeleteVaultFolderMutation = () => {
             })
           )
         )
-
-        await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
       }
+
+      await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
     },
   })
 }

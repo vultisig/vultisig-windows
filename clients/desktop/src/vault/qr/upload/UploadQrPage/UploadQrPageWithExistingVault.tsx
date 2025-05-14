@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -20,7 +19,6 @@ type UploadQrView = (typeof uploadQrViews)[number]
 export const UploadQrPageWithExistingVault = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const coreNavigate = useCoreNavigate()
   const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
   const coins = useCurrentVaultCoins()
   const { addToast } = useToast()
@@ -44,14 +42,14 @@ export const UploadQrPageWithExistingVault = () => {
       const coin = coins.find(coin => coin.chain === chain)
 
       if (coin) {
-        coreNavigate({ id: 'send', state: { coin, address: value } })
+        navigate({ id: 'send', state: { coin, address: value } })
       } else {
         addToast({
           message: t('coin_not_found_in_current_vault'),
         })
       }
     },
-    [addToast, coins, coreNavigate, deriveChainFromWalletAddress, navigate, t]
+    [addToast, coins, navigate, deriveChainFromWalletAddress, t]
   )
 
   return (

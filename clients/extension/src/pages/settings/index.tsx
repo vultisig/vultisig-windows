@@ -6,7 +6,6 @@ import {
   useSetPrioritizeWalletMutation,
 } from '@clients/extension/src/state/currentSettings/isPrioritized'
 import { languageName } from '@core/ui/i18n/Language'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
@@ -34,7 +33,6 @@ export const SettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
   const navigateBack = useNavigateBack()
-  const coreNavigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const { data: isPrioritized } = useIsPrioritizedWalletQuery()
@@ -88,7 +86,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={languageName[language]}
               icon={<LanguagesIcon fontSize={20} />}
-              onClick={() => coreNavigate({ id: 'languageSettings' })}
+              onClick={() => navigate({ id: 'languageSettings' })}
               title={t('language')}
               hoverable
               showArrow
@@ -96,7 +94,7 @@ export const SettingsPage = () => {
             <ListItem
               extra={currency.toUpperCase()}
               icon={<CircleDollarSignIcon fontSize={20} />}
-              onClick={() => coreNavigate({ id: 'currencySettings' })}
+              onClick={() => navigate({ id: 'currencySettings' })}
               title={t('currency')}
               hoverable
               showArrow
@@ -110,7 +108,7 @@ export const SettingsPage = () => {
             />
             <ListItem
               icon={<DefaultChainsIcon fontSize={20} />}
-              onClick={() => coreNavigate({ id: 'defaultChains' })}
+              onClick={() => navigate({ id: 'defaultChains' })}
               title={t('vault_settings_default_chains')}
               hoverable
               showArrow
