@@ -810,4 +810,6 @@ export const pt = {
   vulti_share_not_saved_hint:
     'Se você ainda não salvou seu QR do VultiShare, acesse o aplicativo e clique no ícone do QR no canto superior direito.',
   version: 'Versão',
+  delete_folder_confirmation:
+    'Tem certeza que deseja excluir a pasta "{{name}}"?',
 }
