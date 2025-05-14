@@ -15,6 +15,9 @@ export const hr = {
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
   ibc_transfer: 'IBC prijenos',
+  percentage: 'Postotak',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   select_destination_chain: 'Odaberite odredišni lanac',
   selected_chain_missing_in_your_vault:
     'Odabrani lanac nedostaje u vašem trezoru',

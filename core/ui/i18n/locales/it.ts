@@ -13,6 +13,9 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
+  percentage: 'Percentuale',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',

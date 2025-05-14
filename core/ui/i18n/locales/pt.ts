@@ -13,6 +13,9 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  percentage: 'Percentagem',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   selected_chain_missing_in_your_vault:
