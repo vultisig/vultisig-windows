@@ -11,6 +11,9 @@ export const de = {
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
   youre_swapping: 'Du tauschst',
+  percentage: 'Prozentsatz',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
 
