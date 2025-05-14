@@ -18,6 +18,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { initializeMessenger } from '../../messengers/initializeMessenger'
+import { EventMethod } from '../../utils/constants'
 
 const StyledEmptyState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
@@ -27,6 +29,7 @@ const StyledEmptyState = styled(VStack)`
 const StyledText = styled(Text)`
   text-align: center;
 `
+const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
@@ -34,8 +37,9 @@ export const ConnectedDappsPage = () => {
   const currentVaultId = useCurrentVaultId()
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
-  const handleDisconnect = async (host: string) => {
+  const handleDisconnect = async (host: string, url: string) => {
     await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
+    inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
   }
   const sessionsArray = Object.entries(sessions)
   const navigateBack = useNavigateBack()
@@ -71,7 +75,7 @@ export const ConnectedDappsPage = () => {
                   extra={
                     <Button
                       icon={<LinkTwoOffIcon fontSize={20} />}
-                      onClick={() => handleDisconnect(host)}
+                      onClick={() => handleDisconnect(host, sessions[host].url)}
                       size="md"
                       status="error"
                       fitContent

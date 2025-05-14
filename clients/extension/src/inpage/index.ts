@@ -66,6 +66,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { initializeMessenger } from '../messengers/initializeMessenger'
 import VULTI_ICON_RAW_SVG from './icon'
+import { getDappHost, isValidUrl } from '../utils/connectedApps'
+import { hexlify } from 'ethers'
 
 function doctypeCheck() {
   const { doctype } = window.document
@@ -107,6 +109,7 @@ type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void
 
 const messenger = initializeMessenger({ connect: 'contentScript' })
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
+const popupMessenger = initializeMessenger({ connect: 'popup' })
 
 class XDEFIMessageRequester {
   constructor() {
@@ -595,6 +598,34 @@ namespace Provider {
       this.selectedAddress = ''
 
       this.sendAsync = this.request
+
+      if (isValidUrl(window.location.href)) {
+        const host = getDappHost(window.location.href)
+        popupMessenger?.reply(
+          `${EventMethod.ACCOUNTS_CHANGED}:${host}`,
+          async address => {
+            this.emit(EventMethod.ACCOUNTS_CHANGED, [address])
+          }
+        )
+        popupMessenger?.reply(
+          `${EventMethod.CHAIN_CHANGED}:${host}`,
+          async (chainId: number) => {
+            this.emit(EventMethod.CHAIN_CHANGED, hexlify(String(chainId)))
+          }
+        )
+        popupMessenger?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
+          console.log('emitting:', host)
+
+          this.emit(EventMethod.ACCOUNTS_CHANGED, [])
+          this.emit(EventMethod.DISCONNECT, [])
+        })
+        popupMessenger?.reply(
+          `${EventMethod.CONNECT}:${host}`,
+          async connectionInfo => {
+            this.emit(EventMethod.CONNECT, connectionInfo)
+          }
+        )
+      }
     }
 
     static getInstance(_chain: string): Ethereum {
