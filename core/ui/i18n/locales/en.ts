@@ -795,6 +795,8 @@ export const en = {
     'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
   upgrade_all_devices:
     'Make sure that <b>all initial devices</b> are present when upgrading',
+  upgrade_shares_info:
+    '<b>You’ll create new Vault Share backups</b>, store them as you did before',
   upgrade_success: 'Vault upgraded <b>successfully</b>',
   go_to_vault: 'Go to vault',
   backup_password_prompt:

@@ -1,15 +1,15 @@
-import { Animation } from '@lib/ui/animations/Animation'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { vStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { ActionProp, TitleProp } from '@lib/ui/props'
 import { gradientText, text } from '@lib/ui/text'
+import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type MigrateInfoScreenProps = {
-  animation: string
+  art: ReactNode
 } & TitleProp &
   ActionProp
 
@@ -44,7 +44,7 @@ const PrimaryText = styled.p`
 `
 
 export const MigrateInfoScreen = ({
-  animation,
+  art,
   title,
   action,
 }: MigrateInfoScreenProps) => {
@@ -56,7 +56,7 @@ export const MigrateInfoScreen = ({
       <FitPageContent contentMaxWidth={contentMaxWidth}>
         <Container>
           <Content>
-            <Animation src={animation} />
+            {art}
             <PrimaryText>{title}</PrimaryText>
           </Content>
           {action}
