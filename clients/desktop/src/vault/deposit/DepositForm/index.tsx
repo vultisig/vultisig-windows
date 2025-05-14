@@ -32,17 +32,13 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
+import { BondUnbondLPSpecific } from './BondUnbondLPFormComponents/BondUnbondLPSpecific'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
-import {
-  AssetRequiredLabel,
-  Container,
-  ErrorText,
-  InputFieldWrapper,
-} from './DepositForm.styled'
+import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled'
 import { IBCTransferSpecific } from './IBCTransferFormComponents/IBCTransferSpecific'
-import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
-import { MergeTokenExplorer } from './MergeTokenExplorer'
+import { MergeSpecific } from './MergeFormComponents/MergeSpecific'
 import { SwitchSpecificFields } from './SwitchFormComponents/SwitchSpecificFields'
+import { UnstakeTYCSpecific } from './UnstakeTYCFormComponents/UnstakeTYCSpecific'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -97,7 +93,12 @@ export const DepositForm: FC<DepositFormProps> = ({
   })
 
   const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
-  const selectedCoin = getValues('selectedCoin') as Coin | null
+  const isTCYAction =
+    selectedChainAction === 'stake_tcy' || selectedChainAction === 'unstake_tcy'
+  const selectedCoin = isTCYAction
+    ? coinsWithAmount.find(coin => coin.id === 'tcy') || null
+    : (getValues('selectedCoin') as Coin | null)
+
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
     ({} as VaultChainCoin)
@@ -152,42 +153,17 @@ export const DepositForm: FC<DepositFormProps> = ({
               />
             )}
           />
+
           {(selectedChainAction === 'bond_with_lp' ||
-            selectedChainAction === 'unbond_with_lp') &&
-            bondableAssets.length > 0 && (
-              <Opener
-                renderOpener={({ onOpen }) => (
-                  <Container onClick={onOpen}>
-                    <HStack alignItems="center" gap={4}>
-                      <Text weight="400" family="mono" size={16}>
-                        {selectedBondableAsset || t('asset')}
-                      </Text>
-                      {!selectedBondableAsset && (
-                        <AssetRequiredLabel as="span" color="danger" size={14}>
-                          *
-                        </AssetRequiredLabel>
-                      )}
-                    </HStack>
-                    <IconWrapper style={{ fontSize: 20 }}>
-                      <ChevronRightIcon />
-                    </IconWrapper>
-                  </Container>
-                )}
-                renderContent={({ onClose }) => (
-                  <MayaChainAssetExplorer
-                    onClose={onClose}
-                    activeOption={watch('bondableAsset')}
-                    onOptionClick={selectedAsset => {
-                      setValue('bondableAsset', selectedAsset, {
-                        shouldValidate: true,
-                      })
-                      onClose()
-                    }}
-                    options={bondableAssets}
-                  />
-                )}
-              />
-            )}
+            selectedChainAction === 'unbond_with_lp') && (
+            <BondUnbondLPSpecific
+              assets={bondableAssets}
+              selectedAsset={selectedBondableAsset}
+              setValue={setValue}
+              watch={watch}
+            />
+          )}
+
           {selectedChainAction === 'ibc_transfer' && (
             <IBCTransferSpecific
               getValues={getValues}
@@ -196,37 +172,12 @@ export const DepositForm: FC<DepositFormProps> = ({
               chain={chain}
             />
           )}
+
           {selectedChainAction === 'merge' && (
-            <Opener
-              renderOpener={({ onOpen }) => (
-                <Container onClick={onOpen}>
-                  <HStack alignItems="center" gap={4}>
-                    <Text weight="400" family="mono" size={16}>
-                      {selectedCoin?.ticker || t('select_token')}
-                    </Text>
-                    {!selectedCoin && (
-                      <AssetRequiredLabel as="span" color="danger" size={14}>
-                        *
-                      </AssetRequiredLabel>
-                    )}
-                  </HStack>
-                  <IconWrapper style={{ fontSize: 20 }}>
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                </Container>
-              )}
-              renderContent={({ onClose }) => (
-                <MergeTokenExplorer
-                  setValue={setValue}
-                  activeOption={watch('selectedCoin')}
-                  onOptionClick={token =>
-                    setValue('selectedCoin', token, {
-                      shouldValidate: true,
-                    })
-                  }
-                  onClose={onClose}
-                />
-              )}
+            <MergeSpecific
+              selectedCoin={selectedCoin as Coin}
+              watch={watch}
+              setValue={setValue}
             />
           )}
 
@@ -238,22 +189,31 @@ export const DepositForm: FC<DepositFormProps> = ({
             />
           )}
 
+          {selectedChainAction === 'unstake_tcy' && <UnstakeTYCSpecific />}
+
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => {
                 const showBalance =
                   field.name === 'amount' &&
-                  ['bond', 'ibc_transfer', 'switch', 'merge'].includes(
-                    selectedChainAction
-                  )
+                  [
+                    'bond',
+                    'ibc_transfer',
+                    'switch',
+                    'merge',
+                    'stake_tcy',
+                  ].includes(selectedChainAction)
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
-                  : totalTokenAmount.toFixed(2)
+                  : isTCYAction
+                    ? 0
+                    : totalTokenAmount.toFixed(2)
 
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
-                  selectedChainAction !== 'merge'
+                  selectedChainAction !== 'merge' &&
+                  !isTCYAction
                     ? (selectedCoin?.ticker ?? coin.id)
                     : ''
 
