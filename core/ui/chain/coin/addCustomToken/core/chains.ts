@@ -2,9 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { ChainsOfKind, getChainKind } from '@core/chain/ChainKind'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-export const customTokenEnabledChainKinds = ['evm', 'solana'] as const
-export type CustomTokenEnabledChainKind =
-  (typeof customTokenEnabledChainKinds)[number]
+const customTokenEnabledChainKinds = ['evm', 'solana'] as const
+type CustomTokenEnabledChainKind = (typeof customTokenEnabledChainKinds)[number]
 
 export type CustomTokenEnabledChain = ChainsOfKind<CustomTokenEnabledChainKind>
 
