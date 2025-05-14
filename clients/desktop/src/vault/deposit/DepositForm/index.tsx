@@ -26,17 +26,12 @@ import { useTranslation } from 'react-i18next'
 
 import { ChainAction } from '../ChainAction'
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance'
-import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery'
 import {
   getChainActionSchema,
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
-import { BondUnbondLPSpecific } from './ActionSpecific/BondUnboldLPSpecific/BondUnbondLPSpecific'
-import { IBCTransferSpecific } from './ActionSpecific/IBCTransferSpecific/IBCTransferSpecific'
-import { MergeSpecific } from './ActionSpecific/MergeSpecific/MergeSpecific'
-import { SwitchSpecific } from './ActionSpecific/SwitchSpecificFields'
-import { UnstakeTYCSpecific } from './ActionSpecific/UnstakeTYCSpecific/UnstakeTYCSpecific'
+import { DepositActionSpecific } from './ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
 import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled'
 
@@ -56,7 +51,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   chainActionOptions,
   chain,
 }) => {
-  const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { data: totalAmountAvailableForChainData } =
@@ -93,9 +87,9 @@ export const DepositForm: FC<DepositFormProps> = ({
   })
 
   const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
+  const selectedCoin = getValues('selectedCoin') as Coin | null
   const isTCYAction =
     selectedChainAction === 'stake_tcy' || selectedChainAction === 'unstake_tcy'
-  const selectedCoin = getValues('selectedCoin') as Coin | null
 
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
@@ -108,8 +102,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
-
-  const selectedBondableAsset = getValues('bondableAsset')
 
   return (
     <>
@@ -152,42 +144,13 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           />
 
-          {(selectedChainAction === 'bond_with_lp' ||
-            selectedChainAction === 'unbond_with_lp') && (
-            <BondUnbondLPSpecific
-              assets={bondableAssets}
-              selectedAsset={selectedBondableAsset}
-              setValue={setValue}
-              watch={watch}
-            />
-          )}
-
-          {selectedChainAction === 'ibc_transfer' && (
-            <IBCTransferSpecific
-              getValues={getValues}
-              setValue={setValue}
-              watch={watch}
-              chain={chain}
-            />
-          )}
-
-          {selectedChainAction === 'merge' && (
-            <MergeSpecific
-              selectedCoin={selectedCoin as Coin}
-              watch={watch}
-              setValue={setValue}
-            />
-          )}
-
-          {selectedChainAction === 'switch' && (
-            <SwitchSpecific
-              watch={watch}
-              setValue={setValue}
-              getValues={getValues}
-            />
-          )}
-
-          {selectedChainAction === 'unstake_tcy' && <UnstakeTYCSpecific />}
+          <DepositActionSpecific
+            getValues={getValues}
+            setValue={setValue}
+            watch={watch}
+            chain={chain}
+            action={selectedChainAction}
+          />
 
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
