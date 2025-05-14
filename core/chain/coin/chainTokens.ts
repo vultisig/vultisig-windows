@@ -13,15 +13,6 @@ import { initializeChainTokens } from './utils/initializeChainTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
 const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
-  [Chain.THORChain]: [
-    {
-      ticker: 'TCY',
-      logo: 'tcy.png',
-      decimals: 8,
-      id: 'tcy',
-      priceProviderId: 'tcy',
-    },
-  ],
   [Chain.MayaChain]: [
     {
       ticker: 'MAYA',
@@ -42,6 +33,15 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
 }
 
 const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+  [Chain.THORChain]: [
+    {
+      ticker: 'TCY',
+      logo: 'tcy.png',
+      decimals: 8,
+      id: 'tcy',
+      priceProviderId: 'tcy',
+    },
+  ],
   [Chain.Tron]: [
     {
       ticker: 'USDT',
