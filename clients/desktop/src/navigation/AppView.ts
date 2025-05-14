@@ -10,7 +10,6 @@ export type AppView =
   | { id: 'editVault' }
   | { id: 'vaultBackup' }
   | { id: 'checkUpdate' }
-  | { id: 'addressBook' }
   | { id: 'faq' }
   | { id: 'vaultFAQ' }
   | { id: 'signCustomMessage' }

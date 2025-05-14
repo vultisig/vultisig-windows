@@ -18,7 +18,7 @@ const AddressBookSettingsPage = () => {
   }
 
   return (
-    <VStack flexGrow gap={16}>
+    <VStack flexGrow gap={16} style={{ height: '100%' }}>
       <PageSlice gap={16} flexGrow={true}>
         <Match
           value={

@@ -95,7 +95,7 @@ const SettingsVaultPage = () => {
           id: 'address-book',
           title: t('vault_settings_address_book'),
           icon: <AddressBookIcon />,
-          onClick: () => navigate({ id: 'addressBook' }),
+          onClick: () => coreNavigate({ id: 'addressBook' }),
         },
         {
           id: 'default-chains',
