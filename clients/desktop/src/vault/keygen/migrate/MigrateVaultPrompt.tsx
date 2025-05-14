@@ -27,10 +27,10 @@ const Container = styled(UnstyledButton)`
 
 export const MigrateVaultPrompt = () => {
   const { t } = useTranslation()
-  const appNavigate = useAppNavigate()
+  const navigate = useAppNavigate()
 
   return (
-    <Container onClick={() => appNavigate({ id: 'migrateVault' })}>
+    <Container onClick={() => navigate({ id: 'migrateVault' })}>
       <UpgradeIcon style={{ fontSize: 24 }} />
       <Text weight="500" size={13}>
         {t('upgrade_your_vault_now')}

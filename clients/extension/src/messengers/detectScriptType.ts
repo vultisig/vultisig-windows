@@ -9,15 +9,7 @@ export function detectScriptType() {
     if (window.location.pathname.includes('background')) return 'background'
     if (window.location.pathname.includes('contentscript'))
       return 'contentScript'
-    if (
-      (window.location.pathname.includes('popup') ||
-        window.location.pathname.includes('connect') ||
-        window.location.pathname.includes('import') ||
-        window.location.pathname.includes('transaction') ||
-        window.location.pathname.includes('vaults')) &&
-      !window.location.origin.includes('trezor')
-    )
-      return 'popup'
+    if (window.location.pathname.includes('index')) return 'popup'
     return 'contentScript'
   }
   if (hasChromeRuntime && !hasWindow) return 'background'

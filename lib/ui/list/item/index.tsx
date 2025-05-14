@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes, ReactNode } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type Status = 'default' | 'error' | 'success' | 'warning'
 
@@ -11,6 +11,9 @@ const StyledDesc = styled.span`
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `
 
 const StyledMeta = styled.span`
@@ -18,9 +21,10 @@ const StyledMeta = styled.span`
   flex: 1;
   flex-direction: column;
   gap: 4px;
+  max-width: 100%;
 `
 
-const StyledTitle = styled.span<{ status?: Status }>`
+const StyledTitle = styled.span`
   flex: 1;
   font-size: ${14};
   font-weight: 500;
@@ -28,6 +32,18 @@ const StyledTitle = styled.span<{ status?: Status }>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+const StyledListItem = styled.div<{
+  hoverable?: boolean
+  status: Status
+}>`
+  align-items: center;
+  background-color: ${getColor('backgroundsSecondary')};
+  display: flex;
+  gap: 8px;
+  min-height: 58px;
+  padding: 12px 16px;
   ${({ status }) => {
     switch (status) {
       case 'error':
@@ -48,28 +64,18 @@ const StyledTitle = styled.span<{ status?: Status }>`
         `
     }
   }}
-`
-
-const StyledListItem = styled.div<{
-  hoverable?: boolean
-}>`
-  align-items: center;
-  background-color: ${getColor('backgroundsSecondary')};
-  display: flex;
-  gap: 8px;
-  min-height: 58px;
-  padding: 12px 16px;
   ${({ hoverable }) => {
-    return hoverable
-      ? css`
-          cursor: pointer;
-          transition: all 0.2s;
+    return (
+      hoverable &&
+      css`
+        cursor: pointer;
+        transition: all 0.2s;
 
-          &:hover {
-            background-color: ${getColor('backgroundTertiary')};
-          }
-        `
-      : css``
+        &:hover {
+          background-color: ${getColor('backgroundTertiary')};
+        }
+      `
+    )
   }}
 `
 
@@ -93,37 +99,19 @@ export const ListItem: FC<ListItemProps> = ({
   title,
   ...rest
 }) => {
-  const { colors } = useTheme()
-  let arrowColor: string
-
-  switch (status) {
-    case 'error':
-      arrowColor = colors.alertError.toHex()
-      break
-    case 'success':
-      arrowColor = colors.alertSuccess.toHex()
-      break
-    case 'warning':
-      arrowColor = colors.alertWarning.toHex()
-      break
-    default:
-      arrowColor = colors.textPrimary.toHex()
-      break
-  }
-
   return (
-    <StyledListItem {...rest}>
+    <StyledListItem status={status} {...rest}>
       {icon && icon}
       {description ? (
         <StyledMeta>
-          <StyledTitle status={status}>{title}</StyledTitle>
+          <StyledTitle>{title}</StyledTitle>
           <StyledDesc>{description}</StyledDesc>
         </StyledMeta>
       ) : (
-        <StyledTitle status={status}>{title}</StyledTitle>
+        <StyledTitle>{title}</StyledTitle>
       )}
       {extra && extra}
-      {showArrow && <ChevronRightIcon fontSize={16} stroke={arrowColor} />}
+      {showArrow && <ChevronRightIcon fontSize={16} />}
     </StyledListItem>
   )
 }

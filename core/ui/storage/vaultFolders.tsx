@@ -79,9 +79,9 @@ export const useDeleteVaultFolderMutation = () => {
             })
           )
         )
-
-        await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
       }
+
+      await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
     },
   })
 }
@@ -118,6 +118,7 @@ export const useCreateVaultFolderMutation = () => {
         name,
         order,
         id: uuidv4(),
+        vaultIds,
       }
 
       await createVaultFolder(folder)

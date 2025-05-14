@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
@@ -7,20 +6,19 @@ import { pageConfig } from '@lib/ui/page/config'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
+import { PageHeaderToggleTitle } from '@lib/ui/page/PageHeaderToggleTitle'
 import styled from 'styled-components'
 
 import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
-import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
 import { VaultOverview } from '../../vault/components/VaultOverview'
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
 
 export const VaultPage = () => {
-  const navigate = useCoreNavigate()
   const { name } = useCurrentVault()
-  const appNavigate = useAppNavigate()
+  const navigate = useAppNavigate()
 
   return (
     <>
@@ -32,7 +30,7 @@ export const VaultPage = () => {
             <PageHeaderIconButtons>
               <PageHeaderIconButton
                 icon={<QrCodeIcon />}
-                onClick={() => appNavigate({ id: 'shareVault' })}
+                onClick={() => navigate({ id: 'shareVault' })}
               />
               <RefreshVaultBalance />
             </PageHeaderIconButtons>

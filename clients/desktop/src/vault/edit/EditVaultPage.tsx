@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import BackupIcon from '@lib/ui/icons/BackupIcon'
@@ -36,8 +35,7 @@ type SettingItem = {
 
 const EditVaultPage = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
-  const appNavigate = useAppNavigate()
+  const navigate = useAppNavigate()
   const currentVault = useCurrentVault()
 
   if (!currentVault) {
@@ -56,7 +54,7 @@ const EditVaultPage = () => {
       title: t('backup'),
       subtitle: t('vault_setting_edit_vault_backup_subtitle'),
       icon: <BackupIcon />,
-      onClick: () => appNavigate({ id: 'vaultBackup' }),
+      onClick: () => navigate({ id: 'vaultBackup' }),
     },
     {
       title: t('vault_setting_edit_vault_rename_title'),
@@ -74,13 +72,13 @@ const EditVaultPage = () => {
       title: t('sign'),
       subtitle: t('sign_custom_message'),
       icon: <SignatureIcon />,
-      onClick: () => appNavigate({ id: 'signCustomMessage' }),
+      onClick: () => navigate({ id: 'signCustomMessage' }),
     },
     {
       title: t('delete'),
       subtitle: t('vault_setting_edit_vault_delete_subtitle'),
       icon: <TrashIcon />,
-      onClick: () => appNavigate({ id: 'vaultDelete' }),
+      onClick: () => navigate({ id: 'deleteVault' }),
       textColor: 'danger',
     },
   ]

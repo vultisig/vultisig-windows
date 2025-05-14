@@ -1,8 +1,8 @@
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { Switch } from '@lib/ui/inputs/switchControlContainer'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { useTranslation } from 'react-i18next'
 
-import { Switch } from '../../lib/ui/inputs/switch'
 import { useVaultCreationMpcLib } from '../state/vaultCreationMpcLib'
 
 export const ManageDklsPage = () => {

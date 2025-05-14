@@ -21,6 +21,7 @@ import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActio
 import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
+  useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -57,6 +58,7 @@ export const VaultChainPage = () => {
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
+  const vaultCoins = useCurrentVaultChainCoins(chain)
 
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(chain)
@@ -65,9 +67,9 @@ export const VaultChainPage = () => {
     useInvalidateQueriesMutation()
 
   const refresh = useCallback(() => {
-    const keys: QueryKey[] = [
-      getBalanceQueryKey(extractAccountCoinKey(nativeCoin)),
-    ]
+    const keys: QueryKey[] = vaultCoins.map(coin =>
+      getBalanceQueryKey(extractAccountCoinKey(coin))
+    )
 
     const chainKind = getChainKind(chain)
     if (isOneOf(chainKind, coinFinderChainKinds)) {
@@ -75,7 +77,7 @@ export const VaultChainPage = () => {
     }
 
     invalidateQueries(keys)
-  }, [address, chain, invalidateQueries, nativeCoin])
+  }, [address, chain, invalidateQueries, vaultCoins])
 
   const hasMultipleCoinsSupport = chain in chainTokens
 

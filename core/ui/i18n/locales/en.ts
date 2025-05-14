@@ -6,6 +6,8 @@ export const en = {
   expand_view: 'Expand View',
   general: 'General',
   manage_chains: 'Manage Chains',
+  rename: 'Rename',
+  terms: 'Terms',
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
@@ -793,6 +795,8 @@ export const en = {
     'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
   upgrade_all_devices:
     'Make sure that <b>all initial devices</b> are present when upgrading',
+  upgrade_shares_info:
+    '<b>You’ll create new Vault Share backups</b>, store them as you did before',
   upgrade_success: 'Vault upgraded <b>successfully</b>',
   go_to_vault: 'Go to vault',
   backup_password_prompt:
@@ -803,4 +807,6 @@ export const en = {
   version: 'Version',
   vulti_share_not_saved_hint:
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
+  delete_folder_confirmation:
+    'Are you sure you want to delete the "{{name}}" folder?',
 }
