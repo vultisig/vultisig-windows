@@ -61,7 +61,7 @@ export const CurrentVaultIdProvider = ({
   useEffect(() => {
     if (isPending || guardedValue === value) return
 
-    mutate(value)
+    mutate(guardedValue)
   }, [guardedValue, value, isPending, mutate])
 
   return (
