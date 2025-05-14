@@ -25,7 +25,6 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'custom',
     'merge',
     'stake_tcy',
-    'unstake_tcy',
   ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],
