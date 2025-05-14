@@ -742,6 +742,7 @@ export const en = {
   get_vault_failed_description:
     'Make you sure you have already imported your vaults in VultiConnect',
   connect_with_vultisig: 'Connect with Vultisig',
+  successfully_connected: 'Successfully connected',
   select_vault: 'Select a Vault',
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',

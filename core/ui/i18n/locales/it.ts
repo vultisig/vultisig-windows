@@ -743,6 +743,7 @@ export const it = {
   get_vault_failed_description:
     'Assicurati di aver già importato i tuoi vault in VultiConnect',
   connect_with_vultisig: 'Connettiti con Vultisig',
+  successfully_connected: 'Connesso con successo',
   select_vault: 'Seleziona un Vault',
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
