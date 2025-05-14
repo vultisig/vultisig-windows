@@ -21,9 +21,9 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import { EventMethod } from '../../utils/constants'
-import { hexlify } from 'ethers'
 
 interface InitialState {
   chain?: Chain
@@ -63,19 +63,21 @@ export const ConnectDAppPage = () => {
             : undefined,
       },
     })
-    if (chain === Chain.Ethereum) {
-      inpageMessenger.send(`${EventMethod.CONNECT}:${getDappHost(sender)}`)
+
+    if (getChainKind(chain) === 'evm') {
+      const currentAddress = vaults
+        .find(vault => getVaultId(vault) === vaultId)
+        ?.coins.find(coin => coin.chain === chain)?.address
 
       inpageMessenger.send(
         `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
-        address
+        currentAddress
       )
-      if (Object.keys(sessions).length === 1) {
-        messenger.send(`connect:${host}`, {
-          address,
-          chainId: hexlify(String(chainId)),
-        })
-      }
+
+      inpageMessenger.send(`${EventMethod.CONNECT}:${getDappHost(sender)}`, {
+        address: currentAddress,
+        chainId: getChainId(chain),
+      })
     }
 
     handleClose()

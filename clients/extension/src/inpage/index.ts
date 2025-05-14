@@ -65,9 +65,8 @@ import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
 import { initializeMessenger } from '../messengers/initializeMessenger'
-import VULTI_ICON_RAW_SVG from './icon'
 import { getDappHost, isValidUrl } from '../utils/connectedApps'
-import { hexlify } from 'ethers'
+import VULTI_ICON_RAW_SVG from './icon'
 
 function doctypeCheck() {
   const { doctype } = window.document
@@ -610,12 +609,10 @@ namespace Provider {
         popupMessenger?.reply(
           `${EventMethod.CHAIN_CHANGED}:${host}`,
           async (chainId: number) => {
-            this.emit(EventMethod.CHAIN_CHANGED, hexlify(String(chainId)))
+            this.emit(EventMethod.CHAIN_CHANGED, chainId)
           }
         )
         popupMessenger?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
-          console.log('emitting:', host)
-
           this.emit(EventMethod.ACCOUNTS_CHANGED, [])
           this.emit(EventMethod.DISCONNECT, [])
         })
