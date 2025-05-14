@@ -10,6 +10,7 @@ import { PageSlice } from '@lib/ui/page/PageSlice'
 import { CurrentSearchProvider } from '@lib/ui/search/CurrentSearchProvider'
 import { useTranslation } from 'react-i18next'
 
+import { AddCustomTokenPrompt } from './AddCustomTokenPrompt'
 import { VaultChainCoinOptions } from './search/VaultChainCoinOptions'
 
 export const ManageVaultChainCoinsPage = () => {
@@ -24,8 +25,9 @@ export const ManageVaultChainCoinsPage = () => {
             primaryControls={<PageHeaderBackButton />}
             title={<PageHeaderTitle>{t('choose_tokens')}</PageHeaderTitle>}
           />
-          <PageSlice>
+          <PageSlice alignItems="start" gap={12}>
             <CoinSearch />
+            <AddCustomTokenPrompt />
           </PageSlice>
           <div />
         </VStack>

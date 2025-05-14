@@ -7,7 +7,7 @@ import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 const Container = styled(UnstyledButton)`
-  gap: 16px;
+  gap: 8px;
   display: flex;
   align-items: center;
 
