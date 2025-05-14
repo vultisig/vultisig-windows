@@ -1,3 +1,4 @@
+import { MpcLib } from '@core/mpc/mpcLib'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -12,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
-  const [{ vaultId }] = useCoreViewState<'joinKeysign'>()
+  const [{ vaultId, keysignMsg }] = useCoreViewState<'joinKeysign'>()
   const vaults = useVaults()
 
   const { t } = useTranslation()
@@ -31,6 +32,19 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
           <Button onClick={() => navigate({ id: 'vaults' })}>
             {t('change_vault')}
           </Button>
+        }
+      />
+    )
+  }
+
+  const payload = keysignMsg.keysignPayload
+
+  if (payload && (payload.libType as MpcLib) !== vault.libType) {
+    return (
+      <FullPageFlowErrorState
+        message={t('vault_type_does_not_match')}
+        action={
+          <Button onClick={() => navigate({ id: 'vault' })}>{t('back')}</Button>
         }
       />
     )
