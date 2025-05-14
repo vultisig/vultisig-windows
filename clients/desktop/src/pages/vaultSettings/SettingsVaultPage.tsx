@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
@@ -62,7 +61,6 @@ type SettingSection = {
 
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate()
-  const coreNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const fiatCurrency = useFiatCurrency()
@@ -83,13 +81,13 @@ const SettingsVaultPage = () => {
           id: 'language',
           title: t('language'),
           icon: <GlobeIcon />,
-          onClick: () => coreNavigate({ id: 'languageSettings' }),
+          onClick: () => navigate({ id: 'languageSettings' }),
         },
         {
           id: 'currency',
           title: t('currency'),
           icon: <CurrencyCircleIcon />,
-          onClick: () => coreNavigate({ id: 'currencySettings' }),
+          onClick: () => navigate({ id: 'currencySettings' }),
         },
         {
           id: 'address-book',
@@ -101,7 +99,7 @@ const SettingsVaultPage = () => {
           id: 'default-chains',
           title: t('vault_settings_default_chains'),
           icon: <DefaultChainsIcon />,
-          onClick: () => coreNavigate({ id: 'defaultChains' }),
+          onClick: () => navigate({ id: 'defaultChains' }),
         },
         {
           id: 'faq',
