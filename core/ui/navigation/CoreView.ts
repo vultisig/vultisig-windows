@@ -9,6 +9,7 @@ import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
   | { id: 'address'; state: { address: string } }
+  | { id: 'airdropRegister' }
   | { id: 'currencySettings' }
   | { id: 'defaultChains' }
   | { id: 'deleteVault' }

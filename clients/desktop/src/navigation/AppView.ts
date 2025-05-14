@@ -2,24 +2,23 @@ import { CoreView } from '@core/ui/navigation/CoreView'
 
 export type AppView =
   | CoreView
-  | { id: 'importVaultFromFile'; state: { filePath: string } }
-  | { id: 'shareVault' }
-  | { id: 'migrateVault' }
-  | { id: 'vaultSettings' }
-  | { id: 'manageVaults' }
-  | { id: 'editVault' }
-  | { id: 'vaultBackup' }
-  | { id: 'checkUpdate' }
   | { id: 'addressBook' }
-  | { id: 'faq' }
-  | { id: 'vaultFAQ' }
-  | { id: 'signCustomMessage' }
-  | { id: 'registerForAirdrop' }
-  | { id: 'onboarding' }
+  | { id: 'editVault' }
+  | { id: 'checkUpdate' }
   | { id: 'createVaultFolder' }
-  | { id: 'vaultFolder'; state: { id: string } }
-  | { id: 'manageVaultFolder'; state: { id: string } }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'dkls' }
+  | { id: 'faq' }
+  | { id: 'importVaultFromFile'; state: { filePath: string } }
+  | { id: 'manageVaults' }
+  | { id: 'manageVaultFolder'; state: { id: string } }
+  | { id: 'migrateVault' }
+  | { id: 'onboarding' }
+  | { id: 'shareVault' }
+  | { id: 'signCustomMessage' }
+  | { id: 'vaultBackup' }
+  | { id: 'vaultFAQ' }
+  | { id: 'vaultFolder'; state: { id: string } }
+  | { id: 'vaultSettings' }
 
 export type AppViewId = AppView['id']

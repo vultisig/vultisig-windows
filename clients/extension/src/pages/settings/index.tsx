@@ -18,12 +18,15 @@ import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { DefaultChainsIcon } from '@lib/ui/icons/DefaultChainsIcon'
 import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
+import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
+import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
+import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -102,6 +105,14 @@ export const SettingsPage = () => {
                 hoverable
                 showArrow
               />
+              <ListItem
+                icon={<VultisigLogoIcon fontSize={20} />}
+                onClick={() => navigate({ id: 'airdropRegister' })}
+                status="success"
+                title={t('vault_settings_register_for_airdrop')}
+                hoverable
+                showArrow
+              />
             </List>
           </VStack>
           <VStack gap={12}>
@@ -168,6 +179,27 @@ export const SettingsPage = () => {
                 icon={<ShareIcon fontSize={20} />}
                 onClick={() => setVisible(true)}
                 title={t('share_vault')}
+                hoverable
+              />
+            </List>
+          </VStack>
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('vault_settings_section_legal')}
+            </Text>
+            <List>
+              <ListItem
+                icon={<ShieldCheckIcon fontSize={20} />}
+                onClick={() => open('https://vultisig.com/privacy', '_blank')}
+                title={t('vault_settings_privacy_policy')}
+                hoverable
+              />
+              <ListItem
+                icon={<FileTextIcon fontSize={20} />}
+                onClick={() =>
+                  open('https://vultisig.com/termofservice', '_blank')
+                }
+                title={t('vault_settings_terms_of_service')}
                 hoverable
               />
             </List>
