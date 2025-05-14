@@ -61,6 +61,7 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
     ],
     schema: (_chain: Chain, _wc: WalletCore, total: number) =>
       z.object({
+        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
@@ -78,6 +79,7 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
     fields: [],
     schema: () =>
       z.object({
+        selectedCoin: CoinSchema,
         percentage: z
           .string()
           .transform(Number)

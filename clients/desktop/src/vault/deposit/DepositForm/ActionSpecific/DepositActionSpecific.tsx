@@ -13,9 +13,9 @@ import { FormData } from '..'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
-import { StakeTYCSpecific } from './StakeTycSpecific'
+import { StakeTCYSpecific } from './StakeTCYSpecific'
 import { SwitchSpecific } from './SwitchSpecificFields'
-import { UnstakeTYCSpecific } from './UnstakeTYCSpecific/UnstakeTYCSpecific'
+import { UnstakeTCYSpecific } from './UnstakeTYCSpecific/UnstakeTCYSpecific'
 
 type Props = {
   chain: Chain
@@ -33,7 +33,6 @@ export const DepositActionSpecific = ({
   watch,
 }: Props) => {
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
-
   const selectedBondableAsset = getValues('bondableAsset')
   const selectedCoin = getValues('selectedCoin') as Coin | null
 
@@ -78,8 +77,8 @@ export const DepositActionSpecific = ({
           getValues={getValues}
         />
       )}
-      unstake_tcy={() => <UnstakeTYCSpecific />}
-      stake_tcy={() => <StakeTYCSpecific setValues={setValue} />}
+      unstake_tcy={() => <UnstakeTCYSpecific setValue={setValue} />}
+      stake_tcy={() => <StakeTCYSpecific setValue={setValue} />}
       bond={() => null}
       unbond={() => null}
       leave={() => null}
