@@ -3,8 +3,8 @@ import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MayaChainPool } from '../../../lib/types/deposit'
-import { DepositActionOption } from './DepositActionOption'
+import { MayaChainPool } from '../../../../../lib/types/deposit'
+import { DepositActionOption } from '../../DepositActionOption'
 
 type MayaChainAssetExplorerProps = {
   options: MayaChainPool[]

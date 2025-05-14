@@ -33,6 +33,15 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
 }
 
 const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+  [Chain.THORChain]: [
+    {
+      ticker: 'TCY',
+      logo: 'tcy.png',
+      decimals: 8,
+      id: 'tcy',
+      priceProviderId: 'tcy',
+    },
+  ],
   [Chain.Tron]: [
     {
       ticker: 'USDT',
@@ -946,11 +955,14 @@ export const chainTokens: Partial<Record<Chain, Coin[]>> = (() => {
     }
   }
 
-  base[Chain.THORChain] = IBC_TOKENS.map(t => ({
-    ...t,
-    chain: Chain.THORChain,
-    id: `thor.${t.ticker.toLowerCase()}`,
-  }))
+  base[Chain.THORChain] = [
+    ...(base[Chain.THORChain] ?? []),
+    ...IBC_TOKENS.map(t => ({
+      ...t,
+      chain: Chain.THORChain,
+      id: `thor.${t.ticker.toLowerCase()}`,
+    })),
+  ]
 
   return base
 })()
