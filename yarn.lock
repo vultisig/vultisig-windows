@@ -328,7 +328,6 @@ __metadata:
     "@eslint/js": "npm:^9.22.0"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
-    "@tanstack/query-core": "npm:^5.69.0"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.22.0"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -1476,6 +1475,7 @@ __metadata:
   resolution: "@lib/ui@workspace:lib/ui"
   dependencies:
     "@lib/utils": "workspace:*"
+    "@tanstack/query-core": "npm:^5.69.0"
     styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
