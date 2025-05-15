@@ -11,7 +11,7 @@ export const ManageVaultChainCoin = ({ value }: ValueProp<Coin>) => {
       value={value}
       icon={
         <ChainEntityIcon
-          value={getCoinLogoSrc(value.logo)}
+          value={value.logo ? getCoinLogoSrc(value.logo) : undefined}
           style={{ fontSize: 32 }}
         />
       }

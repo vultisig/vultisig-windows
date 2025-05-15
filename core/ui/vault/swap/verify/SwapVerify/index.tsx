@@ -43,7 +43,9 @@ export const SwapVerify = () => {
         <VStack gap={16}>
           <HStack gap={8}>
             <ChainCoinIcon
-              coinSrc={getCoinLogoSrc(fromCoin.logo)}
+              coinSrc={
+                fromCoin.logo ? getCoinLogoSrc(fromCoin.logo) : undefined
+              }
               style={{ fontSize: 24 }}
             />
             <Text weight="500" size={17} color="contrast">
@@ -61,7 +63,7 @@ export const SwapVerify = () => {
           </HStack>
           <HStack gap={8}>
             <ChainCoinIcon
-              coinSrc={getCoinLogoSrc(toCoin.logo)}
+              coinSrc={toCoin.logo ? getCoinLogoSrc(toCoin.logo) : undefined}
               style={{ fontSize: 24 }}
             />
             <MatchQuery
