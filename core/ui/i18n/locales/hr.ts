@@ -15,10 +15,13 @@ export const hr = {
   percentage_limit: 'Postotak mora biti između 0 i 100',
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
+  percentage_to_unstake: 'Postotak za povlačenje',
+  staked_amount: 'Uloženi iznos',
   ibc_transfer: 'IBC prijenos',
   percentage: 'Postotak',
   stake_tcy: 'Stake TCY',
   unstake_tcy: 'Unstake TCY',
+  staked: 'Uloženo',
   select_destination_chain: 'Odaberite odredišni lanac',
   selected_chain_missing_in_your_vault:
     'Odabrani lanac nedostaje u vašem trezoru',
