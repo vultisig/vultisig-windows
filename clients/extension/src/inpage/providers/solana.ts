@@ -1,16 +1,35 @@
-import { Connection, PublicKey, SystemInstruction, SystemProgram, Transaction, VersionedTransaction } from "@solana/web3.js"
-import EventEmitter from "events"
-import { NetworkKey } from "../constants"
-import { isVersionedTransaction, processBackgroundResponse } from "../../utils/functions"
-import { EventMethod, MessageKey, RequestMethod } from "../../utils/constants"
-import { Messaging, SendTransactionResponse, TransactionType } from "../../utils/interfaces"
+import { Chain } from '@core/chain/Chain'
+import { rootApiUrl } from '@core/config'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAccount,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
+import {
+  Connection,
+  PublicKey,
+  SystemInstruction,
+  SystemProgram,
+  Transaction,
+  VersionedTransaction,
+} from '@solana/web3.js'
 import base58 from 'bs58'
-import { rootApiUrl } from "@core/config"
-import { Chain } from "@core/chain/Chain"
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getAccount, TOKEN_PROGRAM_ID } from "@solana/spl-token"
-import { Callback } from ".."
-import { messengers } from "../messenger"
+import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
+
+import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
+import {
+  isVersionedTransaction,
+  processBackgroundResponse,
+} from '../../utils/functions'
+import {
+  Messaging,
+  SendTransactionResponse,
+  TransactionType,
+} from '../../utils/interfaces'
+import { Callback } from '..'
+import { NetworkKey } from '../constants'
+import { messengers } from '../messenger'
 
 export class Solana extends EventEmitter {
   public chainId: string

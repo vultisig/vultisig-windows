@@ -4,7 +4,6 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
-
 import {
   Messaging,
   SendTransactionResponse,
@@ -40,26 +39,22 @@ import Long from 'long'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
-import { initializeMessenger } from '../messengers/initializeMessenger'
+import { NetworkKey } from './constants'
 import VULTI_ICON_RAW_SVG from './icon'
-import { UTXO } from './providers/utxo'
+import { messengers } from './messenger'
 import { Cosmos } from './providers/cosmos'
 import { Dash } from './providers/dash'
 import { Ethereum } from './providers/ethereum'
 import { MAYAChain } from './providers/maya'
 import { Solana } from './providers/solana'
 import { THORChain } from './providers/thorchain'
-import { NetworkKey } from './constants'
+import { UTXO } from './providers/utxo'
 import { shouldInjectProvider } from './utils/injectHelpers'
 
 export type Callback = (
   error: Error | null,
   result?: Messaging.Chain.Response
 ) => void
-
-const messenger = initializeMessenger({ connect: 'contentScript' })
-const backgroundMessenger = initializeMessenger({ connect: 'background' })
-const popupMessenger = initializeMessenger({ connect: 'popup' })
 
 class XDEFIMessageRequester {
   constructor() {
@@ -416,7 +411,7 @@ const vultisigProvider = {
   solana: solanaProvider,
   thorchain: thorchainProvider,
   getVault: async (): Promise<Messaging.GetVault.Response> => {
-    return await backgroundMessenger.send<
+    return await messengers.background.send<
       Messaging.GetVault.Request,
       Messaging.GetVault.Response
     >(
@@ -429,7 +424,7 @@ const vultisigProvider = {
     )
   },
   getVaults: async (): Promise<VaultExport[]> => {
-    return await backgroundMessenger.send<
+    return await messengers.background.send<
       Messaging.GetVaults.Request,
       Messaging.GetVaults.Response
     >(
@@ -472,7 +467,7 @@ if (shouldInjectProvider()) {
 
   window.dispatchEvent(new Event('vulticonnect:inpage:ready'))
 
-  messenger.reply(
+  messengers.contentScript.reply(
     'setDefaultProvider',
     async ({
       vultisigDefaultProvider,

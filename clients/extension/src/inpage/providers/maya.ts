@@ -1,14 +1,15 @@
 import { EventEmitter } from 'events'
-import { NetworkKey } from '../constants'
-import { EventMethod, MessageKey } from '../../utils/constants'
+import { v4 as uuidv4 } from 'uuid'
+
 import {
   ThorchainProviderMethod,
   ThorchainProviderRequest,
   ThorchainProviderResponse,
 } from '../../types/thorchain'
-import { messengers } from '../messenger'
-import { v4 as uuidv4 } from 'uuid'
+import { EventMethod, MessageKey } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
+import { NetworkKey } from '../constants'
+import { messengers } from '../messenger'
 
 export class MAYAChain extends EventEmitter {
   public chainId: string

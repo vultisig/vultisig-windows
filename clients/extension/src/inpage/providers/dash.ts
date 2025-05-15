@@ -1,11 +1,12 @@
-import EventEmitter from "events"
-import { NetworkKey } from "../constants"
-import { Callback } from ".."
-import { EventMethod, MessageKey } from "../../utils/constants"
-import { Messaging } from "../../utils/interfaces"
-import { messengers } from "../messenger"
+import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
-import { processBackgroundResponse } from "../../utils/functions"
+
+import { EventMethod, MessageKey } from '../../utils/constants'
+import { processBackgroundResponse } from '../../utils/functions'
+import { Messaging } from '../../utils/interfaces'
+import { Callback } from '..'
+import { NetworkKey } from '../constants'
+import { messengers } from '../messenger'
 
 export class Dash extends EventEmitter {
   public chainId: string

@@ -1,16 +1,15 @@
-import EventEmitter from 'events'
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
   EventMethod,
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
+import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
-import { Messaging } from '../../utils/interfaces'
-import { getDappHost, isValidUrl } from '../../utils/connectedApps'
-import { messengers } from '../messenger'
-import { Callback } from '..'
+
 import { processBackgroundResponse } from '../../utils/functions'
+import { Messaging } from '../../utils/interfaces'
+import { Callback } from '..'
+import { messengers } from '../messenger'
 
 export class Ethereum extends EventEmitter {
   public chainId: string
