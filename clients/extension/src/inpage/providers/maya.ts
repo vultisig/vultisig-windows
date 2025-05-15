@@ -21,7 +21,7 @@ export class MAYAChain extends EventEmitter {
     this.network = NetworkKey.MAINNET
   }
 
-  getInstace(): MAYAChain {
+  static getInstance(): MAYAChain {
     if (!MAYAChain.instance) {
       MAYAChain.instance = new MAYAChain()
     }
