@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -94,10 +95,23 @@ func (s *Store) SaveVault(vault *Vault) error {
 		return fmt.Errorf("could not marshal signers, err: %w", err)
 	}
 
-	query := `INSERT OR REPLACE INTO vaults (
-		name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
-	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	columns := []string{
+		"name",
+		"public_key_ecdsa",
+		"public_key_eddsa",
+		"created_at",
+		"hex_chain_code",
+		"local_party_id",
+		"signers",
+		"reshare_prefix",
+		"\"order\"",
+		"is_backedup",
+		"folder_id",
+		"lib_type",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO vaults (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 
 	_, err = s.db.Exec(query,
 		vault.Name,
@@ -188,7 +202,14 @@ func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) erro
 		return fmt.Errorf("could not delete keyshare, err: %w", err)
 	}
 	// insert new keyshare
-	query := `INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare) VALUES (?, ?, ?)`
+	columns := []string{
+		"public_key_ecdsa",
+		"public_key",
+		"keyshare",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO keyshares (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 	_, err = s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
 	if err != nil {
 		return fmt.Errorf("could not upsert keyshare, err: %w", err)
@@ -312,7 +333,15 @@ func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
 	if item.ID == "" {
 		item.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO address_book (id, title, address, chain) VALUES (?, ?, ?, ?)`
+	columns := []string{
+		"id",
+		"title",
+		"address",
+		"chain",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO address_book (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert address book item, err: %w", err)
@@ -383,22 +412,34 @@ func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
 	return err
 }
 
+// generatePlaceholders generates the correct number of SQL placeholders
+func generatePlaceholders(count int) string {
+	placeholders := make([]string, count)
+	for i := 0; i < count; i++ {
+		placeholders[i] = "?"
+	}
+	return strings.Join(placeholders, ", ")
+}
+
 func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) {
 	if coin.ID == "" {
 		coin.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO coins (
-				id, 
-				chain, 
-				address,
-				ticker, 
-				contract_address, 
-				is_native_token, 
-				logo, 
-				price_provider_id,
-				decimals,
-				public_key_ecdsa
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	columns := []string{
+		"id",
+		"chain",
+		"address",
+		"ticker",
+		"contract_address",
+		"is_native_token",
+		"logo",
+		"price_provider_id",
+		"decimals",
+		"public_key_ecdsa",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO coins (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.Decimals, vaultPublicKeyECDSA)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
@@ -420,18 +461,21 @@ func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, e
 		}
 	}()
 
-	query := `INSERT OR REPLACE INTO coins (
-		id, 
-		chain, 
-		address,
-		ticker, 
-		contract_address, 
-		is_native_token, 
-		logo, 
-		price_provider_id,
-		decimals,
-		public_key_ecdsa
-	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	columns := []string{
+		"id",
+		"chain",
+		"address",
+		"ticker",
+		"contract_address",
+		"is_native_token",
+		"logo",
+		"price_provider_id",
+		"decimals",
+		"public_key_ecdsa",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO coins (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 
 	stmt, err := tx.Prepare(query)
 	if err != nil {
@@ -474,7 +518,14 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 	if folder.ID == "" {
 		folder.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO vault_folders (id, name, "order") VALUES (?, ?, ?)`
+	columns := []string{
+		"id",
+		"name",
+		"\"order\"",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO vault_folders (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
 	_, err := s.db.Exec(query, folder.ID, folder.Name, folder.Order)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert vault folder, err: %w", err)
