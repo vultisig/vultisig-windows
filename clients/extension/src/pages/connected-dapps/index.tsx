@@ -16,7 +16,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -41,9 +41,10 @@ export const ConnectedDappsPage = () => {
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
   const [isDisconnecting, setIsDisconnecting] = useState(false)
-
+  const isDisconnectingRef = useRef(false)
   const handleDisconnect = async (host: string, url: string) => {
-    if (isDisconnecting) return
+    if (isDisconnectingRef.current) return
+    isDisconnectingRef.current = true
     setIsDisconnecting(true)
     try {
       await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
@@ -51,12 +52,14 @@ export const ConnectedDappsPage = () => {
     } catch (error) {
       console.error(`Failed to disconnect session for ${host}:`, error)
     } finally {
+      isDisconnectingRef.current = false
       setIsDisconnecting(false)
     }
   }
 
   const handleDisconnectAll = async () => {
-    if (isDisconnecting) return
+    if (isDisconnectingRef.current) return
+    isDisconnectingRef.current = true
     setIsDisconnecting(true)
     try {
       await clearSessions({ vaultId: shouldBePresent(currentVaultId) })
@@ -69,6 +72,7 @@ export const ConnectedDappsPage = () => {
     } catch (error) {
       console.error('Failed to disconnect all sessions:', error)
     } finally {
+      isDisconnectingRef.current = false
       setIsDisconnecting(false)
     }
   }
