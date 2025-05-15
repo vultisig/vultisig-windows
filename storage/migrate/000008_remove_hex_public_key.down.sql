@@ -1,3 +1,6 @@
+-- Disable foreign key constraint checks
+PRAGMA foreign_keys = OFF;
+
 CREATE TABLE Coins_new (
     id TEXT PRIMARY KEY,
     public_key_ecdsa TEXT NOT NULL,
@@ -38,3 +41,6 @@ CREATE INDEX IF NOT EXISTS idx_coins_public_key_ecdsa ON coins (public_key_ecdsa
 CREATE INDEX IF NOT EXISTS idx_coins_chain ON coins (chain);
 CREATE INDEX IF NOT EXISTS idx_coins_ticker ON coins (ticker);
 CREATE INDEX IF NOT EXISTS idx_coins_public_key_ecdsa_chain ON coins (public_key_ecdsa, chain); 
+
+-- Re-enable foreign key constraint checks
+PRAGMA foreign_keys = ON; 
