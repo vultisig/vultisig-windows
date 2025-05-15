@@ -1,4 +1,4 @@
-import { AddressPage } from '@core/ui/chain/components/address/AddressPage'
+import { AddressPage } from '@core/ui/chain/coin/address'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
