@@ -187,7 +187,13 @@ export const VaultChainPage = () => {
                   onClick={() =>
                     navigate({
                       id: 'vaultChainCoinDetail',
-                      state: { chain, coin: coin },
+                      state: {
+                        chain,
+                        coin: {
+                          chain: coin.chain,
+                          id: coin.id,
+                        },
+                      },
                     })
                   }
                 >
