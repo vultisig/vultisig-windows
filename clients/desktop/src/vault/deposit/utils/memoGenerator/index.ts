@@ -95,7 +95,10 @@ export const generateMemo = ({
     },
     stake_tcy: () => 'tcy+',
     unstake_tcy: () => {
-      const pct = shouldBePresent(depositFormData.percentage, 'percentage')
+      const pct = shouldBePresent(
+        depositFormData.tcyPercentage,
+        'TCY Percentage'
+      )
       const basisPoints = Math.floor(pct * 100)
       return `tcy-:${basisPoints}`
     },
