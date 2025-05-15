@@ -72,7 +72,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     gap={4}
                   >
                     <ChainCoinIcon
-                      coinSrc={getCoinLogoSrc(logo)}
+                      coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
                       chainSrc={
                         shouldDisplayChainLogo({
                           ticker: ticker,
