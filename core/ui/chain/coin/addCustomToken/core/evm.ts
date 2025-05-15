@@ -1,5 +1,4 @@
 import { EvmChain } from '@core/chain/Chain'
-import { ChainAccount } from '@core/chain/ChainAccount'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { Address, erc20Abi } from 'viem'
 
@@ -8,7 +7,7 @@ import { CustomTokenResolver } from './CustomTokenResolver'
 export const getEvmCustomToken: CustomTokenResolver<EvmChain> = async ({
   chain,
   address,
-}: ChainAccount<EvmChain>) => {
+}) => {
   const publicClient = getEvmClient(chain)
 
   const [ticker, decimals] = await Promise.all([
