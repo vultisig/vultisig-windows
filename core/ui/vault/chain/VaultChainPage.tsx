@@ -54,8 +54,8 @@ import { VaultChainCoinItem } from './VaultChainCoinItem'
 
 export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
-  const fiatCurrency = useFiatCurrency()
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
+  const fiatCurrency = useFiatCurrency()
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
   const vaultCoins = useCurrentVaultChainCoins(chain)

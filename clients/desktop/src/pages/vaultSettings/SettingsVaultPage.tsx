@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
@@ -14,8 +15,8 @@ import GlobeIcon from '@lib/ui/icons/GlobeIcon'
 import NoteIcon from '@lib/ui/icons/NoteIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
-import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
-import TwitterIcon from '@lib/ui/icons/TwitterIcon'
+import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
+import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { ScrollableFlexboxFiller } from '@lib/ui/layout/ScrollableFlexboxFiller'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -60,9 +61,9 @@ type SettingSection = {
 }
 
 const SettingsVaultPage = () => {
-  const navigate = useAppNavigate()
   const { t } = useTranslation()
-
+  const navigate = useAppNavigate()
+  const coreNavigate = useCoreNavigate()
   const fiatCurrency = useFiatCurrency()
   const language = useLanguage()
 
@@ -93,7 +94,7 @@ const SettingsVaultPage = () => {
           id: 'address-book',
           title: t('vault_settings_address_book'),
           icon: <AddressBookIcon />,
-          onClick: () => navigate({ id: 'addressBook' }),
+          onClick: () => coreNavigate({ id: 'addressBook' }),
         },
         {
           id: 'default-chains',
@@ -116,7 +117,7 @@ const SettingsVaultPage = () => {
           id: 'register-for-airdrop',
           title: t('vault_settings_register_for_airdrop'),
           icon: <VultisigLogoIcon />,
-          onClick: () => navigate({ id: 'registerForAirdrop' }),
+          onClick: () => coreNavigate({ id: 'airdropRegister' }),
         },
         {
           id: 'share-app',

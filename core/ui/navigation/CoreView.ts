@@ -9,6 +9,7 @@ import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
   | { id: 'address'; state: { address: string } }
+  | { id: 'airdropRegister' }
   | { id: 'currencySettings' }
   | { id: 'defaultChains' }
   | { id: 'deleteVault' }
@@ -56,6 +57,7 @@ export type CoreView =
   | { id: 'manageVaultFolder'; state: { id: string } }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
+  | { id: 'addressBook' }
 export type CoreViewId = CoreView['id']
 
 export const initialCoreView: CoreView = {

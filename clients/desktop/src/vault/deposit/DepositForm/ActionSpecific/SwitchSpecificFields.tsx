@@ -26,7 +26,7 @@ import {
 } from '../DepositForm.styled'
 import { TokenExplorer } from '../TokenExplorer'
 
-export const SwitchSpecificFields = ({
+export const SwitchSpecific = ({
   watch,
   getValues,
   setValue,

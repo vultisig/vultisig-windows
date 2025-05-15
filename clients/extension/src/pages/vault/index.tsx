@@ -10,7 +10,7 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -58,7 +58,7 @@ export const VaultPage = () => {
   const navigate = useAppNavigate()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
   const fiatCurrency = useFiatCurrency()
 
   return (

@@ -43,6 +43,7 @@ export const DepositConfirmButton = ({
   const coin = useCurrentVaultCoin(
     selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
+
   const transactionType =
     action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)

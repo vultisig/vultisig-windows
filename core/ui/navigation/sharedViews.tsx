@@ -11,6 +11,7 @@ import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
+import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
@@ -23,6 +24,7 @@ import { Views } from '@lib/ui/navigation/Views'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'airdropRegister'
   | 'currencySettings'
   | 'defaultChains'
   | 'importVault'
@@ -46,6 +48,7 @@ export type SharedViewId = Extract<
 
 export const sharedViews: Views<SharedViewId> = {
   address: AddressPage,
+  airdropRegister: AirdropRegisterPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   defaultChains: DefaultChainsPage,

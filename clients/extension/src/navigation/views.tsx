@@ -15,6 +15,7 @@ import { VaultPage } from '@clients/extension/src/pages/vault'
 import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
+import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
@@ -47,6 +48,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vaultsTab: GetVaultsPage,
   transactionTab: TransactionPage,
   manageVaults: ManageVaultsPage,
+  addressBook: AddressBookSettingsPage,
 }
 
 export const views: Views<AppViewId> = {
