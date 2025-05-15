@@ -815,4 +815,7 @@ export const en = {
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
   custom_token: 'Custom Token',
+  find_custom_token: 'Find Your Custom Token',
+  enter_contract_address: 'Enter Contract Address',
+  no_token_found: 'No token found',
 }

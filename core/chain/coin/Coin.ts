@@ -11,7 +11,7 @@ export type Coin = CoinKey & {
   priceProviderId?: string
   decimals: number
   ticker: string
-  logo: string
+  logo?: string
 }
 
 export type CoinAmount = {
