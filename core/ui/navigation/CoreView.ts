@@ -59,6 +59,7 @@ export type CoreView =
   | { id: 'manageVaultFolder'; state: { id: string } }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
+  | { id: 'addressBook' }
   | { id: 'addCustomToken'; state: { chain: CustomTokenEnabledChain } }
 
 export type CoreViewId = CoreView['id']
