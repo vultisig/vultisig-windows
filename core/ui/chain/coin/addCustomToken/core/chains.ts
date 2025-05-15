@@ -3,7 +3,8 @@ import { ChainsOfKind, getChainKind } from '@core/chain/ChainKind'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 const customTokenEnabledChainKinds = ['evm', 'solana'] as const
-type CustomTokenEnabledChainKind = (typeof customTokenEnabledChainKinds)[number]
+export type CustomTokenEnabledChainKind =
+  (typeof customTokenEnabledChainKinds)[number]
 
 export type CustomTokenEnabledChain = ChainsOfKind<CustomTokenEnabledChainKind>
 

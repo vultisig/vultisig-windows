@@ -829,4 +829,7 @@ export const en = {
   grant_camera_permission: 'Grant Camera Permission',
   failed_to_get_camera_permission: 'Failed to get camera permission',
   custom_token: 'Custom Token',
+  find_custom_token: 'Find Your Custom Token',
+  enter_contract_address: 'Enter Contract Address',
+  no_token_found: 'No token found',
 }
