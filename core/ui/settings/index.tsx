@@ -76,7 +76,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
       <VStack fullHeight>
         <PageHeader
           primaryControls={<PageHeaderBackButton />}
-          title={<PageHeaderTitle>{t('default_chains')}</PageHeaderTitle>}
+          title={<PageHeaderTitle>{t('settings')}</PageHeaderTitle>}
           hasBorder
         />
         <PageContent gap={24} flexGrow scrollable>
