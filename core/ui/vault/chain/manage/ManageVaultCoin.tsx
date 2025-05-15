@@ -4,7 +4,7 @@ import {
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
 import {
-  useCurrentVaultAddreses,
+  useCurrentVaultAddresses,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { interactive } from '@lib/ui/css/interactive'
@@ -34,7 +34,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const isChecked = coins.some(c => areEqualCoins(c, value))
   const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}

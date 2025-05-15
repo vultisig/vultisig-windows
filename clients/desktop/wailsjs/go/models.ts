@@ -22,7 +22,6 @@ export namespace storage {
 	    id: string;
 	    chain: string;
 	    address: string;
-	    hex_public_key: string;
 	    ticker: string;
 	    contract_address: string;
 	    is_native_token: boolean;
@@ -39,7 +38,6 @@ export namespace storage {
 	        this.id = source["id"];
 	        this.chain = source["chain"];
 	        this.address = source["address"];
-	        this.hex_public_key = source["hex_public_key"];
 	        this.ticker = source["ticker"];
 	        this.contract_address = source["contract_address"];
 	        this.is_native_token = source["is_native_token"];

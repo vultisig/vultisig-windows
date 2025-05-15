@@ -1,4 +1,3 @@
-export const VULTISIG_WEBSITE_LINK = 'https://vultisig.com'
 export const VULTISIG_GITHUB_LINK =
   'https://github.com/vultisig/vultisig-windows'
 export const VULTISIG_TWITTER_LINK = 'https://x.com/vultisig'

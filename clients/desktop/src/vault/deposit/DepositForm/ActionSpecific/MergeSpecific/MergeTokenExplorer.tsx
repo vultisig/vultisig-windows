@@ -9,8 +9,8 @@ import { FC, useMemo } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FormData } from '.'
-import { DepositActionOption } from './DepositActionOption'
+import { FormData } from '../..'
+import { DepositActionOption } from '../../DepositActionOption'
 
 const useUserMergeAcceptedTokens = () => {
   const userCoins = useCurrentVaultCoins()

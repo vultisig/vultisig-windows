@@ -2,15 +2,15 @@ import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
 
 import { DiscoveryService } from '../../../../../wailsjs/go/mediator/Server'
 
-export type GetKeygenServerUrlInput = {
+export type GetMpcServerUrlInput = {
   serverType: MpcServerType
   serviceName: string
 }
 
-export const getKeygenServerUrl = async ({
+export const getMpcServerUrl = async ({
   serverType,
   serviceName,
-}: GetKeygenServerUrlInput): Promise<string> => {
+}: GetMpcServerUrlInput): Promise<string> => {
   if (serverType === 'relay') {
     return mpcServerUrl.relay
   }

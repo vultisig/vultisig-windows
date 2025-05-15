@@ -1,3 +1,4 @@
+import { Coin } from '@core/chain/coin/Coin'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import {
   TxOverviewColumn,
@@ -38,7 +39,9 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   selectedChainAction,
 }) => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coin = useCurrentVaultCoin(coinKey)
+  const selectedCoin = depositFormData?.selectedCoin as Coin
+  const currentCoin = useCurrentVaultCoin(coinKey)
+  const coin = selectedCoin || currentCoin
 
   const depositFormDataWithMemo = useMemoGenerator({
     depositFormData: depositFormData,

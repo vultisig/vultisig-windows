@@ -54,8 +54,8 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
         chain: 'THOR',
-        symbol: 'RUNE',
-        ticker: 'RUNE',
+        symbol: commCoin.ticker == 'TCY' ? commCoin.ticker : 'RUNE',
+        ticker: commCoin.ticker == 'TCY' ? commCoin.ticker : 'RUNE',
         synth: false,
       }),
     })

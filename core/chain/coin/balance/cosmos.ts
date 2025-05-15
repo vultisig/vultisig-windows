@@ -11,7 +11,11 @@ import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 const isCosmosNativeCoin = (coin: CoinKey) => {
   if (
-    ['ibc/', 'factory/', '/', '.', '-'].some(prefix => coin.id.includes(prefix))
+    // @antonio 'tcy' should be added as a string here, not as a token in leanChainNativeTokens.
+    // TCY is both a native and non-native token—adding it to leanChainNativeTokens will break keysign.
+    ['ibc/', 'factory/', '/', '.', '-', 'tcy'].some(prefix =>
+      coin.id.includes(prefix)
+    )
   ) {
     return true
   }

@@ -1,4 +1,5 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { MpcSession } from '@core/ui/mpc/session/MpcSession'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
@@ -11,15 +12,22 @@ import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
+import { useMpcServerUrlQuery } from '../../vault/keygen/server/queries/useMpcServerUrlQuery'
+import { MpcMediatorManager } from './MpcMediatorManager'
 
-export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
+type JoinMpcServerUrlProviderInput = ChildrenProp & {
+  mpcSession: MpcSession
+}
+
+export const JoinMpcServerUrlProvider = ({
+  children,
+  mpcSession,
+}: JoinMpcServerUrlProviderInput) => {
+  const { t } = useTranslation()
   const [serverType] = useMpcServerType()
   const [serviceName] = useMpcServiceName()
 
-  const { t } = useTranslation()
-
-  const query = useKeygenServerUrlQuery({
+  const query = useMpcServerUrlQuery({
     serverType,
     serviceName,
   })
@@ -28,7 +36,10 @@ export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
     <MatchQuery
       value={query}
       success={value => (
-        <MpcServerUrlProvider value={value}>{children}</MpcServerUrlProvider>
+        <MpcServerUrlProvider value={value}>
+          <MpcMediatorManager />
+          {children}
+        </MpcServerUrlProvider>
       )}
       error={() => (
         <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
@@ -36,7 +47,7 @@ export const JoinKeygenServerUrlProvider = ({ children }: ChildrenProp) => {
       pending={() => (
         <>
           <PageHeader
-            title={<PageHeaderTitle>{t('join_keygen')}</PageHeaderTitle>}
+            title={<PageHeaderTitle>{t(`join_${mpcSession}`)}</PageHeaderTitle>}
             primaryControls={<PageHeaderBackButton />}
           />
           <PageContent justifyContent="center" alignItems="center">
