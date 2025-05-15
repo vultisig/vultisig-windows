@@ -3,7 +3,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findCoins } from '@core/chain/coin/find'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { FindCoinsResolverInput } from '@core/chain/coin/find/FindCoinsResolver'
-import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
@@ -17,7 +17,7 @@ export const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
 ]
 
 export const useCoinFinderQuery = () => {
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
 
   const coinFinderInputs = useMemo(() => {
     const result: FindCoinsResolverInput[] = []

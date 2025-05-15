@@ -21,4 +21,6 @@ export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   ibc_transfer: { requiresAmount: true, requiresNodeAddress: true },
   merge: { requiresAmount: true, requiresNodeAddress: true },
   switch: { requiresAmount: true, requiresNodeAddress: true },
+  stake_tcy: { requiresAmount: true },
+  unstake_tcy: {},
 }

@@ -26,8 +26,6 @@ export const toStorageCoin = (coin: AccountCoin): storage.Coin => {
     id: accountCoinKeyToString(coin),
     chain: coin.chain,
     address: coin.address,
-    // TODO: remove this field since we are not using it
-    hex_public_key: '',
     ticker: coin.ticker,
     contract_address: isNativeToken ? '' : coin.id,
     is_native_token: isNativeToken,

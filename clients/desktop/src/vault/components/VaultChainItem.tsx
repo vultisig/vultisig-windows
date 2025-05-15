@@ -5,7 +5,7 @@ import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEn
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
-import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { round } from '@lib/ui/css/round'
@@ -37,7 +37,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { chain, coins } = balance
   const fiatCurrency = useFiatCurrency()
 
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
   const address = addresses[chain]
 
   const pressHandlers = useHandleVaultChainItemPress({

@@ -27,7 +27,7 @@ export const useCurrentVaultCoinsByChain = () => {
   }, [coins])
 }
 
-export const useCurrentVaultAddreses = () => {
+export const useCurrentVaultAddresses = () => {
   const coins = useCurrentVaultNativeCoins()
 
   return useMemo(() => {
@@ -38,7 +38,7 @@ export const useCurrentVaultAddreses = () => {
 }
 
 export const useCurrentVaultAddress = (chain: string) => {
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
 
   return shouldBePresent(addresses[chain as Chain])
 }

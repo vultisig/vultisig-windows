@@ -26,8 +26,7 @@
   "content_scripts": [
     {
       "js": ["content.js"],
-      "matches": ["http://*/*", "https://*/*"],
-      "exclude_matches": ["https://*.google.com/*", "http://*.google.com/*"]
+      "matches": ["http://*/*", "https://*/*"]
     }
   ],
   "content_security_policy": {
@@ -50,7 +49,7 @@
     },
     {
       "matches": ["<all_urls>"],
-      "resources": ["content.js", "inpage.js"],
+      "resources": ["inpage.js"],
       "use_dynamic_url": false
     }
   ]

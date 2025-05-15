@@ -26,23 +26,14 @@ import { useTranslation } from 'react-i18next'
 
 import { ChainAction } from '../ChainAction'
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance'
-import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery'
 import {
   getChainActionSchema,
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema'
+import { DepositActionSpecific } from './ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from './DepositActionItemExplorer'
-import {
-  AssetRequiredLabel,
-  Container,
-  ErrorText,
-  InputFieldWrapper,
-} from './DepositForm.styled'
-import { IBCTransferSpecific } from './IBCTransferFormComponents/IBCTransferSpecific'
-import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
-import { MergeTokenExplorer } from './MergeTokenExplorer'
-import { SwitchSpecificFields } from './SwitchFormComponents/SwitchSpecificFields'
+import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -60,7 +51,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   chainActionOptions,
   chain,
 }) => {
-  const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { data: totalAmountAvailableForChainData } =
@@ -98,6 +88,9 @@ export const DepositForm: FC<DepositFormProps> = ({
 
   const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
   const selectedCoin = getValues('selectedCoin') as Coin | null
+  const isTCYAction =
+    selectedChainAction === 'stake_tcy' || selectedChainAction === 'unstake_tcy'
+
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
     ({} as VaultChainCoin)
@@ -109,8 +102,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
-
-  const selectedBondableAsset = getValues('bondableAsset')
 
   return (
     <>
@@ -152,108 +143,38 @@ export const DepositForm: FC<DepositFormProps> = ({
               />
             )}
           />
-          {(selectedChainAction === 'bond_with_lp' ||
-            selectedChainAction === 'unbond_with_lp') &&
-            bondableAssets.length > 0 && (
-              <Opener
-                renderOpener={({ onOpen }) => (
-                  <Container onClick={onOpen}>
-                    <HStack alignItems="center" gap={4}>
-                      <Text weight="400" family="mono" size={16}>
-                        {selectedBondableAsset || t('asset')}
-                      </Text>
-                      {!selectedBondableAsset && (
-                        <AssetRequiredLabel as="span" color="danger" size={14}>
-                          *
-                        </AssetRequiredLabel>
-                      )}
-                    </HStack>
-                    <IconWrapper style={{ fontSize: 20 }}>
-                      <ChevronRightIcon />
-                    </IconWrapper>
-                  </Container>
-                )}
-                renderContent={({ onClose }) => (
-                  <MayaChainAssetExplorer
-                    onClose={onClose}
-                    activeOption={watch('bondableAsset')}
-                    onOptionClick={selectedAsset => {
-                      setValue('bondableAsset', selectedAsset, {
-                        shouldValidate: true,
-                      })
-                      onClose()
-                    }}
-                    options={bondableAssets}
-                  />
-                )}
-              />
-            )}
-          {selectedChainAction === 'ibc_transfer' && (
-            <IBCTransferSpecific
-              getValues={getValues}
-              setValue={setValue}
-              watch={watch}
-              chain={chain}
-            />
-          )}
-          {selectedChainAction === 'merge' && (
-            <Opener
-              renderOpener={({ onOpen }) => (
-                <Container onClick={onOpen}>
-                  <HStack alignItems="center" gap={4}>
-                    <Text weight="400" family="mono" size={16}>
-                      {selectedCoin?.ticker || t('select_token')}
-                    </Text>
-                    {!selectedCoin && (
-                      <AssetRequiredLabel as="span" color="danger" size={14}>
-                        *
-                      </AssetRequiredLabel>
-                    )}
-                  </HStack>
-                  <IconWrapper style={{ fontSize: 20 }}>
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                </Container>
-              )}
-              renderContent={({ onClose }) => (
-                <MergeTokenExplorer
-                  setValue={setValue}
-                  activeOption={watch('selectedCoin')}
-                  onOptionClick={token =>
-                    setValue('selectedCoin', token, {
-                      shouldValidate: true,
-                    })
-                  }
-                  onClose={onClose}
-                />
-              )}
-            />
-          )}
 
-          {selectedChainAction === 'switch' && (
-            <SwitchSpecificFields
-              watch={watch}
-              setValue={setValue}
-              getValues={getValues}
-            />
-          )}
+          <DepositActionSpecific
+            getValues={getValues}
+            setValue={setValue}
+            watch={watch}
+            chain={chain}
+            action={selectedChainAction}
+          />
 
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => {
                 const showBalance =
                   field.name === 'amount' &&
-                  ['bond', 'ibc_transfer', 'switch', 'merge'].includes(
-                    selectedChainAction
-                  )
+                  [
+                    'bond',
+                    'ibc_transfer',
+                    'switch',
+                    'merge',
+                    'stake_tcy',
+                  ].includes(selectedChainAction)
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
-                  : totalTokenAmount.toFixed(2)
+                  : isTCYAction
+                    ? 0
+                    : totalTokenAmount.toFixed(2)
 
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
-                  selectedChainAction !== 'merge'
+                  selectedChainAction !== 'merge' &&
+                  !isTCYAction
                     ? (selectedCoin?.ticker ?? coin.id)
                     : ''
 

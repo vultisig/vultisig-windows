@@ -93,6 +93,12 @@ export const generateMemo = ({
     switch: () => {
       return `switch:${thorchainAddress}`
     },
+    stake_tcy: () => 'tcy+',
+    unstake_tcy: () => {
+      const pct = shouldBePresent(depositFormData.percentage, 'percentage')
+      const basisPoints = Math.floor(pct * 100)
+      return `tcy-:${basisPoints}`
+    },
   })
 }
 
