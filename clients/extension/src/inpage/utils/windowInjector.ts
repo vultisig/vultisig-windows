@@ -59,6 +59,11 @@ function setupContentScriptMessenger(
   providers: ReturnType<typeof createProviders>
 ) {
   const ethereumProvider = providers.ethereum
+  const phantomProvider = {
+    bitcoin: providers.bitcoin,
+    ethereum: ethereumProvider,
+    solana: providers.solana,
+  }
 
   messengers.contentScript.reply(
     'setDefaultProvider',
@@ -114,6 +119,16 @@ function setupContentScriptMessenger(
                   this.lastInjectedProvider = provider
               },
             },
+            configurable: false,
+            writable: false,
+          },
+          phantom: {
+            value: phantomProvider,
+            configurable: false,
+            writable: false,
+          },
+          keplr: {
+            value: providers.keplr,
             configurable: false,
             writable: false,
           },
