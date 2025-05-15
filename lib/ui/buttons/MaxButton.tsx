@@ -10,7 +10,7 @@ import { getColor } from '../theme/getters'
 import { UnstyledButton } from './UnstyledButton'
 
 export const maxButtonOffset = 8
-export const maxButtonHeight = textInputHeight - maxButtonOffset * 2
+const maxButtonHeight = textInputHeight - maxButtonOffset * 2
 
 export const MaxButton = styled(UnstyledButton)`
   ${horizontalPadding(8)};
