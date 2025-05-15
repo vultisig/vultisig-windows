@@ -73,7 +73,7 @@ export class MAYAChain extends EventEmitter {
       return result
     } catch (error) {
       if (callback) callback(error as Error)
-      return error as ThorchainProviderResponse<T>
+      throw error
     }
   }
 }
