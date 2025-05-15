@@ -6,6 +6,7 @@ import {
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
+import { getDappHost, isValidUrl } from '../../utils/connectedApps'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '..'
@@ -35,6 +36,32 @@ export class Ethereum extends EventEmitter {
     this.selectedAddress = ''
 
     this.sendAsync = this.request
+
+    if (isValidUrl(window.location.href)) {
+      const host = getDappHost(window.location.href)
+      messengers.popup?.reply(
+        `${EventMethod.ACCOUNTS_CHANGED}:${host}`,
+        async address => {
+          this.emit(EventMethod.ACCOUNTS_CHANGED, [address])
+        }
+      )
+      messengers.popup?.reply(
+        `${EventMethod.CHAIN_CHANGED}:${host}`,
+        async (chainId: number) => {
+          this.emit(EventMethod.CHAIN_CHANGED, chainId)
+        }
+      )
+      messengers.popup?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
+        this.emit(EventMethod.ACCOUNTS_CHANGED, [])
+        this.emit(EventMethod.DISCONNECT, [])
+      })
+      messengers.popup?.reply(
+        `${EventMethod.CONNECT}:${host}`,
+        async connectionInfo => {
+          this.emit(EventMethod.CONNECT, connectionInfo)
+        }
+      )
+    }
   }
 
   static getInstance(_chain: string): Ethereum {
