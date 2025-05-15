@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getDappHost, isValidUrl } from '../../utils/connectedApps'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback } from '..'
+import { Callback } from '../constants'
 import { messengers } from '../messenger'
 
 export class Ethereum extends EventEmitter {

@@ -1,3 +1,7 @@
+import { CosmosChain } from '@core/chain/Chain'
+import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getChainByChainId } from '@core/chain/coin/ChainId'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -15,22 +19,20 @@ import {
   StdSignDoc,
   StdTx,
 } from '@keplr-wallet/types'
-import { cosmosProvider } from '..'
+import base58 from 'bs58'
+import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
+import Long from 'long'
+
 import { CosmosMsgType, RequestMethod } from '../../utils/constants'
+import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import {
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
 } from '../../utils/interfaces'
-import base58 from 'bs58'
-import Long from 'long'
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { getChainByChainId } from '@core/chain/coin/ChainId'
-import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
-import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
-import { CosmosChain } from '@core/chain/Chain'
+import { Cosmos } from './cosmos'
+
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
@@ -47,13 +49,14 @@ export class XDEFIKeplrProvider extends Keplr {
   static instance: XDEFIKeplrProvider | null = null
   isXDEFI: boolean
   isVulticonnect: boolean
-
-  public static getInstance(): XDEFIKeplrProvider {
+  cosmosProvider: Cosmos
+  public static getInstance(cosmosProvider: Cosmos): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
         '0.0.1',
         'extension',
-        new XDEFIMessageRequester()
+        new XDEFIMessageRequester(),
+        cosmosProvider
       )
     }
     return XDEFIKeplrProvider.instance
@@ -63,16 +66,22 @@ export class XDEFIKeplrProvider extends Keplr {
     window.dispatchEvent(new Event('keplr_keystorechange'))
   }
 
-  constructor(version: string, mode: KeplrMode, requester: any) {
+  constructor(
+    version: string,
+    mode: KeplrMode,
+    requester: any,
+    cosmosProvider: Cosmos
+  ) {
     super(version, mode, requester)
     this.isXDEFI = true
     this.isVulticonnect = true
     window.ctrlKeplrProviders = {}
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
+    this.cosmosProvider = cosmosProvider
   }
   enable(_chainIds: string | string[]): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      cosmosProvider
+      this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
           params: [],
@@ -92,23 +101,23 @@ export class XDEFIKeplrProvider extends Keplr {
     )
 
     cosmSigner.getAccounts = async () => {
-      return cosmosProvider
+      return this.cosmosProvider
         .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
-            return await cosmosProvider
+            return await this.cosmosProvider
               .request({
                 method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
                 params: [{ chainId }],
               })
               .then(async () => {
-                return await cosmosProvider.request({
+                return await this.cosmosProvider.request({
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
                 })
               })
           } else {
-            return await cosmosProvider.request({
+            return await this.cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
             })
@@ -130,23 +139,23 @@ export class XDEFIKeplrProvider extends Keplr {
     )
 
     cosmSigner.getAccounts = async () => {
-      return cosmosProvider
+      return this.cosmosProvider
         .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
-            return await cosmosProvider
+            return await this.cosmosProvider
               .request({
                 method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
                 params: [{ chainId }],
               })
               .then(async () => {
-                return await cosmosProvider.request({
+                return await this.cosmosProvider.request({
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
                 })
               })
           } else {
-            return await cosmosProvider.request({
+            return await this.cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
             })
@@ -163,7 +172,7 @@ export class XDEFIKeplrProvider extends Keplr {
     _mode: BroadcastMode
   ): Promise<Uint8Array> {
     return new Promise<Uint8Array>((resolve, reject) => {
-      cosmosProvider
+      this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [{ ..._tx, txType: 'Keplr' }],
@@ -191,7 +200,7 @@ export class XDEFIKeplrProvider extends Keplr {
         }
       })
 
-      cosmosProvider
+      this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [{ ...txDetails[0]!, txType: 'Keplr' }],
@@ -255,7 +264,7 @@ export class XDEFIKeplrProvider extends Keplr {
       },
     }
 
-    const result: SendTransactionResponse = await cosmosProvider.request({
+    const result: SendTransactionResponse = await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ...standardTx, txType: 'Vultisig' }],
     })
@@ -294,18 +303,18 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async getKey(chainId: string): Promise<Key> {
-    return cosmosProvider
+    return this.cosmosProvider
       .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
       .then(async currentChainID => {
         if (currentChainID !== chainId) {
-          return await cosmosProvider
+          return await this.cosmosProvider
             .request({
               method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
               params: [{ chainId }],
             })
             .then(async () => {
               return (
-                await cosmosProvider.request({
+                await this.cosmosProvider.request({
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
                 })
@@ -313,7 +322,7 @@ export class XDEFIKeplrProvider extends Keplr {
             })
         } else {
           return (
-            await cosmosProvider.request({
+            await this.cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
             })

@@ -27,8 +27,7 @@ import {
   SendTransactionResponse,
   TransactionType,
 } from '../../utils/interfaces'
-import { Callback } from '..'
-import { NetworkKey } from '../constants'
+import { Callback, NetworkKey } from '../constants'
 import { messengers } from '../messenger'
 
 export class Solana extends EventEmitter {
