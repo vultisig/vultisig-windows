@@ -10,6 +10,8 @@ export const de = {
   moreInfo: 'Mehr Info',
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
+  percentage_to_unstake: 'Prozentsatz zum Abziehen',
+  staked_amount: 'Gestakter Betrag',
   youre_swapping: 'Du tauschst',
   percentage: 'Prozentsatz',
   stake_tcy: 'Stake TCY',
@@ -38,6 +40,7 @@ export const de = {
   coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
+  staked: 'Gestaket',
   select_network: 'Netzwerk auswählen',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',

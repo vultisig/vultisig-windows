@@ -14,8 +14,11 @@ export const es = {
   percentage: 'Porcentaje',
   stake_tcy: 'Stake TCY',
   unstake_tcy: 'Unstake TCY',
+  percentage_to_unstake: 'Porcentaje para retirar',
+  staked_amount: 'Cantidad apostada',
   signing_transaction: 'Firma de la transacción',
   chain: 'Cadena',
+  staked: 'Apostado',
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',
   no_tokens_found:
