@@ -1,68 +1,103 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { chainTokens } from '@core/chain/coin/chainTokens'
+import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { MaxButton, maxButtonOffset } from '@lib/ui/buttons/MaxButton'
+import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useEffect } from 'react'
-import { UseFormSetValue } from 'react-hook-form'
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { FormData } from '../..'
-import { InputFieldWrapper } from '../../DepositForm.styled'
 import { useUnstakableTcyQuery } from './hooks/useUnstakableTcyQuery'
 
 type Props = {
   setValue: UseFormSetValue<FormData>
+  getValues: UseFormGetValues<FormData>
 }
 
-export const UnstakeTCYSpecific = ({ setValue }: Props) => {
+const suggestions = [0.25, 0.5, 0.75]
+
+export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address!)
-  //See if you can handle this getter
-  const coin = chainTokens.THORChain?.find(c => c.id === 'tcy')
-
-  // TODO:  Do transactions need to be any different for stake / unstake tyc as per ios / android?
-
   const coins = useCurrentVaultCoins()
+  const percentage = getValues('tcyPercentage')
+
+  const tcyCoin = coins.find(c => c.id === 'tcy')
+  const decimals = tcyCoin?.decimals ?? 8
+  const ticker = tcyCoin?.ticker ?? 'TCY'
+  const maxDisplayAmount = fromChainAmount(unstakableTcy, decimals)
 
   useEffect(() => {
-    if (!coins.length) return
-
-    const tycCoin = coins.find(c => c.id === 'tcy')
-
-    if (tycCoin) {
-      setValue('selectedCoin', tycCoin, {
-        shouldValidate: true,
-      })
+    if (tcyCoin) {
+      setValue('selectedCoin', tcyCoin, { shouldValidate: true })
     }
-  }, [coins, setValue])
+  }, [tcyCoin, setValue])
 
   return (
     <VStack gap={12}>
       <InputContainer>
         <Text size={15} weight="400">
-          {t('percentage')} ({t('balance')}:{' '}
-          {fromChainAmount(unstakableTcy, coin?.decimals ?? 8)}{' '}
-          {coin?.ticker ?? 'TCY'})
+          {t('percentage_to_unstake')} ({t('staked_amount')}: {maxDisplayAmount}{' '}
+          {ticker}
           <Text as="span" color="danger" size={14}>
             *
           </Text>
+          )
         </Text>
 
-        <InputFieldWrapper
-          as="input"
-          onWheel={e => e.currentTarget.blur()}
-          name="percentage"
-          type="number"
-          max={fromChainAmount(unstakableTcy, coin?.decimals ?? 8)}
-          step="0.0001"
-          min={0}
+        <ActionInsideInteractiveElement
+          render={() => (
+            <AmountTextInput
+              suggestion={
+                <HStack alignItems="center" gap={4}>
+                  {suggestions.map(suggestion => (
+                    <AmountSuggestion
+                      onClick={() => {
+                        setValue('tcyPercentage', String(suggestion * 100), {
+                          shouldValidate: true,
+                        })
+                      }}
+                      key={suggestion}
+                      value={suggestion}
+                    />
+                  ))}
+                </HStack>
+              }
+              placeholder={t('enter_amount')}
+              value={percentage}
+              onChange={e => {
+                const value = (e.target as HTMLInputElement).value
+                setValue('tcyPercentage', value, {
+                  shouldValidate: true,
+                })
+              }}
+            />
+          )}
+          action={
+            <MaxButton
+              onClick={() => {
+                setValue('tcyPercentage', '100', {
+                  shouldValidate: true,
+                })
+              }}
+            >
+              {t('max')}
+            </MaxButton>
+          }
+          actionPlacerStyles={{
+            right: maxButtonOffset,
+            bottom: maxButtonOffset,
+          }}
         />
       </InputContainer>
     </VStack>
