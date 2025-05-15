@@ -43,6 +43,7 @@ export type CoreView =
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'settings' }
   | { id: 'setupFastVault' }
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
