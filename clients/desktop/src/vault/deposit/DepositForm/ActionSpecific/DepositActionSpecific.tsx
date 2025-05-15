@@ -14,7 +14,7 @@ import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecifi
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { StakeTCYSpecific } from './StakeTCYSpecific'
-import { SwitchSpecific } from './SwitchSpecificFields'
+import { SwitchSpecific } from './SwitchSpecific'
 import { UnstakeTCYSpecific } from './UnstakeTCYSpecific/UnstakeTCYSpecific'
 
 type Props = {
@@ -77,7 +77,9 @@ export const DepositActionSpecific = ({
           getValues={getValues}
         />
       )}
-      unstake_tcy={() => <UnstakeTCYSpecific setValue={setValue} />}
+      unstake_tcy={() => (
+        <UnstakeTCYSpecific setValue={setValue} getValues={getValues} />
+      )}
       stake_tcy={() => <StakeTCYSpecific setValue={setValue} />}
       bond={() => null}
       unbond={() => null}
