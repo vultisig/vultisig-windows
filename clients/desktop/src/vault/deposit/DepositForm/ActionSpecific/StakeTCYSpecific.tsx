@@ -4,20 +4,20 @@ import { UseFormSetValue } from 'react-hook-form'
 
 import { FormData } from '..'
 
-type StakeTYCSpecificProps = {
+type StakeTCYSpecificProps = {
   setValue: UseFormSetValue<FormData>
 }
 
-export const StakeTCYSpecific = ({ setValue }: StakeTYCSpecificProps) => {
+export const StakeTCYSpecific = ({ setValue }: StakeTCYSpecificProps) => {
   const coins = useCurrentVaultCoins()
 
   useEffect(() => {
     if (!coins.length) return
 
-    const tycCoin = coins.find(c => c.id === 'tcy')
+    const tcyCoin = coins.find(c => c.id === 'tcy')
 
-    if (tycCoin) {
-      setValue('selectedCoin', tycCoin, {
+    if (tcyCoin) {
+      setValue('selectedCoin', tcyCoin, {
         shouldValidate: true,
       })
     }
