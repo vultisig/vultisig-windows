@@ -40,7 +40,7 @@ export class Cosmos extends EventEmitter {
       return result
     } catch (error) {
       if (callback) callback(error as Error)
-      return error
+      throw error
     }
   }
 }

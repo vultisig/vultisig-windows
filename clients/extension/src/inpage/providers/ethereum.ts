@@ -42,6 +42,7 @@ export class Ethereum extends EventEmitter {
       messengers.popup?.reply(
         `${EventMethod.ACCOUNTS_CHANGED}:${host}`,
         async address => {
+          this.selectedAddress = address as string
           this.emit(EventMethod.ACCOUNTS_CHANGED, [address])
         }
       )
@@ -52,12 +53,14 @@ export class Ethereum extends EventEmitter {
         }
       )
       messengers.popup?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
+        this.connected = false
         this.emit(EventMethod.ACCOUNTS_CHANGED, [])
         this.emit(EventMethod.DISCONNECT, [])
       })
       messengers.popup?.reply(
         `${EventMethod.CONNECT}:${host}`,
         async connectionInfo => {
+          this.connected = true
           this.emit(EventMethod.CONNECT, connectionInfo)
         }
       )
@@ -67,6 +70,9 @@ export class Ethereum extends EventEmitter {
   static getInstance(_chain: string): Ethereum {
     if (!Ethereum.instance) {
       Ethereum.instance = new Ethereum()
+    }
+    if (!window.ctrlEthProviders) {
+      window.ctrlEthProviders = {}
     }
     window.ctrlEthProviders['Ctrl Wallet'] = Ethereum.instance
     window.isCtrl = true
@@ -163,7 +169,7 @@ export class Ethereum extends EventEmitter {
       return result
     } catch (error) {
       if (callback) callback(error as Error)
-      return error
+      throw error
     }
   }
 
