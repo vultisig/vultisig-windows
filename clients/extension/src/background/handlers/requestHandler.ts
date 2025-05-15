@@ -28,8 +28,12 @@ import {
   ThorchainProviderResponse,
 } from '../../types/thorchain'
 import api from '../../utils/api'
-import { getDappHostname } from '../../utils/connectedApps'
-import { isSupportedChain, RequestMethod } from '../../utils/constants'
+import { getDappHost, getDappHostname } from '../../utils/connectedApps'
+import {
+  EventMethod,
+  isSupportedChain,
+  RequestMethod,
+} from '../../utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -44,6 +48,8 @@ import {
 import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
+import { initializeMessenger } from '../../messengers/initializeMessenger'
+import { match } from '@lib/utils/match'
 
 const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
   {} as Record<Chain, JsonRpcProvider | undefined>
@@ -58,7 +64,7 @@ const getRpcProvider = (chain: Chain) => {
   }
   return rpcProviderCache[chain]!
 }
-
+const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 export const handleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain,
@@ -100,22 +106,35 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            switch (chain) {
-              case Chain.Dydx:
-              case Chain.Cosmos:
-              case Chain.Kujira:
-              case Chain.Osmosis:
-              case Chain.Solana: {
-                resolve(account)
-
-                break
-              }
-              default: {
-                resolve([account])
-
-                break
+            if (account && getChainKind(chain) === 'evm') {
+              inpageMessenger.send(
+                `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
+                account
+              )
+              try {
+                inpageMessenger.send(
+                  `${EventMethod.CONNECT}:${getDappHost(sender)}`,
+                  {
+                    address: account,
+                    chainId: getChainId(chain),
+                  }
+                )
+              } catch (err) {
+                console.log('background err send to inpage:', err)
               }
             }
+
+            const handlers = {
+              [Chain.Dydx]: () => account,
+              [Chain.Cosmos]: () => account,
+              [Chain.Kujira]: () => account,
+              [Chain.Osmosis]: () => account,
+              [Chain.Solana]: () => account,
+            } as unknown as { [key in Chain]: () => string | string[] }
+
+            const result =
+              chain in handlers ? match(chain, handlers) : [account]
+            resolve(result)
           })
           .catch(reject)
 

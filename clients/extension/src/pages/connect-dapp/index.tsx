@@ -22,14 +22,10 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { initializeMessenger } from '../../messengers/initializeMessenger'
-import { EventMethod } from '../../utils/constants'
-
 interface InitialState {
   chain?: Chain
   sender?: string
 }
-const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 export const ConnectDAppPage = () => {
   const { t } = useTranslation()
@@ -63,22 +59,6 @@ export const ConnectDAppPage = () => {
             : undefined,
       },
     })
-
-    if (getChainKind(chain) === 'evm') {
-      const currentAddress = vaults
-        .find(vault => getVaultId(vault) === vaultId)
-        ?.coins.find(coin => coin.chain === chain)?.address
-
-      inpageMessenger.send(
-        `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
-        currentAddress
-      )
-
-      inpageMessenger.send(`${EventMethod.CONNECT}:${getDappHost(sender)}`, {
-        address: currentAddress,
-        chainId: getChainId(chain),
-      })
-    }
 
     handleClose()
   }
