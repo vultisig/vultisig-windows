@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next'
 import { PageHeaderVaultSettingsPrompt } from '../components/PageHeaderVaultSettingsPrompt'
 import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders'
 import { ManageVaults } from './ManageVaults'
+
 export const ManageVaultsPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useCoreNavigate()
   const { t } = useTranslation()
 
   return (
@@ -32,7 +32,7 @@ export const ManageVaultsPage = () => {
       <PageFooter>
         <Button
           kind="outlined"
-          onClick={() => appNavigate({ id: 'createVaultFolder' })}
+          onClick={() => navigate({ id: 'createVaultFolder' })}
         >
           {t('create_folder')}
         </Button>

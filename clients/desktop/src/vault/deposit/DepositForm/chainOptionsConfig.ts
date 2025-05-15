@@ -50,6 +50,42 @@ const CoinSchema = z.object({
 })
 
 export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
+  stake_tcy: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true,
+      },
+    ],
+    schema: (_chain: Chain, _wc: WalletCore, total: number) =>
+      z.object({
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.0001, t('amount'))
+              .max(total, t('chainFunctions.amountExceeded'))
+          ),
+      }),
+  },
+
+  unstake_tcy: {
+    fields: [],
+    schema: () =>
+      z.object({
+        selectedCoin: CoinSchema,
+        percentage: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(100, 'Percentage must be 0-100')),
+      }),
+  },
   merge: {
     fields: [
       {
@@ -203,19 +239,19 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.bond_with_lp.labels.nodeAddress',
+        label: t('node_address'),
         required: true,
       },
       {
         name: 'lpUnits',
         type: 'number',
-        label: 'chainFunctions.bond_with_lp.labels.lpUnits',
+        label: t('lp_units'),
         required: true,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.bond_with_lp.labels.amount',
+        label: 'amount',
         required: false,
       },
     ],
@@ -280,19 +316,19 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.unbond.labels.nodeAddress',
+        label: t('node_address'),
         required: true,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.unbond.labels.amount',
+        label: t('amount'),
         required: true,
       },
       {
         name: 'provider',
         type: 'text',
-        label: 'chainFunctions.unbond.labels.provider',
+        label: t('provider'),
         required: false,
       },
     ],
@@ -328,19 +364,19 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.unbond_with_lp.labels.nodeAddress',
+        label: t('node_address'),
         required: true,
       },
       {
         name: 'lpUnits',
         type: 'number',
-        label: 'chainFunctions.unbond_with_lp.labels.lpUnits',
+        label: t('lp_units'),
         required: true,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.unbond_with_lp.labels.amount',
+        label: t('amount'),
         required: false,
       },
     ],
@@ -405,7 +441,7 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.leave.labels.nodeAddress',
+        label: t('node_address'),
         required: true,
       },
     ],
@@ -439,13 +475,13 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.custom.labels.amount',
+        label: t('amount'),
         required: false,
       },
       {
         name: 'customMemo',
         type: 'text',
-        label: 'chainFunctions.custom.labels.customMemo',
+        label: t('chainFunctions.custom.labels.customMemo'),
         required: true,
       },
     ],

@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFolderVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -11,11 +10,11 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 
 export const VaultFolderPage = () => {
   const navigate = useCoreNavigate()
-  const appNavigate = useCoreNavigate()
   const { id, name } = useCurrentVaultFolder()
 
   const vaults = useFolderVaults(id)
@@ -30,9 +29,7 @@ export const VaultFolderPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() =>
-              appNavigate({ id: 'manageVaultFolder', state: { id } })
-            }
+            onClick={() => navigate({ id: 'manageVaultFolder', state: { id } })}
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}

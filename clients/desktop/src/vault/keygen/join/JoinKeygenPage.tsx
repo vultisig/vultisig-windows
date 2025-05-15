@@ -3,25 +3,24 @@ import { JoinKeygenProviders } from '@core/ui/mpc/keygen/join/JoinKeygenProvider
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
+import { JoinMpcServerUrlProvider } from '../../../mpc/serverType/JoinMpcServerUrlProvider'
 import { JoinKeygenActionProvider } from './JoinKeygenActionProvider'
-import { JoinKeygenServerUrlProvider } from './JoinKeygenServerUrlProvider'
 
 export const JoinKeygenPage = () => {
   const onExit = useNavigateBack()
 
   return (
     <JoinKeygenProviders>
-      <JoinKeygenServerUrlProvider>
-        <MpcMediatorManager />
+      <JoinMpcServerUrlProvider mpcSession="keygen">
         <JoinMpcSessionFlow
+          value="keygen"
           render={() => (
             <JoinKeygenActionProvider>
               <KeygenFlow onBack={onExit} />
             </JoinKeygenActionProvider>
           )}
         />
-      </JoinKeygenServerUrlProvider>
+      </JoinMpcServerUrlProvider>
     </JoinKeygenProviders>
   )
 }

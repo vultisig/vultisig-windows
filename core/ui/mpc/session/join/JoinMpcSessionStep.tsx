@@ -9,6 +9,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -47,8 +48,11 @@ export const JoinMpcSessionStep = ({
     <MatchQuery
       value={mutationStatus}
       success={() => null}
-      error={() => (
-        <FullPageFlowErrorState message={t('failed_to_join_session')} />
+      error={error => (
+        <FullPageFlowErrorState
+          errorMessage={extractErrorMsg(error)}
+          message={t('failed_to_join_session')}
+        />
       )}
       pending={() => (
         <>

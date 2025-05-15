@@ -11,6 +11,9 @@ export const de = {
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
   youre_swapping: 'Du tauschst',
+  percentage: 'Prozentsatz',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
 
@@ -30,6 +33,7 @@ export const de = {
   price_impact_high: 'Hohe Auswirkung',
   max_total_fees: 'Max. Gesamtgebühr',
   select_asset: 'Asset auswählen',
+  percentage_limit: 'Prozentsatz muss zwischen 0 und 100 liegen',
   waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
   coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:
@@ -824,4 +828,6 @@ export const de = {
   vulti_share_not_saved_hint:
     'Wenn Sie Ihren VultiShare-QR noch nicht gespeichert haben, gehen Sie zur App und klicken Sie auf das QR-Symbol in der oberen rechten Ecke.',
   version: 'Version',
+  delete_folder_confirmation:
+    'Sind Sie sicher, dass Sie den Ordner "{{name}}" löschen möchten?',
 }

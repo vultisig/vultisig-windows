@@ -13,6 +13,10 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
+  percentage: 'Percentuale',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
+  percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',
@@ -817,4 +821,6 @@ export const it = {
   vulti_share_not_saved_hint:
     "Se non hai ancora salvato il tuo codice QR VultiShare, vai all'app e clicca sull'icona del QR nell'angolo in alto a destra.",
   version: 'Versione',
+  delete_folder_confirmation:
+    'Sei sicuro di voler eliminare la cartella "{{name}}"?',
 }

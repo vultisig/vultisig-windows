@@ -1,5 +1,7 @@
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
+import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
+import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
@@ -7,9 +9,7 @@ import { Views } from '@lib/ui/navigation/Views'
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
-import RegisterForAirdropPage from '../pages/registerForAirdrop/RegisterForAirdropPage'
 import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
-import AddressBookSettingsPage from '../pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
@@ -28,7 +28,6 @@ import { SecureReshareVaultPage } from '../vault/reshare/secure/SecureReshareVau
 import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
-import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -58,7 +57,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vaultFAQ: FaqVaultPage,
   addressBook: AddressBookSettingsPage,
   migrateVault: MigrateVaultPage,
-  registerForAirdrop: RegisterForAirdropPage,
   checkUpdate: VaultCheckUpdatePage,
   deeplink: DeeplinkPage,
   signCustomMessage: SignCustomMessagePage,

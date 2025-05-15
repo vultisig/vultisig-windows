@@ -13,6 +13,10 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  percentage: 'Percentagem',
+  stake_tcy: 'Stake TCY',
+  percentage_limit: 'A porcentagem deve estar entre 0 e 100',
+  unstake_tcy: 'Unstake TCY',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   selected_chain_missing_in_your_vault:
@@ -810,4 +814,6 @@ export const pt = {
   vulti_share_not_saved_hint:
     'Se você ainda não salvou seu QR do VultiShare, acesse o aplicativo e clique no ícone do QR no canto superior direito.',
   version: 'Versão',
+  delete_folder_confirmation:
+    'Tem certeza que deseja excluir a pasta "{{name}}"?',
 }

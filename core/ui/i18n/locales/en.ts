@@ -4,6 +4,7 @@ export const en = {
   connected_dapps: 'Connected dApps',
   disconnect_all: 'Disconnect All',
   expand_view: 'Expand View',
+  extension_share_app: 'Share the app',
   general: 'General',
   manage_chains: 'Manage Chains',
   rename: 'Rename',
@@ -18,6 +19,9 @@ export const en = {
   share_vault: 'Share Vault',
   vault_specific: 'Vault Specific',
   secure_crypto_vault: 'SECURE CRYPTO VAULT',
+  percentage: 'Percentage',
+  stake_tcy: 'Stake TCY',
+  unstake_tcy: 'Unstake TCY',
   add_address: 'Add Address',
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',
@@ -699,6 +703,7 @@ export const en = {
       },
     },
   },
+  percentage_limit: 'Percentage must be 0-100',
   amount_must_be_positive: 'Amount must be positive',
   lp_units: 'LP Units',
   validator_address: 'Validator Address',
@@ -795,6 +800,8 @@ export const en = {
     'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
   upgrade_all_devices:
     'Make sure that <b>all initial devices</b> are present when upgrading',
+  upgrade_shares_info:
+    '<b>You’ll create new Vault Share backups</b>, store them as you did before',
   upgrade_success: 'Vault upgraded <b>successfully</b>',
   go_to_vault: 'Go to vault',
   backup_password_prompt:
@@ -805,4 +812,6 @@ export const en = {
   version: 'Version',
   vulti_share_not_saved_hint:
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
+  delete_folder_confirmation:
+    'Are you sure you want to delete the "{{name}}" folder?',
 }

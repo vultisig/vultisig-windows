@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
@@ -18,9 +17,8 @@ import { VaultOverview } from '../../vault/components/VaultOverview'
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
 
 export const VaultPage = () => {
-  const navigate = useCoreNavigate()
   const { name } = useCurrentVault()
-  const appNavigate = useAppNavigate()
+  const navigate = useAppNavigate()
 
   return (
     <>
@@ -32,7 +30,7 @@ export const VaultPage = () => {
             <PageHeaderIconButtons>
               <PageHeaderIconButton
                 icon={<QrCodeIcon />}
-                onClick={() => appNavigate({ id: 'shareVault' })}
+                onClick={() => navigate({ id: 'shareVault' })}
               />
               <RefreshVaultBalance />
             </PageHeaderIconButtons>

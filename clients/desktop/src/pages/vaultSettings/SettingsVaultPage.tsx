@@ -15,8 +15,8 @@ import GlobeIcon from '@lib/ui/icons/GlobeIcon'
 import NoteIcon from '@lib/ui/icons/NoteIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
-import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
-import TwitterIcon from '@lib/ui/icons/TwitterIcon'
+import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
+import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { ScrollableFlexboxFiller } from '@lib/ui/layout/ScrollableFlexboxFiller'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -61,10 +61,9 @@ type SettingSection = {
 }
 
 const SettingsVaultPage = () => {
+  const { t } = useTranslation()
   const navigate = useAppNavigate()
   const coreNavigate = useCoreNavigate()
-  const { t } = useTranslation()
-
   const fiatCurrency = useFiatCurrency()
   const language = useLanguage()
 
@@ -83,25 +82,25 @@ const SettingsVaultPage = () => {
           id: 'language',
           title: t('language'),
           icon: <GlobeIcon />,
-          onClick: () => coreNavigate({ id: 'languageSettings' }),
+          onClick: () => navigate({ id: 'languageSettings' }),
         },
         {
           id: 'currency',
           title: t('currency'),
           icon: <CurrencyCircleIcon />,
-          onClick: () => coreNavigate({ id: 'currencySettings' }),
+          onClick: () => navigate({ id: 'currencySettings' }),
         },
         {
           id: 'address-book',
           title: t('vault_settings_address_book'),
           icon: <AddressBookIcon />,
-          onClick: () => navigate({ id: 'addressBook' }),
+          onClick: () => coreNavigate({ id: 'addressBook' }),
         },
         {
           id: 'default-chains',
           title: t('vault_settings_default_chains'),
           icon: <DefaultChainsIcon />,
-          onClick: () => coreNavigate({ id: 'defaultChains' }),
+          onClick: () => navigate({ id: 'defaultChains' }),
         },
         {
           id: 'faq',
@@ -118,7 +117,7 @@ const SettingsVaultPage = () => {
           id: 'register-for-airdrop',
           title: t('vault_settings_register_for_airdrop'),
           icon: <VultisigLogoIcon />,
-          onClick: () => navigate({ id: 'registerForAirdrop' }),
+          onClick: () => coreNavigate({ id: 'airdropRegister' }),
         },
         {
           id: 'share-app',

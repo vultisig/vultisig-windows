@@ -1,5 +1,5 @@
 import { Button } from '@clients/extension/src/components/button'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 
 export const VaultSettingsPage = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
+  const navigate = useAppNavigate()
   const navigateBack = useNavigateBack()
   const vault = useCurrentVault()
 

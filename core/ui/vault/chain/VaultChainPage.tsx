@@ -8,8 +8,8 @@ import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { AddressPageShyPrompt } from '@core/ui/chain/components/address/AddressPageShyPrompt'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { getCoinFinderQueryKey } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
@@ -17,6 +17,7 @@ import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adj
 import { ManageVaultChainCoinsPrompt } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultAddressLink } from '@core/ui/vault/chain/VaultAddressLink'
+import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import {
@@ -27,6 +28,7 @@ import {
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -49,13 +51,10 @@ import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
-import { VaultChainCoinItem } from './VaultChainCoinItem'
-
 export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
-  const fiatCurrency = useFiatCurrency()
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
+  const fiatCurrency = useFiatCurrency()
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
   const vaultCoins = useCurrentVaultChainCoins(chain)
@@ -121,7 +120,13 @@ export const VaultChainPage = () => {
                   title="Copy address"
                   icon={<CopyIcon />}
                 />
-                <AddressPageShyPrompt value={address} />
+                <IconButton
+                  title="Address QR code"
+                  icon={<QrCodeIcon />}
+                  onClick={() =>
+                    navigate({ id: 'address', state: { address } })
+                  }
+                />
                 <VaultAddressLink value={address} />
               </HStack>
             </HStack>

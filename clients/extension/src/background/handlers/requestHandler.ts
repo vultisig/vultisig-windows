@@ -10,6 +10,7 @@ import {
 } from '@core/chain/coin/ChainId'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -17,6 +18,7 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
+import { initializeMessenger } from '../../messengers/initializeMessenger'
 import {
   getVaultsAppSessions,
   setVaultsAppSessions,
@@ -48,8 +50,6 @@ import {
 import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
-import { initializeMessenger } from '../../messengers/initializeMessenger'
-import { match } from '@lib/utils/match'
 
 const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
   {} as Record<Chain, JsonRpcProvider | undefined>

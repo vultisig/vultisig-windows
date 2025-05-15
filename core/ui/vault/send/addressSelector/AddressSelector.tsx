@@ -3,10 +3,10 @@ import { Match } from '@lib/ui/base/Match'
 import { PageSlice } from '@lib/ui/page/PageSlice'
 import { useState } from 'react'
 
+import EmptyAddressesView from '../../vaultAddressBook/components/emptyAddressesView/EmptyAddressesView'
 import { Wrapper } from './AddressSelector.styles'
 import AddAddressView from './components/addAddressForm/AddAddressForm'
 import AddressesListView from './components/addressesListView/AddressesListView'
-import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView'
 
 type AddressSelectorProps = {
   onAddressClick: (address: string) => void
