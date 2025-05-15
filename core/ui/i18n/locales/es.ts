@@ -747,7 +747,6 @@ export const es = {
   get_vault_failed_description:
     'Asegúrese de que ya haya importado sus bóvedas en VultiConnect',
   connect_with_vultisig: 'Conéctate con Vultisig',
-  successfully_connected: 'Conectado exitosamente',
   select_vault: 'Seleccione una bóveda',
   connect: 'Conectar',
   link_copied: 'Enlace copiado al portapapeles',

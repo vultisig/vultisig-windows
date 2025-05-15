@@ -736,7 +736,6 @@ export const pt = {
   get_vault_failed_description:
     'Certifique-se de que já importou seus cofres no VultiConnect',
   connect_with_vultisig: 'Conecte-se com Vultisig',
-  successfully_connected: 'Conectado com sucesso',
   select_vault: 'Selecione um cofre',
   connect: 'Conectar',
   link_copied: 'Link copiado para a área de transferência',

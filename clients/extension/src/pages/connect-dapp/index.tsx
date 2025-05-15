@@ -8,6 +8,7 @@ import { getStoredRequest } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
+import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
@@ -21,7 +22,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 
 interface InitialState {
   chain?: Chain
@@ -37,27 +37,14 @@ export const ConnectDAppPage = () => {
   const vaults = useVaults()
   const { mutateAsync: addSession } = useAddVaultSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const [connected, setConnected] = useState(false)
 
   const handleClose = () => {
-    window.close();
-    // Fallback for Chrome extension popups
-    if (chrome?.windows) {
-      chrome.windows.getCurrent(windowInfo => {
-        if (windowInfo && windowInfo.type === 'popup') {
-          chrome.windows.remove(windowInfo.id!);
-        }
-      });
-    }
+    window.close()
   }
 
   const handleSubmit = async () => {
-
     if (!vaultId || !sender || !chain) return
-
     await setCurrentVaultId(vaultId)
-
-
     await addSession({
       vaultId: vaultId,
       session: {
@@ -74,7 +61,8 @@ export const ConnectDAppPage = () => {
             : undefined,
       },
     })
-    setConnected(true)
+
+    handleClose()
   }
 
   useEffect(() => {
@@ -108,37 +96,26 @@ export const ConnectDAppPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        {connected ? (
-          <Text color="primary" size={16} weight={500} style={{ textAlign: 'center' }}>
-            {t('successfully_connected') as string}
-          </Text>
-        ) : (
-          <List>
-            {vaults.map(item => {
-              const itemId = getVaultId(item)
-              return (
-                <ListItem
-                  extra={<Switch checked={itemId === vaultId} />}
-                  key={itemId}
-                  title={item.name}
-                  onClick={() => setVaultId(itemId)}
-                  hoverable
-                />
-              )
-            })}
-          </List>
-        )}
+        <List>
+          {vaults.map(item => {
+            const itemId = getVaultId(item)
+
+            return (
+              <ListItem
+                extra={<Switch checked={itemId === vaultId} />}
+                key={itemId}
+                title={item.name}
+                onClick={() => setVaultId(itemId)}
+                hoverable
+              />
+            )
+          })}
+        </List>
       </PageContent>
       <PageFooter>
-        {connected ? (
-          <Button onClick={handleClose} type="primary" block rounded>
-            {t('close')}
-          </Button>
-        ) : (
-          <Button onClick={handleSubmit} type="primary" block rounded disabled={!vaultId}>
-            {t('connect')}
-          </Button>
-        )}
+        <Button onClick={handleSubmit} type="primary" block rounded>
+          {t('connect')}
+        </Button>
       </PageFooter>
     </VStack>
   ) : (

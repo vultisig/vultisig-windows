@@ -726,7 +726,6 @@ export const hr = {
   get_vault_failed_description:
     'Provjerite jeste li već uvezli svoje trezore u VultiConnect',
   connect_with_vultisig: 'Povežite se s Vultisigom',
-  successfully_connected: 'Povezano uspješno',
   select_vault: 'Odaberite trezor',
   connect: 'Poveži se',
   link_copied: 'Veza je kopirana u međuspremnik',
