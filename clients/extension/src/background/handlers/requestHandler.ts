@@ -2,12 +2,14 @@ import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import {
   CosmosChainId,
   EVMChainId,
   getChainByChainId,
   getChainId,
 } from '@core/chain/coin/ChainId'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
@@ -42,7 +44,8 @@ import {
   isBasicTransaction,
 } from '../../utils/tx/getStandardTx'
 import { getCurrentVaultId } from '../../vault/state/currentVaultId'
-import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
+import { getVaultsCoins } from '../../vault/state/vaultsCoins'
+import { handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 
 const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
@@ -74,28 +77,26 @@ export const handleRequest = (
     switch (method) {
       case RequestMethod.VULTISIG.GET_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_ACCOUNTS: {
-        handleFindAccounts(chain, sender)
-          .then(([account]) => {
-            switch (chain) {
-              case Chain.Dydx:
-              case Chain.Cosmos:
-              case Chain.Kujira:
-              case Chain.Osmosis: {
-                resolve(account)
-
-                break
-              }
-              default: {
-                resolve([account])
-
-                break
-              }
+        // Get all addresses from all chains
+        getCurrentVaultId()
+          .then(async vaultId => {
+            if (!vaultId) {
+              resolve([])
+              return
             }
+
+            const vaultsCoins = await getVaultsCoins()
+            const allAddresses = vaultsCoins[vaultId]
+              .filter((coin: AccountCoin) => isFeeCoin(coin))
+              .map((coin: AccountCoin) => coin.address)
+              .filter((addr): addr is string => !!addr)
+
+            resolve([...new Set(allAddresses)])
           })
           .catch(reject)
-
         break
       }
+
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
@@ -111,6 +112,9 @@ export const handleRequest = (
                 break
               }
               default: {
+                if (!account) {
+                  return []
+                }
                 resolve([account])
 
                 break

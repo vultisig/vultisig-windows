@@ -20,7 +20,7 @@ const instance: Record<Instance, boolean> = {
   [Instance.VAULTS]: false,
 }
 
-export const handleFindAccounts = async (
+const handleFindAccounts = async (
   chain: Chain,
   sender: string
 ): Promise<string[]> => {
