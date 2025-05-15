@@ -9,23 +9,21 @@ export const getSplAccounts = async (address: string) => {
   const client = getSolanaClient()
   const programs = [SPL_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]
 
-  let allAccounts: any[] = []
+  const responses = await Promise.all(
+    programs.map(programId =>
+      client
+        .getTokenAccountsByOwner(
+          address as Address,
+          {
+            programId: programId as Address,
+          },
+          {
+            encoding: 'jsonParsed',
+          }
+        )
+        .send()
+    )
+  )
 
-  for (const programId of programs) {
-    const { value } = await client
-      .getTokenAccountsByOwner(
-        address as Address,
-        {
-          programId: programId as Address,
-        },
-        {
-          encoding: 'jsonParsed',
-        }
-      )
-      .send()
-
-    allAccounts = [...allAccounts, ...value]
-  }
-
-  return allAccounts
+  return responses.flatMap(response => response.value)
 }

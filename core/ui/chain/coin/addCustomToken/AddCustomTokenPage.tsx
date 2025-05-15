@@ -1,3 +1,4 @@
+import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
@@ -9,15 +10,21 @@ import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCore } from '../../../state/core'
-import { CustomTokenResult } from './CustomTokenResult'
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider'
+import { CustomToken } from './CustomToken'
 
 export const AddCustomTokenPage = () => {
   const { t } = useTranslation()
+
+  const walletCore = useAssertWalletCore()
+  const [{ chain }] = useCoreViewState<'addCustomToken'>()
 
   const [value, setValue] = useState('')
 
@@ -56,7 +63,17 @@ export const AddCustomTokenPage = () => {
               bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
             }}
           />
-          {value && <CustomTokenResult value={value} />}
+          {value ? (
+            isValidAddress({
+              chain,
+              address: value,
+              walletCore,
+            }) ? (
+              <CustomToken address={value} />
+            ) : (
+              <Text>{t('invalid_token_address')}</Text>
+            )
+          ) : null}
         </VStack>
       </PageContent>
     </>

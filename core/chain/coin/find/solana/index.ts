@@ -5,9 +5,6 @@ import { FindCoinsResolver } from '../FindCoinsResolver'
 
 export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
   const accounts = await getSplAccounts(address)
-  if (!accounts.length) {
-    return []
-  }
 
   const tokenAddresses = accounts.map(
     account => account.account.data.parsed.info.mint
