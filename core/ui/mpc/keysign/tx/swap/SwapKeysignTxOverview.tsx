@@ -261,7 +261,7 @@ const Wrapper = styled(VStack)`
 `
 
 const AnimationWrapper = styled.div`
-  width: 800px;
+  width: 100%;
   height: 250px;
   position: relative;
   margin-inline: auto;
