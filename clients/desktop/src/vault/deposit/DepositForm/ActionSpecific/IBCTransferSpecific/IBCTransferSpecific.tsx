@@ -22,8 +22,8 @@ import {
 import { TokenExplorer } from '../../TokenExplorer'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 
-export const IBCTransferSpecific = ({ chain }: { chain: Chain }) => {
-  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
+export const IBCTransferSpecific = () => {
+  const [{ setValue, watch, getValues, chain }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const selectedDestinationChain = getValues('destinationChain')
   const tokens = useIBCAcceptedTokens(selectedDestinationChain)
