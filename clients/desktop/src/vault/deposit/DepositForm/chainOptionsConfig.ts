@@ -80,7 +80,7 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
     schema: () =>
       z.object({
         selectedCoin: CoinSchema,
-        tcyPercentage: z
+        percentage: z
           .string()
           .transform(Number)
           .pipe(z.number().positive().max(100, 'Percentage must be 0-100')),
