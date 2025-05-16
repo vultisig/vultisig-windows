@@ -8,15 +8,12 @@ import { useTranslation } from 'react-i18next'
 
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
-import { MergeTokenExplorer } from './MergeTokenExplorer'
+import { StakeTokenExplorer } from './StakeTokenExplorer'
 
-type MergeSpecificProps = {
-  selectedCoin: Coin | null
-}
-
-export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
+export const StakeSpecific = () => {
+  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
   const { t } = useTranslation()
-  const [{ setValue, watch }] = useDepositFormHandlers()
+  const selectedCoin = getValues('selectedCoin') as Coin | null
 
   return (
     <Opener
@@ -38,14 +35,15 @@ export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
         </Container>
       )}
       renderContent={({ onClose }) => (
-        <MergeTokenExplorer
+        <StakeTokenExplorer
           setValue={setValue}
           activeOption={watch('selectedCoin')}
-          onOptionClick={token =>
+          onOptionClick={token => {
             setValue('selectedCoin', token, {
               shouldValidate: true,
             })
-          }
+            onClose()
+          }}
           onClose={onClose}
         />
       )}
