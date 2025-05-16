@@ -9,16 +9,11 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
-import {
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { useSwitchTransferTargetQuery } from '../../hooks/useSwitchTransferTarget'
-import { FormData } from '..'
+import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import {
   AssetRequiredLabel,
   Container,
@@ -26,15 +21,8 @@ import {
 } from '../DepositForm.styled'
 import { TokenExplorer } from '../TokenExplorer'
 
-export const SwitchSpecific = ({
-  watch,
-  getValues,
-  setValue,
-}: {
-  watch: UseFormWatch<FormData>
-  getValues: UseFormGetValues<FormData>
-  setValue: UseFormSetValue<FormData>
-}) => {
+export const SwitchSpecific = () => {
+  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
   const { t } = useTranslation()
 
   const {
