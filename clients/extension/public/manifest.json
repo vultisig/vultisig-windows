@@ -50,7 +50,7 @@
   "permissions": [
     "storage",
     "activeTab",
-    "videoCapture"
+    "camera"
   ],
   "web_accessible_resources": [
     {

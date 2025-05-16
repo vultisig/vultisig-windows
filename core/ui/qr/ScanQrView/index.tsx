@@ -120,7 +120,7 @@ export const ScanQrView = ({
           <VideoWrapper>
             <Video ref={setVideo} muted />
             <BorderImageWrapper>
-              <Image src="/assets/images/borderedWrapper.svg" alt="" />
+              <Image src="/core/images/borderedWrapper.svg" alt="" />
             </BorderImageWrapper>
           </VideoWrapper>
         )}
