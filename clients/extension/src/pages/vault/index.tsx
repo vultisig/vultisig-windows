@@ -11,6 +11,7 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -77,12 +78,21 @@ export const VaultPage = () => {
           </ConnectedApp>
         }
         secondaryControls={
-          <Button
-            icon={<SettingsIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'settings' })}
-            size="sm"
-            fitContent
-          />
+          <>
+            <Button
+              style={{ fontSize: 20 }}
+              icon={<CameraIcon />}
+              onClick={() => navigate({ id: 'uploadQr', state: {} })}
+              size="sm"
+              fitContent
+            />
+            <Button
+              icon={<SettingsIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'settings' })}
+              size="sm"
+              fitContent
+            />
+          </>
         }
         title={
           <Text
