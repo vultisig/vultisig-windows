@@ -30,7 +30,7 @@ export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address!)
   const coins = useCurrentVaultCoins()
-  const percentage = getValues('tcyPercentage')
+  const percentage = getValues('percentage')
 
   const tcyCoin = coins.find(c => c.id === 'tcy')
   const decimals = tcyCoin?.decimals ?? 8
@@ -63,7 +63,7 @@ export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
                   {suggestions.map(suggestion => (
                     <AmountSuggestion
                       onClick={() => {
-                        setValue('tcyPercentage', String(suggestion * 100), {
+                        setValue('percentage', String(suggestion * 100), {
                           shouldValidate: true,
                         })
                       }}
@@ -77,7 +77,7 @@ export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
               value={percentage}
               onChange={e => {
                 const value = (e.target as HTMLInputElement).value
-                setValue('tcyPercentage', value, {
+                setValue('percentage', value, {
                   shouldValidate: true,
                 })
               }}
@@ -86,7 +86,7 @@ export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
           action={
             <MaxButton
               onClick={() => {
-                setValue('tcyPercentage', '100', {
+                setValue('percentage', '100', {
                   shouldValidate: true,
                 })
               }}
