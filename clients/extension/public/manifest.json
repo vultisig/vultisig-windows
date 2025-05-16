@@ -49,8 +49,7 @@
   },
   "permissions": [
     "storage",
-    "activeTab",
-    "camera"
+    "activeTab"
   ],
   "web_accessible_resources": [
     {
