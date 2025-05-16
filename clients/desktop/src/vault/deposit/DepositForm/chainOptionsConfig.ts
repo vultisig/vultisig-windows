@@ -56,42 +56,6 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
-  stake_tcy: {
-    fields: [
-      {
-        name: 'amount',
-        type: 'number',
-        label: t('amount'),
-        required: true,
-      },
-    ],
-    schema: (_chain: Chain, _wc: WalletCore, total: number) =>
-      z.object({
-        selectedCoin: CoinSchema,
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(
-            z
-              .number()
-              .positive()
-              .min(0.0001, t('amount'))
-              .max(total, t('chainFunctions.amountExceeded'))
-          ),
-      }),
-  },
-
-  unstake_tcy: {
-    fields: [],
-    schema: () =>
-      z.object({
-        selectedCoin: CoinSchema,
-        percentage: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().positive().max(100, 'Percentage must be 0-100')),
-      }),
-  },
   merge: {
     fields: [
       {
@@ -605,21 +569,47 @@ export const getRequiredFieldsPerChainAction = (
     },
   },
   unstake: {
-    fields: [
-      {
-        name: 'validatorAddress',
-        type: 'text',
-        label: t('validator_address'),
-        required: true,
-      },
-    ],
+    fields: match(chain as StakeableChain, {
+      [Chain.Ton]: () => [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      [Chain.THORChain]: () => [],
+    }),
     schema: (
       _chain: Chain,
       _walletCore: WalletCore,
       _totalAmountAvailable: number
-    ) =>
-      z.object({
-        validatorAddress: z.string().min(1, t('validator_address')),
-      }),
+    ) => {
+      if (chain === Chain.Ton) {
+        return z.object({
+          validatorAddress: z.string().min(1, t('validator_address')),
+          amount: z
+            .string()
+            .transform(Number)
+            .pipe(z.number().positive().min(0.0001, t('amount'))),
+        })
+      }
+
+      if (chain === Chain.THORChain) {
+        return z.object({
+          selectedCoin: CoinSchema,
+          percentage: z
+            .string()
+            .transform(Number)
+            .pipe(z.number().positive().max(100, 'Percentage must be 0-100')),
+        })
+      }
+    },
   },
 })
