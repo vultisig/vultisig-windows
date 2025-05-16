@@ -20,7 +20,7 @@ export const KeysignSigningState = () => {
 }
 
 const Wrapper = styled(VStack)`
-  width: 1000px;
+  width: 100%;
   height: 500px;
   border-radius: 50%;
   position: relative;
