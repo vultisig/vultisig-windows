@@ -67,14 +67,10 @@ func (t *TssService) Keysign(
 	if err != nil {
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
 	}
-	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, false)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create TSS service: %w", err)
-	}
+
 	var result []*mtss.KeysignResponse
 	for _, msg := range messages {
 		resp, err := t.keysignWithRetry(vault,
-			tssServerImp,
 			partiesJoined,
 			msg,
 			localPartyID,
@@ -82,7 +78,8 @@ func (t *TssService) Keysign(
 			derivePath,
 			sessionID,
 			hexEncryptionKey,
-			serverURL)
+			serverURL,
+			localStateAccessor)
 		if err != nil {
 			return nil, fmt.Errorf("failed to keysign: %w", err)
 		}
@@ -96,18 +93,22 @@ func (t *TssService) isEdDSA(tssType string) bool {
 }
 func (t *TssService) keysignWithRetry(
 	vault storage.Vault,
-	tssServerImp *mtss.ServiceImpl,
 	keysignCommittee []string,
 	message string,
 	localPartyID string,
 	tssType string,
 	derivePath string,
-	sessionID, hexEncryptionKey, serverURL string) (*mtss.KeysignResponse, error) {
+	sessionID, hexEncryptionKey, serverURL string, localStateAccessor *LocalStateAccessorImp) (*mtss.KeysignResponse, error) {
 	t.Logger.Infof("signing message: %s", message)
-	messageID := hex.EncodeToString(md5.New().Sum([]byte(message)))
+	md5Hash := md5.Sum([]byte(message))
+	messageID := hex.EncodeToString(md5Hash[:])
 	msgBuf, err := hex.DecodeString(message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode message: %w", err)
+	}
+	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, false, messageID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create TSS service: %w", err)
 	}
 	messageToSign := base64.StdEncoding.EncodeToString(msgBuf)
 	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp, messageID)
