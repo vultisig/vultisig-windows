@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCore } from '@core/ui/state/core'
@@ -24,23 +23,9 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
 
-    // For new vaults, only show default chains in UI
-    const isNewVault = vaultCoins.every(coin => !coin.hidden)
-    const displayChains = isNewVault
-      ? [
-          Chain.Bitcoin,
-          Chain.Ethereum,
-          Chain.THORChain,
-          Chain.Solana,
-          Chain.BSC,
-        ]
-      : vaultCoins
-          .filter(coin => isFeeCoin(coin) && !coin.hidden)
-          .map(coin => coin.chain)
-
     // Filter coins for UI display only, but keep all in storage
     const displayCoins = vaultCoins.filter(
-      coin => displayChains.includes(coin.chain) && !coin.hidden
+      coin => isFeeCoin(coin) && !coin.hidden
     )
 
     return {
