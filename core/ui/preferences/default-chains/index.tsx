@@ -86,11 +86,7 @@ export const DefaultChainsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>
-            {t('vault_settings_default_chains')}
-          </PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('default_chains')}</PageHeaderTitle>}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>

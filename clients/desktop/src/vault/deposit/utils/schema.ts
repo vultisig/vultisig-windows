@@ -21,7 +21,7 @@ export const getFieldsForChainAction = (
   selectedChainAction: ChainAction | undefined,
   t: TFunction
 ) => {
-  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t)
+  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t, chain)
   return chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields || []
     : []
@@ -32,7 +32,7 @@ export const getChainActionSchema = (
   selectedChainAction: ChainAction | undefined,
   t: TFunction
 ) => {
-  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t)
+  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t, chain)
   return chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.schema
     : undefined

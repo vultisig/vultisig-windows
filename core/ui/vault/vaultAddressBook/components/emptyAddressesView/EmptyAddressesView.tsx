@@ -25,9 +25,7 @@ const EmptyAddressesView = ({
       <AddressBookPageHeader
         data-testid="EmptyAddressesView-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>{t('vault_settings_address_book')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
       />
       <Container>
         <CenteredBox>

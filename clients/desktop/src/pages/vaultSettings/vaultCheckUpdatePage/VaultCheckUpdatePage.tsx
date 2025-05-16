@@ -9,7 +9,6 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { DOWNLOAD_VULTISIG_LINK } from '../constants'
 import {
   CenteredText,
   Content,
@@ -38,7 +37,9 @@ const VaultCheckUpdatePage = () => {
     content = (
       <CenteredText>
         {t('vaultCheckUpdatePage.newVersionAvailable', { latestVersion })}
-        <DownloadButton onClick={() => openUrl(DOWNLOAD_VULTISIG_LINK)}>
+        <DownloadButton
+          onClick={() => openUrl('https://vultisig.com/download/vultisig')}
+        >
           {t('vaultCheckUpdatePage.downloadButton')}
         </DownloadButton>
       </CenteredText>
