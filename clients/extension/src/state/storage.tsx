@@ -95,6 +95,7 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   )
 
   // Default chains that should be visible on import
+  // Set new coins as visible only if they are default chains
   const defaultChains = [
     Chain.Bitcoin,
     Chain.Ethereum,
@@ -102,12 +103,13 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
     Chain.Solana,
     Chain.BSC,
   ]
-
-  // Set new coins as visible only if they are default chains
-  const newCoins = coins.map(coin => ({
-    ...coin,
-    hidden: !defaultChains.includes(coin.chain),
-  }))
+  const newCoins = coins.map(coin => {
+    const prev = prevVaultsCoins[vaultId]?.find(c => areEqualCoins(c, coin))
+    return {
+      ...coin,
+      hidden: prev?.hidden ?? !defaultChains.includes(coin.chain), // fall back to default rule
+    }
+  })
 
   await updateVaultsCoins({
     ...prevVaultsCoins,
@@ -197,7 +199,6 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
 const createVaultFolder: CreateVaultFolderFunction = async folder => {
   const folders = await getVaultFolders()
   await updateVaultFolders([...folders, folder])
-  // Update vaults with the new folder ID
   if (folder.vaultIds?.length) {
     const vaults = await getVaults()
     const updatedVaults = vaults.map(vault => {
