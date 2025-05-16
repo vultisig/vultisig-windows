@@ -8,6 +8,7 @@ import { FieldValues } from 'react-hook-form'
 
 import { MayaChainPool } from '../../../../lib/types/deposit'
 import { ChainAction } from '../../ChainAction'
+import { StakeableChain } from '../../constants'
 import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
 
 interface MemoParams {
@@ -36,8 +37,35 @@ export const generateMemo = ({
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
-    stake: () => 'd',
-    unstake: () => 'w',
+    stake: () =>
+      match(chain as StakeableChain, {
+        Ton: () => 'd',
+        THORChain: () => {
+          if (selectedCoin?.ticker === 'TCY') {
+            return 'tcy+'
+          }
+          throw new Error(
+            `Unsupported chain and token for staking memo: ${chain}`
+          )
+        },
+      }),
+    unstake: () =>
+      match(chain as StakeableChain, {
+        Ton: () => 'w',
+        THORChain: () => {
+          if (selectedCoin?.ticker === 'TCY') {
+            const pct = shouldBePresent(
+              depositFormData.percentage,
+              'Percentage'
+            )
+            const basisPoints = Math.floor(pct * 100)
+            return `tcy-:${basisPoints}`
+          }
+          throw new Error(
+            `Unsupported chain and token for staking memo: ${chain}`
+          )
+        },
+      }),
     bond_with_lp: () => {
       if (provider) {
         return operatorFee
@@ -92,12 +120,6 @@ export const generateMemo = ({
     },
     switch: () => {
       return `switch:${thorchainAddress}`
-    },
-    stake_tcy: () => 'tcy+',
-    unstake_tcy: () => {
-      const pct = shouldBePresent(depositFormData.percentage, 'Percentage')
-      const basisPoints = Math.floor(pct * 100)
-      return `tcy-:${basisPoints}`
     },
   })
 }
