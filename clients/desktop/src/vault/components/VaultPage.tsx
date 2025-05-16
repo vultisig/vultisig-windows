@@ -1,4 +1,3 @@
-import { UploadQrPrompt } from '@core/ui/qr/upload/UploadQrPrompt'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
@@ -12,6 +11,7 @@ import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAv
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
 import { VaultOverview } from '../../vault/components/VaultOverview'
+import { UploadQrPrompt } from './UploadQrPrompt'
 
 export const VaultPage = () => {
   const { name } = useCurrentVault()
