@@ -9,7 +9,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { UploadQrView } from '../UploadQrView'
 import { useDeriveChainFromWalletAddress } from '../useDeriveChainFromWalletAddress'
 
@@ -18,7 +18,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 
 export const UploadQrPageWithExistingVault = () => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
   const coins = useCurrentVaultCoins()
   const { addToast } = useToast()

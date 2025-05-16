@@ -1,8 +1,9 @@
+import { GetMpcServerUrlInput, useCore } from '@core/ui/state/core'
 import { useQuery } from '@tanstack/react-query'
 
-import { getMpcServerUrl, GetMpcServerUrlInput } from '../utils/getMpcServerUrl'
-
 export const useMpcServerUrlQuery = (input: GetMpcServerUrlInput) => {
+  const { getMpcServerUrl } = useCore()
+
   return useQuery({
     queryKey: ['mpcServerUrl', input],
     queryFn: () => getMpcServerUrl(input),
