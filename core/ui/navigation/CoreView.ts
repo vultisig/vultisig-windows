@@ -37,7 +37,7 @@ export type CoreView =
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
-  | { id: 'vaultChainCoinDetail'; state: { chain: Chain; coin: CoinKey } }
+  | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }
   | { id: 'newVault' }
   | { id: 'renameVault' }
   | { id: 'reshareVault' }
