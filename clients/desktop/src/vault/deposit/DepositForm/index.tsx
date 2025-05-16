@@ -105,7 +105,9 @@ export const DepositForm: FC<DepositFormProps> = ({
   }
 
   return (
-    <DepositFormHandlersProvider initialValue={{ setValue, getValues, watch }}>
+    <DepositFormHandlersProvider
+      initialValue={{ setValue, getValues, watch, chain }}
+    >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('deposit')}</PageHeaderTitle>}
@@ -145,7 +147,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           />
 
-          <DepositActionSpecific chain={chain} action={selectedChainAction} />
+          <DepositActionSpecific action={selectedChainAction} />
 
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
