@@ -63,7 +63,8 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   const sender = useSender()
   const { t } = useTranslation()
   const actionFields = selectedChainAction
-    ? getRequiredFieldsPerChainAction(t)[selectedChainAction]?.fields
+    ? getRequiredFieldsPerChainAction(t, coin.chain)[selectedChainAction]
+        ?.fields
     : []
 
   return (
