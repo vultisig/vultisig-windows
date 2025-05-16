@@ -34,8 +34,6 @@ export const en = {
   share_vault: 'Share Vault',
   percentage_to_unstake: 'Percentage to Unstake',
   staked_amount: 'Staked Amount',
-  stake_tcy: 'Stake TCY',
-  unstake_tcy: 'Unstake TCY',
   add_address: 'Add Address',
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',

@@ -12,8 +12,6 @@ export const es = {
   swap_overview: 'Resumen de intercambio',
   overview: 'Visión general',
   percentage: 'Porcentaje',
-  stake_tcy: 'Stake TCY',
-  unstake_tcy: 'Unstake TCY',
   percentage_to_unstake: 'Porcentaje para retirar',
   staked_amount: 'Cantidad apostada',
   signing_transaction: 'Firma de la transacción',

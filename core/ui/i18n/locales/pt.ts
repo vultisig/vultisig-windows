@@ -14,12 +14,10 @@ export const pt = {
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
   percentage: 'Percentagem',
-  stake_tcy: 'Stake TCY',
   staked: 'Apostado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
-  unstake_tcy: 'Unstake TCY',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   selected_chain_missing_in_your_vault:

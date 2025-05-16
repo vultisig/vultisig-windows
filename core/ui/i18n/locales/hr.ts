@@ -19,8 +19,6 @@ export const hr = {
   staked_amount: 'Uloženi iznos',
   ibc_transfer: 'IBC prijenos',
   percentage: 'Postotak',
-  stake_tcy: 'Stake TCY',
-  unstake_tcy: 'Unstake TCY',
   staked: 'Uloženo',
   select_destination_chain: 'Odaberite odredišni lanac',
   selected_chain_missing_in_your_vault:
