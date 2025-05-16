@@ -9,15 +9,10 @@ import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useMemo } from 'react'
-import {
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useIBCAcceptedTokens } from '../../../hooks/useIBCAcceptedTokens'
-import { FormData } from '../..'
+import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { getIbcDropdownOptions } from '../../chainOptionsConfig'
 import {
   AssetRequiredLabel,
@@ -27,17 +22,8 @@ import {
 import { TokenExplorer } from '../../TokenExplorer'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 
-export const IBCTransferSpecific = ({
-  watch,
-  setValue,
-  getValues,
-  chain,
-}: {
-  watch: UseFormWatch<FormData>
-  getValues: UseFormGetValues<FormData>
-  setValue: UseFormSetValue<FormData>
-  chain: Chain
-}) => {
+export const IBCTransferSpecific = ({ chain }: { chain: Chain }) => {
+  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const selectedDestinationChain = getValues('destinationChain')
   const tokens = useIBCAcceptedTokens(selectedDestinationChain)
