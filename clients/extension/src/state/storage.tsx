@@ -92,10 +92,15 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
   const prevCoins = (prevVaultsCoins[vaultId] ?? []).filter(existingCoin =>
     coins.every(coin => !areEqualCoins(existingCoin, coin))
   )
+  // Ensure new coins are not hidden by default
+  const newCoins = coins.map(coin => ({
+    ...coin,
+    hidden: false,
+  }))
 
   await updateVaultsCoins({
     ...prevVaultsCoins,
-    [vaultId]: [...prevCoins, ...coins],
+    [vaultId]: [...prevCoins, ...newCoins],
   })
 }
 
@@ -139,12 +144,23 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
   coinKey,
 }) => {
   const vaultsCoins = await getVaultsCoins()
+  console.log('Before deleting coin:', vaultsCoins[vaultId])
+
+  const updatedCoins = vaultsCoins[vaultId].map(coin => {
+    if (areEqualCoins(coin, coinKey)) {
+      return {
+        ...coin,
+        hidden: true, // Mark coin as hidden
+      }
+    }
+    return coin
+  })
+
+  console.log('After marking coin as hidden:', updatedCoins)
 
   await updateVaultsCoins({
     ...vaultsCoins,
-    [vaultId]: vaultsCoins[vaultId].filter(
-      coin => !areEqualCoins(coin, coinKey)
-    ),
+    [vaultId]: updatedCoins,
   })
 }
 

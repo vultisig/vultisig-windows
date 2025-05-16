@@ -116,10 +116,7 @@ export const handleRequest = (
                 break
               }
               default: {
-                if (!account) {
-                  return []
-                }
-                resolve([account])
+                resolve(account ? [account] : [])
 
                 break
               }
