@@ -14,8 +14,6 @@ export const de = {
   staked_amount: 'Gestakter Betrag',
   youre_swapping: 'Du tauschst',
   percentage: 'Prozentsatz',
-  stake_tcy: 'Stake TCY',
-  unstake_tcy: 'Unstake TCY',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
 
