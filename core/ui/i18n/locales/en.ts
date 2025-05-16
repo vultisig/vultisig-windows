@@ -818,4 +818,9 @@ export const en = {
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
+  custom_token: 'Custom Token',
+  find_custom_token: 'Find Your Custom Token',
+  enter_contract_address: 'Enter Contract Address',
+  no_token_found: 'No token found',
+  invalid_token_address: 'Enter a valid token address',
 }

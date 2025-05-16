@@ -73,7 +73,7 @@ export const SwapCoinInputField = ({
           gap={8}
         >
           <ChainCoinIcon
-            coinSrc={getCoinLogoSrc(value.logo)}
+            coinSrc={value.logo ? getCoinLogoSrc(value.logo) : undefined}
             chainSrc={
               shouldDisplayChainLogo({
                 ticker,
