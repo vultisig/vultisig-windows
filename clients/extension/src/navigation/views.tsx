@@ -6,6 +6,7 @@ import { SetupFastVaultPage } from '@clients/extension/src/components/setup/Setu
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
+import { StartKeysignPage } from '@clients/extension/src/mpc/keysign/start/StartKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
@@ -30,7 +31,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   deposit: () => <>{/* <>TODO: Implement Deposit page</> */}</>,
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
-  keysign: () => <>TODO: Implement keysign page</>,
+  keysign: StartKeysignPage,
   manageVaults: ManageVaultsPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
