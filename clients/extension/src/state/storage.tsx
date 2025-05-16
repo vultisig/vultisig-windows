@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/chain'
+import { Chain } from '@core/chain/Chain'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
