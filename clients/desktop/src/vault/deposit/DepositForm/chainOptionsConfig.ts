@@ -1,9 +1,12 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
+
+import { StakeableChain } from '../constants'
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
@@ -49,7 +52,10 @@ const CoinSchema = z.object({
   logo: z.string(),
 })
 
-export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
+export const getRequiredFieldsPerChainAction = (
+  t: TFunction,
+  chain: Chain
+) => ({
   stake_tcy: {
     fields: [
       {
@@ -540,39 +546,70 @@ export const getRequiredFieldsPerChainAction = (t: TFunction) => ({
       }),
   },
   stake: {
-    fields: [
-      {
-        name: 'amount',
-        type: 'number',
-        label: 'chainFunctions.stake.labels.amount',
-        required: true,
-      },
-      {
-        name: 'validatorAddress',
-        type: 'text',
-        label: 'chainFunctions.stake.labels.validatorAddress',
-        required: true,
-      },
-    ],
+    fields: match(chain as StakeableChain, {
+      [Chain.Ton]: () => [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      [Chain.THORChain]: () => [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+      ],
+    }),
     schema: (
-      _chain: Chain,
+      chain: Chain,
       _walletCore: WalletCore,
-      _totalAmountAvailable: number
-    ) =>
-      z.object({
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(z.number().positive().min(0.01, t('amount'))),
-        validatorAddress: z.string().min(1, t('validator_address')),
-      }),
+      totalAmountAvailable: number
+    ) => {
+      if (chain === Chain.Ton) {
+        return z.object({
+          amount: z
+            .string()
+            .transform(val => Number(val))
+            .pipe(z.number().positive().min(0.01, t('amount'))),
+          validatorAddress: z.string().min(1, t('validator_address')),
+        })
+      }
+
+      if (chain === Chain.THORChain) {
+        return z.object({
+          selectedCoin: CoinSchema,
+          amount: z
+            .string()
+            .transform(Number)
+            .pipe(
+              z
+                .number()
+                .positive()
+                .min(0.0001, t('amount'))
+                .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
+            ),
+        })
+      }
+
+      throw new Error(`Unsupported chain: ${chain}`)
+    },
   },
   unstake: {
     fields: [
       {
         name: 'validatorAddress',
         type: 'text',
-        label: 'chainFunctions.unstake.labels.validatorAddress',
+        label: t('validator_address'),
         required: true,
       },
     ],
