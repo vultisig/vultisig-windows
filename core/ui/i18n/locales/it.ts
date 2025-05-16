@@ -15,8 +15,6 @@ export const it = {
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
   percentage: 'Percentuale',
-  stake_tcy: 'Stake TCY',
-  unstake_tcy: 'Unstake TCY',
   percentage_to_unstake: 'Percentuale da dismettere',
   staked_amount: 'Importo puntato',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
