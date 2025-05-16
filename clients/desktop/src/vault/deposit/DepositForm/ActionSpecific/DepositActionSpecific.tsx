@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { Match } from '@lib/ui/base/Match'
 
@@ -13,11 +12,10 @@ import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific
 import { SwitchSpecific } from './SwitchSpecific'
 
 type Props = {
-  chain: Chain
   action: ChainAction
 }
 
-export const DepositActionSpecific = ({ chain, action }: Props) => {
+export const DepositActionSpecific = ({ action }: Props) => {
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
@@ -38,18 +36,16 @@ export const DepositActionSpecific = ({ chain, action }: Props) => {
           selectedAsset={selectedBondableAsset}
         />
       )}
-      ibc_transfer={() => <IBCTransferSpecific chain={chain} />}
+      ibc_transfer={() => <IBCTransferSpecific />}
       merge={() => <MergeSpecific selectedCoin={selectedCoin} />}
       switch={() => <SwitchSpecific />}
-      unstake_tcy={() => <UnstakeSpecific />}
-      stake_tcy={() => <StakeSpecific />}
+      unstake={() => <UnstakeSpecific />}
+      stake={() => <StakeSpecific />}
       bond={() => null}
       unbond={() => null}
       leave={() => null}
       custom={() => null}
       vote={() => null}
-      stake={() => null}
-      unstake={() => null}
     />
   )
 }
