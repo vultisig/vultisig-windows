@@ -23,7 +23,6 @@ type MergeVaultsWithCoinsInput = {
 const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
-    console.log('All vault coins:', vaultCoins)
 
     // For new vaults, only show default chains in UI
     const isNewVault = vaultCoins.every(coin => !coin.hidden)
@@ -38,13 +37,11 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
       : vaultCoins
           .filter(coin => isFeeCoin(coin) && !coin.hidden)
           .map(coin => coin.chain)
-    console.log('Display chains:', displayChains)
 
     // Filter coins for UI display only, but keep all in storage
     const displayCoins = vaultCoins.filter(
       coin => displayChains.includes(coin.chain) && !coin.hidden
     )
-    console.log('Display coins:', displayCoins)
 
     return {
       ...vault,

@@ -144,7 +144,6 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
   coinKey,
 }) => {
   const vaultsCoins = await getVaultsCoins()
-  console.log('Before deleting coin:', vaultsCoins[vaultId])
 
   const updatedCoins = vaultsCoins[vaultId].map(coin => {
     if (areEqualCoins(coin, coinKey)) {
@@ -156,7 +155,6 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
     return coin
   })
 
-  console.log('After marking coin as hidden:', updatedCoins)
 
   await updateVaultsCoins({
     ...vaultsCoins,
