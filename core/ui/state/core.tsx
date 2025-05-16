@@ -1,4 +1,5 @@
 import { MpcDevice } from '@core/mpc/devices/MpcDevice'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { NameProp } from '@lib/utils/entities/props'
 
@@ -10,6 +11,11 @@ type SaveFileFunction = (
   } & NameProp
 ) => Promise<void>
 
+export type GetMpcServerUrlInput = {
+  serverType: MpcServerType
+  serviceName: string
+}
+
 export type CoreState = CoreStorage & {
   openUrl: (url: string) => void
   saveFile: SaveFileFunction
@@ -17,6 +23,7 @@ export type CoreState = CoreStorage & {
   getClipboardText: () => Promise<string>
   version: string
   isLocalModeAvailable: boolean
+  getMpcServerUrl: (input: GetMpcServerUrlInput) => Promise<string>
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

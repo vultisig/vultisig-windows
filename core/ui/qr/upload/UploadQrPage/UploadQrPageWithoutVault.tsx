@@ -7,7 +7,7 @@ import { StyledPageContent } from '@lib/ui/qr/upload/UploadQRPage/UploadQRPage.s
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { UploadQrView } from '../UploadQrView'
 
 const uploadQrViews = ['scan', 'upload'] as const
@@ -15,7 +15,7 @@ type UploadQrView = (typeof uploadQrViews)[number]
 
 export const UploadQrPageWithoutVault = () => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
 
   const goBack = useNavigateBack()

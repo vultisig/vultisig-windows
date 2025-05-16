@@ -22,6 +22,9 @@ import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderP
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
+import { UploadQrPage } from '../qr/upload/UploadQrPage'
+
 export type SharedViewId = Extract<
   CoreViewId,
   | 'airdropRegister'
@@ -44,6 +47,8 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'vaultFolder'
   | 'manageVaultFolder'
+  | 'uploadQr'
+  | 'deeplink'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -75,4 +80,6 @@ export const sharedViews: Views<SharedViewId> = {
       <VaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
+  uploadQr: UploadQrPage,
+  deeplink: DeeplinkPage,
 }
