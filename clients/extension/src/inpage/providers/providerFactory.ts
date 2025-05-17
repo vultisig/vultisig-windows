@@ -11,7 +11,7 @@ import { XDEFIKeplrProvider } from './xdefiKeplr'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
-  const cosmosProvider = new Cosmos()
+  const cosmosProvider = Cosmos.getInstance()
   return {
     bitcoin: utxo(MessageKey.BITCOIN_REQUEST, 'Bitcoin_bitcoin-mainnet'),
     bitcoincash: utxo(
@@ -23,9 +23,9 @@ export const createProviders = () => {
     dogecoin: utxo(MessageKey.DOGECOIN_REQUEST, 'Dogecoin_dogecoin'),
     ethereum: new Ethereum(),
     litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
-    mayachain: new MAYAChain(),
+    mayachain: MAYAChain.getInstance(),
     solana: new Solana(),
-    thorchain: new THORChain(),
+    thorchain: THORChain.getInstance(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
   }
 }

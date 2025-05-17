@@ -4,12 +4,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback, NetworkKey } from '../constants'
+import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 
 export class UTXO extends EventEmitter {
   public chainId: string
-  public network: string
+  public network: Network
   public requestAccounts
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
@@ -17,7 +17,7 @@ export class UTXO extends EventEmitter {
     super()
     this.providerType = providerType as MessageKey
     this.chainId = chainId
-    this.network = NetworkKey.MAINNET
+    this.network = 'mainnet'
     this.requestAccounts = this.getAccounts
   }
 
@@ -46,11 +46,11 @@ export class UTXO extends EventEmitter {
     })
   }
 
-  changeNetwork(network: NetworkKey) {
-    if (network !== NetworkKey.MAINNET && network !== NetworkKey.TESTNET)
+  changeNetwork(network: Network) {
+    if (network !== 'mainnet' && network !== 'testnet')
       throw Error(`Invalid network ${network}`)
-    else if (network === NetworkKey.TESTNET)
-      throw Error(`We only support the ${NetworkKey.MAINNET} network.`)
+    else if (network === 'testnet')
+      throw Error(`We only support the mainnet network.`)
 
     this.chainId = `Bitcoin_bitcoin-${network}`
     this.network = network

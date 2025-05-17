@@ -1,9 +1,7 @@
 import { Messaging } from '../utils/interfaces'
 
-export enum NetworkKey {
-  MAINNET = 'mainnet',
-  TESTNET = 'testnet',
-}
+export type Network = 'mainnet' | 'testnet'
+
 export type Callback = (
   error: Error | null,
   result?: Messaging.Chain.Response

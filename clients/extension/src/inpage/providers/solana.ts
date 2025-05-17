@@ -27,7 +27,7 @@ import {
   SendTransactionResponse,
   TransactionType,
 } from '../../utils/interfaces'
-import { Callback, NetworkKey } from '../constants'
+import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 
 export class Solana extends EventEmitter {
@@ -35,7 +35,7 @@ export class Solana extends EventEmitter {
   public isConnected: boolean
   public isPhantom: boolean
   public isXDEFI: boolean
-  public network: string
+  public network: Network
   public publicKey?: PublicKey
   public static instance: Solana | null = null
   constructor() {
@@ -44,7 +44,7 @@ export class Solana extends EventEmitter {
     this.isConnected = false
     this.isPhantom = true
     this.isXDEFI = true
-    this.network = NetworkKey.MAINNET
+    this.network = 'mainnet'
   }
 
   static getInstance(): Solana {
