@@ -4,6 +4,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp, UiProps } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
+import { CameraPermissionGuard } from './CameraPermissionGuard'
 import { QrScanner } from './QrScanner'
 import { Container } from './ScanQrView.styled'
 
@@ -22,7 +23,9 @@ export const ScanQrView = ({
   return (
     <Container {...rest}>
       <div />
-      <QrScanner onFinish={onFinish} />
+      <CameraPermissionGuard>
+        <QrScanner onFinish={onFinish} />
+      </CameraPermissionGuard>
       {onUploadQrViewRequest && (
         <Button onClick={onUploadQrViewRequest}>
           <VStack
