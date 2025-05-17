@@ -22,11 +22,15 @@ type MergeVaultsWithCoinsInput = {
 const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
-    const vaultChains = vaultCoins.filter(isFeeCoin).map(coin => coin.chain)
+
+    // Filter coins for UI display only, but keep all in storage
+    const displayCoins = vaultCoins.filter(
+      coin => isFeeCoin(coin) && !coin.hidden
+    )
 
     return {
       ...vault,
-      coins: vaultCoins.filter(coin => vaultChains.includes(coin.chain)),
+      coins: displayCoins,
     }
   })
 }
