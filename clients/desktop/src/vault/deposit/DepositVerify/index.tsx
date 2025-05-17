@@ -39,7 +39,11 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   selectedChainAction,
 }) => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const selectedCoin = depositFormData?.selectedCoin as Coin
+  const selectedCoin =
+    depositFormData?.selectedCoin &&
+    typeof depositFormData.selectedCoin === 'object'
+      ? (depositFormData.selectedCoin as Coin)
+      : undefined
   const currentCoin = useCurrentVaultCoin(coinKey)
   const coin = selectedCoin || currentCoin
 
@@ -59,7 +63,8 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   const sender = useSender()
   const { t } = useTranslation()
   const actionFields = selectedChainAction
-    ? getRequiredFieldsPerChainAction(t)[selectedChainAction]?.fields
+    ? getRequiredFieldsPerChainAction(t, coin.chain)[selectedChainAction]
+        ?.fields
     : []
 
   return (

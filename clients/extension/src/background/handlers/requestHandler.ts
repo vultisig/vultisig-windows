@@ -124,16 +124,15 @@ export const handleRequest = (
               }
             }
 
-            const handlers = {
-              [Chain.Dydx]: () => account,
-              [Chain.Cosmos]: () => account,
-              [Chain.Kujira]: () => account,
-              [Chain.Osmosis]: () => account,
-              [Chain.Solana]: () => account,
-            } as unknown as { [key in Chain]: () => string | string[] }
+            const specialChains = [
+              Chain.Dydx,
+              Chain.Cosmos,
+              Chain.Kujira,
+              Chain.Osmosis,
+              Chain.Solana,
+            ] as Chain[]
 
-            const result =
-              chain in handlers ? match(chain, handlers) : [account]
+            const result = specialChains.includes(chain) ? account : [account]
             resolve(result)
           })
           .catch(reject)

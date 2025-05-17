@@ -1,15 +1,16 @@
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
+import { SettingsPage } from '@core/ui/settings'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { CheckUpdate } from '../components/check-update'
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
-import SettingsVaultPage from '../pages/vaultSettings/SettingsVaultPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
@@ -31,37 +32,37 @@ import { SetupVaultPageController } from '../vault/setup/SetupVaultPageControlle
 import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  vault: VaultPage,
-  joinKeygen: JoinKeygenPage,
-  setupFastVault: SetupFastVaultPage,
-  setupSecureVault: SetupSecureVaultPage,
-  setupVault: SetupVaultPageController,
-  keysign: StartKeysignPage,
-  reshareVaultFast: FastReshareVaultPage,
-  reshareVaultSecure: SecureReshareVaultPage,
-  joinKeysign: JoinKeysignPage,
-  uploadQr: UploadQrPage,
-  vaults: VaultsPage,
+  addressBook: AddressBookSettingsPage,
+  checkUpdate: VaultCheckUpdatePage,
+  deeplink: DeeplinkPage,
   deposit: DepositPage,
+  dkls: ManageDklsPage,
+  faq: FaqVaultPage,
+  importVaultFromFile: ImportVaultFromFilePage,
+  joinKeygen: JoinKeygenPage,
+  joinKeysign: JoinKeysignPage,
+  keysign: StartKeysignPage,
+  manageVaults: ManageVaultsPage,
+  migrateVault: MigrateVaultPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  vaultSettings: SettingsVaultPage,
-  importVaultFromFile: ImportVaultFromFilePage,
-  manageVaults: ManageVaultsPage,
+  reshareVaultFast: FastReshareVaultPage,
+  reshareVaultSecure: SecureReshareVaultPage,
+  settings: () => <SettingsPage checkUpdate={<CheckUpdate />} />,
+  setupFastVault: SetupFastVaultPage,
+  setupSecureVault: SetupSecureVaultPage,
+  setupVault: SetupVaultPageController,
   shareVault: ShareVaultPage,
-  editVault: EditVaultPage,
+  signCustomMessage: SignCustomMessagePage,
+  uploadQr: UploadQrPage,
+  vault: VaultPage,
   vaultBackup: VaultBackupPage,
   vaultFAQ: FaqVaultPage,
-  addressBook: AddressBookSettingsPage,
-  migrateVault: MigrateVaultPage,
-  checkUpdate: VaultCheckUpdatePage,
-  deeplink: DeeplinkPage,
-  signCustomMessage: SignCustomMessagePage,
-  dkls: ManageDklsPage,
-  faq: FaqVaultPage,
+  vaults: VaultsPage,
+  vaultSettings: EditVaultPage,
 }
 
 export const views: Views<AppViewId> = {

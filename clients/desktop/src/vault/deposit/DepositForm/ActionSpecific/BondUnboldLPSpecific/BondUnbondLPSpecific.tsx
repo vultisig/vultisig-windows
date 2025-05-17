@@ -3,28 +3,24 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { MayaChainPool } from '../../../../../lib/types/deposit'
-import { FormData } from '../..'
+import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
 
 type BondUnbondLPSpecificProps = {
   assets: MayaChainPool[]
   selectedAsset?: string
-  setValue: UseFormSetValue<FormData>
-  watch: UseFormWatch<FormData>
 }
 
 export const BondUnbondLPSpecific = ({
   assets,
   selectedAsset,
-  setValue,
-  watch,
 }: BondUnbondLPSpecificProps) => {
   const { t } = useTranslation()
+  const [{ setValue, watch }] = useDepositFormHandlers()
 
   return (
     assets.length > 0 && (
