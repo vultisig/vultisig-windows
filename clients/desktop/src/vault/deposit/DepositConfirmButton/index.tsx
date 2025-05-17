@@ -48,7 +48,7 @@ export const DepositConfirmButton = ({
     action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)
   const vault = useCurrentVault()
-  const config = transactionConfig[action] || {}
+  const config = transactionConfig(coinKey.chain)[action] || {}
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : ''

@@ -22,9 +22,10 @@ type MessengerImp struct {
 	HexEncryptionKey string
 	Logger           *logrus.Logger
 	Counter          int64
+	messageID        string
 }
 
-func NewMessengerImp(server, sessionID, hexEncryptionKey string) (*MessengerImp, error) {
+func NewMessengerImp(server, sessionID, hexEncryptionKey string, messageID string) (*MessengerImp, error) {
 	if server == "" {
 		return nil, fmt.Errorf("server is empty")
 	}
@@ -40,6 +41,7 @@ func NewMessengerImp(server, sessionID, hexEncryptionKey string) (*MessengerImp,
 		HexEncryptionKey: hexEncryptionKey,
 		Logger:           logrus.WithField("module", "messenger").Logger,
 		Counter:          0,
+		messageID:        messageID,
 	}, nil
 }
 func (m *MessengerImp) Send(from, to, body string) error {
@@ -83,7 +85,9 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-
+	if m.messageID != "" {
+		req.Header.Set("message_id", m.messageID)
+	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)
@@ -99,9 +103,10 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	}
 
 	m.Logger.WithFields(logrus.Fields{
-		"from": from,
-		"to":   to,
-		"hash": hashStr,
+		"from":       from,
+		"to":         to,
+		"hash":       hashStr,
+		"message_id": m.messageID,
 	}).Info("Message sent")
 
 	return nil

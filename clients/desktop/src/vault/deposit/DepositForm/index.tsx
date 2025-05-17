@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ChainAction } from '../ChainAction'
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance'
+import { DepositFormHandlersProvider } from '../providers/DepositFormHandlersProvider'
 import {
   getChainActionSchema,
   getFieldsForChainAction,
@@ -89,7 +90,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
   const selectedCoin = getValues('selectedCoin') as Coin | null
   const isTCYAction =
-    selectedChainAction === 'stake_tcy' || selectedChainAction === 'unstake_tcy'
+    selectedChainAction === 'stake' || selectedChainAction === 'unstake'
 
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
@@ -104,7 +105,9 @@ export const DepositForm: FC<DepositFormProps> = ({
   }
 
   return (
-    <>
+    <DepositFormHandlersProvider
+      initialValue={{ setValue, getValues, watch, chain }}
+    >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('deposit')}</PageHeaderTitle>}
@@ -144,26 +147,16 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           />
 
-          <DepositActionSpecific
-            getValues={getValues}
-            setValue={setValue}
-            watch={watch}
-            chain={chain}
-            action={selectedChainAction}
-          />
+          <DepositActionSpecific action={selectedChainAction} />
 
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction.map(field => {
                 const showBalance =
                   field.name === 'amount' &&
-                  [
-                    'bond',
-                    'ibc_transfer',
-                    'switch',
-                    'merge',
-                    'stake_tcy',
-                  ].includes(selectedChainAction)
+                  ['bond', 'ibc_transfer', 'switch', 'merge', 'stake'].includes(
+                    selectedChainAction
+                  )
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
@@ -226,6 +219,6 @@ export const DepositForm: FC<DepositFormProps> = ({
           {t('continue')}
         </Button>
       </PageContent>
-    </>
+    </DepositFormHandlersProvider>
   )
 }

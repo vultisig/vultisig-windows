@@ -4,25 +4,19 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FormData } from '../..'
+import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MergeTokenExplorer } from './MergeTokenExplorer'
 
 type MergeSpecificProps = {
   selectedCoin: Coin | null
-  watch: UseFormWatch<FormData>
-  setValue: UseFormSetValue<FormData>
 }
 
-export const MergeSpecific = ({
-  watch,
-  setValue,
-  selectedCoin,
-}: MergeSpecificProps) => {
+export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
   const { t } = useTranslation()
+  const [{ setValue, watch }] = useDepositFormHandlers()
 
   return (
     <Opener

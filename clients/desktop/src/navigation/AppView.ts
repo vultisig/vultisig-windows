@@ -7,7 +7,6 @@ export type AppView =
   | { id: 'createVaultFolder' }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'dkls' }
-  | { id: 'editVault' }
   | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'manageVaults' }
@@ -19,6 +18,5 @@ export type AppView =
   | { id: 'vaultBackup' }
   | { id: 'vaultFAQ' }
   | { id: 'vaultFolder'; state: { id: string } }
-  | { id: 'vaultSettings' }
 
 export type AppViewId = AppView['id']
