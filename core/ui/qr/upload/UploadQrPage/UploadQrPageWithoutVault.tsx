@@ -44,7 +44,7 @@ export const UploadQrPageWithoutVault = () => {
         scan={() => (
           <ScanQrView
             onUploadQrViewRequest={() => setView('upload')}
-            onScanSuccess={onScanSuccess}
+            onFinish={onScanSuccess}
           />
         )}
         upload={() => <UploadQrView />}
