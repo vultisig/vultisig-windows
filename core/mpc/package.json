@@ -8,6 +8,8 @@
     "format:types": "prettier --write 'types/**/*.ts'"
   },
   "devDependencies": {
+    "@bufbuild/buf": "^1.54.0",
+    "@bufbuild/protoc-gen-es": "^2.4.0",
     "vitest": "^3.0.9"
   },
   "dependencies": {

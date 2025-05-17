@@ -59,6 +59,7 @@ export const useSendTxKeysignPayloadQuery = () => {
             memo,
             vaultLocalPartyId: vault.localPartyId,
             vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+            libType: vault.libType,
           })
         )
       },

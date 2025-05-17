@@ -16,7 +16,6 @@ export const de = {
   percentage: 'Prozentsatz',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
-
   select_destination_chain: 'Ziel-Blockchain auswählen',
   no_tokens_found:
     'Keine Tokens gefunden. Füge Tokens unter der gewünschten Chain hinzu.',
@@ -831,4 +830,27 @@ export const de = {
   version: 'Version',
   delete_folder_confirmation:
     'Sind Sie sicher, dass Sie den Ordner "{{name}}" löschen möchten?',
+  available: 'Verfügbar',
+  assets: 'Vermögenswerte',
+  connected_dapps: 'Verbundene dApps',
+  disconnect_all: 'Alle trennen',
+  expand_view: 'Ansicht erweitern',
+  general: 'Allgemein',
+  manage_chains: 'Ketten verwalten',
+  rename: 'Umbenennen',
+  terms: 'Bedingungen',
+  no_connected_dapps: 'Keine verbundenen dApps',
+  no_connected_dapps_desc:
+    'dApps werden hier angezeigt, wann immer Sie mit ihnen interagieren',
+  open_desktop: 'Öffnen Sie den Desktop',
+  portfolio_overview: 'Portfolioübersicht',
+  prioritize_vultisig: 'Priorisieren Sie Vultisig',
+  remove: 'Entfernen',
+  share_vault: 'Tresor teilen',
+  vault_specific: 'Tresorspezifisch',
+  missing_thorchain_address: 'Fehlende THORChain-Adresse',
+  missing_destination_address: 'Fehlende Zieladresse',
+  upgrade_shares_info:
+    '<b>Sie erstellen neue Vault Share-Backups</b> und speichern diese wie zuvor',
+  vault_type_does_not_match: 'Tresortyp stimmt nicht überein',
 }

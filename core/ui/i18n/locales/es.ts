@@ -828,4 +828,27 @@ export const es = {
   version: 'Versión',
   delete_folder_confirmation:
     '¿Está seguro de que desea eliminar la carpeta "{{name}}"?',
+  available: 'Disponible',
+  assets: 'activos',
+  connected_dapps: 'DApps conectadas',
+  disconnect_all: 'Desconectar todo',
+  expand_view: 'Ampliar vista',
+  general: 'General',
+  manage_chains: 'Administrar cadenas',
+  rename: 'Rebautizar',
+  terms: 'Términos',
+  no_connected_dapps: 'No hay dApps conectadas',
+  no_connected_dapps_desc:
+    'Las dApps aparecerán aquí cada vez que interactúes con ellas',
+  open_desktop: 'Abrir escritorio',
+  portfolio_overview: 'Descripción general de la cartera',
+  prioritize_vultisig: 'Priorizar Vultisig',
+  remove: 'Eliminar',
+  share_vault: 'Bóveda compartida',
+  vault_specific: 'Bóveda específica',
+  missing_thorchain_address: 'Falta la dirección de THORChain',
+  missing_destination_address: 'Dirección de destino faltante',
+  upgrade_shares_info:
+    'Creará nuevas copias de seguridad de Vault Share y las almacenará como lo hacía antes.',
+  vault_type_does_not_match: 'El tipo de bóveda no coincide',
 }
