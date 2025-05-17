@@ -17,7 +17,9 @@ const build = chunk => {
     console.log(
       `\x1b[1m\x1b[33mTerminating previous ${capitalizeFirstLetter(chunk)} build...\x1b[0m`
     )
-    buildProcess[chunk].kill()
+    exec(`taskkill /PID ${buildProcess[chunk].pid} /F /T`, error => {
+      if (error) console.error(`Failed to kill ${chunk} process:, error`)
+    })
   }
 
   buildProcess[chunk] = exec(`yarn build:${chunk}`, { shell: true })

@@ -19,3 +19,12 @@ export const getDappHostname = (url: string) => {
   }
   return hostname
 }
+
+export const isValidUrl = (url: string) => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
