@@ -3,12 +3,11 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
-import { DefaultChainsIcon } from '@lib/ui/icons/DefaultChainsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
@@ -41,11 +40,13 @@ import { useTranslation } from 'react-i18next'
 
 interface SettingsPageProps {
   checkUpdate?: ReactNode
+  manageDkls?: ReactNode
   prioritize?: ReactNode
 }
 
 export const SettingsPage: FC<SettingsPageProps> = ({
   checkUpdate,
+  manageDkls,
   prioritize,
 }) => {
   const { t } = useTranslation()
@@ -131,29 +132,28 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 hoverable
                 showArrow
               />
-              <ListItem
-                icon={<DefaultChainsIcon fontSize={20} />}
-                onClick={() => navigate({ id: 'defaultChains' })}
-                title={t('default_chains')}
-                hoverable
-                showArrow
-              />
-              <ListItem
-                icon={<MegaphoneIcon fontSize={20} />}
-                onClick={() => {}}
-                title={t('referral_code')}
-                hoverable
-                showArrow
-              />
-              <ListItem
-                icon={<ExpandIcon fontSize={20} />}
-                onClick={() =>
-                  openUrl(`chrome-extension://${chrome.runtime.id}/index.html`)
-                }
-                title={t('expand_view')}
-                hoverable
-                showArrow
-              />
+              {mpcDevice !== 'windows' && mpcDevice !== 'extension' && (
+                <ListItem
+                  icon={<MegaphoneIcon fontSize={20} />}
+                  onClick={() => {}}
+                  title={t('referral_code')}
+                  hoverable
+                  showArrow
+                />
+              )}
+              {mpcDevice === 'extension' && (
+                <ListItem
+                  icon={<ExpandIcon fontSize={20} />}
+                  onClick={() =>
+                    openUrl(
+                      `chrome-extension://${chrome.runtime.id}/index.html`
+                    )
+                  }
+                  title={t('expand_view')}
+                  hoverable
+                  showArrow
+                />
+              )}
             </List>
           </VStack>
           <VStack gap={12}>
@@ -231,9 +231,10 @@ export const SettingsPage: FC<SettingsPageProps> = ({
           </VStack>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <Button kind="ghost" onClick={() => openUrl(shareURL)} size="xs">
+          <UnstyledButton onClick={() => openUrl(shareURL)}>
             {`VULTISIG ${mpcDevice === 'windows' ? 'APP' : 'EXTENSION'} V${version}`}
-          </Button>
+          </UnstyledButton>
+          {manageDkls}
         </PageFooter>
       </VStack>
       {visible && (

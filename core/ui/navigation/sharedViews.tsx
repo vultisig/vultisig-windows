@@ -2,7 +2,6 @@ import { AddressPage } from '@core/ui/chain/coin/address'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
-import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
@@ -26,7 +25,6 @@ export type SharedViewId = Extract<
   CoreViewId,
   | 'airdropRegister'
   | 'currencySettings'
-  | 'defaultChains'
   | 'importVault'
   | 'deleteVault'
   | 'languageSettings'
@@ -51,7 +49,6 @@ export const sharedViews: Views<SharedViewId> = {
   airdropRegister: AirdropRegisterPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
-  defaultChains: DefaultChainsPage,
   deleteVault: DeleteVaultPage,
   importVault: ImportVaultPage,
   languageSettings: LanguagePage,
