@@ -66,9 +66,11 @@ export const ConnectedDappsPage = () => {
       const uniqueUrls = new Set(
         Object.values(sessions).map(session => session.url)
       )
-      for (const url of uniqueUrls) {
-        await inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
-      }
+      await Promise.allSettled(
+        [...uniqueUrls].map(url =>
+          inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
+        )
+      )
     } catch (error) {
       console.error('Failed to disconnect all sessions:', error)
     } finally {
