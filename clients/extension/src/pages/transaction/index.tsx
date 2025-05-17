@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
@@ -40,6 +39,7 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@lib/ui/buttons/Button'
 import { Divider } from '@lib/ui/divider'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -48,8 +48,14 @@ import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIc
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
@@ -62,13 +68,11 @@ import QRCode from 'react-qr-code'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-const StyledErrorState = styled(VStack)`
+const StyledCard = styled(VStack)<{ padding?: number }>`
   background-color: ${getColor('backgroundsSecondary')};
   border-radius: 12px;
-  padding: 64px;
-`
-const StyledText = styled(Text)`
-  text-align: center;
+  overflow-y: hidden;
+  padding: ${({ padding = 16 }) => padding}px;
 `
 
 interface InitialState {
@@ -104,7 +108,9 @@ export const TransactionPage = () => {
     errorDescription,
     keysignPayload,
   } = state
+  const currency = useFiatCurrency()
   const qrContainerRef = useRef<HTMLDivElement>(null)
+  const steps = fastSign ? 5 : 4
 
   const formSchema = useMemo(
     () =>
@@ -566,9 +572,7 @@ export const TransactionPage = () => {
     return chainKind === 'cosmos' ? hash.toUpperCase() : hash
   }
 
-  const currency = useFiatCurrency()
-
-  const componentDidUpdate = () => {
+  useEffect(() => {
     if (walletCore) {
       Promise.all([getStoredTransactions()]).then(async ([transactions]) => {
         if (!transactions.length) return
@@ -703,578 +707,525 @@ export const TransactionPage = () => {
         }
       })
     }
-  }
+  }, [walletCore]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(componentDidUpdate, [walletCore]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <VStack fullHeight>
-      {hasError ? (
-        <StyledErrorState alignItems="center" gap={24} justifyContent="center">
-          <TriangleAlertIcon fontSize={36} />
-          <VStack
-            alignItems="center"
-            gap={16}
-            justifyContent="center"
-            fullWidth
-          >
-            <StyledText color="contrast" size={17} weight={500}>
-              {errorTitle}
-            </StyledText>
-            <StyledText color="light" size={14} weight={500}>
-              {errorDescription}
-            </StyledText>
-          </VStack>
-        </StyledErrorState>
-      ) : transaction ? (
-        <>
-          {step === 1 ? (
-            <div className="card">
-              <div className="header">
-                <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                <span
-                  className="action"
-                  onClick={handleClose}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' || e.key === ' ') handleClose()
-                  }}
-                  tabIndex={0}
-                  role="button"
-                >
-                  <CrossIcon fontSize={24} />
-                </span>
-              </div>
-              <div className="content">
-                <div className="list">
-                  {transaction.isCustomMessage ? (
-                    <>
-                      <div className="item">
-                        <span className="label">{t('address')}</span>
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.from}
-                        />
-                      </div>
-                      <div className="item">
-                        <span className="label">{t('message')}</span>
-                        <MiddleTruncate
-                          text={transaction.customMessage!.message}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="item">
-                        <span className="label">{t('from')}</span>
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.from}
-                        />
-                      </div>
-                      {transaction.transactionDetails.to && (
-                        <div className="item">
-                          <span className="label">{t('to')}</span>
-                          <MiddleTruncate
-                            text={transaction.transactionDetails.to}
-                          />
-                        </div>
-                      )}
-                      {transaction.transactionDetails.amount?.amount && (
-                        <div className="item">
-                          <span className="label">{t('amount')}</span>
-                          <span className="extra">{`${formatUnits(
-                            transaction.transactionDetails.amount.amount,
-                            transaction.transactionDetails.amount.decimals
-                          )} ${keysignPayload?.coin?.ticker}`}</span>
-                        </div>
-                      )}
-                      <div className="item">
-                        <span className="label">Network</span>
-                        <span className="extra">{transaction.chain}</span>
-                      </div>
-                      <div className="item">
-                        <span className="label">{t('network_fee')}</span>
-                        <span className="extra">
-                          {`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
-                        </span>
-                      </div>
-                      {transaction.memo?.isParsed ? (
-                        <>
-                          <div className="item">
-                            <span className="label">
-                              {t('function_signature')}
-                            </span>
-                            <pre className="extra" style={{ paddingBottom: 8 }}>
-                              <code style={{ fontFamily: 'monospace' }}>
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionSignature
-                                }
-                              </code>
-                            </pre>
-                          </div>
-                          <div className="item">
-                            <span className="label">
-                              {t('function_inputs')}
-                            </span>
-                            <pre className="extra" style={{ paddingBottom: 8 }}>
-                              <code style={{ fontFamily: 'monospace' }}>
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionArguments
-                                }
-                              </code>
-                            </pre>
-                          </div>
-                        </>
-                      ) : transaction.memo?.value ? (
-                        <div className="item">
-                          <span className="label">{t('memo')}</span>
-                          <span className="extra">
-                            {splitString(
-                              transaction.memo.value as string,
-                              32
-                            ).map((str, index) => (
-                              <span key={index}>{str}</span>
-                            ))}
-                          </span>
-                        </div>
-                      ) : null}
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className="footer">
-                <Button onClick={() => handleStep(2)} type="primary" block>
-                  {t('sign')}
-                </Button>
-              </div>
-            </div>
-          ) : step === 2 ? (
-            <div className="card">
-              <div className="header">
-                <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                <span
-                  className="action"
-                  onClick={() => handleStep(1)}
-                  onKeyDown={e => {
-                    if (e.key === 'Escape') {
-                      handleStep(1)
-                    }
-                  }}
-                  tabIndex={0}
-                  role="button"
-                >
-                  <ChevronLeftIcon fontSize={24} />
-                </span>
-              </div>
-              <div className="content" ref={qrContainerRef}>
-                {fastSign ? (
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 2 of 5</span>
-                      <span className="title">
-                        Scan QR with your mobile device
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 2 of 4</span>
-                      <span className="title">
-                        Scan QR with at least 2 other devices linked to this
-                        vault
-                      </span>
-                    </div>
-                  </div>
-                )}
-                <QRCode
-                  bgColor="transparent"
-                  fgColor="white"
-                  size={1000}
-                  value={keySignUrl || ''}
-                  onClick={exportQRCode}
+  return hasError ? (
+    <VStack alignItems="center" justifyContent="center" fullHeight>
+      <StyledCard
+        alignItems="center"
+        gap={24}
+        justifyContent="center"
+        padding={64}
+      >
+        <TriangleAlertIcon fontSize={36} />
+        <VStack alignItems="center" gap={16} justifyContent="center" fullWidth>
+          <Text color="contrast" size={17} weight={500} centerHorizontally>
+            {errorTitle}
+          </Text>
+          <Text color="light" size={14} weight={500} centerHorizontally>
+            {errorDescription}
+          </Text>
+        </VStack>
+      </StyledCard>
+    </VStack>
+  ) : transaction ? (
+    step === 1 ? (
+      <VStack fullHeight>
+        <PageHeader
+          primaryControls={
+            <PageHeaderIconButton icon={<CrossIcon />} onClick={handleClose} />
+          }
+          title={
+            <PageHeaderTitle>
+              {`${t('sign_transaction')} (${step}/${steps})`}
+            </PageHeaderTitle>
+          }
+          hasBorder
+        />
+        <PageContent flexGrow scrollable>
+          <List>
+            {transaction.isCustomMessage ? (
+              <>
+                <ListItem
+                  title={t('address')}
+                  description={transaction.transactionDetails.from}
                 />
-                {fastSign ? null : (
-                  <div className="devices">
-                    <div
-                      className={`item ${connectedDevices.length > 0 ? 'signed' : ''}`}
-                    >
-                      <span className="icon">
-                        {connectedDevices.length > 0 ? <CheckIcon /> : null}
-                      </span>
-                      <span className="name">
-                        {connectedDevices.length > 0 ? (
-                          connectedDevices[0]
-                        ) : (
-                          <>
-                            Scan with 1<sup>st</sup> device
-                          </>
-                        )}
-                      </span>
-                    </div>
-                    <div
-                      className={`item ${connectedDevices.length > 1 ? 'signed' : ''}`}
-                    >
-                      <span className="icon">
-                        {connectedDevices.length > 1 ? <CheckIcon /> : null}
-                      </span>
-                      <span className="name">
-                        {connectedDevices.length > 1 ? (
-                          connectedDevices[1]
-                        ) : (
-                          <>
-                            Scan with 2<sup>nd</sup> device
-                          </>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                )}
-                <Divider text={t('or')} />
-                <Button onClick={handleApp} type="secondary" block>
-                  Sign with desktop app instead
-                </Button>
-              </div>
-            </div>
-          ) : step === 3 ? (
-            <div className="card">
-              <div className="header">
-                <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                <span
-                  className="action"
-                  onClick={() => handleStep(2)}
-                  onKeyDown={e => {
-                    if (e.key === 'Escape') {
-                      handleStep(2)
+                <ListItem
+                  title={t('message')}
+                  description={transaction.customMessage!.message}
+                />
+              </>
+            ) : (
+              <>
+                <ListItem
+                  title={t('from')}
+                  description={
+                    <MiddleTruncate
+                      text={transaction.transactionDetails.from}
+                    />
+                  }
+                />
+                {transaction.transactionDetails.to && (
+                  <ListItem
+                    title={t('to')}
+                    description={
+                      <MiddleTruncate
+                        text={transaction.transactionDetails.to}
+                      />
                     }
-                  }}
-                  tabIndex={0}
-                  role="button"
-                >
-                  <ChevronLeftIcon fontSize={24} />
-                </span>
-              </div>
-              <div className="content">
-                {fastSign ? (
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">
-                        Scan QR with your other device
-                      </span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 3 of 5</span>
-                      <span className="title">
-                        Confirm transaction by signing with server share
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">
-                        Scan QR with your other device
-                      </span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 3 of 4</span>
-                      <span className="title">
-                        Sign with this device and confirm transaction
-                      </span>
-                    </div>
-                  </div>
+                  />
                 )}
-              </div>
-              <div className="footer">
-                <Button onClick={handleStartSigning} type="secondary" block>
-                  {fastSign
-                    ? 'Confirm & signing with server'
-                    : 'Confirm & sign with device'}
-                </Button>
-              </div>
-            </div>
-          ) : step === 4 ? (
-            fastSign ? (
-              <VStack
-                as="form"
-                gap={16}
-                onSubmit={handleSubmit(handleSubmitFastSignPassword)}
-                fullHeight
-              >
-                <button type="submit" style={{ display: 'none' }} />
-
-                <div className="header">
-                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span
-                    className="action"
-                    onClick={() => handleStep(3)}
-                    onKeyDown={e => {
-                      if (e.key === 'Escape') {
-                        handleStep(3)
+                {transaction.transactionDetails.amount?.amount && (
+                  <ListItem
+                    title={t('amount')}
+                    description={`${formatUnits(
+                      transaction.transactionDetails.amount.amount,
+                      transaction.transactionDetails.amount.decimals
+                    )} ${keysignPayload?.coin?.ticker}`}
+                  />
+                )}
+                <ListItem title="Network" description={transaction.chain} />
+                <ListItem
+                  title={t('network_fee')}
+                  description={`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
+                />
+                {transaction.memo?.isParsed ? (
+                  <>
+                    <ListItem
+                      title={t('function_signature')}
+                      description={
+                        <VStack as="pre" scrollable>
+                          <Text as="code" family="mono">
+                            {
+                              (transaction.memo.value as ParsedMemoParams)
+                                .functionSignature
+                            }
+                          </Text>
+                        </VStack>
                       }
-                    }}
-                    tabIndex={0}
-                    role="button"
-                  >
-                    <ChevronLeftIcon fontSize={24} />
+                    />
+                    <ListItem
+                      title={t('function_inputs')}
+                      description={
+                        <VStack as="pre" scrollable>
+                          <Text as="code" family="mono">
+                            {
+                              (transaction.memo.value as ParsedMemoParams)
+                                .functionArguments
+                            }
+                          </Text>
+                        </VStack>
+                      }
+                    />
+                  </>
+                ) : transaction.memo?.value ? (
+                  <ListItem
+                    title={t('memo')}
+                    description={splitString(
+                      transaction.memo.value as string,
+                      32
+                    ).map((str, index) => (
+                      <span key={index}>{str}</span>
+                    ))}
+                  />
+                ) : null}
+              </>
+            )}
+          </List>
+        </PageContent>
+        <PageFooter>
+          <Button kind="primary" onClick={() => handleStep(2)}>
+            {t('sign')}
+          </Button>
+        </PageFooter>
+      </VStack>
+    ) : step === 2 ? (
+      <VStack fullHeight>
+        <PageHeader
+          primaryControls={
+            <PageHeaderIconButton
+              icon={<ChevronLeftIcon />}
+              onClick={() => handleStep(step - 1)}
+            />
+          }
+          title={
+            <PageHeaderTitle>
+              {`${t('sign_transaction')} (${step}/${steps})`}
+            </PageHeaderTitle>
+          }
+          hasBorder
+        />
+        <PageContent gap={16} flexGrow scrollable>
+          <List>
+            <ListItem icon={<CheckIcon />} title="Starting transaction" />
+            <ListItem
+              title={
+                fastSign
+                  ? 'Scan QR with your mobile device'
+                  : 'Scan QR with at least 2 other devices linked to this vault'
+              }
+              description={`Step 2 of ${steps}`}
+            />
+          </List>
+          <StyledCard alignItems="center" ref={qrContainerRef}>
+            <QRCode
+              bgColor="transparent"
+              fgColor="white"
+              size={1000}
+              value={keySignUrl || ''}
+              onClick={exportQRCode}
+              style={{ height: 368, width: 368 }}
+            />
+          </StyledCard>
+          {!fastSign && (
+            <List>
+              {connectedDevices.length > 0 ? (
+                <ListItem
+                  icon={<CheckIcon />}
+                  status="success"
+                  title={connectedDevices[0]}
+                />
+              ) : (
+                <ListItem
+                  title={
+                    <>
+                      Scan with 1<sup>st</sup> device
+                    </>
+                  }
+                />
+              )}
+              {connectedDevices.length > 1 ? (
+                <ListItem
+                  icon={<CheckIcon />}
+                  status="success"
+                  title={connectedDevices[1]}
+                />
+              ) : (
+                <ListItem
+                  title={
+                    <>
+                      Scan with 1<sup>st</sup> device
+                    </>
+                  }
+                />
+              )}
+            </List>
+          )}
+          <Divider text={t('or')} />
+          <Button kind="secondary" onClick={handleApp}>
+            Sign with desktop app instead
+          </Button>
+        </PageContent>
+      </VStack>
+    ) : step === 3 ? (
+      <VStack fullHeight>
+        <PageHeader
+          primaryControls={
+            <PageHeaderIconButton
+              icon={<ChevronLeftIcon />}
+              onClick={() => handleStep(step - 1)}
+            />
+          }
+          title={
+            <PageHeaderTitle>
+              {`${t('sign_transaction')} (${step}/${steps})`}
+            </PageHeaderTitle>
+          }
+          hasBorder
+        />
+        <PageContent flexGrow scrollable>
+          <StyledCard>
+            {fastSign ? (
+              <div className="steps">
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Starting transaction</span>
+                </div>
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Scan QR with your other device</span>
+                </div>
+                <div className="item">
+                  <span className="icon" />
+                  <span className="step">Step 3 of 5</span>
+                  <span className="title">
+                    Confirm transaction by signing with server share
                   </span>
                 </div>
-                <div className="content">
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">
-                        Scan QR with your other device
-                      </span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Transaction confirmed</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 4 of 5</span>
-                      <span className="title">Enter your vault password</span>
-                    </div>
-                  </div>
-                  <VStack gap={12}>
-                    <PasswordInput
-                      placeholder="Enter password"
-                      {...register('password')}
-                    />
-                    {typeof errors.password?.message === 'string' && (
-                      <Text color="danger" size={12}>
-                        {errors.password.message}
-                      </Text>
-                    )}
-                  </VStack>
-                </div>
-                <div className="footer">
-                  <Button
-                    disabled={!isValid || !isDirty}
-                    onClick={handleSubmitFastSignPassword}
-                    type="secondary"
-                    block
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </VStack>
+              </div>
             ) : (
-              <div className="card">
-                <div className="header">
-                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <Spinner />
+              <div className="steps">
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Starting transaction</span>
                 </div>
-                <div className="content">
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">
-                        Scan QR with your other device
-                      </span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Signed with server share</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 4 of 4</span>
-                      <span className="title">Signing Transaction</span>
-                    </div>
-                  </div>
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Scan QR with your other device</span>
+                </div>
+                <div className="item">
+                  <span className="icon" />
+                  <span className="step">Step 3 of 4</span>
+                  <span className="title">
+                    Sign with this device and confirm transaction
+                  </span>
                 </div>
               </div>
-            )
-          ) : step === 5 ? (
-            fastSign ? (
-              <div className="card">
-                <div className="header">
-                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <Spinner />
+            )}
+          </StyledCard>
+        </PageContent>
+        <PageFooter>
+          <Button kind="secondary" onClick={handleStartSigning}>
+            {fastSign
+              ? 'Confirm & signing with server'
+              : 'Confirm & sign with device'}
+          </Button>
+        </PageFooter>
+      </VStack>
+    ) : step === 4 ? (
+      fastSign ? (
+        <VStack
+          as="form"
+          gap={16}
+          onSubmit={handleSubmit(handleSubmitFastSignPassword)}
+          fullHeight
+        >
+          <PageHeader
+            primaryControls={
+              <PageHeaderIconButton
+                icon={<ChevronLeftIcon />}
+                onClick={() => handleStep(step - 1)}
+              />
+            }
+            title={
+              <PageHeaderTitle>
+                {`${t('sign_transaction')} (${step}/${steps})`}
+              </PageHeaderTitle>
+            }
+            hasBorder
+          />
+          <PageContent flexGrow scrollable>
+            <div className="steps">
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Starting transaction</span>
+              </div>
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Scan QR with your other device</span>
+              </div>
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Transaction confirmed</span>
+              </div>
+              <div className="item">
+                <span className="icon" />
+                <span className="step">Step 4 of 5</span>
+                <span className="title">Enter your vault password</span>
+              </div>
+            </div>
+            <VStack gap={12}>
+              <PasswordInput
+                placeholder="Enter password"
+                {...register('password')}
+              />
+              {typeof errors.password?.message === 'string' && (
+                <Text color="danger" size={12}>
+                  {errors.password.message}
+                </Text>
+              )}
+            </VStack>
+          </PageContent>
+          <PageFooter>
+            <Button disabled={!isValid || !isDirty} kind="secondary">
+              Submit
+            </Button>
+          </PageFooter>
+        </VStack>
+      ) : (
+        <VStack fullHeight>
+          <PageHeader
+            secondaryControls={<Spinner />}
+            title={
+              <PageHeaderTitle>
+                {`${t('sign_transaction')} (${step}/${steps})`}
+              </PageHeaderTitle>
+            }
+            hasBorder
+          />
+          <PageContent flexGrow scrollable>
+            <StyledCard>
+              <div className="steps">
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Starting transaction</span>
                 </div>
-                <div className="content">
-                  <div className="steps">
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Starting transaction</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">
-                        Scan QR with your other device
-                      </span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Transaction confirmed</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon">
-                        <CheckIcon />
-                      </span>
-                      <span className="title">Signed with server share</span>
-                    </div>
-                    <div className="item">
-                      <span className="icon" />
-                      <span className="step">Step 5 of 5</span>
-                      <span className="title">Finalizing transaction</span>
-                    </div>
-                  </div>
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Scan QR with your other device</span>
+                </div>
+                <div className="item">
+                  <span className="icon">
+                    <CheckIcon />
+                  </span>
+                  <span className="title">Signed with server share</span>
+                </div>
+                <div className="item">
+                  <span className="icon" />
+                  <span className="step">Step 4 of 4</span>
+                  <span className="title">Signing Transaction</span>
                 </div>
               </div>
-            ) : null
-          ) : (
-            <div className="card">
-              <div className="header">
-                <span className="heading centered">Overview</span>
+            </StyledCard>
+          </PageContent>
+        </VStack>
+      )
+    ) : step === 5 && fastSign ? (
+      <VStack fullHeight>
+        <PageHeader
+          secondaryControls={<Spinner />}
+          title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+          hasBorder
+        />
+        <PageContent flexGrow>
+          <StyledCard>
+            <div className="steps">
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Starting transaction</span>
               </div>
-              <div className="content">
-                {transaction.isCustomMessage ? (
-                  <div className="list">
-                    <div className="item">
-                      <span className="label">{t('signature')}</span>
-                      <MiddleTruncate text={transaction.customSignature!} />
-                    </div>
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Scan QR with your other device</span>
+              </div>
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Transaction confirmed</span>
+              </div>
+              <div className="item">
+                <span className="icon">
+                  <CheckIcon />
+                </span>
+                <span className="title">Signed with server share</span>
+              </div>
+              <div className="item">
+                <span className="icon" />
+                <span className="step">Step 5 of 5</span>
+                <span className="title">Finalizing transaction</span>
+              </div>
+            </div>
+          </StyledCard>
+        </PageContent>
+      </VStack>
+    ) : (
+      <VStack fullHeight>
+        <PageHeader
+          title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+          hasBorder
+        />
+        <PageContent flexGrow>
+          <StyledCard>
+            {transaction.isCustomMessage ? (
+              <div className="list">
+                <div className="item">
+                  <span className="label">{t('signature')}</span>
+                  <MiddleTruncate text={transaction.customSignature!} />
+                </div>
+              </div>
+            ) : (
+              <div className="list">
+                <div className="item">
+                  <span className="label">TX ID</span>
+                  <MiddleTruncate
+                    text={transaction.txHash!}
+                    onClick={() => handleCopy()}
+                  />
+                  <a
+                    href={`${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    className="action"
+                  >
+                    <SquareArrowOutUpRightIcon />
+                  </a>
+                </div>
+                <div className="item">
+                  <span className="label">{t('from')}</span>
+                  <MiddleTruncate text={transaction.transactionDetails.from} />
+                </div>
+                {transaction.transactionDetails.to && (
+                  <div className="item">
+                    <span className="label">{t('to')}</span>
+                    <MiddleTruncate text={transaction.transactionDetails.to} />
                   </div>
-                ) : (
-                  <div className="list">
-                    <div className="item">
-                      <span className="label">TX ID</span>
-                      <MiddleTruncate
-                        text={transaction.txHash!}
-                        onClick={() => handleCopy()}
-                      />
-                      <a
-                        href={`${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        className="action"
-                      >
-                        <SquareArrowOutUpRightIcon />
-                      </a>
-                    </div>
-                    <div className="item">
-                      <span className="label">{t('from')}</span>
-                      <MiddleTruncate
-                        text={transaction.transactionDetails.from}
-                      />
-                    </div>
-                    {transaction.transactionDetails.to && (
-                      <div className="item">
-                        <span className="label">{t('to')}</span>
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.to}
-                        />
-                      </div>
-                    )}
-                    {transaction.transactionDetails.amount?.amount && (
-                      <div className="item">
-                        <span className="label">{t('amount')}</span>
-                        <span className="extra">{`${formatUnits(
-                          transaction.transactionDetails.amount.amount,
-                          transaction.transactionDetails.amount.decimals
-                        )} ${keysignPayload?.coin?.ticker}`}</span>
-                      </div>
-                    )}
-                    <div className="item">
-                      <span className="label">Network</span>
-                      <span className="extra">{transaction.chain}</span>
-                    </div>
-                    <div className="item">
-                      <span className="label">{t('network_fee')}</span>
-                      <span className="extra">{`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}</span>
-                    </div>
-                    {transaction.memo?.value && !transaction.memo?.isParsed && (
-                      <div className="item">
-                        <span className="label">{t('memo')}</span>
-                        <span className="extra">
-                          {splitString(
-                            transaction.memo?.value as string,
-                            32
-                          ).map((str, index) => (
-                            <span key={index}>{str}</span>
-                          ))}
-                        </span>
-                      </div>
-                    )}
+                )}
+                {transaction.transactionDetails.amount?.amount && (
+                  <div className="item">
+                    <span className="label">{t('amount')}</span>
+                    <span className="extra">{`${formatUnits(
+                      transaction.transactionDetails.amount.amount,
+                      transaction.transactionDetails.amount.decimals
+                    )} ${keysignPayload?.coin?.ticker}`}</span>
+                  </div>
+                )}
+                <div className="item">
+                  <span className="label">Network</span>
+                  <span className="extra">{transaction.chain}</span>
+                </div>
+                <div className="item">
+                  <span className="label">{t('network_fee')}</span>
+                  <span className="extra">{`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}</span>
+                </div>
+                {transaction.memo?.value && !transaction.memo?.isParsed && (
+                  <div className="item">
+                    <span className="label">{t('memo')}</span>
+                    <span className="extra">
+                      {splitString(transaction.memo?.value as string, 32).map(
+                        (str, index) => (
+                          <span key={index}>{str}</span>
+                        )
+                      )}
+                    </span>
                   </div>
                 )}
               </div>
-              <div className="footer">
-                <Button onClick={handleClose} type="primary" block>
-                  {t('done')}
-                </Button>
-              </div>
-            </div>
-          )}
-        </>
-      ) : (
-        <PageContent alignItems="center" justifyContent="center" flexGrow>
-          <Spinner />
+            )}
+          </StyledCard>
         </PageContent>
-      )}
+        <PageFooter>
+          <Button kind="primary" onClick={handleClose}>
+            {t('done')}
+          </Button>
+        </PageFooter>
+      </VStack>
+    )
+  ) : (
+    <VStack alignItems="center" justifyContent="center" fullHeight>
+      <Spinner size={32} />
     </VStack>
   )
 }
