@@ -819,4 +819,8 @@ export const en = {
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
+  provide_camera_permission:
+    'Please provide camera permission to scan the QR code',
+  grant_camera_permission: 'Grant Camera Permission',
+  failed_to_get_camera_permission: 'Failed to get camera permission',
 }

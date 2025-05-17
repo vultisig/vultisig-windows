@@ -59,6 +59,8 @@ export type CoreView =
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'addressBook' }
+  | { id: 'deeplink'; state: { url: string } }
+
 export type CoreViewId = CoreView['id']
 
 export const initialCoreView: CoreView = {

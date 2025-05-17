@@ -60,7 +60,7 @@ export const ManageReceiver = () => {
           onClose={() => setViewState('default')}
           withDefaultStructure={false}
         >
-          <FixedScanQRView onScanSuccess={onScanSuccess} />
+          <FixedScanQRView onFinish={onScanSuccess} />
         </Modal>
       )}
       addressBook={() => (

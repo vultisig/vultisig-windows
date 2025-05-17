@@ -28,6 +28,8 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { UploadQrPrompt } from './UploadQrPrompt'
+
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
     getColor(connected ? 'alertSuccess' : 'alertInfo')};
@@ -77,12 +79,15 @@ export const VaultPage = () => {
           </ConnectedApp>
         }
         secondaryControls={
-          <Button
-            icon={<SettingsIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'settings' })}
-            size="sm"
-            fitContent
-          />
+          <>
+            <UploadQrPrompt />
+            <Button
+              icon={<SettingsIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'settings' })}
+              size="sm"
+              fitContent
+            />
+          </>
         }
         title={
           <Text
