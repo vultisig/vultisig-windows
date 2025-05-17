@@ -36,7 +36,6 @@ import {
   GetVaultsFunction,
   isHasFinishedOnboardingInitially,
   isVaultBalanceInitallyVisible,
-  SetDefaultChainsFunction,
   SetHasFinishedOnboardingFunction,
   SetIsVaultBalanceVisibleFunction,
   SetLanguageFunction,
@@ -183,10 +182,6 @@ const getDefaultChains: GetDefaultChainsFunction = async () => {
   return value
 }
 
-const setDefaultChains: SetDefaultChainsFunction = async chains => {
-  persistentStorage.setItem(defaultChainsKey, chains)
-}
-
 const [fiatCurrencyKey] = fiatCurrencyQueryKey
 
 const getFiatCurrency = async () => {
@@ -279,7 +274,6 @@ export const storage: CoreStorage = {
   updateVault,
   createVault,
   createVaultCoins,
-  setDefaultChains,
   getDefaultChains,
   getVaults,
   getVaultsCoins,

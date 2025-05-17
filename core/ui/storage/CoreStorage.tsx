@@ -29,8 +29,6 @@ export type CreateVaultCoinsFunction = (
   input: CreateVaultCoinsInput
 ) => Promise<void>
 
-export type SetDefaultChainsFunction = (chains: Chain[]) => Promise<void>
-
 export type GetDefaultChainsFunction = () => Promise<Chain[]>
 
 export type GetFiatCurrencyFunction = () => Promise<FiatCurrency>
@@ -130,7 +128,6 @@ export type CoreStorage = {
   createVault: CreateVaultFunction
   createVaultCoins: CreateVaultCoinsFunction
   getDefaultChains: GetDefaultChainsFunction
-  setDefaultChains: SetDefaultChainsFunction
   getVaultFolders: GetVaultFoldersFunction
   deleteVault: DeleteVaultFunction
   deleteVaultFolder: DeleteVaultFolderFunction

@@ -8,8 +8,8 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVault
 import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
+import { ManageDkls } from '../components/manage-dkls'
 import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
-import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
@@ -36,7 +36,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: VaultCheckUpdatePage,
   deeplink: DeeplinkPage,
   deposit: DepositPage,
-  dkls: ManageDklsPage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   joinKeygen: JoinKeygenPage,
@@ -51,7 +50,9 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: FastReshareVaultPage,
   reshareVaultSecure: SecureReshareVaultPage,
-  settings: () => <SettingsPage checkUpdate={<CheckUpdate />} />,
+  settings: () => (
+    <SettingsPage checkUpdate={<CheckUpdate />} manageDkls={<ManageDkls />} />
+  ),
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: SetupVaultPageController,
