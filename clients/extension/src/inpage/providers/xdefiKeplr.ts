@@ -28,6 +28,7 @@ import Long from 'long'
 import { CosmosMsgType, RequestMethod } from '../../utils/constants'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import {
+  Messaging,
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
@@ -296,6 +297,13 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async getKey(chainId: string): Promise<Key> {
+    const accounts = (await this.ensureChainAndGetAccounts(chainId)) as string[]
+    return accounts[0] as unknown as Key
+  }
+
+  private async ensureChainAndGetAccounts(
+    chainId: string
+  ): Promise<Messaging.Chain.Response> {
     const currentChainID = await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.CHAIN_ID,
       params: [],
@@ -308,11 +316,9 @@ export class XDEFIKeplrProvider extends Keplr {
       })
     }
 
-    const accounts = (await this.cosmosProvider.request({
+    return this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
       params: [],
-    })) as string[]
-
-    return accounts[0] as unknown as Key
+    })
   }
 }
