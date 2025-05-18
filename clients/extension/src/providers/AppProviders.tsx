@@ -1,4 +1,5 @@
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
+import { useAssertVersion } from '@clients/extension/src/state/currentSettings/extensionVersion'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
@@ -42,6 +43,7 @@ const coreState: CoreState = {
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
+  useAssertVersion(coreState.version)
   return (
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
