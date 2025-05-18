@@ -1,7 +1,7 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
 import { CreateVaultNameStep } from '@core/ui/mpc/keygen/create/CreateVaultNameStep'
-import { SetupVaultServerStep } from '@core/ui/mpc/keygen/create/fast/SetupVaultServerStep'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
+import { FastKeygenServerStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerStep'
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
@@ -21,7 +21,7 @@ const steps = [
   'email',
   'password',
   'hint',
-  'setupForCreateVault',
+  'server',
   'createVault',
 ] as const
 
@@ -62,8 +62,8 @@ export const SetupFastVaultPage = () => {
                       onFinish={toNextStep}
                     />
                   )}
-                  setupForCreateVault={() => (
-                    <SetupVaultServerStep
+                  server={() => (
+                    <FastKeygenServerStep
                       onBack={() => setStep(lastEditableStep)}
                       onFinish={toNextStep}
                     />
