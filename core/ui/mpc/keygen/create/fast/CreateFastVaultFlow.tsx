@@ -3,21 +3,14 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { FastKeygenServerStep } from '../../fast/FastKeygenServerStep'
+import { FastKeygenMpcPeersProvider } from '../../fast/FastKeygenMpcPeersProvider'
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { CreateVaultNameStep } from '../CreateVaultNameStep'
 import { ServerEmailStep } from './server/email/ServerEmailStep'
 import { SetServerPasswordStep } from './server/password/SetServerPasswordStep'
 import { ServerPasswordHintStep } from './server/password-hint/ServerPasswordHintStep'
 
-const steps = [
-  'name',
-  'email',
-  'password',
-  'hint',
-  'server',
-  'createVault',
-] as const
+const steps = ['name', 'email', 'password', 'hint', 'keygen'] as const
 
 const lastEditableStep = 'password'
 
@@ -51,14 +44,10 @@ export const CreateFastVaultFlow = () => {
             onFinish={toNextStep}
           />
         )}
-        server={() => (
-          <FastKeygenServerStep
-            onBack={() => setStep(lastEditableStep)}
-            onFinish={toNextStep}
-          />
-        )}
-        createVault={() => (
-          <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+        keygen={() => (
+          <FastKeygenMpcPeersProvider onBack={() => setStep(lastEditableStep)}>
+            <KeygenFlow onBack={() => setStep(lastEditableStep)} />
+          </FastKeygenMpcPeersProvider>
         )}
       />
     </VStack>

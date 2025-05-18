@@ -7,10 +7,10 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { FastKeygenServerStep } from '../../fast/FastKeygenServerStep'
+import { FastKeygenMpcPeersProvider } from '../../fast/FastKeygenMpcPeersProvider'
 import { ReshareKeygenFlow } from '../ReshareKeygenFlow'
 
-const reshareVaultSteps = ['email', 'password', 'server', 'keygen'] as const
+const reshareVaultSteps = ['email', 'password', 'keygen'] as const
 
 export const FastVaultReshareFlow = () => {
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
@@ -32,10 +32,11 @@ export const FastVaultReshareFlow = () => {
             <SetServerPasswordStep onFinish={toNextStep} />
           )
         }
-        server={() => (
-          <FastKeygenServerStep onBack={toPreviousStep} onFinish={toNextStep} />
+        keygen={() => (
+          <FastKeygenMpcPeersProvider onBack={toPreviousStep}>
+            <ReshareKeygenFlow onBack={toPreviousStep} />
+          </FastKeygenMpcPeersProvider>
         )}
-        keygen={() => <ReshareKeygenFlow onBack={toPreviousStep} />}
       />
     </>
   )

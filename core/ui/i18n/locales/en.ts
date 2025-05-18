@@ -820,4 +820,5 @@ export const en = {
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
   failed_to_connect_with_server: 'Failed to connect with server',
+  connecting_to_server: 'Connecting to server',
 }
