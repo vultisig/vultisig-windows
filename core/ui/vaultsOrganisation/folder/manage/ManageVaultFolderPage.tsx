@@ -1,4 +1,9 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useUpdateVaultFolderMutation } from '@core/ui/storage/vaultFolders'
+import { DeleteVaultFolder } from '@core/ui/vaultsOrganisation/folder/manage/DeleteVaultFolder'
+import { ManageFolderVaults } from '@core/ui/vaultsOrganisation/folder/manage/ManageFolderVaults'
+import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
+import { AddVaultsToFolder } from '@core/ui/vaultsOrganisation/manage/AddVaultsToFolder'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -10,35 +15,27 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
-import { useCurrentVaultFolder } from '../state/currentVaultFolder'
-import { DeleteVaultFolder } from './DeleteVaultFolder'
-import { ManageFolderVaults } from './ManageFolderVaults'
 
 export const ManageVaultFolderPage = () => {
-  const navigate = useCoreNavigate()
-  const { id, name: initialName } = useCurrentVaultFolder()
-  const [name, setName] = useState(initialName)
   const { t } = useTranslation()
-
+  const navigate = useCoreNavigate()
+  const currentVaultFolder = useCurrentVaultFolder()
+  const [name, setName] = useState(currentVaultFolder.name)
   const { mutate, isPending } = useUpdateVaultFolderMutation()
 
   return (
-    <>
-      <StyledHeader
-        hasBorder
+    <VStack fullHeight>
+      <PageHeader
         primaryControls={
           <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
         }
         secondaryControls={<DeleteVaultFolder />}
-        title={<PageHeaderTitle>{name}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{currentVaultFolder.name}</PageHeaderTitle>}
+        hasBorder
       />
-      <PageContent data-testid="manage-vault-folder-page" gap={20}>
+      <PageContent gap={24} flexGrow scrollable>
         <VStack gap={8}>
-          <Text weight="500" color="supporting" size={14}>
+          <Text color="supporting" size={14} weight="500">
             {t('folder_name')}
           </Text>
           <TextInput value={name} onValueChange={setName} />
@@ -51,11 +48,15 @@ export const ManageVaultFolderPage = () => {
           onClick={async () => {
             mutate(
               {
-                id,
+                id: currentVaultFolder.id,
                 fields: { name },
               },
               {
-                onSuccess: () => navigate({ id: 'vaultFolder', state: { id } }),
+                onSuccess: () =>
+                  navigate({
+                    id: 'vaultFolder',
+                    state: { id: currentVaultFolder.id },
+                  }),
               }
             )
           }}
@@ -66,10 +67,6 @@ export const ManageVaultFolderPage = () => {
           </Text>
         </Button>
       </PageFooter>
-    </>
+    </VStack>
   )
 }
-
-const StyledHeader = styled(PageHeader)`
-  flex-shrink: 0;
-`

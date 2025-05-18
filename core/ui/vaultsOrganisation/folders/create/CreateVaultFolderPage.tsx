@@ -3,31 +3,47 @@ import {
   useVaultFolders,
 } from '@core/ui/storage/vaultFolders'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
-import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
+import { VaultSigners } from '@core/ui/vault/signers'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { Text } from '@lib/ui/text'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput'
+interface InitialState {
+  name: string
+  vaultIds: string[]
+}
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()
-  const goBack = useNavigateBack()
-  const [name, setName] = useState('')
-  const [vaultIds, setVaultIds] = useState<string[]>([])
-  const folders = useVaultFolders()
-
-  const names = useMemo(() => folders.map(({ name }) => name), [folders])
-
+  const initialState: InitialState = {
+    name: '',
+    vaultIds: [],
+  }
+  const [state, setState] = useState(initialState)
+  const { name, vaultIds } = state
+  const navigateBack = useNavigateBack()
+  const vaultFolders = useVaultFolders()
   const vaults = useFolderlessVaults()
+
+  const names = useMemo(
+    () => vaultFolders.map(({ name }) => name),
+    [vaultFolders]
+  )
 
   const isDisabled = useMemo(() => {
     if (!name) {
@@ -42,57 +58,81 @@ export const CreateVaultFolderPage = () => {
   const { mutate, isPending } = useCreateVaultFolderMutation()
 
   return (
-    <>
-      <FlowPageHeader
-        title={t('create_folder')}
-        data-testid="create-vault-folder-page"
+    <VStack
+      as="form"
+      {...getFormProps({
+        isDisabled,
+        isPending,
+        onSubmit: () => {
+          mutate(
+            {
+              name,
+              order: getLastItemOrder(vaultFolders.map(({ order }) => order)),
+              vaultIds,
+            },
+            {
+              onSuccess: navigateBack,
+            }
+          )
+        },
+      })}
+      fullHeight
+    >
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('create_folder')}</PageHeaderTitle>}
+        hasBorder
       />
-      <VStack
-        as="form"
-        flexGrow
-        style={{ height: '90%' }}
-        {...getFormProps({
-          isDisabled,
-          isPending,
-          onSubmit: () => {
-            mutate(
-              {
-                name,
-                order: getLastItemOrder(folders.map(({ order }) => order)),
-                vaultIds,
-              },
-              {
-                onSuccess: goBack,
-              }
-            )
-          },
-        })}
-      >
-        <PageContent gap={20} scrollable>
-          <TextInput
-            placeholder={t('enter_folder_name')}
-            label={t('folder_name')}
-            value={name}
-            onValueChange={setName}
-          />
-          <NonEmptyOnly
-            value={vaults}
-            render={options => (
-              <FolderVaultsInput
-                options={options}
-                value={vaultIds}
-                onChange={setVaultIds}
-              />
-            )}
-          />
-          <div style={{ height: 1000 }} />
-        </PageContent>
-        <PageFooter>
-          <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
-            {t('create')}
-          </Button>
-        </PageFooter>
-      </VStack>
-    </>
+      <PageContent gap={24} scrollable>
+        <TextInput
+          label={t('folder_name')}
+          onValueChange={name =>
+            setState(prevState => ({ ...prevState, name }))
+          }
+          placeholder={t('enter_folder_name')}
+          value={name}
+        />
+        {vaults.length ? (
+          <VStack gap={12}>
+            <Text color="light" size={12} weight={500}>
+              {t('add_vaults_to_folder')}
+            </Text>
+            <List>
+              {vaults.map(vault => {
+                const vaultId = getVaultId(vault)
+                const checked = vaultIds.includes(vaultId)
+
+                return (
+                  <ListItem
+                    extra={
+                      <>
+                        <VaultSigners vault={vault} />
+                        <Switch checked={checked} />
+                      </>
+                    }
+                    key={vaultId}
+                    onClick={() =>
+                      setState(prevState => ({
+                        ...prevState,
+                        vaultIds: checked
+                          ? prevState.vaultIds.filter(id => id !== vaultId)
+                          : [...prevState.vaultIds, vaultId],
+                      }))
+                    }
+                    title={vault.name}
+                    hoverable
+                  />
+                )
+              })}
+            </List>
+          </VStack>
+        ) : null}
+      </PageContent>
+      <PageFooter>
+        <Button isDisabled={isDisabled} isLoading={isPending} type="submit">
+          {t('create')}
+        </Button>
+      </PageFooter>
+    </VStack>
   )
 }
