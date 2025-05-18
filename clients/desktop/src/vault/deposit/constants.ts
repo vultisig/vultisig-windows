@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Chain, CosmosChain } from '@core/chain/Chain'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 
@@ -11,4 +10,4 @@ export const STAKEABLE_ASSETS_TICKERS = ['TCY'] as const
 export type StakeableAssetTicker = (typeof STAKEABLE_ASSETS_TICKERS)[number]
 
 export const isStakeableChain = (c: Chain): c is StakeableChain =>
-  c === Chain.Ton || c === Chain.THORChain
+  STAKEABLE_CHAINS.includes(c as StakeableChain)
