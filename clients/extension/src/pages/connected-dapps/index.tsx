@@ -16,8 +16,12 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { initializeMessenger } from '../../messengers/initializeMessenger'
+import { EventMethod } from '../../utils/constants'
 
 const StyledEmptyState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
@@ -28,14 +32,51 @@ const StyledText = styled(Text)`
   text-align: center;
 `
 
+const inpageMessenger = initializeMessenger({ connect: 'inpage' })
+
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const currentVaultId = useCurrentVaultId()
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
-  const handleDisconnect = async (host: string) => {
-    await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
+  const [isDisconnecting, setIsDisconnecting] = useState(false)
+  const isDisconnectingRef = useRef(false)
+  const handleDisconnect = async (host: string, url: string) => {
+    if (isDisconnectingRef.current) return
+    isDisconnectingRef.current = true
+    setIsDisconnecting(true)
+    try {
+      await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
+      await inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
+    } catch (error) {
+      console.error(`Failed to disconnect session for ${host}:`, error)
+    } finally {
+      isDisconnectingRef.current = false
+      setIsDisconnecting(false)
+    }
+  }
+
+  const handleDisconnectAll = async () => {
+    if (isDisconnectingRef.current) return
+    isDisconnectingRef.current = true
+    setIsDisconnecting(true)
+    try {
+      await clearSessions({ vaultId: shouldBePresent(currentVaultId) })
+      const uniqueUrls = new Set(
+        Object.values(sessions).map(session => session.url)
+      )
+      await Promise.allSettled(
+        [...uniqueUrls].map(url =>
+          inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
+        )
+      )
+    } catch (error) {
+      console.error('Failed to disconnect all sessions:', error)
+    } finally {
+      isDisconnectingRef.current = false
+      setIsDisconnecting(false)
+    }
   }
   const sessionsArray = Object.entries(sessions)
   const navigateBack = useNavigateBack()
@@ -65,16 +106,17 @@ export const ConnectedDappsPage = () => {
               {t('overview')}
             </Text>
             <List>
-              {Object.entries(sessions).map(([host]) => (
+              {sessionsArray.map(([host, session]) => (
                 <ListItem
                   key={host}
                   extra={
                     <Button
                       icon={<LinkTwoOffIcon fontSize={20} />}
-                      onClick={() => handleDisconnect(host)}
+                      onClick={() => handleDisconnect(host, session.url)}
                       size="md"
                       status="error"
                       fitContent
+                      disabled={isDisconnecting}
                     />
                   }
                   title={
@@ -88,12 +130,11 @@ export const ConnectedDappsPage = () => {
           </PageContent>
           <PageFooter alignItems="center">
             <Button
-              onClick={() =>
-                clearSessions({ vaultId: shouldBePresent(currentVaultId) })
-              }
+              onClick={handleDisconnectAll}
               type="primary"
               block
               rounded
+              disabled={isDisconnecting}
             >
               {t('disconnect_all')}
             </Button>
