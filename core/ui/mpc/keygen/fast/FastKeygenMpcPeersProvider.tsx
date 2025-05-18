@@ -6,6 +6,7 @@ import { ChildrenProp, OnBackProp } from '@lib/ui/props'
 import { ComponentType } from 'react'
 
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
+import { StartMpcSessionFlow } from '../../session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '../../state/mpcPeers'
 import { CreateFastKeygenServerActionProvider } from '../create/fast/CreateFastKeygenServerActionProvider'
 import { MigrateFastKeygenServerActionProvider } from '../migrate/fast/MigrateFastKeygenServerActionProvider'
@@ -39,7 +40,12 @@ export const FastKeygenMpcPeersProvider = ({
             <WaitForServerStep onBack={onBack} onFinish={onFinish} />
           )}
           to={({ value }) => (
-            <MpcPeersProvider value={value}>{children}</MpcPeersProvider>
+            <MpcPeersProvider value={value}>
+              <StartMpcSessionFlow
+                value="keygen"
+                render={() => <>{children}</>}
+              />
+            </MpcPeersProvider>
           )}
         />
       )}
