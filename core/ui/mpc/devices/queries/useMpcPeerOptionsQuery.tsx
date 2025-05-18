@@ -1,16 +1,13 @@
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { OnSuccessProp } from '@lib/ui/props'
 import { pollingQueryOptions } from '@lib/ui/query/utils/options'
 import { without } from '@lib/utils/array/without'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-export const useMpcPeerOptionsQuery = (
-  options: Partial<OnSuccessProp<string[]>> = {}
-) => {
+export const useMpcPeerOptionsQuery = () => {
   const sessionId = useMpcSessionId()
   const localPartyId = useMpcLocalPartyId()
   const serverUrl = useMpcServerUrl()
@@ -24,7 +21,6 @@ export const useMpcPeerOptionsQuery = (
       }
       return without(withoutDuplicates(response), localPartyId)
     },
-    ...options,
     ...pollingQueryOptions(2000),
   })
 }

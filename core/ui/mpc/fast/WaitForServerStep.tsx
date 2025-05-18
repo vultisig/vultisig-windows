@@ -1,5 +1,6 @@
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeerOptionsQuery } from '../devices/queries/useMpcPeerOptionsQuery'
@@ -9,9 +10,13 @@ export const WaitForServerStep = ({
   onFinish,
   onBack,
 }: OnFinishProp<string[]> & OnBackProp) => {
-  const peersQuery = useMpcPeerOptionsQuery({
-    onSuccess: onFinish,
-  })
+  const peersQuery = useMpcPeerOptionsQuery()
+
+  useEffect(() => {
+    if (peersQuery.data) {
+      onFinish(peersQuery.data)
+    }
+  }, [peersQuery.data, onFinish])
 
   const { t } = useTranslation()
 
