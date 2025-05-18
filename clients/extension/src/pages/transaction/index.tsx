@@ -35,11 +35,13 @@ import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { Divider } from '@lib/ui/divider'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -109,6 +111,7 @@ export const TransactionPage = () => {
     keysignPayload,
   } = state
   const currency = useFiatCurrency()
+  const { openUrl } = useCore()
   const qrContainerRef = useRef<HTMLDivElement>(null)
   const steps = fastSign ? 5 : 4
 
@@ -934,53 +937,21 @@ export const TransactionPage = () => {
           hasBorder
         />
         <PageContent flexGrow scrollable>
-          <StyledCard>
-            {fastSign ? (
-              <div className="steps">
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Starting transaction</span>
-                </div>
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Scan QR with your other device</span>
-                </div>
-                <div className="item">
-                  <span className="icon" />
-                  <span className="step">Step 3 of 5</span>
-                  <span className="title">
-                    Confirm transaction by signing with server share
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="steps">
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Starting transaction</span>
-                </div>
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Scan QR with your other device</span>
-                </div>
-                <div className="item">
-                  <span className="icon" />
-                  <span className="step">Step 3 of 4</span>
-                  <span className="title">
-                    Sign with this device and confirm transaction
-                  </span>
-                </div>
-              </div>
-            )}
-          </StyledCard>
+          <List>
+            <ListItem icon={<CheckIcon />} title="Starting transaction" />
+            <ListItem
+              icon={<CheckIcon />}
+              title="Scan QR with your other device"
+            />
+            <ListItem
+              description={`Step 3 of ${steps}`}
+              title={
+                fastSign
+                  ? 'Confirm transaction by signing with server share'
+                  : 'Sign with this device and confirm transaction'
+              }
+            />
+          </List>
         </PageContent>
         <PageFooter>
           <Button kind="secondary" onClick={handleStartSigning}>
@@ -1012,32 +983,19 @@ export const TransactionPage = () => {
             }
             hasBorder
           />
-          <PageContent flexGrow scrollable>
-            <div className="steps">
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Starting transaction</span>
-              </div>
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Scan QR with your other device</span>
-              </div>
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Transaction confirmed</span>
-              </div>
-              <div className="item">
-                <span className="icon" />
-                <span className="step">Step 4 of 5</span>
-                <span className="title">Enter your vault password</span>
-              </div>
-            </div>
+          <PageContent gap={16} flexGrow scrollable>
+            <List>
+              <ListItem icon={<CheckIcon />} title="Starting transaction" />
+              <ListItem
+                icon={<CheckIcon />}
+                title="Scan QR with your other device"
+              />
+              <ListItem icon={<CheckIcon />} title="Transaction confirmed" />
+              <ListItem
+                description={`Step 4 of ${steps}`}
+                title="Transaction confirmed"
+              />
+            </List>
             <VStack gap={12}>
               <PasswordInput
                 placeholder="Enter password"
@@ -1068,33 +1026,18 @@ export const TransactionPage = () => {
             hasBorder
           />
           <PageContent flexGrow scrollable>
-            <StyledCard>
-              <div className="steps">
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Starting transaction</span>
-                </div>
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Scan QR with your other device</span>
-                </div>
-                <div className="item">
-                  <span className="icon">
-                    <CheckIcon />
-                  </span>
-                  <span className="title">Signed with server share</span>
-                </div>
-                <div className="item">
-                  <span className="icon" />
-                  <span className="step">Step 4 of 4</span>
-                  <span className="title">Signing Transaction</span>
-                </div>
-              </div>
-            </StyledCard>
+            <List>
+              <ListItem icon={<CheckIcon />} title="Starting transaction" />
+              <ListItem
+                icon={<CheckIcon />}
+                title="Scan QR with your other device"
+              />
+              <ListItem icon={<CheckIcon />} title="Signed with server share" />
+              <ListItem
+                description={`Step 4 of ${steps}`}
+                title="Signing Transaction"
+              />
+            </List>
           </PageContent>
         </VStack>
       )
@@ -1106,39 +1049,19 @@ export const TransactionPage = () => {
           hasBorder
         />
         <PageContent flexGrow>
-          <StyledCard>
-            <div className="steps">
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Starting transaction</span>
-              </div>
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Scan QR with your other device</span>
-              </div>
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Transaction confirmed</span>
-              </div>
-              <div className="item">
-                <span className="icon">
-                  <CheckIcon />
-                </span>
-                <span className="title">Signed with server share</span>
-              </div>
-              <div className="item">
-                <span className="icon" />
-                <span className="step">Step 5 of 5</span>
-                <span className="title">Finalizing transaction</span>
-              </div>
-            </div>
-          </StyledCard>
+          <List>
+            <ListItem icon={<CheckIcon />} title="Starting transaction" />
+            <ListItem
+              icon={<CheckIcon />}
+              title="Scan QR with your other device"
+            />
+            <ListItem icon={<CheckIcon />} title="Transaction confirmed" />
+            <ListItem icon={<CheckIcon />} title="Signed with server share" />
+            <ListItem
+              description="Step 5 of 5"
+              title="Finalizing transaction"
+            />
+          </List>
         </PageContent>
       </VStack>
     ) : (
@@ -1148,73 +1071,77 @@ export const TransactionPage = () => {
           hasBorder
         />
         <PageContent flexGrow>
-          <StyledCard>
-            {transaction.isCustomMessage ? (
-              <div className="list">
-                <div className="item">
-                  <span className="label">{t('signature')}</span>
+          {transaction.isCustomMessage ? (
+            <List>
+              <ListItem
+                description={
                   <MiddleTruncate text={transaction.customSignature!} />
-                </div>
-              </div>
-            ) : (
-              <div className="list">
-                <div className="item">
-                  <span className="label">TX ID</span>
+                }
+                title={t('signature')}
+              />
+            </List>
+          ) : (
+            <List>
+              <ListItem
+                description={
                   <MiddleTruncate
                     text={transaction.txHash!}
                     onClick={() => handleCopy()}
                   />
-                  <a
-                    href={`${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className="action"
-                  >
-                    <SquareArrowOutUpRightIcon />
-                  </a>
-                </div>
-                <div className="item">
-                  <span className="label">{t('from')}</span>
+                }
+                extra={
+                  <IconButton
+                    icon={<SquareArrowOutUpRightIcon />}
+                    onClick={() =>
+                      openUrl(
+                        `${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`
+                      )
+                    }
+                  />
+                }
+                title="TX ID"
+              />
+              <ListItem
+                description={
                   <MiddleTruncate text={transaction.transactionDetails.from} />
-                </div>
-                {transaction.transactionDetails.to && (
-                  <div className="item">
-                    <span className="label">{t('to')}</span>
+                }
+                title={t('from')}
+              />
+              {transaction.transactionDetails.to && (
+                <ListItem
+                  description={
                     <MiddleTruncate text={transaction.transactionDetails.to} />
-                  </div>
-                )}
-                {transaction.transactionDetails.amount?.amount && (
-                  <div className="item">
-                    <span className="label">{t('amount')}</span>
-                    <span className="extra">{`${formatUnits(
-                      transaction.transactionDetails.amount.amount,
-                      transaction.transactionDetails.amount.decimals
-                    )} ${keysignPayload?.coin?.ticker}`}</span>
-                  </div>
-                )}
-                <div className="item">
-                  <span className="label">Network</span>
-                  <span className="extra">{transaction.chain}</span>
-                </div>
-                <div className="item">
-                  <span className="label">{t('network_fee')}</span>
-                  <span className="extra">{`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}</span>
-                </div>
-                {transaction.memo?.value && !transaction.memo?.isParsed && (
-                  <div className="item">
-                    <span className="label">{t('memo')}</span>
-                    <span className="extra">
-                      {splitString(transaction.memo?.value as string, 32).map(
-                        (str, index) => (
-                          <span key={index}>{str}</span>
-                        )
-                      )}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-          </StyledCard>
+                  }
+                  title={t('to')}
+                />
+              )}
+              {transaction.transactionDetails.amount?.amount && (
+                <ListItem
+                  extra={`${formatUnits(
+                    transaction.transactionDetails.amount.amount,
+                    transaction.transactionDetails.amount.decimals
+                  )} ${keysignPayload?.coin?.ticker}`}
+                  title={t('amount')}
+                />
+              )}
+              <ListItem extra={transaction.chain} title="Network" />
+              <ListItem
+                extra={`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
+                title={t('network_fee')}
+              />
+
+              {transaction.memo?.value && !transaction.memo?.isParsed && (
+                <ListItem
+                  extra={splitString(transaction.memo?.value as string, 32).map(
+                    (str, index) => (
+                      <span key={index}>{str}</span>
+                    )
+                  )}
+                  title={t('memo')}
+                />
+              )}
+            </List>
+          )}
         </PageContent>
         <PageFooter>
           <Button kind="primary" onClick={handleClose}>
