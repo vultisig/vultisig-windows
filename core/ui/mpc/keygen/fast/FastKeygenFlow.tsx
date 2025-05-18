@@ -2,13 +2,14 @@ import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
-import { ChildrenProp, OnBackProp } from '@lib/ui/props'
+import { OnBackProp } from '@lib/ui/props'
 import { ComponentType } from 'react'
 
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { StartMpcSessionFlow } from '../../session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '../../state/mpcPeers'
 import { CreateFastKeygenServerActionProvider } from '../create/fast/CreateFastKeygenServerActionProvider'
+import { KeygenFlow } from '../flow/KeygenFlow'
 import { MigrateFastKeygenServerActionProvider } from '../migrate/fast/MigrateFastKeygenServerActionProvider'
 import { ReshareFastKeygenServerActionProvider } from '../reshare/ReshareFastKeygenServerActionProvider'
 import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
@@ -19,10 +20,7 @@ const serverActionProviders: Record<KeygenType, ComponentType<any>> = {
   migrate: MigrateFastKeygenServerActionProvider,
 }
 
-export const FastKeygenMpcPeersProvider = ({
-  onBack,
-  children,
-}: OnBackProp & ChildrenProp) => {
+export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenType = useCurrentKeygenType()
 
   const ServerActionProvider = serverActionProviders[keygenType]
@@ -43,7 +41,7 @@ export const FastKeygenMpcPeersProvider = ({
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
                 value="keygen"
-                render={() => <>{children}</>}
+                render={() => <KeygenFlow onBack={onBack} />}
               />
             </MpcPeersProvider>
           )}
