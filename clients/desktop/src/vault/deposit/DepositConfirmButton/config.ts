@@ -2,7 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { match } from '@lib/utils/match'
 
 import { ChainAction } from '../ChainAction'
-import { StakeableChain } from '../constants'
+import { isStakeableChain, StakeableChain } from '../constants'
 
 type TransactionConfig = {
   requiresAmount?: boolean
@@ -19,22 +19,26 @@ export const transactionConfig = (
   unbond: { requiresAmount: false, requiresNodeAddress: true },
   leave: { requiresNodeAddress: true, requiresAmount: false },
   custom: {},
-  stake: match(chain as StakeableChain, {
-    Ton: () => ({
-      requiresAmount: true,
-      requiresNodeAddress: true,
-    }),
-    THORChain: () => ({
-      requiresAmount: true,
-    }),
-  }),
-  unstake: match(chain as StakeableChain, {
-    Ton: () => ({
-      requiresAmount: true,
-      requiresNodeAddress: true,
-    }),
-    THORChain: () => ({}),
-  }),
+  stake: isStakeableChain(chain)
+    ? match(chain as StakeableChain, {
+        Ton: () => ({
+          requiresAmount: true,
+          requiresNodeAddress: true,
+        }),
+        THORChain: () => ({
+          requiresAmount: true,
+        }),
+      })
+    : {},
+  unstake: isStakeableChain(chain)
+    ? match(chain as StakeableChain, {
+        Ton: () => ({
+          requiresAmount: true,
+          requiresNodeAddress: true,
+        }),
+        THORChain: () => ({}),
+      })
+    : {},
   vote: { requiresAmount: false, requiresNodeAddress: false },
   bond_with_lp: { requiresAmount: false, requiresNodeAddress: true },
   unbond_with_lp: { requiresAmount: true, requiresNodeAddress: true },
