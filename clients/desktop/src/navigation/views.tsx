@@ -1,4 +1,5 @@
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
+import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { SettingsPage } from '@core/ui/settings'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
@@ -9,7 +10,6 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
-import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
