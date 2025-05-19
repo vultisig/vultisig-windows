@@ -10,7 +10,6 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
@@ -36,7 +35,7 @@ export const ManageVaultFolderPage = () => {
         secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <VStack flexGrow style={{ height: '90%' }}>
+      <VStack flexGrow extensionHeight>
         <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
           <VStack gap={8}>
             <Text weight="500" color="supporting" size={14}>
@@ -56,7 +55,8 @@ export const ManageVaultFolderPage = () => {
                   fields: { name },
                 },
                 {
-                  onSuccess: () => navigate({ id: 'vaultFolder', state: { id } }),
+                  onSuccess: () =>
+                    navigate({ id: 'vaultFolder', state: { id } }),
                 }
               )
             }}
@@ -71,7 +71,3 @@ export const ManageVaultFolderPage = () => {
     </>
   )
 }
-
-const StyledHeader = styled(PageHeader)`
-  flex-shrink: 0;
-`

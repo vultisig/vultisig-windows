@@ -34,7 +34,7 @@ export const VaultFolderPage = () => {
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <VStack flexGrow style={{ height: '90%' }}>
+      <VStack flexGrow extensionHeight>
         <PageContent scrollable>
           <VStack gap={8}>
             {vaults.map(vault => (

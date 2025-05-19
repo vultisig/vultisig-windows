@@ -32,7 +32,7 @@ export const ManageVaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <VStack flexGrow style={{ height: '90%' }}>
+      <VStack flexGrow extensionHeight>
         <PageContent gap={20} scrollable>
           <ManageVaultFolders />
           <ManageVaults />

@@ -13,6 +13,7 @@ type FixedDirectionStackProps = {
   flexGrow?: boolean
   children?: React.ReactNode
   scrollable?: boolean
+  extensionHeight?: boolean
 }
 
 type StackProps = FixedDirectionStackProps & {
@@ -42,6 +43,7 @@ const stack = ({
   direction,
   flexGrow,
   scrollable,
+  extensionHeight,
 }: StackProps) => css`
   display: flex;
   flex-direction: ${direction};
@@ -74,7 +76,7 @@ const stack = ({
     width: 100%;
     height: 100%;
   `}
-    ${flexGrow &&
+  ${flexGrow &&
   css`
     flex: 1;
   `}
@@ -85,6 +87,10 @@ const stack = ({
     > * {
       flex-shrink: 0;
     }
+  `}
+  ${extensionHeight &&
+  css`
+    height: 90%;
   `}
 `
 
