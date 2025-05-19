@@ -1,5 +1,4 @@
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
-import { useAssertVersion } from '@clients/extension/src/state/currentSettings/extensionVersion'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
@@ -16,6 +15,8 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
 import { storage } from '../state/storage'
+import { getManifestVersion } from '../state/utils/getManifestVersion'
+import { StorageMigrationsManager } from './StorageMigrationManager'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -38,12 +39,11 @@ const coreState: CoreState = {
   },
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
-  version: '1.0.0',
+  version: getManifestVersion(),
   isLocalModeAvailable: false,
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
-  useAssertVersion(coreState.version)
   return (
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
@@ -52,12 +52,14 @@ export const AppProviders = ({ children }: ChildrenProp) => {
         <CoreProvider value={coreState}>
           <QueryProvider>
             <WalletCoreProvider>
-              <StorageDependant>
-                <ToastProvider>{children}</ToastProvider>
-                <ActiveVaultOnly>
-                  <CoinFinder />
-                </ActiveVaultOnly>
-              </StorageDependant>
+              <StorageMigrationsManager>
+                <StorageDependant>
+                  <ToastProvider>{children}</ToastProvider>
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
+                </StorageDependant>
+              </StorageMigrationsManager>
             </WalletCoreProvider>
           </QueryProvider>
         </CoreProvider>
