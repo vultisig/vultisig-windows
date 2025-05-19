@@ -1,7 +1,6 @@
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { SettingsPage } from '@core/ui/settings'
-import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
@@ -35,7 +34,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   checkUpdate: VaultCheckUpdatePage,
   deeplink: DeeplinkPage,
-  deposit: DepositPage,
   dkls: ManageDklsPage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
