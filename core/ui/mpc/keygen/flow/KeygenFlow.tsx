@@ -2,7 +2,6 @@ import { hasServer } from '@core/mpc/devices/localPartyId'
 import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
-import { KeygenSuccessScreen } from '@core/ui/mpc/keygen/progress/KeygenSuccessScreen'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
@@ -15,6 +14,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const {
@@ -37,32 +38,42 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
   return (
     <MatchQuery
       value={keygenMutationState}
-      success={vault => (
-        <CurrentVaultProvider value={vault}>
-          <StepTransition
-            from={({ onFinish }) => <KeygenSuccessScreen onFinish={onFinish} />}
-            to={() => {
-              if (hasServer(vault.signers)) {
-                return <KeygenFlowEnding onBack={onBack} />
-              }
+      success={vault => {
+        const renderEnding = () => {
+          if (hasServer(vault.signers)) {
+            return <KeygenFlowEnding onBack={onBack} />
+          }
 
-              return (
-                <StepTransition
-                  from={({ onFinish }) => (
-                    <SaveVaultStep
-                      title={title}
-                      value={vault}
-                      onFinish={onFinish}
-                      onBack={onBack}
-                    />
-                  )}
-                  to={() => <KeygenFlowEnding onBack={onBack} />}
+          return (
+            <StepTransition
+              from={({ onFinish }) => (
+                <SaveVaultStep
+                  title={title}
+                  value={vault}
+                  onFinish={onFinish}
+                  onBack={onBack}
                 />
-              )
-            }}
-          />
-        </CurrentVaultProvider>
-      )}
+              )}
+              to={() => <KeygenFlowEnding onBack={onBack} />}
+            />
+          )
+        }
+
+        return (
+          <CurrentVaultProvider value={vault}>
+            {keygenType === 'create' ? (
+              <StepTransition
+                from={({ onFinish }) => (
+                  <CreateVaultSuccessScreen onFinish={onFinish} />
+                )}
+                to={renderEnding}
+              />
+            ) : (
+              renderEnding()
+            )}
+          </CurrentVaultProvider>
+        )
+      }}
       error={error => (
         <>
           <FlowPageHeader title={title} />

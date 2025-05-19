@@ -1,4 +1,3 @@
-import { WaitForServerToJoinStep } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
@@ -11,6 +10,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
@@ -20,7 +20,7 @@ export const StartFastKeysignFlow = ({
 }: KeysignActionProviderProp) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
-  const { step, toNextStep } = useStepNavigation({
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: useNavigateBack(),
   })
@@ -34,7 +34,7 @@ export const StartFastKeysignFlow = ({
         keysign={() => (
           <ValueTransfer<string[]>
             from={({ onFinish }) => (
-              <WaitForServerToJoinStep onFinish={onFinish} />
+              <WaitForServerStep onBack={toPreviousStep} onFinish={onFinish} />
             )}
             to={({ value }) => (
               <MpcPeersProvider value={value}>

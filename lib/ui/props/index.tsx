@@ -29,6 +29,15 @@ export type OnFinishProp<
     ? { onFinish: (value?: T) => void }
     : { onFinish: (value: T) => void }
 
+export type OnSuccessProp<
+  T = void,
+  Mode extends 'required' | 'optional' = 'required',
+> = [T] extends [void]
+  ? { onSuccess: () => void }
+  : Mode extends 'optional'
+    ? { onSuccess: (value?: T) => void }
+    : { onSuccess: (value: T) => void }
+
 export type InputProps<T> = {
   value: T
   onChange: (value: T) => void

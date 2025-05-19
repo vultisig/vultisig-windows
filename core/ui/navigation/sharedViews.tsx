@@ -8,6 +8,7 @@ import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
@@ -44,6 +45,7 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'vaultFolder'
   | 'manageVaultFolder'
+  | 'deposit'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -55,6 +57,7 @@ export const sharedViews: Views<SharedViewId> = {
   deleteVault: DeleteVaultPage,
   importVault: ImportVaultPage,
   languageSettings: LanguagePage,
+  deposit: DepositPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaultFolder: () => (
