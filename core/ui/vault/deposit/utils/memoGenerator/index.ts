@@ -6,10 +6,10 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { FieldValues } from 'react-hook-form'
 
-import { MayaChainPool } from '../../../../lib/types/deposit'
 import { ChainAction } from '../../ChainAction'
 import { StakeableChain } from '../../constants'
 import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
+import { MayaChainPool } from '../../types/mayaChain'
 
 interface MemoParams {
   selectedChainAction: ChainAction

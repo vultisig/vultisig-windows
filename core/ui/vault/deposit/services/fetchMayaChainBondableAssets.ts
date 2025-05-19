@@ -1,5 +1,5 @@
-import { MayaChainPool } from '../../../lib/types/deposit'
 import { MAYACHAIN_POOLS_ENDPOINT } from '../constants'
+import { MayaChainPool } from '../types/mayaChain'
 
 export const fetchMayaChainAssets = async (): Promise<MayaChainPool[]> => {
   try {
