@@ -8,7 +8,6 @@ import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultOrders } from '@core/ui/storage/vaults'
@@ -31,14 +30,13 @@ export const ReshareVaultKeygenActionProvider = ({
   const sessionId = useMpcSessionId()
   const vaultName = useKeygenVaultName()
   const localPartyId = useMpcLocalPartyId()
-  const peers = useMpcPeers()
   const isInitiatingDevice = useIsInitiatingDevice()
   const keygenVault = useKeygenVault()
 
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange }) => {
+    async ({ onStepChange, peers }) => {
       onStepChange('ecdsa')
 
       const signers = [localPartyId, ...peers]
@@ -143,7 +141,6 @@ export const ReshareVaultKeygenActionProvider = ({
       isInitiatingDevice,
       keygenVault,
       localPartyId,
-      peers,
       serverUrl,
       sessionId,
       vaultName,

@@ -1,31 +1,37 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000
-type BackupSuccessSlideProps = {
-  onCompleted: () => void
-}
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { useCurrentVaultSecurityType } from '../../../vault/state/currentVault'
 
-export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
-  onCompleted,
-}) => {
+const animationDuration = 6000
+
+export const KeygenFlowSuccess = () => {
   const { t } = useTranslation()
+  const securityType = useCurrentVaultSecurityType()
+
   const { RiveComponent } = useRive({
-    src: '/core/animations/fast-vault-backup-success.riv',
+    src: `/core/animations/${securityType}-vault-keygen-success.riv`,
     stateMachines: 'State Machine 1',
     autoplay: true,
   })
 
+  const navigate = useCoreNavigate()
+
   useEffect(() => {
-    const timeoutId = setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS)
+    const timeoutId = setTimeout(() => {
+      navigate({ id: 'vault' })
+    }, animationDuration)
+
     return () => clearTimeout(timeoutId)
-  }, [onCompleted])
+  }, [navigate])
 
   return (
     <Wrapper>
@@ -39,9 +45,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
         </RiveWrapper>
         <VStack alignItems="center" gap={12}>
           <Text centerHorizontally size={32}>
-            <GradientText size={32}>
-              {t('fastVaultSetup.backup.wellDone')}
-            </GradientText>{' '}
+            <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>
           <Spinner size="3em" />
@@ -57,7 +61,10 @@ const RiveWrapper = styled(VStack)`
 `
 
 const Wrapper = styled(PageContent)`
-  margin-top: 48px;
   margin-inline: auto;
   max-width: 800px;
+
+  @media (${mediaQuery.tabletDeviceAndUp}) {
+    margin-top: 48px;
+  }
 `

@@ -2,7 +2,6 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
-import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +12,6 @@ import { EmailConfirmation } from '.'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
 import { BackupOverviewSlidesPartTwo } from './BackupOverviewSlidesPartTwo'
-import { BackupSuccessSlide } from './BackupSuccessSlides'
 
 const steps = [
   'backupSlideshowPartOne',
@@ -59,19 +57,20 @@ export const BackupFastVault = ({
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
       backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
-      backupPage={() => <VaultBackupFlow onFinish={toNextStep} />}
-      backupSuccessfulSlideshow={() =>
-        shouldShowBackupSummary ? (
-          <StepTransition
-            from={({ onFinish }) => (
-              <VaultBackupSummaryStep onFinish={onFinish} />
-            )}
-            to={() => <BackupSuccessSlide onCompleted={onFinish} />}
-          />
-        ) : (
-          <BackupSuccessSlide onCompleted={onFinish} />
-        )
-      }
+      backupPage={() => (
+        <VaultBackupFlow
+          onFinish={() => {
+            if (shouldShowBackupSummary) {
+              toNextStep()
+            } else {
+              onFinish()
+            }
+          }}
+        />
+      )}
+      backupSuccessfulSlideshow={() => (
+        <VaultBackupSummaryStep onFinish={onFinish} />
+      )}
     />
   )
 }
