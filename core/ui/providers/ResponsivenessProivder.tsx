@@ -9,7 +9,7 @@ type WindowSizeContextType = {
 const ResponsivenessContext = createContext<WindowSizeContextType>(null!)
 
 export const ResponsivenessProvider: FC<PropsWithChildren> = ({ children }) => {
-  const isMobileScreen = useMedia(mediaQuery.mobileDeviceOnly)
+  const isMobileScreen = useMedia(mediaQuery.mobileDeviceAndDown)
 
   return (
     <ResponsivenessContext.Provider value={{ isMobileScreen }}>

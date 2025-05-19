@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 type SupportedMedias =
   | 'mobileDeviceAndUp'
+  | 'mobileDeviceAndDown'
   | 'tabletDeviceAndUp'
   | 'desktopDeviceAndUp'
   | 'mobileDeviceOnly'
@@ -17,6 +18,7 @@ const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
 }
 
 export const mediaQuery: Record<SupportedMedias, string> = {
+  mobileDeviceAndDown: `(max-width: ${mediaBreakPoints.mobileDevice - 1}px)`,
   mobileDeviceAndUp: `(min-width: ${mediaBreakPoints.mobileDevice}px)`,
   mobileDeviceOnly: `(min-width: ${mediaBreakPoints.mobileDevice}px) and (max-width: ${
     mediaBreakPoints.tabletDevice - 1
