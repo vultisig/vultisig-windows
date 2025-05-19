@@ -1,6 +1,7 @@
 import { VaultFolders } from '@core/ui/vaultsOrganisation/folders/components/VaultFolders'
 import { EditIcon } from '@lib/ui/icons/EditIcon'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -32,13 +33,15 @@ export const VaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <PageContent scrollable gap={20}>
-        <VaultFolders />
-        <Vaults />
-      </PageContent>
-      <PageFooter>
-        <ManageVaultCreation />
-      </PageFooter>
+      <VStack flexGrow style={{ height: '90%' }}>
+        <PageContent scrollable gap={20}>
+          <VaultFolders />
+          <Vaults />
+        </PageContent>
+        <PageFooter>
+          <ManageVaultCreation />
+        </PageFooter>
+      </VStack>
     </>
   )
 }

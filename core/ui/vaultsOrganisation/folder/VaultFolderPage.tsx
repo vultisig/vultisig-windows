@@ -34,15 +34,17 @@ export const VaultFolderPage = () => {
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <PageContent scrollable>
-        <VStack gap={8}>
-          {vaults.map(vault => (
-            <CurrentVaultProvider value={vault} key={getVaultId(vault)}>
-              <VaultListItem />
-            </CurrentVaultProvider>
-          ))}
-        </VStack>
-      </PageContent>
+      <VStack flexGrow style={{ height: '90%' }}>
+        <PageContent scrollable>
+          <VStack gap={8}>
+            {vaults.map(vault => (
+              <CurrentVaultProvider value={vault} key={getVaultId(vault)}>
+                <VaultListItem />
+              </CurrentVaultProvider>
+            ))}
+          </VStack>
+        </PageContent>
+      </VStack>
     </>
   )
 }

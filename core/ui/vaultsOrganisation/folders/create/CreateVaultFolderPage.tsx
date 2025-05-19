@@ -85,7 +85,6 @@ export const CreateVaultFolderPage = () => {
               />
             )}
           />
-          <div style={{ height: 1000 }} />
         </PageContent>
         <PageFooter>
           <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
