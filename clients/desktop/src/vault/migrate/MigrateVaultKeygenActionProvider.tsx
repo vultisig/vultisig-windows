@@ -14,7 +14,6 @@ import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
@@ -34,12 +33,11 @@ export const MigrateVaultKeygenActionProvider = ({
   const sessionId = useMpcSessionId()
   const localPartyId = useMpcLocalPartyId()
   const hexChainCode = useCurrentHexChainCode()
-  const peers = useMpcPeers()
   const isInitiatingDevice = useIsInitiatingDevice()
   const keygenVault = useKeygenVault()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange }) => {
+    async ({ onStepChange, peers }) => {
       onStepChange('ecdsa')
 
       const signers = [localPartyId, ...peers]
@@ -126,7 +124,6 @@ export const MigrateVaultKeygenActionProvider = ({
       isInitiatingDevice,
       keygenVault,
       localPartyId,
-      peers,
       serverUrl,
       sessionId,
     ]

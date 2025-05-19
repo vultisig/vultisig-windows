@@ -8,10 +8,14 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultCreationMpcLib } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
-import { useMutation } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { ChildrenProp } from '@lib/ui/props'
+import { useCallback } from 'react'
 
-export const useVaultServerSetup = () => {
+import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
+
+export const CreateFastKeygenServerActionProvider = ({
+  children,
+}: ChildrenProp) => {
   const [name] = useVaultName()
   const [password] = useVaultPassword()
   const [email] = useEmail()
@@ -20,21 +24,22 @@ export const useVaultServerSetup = () => {
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const mpcLib = useVaultCreationMpcLib()
 
-  const { mutate, ...state } = useMutation({
-    mutationFn: () =>
-      setupVaultWithServer({
-        name,
-        encryption_password: password,
-        session_id: sessionId,
-        hex_chain_code: hexChainCode,
-        local_party_id: generateLocalPartyId('server'),
-        email,
-        hex_encryption_key: hexEncryptionKey,
-        lib_type: toLibType(mpcLib),
-      }),
-  })
+  const action = useCallback(async () => {
+    await setupVaultWithServer({
+      name,
+      encryption_password: password,
+      session_id: sessionId,
+      hex_chain_code: hexChainCode,
+      local_party_id: generateLocalPartyId('server'),
+      email,
+      hex_encryption_key: hexEncryptionKey,
+      lib_type: toLibType(mpcLib),
+    })
+  }, [email, hexChainCode, hexEncryptionKey, mpcLib, name, password, sessionId])
 
-  useEffect(mutate, [mutate])
-
-  return state
+  return (
+    <FastKeygenServerActionProvider value={action}>
+      {children}
+    </FastKeygenServerActionProvider>
+  )
 }
