@@ -32,6 +32,8 @@ export const UploadBackupFileStep = ({
     <>
       <FlowPageHeader title={t('import_vault')} />
       <PageContent
+        style={{ height: '90%', paddingTop: '0px' }}
+        justifyContent="center"
         as="form"
         {...getFormProps({
           onSubmit: () => {
@@ -40,7 +42,7 @@ export const UploadBackupFileStep = ({
           isDisabled,
         })}
       >
-        <VStack gap={20} flexGrow>
+        <VStack gap={20} flexGrow justifyContent="center">
           {file ? (
             <UploadedBackupFile value={file} />
           ) : (
@@ -52,7 +54,12 @@ export const UploadBackupFileStep = ({
             </Text>
           )}
         </VStack>
-        <Button isLoading={isPending} isDisabled={isDisabled} type="submit">
+        <Button
+          isLoading={isPending}
+          isDisabled={isDisabled}
+          type="submit"
+          style={{ marginTop: '16px' }}
+        >
           {t('continue')}
         </Button>
       </PageContent>

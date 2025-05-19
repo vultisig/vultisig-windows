@@ -39,7 +39,7 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
         </DropZoneContent>
         <input {...getInputProps()} />
       </InteractiveDropZoneContainer>
-      <Text color="shy">Supported file types: .bak & .vult</Text>
+      <Text color="shy">{t('supported_file_types')}</Text>
     </>
   )
 }

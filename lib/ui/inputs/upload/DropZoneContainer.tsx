@@ -6,9 +6,9 @@ import styled from 'styled-components'
 
 export const DropZoneContainer = styled.div`
   flex: 1;
-  height: 400px;
+  height: 300px;
   width: 100%;
-  max-height: 400px;
+  max-height: 300px;
   ${centerContent};
   ${borderRadius.m};
   padding: 20px;
