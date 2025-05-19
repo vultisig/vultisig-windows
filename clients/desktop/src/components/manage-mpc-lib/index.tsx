@@ -5,7 +5,7 @@ import { Modal } from '@lib/ui/modal'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const ManageDkls = () => {
+export const ManageMpcLib = () => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [value, setValue] = useVaultCreationMpcLib()

@@ -1,3 +1,4 @@
+import { ExpandView } from '@clients/extension/src/components/expand-view'
 import { OnboardingPage } from '@clients/extension/src/components/onboarding/components/OnboardingPage'
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
@@ -40,7 +41,13 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
-  settings: () => <SettingsPage prioritize={<Prioritize />} />,
+  settings: () => (
+    <SettingsPage
+      client="extension"
+      prioritize={<Prioritize />}
+      expandView={<ExpandView />}
+    />
+  ),
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: SetupVaultPageController,

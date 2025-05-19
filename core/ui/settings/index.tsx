@@ -1,3 +1,4 @@
+import { MpcDevice } from '@core/mpc/devices/MpcDevice'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
@@ -9,7 +10,6 @@ import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
-import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
@@ -38,26 +38,28 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface SettingsPageProps {
-  checkUpdate?: ReactNode
-  manageDkls?: ReactNode
-  prioritize?: ReactNode
+interface ExtensionSettings {
+  client: Extract<MpcDevice, 'extension'>
+  expandView: ReactNode
+  prioritize: ReactNode
 }
 
-export const SettingsPage: FC<SettingsPageProps> = ({
-  checkUpdate,
-  manageDkls,
-  prioritize,
-}) => {
+interface WindowsSettings {
+  client: Extract<MpcDevice, 'windows'>
+  checkUpdate: ReactNode
+  manageMpcLib: ReactNode
+}
+
+export const SettingsPage: FC<ExtensionSettings | WindowsSettings> = props => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { addToast } = useToast()
-  const { mpcDevice, openUrl, version } = useCore()
+  const { openUrl, version } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const shareURL =
-    mpcDevice === 'windows'
+    props.client === 'windows'
       ? 'https://vultisig.com/download/vultisig'
       : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
@@ -86,7 +88,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
               {t('vault')}
             </Text>
             <List>
-              {prioritize}
+              {props.client === 'extension' && props.prioritize}
               <ListItem
                 icon={<SettingsIcon fontSize={20} />}
                 onClick={() => navigate({ id: 'vaultSettings' })}
@@ -132,28 +134,14 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 hoverable
                 showArrow
               />
-              {mpcDevice !== 'windows' && mpcDevice !== 'extension' && (
-                <ListItem
-                  icon={<MegaphoneIcon fontSize={20} />}
-                  onClick={() => {}}
-                  title={t('referral_code')}
-                  hoverable
-                  showArrow
-                />
-              )}
-              {mpcDevice === 'extension' && (
-                <ListItem
-                  icon={<ExpandIcon fontSize={20} />}
-                  onClick={() =>
-                    openUrl(
-                      `chrome-extension://${chrome.runtime.id}/index.html`
-                    )
-                  }
-                  title={t('expand_view')}
-                  hoverable
-                  showArrow
-                />
-              )}
+              <ListItem
+                icon={<MegaphoneIcon fontSize={20} />}
+                onClick={() => {}}
+                title={t('referral_code')}
+                hoverable
+                showArrow
+              />
+              {props.client === 'extension' && props.expandView}
             </List>
           </VStack>
           <VStack gap={12}>
@@ -168,7 +156,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 hoverable
                 showArrow
               />
-              {checkUpdate}
+              {props.client === 'windows' && props.checkUpdate}
               <ListItem
                 icon={<ShareTwoIcon fontSize={20} />}
                 onClick={() => setVisible(true)}
@@ -232,9 +220,9 @@ export const SettingsPage: FC<SettingsPageProps> = ({
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
           <UnstyledButton onClick={() => openUrl(shareURL)}>
-            {`VULTISIG ${mpcDevice === 'windows' ? 'APP' : 'EXTENSION'} V${version}`}
+            {`VULTISIG ${props.client === 'windows' ? 'APP' : 'EXTENSION'} V${version}`}
           </UnstyledButton>
-          {manageDkls}
+          {props.client === 'windows' && props.manageMpcLib}
         </PageFooter>
       </VStack>
       {visible && (
