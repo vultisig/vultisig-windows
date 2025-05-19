@@ -8,6 +8,7 @@ import { TextWrapper } from './AnimationDescriptions.styled'
 export const VaultSharesInfo = () => {
   const { t } = useTranslation()
   const { isMobileScreen } = useResponsiveness()
+  console.log('🚀 ~ VaultSharesInfo ~ isMobileScreen:', isMobileScreen)
 
   return (
     <AnimatedVisibility>

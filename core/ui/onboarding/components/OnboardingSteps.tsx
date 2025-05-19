@@ -81,7 +81,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           justifyContent="flex-end"
           gap={12}
           style={{
-            minHeight: !isMobileScreen ? '170px' : 'auto',
+            minHeight: !isMobileScreen ? '170px' : '102px',
           }}
         >
           <AnimationDescription animation={currentAnimation} />
