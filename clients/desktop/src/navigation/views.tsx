@@ -12,7 +12,6 @@ import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
-import { DepositPage } from '../vault/deposit/DepositPage'
 import EditVaultPage from '../vault/edit/EditVaultPage'
 import { VaultBackupPage } from '../vault/edit/vaultBackupSettings/VaultBackupPage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
@@ -33,7 +32,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   checkUpdate: VaultCheckUpdatePage,
   deeplink: DeeplinkPage,
-  deposit: DepositPage,
   dkls: ManageDklsPage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,

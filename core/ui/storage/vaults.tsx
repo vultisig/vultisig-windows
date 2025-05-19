@@ -1,5 +1,4 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -22,11 +21,13 @@ type MergeVaultsWithCoinsInput = {
 const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
-    const vaultChains = vaultCoins.filter(isFeeCoin).map(coin => coin.chain)
+
+    // Include both native and non-native tokens but filter out hidden ones
+    const displayCoins = vaultCoins.filter(coin => !coin.hidden)
 
     return {
       ...vault,
-      coins: vaultCoins.filter(coin => vaultChains.includes(coin.chain)),
+      coins: displayCoins,
     }
   })
 }

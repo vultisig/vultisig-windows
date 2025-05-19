@@ -26,7 +26,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
-  deposit: () => <>{/* <>TODO: Implement Deposit page</> */}</>,
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignPage,
