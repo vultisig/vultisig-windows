@@ -16,7 +16,6 @@ export const de = {
   percentage: 'Prozentsatz',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
-
   select_destination_chain: 'Ziel-Blockchain auswählen',
   no_tokens_found:
     'Keine Tokens gefunden. Füge Tokens unter der gewünschten Chain hinzu.',
@@ -831,4 +830,34 @@ export const de = {
   version: 'Version',
   delete_folder_confirmation:
     'Sind Sie sicher, dass Sie den Ordner "{{name}}" löschen möchten?',
+  assets: 'Vermögenswerte',
+  available: 'Verfügbar',
+  connected_dapps: 'Verbundene dApps',
+  disconnect_all: 'Alle trennen',
+  discord: 'Zwietracht',
+  expand_view: 'Ansicht erweitern',
+  general: 'Allgemein',
+  github: 'Github',
+  manage_chains: 'Ketten verwalten',
+  no_connected_dapps: 'Keine verbundenen dApps',
+  no_connected_dapps_desc:
+    'dApps werden hier angezeigt, wann immer Sie mit ihnen interagieren',
+  open_desktop: 'Öffnen Sie den Desktop',
+  portfolio_overview: 'Portfolioübersicht',
+  prioritize_vultisig: 'Priorisieren Sie Vultisig',
+  referral_code: 'Empfehlungscode',
+  rename: 'Umbenennen',
+  support: 'Unterstützung',
+  terms: 'Bedingungen',
+  twitter: 'Twitter',
+  vultisig_community: 'Vultisig-Gemeinschaft',
+  remove: 'Entfernen',
+  share_vault: 'Tresor teilen',
+  missing_thorchain_address: 'Fehlende THORChain-Adresse',
+  missing_destination_address: 'Fehlende Zieladresse',
+  upgrade_shares_info:
+    '<b>Sie erstellen neue Vault Share-Backups</b> und speichern diese wie zuvor',
+  failed_to_connect_with_server:
+    'Verbindung zum Server konnte nicht hergestellt werden',
+  connecting_to_server: 'Verbindung zum Server herstellen',
 }

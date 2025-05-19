@@ -819,4 +819,6 @@ export const en = {
     'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
+  failed_to_connect_with_server: 'Failed to connect with server',
+  connecting_to_server: 'Connecting to server',
 }
