@@ -16,34 +16,38 @@ import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
+import { VaultsPage } from '@core/ui/vaultsOrganisation'
+import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
+import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create'
+import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/provider'
+import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'address'
   | 'airdropRegister'
+  | 'createVaultFolder'
   | 'currencySettings'
   | 'defaultChains'
-  | 'importVault'
   | 'deleteVault'
+  | 'importVault'
   | 'languageSettings'
+  | 'manageVaultChainCoins'
+  | 'manageVaultChains'
+  | 'manageVaults'
   | 'newVault'
   | 'renameVault'
-  | 'vaultDetails'
-  | 'vaultChainDetail'
-  | 'vaultChainCoinDetail'
-  | 'manageVaultChainCoins'
-  | 'address'
-  | 'manageVaultChains'
   | 'reshareVault'
   | 'send'
   | 'swap'
-  | 'createVaultFolder'
+  | 'updateVaultFolder'
+  | 'vaultChainDetail'
+  | 'vaultChainCoinDetail'
   | 'vaultFolder'
-  | 'manageVaultFolder'
+  | 'vaultDetails'
+  | 'vaults'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -57,16 +61,17 @@ export const sharedViews: Views<SharedViewId> = {
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
-  manageVaultFolder: () => (
-    <CurrentVaultFolderPageProvider>
-      <ManageVaultFolderPage />
-    </CurrentVaultFolderPageProvider>
-  ),
+  manageVaults: ManageVaultsPage,
   newVault: NewVaultPage,
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
   swap: SwapPage,
+  updateVaultFolder: () => (
+    <CurrentVaultFolderPageProvider>
+      <UpdateVaultFolderPage />
+    </CurrentVaultFolderPageProvider>
+  ),
   vaultChainDetail: VaultChainPage,
   vaultChainCoinDetail: VaultChainCoinPage,
   vaultDetails: VaultDetailsPage,
@@ -75,4 +80,5 @@ export const sharedViews: Views<SharedViewId> = {
       <VaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
+  vaults: VaultsPage,
 }

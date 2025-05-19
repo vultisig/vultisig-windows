@@ -20,8 +20,6 @@ import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { SettingsPage } from '@core/ui/settings'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
-import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
-import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -32,7 +30,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignPage,
-  manageVaults: ManageVaultsPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -47,7 +44,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   transactionTab: TransactionPage,
   uploadQr: ImportQRPage,
   vault: VaultPage,
-  vaults: VaultsPage,
   vaultSettings: VaultSettingsPage,
   vaultsTab: GetVaultsPage,
 }

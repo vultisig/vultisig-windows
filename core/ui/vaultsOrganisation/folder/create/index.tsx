@@ -23,39 +23,22 @@ import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface InitialState {
-  name: string
-  vaultIds: string[]
-}
-
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = {
-    name: '',
-    vaultIds: [],
-  }
-  const [state, setState] = useState(initialState)
-  const { name, vaultIds } = state
+  const { mutate, isPending } = useCreateVaultFolderMutation()
+  const [name, setName] = useState<string>('')
+  const [vaultIds, setVaultIds] = useState<string[]>([])
   const navigateBack = useNavigateBack()
-  const vaultFolders = useVaultFolders()
+  const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
 
-  const names = useMemo(
-    () => vaultFolders.map(({ name }) => name),
-    [vaultFolders]
-  )
+  const names = useMemo(() => folders.map(({ name }) => name), [folders])
 
   const isDisabled = useMemo(() => {
-    if (!name) {
-      return t('folder_name_required')
-    }
+    if (!name) return t('folder_name_required')
 
-    if (names.includes(name)) {
-      return t('folder_name_already_exists')
-    }
+    if (names.includes(name)) return t('folder_name_already_exists')
   }, [name, t, names])
-
-  const { mutate, isPending } = useCreateVaultFolderMutation()
 
   return (
     <VStack
@@ -63,18 +46,15 @@ export const CreateVaultFolderPage = () => {
       {...getFormProps({
         isDisabled,
         isPending,
-        onSubmit: () => {
+        onSubmit: () =>
           mutate(
             {
               name,
-              order: getLastItemOrder(vaultFolders.map(({ order }) => order)),
+              order: getLastItemOrder(folders.map(({ order }) => order)),
               vaultIds,
             },
-            {
-              onSuccess: navigateBack,
-            }
-          )
-        },
+            { onSuccess: navigateBack }
+          ),
       })}
       fullHeight
     >
@@ -86,9 +66,7 @@ export const CreateVaultFolderPage = () => {
       <PageContent gap={24} scrollable>
         <TextInput
           label={t('folder_name')}
-          onValueChange={name =>
-            setState(prevState => ({ ...prevState, name }))
-          }
+          onValueChange={setName}
           placeholder={t('enter_folder_name')}
           value={name}
         />
@@ -112,12 +90,11 @@ export const CreateVaultFolderPage = () => {
                     }
                     key={vaultId}
                     onClick={() =>
-                      setState(prevState => ({
-                        ...prevState,
-                        vaultIds: checked
-                          ? prevState.vaultIds.filter(id => id !== vaultId)
-                          : [...prevState.vaultIds, vaultId],
-                      }))
+                      setVaultIds(prevVaultIds =>
+                        checked
+                          ? prevVaultIds.filter(id => id !== vaultId)
+                          : [...prevVaultIds, vaultId]
+                      )
                     }
                     title={vault.name}
                     hoverable

@@ -12,6 +12,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -21,11 +22,12 @@ import { useTranslation } from 'react-i18next'
 
 export const VaultFolderPage = () => {
   const { t } = useTranslation()
+  const { mutate } = useSetCurrentVaultIdMutation()
+  const { id, name } = useCurrentVaultFolder()
   const navigate = useCoreNavigate()
-  const currentVaultFolder = useCurrentVaultFolder()
+  const navigateBack = useNavigateBack()
   const currentVaultId = useCurrentVaultId()
-  const setCurrentVaultId = useSetCurrentVaultIdMutation()
-  const vaults = useFolderVaults(currentVaultFolder.id)
+  const vaults = useFolderVaults(id)
 
   return (
     <VStack fullHeight>
@@ -34,18 +36,13 @@ export const VaultFolderPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<SquarePenIcon />}
-            onClick={() =>
-              navigate({
-                id: 'manageVaultFolder',
-                state: { id: currentVaultFolder.id },
-              })
-            }
+            onClick={() => navigate({ id: 'updateVaultFolder', state: { id } })}
           />
         }
-        title={<PageHeaderTitle>{currentVaultFolder.name}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{name}</PageHeaderTitle>}
         hasBorder
       />
-      <PageContent gap={8} flexGrow scrollable>
+      <PageContent flexGrow scrollable>
         <List>
           {vaults.map(vault => {
             const vaultId = getVaultId(vault)
@@ -61,11 +58,7 @@ export const VaultFolderPage = () => {
                     <VaultSigners vault={vault} />
                   </>
                 }
-                onClick={() => {
-                  setCurrentVaultId.mutate(vaultId, {
-                    onSuccess: () => navigate({ id: 'vault' }),
-                  })
-                }}
+                onClick={() => mutate(vaultId, { onSuccess: navigateBack })}
                 title={vault.name}
                 hoverable
               />

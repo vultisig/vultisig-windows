@@ -28,15 +28,15 @@ import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const ManageVaultFolders = () => {
+const ManageFolders = () => {
   const { t } = useTranslation()
-  const vaultFolders = useVaultFolders()
-  const updateVaultFolder = useUpdateVaultFolderMutation()
-  const [items, setItems] = useState(vaultFolders)
+  const { mutate } = useUpdateVaultFolderMutation()
+  const folders = useVaultFolders()
+  const [items, setItems] = useState(folders)
 
-  useEffect(() => setItems(vaultFolders), [vaultFolders])
+  useEffect(() => setItems(folders), [folders])
 
-  return vaultFolders.length ? (
+  return folders.length ? (
     <DnDList
       items={items}
       getItemId={item => item.id}
@@ -47,7 +47,7 @@ const ManageVaultFolders = () => {
           destinationIndex: index,
         })
 
-        updateVaultFolder.mutate({ id, fields: { order } })
+        mutate({ id, fields: { order } })
 
         setItems(prevItems =>
           sortEntitiesWithOrder(
@@ -84,8 +84,8 @@ const ManageVaultFolders = () => {
 
 const ManageVaults = () => {
   const { t } = useTranslation()
+  const { mutate } = useUpdateVaultMutation()
   const vaults = useFolderlessVaults()
-  const updateVault = useUpdateVaultMutation()
   const [items, setItems] = useState(vaults)
 
   useEffect(() => setItems(vaults), [vaults])
@@ -101,7 +101,7 @@ const ManageVaults = () => {
           destinationIndex: index,
         })
 
-        updateVault.mutate({ vaultId: id, fields: { order } })
+        mutate({ vaultId: id, fields: { order } })
 
         setItems(prevItems =>
           sortEntitiesWithOrder(
@@ -155,14 +155,11 @@ export const ManageVaultsPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <ManageVaultFolders />
+        <ManageFolders />
         <ManageVaults />
       </PageContent>
       <PageFooter>
-        <Button
-          kind="primary"
-          onClick={() => navigate({ id: 'createVaultFolder' })}
-        >
+        <Button onClick={() => navigate({ id: 'createVaultFolder' })}>
           {t('create_folder')}
         </Button>
       </PageFooter>

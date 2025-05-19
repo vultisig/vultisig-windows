@@ -8,9 +8,8 @@ import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
@@ -25,11 +24,11 @@ import { useTranslation } from 'react-i18next'
 
 export const VaultsPage = () => {
   const { t } = useTranslation()
+  const { mutate } = useSetCurrentVaultIdMutation()
   const navigate = useCoreNavigate()
-  const vaults = useFolderlessVaults()
   const folders = useVaultFolders()
+  const vaults = useFolderlessVaults()
   const currentVaultId = useCurrentVaultId()
-  const setCurrentVaultId = useSetCurrentVaultIdMutation()
 
   return (
     <VStack fullHeight>
@@ -83,11 +82,11 @@ export const VaultsPage = () => {
                         <VaultSigners vault={vault} />
                       </>
                     }
-                    onClick={() => {
-                      setCurrentVaultId.mutate(vaultId, {
+                    onClick={() =>
+                      mutate(vaultId, {
                         onSuccess: () => navigate({ id: 'vault' }),
                       })
-                    }}
+                    }
                     title={vault.name}
                     hoverable
                   />
@@ -98,15 +97,8 @@ export const VaultsPage = () => {
         ) : null}
       </PageContent>
       <PageFooter>
-        <Button
-          kind="primary"
-          onClick={() => {
-            navigate({ id: 'newVault' })
-          }}
-        >
-          <HStack alignItems="center" gap={8}>
-            <PlusIcon /> {t('add_new_vault')}
-          </HStack>
+        <Button onClick={() => navigate({ id: 'newVault' })}>
+          {t('add_new_vault')}
         </Button>
       </PageFooter>
     </VStack>
