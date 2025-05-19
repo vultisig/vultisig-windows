@@ -1,5 +1,6 @@
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { GradientText, Text } from '@lib/ui/text'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import { gradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -15,16 +16,28 @@ export const VaultSharesIntro = () => {
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={18}>
+        <SizedText as="span" size={18}>
           {t('sayHelloTo')}{' '}
-        </Text>
-        <GradientText as="span" size={18}>
+        </SizedText>
+        <GradientSizedText as="span" size={18}>
           {t('vaultShares')},{' '}
-        </GradientText>
-        <Text as="span" size={18}>
+        </GradientSizedText>
+        <SizedText as="span" size={18}>
           {t('yourNewRecoveryMethod')}
-        </Text>
+        </SizedText>
       </TextWrapper>
     </AnimatedVisibility>
   )
 }
+
+const SizedText = styled(Text)`
+  font-size: 18px;
+
+  @media (${mediaQuery.tabletDeviceAndUp}) {
+    font-size: 48px;
+  }
+`
+
+const GradientSizedText = styled(SizedText)`
+  ${gradientText}
+`

@@ -2,6 +2,7 @@ import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
@@ -60,7 +61,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
             <WalletCoreProvider>
               <StorageDependant>
                 <ToastProvider>
-                  {children}
+                  <ResponsivenessProvider>{children}</ResponsivenessProvider>
                   <ActiveVaultOnly>
                     <CoinFinder />
                   </ActiveVaultOnly>

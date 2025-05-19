@@ -2,6 +2,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -11,6 +12,13 @@ export const Wrapper = styled(PageContent)`
   padding-top: 20px;
   justify-content: space-between;
   overflow-y: hidden;
+
+  @media (${mediaQuery.tabletDeviceAndUp}) {
+    height: 800px;
+    max-width: 550px;
+    margin-inline: auto;
+    padding-top: 100px;
+  }
 `
 
 export const StyledCheckbox = styled(Checkbox)`
