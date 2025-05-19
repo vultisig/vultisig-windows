@@ -21,18 +21,23 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
 
   useEffect(() => {
     const migrate = async () => {
-      const storedVersion = await getExtensionVersion()
+      try {
+        const storedVersion = await getExtensionVersion()
 
-      if (!storedVersion) {
-        console.warn('Version missing. Clearing storage for migration.')
-        await chrome.storage.local.clear()
+        if (!storedVersion) {
+          console.warn('Version missing. Clearing storage for migration.')
+          await chrome.storage.local.clear()
+        }
+
+        await setExtensionVersion(getManifestVersion())
+      } catch (error) {
+        console.error('Migration failed:', error)
+      } finally {
+        setIsReady(true)
       }
-
-      await setExtensionVersion(getManifestVersion())
-      setIsReady(true)
     }
 
-    migrate().catch(console.error)
+    migrate()
   }, [])
 
   if (!isReady) return <ProductLogoBlock />
