@@ -11,6 +11,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useResponsiveness } from '../../providers/ResponsivenessProivder'
 import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
 import { AnimationDescription } from './AnimationDescriptions'
 import { RiveWrapper } from './Onobarding.styled'
@@ -33,6 +34,8 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
     isLoading,
   } = useOnboardingStepsAnimations()
 
+  const { isMobileScreen } = useResponsiveness()
+
   return (
     <PageContent flexGrow style={{ overflowY: 'hidden' }}>
       <ProgressWrapper gap={16}>
@@ -48,10 +51,10 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             onClick={handlePrevAnimation}
           >
             <ChevronLeftIcon width={14} height={14} />
-            <Text size={14}>{t('back')}</Text>
+            <Text size={isMobileScreen ? 14 : 18}>{t('back')}</Text>
           </HStack>
           <UnstyledButton onClick={onCompleteSteps}>
-            <Text color="shy" size={14}>
+            <Text color="shy" size={isMobileScreen ? 14 : 18}>
               {t('skip')}
             </Text>
           </UnstyledButton>
@@ -74,7 +77,13 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <VStack gap={12}>
+        <VStack
+          justifyContent="flex-end"
+          gap={12}
+          style={{
+            minHeight: !isMobileScreen ? '170px' : 'auto',
+          }}
+        >
           <AnimationDescription animation={currentAnimation} />
           <NextAnimationButton
             disabled={isLoading}

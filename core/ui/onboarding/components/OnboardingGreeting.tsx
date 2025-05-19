@@ -5,6 +5,8 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useResponsiveness } from '../../providers/ResponsivenessProivder'
+
 const DELAY_BEFORE_NEXT_STEP_IN_MS = 500
 
 type OnboardingGreetingProps = {
@@ -28,6 +30,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onCompleteGreeting,
 }) => {
   const { t } = useTranslation()
+  const { isMobileScreen } = useResponsiveness()
 
   return (
     <Wrapper data-testid="OnboardingGreeting-Wrapper">
@@ -42,7 +45,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         }
       >
         <ContentWrapper>
-          <Text size={36}>
+          <Text size={isMobileScreen ? 36 : 52}>
             {t('sayGoodbyeTo')}{' '}
             <GradientText as="span">{t('seedPhrases')}</GradientText>
           </Text>
