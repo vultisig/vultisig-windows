@@ -5,8 +5,8 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { MayaChainPool } from '../../../../../lib/types/deposit'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
+import { MayaChainPool } from '../../../types/mayaChain'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer'
 

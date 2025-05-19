@@ -2,8 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { useMemo } from 'react'
 import { FieldValues } from 'react-hook-form'
 
-import { MayaChainPool } from '../../../lib/types/deposit'
 import { ChainAction } from '../ChainAction'
+import { MayaChainPool } from '../types/mayaChain'
 import { generateMemo } from '../utils/memoGenerator'
 
 type UseMemoGeneratorProps = {

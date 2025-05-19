@@ -19,6 +19,7 @@ import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { SettingsPage } from '@core/ui/settings'
+import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
@@ -28,7 +29,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
-  deposit: () => <>{/* <>TODO: Implement Deposit page</> */}</>,
+  deposit: DepositPage,
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignPage,
