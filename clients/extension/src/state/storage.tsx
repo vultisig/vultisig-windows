@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
@@ -93,9 +94,26 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
     coins.every(coin => !areEqualCoins(existingCoin, coin))
   )
 
+  // Default chains that should be visible on import
+  // Set new coins as visible only if they are default chains
+  const defaultChains = [
+    Chain.Bitcoin,
+    Chain.Ethereum,
+    Chain.THORChain,
+    Chain.Solana,
+    Chain.BSC,
+  ]
+  const newCoins = coins.map(coin => {
+    const prev = prevVaultsCoins[vaultId]?.find(c => areEqualCoins(c, coin))
+    return {
+      ...coin,
+      hidden: prev?.hidden ?? !defaultChains.includes(coin.chain), // fall back to default rule
+    }
+  })
+
   await updateVaultsCoins({
     ...prevVaultsCoins,
-    [vaultId]: [...prevCoins, ...coins],
+    [vaultId]: [...prevCoins, ...newCoins],
   })
 }
 
@@ -131,7 +149,29 @@ const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
 }
 
 const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
-  await createVaultCoins({ vaultId, coins: [coin] })
+  const prevVaultsCoins = await getVaultsCoins()
+  const prevCoins = prevVaultsCoins[vaultId] ?? []
+
+  const existingCoin = prevCoins.find(c => areEqualCoins(c, coin))
+  if (existingCoin) {
+    // If coin exists but is hidden make it visible
+    if (existingCoin.hidden) {
+      const updatedCoins = prevCoins.map(c =>
+        areEqualCoins(c, coin) ? { ...c, hidden: false } : c
+      )
+      await updateVaultsCoins({
+        ...prevVaultsCoins,
+        [vaultId]: updatedCoins,
+      })
+    }
+    return
+  }
+
+  const newCoin = { ...coin, hidden: false }
+  await updateVaultsCoins({
+    ...prevVaultsCoins,
+    [vaultId]: [...prevCoins, newCoin],
+  })
 }
 
 const deleteVaultCoin: DeleteVaultCoinFunction = async ({
@@ -140,18 +180,25 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
 }) => {
   const vaultsCoins = await getVaultsCoins()
 
+  const updatedCoins = vaultsCoins[vaultId].map(coin => {
+    if (areEqualCoins(coin, coinKey)) {
+      return {
+        ...coin,
+        hidden: true, // Mark coin as hidden
+      }
+    }
+    return coin
+  })
+
   await updateVaultsCoins({
     ...vaultsCoins,
-    [vaultId]: vaultsCoins[vaultId].filter(
-      coin => !areEqualCoins(coin, coinKey)
-    ),
+    [vaultId]: updatedCoins,
   })
 }
 
 const createVaultFolder: CreateVaultFolderFunction = async folder => {
   const folders = await getVaultFolders()
   await updateVaultFolders([...folders, folder])
-  // Update vaults with the new folder ID
   if (folder.vaultIds?.length) {
     const vaults = await getVaults()
     const updatedVaults = vaults.map(vault => {
