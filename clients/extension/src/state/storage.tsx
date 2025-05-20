@@ -193,7 +193,6 @@ export const storage: CoreStorage = {
   updateVault,
   createVault,
   createVaultCoins,
-  setDefaultChains,
   getDefaultChains,
   getFiatCurrency,
   getVaults,
