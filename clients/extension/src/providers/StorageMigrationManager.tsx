@@ -6,7 +6,8 @@ import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const latestInstalledVersionQueryKey = ['latestInstalledVersion']
@@ -21,35 +22,30 @@ const setExtensionVersion = async (version: string): Promise<void> => {
 }
 
 export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
-  const { version } = useCore()
   const { t } = useTranslation()
+  const { version } = useCore()
 
-  const migration = useQuery({
-    queryKey: ['storageMigration'],
-    queryFn: async () => {
+  const { mutate: migrate, ...mutationStatus } = useMutation({
+    mutationFn: async () => {
       const storedVersion = await getExtensionVersion()
 
       if (!storedVersion) {
         console.warn('Version missing. Clearing storage for migration.')
         await chrome.storage.local.clear()
-        await setExtensionVersion(version)
-        return true
       }
 
-      if (storedVersion !== version) {
-        // Future migration logic can go here
-        await setExtensionVersion(version)
-      }
-
+      await setExtensionVersion(version)
       return true
     },
-    staleTime: Infinity, // Don't re-run
-    retry: 2, // Retry if migration fails
   })
+
+  useEffect(() => {
+    migrate()
+  }, [migrate])
 
   return (
     <MatchQuery
-      value={migration}
+      value={mutationStatus}
       pending={() => <ProductLogoBlock />}
       error={error => (
         <FlowErrorPageContent
