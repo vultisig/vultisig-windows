@@ -7,6 +7,7 @@ import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
+import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CurrentVaultId } from './currentVaultId'
 
 export type SetFiatCurrencyFunction = (value: FiatCurrency) => Promise<void>
@@ -117,7 +118,7 @@ export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type GetInitialViewFunction = () => Promise<View>
 
-export type CoreStorage = {
+export type CoreStorage = CoinFinderIgnoreStorage & {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
   getCurrentVaultId: GetCurrentVaultIdFunction

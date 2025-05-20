@@ -22,19 +22,6 @@ import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
 import {
-  getAddressBookItems,
-  updateAddressBookItems,
-} from '../storage/addressBook'
-import { getLanguage, setLanguage } from '../storage/language'
-import {
-  getHasFinishedOnboarding,
-  setHasFinishedOnboarding,
-} from '../storage/onboarding'
-import {
-  getIsVaultBalanceVisible,
-  setIsVaultBalanceVisible,
-} from '../storage/vaultBalanceVisibility'
-import {
   getCurrentVaultId,
   setCurrentVaultId,
 } from '../vault/state/currentVaultId'
@@ -46,6 +33,17 @@ import { updateVaults } from '../vault/state/vaults'
 import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
 import { updateVaultsCoins } from '../vault/state/vaultsCoins'
+import { getAddressBookItems, updateAddressBookItems } from './addressBook'
+import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { getLanguage, setLanguage } from './language'
+import {
+  getHasFinishedOnboarding,
+  setHasFinishedOnboarding,
+} from './onboarding'
+import {
+  getIsVaultBalanceVisible,
+  setIsVaultBalanceVisible,
+} from './vaultBalanceVisibility'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const vaults = await getVaults()
@@ -187,6 +185,7 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
 }
 
 export const storage: CoreStorage = {
+  ...coinFinderIgnoreStorage,
   setFiatCurrency,
   setCurrentVaultId,
   getCurrentVaultId,
