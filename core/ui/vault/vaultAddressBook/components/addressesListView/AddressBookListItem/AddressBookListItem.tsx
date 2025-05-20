@@ -118,7 +118,7 @@ const AddressBookItem = ({
           transition={{ duration: 0.5 }}
         >
           <UnstyledButton>
-            <MenuIcon size={30} />
+            <MenuIcon fontSize={30} />
           </UnstyledButton>
         </ModifyButtonWrapper>
       )}

@@ -8,8 +8,6 @@ export type AppView =
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
-  | { id: 'manageVaults' }
-  | { id: 'manageVaultFolder'; state: { id: string } }
   | { id: 'migrateVault' }
   | { id: 'onboarding' }
   | { id: 'shareVault' }

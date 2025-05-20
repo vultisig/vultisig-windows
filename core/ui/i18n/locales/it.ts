@@ -824,4 +824,38 @@ export const it = {
   version: 'Versione',
   delete_folder_confirmation:
     'Sei sicuro di voler eliminare la cartella "{{name}}"?',
+  assets: 'attività',
+  available: 'Disponibile',
+  connected_dapps: 'dApp connesse',
+  disconnect_all: 'Disconnetti tutto',
+  discord: 'Discordia',
+  expand_view: 'Espandi vista',
+  general: 'Generale',
+  github: 'Github',
+  manage_chains: 'Gestire le catene',
+  no_connected_dapps: 'Nessuna dApp connessa',
+  no_connected_dapps_desc:
+    'Le dApp appariranno qui ogni volta che interagisci con esse',
+  open_desktop: 'Apri Desktop',
+  portfolio_overview: 'Panoramica del portafoglio',
+  prioritize_vultisig: 'Dare priorità a Vultisig',
+  referral_code: 'Codice di riferimento',
+  rename: 'Rinominare',
+  support: 'Supporto',
+  terms: 'Termini',
+  twitter: 'Cinguettio',
+  vultisig_community: 'Comunità di Vultisig',
+  remove: 'Rimuovere',
+  share_vault: 'Condividi Vault',
+  missing_thorchain_address: 'Indirizzo THORChain mancante',
+  missing_destination_address: 'Indirizzo di destinazione mancante',
+  upgrade_shares_info:
+    '<b>Creerai nuovi backup di Vault Share</b> e li memorizzerai come hai fatto prima',
+  failed_to_connect_with_server: 'Impossibile connettersi al server',
+  connecting_to_server: 'Connessione al server',
+  provide_camera_permission:
+    "Si prega di fornire l'autorizzazione della fotocamera per scansionare il codice QR",
+  grant_camera_permission: "Concedi l'autorizzazione per la telecamera",
+  failed_to_get_camera_permission:
+    "Impossibile ottenere l'autorizzazione per la fotocamera",
 }
