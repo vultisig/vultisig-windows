@@ -7,7 +7,7 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-export const useMpcPeerOptionsQuery = ({ enabled = true } = {}) => {
+export const useMpcPeerOptionsQuery = () => {
   const sessionId = useMpcSessionId()
   const localPartyId = useMpcLocalPartyId()
   const serverUrl = useMpcServerUrl()
@@ -21,7 +21,6 @@ export const useMpcPeerOptionsQuery = ({ enabled = true } = {}) => {
       }
       return without(withoutDuplicates(response), localPartyId)
     },
-    enabled,
     ...pollingQueryOptions(2000),
   })
 }

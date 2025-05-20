@@ -3,26 +3,16 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
-import { KeygenFlow } from '../../flow/KeygenFlow'
+import { FastKeygenFlow } from '../../fast/FastKeygenFlow'
 import { CreateVaultNameStep } from '../CreateVaultNameStep'
 import { ServerEmailStep } from './server/email/ServerEmailStep'
 import { SetServerPasswordStep } from './server/password/SetServerPasswordStep'
 import { ServerPasswordHintStep } from './server/password-hint/ServerPasswordHintStep'
-import { SetupVaultServerStep } from './SetupVaultServerStep'
 
-const steps = [
-  'name',
-  'email',
-  'password',
-  'hint',
-  'setupForCreateVault',
-  'createVault',
-] as const
-
-const lastEditableStep = 'password'
+const steps = ['name', 'email', 'password', 'hint', 'keygen'] as const
 
 export const CreateFastVaultFlow = () => {
-  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+  const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps,
     onExit: useNavigateBack(),
   })
@@ -51,15 +41,7 @@ export const CreateFastVaultFlow = () => {
             onFinish={toNextStep}
           />
         )}
-        setupForCreateVault={() => (
-          <SetupVaultServerStep
-            onBack={() => setStep(lastEditableStep)}
-            onFinish={toNextStep}
-          />
-        )}
-        createVault={() => (
-          <KeygenFlow onBack={() => setStep(lastEditableStep)} />
-        )}
+        keygen={() => <FastKeygenFlow onBack={toPreviousStep} />}
       />
     </VStack>
   )

@@ -1,17 +1,28 @@
-export const MenuIcon = ({ size = '1em' }: { size?: string | number }) => (
+import { FC, SVGProps } from 'react'
+
+export const MenuIcon: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = '1em',
+  stroke = 'currentColor',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 1.5,
+  width = '1em',
+  ...props
+}) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
   >
-    <line x1="4" x2="20" y1="12" y2="12" />
-    <line x1="4" x2="20" y1="6" y2="6" />
-    <line x1="4" x2="20" y1="18" y2="18" />
+    <path d="M4 12H20M4 6H20M4 18H20" />
   </svg>
 )

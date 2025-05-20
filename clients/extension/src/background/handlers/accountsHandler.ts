@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 
@@ -33,10 +32,9 @@ export const handleFindAccounts = async (
 
   if (currentSession) {
     const vaultsCoins = await getVaultsCoins()
+    // Return all addresses for the requested chain
     return vaultsCoins[currentVaultId]
-      .filter(
-        accountCoin => isFeeCoin(accountCoin) && accountCoin.chain === chain
-      )
+      .filter(accountCoin => accountCoin.chain === chain)
       .map(({ address }) => address ?? '')
   } else {
     return []
