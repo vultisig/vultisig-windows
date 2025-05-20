@@ -1,7 +1,9 @@
 import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { MpcLib } from '@core/mpc/mpcLib'
+import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
@@ -15,6 +17,8 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
 import { storage } from '../state/storage'
+import { getManifestVersion } from '../state/utils/getManifestVersion'
+import { StorageMigrationsManager } from './StorageMigrationManager'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -37,8 +41,15 @@ const coreState: CoreState = {
   },
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
-  version: '1.0.0',
+  version: getManifestVersion(),
   isLocalModeAvailable: false,
+  getMpcServerUrl: async ({ serverType }) => {
+    if (serverType === 'relay') {
+      return mpcServerUrl.relay
+    }
+
+    throw new Error('Local mode is not available in extension')
+  },
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -50,12 +61,16 @@ export const AppProviders = ({ children }: ChildrenProp) => {
         <CoreProvider value={coreState}>
           <QueryProvider>
             <WalletCoreProvider>
-              <StorageDependant>
-                <ToastProvider>{children}</ToastProvider>
-                <ActiveVaultOnly>
-                  <CoinFinder />
-                </ActiveVaultOnly>
-              </StorageDependant>
+              <StorageMigrationsManager>
+                <StorageDependant>
+                  <ToastProvider>
+                    <ResponsivenessProvider>{children}</ResponsivenessProvider>
+                  </ToastProvider>
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
+                </StorageDependant>
+              </StorageMigrationsManager>
             </WalletCoreProvider>
           </QueryProvider>
         </CoreProvider>

@@ -16,7 +16,7 @@ import { ReactNode, useCallback, useId, useState } from 'react'
 import { DnDItem } from './DnDItem'
 import { DnDItemStatus } from './DnDItemStatus'
 
-export type ItemChangeParams = {
+type ItemChangeParams = {
   index: number
 }
 

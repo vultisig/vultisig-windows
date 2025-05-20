@@ -8,6 +8,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  failed_to_migrate_storage: 'Failed to migrate storage',
   general: 'General',
   github: 'Github',
   legal: 'Legal',
@@ -821,4 +822,8 @@ export const en = {
     'Are you sure you want to delete the "{{name}}" folder?',
   failed_to_connect_with_server: 'Failed to connect with server',
   connecting_to_server: 'Connecting to server',
+  provide_camera_permission:
+    'Please provide camera permission to scan the QR code',
+  grant_camera_permission: 'Grant Camera Permission',
+  failed_to_get_camera_permission: 'Failed to get camera permission',
 }

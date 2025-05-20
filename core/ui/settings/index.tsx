@@ -1,16 +1,14 @@
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCore } from '@core/ui/state/core'
+import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
-import { DefaultChainsIcon } from '@lib/ui/icons/DefaultChainsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
-import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
@@ -39,24 +37,28 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface SettingsPageProps {
-  checkUpdate?: ReactNode
-  prioritize?: ReactNode
+interface ExtensionSettings {
+  client: Extract<Client, 'extension'>
+  expandView: ReactNode
+  prioritize: ReactNode
 }
 
-export const SettingsPage: FC<SettingsPageProps> = ({
-  checkUpdate,
-  prioritize,
-}) => {
+interface DesktopSettings {
+  client: Extract<Client, 'desktop'>
+  checkUpdate: ReactNode
+  manageMpcLib: ReactNode
+}
+
+export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { addToast } = useToast()
-  const { mpcDevice, openUrl, version } = useCore()
+  const { openUrl, version } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const shareURL =
-    mpcDevice === 'windows'
+    props.client === 'desktop'
       ? 'https://vultisig.com/download/vultisig'
       : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
@@ -85,7 +87,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
               {t('vault')}
             </Text>
             <List>
-              {prioritize}
+              {props.client === 'extension' && props.prioritize}
               <ListItem
                 icon={<SettingsIcon fontSize={20} />}
                 onClick={() => navigate({ id: 'vaultSettings' })}
@@ -132,28 +134,13 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 showArrow
               />
               <ListItem
-                icon={<DefaultChainsIcon fontSize={20} />}
-                onClick={() => navigate({ id: 'defaultChains' })}
-                title={t('default_chains')}
-                hoverable
-                showArrow
-              />
-              <ListItem
                 icon={<MegaphoneIcon fontSize={20} />}
                 onClick={() => {}}
                 title={t('referral_code')}
                 hoverable
                 showArrow
               />
-              <ListItem
-                icon={<ExpandIcon fontSize={20} />}
-                onClick={() =>
-                  openUrl(`chrome-extension://${chrome.runtime.id}/index.html`)
-                }
-                title={t('expand_view')}
-                hoverable
-                showArrow
-              />
+              {props.client === 'extension' && props.expandView}
             </List>
           </VStack>
           <VStack gap={12}>
@@ -168,7 +155,7 @@ export const SettingsPage: FC<SettingsPageProps> = ({
                 hoverable
                 showArrow
               />
-              {checkUpdate}
+              {props.client === 'desktop' && props.checkUpdate}
               <ListItem
                 icon={<ShareTwoIcon fontSize={20} />}
                 onClick={() => setVisible(true)}
@@ -231,9 +218,10 @@ export const SettingsPage: FC<SettingsPageProps> = ({
           </VStack>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <Button kind="ghost" onClick={() => openUrl(shareURL)} size="xs">
-            {`VULTISIG ${mpcDevice === 'windows' ? 'APP' : 'EXTENSION'} V${version}`}
-          </Button>
+          <UnstyledButton onClick={() => openUrl(shareURL)}>
+            {`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}
+          </UnstyledButton>
+          {props.client === 'desktop' && props.manageMpcLib}
         </PageFooter>
       </VStack>
       {visible && (

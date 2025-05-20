@@ -853,4 +853,9 @@ export const it = {
     '<b>Creerai nuovi backup di Vault Share</b> e li memorizzerai come hai fatto prima',
   failed_to_connect_with_server: 'Impossibile connettersi al server',
   connecting_to_server: 'Connessione al server',
+  provide_camera_permission:
+    "Si prega di fornire l'autorizzazione della fotocamera per scansionare il codice QR",
+  grant_camera_permission: "Concedi l'autorizzazione per la telecamera",
+  failed_to_get_camera_permission:
+    "Impossibile ottenere l'autorizzazione per la fotocamera",
 }

@@ -6,11 +6,8 @@ export type AppView =
   | { id: 'checkUpdate' }
   | { id: 'createVaultFolder' }
   | { id: 'deeplink'; state: { url: string } }
-  | { id: 'dkls' }
   | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
-  | { id: 'manageVaults' }
-  | { id: 'manageVaultFolder'; state: { id: string } }
   | { id: 'migrateVault' }
   | { id: 'onboarding' }
   | { id: 'shareVault' }

@@ -85,12 +85,16 @@ export const handleRequest = (
               case Chain.Dydx:
               case Chain.Cosmos:
               case Chain.Kujira:
-              case Chain.Osmosis: {
+              case Chain.Osmosis:
+              case Chain.Solana: {
                 resolve(account)
 
                 break
               }
               default: {
+                if (!account) {
+                  return []
+                }
                 resolve([account])
 
                 break
@@ -101,6 +105,7 @@ export const handleRequest = (
 
         break
       }
+
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
