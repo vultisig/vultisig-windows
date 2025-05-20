@@ -35,37 +35,36 @@ export const ManageVaultFolderPage = () => {
         secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-        <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
-          <VStack gap={8}>
-            <Text weight="500" color="supporting" size={14}>
-              {t('folder_name')}
-            </Text>
-            <TextInput value={name} onValueChange={setName} />
-          </VStack>
-          <ManageFolderVaults />
-          <AddVaultsToFolder />
-        </PageContent>
-        <PageFooter>
-          <Button
-            onClick={async () => {
-              mutate(
-                {
-                  id,
-                  fields: { name },
-                },
-                {
-                  onSuccess: () =>
-                    navigate({ id: 'vaultFolder', state: { id } }),
-                }
-              )
-            }}
-            isLoading={isPending}
-          >
-            <Text color="reversed" size={14} weight="600">
-              {t('save_changes')}
-            </Text>
-          </Button>
-        </PageFooter>
+      <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
+        <VStack gap={8}>
+          <Text weight="500" color="supporting" size={14}>
+            {t('folder_name')}
+          </Text>
+          <TextInput value={name} onValueChange={setName} />
+        </VStack>
+        <ManageFolderVaults />
+        <AddVaultsToFolder />
+      </PageContent>
+      <PageFooter>
+        <Button
+          onClick={async () => {
+            mutate(
+              {
+                id,
+                fields: { name },
+              },
+              {
+                onSuccess: () => navigate({ id: 'vaultFolder', state: { id } }),
+              }
+            )
+          }}
+          isLoading={isPending}
+        >
+          <Text color="reversed" size={14} weight="600">
+            {t('save_changes')}
+          </Text>
+        </Button>
+      </PageFooter>
     </VStack>
   )
 }

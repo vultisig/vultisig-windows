@@ -33,13 +33,13 @@ export const VaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-        <PageContent scrollable gap={20}>
-          <VaultFolders />
-          <Vaults />
-        </PageContent>
-        <PageFooter>
-          <ManageVaultCreation />
-        </PageFooter>
+      <PageContent scrollable gap={20}>
+        <VaultFolders />
+        <Vaults />
+      </PageContent>
+      <PageFooter>
+        <ManageVaultCreation />
+      </PageFooter>
     </VStack>
   )
 }

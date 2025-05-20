@@ -32,18 +32,18 @@ export const ManageVaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-        <PageContent gap={20} scrollable>
-          <ManageVaultFolders />
-          <ManageVaults />
-        </PageContent>
-        <PageFooter>
-          <Button
-            kind="outlined"
-            onClick={() => navigate({ id: 'createVaultFolder' })}
-          >
-            {t('create_folder')}
-          </Button>
-        </PageFooter>
+      <PageContent gap={20} scrollable>
+        <ManageVaultFolders />
+        <ManageVaults />
+      </PageContent>
+      <PageFooter>
+        <Button
+          kind="outlined"
+          onClick={() => navigate({ id: 'createVaultFolder' })}
+        >
+          {t('create_folder')}
+        </Button>
+      </PageFooter>
     </VStack>
   )
 }
