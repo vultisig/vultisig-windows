@@ -11,7 +11,7 @@ import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { UploadQrView } from '../UploadQrView'
 
 const uploadQrViews = ['scan', 'upload'] as const
-type UploadQrView = (typeof uploadQrViews)[number]
+type UploadQrViewType = (typeof uploadQrViews)[number]
 
 export const UploadQrPageWithoutVault = () => {
   const { t } = useTranslation()
@@ -20,7 +20,7 @@ export const UploadQrPageWithoutVault = () => {
 
   const goBack = useNavigateBack()
 
-  const [view, setView] = useState<UploadQrView>('scan')
+  const [view, setView] = useState<UploadQrViewType>('scan')
 
   const viewIndex = uploadQrViews.indexOf(view)
 
