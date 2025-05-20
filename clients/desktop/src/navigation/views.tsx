@@ -8,7 +8,6 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVault
 import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
-import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
 import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
 import { OnboardingPage } from '../onboarding/components/OnboardingPage'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
@@ -22,7 +21,6 @@ import { SignCustomMessagePage } from '../vault/keysign/customMessage/SignCustom
 import { JoinKeysignPage } from '../vault/keysign/join/JoinKeysignPage'
 import { StartKeysignPage } from '../vault/keysign/start/StartKeysignPage'
 import { MigrateVaultPage } from '../vault/migrate/MigrateVaultPage'
-import { UploadQrPage } from '../vault/qr/upload/UploadQrPage'
 import { FastReshareVaultPage } from '../vault/reshare/fast/FastReshareVaultPage'
 import { SecureReshareVaultPage } from '../vault/reshare/secure/SecureReshareVaultPage'
 import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
@@ -33,7 +31,6 @@ import { AppViewId } from './AppView'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   checkUpdate: VaultCheckUpdatePage,
-  deeplink: DeeplinkPage,
   dkls: ManageDklsPage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
@@ -55,7 +52,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   setupVault: SetupVaultPageController,
   shareVault: ShareVaultPage,
   signCustomMessage: SignCustomMessagePage,
-  uploadQr: UploadQrPage,
   vault: VaultPage,
   vaultBackup: VaultBackupPage,
   vaultFAQ: FaqVaultPage,

@@ -836,4 +836,8 @@ export const hr = {
     '<b>Izradit ćete nove sigurnosne kopije Vault Sharea</b> i pohraniti ih kao i prije',
   failed_to_connect_with_server: 'Povezivanje sa serverom nije uspjelo',
   connecting_to_server: 'Povezivanje sa serverom',
+  provide_camera_permission:
+    'Molimo vas da omogućite kameru za skeniranje QR koda',
+  grant_camera_permission: 'Odobri dopuštenje za kameru',
+  failed_to_get_camera_permission: 'Nije uspjelo dobiti dopuštenje za kameru',
 }

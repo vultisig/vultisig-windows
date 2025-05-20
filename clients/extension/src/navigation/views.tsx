@@ -11,7 +11,6 @@ import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
-import ImportQRPage from '@clients/extension/src/pages/import-qr'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
@@ -44,7 +43,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   setupSecureVault: SetupSecureVaultPage,
   setupVault: SetupVaultPageController,
   transactionTab: TransactionPage,
-  uploadQr: ImportQRPage,
   vault: VaultPage,
   vaults: VaultsPage,
   vaultSettings: VaultSettingsPage,
