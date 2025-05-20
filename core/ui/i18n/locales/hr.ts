@@ -13,6 +13,7 @@ export const hr = {
   select_asset: 'Odaberite imovinu',
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
+  unexpected_error: 'Neočekivana pogreška',
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
   percentage_to_unstake: 'Postotak za povlačenje',

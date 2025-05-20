@@ -14,6 +14,7 @@ export const pt = {
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
   percentage: 'Percentagem',
+  unexpected_error: 'Erro inesperado',
   staked: 'Apostado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
