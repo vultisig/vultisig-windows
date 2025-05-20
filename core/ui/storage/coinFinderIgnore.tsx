@@ -8,16 +8,11 @@ import { useCore } from '../state/core'
 
 export type GetCoinFinderIgnoreFunction = () => Promise<CoinKey[]>
 
-export type AddToCoinFinderIgnoreFunction = (coinKey: CoinKey) => Promise<void>
-
-export type RemoveFromCoinFinderIgnoreFunction = (
-  coinKey: CoinKey
-) => Promise<void>
+export type SetCoinFinderIgnoreFunction = (coinKeys: CoinKey[]) => Promise<void>
 
 export type CoinFinderIgnoreStorage = {
   getCoinFinderIgnore: GetCoinFinderIgnoreFunction
-  addToCoinFinderIgnore: AddToCoinFinderIgnoreFunction
-  removeFromCoinFinderIgnore: RemoveFromCoinFinderIgnoreFunction
+  setCoinFinderIgnore: SetCoinFinderIgnoreFunction
 }
 
 export const coinFinderIgnoreInitialValue: CoinKey[] = []
