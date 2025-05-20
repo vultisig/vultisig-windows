@@ -1,6 +1,8 @@
 import buildInfo from '@clients/desktop/build.json'
+import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { VaultCreationMpcLibProvider } from '@core/ui/mpc/state/vaultCreationMpcLib'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
@@ -14,6 +16,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 
 import { SaveFile } from '../wailsjs/go/main/App'
+import { DiscoveryService } from '../wailsjs/go/mediator/Server'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { getQueryClient } from './query/queryClient'
 import { storage } from './state/storage'
@@ -37,6 +40,13 @@ const coreState: CoreState = {
   getClipboardText: ClipboardGetText,
   version: buildInfo.version,
   isLocalModeAvailable: true,
+  getMpcServerUrl: async ({ serverType, serviceName }) => {
+    if (serverType === 'relay') {
+      return mpcServerUrl.relay
+    }
+
+    return DiscoveryService(serviceName)
+  },
 }
 
 export const AppProviders = ({ children }: ChildrenProp) => {
@@ -51,7 +61,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
             <WalletCoreProvider>
               <StorageDependant>
                 <ToastProvider>
-                  {children}
+                  <ResponsivenessProvider>{children}</ResponsivenessProvider>
                   <ActiveVaultOnly>
                     <CoinFinder />
                   </ActiveVaultOnly>

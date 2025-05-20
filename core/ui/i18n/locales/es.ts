@@ -857,4 +857,8 @@ export const es = {
     'Creará nuevas copias de seguridad de Vault Share y las almacenará como lo hacía antes.',
   failed_to_connect_with_server: 'No se pudo conectar con el servidor',
   connecting_to_server: 'Conectando al servidor',
+  provide_camera_permission:
+    'Proporcione permiso para escanear el código QR con la cámara',
+  grant_camera_permission: 'Conceder permiso para la cámara',
+  failed_to_get_camera_permission: 'No se pudo obtener el permiso de la cámara',
 }

@@ -13,6 +13,7 @@ export type CoreView =
   | { id: 'airdropRegister' }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
+  | { id: 'deeplink'; state: { url: string } }
   | { id: 'defaultChains' }
   | { id: 'deleteVault' }
   | { id: 'deposit'; state: { coin: CoinKey } }

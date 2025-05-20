@@ -1,9 +1,11 @@
 import { AddressPage } from '@core/ui/chain/coin/address'
+import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
+import { UploadQrPage } from '@core/ui/qr/upload/UploadQrPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
@@ -31,6 +33,7 @@ export type SharedViewId = Extract<
   | 'airdropRegister'
   | 'createVaultFolder'
   | 'currencySettings'
+  | 'deeplink'
   | 'defaultChains'
   | 'deleteVault'
   | 'deposit'
@@ -46,6 +49,7 @@ export type SharedViewId = Extract<
   | 'send'
   | 'swap'
   | 'updateVaultFolder'
+  | 'uploadQr'
   | 'vaultChainDetail'
   | 'vaultChainCoinDetail'
   | 'vaultFolder'
@@ -58,6 +62,7 @@ export const sharedViews: Views<SharedViewId> = {
   airdropRegister: AirdropRegisterPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
+  deeplink: DeeplinkPage,
   defaultChains: DefaultChainsPage,
   deleteVault: DeleteVaultPage,
   deposit: DepositPage,
@@ -76,6 +81,7 @@ export const sharedViews: Views<SharedViewId> = {
       <UpdateVaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
+  uploadQr: UploadQrPage,
   vaultChainDetail: VaultChainPage,
   vaultChainCoinDetail: VaultChainCoinPage,
   vaultDetails: VaultDetailsPage,

@@ -860,4 +860,9 @@ export const de = {
   failed_to_connect_with_server:
     'Verbindung zum Server konnte nicht hergestellt werden',
   connecting_to_server: 'Verbindung zum Server herstellen',
+  provide_camera_permission:
+    'Bitte erteilen Sie der Kamera die Erlaubnis, den QR-Code zu scannen',
+  grant_camera_permission: 'Kameraberechtigung erteilen',
+  failed_to_get_camera_permission:
+    'Kameraberechtigung konnte nicht eingeholt werden',
 }
