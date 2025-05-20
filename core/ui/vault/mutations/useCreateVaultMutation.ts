@@ -9,9 +9,9 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
+import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
-import { useCreateVaultCoinsMutation } from './useCreateVaultCoinsMutations'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
@@ -22,7 +22,7 @@ export const useCreateVaultMutation = (
   const { createVault, getDefaultChains } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const { mutateAsync: createVaultCoins } = useCreateVaultCoinsMutation()
+  const { mutateAsync: createCoins } = useCreateCoinsMutation()
 
   const walletCore = useAssertWalletCore()
 
@@ -63,10 +63,7 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await createVaultCoins({
-        vaultId: getVaultId(vault),
-        coins,
-      })
+      await createCoins(coins)
 
       return vault
     },
