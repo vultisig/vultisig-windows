@@ -11,6 +11,8 @@ type SaveFileFunction = (
   } & NameProp
 ) => Promise<void>
 
+export type Client = 'desktop' | 'extension'
+
 export type GetMpcServerUrlInput = {
   serverType: MpcServerType
   serviceName: string
