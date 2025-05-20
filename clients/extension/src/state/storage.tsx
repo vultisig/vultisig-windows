@@ -19,10 +19,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import {
-  getDefaultChains,
-  setDefaultChains,
-} from '../chain/state/defaultChains'
+import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
 import {
@@ -243,7 +240,6 @@ export const storage: CoreStorage = {
   updateVault,
   createVault,
   createVaultCoins,
-  setDefaultChains,
   getDefaultChains,
   getFiatCurrency,
   getVaults,

@@ -8,7 +8,7 @@ import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBook
 import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
-import { ManageDklsPage } from '../mpc/dkls/ManageDklsPage'
+import { ManageMpcLib } from '../components/manage-mpc-lib'
 import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
@@ -30,7 +30,6 @@ import { AppViewId } from './AppView'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   checkUpdate: VaultCheckUpdatePage,
-  dkls: ManageDklsPage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   joinKeygen: JoinKeygenPage,
@@ -44,7 +43,13 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: FastReshareVaultPage,
   reshareVaultSecure: SecureReshareVaultPage,
-  settings: () => <SettingsPage checkUpdate={<CheckUpdate />} />,
+  settings: () => (
+    <SettingsPage
+      client="desktop"
+      checkUpdate={<CheckUpdate />}
+      manageMpcLib={<ManageMpcLib />}
+    />
+  ),
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: () => (

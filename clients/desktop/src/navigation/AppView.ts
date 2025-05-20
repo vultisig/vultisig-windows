@@ -5,7 +5,7 @@ export type AppView =
   | { id: 'addressBook' }
   | { id: 'checkUpdate' }
   | { id: 'createVaultFolder' }
-  | { id: 'dkls' }
+  | { id: 'deeplink'; state: { url: string } }
   | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'migrateVault' }
