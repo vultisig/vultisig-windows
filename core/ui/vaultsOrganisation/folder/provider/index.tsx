@@ -1,17 +1,14 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useVaultFolder } from '@core/ui/storage/vaultFolders'
+import { VaultFolderProvider } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { VaultFolderProvider } from './state/currentVaultFolder'
-
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
   const [{ id }] = useCoreViewState<'vaultFolder'>()
-
-  const value = useVaultFolder(id)
-
   const navigate = useCoreNavigate()
+  const value = useVaultFolder(id)
 
   useEffect(() => {
     if (!value) {
@@ -19,9 +16,7 @@ export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
     }
   }, [navigate, value])
 
-  if (!value) {
-    return null
-  }
-
-  return <VaultFolderProvider value={value}>{children}</VaultFolderProvider>
+  return value ? (
+    <VaultFolderProvider value={value}>{children}</VaultFolderProvider>
+  ) : null
 }

@@ -1,9 +1,11 @@
 import { AddressPage } from '@core/ui/chain/coin/address'
+import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
+import { UploadQrPage } from '@core/ui/qr/upload/UploadQrPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
@@ -17,40 +19,42 @@ import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
-import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/CurrentVaultFolderPageProvider'
-import { ManageVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/manage/ManageVaultFolderPage'
-import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder/VaultFolderPage'
-import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folders/create/CreateVaultFolderPage'
+import { VaultsPage } from '@core/ui/vaultsOrganisation'
+import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
+import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create'
+import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/provider'
+import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update'
+import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
-
-import { DeeplinkPage } from '../deeplink/components/DeeplinkPage'
-import { UploadQrPage } from '../qr/upload/UploadQrPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'address'
   | 'airdropRegister'
+  | 'createVaultFolder'
   | 'currencySettings'
+  | 'deeplink'
   | 'defaultChains'
-  | 'importVault'
   | 'deleteVault'
+  | 'deposit'
+  | 'importVault'
   | 'languageSettings'
+  | 'manageVaultChainCoins'
+  | 'manageVaultChains'
+  | 'manageVaultFolder'
+  | 'manageVaults'
   | 'newVault'
   | 'renameVault'
-  | 'vaultDetails'
-  | 'vaultChainDetail'
-  | 'vaultChainCoinDetail'
-  | 'manageVaultChainCoins'
-  | 'address'
-  | 'manageVaultChains'
   | 'reshareVault'
   | 'send'
   | 'swap'
-  | 'createVaultFolder'
-  | 'vaultFolder'
-  | 'manageVaultFolder'
-  | 'deposit'
+  | 'updateVaultFolder'
   | 'uploadQr'
-  | 'deeplink'
+  | 'vaultChainDetail'
+  | 'vaultChainCoinDetail'
+  | 'vaultFolder'
+  | 'vaultDetails'
+  | 'vaults'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -58,23 +62,26 @@ export const sharedViews: Views<SharedViewId> = {
   airdropRegister: AirdropRegisterPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
+  deeplink: DeeplinkPage,
   defaultChains: DefaultChainsPage,
   deleteVault: DeleteVaultPage,
+  deposit: DepositPage,
   importVault: ImportVaultPage,
   languageSettings: LanguagePage,
-  deposit: DepositPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
-  manageVaultFolder: () => (
-    <CurrentVaultFolderPageProvider>
-      <ManageVaultFolderPage />
-    </CurrentVaultFolderPageProvider>
-  ),
+  manageVaults: ManageVaultsPage,
   newVault: NewVaultPage,
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
   swap: SwapPage,
+  updateVaultFolder: () => (
+    <CurrentVaultFolderPageProvider>
+      <UpdateVaultFolderPage />
+    </CurrentVaultFolderPageProvider>
+  ),
+  uploadQr: UploadQrPage,
   vaultChainDetail: VaultChainPage,
   vaultChainCoinDetail: VaultChainCoinPage,
   vaultDetails: VaultDetailsPage,
@@ -83,6 +90,5 @@ export const sharedViews: Views<SharedViewId> = {
       <VaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
-  uploadQr: UploadQrPage,
-  deeplink: DeeplinkPage,
+  vaults: VaultsPage,
 }

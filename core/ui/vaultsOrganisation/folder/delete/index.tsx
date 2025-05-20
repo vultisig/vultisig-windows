@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteVaultFolderMutation } from '@core/ui/storage/vaultFolders'
+import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -8,25 +9,25 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { useCurrentVaultFolder } from '../state/currentVaultFolder'
+const StyledIcon = styled(TrashIcon)`
+  color: ${getColor('alertError')};
+`
 
 export const DeleteVaultFolder = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
   const { id, name } = useCurrentVaultFolder()
   const { mutate, isPending } = useDeleteVaultFolderMutation()
+  const navigate = useCoreNavigate()
 
   return (
     <Opener
       renderOpener={({ onOpen }) => (
         <UnstyledButton onClick={onOpen}>
-          {isPending ? (
-            <Spinner />
-          ) : (
-            <TrashIcon width={20} height={20} stroke="#FFA500" />
-          )}
+          {isPending ? <Spinner /> : <StyledIcon fontSize={20} />}
         </UnstyledButton>
       )}
       renderContent={({ onClose }) => (
@@ -43,9 +44,7 @@ export const DeleteVaultFolder = () => {
                       onClose()
                       navigate({ id: 'vaults' })
                     },
-                    onError: error => {
-                      console.error(error)
-                    },
+                    onError: error => console.error(error),
                   })
                 }}
                 isLoading={isPending}
