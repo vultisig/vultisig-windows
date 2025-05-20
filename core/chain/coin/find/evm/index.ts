@@ -3,6 +3,8 @@ import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { attempt } from '@lib/utils/attempt'
+import { NoDataError } from '@lib/utils/error/NoDataError'
 
 import { FindCoinsResolver } from '../FindCoinsResolver'
 import { queryOneInch } from './queryOneInch'
@@ -13,9 +15,21 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
 }) => {
   const oneInchChainId = getEvmChainId(chain)
 
-  const balanceData = await queryOneInch<Record<string, string>>(
-    `/balance/v1.2/${oneInchChainId}/balances/${address}`
+  const balanceResult = await attempt(
+    queryOneInch<Record<string, string>>(
+      `/balance/v1.2/${oneInchChainId}/balances/${address}`
+    )
   )
+
+  if ('error' in balanceResult) {
+    if (balanceResult.error instanceof NoDataError) {
+      return []
+    }
+
+    throw balanceResult.error
+  }
+
+  const balanceData = balanceResult.data
 
   // Filter tokens with non-zero balance
   const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
