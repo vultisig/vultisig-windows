@@ -11,7 +11,7 @@ type SupportedMedias =
 
 type SupportedMediasWidths = 'mobileDevice' | 'tabletDevice' | 'desktopDevice'
 
-const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
+export const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
   mobileDevice: 550,
   tabletDevice: 768,
   desktopDevice: 1100,

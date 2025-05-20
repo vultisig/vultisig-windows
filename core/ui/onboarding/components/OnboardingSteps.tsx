@@ -34,7 +34,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
     isLoading,
   } = useOnboardingStepsAnimations()
 
-  const { isMobileScreen } = useResponsiveness()
+  const { isSmall } = useResponsiveness()
 
   return (
     <PageContent flexGrow style={{ overflowY: 'hidden' }}>
@@ -51,10 +51,10 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             onClick={handlePrevAnimation}
           >
             <ChevronLeftIcon width={14} height={14} />
-            <Text size={isMobileScreen ? 14 : 18}>{t('back')}</Text>
+            <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
           <UnstyledButton onClick={onCompleteSteps}>
-            <Text color="shy" size={isMobileScreen ? 14 : 18}>
+            <Text color="shy" size={isSmall ? 14 : 18}>
               {t('skip')}
             </Text>
           </UnstyledButton>
@@ -81,7 +81,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           justifyContent="flex-end"
           gap={12}
           style={{
-            minHeight: !isMobileScreen ? '170px' : '102px',
+            minHeight: !isSmall ? '170px' : '102px',
           }}
         >
           <AnimationDescription animation={currentAnimation} />

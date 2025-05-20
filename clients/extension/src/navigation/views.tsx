@@ -17,12 +17,14 @@ import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation/components/VaultsPage'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage/ManageVaultsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import {} from '../pages/setup-vault/SetupVaultPageController'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
@@ -41,7 +43,11 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   settings: () => <SettingsPage prioritize={<Prioritize />} />,
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
-  setupVault: SetupVaultPageController,
+  setupVault: () => (
+    <ResponsivenessProvider>
+      <SetupVaultPageController />
+    </ResponsivenessProvider>
+  ),
   transactionTab: TransactionPage,
   vault: VaultPage,
   vaults: VaultsPage,

@@ -7,12 +7,12 @@ import { TextWrapper } from './AnimationDescriptions.styled'
 
 export const VaultDevice = () => {
   const { t } = useTranslation()
-  const { isMobileScreen } = useResponsiveness()
+  const { isSmall } = useResponsiveness()
 
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={isMobileScreen ? 18 : 48}>
+        <Text as="span" size={isSmall ? 18 : 48}>
           <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
           {t('inYourVaultHolds')}{' '}
           <GradientText as="span">{t('oneVaultShare')}</GradientText>

@@ -7,15 +7,14 @@ import { TextWrapper } from './AnimationDescriptions.styled'
 
 export const VaultSharesInfo = () => {
   const { t } = useTranslation()
-  const { isMobileScreen } = useResponsiveness()
-  console.log('🚀 ~ VaultSharesInfo ~ isMobileScreen:', isMobileScreen)
+  const { isSmall } = useResponsiveness()
 
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={isMobileScreen ? 18 : 48}>
+        <Text as="span" size={isSmall ? 18 : 48}>
           {t('theyRe')}{' '}
-          <GradientText as="span" size={isMobileScreen ? 18 : 48}>
+          <GradientText as="span" size={isSmall ? 18 : 48}>
             {t('splitIntoParts')}
           </GradientText>{' '}
           {t('toIncreaseSecurity')}{' '}
