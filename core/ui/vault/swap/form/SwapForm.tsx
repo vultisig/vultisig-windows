@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { cropText } from '@lib/ui/css/cropText'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -38,13 +39,13 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
           <SwapInfo />
         </VStack>
       </VStack>
-      <Button
+      <SubmitButton
         isDisabled={isDisabled}
         disabled={Boolean(isDisabled)}
         type="submit"
       >
         {typeof isDisabled === 'string' ? isDisabled : t('continue')}
-      </Button>
+      </SubmitButton>
     </PageContent>
   )
 }
@@ -52,4 +53,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
 const ReverseSwapWrapper = styled.div`
   ${vStack({ gap: 8 })}
   position: relative;
+`
+const SubmitButton = styled(Button)`
+  ${cropText}
 `
