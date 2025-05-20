@@ -5,22 +5,33 @@ import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
 import { Text } from '@lib/ui/text'
 import { t } from 'i18next'
 import { useDropzone } from 'react-dropzone'
+import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile'
+import { useCore } from '../../../state/core'
 
 type BackupFileDropzoneProps = {
   onFinish: (data: File) => void
 }
 
 export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
+  const { client } = useCore()
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/octet-stream': vaultBackupExtensions.map(
         extension => `.${extension}`
       ),
     },
-    onDrop: acceptedFiles => {
+    onDrop: async acceptedFiles => {
       const [file] = acceptedFiles
+
       if (file) {
-        onFinish(file)
+        if (client === 'extension') {
+          const { override } = await vaultBackupResultFromFile(file)
+
+          if (override?.libType === 'DKLS') onFinish(file)
+        } else {
+          onFinish(file)
+        }
       }
     },
   })

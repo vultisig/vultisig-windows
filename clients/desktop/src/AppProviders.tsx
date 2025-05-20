@@ -25,6 +25,7 @@ const queryClient = getQueryClient()
 
 const coreState: CoreState = {
   ...storage,
+  client: 'desktop',
   openUrl: BrowserOpenURL,
   saveFile: async ({ name, blob }) => {
     const arrayBuffer = await blob.arrayBuffer()
