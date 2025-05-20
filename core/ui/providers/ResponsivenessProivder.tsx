@@ -1,30 +1,42 @@
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { createContext, FC, PropsWithChildren, useContext } from 'react'
-import { useMedia } from 'react-use'
+import { ChildrenProp } from '@lib/ui/props'
+import { mediaBreakPoints } from '@lib/ui/responsive/mediaQuery'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-type WindowSizeContextType = {
-  isMobileScreen: boolean
+type Size = 's' | 'm' | 'l'
+
+const getSize = (width: number): Size => {
+  if (width < mediaBreakPoints.mobileDevice) return 's'
+  if (width < mediaBreakPoints.desktopDevice) return 'm'
+  return 'l'
 }
 
-const ResponsivenessContext = createContext<WindowSizeContextType>(null!)
+const ResponsivenessContext = createContext<Size>('m')
 
-export const ResponsivenessProvider: FC<PropsWithChildren> = ({ children }) => {
-  const isMobileScreen = useMedia(mediaQuery.mobileDeviceAndDown)
+export const ResponsivenessProvider = ({ children }: ChildrenProp) => {
+  const [size, setSize] = useState<Size>(() => getSize(window.innerWidth))
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSize(getSize(window.innerWidth))
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
-    <ResponsivenessContext.Provider value={{ isMobileScreen }}>
+    <ResponsivenessContext.Provider value={size}>
       {children}
     </ResponsivenessContext.Provider>
   )
 }
 
 export const useResponsiveness = () => {
-  const context = useContext(ResponsivenessContext)
-
-  if (!context) {
-    throw new Error(
-      'useResponsiveness must be used within a ResponsivenessProvider'
-    )
+  const size = useContext(ResponsivenessContext)
+  return {
+    current: size,
+    isSmall: size === 's',
+    isMedium: size === 'm',
+    isLarge: size === 'l',
   }
-  return context
 }

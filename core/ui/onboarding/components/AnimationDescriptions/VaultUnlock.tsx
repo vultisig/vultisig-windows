@@ -7,15 +7,15 @@ import { TextWrapper } from './AnimationDescriptions.styled'
 
 export const VaultUnlock = () => {
   const { t } = useTranslation()
-  const { isMobileScreen } = useResponsiveness()
+  const { isSmall } = useResponsiveness()
 
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={isMobileScreen ? 18 : 48}>
+        <Text as="span" size={isSmall ? 18 : 48}>
           {t('theseSharesCollaborate')}{' '}
         </Text>
-        <GradientText as="span" size={isMobileScreen ? 18 : 48}>
+        <GradientText as="span" size={isSmall ? 18 : 48}>
           {t('unlockYourVault')}
         </GradientText>
       </TextWrapper>

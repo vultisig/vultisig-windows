@@ -30,7 +30,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onCompleteGreeting,
 }) => {
   const { t } = useTranslation()
-  const { isMobileScreen } = useResponsiveness()
+  const { isSmall } = useResponsiveness()
 
   return (
     <Wrapper data-testid="OnboardingGreeting-Wrapper">
@@ -45,7 +45,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         }
       >
         <ContentWrapper>
-          <Text size={isMobileScreen ? 36 : 52}>
+          <Text size={isSmall ? 36 : 52}>
             {t('sayGoodbyeTo')}{' '}
             <GradientText as="span">{t('seedPhrases')}</GradientText>
           </Text>

@@ -1,6 +1,7 @@
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
@@ -49,7 +50,11 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   settings: () => <SettingsPage checkUpdate={<CheckUpdate />} />,
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
-  setupVault: SetupVaultPageController,
+  setupVault: () => (
+    <ResponsivenessProvider>
+      <SetupVaultPageController />
+    </ResponsivenessProvider>
+  ),
   shareVault: ShareVaultPage,
   signCustomMessage: SignCustomMessagePage,
   vault: VaultPage,
