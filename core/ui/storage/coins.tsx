@@ -1,4 +1,4 @@
-import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
@@ -9,6 +9,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
+import { CreateVaultCoinsFunction } from './CoreStorage'
 import { useAssertCurrentVaultId } from './currentVaultId'
 
 export const useCreateCoinMutation = () => {
@@ -51,10 +52,8 @@ export const useCreateCoinsMutation = () => {
 
   const { createVaultCoins } = useCore()
 
-  const vaultId = useAssertCurrentVaultId()
-
-  const mutationFn = async (coins: AccountCoin[]) => {
-    await createVaultCoins({ vaultId, coins })
+  const mutationFn: CreateVaultCoinsFunction = async input => {
+    await createVaultCoins(input)
     await invalidate(vaultsCoinsQueryKey)
   }
 

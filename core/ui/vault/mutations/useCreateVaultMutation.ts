@@ -63,7 +63,10 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await createCoins(coins)
+      await createCoins({
+        vaultId: getVaultId(vault),
+        coins,
+      })
 
       return vault
     },
