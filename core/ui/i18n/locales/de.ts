@@ -39,6 +39,7 @@ export const de = {
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   staked: 'Gestaket',
   select_network: 'Netzwerk auswählen',
+  unexpected_error: 'Unerwarteter Fehler',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
