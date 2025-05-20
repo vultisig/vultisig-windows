@@ -22,9 +22,6 @@ export const useIsSwapFormDisabled = () => {
   const { t } = useTranslation()
 
   const swapQuoteQuery = useSwapQuoteQuery()
-  console.log('~swapQuoteQuery data', swapQuoteQuery)
-  console.log('~balanceQuery', balanceQuery)
-  console.log('~swapfees query', swapFeesQuery)
 
   return useMemo(() => {
     if (!amount) {
@@ -35,7 +32,7 @@ export const useIsSwapFormDisabled = () => {
       return t('loading')
     }
 
-    if (!swapFeesQuery.error) {
+    if (swapFeesQuery.error) {
       return extractErrorMsg(swapFeesQuery.error)
     }
 
@@ -55,7 +52,9 @@ export const useIsSwapFormDisabled = () => {
     }
 
     if (!swapQuoteQuery.data) {
-      return extractErrorMsg(swapQuoteQuery.error) || t('unexpected_error')
+      return swapQuoteQuery.error
+        ? extractErrorMsg(swapQuoteQuery.error)
+        : t('unexpected_error')
     }
   }, [
     amount,
