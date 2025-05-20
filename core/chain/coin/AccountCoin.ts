@@ -7,10 +7,7 @@ export type AccountCoinKey<T extends Chain = Chain> = CoinKey<T> & {
   address: string
 }
 
-export type AccountCoin<T extends Chain = Chain> = Coin &
-  AccountCoinKey<T> & {
-    hidden?: boolean
-  }
+export type AccountCoin<T extends Chain = Chain> = Coin & AccountCoinKey<T>
 
 export const extractAccountCoinKey = <T extends AccountCoinKey>(
   coin: T
