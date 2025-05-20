@@ -3,7 +3,6 @@ import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
-import { DefaultChainsPage } from '@core/ui/preferences/default-chains'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload/UploadQrPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
@@ -34,7 +33,6 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'currencySettings'
   | 'deeplink'
-  | 'defaultChains'
   | 'deleteVault'
   | 'deposit'
   | 'importVault'
@@ -63,7 +61,6 @@ export const sharedViews: Views<SharedViewId> = {
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
-  defaultChains: DefaultChainsPage,
   deleteVault: DeleteVaultPage,
   deposit: DepositPage,
   importVault: ImportVaultPage,

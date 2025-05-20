@@ -1,3 +1,4 @@
+import { ExpandView } from '@clients/extension/src/components/expand-view'
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
@@ -22,7 +23,6 @@ import { SettingsPage } from '@core/ui/settings'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
-import {} from '../pages/setup-vault/SetupVaultPageController'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
@@ -37,7 +37,13 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
-  settings: () => <SettingsPage prioritize={<Prioritize />} />,
+  settings: () => (
+    <SettingsPage
+      client="extension"
+      prioritize={<Prioritize />}
+      expandView={<ExpandView />}
+    />
+  ),
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: () => (
