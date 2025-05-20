@@ -1,4 +1,10 @@
 import { CoinKey } from '@core/chain/coin/Coin'
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useQuery } from '@tanstack/react-query'
+
+import { coinFinderIgnoreQueryKey } from '../query/keys'
+import { useCore } from '../state/core'
 
 export type GetCoinFinderIgnoreFunction = () => Promise<CoinKey[]>
 
@@ -15,3 +21,19 @@ export type CoinFinderIgnoreStorage = {
 }
 
 export const coinFinderIgnoreInitialValue: CoinKey[] = []
+
+export const useCoinFinderIgnoreQuery = () => {
+  const { getCoinFinderIgnore } = useCore()
+
+  return useQuery({
+    queryKey: coinFinderIgnoreQueryKey,
+    queryFn: getCoinFinderIgnore,
+    ...fixedDataQueryOptions,
+  })
+}
+
+export const useCoinFinderIgnore = () => {
+  const { data } = useCoinFinderIgnoreQuery()
+
+  return shouldBePresent(data)
+}
