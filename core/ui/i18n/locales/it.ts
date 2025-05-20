@@ -10,6 +10,7 @@ export const it = {
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
