@@ -29,10 +29,9 @@ export const UploadBackupFileStep = ({
   const isDisabled = !file
 
   return (
-    <>
+    <VStack fullHeight>
       <FlowPageHeader title={t('import_vault')} />
       <PageContent
-        style={{ height: '90%', paddingTop: '0px' }}
         justifyContent="center"
         as="form"
         {...getFormProps({
@@ -58,11 +57,10 @@ export const UploadBackupFileStep = ({
           isLoading={isPending}
           isDisabled={isDisabled}
           type="submit"
-          style={{ marginTop: '16px' }}
         >
           {t('continue')}
         </Button>
       </PageContent>
-    </>
+    </VStack>
   )
 }
