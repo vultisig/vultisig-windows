@@ -40,7 +40,7 @@ export const SwapCoinInputField = ({
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <Text weight="500" size={12} color="shy">
-            {t('from')}
+            {side === 'from' ? t('from') : t('to')}
           </Text>
           <HStack gap={4} alignItems="center">
             <ChainEntityIcon
