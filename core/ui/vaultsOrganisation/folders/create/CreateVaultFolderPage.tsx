@@ -42,7 +42,7 @@ export const CreateVaultFolderPage = () => {
   const { mutate, isPending } = useCreateVaultFolderMutation()
 
   return (
-    <>
+    <VStack fullHeight>
       <FlowPageHeader
         title={t('create_folder')}
         data-testid="create-vault-folder-page"
@@ -50,7 +50,7 @@ export const CreateVaultFolderPage = () => {
       <VStack
         as="form"
         flexGrow
-        style={{ height: '90%' }}
+        fullHeight
         {...getFormProps({
           isDisabled,
           isPending,
@@ -92,6 +92,6 @@ export const CreateVaultFolderPage = () => {
           </Button>
         </PageFooter>
       </VStack>
-    </>
+    </VStack>
   )
 }

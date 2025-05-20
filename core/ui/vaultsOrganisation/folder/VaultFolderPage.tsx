@@ -20,7 +20,7 @@ export const VaultFolderPage = () => {
   const vaults = useFolderVaults(id)
 
   return (
-    <>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
@@ -34,7 +34,6 @@ export const VaultFolderPage = () => {
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <VStack flexGrow extensionHeight>
         <PageContent scrollable>
           <VStack gap={8}>
             {vaults.map(vault => (
@@ -44,7 +43,6 @@ export const VaultFolderPage = () => {
             ))}
           </VStack>
         </PageContent>
-      </VStack>
-    </>
+    </VStack>
   )
 }

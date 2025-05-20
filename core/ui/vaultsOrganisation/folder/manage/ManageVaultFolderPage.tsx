@@ -26,7 +26,7 @@ export const ManageVaultFolderPage = () => {
   const { mutate, isPending } = useUpdateVaultFolderMutation()
 
   return (
-    <>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
@@ -35,7 +35,6 @@ export const ManageVaultFolderPage = () => {
         secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <VStack flexGrow extensionHeight>
         <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
           <VStack gap={8}>
             <Text weight="500" color="supporting" size={14}>
@@ -67,7 +66,6 @@ export const ManageVaultFolderPage = () => {
             </Text>
           </Button>
         </PageFooter>
-      </VStack>
-    </>
+    </VStack>
   )
 }

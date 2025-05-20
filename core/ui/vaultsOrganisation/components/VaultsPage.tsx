@@ -16,7 +16,7 @@ export const VaultsPage = () => {
   const navigate = useCoreNavigate()
 
   return (
-    <>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
@@ -33,7 +33,6 @@ export const VaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <VStack flexGrow style={{ height: '90%' }}>
         <PageContent scrollable gap={20}>
           <VaultFolders />
           <Vaults />
@@ -41,7 +40,6 @@ export const VaultsPage = () => {
         <PageFooter>
           <ManageVaultCreation />
         </PageFooter>
-      </VStack>
-    </>
+    </VStack>
   )
 }

@@ -18,7 +18,7 @@ export const ManageVaultsPage = () => {
   const { t } = useTranslation()
 
   return (
-    <>
+    <VStack fullHeight>
       <PageHeader
         hasBorder
         primaryControls={
@@ -32,7 +32,6 @@ export const ManageVaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <VStack flexGrow extensionHeight>
         <PageContent gap={20} scrollable>
           <ManageVaultFolders />
           <ManageVaults />
@@ -45,7 +44,6 @@ export const ManageVaultsPage = () => {
             {t('create_folder')}
           </Button>
         </PageFooter>
-      </VStack>
-    </>
+    </VStack>
   )
 }
