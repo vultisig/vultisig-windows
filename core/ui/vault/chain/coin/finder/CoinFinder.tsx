@@ -8,6 +8,7 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 import { useEffect } from 'react'
 
 import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
@@ -17,6 +18,8 @@ export const CoinFinder = () => {
   const coins = useCurrentVaultCoins()
 
   const coinFinderIgnore = useCoinFinderIgnore()
+
+  const vaultId = useAssertCurrentVaultId()
 
   useEffect(() => {
     if (!data) return
@@ -34,9 +37,12 @@ export const CoinFinder = () => {
 
     if (!isEmpty(newCoins) && !isPending && !error) {
       console.log('CoinFinder: saving new coins', newCoins)
-      saveCoins(newCoins)
+      saveCoins({
+        vaultId,
+        coins: newCoins,
+      })
     }
-  }, [coinFinderIgnore, coins, data, error, isPending, saveCoins])
+  }, [coinFinderIgnore, coins, data, error, isPending, saveCoins, vaultId])
 
   return null
 }
