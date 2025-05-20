@@ -35,7 +35,6 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
       }
 
       await setExtensionVersion(version)
-      return true
     },
   })
 
