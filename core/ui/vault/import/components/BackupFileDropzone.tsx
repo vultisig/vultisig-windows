@@ -1,3 +1,5 @@
+import { useCore } from '@core/ui/state/core'
+import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { vaultBackupExtensions } from '@core/ui/vault/import/VaultBackupExtension'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
@@ -5,8 +7,6 @@ import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
 import { Text } from '@lib/ui/text'
 import { t } from 'i18next'
 import { useDropzone } from 'react-dropzone'
-import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile'
-import { useCore } from '../../../state/core'
 
 type BackupFileDropzoneProps = {
   onFinish: (data: File) => void
