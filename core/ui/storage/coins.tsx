@@ -37,11 +37,12 @@ export const useCreateCoinMutation = () => {
     })
 
     await createVaultCoin({ vaultId, coin: { ...coin, address } })
+
+    await invalidate(vaultsCoinsQueryKey)
   }
 
   return useMutation({
     mutationFn,
-    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
