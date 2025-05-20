@@ -22,14 +22,21 @@ export const useIsSwapFormDisabled = () => {
   const { t } = useTranslation()
 
   const swapQuoteQuery = useSwapQuoteQuery()
+  console.log('~swapQuoteQuery data', swapQuoteQuery)
+  console.log('~balanceQuery', balanceQuery)
+  console.log('~swapfees query', swapFeesQuery)
 
   return useMemo(() => {
     if (!amount) {
       return t('amount_required')
     }
 
-    if (balanceQuery.isPending || swapFeesQuery.isPending) {
+    if (balanceQuery.isPending || swapFeesQuery.isLoading) {
       return t('loading')
+    }
+
+    if (!swapFeesQuery.error) {
+      return extractErrorMsg(swapFeesQuery.error)
     }
 
     if (!balanceQuery.data) {
@@ -43,12 +50,12 @@ export const useIsSwapFormDisabled = () => {
       return t('insufficient_balance')
     }
 
-    if (swapQuoteQuery.isPending) {
+    if (swapQuoteQuery.isLoading) {
       return t('loading')
     }
 
     if (!swapQuoteQuery.data) {
-      return extractErrorMsg(swapQuoteQuery.error)
+      return extractErrorMsg(swapQuoteQuery.error) || t('unexpected_error')
     }
   }, [
     amount,
@@ -56,10 +63,11 @@ export const useIsSwapFormDisabled = () => {
     balanceQuery.error,
     balanceQuery.isPending,
     coin.decimals,
-    swapFeesQuery.isPending,
+    swapFeesQuery.error,
+    swapFeesQuery.isLoading,
     swapQuoteQuery.data,
     swapQuoteQuery.error,
-    swapQuoteQuery.isPending,
+    swapQuoteQuery.isLoading,
     t,
   ])
 }
