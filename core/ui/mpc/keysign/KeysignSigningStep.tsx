@@ -59,9 +59,12 @@ export const KeysignSigningStep = ({
               handlers={{
                 keysign: payload => (
                   <CurrentTxHashProvider
-                    value={normalizeTxHash(value, {
-                      memo: payload?.memo,
-                    })}
+                    value={{
+                      approvalTxHash: value.approvalTxHash,
+                      txHash: normalizeTxHash(value.txHash, {
+                        memo: payload?.memo,
+                      }),
+                    }}
                   >
                     <Match
                       value={payload.swapPayload.value ? 'swap' : 'default'}
@@ -84,7 +87,7 @@ export const KeysignSigningStep = ({
                     <KeysignCustomMessageInfo value={payload} />
                     <TxOverviewChainDataRow>
                       <span>{t('signature')}</span>
-                      <span>{value}</span>
+                      <span>{value.txHash}</span>
                     </TxOverviewChainDataRow>
                   </TxOverviewPanel>
                 ),
