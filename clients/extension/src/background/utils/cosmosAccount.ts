@@ -5,8 +5,8 @@ import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { hexToBytes } from '@lib/utils/hexToBytes'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { hexToBytes } from '@lib/utils/hexToBytes'
 
 interface CosmosAccount {
   pubkey: number[]
