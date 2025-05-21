@@ -25,6 +25,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../../state/core'
+import { normalizeTxHash } from './utils/normalizeTxHash'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
@@ -72,7 +73,9 @@ export const KeysignSigningStep = ({
                         <>
                           <TxOverviewPanel>
                             <KeysignTxOverview
-                              txHash={txHash}
+                              txHash={normalizeTxHash(txHash, {
+                                memo: payload?.memo,
+                              })}
                               value={payload}
                             />
                           </TxOverviewPanel>

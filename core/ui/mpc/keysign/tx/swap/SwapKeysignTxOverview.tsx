@@ -32,6 +32,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCore } from '../../../../state/core'
+import { normalizeTxHash } from '../../utils/normalizeTxHash'
 
 const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
   if (!value?.case) return null
@@ -49,10 +50,13 @@ export const SwapKeysignTxOverview = ({
 }: ValueProp<KeysignPayload> & {
   txHashes: string[]
 }) => {
+  const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
+    memo: value.memo,
+  })
   const isERC20Approve = Boolean(value.erc20ApprovePayload)
   const [approvalTxHash, txHash] = isERC20Approve
-    ? [txHashes[0], txHashes[1]]
-    : [undefined, getLastItem(txHashes)]
+    ? [txHashes[0], txHashNormalized]
+    : [undefined, txHashNormalized]
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const { t } = useTranslation()
