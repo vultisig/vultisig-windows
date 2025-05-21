@@ -1,11 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapProvider'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { useCurrentTxHashes } from '@core/ui/chain/state/currentTxHash'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -23,6 +23,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -38,12 +39,20 @@ const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
   return match(value.case, {
     thorchainSwapPayload: () => 'ThorChain',
     mayachainSwapPayload: () => 'MayaChain',
-    oneinchSwapPayload: () => '1inch',
+    oneinchSwapPayload: () => generalSwapProviderName.oneinch,
   })
 }
 
-export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const { txHash, approvalTxHash } = useCurrentTxHashes()
+export const SwapKeysignTxOverview = ({
+  value,
+  txHashes,
+}: ValueProp<KeysignPayload> & {
+  txHashes: string[]
+}) => {
+  const isERC20Approve = Boolean(value.erc20ApprovePayload)
+  const [approvalTxHash, txHash] = isERC20Approve
+    ? [txHashes[0], txHashes[1]]
+    : [undefined, getLastItem(txHashes)]
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const { t } = useTranslation()

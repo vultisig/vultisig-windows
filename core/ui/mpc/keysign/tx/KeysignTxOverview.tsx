@@ -7,7 +7,6 @@ import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
-import { useCurrentTxHashes } from '@core/ui/chain/state/currentTxHash'
 import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
@@ -29,10 +28,13 @@ import { useTranslation } from 'react-i18next'
 import { useCore } from '../../../state/core'
 import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
-export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const { txHash } = useCurrentTxHashes()
+export const KeysignTxOverview = ({
+  value,
+  txHash,
+}: ValueProp<KeysignPayload> & {
+  txHash: string
+}) => {
   const { t } = useTranslation()
-
   const copyTxHash = useCopyTxHash()
   const fiatCurrency = useFiatCurrency()
   const {
