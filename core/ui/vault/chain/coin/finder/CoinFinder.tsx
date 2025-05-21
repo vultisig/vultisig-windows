@@ -24,16 +24,17 @@ export const CoinFinder = () => {
   useEffect(() => {
     if (!data) return
 
-    const newCoins = data.filter(
-      coin =>
-        !coins.some(
-          c =>
+    const newCoins = data
+      .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
+      .filter(
+        coin =>
+          !coins.some(c =>
             areEqualRecords(
               withoutUndefinedFields(c),
               withoutUndefinedFields(coin)
-            ) && !coinFinderIgnore.some(c => areEqualCoins(c, coin))
-        )
-    )
+            )
+          )
+      )
 
     if (!isEmpty(newCoins) && !isPending && !error) {
       console.log('CoinFinder: saving new coins', newCoins)
