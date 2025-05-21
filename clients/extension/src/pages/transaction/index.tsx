@@ -1,11 +1,14 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useMutation } from '@tanstack/react-query'
 
-import { getStoredTransactions } from '../../utils/storage'
+import {
+  getStoredTransactions,
+  setStoredTransaction,
+} from '../../utils/storage'
 import { useVaults } from '@core/ui/storage/vaults'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getKeysignPayload } from '../../utils/tx/getKeySignPayload'
@@ -34,10 +37,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { formatUnits, toUtf8String } from 'ethers'
-import { steps } from 'framer-motion'
 import { t } from 'i18next'
-import { step } from 'viem/chains'
-import { Button } from '../../components/button'
 import { MiddleTruncate } from '../../components/middle-truncate'
 import { splitString } from '../../utils/functions'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
@@ -45,6 +45,14 @@ import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getChainKind } from '@core/chain/ChainKind'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
+import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { ITransaction } from '../../utils/interfaces'
+import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
+import { useCore } from '@core/ui/state/core'
+import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { Button } from '@lib/ui/buttons/Button'
 const StyledErrorState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
   border-radius: 12px;
@@ -54,10 +62,30 @@ const StyledErrorState = styled(VStack)`
 const StyledText = styled(Text)`
   text-align: center;
 `
+type TransactionPageProps = { txHash?: string }
 
-export const TransactionPage = () => {
+interface InitialState {
+  transaction?: ITransaction
+  keysignMessagePayload?: KeysignMessagePayload
+}
+
+export const TransactionPage = ({ txHash }: TransactionPageProps) => {
   const vaults = useVaults()
+  const { openUrl } = useCore()
+
   const walletCore = useAssertWalletCore()
+  const [state, setState] = useState<InitialState>({})
+  const { transaction } = state
+  const copyTxHash = useCopyTxHash()
+
+  useEffect(() => {
+    const getCurrentTransaction = async () => {
+      const [transaction] = await getStoredTransactions()
+      setState({ transaction })
+    }
+    getCurrentTransaction()
+  }, [])
+
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const handleClose = (): void => {
     window.close()
@@ -131,10 +159,21 @@ export const TransactionPage = () => {
   })
 
   useEffect(() => {
-    processTransaction()
+    if (txHash && transaction) {
+      setStoredTransaction({
+        ...transaction,
+        status: 'success',
+        txHash,
+        raw: {},
+      })
+    }
+  }, [txHash, transaction])
+
+  useEffect(() => {
+    if (!txHash) processTransaction()
   }, [processTransaction])
 
-  return (
+  return !txHash ? (
     <MatchQuery
       value={mutationStatus}
       pending={() => <ProductLogoBlock />}
@@ -255,5 +294,81 @@ export const TransactionPage = () => {
         </VStack>
       )}
     />
+  ) : transaction ? (
+    <VStack fullHeight>
+      <PageHeader
+        title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+        hasBorder
+      />
+      <PageContent flexGrow>
+        <List>
+          <ListItem
+            description={
+              <MiddleTruncate
+                text={txHash}
+                onClick={() => copyTxHash(txHash)}
+              />
+            }
+            extra={
+              <IconButton
+                icon={<SquareArrowOutUpRightIcon />}
+                onClick={() =>
+                  openUrl(
+                    `${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: txHash })}`
+                  )
+                }
+              />
+            }
+            title="TX ID"
+          />
+          <ListItem
+            description={
+              <MiddleTruncate text={transaction.transactionDetails.from} />
+            }
+            title={t('from')}
+          />
+          {transaction.transactionDetails.to && (
+            <ListItem
+              description={
+                <MiddleTruncate text={transaction.transactionDetails.to} />
+              }
+              title={t('to')}
+            />
+          )}
+          {transaction.transactionDetails.amount?.amount && (
+            <ListItem
+              extra={`${formatUnits(
+                transaction.transactionDetails.amount.amount,
+                transaction.transactionDetails.amount.decimals
+              )}`}
+              title={t('amount')}
+            />
+          )}
+          <ListItem extra={transaction.chain} title="Network" />
+          <ListItem
+            extra={`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
+            title={t('network_fee')}
+          />
+
+          {transaction.memo?.value && !transaction.memo?.isParsed && (
+            <ListItem
+              extra={splitString(transaction.memo?.value as string, 32).map(
+                (str, index) => (
+                  <span key={index}>{str}</span>
+                )
+              )}
+              title={t('memo')}
+            />
+          )}
+        </List>
+      </PageContent>
+      <PageFooter>
+        <Button kind="primary" onClick={handleClose}>
+          {t('done')}
+        </Button>
+      </PageFooter>
+    </VStack>
+  ) : (
+    <></>
   )
 }

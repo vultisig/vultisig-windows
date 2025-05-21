@@ -12,12 +12,14 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
+import { OnFinishProp } from '@lib/ui/props'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
-}: KeysignActionProviderProp) => {
+  onFinish,
+}: KeysignActionProviderProp & Partial<OnFinishProp<string>>) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({
@@ -42,7 +44,10 @@ export const StartFastKeysignFlow = ({
                   value="keysign"
                   render={() => (
                     <KeysignActionProvider>
-                      <KeysignSigningStep payload={keysignPayload} />
+                      <KeysignSigningStep
+                        payload={keysignPayload}
+                        onFinish={onFinish}
+                      />
                     </KeysignActionProvider>
                   )}
                 />

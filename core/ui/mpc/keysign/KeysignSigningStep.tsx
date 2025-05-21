@@ -17,7 +17,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { OnBackProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -29,14 +29,16 @@ import { normalizeTxHash } from './utils/normalizeTxHash'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
-} & Partial<OnBackProp>
+} & Partial<OnBackProp> &
+  Partial<OnFinishProp<string>>
 
 export const KeysignSigningStep = ({
   onBack,
   payload,
+  onFinish,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { version } = useCore()
+  const { version, mpcDevice } = useCore()
 
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
@@ -48,51 +50,57 @@ export const KeysignSigningStep = ({
   return (
     <MatchQuery
       value={mutationStatus}
-      success={value => (
-        <>
-          <PageHeader
-            title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
-          />
-          <PageContent>
-            <MatchRecordUnion
-              value={payload}
-              handlers={{
-                keysign: payload => (
-                  <CurrentTxHashProvider
-                    value={normalizeTxHash(value, {
-                      memo: payload?.memo,
-                    })}
-                  >
-                    <Match
-                      value={payload.swapPayload.value ? 'swap' : 'default'}
-                      swap={() => <SwapKeysignTxOverview value={payload} />}
-                      default={() => (
-                        <>
-                          <TxOverviewPanel>
-                            <KeysignTxOverview value={payload} />
-                          </TxOverviewPanel>
-                          <Button onClick={() => navigate({ id: 'vault' })}>
-                            {t('complete')}
-                          </Button>
-                        </>
-                      )}
-                    />
-                  </CurrentTxHashProvider>
-                ),
-                custom: payload => (
-                  <TxOverviewPanel>
-                    <KeysignCustomMessageInfo value={payload} />
-                    <TxOverviewChainDataRow>
-                      <span>{t('signature')}</span>
-                      <span>{value}</span>
-                    </TxOverviewChainDataRow>
-                  </TxOverviewPanel>
-                ),
-              }}
-            />
-          </PageContent>
-        </>
-      )}
+      success={value => {
+        if (mpcDevice === 'extension' && onFinish) {
+          onFinish(value)
+        } else {
+          return (
+            <>
+              <PageHeader
+                title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+              />
+              <PageContent>
+                <MatchRecordUnion
+                  value={payload}
+                  handlers={{
+                    keysign: payload => (
+                      <CurrentTxHashProvider
+                        value={normalizeTxHash(value, {
+                          memo: payload?.memo,
+                        })}
+                      >
+                        <Match
+                          value={payload.swapPayload.value ? 'swap' : 'default'}
+                          swap={() => <SwapKeysignTxOverview value={payload} />}
+                          default={() => (
+                            <>
+                              <TxOverviewPanel>
+                                <KeysignTxOverview value={payload} />
+                              </TxOverviewPanel>
+                              <Button onClick={() => navigate({ id: 'vault' })}>
+                                {t('complete')}
+                              </Button>
+                            </>
+                          )}
+                        />
+                      </CurrentTxHashProvider>
+                    ),
+                    custom: payload => (
+                      <TxOverviewPanel>
+                        <KeysignCustomMessageInfo value={payload} />
+                        <TxOverviewChainDataRow>
+                          <span>{t('signature')}</span>
+                          <span>{value}</span>
+                        </TxOverviewChainDataRow>
+                      </TxOverviewPanel>
+                    ),
+                  }}
+                />
+              </PageContent>
+            </>
+          )
+        }
+      }}
       error={error => (
         <FullPageFlowErrorState
           message={t('signing_error')}

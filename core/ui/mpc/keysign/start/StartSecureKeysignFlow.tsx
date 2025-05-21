@@ -8,10 +8,12 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
+import { OnFinishProp } from '@lib/ui/props'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
-}: KeysignActionProviderProp) => {
+  onFinish,
+}: KeysignActionProviderProp & Partial<OnFinishProp<string>>) => {
   const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
     useCoreViewState<'keysign'>()
   const keysignPayload = useRefreshedKeysignPayload(
@@ -34,7 +36,11 @@ export const StartSecureKeysignFlow = ({
             value="keysign"
             render={() => (
               <KeysignActionProvider>
-                <KeysignSigningStep payload={keysignPayload} onBack={onBack} />
+                <KeysignSigningStep
+                  payload={keysignPayload}
+                  onBack={onBack}
+                  onFinish={onFinish}
+                />
               </KeysignActionProvider>
             )}
           />
