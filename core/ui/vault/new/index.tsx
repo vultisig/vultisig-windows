@@ -19,7 +19,6 @@ export const NewVaultPage = () => {
     <VStack fullHeight>
       {vaults.length > 0 && (
         <PageHeader
-          style={{ height: '55px' }}
           primaryControls={<PageHeaderBackButton />}
         />
       )}
@@ -29,7 +28,6 @@ export const NewVaultPage = () => {
       <PageFooter gap={16}>
         <Button
           type="primary"
-          block
           rounded
           onClick={() => navigate({ id: 'setupVault', state: {} })}
         >
