@@ -63,12 +63,7 @@ export const handleSendTransaction = async (
             await setStoredTransactions(filteredTransactions)
             reject(new Error('Transaction was not completed'))
           } else {
-            if (matchedTransaction.customSignature) {
-              resolve({
-                txResponse: matchedTransaction.customSignature,
-                raw: matchedTransaction.raw,
-              })
-            } else if (matchedTransaction.txHash) {
+            if (matchedTransaction.txHash) {
               resolve({
                 txResponse: matchedTransaction.txHash,
                 raw: matchedTransaction.raw,
