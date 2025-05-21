@@ -1,4 +1,4 @@
-import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
+import { areEqualCoins, Coin, extractCoinKey } from '@core/chain/coin/Coin'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -17,6 +17,11 @@ import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
+import {
+  useAddToCoinFinderIgnoreMutation,
+  useRemoveFromCoinFinderIgnoreMutation,
+} from '../../../storage/coinFinderIgnore'
+
 const Container = styled(Panel)`
   ${interactive};
 `
@@ -32,22 +37,47 @@ type ManageVaultCoinProps = ValueProp<Coin> & {
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const coins = useCurrentVaultCoins()
   const isChecked = coins.some(c => areEqualCoins(c, value))
+
   const { mutate: saveCoin } = useCreateCoinMutation()
   const { mutate: deleteCoin } = useDeleteCoinMutation()
+
+  const { mutate: addToCoinFinderIgnore } = useAddToCoinFinderIgnoreMutation()
+  const { mutate: removeFromCoinFinderIgnore } =
+    useRemoveFromCoinFinderIgnoreMutation()
+
   const addresses = useCurrentVaultAddresses()
+
+  /*
+   * We don't have a dedicated UI for managing coin finder ignore,
+   * so we expect that the user intent to add/remove a coin should be
+   * reflected in the coin finder ignore list.
+   */
+  const handleChange = () => {
+    if (isChecked) {
+      deleteCoin(
+        {
+          address: addresses[value.chain],
+          ...value,
+        },
+        {
+          onSuccess: () => {
+            addToCoinFinderIgnore(extractCoinKey(value))
+          },
+        }
+      )
+    } else {
+      saveCoin(value, {
+        onSuccess: () => {
+          removeFromCoinFinderIgnore(extractCoinKey(value))
+        },
+      })
+    }
+  }
+
   return (
     <Container
       data-testid={`ManageVaultChain-Coin-${value.ticker}`}
-      onClick={() => {
-        if (isChecked) {
-          deleteCoin({
-            address: addresses[value.chain],
-            ...value,
-          })
-        } else {
-          saveCoin(value)
-        }
-      }}
+      onClick={handleChange}
     >
       <HStack fullWidth alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" gap={16}>
