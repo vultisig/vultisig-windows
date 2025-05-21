@@ -1,5 +1,3 @@
-import { useCore } from '@core/ui/state/core'
-import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { vaultBackupExtensions } from '@core/ui/vault/import/VaultBackupExtension'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
@@ -13,25 +11,16 @@ type BackupFileDropzoneProps = {
 }
 
 export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
-  const { client } = useCore()
-
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/octet-stream': vaultBackupExtensions.map(
         extension => `.${extension}`
       ),
     },
-    onDrop: async acceptedFiles => {
+    onDrop: acceptedFiles => {
       const [file] = acceptedFiles
-
       if (file) {
-        if (client === 'extension') {
-          const { override } = await vaultBackupResultFromFile(file)
-
-          if (override?.libType === 'DKLS') onFinish(file)
-        } else {
-          onFinish(file)
-        }
+        onFinish(file)
       }
     },
   })
