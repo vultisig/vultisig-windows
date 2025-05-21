@@ -12,6 +12,7 @@ export const it = {
   start_transaction: 'Avvia transazione',
   unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
+  approval_tx: 'Transazione di approvazione',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
