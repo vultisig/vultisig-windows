@@ -10,6 +10,7 @@ import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
+import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
@@ -34,6 +35,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
   const initialView = useInitialViewQuery()
+  const coinFinderIgnore = useCoinFinderIgnoreQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -46,6 +48,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     isVaultBalanceVisible,
     hasFinishedOnboarding,
     initialView,
+    coinFinderIgnore,
   })
 
   return (

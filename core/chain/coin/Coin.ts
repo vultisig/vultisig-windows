@@ -1,3 +1,5 @@
+import { pick } from '@lib/utils/record/pick'
+
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
 import { chainFeeCoin } from './chainFeeCoin'
@@ -40,3 +42,6 @@ export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
 
   return undefined
 }
+
+export const extractCoinKey = <T extends CoinKey>(coin: T): CoinKey =>
+  pick(coin, ['chain', 'id'])

@@ -66,9 +66,10 @@ import {
   SaveVault,
   SaveVaultFolder,
 } from '../../wailsjs/go/storage/Store'
-import { fromStorageCoin, toStorageCoin } from '../storage/storageCoin'
+import { persistentStorage } from '../state/persistentState'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
-import { persistentStorage } from './persistentState'
+import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { fromStorageCoin, toStorageCoin } from './storageCoin'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
   const oldStorageVault = await GetVault(vaultId)
@@ -295,4 +296,5 @@ export const storage: CoreStorage = {
   getHasFinishedOnboarding,
   setHasFinishedOnboarding,
   getInitialView,
+  ...coinFinderIgnoreStorage,
 }
