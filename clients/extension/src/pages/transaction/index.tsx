@@ -16,6 +16,10 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
+import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { create } from '@bufbuild/protobuf'
 
 const StyledErrorState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
@@ -46,13 +50,21 @@ export const TransactionPage = () => {
 
       setCurrentVaultId(vault.publicKeys.ecdsa)
 
-      const keysignPayload = await getKeysignPayload(
-        transaction,
-        vault,
-        walletCore
-      )
+      let keysignMessagePayload: KeysignMessagePayload
+      if (transaction.isCustomMessage) {
+        keysignMessagePayload = {
+          custom: create(CustomMessagePayloadSchema, {
+            method: transaction.customMessage?.method,
+            message: transaction.customMessage?.message,
+          }),
+        }
+      } else {
+        keysignMessagePayload = {
+          keysign: await getKeysignPayload(transaction, vault, walletCore),
+        }
+      }
 
-      return keysignPayload
+      return keysignMessagePayload
     },
   })
 
@@ -70,8 +82,8 @@ export const TransactionPage = () => {
           message={extractErrorMsg(error)}
         />
       )}
-      success={keysignPayload => (
-        <StartKeysignPrompt value={{ keysign: keysignPayload }} />
+      success={keysignMessagePayload => (
+        <StartKeysignPrompt value={keysignMessagePayload} />
       )}
     />
   )
