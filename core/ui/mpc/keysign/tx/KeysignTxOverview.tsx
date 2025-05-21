@@ -30,7 +30,7 @@ import { useCore } from '../../../state/core'
 import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const txHash = useCurrentTxHashes()
+  const { txHash } = useCurrentTxHashes()
   const { t } = useTranslation()
 
   const copyTxHash = useCopyTxHash()
