@@ -132,6 +132,7 @@ export const en = {
   done: 'Done',
   and: 'and',
   approve: 'Approve',
+  approval_tx: 'Approval Tx',
   information_note1:
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',
