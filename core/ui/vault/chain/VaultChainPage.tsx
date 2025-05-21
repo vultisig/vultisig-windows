@@ -14,7 +14,6 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { getCoinFinderQueryKey } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
-import { ManageVaultChainCoinsPrompt } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultAddressLink } from '@core/ui/vault/chain/VaultAddressLink'
 import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
@@ -31,6 +30,7 @@ import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -52,15 +52,16 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const VaultChainPage = () => {
+  const { t } = useTranslation()
   const chain = useCurrentVaultChain()
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const fiatCurrency = useFiatCurrency()
   const nativeCoin = useCurrentVaultNativeCoin(chain)
-  const copyAddress = useCopyAddress()
   const vaultCoins = useCurrentVaultChainCoins(chain)
-
-  const { t } = useTranslation()
   const address = useCurrentVaultAddress(chain)
+  const hasMultipleCoinsSupport = chain in chainTokens
+  const copyAddress = useCopyAddress()
+  const navigate = useCoreNavigate()
 
   const { mutate: invalidateQueries, isPending } =
     useInvalidateQueriesMutation()
@@ -78,10 +79,6 @@ export const VaultChainPage = () => {
     invalidateQueries(keys)
   }, [address, chain, invalidateQueries, vaultCoins])
 
-  const hasMultipleCoinsSupport = chain in chainTokens
-
-  const navigate = useCoreNavigate()
-
   return (
     <VStack flexGrow>
       <PageHeader
@@ -96,7 +93,7 @@ export const VaultChainPage = () => {
         }
         title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
       />
-      <PageContent gap={16} data-testid="VaultChainPage-Content">
+      <PageContent gap={16} flexGrow>
         <VaultPrimaryActions value={nativeCoin} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
@@ -198,7 +195,13 @@ export const VaultChainPage = () => {
           />
         </Panel>
         {hasMultipleCoinsSupport && (
-          <ManageVaultChainCoinsPrompt value={chain} />
+          <ListAddButton
+            onClick={() =>
+              navigate({ id: 'manageVaultChainCoins', state: { chain } })
+            }
+          >
+            {t('choose_tokens')}
+          </ListAddButton>
         )}
       </PageContent>
     </VStack>
