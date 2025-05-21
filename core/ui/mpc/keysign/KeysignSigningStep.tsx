@@ -1,5 +1,4 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { CurrentTxHashProvider } from '@core/ui/chain/state/currentTxHash'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -20,6 +19,7 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,28 +48,36 @@ export const KeysignSigningStep = ({
   return (
     <MatchQuery
       value={mutationStatus}
-      success={value => (
-        <>
-          <PageHeader
-            title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
-          />
-          <PageContent>
-            <MatchRecordUnion
-              value={payload}
-              handlers={{
-                keysign: payload => (
-                  <CurrentTxHashProvider
-                    value={normalizeTxHash(value, {
-                      memo: payload?.memo,
-                    })}
-                  >
+      success={txHashes => {
+        const txHash = getLastItem(txHashes)
+
+        return (
+          <>
+            <PageHeader
+              title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+            />
+            <PageContent>
+              <MatchRecordUnion
+                value={payload}
+                handlers={{
+                  keysign: payload => (
                     <Match
                       value={payload.swapPayload.value ? 'swap' : 'default'}
-                      swap={() => <SwapKeysignTxOverview value={payload} />}
+                      swap={() => (
+                        <SwapKeysignTxOverview
+                          txHashes={txHashes}
+                          value={payload}
+                        />
+                      )}
                       default={() => (
                         <>
                           <TxOverviewPanel>
-                            <KeysignTxOverview value={payload} />
+                            <KeysignTxOverview
+                              txHash={normalizeTxHash(txHash, {
+                                memo: payload?.memo,
+                              })}
+                              value={payload}
+                            />
                           </TxOverviewPanel>
                           <Button onClick={() => navigate({ id: 'vault' })}>
                             {t('complete')}
@@ -77,22 +85,22 @@ export const KeysignSigningStep = ({
                         </>
                       )}
                     />
-                  </CurrentTxHashProvider>
-                ),
-                custom: payload => (
-                  <TxOverviewPanel>
-                    <KeysignCustomMessageInfo value={payload} />
-                    <TxOverviewChainDataRow>
-                      <span>{t('signature')}</span>
-                      <span>{value}</span>
-                    </TxOverviewChainDataRow>
-                  </TxOverviewPanel>
-                ),
-              }}
-            />
-          </PageContent>
-        </>
-      )}
+                  ),
+                  custom: payload => (
+                    <TxOverviewPanel>
+                      <KeysignCustomMessageInfo value={payload} />
+                      <TxOverviewChainDataRow>
+                        <span>{t('signature')}</span>
+                        <span>{txHash}</span>
+                      </TxOverviewChainDataRow>
+                    </TxOverviewPanel>
+                  ),
+                }}
+              />
+            </PageContent>
+          </>
+        )
+      }}
       error={error => (
         <FullPageFlowErrorState
           message={t('signing_error')}
