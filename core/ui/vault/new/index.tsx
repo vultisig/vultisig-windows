@@ -18,9 +18,7 @@ export const NewVaultPage = () => {
   return (
     <VStack fullHeight>
       {vaults.length > 0 && (
-        <PageHeader
-          primaryControls={<PageHeaderBackButton />}
-        />
+        <PageHeader primaryControls={<PageHeaderBackButton />} />
       )}
       <PageContent alignItems="center" justifyContent="center" flexGrow>
         <ProductLogoBlock />
