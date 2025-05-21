@@ -1,6 +1,6 @@
 import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
 import { GetAddressBookItemsFunction } from '@core/ui/storage/CoreStorage'
-import { StorageKey } from '@core/ui/storage/storageKey'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'

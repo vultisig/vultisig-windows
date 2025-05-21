@@ -38,7 +38,7 @@ import {
 import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
-import { StorageKey } from '@core/ui/storage/storageKey'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { recordMap } from '@lib/utils/record/recordMap'
 
 import {

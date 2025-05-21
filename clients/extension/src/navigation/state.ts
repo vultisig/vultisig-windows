@@ -1,5 +1,5 @@
 import { CoreView, initialCoreView } from '@core/ui/navigation/CoreView'
-import { StorageKey } from '@core/ui/storage/storageKey'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { removePersistentState } from '../state/persistent/removePersistentState'
