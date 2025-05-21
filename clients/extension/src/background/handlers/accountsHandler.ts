@@ -41,9 +41,6 @@ export const handleFindAccounts = async (
   )
 
   if (existingAccount) {
-    if (!existingAccount.address) {
-      throw new Error('Fee account address is missing')
-    }
     return [existingAccount.address]
   }
 

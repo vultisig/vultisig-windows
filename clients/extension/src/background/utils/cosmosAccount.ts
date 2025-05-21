@@ -1,12 +1,13 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
+import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { getVaults } from '@clients/extension/src/vault/state/vaults'
-import { getVaultsCoins } from '@clients/extension/src/vault/state/vaultsCoins'
 import { Chain } from '@core/chain/Chain'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { hexToBytes } from '@lib/utils/hexToBytes'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+
 interface CosmosAccount {
   pubkey: number[]
   address: string
@@ -21,20 +22,12 @@ export const generateCosmosAccount = async (
   chain: Chain
 ): Promise<CosmosAccount[] | undefined> => {
   try {
+    const currentVaultId = await getCurrentVaultId()
+
     const vaults = await getVaults()
-    const allCoins = await getVaultsCoins()
-
-    const targetVault = vaults.find(vault => {
-      const coins = allCoins[getVaultId(vault)] ?? []
-      return coins.some(
-        coin =>
-          isFeeCoin(coin) &&
-          coin.chain === chain &&
-          coin.address === responseAddress
-      )
-    })
-
-    if (!targetVault) throw new Error('Vault not found!')
+    const currentVault = shouldBePresent(
+      vaults.find(vault => getVaultId(vault) === currentVaultId)
+    )
 
     const walletCore = await getWalletCore()
     if (!walletCore) throw new Error('WalletCore is not initialized!')
@@ -42,8 +35,8 @@ export const generateCosmosAccount = async (
     const publicKey = getPublicKey({
       chain,
       walletCore,
-      hexChainCode: targetVault.hexChainCode,
-      publicKeys: targetVault.publicKeys,
+      hexChainCode: currentVault.hexChainCode,
+      publicKeys: currentVault.publicKeys,
     })
 
     const keyBytes = hexToBytes(toHexPublicKey({ publicKey, walletCore }))
