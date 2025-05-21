@@ -6,15 +6,18 @@ import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
+import { useVaults } from '../../storage/vaults'
 import { useCreateVaultCoinsMutation } from './useCreateVaultCoinsMutations'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
   const invalidateQueries = useInvalidateQueries()
+  const vaults = useVaults()
 
   const { createVault, getDefaultChains } = useCore()
 
@@ -23,8 +26,14 @@ export const useCreateVaultMutation = (
 
   const walletCore = useAssertWalletCore()
 
+  const { t } = useTranslation()
+
   return useMutation({
     mutationFn: async (input: Vault) => {
+      if (vaults.find(v => getVaultId(v) === getVaultId(input))) {
+        throw new Error(t('vault_already_exists'))
+      }
+
       const vault = await createVault(input)
 
       await invalidateQueries(vaultsQueryKey)
