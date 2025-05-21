@@ -17,6 +17,7 @@ const chainIdRecord = {
   [UtxoChain.Litecoin]: 'Litecoin_litecoin',
   [UtxoChain.Dogecoin]: '0x7d0',
   [UtxoChain.Dash]: 'Dash_dash',
+  [UtxoChain.Zcash]: 'Zcash_zcash',
 
   [CosmosChain.THORChain]: 'thorchain-1',
   [CosmosChain.Cosmos]: 'cosmoshub-4',

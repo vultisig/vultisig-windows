@@ -8,4 +8,5 @@ export const utxoChainScriptType: Record<UtxoChain, UtxoScriptType> = {
   [UtxoChain.BitcoinCash]: 'pkh',
   [UtxoChain.Dogecoin]: 'pkh',
   [UtxoChain.Dash]: 'pkh',
+  [UtxoChain.Zcash]: 'pkh',
 }

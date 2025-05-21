@@ -137,6 +137,7 @@ const supportedChains: Record<Chain, boolean> = {
   [Chain.BSC]: true,
   [Chain.CronosChain]: true,
   [Chain.Dogecoin]: true,
+  [Chain.Zcash]: true,
   [Chain.Dash]: true,
   [Chain.Dydx]: true,
   [Chain.Ethereum]: true,
