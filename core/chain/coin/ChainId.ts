@@ -1,6 +1,6 @@
 import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from '../Chain'
 
-const chainIdRecord = {
+const chainIdRecord: Record<Chain, string> = {
   [EvmChain.Arbitrum]: '0xa4b1',
   [EvmChain.Avalanche]: '0xa86a',
   [EvmChain.Base]: '0x2105',
@@ -36,7 +36,7 @@ const chainIdRecord = {
   [OtherChain.Ton]: '0x44c',
   [OtherChain.Ripple]: '0x1df4',
   [OtherChain.Tron]: '0x2b6653dc',
-} as const
+}
 
 type DeriveChainId<T> = T extends Chain ? (typeof chainIdRecord)[T] : never
 type ChainIdRecord = typeof chainIdRecord
