@@ -23,6 +23,11 @@ import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
 import { keccak256 } from 'js-sha3'
 
+export type KeysignMutationResult = {
+  approvalTxHash?: string
+  txHash: string
+}
+
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
@@ -32,7 +37,10 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
   return useMutation({
     mutationFn: async () => {
-      return matchRecordUnion<KeysignMessagePayload, Promise<string>>(payload, {
+      return matchRecordUnion<
+        KeysignMessagePayload,
+        Promise<KeysignMutationResult>
+      >(payload, {
         keysign: async payload => {
           const chain = getKeysignChain(payload)
 
@@ -94,7 +102,15 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             })
           )
 
-          return getLastItem(hashes)
+          // The last hash is always the swap tx
+          // If there's more than one tx, the second-to-last is the approval tx (e.g. ERC-20 approve)
+          const approvalTxHash =
+            hashes.length > 1 ? hashes[hashes.length - 2] : undefined
+
+          return {
+            approvalTxHash,
+            txHash: getLastItem(hashes),
+          }
         },
         custom: async ({ message }) => {
           const messageToHash = message.startsWith('0x')
@@ -120,7 +136,10 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             signatureFormat,
           })
 
-          return Buffer.from(result).toString('hex')
+          return {
+            approvalTxHash: undefined,
+            txHash: Buffer.from(result).toString('hex'),
+          }
         },
       })
     },
