@@ -10,17 +10,17 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { vaultFoldersQueryKey, vaultsQueryKey } from '../query/keys'
 import { useUpdateVaultMutation } from '../vault/mutations/useUpdateVaultMutation'
 import { getVaultId } from '../vault/Vault'
 import { UpdateVaultFolderFunction } from './CoreStorage'
+import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'
 
 export const useVaultFoldersQuery = () => {
   const { getVaultFolders } = useCore()
 
   return useQuery({
-    queryKey: vaultFoldersQueryKey,
+    queryKey: [StorageKey.vaultFolders],
     queryFn: async () => {
       const result = await getVaultFolders()
 
@@ -81,7 +81,7 @@ export const useDeleteVaultFolderMutation = () => {
         )
       }
 
-      await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
+      await invalidateQueries([StorageKey.vaultFolders], [StorageKey.vaults])
     },
   })
 }
@@ -93,7 +93,7 @@ export const useUpdateVaultFolderMutation = () => {
 
   const mutationFn: UpdateVaultFolderFunction = async input => {
     await updateVaultFolder(input)
-    await invalidateQueries(vaultFoldersQueryKey)
+    await invalidateQueries([StorageKey.vaultFolders])
   }
 
   return useMutation({
@@ -132,7 +132,7 @@ export const useCreateVaultFolderMutation = () => {
         )
       )
 
-      await invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey)
+      await invalidateQueries([StorageKey.vaultFolders], [StorageKey.vaults])
     },
   })
 }

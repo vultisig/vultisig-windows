@@ -2,8 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
-import { defaultChainsQueryKey } from '../query/keys'
 import { useCore } from '../state/core'
+import { StorageKey } from './StorageKey'
 
 export const initialDefaultChains = [
   Chain.Bitcoin,
@@ -17,7 +17,7 @@ export const useDefaultChainsQuery = () => {
   const { getDefaultChains } = useCore()
 
   return useQuery({
-    queryKey: defaultChainsQueryKey,
+    queryKey: [StorageKey.defaultChains],
     queryFn: getDefaultChains,
     ...fixedDataQueryOptions,
   })

@@ -1,7 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
-import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
+import { StorageKey } from '../../storage/StorageKey'
 import { useVaults } from '../../storage/vaults'
 
 export const useCreateVaultMutation = (
@@ -36,7 +36,7 @@ export const useCreateVaultMutation = (
 
       const vault = await createVault(input)
 
-      await invalidateQueries(vaultsQueryKey)
+      await invalidateQueries([StorageKey.vaults])
 
       await setCurrentVaultId(getVaultId(vault))
 

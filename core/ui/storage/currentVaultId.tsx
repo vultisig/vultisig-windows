@@ -11,8 +11,8 @@ import {
 } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 
-import { currentVaultIdQueryKey } from '../query/keys'
 import { getVaultId } from '../vault/Vault'
+import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'
 
 export type CurrentVaultId = string | null
@@ -36,7 +36,7 @@ export const useCurrentVaultIdQuery = () => {
   const { getCurrentVaultId } = useCore()
 
   return useQuery({
-    queryKey: currentVaultIdQueryKey,
+    queryKey: [StorageKey.currentVaultId],
     queryFn: getCurrentVaultId,
     ...fixedDataQueryOptions,
   })
@@ -81,7 +81,7 @@ export const useSetCurrentVaultIdMutation = (
   const mutationFn = async (value: CurrentVaultId) => {
     await setCurrentVaultId(value)
 
-    await invalidateQueries(currentVaultIdQueryKey)
+    await invalidateQueries([StorageKey.currentVaultId])
   }
 
   return useMutation({
