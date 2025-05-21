@@ -4,6 +4,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { getVaultAppSessions } from '../../sessions/state/appSessions'
@@ -33,48 +34,44 @@ export const handleFindAccounts = async (
   const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null
 
-  // First check if we have the address in our coins
+  // Check if the chain already exists in the vault's portfolio
   const vaultsCoins = await getVaultsCoins()
-  const existingCoins = vaultsCoins[currentVaultId]
-    .filter(
-      accountCoin => isFeeCoin(accountCoin) && accountCoin.chain === chain
-    )
-    .map(({ address }) => address ?? '')
+  const existingAccount = vaultsCoins[currentVaultId].find(
+    account => isFeeCoin(account) && account.chain === chain
+  )
 
-  if (existingCoins.length > 0) {
-    return existingCoins
+  if (existingAccount) {
+    if (!existingAccount.address) {
+      throw new Error('Fee account address is missing')
+    }
+    return [existingAccount.address]
   }
 
   // If not derive the address from the vault's public key via deriveAddress()
   const vaults = await getVaults()
-  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
-  if (!vault) return []
+  const vault = shouldBePresent(
+    vaults.find(vault => getVaultId(vault) === currentVaultId)
+  )
 
   const walletCore = await getWalletCore()
-  if (!walletCore) return []
 
-  try {
-    const publicKey = getPublicKey({
-      chain,
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-    })
+  const publicKey = getPublicKey({
+    chain,
+    walletCore,
+    hexChainCode: vault.hexChainCode,
+    publicKeys: vault.publicKeys,
+  })
 
-    const address = deriveAddress({
-      chain,
-      publicKey,
-      walletCore,
-    })
+  const address = deriveAddress({
+    chain,
+    publicKey,
+    walletCore,
+  })
 
-    if (!currentSession) {
-      return []
-    }
-    return [address]
-  } catch (error) {
-    console.error(`Error deriving address for chain ${chain}:`, error)
+  if (!currentSession) {
     return []
   }
+  return [address]
 }
 
 const handleFindVault = async (
