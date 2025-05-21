@@ -71,20 +71,6 @@ export type ThorchainProviderMethod =
   | 'deposit_transaction'
   | 'get_transaction_by_hash'
 
-type ThorchainProviderMethodToParams = {
-  request_accounts: never[]
-  get_accounts: never[]
-  send_transaction: any[] // TODO: Request types for every method
-  deposit_transaction: any[] // TODO: Request types for every method
-  get_transaction_by_hash: [{ hash: string }]
-}
-
-// Generic request type based on method
-export type ThorchainProviderRequest<T extends ThorchainProviderMethod> = {
-  method: T
-  params: ThorchainProviderMethodToParams[T]
-}
-
 export type ThorchainProviderResponse<T extends ThorchainProviderMethod> =
   T extends 'get_transaction_by_hash'
     ? ThornodeTxResponse

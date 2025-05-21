@@ -10,10 +10,12 @@ export const de = {
   moreInfo: 'Mehr Info',
   search_field_placeholder: 'Suchen..',
   start_transaction: 'Transaktion starten',
+  percentage_to_unstake: 'Prozentsatz zum Abziehen',
+  staked_amount: 'Gestakter Betrag',
   youre_swapping: 'Du tauschst',
+  percentage: 'Prozentsatz',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
-
   select_destination_chain: 'Ziel-Blockchain auswählen',
   no_tokens_found:
     'Keine Tokens gefunden. Füge Tokens unter der gewünschten Chain hinzu.',
@@ -30,11 +32,14 @@ export const de = {
   price_impact_high: 'Hohe Auswirkung',
   max_total_fees: 'Max. Gesamtgebühr',
   select_asset: 'Asset auswählen',
+  percentage_limit: 'Prozentsatz muss zwischen 0 und 100 liegen',
   waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
   coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
+  staked: 'Gestaket',
   select_network: 'Netzwerk auswählen',
+  unexpected_error: 'Unerwarteter Fehler',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
@@ -230,12 +235,12 @@ export const de = {
   vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_signer_word: 'Unterzeichner',
   vault_edit_page_title: 'Tresor bearbeiten',
-  vault_settings_address_book: 'Adressbuch',
-  vault_settings_default_chains: 'Standard-Blockchains',
-  vault_settings_share_app: 'App teilen',
-  vault_settings_section_legal: 'Rechtliches',
-  vault_settings_privacy_policy: 'Datenschutzrichtlinie',
-  vault_settings_terms_of_service: 'Nutzungsbedingungen',
+  address_book: 'Adressbuch',
+  default_chains: 'Standard-Blockchains',
+  share_app: 'App teilen',
+  legal: 'Rechtliches',
+  privacy_policy: 'Datenschutzrichtlinie',
+  terms_of_service: 'Nutzungsbedingungen',
   vault_setting_edit_vault_details_subtitle: 'Details Ihres Tresors anzeigen',
   vault_setting_edit_vault_backup_subtitle: 'Sichern Sie Ihr Tresorfragment',
   vault_setting_edit_vault_rename_title: 'Umbenennen',
@@ -544,7 +549,7 @@ export const de = {
   new_vault_setup: 'Neues Tresor-Setup',
   new_vault_setup_disclaimer:
     'Ihre Konfiguration hat sich geändert. Erstellen Sie ein neues Backup.',
-  vault_settings_register_for_airdrop: 'Registrieren Sie Ihre Vaults!',
+  register_your_vaults: 'Registrieren Sie Ihre Vaults!',
   vault_register_for_airdrop_title: 'Vault registrieren',
   vault_register_for_airdrop_list_item_1: 'Speichern Sie Ihren Vault-QR',
   vault_register_for_airdrop_list_item_2_part_1: 'Gehen Sie zu',
@@ -583,7 +588,7 @@ export const de = {
   folder_name_already_exists: 'Der Ordnername muss eindeutig sein',
   create: 'Erstellen',
   folders: 'Ordner',
-  vault_settings_check_for_update: 'Nach Updates suchen',
+  check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
   deposit: 'Einzahlung',
   add_vaults_to_folder:
@@ -826,4 +831,39 @@ export const de = {
   version: 'Version',
   delete_folder_confirmation:
     'Sind Sie sicher, dass Sie den Ordner "{{name}}" löschen möchten?',
+  assets: 'Vermögenswerte',
+  available: 'Verfügbar',
+  connected_dapps: 'Verbundene dApps',
+  disconnect_all: 'Alle trennen',
+  discord: 'Zwietracht',
+  expand_view: 'Ansicht erweitern',
+  general: 'Allgemein',
+  github: 'Github',
+  manage_chains: 'Ketten verwalten',
+  no_connected_dapps: 'Keine verbundenen dApps',
+  no_connected_dapps_desc:
+    'dApps werden hier angezeigt, wann immer Sie mit ihnen interagieren',
+  open_desktop: 'Öffnen Sie den Desktop',
+  portfolio_overview: 'Portfolioübersicht',
+  prioritize_vultisig: 'Priorisieren Sie Vultisig',
+  referral_code: 'Empfehlungscode',
+  rename: 'Umbenennen',
+  support: 'Unterstützung',
+  terms: 'Bedingungen',
+  twitter: 'Twitter',
+  vultisig_community: 'Vultisig-Gemeinschaft',
+  remove: 'Entfernen',
+  share_vault: 'Tresor teilen',
+  missing_thorchain_address: 'Fehlende THORChain-Adresse',
+  missing_destination_address: 'Fehlende Zieladresse',
+  upgrade_shares_info:
+    '<b>Sie erstellen neue Vault Share-Backups</b> und speichern diese wie zuvor',
+  failed_to_connect_with_server:
+    'Verbindung zum Server konnte nicht hergestellt werden',
+  connecting_to_server: 'Verbindung zum Server herstellen',
+  provide_camera_permission:
+    'Bitte erteilen Sie der Kamera die Erlaubnis, den QR-Code zu scannen',
+  grant_camera_permission: 'Kameraberechtigung erteilen',
+  failed_to_get_camera_permission:
+    'Kameraberechtigung konnte nicht eingeholt werden',
 }

@@ -9,8 +9,11 @@ import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
   | { id: 'address'; state: { address: string } }
+  | { id: 'addressBook' }
+  | { id: 'airdropRegister' }
+  | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
-  | { id: 'defaultChains' }
+  | { id: 'deeplink'; state: { url: string } }
   | { id: 'deleteVault' }
   | { id: 'deposit'; state: { coin: CoinKey } }
   | { id: 'importVault' }
@@ -35,27 +38,28 @@ export type CoreView =
   | { id: 'languageSettings' }
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
-  | { id: 'vaultChainDetail'; state: { chain: Chain } }
-  | { id: 'vaultChainCoinDetail'; state: { chain: Chain; coin: CoinKey } }
+  | { id: 'manageVaults' }
   | { id: 'newVault' }
   | { id: 'renameVault' }
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'send'; state: { coin: CoinKey; address?: string } }
+  | { id: 'settings' }
   | { id: 'setupFastVault' }
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
+  | { id: 'swap'; state: { coin: CoinKey } }
+  | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'vaultDetails' }
-  | { id: 'vaults' }
-  | { id: 'send'; state: { coin: CoinKey; address?: string } }
-  | { id: 'swap'; state: { coin: CoinKey } }
-  | { id: 'createVaultFolder' }
+  | { id: 'vaultChainDetail'; state: { chain: Chain } }
+  | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }
   | { id: 'vaultFolder'; state: { id: string } }
-  | { id: 'manageVaultFolder'; state: { id: string } }
+  | { id: 'vaults' }
   | { id: 'vaultSettings' }
-  | { id: 'manageVaults' }
+
 export type CoreViewId = CoreView['id']
 
 export const initialCoreView: CoreView = {

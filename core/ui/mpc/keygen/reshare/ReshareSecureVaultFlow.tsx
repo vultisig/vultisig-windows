@@ -1,29 +1,25 @@
-import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
-import { ReshareVerifyStep } from '@core/ui/mpc/keygen/reshare/verify/ReshareVerifyStep'
-import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
-import { Match } from '@lib/ui/base/Match'
-import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 
-const reshareVaultSteps = ['peers', 'verify', 'keygen'] as const
+import { StartMpcSessionFlow } from '../../session/StartMpcSessionFlow'
+import { KeygenFlow } from '../flow/KeygenFlow'
+import { ReshareVerifyStep } from './verify/ReshareVerifyStep'
 
 export const ReshareSecureVaultFlow = () => {
-  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
-    steps: reshareVaultSteps,
-    onExit: useNavigateBack(),
-  })
-
   return (
-    <Match
-      value={step}
-      peers={() => <KeygenPeerDiscoveryStep onFinish={toNextStep} />}
-      verify={() => (
-        <ReshareVerifyStep onBack={toPreviousStep} onFinish={toNextStep} />
-      )}
-      keygen={() => (
-        <StartMpcSessionFlow
-          render={() => <KeygenFlow onBack={() => setStep('verify')} />}
+    <StepTransition
+      from={({ onFinish }) => <KeygenPeerDiscoveryStep onFinish={onFinish} />}
+      to={({ onBack }) => (
+        <StepTransition
+          from={({ onFinish }) => (
+            <ReshareVerifyStep onBack={onBack} onFinish={onFinish} />
+          )}
+          to={({ onBack }) => (
+            <StartMpcSessionFlow
+              value="keygen"
+              render={() => <KeygenFlow onBack={onBack} />}
+            />
+          )}
         />
       )}
     />

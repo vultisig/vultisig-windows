@@ -71,7 +71,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
 	}
 	runtime.EventsEmit(t.ctx, "prepareVault")
-	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, true)
+	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, true, "")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create TSS service: %w", err)
 	}
@@ -150,8 +150,8 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 	return vault, nil
 }
 
-func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey string, localStateAccessor mtss.LocalStateAccessor, createPreParam bool) (*mtss.ServiceImpl, error) {
-	messenger, err := relay.NewMessengerImp(serverURL, Session, HexEncryptionKey)
+func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey string, localStateAccessor mtss.LocalStateAccessor, createPreParam bool, messageID string) (*mtss.ServiceImpl, error) {
+	messenger, err := relay.NewMessengerImp(serverURL, Session, HexEncryptionKey, messageID)
 	if err != nil {
 		return nil, fmt.Errorf("create messenger: %w", err)
 	}

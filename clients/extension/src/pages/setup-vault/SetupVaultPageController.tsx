@@ -1,4 +1,4 @@
-import { OnboardingController } from '@clients/extension/src/components/onboarding/OnboardingController'
+import { OnboardingController } from '@core/ui/onboarding/OnboardingController'
 import { useHasFinishedOnboarding } from '@core/ui/storage/onboarding'
 import { SetupVaultPage } from '@core/ui/vault/create/setup-vault'
 

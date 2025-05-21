@@ -173,9 +173,7 @@ const AddressesListView = ({
       <AddressBookPageHeader
         data-testid="AddressesListView-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton onClick={onClose} />}
-        title={
-          <PageHeaderTitle>{t('vault_settings_address_book')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
         secondaryControls={
           isEditModeOn ? (
             <UnstyledButton onClick={onEditModeToggle}>

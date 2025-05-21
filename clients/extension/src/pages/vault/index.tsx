@@ -10,7 +10,7 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultAddreses } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -27,6 +27,8 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { UploadQrPrompt } from './UploadQrPrompt'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -58,7 +60,7 @@ export const VaultPage = () => {
   const navigate = useAppNavigate()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
-  const addresses = useCurrentVaultAddreses()
+  const addresses = useCurrentVaultAddresses()
   const fiatCurrency = useFiatCurrency()
 
   return (
@@ -77,12 +79,15 @@ export const VaultPage = () => {
           </ConnectedApp>
         }
         secondaryControls={
-          <Button
-            icon={<SettingsIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'settings' })}
-            size="sm"
-            fitContent
-          />
+          <>
+            <UploadQrPrompt />
+            <Button
+              icon={<SettingsIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'settings' })}
+              size="sm"
+              fitContent
+            />
+          </>
         }
         title={
           <Text
