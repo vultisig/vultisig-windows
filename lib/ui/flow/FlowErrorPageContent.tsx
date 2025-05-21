@@ -9,7 +9,7 @@ export const FlowErrorPageContent = ({
   title,
 }: Partial<ActionProp> & Partial<MessageProp> & TitleProp) => {
   return (
-    <PageContent>
+    <PageContent flexGrow>
       <ErrorFallbackContent message={message} title={title} />
       {action}
     </PageContent>
