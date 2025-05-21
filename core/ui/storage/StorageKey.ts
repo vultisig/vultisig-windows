@@ -10,4 +10,5 @@ export enum StorageKey {
   isVaultBalanceVisible = 'isVaultBalanceVisible',
   hasFinishedOnboarding = 'hasFinishedOnboarding',
   initialView = 'initialView',
+  coinFinderIgnore = 'coinFinderIgnore',
 }
