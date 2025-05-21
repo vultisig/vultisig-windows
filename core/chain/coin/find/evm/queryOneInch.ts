@@ -1,5 +1,6 @@
 import { rootApiUrl } from '@core/config'
 import { sleep } from '@core/mpc/sleep'
+import { NoDataError } from '@lib/utils/error/NoDataError'
 import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
 let lastRequestAt: number | null = null
@@ -16,6 +17,10 @@ export const queryOneInch = async <T>(urlParams: string): Promise<T> => {
   lastRequestAt = now
   const url = `${rootApiUrl}/1inch${urlParams}`
   const response = await fetch(url)
+
+  if (response.status === 404) {
+    throw new NoDataError()
+  }
 
   if (response.status === 429) {
     await sleep(minTimeGap)
