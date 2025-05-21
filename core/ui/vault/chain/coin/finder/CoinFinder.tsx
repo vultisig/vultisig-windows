@@ -1,3 +1,4 @@
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -6,6 +7,9 @@ import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useEffect } from 'react'
 
+import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
+
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
 
@@ -13,24 +17,33 @@ export const CoinFinder = () => {
 
   const coins = useCurrentVaultCoins()
 
+  const coinFinderIgnore = useCoinFinderIgnore()
+
+  const vaultId = useAssertCurrentVaultId()
+
   useEffect(() => {
     if (!data) return
 
-    const newCoins = data.filter(
-      coin =>
-        !coins.some(c =>
-          areEqualRecords(
-            withoutUndefinedFields(c),
-            withoutUndefinedFields(coin)
+    const newCoins = data
+      .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
+      .filter(
+        coin =>
+          !coins.some(c =>
+            areEqualRecords(
+              withoutUndefinedFields(c),
+              withoutUndefinedFields(coin)
+            )
           )
-        )
-    )
+      )
 
     if (!isEmpty(newCoins) && !isPending && !error) {
       console.log('CoinFinder: saving new coins', newCoins)
-      saveCoins(newCoins)
+      saveCoins({
+        vaultId,
+        coins: newCoins,
+      })
     }
-  }, [coins, data, saveCoins, isPending, error])
+  }, [coinFinderIgnore, coins, data, error, isPending, saveCoins, vaultId])
 
   return null
 }

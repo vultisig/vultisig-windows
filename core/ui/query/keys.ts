@@ -27,3 +27,5 @@ export const hasFinishedOnboardingQueryKey = [
 ] as const
 
 export const initialViewQueryKey = ['initialView', version] as const
+
+export const coinFinderIgnoreQueryKey = ['coinFinderIgnore', version] as const
