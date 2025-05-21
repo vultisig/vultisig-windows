@@ -16,8 +16,8 @@ import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
-import { storage } from '../state/storage'
 import { getManifestVersion } from '../state/utils/getManifestVersion'
+import { storage } from '../storage'
 import { StorageMigrationsManager } from './StorageMigrationManager'
 
 const ExtensionGlobalStyle = createGlobalStyle`
