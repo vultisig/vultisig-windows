@@ -23,20 +23,29 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { match } from '@lib/utils/match'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCore } from '../../../../state/core'
 
+const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
+  if (!value?.case) return null
+
+  return match(value.case, {
+    thorchainSwapPayload: () => 'ThorChain',
+    mayachainSwapPayload: () => 'MayaChain',
+    oneinchSwapPayload: () => '1inch',
+  })
+}
+
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const txHash = useCurrentTxHash()
+  const { txHash, approvalTxHash } = useCurrentTxHash()
   const navigate = useCoreNavigate()
-
   const vault = useCurrentVault()
-
   const { t } = useTranslation()
 
   const {
@@ -76,7 +85,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
 
   const blockExplorerChain: Chain = useMemo(() => {
     if (isSwapTx && swapPayload && swapPayload.value) {
-      return matchDiscriminatedUnion(swapPayload, 'case', 'value', {
+      return match(swapPayload.case, {
         thorchainSwapPayload: () => Chain.THORChain,
         mayachainSwapPayload: () => Chain.MayaChain,
         oneinchSwapPayload: () => chain as Chain,
@@ -86,15 +95,18 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     return chain as Chain
   }, [chain, isSwapTx, swapPayload])
 
-  const blockExplorerUrl = getBlockExplorerUrl({
-    chain: blockExplorerChain,
-    entity: 'tx',
-    value: txHash,
-  })
+  const swapProvider = getSwapProvider(swapPayload)
 
   const { openUrl } = useCore()
 
-  const trackTransaction = () => openUrl(blockExplorerUrl)
+  const trackTransaction = (tx: string) =>
+    openUrl(
+      getBlockExplorerUrl({
+        chain: blockExplorerChain,
+        entity: 'tx',
+        value: tx,
+      })
+    )
 
   return (
     <Wrapper>
@@ -137,29 +149,51 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           )}
         </HStack>
         <SwapInfoWrapper gap={16} fullWidth fullHeight flexGrow>
-          <HStack fullWidth justifyContent="space-between" alignItems="center">
-            <Text weight="500" size={14} color="shy">
-              {t('transaction')}
-            </Text>
-            <HStack gap={4} alignItems="center">
-              <Text
-                style={{
-                  width: 100,
-                }}
-                cropped
-                weight="500"
-                size={14}
-                color="contrast"
-              >
-                {txHash}
+          {withoutUndefined([txHash, approvalTxHash]).map(hash => (
+            <HStack
+              key={hash}
+              fullWidth
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text weight="500" size={14} color="shy">
+                {hash === approvalTxHash ? t('approval_tx') : t('transaction')}
               </Text>
-              <IconButton
-                size="s"
-                onClick={trackTransaction}
-                icon={<SquareArrowOutUpRightIcon />}
-              />
+              <HStack gap={4} alignItems="center">
+                <Text
+                  style={{
+                    width: 100,
+                  }}
+                  cropped
+                  weight="500"
+                  size={14}
+                  color="contrast"
+                >
+                  {hash}
+                </Text>
+                <IconButton
+                  size="s"
+                  onClick={() => trackTransaction(hash)}
+                  icon={<SquareArrowOutUpRightIcon />}
+                />
+              </HStack>
             </HStack>
-          </HStack>
+          ))}
+          {swapProvider && (
+            <HStack
+              fullWidth
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text weight="500" size={14} color="shy">
+                {t('provider')}
+              </Text>
+
+              <Text weight={500} size={14} color="contrast" cropped>
+                {swapProvider}
+              </Text>
+            </HStack>
+          )}
           <HStack fullWidth justifyContent="space-between" alignItems="center">
             <Text weight="500" size={14} color="shy">
               {t('from')}
@@ -176,7 +210,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             >
               {vault.name}{' '}
               <Text cropped as="span" color="shy">
-                {fromCoin.address}
+                ({fromCoin.address})
               </Text>
             </Text>
           </HStack>
@@ -219,7 +253,7 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth justifyContent="space-between">
           <Button
-            onClick={trackTransaction}
+            onClick={() => trackTransaction(txHash)}
             style={{
               flex: 1,
             }}
