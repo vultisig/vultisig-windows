@@ -1,9 +1,13 @@
 import { chainTokens } from '@core/chain/coin/chainTokens'
-import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
+import { areEqualCoins, Coin, extractCoinKey } from '@core/chain/coin/Coin'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
+import {
+  useAddToCoinFinderIgnoreMutation,
+  useRemoveFromCoinFinderIgnoreMutation,
+} from '@core/ui/storage/coinFinderIgnore'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -31,6 +35,8 @@ const CoinItem: FC<Coin> = coin => {
   const currentVaultCoins = useCurrentVaultCoins()
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
+  const addToCoinFinderIgnore = useAddToCoinFinderIgnoreMutation()
+  const removeFromCoinFinderIgnore = useRemoveFromCoinFinderIgnoreMutation()
 
   const currentVaultCoin = useMemo(() => {
     return currentVaultCoins.find(c => areEqualCoins(c, coin))
@@ -38,9 +44,15 @@ const CoinItem: FC<Coin> = coin => {
 
   const handleChange = () => {
     if (currentVaultCoin) {
-      deleteCoin.mutate(currentVaultCoin)
+      deleteCoin.mutate(currentVaultCoin, {
+        onSuccess: () =>
+          addToCoinFinderIgnore.mutate(extractCoinKey(currentVaultCoin)),
+      })
     } else {
-      createCoin.mutate(coin)
+      createCoin.mutate(coin, {
+        onSuccess: () =>
+          removeFromCoinFinderIgnore.mutate(extractCoinKey(coin)),
+      })
     }
   }
 
