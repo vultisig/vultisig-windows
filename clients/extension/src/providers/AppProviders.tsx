@@ -17,6 +17,8 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { createGlobalStyle } from 'styled-components'
 
 import { storage } from '../state/storage'
+import { getManifestVersion } from '../state/utils/getManifestVersion'
+import { StorageMigrationsManager } from './StorageMigrationManager'
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
@@ -39,7 +41,7 @@ const coreState: CoreState = {
   },
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
-  version: '1.0.0',
+  version: getManifestVersion(),
   isLocalModeAvailable: false,
   getMpcServerUrl: async ({ serverType }) => {
     if (serverType === 'relay') {
@@ -59,14 +61,16 @@ export const AppProviders = ({ children }: ChildrenProp) => {
         <CoreProvider value={coreState}>
           <QueryProvider>
             <WalletCoreProvider>
-              <StorageDependant>
-                <ToastProvider>
-                  <ResponsivenessProvider>{children}</ResponsivenessProvider>
-                </ToastProvider>
-                <ActiveVaultOnly>
-                  <CoinFinder />
-                </ActiveVaultOnly>
-              </StorageDependant>
+              <StorageMigrationsManager>
+                <StorageDependant>
+                  <ToastProvider>
+                    <ResponsivenessProvider>{children}</ResponsivenessProvider>
+                  </ToastProvider>
+                  <ActiveVaultOnly>
+                    <CoinFinder />
+                  </ActiveVaultOnly>
+                </StorageDependant>
+              </StorageMigrationsManager>
             </WalletCoreProvider>
           </QueryProvider>
         </CoreProvider>
