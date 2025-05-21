@@ -43,7 +43,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.MayaChain]: 'https://mayascan.org',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
   [Chain.Tron]: 'https://tronscan.org/#',
-  [Chain.Zcash]: 'https://zcashblockexplorer.com',
+  [Chain.Zcash]: 'https://blockchair.com/zcash',
 }
 
 export const getBlockExplorerUrl = ({
@@ -121,7 +121,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Ripple]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Akash]: () => `${baseUrl}/tx/${value}`,
         [Chain.Tron]: () => `${baseUrl}/transaction/${value}`,
-        [Chain.Zcash]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
       }),
   })
 }
