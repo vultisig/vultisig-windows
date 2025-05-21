@@ -1,5 +1,5 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { CurrentTxHashProvider } from '@core/ui/chain/state/currentTxHash'
+import { CurrentTxHashesProvider } from '@core/ui/chain/state/currentTxHash'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -58,7 +58,7 @@ export const KeysignSigningStep = ({
               value={payload}
               handlers={{
                 keysign: payload => (
-                  <CurrentTxHashProvider
+                  <CurrentTxHashesProvider
                     value={{
                       approvalTxHash: value.approvalTxHash,
                       txHash: normalizeTxHash(value.txHash, {
@@ -80,7 +80,7 @@ export const KeysignSigningStep = ({
                         </>
                       )}
                     />
-                  </CurrentTxHashProvider>
+                  </CurrentTxHashesProvider>
                 ),
                 custom: payload => (
                   <TxOverviewPanel>

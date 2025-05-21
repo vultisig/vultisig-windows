@@ -5,7 +5,7 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
+import { useCurrentTxHashes } from '@core/ui/chain/state/currentTxHash'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -43,7 +43,7 @@ const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
 }
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const { txHash, approvalTxHash } = useCurrentTxHash()
+  const { txHash, approvalTxHash } = useCurrentTxHashes()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const { t } = useTranslation()
