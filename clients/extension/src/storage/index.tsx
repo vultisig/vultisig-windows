@@ -9,10 +9,7 @@ import { currentVaultIdStorage } from './currentVaultId'
 import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { languageStorage } from './language'
-import {
-  getHasFinishedOnboarding,
-  setHasFinishedOnboarding,
-} from './onboarding'
+import { onboardingStorage } from './onboarding'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
 
@@ -27,7 +24,6 @@ export const storage: CoreStorage = {
   ...addressBookStorage,
   ...languageStorage,
   ...balanceVisibilityStorage,
-  getHasFinishedOnboarding,
-  setHasFinishedOnboarding,
+  ...onboardingStorage,
   getInitialView,
 }

@@ -8,18 +8,9 @@ import { CurrentVaultIdStorage } from './currentVaultId'
 import { DefaultChainsStorage } from './defaultChains'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { LanguageStorage } from './language'
+import { OnboardingStorage } from './onboarding'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
-
-export const isVaultBalanceInitallyVisible = true
-
-export const isHasFinishedOnboardingInitially = false
-
-export type SetHasFinishedOnboardingFunction = (
-  hasFinishedOnboarding: boolean
-) => Promise<void>
-
-export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type GetInitialViewFunction = () => Promise<View>
 
@@ -32,8 +23,7 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   DefaultChainsStorage &
   AddressBookStorage &
   LanguageStorage &
-  BalanceVisibilityStorage & {
-    getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
-    setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
+  BalanceVisibilityStorage &
+  OnboardingStorage & {
     getInitialView: GetInitialViewFunction
   }
