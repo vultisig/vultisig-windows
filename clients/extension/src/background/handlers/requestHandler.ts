@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
@@ -9,12 +9,7 @@ import {
   getChainId,
 } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import {
-  JsonRpcProvider,
-  toUtf8String,
-  TransactionRequest,
-  TypedDataEncoder,
-} from 'ethers'
+import { toUtf8String, TransactionRequest, TypedDataEncoder } from 'ethers'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import {
@@ -49,19 +44,6 @@ import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 
-const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
-  {} as Record<Chain, JsonRpcProvider | undefined>
-
-const getRpcProvider = (chain: Chain) => {
-  if (!rpcProviderCache[chain]) {
-    const rpcUrl = chainRpcUrl[chain]
-    if (!rpcUrl) {
-      throw new Error(`No RPC URL configured for chain ${chain}`)
-    }
-    rpcProviderCache[chain] = new JsonRpcProvider(rpcUrl)
-  }
-  return rpcProviderCache[chain]!
-}
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 export const handleRequest = (
   body: Messaging.Chain.Request,
@@ -318,16 +300,21 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_COUNT: {
         const [address, tag] = params
-        getRpcProvider(chain)
-          .getTransactionCount(String(address), String(tag))
+
+        getEvmClient(chain as EvmChain)
+          .getTransactionCount({
+            address: String(address) as `0x${string}`,
+            blockTag: String(tag) as any,
+          })
           .then(count => resolve(String(count)))
           .catch(reject)
+
         break
       }
       case RequestMethod.METAMASK.ETH_BLOCK_NUMBER: {
-        getRpcProvider(chain)
-          .getBlock('latest')
-          .then(block => resolve(String(block?.number)))
+        getEvmClient(chain as EvmChain)
+          .getBlockNumber()
+          .then(blockNumber => resolve(String(blockNumber)))
           .catch(reject)
 
         break
@@ -423,14 +410,17 @@ export const handleRequest = (
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionRequest[]
 
-          if (transaction) {
-            getRpcProvider(chain)
-              .estimateGas(transaction)
-              .then(gas => resolve(gas.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
+          getEvmClient(chain as EvmChain)
+            .estimateGas({
+              account: transaction.from as `0x${string}`,
+              to: transaction.to as `0x${string}` | undefined,
+              data: transaction.data as `0x${string}` | undefined,
+              value: transaction.value
+                ? BigInt(transaction.value.toString())
+                : undefined,
+            })
+            .then(gas => resolve(gas.toString()))
+            .catch(reject)
         } else {
           reject()
         }
@@ -490,14 +480,13 @@ export const handleRequest = (
         if (Array.isArray(params)) {
           const [address, tag] = params
 
-          if (address && tag) {
-            getRpcProvider(chain)
-              .getBalance(String(address), String(tag))
-              .then(value => resolve(value.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
+          getEvmClient(chain as EvmChain)
+            .getBalance({
+              address: String(address) as `0x${string}`,
+              blockTag: String(tag) as any,
+            })
+            .then(value => resolve(value.toString()))
+            .catch(reject)
         } else {
           reject()
         }
@@ -506,28 +495,32 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_GET_BLOCK_BY_NUMBER: {
         const [tag, refresh] = params
-        getRpcProvider(chain)
-          .getBlock(String(tag), Boolean(refresh))
-          .then(block => resolve(block?.toJSON()))
+        getEvmClient(chain as EvmChain)
+          .getBlock({
+            blockTag: String(tag) as any,
+            includeTransactions: Boolean(refresh),
+          })
+          .then(block => {
+            // Convert block to JSON string to ensure compatibility
+            resolve(JSON.stringify(block))
+          })
           .catch(reject)
 
         break
       }
       case RequestMethod.METAMASK.ETH_GAS_PRICE: {
-        getRpcProvider(chain)
-          .getFeeData()
-          .then(({ gasPrice, maxFeePerGas }) =>
-            resolve((gasPrice ?? maxFeePerGas ?? 0n).toString())
-          )
+        getEvmClient(chain as EvmChain)
+          .getGasPrice()
+          .then(gasPrice => resolve(gasPrice.toString()))
           .catch(reject)
 
         break
       }
       case RequestMethod.METAMASK.ETH_MAX_PRIORITY_FEE_PER_GAS: {
-        getRpcProvider(chain)
-          .getFeeData()
+        getEvmClient(chain as EvmChain)
+          .estimateFeesPerGas()
           .then(({ maxPriorityFeePerGas }) =>
-            resolve((maxPriorityFeePerGas ?? 0n).toString())
+            resolve(maxPriorityFeePerGas.toString())
           )
           .catch(reject)
 
@@ -535,13 +528,19 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_CALL: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as any
 
-          if (transaction) {
-            getRpcProvider(chain).call(transaction).then(resolve).catch(reject)
-          } else {
-            reject(new Error('Invalid transaction'))
-          }
+          getEvmClient(chain as EvmChain)
+            .call({
+              account: transaction.from as `0x${string}` | undefined,
+              to: transaction.to as `0x${string}` | undefined,
+              data: transaction.data as `0x${string}` | undefined,
+              value: transaction.value
+                ? BigInt(transaction.value.toString())
+                : undefined,
+            })
+            .then(result => resolve(result as unknown as string))
+            .catch(reject)
         } else {
           reject(new Error('Invalid params'))
         }
@@ -551,11 +550,16 @@ export const handleRequest = (
 
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_RECEIPT: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [txHash] = params
 
-          getRpcProvider(chain)
-            .getTransactionReceipt(String(transaction))
-            .then(receipt => resolve(receipt?.toJSON()))
+          getEvmClient(chain as EvmChain)
+            .getTransactionReceipt({
+              hash: String(txHash) as `0x${string}`,
+            })
+            .then(receipt => {
+              // Convert receipt to JSON string to ensure compatibility
+              resolve(receipt ? JSON.stringify(receipt) : 'null')
+            })
             .catch(reject)
         } else {
           reject()
@@ -567,14 +571,13 @@ export const handleRequest = (
         if (Array.isArray(params)) {
           const [address, tag] = params
 
-          if (address && tag) {
-            getRpcProvider(chain)
-              .getCode(String(address), String(tag))
-              .then(value => resolve(value.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
+          getEvmClient(chain as EvmChain)
+            .getCode({
+              address: String(address) as `0x${string}`,
+              blockTag: String(tag) as any,
+            })
+            .then(code => resolve(code || '0x'))
+            .catch(reject)
         } else {
           reject()
         }
