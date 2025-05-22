@@ -23,7 +23,7 @@ const addToCoinFinderIgnore: AddToCoinFinderIgnoreFunction = async coinKey => {
 
   const newList = [...list, coinKey]
 
-  setPersistentState(StorageKey.coinFinderIgnore, newList)
+  await setPersistentState(StorageKey.coinFinderIgnore, newList)
 }
 
 const removeFromCoinFinderIgnore: RemoveFromCoinFinderIgnoreFunction =
@@ -32,7 +32,7 @@ const removeFromCoinFinderIgnore: RemoveFromCoinFinderIgnoreFunction =
 
     const newList = list.filter(key => !areEqualCoins(key, coinKey))
 
-    setPersistentState(StorageKey.coinFinderIgnore, newList)
+    await setPersistentState(StorageKey.coinFinderIgnore, newList)
   }
 
 export const coinFinderIgnoreStorage: CoinFinderIgnoreStorage = {
