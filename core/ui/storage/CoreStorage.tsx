@@ -7,7 +7,7 @@ import { Language } from '../i18n/Language'
 import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
-import { CurrentVaultId } from './currentVaultId'
+import { CurrentVaultIdStorage } from './currentVaultId'
 import { FiatCurrencyStorage } from './fiatCurrency'
 
 export type UpdateVaultInput = {
@@ -29,10 +29,6 @@ export type CreateVaultCoinsFunction = (
 ) => Promise<void>
 
 export type GetDefaultChainsFunction = () => Promise<Chain[]>
-
-type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
-
-export type SetCurrentVaultIdFunction = (id: CurrentVaultId) => Promise<void>
 
 export type GetVaultsFunction = () => Promise<Vault[]>
 
@@ -115,9 +111,8 @@ export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 export type GetInitialViewFunction = () => Promise<View>
 
 export type CoreStorage = CoinFinderIgnoreStorage &
-  FiatCurrencyStorage & {
-    getCurrentVaultId: GetCurrentVaultIdFunction
-    setCurrentVaultId: SetCurrentVaultIdFunction
+  FiatCurrencyStorage &
+  CurrentVaultIdStorage & {
     getVaults: GetVaultsFunction
     getVaultsCoins: GetVaultsCoinsFunction
     updateVault: UpdateVaultFunction
