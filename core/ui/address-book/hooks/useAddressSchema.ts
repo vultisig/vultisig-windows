@@ -1,3 +1,8 @@
+import { chainInfos } from '@core/chain/coin/chainInfo'
+import {
+  getAddressSchema,
+  getModifyAddressSchema,
+} from '@core/ui/address-book/schemas/addressSchema'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,12 +10,6 @@ import { useEffect, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-import { getCoinOptions } from '../helpers/getCoinOptions'
-import {
-  getAddressSchema,
-  getModifyAddressSchema,
-} from '../schemas/addressSchema'
 
 export type AddressFormValues = z.infer<ReturnType<typeof getAddressSchema>>
 
@@ -24,7 +23,18 @@ export const useAddressSchema = ({
   const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
+
+  const chainOptions = useMemo(() => {
+    const coins = Object.values(chainInfos)
+
+    return coins.map(({ chain, ticker, logo }, index) => ({
+      value: chain,
+      label: ticker,
+      logo: logo,
+      isLastOption: index === coins.length - 1,
+    }))
+  }, [])
+
   const derivedDefaultValues = defaultValues || {
     chain: chainOptions[0].value,
     title: '',

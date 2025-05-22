@@ -1,14 +1,13 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
+import { AddressBookItem } from '@core/ui/address-book/item'
+import { Language } from '@core/ui/i18n/Language'
+import { CoinFinderIgnoreStorage } from '@core/ui/storage/coinFinderIgnore'
+import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { Vault } from '@core/ui/vault/Vault'
+import { VaultFolder } from '@core/ui/vault/VaultFolder'
 import { View } from '@lib/ui/navigation/View'
-
-import { AddressBookItem } from '../addressBook/AddressBookItem'
-import { Language } from '../i18n/Language'
-import { Vault } from '../vault/Vault'
-import { VaultFolder } from '../vault/VaultFolder'
-import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
-import { CurrentVaultId } from './currentVaultId'
 
 export type SetFiatCurrencyFunction = (value: FiatCurrency) => Promise<void>
 

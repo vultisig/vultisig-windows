@@ -36,6 +36,7 @@ export type CoreView =
       }
     }
   | { id: 'languageSettings' }
+  | { id: 'manageAddress'; state: { id?: string } }
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
   | { id: 'manageVaults' }

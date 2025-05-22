@@ -1,5 +1,7 @@
+import { AddressBookPage } from '@core/ui/address-book'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { useCore } from '@core/ui/state/core'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
@@ -18,9 +20,6 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import AddressSelector from '../addressSelector/AddressSelector'
-import { useSendReceiver } from '../state/receiver'
 
 const Input = styled(TextInput)`
   ${text({
@@ -65,7 +64,7 @@ export const ManageReceiver = () => {
       )}
       addressBook={() => (
         <Modal title="" withDefaultStructure={false}>
-          <AddressSelector
+          <AddressBookPage
             onAddressClick={address => {
               setValue(address)
               setViewState('default')

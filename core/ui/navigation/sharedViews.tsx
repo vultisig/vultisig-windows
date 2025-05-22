@@ -1,3 +1,5 @@
+import { AddressBookPage } from '@core/ui/address-book'
+import { ManageAddressPage } from '@core/ui/address-book/manage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
@@ -28,7 +30,9 @@ import { Views } from '@lib/ui/navigation/Views'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'addAddress'
   | 'address'
+  | 'addressBook'
   | 'airdropRegister'
   | 'createVaultFolder'
   | 'currencySettings'
@@ -37,6 +41,7 @@ export type SharedViewId = Extract<
   | 'deposit'
   | 'importVault'
   | 'languageSettings'
+  | 'manageAddress'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
   | 'manageVaultFolder'
@@ -57,6 +62,7 @@ export type SharedViewId = Extract<
 
 export const sharedViews: Views<SharedViewId> = {
   address: AddressPage,
+  addressBook: AddressBookPage,
   airdropRegister: AirdropRegisterPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
@@ -65,6 +71,7 @@ export const sharedViews: Views<SharedViewId> = {
   deposit: DepositPage,
   importVault: ImportVaultPage,
   languageSettings: LanguagePage,
+  manageAddress: ManageAddressPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,

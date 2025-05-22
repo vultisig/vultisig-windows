@@ -317,10 +317,9 @@ export const it = {
   vault_name_max_length_error:
     'Il nome della cassaforte deve essere inferiore a 50 caratteri',
   vault_name_already_exists: 'Il nome della cassaforte deve essere univoco',
-  vault_settings_address_book_save_addresses_button: 'Salva indirizzo',
-  vault_settings_address_book_edit_addresses_title: 'Modifica indirizzo',
-  vault_settings_address_book_address_title_field: 'Titolo',
-  vault_settings_address_book_address_placeholder: 'Scrivi qui',
+  edit_address: 'Modifica indirizzo',
+  title: 'Titolo',
+  type_here: 'Scrivi qui',
   vault_settings_address_book_invalid_address_error:
     'Indirizzo non valido per la blockchain selezionata!',
   vault_settings_address_book_repeated_address_error: 'Indirizzo già aggiunto!',
@@ -331,7 +330,7 @@ export const it = {
   vault_settings_address_book_title_max_length_error:
     'Il titolo deve essere al massimo di 50 caratteri.',
   track: 'Traccia',
-  address_book_list_item_network: 'rete',
+  network: 'rete',
   overview: 'Panoramica',
   signing_transaction: 'Firma della transazione',
   session_init: 'Inizializzazione sessione...',
