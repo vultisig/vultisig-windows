@@ -1,3 +1,5 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
+import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
@@ -14,7 +16,8 @@ import { VaultOverview } from '../../vault/components/VaultOverview'
 import { UploadQrPrompt } from './UploadQrPrompt'
 
 export const VaultPage = () => {
-  const { name } = useCurrentVault()
+  const { name, signers } = useCurrentVault()
+  const isFastVault = hasServer(signers)
   const navigate = useAppNavigate()
 
   return (
@@ -53,6 +56,7 @@ export const VaultPage = () => {
         <VaultOverview />
       </VStack>
       <UpdateAvailablePopup />
+      {isFastVault && <FastVaultPasswordVerification />}
     </>
   )
 }
