@@ -7,14 +7,6 @@ import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import {
-  currentVaultIdQueryKey,
-  defaultChainsQueryKey,
-  fiatCurrencyQueryKey,
-  hasFinishedOnboardingQueryKey,
-  isVaultBalanceVisibleQueryKey,
-  languageQueryKey,
-} from '@core/ui/query/keys'
-import {
   CoreStorage,
   CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
@@ -46,6 +38,7 @@ import {
 import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { recordMap } from '@lib/utils/record/recordMap'
 
 import {
@@ -171,10 +164,8 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
   await DeleteAddressBookItem(item)
 }
 
-const [defaultChainsKey] = defaultChainsQueryKey
-
 const getDefaultChains: GetDefaultChainsFunction = async () => {
-  const value = persistentStorage.getItem<Chain[]>(defaultChainsKey)
+  const value = persistentStorage.getItem<Chain[]>(StorageKey.defaultChains)
 
   if (value === undefined) {
     return initialDefaultChains
@@ -183,10 +174,8 @@ const getDefaultChains: GetDefaultChainsFunction = async () => {
   return value
 }
 
-const [fiatCurrencyKey] = fiatCurrencyQueryKey
-
 const getFiatCurrency = async () => {
-  const value = persistentStorage.getItem<FiatCurrency>(fiatCurrencyKey)
+  const value = persistentStorage.getItem<FiatCurrency>(StorageKey.fiatCurrency)
 
   if (value === undefined) {
     return defaultFiatCurrency
@@ -196,13 +185,13 @@ const getFiatCurrency = async () => {
 }
 
 const setFiatCurrency = async (currency: FiatCurrency) => {
-  persistentStorage.setItem(fiatCurrencyKey, currency)
+  persistentStorage.setItem(StorageKey.fiatCurrency, currency)
 }
 
-const [currentVaultIdKey] = currentVaultIdQueryKey
-
 const getCurrentVaultId = async () => {
-  const value = persistentStorage.getItem<CurrentVaultId>(currentVaultIdKey)
+  const value = persistentStorage.getItem<CurrentVaultId>(
+    StorageKey.currentVaultId
+  )
 
   if (value === undefined) {
     return initialCurrentVaultId
@@ -212,13 +201,11 @@ const getCurrentVaultId = async () => {
 }
 
 const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
-  persistentStorage.setItem(currentVaultIdKey, vaultId)
+  persistentStorage.setItem(StorageKey.currentVaultId, vaultId)
 }
 
-const [languageKey] = languageQueryKey
-
 const getLanguage: GetLanguageFunction = async () => {
-  const value = persistentStorage.getItem<Language>(languageKey)
+  const value = persistentStorage.getItem<Language>(StorageKey.language)
 
   if (value === undefined) {
     return primaryLanguage
@@ -228,13 +215,13 @@ const getLanguage: GetLanguageFunction = async () => {
 }
 
 const setLanguage: SetLanguageFunction = async language => {
-  persistentStorage.setItem(languageKey, language)
+  persistentStorage.setItem(StorageKey.language, language)
 }
 
-const [isVaultBalanceVisibleKey] = isVaultBalanceVisibleQueryKey
-
 const getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction = async () => {
-  const value = persistentStorage.getItem<boolean>(isVaultBalanceVisibleKey)
+  const value = persistentStorage.getItem<boolean>(
+    StorageKey.isVaultBalanceVisible
+  )
 
   if (value === undefined) {
     return isVaultBalanceInitallyVisible
@@ -245,13 +232,16 @@ const getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction = async () => {
 
 const setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction =
   async isVaultBalanceVisible => {
-    persistentStorage.setItem(isVaultBalanceVisibleKey, isVaultBalanceVisible)
+    persistentStorage.setItem(
+      StorageKey.isVaultBalanceVisible,
+      isVaultBalanceVisible
+    )
   }
 
-const [hasFinishedOnboardingKey] = hasFinishedOnboardingQueryKey
-
 const getHasFinishedOnboarding: GetHasFinishedOnboardingFunction = async () => {
-  const value = persistentStorage.getItem<boolean>(hasFinishedOnboardingKey)
+  const value = persistentStorage.getItem<boolean>(
+    StorageKey.hasFinishedOnboarding
+  )
 
   if (value === undefined) {
     return isHasFinishedOnboardingInitially
@@ -262,7 +252,10 @@ const getHasFinishedOnboarding: GetHasFinishedOnboardingFunction = async () => {
 
 const setHasFinishedOnboarding: SetHasFinishedOnboardingFunction =
   async hasFinishedOnboarding => {
-    persistentStorage.setItem(hasFinishedOnboardingKey, hasFinishedOnboarding)
+    persistentStorage.setItem(
+      StorageKey.hasFinishedOnboarding,
+      hasFinishedOnboarding
+    )
   }
 
 const getInitialView: GetInitialViewFunction = async () => initialCoreView
