@@ -30,11 +30,7 @@ import {
 } from '../../types/thorchain'
 import api from '../../utils/api'
 import { getDappHost, getDappHostname } from '../../utils/connectedApps'
-import {
-  EventMethod,
-  isSupportedChain,
-  RequestMethod,
-} from '../../utils/constants'
+import { EventMethod, RequestMethod } from '../../utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -349,11 +345,7 @@ export const handleRequest = (
           reject()
           return
         }
-        const supportedChain = isSupportedChain(chain) ? chain : null
-        if (!supportedChain) {
-          reject()
-          return
-        }
+
         getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
@@ -450,12 +442,7 @@ export const handleRequest = (
           break
         }
 
-        const chain = getChainByChainId(param.chainId)
-        const supportedChain = isSupportedChain(chain) ? chain : null
-        if (!supportedChain) {
-          reject(`Chain ${param?.chainId} not supported`)
-          break
-        }
+        const chain = shouldBePresent(getChainByChainId(param.chainId))
 
         getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
@@ -466,9 +453,9 @@ export const handleRequest = (
 
           if (!previousSession) throw new Error(`No session found for ${host}`)
 
-          const isEVM = getChainKind(supportedChain) === 'evm'
-          const isCosmos = getChainKind(supportedChain) === 'cosmos'
-          const chainId = getChainId(supportedChain)
+          const isEVM = getChainKind(chain) === 'evm'
+          const isCosmos = getChainKind(chain) === 'cosmos'
+          const chainId = getChainId(chain)
 
           await updateAppSession({
             vaultId: safeVaultId,
