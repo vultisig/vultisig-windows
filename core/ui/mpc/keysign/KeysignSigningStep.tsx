@@ -26,11 +26,15 @@ import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../../state/core'
 import { normalizeTxHash } from './utils/normalizeTxHash'
+import { getKeysignChain } from './utils/getKeysignChain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { getChainKind } from '@core/chain/ChainKind'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
 } & Partial<OnBackProp> &
-  Partial<OnFinishProp<string>>
+  Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>
 
 export const KeysignSigningStep = ({
   onBack,
@@ -39,11 +43,17 @@ export const KeysignSigningStep = ({
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
   const { version, mpcDevice } = useCore()
-
+  const isDAppSigning =
+    mpcDevice === 'extension' && typeof onFinish === 'function'
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
-
   useEffect(startKeysign, [startKeysign])
+
+  const isEncodedResultChain = (chain: Chain): boolean => {
+    if (getChainKind(chain) === 'cosmos' || getChainKind(chain) === 'solana')
+      return true
+    return false
+  }
 
   const navigate = useCoreNavigate()
 
@@ -51,55 +61,69 @@ export const KeysignSigningStep = ({
     <MatchQuery
       value={mutationStatus}
       success={value => {
-        if (mpcDevice === 'extension' && onFinish) {
-          onFinish(value)
-        } else {
-          return (
-            <>
-              <PageHeader
-                title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
-              />
-              <PageContent>
-                <MatchRecordUnion
-                  value={payload}
-                  handlers={{
-                    keysign: payload => (
-                      <CurrentTxHashProvider
-                        value={normalizeTxHash(value, {
+        return (
+          <>
+            <PageHeader
+              title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+            />
+            <PageContent>
+              <MatchRecordUnion
+                value={payload}
+                handlers={{
+                  keysign: payload => (
+                    <CurrentTxHashProvider
+                      value={normalizeTxHash(
+                        isEncodedResultChain(getKeysignChain(payload))
+                          ? (value as ExecuteTxResultWithEncoded).result
+                          : (value as string),
+                        {
                           memo: payload?.memo,
-                        })}
-                      >
-                        <Match
-                          value={payload.swapPayload.value ? 'swap' : 'default'}
-                          swap={() => <SwapKeysignTxOverview value={payload} />}
-                          default={() => (
-                            <>
-                              <TxOverviewPanel>
-                                <KeysignTxOverview value={payload} />
-                              </TxOverviewPanel>
-                              <Button onClick={() => navigate({ id: 'vault' })}>
-                                {t('complete')}
-                              </Button>
-                            </>
-                          )}
-                        />
-                      </CurrentTxHashProvider>
-                    ),
-                    custom: payload => (
+                        }
+                      )}
+                    >
+                      <Match
+                        value={payload.swapPayload.value ? 'swap' : 'default'}
+                        swap={() => <SwapKeysignTxOverview value={payload} />}
+                        default={() => (
+                          <>
+                            <TxOverviewPanel>
+                              <KeysignTxOverview value={payload} />
+                            </TxOverviewPanel>
+                            <Button
+                              onClick={() =>
+                                isDAppSigning
+                                  ? onFinish(value)
+                                  : navigate({ id: 'vault' })
+                              }
+                            >
+                              {t('complete')}
+                            </Button>
+                          </>
+                        )}
+                      />
+                    </CurrentTxHashProvider>
+                  ),
+                  custom: payload => (
+                    <>
                       <TxOverviewPanel>
                         <KeysignCustomMessageInfo value={payload} />
                         <TxOverviewChainDataRow>
                           <span>{t('signature')}</span>
-                          <span>{value}</span>
+                          <span>{value as string}</span>
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
-                    ),
-                  }}
-                />
-              </PageContent>
-            </>
-          )
-        }
+                      {isDAppSigning && (
+                        <Button onClick={() => onFinish(value as string)}>
+                          {t('complete')}
+                        </Button>
+                      )}
+                    </>
+                  ),
+                }}
+              />
+            </PageContent>
+          </>
+        )
       }}
       error={error => (
         <FullPageFlowErrorState

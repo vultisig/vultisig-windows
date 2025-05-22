@@ -6,11 +6,13 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { IsDisabledProp, ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-type StartKeysignPromptProps = ValueProp<KeysignMessagePayload> & IsDisabledProp
+type StartKeysignPromptProps = ValueProp<KeysignMessagePayload> &
+  IsDisabledProp & { isDAppSigning?: boolean }
 
 export const StartKeysignPrompt = ({
   value: keysignPayload,
   isDisabled,
+  isDAppSigning,
 }: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -27,6 +29,7 @@ export const StartKeysignPrompt = ({
             state: {
               securityType: 'secure',
               keysignPayload,
+              isDAppSigning,
             },
           })
         }}
@@ -43,6 +46,7 @@ export const StartKeysignPrompt = ({
               state: {
                 securityType: 'fast',
                 keysignPayload,
+                isDAppSigning,
               },
             })
           }}

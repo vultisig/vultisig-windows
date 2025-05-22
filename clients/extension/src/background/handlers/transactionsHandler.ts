@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ITransaction, SendTransactionResponse } from '../../utils/interfaces'
+import { ITransaction } from '../../utils/interfaces'
 import {
   getStoredTransactions,
   setStoredTransactions,
@@ -11,7 +11,7 @@ import { handleOpenPanel } from '../window/windowManager'
 export const handleSendTransaction = async (
   transaction: ITransaction,
   chain: Chain
-): Promise<SendTransactionResponse> => {
+): Promise<string> => {
   const uuid = uuidv4()
 
   try {
@@ -40,7 +40,7 @@ export const handleSendTransaction = async (
       )
     )
 
-    return await new Promise<SendTransactionResponse>((resolve, reject) => {
+    return await new Promise<string>((resolve, reject) => {
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
 
@@ -64,10 +64,7 @@ export const handleSendTransaction = async (
             reject(new Error('Transaction was not completed'))
           } else {
             if (matchedTransaction.txHash) {
-              resolve({
-                txResponse: matchedTransaction.txHash,
-                raw: matchedTransaction.raw,
-              })
+              resolve(matchedTransaction.txHash)
             } else {
               reject(new Error('Transaction has no signature or hash'))
             }

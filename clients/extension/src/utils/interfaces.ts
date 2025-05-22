@@ -2,6 +2,7 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { Vault } from '@core/ui/vault/Vault'
@@ -16,7 +17,7 @@ export namespace Messaging {
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
-      | SendTransactionResponse
+      | ExecuteTxResultWithEncoded
   }
 
   export namespace GetVault {
@@ -46,11 +47,6 @@ export type VaultExport = {
 export interface AccountsProps {
   chain: Chain
   sender: string
-}
-
-export interface SendTransactionResponse {
-  raw: any
-  txResponse: string
 }
 
 interface CustomMessage {
@@ -171,7 +167,7 @@ export interface ITransaction {
   maxPriorityFeePerGas?: string
   txHash?: string
   windowId?: number
-  raw?: any
+  encoded?: any
 }
 
 export interface SignedTransaction {

@@ -9,11 +9,13 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
 import { OnFinishProp } from '@lib/ui/props'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<string>>) => {
+}: KeysignActionProviderProp &
+  Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
   const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
     useCoreViewState<'keysign'>()
   const keysignPayload = useRefreshedKeysignPayload(

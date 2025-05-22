@@ -5,11 +5,13 @@ import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
 import { OnFinishProp } from '@lib/ui/props'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const StartKeysignFlow = ({
   keysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<string>>) => {
+}: KeysignActionProviderProp &
+  Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
   const [{ securityType }] = useCoreViewState<'keysign'>()
 
   return (

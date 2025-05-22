@@ -2,10 +2,10 @@ import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
+import { processBackgroundResponse } from '../../utils/functions'
 
 export class Dash extends EventEmitter {
   public chainId: string

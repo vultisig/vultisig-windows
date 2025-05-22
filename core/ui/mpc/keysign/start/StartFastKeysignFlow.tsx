@@ -13,13 +13,14 @@ import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { OnFinishProp } from '@lib/ui/props'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<string>>) => {
+}: KeysignActionProviderProp & Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({

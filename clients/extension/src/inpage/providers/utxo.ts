@@ -2,7 +2,6 @@ import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
@@ -74,13 +73,9 @@ export class UTXO extends EventEmitter {
         },
         { id: uuidv4() }
       )
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
-      if (callback) callback(null, result)
-      return result
+
+      if (callback) callback(null, response)
+      return response
     } catch (error) {
       if (callback) callback(error as Error)
       throw error

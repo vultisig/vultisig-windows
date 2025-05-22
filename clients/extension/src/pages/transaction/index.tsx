@@ -62,30 +62,10 @@ const StyledErrorState = styled(VStack)`
 const StyledText = styled(Text)`
   text-align: center;
 `
-type TransactionPageProps = { txHash?: string }
 
-interface InitialState {
-  transaction?: ITransaction
-  keysignMessagePayload?: KeysignMessagePayload
-}
-
-export const TransactionPage = ({ txHash }: TransactionPageProps) => {
+export const TransactionPage = () => {
   const vaults = useVaults()
-  const { openUrl } = useCore()
-
   const walletCore = useAssertWalletCore()
-  const [state, setState] = useState<InitialState>({})
-  const { transaction } = state
-  const copyTxHash = useCopyTxHash()
-
-  useEffect(() => {
-    const getCurrentTransaction = async () => {
-      const [transaction] = await getStoredTransactions()
-      setState({ transaction })
-    }
-    getCurrentTransaction()
-  }, [])
-
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const handleClose = (): void => {
     window.close()
@@ -94,6 +74,9 @@ export const TransactionPage = ({ txHash }: TransactionPageProps) => {
   const { mutate: processTransaction, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const [transaction] = await getStoredTransactions()
+      if (!transaction) {
+        throw new Error('No current transaction present')
+      }
       const vault = shouldBePresent(
         vaults.find(({ coins }) =>
           coins.some(
@@ -159,21 +142,10 @@ export const TransactionPage = ({ txHash }: TransactionPageProps) => {
   })
 
   useEffect(() => {
-    if (txHash && transaction) {
-      setStoredTransaction({
-        ...transaction,
-        status: 'success',
-        txHash,
-        raw: {},
-      })
-    }
-  }, [txHash, transaction])
-
-  useEffect(() => {
-    if (!txHash) processTransaction()
+    processTransaction()
   }, [processTransaction])
 
-  return !txHash ? (
+  return (
     <MatchQuery
       value={mutationStatus}
       pending={() => <ProductLogoBlock />}
@@ -289,86 +261,13 @@ export const TransactionPage = ({ txHash }: TransactionPageProps) => {
             </List>
           </PageContent>
           <PageFooter>
-            <StartKeysignPrompt value={keysignMessagePayload} />
+            <StartKeysignPrompt
+              value={keysignMessagePayload}
+              isDAppSigning={true}
+            />
           </PageFooter>
         </VStack>
       )}
     />
-  ) : transaction ? (
-    <VStack fullHeight>
-      <PageHeader
-        title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
-        hasBorder
-      />
-      <PageContent flexGrow>
-        <List>
-          <ListItem
-            description={
-              <MiddleTruncate
-                text={txHash}
-                onClick={() => copyTxHash(txHash)}
-              />
-            }
-            extra={
-              <IconButton
-                icon={<SquareArrowOutUpRightIcon />}
-                onClick={() =>
-                  openUrl(
-                    `${getBlockExplorerUrl({ chain: transaction.chain, entity: 'tx', value: txHash })}`
-                  )
-                }
-              />
-            }
-            title="TX ID"
-          />
-          <ListItem
-            description={
-              <MiddleTruncate text={transaction.transactionDetails.from} />
-            }
-            title={t('from')}
-          />
-          {transaction.transactionDetails.to && (
-            <ListItem
-              description={
-                <MiddleTruncate text={transaction.transactionDetails.to} />
-              }
-              title={t('to')}
-            />
-          )}
-          {transaction.transactionDetails.amount?.amount && (
-            <ListItem
-              extra={`${formatUnits(
-                transaction.transactionDetails.amount.amount,
-                transaction.transactionDetails.amount.decimals
-              )}`}
-              title={t('amount')}
-            />
-          )}
-          <ListItem extra={transaction.chain} title="Network" />
-          <ListItem
-            extra={`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
-            title={t('network_fee')}
-          />
-
-          {transaction.memo?.value && !transaction.memo?.isParsed && (
-            <ListItem
-              extra={splitString(transaction.memo?.value as string, 32).map(
-                (str, index) => (
-                  <span key={index}>{str}</span>
-                )
-              )}
-              title={t('memo')}
-            />
-          )}
-        </List>
-      </PageContent>
-      <PageFooter>
-        <Button kind="primary" onClick={handleClose}>
-          {t('done')}
-        </Button>
-      </PageFooter>
-    </VStack>
-  ) : (
-    <></>
   )
 }

@@ -38,7 +38,6 @@ import {
 import {
   ITransaction,
   Messaging,
-  SendTransactionResponse,
   TransactionDetails,
   TransactionType,
 } from '../../utils/interfaces'
@@ -69,9 +68,7 @@ export const handleRequest = (
   chain: Chain,
   sender: string
 ): Promise<
-  | Messaging.Chain.Response
-  | ThorchainProviderResponse<ThorchainProviderMethod>
-  | SendTransactionResponse
+  Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body

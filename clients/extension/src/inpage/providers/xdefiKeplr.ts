@@ -29,11 +29,11 @@ import { CosmosMsgType, RequestMethod } from '../../utils/constants'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import {
   Messaging,
-  SendTransactionResponse,
   TransactionDetails,
   TransactionType,
 } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 class XDEFIMessageRequester {
   constructor() {
@@ -172,7 +172,9 @@ export class XDEFIKeplrProvider extends Keplr {
           params: [{ ..._tx, txType: 'Keplr' }],
         })
         .then(result => {
-          const decoded = base58.decode((result as SendTransactionResponse).raw)
+          const decoded = base58.decode(
+            (result as ExecuteTxResultWithEncoded).encoded
+          )
           if (decoded) resolve(decoded)
           else reject()
         })
@@ -261,7 +263,7 @@ export class XDEFIKeplrProvider extends Keplr {
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ...standardTx, txType: 'Vultisig' }],
-    })) as SendTransactionResponse
+    })) as ExecuteTxResultWithEncoded
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,
@@ -272,7 +274,7 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('No account info or pubkey')
     }
 
-    const decoded = base58.decode(result.raw)
+    const decoded = base58.decode(result.encoded)
     if (!decoded) {
       throw new Error('Invalid signature')
     }

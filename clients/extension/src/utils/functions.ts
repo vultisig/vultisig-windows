@@ -1,13 +1,8 @@
 import api from '@clients/extension/src/utils/api'
-import {
-  MessageKey,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
-import {
-  Messaging,
-  SendTransactionResponse,
-} from '@clients/extension/src/utils/interfaces'
 import { VersionedTransaction } from '@solana/web3.js'
+import { MessageKey, RequestMethod } from './constants'
+import { Messaging } from './interfaces'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -118,9 +113,16 @@ export const processBackgroundResponse = (
     case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION:
     case RequestMethod.METAMASK.PERSONAL_SIGN:
     case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
-      if (messageKey === MessageKey.SOLANA_REQUEST)
-        return (result as SendTransactionResponse).raw
-      return (result as SendTransactionResponse).txResponse
+      if (messageKey === MessageKey.SOLANA_REQUEST) {
+        return (result as ExecuteTxResultWithEncoded).encoded
+      } else if (
+        messageKey === MessageKey.COSMOS_REQUEST &&
+        (data.params[0].txType === 'Vultisig' ||
+          data.params[0].txType === 'Keplr')
+      ) {
+        return result
+      }
+      return (result as ExecuteTxResultWithEncoded).result
     }
     default: {
       return result
