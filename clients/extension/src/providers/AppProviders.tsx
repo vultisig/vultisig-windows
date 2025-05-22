@@ -35,6 +35,7 @@ const defaultMpcLib: MpcLib = 'DKLS'
 
 const coreState: CoreState = {
   ...storage,
+  client: 'extension',
   openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
   saveFile: async ({ name, blob }) => {
     initiateFileDownload({ name, blob })
