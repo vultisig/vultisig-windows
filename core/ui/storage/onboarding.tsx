@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { SetHasFinishedOnboardingFunction } from './CoreStorage'
 import { StorageKey } from './StorageKey'
+
 export const useHasFinishedOnboardingQuery = () => {
   const { getHasFinishedOnboarding } = useCore()
 
