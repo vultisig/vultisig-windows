@@ -4,10 +4,10 @@ import { View } from '@lib/ui/navigation/View'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
-import { VaultFolder } from '../vault/VaultFolder'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { FiatCurrencyStorage } from './fiatCurrency'
+import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
 type CreateVaultCoinsInput = {
@@ -24,10 +24,6 @@ export type GetDefaultChainsFunction = () => Promise<Chain[]>
 export type GetVaultsCoinsFunction = () => Promise<
   Record<string, AccountCoin[]>
 >
-
-export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
-
-export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
 
 export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
 
@@ -55,15 +51,6 @@ type CreateCoinInput = {
 
 export type CreateVaultCoinFunction = (input: CreateCoinInput) => Promise<void>
 
-type UpdateVaultFolderInput = {
-  id: string
-  fields: Partial<Omit<VaultFolder, 'id'>>
-}
-
-export type UpdateVaultFolderFunction = (
-  input: UpdateVaultFolderInput
-) => Promise<void>
-
 type DeleteVaultCoinInput = {
   vaultId: string
   coinKey: AccountCoinKey
@@ -72,8 +59,6 @@ type DeleteVaultCoinInput = {
 export type DeleteVaultCoinFunction = (
   input: DeleteVaultCoinInput
 ) => Promise<void>
-
-export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
 
 export type GetLanguageFunction = () => Promise<Language>
 
@@ -100,16 +85,13 @@ export type GetInitialViewFunction = () => Promise<View>
 export type CoreStorage = CoinFinderIgnoreStorage &
   FiatCurrencyStorage &
   CurrentVaultIdStorage &
-  VaultsStorage & {
+  VaultsStorage &
+  VaultFoldersStorage & {
     getVaultsCoins: GetVaultsCoinsFunction
     createVaultCoins: CreateVaultCoinsFunction
     getDefaultChains: GetDefaultChainsFunction
-    getVaultFolders: GetVaultFoldersFunction
-    deleteVaultFolder: DeleteVaultFolderFunction
-    updateVaultFolder: UpdateVaultFolderFunction
     createVaultCoin: CreateVaultCoinFunction
     deleteVaultCoin: DeleteVaultCoinFunction
-    createVaultFolder: CreateVaultFolderFunction
     getAddressBookItems: GetAddressBookItemsFunction
     createAddressBookItem: CreateAddressBookItemFunction
     updateAddressBookItem: UpdateAddressBookItemFunction
