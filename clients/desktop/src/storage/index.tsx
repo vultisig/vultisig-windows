@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
@@ -8,7 +7,6 @@ import {
   CreateAddressBookItemFunction,
   DeleteAddressBookItemFunction,
   GetAddressBookItemsFunction,
-  GetDefaultChainsFunction,
   GetHasFinishedOnboardingFunction,
   GetInitialViewFunction,
   GetIsVaultBalanceVisibleFunction,
@@ -20,7 +18,6 @@ import {
   SetLanguageFunction,
   UpdateAddressBookItemFunction,
 } from '@core/ui/storage/CoreStorage'
-import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import {
@@ -33,6 +30,7 @@ import { persistentStorage } from '../state/persistentState'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
+import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
@@ -59,16 +57,6 @@ const updateAddressBookItem: UpdateAddressBookItemFunction = async item => {
 
 const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
   await DeleteAddressBookItem(item)
-}
-
-const getDefaultChains: GetDefaultChainsFunction = async () => {
-  const value = persistentStorage.getItem<Chain[]>(StorageKey.defaultChains)
-
-  if (value === undefined) {
-    return initialDefaultChains
-  }
-
-  return value
 }
 
 const getLanguage: GetLanguageFunction = async () => {
@@ -133,7 +121,7 @@ export const storage: CoreStorage = {
   ...vaultsStorage,
   ...vaultFoldersStorage,
   ...coinsStorage,
-  getDefaultChains,
+  ...defaultChainsStorage,
   getAddressBookItems,
   createAddressBookItem,
   updateAddressBookItem,

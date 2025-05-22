@@ -7,12 +7,12 @@ import {
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
+import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { getLanguage, setLanguage } from './language'
 import {
@@ -58,7 +58,7 @@ export const storage: CoreStorage = {
   ...vaultsStorage,
   ...vaultFoldersStorage,
   ...coinsStorage,
-  getDefaultChains,
+  ...defaultChainsStorage,
   getAddressBookItems,
   createAddressBookItem,
   updateAddressBookItem,
