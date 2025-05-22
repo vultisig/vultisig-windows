@@ -1,15 +1,12 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { Text } from '@lib/ui/text'
+import { GradientText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
-import {
-  CenteredBox,
-  Container,
-  ResponsiveText,
-  StyledTriangleWarningIcon,
-} from './EmptyAddressView.styles'
+import { CenteredBox, Container } from './EmptyAddressView.styles'
 
 type EmptyAddressesViewProps = {
   onOpenAddAddressView: () => void
@@ -23,18 +20,23 @@ const EmptyAddressesView = ({
   return (
     <>
       <AddressBookPageHeader
-        data-testid="EmptyAddressesView-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
       />
       <Container>
         <CenteredBox>
-          <StyledTriangleWarningIcon width={120} height={120} />
-          <ResponsiveText weight={700} color="contrast">
-            {t('vault_settings_address_book_no_addresses_title')}
-          </ResponsiveText>
+          <Text size={16} color="contrast" weight="600">
+            Your Address Book is empty
+          </Text>
+          <Text size={14} color="light" weight="600" centerHorizontally>
+            {'Click "Add Address" to add your'}
+            <br />
+            {'favorite addresses'}
+          </Text>
+          <Button onClick={onOpenAddAddressView} kind="outlined">
+            <GradientText>{t('add_address')}</GradientText>
+          </Button>
         </CenteredBox>
-        <Button onClick={onOpenAddAddressView}>{t('add_address')}</Button>
       </Container>
     </>
   )

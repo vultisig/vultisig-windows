@@ -6,7 +6,6 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { getCoinOptions } from '../helpers/getCoinOptions'
 import {
   getAddressSchema,
   getModifyAddressSchema,
@@ -24,9 +23,8 @@ export const useAddressSchema = ({
   const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
   const derivedDefaultValues = defaultValues || {
-    chain: chainOptions[0].value,
+    chain: '',
     title: '',
     address: '',
   }
