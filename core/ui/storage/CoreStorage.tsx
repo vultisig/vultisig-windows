@@ -1,7 +1,7 @@
 import { View } from '@lib/ui/navigation/View'
 
-import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
+import { AddressBookStorage } from './addressBook'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
@@ -9,25 +9,6 @@ import { DefaultChainsStorage } from './defaultChains'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
-
-export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
-
-type CreateAddressBookItemInput = AddressBookItem
-
-export type CreateAddressBookItemFunction = (
-  input: CreateAddressBookItemInput
-) => Promise<void>
-
-type UpdateAddressBookItemInput = {
-  id: string
-  fields: Partial<Omit<AddressBookItem, 'id'>>
-}
-
-export type UpdateAddressBookItemFunction = (
-  input: UpdateAddressBookItemInput
-) => Promise<void>
-
-export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
 
 export type GetLanguageFunction = () => Promise<Language>
 
@@ -57,11 +38,8 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   VaultsStorage &
   VaultFoldersStorage &
   CoinsStorage &
-  DefaultChainsStorage & {
-    getAddressBookItems: GetAddressBookItemsFunction
-    createAddressBookItem: CreateAddressBookItemFunction
-    updateAddressBookItem: UpdateAddressBookItemFunction
-    deleteAddressBookItem: DeleteAddressBookItemFunction
+  DefaultChainsStorage &
+  AddressBookStorage & {
     getLanguage: GetLanguageFunction
     setLanguage: SetLanguageFunction
     getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction

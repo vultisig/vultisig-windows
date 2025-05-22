@@ -4,12 +4,36 @@ import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import {
-  CreateAddressBookItemFunction,
-  DeleteAddressBookItemFunction,
-  UpdateAddressBookItemFunction,
-} from './CoreStorage'
+import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { StorageKey } from './StorageKey'
+
+export const initialAddressBookItems: AddressBookItem[] = []
+
+export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
+
+type CreateAddressBookItemInput = AddressBookItem
+
+export type CreateAddressBookItemFunction = (
+  input: CreateAddressBookItemInput
+) => Promise<void>
+
+type UpdateAddressBookItemInput = {
+  id: string
+  fields: Partial<Omit<AddressBookItem, 'id'>>
+}
+
+export type UpdateAddressBookItemFunction = (
+  input: UpdateAddressBookItemInput
+) => Promise<void>
+
+export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
+
+export type AddressBookStorage = {
+  getAddressBookItems: GetAddressBookItemsFunction
+  createAddressBookItem: CreateAddressBookItemFunction
+  updateAddressBookItem: UpdateAddressBookItemFunction
+  deleteAddressBookItem: DeleteAddressBookItemFunction
+}
 
 export const useAddressBookItemsQuery = () => {
   const { getAddressBookItems } = useCore()
