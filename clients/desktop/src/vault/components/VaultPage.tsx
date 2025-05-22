@@ -1,5 +1,4 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
-import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
@@ -13,6 +12,7 @@ import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAv
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
 import { VaultOverview } from '../../vault/components/VaultOverview'
+import { FastVaultPasswordVerification } from './FastVaultPasswordVerification'
 import { UploadQrPrompt } from './UploadQrPrompt'
 
 export const VaultPage = () => {
