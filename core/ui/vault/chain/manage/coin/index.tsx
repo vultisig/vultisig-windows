@@ -44,14 +44,12 @@ const CoinItem: FC<Coin> = coin => {
 
   const handleChange = () => {
     if (currentVaultCoin) {
-      deleteCoin.mutate(currentVaultCoin, {
-        onSuccess: () =>
-          addToCoinFinderIgnore.mutate(extractCoinKey(currentVaultCoin)),
+      addToCoinFinderIgnore.mutate(extractCoinKey(currentVaultCoin), {
+        onSuccess: () => deleteCoin.mutate(currentVaultCoin),
       })
     } else {
-      createCoin.mutate(coin, {
-        onSuccess: () =>
-          removeFromCoinFinderIgnore.mutate(extractCoinKey(coin)),
+      removeFromCoinFinderIgnore.mutate(extractCoinKey(coin), {
+        onSuccess: () => createCoin.mutate(coin),
       })
     }
   }

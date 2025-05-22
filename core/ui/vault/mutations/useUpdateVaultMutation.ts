@@ -1,4 +1,3 @@
-import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useCore } from '@core/ui/state/core'
 import {
   UpdateVaultFunction,
@@ -6,6 +5,8 @@ import {
 } from '@core/ui/storage/CoreStorage'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+
+import { StorageKey } from '../../storage/StorageKey'
 
 export const useUpdateVaultMutation = (
   options?: UseMutationOptions<any, any, UpdateVaultInput, unknown>
@@ -17,7 +18,7 @@ export const useUpdateVaultMutation = (
   const mutationFn: UpdateVaultFunction = async input => {
     const result = await updateVault(input)
 
-    await invalidateQueries(vaultsQueryKey)
+    await invalidateQueries([StorageKey.vaults])
 
     return result
   }

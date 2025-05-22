@@ -10,9 +10,9 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { vaultsCoinsQueryKey, vaultsQueryKey } from '../query/keys'
 import { getVaultId, Vault } from '../vault/Vault'
 import { DeleteVaultFunction } from './CoreStorage'
+import { StorageKey } from './StorageKey'
 
 type MergeVaultsWithCoinsInput = {
   vaults: Vault[]
@@ -38,13 +38,13 @@ export const useVaultsQuery = () => {
   const { getVaults, getVaultsCoins } = useCore()
 
   const vaults = useQuery({
-    queryKey: vaultsQueryKey,
+    queryKey: [StorageKey.vaults],
     queryFn: getVaults,
     ...fixedDataQueryOptions,
   })
 
   const coins = useQuery({
-    queryKey: vaultsCoinsQueryKey,
+    queryKey: [StorageKey.vaultsCoins],
     queryFn: getVaultsCoins,
     ...fixedDataQueryOptions,
   })
@@ -94,7 +94,7 @@ export const useDeleteVaultMutation = () => {
 
   const mutationFn: DeleteVaultFunction = async input => {
     await deleteVault(input)
-    await invalidateQueries(vaultsQueryKey)
+    await invalidateQueries([StorageKey.vaults])
   }
 
   return useMutation({
