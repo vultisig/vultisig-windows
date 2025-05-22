@@ -48,6 +48,7 @@ export const getQueryClient = () => {
         return defaultShouldDehydrateQuery(query)
       },
     },
+    buster: 'v1',
   })
 
   return queryClient

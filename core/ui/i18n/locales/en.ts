@@ -8,6 +8,8 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  extension_vault_import_restriction:
+    'Only DKLS vaults can be imported in extension',
   failed_to_migrate_storage: 'Failed to migrate storage',
   general: 'General',
   github: 'Github',
@@ -132,6 +134,7 @@ export const en = {
   done: 'Done',
   and: 'and',
   approve: 'Approve',
+  approval_tx: 'Approval Tx',
   information_note1:
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',

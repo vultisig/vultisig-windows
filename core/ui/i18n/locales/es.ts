@@ -20,6 +20,7 @@ export const es = {
   unexpected_error: 'Error inesperado',
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',
+  approval_tx: 'Transacción de aprobación',
   no_tokens_found:
     'No se encontraron tokens. Agrega tokens bajo la cadena deseada.',
   ibc_transfer: 'Transferencia IBC',

@@ -19,6 +19,7 @@ export type GetMpcServerUrlInput = {
 }
 
 export type CoreState = CoreStorage & {
+  client: Client
   openUrl: (url: string) => void
   saveFile: SaveFileFunction
   mpcDevice: MpcDevice
