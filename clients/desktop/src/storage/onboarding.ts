@@ -4,18 +4,22 @@ import {
 } from '@core/ui/storage/onboarding'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
+import { persistentStorage } from '../state/persistentState'
 
 export const onboardingStorage: OnboardingStorage = {
   getHasFinishedOnboarding: async () => {
-    return getPersistentState(
-      StorageKey.hasFinishedOnboarding,
-      isHasFinishedOnboardingInitially
+    const value = persistentStorage.getItem<boolean>(
+      StorageKey.hasFinishedOnboarding
     )
+
+    if (value === undefined) {
+      return isHasFinishedOnboardingInitially
+    }
+
+    return value
   },
   setHasFinishedOnboarding: async hasFinishedOnboarding => {
-    await setPersistentState(
+    persistentStorage.setItem(
       StorageKey.hasFinishedOnboarding,
       hasFinishedOnboarding
     )
