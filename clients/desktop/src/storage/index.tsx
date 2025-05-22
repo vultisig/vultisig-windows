@@ -33,8 +33,6 @@ import {
   UpdateVaultFolderFunction,
   UpdateVaultFunction,
 } from '@core/ui/storage/CoreStorage'
-import { initialCurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { recordMap } from '@lib/utils/record/recordMap'
@@ -60,6 +58,7 @@ import {
 import { persistentStorage } from '../state/persistentState'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { currentVaultIdStorage } from './currentVaultId'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { fromStorageCoin, toStorageCoin } from './storageCoin'
 
@@ -173,22 +172,6 @@ const getDefaultChains: GetDefaultChainsFunction = async () => {
   return value
 }
 
-const getCurrentVaultId = async () => {
-  const value = persistentStorage.getItem<CurrentVaultId>(
-    StorageKey.currentVaultId
-  )
-
-  if (value === undefined) {
-    return initialCurrentVaultId
-  }
-
-  return value
-}
-
-const setCurrentVaultId = async (vaultId: CurrentVaultId) => {
-  persistentStorage.setItem(StorageKey.currentVaultId, vaultId)
-}
-
 const getLanguage: GetLanguageFunction = async () => {
   const value = persistentStorage.getItem<Language>(StorageKey.language)
 
@@ -247,8 +230,7 @@ const getInitialView: GetInitialViewFunction = async () => initialCoreView
 
 export const storage: CoreStorage = {
   ...fiatCurrencyStorage,
-  setCurrentVaultId,
-  getCurrentVaultId,
+  ...currentVaultIdStorage,
   updateVault,
   createVault,
   createVaultCoins,

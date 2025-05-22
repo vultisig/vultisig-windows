@@ -8,11 +8,11 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { getVaultAppSessions } from '../../sessions/state/appSessions'
+import { storage } from '../../storage'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredRequest } from '../../utils/storage'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { getVaults } from '../../vault/state/vaults'
 import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { getWalletCore } from '../walletCore'
@@ -28,7 +28,7 @@ export const handleFindAccounts = async (
   chain: Chain,
   sender: string
 ): Promise<string[]> => {
-  const currentVaultId = await getCurrentVaultId()
+  const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) return []
   const vaultSessions = await getVaultAppSessions(currentVaultId)
@@ -75,7 +75,7 @@ const handleFindVault = async (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
   const vaults = await getVaults()
-  const currentVaultId = await getCurrentVaultId()
+  const currentVaultId = await storage.getCurrentVaultId()
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null

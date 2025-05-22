@@ -19,6 +19,15 @@ export type CurrentVaultId = string | null
 
 export const initialCurrentVaultId: CurrentVaultId = null
 
+type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
+
+export type SetCurrentVaultIdFunction = (id: CurrentVaultId) => Promise<void>
+
+export type CurrentVaultIdStorage = {
+  getCurrentVaultId: GetCurrentVaultIdFunction
+  setCurrentVaultId: SetCurrentVaultIdFunction
+}
+
 const {
   useValue: useCurrentVaultId,
   provider: InternalCurrentVaultIdProvider,
