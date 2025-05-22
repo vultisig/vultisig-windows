@@ -1,0 +1,97 @@
+import {
+  PersistentStateKey,
+  usePersistentState,
+} from '@clients/desktop/src/state/persistentState'
+import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { Button } from '@lib/ui/buttons/Button'
+import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Modal } from '@lib/ui/modal'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { useCurrentVault } from '../../vault/state/currentVault'
+import { getVaultId } from '../../vault/Vault'
+
+const FIFTEEN_DAYS_MS = 15 * 24 * 60 * 60 * 1000
+
+export const FastVaultPasswordVerification = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [password, setPassword] = useState('')
+
+  const [lastVerification, setLastVerification] = usePersistentState<number>(
+    PersistentStateKey.LastVaultPasswordVerification,
+    () => 0 // default to 0 (never verified)
+  )
+
+  const { t } = useTranslation()
+  const vault = useCurrentVault()
+
+  const { mutate, error, isPending } = useMutation({
+    mutationFn: async () =>
+      getVaultFromServer({
+        vaultId: getVaultId(vault),
+        password,
+      }),
+    onSuccess: () => {
+      setLastVerification(Date.now())
+      setIsOpen(false)
+    },
+  })
+
+  useEffect(() => {
+    const now = Date.now()
+    if (!lastVerification || now - lastVerification > FIFTEEN_DAYS_MS) {
+      setIsOpen(true)
+    }
+  }, [lastVerification, setIsOpen])
+
+  const isDisabled = useMemo(() => {
+    if (!password) {
+      return t('password_required')
+    }
+  }, [password, t])
+
+  if (!isOpen) return null
+
+  return (
+    <StyledModal
+      title={t('verify_password_periodic_message')}
+      onClose={() => setIsOpen(false)}
+    >
+      <VStack gap={16}>
+        <PasswordInput
+          placeholder={t('enter_password')}
+          value={password}
+          onValueChange={value => {
+            if (isPending) return
+            setPassword(value)
+          }}
+        />
+        <VStack gap={6}>
+          <Button
+            onClick={() => mutate()}
+            isDisabled={isDisabled || isPending}
+            isLoading={isPending}
+          >
+            {t('verify')}
+          </Button>
+          {error && (
+            <Text size={12} color="danger">
+              {t('incorrect_password')}
+            </Text>
+          )}
+        </VStack>
+      </VStack>
+    </StyledModal>
+  )
+}
+
+const StyledModal = styled(Modal)`
+  background-color: ${getColor('background')};
+  border: none;
+`
