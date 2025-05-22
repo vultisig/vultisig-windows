@@ -26,6 +26,9 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import AddAddressForm from '../vault/send/addressSelector/components/addAddressForm/AddAddressForm'
+import ChainSelectionScreen from '../vault/send/addressSelector/components/chainSelection/ChainSelectionScreen'
+
 export type SharedViewId = Extract<
   CoreViewId,
   | 'address'
@@ -53,6 +56,8 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultDetails'
   | 'vaults'
+  | 'addAddress'
+  | 'chainSelection'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -88,4 +93,6 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   vaults: VaultsPage,
+  addAddress: AddAddressForm,
+  chainSelection: ChainSelectionScreen,
 }
