@@ -1,5 +1,4 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
 import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
@@ -25,7 +24,7 @@ export const generateCosmosAccount = async (
   try {
     const currentVaultId = await storage.getCurrentVaultId()
 
-    const vaults = await getVaults()
+    const vaults = await storage.getVaults()
     const currentVault = shouldBePresent(
       vaults.find(vault => getVaultId(vault) === currentVaultId)
     )

@@ -4,20 +4,11 @@ import { View } from '@lib/ui/navigation/View'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
-import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { FiatCurrencyStorage } from './fiatCurrency'
-
-export type UpdateVaultInput = {
-  vaultId: string
-  fields: Partial<Vault>
-}
-
-export type CreateVaultFunction = (vault: Vault) => Promise<Vault>
-
-export type UpdateVaultFunction = (input: UpdateVaultInput) => Promise<Vault>
+import { VaultsStorage } from './vaults'
 
 type CreateVaultCoinsInput = {
   vaultId: string
@@ -30,15 +21,11 @@ export type CreateVaultCoinsFunction = (
 
 export type GetDefaultChainsFunction = () => Promise<Chain[]>
 
-export type GetVaultsFunction = () => Promise<Vault[]>
-
 export type GetVaultsCoinsFunction = () => Promise<
   Record<string, AccountCoin[]>
 >
 
 export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
-
-export type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
 export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
 
@@ -112,15 +99,12 @@ export type GetInitialViewFunction = () => Promise<View>
 
 export type CoreStorage = CoinFinderIgnoreStorage &
   FiatCurrencyStorage &
-  CurrentVaultIdStorage & {
-    getVaults: GetVaultsFunction
+  CurrentVaultIdStorage &
+  VaultsStorage & {
     getVaultsCoins: GetVaultsCoinsFunction
-    updateVault: UpdateVaultFunction
-    createVault: CreateVaultFunction
     createVaultCoins: CreateVaultCoinsFunction
     getDefaultChains: GetDefaultChainsFunction
     getVaultFolders: GetVaultFoldersFunction
-    deleteVault: DeleteVaultFunction
     deleteVaultFolder: DeleteVaultFolderFunction
     updateVaultFolder: UpdateVaultFolderFunction
     createVaultCoin: CreateVaultCoinFunction

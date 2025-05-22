@@ -10,11 +10,9 @@ import {
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFolderFunction,
-  CreateVaultFunction,
   DeleteAddressBookItemFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
-  DeleteVaultFunction,
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
   GetHasFinishedOnboardingFunction,
@@ -23,7 +21,6 @@ import {
   GetLanguageFunction,
   GetVaultFoldersFunction,
   GetVaultsCoinsFunction,
-  GetVaultsFunction,
   isHasFinishedOnboardingInitially,
   isVaultBalanceInitallyVisible,
   SetHasFinishedOnboardingFunction,
@@ -31,7 +28,6 @@ import {
   SetLanguageFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
-  UpdateVaultFunction,
 } from '@core/ui/storage/CoreStorage'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
@@ -40,58 +36,29 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import {
   DeleteAddressBookItem,
   DeleteCoin,
-  DeleteVault,
   DeleteVaultFolder,
   GetAddressBookItem,
   GetAllAddressBookItems,
   GetCoins,
-  GetVault,
   GetVaultFolder,
   GetVaultFolders,
-  GetVaults,
   SaveAddressBookItem,
   SaveCoin,
   SaveCoins,
-  SaveVault,
   SaveVaultFolder,
 } from '../../wailsjs/go/storage/Store'
 import { persistentStorage } from '../state/persistentState'
-import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { currentVaultIdStorage } from './currentVaultId'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { fromStorageCoin, toStorageCoin } from './storageCoin'
-
-const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
-  const oldStorageVault = await GetVault(vaultId)
-  const oldVault = fromStorageVault(oldStorageVault)
-
-  const newVault = { ...oldVault, ...fields }
-  const newStorageVault = toStorageVault(newVault)
-
-  await SaveVault(newStorageVault)
-
-  return newVault
-}
-
-const createVault: CreateVaultFunction = async vault => {
-  const storageVault = toStorageVault(vault)
-
-  await SaveVault(storageVault)
-
-  return vault
-}
+import { vaultsStorage } from './vaults'
 
 const createVaultCoins: CreateVaultCoinsFunction = async ({
   vaultId,
   coins,
 }) => {
   await SaveCoins(vaultId, coins.map(toStorageCoin))
-}
-
-const getVaults: GetVaultsFunction = async () => {
-  const storageVaults = (await GetVaults()) ?? []
-  return storageVaults.map(fromStorageVault)
 }
 
 const getVaultsCoins: GetVaultsCoinsFunction = async () => {
@@ -102,10 +69,6 @@ const getVaultsCoins: GetVaultsCoinsFunction = async () => {
 const getVaultFolders: GetVaultFoldersFunction = async () => {
   const storageVaultFolders = (await GetVaultFolders()) ?? []
   return storageVaultFolders
-}
-
-const deleteVault: DeleteVaultFunction = async vaultId => {
-  await DeleteVault(vaultId)
 }
 
 const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
@@ -231,14 +194,11 @@ const getInitialView: GetInitialViewFunction = async () => initialCoreView
 export const storage: CoreStorage = {
   ...fiatCurrencyStorage,
   ...currentVaultIdStorage,
-  updateVault,
-  createVault,
+  ...vaultsStorage,
   createVaultCoins,
   getDefaultChains,
-  getVaults,
   getVaultsCoins,
   getVaultFolders,
-  deleteVault,
   deleteVaultFolder,
   createVaultCoin,
   updateVaultFolder,
