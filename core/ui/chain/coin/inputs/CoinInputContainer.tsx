@@ -1,7 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -13,6 +12,8 @@ import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
+
+import { getChainLogoSrc } from '../../metadata/getChainLogoSrc'
 
 const IconWrapper = styled.div`
   align-self: center;
@@ -64,7 +65,7 @@ export const CoinInputContainer = ({
               chain,
               isNative: isFeeCoin({ id, chain }),
             })
-              ? getChainEntityIconSrc(chain)
+              ? getChainLogoSrc(chain)
               : undefined
           }
           style={{ fontSize: 32 }}

@@ -1,7 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
@@ -14,6 +13,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 
 export const ChainOption = ({
@@ -47,7 +47,7 @@ export const ChainOption = ({
                 chain,
                 isNative: isFeeCoin({ id, chain }),
               })
-                ? getChainEntityIconSrc(chain)
+                ? getChainLogoSrc(chain)
                 : undefined
             }
             style={{ fontSize: 32 }}

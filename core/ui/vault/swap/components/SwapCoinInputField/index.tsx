@@ -2,7 +2,6 @@ import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
@@ -17,6 +16,7 @@ import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
+import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
@@ -44,7 +44,7 @@ export const SwapCoinInputField = ({
           </Text>
           <HStack gap={4} alignItems="center">
             <ChainEntityIcon
-              value={getChainEntityIconSrc(chain)}
+              value={getChainLogoSrc(chain)}
               style={{ fontSize: 16 }}
             />
             <HStack
@@ -80,7 +80,7 @@ export const SwapCoinInputField = ({
                 chain,
                 isNative: isFeeCoin({ id, chain }),
               })
-                ? getChainEntityIconSrc(chain)
+                ? getChainLogoSrc(chain)
                 : undefined
             }
             style={{ fontSize: 32 }}

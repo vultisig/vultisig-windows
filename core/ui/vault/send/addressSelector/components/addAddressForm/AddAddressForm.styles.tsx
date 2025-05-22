@@ -1,4 +1,4 @@
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { Chain } from '@core/chain/Chain'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledInput } from '@lib/ui/inputs/UnstyledInput'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -12,6 +12,8 @@ import {
   StylesConfig,
 } from 'react-select'
 import styled from 'styled-components'
+
+import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
 
 export const Container = styled.div`
   height: 100%;
@@ -132,7 +134,7 @@ export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
 }
 
 export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value)
+  const iconSrc = getChainLogoSrc(props.data.value as Chain)
   return (
     <components.Option {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -150,7 +152,7 @@ export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
 export const customSingleValue = (
   props: SingleValueProps<ChainOption, false>
 ) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value)
+  const iconSrc = getChainLogoSrc(props.data.value as Chain)
   return (
     <components.SingleValue {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
