@@ -8,11 +8,9 @@ import { StorageKey } from './StorageKey'
 
 export const isBalanceInitallyVisible = true
 
-export type SetIsBalanceVisibleFunction = (
-  isBalanceVisible: boolean
-) => Promise<void>
+type SetIsBalanceVisibleFunction = (isBalanceVisible: boolean) => Promise<void>
 
-export type GetIsBalanceVisibleFunction = () => Promise<boolean>
+type GetIsBalanceVisibleFunction = () => Promise<boolean>
 
 export type BalanceVisibilityStorage = {
   getIsBalanceVisible: GetIsBalanceVisibleFunction

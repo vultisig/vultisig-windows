@@ -7,9 +7,9 @@ import { Language } from '../i18n/Language'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type GetLanguageFunction = () => Promise<Language>
+type GetLanguageFunction = () => Promise<Language>
 
-export type SetLanguageFunction = (language: Language) => Promise<void>
+type SetLanguageFunction = (language: Language) => Promise<void>
 
 export type LanguageStorage = {
   getLanguage: GetLanguageFunction

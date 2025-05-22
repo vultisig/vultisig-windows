@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type GetDefaultChainsFunction = () => Promise<Chain[]>
+type GetDefaultChainsFunction = () => Promise<Chain[]>
 
 export type DefaultChainsStorage = {
   getDefaultChains: GetDefaultChainsFunction

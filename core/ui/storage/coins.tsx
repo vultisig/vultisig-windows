@@ -22,21 +22,21 @@ export type CoinsRecord = Record<string, AccountCoin[]>
 
 export const initialCoinsRecord: CoinsRecord = {}
 
-export type GetCoinsFunction = () => Promise<CoinsRecord>
+type GetCoinsFunction = () => Promise<CoinsRecord>
 
 type CreateCoinInput = {
   vaultId: string
   coin: AccountCoin
 }
 
-export type CreateCoinFunction = (input: CreateCoinInput) => Promise<void>
+type CreateCoinFunction = (input: CreateCoinInput) => Promise<void>
 
 type DeleteCoinInput = {
   vaultId: string
   coinKey: AccountCoinKey
 }
 
-export type DeleteCoinFunction = (input: DeleteCoinInput) => Promise<void>
+type DeleteCoinFunction = (input: DeleteCoinInput) => Promise<void>
 
 export type CoinsStorage = {
   createCoins: CreateCoinsFunction

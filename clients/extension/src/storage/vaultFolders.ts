@@ -17,7 +17,7 @@ const getVaultFolders: GetVaultFoldersFunction = async () => {
   return getPersistentState(StorageKey.vaultFolders, vaultFoldersInitialValue)
 }
 
-export const updateVaultFolders = async (folders: VaultFolder[]) => {
+const updateVaultFolders = async (folders: VaultFolder[]) => {
   await setPersistentState(StorageKey.vaultFolders, folders)
 }
 

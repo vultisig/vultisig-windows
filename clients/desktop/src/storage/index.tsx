@@ -1,8 +1,4 @@
-import { initialCoreView } from '@core/ui/navigation/CoreView'
-import {
-  CoreStorage,
-  GetInitialViewFunction,
-} from '@core/ui/storage/CoreStorage'
+import { CoreStorage } from '@core/ui/storage/CoreStorage'
 
 import { addressBookStorage } from './addressBook'
 import { balanceVisibilityStorage } from './balanceVisibility'
@@ -11,12 +7,11 @@ import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
+import { initialViewStorage } from './initialView'
 import { languageStorage } from './language'
 import { onboardingStorage } from './onboarding'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
-
-const getInitialView: GetInitialViewFunction = async () => initialCoreView
 
 export const storage: CoreStorage = {
   ...fiatCurrencyStorage,
@@ -29,6 +24,6 @@ export const storage: CoreStorage = {
   ...languageStorage,
   ...balanceVisibilityStorage,
   ...onboardingStorage,
-  getInitialView,
+  ...initialViewStorage,
   ...coinFinderIgnoreStorage,
 }
