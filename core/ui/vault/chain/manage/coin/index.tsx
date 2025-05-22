@@ -31,6 +31,8 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AddCustomTokenPrompt } from './AddCustomTokenPrompt'
+
 const CoinItem: FC<Coin> = coin => {
   const currentVaultCoins = useCurrentVaultCoins()
   const createCoin = useCreateCoinMutation()
@@ -65,7 +67,7 @@ const CoinItem: FC<Coin> = coin => {
       }
       icon={
         <ChainEntityIcon
-          value={getCoinLogoSrc(coin.logo)}
+          value={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
           style={{ fontSize: 32 }}
         />
       }
@@ -131,11 +133,14 @@ export const ManageVaultChainCoinsPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <TextInput
-          placeholder={t('search_field_placeholder')}
-          onValueChange={setSearch}
-          value={search}
-        />
+        <VStack alignItems="start" gap={12}>
+          <TextInput
+            placeholder={t('search_field_placeholder')}
+            onValueChange={setSearch}
+            value={search}
+          />
+          <AddCustomTokenPrompt />
+        </VStack>
         {activeCoins.length ? (
           <VStack gap={12}>
             <Text color="light" size={12} weight={500}>
