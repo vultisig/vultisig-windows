@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
@@ -7,17 +6,13 @@ import { initialCoreView } from '@core/ui/navigation/CoreView'
 import {
   CoreStorage,
   CreateAddressBookItemFunction,
-  CreateVaultCoinFunction,
-  CreateVaultCoinsFunction,
   DeleteAddressBookItemFunction,
-  DeleteVaultCoinFunction,
   GetAddressBookItemsFunction,
   GetDefaultChainsFunction,
   GetHasFinishedOnboardingFunction,
   GetInitialViewFunction,
   GetIsVaultBalanceVisibleFunction,
   GetLanguageFunction,
-  GetVaultsCoinsFunction,
   isHasFinishedOnboardingInitially,
   isVaultBalanceInitallyVisible,
   SetHasFinishedOnboardingFunction,
@@ -27,48 +22,20 @@ import {
 } from '@core/ui/storage/CoreStorage'
 import { initialDefaultChains } from '@core/ui/storage/defaultChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-import { recordMap } from '@lib/utils/record/recordMap'
 
 import {
   DeleteAddressBookItem,
-  DeleteCoin,
   GetAddressBookItem,
   GetAllAddressBookItems,
-  GetCoins,
   SaveAddressBookItem,
-  SaveCoin,
-  SaveCoins,
 } from '../../wailsjs/go/storage/Store'
 import { persistentStorage } from '../state/persistentState'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { fiatCurrencyStorage } from './fiatCurrency'
-import { fromStorageCoin, toStorageCoin } from './storageCoin'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
-
-const createVaultCoins: CreateVaultCoinsFunction = async ({
-  vaultId,
-  coins,
-}) => {
-  await SaveCoins(vaultId, coins.map(toStorageCoin))
-}
-
-const getVaultsCoins: GetVaultsCoinsFunction = async () => {
-  const coins = (await GetCoins()) ?? {}
-  return recordMap(coins, coins => coins.map(fromStorageCoin))
-}
-
-const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
-  await SaveCoin(vaultId, toStorageCoin(coin))
-}
-
-const deleteVaultCoin: DeleteVaultCoinFunction = async ({
-  vaultId,
-  coinKey,
-}) => {
-  await DeleteCoin(vaultId, accountCoinKeyToString(coinKey))
-}
 
 const getAddressBookItems: GetAddressBookItemsFunction = async () => {
   const addressBookItems = (await GetAllAddressBookItems()) ?? []
@@ -165,11 +132,8 @@ export const storage: CoreStorage = {
   ...currentVaultIdStorage,
   ...vaultsStorage,
   ...vaultFoldersStorage,
-  createVaultCoins,
+  ...coinsStorage,
   getDefaultChains,
-  getVaultsCoins,
-  createVaultCoin,
-  deleteVaultCoin,
   getAddressBookItems,
   createAddressBookItem,
   updateAddressBookItem,

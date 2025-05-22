@@ -1,29 +1,16 @@
 import { Chain } from '@core/chain/Chain'
-import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { View } from '@lib/ui/navigation/View'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
 import { Language } from '../i18n/Language'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
+import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
-type CreateVaultCoinsInput = {
-  vaultId: string
-  coins: AccountCoin[]
-}
-
-export type CreateVaultCoinsFunction = (
-  input: CreateVaultCoinsInput
-) => Promise<void>
-
 export type GetDefaultChainsFunction = () => Promise<Chain[]>
-
-export type GetVaultsCoinsFunction = () => Promise<
-  Record<string, AccountCoin[]>
->
 
 export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
 
@@ -43,22 +30,6 @@ export type UpdateAddressBookItemFunction = (
 ) => Promise<void>
 
 export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
-
-type CreateCoinInput = {
-  vaultId: string
-  coin: AccountCoin
-}
-
-export type CreateVaultCoinFunction = (input: CreateCoinInput) => Promise<void>
-
-type DeleteVaultCoinInput = {
-  vaultId: string
-  coinKey: AccountCoinKey
-}
-
-export type DeleteVaultCoinFunction = (
-  input: DeleteVaultCoinInput
-) => Promise<void>
 
 export type GetLanguageFunction = () => Promise<Language>
 
@@ -86,12 +57,9 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   FiatCurrencyStorage &
   CurrentVaultIdStorage &
   VaultsStorage &
-  VaultFoldersStorage & {
-    getVaultsCoins: GetVaultsCoinsFunction
-    createVaultCoins: CreateVaultCoinsFunction
+  VaultFoldersStorage &
+  CoinsStorage & {
     getDefaultChains: GetDefaultChainsFunction
-    createVaultCoin: CreateVaultCoinFunction
-    deleteVaultCoin: DeleteVaultCoinFunction
     getAddressBookItems: GetAddressBookItemsFunction
     createAddressBookItem: CreateAddressBookItemFunction
     updateAddressBookItem: UpdateAddressBookItemFunction

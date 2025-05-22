@@ -1,4 +1,4 @@
-import { AccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
@@ -8,9 +8,42 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
-import { CreateVaultCoinsFunction } from './CoreStorage'
 import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
+
+type CreateCoinsInput = {
+  vaultId: string
+  coins: AccountCoin[]
+}
+
+export type CreateCoinsFunction = (input: CreateCoinsInput) => Promise<void>
+
+export type CoinsRecord = Record<string, AccountCoin[]>
+
+export const initialCoinsRecord: CoinsRecord = {}
+
+export type GetCoinsFunction = () => Promise<CoinsRecord>
+
+type CreateCoinInput = {
+  vaultId: string
+  coin: AccountCoin
+}
+
+export type CreateCoinFunction = (input: CreateCoinInput) => Promise<void>
+
+type DeleteCoinInput = {
+  vaultId: string
+  coinKey: AccountCoinKey
+}
+
+export type DeleteCoinFunction = (input: DeleteCoinInput) => Promise<void>
+
+export type CoinsStorage = {
+  createCoins: CreateCoinsFunction
+  getCoins: GetCoinsFunction
+  createCoin: CreateCoinFunction
+  deleteCoin: DeleteCoinFunction
+}
 
 export const useCreateCoinMutation = () => {
   const vault = useCurrentVault()
@@ -19,7 +52,7 @@ export const useCreateCoinMutation = () => {
 
   const invalidate = useInvalidateQueries()
 
-  const { createVaultCoin } = useCore()
+  const { createCoin } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
@@ -37,7 +70,7 @@ export const useCreateCoinMutation = () => {
       walletCore,
     })
 
-    await createVaultCoin({ vaultId, coin: { ...coin, address } })
+    await createCoin({ vaultId, coin: { ...coin, address } })
 
     await invalidate([StorageKey.vaultsCoins])
   }
@@ -50,10 +83,10 @@ export const useCreateCoinMutation = () => {
 export const useCreateCoinsMutation = () => {
   const invalidate = useInvalidateQueries()
 
-  const { createVaultCoins } = useCore()
+  const { createCoins } = useCore()
 
-  const mutationFn: CreateVaultCoinsFunction = async input => {
-    await createVaultCoins(input)
+  const mutationFn: CreateCoinsFunction = async input => {
+    await createCoins(input)
     await invalidate([StorageKey.vaultsCoins])
   }
 
@@ -65,12 +98,12 @@ export const useCreateCoinsMutation = () => {
 export const useDeleteCoinMutation = () => {
   const invalidate = useInvalidateQueries()
 
-  const { deleteVaultCoin } = useCore()
+  const { deleteCoin } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
   const mutationFn = async (coinKey: AccountCoinKey) => {
-    await deleteVaultCoin({ vaultId, coinKey })
+    await deleteCoin({ vaultId, coinKey })
     await invalidate([StorageKey.vaultsCoins])
   }
 
