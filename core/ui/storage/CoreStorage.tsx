@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { View } from '@lib/ui/navigation/View'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
@@ -6,11 +5,10 @@ import { Language } from '../i18n/Language'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
+import { DefaultChainsStorage } from './defaultChains'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
-
-export type GetDefaultChainsFunction = () => Promise<Chain[]>
 
 export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
 
@@ -58,8 +56,8 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   CurrentVaultIdStorage &
   VaultsStorage &
   VaultFoldersStorage &
-  CoinsStorage & {
-    getDefaultChains: GetDefaultChainsFunction
+  CoinsStorage &
+  DefaultChainsStorage & {
     getAddressBookItems: GetAddressBookItemsFunction
     createAddressBookItem: CreateAddressBookItemFunction
     updateAddressBookItem: UpdateAddressBookItemFunction
