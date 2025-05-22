@@ -4,23 +4,15 @@ import {
   CreateAddressBookItemFunction,
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
-  CreateVaultFolderFunction,
   DeleteAddressBookItemFunction,
   DeleteVaultCoinFunction,
-  DeleteVaultFolderFunction,
   UpdateAddressBookItemFunction,
-  UpdateVaultFolderFunction,
 } from '@core/ui/storage/CoreStorage'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
-import {
-  getVaultFolders,
-  updateVaultFolders,
-} from '../vault/state/vaultFolders'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
 import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
@@ -36,7 +28,8 @@ import {
   getIsVaultBalanceVisible,
   setIsVaultBalanceVisible,
 } from './vaultBalanceVisibility'
-import { updateVaults, vaultsStorage } from './vaults'
+import { vaultFoldersStorage } from './vaultFolders'
+import { vaultsStorage } from './vaults'
 
 const createVaultCoins: CreateVaultCoinsFunction = async ({
   vaultId,
@@ -52,37 +45,6 @@ const createVaultCoins: CreateVaultCoinsFunction = async ({
     ...prevVaultsCoins,
     [vaultId]: [...prevCoins, ...coins],
   })
-}
-
-const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
-  const vaultFolders = await getVaultFolders()
-  const vaultFolderIndex = shouldBePresent(
-    vaultFolders.findIndex(vaultFolder => vaultFolder.id === id)
-  )
-
-  const updatedVaultFolders = updateAtIndex(
-    vaultFolders,
-    vaultFolderIndex,
-    vaultFolder => ({
-      ...vaultFolder,
-      ...fields,
-    })
-  )
-
-  await updateVaultFolders(updatedVaultFolders)
-}
-
-const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
-  const folders = await getVaultFolders()
-  const vaults = await vaultsStorage.getVaults()
-
-  // Update vaults to remove folder reference
-  const updatedVaults = vaults.map(vault =>
-    vault.folderId === folderId ? { ...vault, folderId: undefined } : vault
-  )
-
-  await updateVaults(updatedVaults)
-  await updateVaultFolders(folders.filter(folder => folder.id !== folderId))
 }
 
 const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
@@ -101,22 +63,6 @@ const deleteVaultCoin: DeleteVaultCoinFunction = async ({
       coin => !areEqualCoins(coin, coinKey)
     ),
   })
-}
-
-const createVaultFolder: CreateVaultFolderFunction = async folder => {
-  const folders = await getVaultFolders()
-  await updateVaultFolders([...folders, folder])
-  // Update vaults with the new folder ID
-  if (folder.vaultIds?.length) {
-    const vaults = await vaultsStorage.getVaults()
-    const updatedVaults = vaults.map(vault => {
-      if (folder.vaultIds?.includes(getVaultId(vault))) {
-        return { ...vault, folderId: folder.id }
-      }
-      return vault
-    })
-    await updateVaults(updatedVaults)
-  }
 }
 
 const createAddressBookItem: CreateAddressBookItemFunction = async item => {
@@ -149,15 +95,12 @@ export const storage: CoreStorage = {
   ...fiatCurrencyStorage,
   ...currentVaultIdStorage,
   ...vaultsStorage,
+  ...vaultFoldersStorage,
   createVaultCoins,
   getDefaultChains,
   getVaultsCoins,
-  getVaultFolders,
-  deleteVaultFolder,
   createVaultCoin,
-  updateVaultFolder,
   deleteVaultCoin,
-  createVaultFolder,
   getAddressBookItems,
   createAddressBookItem,
   updateAddressBookItem,

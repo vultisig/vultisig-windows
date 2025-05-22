@@ -12,9 +12,33 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { useUpdateVaultMutation } from '../vault/mutations/useUpdateVaultMutation'
 import { getVaultId } from '../vault/Vault'
-import { UpdateVaultFolderFunction } from './CoreStorage'
+import { VaultFolder } from '../vault/VaultFolder'
 import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'
+
+export const vaultFoldersInitialValue: VaultFolder[] = []
+
+export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
+
+export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
+
+type UpdateVaultFolderInput = {
+  id: string
+  fields: Partial<Omit<VaultFolder, 'id'>>
+}
+
+export type UpdateVaultFolderFunction = (
+  input: UpdateVaultFolderInput
+) => Promise<void>
+
+export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
+
+export type VaultFoldersStorage = {
+  getVaultFolders: GetVaultFoldersFunction
+  deleteVaultFolder: DeleteVaultFolderFunction
+  updateVaultFolder: UpdateVaultFolderFunction
+  createVaultFolder: CreateVaultFolderFunction
+}
 
 export const useVaultFoldersQuery = () => {
   const { getVaultFolders } = useCore()
