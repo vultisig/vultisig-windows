@@ -10,6 +10,7 @@ import {
 } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { toUtf8String, TransactionRequest, TypedDataEncoder } from 'ethers'
+import { BlockTag } from 'viem'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import {
@@ -304,7 +305,7 @@ export const handleRequest = (
         getEvmClient(chain as EvmChain)
           .getTransactionCount({
             address: String(address) as `0x${string}`,
-            blockTag: String(tag) as any,
+            blockTag: String(tag) as BlockTag,
           })
           .then(count => resolve(String(count)))
           .catch(reject)
