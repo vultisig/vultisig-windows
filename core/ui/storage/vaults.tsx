@@ -56,7 +56,7 @@ export const { useValue: useVaults, provider: VaultsProvider } =
   getValueProviderSetup<(Vault & { coins: AccountCoin[] })[]>('VaultsProvider')
 
 export const useVaultsQuery = () => {
-  const { getVaults, getVaultsCoins } = useCore()
+  const { getVaults, getCoins } = useCore()
 
   const vaults = useQuery({
     queryKey: [StorageKey.vaults],
@@ -66,7 +66,7 @@ export const useVaultsQuery = () => {
 
   const coins = useQuery({
     queryKey: [StorageKey.vaultsCoins],
-    queryFn: getVaultsCoins,
+    queryFn: getCoins,
     ...fixedDataQueryOptions,
   })
 

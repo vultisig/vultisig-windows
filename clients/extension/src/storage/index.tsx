@@ -1,11 +1,7 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
   CreateAddressBookItemFunction,
-  CreateVaultCoinFunction,
-  CreateVaultCoinsFunction,
   DeleteAddressBookItemFunction,
-  DeleteVaultCoinFunction,
   UpdateAddressBookItemFunction,
 } from '@core/ui/storage/CoreStorage'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
@@ -13,10 +9,9 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
-import { getVaultsCoins } from '../vault/state/vaultsCoins'
-import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { getLanguage, setLanguage } from './language'
@@ -30,40 +25,6 @@ import {
 } from './vaultBalanceVisibility'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
-
-const createVaultCoins: CreateVaultCoinsFunction = async ({
-  vaultId,
-  coins,
-}) => {
-  const prevVaultsCoins = await getVaultsCoins()
-
-  const prevCoins = (prevVaultsCoins[vaultId] ?? []).filter(existingCoin =>
-    coins.every(coin => !areEqualCoins(existingCoin, coin))
-  )
-
-  await updateVaultsCoins({
-    ...prevVaultsCoins,
-    [vaultId]: [...prevCoins, ...coins],
-  })
-}
-
-const createVaultCoin: CreateVaultCoinFunction = async ({ vaultId, coin }) => {
-  await createVaultCoins({ vaultId, coins: [coin] })
-}
-
-const deleteVaultCoin: DeleteVaultCoinFunction = async ({
-  vaultId,
-  coinKey,
-}) => {
-  const vaultsCoins = await getVaultsCoins()
-
-  await updateVaultsCoins({
-    ...vaultsCoins,
-    [vaultId]: vaultsCoins[vaultId].filter(
-      coin => !areEqualCoins(coin, coinKey)
-    ),
-  })
-}
 
 const createAddressBookItem: CreateAddressBookItemFunction = async item => {
   const items = await getAddressBookItems()
@@ -96,11 +57,8 @@ export const storage: CoreStorage = {
   ...currentVaultIdStorage,
   ...vaultsStorage,
   ...vaultFoldersStorage,
-  createVaultCoins,
+  ...coinsStorage,
   getDefaultChains,
-  getVaultsCoins,
-  createVaultCoin,
-  deleteVaultCoin,
   getAddressBookItems,
   createAddressBookItem,
   updateAddressBookItem,

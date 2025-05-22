@@ -13,7 +13,6 @@ import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredRequest } from '../../utils/storage'
-import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
@@ -34,7 +33,7 @@ export const handleFindAccounts = async (
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null
 
   // Check if the chain already exists in the vault's portfolio
-  const vaultsCoins = await getVaultsCoins()
+  const vaultsCoins = await storage.getCoins()
   const existingAccount = vaultsCoins[currentVaultId].find(
     account => isFeeCoin(account) && account.chain === chain
   )
