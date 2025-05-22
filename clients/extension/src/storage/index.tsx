@@ -5,14 +5,11 @@ import {
   CreateVaultCoinFunction,
   CreateVaultCoinsFunction,
   CreateVaultFolderFunction,
-  CreateVaultFunction,
   DeleteAddressBookItemFunction,
   DeleteVaultCoinFunction,
   DeleteVaultFolderFunction,
-  DeleteVaultFunction,
   UpdateAddressBookItemFunction,
   UpdateVaultFolderFunction,
-  UpdateVaultFunction,
 } from '@core/ui/storage/CoreStorage'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
@@ -24,8 +21,6 @@ import {
   getVaultFolders,
   updateVaultFolders,
 } from '../vault/state/vaultFolders'
-import { updateVaults } from '../vault/state/vaults'
-import { getVaults } from '../vault/state/vaults'
 import { getVaultsCoins } from '../vault/state/vaultsCoins'
 import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
@@ -41,39 +36,7 @@ import {
   getIsVaultBalanceVisible,
   setIsVaultBalanceVisible,
 } from './vaultBalanceVisibility'
-
-const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
-  const vaults = await getVaults()
-  const vaultIndex = shouldBePresent(
-    vaults.findIndex(vault => getVaultId(vault) === vaultId)
-  )
-
-  const updatedVaults = updateAtIndex(vaults, vaultIndex, vault => ({
-    ...vault,
-    ...fields,
-  }))
-
-  await updateVaults(updatedVaults)
-
-  return updatedVaults[vaultIndex]
-}
-
-const deleteVault: DeleteVaultFunction = async vaultId => {
-  const vaults = await getVaults()
-
-  await updateVaults(vaults.filter(v => getVaultId(v) !== vaultId))
-}
-
-const createVault: CreateVaultFunction = async vault => {
-  const prevVaults = await getVaults()
-
-  await updateVaults([
-    ...prevVaults.filter(v => getVaultId(v) !== getVaultId(vault)),
-    vault,
-  ])
-
-  return vault
-}
+import { updateVaults, vaultsStorage } from './vaults'
 
 const createVaultCoins: CreateVaultCoinsFunction = async ({
   vaultId,
@@ -111,7 +74,7 @@ const updateVaultFolder: UpdateVaultFolderFunction = async ({ id, fields }) => {
 
 const deleteVaultFolder: DeleteVaultFolderFunction = async folderId => {
   const folders = await getVaultFolders()
-  const vaults = await getVaults()
+  const vaults = await vaultsStorage.getVaults()
 
   // Update vaults to remove folder reference
   const updatedVaults = vaults.map(vault =>
@@ -145,7 +108,7 @@ const createVaultFolder: CreateVaultFolderFunction = async folder => {
   await updateVaultFolders([...folders, folder])
   // Update vaults with the new folder ID
   if (folder.vaultIds?.length) {
-    const vaults = await getVaults()
+    const vaults = await vaultsStorage.getVaults()
     const updatedVaults = vaults.map(vault => {
       if (folder.vaultIds?.includes(getVaultId(vault))) {
         return { ...vault, folderId: folder.id }
@@ -185,14 +148,11 @@ export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
   ...fiatCurrencyStorage,
   ...currentVaultIdStorage,
-  updateVault,
-  createVault,
+  ...vaultsStorage,
   createVaultCoins,
   getDefaultChains,
-  getVaults,
   getVaultsCoins,
   getVaultFolders,
-  deleteVault,
   deleteVaultFolder,
   createVaultCoin,
   updateVaultFolder,

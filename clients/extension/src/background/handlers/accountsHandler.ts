@@ -13,7 +13,6 @@ import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredRequest } from '../../utils/storage'
-import { getVaults } from '../../vault/state/vaults'
 import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
@@ -45,7 +44,7 @@ export const handleFindAccounts = async (
   }
 
   // If not derive the address from the vault's public key via deriveAddress()
-  const vaults = await getVaults()
+  const vaults = await storage.getVaults()
   const vault = shouldBePresent(
     vaults.find(vault => getVaultId(vault) === currentVaultId)
   )
@@ -74,7 +73,7 @@ export const handleFindAccounts = async (
 const handleFindVault = async (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  const vaults = await getVaults()
+  const vaults = await storage.getVaults()
   const currentVaultId = await storage.getCurrentVaultId()
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
