@@ -20,13 +20,13 @@ export type UpdateVaultInput = {
 
 export const vaultsInitialValue: Vault[] = []
 
-export type CreateVaultFunction = (vault: Vault) => Promise<Vault>
+type CreateVaultFunction = (vault: Vault) => Promise<Vault>
 
 export type UpdateVaultFunction = (input: UpdateVaultInput) => Promise<Vault>
 
-export type GetVaultsFunction = () => Promise<Vault[]>
+type GetVaultsFunction = () => Promise<Vault[]>
 
-export type DeleteVaultFunction = (vaultId: string) => Promise<void>
+type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
 export type VaultsStorage = {
   getVaults: GetVaultsFunction

@@ -8,11 +8,11 @@ import { StorageKey } from './StorageKey'
 
 export const isHasFinishedOnboardingInitially = false
 
-export type SetHasFinishedOnboardingFunction = (
+type SetHasFinishedOnboardingFunction = (
   hasFinishedOnboarding: boolean
 ) => Promise<void>
 
-export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
+type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type OnboardingStorage = {
   getHasFinishedOnboarding: GetHasFinishedOnboardingFunction

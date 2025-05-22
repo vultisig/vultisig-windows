@@ -11,14 +11,14 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
 
-export const getAddressBookItems: GetAddressBookItemsFunction = async () => {
+const getAddressBookItems: GetAddressBookItemsFunction = async () => {
   return getPersistentState(
     StorageKey.addressBookItems,
     initialAddressBookItems
   )
 }
 
-export const updateAddressBookItems = async (items: AddressBookItem[]) => {
+const updateAddressBookItems = async (items: AddressBookItem[]) => {
   await setPersistentState(StorageKey.addressBookItems, items)
 }
 

@@ -13,7 +13,7 @@ export type GetAddressBookItemsFunction = () => Promise<AddressBookItem[]>
 
 type CreateAddressBookItemInput = AddressBookItem
 
-export type CreateAddressBookItemFunction = (
+type CreateAddressBookItemFunction = (
   input: CreateAddressBookItemInput
 ) => Promise<void>
 
@@ -22,11 +22,11 @@ type UpdateAddressBookItemInput = {
   fields: Partial<Omit<AddressBookItem, 'id'>>
 }
 
-export type UpdateAddressBookItemFunction = (
+type UpdateAddressBookItemFunction = (
   input: UpdateAddressBookItemInput
 ) => Promise<void>
 
-export type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
+type DeleteAddressBookItemFunction = (itemId: string) => Promise<void>
 
 export type AddressBookStorage = {
   getAddressBookItems: GetAddressBookItemsFunction

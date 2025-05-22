@@ -20,18 +20,18 @@ export const vaultFoldersInitialValue: VaultFolder[] = []
 
 export type GetVaultFoldersFunction = () => Promise<VaultFolder[]>
 
-export type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
+type DeleteVaultFolderFunction = (folderId: string) => Promise<void>
 
 type UpdateVaultFolderInput = {
   id: string
   fields: Partial<Omit<VaultFolder, 'id'>>
 }
 
-export type UpdateVaultFolderFunction = (
+type UpdateVaultFolderFunction = (
   input: UpdateVaultFolderInput
 ) => Promise<void>
 
-export type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
+type CreateVaultFolderFunction = (input: VaultFolder) => Promise<void>
 
 export type VaultFoldersStorage = {
   getVaultFolders: GetVaultFoldersFunction
