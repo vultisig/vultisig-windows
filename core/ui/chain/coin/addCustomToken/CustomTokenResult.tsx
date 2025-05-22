@@ -4,7 +4,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { ManageVaultChainCoin } from '../../../vault/chain/manage/coin/ManageVaultChainCoin'
+import { ManageVaultCoin } from '../../../vault/chain/manage/coin/ManageVaultCoin'
 import { useCustomTokenQuery } from './queries/useCustomTokenQuery'
 
 export const CustomTokenResult = ({ address }: { address: string }) => {
@@ -20,7 +20,7 @@ export const CustomTokenResult = ({ address }: { address: string }) => {
       error={() => <Text>{t('no_token_found')}</Text>}
       pending={() => <Text>{t('loading')}</Text>}
       success={coin => (
-        <ManageVaultChainCoin key={coinKeyToString(coin)} value={coin} />
+        <ManageVaultCoin key={coinKeyToString(coin)} value={coin} />
       )}
     />
   )
