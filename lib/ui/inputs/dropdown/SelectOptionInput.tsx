@@ -16,7 +16,7 @@ import { DropdownIdentifierWrapper } from './DropdownIdentifierWrapper'
 import { DropdownInputFrame } from './DropdownInputFrame'
 import { DropdownOption } from './DropdownOption'
 
-export interface SelectOptionInputProps<T> extends InputProps<T> {
+type SelectOptionInputProps<T> = InputProps<T> & {
   label?: ReactNode
 
   options: T[]
@@ -25,11 +25,6 @@ export interface SelectOptionInputProps<T> extends InputProps<T> {
   valueIdentifier: ReactNode
   valueName: string
 }
-
-export type SelectOptionInputWrapperProps<T> = Pick<
-  SelectOptionInputProps<T>,
-  'value' | 'onChange' | 'label' | 'options'
->
 
 const Container = styled(DropdownInputFrame)`
   ${interactive};

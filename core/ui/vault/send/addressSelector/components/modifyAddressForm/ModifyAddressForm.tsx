@@ -4,23 +4,17 @@ import { useUpdateAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { Controller } from 'react-hook-form'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Select from 'react-select'
 
+import { ChainInput } from '../../../../../chain/inputs/ChainInput'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '../../hooks/useAddressSchema'
 import {
-  customSelectOption,
-  customSingleValue,
-} from '../addAddressForm/AddAddressForm.styles'
-import {
   ButtonWrapper,
   Container,
-  customSelectMenu,
-  customSelectStyles,
   Form,
   FormField,
   FormFieldLabel,
@@ -37,13 +31,13 @@ const ModifyAddressForm = ({
   addressBookItem,
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
-  const { address, chain, title, id } = addressBookItem
+  const [chain, setChain] = useState<Chain>(addressBookItem.chain)
+  const { address, title, id } = addressBookItem
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
-    control,
   } = useAddressSchema({
     type: 'modify',
     defaultValues: {
@@ -79,30 +73,7 @@ const ModifyAddressForm = ({
   return (
     <Container>
       <Form onSubmit={handleSubmit(handleModifyAddress)}>
-        <FormField>
-          <Controller
-            name="chain"
-            control={control}
-            render={({ field }) => (
-              <Select<Chain>
-                value={field.value as Chain}
-                defaultValue={Chain.Bitcoin}
-                onChange={selectedOption => {
-                  field.onChange(selectedOption)
-                }}
-                onBlur={field.onBlur}
-                options={Object.values(Chain)}
-                components={{
-                  Menu: customSelectMenu,
-                  Option: customSelectOption,
-                  SingleValue: customSingleValue,
-                }}
-                styles={customSelectStyles}
-                placeholder="Select cryptocurrency"
-              />
-            )}
-          />
-        </FormField>
+        <ChainInput value={chain} onChange={setChain} />
 
         <div>
           <FormFieldLabel htmlFor="title">
