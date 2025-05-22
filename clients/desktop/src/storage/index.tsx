@@ -1,8 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { assertChainField } from '@core/chain/utils/assertChainField'
-import { defaultFiatCurrency } from '@core/config/FiatCurrency'
-import { FiatCurrency } from '@core/config/FiatCurrency'
 import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
@@ -62,6 +60,7 @@ import {
 import { persistentStorage } from '../state/persistentState'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { fiatCurrencyStorage } from './fiatCurrency'
 import { fromStorageCoin, toStorageCoin } from './storageCoin'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
@@ -174,20 +173,6 @@ const getDefaultChains: GetDefaultChainsFunction = async () => {
   return value
 }
 
-const getFiatCurrency = async () => {
-  const value = persistentStorage.getItem<FiatCurrency>(StorageKey.fiatCurrency)
-
-  if (value === undefined) {
-    return defaultFiatCurrency
-  }
-
-  return value
-}
-
-const setFiatCurrency = async (currency: FiatCurrency) => {
-  persistentStorage.setItem(StorageKey.fiatCurrency, currency)
-}
-
 const getCurrentVaultId = async () => {
   const value = persistentStorage.getItem<CurrentVaultId>(
     StorageKey.currentVaultId
@@ -261,9 +246,8 @@ const setHasFinishedOnboarding: SetHasFinishedOnboardingFunction =
 const getInitialView: GetInitialViewFunction = async () => initialCoreView
 
 export const storage: CoreStorage = {
-  setFiatCurrency,
+  ...fiatCurrencyStorage,
   setCurrentVaultId,
-  getFiatCurrency,
   getCurrentVaultId,
   updateVault,
   createVault,

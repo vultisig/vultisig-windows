@@ -20,7 +20,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
-import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
 import {
   getCurrentVaultId,
   setCurrentVaultId,
@@ -35,6 +34,7 @@ import { getVaultsCoins } from '../vault/state/vaultsCoins'
 import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { fiatCurrencyStorage } from './fiatCurrency'
 import { getLanguage, setLanguage } from './language'
 import {
   getHasFinishedOnboarding,
@@ -186,14 +186,13 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
 
 export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
-  setFiatCurrency,
+  ...fiatCurrencyStorage,
   setCurrentVaultId,
   getCurrentVaultId,
   updateVault,
   createVault,
   createVaultCoins,
   getDefaultChains,
-  getFiatCurrency,
   getVaults,
   getVaultsCoins,
   getVaultFolders,
