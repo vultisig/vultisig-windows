@@ -1,6 +1,7 @@
-import { AddressBookPage } from '@core/ui/address-book'
+import { AddressBookListItem } from '@core/ui/address-book/item'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
 import { useCore } from '@core/ui/state/core'
+import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -14,6 +15,7 @@ import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
 import { text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
@@ -36,11 +38,11 @@ const FixedScanQRView = styled(ScanQrView)`
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiver = () => {
+  const { t } = useTranslation()
+  const { getClipboardText } = useCore()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
-  const { t } = useTranslation()
-
-  const { getClipboardText } = useCore()
+  const addressBookItems = useAddressBookItems()
 
   const onScanSuccess = useCallback(
     (address: string) => {
@@ -63,14 +65,22 @@ export const ManageReceiver = () => {
         </Modal>
       )}
       addressBook={() => (
-        <Modal title="" withDefaultStructure={false}>
-          <AddressBookPage
-            onAddressClick={address => {
-              setValue(address)
-              setViewState('default')
-            }}
-            onClose={() => setViewState('default')}
-          />
+        <Modal
+          onClose={() => setViewState('default')}
+          title={t('address_book')}
+        >
+          <List>
+            {addressBookItems.map(item => (
+              <AddressBookListItem
+                key={item.id}
+                onSelect={address => {
+                  setValue(address)
+                  setViewState('default')
+                }}
+                {...item}
+              />
+            ))}
+          </List>
         </Modal>
       )}
       default={() => (

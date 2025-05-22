@@ -8,6 +8,7 @@ import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
+import { MiddleTruncate } from '@lib/utils/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,6 +22,7 @@ export interface AddressBookItem {
 
 interface AddressBookListItemProps extends AddressBookItem {
   isEditMode?: boolean
+  onSelect?: (address: string) => void
 }
 
 export const AddressBookListItem: FC<AddressBookListItemProps> = ({
@@ -28,6 +30,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
   chain,
   id,
   isEditMode,
+  onSelect,
   title,
 }) => {
   const { t } = useTranslation()
@@ -60,7 +63,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
     />
   ) : (
     <ListItem
-      description={address}
+      description={<MiddleTruncate text={address} width={80} />}
       extra={<Text color="shy">{`${chain} ${t('network')}`}</Text>}
       icon={
         <ChainEntityIcon
@@ -69,7 +72,11 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
         />
       }
       key={id}
-      onClick={() => navigate({ id: 'manageAddress', state: { id } })}
+      onClick={() =>
+        onSelect
+          ? onSelect(address)
+          : navigate({ id: 'manageAddress', state: { id } })
+      }
       title={title}
       hoverable
     />

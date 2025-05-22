@@ -1,5 +1,4 @@
 import { Button } from '@clients/extension/src/components/button'
-import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
@@ -25,6 +24,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { MiddleTruncate } from '@lib/utils/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

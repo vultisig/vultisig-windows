@@ -116,7 +116,11 @@ export const ManageAddressPage = () => {
     <VStack as="form" onSubmit={handleSubmit(handleAddAddress)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('edit_address')}</PageHeaderTitle>}
+        title={
+          <PageHeaderTitle>
+            {addressBookItem ? t('edit_address') : t('add_address')}
+          </PageHeaderTitle>
+        }
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>
