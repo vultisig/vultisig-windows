@@ -1,8 +1,8 @@
+import { Chain } from '@core/chain/Chain'
 import { UnstyledInput } from '@lib/ui/inputs/UnstyledInput'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
-import React from 'react'
 import { MenuProps, StylesConfig } from 'react-select'
 import styled from 'styled-components'
 
@@ -50,14 +50,7 @@ export const FormInput = styled(UnstyledInput)`
   }
 `
 
-export type CoinOption = {
-  value: string
-  label: string
-  logo?: string
-  isLastOption: boolean
-}
-
-export const customSelectStyles: StylesConfig<CoinOption, false> = {
+export const customSelectStyles: StylesConfig<Chain, false> = {
   control: base => ({
     ...base,
     backgroundColor: 'transparent',
@@ -77,10 +70,10 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
     marginTop: '5px',
     boxShadow: 'none',
   }),
-  option: (base, { data }) => ({
+  option: base => ({
     ...base,
     backgroundColor: 'none',
-    borderBottom: data.isLastOption ? 'none' : '2px solid #ffffff47',
+    borderBottom: '2px solid #ffffff47',
     color: 'white',
     padding: '10px',
     cursor: 'pointer',
@@ -109,7 +102,7 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
   }),
 }
 
-export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
+export const customSelectMenu = (props: MenuProps<Chain, false>) => {
   const { children, innerProps } = props
   return (
     <motion.div

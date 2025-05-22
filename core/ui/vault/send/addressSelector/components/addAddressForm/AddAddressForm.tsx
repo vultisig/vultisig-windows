@@ -4,21 +4,18 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 import { v4 as uuidv4 } from 'uuid'
 
 import { AddressBookPageHeader } from '../../AddressSelector.styles'
-import { getCoinOptions } from '../../helpers/getCoinOptions'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '../../hooks/useAddressSchema'
 import {
   AddButton,
-  ChainOption,
   Container,
   customSelectMenu,
   customSelectOption,
@@ -36,7 +33,6 @@ type AddAddressFormProps = {
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
 
   const {
     register,
@@ -84,17 +80,14 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
               name="chain"
               control={control}
               render={({ field }) => (
-                <Select<ChainOption>
-                  value={
-                    chainOptions.find(option => option.value === field.value) ||
-                    null
-                  }
-                  defaultValue={chainOptions[0]}
+                <Select<Chain>
+                  value={field.value as Chain}
+                  defaultValue={Chain.Bitcoin}
                   onChange={selectedOption => {
-                    field.onChange(selectedOption?.value)
+                    field.onChange(selectedOption)
                   }}
                   onBlur={field.onBlur}
-                  options={chainOptions}
+                  options={Object.values(Chain)}
                   components={{
                     Menu: customSelectMenu,
                     Option: customSelectOption,

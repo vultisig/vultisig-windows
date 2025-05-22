@@ -59,14 +59,7 @@ export const FormInput = styled(UnstyledInput)`
   }
 `
 
-export type ChainOption = {
-  value: string
-  label: string
-  logo?: string
-  isLastOption: boolean
-}
-
-export const customSelectStyles: StylesConfig<ChainOption, false> = {
+export const customSelectStyles: StylesConfig<Chain, false> = {
   control: base => ({
     ...base,
     backgroundColor: 'transparent',
@@ -86,10 +79,10 @@ export const customSelectStyles: StylesConfig<ChainOption, false> = {
     marginTop: '5px',
     boxShadow: 'none',
   }),
-  option: (base, { data }) => ({
+  option: base => ({
     ...base,
     backgroundColor: 'none',
-    borderBottom: data.isLastOption ? 'none' : '2px solid #ffffff47',
+    borderBottom: '2px solid #ffffff47',
     color: 'white',
     padding: '10px',
     cursor: 'pointer',
@@ -118,7 +111,7 @@ export const customSelectStyles: StylesConfig<ChainOption, false> = {
   }),
 }
 
-export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
+export const customSelectMenu = (props: MenuProps<Chain, false>) => {
   const { children, innerProps } = props
   return (
     <motion.div
@@ -133,8 +126,8 @@ export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
   )
 }
 
-export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
-  const iconSrc = getChainLogoSrc(props.data.value as Chain)
+export const customSelectOption = (props: OptionProps<Chain, false>) => {
+  const iconSrc = getChainLogoSrc(props.data as Chain)
   return (
     <components.Option {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -143,16 +136,14 @@ export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
           alt=""
           style={{ width: 24, height: 24, marginRight: 8 }}
         />
-        {props.data.label}
+        {props.data}
       </div>
     </components.Option>
   )
 }
 
-export const customSingleValue = (
-  props: SingleValueProps<ChainOption, false>
-) => {
-  const iconSrc = getChainLogoSrc(props.data.value as Chain)
+export const customSingleValue = (props: SingleValueProps<Chain, false>) => {
+  const iconSrc = getChainLogoSrc(props.data as Chain)
   return (
     <components.SingleValue {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -161,7 +152,7 @@ export const customSingleValue = (
           alt=""
           style={{ width: 24, height: 24, marginRight: 8 }}
         />
-        {props.data.label}
+        {props.data}
       </div>
     </components.SingleValue>
   )

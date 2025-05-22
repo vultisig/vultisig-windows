@@ -4,12 +4,10 @@ import { useUpdateAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Select from 'react-select'
 
-import { getCoinOptions } from '../../helpers/getCoinOptions'
 import {
   AddressFormValues,
   useAddressSchema,
@@ -20,7 +18,6 @@ import {
 } from '../addAddressForm/AddAddressForm.styles'
 import {
   ButtonWrapper,
-  CoinOption,
   Container,
   customSelectMenu,
   customSelectStyles,
@@ -40,7 +37,6 @@ const ModifyAddressForm = ({
   addressBookItem,
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
   const { address, chain, title, id } = addressBookItem
 
   const {
@@ -88,17 +84,14 @@ const ModifyAddressForm = ({
             name="chain"
             control={control}
             render={({ field }) => (
-              <Select<CoinOption>
-                value={
-                  chainOptions.find(option => option.value === field.value) ||
-                  null
-                }
-                defaultValue={chainOptions[0]}
+              <Select<Chain>
+                value={field.value as Chain}
+                defaultValue={Chain.Bitcoin}
                 onChange={selectedOption => {
-                  field.onChange(selectedOption?.value)
+                  field.onChange(selectedOption)
                 }}
                 onBlur={field.onBlur}
-                options={chainOptions}
+                options={Object.values(Chain)}
                 components={{
                   Menu: customSelectMenu,
                   Option: customSelectOption,
