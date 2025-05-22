@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { FiatCurrency } from '@core/config/FiatCurrency'
 import { View } from '@lib/ui/navigation/View'
 
 import { AddressBookItem } from '../addressBook/AddressBookItem'
@@ -9,8 +8,7 @@ import { Vault } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CurrentVaultId } from './currentVaultId'
-
-export type SetFiatCurrencyFunction = (value: FiatCurrency) => Promise<void>
+import { FiatCurrencyStorage } from './fiatCurrency'
 
 export type UpdateVaultInput = {
   vaultId: string
@@ -31,8 +29,6 @@ export type CreateVaultCoinsFunction = (
 ) => Promise<void>
 
 export type GetDefaultChainsFunction = () => Promise<Chain[]>
-
-export type GetFiatCurrencyFunction = () => Promise<FiatCurrency>
 
 type GetCurrentVaultIdFunction = () => Promise<CurrentVaultId>
 
@@ -118,33 +114,32 @@ export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type GetInitialViewFunction = () => Promise<View>
 
-export type CoreStorage = CoinFinderIgnoreStorage & {
-  getFiatCurrency: GetFiatCurrencyFunction
-  setFiatCurrency: SetFiatCurrencyFunction
-  getCurrentVaultId: GetCurrentVaultIdFunction
-  setCurrentVaultId: SetCurrentVaultIdFunction
-  getVaults: GetVaultsFunction
-  getVaultsCoins: GetVaultsCoinsFunction
-  updateVault: UpdateVaultFunction
-  createVault: CreateVaultFunction
-  createVaultCoins: CreateVaultCoinsFunction
-  getDefaultChains: GetDefaultChainsFunction
-  getVaultFolders: GetVaultFoldersFunction
-  deleteVault: DeleteVaultFunction
-  deleteVaultFolder: DeleteVaultFolderFunction
-  updateVaultFolder: UpdateVaultFolderFunction
-  createVaultCoin: CreateVaultCoinFunction
-  deleteVaultCoin: DeleteVaultCoinFunction
-  createVaultFolder: CreateVaultFolderFunction
-  getAddressBookItems: GetAddressBookItemsFunction
-  createAddressBookItem: CreateAddressBookItemFunction
-  updateAddressBookItem: UpdateAddressBookItemFunction
-  deleteAddressBookItem: DeleteAddressBookItemFunction
-  getLanguage: GetLanguageFunction
-  setLanguage: SetLanguageFunction
-  getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction
-  setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction
-  getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
-  setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
-  getInitialView: GetInitialViewFunction
-}
+export type CoreStorage = CoinFinderIgnoreStorage &
+  FiatCurrencyStorage & {
+    getCurrentVaultId: GetCurrentVaultIdFunction
+    setCurrentVaultId: SetCurrentVaultIdFunction
+    getVaults: GetVaultsFunction
+    getVaultsCoins: GetVaultsCoinsFunction
+    updateVault: UpdateVaultFunction
+    createVault: CreateVaultFunction
+    createVaultCoins: CreateVaultCoinsFunction
+    getDefaultChains: GetDefaultChainsFunction
+    getVaultFolders: GetVaultFoldersFunction
+    deleteVault: DeleteVaultFunction
+    deleteVaultFolder: DeleteVaultFolderFunction
+    updateVaultFolder: UpdateVaultFolderFunction
+    createVaultCoin: CreateVaultCoinFunction
+    deleteVaultCoin: DeleteVaultCoinFunction
+    createVaultFolder: CreateVaultFolderFunction
+    getAddressBookItems: GetAddressBookItemsFunction
+    createAddressBookItem: CreateAddressBookItemFunction
+    updateAddressBookItem: UpdateAddressBookItemFunction
+    deleteAddressBookItem: DeleteAddressBookItemFunction
+    getLanguage: GetLanguageFunction
+    setLanguage: SetLanguageFunction
+    getIsVaultBalanceVisible: GetIsVaultBalanceVisibleFunction
+    setIsVaultBalanceVisible: SetIsVaultBalanceVisibleFunction
+    getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
+    setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
+    getInitialView: GetInitialViewFunction
+  }
