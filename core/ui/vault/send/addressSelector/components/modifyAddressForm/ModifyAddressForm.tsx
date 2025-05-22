@@ -43,8 +43,8 @@ const ModifyAddressForm = ({
     defaultValues: {
       title: title,
       address: address,
-      chain: chain,
     },
+    chain,
   })
 
   const {
@@ -54,14 +54,14 @@ const ModifyAddressForm = ({
   } = useUpdateAddressBookItemMutation()
 
   const handleModifyAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data
+    const { address, title } = data
     updateAddressBookItem(
       {
         id,
         fields: {
           address,
           title,
-          chain: chain as Chain,
+          chain,
         },
       },
       {

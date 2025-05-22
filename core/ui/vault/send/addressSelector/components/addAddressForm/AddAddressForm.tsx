@@ -38,6 +38,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     formState: { errors, isValid, isDirty, isLoading, isValidating },
   } = useAddressSchema({
     type: 'add',
+    chain,
   })
 
   const {
