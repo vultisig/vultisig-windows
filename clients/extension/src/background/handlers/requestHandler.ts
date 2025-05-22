@@ -8,7 +8,6 @@ import {
   getChainByChainId,
   getChainId,
 } from '@core/chain/coin/ChainId'
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   JsonRpcProvider,
