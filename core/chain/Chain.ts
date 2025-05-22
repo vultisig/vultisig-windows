@@ -1,3 +1,4 @@
+// When adding a new Ethereum L2 chain, add its icon to `core/ui/public/chains` as a lowercase SVG file (e.g. `arbitrum.svg`, `base.svg`)
 export const EthereumL2Chain = {
   Arbitrum: 'Arbitrum',
   Base: 'Base',
