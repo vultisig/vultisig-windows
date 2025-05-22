@@ -16,10 +16,6 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 24px;
-
-  & > :first-child {
-    padding: 8px;
-  }
 `
 
 export const FormField = styled(Panel)`
