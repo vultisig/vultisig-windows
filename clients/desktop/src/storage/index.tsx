@@ -1,12 +1,8 @@
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import { Language } from '@core/ui/i18n/Language'
 import { primaryLanguage } from '@core/ui/i18n/Language'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import {
   CoreStorage,
-  CreateAddressBookItemFunction,
-  DeleteAddressBookItemFunction,
-  GetAddressBookItemsFunction,
   GetHasFinishedOnboardingFunction,
   GetInitialViewFunction,
   GetIsVaultBalanceVisibleFunction,
@@ -16,17 +12,11 @@ import {
   SetHasFinishedOnboardingFunction,
   SetIsVaultBalanceVisibleFunction,
   SetLanguageFunction,
-  UpdateAddressBookItemFunction,
 } from '@core/ui/storage/CoreStorage'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
-import {
-  DeleteAddressBookItem,
-  GetAddressBookItem,
-  GetAllAddressBookItems,
-  SaveAddressBookItem,
-} from '../../wailsjs/go/storage/Store'
 import { persistentStorage } from '../state/persistentState'
+import { addressBookStorage } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
@@ -34,30 +24,6 @@ import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
-
-const getAddressBookItems: GetAddressBookItemsFunction = async () => {
-  const addressBookItems = (await GetAllAddressBookItems()) ?? []
-  return addressBookItems.map(assertChainField)
-}
-
-const createAddressBookItem: CreateAddressBookItemFunction = async item => {
-  await SaveAddressBookItem(item)
-}
-
-const updateAddressBookItem: UpdateAddressBookItemFunction = async item => {
-  const oldAddressBookItem = await GetAddressBookItem(item.id)
-
-  const newAddressBookItem = {
-    ...oldAddressBookItem,
-    ...item,
-  }
-
-  await SaveAddressBookItem(newAddressBookItem)
-}
-
-const deleteAddressBookItem: DeleteAddressBookItemFunction = async item => {
-  await DeleteAddressBookItem(item)
-}
 
 const getLanguage: GetLanguageFunction = async () => {
   const value = persistentStorage.getItem<Language>(StorageKey.language)
@@ -122,10 +88,7 @@ export const storage: CoreStorage = {
   ...vaultFoldersStorage,
   ...coinsStorage,
   ...defaultChainsStorage,
-  getAddressBookItems,
-  createAddressBookItem,
-  updateAddressBookItem,
-  deleteAddressBookItem,
+  ...addressBookStorage,
   getLanguage,
   setLanguage,
   getIsVaultBalanceVisible,

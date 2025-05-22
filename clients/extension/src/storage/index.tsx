@@ -1,14 +1,7 @@
-import {
-  CoreStorage,
-  CreateAddressBookItemFunction,
-  DeleteAddressBookItemFunction,
-  UpdateAddressBookItemFunction,
-} from '@core/ui/storage/CoreStorage'
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { CoreStorage } from '@core/ui/storage/CoreStorage'
 
 import { getInitialView } from '../navigation/state'
-import { getAddressBookItems, updateAddressBookItems } from './addressBook'
+import { addressBookStorage } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
@@ -26,31 +19,6 @@ import {
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
 
-const createAddressBookItem: CreateAddressBookItemFunction = async item => {
-  const items = await getAddressBookItems()
-  await updateAddressBookItems([...items, item])
-}
-
-const updateAddressBookItem: UpdateAddressBookItemFunction = async ({
-  id,
-  fields,
-}) => {
-  const items = await getAddressBookItems()
-  const itemIndex = shouldBePresent(items.findIndex(item => item.id === id))
-
-  const updatedAddressBookItems = updateAtIndex(items, itemIndex, item => ({
-    ...item,
-    ...fields,
-  }))
-
-  await updateAddressBookItems(updatedAddressBookItems)
-}
-
-const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
-  const items = await getAddressBookItems()
-  await updateAddressBookItems(items.filter(i => i.id !== itemId))
-}
-
 export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
   ...fiatCurrencyStorage,
@@ -59,10 +27,7 @@ export const storage: CoreStorage = {
   ...vaultFoldersStorage,
   ...coinsStorage,
   ...defaultChainsStorage,
-  getAddressBookItems,
-  createAddressBookItem,
-  updateAddressBookItem,
-  deleteAddressBookItem,
+  ...addressBookStorage,
   getLanguage,
   setLanguage,
   getIsVaultBalanceVisible,
