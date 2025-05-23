@@ -62,6 +62,7 @@ import {
 import { persistentStorage } from '../state/persistentState'
 import { fromStorageVault, toStorageVault } from '../vault/utils/storageVault'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
+import { lastFastVaultPasswordVerificationStorage } from './lastFastVaultPasswordVerificationIgnore'
 import { fromStorageCoin, toStorageCoin } from './storageCoin'
 
 const updateVault: UpdateVaultFunction = async ({ vaultId, fields }) => {
@@ -290,4 +291,5 @@ export const storage: CoreStorage = {
   setHasFinishedOnboarding,
   getInitialView,
   ...coinFinderIgnoreStorage,
+  ...lastFastVaultPasswordVerificationStorage,
 }

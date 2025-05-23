@@ -5,7 +5,6 @@ import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 export enum PersistentStateKey {
   ReactQueryState = 'reactQueryState',
   VaultCreationMpcLib = 'vaultCreationMpcLib',
-  LastVaultPasswordVerification = 'lastVaultPasswordVerification',
 }
 
 const Storage = typeof window !== 'undefined' ? LocalStorage : TemporaryStorage

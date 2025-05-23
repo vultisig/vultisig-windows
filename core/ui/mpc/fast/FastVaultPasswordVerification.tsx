@@ -1,7 +1,3 @@
-import {
-  PersistentStateKey,
-  usePersistentState,
-} from '@clients/desktop/src/state/persistentState'
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -9,46 +5,57 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import {
+  useLastFastVaultPasswordVerificationQuery,
+  useSetLastFastVaultPasswordVerificationMutation,
+} from '../../storage/lastFastVaultPasswordVerification'
 import { useCurrentVault } from '../../vault/state/currentVault'
 import { getVaultId } from '../../vault/Vault'
 
-const FIFTEEN_DAYS_MS = 15 * 24 * 60 * 60 * 1000
+const FIFTEEN_DAYS_MS = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [password, setPassword] = useState('')
 
-  const [lastVerification, setLastVerification] = usePersistentState<number>(
-    PersistentStateKey.LastVaultPasswordVerification,
-    () => 0 // default to 0 (never verified)
-  )
-
   const { t } = useTranslation()
   const vault = useCurrentVault()
+  const vaultId = getVaultId(vault)
+
+  const { data: lastVerification, isFetching: isLastVerificationPending } =
+    useLastFastVaultPasswordVerificationQuery(vaultId)
+
+  const { mutate: setLastVerification } =
+    useSetLastFastVaultPasswordVerificationMutation()
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
       getVaultFromServer({
-        vaultId: getVaultId(vault),
+        vaultId: vaultId,
         password,
       }),
     onSuccess: () => {
-      setLastVerification(Date.now())
+      setLastVerification({
+        timestamp: Date.now(),
+        vaultId: vaultId,
+      })
       setIsOpen(false)
     },
   })
 
   useEffect(() => {
     const now = Date.now()
+
     if (!lastVerification || now - lastVerification > FIFTEEN_DAYS_MS) {
       setIsOpen(true)
     }
-  }, [lastVerification, setIsOpen])
+  }, [isLastVerificationPending, lastVerification, setIsOpen])
 
   const isDisabled = useMemo(() => {
     if (!password) {
