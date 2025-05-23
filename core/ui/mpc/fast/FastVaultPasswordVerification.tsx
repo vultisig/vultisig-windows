@@ -23,7 +23,7 @@ export const FastVaultPasswordVerification = () => {
 
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { lastPasswordVerificationTime = 0 } = vault
+  const { lastPasswordVerificationTime } = vault
   const vaultId = getVaultId(vault)
   const { mutate: updateVault } = useUpdateVaultMutation()
 
