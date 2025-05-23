@@ -3,8 +3,6 @@ import {
   usePersistentState,
 } from '@clients/desktop/src/state/persistentState'
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -15,6 +13,9 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useCurrentVault } from '../../vault/state/currentVault'
+import { getVaultId } from '../../vault/Vault'
 
 const FIFTEEN_DAYS_MS = 15 * 24 * 60 * 60 * 1000
 
