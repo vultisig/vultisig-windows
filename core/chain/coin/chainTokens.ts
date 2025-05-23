@@ -1,8 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
+import { Coin } from './Coin'
 import {
   CHAINS_WITH_IBC_TOKENS,
   IBC_TOKENS,
@@ -12,7 +13,9 @@ import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { initializeChainTokens } from './utils/initializeChainTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
-const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+const leanChainNativeTokens: Partial<
+  Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>
+> = {
   [Chain.MayaChain]: [
     {
       ticker: 'MAYA',
@@ -32,7 +35,9 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   ],
 }
 
-const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+const leanChainTokens: Partial<
+  Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>
+> = {
   [Chain.THORChain]: [
     {
       ticker: 'TCY',
@@ -915,8 +920,13 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   ],
 }
 
-export const chainNativeTokens: Partial<Record<Chain, Coin[]>> = recordMap(
-  leanChainNativeTokens as Record<Chain, Omit<Coin, 'chain'>[]>,
+export const chainNativeTokens: Partial<
+  Record<Chain, RequiredFields<Coin, 'logo'>[]>
+> = recordMap(
+  leanChainNativeTokens as Record<
+    Chain,
+    Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]
+  >,
   (tokens, chain) => tokens.map(token => ({ ...token, chain }))
 )
 
@@ -933,12 +943,14 @@ const mergedLeanChainTokens = Object.values(Chain).reduce(
 
     return acc
   },
-  {} as Partial<Record<Chain, Omit<Coin, 'chain'>[]>>
+  {} as Partial<Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>>
 )
 
-type TokenWithoutChain = Omit<Coin, 'chain'>
+type TokenWithoutChain = Omit<RequiredFields<Coin, 'logo'>, 'chain'>
 
-export const chainTokens: Partial<Record<Chain, Coin[]>> = (() => {
+export const chainTokens: Partial<
+  Record<Chain, RequiredFields<Coin, 'logo'>[]>
+> = (() => {
   const base = initializeChainTokens(
     mergedLeanChainTokens as Record<Chain, TokenWithoutChain[]>
   )
