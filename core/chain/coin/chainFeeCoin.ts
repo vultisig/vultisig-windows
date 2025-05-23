@@ -1,8 +1,12 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { recordMap } from '@lib/utils/record/recordMap'
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
-const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
+const leanChainFeeCoin: Record<
+  Chain,
+  Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>
+> = {
   [Chain.Bitcoin]: {
     ticker: 'BTC',
     logo: 'btc',
@@ -191,11 +195,11 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
   },
 }
 
-export const chainFeeCoin: Record<Chain, Coin> = recordMap(
-  leanChainFeeCoin,
-  (coin, chain) => ({
-    ...coin,
-    chain,
-    id: coin.ticker,
-  })
-)
+export const chainFeeCoin: Record<
+  Chain,
+  RequiredFields<Coin, 'logo'>
+> = recordMap(leanChainFeeCoin, (coin, chain) => ({
+  ...coin,
+  chain,
+  id: coin.ticker,
+}))
