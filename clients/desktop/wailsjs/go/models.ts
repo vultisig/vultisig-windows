@@ -16,7 +16,7 @@ export namespace storage {
       this.title = source['title']
       this.address = source['address']
       this.chain = source['chain']
-      this.order = source['chain']
+      this.order = source['order']
     }
   }
   export class Coin {

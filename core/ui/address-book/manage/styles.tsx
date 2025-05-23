@@ -39,7 +39,7 @@ export const customSelectStyles: StylesConfig<ChainOption, false> = {
   }),
   option: (base, { data }) => ({
     ...base,
-    backgroundColor: 'none',
+    backgroundColor: 'transparent',
     borderBottom: data.isLastOption ? 'none' : '2px solid #ffffff47',
     color: 'white',
     padding: '10px',
