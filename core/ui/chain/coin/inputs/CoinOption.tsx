@@ -3,7 +3,6 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -19,6 +18,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
+
+import { getChainLogoSrc } from '../../metadata/getChainLogoSrc'
 
 export const CoinOption = ({
   value,
@@ -50,7 +51,7 @@ export const CoinOption = ({
               chain,
               isNative: isFeeCoin({ id, chain }),
             })
-              ? getChainEntityIconSrc(chain)
+              ? getChainLogoSrc(chain)
               : undefined
           }
           style={{ fontSize: 32 }}

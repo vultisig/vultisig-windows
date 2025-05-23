@@ -1,15 +1,25 @@
-export enum EvmChain {
-  Arbitrum = 'Arbitrum',
-  Avalanche = 'Avalanche',
-  Base = 'Base',
-  CronosChain = 'CronosChain',
-  BSC = 'BSC',
-  Blast = 'Blast',
-  Ethereum = 'Ethereum',
-  Optimism = 'Optimism',
-  Polygon = 'Polygon',
-  Zksync = 'Zksync',
-}
+// When adding a new Ethereum L2 chain, add its icon to `core/ui/public/chains` as a lowercase SVG file (e.g. `arbitrum.svg`, `base.svg`)
+export const EthereumL2Chain = {
+  Arbitrum: 'Arbitrum',
+  Base: 'Base',
+  Blast: 'Blast',
+  Optimism: 'Optimism',
+  Zksync: 'Zksync',
+} as const
+
+export type EthereumL2Chain =
+  (typeof EthereumL2Chain)[keyof typeof EthereumL2Chain]
+
+export const EvmChain = {
+  ...EthereumL2Chain,
+  Avalanche: 'Avalanche',
+  CronosChain: 'CronosChain',
+  BSC: 'BSC',
+  Ethereum: 'Ethereum',
+  Polygon: 'Polygon',
+} as const
+
+export type EvmChain = (typeof EvmChain)[keyof typeof EvmChain]
 
 export enum UtxoChain {
   Bitcoin = 'Bitcoin',
@@ -46,6 +56,6 @@ export const Chain = {
   ...UtxoChain,
   ...CosmosChain,
   ...OtherChain,
-}
+} as const
 
-export type Chain = EvmChain | UtxoChain | CosmosChain | OtherChain
+export type Chain = (typeof Chain)[keyof typeof Chain]

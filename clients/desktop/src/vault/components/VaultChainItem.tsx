@@ -1,7 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
@@ -61,7 +61,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
     <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
       <HStack fullWidth alignItems="center" gap={16}>
         <ChainEntityIcon
-          value={getChainEntityIconSrc(chain)}
+          value={getChainLogoSrc(chain)}
           style={{ fontSize: 32 }}
         />
 
