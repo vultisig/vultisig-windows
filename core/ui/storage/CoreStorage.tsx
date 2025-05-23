@@ -118,26 +118,6 @@ export type GetHasFinishedOnboardingFunction = () => Promise<boolean>
 
 export type GetInitialViewFunction = () => Promise<View>
 
-export type LastVerificationRecord = Record<string, number>
-export const initialLastFastVaultPasswordVerification: LastVerificationRecord =
-  {}
-
-export type GetLastFastVaultPasswordVerificationFunction =
-  () => Promise<LastVerificationRecord>
-
-export type GetLastFastVaultPasswordVerificationPerVaultFunction = (
-  vaultId: string
-) => Promise<number | undefined>
-
-export type SetLastFastVaultPasswordVerificationPerVaultFunction = (
-  vaultId: string,
-  timestamp: number
-) => Promise<void>
-
-export type SetLastFastVaultPasswordVerificationFunction = (
-  value: LastVerificationRecord
-) => Promise<void>
-
 export type CoreStorage = CoinFinderIgnoreStorage & {
   getFiatCurrency: GetFiatCurrencyFunction
   setFiatCurrency: SetFiatCurrencyFunction
@@ -167,8 +147,4 @@ export type CoreStorage = CoinFinderIgnoreStorage & {
   getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
   setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
   getInitialView: GetInitialViewFunction
-  getLastFastVaultPasswordVerification: GetLastFastVaultPasswordVerificationFunction
-  getLastFastVaultPasswordVerificationPerVault: GetLastFastVaultPasswordVerificationPerVaultFunction
-  setLastFastVaultPasswordVerification: SetLastFastVaultPasswordVerificationFunction
-  setLastFastVaultPasswordVerificationPerVault: SetLastFastVaultPasswordVerificationPerVaultFunction
 }

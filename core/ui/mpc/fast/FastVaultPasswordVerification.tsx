@@ -11,10 +11,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import {
-  useLastFastVaultPasswordVerificationQuery,
-  useSetLastFastVaultPasswordVerificationMutation,
-} from '../../storage/lastFastVaultPasswordVerification'
+import { useUpdateVaultMutation } from '../../vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '../../vault/state/currentVault'
 import { getVaultId } from '../../vault/Vault'
 
@@ -26,13 +23,9 @@ export const FastVaultPasswordVerification = () => {
 
   const { t } = useTranslation()
   const vault = useCurrentVault()
+  const { lastPasswordVerificationTime = 0 } = vault
   const vaultId = getVaultId(vault)
-
-  const { data: lastVerification, isFetching: isLastVerificationPending } =
-    useLastFastVaultPasswordVerificationQuery(vaultId)
-
-  const { mutate: setLastVerification } =
-    useSetLastFastVaultPasswordVerificationMutation()
+  const { mutate: updateVault } = useUpdateVaultMutation()
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
@@ -41,9 +34,11 @@ export const FastVaultPasswordVerification = () => {
         password,
       }),
     onSuccess: () => {
-      setLastVerification({
-        timestamp: Date.now(),
-        vaultId: vaultId,
+      updateVault({
+        vaultId,
+        fields: {
+          lastPasswordVerificationTime: Date.now(),
+        },
       })
       setIsOpen(false)
     },
@@ -52,10 +47,13 @@ export const FastVaultPasswordVerification = () => {
   useEffect(() => {
     const now = Date.now()
 
-    if (!lastVerification || now - lastVerification > FIFTEEN_DAYS_MS) {
+    if (
+      !lastPasswordVerificationTime ||
+      now - lastPasswordVerificationTime > FIFTEEN_DAYS_MS
+    ) {
       setIsOpen(true)
     }
-  }, [isLastVerificationPending, lastVerification, setIsOpen])
+  }, [lastPasswordVerificationTime])
 
   const isDisabled = useMemo(() => {
     if (!password) {
