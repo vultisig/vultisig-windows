@@ -11,4 +11,5 @@ export enum StorageKey {
   hasFinishedOnboarding = 'hasFinishedOnboarding',
   initialView = 'initialView',
   coinFinderIgnore = 'coinFinderIgnore',
+  lastFastVaultPasswordVerification = 'lastFastVaultPasswordVerification',
 }
