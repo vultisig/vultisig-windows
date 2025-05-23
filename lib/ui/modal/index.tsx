@@ -48,7 +48,7 @@ export const Modal = ({
   footer,
   subTitle,
   as,
-  titleAlign = 'left',
+  titleAlign,
   withDefaultStructure = true,
   ...rest
 }: ModalProps) => {
