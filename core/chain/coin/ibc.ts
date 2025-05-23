@@ -1,3 +1,5 @@
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
+
 import { Chain, CosmosChain } from '../Chain'
 import { Coin } from './Coin'
 
@@ -11,7 +13,7 @@ export const TOKEN_MERGE_CONTRACTS: Record<string, string> = {
 }
 
 export const IBC_TRANSFERRABLE_TOKENS_PER_CHAIN: Partial<
-  Record<CosmosChain, Pick<Coin, 'ticker' | 'id'>[]>
+  Record<CosmosChain, Pick<RequiredFields<Coin, 'logo'>, 'ticker' | 'id'>[]>
 > = {
   [Chain.Kujira]: [
     {
@@ -103,42 +105,53 @@ export const IBC_TRANSFERRABLE_TOKENS_PER_CHAIN: Partial<
   ],
 }
 
-export const IBC_TOKENS: Omit<Coin, 'chain' | 'id'>[] = [
-  { ticker: 'KUJI', logo: 'kuji', decimals: 6, priceProviderId: 'kujira' },
-  {
-    ticker: 'rKUJI',
-    logo: 'rkuji.png',
-    decimals: 6,
-    priceProviderId: 'kujira',
-  },
-  {
-    ticker: 'ASTRO',
-    logo: 'terra-astroport.png',
-    decimals: 6,
-    priceProviderId: 'astroport-fi',
-  },
-  { ticker: 'WINK', logo: 'wink.png', decimals: 6, priceProviderId: 'winkhub' },
-  {
-    ticker: 'LVN',
-    logo: 'levana',
-    decimals: 6,
-    priceProviderId: 'levana-protocol',
-  },
-  {
-    ticker: 'NSTK',
-    logo: 'nstk.png',
-    decimals: 6,
-    priceProviderId: 'unstake-fi',
-  },
-  {
-    ticker: 'NAMI',
-    logo: 'nami.png',
-    decimals: 6,
-    priceProviderId: 'nami-protocol',
-  },
-  { ticker: 'FUZN', logo: 'fuzn.png', decimals: 6, priceProviderId: 'fuzion' },
-  { ticker: 'USK', logo: 'usk.png', decimals: 6, priceProviderId: 'usk' },
-]
+export const IBC_TOKENS: Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>[] =
+  [
+    { ticker: 'KUJI', logo: 'kuji', decimals: 6, priceProviderId: 'kujira' },
+    {
+      ticker: 'rKUJI',
+      logo: 'rkuji.png',
+      decimals: 6,
+      priceProviderId: 'kujira',
+    },
+    {
+      ticker: 'ASTRO',
+      logo: 'terra-astroport.png',
+      decimals: 6,
+      priceProviderId: 'astroport-fi',
+    },
+    {
+      ticker: 'WINK',
+      logo: 'wink.png',
+      decimals: 6,
+      priceProviderId: 'winkhub',
+    },
+    {
+      ticker: 'LVN',
+      logo: 'levana',
+      decimals: 6,
+      priceProviderId: 'levana-protocol',
+    },
+    {
+      ticker: 'NSTK',
+      logo: 'nstk.png',
+      decimals: 6,
+      priceProviderId: 'unstake-fi',
+    },
+    {
+      ticker: 'NAMI',
+      logo: 'nami.png',
+      decimals: 6,
+      priceProviderId: 'nami-protocol',
+    },
+    {
+      ticker: 'FUZN',
+      logo: 'fuzn.png',
+      decimals: 6,
+      priceProviderId: 'fuzion',
+    },
+    { ticker: 'USK', logo: 'usk.png', decimals: 6, priceProviderId: 'usk' },
+  ]
 
 export const CHAINS_WITH_IBC_TOKENS: CosmosChain[] = [
   Chain.Kujira,
