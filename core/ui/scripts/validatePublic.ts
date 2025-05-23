@@ -13,61 +13,134 @@ import { getChainLogoSrc } from '../chain/metadata/getChainLogoSrc'
 
 const currentDirname = dirname(fileURLToPath(import.meta.url))
 
-type AssertAssetsInput = {
-  expected: string[]
-  actual: string[]
-  entity: 'coin' | 'chain'
+type Entity = 'coin' | 'chain'
+
+type ValidationResult = {
+  entity: Entity
+  missing: string[]
+  unexpected: string[]
+  hasIssues: boolean
 }
 
-const assertAssets = ({ expected, actual, entity }: AssertAssetsInput) => {
+const validateAssets = ({
+  expected,
+  actual,
+  entity,
+}: {
+  expected: string[]
+  actual: string[]
+  entity: Entity
+}): ValidationResult => {
   const missing = expected.filter(logo => !actual.includes(logo))
   const unexpected = actual.filter(logo => !expected.includes(logo))
 
-  if (missing.length > 0) {
-    throw new Error(`Missing ${entity} assets: ${missing.join(', ')}`)
+  return {
+    entity,
+    missing,
+    unexpected,
+    hasIssues: missing.length > 0 || unexpected.length > 0,
+  }
+}
+
+const printValidationSummary = (results: ValidationResult[]) => {
+  const hasAnyIssues = results.some(result => result.hasIssues)
+
+  if (!hasAnyIssues) {
+    console.log('✅ All asset validations passed!')
+    return
   }
 
-  if (unexpected.length > 0) {
-    throw new Error(`Unexpected ${entity} assets: ${unexpected.join(', ')}`)
+  console.log('🔍 Asset Validation Results\n')
+  console.log('═'.repeat(50))
+
+  results.forEach(({ entity, missing, unexpected, hasIssues }) => {
+    const emoji = hasIssues ? '❌' : '✅'
+    const status = hasIssues ? 'FAILED' : 'PASSED'
+
+    console.log(`\n${emoji} ${entity.toUpperCase()} ASSETS: ${status}`)
+    console.log('─'.repeat(30))
+
+    if (missing.length > 0) {
+      console.log(`\n🚫 Missing ${entity} assets (${missing.length}):`)
+      missing.forEach(asset => console.log(`   • ${asset}`))
+    }
+
+    if (unexpected.length > 0) {
+      console.log(`\n⚠️  Unexpected ${entity} assets (${unexpected.length}):`)
+      unexpected.forEach(asset => console.log(`   • ${asset}`))
+    }
+
+    if (!hasIssues) {
+      console.log(`\n✨ All ${entity} assets are properly aligned!`)
+    }
+  })
+
+  console.log('\n' + '═'.repeat(50))
+
+  const totalIssues = results.reduce(
+    (sum, result) => sum + result.missing.length + result.unexpected.length,
+    0
+  )
+
+  console.log(
+    `\n📊 Summary: ${totalIssues} issue(s) found across ${results.filter(r => r.hasIssues).length} asset type(s)`
+  )
+
+  if (hasAnyIssues) {
+    console.log(
+      '\n💡 Please resolve the above issues and run the validation again.'
+    )
   }
 }
 
 const main = async () => {
-  const [coinFiles, chainFiles] = await Promise.all(
-    ['coins', 'chains'].map(dir =>
-      readdir(path.resolve(currentDirname, '../public', dir))
+  try {
+    const [coinFiles, chainFiles] = await Promise.all(
+      ['coins', 'chains'].map(dir =>
+        readdir(path.resolve(currentDirname, '../public', dir))
+      )
     )
-  )
 
-  console.log(coinFiles, chainFiles)
+    const expectedCoins = withoutDuplicates(
+      [
+        ...Object.values(chainFeeCoin),
+        ...Object.values(chainTokens).flat(),
+        ...Object.values(chainNativeTokens).flat(),
+      ]
+        .map(coin => coin.logo)
+        .filter(logo => !logo.startsWith('http'))
+    )
+      .map(getCoinLogoSrc)
+      .map(logo => getLastItem(logo.split('/')))
 
-  const expectedCoins = withoutDuplicates(
-    [
-      ...Object.values(chainFeeCoin),
-      ...Object.values(chainTokens).flat(),
-      ...Object.values(chainNativeTokens).flat(),
+    const expectedChains = Object.values(EthereumL2Chain)
+      .map(getChainLogoSrc)
+      .map(logo => getLastItem(logo.split('/')))
+
+    const results = [
+      validateAssets({
+        expected: expectedCoins,
+        actual: coinFiles,
+        entity: 'coin',
+      }),
+      validateAssets({
+        expected: expectedChains,
+        actual: chainFiles,
+        entity: 'chain',
+      }),
     ]
-      .map(coin => coin.logo)
-      .filter(logo => !logo.startsWith('http'))
-  )
-    .map(getCoinLogoSrc)
-    .map(logo => getLastItem(logo.split('/')))
 
-  const expectedChains = Object.values(EthereumL2Chain)
-    .map(getChainLogoSrc)
-    .map(logo => getLastItem(logo.split('/')))
+    printValidationSummary(results)
 
-  assertAssets({
-    expected: expectedCoins,
-    actual: coinFiles,
-    entity: 'coin',
-  })
-
-  assertAssets({
-    expected: expectedChains,
-    actual: chainFiles,
-    entity: 'chain',
-  })
+    // Exit with error code if any validation failed (for GitHub Actions)
+    const hasFailures = results.some(result => result.hasIssues)
+    if (hasFailures) {
+      process.exit(1)
+    }
+  } catch (error) {
+    console.error('❌ Validation script failed:', error)
+    process.exit(1)
+  }
 }
 
 main()
