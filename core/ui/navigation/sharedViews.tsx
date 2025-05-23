@@ -28,6 +28,8 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
+
 export type SharedViewId = Extract<
   CoreViewId,
   | 'addAddress'
@@ -58,6 +60,8 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultDetails'
   | 'vaults'
+  | 'manageVaultFolder'
+  | 'addCustomToken'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -95,4 +99,5 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   vaults: VaultsPage,
+  addCustomToken: AddCustomTokenPage,
 }
