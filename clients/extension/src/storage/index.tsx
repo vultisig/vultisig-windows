@@ -36,7 +36,6 @@ import { updateVaultsCoins } from '../vault/state/vaultsCoins'
 import { getAddressBookItems, updateAddressBookItems } from './addressBook'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { getLanguage, setLanguage } from './language'
-import { lastFastVaultPasswordVerificationStorage } from './lastFastVaultPasswordVerificationIgnore'
 import {
   getHasFinishedOnboarding,
   setHasFinishedOnboarding,
@@ -187,7 +186,6 @@ const deleteAddressBookItem: DeleteAddressBookItemFunction = async itemId => {
 
 export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
-  ...lastFastVaultPasswordVerificationStorage,
   setFiatCurrency,
   setCurrentVaultId,
   getCurrentVaultId,
