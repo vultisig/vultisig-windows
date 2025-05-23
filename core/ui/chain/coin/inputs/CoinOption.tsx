@@ -43,7 +43,7 @@ export const CoinOption = ({
     >
       <HStack alignItems="center" gap={12}>
         <ChainCoinIcon
-          coinSrc={getCoinLogoSrc(logo)}
+          coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
           chainSrc={
             shouldDisplayChainLogo({
               ticker,

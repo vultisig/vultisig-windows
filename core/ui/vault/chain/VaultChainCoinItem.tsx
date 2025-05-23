@@ -19,7 +19,7 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 export const VaultChainCoinItem = ({
   value,
 }: ValueProp<
-  EntityWithLogo &
+  Partial<EntityWithLogo> &
     EntityWithTicker &
     CoinAmount &
     Partial<EntityWithPrice> &
@@ -32,7 +32,7 @@ export const VaultChainCoinItem = ({
   return (
     <HStack fullWidth alignItems="center" gap={12}>
       <ChainCoinIcon
-        coinSrc={getCoinLogoSrc(logo)}
+        coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
         chainSrc={
           shouldDisplayChainLogo({
             ticker,

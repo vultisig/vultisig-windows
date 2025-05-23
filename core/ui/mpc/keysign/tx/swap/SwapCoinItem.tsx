@@ -31,7 +31,7 @@ export const SwapCoinItem = ({
   return (
     <SwapVStackItem gap={12} alignItems="center">
       <ChainCoinIcon
-        coinSrc={getCoinLogoSrc(coin.logo)}
+        coinSrc={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
         chainSrc={
           shouldDisplayChainLogo({
             ticker: coin.ticker,

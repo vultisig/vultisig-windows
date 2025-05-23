@@ -60,7 +60,7 @@ export const FormInput = styled(UnstyledInput)`
 export type ChainOption = {
   value: string
   label: string
-  logo: string
+  logo?: string
   isLastOption: boolean
 }
 

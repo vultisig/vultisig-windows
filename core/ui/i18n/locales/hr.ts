@@ -842,4 +842,10 @@ export const hr = {
     'Molimo vas da omogućite kameru za skeniranje QR koda',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   failed_to_get_camera_permission: 'Nije uspjelo dobiti dopuštenje za kameru',
+  failed_to_migrate_storage: 'Migracija pohrane nije uspjela',
+  custom_token: 'Prilagođeni token',
+  find_custom_token: 'Pronađite svoj prilagođeni token',
+  enter_contract_address: 'Unesite adresu ugovora',
+  no_token_found: 'Nije pronađen token',
+  invalid_token_address: 'Unesite valjanu adresu tokena',
 }
