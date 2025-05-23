@@ -15,7 +15,7 @@ import { useUpdateVaultMutation } from '../../vault/mutations/useUpdateVaultMuta
 import { useCurrentVault } from '../../vault/state/currentVault'
 import { getVaultId } from '../../vault/Vault'
 
-const FIFTEEN_DAYS_MS = convertDuration(15, 'd', 'ms')
+const VERIFICATION_TIMEOUT_MS = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -49,7 +49,7 @@ export const FastVaultPasswordVerification = () => {
 
     if (
       !lastPasswordVerificationTime ||
-      now - lastPasswordVerificationTime > FIFTEEN_DAYS_MS
+      now - lastPasswordVerificationTime > VERIFICATION_TIMEOUT_MS
     ) {
       setIsOpen(true)
     }
