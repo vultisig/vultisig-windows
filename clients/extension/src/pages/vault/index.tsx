@@ -24,7 +24,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { MiddleTruncate } from '@lib/utils/truncate'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

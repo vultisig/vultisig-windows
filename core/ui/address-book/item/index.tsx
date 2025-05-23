@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
@@ -8,7 +8,7 @@ import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/utils/truncate'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -52,7 +52,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
         <>
           <MenuIcon fontSize={20} />
           <ChainEntityIcon
-            value={getChainEntityIconSrc(chain)}
+            value={getChainLogoSrc(chain)}
             style={{ fontSize: 32 }}
           />
         </>
@@ -67,7 +67,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       extra={<Text color="shy">{`${chain} ${t('network')}`}</Text>}
       icon={
         <ChainEntityIcon
-          value={getChainEntityIconSrc(chain)}
+          value={getChainLogoSrc(chain)}
           style={{ fontSize: 32 }}
         />
       }

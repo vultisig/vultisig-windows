@@ -1,16 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { chainInfos } from '@core/chain/coin/chainInfo'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '@core/ui/address-book/hooks/useAddressSchema'
-import {
-  ChainOption,
-  customSelectMenu,
-  customSelectOption,
-  customSelectStyles,
-  customSingleValue,
-} from '@core/ui/address-book/manage/styles'
+import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import {
   useAddressBookItems,
@@ -26,38 +19,20 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Select from 'react-select'
-import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
-
-const StyledPanel = styled(Panel)`
-  padding: 5px 0;
-`
 
 export const ManageAddressPage = () => {
   const { t } = useTranslation()
   const [{ id }] = useCoreViewState<'manageAddress'>()
+  const [chain, setChain] = useState<Chain>(Chain.Bitcoin)
   const addressBookItems = useAddressBookItems()
   const createAddressBookItem = useCreateAddressBookItemMutation()
   const updateAddressBookItem = useUpdateAddressBookItemMutation()
   const navigateBack = useNavigateBack()
-
-  const options = useMemo(() => {
-    const coins = Object.values(chainInfos)
-
-    return coins.map(({ chain, ticker, logo }, index) => ({
-      value: chain,
-      label: ticker,
-      logo: logo,
-      isLastOption: index === coins.length - 1,
-    }))
-  }, [])
 
   const addressBookItem = useMemo(() => {
     return addressBookItems.find(item => item.id === id)
@@ -67,29 +42,30 @@ export const ManageAddressPage = () => {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
-    control,
   } = useAddressSchema(
     addressBookItem
       ? {
-          type: 'modify',
+          chain,
           defaultValues: addressBookItem,
+          type: 'modify',
         }
       : {
+          chain,
           type: 'add',
         }
   )
 
-  const handleAddAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data
+  const handleManageAddress = (data: AddressFormValues) => {
+    const { address, title } = data
 
     if (addressBookItem) {
       updateAddressBookItem.mutate(
         {
           id: addressBookItem.id,
           fields: {
-            title,
             address,
-            chain: chain as Chain,
+            chain,
+            title,
           },
         },
         {
@@ -99,11 +75,11 @@ export const ManageAddressPage = () => {
     } else {
       createAddressBookItem.mutate(
         {
-          id: uuidv4(),
-          title,
           address,
-          chain: chain as Chain,
+          chain,
+          id: uuidv4(),
           order: addressBookItems.length + 1,
+          title,
         },
         {
           onSuccess: navigateBack,
@@ -113,7 +89,7 @@ export const ManageAddressPage = () => {
   }
 
   return (
-    <VStack as="form" onSubmit={handleSubmit(handleAddAddress)} fullHeight>
+    <VStack as="form" onSubmit={handleSubmit(handleManageAddress)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={
@@ -124,35 +100,7 @@ export const ManageAddressPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>
-        <Controller
-          name="chain"
-          control={control}
-          render={({ field }) => {
-            const [defaultValue] = options
-
-            return (
-              <StyledPanel>
-                <Select<ChainOption>
-                  value={
-                    options.find(option => option.value === field.value) || null
-                  }
-                  defaultValue={defaultValue}
-                  onChange={selectedOption =>
-                    field.onChange(selectedOption?.value)
-                  }
-                  onBlur={field.onBlur}
-                  options={options}
-                  components={{
-                    Menu: customSelectMenu,
-                    Option: customSelectOption,
-                    SingleValue: customSingleValue,
-                  }}
-                  styles={customSelectStyles}
-                />
-              </StyledPanel>
-            )
-          }}
-        />
+        <ChainInput value={chain} onChange={setChain} />
         <VStack gap={8}>
           <TextInput
             label={t('title')}
@@ -197,7 +145,7 @@ export const ManageAddressPage = () => {
             isValidating ||
             updateAddressBookItem.isPending
           }
-          onClick={handleSubmit(handleAddAddress)}
+          onClick={handleSubmit(handleManageAddress)}
         >
           {t('save')}
         </Button>
