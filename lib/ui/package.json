@@ -6,6 +6,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.0",
+    "@floating-ui/react": "^0.27.8",
     "@lib/utils": "workspace:*",
     "@tanstack/query-core": "^5.69.0",
     "styled-components": "^6.1.16"

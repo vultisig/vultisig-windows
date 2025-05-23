@@ -1,7 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -20,6 +19,8 @@ import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 
 const NativeCoinItem: FC<Coin> = coin => {
   const currentCoins = useCurrentVaultNativeCoins()
@@ -49,7 +50,7 @@ const NativeCoinItem: FC<Coin> = coin => {
       }
       icon={
         <ChainEntityIcon
-          value={getChainEntityIconSrc(coin.chain)}
+          value={getChainLogoSrc(coin.chain)}
           style={{ fontSize: 32 }}
         />
       }

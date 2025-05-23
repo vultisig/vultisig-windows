@@ -1,7 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -12,6 +11,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
+import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 export const SwapCoinItem = ({
@@ -31,7 +31,7 @@ export const SwapCoinItem = ({
   return (
     <SwapVStackItem gap={12} alignItems="center">
       <ChainCoinIcon
-        coinSrc={getCoinLogoSrc(coin.logo)}
+        coinSrc={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
         chainSrc={
           shouldDisplayChainLogo({
             ticker: coin.ticker,
@@ -41,7 +41,7 @@ export const SwapCoinItem = ({
               chain: chain,
             }),
           })
-            ? getChainEntityIconSrc(chain)
+            ? getChainLogoSrc(chain)
             : undefined
         }
         style={{ fontSize: 36 }}

@@ -4,8 +4,8 @@ import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { coinFinderIgnoreQueryKey } from '../query/keys'
 import { useCore } from '../state/core'
+import { StorageKey } from './StorageKey'
 
 export type GetCoinFinderIgnoreFunction = () => Promise<CoinKey[]>
 
@@ -27,7 +27,7 @@ export const useCoinFinderIgnoreQuery = () => {
   const { getCoinFinderIgnore } = useCore()
 
   return useQuery({
-    queryKey: coinFinderIgnoreQueryKey,
+    queryKey: [StorageKey.coinFinderIgnore],
     queryFn: getCoinFinderIgnore,
     ...fixedDataQueryOptions,
   })
@@ -47,7 +47,7 @@ export const useAddToCoinFinderIgnoreMutation = () => {
   const mutationFn: AddToCoinFinderIgnoreFunction = async coinKey => {
     await addToCoinFinderIgnore(coinKey)
 
-    await invalidate(coinFinderIgnoreQueryKey)
+    await invalidate([StorageKey.coinFinderIgnore])
   }
 
   return useMutation({
@@ -63,7 +63,7 @@ export const useRemoveFromCoinFinderIgnoreMutation = () => {
   const mutationFn: RemoveFromCoinFinderIgnoreFunction = async coinKey => {
     await removeFromCoinFinderIgnore(coinKey)
 
-    await invalidate(coinFinderIgnoreQueryKey)
+    await invalidate([StorageKey.coinFinderIgnore])
   }
 
   return useMutation({
