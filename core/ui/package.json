@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "translate": "npx tsx i18n/scripts/translate.ts"
+    "translate": "npx tsx i18n/scripts/translate.ts",
+    "validate-public": "npx tsx scripts/validatePublic.ts"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
