@@ -1,3 +1,4 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
 import {
   setKeygenComplete,
@@ -85,6 +86,9 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
         hexChainCode: dklsResult.chaincode,
         keyShares,
         order: getLastItemOrder(vaultOrders),
+        lastPasswordVerificationTime: hasServer(signers)
+          ? Date.now()
+          : undefined,
         ...sharedFinalVaultFields,
       }
 
