@@ -10,7 +10,7 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
 
-export const getLastFastVaultPasswordVerification: GetLastFastVaultPasswordVerificationFunction =
+const getLastFastVaultPasswordVerification: GetLastFastVaultPasswordVerificationFunction =
   async () => {
     return await getPersistentState(
       StorageKey.lastFastVaultPasswordVerification,
@@ -18,13 +18,13 @@ export const getLastFastVaultPasswordVerification: GetLastFastVaultPasswordVerif
     )
   }
 
-export const getLastFastVaultPasswordVerificationPerVault: GetLastFastVaultPasswordVerificationPerVaultFunction =
+const getLastFastVaultPasswordVerificationPerVault: GetLastFastVaultPasswordVerificationPerVaultFunction =
   async vaultId => {
     const all = await getLastFastVaultPasswordVerification()
     return all[vaultId] ?? 0
   }
 
-export const setLastFastVaultPasswordVerification: SetLastFastVaultPasswordVerificationFunction =
+const setLastFastVaultPasswordVerification: SetLastFastVaultPasswordVerificationFunction =
   async value => {
     await setPersistentState(
       StorageKey.lastFastVaultPasswordVerification,
@@ -32,7 +32,7 @@ export const setLastFastVaultPasswordVerification: SetLastFastVaultPasswordVerif
     )
   }
 
-export const setLastFastVaultPasswordVerificationPerVault: SetLastFastVaultPasswordVerificationPerVaultFunction =
+const setLastFastVaultPasswordVerificationPerVault: SetLastFastVaultPasswordVerificationPerVaultFunction =
   async (vaultId, timestamp) => {
     const all = await getLastFastVaultPasswordVerification()
     const updated = { ...all, [vaultId]: timestamp }

@@ -3,7 +3,6 @@ import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
-import { initialLastFastVaultPasswordVerification } from './CoreStorage'
 import { StorageKey } from './StorageKey'
 
 export const useLastFastVaultPasswordVerificationQuery = (vaultId: string) => {
@@ -33,5 +32,3 @@ export const useSetLastFastVaultPasswordVerificationMutation = () => {
     },
   })
 }
-
-export { initialLastFastVaultPasswordVerification }
