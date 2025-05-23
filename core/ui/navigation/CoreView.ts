@@ -11,7 +11,6 @@ import { CustomTokenEnabledChain } from '../chain/coin/addCustomToken/core/chain
 
 export type CoreView =
   | { id: 'address'; state: { address: string } }
-  | { id: 'addressBook' }
   | { id: 'airdropRegister' }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
@@ -40,7 +39,6 @@ export type CoreView =
   | { id: 'languageSettings' }
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
-  | { id: 'manageVaults' }
   | { id: 'newVault' }
   | { id: 'renameVault' }
   | { id: 'reshareVault' }
