@@ -70,7 +70,6 @@ const leanChainTokens: Partial<
       ticker: 'VULT',
       logo: 'vult',
       decimals: 18,
-      priceProviderId: '',
       id: '0xb788144DF611029C60b859DF47e79B7726C4DEBa',
     },
     {
