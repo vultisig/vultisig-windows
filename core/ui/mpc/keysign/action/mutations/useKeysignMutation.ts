@@ -5,6 +5,7 @@ import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
 import { executeTx } from '@core/chain/tx/execute'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
@@ -34,7 +35,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
     mutationFn: async () => {
       return matchRecordUnion<
         KeysignMessagePayload,
-        Promise<string | { result: string; encoded: string }>
+        Promise<string | ExecuteTxResultWithEncoded>
       >(payload, {
         keysign: async payload => {
           const chain = getKeysignChain(payload)

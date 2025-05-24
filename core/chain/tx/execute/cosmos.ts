@@ -33,5 +33,5 @@ export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
     throw result.error
   }
 
-  return { result: txHash, encoded: output.serialized }
+  return { txHash, encoded: output.serialized }
 }

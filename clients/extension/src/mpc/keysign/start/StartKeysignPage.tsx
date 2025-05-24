@@ -6,17 +6,20 @@ import {
   setStoredTransaction,
 } from '../../../utils/storage'
 import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
 
 export const StartKeysignPage = (isDAppSigning: boolean) => {
   const onFinish = async (txResult: string | ExecuteTxResultWithEncoded) => {
     const [transaction] = await getStoredTransactions()
     let txHash: string
     let encoded = undefined
-    if (transaction.chain === Chain.Solana) {
-      const solanaResult = txResult as ExecuteTxResultWithEncoded
-      txHash = solanaResult.result
-      encoded = solanaResult.encoded as string
+    if (
+      getChainKind(transaction.chain) === 'cosmos' ||
+      getChainKind(transaction.chain) === 'solana'
+    ) {
+      const resultWithEncoded = txResult as ExecuteTxResultWithEncoded
+      txHash = resultWithEncoded.txHash
+      encoded = resultWithEncoded.encoded as string
     } else {
       txHash = txResult as string
     }

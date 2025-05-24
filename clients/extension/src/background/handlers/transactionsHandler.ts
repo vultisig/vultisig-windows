@@ -7,11 +7,12 @@ import {
   setStoredTransactions,
 } from '../../utils/storage'
 import { handleOpenPanel } from '../window/windowManager'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const handleSendTransaction = async (
   transaction: ITransaction,
   chain: Chain
-): Promise<string> => {
+): Promise<ExecuteTxResultWithEncoded> => {
   const uuid = uuidv4()
 
   try {
@@ -40,7 +41,7 @@ export const handleSendTransaction = async (
       )
     )
 
-    return await new Promise<string>((resolve, reject) => {
+    return await new Promise<ExecuteTxResultWithEncoded>((resolve, reject) => {
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
 
@@ -64,7 +65,10 @@ export const handleSendTransaction = async (
             reject(new Error('Transaction was not completed'))
           } else {
             if (matchedTransaction.txHash) {
-              resolve(matchedTransaction.txHash)
+              resolve({
+                txHash: matchedTransaction.txHash,
+                encoded: matchedTransaction.encoded ?? undefined,
+              })
             } else {
               reject(new Error('Transaction has no signature or hash'))
             }

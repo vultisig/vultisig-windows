@@ -122,7 +122,7 @@ export const processBackgroundResponse = (
       ) {
         return result
       }
-      return (result as ExecuteTxResultWithEncoded).result
+      return (result as ExecuteTxResultWithEncoded).txHash
     }
     default: {
       return result

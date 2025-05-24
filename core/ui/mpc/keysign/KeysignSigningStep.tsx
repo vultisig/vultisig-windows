@@ -74,7 +74,7 @@ export const KeysignSigningStep = ({
                     <CurrentTxHashProvider
                       value={normalizeTxHash(
                         isEncodedResultChain(getKeysignChain(payload))
-                          ? (value as ExecuteTxResultWithEncoded).result
+                          ? (value as ExecuteTxResultWithEncoded).txHash
                           : (value as string),
                         {
                           memo: payload?.memo,
