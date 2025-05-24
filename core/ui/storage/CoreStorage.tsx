@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { AddressBookItem } from '@core/ui/address-book/item'
+import { AddressBookItem } from '@core/ui/address-book/model'
 import { Language } from '@core/ui/i18n/Language'
 import { CoinFinderIgnoreStorage } from '@core/ui/storage/coinFinderIgnore'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'

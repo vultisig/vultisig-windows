@@ -1,7 +1,5 @@
-import {
-  AddressBookItem,
-  AddressBookListItem,
-} from '@core/ui/address-book/item'
+import { AddressBookListItem } from '@core/ui/address-book/item'
+import { AddressBookItem } from '@core/ui/address-book/model'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
   useAddressBookItems,
@@ -29,7 +27,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -37,12 +35,7 @@ const StyledIcon = styled(TriangleAlertIcon)`
   color: ${getColor('alertWarning')};
 `
 
-interface AddressBookPageProps {
-  onAddressClick?: (address: string) => void
-  onClose?: () => void
-}
-
-export const AddressBookPage: FC<AddressBookPageProps> = () => {
+export const AddressBookPage = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateAddressBookItemMutation()
   const [items, setItems] = useState<AddressBookItem[]>([])
@@ -117,7 +110,7 @@ export const AddressBookPage: FC<AddressBookPageProps> = () => {
       </PageContent>
       {!isEditMode && (
         <PageFooter>
-          <Button onClick={() => navigate({ id: 'manageAddress', state: {} })}>
+          <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
             {t('add_address')}
           </Button>
         </PageFooter>
@@ -137,7 +130,7 @@ export const AddressBookPage: FC<AddressBookPageProps> = () => {
         </Text>
       </PageContent>
       <PageFooter>
-        <Button onClick={() => navigate({ id: 'manageAddress', state: {} })}>
+        <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
           {t('add_address')}
         </Button>
       </PageFooter>

@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
-import { AddressBookItem } from '@core/ui/address-book/item'
+import { AddressBookItem } from '@core/ui/address-book/model'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TFunction } from 'i18next'
 import { z } from 'zod'

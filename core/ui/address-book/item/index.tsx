@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { AddressBookItem } from '@core/ui/address-book/model'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -12,28 +12,18 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export interface AddressBookItem {
-  address: string
-  chain: Chain
-  id: string
-  order: number
-  title: string
-}
-
 interface AddressBookListItemProps extends AddressBookItem {
   isEditMode?: boolean
   onSelect?: (address: string) => void
 }
 
 export const AddressBookListItem: FC<AddressBookListItemProps> = ({
-  address,
-  chain,
-  id,
   isEditMode,
   onSelect,
-  title,
+  ...values
 }) => {
   const { t } = useTranslation()
+  const { address, chain, id, title } = values
   const { mutate } = useDeleteAddressBookItemMutation()
   const navigate = useCoreNavigate()
 
@@ -75,7 +65,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       onClick={() =>
         onSelect
           ? onSelect(address)
-          : navigate({ id: 'manageAddress', state: { id } })
+          : navigate({ id: 'updateAddressBookItem', state: { values } })
       }
       title={title}
       hoverable
