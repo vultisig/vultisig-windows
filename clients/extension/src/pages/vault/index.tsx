@@ -1,4 +1,3 @@
-import { Button } from '@clients/extension/src/components/button'
 import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
@@ -11,6 +10,7 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { Button } from '@lib/ui/buttons'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'

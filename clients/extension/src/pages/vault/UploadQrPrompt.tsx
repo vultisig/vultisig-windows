@@ -1,5 +1,5 @@
-import { Button } from '@clients/extension/src/components/button'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { Button } from '@lib/ui/buttons'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 
 export const UploadQrPrompt = () => {

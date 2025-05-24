@@ -9,7 +9,7 @@ export const ProductLogoBlock = () => {
   return (
     <VStack alignItems="center" justifyContent="center" flexGrow fullHeight>
       <ProductEnhancedLogo style={{ fontSize: 250 }} />
-      <Text color="contrast" weight="500" size={42}>
+      <Text color="contrast" weight="500" size={34}>
         {t('vultisig')}
       </Text>
     </VStack>

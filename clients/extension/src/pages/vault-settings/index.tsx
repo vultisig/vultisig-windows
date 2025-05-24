@@ -1,6 +1,6 @@
-import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { Button } from '@lib/ui/buttons'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'

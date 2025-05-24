@@ -10,6 +10,7 @@ import styled from 'styled-components'
 
 const Container = styled.header<{ hasBorder?: boolean }>`
   ${centerContent};
+  min-height: 55px;
   width: 100%;
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
