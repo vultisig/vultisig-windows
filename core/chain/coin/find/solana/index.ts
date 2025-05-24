@@ -16,7 +16,7 @@ export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
     tokenAddresses.map(async tokenAddress => {
       const { data } = await attempt(getSolanaToken(tokenAddress))
 
-      if (data) {
+      if (data && data.priceProviderId) {
         return { ...data, address }
       }
     })

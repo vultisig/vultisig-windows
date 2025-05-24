@@ -9,6 +9,7 @@ export type OneInchToken = {
   logoURI?: string
   eip2612: boolean
   tags: string[]
+  providers: string[]
 }
 
 export type OneInchTokensResponse = {
