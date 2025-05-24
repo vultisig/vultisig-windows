@@ -84,6 +84,7 @@ export const DepositConfirmButton = ({
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
       vaultLocalPartyId: vault.localPartyId,
       vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+      libType: vault.libType,
     })
 
     if (
@@ -124,6 +125,7 @@ export const DepositConfirmButton = ({
     vault.hexChainCode,
     vault.localPartyId,
     vault.publicKeys,
+    vault.libType,
     walletCore,
   ])
 
