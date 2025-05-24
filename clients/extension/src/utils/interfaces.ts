@@ -169,6 +169,7 @@ export type ITransactionPayload =
   | {
       custom: ICustomTransactionPayload
     }
+  | { serialized: Uint8Array }
 
 export interface ITransaction {
   id: string

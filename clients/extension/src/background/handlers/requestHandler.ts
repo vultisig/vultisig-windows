@@ -149,7 +149,11 @@ export const handleRequest = (
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
-          handleSendTransaction(_transaction as ITransaction)
+          handleSendTransaction({
+            transactionPayload: { serialized: _transaction.serializedTx },
+            id: '',
+            status: 'default',
+          })
             .then(result => resolve(result))
             .catch(reject)
         } else {

@@ -163,6 +163,11 @@ export function parseTxResult(
     custom: () => {
       txHash = txResult as string
     },
+    serialized: () => {
+      const result = txResult as ExecuteTxResultWithEncoded
+      txHash = result.txHash
+      encoded = result.encoded as string
+    },
   })
 
   return { txHash: txHash!, encoded }

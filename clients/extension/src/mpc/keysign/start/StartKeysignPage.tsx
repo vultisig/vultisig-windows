@@ -19,7 +19,6 @@ export const StartKeysignPage: React.FC<StartKeysignPageProps> = ({
   const onFinish = useCallback(
     async (txResult: string | ExecuteTxResultWithEncoded) => {
       const [transaction] = await getStoredTransactions()
-      console.log('StartKeysignPage onFinish', transaction)
       const { txHash, encoded } = parseTxResult(transaction, txResult)
       await setStoredTransaction({
         ...transaction,

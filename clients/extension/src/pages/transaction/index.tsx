@@ -48,7 +48,10 @@ import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignCha
 import { useCurrentTxHash } from '@core/ui/chain/state/currentTxHash'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { ITransaction } from '../../utils/interfaces'
+import {
+  IKeysignTransactionPayload,
+  ITransaction,
+} from '../../utils/interfaces'
 import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
 import { useCore } from '@core/ui/state/core'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
@@ -56,6 +59,10 @@ import { Button } from '@lib/ui/buttons/Button'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Vault } from '@core/ui/vault/Vault'
+import { Chain } from '@core/chain/Chain'
+import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
+import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
+import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 
 const StyledErrorState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
@@ -102,6 +109,18 @@ export const TransactionPage = () => {
                 coins.some(
                   ({ address }) =>
                     address?.toLowerCase() === custom.address.toLowerCase()
+                )
+              )
+            )
+          },
+          serialized: async serialized => {
+            const parsed = await getParsedSolanaSwap(walletCore, serialized)
+            return shouldBePresent(
+              vaults.find(({ coins }) =>
+                coins.some(
+                  ({ address }) =>
+                    address?.toLowerCase() ===
+                    parsed.authority?.toLocaleLowerCase()
                 )
               )
             )
@@ -158,6 +177,22 @@ export const TransactionPage = () => {
               }),
             }
           },
+          serialized: async serialized => {
+            console.log('serialized:', serialized)
+
+            const parsed = await getParsedSolanaSwap(walletCore, serialized)
+            console.log('parsed:', parsed)
+
+            const keysignPayload = await getSolanaSwapKeysignPayload(
+              parsed,
+              serialized,
+              vault,
+              walletCore
+            )
+            console.log('keysignPayload:', keysignPayload)
+
+            return { keysign: keysignPayload }
+          },
         })
 
       return { transaction, keysignMessagePayload }
@@ -195,13 +230,13 @@ export const TransactionPage = () => {
           <PageContent flexGrow scrollable>
             <List>
               <MatchRecordUnion
-                value={transaction.transactionPayload}
+                value={keysignMessagePayload}
                 handlers={{
                   custom: custom => (
                     <>
                       <ListItem
-                        title={t('address')}
-                        description={custom.address}
+                        title={t('method')}
+                        description={custom.method}
                       />
                       <ListItem
                         title={t('message')}
@@ -214,77 +249,91 @@ export const TransactionPage = () => {
                       <ListItem
                         title={t('from')}
                         description={
-                          <MiddleTruncate
-                            text={keysign.transactionDetails.from}
-                          />
+                          <MiddleTruncate text={keysign.coin!.address} />
                         }
                       />
-                      {keysign.transactionDetails.to && (
+                      {keysign.toAddress && (
                         <ListItem
                           title={t('to')}
                           description={
-                            <MiddleTruncate
-                              text={keysign.transactionDetails.to}
-                            />
+                            <MiddleTruncate text={keysign.toAddress} />
                           }
                         />
                       )}
-                      {keysign.transactionDetails.amount?.amount && (
+                      {keysign.toAmount && (
                         <ListItem
                           title={t('amount')}
                           description={`${formatUnits(
-                            keysign.transactionDetails.amount.amount,
-                            keysign.transactionDetails.amount.decimals
-                          )} ${(keysignMessagePayload as any).keysign.coin.ticker}`}
+                            keysign.toAmount,
+                            keysign.coin?.decimals
+                          )} ${keysign.coin?.ticker}`}
                         />
                       )}
-                      <ListItem title="Network" description={keysign.chain} />
                       <ListItem
-                        title={t('network_fee')}
-                        description={`${keysign.txFee} ${chainFeeCoin[keysign.chain].ticker}`}
+                        title="Network"
+                        description={getKeysignChain(keysign)}
                       />
-                      {keysign.memo?.isParsed ? (
-                        <>
-                          <ListItem
-                            title={t('function_signature')}
-                            description={
-                              <VStack as="pre" scrollable>
-                                <Text as="code" family="mono">
-                                  {
-                                    (keysign.memo.value as ParsedMemoParams)
-                                      .functionSignature
-                                  }
-                                </Text>
-                              </VStack>
-                            }
-                          />
-                          <ListItem
-                            title={t('function_inputs')}
-                            description={
-                              <VStack as="pre" scrollable>
-                                <Text as="code" family="mono">
-                                  {
-                                    (keysign.memo.value as ParsedMemoParams)
-                                      .functionArguments
-                                  }
-                                </Text>
-                              </VStack>
-                            }
-                          />
-                        </>
-                      ) : (
-                        keysign.memo?.value && (
-                          <ListItem
-                            title={t('memo')}
-                            description={splitString(
-                              keysign.memo.value as string,
-                              32
-                            ).map((str, index) => (
-                              <span key={index}>{str}</span>
-                            ))}
-                          />
-                        )
-                      )}
+                      <MatchRecordUnion
+                        value={transaction.transactionPayload}
+                        handlers={{
+                          keysign: transactionPayload => (
+                            <>
+                              <ListItem
+                                title={t('network_fee')}
+                                description={`${transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
+                              />
+                              {transactionPayload.memo?.isParsed ? (
+                                <>
+                                  <ListItem
+                                    title={t('function_signature')}
+                                    description={
+                                      <VStack as="pre" scrollable>
+                                        <Text as="code" family="mono">
+                                          {
+                                            (
+                                              transactionPayload.memo
+                                                .value as ParsedMemoParams
+                                            ).functionSignature
+                                          }
+                                        </Text>
+                                      </VStack>
+                                    }
+                                  />
+                                  <ListItem
+                                    title={t('function_inputs')}
+                                    description={
+                                      <VStack as="pre" scrollable>
+                                        <Text as="code" family="mono">
+                                          {
+                                            (
+                                              transactionPayload.memo
+                                                .value as ParsedMemoParams
+                                            ).functionArguments
+                                          }
+                                        </Text>
+                                      </VStack>
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                transactionPayload.memo?.value && (
+                                  <ListItem
+                                    title={t('memo')}
+                                    description={splitString(
+                                      transactionPayload.memo.value as string,
+                                      32
+                                    ).map((str, index) => (
+                                      <span key={index}>{str}</span>
+                                    ))}
+                                  />
+                                )
+                              )}
+                            </>
+                          ),
+                          custom: () => <></>,
+                          serialized: () => <></>,
+                        }}
+                      />
                     </>
                   ),
                 }}

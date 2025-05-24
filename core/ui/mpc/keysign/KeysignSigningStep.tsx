@@ -83,7 +83,13 @@ export const KeysignSigningStep = ({
                     >
                       <Match
                         value={payload.swapPayload.value ? 'swap' : 'default'}
-                        swap={() => <SwapKeysignTxOverview value={payload} />}
+                        swap={() => {
+                          if (isDAppSigning) {
+                            onFinish(value)
+                          } else {
+                            return <SwapKeysignTxOverview value={payload} />
+                          }
+                        }}
                         default={() => (
                           <>
                             <TxOverviewPanel>
