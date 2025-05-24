@@ -868,4 +868,6 @@ export const it = {
   enter_contract_address: "Inserisci l'indirizzo del contratto",
   no_token_found: 'Nessun token trovato',
   invalid_token_address: 'Inserisci un indirizzo token valido',
+  extension_vault_import_restriction:
+    "Solo i vault DKLS possono essere importati nell'estensione",
 }

@@ -860,4 +860,6 @@ export const pt = {
   enter_contract_address: 'Insira o endereço do contrato',
   no_token_found: 'Nenhum token encontrado',
   invalid_token_address: 'Insira um endereço de token válido',
+  extension_vault_import_restriction:
+    'Somente os cofres DKLS podem ser importados na extensão',
 }

@@ -850,4 +850,6 @@ export const hr = {
   enter_contract_address: 'Unesite adresu ugovora',
   no_token_found: 'Nije pronađen token',
   invalid_token_address: 'Unesite valjanu adresu tokena',
+  extension_vault_import_restriction:
+    'U ekstenziju se mogu uvesti samo DKLS trezori',
 }

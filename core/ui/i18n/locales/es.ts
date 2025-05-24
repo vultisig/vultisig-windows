@@ -871,4 +871,6 @@ export const es = {
   enter_contract_address: 'Ingrese la dirección del contrato',
   no_token_found: 'No se encontró ningún token',
   invalid_token_address: 'Introduzca una dirección de token válida',
+  extension_vault_import_restriction:
+    'Solo se pueden importar bóvedas DKLS en la extensión',
 }
