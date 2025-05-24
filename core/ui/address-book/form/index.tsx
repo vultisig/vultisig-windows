@@ -91,7 +91,7 @@ export const AddressForm: FC<AddressFormProps> = ({
         <Button
           isDisabled={!isValid || !isDirty}
           isLoading={isLoading || isPending || isValidating}
-          onClick={handleSubmit(values => onSubmit(chain, values))}
+          type="submit"
         >
           {t('save')}
         </Button>
