@@ -1,9 +1,6 @@
 import { create } from '@bufbuild/protobuf'
-import {
-  IKeysignTransactionPayload,
-  ITransaction,
-} from '@clients/extension/src/utils/interfaces'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
@@ -20,7 +17,6 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
 import { ParsedSolanaSwapParams } from './types/types'
-import { Chain } from '@core/chain/Chain'
 export const getSolanaSwapKeysignPayload = (
   parsedSwapParams: ParsedSolanaSwapParams,
   serialized: Uint8Array,

@@ -3,10 +3,7 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
-import { Vault } from '@core/ui/vault/Vault'
-import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
 export namespace Messaging {
@@ -162,7 +159,7 @@ export type IKeysignTransactionPayload = {
   isDeposit?: boolean
 }
 
-export type ITransactionPayload =
+type ITransactionPayload =
   | {
       keysign: IKeysignTransactionPayload
     }

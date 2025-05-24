@@ -2,6 +2,7 @@ import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId } from '@core/chain/coin/ChainId'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -33,7 +34,6 @@ import {
   TransactionType,
 } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 class XDEFIMessageRequester {
   constructor() {

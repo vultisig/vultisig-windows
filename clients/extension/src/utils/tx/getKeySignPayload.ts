@@ -1,10 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import {
-  IKeysignTransactionPayload,
-  ITransaction,
-} from '@clients/extension/src/utils/interfaces'
+import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'

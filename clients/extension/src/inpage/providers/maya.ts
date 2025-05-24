@@ -1,10 +1,11 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { MessageKey } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
-import { v4 as uuidv4 } from 'uuid'
 export class MAYAChain extends BaseCosmosChain {
   public static instance: MAYAChain | null = null
   public messageKey = MessageKey.MAYA_REQUEST

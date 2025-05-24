@@ -1,10 +1,11 @@
 import api from '@clients/extension/src/utils/api'
+import { getChainKind } from '@core/chain/ChainKind'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { VersionedTransaction } from '@solana/web3.js'
+
 import { MessageKey, RequestMethod } from './constants'
 import { ITransaction, Messaging } from './interfaces'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { getChainKind } from '@core/chain/ChainKind'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)

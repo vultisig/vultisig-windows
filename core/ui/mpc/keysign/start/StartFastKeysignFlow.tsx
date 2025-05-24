@@ -1,3 +1,4 @@
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
@@ -8,19 +9,19 @@ import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { OnFinishProp } from '@lib/ui/props'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
-import { OnFinishProp } from '@lib/ui/props'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
+}: KeysignActionProviderProp &
+  Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({

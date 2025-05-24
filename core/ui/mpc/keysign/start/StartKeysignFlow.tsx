@@ -1,11 +1,11 @@
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { Match } from '@lib/ui/base/Match'
+import { OnFinishProp } from '@lib/ui/props'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
-import { OnFinishProp } from '@lib/ui/props'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const StartKeysignFlow = ({
   keysignActionProvider,

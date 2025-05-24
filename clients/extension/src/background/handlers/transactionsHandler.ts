@@ -1,13 +1,16 @@
-import { Chain } from '@core/chain/Chain'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ITransaction } from '../../utils/interfaces'
 import {
-  getStoredTransactions,
-  setStoredTransactions,
-} from '../../utils/storage'
+  addTransactionToVault,
+  getVaultTransactions,
+  removeTransactionFromVault,
+  updateTransaction,
+} from '../../transactions/state/transactions'
+import { ITransaction } from '../../utils/interfaces'
+import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleOpenPanel } from '../window/windowManager'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const handleSendTransaction = async (
   transaction: ITransaction
@@ -15,16 +18,13 @@ export const handleSendTransaction = async (
   const uuid = uuidv4()
 
   try {
-    const transactions = await getStoredTransactions()
+    const currentVaultId = shouldBePresent(await getCurrentVaultId())
 
-    await setStoredTransactions([
-      {
-        ...transaction,
-        id: uuid,
-        status: 'default',
-      },
-      ...transactions,
-    ])
+    await addTransactionToVault(currentVaultId, {
+      ...transaction,
+      id: uuid,
+      status: 'default',
+    })
 
     const createdWindowId = await handleOpenPanel({ id: 'transactionTab' })
 
@@ -32,19 +32,21 @@ export const handleSendTransaction = async (
       throw new Error('Failed to open transaction panel window')
     }
 
-    const updatedTransactions = await getStoredTransactions()
-    await setStoredTransactions(
-      updatedTransactions.map(t =>
-        t.id === uuid ? { ...t, windowId: createdWindowId } : t
-      )
+    const updatedTx = shouldBePresent(
+      (await getVaultTransactions(currentVaultId)).find(tx => tx.id === uuid)
     )
+
+    await updateTransaction(currentVaultId, {
+      ...updatedTx,
+      windowId: createdWindowId,
+    })
 
     return await new Promise<ExecuteTxResultWithEncoded>((resolve, reject) => {
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
 
         try {
-          const currentTransactions = await getStoredTransactions()
+          const currentTransactions = await getVaultTransactions(currentVaultId)
           const matchedTransaction = currentTransactions.find(
             ({ windowId }) => windowId === createdWindowId
           )
@@ -56,10 +58,8 @@ export const handleSendTransaction = async (
           }
 
           if (matchedTransaction.status === 'default') {
-            const filteredTransactions = currentTransactions.filter(
-              t => t.id !== uuid && t.windowId !== createdWindowId
-            )
-            await setStoredTransactions(filteredTransactions)
+            // removing the transaction with default status from store
+            removeTransactionFromVault(currentVaultId, matchedTransaction.id)
             reject(new Error('Transaction was not completed'))
           } else {
             if (matchedTransaction.txHash) {

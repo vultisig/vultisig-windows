@@ -1,3 +1,4 @@
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeerDiscoveryStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
@@ -6,10 +7,9 @@ import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { OnFinishProp } from '@lib/ui/props'
 
 import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
-import { OnFinishProp } from '@lib/ui/props'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,

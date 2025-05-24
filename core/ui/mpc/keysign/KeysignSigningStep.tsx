@@ -1,3 +1,6 @@
+import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { CurrentTxHashProvider } from '@core/ui/chain/state/currentTxHash'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
@@ -25,11 +28,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../../state/core'
-import { normalizeTxHash } from './utils/normalizeTxHash'
 import { getKeysignChain } from './utils/getKeysignChain'
-import { Chain, CosmosChain } from '@core/chain/Chain'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { getChainKind } from '@core/chain/ChainKind'
+import { normalizeTxHash } from './utils/normalizeTxHash'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
