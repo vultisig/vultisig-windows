@@ -1,6 +1,5 @@
 import { EthereumL2Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { chainNativeTokens, chainTokens } from '@core/chain/coin/chainTokens'
+import { coins } from '@core/chain/coin/coins'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { readdir } from 'fs/promises'
@@ -102,13 +101,7 @@ const main = async () => {
     )
 
     const expectedCoins = withoutDuplicates(
-      [
-        ...Object.values(chainFeeCoin),
-        ...Object.values(chainTokens).flat(),
-        ...Object.values(chainNativeTokens).flat(),
-      ]
-        .map(coin => coin.logo)
-        .filter(logo => !logo.startsWith('http'))
+      coins.map(coin => coin.logo).filter(logo => !logo.startsWith('http'))
     )
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
