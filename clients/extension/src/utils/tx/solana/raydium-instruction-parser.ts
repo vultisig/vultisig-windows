@@ -1,4 +1,4 @@
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 
@@ -14,7 +14,7 @@ export class RaydiumInstructionParser {
 
   constructor(programId: PublicKey) {
     this.programId = programId
-    this.connection = new Connection(chainRpcUrl.Solana)
+    this.connection = new Connection(solanaRpcUrl)
   }
 
   async getInstructionParsedData(
