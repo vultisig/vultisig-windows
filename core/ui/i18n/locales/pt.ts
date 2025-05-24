@@ -16,6 +16,8 @@ export const pt = {
   percentage: 'Percentagem',
   unexpected_error: 'Erro inesperado',
   approval_tx: 'Transação de aprovação',
+  verify_password_periodic_message:
+    'Verifique sua senha de compartilhamento do servidor',
   staked: 'Apostado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',

@@ -13,7 +13,7 @@ import { ModalContent } from './ModalContent'
 import { ModalSubTitleText } from './ModalSubTitleText'
 import { ModalTitleText } from './ModalTitleText'
 
-type ModalProps = AsProp &
+export type ModalProps = AsProp &
   Omit<ComponentProps<typeof Container>, 'title'> &
   TitleProp & {
     onClose?: () => void
@@ -48,6 +48,7 @@ export const Modal = ({
   footer,
   subTitle,
   as,
+  titleAlign,
   withDefaultStructure = true,
   ...rest
 }: ModalProps) => {
@@ -62,7 +63,7 @@ export const Modal = ({
                 justifyContent="space-between"
                 gap={16}
               >
-                <ModalTitleText>{title}</ModalTitleText>
+                <ModalTitleText align={titleAlign}>{title}</ModalTitleText>
                 {onClose && <ModalCloseButton onClick={onClose} />}
               </HStack>
               {subTitle && <ModalSubTitleText>{subTitle}</ModalSubTitleText>}

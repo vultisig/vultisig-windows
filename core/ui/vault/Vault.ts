@@ -16,6 +16,7 @@ export type Vault = {
   isBackedUp: boolean
   order: number
   folderId?: string
+  lastPasswordVerificationTime?: number
 }
 
 export const getVaultId = (vault: Vault): string => vault.publicKeys.ecdsa
