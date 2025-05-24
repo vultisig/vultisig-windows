@@ -7,6 +7,7 @@ import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
+import { CoinsMetadataManager } from '@core/ui/vault/chain/coin/metadata/CoinsMetadataManager'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
@@ -65,6 +66,7 @@ export const AppProviders = ({ children }: ChildrenProp) => {
                   <ResponsivenessProvider>{children}</ResponsivenessProvider>
                   <ActiveVaultOnly>
                     <CoinFinder />
+                    <CoinsMetadataManager />
                   </ActiveVaultOnly>
                 </ToastProvider>
               </StorageDependant>
