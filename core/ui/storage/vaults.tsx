@@ -11,8 +11,29 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { getVaultId, Vault } from '../vault/Vault'
-import { DeleteVaultFunction } from './CoreStorage'
 import { StorageKey } from './StorageKey'
+
+export type UpdateVaultInput = {
+  vaultId: string
+  fields: Partial<Vault>
+}
+
+export const vaultsInitialValue: Vault[] = []
+
+type CreateVaultFunction = (vault: Vault) => Promise<Vault>
+
+export type UpdateVaultFunction = (input: UpdateVaultInput) => Promise<Vault>
+
+type GetVaultsFunction = () => Promise<Vault[]>
+
+type DeleteVaultFunction = (vaultId: string) => Promise<void>
+
+export type VaultsStorage = {
+  getVaults: GetVaultsFunction
+  createVault: CreateVaultFunction
+  updateVault: UpdateVaultFunction
+  deleteVault: DeleteVaultFunction
+}
 
 type MergeVaultsWithCoinsInput = {
   vaults: Vault[]
@@ -35,7 +56,7 @@ export const { useValue: useVaults, provider: VaultsProvider } =
   getValueProviderSetup<(Vault & { coins: AccountCoin[] })[]>('VaultsProvider')
 
 export const useVaultsQuery = () => {
-  const { getVaults, getVaultsCoins } = useCore()
+  const { getVaults, getCoins } = useCore()
 
   const vaults = useQuery({
     queryKey: [StorageKey.vaults],
@@ -45,7 +66,7 @@ export const useVaultsQuery = () => {
 
   const coins = useQuery({
     queryKey: [StorageKey.vaultsCoins],
-    queryFn: getVaultsCoins,
+    queryFn: getCoins,
     ...fixedDataQueryOptions,
   })
 

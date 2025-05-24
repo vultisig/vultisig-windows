@@ -1,12 +1,10 @@
 import { useCore } from '@core/ui/state/core'
-import {
-  UpdateVaultFunction,
-  UpdateVaultInput,
-} from '@core/ui/storage/CoreStorage'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { StorageKey } from '../../storage/StorageKey'
+import { UpdateVaultFunction } from '../../storage/vaults'
+import { UpdateVaultInput } from '../../storage/vaults'
 
 export const useUpdateVaultMutation = (
   options?: UseMutationOptions<any, any, UpdateVaultInput, unknown>

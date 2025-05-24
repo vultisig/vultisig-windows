@@ -1,8 +1,9 @@
-import { useIsVaultBalanceVisible } from '@core/ui/storage/isVaultBalanceVisible'
 import { AsteriskIcon } from '@lib/ui/icons/AsteriskIcon'
 import { ChildrenProp } from '@lib/ui/props'
 import { range } from '@lib/utils/array/range'
 import styled from 'styled-components'
+
+import { useIsBalanceVisible } from '../../../storage/balanceVisibility'
 
 type BalanceSize = 'm' | 'l' | 'xxxl'
 
@@ -26,7 +27,7 @@ export const BalanceVisibilityAware = ({
   children,
   size = 'm',
 }: BalanceVisibilityAwareProps) => {
-  const isVisible = useIsVaultBalanceVisible()
+  const isVisible = useIsBalanceVisible()
 
   if (isVisible) {
     return <>{children}</>
