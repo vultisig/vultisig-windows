@@ -4,7 +4,6 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
-import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
@@ -28,7 +27,6 @@ import { SetupVaultPageController } from '../vault/setup/SetupVaultPageControlle
 import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  addressBook: AddressBookSettingsPage,
   checkUpdate: VaultCheckUpdatePage,
   faq: FaqVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,

@@ -55,7 +55,7 @@ export const VaultRenamePage = () => {
   }, [updateVaultMutation.isSuccess, navigateBack])
 
   return (
-    <VStack as="form" gap={16} onSubmit={handleSubmit(onSubmit)} fullHeight>
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('rename_vault')}</PageHeaderTitle>}

@@ -6,7 +6,8 @@ import {
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { VaultSigners } from '@core/ui/vault/signers'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { VaultFolder } from '@core/ui/vault/VaultFolder'
 import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
@@ -31,12 +32,12 @@ import { useTranslation } from 'react-i18next'
 const ManageFolders = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultFolderMutation()
+  const [items, setItems] = useState<VaultFolder[]>([])
   const folders = useVaultFolders()
-  const [items, setItems] = useState(folders)
 
   useEffect(() => setItems(folders), [folders])
 
-  return folders.length ? (
+  return items.length ? (
     <DnDList
       items={items}
       getItemId={item => item.id}
@@ -85,8 +86,8 @@ const ManageFolders = () => {
 const ManageVaults = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultMutation()
+  const [items, setItems] = useState<Vault[]>([])
   const vaults = useFolderlessVaults()
-  const [items, setItems] = useState(vaults)
 
   useEffect(() => setItems(vaults), [vaults])
 

@@ -1,4 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import {
+  getAddressSchema,
+  getModifyAddressSchema,
+} from '@core/ui/address-book/schemas/addressSchema'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,11 +10,6 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-import {
-  getAddressSchema,
-  getModifyAddressSchema,
-} from '../schemas/addressSchema'
 
 export type AddressFormValues = z.infer<ReturnType<typeof getAddressSchema>>
 

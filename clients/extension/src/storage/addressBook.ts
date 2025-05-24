@@ -1,4 +1,4 @@
-import { AddressBookItem } from '@core/ui/addressBook/AddressBookItem'
+import { AddressBookItem } from '@core/ui/address-book/model'
 import { GetAddressBookItemsFunction } from '@core/ui/storage/CoreStorage'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 

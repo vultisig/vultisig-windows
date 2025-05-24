@@ -20,11 +20,9 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
-import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
   joinKeygen: JoinKeygenPage,
