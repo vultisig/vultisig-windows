@@ -149,7 +149,7 @@ export const handleRequest = (
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
-          handleSendTransaction(_transaction as ITransaction, chain)
+          handleSendTransaction(_transaction as ITransaction)
             .then(result => resolve(result))
             .catch(reject)
         } else {
@@ -164,12 +164,16 @@ export const handleRequest = (
             chain
           ).then(standardTx => {
             const modifiedTransaction: ITransaction = {
-              transactionDetails: standardTx as TransactionDetails,
-              chain,
+              transactionPayload: {
+                keysign: {
+                  transactionDetails: standardTx as TransactionDetails,
+                  chain,
+                },
+              },
               id: '',
               status: 'default',
             }
-            handleSendTransaction(modifiedTransaction, chain)
+            handleSendTransaction(modifiedTransaction)
               .then(result => resolve(result))
               .catch(reject)
           })
@@ -189,12 +193,16 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const modifiedTransaction: ITransaction = {
-                transactionDetails: standardTx!,
-                chain,
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx!,
+                    chain,
+                  },
+                },
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(modifiedTransaction, chain)
+              handleSendTransaction(modifiedTransaction)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -222,15 +230,18 @@ export const handleRequest = (
               } as TransactionType.WalletTransaction,
               chain
             ).then(standardTx => {
-              let modifiedTransaction: ITransaction = {} as ITransaction
-              modifiedTransaction = {
-                transactionDetails: standardTx as TransactionDetails,
-                isDeposit: true,
-                chain,
+              const modifiedTransaction: ITransaction = {
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx as TransactionDetails,
+                    chain,
+                    isDeposit: true,
+                  },
+                },
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(modifiedTransaction, chain)
+              handleSendTransaction(modifiedTransaction)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -533,7 +544,7 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_CALL: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as TransactionRequest[]
 
           if (transaction) {
             getRpcProvider(chain).call(transaction).then(resolve).catch(reject)
@@ -591,30 +602,17 @@ export const handleRequest = (
             }
 
             const hashMessage = TypedDataEncoder.encode(domain, types, message)
-            handleSendTransaction(
-              {
-                customMessage: {
+            handleSendTransaction({
+              transactionPayload: {
+                custom: {
                   method,
                   address: String(address),
                   message: hashMessage,
                 },
-                isCustomMessage: true,
-                chain: chain,
-                transactionDetails: {
-                  amount: { amount: '0', decimals: 0 },
-                  from: String(address),
-                  to: '',
-                  asset: {
-                    chain: Chain.Ethereum,
-                    ticker: 'ETH',
-                  },
-                },
-                id: '',
-                status: 'default',
-                isDeposit: false,
               },
-              chain
-            )
+              id: '',
+              status: 'default',
+            })
               .then(result => resolve(result))
               .catch(error => {
                 reject(error)
@@ -632,30 +630,17 @@ export const handleRequest = (
         if (Array.isArray(params)) {
           const [message, address] = params
           const utf8Message = toUtf8String(String(message))
-          handleSendTransaction(
-            {
-              customMessage: {
+          handleSendTransaction({
+            transactionPayload: {
+              custom: {
                 method,
                 address: String(address),
                 message: `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`,
               },
-              isCustomMessage: true,
-              chain: chain,
-              transactionDetails: {
-                amount: { amount: '0', decimals: 0 },
-                from: String(address),
-                to: '',
-                asset: {
-                  chain: Chain.Ethereum,
-                  ticker: 'ETH',
-                },
-              },
-              id: '',
-              status: 'default',
-              isDeposit: false,
             },
-            chain
-          )
+            id: '',
+            status: 'default',
+          })
             .then(result => resolve(result))
             .catch(reject)
         } else {
@@ -678,13 +663,17 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const tx: ITransaction = {
-                transactionDetails: standardTx,
-                isDeposit: true,
-                chain: chain,
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx,
+                    chain,
+                    isDeposit: true,
+                  },
+                },
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
+              handleSendTransaction(tx)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -707,12 +696,16 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const tx: ITransaction = {
-                transactionDetails: standardTx,
-                chain: chain,
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx,
+                    chain,
+                  },
+                },
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
+              handleSendTransaction(tx)
                 .then(result => resolve(result))
                 .catch(reject)
             })

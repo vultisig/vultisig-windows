@@ -49,7 +49,7 @@ export interface AccountsProps {
   sender: string
 }
 
-interface CustomMessage {
+interface ICustomTransactionPayload {
   method: string
   address: string
   message: string
@@ -146,14 +146,10 @@ export interface TransactionDetails {
   ibcTransaction?: IMsgTransfer
 }
 
-export interface ITransaction {
+export type IKeysignTransactionPayload = {
   transactionDetails: TransactionDetails
   chain: Chain
   contract?: string
-  customMessage?: CustomMessage
-  customSignature?: string
-  id: string
-  status: 'default' | 'error' | 'pending' | 'success'
   memo?: {
     isParsed: boolean
     value: string | ParsedMemoParams | undefined
@@ -161,29 +157,24 @@ export interface ITransaction {
   gas?: string
   gasLimit?: string
   txFee?: string
-  isDeposit?: boolean
-  isCustomMessage?: boolean
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
+  isDeposit?: boolean
+}
+
+export type ITransactionPayload =
+  | {
+      keysign: IKeysignTransactionPayload
+    }
+  | {
+      custom: ICustomTransactionPayload
+    }
+
+export interface ITransaction {
+  id: string
+  status: 'default' | 'error' | 'pending' | 'success'
+  transactionPayload: ITransactionPayload
   txHash?: string
-  windowId?: number
   encoded?: any
-}
-
-export interface SignedTransaction {
-  inputData?: Uint8Array
-  signatures: Record<string, KeysignSignature>
-  transaction?: ITransaction
-  vault?: Vault
-  walletCore: WalletCore
-}
-
-export interface FastSignInput {
-  public_key: string
-  messages: string[]
-  session: string
-  hex_encryption_key: string
-  derive_path: string
-  is_ecdsa: boolean
-  vault_password: string
+  windowId?: number
 }

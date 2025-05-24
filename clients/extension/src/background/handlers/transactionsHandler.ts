@@ -10,8 +10,7 @@ import { handleOpenPanel } from '../window/windowManager'
 import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
 
 export const handleSendTransaction = async (
-  transaction: ITransaction,
-  chain: Chain
+  transaction: ITransaction
 ): Promise<ExecuteTxResultWithEncoded> => {
   const uuid = uuidv4()
 
@@ -21,7 +20,6 @@ export const handleSendTransaction = async (
     await setStoredTransactions([
       {
         ...transaction,
-        chain,
         id: uuid,
         status: 'default',
       },

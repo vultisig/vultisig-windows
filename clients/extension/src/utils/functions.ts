@@ -1,8 +1,10 @@
 import api from '@clients/extension/src/utils/api'
 import { VersionedTransaction } from '@solana/web3.js'
 import { MessageKey, RequestMethod } from './constants'
-import { Messaging } from './interfaces'
+import { ITransaction, Messaging } from './interfaces'
 import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { getChainKind } from '@core/chain/ChainKind'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -138,4 +140,30 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
     'message' in tx &&
     'addressTableLookups' in tx.message
   )
+}
+
+export function parseTxResult(
+  transaction: ITransaction,
+  txResult: string | ExecuteTxResultWithEncoded
+): { txHash: string; encoded?: string } {
+  let txHash: string
+  let encoded: string | undefined
+
+  matchRecordUnion(transaction.transactionPayload, {
+    keysign: keysign => {
+      const chainKind = getChainKind(keysign.chain)
+      if (chainKind === 'cosmos' || chainKind === 'solana') {
+        const result = txResult as ExecuteTxResultWithEncoded
+        txHash = result.txHash
+        encoded = result.encoded as string
+      } else {
+        txHash = txResult as string
+      }
+    },
+    custom: () => {
+      txHash = txResult as string
+    },
+  })
+
+  return { txHash: txHash!, encoded }
 }

@@ -53,6 +53,10 @@ import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
 import { useCore } from '@core/ui/state/core'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { Button } from '@lib/ui/buttons/Button'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { Vault } from '@core/ui/vault/Vault'
+
 const StyledErrorState = styled(VStack)`
   background-color: ${getColor('backgroundsSecondary')};
   border-radius: 12px;
@@ -77,65 +81,84 @@ export const TransactionPage = () => {
       if (!transaction) {
         throw new Error('No current transaction present')
       }
-      const vault = shouldBePresent(
-        vaults.find(({ coins }) =>
-          coins.some(
-            ({ address }) =>
-              address?.toLowerCase() ===
-              transaction?.transactionDetails.from.toLowerCase()
-          )
-        )
+
+      const vault: Vault = await matchRecordUnion(
+        transaction.transactionPayload,
+        {
+          keysign: keysign => {
+            return shouldBePresent(
+              vaults.find(({ coins }) =>
+                coins.some(
+                  ({ address }) =>
+                    address?.toLowerCase() ===
+                    keysign.transactionDetails.from.toLowerCase()
+                )
+              )
+            )
+          },
+          custom: custom => {
+            return shouldBePresent(
+              vaults.find(({ coins }) =>
+                coins.some(
+                  ({ address }) =>
+                    address?.toLowerCase() === custom.address.toLowerCase()
+                )
+              )
+            )
+          },
+        }
       )
 
       setCurrentVaultId(vault.publicKeys.ecdsa)
 
-      let keysignMessagePayload: KeysignMessagePayload
-      if (transaction.isCustomMessage) {
-        keysignMessagePayload = {
-          custom: create(CustomMessagePayloadSchema, {
-            method: transaction.customMessage?.method,
-            message: transaction.customMessage?.message,
-          }),
-        }
-      } else {
-        keysignMessagePayload = {
-          keysign: await getKeysignPayload(transaction, vault, walletCore),
-        }
-
-        transaction.txFee = String(
-          formatUnits(
-            getFeeAmount(
-              keysignMessagePayload.keysign
-                .blockchainSpecific as KeysignChainSpecific
-            ),
-            transaction.transactionDetails.amount?.decimals
-          )
-        )
-
-        transaction.memo = { isParsed: false, value: undefined }
-
-        if (getChainKind(transaction.chain) === 'evm') {
-          const parsedMemo = await getParsedMemo(
-            keysignMessagePayload.keysign.memo
-          )
-          if (parsedMemo) {
-            transaction.memo = {
-              isParsed: true,
-              value: parsedMemo,
-            }
-          }
-        }
-
-        if (!transaction.memo.isParsed) {
-          try {
-            transaction.memo.value = toUtf8String(
-              transaction.transactionDetails.data!
+      const keysignMessagePayload: KeysignMessagePayload =
+        await matchRecordUnion(transaction.transactionPayload, {
+          keysign: async keysign => {
+            const keysignPayload = await getKeysignPayload(
+              keysign,
+              vault,
+              walletCore
             )
-          } catch {
-            transaction.memo.value = transaction.transactionDetails.data
-          }
-        }
-      }
+
+            keysign.txFee = String(
+              formatUnits(
+                getFeeAmount(
+                  keysignPayload.blockchainSpecific as KeysignChainSpecific
+                ),
+                keysign.transactionDetails.amount?.decimals
+              )
+            )
+
+            keysign.memo = { isParsed: false, value: undefined }
+
+            if (getChainKind(keysign.chain) === 'evm') {
+              const parsedMemo = await getParsedMemo(keysignPayload.memo)
+              if (parsedMemo) {
+                keysign.memo = { isParsed: true, value: parsedMemo }
+              }
+            }
+
+            if (!keysign.memo.isParsed) {
+              try {
+                keysign.memo.value = toUtf8String(
+                  keysign.transactionDetails.data!
+                )
+              } catch {
+                keysign.memo.value = keysign.transactionDetails.data
+              }
+            }
+
+            return { keysign: keysignPayload }
+          },
+          custom: async custom => {
+            return {
+              custom: create(CustomMessagePayloadSchema, {
+                method: custom.method,
+                message: custom.message,
+              }),
+            }
+          },
+        })
 
       return { transaction, keysignMessagePayload }
     },
@@ -171,93 +194,101 @@ export const TransactionPage = () => {
           />
           <PageContent flexGrow scrollable>
             <List>
-              {transaction.isCustomMessage ? (
-                <>
-                  <ListItem
-                    title={t('address')}
-                    description={transaction.transactionDetails.from}
-                  />
-                  <ListItem
-                    title={t('message')}
-                    description={transaction.customMessage!.message}
-                  />
-                </>
-              ) : (
-                <>
-                  <ListItem
-                    title={t('from')}
-                    description={
-                      <MiddleTruncate
-                        text={transaction.transactionDetails.from}
-                      />
-                    }
-                  />
-                  {transaction.transactionDetails.to && (
-                    <ListItem
-                      title={t('to')}
-                      description={
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.to}
-                        />
-                      }
-                    />
-                  )}
-                  {transaction.transactionDetails.amount?.amount && (
-                    <ListItem
-                      title={t('amount')}
-                      description={`${formatUnits(
-                        transaction.transactionDetails.amount.amount,
-                        transaction.transactionDetails.amount.decimals
-                      )} ${(keysignMessagePayload as any).keysign.coin.ticker}`}
-                    />
-                  )}
-                  <ListItem title="Network" description={transaction.chain} />
-                  <ListItem
-                    title={t('network_fee')}
-                    description={`${transaction.txFee} ${chainFeeCoin[transaction.chain].ticker}`}
-                  />
-                  {transaction.memo?.isParsed ? (
+              <MatchRecordUnion
+                value={transaction.transactionPayload}
+                handlers={{
+                  custom: custom => (
                     <>
                       <ListItem
-                        title={t('function_signature')}
-                        description={
-                          <VStack as="pre" scrollable>
-                            <Text as="code" family="mono">
-                              {
-                                (transaction.memo.value as ParsedMemoParams)
-                                  .functionSignature
-                              }
-                            </Text>
-                          </VStack>
-                        }
+                        title={t('address')}
+                        description={custom.address}
                       />
                       <ListItem
-                        title={t('function_inputs')}
-                        description={
-                          <VStack as="pre" scrollable>
-                            <Text as="code" family="mono">
-                              {
-                                (transaction.memo.value as ParsedMemoParams)
-                                  .functionArguments
-                              }
-                            </Text>
-                          </VStack>
-                        }
+                        title={t('message')}
+                        description={custom.message}
                       />
                     </>
-                  ) : transaction.memo?.value ? (
-                    <ListItem
-                      title={t('memo')}
-                      description={splitString(
-                        transaction.memo.value as string,
-                        32
-                      ).map((str, index) => (
-                        <span key={index}>{str}</span>
-                      ))}
-                    />
-                  ) : null}
-                </>
-              )}
+                  ),
+                  keysign: keysign => (
+                    <>
+                      <ListItem
+                        title={t('from')}
+                        description={
+                          <MiddleTruncate
+                            text={keysign.transactionDetails.from}
+                          />
+                        }
+                      />
+                      {keysign.transactionDetails.to && (
+                        <ListItem
+                          title={t('to')}
+                          description={
+                            <MiddleTruncate
+                              text={keysign.transactionDetails.to}
+                            />
+                          }
+                        />
+                      )}
+                      {keysign.transactionDetails.amount?.amount && (
+                        <ListItem
+                          title={t('amount')}
+                          description={`${formatUnits(
+                            keysign.transactionDetails.amount.amount,
+                            keysign.transactionDetails.amount.decimals
+                          )} ${(keysignMessagePayload as any).keysign.coin.ticker}`}
+                        />
+                      )}
+                      <ListItem title="Network" description={keysign.chain} />
+                      <ListItem
+                        title={t('network_fee')}
+                        description={`${keysign.txFee} ${chainFeeCoin[keysign.chain].ticker}`}
+                      />
+                      {keysign.memo?.isParsed ? (
+                        <>
+                          <ListItem
+                            title={t('function_signature')}
+                            description={
+                              <VStack as="pre" scrollable>
+                                <Text as="code" family="mono">
+                                  {
+                                    (keysign.memo.value as ParsedMemoParams)
+                                      .functionSignature
+                                  }
+                                </Text>
+                              </VStack>
+                            }
+                          />
+                          <ListItem
+                            title={t('function_inputs')}
+                            description={
+                              <VStack as="pre" scrollable>
+                                <Text as="code" family="mono">
+                                  {
+                                    (keysign.memo.value as ParsedMemoParams)
+                                      .functionArguments
+                                  }
+                                </Text>
+                              </VStack>
+                            }
+                          />
+                        </>
+                      ) : (
+                        keysign.memo?.value && (
+                          <ListItem
+                            title={t('memo')}
+                            description={splitString(
+                              keysign.memo.value as string,
+                              32
+                            ).map((str, index) => (
+                              <span key={index}>{str}</span>
+                            ))}
+                          />
+                        )
+                      )}
+                    </>
+                  ),
+                }}
+              />
             </List>
           </PageContent>
           <PageFooter>
