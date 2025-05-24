@@ -17,7 +17,7 @@ const chainKindRecord = {
   [UtxoChain.Litecoin]: 'utxo',
   [UtxoChain.Dogecoin]: 'utxo',
   [UtxoChain.Dash]: 'utxo',
-
+  [UtxoChain.Zcash]: 'utxo',
   [CosmosChain.THORChain]: 'cosmos',
   [CosmosChain.Cosmos]: 'cosmos',
   [CosmosChain.Osmosis]: 'cosmos',

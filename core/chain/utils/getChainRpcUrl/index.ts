@@ -18,4 +18,5 @@ export const chainRpcUrl: Record<Chain, string> = {
   [OtherChain.Ton]: '',
   [OtherChain.Ripple]: '',
   [OtherChain.Tron]: '',
+  [UtxoChain.Zcash]: '',
 }

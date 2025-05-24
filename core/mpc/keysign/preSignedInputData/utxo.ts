@@ -29,7 +29,7 @@ export const getUtxoPreSignedInputData = ({
     coinType
   )
 
-  const scriptType = utxoChainScriptType[coin.chain as UtxoChain]
+  const scriptType = utxoChainScriptType[chain]
 
   const pubKeyHash = match(scriptType, {
     wpkh: () => lockScript.matchPayToWitnessPublicKeyHash(),
@@ -81,6 +81,10 @@ export const getUtxoPreSignedInputData = ({
   const plan = walletCore.AnySigner.plan(inputData, coinType)
 
   input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan)
+
+  if (chain === UtxoChain.Zcash) {
+    input.plan.branchId = Buffer.from('5510e7c8', 'hex')
+  }
 
   return TW.Bitcoin.Proto.SigningInput.encode(input).finish()
 }

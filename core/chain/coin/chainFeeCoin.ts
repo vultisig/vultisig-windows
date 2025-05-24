@@ -167,6 +167,12 @@ const leanChainFeeCoin: Record<Chain, LeanFeeCoin> = {
     priceProviderId: 'tron',
   },
   ...recordMap(EthereumL2Chain, () => ether),
+  [Chain.Zcash]: {
+    ticker: 'ZEC',
+    logo: 'zec',
+    decimals: 8,
+    priceProviderId: 'zcash',
+  },
 }
 
 export const chainFeeCoin: Record<

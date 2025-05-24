@@ -31,6 +31,7 @@ export const chainSpecificRecord = {
   [Chain.Litecoin]: 'utxoSpecific',
   [Chain.Dogecoin]: 'utxoSpecific',
   [Chain.Dash]: 'utxoSpecific',
+  [Chain.Zcash]: 'utxoSpecific',
 
   [Chain.Cosmos]: 'cosmosSpecific',
   [Chain.Osmosis]: 'cosmosSpecific',
