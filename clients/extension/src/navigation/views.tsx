@@ -1,7 +1,6 @@
 import { ExpandView } from '@clients/extension/src/components/expand-view'
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
-import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
@@ -23,11 +22,22 @@ import { SettingsPage } from '@core/ui/settings'
 import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { ReshareSecureVault } from '../components/settings/reshare/ReshareSecureVault'
+import { WithCurrentVault } from '../providers/WithCurrentVault'
+
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  addressBook: AddressBookSettingsPage,
+  addressBook: () => (
+    <WithCurrentVault>
+      <AddressBookSettingsPage />
+    </WithCurrentVault>
+  ),
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
-  joinKeygen: JoinKeygenPage,
+  joinKeygen: () => (
+    <WithCurrentVault>
+      <JoinKeygenPage />
+    </WithCurrentVault>
+  ),
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignPage,
   onboarding: () => (
@@ -35,14 +45,24 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       <OnboardingPage />
     </IncompleteOnboardingOnly>
   ),
-  reshareVaultFast: ReshareFastVault,
-  reshareVaultSecure: ReshareSecureVault,
+  reshareVaultFast: () => (
+    <WithCurrentVault>
+      <ReshareFastVault />
+    </WithCurrentVault>
+  ),
+  reshareVaultSecure: () => (
+    <WithCurrentVault>
+      <ReshareSecureVault />
+    </WithCurrentVault>
+  ),
   settings: () => (
-    <SettingsPage
-      client="extension"
-      prioritize={<Prioritize />}
-      expandView={<ExpandView />}
-    />
+    <WithCurrentVault>
+      <SettingsPage
+        client="extension"
+        prioritize={<Prioritize />}
+        expandView={<ExpandView />}
+      />
+    </WithCurrentVault>
   ),
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
@@ -52,9 +72,21 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
     </ResponsivenessProvider>
   ),
   transactionTab: TransactionPage,
-  vault: VaultPage,
-  vaultSettings: VaultSettingsPage,
-  vaultsTab: GetVaultsPage,
+  vault: () => (
+    <WithCurrentVault>
+      <VaultPage />
+    </WithCurrentVault>
+  ),
+  vaultSettings: () => (
+    <WithCurrentVault>
+      <VaultSettingsPage />
+    </WithCurrentVault>
+  ),
+  vaultsTab: () => (
+    <WithCurrentVault>
+      <GetVaultsPage />
+    </WithCurrentVault>
+  ),
 }
 
 export const views: Views<AppViewId> = {

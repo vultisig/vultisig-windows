@@ -8,7 +8,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
-import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
@@ -25,57 +24,43 @@ import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
 export const StorageDependant = ({ children }: ChildrenProp) => {
-  const vaults = useVaultsQuery()
-  const vaultFolders = useVaultFoldersQuery()
-  const defaultChains = useDefaultChainsQuery()
-  const fiatCurrency = useFiatCurrencyQuery()
-  const currentVaultId = useCurrentVaultIdQuery()
-  const addressBookItems = useAddressBookItemsQuery()
-  const language = useLanguageQuery()
-  const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
-  const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
-  const initialView = useInitialViewQuery()
-  const coinFinderIgnore = useCoinFinderIgnoreQuery()
-
-  const query = useMergeQueries({
-    vaults,
-    vaultFolders,
-    defaultChains,
-    fiatCurrency,
-    currentVaultId,
-    addressBookItems,
-    language,
-    isVaultBalanceVisible,
-    hasFinishedOnboarding,
-    initialView,
-    coinFinderIgnore,
+  const { data: vaultsData = [] } = useVaultsQuery()
+  const { data: currentVaultId = null } = useCurrentVaultIdQuery()
+  const baseQueries = useMergeQueries({
+    vaultFolders: useVaultFoldersQuery(),
+    defaultChains: useDefaultChainsQuery(),
+    fiatCurrency: useFiatCurrencyQuery(),
+    addressBookItems: useAddressBookItemsQuery(),
+    language: useLanguageQuery(),
+    isVaultBalanceVisible: useIsVaultBalanceVisibleQuery(),
+    hasFinishedOnboarding: useHasFinishedOnboardingQuery(),
+    initialView: useInitialViewQuery(),
+    coinFinderIgnore: useCoinFinderIgnoreQuery(),
   })
 
   return (
     <MatchQuery
-      value={query}
-      success={({ currentVaultId, vaults, initialView }) => (
-        <I18nProvider>
-          <NavigationProvider initialValue={{ history: [initialView] }}>
-            <RootErrorBoundary>
-              <VaultsProvider value={vaults}>
-                <CurrentVaultIdProvider value={currentVaultId}>
-                  <RootCurrentVaultProvider>
-                    {children}
-                  </RootCurrentVaultProvider>
-                </CurrentVaultIdProvider>
-              </VaultsProvider>
-            </RootErrorBoundary>
-          </NavigationProvider>
-        </I18nProvider>
-      )}
+      value={baseQueries}
+      pending={() => <ProductLogoBlock />}
       error={error => (
         <FlowErrorPageContent
           title="Failed to load essential data from the storage"
           message={extractErrorMsg(error)}
         />
       )}
-      pending={() => <ProductLogoBlock />}
+      success={({ initialView }) => (
+        <I18nProvider>
+          <NavigationProvider initialValue={{ history: [initialView] }}>
+            <RootErrorBoundary>
+              <VaultsProvider value={vaultsData}>
+                <CurrentVaultIdProvider value={currentVaultId}>
+                  {children}
+                </CurrentVaultIdProvider>
+              </VaultsProvider>
+            </RootErrorBoundary>
+          </NavigationProvider>
+        </I18nProvider>
+      )}
     />
   )
 }

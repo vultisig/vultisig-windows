@@ -45,7 +45,7 @@ export const useCurrentVaultIdQuery = () => {
 export const CurrentVaultIdProvider = ({
   children,
   value,
-}: ChildrenProp & ValueProp<string>) => {
+}: ChildrenProp & ValueProp<string | null>) => {
   const vaults = useVaults()
 
   const guardedValue = useMemo(() => {
