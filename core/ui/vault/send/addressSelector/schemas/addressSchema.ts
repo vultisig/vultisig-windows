@@ -8,10 +8,12 @@ import { z } from 'zod'
 export const getAddressSchema = ({
   walletCore,
   addressBookItems,
+  chain,
   t,
 }: {
   walletCore: WalletCore
   addressBookItems: AddressBookItem[]
+  chain: Chain
   t: TFunction
 }) =>
   z
@@ -23,13 +25,12 @@ export const getAddressSchema = ({
       address: z
         .string()
         .min(1, t('vault_settings_address_book_address_min_length_error')),
-      chain: z.string(),
     })
     .superRefine(async (data, ctx) => {
-      const { address, chain } = data
+      const { address } = data
 
       const isValid = isValidAddress({
-        chain: chain as Chain,
+        chain,
         address,
         walletCore,
       })
@@ -57,9 +58,11 @@ export const getAddressSchema = ({
 
 export const getModifyAddressSchema = ({
   walletCore,
+  chain,
   t,
 }: {
   walletCore: WalletCore
+  chain: Chain
   t: TFunction
 }) =>
   z
@@ -71,13 +74,12 @@ export const getModifyAddressSchema = ({
       address: z
         .string()
         .min(1, t('vault_settings_address_book_address_min_length_error')),
-      chain: z.string(),
     })
     .superRefine(async (data, ctx) => {
-      const { address, chain } = data
+      const { address } = data
 
       const isValid = isValidAddress({
-        chain: chain as Chain,
+        chain,
         address,
         walletCore,
       })

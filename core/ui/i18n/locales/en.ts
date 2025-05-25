@@ -8,6 +8,8 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  extension_vault_import_restriction:
+    'Only DKLS vaults can be imported in extension',
   failed_to_migrate_storage: 'Failed to migrate storage',
   general: 'General',
   github: 'Github',
@@ -51,6 +53,7 @@ export const en = {
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
+  unexpected_error: 'Unexpected Error',
   youre_swapping: "You're swapping",
   missing_public_key_ecdsa: 'Missing Public Key ECDSA',
   missing_verification_code: 'Missing Verification Code',
@@ -131,6 +134,7 @@ export const en = {
   done: 'Done',
   and: 'and',
   approve: 'Approve',
+  approval_tx: 'Approval Tx',
   information_note1:
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',
@@ -826,4 +830,9 @@ export const en = {
     'Please provide camera permission to scan the QR code',
   grant_camera_permission: 'Grant Camera Permission',
   failed_to_get_camera_permission: 'Failed to get camera permission',
+  custom_token: 'Custom Token',
+  find_custom_token: 'Find Your Custom Token',
+  enter_contract_address: 'Enter Contract Address',
+  no_token_found: 'No token found',
+  invalid_token_address: 'Enter a valid token address',
 }

@@ -19,12 +19,13 @@ import { SaveFile } from '../wailsjs/go/main/App'
 import { DiscoveryService } from '../wailsjs/go/mediator/Server'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { getQueryClient } from './query/queryClient'
-import { storage } from './state/storage'
+import { storage } from './storage'
 
 const queryClient = getQueryClient()
 
 const coreState: CoreState = {
   ...storage,
+  client: 'desktop',
   openUrl: BrowserOpenURL,
   saveFile: async ({ name, blob }) => {
     const arrayBuffer = await blob.arrayBuffer()

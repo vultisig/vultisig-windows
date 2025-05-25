@@ -39,6 +39,8 @@ export const de = {
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   staked: 'Gestaket',
   select_network: 'Netzwerk auswählen',
+  approval_tx: 'Genehmigungstransaktion',
+  unexpected_error: 'Unerwarteter Fehler',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
@@ -865,4 +867,10 @@ export const de = {
   grant_camera_permission: 'Kameraberechtigung erteilen',
   failed_to_get_camera_permission:
     'Kameraberechtigung konnte nicht eingeholt werden',
+  failed_to_migrate_storage: 'Speichermigration fehlgeschlagen',
+  custom_token: 'Benutzerdefiniertes Token',
+  find_custom_token: 'Finden Sie Ihr benutzerdefiniertes Token',
+  enter_contract_address: 'Vertragsadresse eingeben',
+  no_token_found: 'Kein Token gefunden',
+  invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
 }

@@ -1,15 +1,16 @@
-import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { vaultsCoinsQueryKey } from '@core/ui/query/keys'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
+import { CreateVaultCoinsFunction } from './CoreStorage'
 import { useAssertCurrentVaultId } from './currentVaultId'
+import { StorageKey } from './StorageKey'
 
 export const useCreateCoinMutation = () => {
   const vault = useCurrentVault()
@@ -37,11 +38,12 @@ export const useCreateCoinMutation = () => {
     })
 
     await createVaultCoin({ vaultId, coin: { ...coin, address } })
+
+    await invalidate([StorageKey.vaultsCoins])
   }
 
   return useMutation({
     mutationFn,
-    onSuccess: () => invalidate(vaultsCoinsQueryKey),
   })
 }
 
@@ -50,11 +52,9 @@ export const useCreateCoinsMutation = () => {
 
   const { createVaultCoins } = useCore()
 
-  const vaultId = useAssertCurrentVaultId()
-
-  const mutationFn = async (coins: AccountCoin[]) => {
-    await createVaultCoins({ vaultId, coins })
-    await invalidate(vaultsCoinsQueryKey)
+  const mutationFn: CreateVaultCoinsFunction = async input => {
+    await createVaultCoins(input)
+    await invalidate([StorageKey.vaultsCoins])
   }
 
   return useMutation({
@@ -71,7 +71,7 @@ export const useDeleteCoinMutation = () => {
 
   const mutationFn = async (coinKey: AccountCoinKey) => {
     await deleteVaultCoin({ vaultId, coinKey })
-    await invalidate(vaultsCoinsQueryKey)
+    await invalidate([StorageKey.vaultsCoins])
   }
 
   return useMutation({

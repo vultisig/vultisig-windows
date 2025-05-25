@@ -7,7 +7,7 @@ import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload/UploadQrPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
-import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin/ManageVaultChainCoinsPage'
+import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
@@ -25,6 +25,8 @@ import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/fold
 import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
+
+import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -53,6 +55,8 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultDetails'
   | 'vaults'
+  | 'manageVaultFolder'
+  | 'addCustomToken'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -88,4 +92,5 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   vaults: VaultsPage,
+  addCustomToken: AddCustomTokenPage,
 }

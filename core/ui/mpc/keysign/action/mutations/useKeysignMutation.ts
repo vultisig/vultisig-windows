@@ -17,7 +17,6 @@ import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getLastItem } from '@lib/utils/array/getLastItem'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
@@ -35,7 +34,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
     mutationFn: async () => {
       return matchRecordUnion<
         KeysignMessagePayload,
-        Promise<string | ExecuteTxResultWithEncoded>
+        Promise<(string | ExecuteTxResultWithEncoded)[]>
       >(payload, {
         keysign: async payload => {
           const chain = getKeysignChain(payload)
@@ -98,7 +97,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             })
           )
 
-          return getLastItem(hashes)
+          return hashes
         },
         custom: async ({ message }) => {
           const messageToHash = message.startsWith('0x')
@@ -124,7 +123,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             signatureFormat,
           })
 
-          return Buffer.from(result).toString('hex')
+          return [Buffer.from(result).toString('hex')]
         },
       })
     },

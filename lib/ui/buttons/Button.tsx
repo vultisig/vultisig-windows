@@ -11,6 +11,7 @@ import { match } from '@lib/utils/match'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { cropText } from '../css/cropText'
 import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
@@ -33,11 +34,12 @@ interface ContainerProps {
 
 const Container = styled(UnstyledButton)<ContainerProps>`
   ${centerContent};
+  ${cropText};
+  ${round};
   position: relative;
   white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
-  ${round};
 
   ${({ size }) =>
     match(size, {

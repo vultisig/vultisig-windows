@@ -1,4 +1,3 @@
-import { languageQueryKey } from '@core/ui/query/keys'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
@@ -6,12 +5,13 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
 import { SetLanguageFunction } from './CoreStorage'
+import { StorageKey } from './StorageKey'
 
 export const useLanguageQuery = () => {
   const { getLanguage } = useCore()
 
   return useQuery({
-    queryKey: languageQueryKey,
+    queryKey: [StorageKey.language],
     queryFn: getLanguage,
     ...fixedDataQueryOptions,
   })
@@ -29,7 +29,7 @@ export const useSetLanguageMutation = () => {
 
   const mutationFn: SetLanguageFunction = async input => {
     await setLanguage(input)
-    await invalidateQueries(languageQueryKey)
+    await invalidateQueries([StorageKey.language])
   }
 
   return useMutation({

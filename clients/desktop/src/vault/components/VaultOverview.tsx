@@ -1,12 +1,13 @@
-import { ManageVaultChainsPrompt } from '@core/ui/vault/chain/manage/ManageVaultChainsPrompt'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
-import { ScrollableFlexboxFiller } from '@lib/ui/layout/ScrollableFlexboxFiller'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
@@ -21,11 +22,13 @@ const PromptsContainer = styled.div`
 `
 
 export const VaultOverview = () => {
+  const { t } = useTranslation()
+  const navigate = useCoreNavigate()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
   const { isBackedUp, libType } = useCurrentVault()
 
   return (
-    <ScrollableFlexboxFiller>
+    <VStack fullHeight>
       <Wrap
         wrap={children =>
           areEmptyChildren(children) ? null : (
@@ -36,20 +39,20 @@ export const VaultOverview = () => {
         {!isBackedUp && <VaultBackupBanner />}
         {libType !== 'DKLS' && <MigrateVaultPrompt />}
       </Wrap>
-      <PageContent>
-        <VStack gap={32}>
-          <VStack gap={24} alignItems="center">
-            <VaultTotalBalance />
-            <VaultPrimaryActions />
-          </VStack>
-          <VStack gap={16}>
-            {vaultChainBalances.map(balance => (
-              <VaultChainItem key={balance.chain} balance={balance} />
-            ))}
-            <ManageVaultChainsPrompt />
-          </VStack>
+      <PageContent gap={32} flexGrow>
+        <VStack alignItems="center" gap={24}>
+          <VaultTotalBalance />
+          <VaultPrimaryActions />
+        </VStack>
+        <VStack gap={16}>
+          {vaultChainBalances.map(balance => (
+            <VaultChainItem key={balance.chain} balance={balance} />
+          ))}
+          <ListAddButton onClick={() => navigate({ id: 'manageVaultChains' })}>
+            {t('choose_chains')}
+          </ListAddButton>
         </VStack>
       </PageContent>
-    </ScrollableFlexboxFiller>
+    </VStack>
   )
 }

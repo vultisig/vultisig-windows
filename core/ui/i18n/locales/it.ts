@@ -10,7 +10,9 @@ export const it = {
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
+  approval_tx: 'Transazione di approvazione',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
@@ -858,4 +860,10 @@ export const it = {
   grant_camera_permission: "Concedi l'autorizzazione per la telecamera",
   failed_to_get_camera_permission:
     "Impossibile ottenere l'autorizzazione per la fotocamera",
+  failed_to_migrate_storage: "Impossibile migrare l'archiviazione",
+  custom_token: 'Token personalizzato',
+  find_custom_token: 'Trova il tuo token personalizzato',
+  enter_contract_address: "Inserisci l'indirizzo del contratto",
+  no_token_found: 'Nessun token trovato',
+  invalid_token_address: 'Inserisci un indirizzo token valido',
 }

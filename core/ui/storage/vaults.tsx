@@ -1,4 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -9,9 +10,9 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { vaultsCoinsQueryKey, vaultsQueryKey } from '../query/keys'
 import { getVaultId, Vault } from '../vault/Vault'
 import { DeleteVaultFunction } from './CoreStorage'
+import { StorageKey } from './StorageKey'
 
 type MergeVaultsWithCoinsInput = {
   vaults: Vault[]
@@ -21,13 +22,11 @@ type MergeVaultsWithCoinsInput = {
 const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
     const vaultCoins = coins[getVaultId(vault)] ?? []
-
-    // Include both native and non-native tokens but filter out hidden ones
-    const displayCoins = vaultCoins.filter(coin => !coin.hidden)
+    const vaultChains = vaultCoins.filter(isFeeCoin).map(coin => coin.chain)
 
     return {
       ...vault,
-      coins: displayCoins,
+      coins: vaultCoins.filter(coin => vaultChains.includes(coin.chain)),
     }
   })
 }
@@ -39,13 +38,13 @@ export const useVaultsQuery = () => {
   const { getVaults, getVaultsCoins } = useCore()
 
   const vaults = useQuery({
-    queryKey: vaultsQueryKey,
+    queryKey: [StorageKey.vaults],
     queryFn: getVaults,
     ...fixedDataQueryOptions,
   })
 
   const coins = useQuery({
-    queryKey: vaultsCoinsQueryKey,
+    queryKey: [StorageKey.vaultsCoins],
     queryFn: getVaultsCoins,
     ...fixedDataQueryOptions,
   })
@@ -95,7 +94,7 @@ export const useDeleteVaultMutation = () => {
 
   const mutationFn: DeleteVaultFunction = async input => {
     await deleteVault(input)
-    await invalidateQueries(vaultsQueryKey)
+    await invalidateQueries([StorageKey.vaults])
   }
 
   return useMutation({
