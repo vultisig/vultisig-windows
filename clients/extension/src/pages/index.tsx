@@ -5,12 +5,15 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
 import { views } from '../navigation/views'
+import { AuthProvider } from '../providers/AuthProvider'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProviders>
       <VStack fullSize>
-        <ActiveView views={views} />
+        <AuthProvider>
+          <ActiveView views={views} />
+        </AuthProvider>
       </VStack>
     </AppProviders>
   </StrictMode>
