@@ -5,7 +5,7 @@ import { ITransaction } from '../../utils/interfaces'
 export const transactionsQueryKey = ['transactions']
 const [key] = transactionsQueryKey
 
- type VaultsTransactions = Record<string, ITransaction[]>
+type VaultsTransactions = Record<string, ITransaction[]>
 
 export const getVaultsTransactions = async (): Promise<VaultsTransactions> => {
   return getPersistentState<VaultsTransactions>(key, {})

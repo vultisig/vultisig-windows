@@ -20,8 +20,6 @@ export enum MessageKey {
   VAULTS = 'vaults',
 }
 
-
-
 export enum Instance {
   CONNECT = 'connect',
   TRANSACTION = 'transaction',
