@@ -2,10 +2,10 @@ import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
+import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
-import { processBackgroundResponse } from '../../utils/functions'
 
 export class UTXO extends EventEmitter {
   public chainId: string
