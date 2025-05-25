@@ -15,7 +15,7 @@ import {
 const UpdateAvailablePopup = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const { version } = useCore()
+  const { version: localVersion } = useCore()
 
   const { latestVersion, updateAvailable, remoteError, isLoading } =
     useVersionCheck()
@@ -38,7 +38,7 @@ const UpdateAvailablePopup = () => {
       <Text size={14} color="contrast" weight={500}>
         {t('updatePopup.updateAvailableMessage', {
           latestVersion,
-          version,
+          localVersion,
         })}
       </Text>
       <StyledButton onClickCapture={() => navigate({ id: 'checkUpdate' })}>
