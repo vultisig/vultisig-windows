@@ -249,8 +249,8 @@ export const TransactionPage = () => {
                               )}
                             </>
                           ),
-                          custom: () => <></>,
-                          serialized: () => <></>,
+                          custom: () => null,
+                          serialized: () => null,
                         }}
                       />
                     </>
