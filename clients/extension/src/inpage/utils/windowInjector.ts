@@ -1,10 +1,10 @@
+import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
+import { messengers } from '@clients/extension/src/inpage/messenger'
+import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
+import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
+import { MessageKey } from '@clients/extension/src/utils/constants'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-
-import VULTI_ICON_RAW_SVG from '../icon'
-import { messengers } from '../messenger'
-import { Ethereum } from '../providers/ethereum'
-import { createProviders } from '../providers/providerFactory'
 
 export const injectToWindow = () => {
   const providers = createProviders()
@@ -15,13 +15,13 @@ export const injectToWindow = () => {
     getVault: async () =>
       messengers.background.send(
         'providerRequest',
-        { type: 'VAULT', message: {} },
+        { type: MessageKey.VAULT, message: {} },
         { id: uuidv4() }
       ),
     getVaults: async () =>
       messengers.background.send(
         'providerRequest',
-        { type: 'VAULTS', message: {} },
+        { type: MessageKey.VAULTS, message: {} },
         { id: uuidv4() }
       ),
   }
