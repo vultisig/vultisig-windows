@@ -8,6 +8,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
+import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
@@ -54,7 +55,9 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
             <RootErrorBoundary>
               <VaultsProvider value={vaultsData}>
                 <CurrentVaultIdProvider value={currentVaultId}>
-                  {children}
+                  <RootCurrentVaultProvider>
+                    {children}
+                  </RootCurrentVaultProvider>
                 </CurrentVaultIdProvider>
               </VaultsProvider>
             </RootErrorBoundary>

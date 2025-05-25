@@ -1,4 +1,6 @@
+import { AppViewId } from '@clients/extension/src/navigation/AppView'
+
 export type View = {
-  id: string
+  id: AppViewId
   state?: any
 }

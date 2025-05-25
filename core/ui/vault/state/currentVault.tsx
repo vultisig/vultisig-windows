@@ -11,10 +11,18 @@ import { useVaults } from '../../storage/vaults'
 
 export const currentVaultContextId = 'CurrentVault'
 
-export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
-  getValueProviderSetup<Vault & Partial<{ coins: AccountCoin[] }>>(
-    currentVaultContextId
-  )
+type CurrentVault = (Vault & Partial<{ coins: AccountCoin[] }>) | null
+
+export const {
+  useValue: useInternalCurrentVault,
+  provider: CurrentVaultProvider,
+} = getValueProviderSetup<CurrentVault>(currentVaultContextId)
+
+export const useCurrentVault = () => {
+  const currentVault = useInternalCurrentVault()
+
+  return shouldBePresent(currentVault)
+}
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
@@ -25,12 +33,7 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const id = useCurrentVaultId()
   const vaults = useVaults()
-
-  if (!id) {
-    return <>{children}</>
-  }
-
-  const vault = shouldBePresent(vaults.find(vault => getVaultId(vault) === id))
+  const vault = vaults.find(vault => getVaultId(vault) === id) || null
 
   return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>
 }
