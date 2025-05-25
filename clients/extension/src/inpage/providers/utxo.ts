@@ -5,6 +5,7 @@ import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { Messaging } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
+import { processBackgroundResponse } from '../../utils/functions'
 
 export class UTXO extends EventEmitter {
   public chainId: string
@@ -74,8 +75,14 @@ export class UTXO extends EventEmitter {
         { id: uuidv4() }
       )
 
-      if (callback) callback(null, response)
-      return response
+      const result = processBackgroundResponse(
+        data,
+        this.providerType,
+        response
+      )
+
+      if (callback) callback(null, result)
+      return result
     } catch (error) {
       if (callback) callback(error as Error)
       throw error
