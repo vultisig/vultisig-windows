@@ -19,7 +19,7 @@ const AddressBookSettingsPage = () => {
 
   return (
     <VStack flexGrow gap={16} fullHeight>
-      <PageSlice gap={16} flexGrow={true}>
+      <PageSlice flexGrow={true}>
         <Match
           value={
             isAddAddressViewOpen
@@ -29,11 +29,10 @@ const AddressBookSettingsPage = () => {
                 : 'list'
           }
           addAddress={() => (
-            <AddAddressForm onClose={() => setIsAddAddressViewOpen(false)} />
+            <AddAddressForm />
           )}
           empty={() => (
             <EmptyAddressesView
-              onOpenAddAddressView={handleOpenAddAddressView}
             />
           )}
           list={() => (

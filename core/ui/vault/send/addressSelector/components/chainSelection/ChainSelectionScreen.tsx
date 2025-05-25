@@ -1,18 +1,24 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
+import { sum } from '@lib/utils/array/sum'
+import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { getCoinOptions } from '../../helpers/getCoinOptions'
 
 const Container = styled.div`
   height: 100%;
@@ -29,18 +35,52 @@ const Content = styled.div`
 const ChainList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 24px;
+  margin-top: 8px;
+  background-color: #061b3a;
+  border-radius: 12px;
 `
 
 const ChainItem = styled(HStack)`
   cursor: pointer;
-  padding: 12px;
-  border-radius: 8px;
+  height: 60px;
+  min-height: 58px;
+  padding: 12px 20px;
+  gap: 16px;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-width: 1px;
+  border-bottom-color: #11284a;
   transition: background-color 0.2s;
+  background-color: #061b3a;
+  justify-content: space-between;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+  }
+`
+
+const ChainContent = styled(HStack)`
+  gap: 16px;
+  align-items: center;
+`
+
+const Checkbox = styled.div<{ checked?: boolean }>`
+  width: 20px;
+  height: 20px;
+  border: 1px solid ${props => (props.checked ? '#4CAF50' : '#11284A')};
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #061b3a;
+
+  &:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: #4caf50;
+    border-radius: 2px;
+    display: ${props => (props.checked ? 'block' : 'none')};
   }
 `
 
@@ -49,8 +89,19 @@ const ChainSelectionScreen = () => {
   const goBack = useNavigateBack()
   const [state] = useCoreViewState<'chainSelection'>()
   const [search, setSearch] = useState('')
+  const [selectedChain, setSelectedChain] = useState<Chain | null>(
+    state?.selectedChain || null
+  )
+  const fiatCurrency = useFiatCurrency()
+  const balancesQuery = useVaultChainsBalancesQuery()
 
-  const chainOptions = useMemo(() => getCoinOptions(), [])
+  const chainOptions = useMemo(() => {
+    if (!balancesQuery.data) return []
+    return balancesQuery.data.map(balance => ({
+      value: balance.chain,
+      label: balance.chain,
+    }))
+  }, [balancesQuery.data])
 
   const filteredChains = useMemo(() => {
     if (!search) return chainOptions
@@ -62,7 +113,33 @@ const ChainSelectionScreen = () => {
   }, [chainOptions, search])
 
   const handleChainSelect = (chain: Chain) => {
+    setSelectedChain(chain)
     state.onChainSelect(chain)
+  }
+
+  const getChainBalance = (chain: Chain) => {
+    if (!balancesQuery.data) return null
+    const chainBalance = balancesQuery.data.find(b => b.chain === chain)
+    if (!chainBalance) return null
+
+    const totalAmount = sum(
+      chainBalance.coins.map(coin =>
+        getCoinValue({
+          price: coin.price ?? 0,
+          amount: coin.amount,
+          decimals: coin.decimals,
+        })
+      )
+    )
+
+    const singleCoin =
+      chainBalance.coins.length === 1 ? chainBalance.coins[0] : null
+
+    return {
+      totalAmount,
+      singleCoin,
+      assets: chainBalance.coins.length,
+    }
   }
 
   return (
@@ -77,27 +154,55 @@ const ChainSelectionScreen = () => {
           onValueChange={setSearch}
           value={search}
         />
-        <Text size={12} weight={500} color="light">
+        <Text size={12} weight={500} color="light" style={{ marginTop: 16 }}>
           {'Chains'}
         </Text>
         <ChainList>
-          {filteredChains.map(option => (
-            <ChainItem
-              key={option.value}
-              alignItems="center"
-              gap={12}
-              onClick={() => handleChainSelect(option.value as Chain)}
-            >
-              <img
-                src={getChainEntityIconSrc(option.value)}
-                alt=""
-                style={{ width: 24, height: 24 }}
-              />
-              <Text color="contrast" size={14} weight="500">
-                {option.value}
-              </Text>
-            </ChainItem>
-          ))}
+          {filteredChains.map(option => {
+            const balance = getChainBalance(option.value as Chain)
+            const isSelected = selectedChain === option.value
+            return (
+              <ChainItem
+                key={option.value}
+                alignItems="center"
+                onClick={() => handleChainSelect(option.value as Chain)}
+              >
+                <ChainContent>
+                  <img
+                    src={getChainEntityIconSrc(option.value)}
+                    alt=""
+                    style={{ width: 24, height: 24 }}
+                  />
+                  <Text color="contrast" size={14} weight="500">
+                    {option.value}
+                  </Text>
+                </ChainContent>
+                <HStack gap={12} alignItems="center">
+                  {balance && (
+                    <VStack gap={4} alignItems="end">
+                      <Text color="contrast" size={14} weight="500">
+                        <BalanceVisibilityAware>
+                          {formatAmount(balance.totalAmount, fiatCurrency)}
+                        </BalanceVisibilityAware>
+                      </Text>
+                      <Text color="light" size={12} weight="500">
+                        {balance.assets > 1
+                          ? `${balance.assets} ${t('assets')}`
+                          : balance.singleCoin &&
+                            formatTokenAmount(
+                              fromChainAmount(
+                                balance.singleCoin.amount,
+                                balance.singleCoin.decimals
+                              )
+                            )}
+                      </Text>
+                    </VStack>
+                  )}
+                  <Checkbox checked={isSelected} />
+                </HStack>
+              </ChainItem>
+            )
+          })}
         </ChainList>
       </Content>
     </Container>

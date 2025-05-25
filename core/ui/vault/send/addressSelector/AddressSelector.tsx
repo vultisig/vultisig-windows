@@ -33,14 +33,8 @@ const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
                 ? 'empty'
                 : 'list'
           }
-          addAddress={() => (
-            <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
-          )}
-          empty={() => (
-            <EmptyAddressesView
-              onOpenAddAddressView={handleOpenAddAddressView}
-            />
-          )}
+          addAddress={() => <AddAddressView />}
+          empty={() => <EmptyAddressesView />}
           list={() => (
             <AddressesListView
               onClick={onAddressClick}

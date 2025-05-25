@@ -6,24 +6,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { components, OptionProps, SingleValueProps } from 'react-select'
 import styled from 'styled-components'
 
-export const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 32px;
-`
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  & > :first-child {
-    padding: 8px;
-  }
-`
-
 export const FormField = styled(Panel)`
   font-weight: 400;
   font-size: 16px;

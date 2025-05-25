@@ -10,7 +10,10 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
@@ -20,24 +23,17 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 
-import { AddressBookPageHeader } from '../../AddressSelector.styles'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '../../hooks/useAddressSchema'
 import {
   AddButton,
-  Container,
-  Form,
   FormField,
   FormFieldLabel,
   FormInput,
   InputWrapper,
 } from './AddAddressForm.styles'
-
-type AddAddressFormProps = {
-  onClose: () => void
-}
 
 const QrScanner = ({ onFinish }: { onFinish: (address: string) => void }) => (
   <CameraPermissionGuard>
@@ -45,7 +41,7 @@ const QrScanner = ({ onFinish }: { onFinish: (address: string) => void }) => (
   </CameraPermissionGuard>
 )
 
-const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
+const AddAddressForm = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [state] = useCoreViewState<'addAddress'>()
@@ -86,7 +82,6 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       },
       {
         onSuccess: () => {
-          onClose()
           navigate({ id: 'addressBook' })
         },
       }
@@ -110,6 +105,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     navigate({
       id: 'chainSelection',
       state: {
+        selectedChain,
         onChainSelect: (chain: Chain) => {
           setValue('chain', chain)
           navigate({
@@ -126,118 +122,118 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   }
 
   return (
-    <>
-      <AddressBookPageHeader
+    <VStack fullHeight as="form" onSubmit={handleSubmit(handleAddAddress)}>
+      <PageHeader
         primaryControls={
           <PageHeaderBackButton
-            onClick={() => navigate({ id: 'addressBook' })}
+            onClick={() => navigate({ id: 'settings' })}
           />
         }
         title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
       />
 
-      <Container>
-        <Form onSubmit={handleSubmit(handleAddAddress)}>
-          <FormField>
-            <HStack
-              alignItems="center"
-              justifyContent={selectedChain ? 'flex-start' : 'space-between'}
-              gap={12}
-              style={{ cursor: 'pointer', padding: '12px' }}
-              onClick={handleSelectChain}
-            >
-              {selectedChain ? (
-                <>
-                  <img
-                    src={getChainEntityIconSrc(selectedChain)}
-                    alt=""
-                    style={{ width: 24, height: 24 }}
-                  />
-                  <Text color="contrast" size={14} weight="500">
-                    {selectedChain}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text color="shy" size={14} weight="500">
-                    Select
-                  </Text>
-                  <ChevronRightIcon style={{ marginRight: '0' }} />
-                </>
-              )}
-            </HStack>
-          </FormField>
+      <PageContent fullHeight gap={16}>
+        <FormField>
+          <HStack
+            alignItems="center"
+            justifyContent={selectedChain ? 'flex-start' : 'space-between'}
+            gap={12}
+            style={{ cursor: 'pointer', padding: '12px' }}
+            onClick={handleSelectChain}
+          >
+            {selectedChain ? (
+              <>
+                <img
+                  src={getChainEntityIconSrc(selectedChain)}
+                  alt=""
+                  style={{ width: 24, height: 24 }}
+                />
+                <Text color="contrast" size={14} weight="500">
+                  {selectedChain}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text color="shy" size={14} weight="500">
+                  Select
+                </Text>
+                <ChevronRightIcon style={{ marginRight: '0' }} />
+              </>
+            )}
+          </HStack>
+        </FormField>
 
-          <div>
-            <FormFieldLabel htmlFor="title">
-              {t('vault_settings_address_book_address_title_field')}
-            </FormFieldLabel>
-            <FormField>
+        <div>
+          <FormFieldLabel htmlFor="title">
+            {t('vault_settings_address_book_address_title_field')}
+          </FormFieldLabel>
+          <FormField>
+            <FormInput
+              id="title"
+              {...register('title')}
+              placeholder={t('vault_settings_address_book_address_placeholder')}
+            />
+          </FormField>
+          {errors.title && (
+            <Text color="danger" size={12}>
+              {errors.title.message}
+            </Text>
+          )}
+        </div>
+
+        <div>
+          <FormFieldLabel htmlFor="address">
+            {t('vault_settings_address_book_address_title_field')}
+          </FormFieldLabel>
+          <FormField>
+            <InputWrapper>
               <FormInput
-                id="title"
-                {...register('title')}
+                id="address"
+                {...register('address')}
                 placeholder={t(
                   'vault_settings_address_book_address_placeholder'
                 )}
               />
-            </FormField>
-            {errors.title && (
-              <Text color="danger" size={12}>
-                {errors.title.message}
-              </Text>
-            )}
-          </div>
-
-          <div>
-            <FormFieldLabel htmlFor="address">
-              {t('vault_settings_address_book_address_title_field')}
-            </FormFieldLabel>
-            <FormField>
-              <InputWrapper>
-                <FormInput
-                  id="address"
-                  {...register('address')}
-                  placeholder={t(
-                    'vault_settings_address_book_address_placeholder'
-                  )}
+              <HStack gap={8}>
+                <IconButton
+                  icon={<PasteIcon />}
+                  onClick={handlePasteAddress}
+                  title={t('successful_copy_text')}
                 />
-                <HStack gap={8}>
-                  <IconButton
-                    icon={<PasteIcon />}
-                    onClick={handlePasteAddress}
-                    title={t('successful_copy_text')}
-                  />
-                  <IconButton
-                    icon={<CameraIcon />}
-                    onClick={() => setShowQrScanner(true)}
-                    title={t('scan_qr')}
-                  />
-                </HStack>
-              </InputWrapper>
-            </FormField>
-            {errors.address && (
-              <Text color="danger" size={12}>
-                {errors.address.message}
-              </Text>
-            )}
-          </div>
+                <IconButton
+                  icon={<CameraIcon />}
+                  onClick={() => setShowQrScanner(true)}
+                  title={t('scan_qr')}
+                />
+              </HStack>
+            </InputWrapper>
+          </FormField>
+          {errors.address && (
+            <Text color="danger" size={12}>
+              {errors.address.message}
+            </Text>
+          )}
+        </div>
+      </PageContent>
 
-          <AddButton
-            isLoading={isAddAddressBookAddressPending}
-            isDisabled={!isValid || !isDirty}
-            onClick={handleSubmit(handleAddAddress)}
-          >
-            {t('vault_settings_address_book_save_addresses_button')}
-          </AddButton>
+      <PageFooter>
+        <AddButton
+          type="submit"
+          isLoading={isAddAddressBookAddressPending}
+          isDisabled={!isValid || !isDirty}
+        >
+          {t('vault_settings_address_book_save_addresses_button')}
+        </AddButton>
 
-          {addAddressBookAddressError && (
+        {addAddressBookAddressError &&
+          (console.log(addAddressBookAddressError),
+          (
             <Text color="danger" size={12}>
               {extractErrorMsg(addAddressBookAddressError)}
             </Text>
-          )}
-        </Form>
-      </Container>
-    </>
+          ))}
+      </PageFooter>
+    </VStack>
   )
 }
 

@@ -5,17 +5,16 @@ import { Text } from '@lib/ui/text'
 import { GradientText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
 import { CenteredBox, Container } from './EmptyAddressView.styles'
 
-type EmptyAddressesViewProps = {
-  onOpenAddAddressView: () => void
-}
-
-const EmptyAddressesView = ({
-  onOpenAddAddressView,
-}: EmptyAddressesViewProps) => {
+const EmptyAddressesView = () => {
   const { t } = useTranslation()
+  const navigate = useCoreNavigate()
+  const handleAddAddress = () => {
+    navigate({ id: 'addAddress', state: {} })
+  }
 
   return (
     <>
@@ -33,7 +32,7 @@ const EmptyAddressesView = ({
             <br />
             {'favorite addresses'}
           </Text>
-          <Button onClick={onOpenAddAddressView} kind="outlined">
+          <Button onClick={handleAddAddress} kind="outlined">
             <GradientText>{t('add_address')}</GradientText>
           </Button>
         </CenteredBox>
