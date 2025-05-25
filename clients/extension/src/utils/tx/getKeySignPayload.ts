@@ -105,7 +105,7 @@ export const getKeysignPayload = (
               TransactionType.IBC_TRANSFER
 
             const hasTimeout =
-              !!transaction.transactionDetails.ibcTransaction!.timeoutTimestamp
+              !!transaction.transactionDetails.ibcTransaction?.timeoutTimestamp
 
             if (isIbcTransfer && hasTimeout) {
               try {
