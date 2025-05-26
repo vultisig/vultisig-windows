@@ -221,7 +221,7 @@ export const getRequiredFieldsPerChainAction = (
       {
         name: 'amount',
         type: 'number',
-        label: 'amount',
+        label: t('amount'),
         required: false,
       },
     ],
