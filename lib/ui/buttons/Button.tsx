@@ -57,7 +57,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       border: none;
       cursor: pointer;
       display: flex;
-      font-weight: ${weight};
+      font-weight: ${weight || 600};
       gap: 8px;
       justify-content: center;
       transition: all 0.2s;
