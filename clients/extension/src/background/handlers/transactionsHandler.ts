@@ -1,4 +1,4 @@
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -14,7 +14,7 @@ import { handleOpenPanel } from '../window/windowManager'
 
 export const handleSendTransaction = async (
   transaction: ITransaction
-): Promise<ExecuteTxResultWithEncoded> => {
+): Promise<TxResult> => {
   const uuid = uuidv4()
 
   try {
@@ -41,7 +41,7 @@ export const handleSendTransaction = async (
       windowId: createdWindowId,
     })
 
-    return await new Promise<ExecuteTxResultWithEncoded>((resolve, reject) => {
+    return await new Promise<TxResult>((resolve, reject) => {
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
 
@@ -59,7 +59,10 @@ export const handleSendTransaction = async (
 
           if (matchedTransaction.status === 'default') {
             // removing the transaction with default status from store
-            removeTransactionFromVault(currentVaultId, matchedTransaction.id)
+            removeTransactionFromVault(
+              currentVaultId,
+              shouldBePresent(matchedTransaction.id)
+            )
             reject(new Error('Transaction was not completed'))
           } else {
             if (matchedTransaction.txHash) {

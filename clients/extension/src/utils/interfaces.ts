@@ -2,7 +2,7 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { TransactionResponse } from 'ethers'
 
@@ -14,7 +14,7 @@ export namespace Messaging {
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
-      | ExecuteTxResultWithEncoded
+      | TxResult
   }
 
   export namespace GetVault {
@@ -169,7 +169,7 @@ type ITransactionPayload =
   | { serialized: Uint8Array }
 
 export interface ITransaction {
-  id: string
+  id?: string
   status: 'default' | 'error' | 'pending' | 'success'
   transactionPayload: ITransactionPayload
   txHash?: string

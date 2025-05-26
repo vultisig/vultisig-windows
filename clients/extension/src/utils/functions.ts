@@ -1,6 +1,7 @@
 import api from '@clients/extension/src/utils/api'
 import { getChainKind } from '@core/chain/ChainKind'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { VersionedTransaction } from '@solana/web3.js'
 
@@ -108,29 +109,30 @@ export const processBackgroundResponse = (
   messageKey: MessageKey,
   result: Messaging.Chain.Response
 ) => {
-  switch (data.method) {
-    case RequestMethod.CTRL.TRANSFER:
-    case RequestMethod.METAMASK.ETH_SEND_TRANSACTION:
-    case RequestMethod.VULTISIG.SEND_TRANSACTION:
-    case RequestMethod.CTRL.DEPOSIT:
-    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION:
-    case RequestMethod.METAMASK.PERSONAL_SIGN:
-    case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
-      if (messageKey === MessageKey.SOLANA_REQUEST) {
-        return (result as ExecuteTxResultWithEncoded).encoded
-      } else if (
-        messageKey === MessageKey.COSMOS_REQUEST &&
-        (data.params[0].txType === 'Vultisig' ||
-          data.params[0].txType === 'Keplr')
-      ) {
-        return result
-      }
-      return (result as ExecuteTxResultWithEncoded).txHash
-    }
-    default: {
+  const handledMethods = [
+    RequestMethod.CTRL.TRANSFER,
+    RequestMethod.METAMASK.ETH_SEND_TRANSACTION,
+    RequestMethod.VULTISIG.SEND_TRANSACTION,
+    RequestMethod.CTRL.DEPOSIT,
+    RequestMethod.VULTISIG.DEPOSIT_TRANSACTION,
+    RequestMethod.METAMASK.PERSONAL_SIGN,
+    RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4,
+  ]
+
+  if (isOneOf(data.method, handledMethods)) {
+    if (messageKey === MessageKey.SOLANA_REQUEST) {
+      return (result as TxResult).encoded
+    } else if (
+      messageKey === MessageKey.COSMOS_REQUEST &&
+      (data.params[0].txType === 'Vultisig' ||
+        data.params[0].txType === 'Keplr')
+    ) {
       return result
     }
+    return (result as TxResult).txHash
   }
+
+  return result
 }
 
 export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
@@ -145,7 +147,7 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
 
 export function parseTxResult(
   transaction: ITransaction,
-  txResult: string | ExecuteTxResultWithEncoded
+  txResult: string | TxResult
 ): { txHash: string; encoded?: string } {
   let txHash: string
   let encoded: string | undefined
@@ -154,7 +156,7 @@ export function parseTxResult(
     keysign: keysign => {
       const chainKind = getChainKind(keysign.chain)
       if (chainKind === 'cosmos' || chainKind === 'solana') {
-        const result = txResult as ExecuteTxResultWithEncoded
+        const result = txResult as TxResult
         txHash = result.txHash
         encoded = result.encoded as string
       } else {
@@ -165,7 +167,7 @@ export function parseTxResult(
       txHash = txResult as string
     },
     serialized: () => {
-      const result = txResult as ExecuteTxResultWithEncoded
+      const result = txResult as TxResult
       txHash = result.txHash
       encoded = result.encoded as string
     },

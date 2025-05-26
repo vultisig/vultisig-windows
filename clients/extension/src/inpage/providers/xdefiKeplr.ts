@@ -2,7 +2,7 @@ import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId } from '@core/chain/coin/ChainId'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -172,9 +172,7 @@ export class XDEFIKeplrProvider extends Keplr {
           params: [{ ..._tx, txType: 'Keplr' }],
         })
         .then(result => {
-          const decoded = base58.decode(
-            (result as ExecuteTxResultWithEncoded).encoded
-          )
+          const decoded = base58.decode((result as TxResult).encoded)
           if (decoded) resolve(decoded)
           else reject()
         })
@@ -263,7 +261,7 @@ export class XDEFIKeplrProvider extends Keplr {
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ...standardTx, txType: 'Vultisig' }],
-    })) as ExecuteTxResultWithEncoded
+    })) as TxResult
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,

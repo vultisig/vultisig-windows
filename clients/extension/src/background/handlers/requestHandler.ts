@@ -151,7 +151,6 @@ export const handleRequest = (
         if (chain === Chain.Solana && _transaction.serializedTx) {
           handleSendTransaction({
             transactionPayload: { serialized: _transaction.serializedTx },
-            id: '',
             status: 'default',
           })
             .then(result => resolve(result))
@@ -174,7 +173,6 @@ export const handleRequest = (
                   chain,
                 },
               },
-              id: '',
               status: 'default',
             }
             handleSendTransaction(modifiedTransaction)
@@ -203,7 +201,6 @@ export const handleRequest = (
                     chain,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction)
@@ -242,7 +239,6 @@ export const handleRequest = (
                     isDeposit: true,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction)
@@ -614,7 +610,6 @@ export const handleRequest = (
                   message: hashMessage,
                 },
               },
-              id: '',
               status: 'default',
             })
               .then(result => resolve(result))
@@ -642,7 +637,6 @@ export const handleRequest = (
                 message: `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`,
               },
             },
-            id: '',
             status: 'default',
           })
             .then(result => resolve(result))
@@ -674,7 +668,6 @@ export const handleRequest = (
                     isDeposit: true,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(tx)
@@ -706,7 +699,6 @@ export const handleRequest = (
                     chain,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(tx)
