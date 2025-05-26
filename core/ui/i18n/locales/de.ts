@@ -237,6 +237,7 @@ export const de = {
   vault_details_page_signer_word: 'Unterzeichner',
   vault_edit_page_title: 'Tresor bearbeiten',
   address_book: 'Adressbuch',
+  address_book_empty: 'Ihr Adressbuch ist leer',
   default_chains: 'Standard-Blockchains',
   share_app: 'App teilen',
   legal: 'Rechtliches',
@@ -867,4 +868,7 @@ export const de = {
   grant_camera_permission: 'Kameraberechtigung erteilen',
   failed_to_get_camera_permission:
     'Kameraberechtigung konnte nicht eingeholt werden',
+  address_book_empty_instruction: 'Klicken Sie auf "Adresse hinzufügen", um Ihre bevorzugten Adressen hinzuzufügen',
+  select_chains: 'Chains auswählen',
+  chains: 'Chains'
 }

@@ -146,7 +146,7 @@ const ChainSelectionScreen = () => {
     <Container>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
-        title={<PageHeaderTitle>{'Select Chains'}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{t('select_chains')}</PageHeaderTitle>}
       />
       <Content>
         <TextInput
@@ -155,7 +155,7 @@ const ChainSelectionScreen = () => {
           value={search}
         />
         <Text size={12} weight={500} color="light" style={{ marginTop: 16 }}>
-          {'Chains'}
+          {t('chains')}
         </Text>
         <ChainList>
           {filteredChains.map(option => {

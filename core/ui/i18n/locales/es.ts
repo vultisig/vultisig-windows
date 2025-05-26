@@ -238,6 +238,7 @@ export const es = {
   vault_edit_page_title: 'Editar bóveda',
   vault_details_page_signer_word: 'Firmante',
   address_book: 'Libreta de direcciones',
+  address_book_empty: 'Tu libreta de direcciones está vacía',
   default_chains: 'Blockchains predeterminadas',
   share_app: 'Compartir la aplicación',
   legal: 'Legal',
@@ -863,4 +864,7 @@ export const es = {
     'Proporcione permiso para escanear el código QR con la cámara',
   grant_camera_permission: 'Conceder permiso para la cámara',
   failed_to_get_camera_permission: 'No se pudo obtener el permiso de la cámara',
+  address_book_empty_instruction: 'Haz clic en "Añadir dirección" para añadir tus direcciones favoritas',
+  select_chains: 'Seleccionar chains',
+  chains: 'Chains'
 }

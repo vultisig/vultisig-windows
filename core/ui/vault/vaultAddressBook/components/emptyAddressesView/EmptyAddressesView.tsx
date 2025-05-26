@@ -25,12 +25,10 @@ const EmptyAddressesView = () => {
       <Container>
         <CenteredBox>
           <Text size={16} color="contrast" weight="600">
-            Your Address Book is empty
+            {t('address_book_empty')}
           </Text>
           <Text size={14} color="light" weight="600" centerHorizontally>
-            {'Click "Add Address" to add your'}
-            <br />
-            {'favorite addresses'}
+            {t('address_book_empty_instruction')}
           </Text>
           <Button onClick={handleAddAddress} kind="outlined">
             <GradientText>{t('add_address')}</GradientText>
