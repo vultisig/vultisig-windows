@@ -9,7 +9,6 @@ import { useCallback } from 'react'
 
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
-import { parseTxResult } from '../../../utils/functions'
 
 export const StartKeysignPage = () => {
   const currentVaultId = useAssertCurrentVaultId()
@@ -17,15 +16,18 @@ export const StartKeysignPage = () => {
   const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const onFinish = useCallback(
-    async (txResult: string | TxResult) => {
-      if (!transactions) {
+    async (txResult: TxResult) => {
+      if (!transactions || !transactions.length) {
         throw new Error('No current transaction present')
       }
       const transaction = getLastItem(transactions)
-      const { txHash, encoded } = parseTxResult(transaction, txResult)
 
       await updateTransaction({
-        transaction: { ...transaction, status: 'success', txHash, encoded },
+        transaction: {
+          ...transaction,
+          status: 'success',
+          ...txResult,
+        },
         vaultId: currentVaultId,
       })
 

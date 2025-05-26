@@ -7,7 +7,7 @@ import { getVaultsTransactions, transactionsQueryKey } from './transactions'
 
 export const currentVaultTransactionsQueryKey = ['currentVaultTransactions']
 
-export const useTransactionsQuery = () => {
+const useTransactionsQuery = () => {
   return useQuery({
     queryKey: transactionsQueryKey,
     queryFn: getVaultsTransactions,

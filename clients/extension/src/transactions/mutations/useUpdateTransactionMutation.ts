@@ -3,13 +3,11 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { ITransaction } from '../../utils/interfaces'
 import {
+  getVaultsTransactions,
   setVaultsTransactions,
   transactionsQueryKey,
 } from '../state/transactions'
-import {
-  currentVaultTransactionsQueryKey,
-  useTransactionsQuery,
-} from '../state/useTransactions'
+import { currentVaultTransactionsQueryKey } from '../state/useTransactions'
 
 type AddOrUpdateInput = {
   vaultId: string
@@ -20,11 +18,10 @@ export const useUpdateTransactionMutation = (
   options?: UseMutationOptions<any, any, AddOrUpdateInput, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
-  const { data: allTxs, isLoading } = useTransactionsQuery()
-
   return useMutation({
     mutationFn: async ({ vaultId, transaction }) => {
-      if (!allTxs || isLoading) {
+      const allTxs = await getVaultsTransactions()
+      if (!allTxs) {
         throw new Error('Transactions are not loaded yet.')
       }
 

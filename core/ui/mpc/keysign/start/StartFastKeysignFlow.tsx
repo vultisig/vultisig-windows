@@ -20,7 +20,7 @@ const keysignSteps = ['password', 'server', 'keysign'] as const
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<string | TxResult>>) => {
+}: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({

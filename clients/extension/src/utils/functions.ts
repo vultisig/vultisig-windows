@@ -1,13 +1,11 @@
 import api from '@clients/extension/src/utils/api'
-import { getChainKind } from '@core/chain/ChainKind'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
-import { ITransaction, Messaging } from './interfaces'
+import { Messaging } from './interfaces'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -144,35 +142,4 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
     'message' in tx &&
     'addressTableLookups' in tx.message
   )
-}
-
-export function parseTxResult(
-  transaction: ITransaction,
-  txResult: string | TxResult
-): { txHash: string; encoded?: string } {
-  let txHash: string
-  let encoded: string | undefined
-
-  matchRecordUnion(transaction.transactionPayload, {
-    keysign: keysign => {
-      const chainKind = getChainKind(keysign.chain)
-      if (chainKind === 'cosmos' || chainKind === 'solana') {
-        const result = txResult as TxResult
-        txHash = result.txHash
-        encoded = result.encoded as string
-      } else {
-        txHash = txResult as string
-      }
-    },
-    custom: () => {
-      txHash = txResult as string
-    },
-    serialized: () => {
-      const result = txResult as TxResult
-      txHash = result.txHash
-      encoded = result.encoded as string
-    },
-  })
-
-  return { txHash: txHash!, encoded }
 }
