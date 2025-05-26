@@ -43,6 +43,12 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
   })
 }
 
+type FunctionSchema = {
+  chain: Chain
+  walletCore: WalletCore
+  totalAmountAvailable: number
+}
+
 const CoinSchema = z.object({
   chain: z.string(),
   id: z.string(),
@@ -65,11 +71,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) => {
+    schema: ({ totalAmountAvailable }: FunctionSchema) => {
       return z.object({
         nodeAddress: z.string().min(1, 'Required'),
         selectedCoin: CoinSchema,
@@ -89,11 +91,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
         selectedCoin: CoinSchema,
         amount: z
@@ -113,11 +111,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
         selectedCoin: CoinSchema,
         destinationChain: z.string().min(1, 'Destination Chain is required'),
@@ -161,11 +155,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ walletCore, chain, totalAmountAvailable }: FunctionSchema) =>
       z.object({
         nodeAddress: z
           .string()
@@ -225,11 +215,7 @@ export const getRequiredFieldsPerChainAction = (
         required: false,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ walletCore, chain, totalAmountAvailable }: FunctionSchema) =>
       z.object({
         nodeAddress: z
           .string()
@@ -302,11 +288,7 @@ export const getRequiredFieldsPerChainAction = (
         required: false,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      _totalAmountAvailable: number
-    ) =>
+    schema: ({ walletCore, chain }: FunctionSchema) =>
       z.object({
         nodeAddress: z
           .string()
@@ -350,11 +332,7 @@ export const getRequiredFieldsPerChainAction = (
         required: false,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ walletCore, chain, totalAmountAvailable }: FunctionSchema) =>
       z.object({
         nodeAddress: z
           .string()
@@ -415,11 +393,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      _totalAmountAvailable: number
-    ) =>
+    schema: ({ walletCore, chain }: FunctionSchema) =>
       z.object({
         nodeAddress: z
           .string()
@@ -455,11 +429,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      _chain: Chain,
-      _walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
         amount: z
           .string()
@@ -497,11 +467,7 @@ export const getRequiredFieldsPerChainAction = (
         required: true,
       },
     ],
-    schema: (
-      _chain: Chain,
-      _walletCore: WalletCore,
-      _totalAmountAvailable: number
-    ) =>
+    schema: (_args: FunctionSchema) =>
       z.object({
         proposalId: z
           .string()
@@ -536,11 +502,7 @@ export const getRequiredFieldsPerChainAction = (
           ],
         })
       : [],
-    schema: (
-      chain: Chain,
-      _walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) => {
+    schema: ({ chain, totalAmountAvailable }: FunctionSchema) => {
       if (!isStakeableChain(chain)) return z.never()
 
       return match(chain, {
@@ -589,11 +551,7 @@ export const getRequiredFieldsPerChainAction = (
           [Chain.THORChain]: () => [],
         })
       : [],
-    schema: (
-      _chain: Chain,
-      _walletCore: WalletCore,
-      _totalAmountAvailable: number
-    ) => {
+    schema: (_args: FunctionSchema) => {
       if (!isStakeableChain(chain)) return z.never()
 
       return match(chain, {
