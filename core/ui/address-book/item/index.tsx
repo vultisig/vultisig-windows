@@ -29,7 +29,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
 
   return isEditMode ? (
     <ListItem
-      description={address}
+      description={<MiddleTruncate text={address} width={80} />}
       extra={
         <>
           <Text color="shy">{`${chain} ${t('network')}`}</Text>
