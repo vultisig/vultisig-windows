@@ -3,7 +3,7 @@ import { VaultExport } from '@clients/extension/src/utils/interfaces'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons'
+import { Button } from '@lib/ui/buttons/Button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -65,7 +65,7 @@ export const GetVaultsPage = () => {
           <Button
             icon={<CrossIcon fontSize={20} />}
             onClick={handleClose}
-            size="sm"
+            size="m"
             fitContent
           />
         }
@@ -104,9 +104,9 @@ export const GetVaultsPage = () => {
         <Button
           onClick={handleSubmit}
           disabled={!vaultIds.length}
-          type="primary"
-          block
-          rounded
+          kind="primary"
+          isBlock
+          isRounded
         >
           {t('connect')}
         </Button>

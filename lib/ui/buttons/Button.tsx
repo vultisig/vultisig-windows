@@ -8,13 +8,16 @@ import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { cropText } from '../css/cropText'
 import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
+type Status = 'default' | 'error' | 'success' | 'warning'
+type ButtonType = 'default' | 'link'
+type Weight = 400 | 500 | 600 | 700
 
 type ButtonKind =
   | 'primary'
@@ -23,13 +26,20 @@ type ButtonKind =
   | 'ghost'
   | 'idle'
   | 'alert'
+  | 'default'
+  | 'link'
 
 interface ContainerProps {
   size: ButtonSize
   isDisabled?: boolean
   isLoading?: boolean
   isRounded?: boolean
+  isBlock?: boolean
+  icon?: ReactNode
   kind: ButtonKind
+  fitContent?: boolean
+  status?: Status
+  weight?: Weight
 }
 
 const Container = styled(UnstyledButton)<ContainerProps>`
@@ -41,48 +51,79 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   font-weight: 600;
   flex-shrink: 0;
 
-  ${({ size }) =>
+  ${({ isBlock, weight }) => {
+    return css`
+      align-items: center;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      font-weight: ${weight};
+      gap: 8px;
+      justify-content: center;
+      transition: all 0.2s;
+      width: ${isBlock ? '100%' : 'auto'};
+    `
+  }}
+
+  ${({ size, fitContent, isRounded }) =>
     match(size, {
       xs: () => css`
         ${horizontalPadding(8)}
         height: 28px;
         font-size: 12px;
+        ${!fitContent && horizontalPadding(8)}
       `,
       s: () => css`
-        ${horizontalPadding(16)}
-        height: 36px;
-        font-size: 14px;
+        border-radius: ${isRounded ? '20px' : '4px'};
+        font-size: 12px;
+        height: 20px;
+        min-width: 20px;
+        ${!fitContent && horizontalPadding(10)}
       `,
       m: () => css`
-        ${horizontalPadding(20)}
-        height: 40px;
-        font-size: 16px;
+        border-radius: ${isRounded ? '24px' : '6px'};
+        font-size: 12px;
+        height: 24px;
+        min-width: 24px;
+        ${!fitContent && horizontalPadding(12)}
       `,
       l: () => css`
-        ${horizontalPadding(20)}
-        height: 48px;
-        font-size: 16px;
+        border-radius: ${isRounded ? '36px' : '8px'};
+        font-size: 14px;
+        height: 40px;
+        min-width: 40px;
+        ${!fitContent && horizontalPadding(16)}
       `,
       xl: () => css`
-        ${horizontalPadding(28)}
-        height: 56px;
-        font-size: 16px;
+        border-radius: ${isRounded ? '46px' : '12px'};
+        font-size: 14px;
+        height: 46px;
+        min-width: 46px;
+        ${!fitContent && horizontalPadding(16)}
       `,
     })}
 
   ${({ kind, isDisabled }) =>
     match(kind, {
+      default: () => css`
+        background-color: ${getColor('buttonBackgroundDisabled')};
+        color: ${getColor('textPrimary')};
+      `,
+      link: () => css`
+        background-color: ${getColor('buttonBackgroundDisabled')};
+        color: ${getColor('textExtraLight')};
+      `,
       primary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
-          : getColor('primary')};
-        color: ${isDisabled ? getColor('mistExtra') : getColor('textDark')};
+          : getColor('buttonPrimaryWeb')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
       secondary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
-          : getColor('foregroundExtra')};
-        color: ${isDisabled ? getColor('mistExtra') : getColor('contrast')};
+          : getColor('backgroundTertiary')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
       outlined: () => css`
         font-weight: 700;
@@ -114,11 +155,17 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     css`
       &:hover {
         ${match(kind, {
+          default: () => css`
+            background: ${getHoverVariant('backgroundTertiary')};
+          `,
+          link: () => css`
+            background: ${getHoverVariant('backgroundTertiary')};
+          `,
           primary: () => css`
-            background: ${getHoverVariant('primary')};
+            background: ${getHoverVariant('buttonPrimaryWebHover')};
           `,
           secondary: () => css`
-            background: ${getHoverVariant('foregroundSuperContrast')};
+            background: ${getHoverVariant('buttonPrimaryWeb')};
           `,
           outlined: () => css``,
           ghost: () => css`
@@ -156,8 +203,12 @@ type ButtonProps = Omit<
   isLoading?: boolean
   isRounded?: boolean
   kind?: ButtonKind
+  isBlock?: boolean
+  fitContent?: boolean
   onClick?: () => void
   as?: React.ElementType
+  status?: 'default' | 'error' | 'success' | 'warning'
+  buttonType?: ButtonType
 }
 
 const Hide = styled.div`
@@ -166,10 +217,11 @@ const Hide = styled.div`
 
 export const Button = ({
   children,
-  size = 'm',
+  size = 'l',
   isDisabled = false,
   isLoading = false,
   onClick,
+  icon,
   kind = 'primary',
   ref,
   ...rest
@@ -182,7 +234,10 @@ export const Button = ({
       </CenterAbsolutely>
     </>
   ) : (
-    children
+    <>
+      {icon}
+      {children}
+    </>
   )
 
   const containerProps = {
@@ -190,6 +245,7 @@ export const Button = ({
     size,
     isDisabled: !!isDisabled,
     isLoading,
+    icon,
     onClick: isDisabled || isLoading ? undefined : onClick,
     ...rest,
   }

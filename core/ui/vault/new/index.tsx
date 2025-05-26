@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useVaults } from '@core/ui/storage/vaults'
-import { Button } from '@lib/ui/buttons'
+import { Button } from '@lib/ui/buttons/Button'
 import { Divider } from '@lib/ui/divider'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -25,8 +25,8 @@ export const NewVaultPage = () => {
       </PageContent>
       <PageFooter gap={16}>
         <Button
-          type="primary"
-          rounded
+          kind="primary"
+          isRounded
           onClick={() => navigate({ id: 'setupVault', state: {} })}
         >
           {t('create_new_vault')}
@@ -34,8 +34,8 @@ export const NewVaultPage = () => {
         <Divider text={t('or').toUpperCase()} />
         <VStack gap={12}>
           <Button
-            type="secondary"
-            rounded
+            kind="secondary"
+            isRounded
             onClick={() =>
               navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
@@ -43,8 +43,8 @@ export const NewVaultPage = () => {
             {t('scan_qr')}
           </Button>
           <Button
-            rounded
-            type="secondary"
+            isRounded
+            kind="secondary"
             onClick={() => navigate({ id: 'importVault' })}
           >
             {t('import_vault')}

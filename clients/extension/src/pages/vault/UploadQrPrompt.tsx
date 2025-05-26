@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { Button } from '@lib/ui/buttons'
+import { Button } from '@lib/ui/buttons/Button'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 
 export const UploadQrPrompt = () => {
@@ -10,7 +10,8 @@ export const UploadQrPrompt = () => {
       style={{ fontSize: 20 }}
       icon={<CameraIcon />}
       onClick={() => navigate({ id: 'uploadQr', state: {} })}
-      size="sm"
+      size="m"
+      kind="default"
       fitContent
     />
   )

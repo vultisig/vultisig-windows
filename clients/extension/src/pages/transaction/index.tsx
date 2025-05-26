@@ -39,7 +39,7 @@ import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/buttons'
+import { Button } from '@lib/ui/buttons/Button'
 import { Divider } from '@lib/ui/divider'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -843,7 +843,7 @@ export const TransactionPage = () => {
                 </div>
               </div>
               <div className="footer">
-                <Button onClick={() => handleStep(2)} type="primary" block>
+                <Button onClick={() => handleStep(2)} kind="primary" isBlock>
                   {t('sign')}
                 </Button>
               </div>
@@ -945,7 +945,7 @@ export const TransactionPage = () => {
                   </div>
                 )}
                 <Divider text={t('or')} />
-                <Button onClick={handleApp} type="secondary" block>
+                <Button onClick={handleApp} kind="secondary" isBlock>
                   Sign with desktop app instead
                 </Button>
               </div>
@@ -1020,7 +1020,7 @@ export const TransactionPage = () => {
                 )}
               </div>
               <div className="footer">
-                <Button onClick={handleStartSigning} type="secondary" block>
+                <Button onClick={handleStartSigning} kind="secondary" isBlock>
                   {fastSign
                     ? 'Confirm & signing with server'
                     : 'Confirm & sign with device'}
@@ -1096,9 +1096,9 @@ export const TransactionPage = () => {
                 <div className="footer">
                   <Button
                     disabled={!isValid || !isDirty}
-                    onClick={handleSubmitFastSignPassword}
-                    type="secondary"
-                    block
+                    onClick={handleSubmit(handleSubmitFastSignPassword)}
+                    kind="secondary"
+                    isBlock
                   >
                     Submit
                   </Button>
@@ -1263,7 +1263,7 @@ export const TransactionPage = () => {
                 )}
               </div>
               <div className="footer">
-                <Button onClick={handleClose} type="primary" block>
+                <Button onClick={handleClose} kind="primary" isBlock>
                   {t('done')}
                 </Button>
               </div>

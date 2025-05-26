@@ -2,7 +2,7 @@ import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/m
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { Button } from '@lib/ui/buttons'
+import { Button } from '@lib/ui/buttons/Button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -88,7 +88,8 @@ export const ConnectedDappsPage = () => {
           <Button
             icon={<ChevronLeftIcon fontSize={20} />}
             onClick={navigateBack}
-            size="sm"
+            size="m"
+            kind="default"
             fitContent
           />
         }
@@ -113,7 +114,7 @@ export const ConnectedDappsPage = () => {
                     <Button
                       icon={<LinkTwoOffIcon fontSize={20} />}
                       onClick={() => handleDisconnect(host, session.url)}
-                      size="md"
+                      size="l"
                       status="error"
                       fitContent
                       disabled={isDisconnecting}
@@ -131,9 +132,9 @@ export const ConnectedDappsPage = () => {
           <PageFooter alignItems="center">
             <Button
               onClick={handleDisconnectAll}
-              type="primary"
-              block
-              rounded
+              kind="primary"
+              isBlock
+              isRounded
               disabled={isDisconnecting}
             >
               {t('disconnect_all')}
