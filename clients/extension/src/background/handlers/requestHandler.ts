@@ -12,12 +12,11 @@ import {
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { memoize } from '@lib/utils/memoize'
 import {
+  getBytes,
+  isHexString,
   JsonRpcProvider,
-  toUtf8String,
   TransactionRequest,
   TypedDataEncoder,
-  isHexString,
-  getBytes,
 } from 'ethers'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
