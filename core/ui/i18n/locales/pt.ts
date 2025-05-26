@@ -862,4 +862,5 @@ export const pt = {
   invalid_token_address: 'Insira um endereço de token válido',
   extension_vault_import_restriction:
     'Somente os cofres DKLS podem ser importados na extensão',
+  vault_type_does_not_match: 'O tipo de cofre não corresponde',
 }

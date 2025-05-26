@@ -861,4 +861,5 @@ export const en = {
   app_locked_description: 'Enter your passcode to continue.',
   invalid_passcode: 'Invalid passcode',
   unlock: 'Unlock',
+  vault_type_does_not_match: 'Vault type does not match',
 }

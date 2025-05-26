@@ -873,4 +873,5 @@ export const es = {
   invalid_token_address: 'Introduzca una dirección de token válida',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',
+  vault_type_does_not_match: 'El tipo de bóveda no coincide',
 }

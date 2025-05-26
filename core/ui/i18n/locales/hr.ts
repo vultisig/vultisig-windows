@@ -852,4 +852,5 @@ export const hr = {
   invalid_token_address: 'Unesite valjanu adresu tokena',
   extension_vault_import_restriction:
     'U ekstenziju se mogu uvesti samo DKLS trezori',
+  vault_type_does_not_match: 'Vrsta trezora se ne podudara',
 }

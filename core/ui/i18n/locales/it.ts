@@ -870,4 +870,5 @@ export const it = {
   invalid_token_address: 'Inserisci un indirizzo token valido',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
+  vault_type_does_not_match: 'Il tipo di caveau non corrisponde',
 }

@@ -877,4 +877,5 @@ export const de = {
   invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden',
+  vault_type_does_not_match: 'Tresortyp stimmt nicht überein',
 }
