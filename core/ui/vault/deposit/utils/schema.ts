@@ -31,7 +31,6 @@ export const getChainActionSchema = (
     : undefined
 }
 
-// @antonio: using any because Zod can't be configured
 export const resolveSchema = (
   schema: any,
   chain: Chain,
