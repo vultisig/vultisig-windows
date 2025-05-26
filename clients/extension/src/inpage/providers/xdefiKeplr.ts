@@ -34,6 +34,8 @@ import {
   TransactionType,
 } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 class XDEFIMessageRequester {
   constructor() {
@@ -172,7 +174,9 @@ export class XDEFIKeplrProvider extends Keplr {
           params: [{ ..._tx, txType: 'Keplr' }],
         })
         .then(result => {
-          const decoded = base58.decode((result as TxResult).encoded)
+          const decoded = base58.decode(
+            shouldBePresent((result as TxResult).encoded)
+          )
           if (decoded) resolve(decoded)
           else reject()
         })
@@ -272,7 +276,7 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('No account info or pubkey')
     }
 
-    const decoded = base58.decode(result.encoded)
+    const decoded = base58.decode(shouldBePresent(result.encoded))
     if (!decoded) {
       throw new Error('Invalid signature')
     }

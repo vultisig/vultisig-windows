@@ -7,6 +7,7 @@ import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
 import { ITransaction, Messaging } from './interfaces'
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -121,7 +122,7 @@ export const processBackgroundResponse = (
 
   if (isOneOf(data.method, handledMethods)) {
     if (messageKey === MessageKey.SOLANA_REQUEST) {
-      return (result as TxResult).encoded
+      return shouldBeDefined((result as TxResult).encoded)
     } else if (
       messageKey === MessageKey.COSMOS_REQUEST &&
       (data.params[0].txType === 'Vultisig' ||
