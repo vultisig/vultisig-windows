@@ -28,6 +28,7 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import AddAddressForm from '../vault/send/addressSelector/components/addAddressForm/AddAddressForm'
 import ChainSelectionScreen from '../vault/send/addressSelector/components/chainSelection/ChainSelectionScreen'
+import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -58,6 +59,8 @@ export type SharedViewId = Extract<
   | 'vaults'
   | 'addAddress'
   | 'chainSelection'
+  | 'manageVaultFolder'
+  | 'addCustomToken'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -95,4 +98,5 @@ export const sharedViews: Views<SharedViewId> = {
   vaults: VaultsPage,
   addAddress: AddAddressForm,
   chainSelection: ChainSelectionScreen,
+  addCustomToken: AddCustomTokenPage,
 }

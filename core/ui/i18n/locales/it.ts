@@ -13,6 +13,8 @@ export const it = {
   unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
   approval_tx: 'Transazione di approvazione',
+  verify_password_periodic_message:
+    'Verifica la password di condivisione del server',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
@@ -863,5 +865,11 @@ export const it = {
     "Impossibile ottenere l'autorizzazione per la fotocamera",
     address_book_empty_instruction: 'Clicca su "Aggiungi indirizzo" per aggiungere i tuoi indirizzi preferiti',
     select_chains: 'Seleziona Chains',
-    chains: 'Chains'
+    chains: 'Chains',
+  failed_to_migrate_storage: "Impossibile migrare l'archiviazione",
+  custom_token: 'Token personalizzato',
+  find_custom_token: 'Trova il tuo token personalizzato',
+  enter_contract_address: "Inserisci l'indirizzo del contratto",
+  no_token_found: 'Nessun token trovato',
+  invalid_token_address: 'Inserisci un indirizzo token valido',
 }

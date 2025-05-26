@@ -21,6 +21,8 @@ export const es = {
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',
   approval_tx: 'Transacción de aprobación',
+  verify_password_periodic_message:
+    'Verifique su contraseña de compartición del servidor',
   no_tokens_found:
     'No se encontraron tokens. Agrega tokens bajo la cadena deseada.',
   ibc_transfer: 'Transferencia IBC',
@@ -866,5 +868,11 @@ export const es = {
   failed_to_get_camera_permission: 'No se pudo obtener el permiso de la cámara',
   address_book_empty_instruction: 'Haz clic en "Añadir dirección" para añadir tus direcciones favoritas',
   select_chains: 'Seleccionar chains',
-  chains: 'Chains'
+  chains: 'Chains',
+  failed_to_migrate_storage: 'No se pudo migrar el almacenamiento',
+  custom_token: 'Token personalizado',
+  find_custom_token: 'Encuentra tu token personalizado',
+  enter_contract_address: 'Ingrese la dirección del contrato',
+  no_token_found: 'No se encontró ningún token',
+  invalid_token_address: 'Introduzca una dirección de token válida',
 }

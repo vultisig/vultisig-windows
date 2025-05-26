@@ -56,6 +56,7 @@ const AddAddressForm = () => {
     setValue,
   } = useAddressSchema({
     type: 'add',
+    chain,
   })
 
   useEffect(() => {
@@ -71,14 +72,14 @@ const AddAddressForm = () => {
   } = useCreateAddressBookItemMutation()
 
   const handleAddAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data
+    const { address, title } = data
 
     addAddressBookItem(
       {
         id: uuidv4(),
         title,
         address,
-        chain: chain as Chain,
+        chain,
       },
       {
         onSuccess: () => {

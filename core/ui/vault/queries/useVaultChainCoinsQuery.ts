@@ -14,7 +14,7 @@ import { useMemo } from 'react'
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
-  EntityWithLogo &
+  Partial<EntityWithLogo> &
   EntityWithTicker &
   Partial<EntityWithPrice>
 

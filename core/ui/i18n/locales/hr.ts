@@ -14,6 +14,8 @@ export const hr = {
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',
+  verify_password_periodic_message:
+    'Potvrdite lozinku za dijeljenje poslužitelja',
   approval_tx: 'Transakcija odobrenja',
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',
@@ -845,5 +847,11 @@ export const hr = {
   failed_to_get_camera_permission: 'Nije uspjelo dobiti dopuštenje za kameru',
   address_book_empty_instruction: 'Kliknite "Dodaj adresu" da dodate svoje omiljene adrese',
   select_chains: 'Odaberite Chains',
-  chains: 'Chains'
+  chains: 'Chains',
+  failed_to_migrate_storage: 'Migracija pohrane nije uspjela',
+  custom_token: 'Prilagođeni token',
+  find_custom_token: 'Pronađite svoj prilagođeni token',
+  enter_contract_address: 'Unesite adresu ugovora',
+  no_token_found: 'Nije pronađen token',
+  invalid_token_address: 'Unesite valjanu adresu tokena',
 }

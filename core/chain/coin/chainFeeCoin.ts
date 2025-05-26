@@ -1,8 +1,18 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, EthereumL2Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { recordMap } from '@lib/utils/record/recordMap'
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
-const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
+type LeanFeeCoin = Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>
+
+const ether: LeanFeeCoin = {
+  ticker: 'ETH',
+  logo: 'ethereum',
+  decimals: 18,
+  priceProviderId: 'ethereum',
+}
+
+const leanChainFeeCoin: Record<Chain, LeanFeeCoin> = {
   [Chain.Bitcoin]: {
     ticker: 'BTC',
     logo: 'btc',
@@ -63,12 +73,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     decimals: 9,
     priceProviderId: 'the-open-network',
   },
-  [Chain.Ethereum]: {
-    ticker: 'ETH',
-    logo: 'eth',
-    decimals: 18,
-    priceProviderId: 'ethereum',
-  },
+  [Chain.Ethereum]: ether,
   [Chain.Avalanche]: {
     ticker: 'AVAX',
     logo: 'avax',
@@ -81,47 +86,19 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     decimals: 18,
     priceProviderId: 'binancecoin',
   },
-  [Chain.Base]: {
-    ticker: 'ETH',
-    logo: 'ethereum',
-    decimals: 18,
-    priceProviderId: 'ethereum',
-  },
-  [Chain.Arbitrum]: {
-    ticker: 'ETH',
-    logo: 'ethereum',
-    decimals: 18,
-    priceProviderId: 'ethereum',
-  },
-  [Chain.Optimism]: {
-    ticker: 'ETH',
-    logo: 'ethereum',
-    decimals: 18,
-    priceProviderId: 'ethereum',
-  },
+
   [Chain.Polygon]: {
     ticker: 'MATIC',
     logo: 'matic',
     decimals: 18,
     priceProviderId: 'matic-network',
   },
-  [Chain.Blast]: {
-    ticker: 'ETH',
-    logo: 'ethereum',
-    decimals: 18,
-    priceProviderId: 'ethereum',
-  },
+
   [Chain.CronosChain]: {
     ticker: 'CRO',
     logo: 'cro',
     decimals: 18,
     priceProviderId: 'crypto-com-chain',
-  },
-  [Chain.Zksync]: {
-    ticker: 'ETH',
-    logo: 'ethereum',
-    decimals: 18,
-    priceProviderId: 'ethereum',
   },
   [Chain.Dydx]: {
     ticker: 'DYDX',
@@ -189,13 +166,14 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     decimals: 6,
     priceProviderId: 'tron',
   },
+  ...recordMap(EthereumL2Chain, () => ether),
 }
 
-export const chainFeeCoin: Record<Chain, Coin> = recordMap(
-  leanChainFeeCoin,
-  (coin, chain) => ({
-    ...coin,
-    chain,
-    id: coin.ticker,
-  })
-)
+export const chainFeeCoin: Record<
+  Chain,
+  RequiredFields<Coin, 'logo'>
+> = recordMap(leanChainFeeCoin, (coin, chain) => ({
+  ...coin,
+  chain,
+  id: coin.ticker,
+}))

@@ -1,4 +1,3 @@
-import { vaultsQueryKey } from '@core/ui/query/keys'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
@@ -6,6 +5,8 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
+
+import { StorageKey } from '../../../storage/StorageKey'
 
 type RemoveVaultFromFolderInput = {
   vaultId: string
@@ -38,7 +39,7 @@ export const useRemoveVaultFromFolderMutation = () => {
         fields: updateParams,
       })
 
-      await invalidateQueries(vaultsQueryKey)
+      await invalidateQueries([StorageKey.vaults])
     },
   })
 }

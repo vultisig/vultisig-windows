@@ -16,6 +16,8 @@ export const pt = {
   percentage: 'Percentagem',
   unexpected_error: 'Erro inesperado',
   approval_tx: 'Transação de aprovação',
+  verify_password_periodic_message:
+    'Verifique sua senha de compartilhamento do servidor',
   staked: 'Apostado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
@@ -856,4 +858,10 @@ export const pt = {
   address_book_empty_instruction: 'Clique em "Adicionar endereço" para adicionar seus endereços favoritos',
   select_chains: 'Selecionar Chains',
   chains: 'Chains',
+  failed_to_migrate_storage: 'Falha ao migrar o armazenamento',
+  custom_token: 'Token personalizado',
+  find_custom_token: 'Encontre seu token personalizado',
+  enter_contract_address: 'Insira o endereço do contrato',
+  no_token_found: 'Nenhum token encontrado',
+  invalid_token_address: 'Insira um endereço de token válido',
 }

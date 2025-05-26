@@ -5,7 +5,7 @@ import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
@@ -152,7 +152,7 @@ export const VaultPage = () => {
                   }
                   icon={
                     <ChainEntityIcon
-                      value={getChainEntityIconSrc(chain)}
+                      value={getChainLogoSrc(chain)}
                       style={{ fontSize: 36 }}
                     />
                   }

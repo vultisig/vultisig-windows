@@ -2,7 +2,6 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -16,10 +15,12 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
+import { getChainLogoSrc } from '../../chain/metadata/getChainLogoSrc'
+
 export const VaultChainCoinItem = ({
   value,
 }: ValueProp<
-  EntityWithLogo &
+  Partial<EntityWithLogo> &
     EntityWithTicker &
     CoinAmount &
     Partial<EntityWithPrice> &
@@ -32,14 +33,14 @@ export const VaultChainCoinItem = ({
   return (
     <HStack fullWidth alignItems="center" gap={12}>
       <ChainCoinIcon
-        coinSrc={getCoinLogoSrc(logo)}
+        coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
         chainSrc={
           shouldDisplayChainLogo({
             ticker,
             chain,
             isNative: isFeeCoin({ id, chain }),
           })
-            ? getChainEntityIconSrc(chain)
+            ? getChainLogoSrc(chain)
             : undefined
         }
         style={{ fontSize: 32 }}

@@ -1,10 +1,22 @@
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledInput } from '@lib/ui/inputs/UnstyledInput'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
-import { components, OptionProps, SingleValueProps } from 'react-select'
 import styled from 'styled-components'
+
+export const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`
 
 export const FormField = styled(Panel)`
   font-weight: 400;
@@ -31,47 +43,6 @@ export const FormInput = styled(UnstyledInput)`
     color: ${getColor('textShy')};
   }
 `
-
-type ChainOption = {
-  value: string
-  label: string
-  logo: string
-  isLastOption: boolean
-}
-
-export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value)
-  return (
-    <components.Option {...props}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <img
-          src={iconSrc}
-          alt=""
-          style={{ width: 24, height: 24, marginRight: 8 }}
-        />
-        {props.data.label}
-      </div>
-    </components.Option>
-  )
-}
-
-export const customSingleValue = (
-  props: SingleValueProps<ChainOption, false>
-) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value)
-  return (
-    <components.SingleValue {...props}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <img
-          src={iconSrc}
-          alt=""
-          style={{ width: 24, height: 24, marginRight: 8 }}
-        />
-        {props.data.label}
-      </div>
-    </components.SingleValue>
-  )
-}
 
 export const AddButton = styled(Button)`
   width: 100%;

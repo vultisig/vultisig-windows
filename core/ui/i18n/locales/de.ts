@@ -38,6 +38,8 @@ export const de = {
   waiting_for_devices_to_join_description:
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   staked: 'Gestaket',
+  verify_password_periodic_message:
+    'Überprüfen Sie Ihr Serverfreigabe-Passwort',
   select_network: 'Netzwerk auswählen',
   approval_tx: 'Genehmigungstransaktion',
   unexpected_error: 'Unerwarteter Fehler',
@@ -870,5 +872,11 @@ export const de = {
     'Kameraberechtigung konnte nicht eingeholt werden',
   address_book_empty_instruction: 'Klicken Sie auf "Adresse hinzufügen", um Ihre bevorzugten Adressen hinzuzufügen',
   select_chains: 'Chains auswählen',
-  chains: 'Chains'
+  chains: 'Chains',
+  failed_to_migrate_storage: 'Speichermigration fehlgeschlagen',
+  custom_token: 'Benutzerdefiniertes Token',
+  find_custom_token: 'Finden Sie Ihr benutzerdefiniertes Token',
+  enter_contract_address: 'Vertragsadresse eingeben',
+  no_token_found: 'Kein Token gefunden',
+  invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
 }
