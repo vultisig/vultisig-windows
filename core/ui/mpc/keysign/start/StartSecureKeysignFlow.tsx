@@ -1,4 +1,4 @@
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeerDiscoveryStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
@@ -14,8 +14,7 @@ import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp &
-  Partial<OnFinishProp<string | ExecuteTxResultWithEncoded>>) => {
+}: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
   const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
     useCoreViewState<'keysign'>()
   const keysignPayload = useRefreshedKeysignPayload(

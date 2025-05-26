@@ -3,31 +3,43 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { ITransaction } from '../../utils/interfaces'
 import {
+  getVaultsTransactions,
   setVaultsTransactions,
   transactionsQueryKey,
 } from '../state/transactions'
-import {
-  currentVaultTransactionsQueryKey,
-  useTransactionsQuery,
-} from '../state/useTransactions'
+import { currentVaultTransactionsQueryKey } from '../state/useTransactions'
 
 type AddOrUpdateInput = {
   vaultId: string
   transaction: ITransaction
 }
 
-export const useAddOrUpdateTransactionMutation = (
+export const useUpdateTransactionMutation = (
   options?: UseMutationOptions<any, any, AddOrUpdateInput, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
-  const { data: allTxs } = useTransactionsQuery()
-
   return useMutation({
     mutationFn: async ({ vaultId, transaction }) => {
-      const vaultTxs = allTxs[vaultId] ?? []
-      const updated = vaultTxs.some(tx => tx.id === transaction.id)
-        ? vaultTxs.map(tx => (tx.id === transaction.id ? transaction : tx))
-        : [...vaultTxs, transaction]
+      const allTxs = await getVaultsTransactions()
+      if (!allTxs) {
+        throw new Error('Transactions are not loaded yet.')
+      }
+
+      const vaultTxs = allTxs[vaultId]
+      if (!vaultTxs) {
+        throw new Error(`No transactions found for vaultId: ${vaultId}`)
+      }
+      const exists = vaultTxs.some(tx => tx.id === transaction.id)
+
+      if (!exists) {
+        throw new Error(
+          `Transaction with id ${transaction.id} does not exist in vault ${vaultId}`
+        )
+      }
+
+      const updated = vaultTxs.map(tx =>
+        tx.id === transaction.id ? transaction : tx
+      )
 
       const updatedAll = {
         ...allTxs,

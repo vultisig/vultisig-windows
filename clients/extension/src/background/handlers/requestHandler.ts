@@ -1,6 +1,7 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { evmChainRpcUrls } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import {
   CosmosChainId,
@@ -8,8 +9,8 @@ import {
   getChainByChainId,
   getChainId,
 } from '@core/chain/coin/ChainId'
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { memoize } from '@lib/utils/memoize'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -32,11 +33,7 @@ import {
 } from '../../types/thorchain'
 import api from '../../utils/api'
 import { getDappHost, getDappHostname } from '../../utils/connectedApps'
-import {
-  EventMethod,
-  isSupportedChain,
-  RequestMethod,
-} from '../../utils/constants'
+import { EventMethod, RequestMethod } from '../../utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -51,19 +48,10 @@ import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 
-const rpcProviderCache: Record<Chain, JsonRpcProvider | undefined> =
-  {} as Record<Chain, JsonRpcProvider | undefined>
+const getEvmRpcProvider = memoize(
+  (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
+)
 
-const getRpcProvider = (chain: Chain) => {
-  if (!rpcProviderCache[chain]) {
-    const rpcUrl = chainRpcUrl[chain]
-    if (!rpcUrl) {
-      throw new Error(`No RPC URL configured for chain ${chain}`)
-    }
-    rpcProviderCache[chain] = new JsonRpcProvider(rpcUrl)
-  }
-  return rpcProviderCache[chain]!
-}
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 export const handleRequest = (
   body: Messaging.Chain.Request,
@@ -153,7 +141,6 @@ export const handleRequest = (
         if (chain === Chain.Solana && _transaction.serializedTx) {
           handleSendTransaction({
             transactionPayload: { serialized: _transaction.serializedTx },
-            id: '',
             status: 'default',
           })
             .then(result => resolve(result))
@@ -176,7 +163,6 @@ export const handleRequest = (
                   chain,
                 },
               },
-              id: '',
               status: 'default',
             }
             handleSendTransaction(modifiedTransaction)
@@ -205,7 +191,6 @@ export const handleRequest = (
                     chain,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction)
@@ -244,7 +229,6 @@ export const handleRequest = (
                     isDeposit: true,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction)
@@ -333,14 +317,14 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_COUNT: {
         const [address, tag] = params
-        getRpcProvider(chain)
+        getEvmRpcProvider(chain as EvmChain)
           .getTransactionCount(String(address), String(tag))
           .then(count => resolve(String(count)))
           .catch(reject)
         break
       }
       case RequestMethod.METAMASK.ETH_BLOCK_NUMBER: {
-        getRpcProvider(chain)
+        getEvmRpcProvider(chain as EvmChain)
           .getBlock('latest')
           .then(block => resolve(String(block?.number)))
           .catch(reject)
@@ -363,11 +347,7 @@ export const handleRequest = (
           reject()
           return
         }
-        const supportedChain = isSupportedChain(chain) ? chain : null
-        if (!supportedChain) {
-          reject()
-          return
-        }
+
         getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
@@ -439,7 +419,7 @@ export const handleRequest = (
           const [transaction] = params as TransactionRequest[]
 
           if (transaction) {
-            getRpcProvider(chain)
+            getEvmRpcProvider(chain as EvmChain)
               .estimateGas(transaction)
               .then(gas => resolve(gas.toString()))
               .catch(reject)
@@ -464,12 +444,7 @@ export const handleRequest = (
           break
         }
 
-        const chain = getChainByChainId(param.chainId)
-        const supportedChain = isSupportedChain(chain) ? chain : null
-        if (!supportedChain) {
-          reject(`Chain ${param?.chainId} not supported`)
-          break
-        }
+        const chain = shouldBePresent(getChainByChainId(param.chainId))
 
         getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
@@ -480,9 +455,9 @@ export const handleRequest = (
 
           if (!previousSession) throw new Error(`No session found for ${host}`)
 
-          const isEVM = getChainKind(supportedChain) === 'evm'
-          const isCosmos = getChainKind(supportedChain) === 'cosmos'
-          const chainId = getChainId(supportedChain)
+          const isEVM = getChainKind(chain) === 'evm'
+          const isCosmos = getChainKind(chain) === 'cosmos'
+          const chainId = getChainId(chain)
 
           await updateAppSession({
             vaultId: safeVaultId,
@@ -506,7 +481,7 @@ export const handleRequest = (
           const [address, tag] = params
 
           if (address && tag) {
-            getRpcProvider(chain)
+            getEvmRpcProvider(chain as EvmChain)
               .getBalance(String(address), String(tag))
               .then(value => resolve(value.toString()))
               .catch(reject)
@@ -521,7 +496,7 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_GET_BLOCK_BY_NUMBER: {
         const [tag, refresh] = params
-        getRpcProvider(chain)
+        getEvmRpcProvider(chain as EvmChain)
           .getBlock(String(tag), Boolean(refresh))
           .then(block => resolve(block?.toJSON()))
           .catch(reject)
@@ -529,7 +504,7 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.ETH_GAS_PRICE: {
-        getRpcProvider(chain)
+        getEvmRpcProvider(chain as EvmChain)
           .getFeeData()
           .then(({ gasPrice, maxFeePerGas }) =>
             resolve((gasPrice ?? maxFeePerGas ?? 0n).toString())
@@ -539,7 +514,7 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.ETH_MAX_PRIORITY_FEE_PER_GAS: {
-        getRpcProvider(chain)
+        getEvmRpcProvider(chain as EvmChain)
           .getFeeData()
           .then(({ maxPriorityFeePerGas }) =>
             resolve((maxPriorityFeePerGas ?? 0n).toString())
@@ -553,7 +528,10 @@ export const handleRequest = (
           const [transaction] = params as TransactionRequest[]
 
           if (transaction) {
-            getRpcProvider(chain).call(transaction).then(resolve).catch(reject)
+            getEvmRpcProvider(chain as EvmChain)
+              .call(transaction)
+              .then(resolve)
+              .catch(reject)
           } else {
             reject(new Error('Invalid transaction'))
           }
@@ -568,7 +546,7 @@ export const handleRequest = (
         if (Array.isArray(params)) {
           const [transaction] = params as ITransaction[]
 
-          getRpcProvider(chain)
+          getEvmRpcProvider(chain as EvmChain)
             .getTransactionReceipt(String(transaction))
             .then(receipt => resolve(receipt?.toJSON()))
             .catch(reject)
@@ -583,7 +561,7 @@ export const handleRequest = (
           const [address, tag] = params
 
           if (address && tag) {
-            getRpcProvider(chain)
+            getEvmRpcProvider(chain as EvmChain)
               .getCode(String(address), String(tag))
               .then(value => resolve(value.toString()))
               .catch(reject)
@@ -616,7 +594,6 @@ export const handleRequest = (
                   message: hashMessage,
                 },
               },
-              id: '',
               status: 'default',
             })
               .then(result => resolve(result))
@@ -654,7 +631,6 @@ export const handleRequest = (
                 message: fullMessage,
               },
             },
-            id: '',
             status: 'default',
           })
             .then(result => resolve(result))
@@ -686,7 +662,6 @@ export const handleRequest = (
                     isDeposit: true,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(tx)
@@ -718,7 +693,6 @@ export const handleRequest = (
                     chain,
                   },
                 },
-                id: '',
                 status: 'default',
               }
               handleSendTransaction(tx)

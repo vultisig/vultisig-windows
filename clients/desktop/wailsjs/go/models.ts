@@ -76,6 +76,7 @@ export namespace storage {
 	    coins: Coin[];
 	    folder_id?: string;
 	    lib_type: string;
+	    last_password_verification_time: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
@@ -97,6 +98,7 @@ export namespace storage {
 	        this.coins = this.convertValues(source["coins"], Coin);
 	        this.folder_id = source["folder_id"];
 	        this.lib_type = source["lib_type"];
+	        this.last_password_verification_time = source["last_password_verification_time"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

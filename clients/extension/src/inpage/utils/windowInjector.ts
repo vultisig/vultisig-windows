@@ -1,10 +1,10 @@
+import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
+import { messengers } from '@clients/extension/src/inpage/messenger'
+import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
+import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
+import { MessageKey } from '@clients/extension/src/utils/constants'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-import { MessageKey } from '@clients/extension/src/utils/constants'
-import VULTI_ICON_RAW_SVG from '../icon'
-import { messengers } from '../messenger'
-import { Ethereum } from '../providers/ethereum'
-import { createProviders } from '../providers/providerFactory'
 
 export const injectToWindow = () => {
   const providers = createProviders()

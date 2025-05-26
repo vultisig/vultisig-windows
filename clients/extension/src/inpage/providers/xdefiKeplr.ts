@@ -2,7 +2,7 @@ import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId } from '@core/chain/coin/ChainId'
-import { ExecuteTxResultWithEncoded } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -21,6 +21,7 @@ import {
   StdSignDoc,
   StdTx,
 } from '@keplr-wallet/types'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import base58 from 'bs58'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
@@ -173,7 +174,7 @@ export class XDEFIKeplrProvider extends Keplr {
         })
         .then(result => {
           const decoded = base58.decode(
-            (result as ExecuteTxResultWithEncoded).encoded
+            shouldBePresent((result as TxResult).encoded)
           )
           if (decoded) resolve(decoded)
           else reject()
@@ -263,7 +264,7 @@ export class XDEFIKeplrProvider extends Keplr {
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ...standardTx, txType: 'Vultisig' }],
-    })) as ExecuteTxResultWithEncoded
+    })) as TxResult
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,
@@ -274,7 +275,7 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('No account info or pubkey')
     }
 
-    const decoded = base58.decode(result.encoded)
+    const decoded = base58.decode(shouldBePresent(result.encoded))
     if (!decoded) {
       throw new Error('Invalid signature')
     }

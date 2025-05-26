@@ -28,6 +28,7 @@ import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
@@ -51,7 +52,7 @@ export const TransactionPage = () => {
   const { mutate: processTransaction, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const transactions = await getVaultTransactions(getVaultId(vault))
-      const transaction = transactions.pop()
+      const transaction = getLastItem(transactions)
       if (!transaction) {
         throw new Error('No current transaction present')
       }

@@ -1,27 +1,28 @@
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useQuery } from '@tanstack/react-query'
+import { useCallback } from 'react'
 
-import {
-  getVaultsTransactions,
-  getVaultTransactions,
-  transactionsQueryKey,
-} from './transactions'
+import { getVaultsTransactions, transactionsQueryKey } from './transactions'
 
 export const currentVaultTransactionsQueryKey = ['currentVaultTransactions']
 
-export const useTransactionsQuery = () => {
+const useTransactionsQuery = () => {
   return useQuery({
     queryKey: transactionsQueryKey,
     queryFn: getVaultsTransactions,
-    initialData: {},
   })
 }
-
 export const useCurrentVaultTransactionsQuery = () => {
   const vaultId = useAssertCurrentVaultId()
 
-  return useQuery({
-    queryKey: currentVaultTransactionsQueryKey,
-    queryFn: async () => getVaultTransactions(vaultId),
-  })
+  return useTransformQueryData(
+    useTransactionsQuery(),
+    useCallback(
+      allTxs => {
+        return allTxs?.[vaultId] ?? []
+      },
+      [vaultId]
+    )
+  )
 }
