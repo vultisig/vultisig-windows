@@ -28,6 +28,7 @@ import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
@@ -41,7 +42,6 @@ import { splitString } from '../../utils/functions'
 import { getKeysignPayload } from '../../utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
-import { getLastItem } from '@lib/utils/array/getLastItem'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()

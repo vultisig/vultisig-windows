@@ -2,12 +2,12 @@ import api from '@clients/extension/src/utils/api'
 import { getChainKind } from '@core/chain/ChainKind'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
 import { ITransaction, Messaging } from './interfaces'
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)

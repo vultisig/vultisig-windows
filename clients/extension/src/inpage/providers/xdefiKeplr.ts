@@ -21,6 +21,7 @@ import {
   StdSignDoc,
   StdTx,
 } from '@keplr-wallet/types'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import base58 from 'bs58'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
@@ -34,8 +35,6 @@ import {
   TransactionType,
 } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 class XDEFIMessageRequester {
   constructor() {
