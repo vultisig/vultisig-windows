@@ -1,6 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { attempt } from '@lib/utils/attempt'
@@ -55,22 +54,18 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     )
   )
 
-  const result: AccountCoin[] = []
-
-  tokens.forEach(token => {
-    if (!token.logoURI) {
-      return
-    }
-
-    result.push({
-      chain,
-      id: token.address,
-      decimals: token.decimals,
-      logo: token.logoURI,
-      ticker: token.symbol,
-      address,
+  return withoutUndefined(
+    tokens.map(token => {
+      if (token.logoURI && token.providers.includes('CoinGecko')) {
+        return {
+          chain,
+          id: token.address,
+          decimals: token.decimals,
+          logo: token.logoURI,
+          ticker: token.symbol,
+          address,
+        }
+      }
     })
-  })
-
-  return result
+  )
 }
