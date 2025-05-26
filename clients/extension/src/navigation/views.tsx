@@ -62,7 +62,7 @@ export const views: Views<AppViewId> = {
   ...appCustomViews,
 }
 
-export const UNAUTHENTICATED_VIEW_IDS = [
+export const unauthenticatedViewsIds = [
   'uploadQr',
   'setupSecureVault',
   'setupFastVault',

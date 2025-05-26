@@ -3,7 +3,7 @@ import { useNavigation } from '@lib/ui/navigation/state'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { useEffect, useState } from 'react'
 
-import { UNAUTHENTICATED_VIEW_IDS } from '../views'
+import { unauthenticatedViewsIds } from '../views'
 import { useAppNavigate } from './useAppNavigate'
 
 export const useRedirect = () => {
@@ -15,7 +15,7 @@ export const useRedirect = () => {
   const { id } = getLastItem(history)
 
   useEffect(() => {
-    if (!hasExistingVault && !UNAUTHENTICATED_VIEW_IDS.includes(id)) {
+    if (!hasExistingVault && !unauthenticatedViewsIds.includes(id)) {
       navigate({ id: 'newVault' })
     }
 
