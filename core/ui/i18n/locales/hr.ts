@@ -14,6 +14,8 @@ export const hr = {
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',
+  verify_password_periodic_message:
+    'Potvrdite lozinku za dijeljenje poslužitelja',
   approval_tx: 'Transakcija odobrenja',
   youre_swapping: 'Mijenjaš',
   swap_overview: 'Pregled zamjene',

@@ -13,6 +13,8 @@ export const it = {
   unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
   approval_tx: 'Transazione di approvazione',
+  verify_password_periodic_message:
+    'Verifica la password di condivisione del server',
   select_asset: 'Seleziona asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',

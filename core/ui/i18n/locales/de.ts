@@ -38,6 +38,8 @@ export const de = {
   waiting_for_devices_to_join_description:
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   staked: 'Gestaket',
+  verify_password_periodic_message:
+    'Überprüfen Sie Ihr Serverfreigabe-Passwort',
   select_network: 'Netzwerk auswählen',
   approval_tx: 'Genehmigungstransaktion',
   unexpected_error: 'Unerwarteter Fehler',
