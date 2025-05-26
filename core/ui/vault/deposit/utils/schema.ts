@@ -1,18 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
-import { ZodObject } from 'zod'
 
 import { ChainAction } from '../ChainAction'
 import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 
-const isSchemaFunction = (
-  schema: unknown
-): schema is (
-  chain: Chain,
-  walletCore: any,
-  totalAmountAvailable: number
-) => ZodObject<any> => {
+const isSchemaFunction = (schema: unknown) => {
   return typeof schema === 'function'
 }
 
@@ -47,6 +40,10 @@ export const resolveSchema = (
 ) =>
   schema
     ? isSchemaFunction(schema)
-      ? schema(chain, walletCore, totalAmountAvailable)
+      ? schema({
+          chain,
+          walletCore,
+          totalAmountAvailable,
+        })
       : schema
     : undefined
