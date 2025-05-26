@@ -1,6 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { AddressForm } from '@core/ui/address-book/form'
-import { AddressFormValues } from '@core/ui/address-book/hooks/useAddressSchema'
+import {
+  AddressBookForm,
+  AddressBookFormValues,
+} from '@core/ui/address-book/form'
 import {
   useAddressBookItemOrders,
   useCreateAddressBookItemMutation,
@@ -16,8 +17,8 @@ export const CreateAddressBookItemPage = () => {
   const addressBookItemOrders = useAddressBookItemOrders()
   const navigateBack = useNavigateBack()
 
-  const handleCreateAddress = (chain: Chain, values: AddressFormValues) => {
-    const { address, title } = values
+  const handleCreateAddress = (values: AddressBookFormValues) => {
+    const { address, chain, title } = values
 
     mutate(
       {
@@ -32,13 +33,11 @@ export const CreateAddressBookItemPage = () => {
   }
 
   return (
-    <AddressForm
-      chain={Chain.Bitcoin}
+    <AddressBookForm
       error={error}
       isPending={isPending}
       onSubmit={handleCreateAddress}
       title={t('add_address')}
-      type="add"
     />
   )
 }
