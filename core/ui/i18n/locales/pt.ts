@@ -852,4 +852,10 @@ export const pt = {
     'Por favor, forneça permissão para a câmera escanear o código QR',
   grant_camera_permission: 'Conceder permissão para câmera',
   failed_to_get_camera_permission: 'Falha ao obter permissão para câmera',
+  failed_to_migrate_storage: 'Falha ao migrar o armazenamento',
+  custom_token: 'Token personalizado',
+  find_custom_token: 'Encontre seu token personalizado',
+  enter_contract_address: 'Insira o endereço do contrato',
+  no_token_found: 'Nenhum token encontrado',
+  invalid_token_address: 'Insira um endereço de token válido',
 }

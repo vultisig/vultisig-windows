@@ -6,7 +6,6 @@ import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -50,6 +49,8 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { getChainLogoSrc } from '../../chain/metadata/getChainLogoSrc'
 
 export const VaultChainPage = () => {
   const { t } = useTranslation()
@@ -104,7 +105,7 @@ export const VaultChainPage = () => {
             >
               <HStack alignItems="center" gap={12}>
                 <ChainEntityIcon
-                  value={getChainEntityIconSrc(chain)}
+                  value={getChainLogoSrc(chain)}
                   style={{ fontSize: 32 }}
                 />
                 <Text weight="700" color="contrast">

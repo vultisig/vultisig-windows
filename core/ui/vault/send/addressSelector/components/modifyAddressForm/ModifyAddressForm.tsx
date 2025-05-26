@@ -4,26 +4,17 @@ import { useUpdateAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Select from 'react-select'
 
-import { getCoinOptions } from '../../helpers/getCoinOptions'
+import { ChainInput } from '../../../../../chain/inputs/ChainInput'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '../../hooks/useAddressSchema'
 import {
-  customSelectOption,
-  customSingleValue,
-} from '../addAddressForm/AddAddressForm.styles'
-import {
   ButtonWrapper,
-  CoinOption,
   Container,
-  customSelectMenu,
-  customSelectStyles,
   Form,
   FormField,
   FormFieldLabel,
@@ -40,21 +31,20 @@ const ModifyAddressForm = ({
   addressBookItem,
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
-  const { address, chain, title, id } = addressBookItem
+  const [chain, setChain] = useState<Chain>(addressBookItem.chain)
+  const { address, title, id } = addressBookItem
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
-    control,
   } = useAddressSchema({
     type: 'modify',
     defaultValues: {
       title: title,
       address: address,
-      chain: chain,
     },
+    chain,
   })
 
   const {
@@ -64,14 +54,14 @@ const ModifyAddressForm = ({
   } = useUpdateAddressBookItemMutation()
 
   const handleModifyAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data
+    const { address, title } = data
     updateAddressBookItem(
       {
         id,
         fields: {
           address,
           title,
-          chain: chain as Chain,
+          chain,
         },
       },
       {
@@ -83,33 +73,7 @@ const ModifyAddressForm = ({
   return (
     <Container>
       <Form onSubmit={handleSubmit(handleModifyAddress)}>
-        <FormField>
-          <Controller
-            name="chain"
-            control={control}
-            render={({ field }) => (
-              <Select<CoinOption>
-                value={
-                  chainOptions.find(option => option.value === field.value) ||
-                  null
-                }
-                defaultValue={chainOptions[0]}
-                onChange={selectedOption => {
-                  field.onChange(selectedOption?.value)
-                }}
-                onBlur={field.onBlur}
-                options={chainOptions}
-                components={{
-                  Menu: customSelectMenu,
-                  Option: customSelectOption,
-                  SingleValue: customSingleValue,
-                }}
-                styles={customSelectStyles}
-                placeholder="Select cryptocurrency"
-              />
-            )}
-          />
-        </FormField>
+        <ChainInput value={chain} onChange={setChain} />
 
         <div>
           <FormFieldLabel htmlFor="title">

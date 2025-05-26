@@ -4,26 +4,19 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Select from 'react-select'
 import { v4 as uuidv4 } from 'uuid'
 
+import { ChainInput } from '../../../../../chain/inputs/ChainInput'
 import { AddressBookPageHeader } from '../../AddressSelector.styles'
-import { getCoinOptions } from '../../helpers/getCoinOptions'
 import {
   AddressFormValues,
   useAddressSchema,
 } from '../../hooks/useAddressSchema'
 import {
   AddButton,
-  ChainOption,
   Container,
-  customSelectMenu,
-  customSelectOption,
-  customSelectStyles,
-  customSingleValue,
   Form,
   FormField,
   FormFieldLabel,
@@ -36,15 +29,16 @@ type AddAddressFormProps = {
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const { t } = useTranslation()
-  const chainOptions = useMemo(() => getCoinOptions(), [])
+
+  const [chain, setChain] = useState<Chain>(Chain.Bitcoin)
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty, isLoading, isValidating },
-    control,
   } = useAddressSchema({
     type: 'add',
+    chain,
   })
 
   const {
@@ -54,14 +48,14 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   } = useCreateAddressBookItemMutation()
 
   const handleAddAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data
+    const { address, title } = data
 
     addAddressBookItem(
       {
         id: uuidv4(),
         title,
         address,
-        chain: chain as Chain,
+        chain,
       },
       {
         onSuccess: onClose,
@@ -79,32 +73,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
 
       <Container>
         <Form onSubmit={handleSubmit(handleAddAddress)}>
-          <FormField>
-            <Controller
-              name="chain"
-              control={control}
-              render={({ field }) => (
-                <Select<ChainOption>
-                  value={
-                    chainOptions.find(option => option.value === field.value) ||
-                    null
-                  }
-                  defaultValue={chainOptions[0]}
-                  onChange={selectedOption => {
-                    field.onChange(selectedOption?.value)
-                  }}
-                  onBlur={field.onBlur}
-                  options={chainOptions}
-                  components={{
-                    Menu: customSelectMenu,
-                    Option: customSelectOption,
-                    SingleValue: customSingleValue,
-                  }}
-                  styles={customSelectStyles}
-                />
-              )}
-            />
-          </FormField>
+          <ChainInput value={chain} onChange={setChain} />
 
           <div>
             <FormFieldLabel htmlFor="title">

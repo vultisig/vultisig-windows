@@ -8,6 +8,8 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  extension_vault_import_restriction:
+    'Only DKLS vaults can be imported in extension',
   failed_to_migrate_storage: 'Failed to migrate storage',
   general: 'General',
   github: 'Github',
@@ -828,4 +830,9 @@ export const en = {
     'Please provide camera permission to scan the QR code',
   grant_camera_permission: 'Grant Camera Permission',
   failed_to_get_camera_permission: 'Failed to get camera permission',
+  custom_token: 'Custom Token',
+  find_custom_token: 'Find Your Custom Token',
+  enter_contract_address: 'Enter Contract Address',
+  no_token_found: 'No token found',
+  invalid_token_address: 'Enter a valid token address',
 }
