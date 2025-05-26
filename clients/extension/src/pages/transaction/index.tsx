@@ -41,6 +41,7 @@ import { splitString } from '../../utils/functions'
 import { getKeysignPayload } from '../../utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -51,7 +52,7 @@ export const TransactionPage = () => {
   const { mutate: processTransaction, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const transactions = await getVaultTransactions(getVaultId(vault))
-      const transaction = transactions.pop()
+      const transaction = getLastItem(transactions)
       if (!transaction) {
         throw new Error('No current transaction present')
       }
