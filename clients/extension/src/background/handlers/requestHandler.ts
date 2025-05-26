@@ -15,6 +15,8 @@ import {
   toUtf8String,
   TransactionRequest,
   TypedDataEncoder,
+  isHexString,
+  getBytes,
 } from 'ethers'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
@@ -633,13 +635,23 @@ export const handleRequest = (
       case RequestMethod.METAMASK.PERSONAL_SIGN: {
         if (Array.isArray(params)) {
           const [message, address] = params
-          const utf8Message = toUtf8String(String(message))
+
+          let messageBytes: Uint8Array
+          if (typeof message === 'string' && isHexString(message)) {
+            messageBytes = getBytes(message)
+          } else {
+            messageBytes = new TextEncoder().encode(String(message))
+          }
+
+          const prefix = `\x19Ethereum Signed Message:\n${messageBytes.length}`
+          const fullMessage = prefix + new TextDecoder().decode(messageBytes)
+
           handleSendTransaction({
             transactionPayload: {
               custom: {
                 method,
                 address: String(address),
-                message: `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`,
+                message: fullMessage,
               },
             },
             id: '',

@@ -1,6 +1,6 @@
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-
+import { MessageKey } from '@clients/extension/src/utils/constants'
 import VULTI_ICON_RAW_SVG from '../icon'
 import { messengers } from '../messenger'
 import { Ethereum } from '../providers/ethereum'
@@ -15,13 +15,13 @@ export const injectToWindow = () => {
     getVault: async () =>
       messengers.background.send(
         'providerRequest',
-        { type: 'VAULT', message: {} },
+        { type: MessageKey.VAULT, message: {} },
         { id: uuidv4() }
       ),
     getVaults: async () =>
       messengers.background.send(
         'providerRequest',
-        { type: 'VAULTS', message: {} },
+        { type: MessageKey.VAULTS, message: {} },
         { id: uuidv4() }
       ),
   }
