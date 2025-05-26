@@ -31,7 +31,7 @@ const EmptyAddressesView = () => {
             {t('address_book_empty_instruction')}
           </Text>
           <Button onClick={handleAddAddress} kind="outlined">
-            <GradientText>{t('add_address')}</GradientText>
+            <Text weight={500} size={14}>{t('add_address')}</Text>
           </Button>
         </CenteredBox>
       </Container>

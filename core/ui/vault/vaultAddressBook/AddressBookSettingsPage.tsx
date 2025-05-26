@@ -28,13 +28,8 @@ const AddressBookSettingsPage = () => {
                 ? 'empty'
                 : 'list'
           }
-          addAddress={() => (
-            <AddAddressForm />
-          )}
-          empty={() => (
-            <EmptyAddressesView
-            />
-          )}
+          addAddress={() => <AddAddressForm />}
+          empty={() => <EmptyAddressesView />}
           list={() => (
             <AddressesListView
               onEditModeToggle={() => setIsEditModeOn(!isEditModeOn)}

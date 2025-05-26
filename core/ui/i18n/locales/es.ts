@@ -866,7 +866,8 @@ export const es = {
     'Proporcione permiso para escanear el código QR con la cámara',
   grant_camera_permission: 'Conceder permiso para la cámara',
   failed_to_get_camera_permission: 'No se pudo obtener el permiso de la cámara',
-  address_book_empty_instruction: 'Haz clic en "Añadir dirección" para añadir tus direcciones favoritas',
+  address_book_empty_instruction:
+    'Haz clic en "Añadir dirección" para añadir tus direcciones favoritas',
   select_chains: 'Seleccionar chains',
   chains: 'Chains',
   failed_to_migrate_storage: 'No se pudo migrar el almacenamiento',

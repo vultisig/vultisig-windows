@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/ScanQrView'
@@ -49,6 +50,21 @@ const AddAddressForm = () => {
   const { getClipboardText } = useCore()
   const [showQrScanner, setShowQrScanner] = useState(false)
 
+  const handleSelectChain = () => {
+    navigate({
+      id: 'chainSelection',
+      state: {
+        selectedChain,
+        onChainSelect: (chain: Chain) => {
+          navigate({
+            id: 'addAddress',
+            state: { selectedChain: chain },
+          })
+        },
+      },
+    })
+  }
+
   const {
     register,
     handleSubmit,
@@ -56,12 +72,13 @@ const AddAddressForm = () => {
     setValue,
   } = useAddressSchema({
     type: 'add',
-    chain,
+    chain: selectedChain || Chain.Ethereum,
   })
 
   useEffect(() => {
     if (selectedChain) {
-      setValue('chain', selectedChain)
+      setValue('address', '')
+      setValue('title', '')
     }
   }, [selectedChain, setValue])
 
@@ -79,7 +96,7 @@ const AddAddressForm = () => {
         id: uuidv4(),
         title,
         address,
-        chain,
+        chain: selectedChain || Chain.Ethereum,
       },
       {
         onSuccess: () => {
@@ -102,22 +119,6 @@ const AddAddressForm = () => {
     setShowQrScanner(false)
   }
 
-  const handleSelectChain = () => {
-    navigate({
-      id: 'chainSelection',
-      state: {
-        selectedChain,
-        onChainSelect: (chain: Chain) => {
-          setValue('chain', chain)
-          navigate({
-            id: 'addAddress',
-            state: { selectedChain: chain },
-          })
-        },
-      },
-    })
-  }
-
   if (showQrScanner) {
     return <QrScanner onFinish={handleScanQrCode} />
   }
@@ -126,9 +127,7 @@ const AddAddressForm = () => {
     <VStack fullHeight as="form" onSubmit={handleSubmit(handleAddAddress)}>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton
-            onClick={() => navigate({ id: 'settings' })}
-          />
+          <PageHeaderBackButton onClick={() => navigate({ id: 'settings' })} />
         }
         title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
       />
@@ -144,9 +143,8 @@ const AddAddressForm = () => {
           >
             {selectedChain ? (
               <>
-                <img
-                  src={getChainEntityIconSrc(selectedChain)}
-                  alt=""
+                <ChainEntityIcon
+                  value={getChainLogoSrc(selectedChain)}
                   style={{ width: 24, height: 24 }}
                 />
                 <Text color="contrast" size={14} weight="500">

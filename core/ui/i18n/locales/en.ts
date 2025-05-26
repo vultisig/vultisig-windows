@@ -832,7 +832,8 @@ export const en = {
     'Please provide camera permission to scan the QR code',
   grant_camera_permission: 'Grant Camera Permission',
   failed_to_get_camera_permission: 'Failed to get camera permission',
-  address_book_empty_instruction: 'Click "Add Address" to add your favorite addresses',
+  address_book_empty_instruction:
+    'Click "Add Address" to add your favorite addresses',
   select_chains: 'Select Chains',
   chains: 'Chains',
   custom_token: 'Custom Token',

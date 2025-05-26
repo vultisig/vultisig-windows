@@ -863,9 +863,10 @@ export const it = {
   grant_camera_permission: "Concedi l'autorizzazione per la telecamera",
   failed_to_get_camera_permission:
     "Impossibile ottenere l'autorizzazione per la fotocamera",
-    address_book_empty_instruction: 'Clicca su "Aggiungi indirizzo" per aggiungere i tuoi indirizzi preferiti',
-    select_chains: 'Seleziona Chains',
-    chains: 'Chains',
+  address_book_empty_instruction:
+    'Clicca su "Aggiungi indirizzo" per aggiungere i tuoi indirizzi preferiti',
+  select_chains: 'Seleziona Chains',
+  chains: 'Chains',
   failed_to_migrate_storage: "Impossibile migrare l'archiviazione",
   custom_token: 'Token personalizzato',
   find_custom_token: 'Trova il tuo token personalizzato',

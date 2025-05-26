@@ -845,7 +845,8 @@ export const hr = {
     'Molimo vas da omogućite kameru za skeniranje QR koda',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   failed_to_get_camera_permission: 'Nije uspjelo dobiti dopuštenje za kameru',
-  address_book_empty_instruction: 'Kliknite "Dodaj adresu" da dodate svoje omiljene adrese',
+  address_book_empty_instruction:
+    'Kliknite "Dodaj adresu" da dodate svoje omiljene adrese',
   select_chains: 'Odaberite Chains',
   chains: 'Chains',
   failed_to_migrate_storage: 'Migracija pohrane nije uspjela',

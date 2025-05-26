@@ -26,9 +26,9 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
 import AddAddressForm from '../vault/send/addressSelector/components/addAddressForm/AddAddressForm'
 import ChainSelectionScreen from '../vault/send/addressSelector/components/chainSelection/ChainSelectionScreen'
-import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
 
 export type SharedViewId = Extract<
   CoreViewId,

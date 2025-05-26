@@ -855,7 +855,8 @@ export const pt = {
     'Por favor, forneça permissão para a câmera escanear o código QR',
   grant_camera_permission: 'Conceder permissão para câmera',
   failed_to_get_camera_permission: 'Falha ao obter permissão para câmera',
-  address_book_empty_instruction: 'Clique em "Adicionar endereço" para adicionar seus endereços favoritos',
+  address_book_empty_instruction:
+    'Clique em "Adicionar endereço" para adicionar seus endereços favoritos',
   select_chains: 'Selecionar Chains',
   chains: 'Chains',
   failed_to_migrate_storage: 'Falha ao migrar o armazenamento',

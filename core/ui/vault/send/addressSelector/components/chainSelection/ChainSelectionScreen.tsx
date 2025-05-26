@@ -1,7 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -170,10 +171,9 @@ const ChainSelectionScreen = () => {
                 onClick={() => handleChainSelect(option.value as Chain)}
               >
                 <ChainContent>
-                  <img
-                    src={getChainEntityIconSrc(option.value)}
-                    alt=""
-                    style={{ width: 24, height: 24 }}
+                  <ChainEntityIcon
+                    value={getChainLogoSrc(option.value)}
+                    style={{ width: 24, height: 24, marginRight: 16 }}
                   />
                   <Text color="contrast" size={14} weight="500">
                     {option.value}
