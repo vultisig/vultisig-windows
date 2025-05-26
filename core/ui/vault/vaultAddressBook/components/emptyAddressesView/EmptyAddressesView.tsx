@@ -2,7 +2,6 @@ import { Button } from '@lib/ui/buttons/Button'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
-import { GradientText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
@@ -31,7 +30,9 @@ const EmptyAddressesView = () => {
             {t('address_book_empty_instruction')}
           </Text>
           <Button onClick={handleAddAddress} kind="outlined">
-            <Text weight={500} size={14}>{t('add_address')}</Text>
+            <Text weight={500} size={14}>
+              {t('add_address')}
+            </Text>
           </Button>
         </CenteredBox>
       </Container>
