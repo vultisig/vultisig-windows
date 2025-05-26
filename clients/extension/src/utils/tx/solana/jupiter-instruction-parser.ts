@@ -1,5 +1,5 @@
 import { BorshCoder } from '@coral-xyz/anchor'
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
+import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
@@ -130,7 +130,7 @@ export class JupiterInstructionParser {
       return NATIVE_MINT.toString()
     }
 
-    const connection = new Connection(chainRpcUrl.Solana)
+    const connection = new Connection(solanaRpcUrl)
     const inputAccountInfo = await connection.getParsedAccountInfo(pubkey)
 
     if (!inputAccountInfo.value) return NATIVE_MINT.toString()

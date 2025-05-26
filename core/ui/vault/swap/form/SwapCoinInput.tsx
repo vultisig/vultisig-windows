@@ -3,7 +3,6 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getChainEntityIconSrc } from '@core/ui/chain/coin/icon/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
@@ -23,6 +22,7 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 
@@ -72,7 +72,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     gap={4}
                   >
                     <ChainCoinIcon
-                      coinSrc={getCoinLogoSrc(logo)}
+                      coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
                       chainSrc={
                         shouldDisplayChainLogo({
                           ticker: ticker,
@@ -82,7 +82,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                             chain: chain,
                           }),
                         })
-                          ? getChainEntityIconSrc(chain)
+                          ? getChainLogoSrc(chain)
                           : undefined
                       }
                       style={{ fontSize: 16 }}
