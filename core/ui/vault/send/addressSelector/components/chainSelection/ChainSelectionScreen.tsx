@@ -76,10 +76,12 @@ const Checkbox = styled.div<{ checked?: boolean }>`
 
   &:after {
     content: '';
-    width: 10px;
+    width: 6px;
     height: 10px;
-    background-color: #4caf50;
-    border-radius: 2px;
+    border: 2px solid #4caf50;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg) translate(-1px, -1px);
     display: ${props => (props.checked ? 'block' : 'none')};
   }
 `
