@@ -20,7 +20,9 @@ export const toStorageVault = ({
   order,
   folderId,
   isBackedUp,
+  lastPasswordVerificationTime,
 }: Vault): storage.Vault => ({
+  last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
   name: name,
   public_key_ecdsa: publicKeys.ecdsa,
   public_key_eddsa: publicKeys.eddsa,
@@ -59,6 +61,7 @@ export const fromStorageVault = (
       ).keyshare
   )
   return {
+    lastPasswordVerificationTime: vault.last_password_verification_time,
     name: vault.name,
     publicKeys,
     signers: vault.signers,

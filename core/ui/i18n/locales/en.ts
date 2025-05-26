@@ -131,6 +131,7 @@ export const en = {
   name_your_vault: 'Name your Vault',
   vault_name_description: 'You can always rename your vault later in settings',
   join: 'Join',
+  verify_password_periodic_message: 'Verify your Server Share Password',
   done: 'Done',
   and: 'and',
   approve: 'Approve',

@@ -145,6 +145,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 		IsBackedUp:    false,
 		Coins:         []storage.Coin{},
 		LibType:       "GG20",
+		LastPasswordVerificationTime: time.Now().UnixMilli(),
 	}
 
 	return vault, nil

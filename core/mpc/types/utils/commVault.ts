@@ -8,6 +8,7 @@ import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
+import { hasServer } from '../../devices/localPartyId'
 import {
   Vault as CommVault,
   Vault_KeyShareSchema,
@@ -81,5 +82,8 @@ export const fromCommVault = (vault: CommVault): Vault => {
     libType: fromLibType(vault.libType),
     isBackedUp: false,
     order: 0,
+    lastPasswordVerificationTime: hasServer(vault.signers)
+      ? Date.now()
+      : undefined,
   }
 }
