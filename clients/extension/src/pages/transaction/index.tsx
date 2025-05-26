@@ -262,7 +262,7 @@ export const TransactionPage = () => {
           </PageContent>
           <PageFooter>
             <StartKeysignPrompt
-              value={keysignMessagePayload}
+              keysignPayload={keysignMessagePayload}
               isDAppSigning={true}
             />
           </PageFooter>
