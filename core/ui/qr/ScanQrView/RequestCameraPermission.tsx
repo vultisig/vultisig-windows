@@ -1,3 +1,4 @@
+import { cameraPermissionQueryKey } from '@core/ui/qr/ScanQrView/queries/useCameraPermissionQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -7,19 +8,23 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
-import { cameraPermissionQueryKey } from './queries/useCameraPermissionQuery'
-
 export const RequestCameraPermission = () => {
+  const { t } = useTranslation()
   const invalidateQueries = useInvalidateQueries()
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
+      await navigator.permissions
+        .query({ name: 'camera' })
+        .then(({ state }) => {
+          if (state === 'denied') throw Error(t('camera_access_blocked'))
+        })
+
       await navigator.mediaDevices.getUserMedia({ video: true })
+
       return invalidateQueries(cameraPermissionQueryKey)
     },
   })
-
-  const { t } = useTranslation()
 
   return (
     <Center>
@@ -28,7 +33,11 @@ export const RequestCameraPermission = () => {
         <Button onClick={() => mutate()} isLoading={isPending}>
           {error ? t('try_again') : t('grant_camera_permission')}
         </Button>
-        {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+        {error && (
+          <Text color="danger" centerHorizontally>
+            {extractErrorMsg(error)}
+          </Text>
+        )}
       </VStack>
     </Center>
   )

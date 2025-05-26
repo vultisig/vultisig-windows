@@ -829,6 +829,8 @@ export const en = {
   provide_camera_permission:
     'Please provide camera permission to scan the QR code',
   grant_camera_permission: 'Grant Camera Permission',
+  camera_access_blocked:
+    'Camera access is blocked. Please enable it in your browser settings.',
   failed_to_get_camera_permission: 'Failed to get camera permission',
   custom_token: 'Custom Token',
   find_custom_token: 'Find Your Custom Token',
