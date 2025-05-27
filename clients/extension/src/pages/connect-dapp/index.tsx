@@ -113,7 +113,7 @@ export const ConnectDAppPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button onClick={handleSubmit} kind="primary" isBlock isRounded>
+        <Button onClick={handleSubmit} kind="primary"  isRounded>
           {t('connect')}
         </Button>
       </PageFooter>

@@ -115,7 +115,7 @@ export const ConnectedDappsPage = () => {
                       icon={<LinkTwoOffIcon fontSize={20} />}
                       onClick={() => handleDisconnect(host, session.url)}
                       size="l"
-                      status="error"
+                      kind="alert"
                       fitContent
                       disabled={isDisconnecting}
                     />
@@ -133,7 +133,6 @@ export const ConnectedDappsPage = () => {
             <Button
               onClick={handleDisconnectAll}
               kind="primary"
-              isBlock
               isRounded
               disabled={isDisconnecting}
             >

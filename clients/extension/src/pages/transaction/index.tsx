@@ -843,7 +843,7 @@ export const TransactionPage = () => {
                 </div>
               </div>
               <div className="footer">
-                <Button onClick={() => handleStep(2)} kind="primary" isBlock>
+                <Button onClick={() => handleStep(2)} kind="primary">
                   {t('sign')}
                 </Button>
               </div>
@@ -945,7 +945,7 @@ export const TransactionPage = () => {
                   </div>
                 )}
                 <Divider text={t('or')} />
-                <Button onClick={handleApp} kind="secondary" isBlock>
+                <Button onClick={handleApp} kind="secondary">
                   Sign with desktop app instead
                 </Button>
               </div>
@@ -1020,7 +1020,7 @@ export const TransactionPage = () => {
                 )}
               </div>
               <div className="footer">
-                <Button onClick={handleStartSigning} kind="secondary" isBlock>
+                <Button onClick={handleStartSigning} kind="secondary">
                   {fastSign
                     ? 'Confirm & signing with server'
                     : 'Confirm & sign with device'}
@@ -1098,7 +1098,6 @@ export const TransactionPage = () => {
                     disabled={!isValid || !isDirty}
                     onClick={handleSubmit(handleSubmitFastSignPassword)}
                     kind="secondary"
-                    isBlock
                   >
                     Submit
                   </Button>
@@ -1263,7 +1262,7 @@ export const TransactionPage = () => {
                 )}
               </div>
               <div className="footer">
-                <Button onClick={handleClose} kind="primary" isBlock>
+                <Button onClick={handleClose} kind="primary">
                   {t('done')}
                 </Button>
               </div>

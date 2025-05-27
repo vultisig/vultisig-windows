@@ -15,9 +15,6 @@ import { cropText } from '../css/cropText'
 import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
-type Status = 'default' | 'error' | 'success' | 'warning'
-type ButtonType = 'default' | 'link'
-type Weight = 400 | 500 | 600 | 700
 
 type ButtonKind =
   | 'primary'
@@ -34,12 +31,9 @@ interface ContainerProps {
   isDisabled?: boolean
   isLoading?: boolean
   isRounded?: boolean
-  isBlock?: boolean
   icon?: ReactNode
   kind: ButtonKind
   fitContent?: boolean
-  status?: Status
-  weight?: Weight
 }
 
 const Container = styled(UnstyledButton)<ContainerProps>`
@@ -50,20 +44,6 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
-
-  ${({ isBlock, weight }) => {
-    return css`
-      align-items: center;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      font-weight: ${weight || 600};
-      gap: 8px;
-      justify-content: center;
-      transition: all 0.2s;
-      width: ${isBlock ? '100%' : 'auto'};
-    `
-  }}
 
   ${({ size, fitContent, isRounded }) =>
     match(size, {
@@ -203,12 +183,9 @@ type ButtonProps = Omit<
   isLoading?: boolean
   isRounded?: boolean
   kind?: ButtonKind
-  isBlock?: boolean
   fitContent?: boolean
   onClick?: () => void
   as?: React.ElementType
-  status?: 'default' | 'error' | 'success' | 'warning'
-  buttonType?: ButtonType
 }
 
 const Hide = styled.div`
