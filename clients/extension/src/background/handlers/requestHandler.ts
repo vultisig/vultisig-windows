@@ -595,7 +595,7 @@ export const handleRequest = (
               },
               status: 'default',
             })
-              .then(result => resolve(result))
+              .then(result => resolve(ensureHexPrefix(result.txHash)))
               .catch(error => {
                 reject(error)
               })
@@ -632,7 +632,7 @@ export const handleRequest = (
             },
             status: 'default',
           })
-            .then(result => ensureHexPrefix(result.txHash))
+            .then(result => resolve(ensureHexPrefix(result.txHash)))
             .catch(reject)
         } else {
           reject()
