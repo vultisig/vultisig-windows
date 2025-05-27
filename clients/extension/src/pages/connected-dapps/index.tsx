@@ -1,3 +1,4 @@
+import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/mutations/useClearVaultSessionsMutation'
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
@@ -19,8 +20,6 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
-
-import { initializeMessenger } from '../../messengers/initializeMessenger'
 
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
@@ -91,7 +90,6 @@ export const ConnectedDappsPage = () => {
                       onClick={() => handleDisconnect(host, session.url)}
                       size="l"
                       kind="alert"
-                      disabled={isDisconnecting}
                     />
                   }
                   title={
