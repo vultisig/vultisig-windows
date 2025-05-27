@@ -6,7 +6,6 @@ import {
   toCamelCase,
   toSnakeCase,
 } from '@clients/extension/src/utils/functions'
-import { FastSignInput } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
@@ -92,22 +91,6 @@ export default {
         .then(({ data }) => resolve(data.count > 0))
         .catch(() => resolve(false))
     })
-  },
-  fastVault: {
-    assertVaultExist: (ecdsa: string): Promise<boolean> => {
-      return new Promise(resolve => {
-        api
-          .get(`${apiRef.vultisig.api}vault/exist/${ecdsa}`)
-          .then(() => resolve(true))
-          .catch(() => resolve(false))
-      })
-    },
-    signWithServer: async (input: FastSignInput) => {
-      return new Promise((resolve, reject) => {
-        const url = `${apiRef.vultisig.api}vault/sign`
-        api.post(url, input).then(resolve).catch(reject)
-      })
-    },
   },
   ethereum: {
     async getTransactionByHash(

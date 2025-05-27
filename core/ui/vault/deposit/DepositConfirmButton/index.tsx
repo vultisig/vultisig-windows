@@ -143,5 +143,5 @@ export const DepositConfirmButton = ({
     return <Text>{t('loading')}</Text>
   }
 
-  return <StartKeysignPrompt value={keysignPayload} />
+  return <StartKeysignPrompt keysignPayload={keysignPayload} />
 }
