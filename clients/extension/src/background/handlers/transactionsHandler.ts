@@ -9,6 +9,7 @@ import {
   updateTransaction,
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
+import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleOpenPanel } from '../window/windowManager'
 
 export const handleSendTransaction = async (
