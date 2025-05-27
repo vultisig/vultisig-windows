@@ -57,6 +57,10 @@ export const checkERC20Function = async (
   return await api.getIsFunctionSelector(functionSelector)
 }
 
+export const isPopupView = () => {
+  return chrome.extension.getViews({ type: 'popup' }).length > 0
+}
+
 export const splitString = (str: string, size: number): string[] => {
   const result: string[] = []
 
@@ -114,8 +118,6 @@ export const processBackgroundResponse = (
     RequestMethod.VULTISIG.SEND_TRANSACTION,
     RequestMethod.CTRL.DEPOSIT,
     RequestMethod.VULTISIG.DEPOSIT_TRANSACTION,
-    RequestMethod.METAMASK.PERSONAL_SIGN,
-    RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4,
   ]
 
   if (isOneOf(data.method, handledMethods)) {
