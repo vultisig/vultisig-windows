@@ -473,7 +473,7 @@ export const hr = {
     },
     connectingWithServer: 'Csatlakozás a szerverhez...',
     connectionSuccess: 'Sikeres csatlakozás!',
-    takeMinute: 'Ez csak egy másodpercet vesz igénybe',
+    takeMinute: 'Ovo traje samo jednu sekundu',
     vaultInitializationStarting: 'Tároló inicializálásának indítása...',
     emailRequired: 'E-mail szükséges',
     emailIncorrect: 'Hibás e-mail, kérjük, ellenőrizze',
