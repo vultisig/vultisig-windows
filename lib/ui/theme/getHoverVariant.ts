@@ -9,13 +9,7 @@ interface ThemeGetterParams {
 
 type ColorName = keyof Pick<
   ThemeColors,
-  | 'foreground'
-  | 'primary'
-  | 'idle'
-  | 'foregroundSuperContrast'
-  | 'buttonPrimaryWebHover'
-  | 'buttonPrimaryWeb'
-  | 'backgroundTertiary'
+  'foreground' | 'primary' | 'idle' | 'foregroundSuperContrast'
 >
 
 export const getHoverVariant =
@@ -28,7 +22,4 @@ export const getHoverVariant =
         theme.colors.primary.getVariant({ l: (l: number) => l * 0.85 }),
       foregroundSuperContrast: () => theme.colors.foregroundSuperContrast,
       idle: () => theme.colors.idle.getVariant({ l: (l: number) => l + 4 }),
-      buttonPrimaryWebHover: () => theme.colors.buttonPrimaryWebHover,
-      buttonPrimaryWeb: () => theme.colors.buttonPrimaryWeb,
-      backgroundTertiary: () => theme.colors.backgroundTertiary,
     }).toCssValue()

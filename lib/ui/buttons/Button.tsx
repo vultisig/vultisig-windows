@@ -12,6 +12,7 @@ import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { cropText } from '../css/cropText'
+import { HStack } from '../layout/Stack'
 import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
@@ -136,16 +137,16 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         ${match(kind, {
           default: () => css`
-            background: ${getHoverVariant('backgroundTertiary')};
+            background: transparent;
           `,
           link: () => css`
-            background: ${getHoverVariant('backgroundTertiary')};
+            background: ${getColor('backgroundTertiary')};
           `,
           primary: () => css`
-            background: ${getHoverVariant('buttonPrimaryWebHover')};
+            background: ${getColor('buttonPrimaryWebHover')};
           `,
           secondary: () => css`
-            background: ${getHoverVariant('buttonPrimaryWeb')};
+            background: ${getColor('buttonPrimaryWeb')};
           `,
           outlined: () => css``,
           ghost: () => css`
@@ -211,10 +212,10 @@ export const Button = ({
       </CenterAbsolutely>
     </>
   ) : (
-    <>
+    <HStack gap={8}>
       {icon}
       {children}
-    </>
+    </HStack>
   )
 
   const containerProps = {
