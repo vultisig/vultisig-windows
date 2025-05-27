@@ -324,10 +324,9 @@ export const es = {
   vault_name_max_length_error:
     'El nombre del bóveda debe tener menos de 50 caracteres',
   vault_name_already_exists: 'El nombre de la bóveda debe ser único',
-  vault_settings_address_book_save_addresses_button: 'Guardar dirección',
-  vault_settings_address_book_edit_addresses_title: 'Editar dirección',
-  vault_settings_address_book_address_title_field: 'Título',
-  vault_settings_address_book_address_placeholder: 'Escriba aquí',
+  edit_address: 'Editar dirección',
+  title: 'Título',
+  type_here: 'Escriba aquí',
   vault_settings_address_book_invalid_address_error:
     '¡Dirección inválida para la blockchain seleccionada!',
   vault_settings_address_book_repeated_address_error: '¡Dirección ya agregada!',
@@ -337,7 +336,7 @@ export const es = {
     'La dirección debe tener al menos 1 carácter.',
   vault_settings_address_book_title_max_length_error:
     'El título debe tener como máximo 50 caracteres.',
-  address_book_list_item_network: 'red',
+  network: 'red',
   session_init: 'Inicializando sesión...',
   session_init_failed: 'No se pudo iniciar la sesión',
   select_at_least_one_device: 'Seleccione al menos un dispositivo',
