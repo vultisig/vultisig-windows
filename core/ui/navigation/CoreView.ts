@@ -5,7 +5,6 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { AddressBookItem } from '@core/ui/address-book/model'
 import { CustomTokenEnabledChain } from '@core/ui/chain/coin/addCustomToken/core/chains'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
@@ -53,7 +52,7 @@ export type CoreView =
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'swap'; state: { coin: CoinKey } }
-  | { id: 'updateAddressBookItem'; state: { values: AddressBookItem } }
+  | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }

@@ -65,7 +65,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       onClick={() =>
         onSelect
           ? onSelect(address)
-          : navigate({ id: 'updateAddressBookItem', state: { values } })
+          : navigate({ id: 'updateAddressBookItem', state: { id } })
       }
       title={title}
       hoverable
