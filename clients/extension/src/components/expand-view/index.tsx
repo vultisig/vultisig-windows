@@ -1,8 +1,8 @@
+import { isPopupView } from '@clients/extension/src/utils/functions'
 import { useCore } from '@core/ui/state/core'
 import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
 import { ListItem } from '@lib/ui/list/item'
 import { useTranslation } from 'react-i18next'
-import { isPopupView } from '@clients/extension/src/utils/functions'
 
 export const ExpandView = () => {
   const { t } = useTranslation()
