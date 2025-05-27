@@ -1,5 +1,4 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
@@ -12,6 +11,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
 import { ManageAmount } from '../amount/ManageSendAmount'
@@ -50,16 +50,16 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         }
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageContent
-        as="form"
-        scrollable
-        gap={40}
-        {...getFormProps({
-          onSubmit: onFinish,
-          isDisabled,
-        })}
-      >
-        <WithProgressIndicator value={0.2}>
+      <PageWrapper justifyContent="center">
+        <PageContent
+          as="form"
+          scrollable
+          gap={40}
+          {...getFormProps({
+            onSubmit: onFinish,
+            isDisabled,
+          })}
+        >
           <VStack gap={16}>
             <ManageSendCoin />
             <Sender />
@@ -76,17 +76,24 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
               </StrictInfoRow>
             </VStack>
           </VStack>
-        </WithProgressIndicator>
-      </PageContent>
-      <PageFooter>
-        <Button
-          isLoading={isLoading && isPending}
-          isDisabled={isDisabled}
-          type="submit"
-        >
-          {t('continue')}
-        </Button>
-      </PageFooter>
+        </PageContent>
+        <PageFooter>
+          <Button
+            isLoading={isLoading && isPending}
+            isDisabled={isDisabled}
+            type="submit"
+          >
+            {t('continue')}
+          </Button>
+        </PageFooter>
+      </PageWrapper>
     </>
   )
 }
+
+const PageWrapper = styled(VStack)`
+  width: 1200px;
+  max-width: min(100%, 800px);
+  margin-inline: auto;
+  flex: 1;
+`
