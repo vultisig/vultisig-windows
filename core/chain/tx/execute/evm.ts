@@ -26,7 +26,7 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
     const hash = await publicClient.sendRawTransaction({
       serializedTransaction: rawTx as `0x${string}`,
     })
-    return hash
+    return { txHash: hash }
   } catch (error) {
     const isAlreadyBroadcast = isInError(
       error,
@@ -39,7 +39,7 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
     )
 
     if (isAlreadyBroadcast) {
-      return txHash
+      return { txHash }
     }
 
     throw error

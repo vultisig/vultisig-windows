@@ -20,5 +20,5 @@ export const executeSuiTx: ExecuteTxResolver = async ({ compiledTx }) => {
     signature: [compiledSignature],
   })
 
-  return digest
+  return { txHash: digest }
 }

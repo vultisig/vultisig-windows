@@ -33,11 +33,11 @@ export const executeRippleTx: ExecuteTxResolver = async ({
           'this sequence number has already passed.' &&
         tx_json?.hash
       ) {
-        return tx_json.hash
+        return { txHash: tx_json.hash }
       }
-      return engine_result_message
+      return { txHash: engine_result_message }
     }
   }
 
-  return shouldBeDefined(tx_json?.hash)
+  return { txHash: shouldBeDefined(tx_json?.hash) }
 }

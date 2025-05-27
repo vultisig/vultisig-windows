@@ -4,6 +4,7 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -51,6 +52,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       />
       <PageContent
         as="form"
+        scrollable
         gap={40}
         {...getFormProps({
           onSubmit: onFinish,
@@ -75,6 +77,8 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
             </VStack>
           </VStack>
         </WithProgressIndicator>
+      </PageContent>
+      <PageFooter>
         <Button
           isLoading={isLoading && isPending}
           isDisabled={isDisabled}
@@ -82,7 +86,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         >
           {t('continue')}
         </Button>
-      </PageContent>
+      </PageFooter>
     </>
   )
 }
