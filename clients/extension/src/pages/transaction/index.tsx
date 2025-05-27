@@ -10,6 +10,7 @@ import {
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -18,6 +19,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -58,10 +60,19 @@ export const TransactionPage = () => {
       const keysignMessagePayload: KeysignMessagePayload =
         await matchRecordUnion(transaction.transactionPayload, {
           keysign: async keysign => {
+            const chainKind = getChainKind(keysign.chain)
+            const gasSettings: FeeSettings | null =
+              chainKind === 'evm'
+                ? { priority: 'fast', gasLimit: defaultEvmSwapGasLimit }
+                : chainKind === 'utxo'
+                  ? { priority: 'fast' }
+                  : null
+
             const keysignPayload = await getKeysignPayload(
               keysign,
               vault,
-              walletCore
+              walletCore,
+              gasSettings
             )
 
             keysign.txFee = String(
