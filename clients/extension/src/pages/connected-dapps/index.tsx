@@ -1,7 +1,9 @@
 import { Button } from '@clients/extension/src/components/button'
+import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/mutations/useClearVaultSessionsMutation'
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
+import { EventMethod } from '@clients/extension/src/utils/constants'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
@@ -13,54 +15,32 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { initializeMessenger } from '../../messengers/initializeMessenger'
-import { EventMethod } from '../../utils/constants'
-
-const StyledEmptyState = styled(VStack)`
-  background-color: ${getColor('backgroundsSecondary')};
-  border-radius: 12px;
-  padding: 64px;
-`
-const StyledText = styled(Text)`
-  text-align: center;
-`
 
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
-  const currentVaultId = useCurrentVaultId()
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
-  const [isDisconnecting, setIsDisconnecting] = useState(false)
-  const isDisconnectingRef = useRef(false)
+  const sessionsArray = Object.entries(sessions)
+  const currentVaultId = useCurrentVaultId()
+  const navigateBack = useNavigateBack()
+
   const handleDisconnect = async (host: string, url: string) => {
-    if (isDisconnectingRef.current) return
-    isDisconnectingRef.current = true
-    setIsDisconnecting(true)
     try {
       await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
       await inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
     } catch (error) {
       console.error(`Failed to disconnect session for ${host}:`, error)
-    } finally {
-      isDisconnectingRef.current = false
-      setIsDisconnecting(false)
     }
   }
 
   const handleDisconnectAll = async () => {
-    if (isDisconnectingRef.current) return
-    isDisconnectingRef.current = true
-    setIsDisconnecting(true)
     try {
       await clearSessions({ vaultId: shouldBePresent(currentVaultId) })
       const uniqueUrls = new Set(
@@ -73,13 +53,8 @@ export const ConnectedDappsPage = () => {
       )
     } catch (error) {
       console.error('Failed to disconnect all sessions:', error)
-    } finally {
-      isDisconnectingRef.current = false
-      setIsDisconnecting(false)
     }
   }
-  const sessionsArray = Object.entries(sessions)
-  const navigateBack = useNavigateBack()
 
   return (
     <VStack fullHeight>
@@ -116,7 +91,6 @@ export const ConnectedDappsPage = () => {
                       size="md"
                       status="error"
                       fitContent
-                      disabled={isDisconnecting}
                     />
                   }
                   title={
@@ -129,13 +103,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button
-              onClick={handleDisconnectAll}
-              type="primary"
-              block
-              rounded
-              disabled={isDisconnecting}
-            >
+            <Button onClick={handleDisconnectAll} type="primary" block rounded>
               {t('disconnect_all')}
             </Button>
           </PageFooter>
@@ -148,26 +116,24 @@ export const ConnectedDappsPage = () => {
           flexGrow
           scrollable
         >
-          <StyledEmptyState
-            alignItems="center"
-            gap={24}
-            justifyContent="center"
-          >
-            <DAppsIcon fontSize={36} />
-            <VStack
-              alignItems="center"
-              gap={16}
-              justifyContent="center"
-              fullWidth
-            >
-              <StyledText color="contrast" size={17} weight={500}>
-                {t('no_connected_dapps')}
-              </StyledText>
-              <StyledText color="light" size={14} weight={500}>
-                {t('no_connected_dapps_desc')}
-              </StyledText>
+          <Panel>
+            <VStack alignItems="center" gap={24} justifyContent="center">
+              <DAppsIcon fontSize={36} />
+              <VStack
+                alignItems="center"
+                gap={16}
+                justifyContent="center"
+                fullWidth
+              >
+                <Text size={17} weight={500} centerHorizontally>
+                  {t('no_connected_dapps')}
+                </Text>
+                <Text color="light" size={14} weight={500} centerHorizontally>
+                  {t('no_connected_dapps_desc')}
+                </Text>
+              </VStack>
             </VStack>
-          </StyledEmptyState>
+          </Panel>
         </PageContent>
       )}
     </VStack>
