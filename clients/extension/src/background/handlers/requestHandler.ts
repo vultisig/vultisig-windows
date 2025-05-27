@@ -25,6 +25,7 @@ import {
   updateAppSession,
   VaultsAppSessions,
 } from '../../sessions/state/appSessions'
+import { storage } from '../../storage'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -43,7 +44,6 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '../../utils/tx/getStandardTx'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 
@@ -338,7 +338,7 @@ export const handleRequest = (
           return
         }
 
-        getCurrentVaultId().then(async vaultId => {
+        storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
           const allSessions = await getVaultsAppSessions()
@@ -436,7 +436,7 @@ export const handleRequest = (
 
         const chain = shouldBePresent(getChainByChainId(param.chainId))
 
-        getCurrentVaultId().then(async vaultId => {
+        storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
 
