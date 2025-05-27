@@ -5,13 +5,15 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { CustomTokenEnabledChain } from '@core/ui/chain/coin/addCustomToken/core/chains'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
-import { CustomTokenEnabledChain } from '../chain/coin/addCustomToken/core/chains'
-
 export type CoreView =
+  | { id: 'addCustomToken'; state: { chain: CustomTokenEnabledChain } }
   | { id: 'address'; state: { address: string } }
+  | { id: 'addressBook' }
   | { id: 'airdropRegister' }
+  | { id: 'createAddressBookItem' }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
   | { id: 'deeplink'; state: { url: string } }
@@ -51,6 +53,7 @@ export type CoreView =
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'swap'; state: { coin: CoinKey } }
+  | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
@@ -61,8 +64,6 @@ export type CoreView =
   | { id: 'vaults' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
-  | { id: 'addressBook' }
-  | { id: 'addCustomToken'; state: { chain: CustomTokenEnabledChain } }
 
 export type CoreViewId = CoreView['id']
 
