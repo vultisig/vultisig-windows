@@ -40,27 +40,16 @@ export const ConnectedDappsPage = () => {
   const currentVaultId = useCurrentVaultId()
   const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
-  const [isDisconnecting, setIsDisconnecting] = useState(false)
-  const isDisconnectingRef = useRef(false)
   const handleDisconnect = async (host: string, url: string) => {
-    if (isDisconnectingRef.current) return
-    isDisconnectingRef.current = true
-    setIsDisconnecting(true)
     try {
       await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
       await inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
     } catch (error) {
       console.error(`Failed to disconnect session for ${host}:`, error)
-    } finally {
-      isDisconnectingRef.current = false
-      setIsDisconnecting(false)
     }
   }
 
   const handleDisconnectAll = async () => {
-    if (isDisconnectingRef.current) return
-    isDisconnectingRef.current = true
-    setIsDisconnecting(true)
     try {
       await clearSessions({ vaultId: shouldBePresent(currentVaultId) })
       const uniqueUrls = new Set(
@@ -73,9 +62,6 @@ export const ConnectedDappsPage = () => {
       )
     } catch (error) {
       console.error('Failed to disconnect all sessions:', error)
-    } finally {
-      isDisconnectingRef.current = false
-      setIsDisconnecting(false)
     }
   }
   const sessionsArray = Object.entries(sessions)
@@ -116,7 +102,6 @@ export const ConnectedDappsPage = () => {
                       size="md"
                       status="error"
                       fitContent
-                      disabled={isDisconnecting}
                     />
                   }
                   title={
@@ -129,13 +114,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button
-              onClick={handleDisconnectAll}
-              type="primary"
-              block
-              rounded
-              disabled={isDisconnecting}
-            >
+            <Button onClick={handleDisconnectAll} type="primary" block rounded>
               {t('disconnect_all')}
             </Button>
           </PageFooter>
