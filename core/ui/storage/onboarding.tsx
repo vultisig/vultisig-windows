@@ -4,8 +4,21 @@ import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
-import { SetHasFinishedOnboardingFunction } from './CoreStorage'
 import { StorageKey } from './StorageKey'
+
+export const isHasFinishedOnboardingInitially = false
+
+type SetHasFinishedOnboardingFunction = (
+  hasFinishedOnboarding: boolean
+) => Promise<void>
+
+type GetHasFinishedOnboardingFunction = () => Promise<boolean>
+
+export type OnboardingStorage = {
+  getHasFinishedOnboarding: GetHasFinishedOnboardingFunction
+  setHasFinishedOnboarding: SetHasFinishedOnboardingFunction
+}
+
 export const useHasFinishedOnboardingQuery = () => {
   const { getHasFinishedOnboarding } = useCore()
 
