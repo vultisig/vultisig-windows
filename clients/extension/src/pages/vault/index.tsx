@@ -5,11 +5,13 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -27,8 +29,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { UploadQrPrompt } from './UploadQrPrompt'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -57,7 +57,8 @@ const ConnectedApp = styled(Button)`
 export const VaultPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
+  const appNavigate = useAppNavigate()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
   const addresses = useCurrentVaultAddresses()
@@ -68,7 +69,7 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
-            onClick={() => navigate({ id: 'connectedDapps' })}
+            onClick={() => appNavigate({ id: 'connectedDapps' })}
             size="md"
             fitContent
           >
@@ -80,7 +81,12 @@ export const VaultPage = () => {
         }
         secondaryControls={
           <>
-            <UploadQrPrompt />
+            <Button
+              icon={<CameraIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'uploadQr', state: {} })}
+              size="sm"
+              fitContent
+            />
             <Button
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
