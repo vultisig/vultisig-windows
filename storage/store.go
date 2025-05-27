@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -32,12 +33,16 @@ type Store struct {
 func NewStore() (*Store, error) {
 	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
 	if dbPath == "" {
-		// Get the current running folder
-		exePath, err := os.Executable()
-		if err != nil {
-			return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+		if runtime.GOOS == "linux" {
+			dbPath = "/home/" + os.Getenv("USER") + "/.vultisig/vultisig.db"
+		} else {
+			// Get the current running folder
+			exePath, err := os.Executable()
+			if err != nil {
+				return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+			}
+			dbPath = exePath
 		}
-		dbPath = exePath
 	}
 	exeDir := filepath.Dir(dbPath)
 	// Construct the full path to the database file
@@ -399,7 +404,7 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
 	query := `SELECT id, title, address, chain FROM address_book WHERE id = ?`
 	row := s.db.QueryRow(query, id)
-	
+
 	var item AddressBookItem
 	err := row.Scan(&item.ID, &item.Title, &item.Address, &item.Chain)
 	if err != nil {
@@ -408,7 +413,7 @@ func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
 		}
 		return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 	}
-	
+
 	return &item, nil
 }
 
@@ -575,7 +580,7 @@ func (s *Store) DeleteVaultFolder(id string) error {
 func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 	query := `SELECT id, name, "order" FROM vault_folders WHERE id = ?`
 	row := s.db.QueryRow(query, id)
-	
+
 	var folder VaultFolder
 	err := row.Scan(&folder.ID, &folder.Name, &folder.Order)
 	if err != nil {
@@ -584,7 +589,7 @@ func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 		}
 		return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
 	}
-	
+
 	return &folder, nil
 }
 

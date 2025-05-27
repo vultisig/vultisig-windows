@@ -12,10 +12,7 @@ homepage: "https://vultisig.com"
 license: "MIT"
 contents:
   - src: ../../build/bin/vultisig
-    dst: /usr/local/bin/vultisig
-  - src: /usr/local/bin/vultisig
-    dst: /sbin/vultisig
-    type: symlink
+    dst: /usr/bin/vultisig
   - src: ./vultisig.desktop
     dst: /usr/share/applications/vultisig.desktop
   - src: ./vultisig.svg
