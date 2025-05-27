@@ -1,5 +1,5 @@
 import { AppView } from '@clients/extension/src/navigation/AppView'
-import { setInitialView } from '@clients/extension/src/navigation/state'
+import { setInitialView } from '@clients/extension/src/storage/initialView'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { CoreView } from '@core/ui/navigation/CoreView'
 
