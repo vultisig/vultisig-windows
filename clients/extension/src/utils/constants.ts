@@ -1,5 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
 }
@@ -18,19 +16,6 @@ export enum MessageKey {
   PRIORITY = 'priority',
   VAULT = 'vault',
   VAULTS = 'vaults',
-}
-
-export enum Currency {
-  AUD = 'AUD',
-  CAD = 'CAD',
-  CNY = 'CNY',
-  EUR = 'EUR',
-  GBP = 'GBP',
-  JPY = 'JPY',
-  RUB = 'RUB',
-  SEK = 'SEK',
-  SGD = 'SGD',
-  USD = 'USD',
 }
 
 export enum Instance {
@@ -125,42 +110,4 @@ export namespace RequestMethod {
     WALLET_ADD_CHAIN = 'wallet_add_chain',
     WALLET_SWITCH_CHAIN = 'wallet_switch_chain',
   }
-}
-
-const supportedChains: Record<Chain, boolean> = {
-  [Chain.Arbitrum]: true,
-  [Chain.Avalanche]: true,
-  [Chain.Base]: true,
-  [Chain.Bitcoin]: true,
-  [Chain.BitcoinCash]: true,
-  [Chain.Blast]: true,
-  [Chain.BSC]: true,
-  [Chain.CronosChain]: true,
-  [Chain.Dogecoin]: true,
-  [Chain.Dash]: true,
-  [Chain.Dydx]: true,
-  [Chain.Ethereum]: true,
-  [Chain.Cosmos]: true,
-  [Chain.Kujira]: true,
-  [Chain.Litecoin]: true,
-  [Chain.MayaChain]: true,
-  [Chain.Optimism]: true,
-  [Chain.Osmosis]: true,
-  [Chain.Polygon]: true,
-  [Chain.Solana]: true,
-  [Chain.THORChain]: true,
-  [Chain.Zksync]: false,
-  [Chain.Terra]: false,
-  [Chain.TerraClassic]: false,
-  [Chain.Noble]: false,
-  [Chain.Akash]: false,
-  [Chain.Sui]: false,
-  [Chain.Polkadot]: false,
-  [Chain.Ton]: false,
-  [Chain.Ripple]: false,
-  [Chain.Tron]: false,
-}
-
-export function isSupportedChain(chain?: Chain): boolean {
-  return chain ? supportedChains[chain] : false
 }

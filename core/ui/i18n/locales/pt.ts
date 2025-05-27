@@ -16,6 +16,8 @@ export const pt = {
   percentage: 'Percentagem',
   unexpected_error: 'Erro inesperado',
   approval_tx: 'Transação de aprovação',
+  verify_password_periodic_message:
+    'Verifique sua senha de compartilhamento do servidor',
   staked: 'Apostado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
@@ -310,10 +312,9 @@ export const pt = {
   vault_name_max_length_error:
     'O nome do cofre deve ter menos de 50 caracteres',
   vault_name_already_exists: 'O nome do cofre deve ser exclusivo',
-  vault_settings_address_book_save_addresses_button: 'Salvar endereço',
-  vault_settings_address_book_edit_addresses_title: 'Editar endereço',
-  vault_settings_address_book_address_title_field: 'Título',
-  vault_settings_address_book_address_placeholder: 'Digite aqui',
+  edit_address: 'Editar endereço',
+  title: 'Título',
+  type_here: 'Digite aqui',
   vault_settings_address_book_invalid_address_error:
     'Endereço inválido para o blockchain selecionado!',
   vault_settings_address_book_repeated_address_error: 'Endereço já adicionado!',
@@ -323,7 +324,7 @@ export const pt = {
     'O endereço deve ter pelo menos 1 caractere.',
   vault_settings_address_book_title_max_length_error:
     'O título deve ter no máximo 50 caracteres.',
-  address_book_list_item_network: 'rede',
+  network: 'rede',
   session_init: 'Inicializando sessão...',
   session_init_failed: 'Falha ao iniciar a sessão',
   select_at_least_one_device: 'Selecione pelo menos um dispositivo',

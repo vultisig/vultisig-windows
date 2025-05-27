@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import { ITransaction } from '@clients/extension/src/utils/interfaces'
+import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -30,7 +30,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
-  transaction: ITransaction,
+  transaction: IKeysignTransactionPayload,
   vault: Vault,
   walletCore: WalletCore
 ): Promise<KeysignPayload> => {
@@ -105,7 +105,7 @@ export const getKeysignPayload = (
               TransactionType.IBC_TRANSFER
 
             const hasTimeout =
-              !!transaction.transactionDetails.ibcTransaction!.timeoutTimestamp
+              !!transaction.transactionDetails.ibcTransaction?.timeoutTimestamp
 
             if (isIbcTransfer && hasTimeout) {
               try {

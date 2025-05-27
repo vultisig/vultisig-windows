@@ -1,13 +1,11 @@
 import api from '@clients/extension/src/utils/api'
-import {
-  MessageKey,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
-import {
-  Messaging,
-  SendTransactionResponse,
-} from '@clients/extension/src/utils/interfaces'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { VersionedTransaction } from '@solana/web3.js'
+
+import { MessageKey, RequestMethod } from './constants'
+import { Messaging } from './interfaces'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -57,6 +55,10 @@ export const checkERC20Function = async (
   const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
 
   return await api.getIsFunctionSelector(functionSelector)
+}
+
+export const isPopupView = () => {
+  return chrome.extension.getViews({ type: 'popup' }).length > 0
 }
 
 export const splitString = (str: string, size: number): string[] => {
@@ -110,22 +112,30 @@ export const processBackgroundResponse = (
   messageKey: MessageKey,
   result: Messaging.Chain.Response
 ) => {
-  switch (data.method) {
-    case RequestMethod.CTRL.TRANSFER:
-    case RequestMethod.METAMASK.ETH_SEND_TRANSACTION:
-    case RequestMethod.VULTISIG.SEND_TRANSACTION:
-    case RequestMethod.CTRL.DEPOSIT:
-    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION:
-    case RequestMethod.METAMASK.PERSONAL_SIGN:
-    case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
-      if (messageKey === MessageKey.SOLANA_REQUEST)
-        return (result as SendTransactionResponse).raw
-      return (result as SendTransactionResponse).txResponse
-    }
-    default: {
+  const handledMethods = [
+    RequestMethod.CTRL.TRANSFER,
+    RequestMethod.METAMASK.ETH_SEND_TRANSACTION,
+    RequestMethod.VULTISIG.SEND_TRANSACTION,
+    RequestMethod.CTRL.DEPOSIT,
+    RequestMethod.VULTISIG.DEPOSIT_TRANSACTION,
+    RequestMethod.METAMASK.PERSONAL_SIGN,
+    RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4,
+  ]
+
+  if (isOneOf(data.method, handledMethods)) {
+    if (messageKey === MessageKey.SOLANA_REQUEST) {
+      return shouldBeDefined((result as TxResult).encoded)
+    } else if (
+      messageKey === MessageKey.COSMOS_REQUEST &&
+      (data.params[0].txType === 'Vultisig' ||
+        data.params[0].txType === 'Keplr')
+    ) {
       return result
     }
+    return (result as TxResult).txHash
   }
+
+  return result
 }
 
 export function isVersionedTransaction(tx: any): tx is VersionedTransaction {

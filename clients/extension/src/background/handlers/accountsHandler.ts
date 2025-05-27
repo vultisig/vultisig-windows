@@ -8,13 +8,11 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { getVaultAppSessions } from '../../sessions/state/appSessions'
+import { storage } from '../../storage'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredRequest } from '../../utils/storage'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
-import { getVaults } from '../../vault/state/vaults'
-import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
@@ -28,29 +26,29 @@ export const handleFindAccounts = async (
   chain: Chain,
   sender: string
 ): Promise<string[]> => {
-  const currentVaultId = await getCurrentVaultId()
+  const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) return []
+
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)] ?? null
+  const currentSession = vaultSessions[getDappHostname(sender)]
+
+  if (!currentSession) return []
 
   // Check if the chain already exists in the vault's portfolio
-  const vaultsCoins = await getVaultsCoins()
+  const vaultsCoins = await storage.getCoins()
   const existingAccount = vaultsCoins[currentVaultId].find(
     account => isFeeCoin(account) && account.chain === chain
   )
 
-  if (existingAccount) {
-    return [existingAccount.address]
-  }
+  if (existingAccount) return [existingAccount.address]
 
   // If not derive the address from the vault's public key via deriveAddress()
-  const vaults = await getVaults()
+  const walletCore = await getWalletCore()
+  const vaults = await storage.getVaults()
   const vault = shouldBePresent(
     vaults.find(vault => getVaultId(vault) === currentVaultId)
   )
-
-  const walletCore = await getWalletCore()
 
   const publicKey = getPublicKey({
     chain,
@@ -65,17 +63,14 @@ export const handleFindAccounts = async (
     walletCore,
   })
 
-  if (!currentSession) {
-    return []
-  }
   return [address]
 }
 
 const handleFindVault = async (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  const vaults = await getVaults()
-  const currentVaultId = await getCurrentVaultId()
+  const vaults = await storage.getVaults()
+  const currentVaultId = await storage.getCurrentVaultId()
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null

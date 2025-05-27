@@ -65,27 +65,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@atlaskit/pragmatic-drag-and-drop-hitbox@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@atlaskit/pragmatic-drag-and-drop-hitbox@npm:1.0.3"
-  dependencies:
-    "@atlaskit/pragmatic-drag-and-drop": "npm:^1.1.0"
-    "@babel/runtime": "npm:^7.0.0"
-  checksum: 10c0/fc28abbaff5e167eac1d43a631c8309e6f82bfc5350b5d3c27be84bc432aaba62a06692a8e7d07dff3eae536ab8a1fda2d9356f96f57604b351585e0ac8104f5
-  languageName: node
-  linkType: hard
-
-"@atlaskit/pragmatic-drag-and-drop@npm:^1.1.0, @atlaskit/pragmatic-drag-and-drop@npm:^1.5.1":
-  version: 1.5.2
-  resolution: "@atlaskit/pragmatic-drag-and-drop@npm:1.5.2"
-  dependencies:
-    "@babel/runtime": "npm:^7.0.0"
-    bind-event-listener: "npm:^3.0.0"
-    raf-schd: "npm:^4.0.3"
-  checksum: 10c0/1dace49fa384b532ca3ba363931e8c3b3d92632c02b259bc2823d2b443a8dd903a2c218d96aaceb3b715b9925a2438a570d09ed82287ab7180eabef89fd0fa43
-  languageName: node
-  linkType: hard
-
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.26.2":
   version: 7.26.2
   resolution: "@babel/code-frame@npm:7.26.2"
@@ -4348,13 +4327,6 @@ __metadata:
   version: 2.3.0
   resolution: "binary-extensions@npm:2.3.0"
   checksum: 10c0/75a59cafc10fb12a11d510e77110c6c7ae3f4ca22463d52487709ca7f18f69d886aa387557cc9864fbdb10153d0bdb4caacabf11541f55e89ed6e18d12ece2b5
-  languageName: node
-  linkType: hard
-
-"bind-event-listener@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "bind-event-listener@npm:3.0.0"
-  checksum: 10c0/08eadf1c7d3a58633f25c2bbd8dc066f77ef4e5df1049e81ff2f43a40c00f6581aba37387caa4878782b1f1f7c337b827757f52b637052a465ad74a7e1db8def
   languageName: node
   linkType: hard
 
@@ -9027,13 +8999,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raf-schd@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "raf-schd@npm:4.0.3"
-  checksum: 10c0/ecabf0957c05fad059779bddcd992f1a9d3a35dfea439a6f0935c382fcf4f7f7fa60489e467b4c2db357a3665167d2a379782586b59712bb36c766e02824709b
-  languageName: node
-  linkType: hard
-
 "randombytes@npm:^2.0.0, randombytes@npm:^2.0.1, randombytes@npm:^2.0.5, randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -11233,8 +11198,6 @@ __metadata:
   resolution: "vultisig-windows@workspace:."
   dependencies:
     7z-wasm: "npm:^1.1.0"
-    "@atlaskit/pragmatic-drag-and-drop": "npm:^1.5.1"
-    "@atlaskit/pragmatic-drag-and-drop-hitbox": "npm:^1.0.3"
     "@coral-xyz/anchor": "npm:^0.28.0"
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"

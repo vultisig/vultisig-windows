@@ -17,7 +17,7 @@ export const executeTronTx: ExecuteTxResolver<OtherChain> = async ({
 
   const txid = await broadcastTransaction(rawTx)
 
-  return txid
+  return { txHash: txid }
 }
 
 async function broadcastTransaction(jsonString: string): Promise<string> {

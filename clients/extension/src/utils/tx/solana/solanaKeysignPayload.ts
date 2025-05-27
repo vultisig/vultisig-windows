@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
-import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
@@ -19,18 +19,16 @@ import { formatUnits } from 'ethers'
 import { ParsedSolanaSwapParams } from './types/types'
 export const getSolanaSwapKeysignPayload = (
   parsedSwapParams: ParsedSolanaSwapParams,
-  transaction: ITransaction,
+  serialized: Uint8Array,
   vault: Vault,
   walletCore: WalletCore
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
-        const txInputDataArray = Object.values(
-          (transaction as any).serializedTx
-        )
+        const txInputDataArray = Object.values(serialized)
         const publicKey = getPublicKey({
-          chain: transaction.chain,
+          chain: Chain.Solana,
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
@@ -40,9 +38,9 @@ export const getSolanaSwapKeysignPayload = (
         const dataBuffer = Buffer.from(txInputDataBuffer)
         const base64Data = base64.encode(dataBuffer)
         const coin = create(CoinSchema, {
-          chain: transaction.chain,
+          chain: Chain.Solana,
           ticker: parsedSwapParams.inputToken.symbol.toUpperCase(),
-          address: transaction.transactionDetails.from,
+          address: parsedSwapParams.authority,
           decimals: parsedSwapParams.inputToken.decimals,
           hexPublicKey: toHexPublicKey({
             publicKey,
@@ -69,7 +67,7 @@ export const getSolanaSwapKeysignPayload = (
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: Number(0),
-          isDeposit: transaction.isDeposit,
+          isDeposit: false,
           receiver: '',
         })
         chainSpecific.value = {
@@ -82,8 +80,8 @@ export const getSolanaSwapKeysignPayload = (
 
         const swapPayload = create(OneInchSwapPayloadSchema, {
           fromCoin: {
-            address: transaction.transactionDetails.from,
-            chain: transaction.chain,
+            address: parsedSwapParams.authority,
+            chain: Chain.Solana,
             contractAddress:
               parsedSwapParams.inputToken.symbol === 'SOL'
                 ? ''
@@ -101,8 +99,8 @@ export const getSolanaSwapKeysignPayload = (
             ticker: parsedSwapParams.inputToken.symbol.toUpperCase(),
           },
           toCoin: {
-            address: transaction.transactionDetails.from,
-            chain: transaction.chain,
+            address: parsedSwapParams.authority,
+            chain: Chain.Solana,
             contractAddress:
               parsedSwapParams.outputToken.symbol === 'SOL'
                 ? ''

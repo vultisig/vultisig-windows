@@ -1,6 +1,6 @@
+import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
-import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
@@ -119,7 +119,7 @@ export async function resolveAddressTableKeys(
   lookups: AddressTableLookup[]
 ): Promise<PublicKey[]> {
   const allResolvedKeys: PublicKey[] = []
-  const connection = new Connection(chainRpcUrl.Solana)
+  const connection = new Connection(solanaRpcUrl)
   for (const lookup of lookups) {
     const tableAccountResult = await connection.getAddressLookupTable(
       new PublicKey(lookup.accountKey)

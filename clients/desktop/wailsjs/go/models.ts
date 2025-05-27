@@ -5,6 +5,7 @@ export namespace storage {
 	    title: string;
 	    address: string;
 	    chain: string;
+	    order: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new AddressBookItem(source);
@@ -16,6 +17,7 @@ export namespace storage {
 	        this.title = source["title"];
 	        this.address = source["address"];
 	        this.chain = source["chain"];
+	        this.order = source["order"];
 	    }
 	}
 	export class Coin {
@@ -76,6 +78,7 @@ export namespace storage {
 	    coins: Coin[];
 	    folder_id?: string;
 	    lib_type: string;
+	    last_password_verification_time: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
@@ -97,6 +100,7 @@ export namespace storage {
 	        this.coins = this.convertValues(source["coins"], Coin);
 	        this.folder_id = source["folder_id"];
 	        this.lib_type = source["lib_type"];
+	        this.last_password_verification_time = source["last_password_verification_time"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
