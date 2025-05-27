@@ -6,13 +6,13 @@ import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
-import { CoinWrapper, Container } from './SendCoinInputField.styled'
+import { CoinWrapper } from './SendCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
   Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
@@ -29,7 +29,7 @@ export const SendCoinInputField = ({
   const { ticker, chain, id } = value
 
   return (
-    <Container justifyContent="center" gap={16}>
+    <VStack justifyContent="center" gap={16}>
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <HStack gap={4} alignItems="center">
@@ -83,6 +83,6 @@ export const SendCoinInputField = ({
         </CoinWrapper>
         <CoinBalance value={value} />
       </HStack>
-    </Container>
+    </VStack>
   )
 }
