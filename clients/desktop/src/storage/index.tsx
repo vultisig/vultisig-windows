@@ -149,12 +149,15 @@ const createAddressBookItem: CreateAddressBookItemFunction = async item => {
   await SaveAddressBookItem(item)
 }
 
-const updateAddressBookItem: UpdateAddressBookItemFunction = async item => {
-  const oldAddressBookItem = await GetAddressBookItem(item.id)
+const updateAddressBookItem: UpdateAddressBookItemFunction = async ({
+  id,
+  fields,
+}) => {
+  const oldAddressBookItem = await GetAddressBookItem(id)
 
   const newAddressBookItem = {
     ...oldAddressBookItem,
-    ...item,
+    ...fields,
   }
 
   await SaveAddressBookItem(newAddressBookItem)
