@@ -20,5 +20,5 @@ export const executeTonTx: ExecuteTxResolver = async ({ compiledTx }) => {
     body: JSON.stringify({ boc: output.encoded }),
   })
 
-  return Buffer.from(response.result.hash, 'base64').toString('hex')
+  return { txHash: Buffer.from(response.result.hash, 'base64').toString('hex') }
 }

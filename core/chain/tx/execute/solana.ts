@@ -21,5 +21,5 @@ export const executeSolanaTx: ExecuteTxResolver = async ({ compiledTx }) => {
     })
     .send()
 
-  return result
+  return { txHash: result, encoded }
 }

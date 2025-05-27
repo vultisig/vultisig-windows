@@ -22,11 +22,7 @@ import {
   isVersionedTransaction,
   processBackgroundResponse,
 } from '../../utils/functions'
-import {
-  Messaging,
-  SendTransactionResponse,
-  TransactionType,
-} from '../../utils/interfaces'
+import { Messaging, TransactionType } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 
@@ -63,8 +59,8 @@ export class Solana extends EventEmitter {
             serializedTx: transaction.serialize(),
           },
         ],
-      }).then((result: SendTransactionResponse) => {
-        const rawData = base58.decode(result.raw)
+      }).then(result => {
+        const rawData = base58.decode(result as string)
         return VersionedTransaction.deserialize(rawData)
       })
     } else {
@@ -134,8 +130,8 @@ export class Solana extends EventEmitter {
         return await this.request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [modifiedTransfer],
-        }).then((result: SendTransactionResponse) => {
-          const rawData = base58.decode(result.raw)
+        }).then(result => {
+          const rawData = base58.decode(result as string)
           return VersionedTransaction.deserialize(rawData)
         })
       }
