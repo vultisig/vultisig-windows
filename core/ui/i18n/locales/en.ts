@@ -838,4 +838,5 @@ export const en = {
   enter_contract_address: 'Enter Contract Address',
   no_token_found: 'No token found',
   invalid_token_address: 'Enter a valid token address',
+  security: 'Security',
 }

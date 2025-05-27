@@ -33,6 +33,8 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+
 export type SharedViewId = Extract<
   CoreViewId,
   | 'addCustomToken'
@@ -67,6 +69,7 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultSettings'
   | 'vaults'
+  | 'managePasscodeEncryption'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -109,4 +112,5 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
+  managePasscodeEncryption: ManagePasscodeEncryptionPage,
 }

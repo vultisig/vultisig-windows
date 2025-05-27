@@ -66,6 +66,7 @@ export type CoreView =
   | { id: 'vaults' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
+  | { id: 'managePasscodeEncryption' }
 
 export type CoreViewId = CoreView['id']
 
