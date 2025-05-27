@@ -13,6 +13,7 @@ export const de = {
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
   youre_swapping: 'Du tauschst',
+  asset_selection: 'Asset-Auswahl',
   percentage: 'Prozentsatz',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',

@@ -16,6 +16,7 @@ export const it = {
   verify_password_periodic_message:
     'Verifica la password di condivisione del server',
   select_asset: 'Seleziona asset',
+  asset_selection: 'Selezione asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
   percentage: 'Percentuale',
