@@ -1,3 +1,4 @@
+import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
@@ -9,7 +10,6 @@ import {
   updateTransaction,
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleOpenPanel } from '../window/windowManager'
 
 export const handleSendTransaction = async (
