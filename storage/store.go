@@ -34,7 +34,7 @@ func NewStore() (*Store, error) {
 	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
 	if dbPath == "" {
 		if runtime.GOOS == "linux" {
-			dbPath = "/home/" + os.Getenv("USER") + "/.vultisig"
+			dbPath = "/home/" + os.Getenv("USER") + "/.vultisig/"
 		} else {
 			// Get the current running folder
 			exePath, err := os.Executable()
