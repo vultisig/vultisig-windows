@@ -18,19 +18,6 @@ export enum MessageKey {
   VAULTS = 'vaults',
 }
 
-export enum Currency {
-  AUD = 'AUD',
-  CAD = 'CAD',
-  CNY = 'CNY',
-  EUR = 'EUR',
-  GBP = 'GBP',
-  JPY = 'JPY',
-  RUB = 'RUB',
-  SEK = 'SEK',
-  SGD = 'SGD',
-  USD = 'USD',
-}
-
 export enum Instance {
   CONNECT = 'connect',
   TRANSACTION = 'transaction',

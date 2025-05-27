@@ -304,10 +304,9 @@ export const hr = {
   vault_name_required: 'Naziv trezora je obavezan',
   vault_name_max_length_error: 'A tároló neve legfeljebb 50 karakter lehet',
   vault_name_already_exists: 'Naziv trezora mora biti jedinstven',
-  vault_settings_address_book_save_addresses_button: 'Spremi adresu',
-  vault_settings_address_book_edit_addresses_title: 'Uredi adresu',
-  vault_settings_address_book_address_title_field: 'Naslov',
-  vault_settings_address_book_address_placeholder: 'Upišite ovdje',
+  edit_address: 'Uredi adresu',
+  title: 'Naslov',
+  type_here: 'Upišite ovdje',
   vault_settings_address_book_invalid_address_error:
     'Nevažeća adresa za odabrani blockchain!',
   vault_settings_address_book_repeated_address_error: 'Adresa je već dodana!',
@@ -317,7 +316,7 @@ export const hr = {
     'Adresa mora biti najmanje 1 znak.',
   vault_settings_address_book_title_max_length_error:
     'Naslov može imati najviše 50 znakova.',
-  address_book_list_item_network: 'mreža',
+  network: 'mreža',
   session_init: 'Inicijalizacija sesije...',
   session_init_failed: 'Inicijalizacija sesije nije uspjela',
   select_at_least_one_device: 'Odaberite barem jedan uređaj',

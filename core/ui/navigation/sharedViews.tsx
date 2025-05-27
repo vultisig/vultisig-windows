@@ -1,3 +1,6 @@
+import { AddressBookPage } from '@core/ui/address-book'
+import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
+import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
@@ -30,8 +33,11 @@ import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenP
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'addCustomToken'
   | 'address'
+  | 'addressBook'
   | 'airdropRegister'
+  | 'createAddressBookItem'
   | 'createVaultFolder'
   | 'currencySettings'
   | 'deeplink'
@@ -48,6 +54,7 @@ export type SharedViewId = Extract<
   | 'reshareVault'
   | 'send'
   | 'swap'
+  | 'updateAddressBookItem'
   | 'updateVaultFolder'
   | 'uploadQr'
   | 'vaultChainDetail'
@@ -55,13 +62,14 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultDetails'
   | 'vaults'
-  | 'manageVaultFolder'
-  | 'addCustomToken'
 >
 
 export const sharedViews: Views<SharedViewId> = {
   address: AddressPage,
+  addressBook: AddressBookPage,
+  addCustomToken: AddCustomTokenPage,
   airdropRegister: AirdropRegisterPage,
+  createAddressBookItem: CreateAddressBookItemPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
@@ -77,6 +85,7 @@ export const sharedViews: Views<SharedViewId> = {
   reshareVault: ReshareVaultPage,
   send: SendPage,
   swap: SwapPage,
+  updateAddressBookItem: UpdateAddressBookItemPage,
   updateVaultFolder: () => (
     <CurrentVaultFolderPageProvider>
       <UpdateVaultFolderPage />
@@ -92,5 +101,4 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   vaults: VaultsPage,
-  addCustomToken: AddCustomTokenPage,
 }

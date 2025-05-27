@@ -1,16 +1,22 @@
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
-import { IsDisabledProp, ValueProp } from '@lib/ui/props'
+import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-type StartKeysignPromptProps = ValueProp<KeysignMessagePayload> & IsDisabledProp
+import { CoreView } from '../../navigation/CoreView'
+
+type StartKeysignPromptProps = Omit<
+  Extract<CoreView, { id: 'keysign' }>['state'],
+  'securityType'
+> &
+  IsDisabledProp
 
 export const StartKeysignPrompt = ({
-  value: keysignPayload,
+  keysignPayload,
   isDisabled,
+  isDAppSigning,
 }: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -27,6 +33,7 @@ export const StartKeysignPrompt = ({
             state: {
               securityType: 'secure',
               keysignPayload,
+              isDAppSigning,
             },
           })
         }}
@@ -43,6 +50,7 @@ export const StartKeysignPrompt = ({
               state: {
                 securityType: 'fast',
                 keysignPayload,
+                isDAppSigning,
               },
             })
           }}

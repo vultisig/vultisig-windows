@@ -74,11 +74,13 @@ export class UTXO extends EventEmitter {
         },
         { id: uuidv4() }
       )
+
       const result = processBackgroundResponse(
         data,
         this.providerType,
         response
       )
+
       if (callback) callback(null, result)
       return result
     } catch (error) {

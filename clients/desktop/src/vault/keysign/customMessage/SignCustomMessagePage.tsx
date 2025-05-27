@@ -49,7 +49,10 @@ export const SignCustomMessagePage = () => {
             />
           </VStack>
         </WithProgressIndicator>
-        <StartKeysignPrompt value={keysignPayload} isDisabled={isDisabled} />
+        <StartKeysignPrompt
+          keysignPayload={keysignPayload}
+          isDisabled={isDisabled}
+        />
       </PageContent>
     </>
   )
