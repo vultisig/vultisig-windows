@@ -95,6 +95,5 @@ const PositionedAmountInput = styled(AmountTextInput)`
   }
   &::placeholder {
     font-size: 18px;
-    font-weight: 400;
   }
 `
