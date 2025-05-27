@@ -71,12 +71,6 @@ export const getEthereumSpecific: ChainSpecificResolver<
   )
 
   if (maxFeePerGasWei < 1) maxFeePerGasWei = 1
-  console.log({
-    maxFeePerGasWei: maxFeePerGasWei.toString(),
-    priorityFee: priorityFee.toString(),
-    nonce,
-    gasLimit: gasLimit.toString(),
-  })
 
   return create(EthereumSpecificSchema, {
     maxFeePerGasWei: maxFeePerGasWei.toString(),
