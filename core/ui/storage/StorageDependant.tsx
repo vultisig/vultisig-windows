@@ -10,6 +10,7 @@ import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
+import { useIsBalanceVisibleQuery } from './balanceVisibility'
 import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
   CurrentVaultIdProvider,
@@ -18,7 +19,6 @@ import {
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useInitialViewQuery } from './initialView'
-import { useIsVaultBalanceVisibleQuery } from './isVaultBalanceVisible'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { useVaultFoldersQuery } from './vaultFolders'
@@ -32,7 +32,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const currentVaultId = useCurrentVaultIdQuery()
   const addressBookItems = useAddressBookItemsQuery()
   const language = useLanguageQuery()
-  const isVaultBalanceVisible = useIsVaultBalanceVisibleQuery()
+  const isBalanceVisible = useIsBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
   const initialView = useInitialViewQuery()
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
@@ -45,7 +45,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     currentVaultId,
     addressBookItems,
     language,
-    isVaultBalanceVisible,
+    isBalanceVisible,
     hasFinishedOnboarding,
     initialView,
     coinFinderIgnore,

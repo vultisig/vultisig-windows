@@ -8,6 +8,7 @@ type ExecuteTxInput<T extends Chain = Chain> = {
   compiledTx: Uint8Array<ArrayBufferLike>
 }
 
+export type TxResult = { txHash: string; encoded?: string }
 export type ExecuteTxResolver<T extends Chain = Chain> = (
   input: ExecuteTxInput<T>
-) => Promise<string>
+) => Promise<TxResult>

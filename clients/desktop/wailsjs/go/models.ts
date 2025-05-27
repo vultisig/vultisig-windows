@@ -5,6 +5,7 @@ export namespace storage {
 	    title: string;
 	    address: string;
 	    chain: string;
+	    order: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new AddressBookItem(source);
@@ -16,6 +17,7 @@ export namespace storage {
 	        this.title = source["title"];
 	        this.address = source["address"];
 	        this.chain = source["chain"];
+	        this.order = source["order"];
 	    }
 	}
 	export class Coin {

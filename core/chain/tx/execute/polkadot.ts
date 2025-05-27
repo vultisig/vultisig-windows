@@ -20,14 +20,14 @@ export const executePolkadotTx: ExecuteTxResolver = async ({
 
   try {
     const { hash } = await rpcClient.rpc.author.submitExtrinsic(rawTx)
-    return hash.toHex()
+    return { txHash: hash.toHex() }
   } catch (error) {
     if (isInError(error, 'Transaction is temporarily banned')) {
       const extrinsic = rpcClient.createType('Extrinsic', rawTx, {
         isSigned: true,
         version: 4,
       })
-      return extrinsic.hash.toHex()
+      return { txHash: extrinsic.hash.toHex() }
     }
 
     throw error

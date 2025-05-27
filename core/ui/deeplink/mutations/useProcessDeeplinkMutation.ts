@@ -8,14 +8,13 @@ import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { getPayloadFromServer } from '@core/ui/mpc/keygen/create/fast/server/utils/getPayloadFromServer'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { decompressQrPayload } from '@core/ui/qr/upload/utils/decompressQrPayload'
+import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
+import { useCore } from '@core/ui/state/core'
 import { match } from '@lib/utils/match'
 import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
 import { useMutation } from '@tanstack/react-query'
-
-import { getPayloadFromServer } from '../../mpc/keygen/create/fast/server/utils/getPayloadFromServer'
-import { useCore } from '../../state/core'
 
 type DeeplinkType = 'NewVault' | 'SignTransaction'
 

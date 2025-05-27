@@ -25,7 +25,10 @@ export const SendConfirm = () => {
       error={err => <Text>{extractErrorMsg(err)}</Text>}
       pending={() => <Text>{t('loading')}</Text>}
       success={keysign => (
-        <StartKeysignPrompt value={{ keysign }} isDisabled={isDisabled} />
+        <StartKeysignPrompt
+          keysignPayload={{ keysign }}
+          isDisabled={isDisabled}
+        />
       )}
     />
   )
