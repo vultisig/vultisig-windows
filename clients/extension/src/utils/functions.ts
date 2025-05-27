@@ -114,7 +114,6 @@ export const processBackgroundResponse = (
     RequestMethod.VULTISIG.SEND_TRANSACTION,
     RequestMethod.CTRL.DEPOSIT,
     RequestMethod.VULTISIG.DEPOSIT_TRANSACTION,
-    RequestMethod.METAMASK.PERSONAL_SIGN,
     RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4,
   ]
 

@@ -46,7 +46,7 @@ import {
 } from '../../utils/tx/getStandardTx'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
-
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
@@ -632,7 +632,7 @@ export const handleRequest = (
             },
             status: 'default',
           })
-            .then(result => resolve(result))
+            .then(result => ensureHexPrefix(result.txHash))
             .catch(reject)
         } else {
           reject()
