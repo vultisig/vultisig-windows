@@ -52,7 +52,7 @@ export const ManageFromAmount = () => {
         type="number"
         placeholder={'0'}
         onWheel={event => event.currentTarget.blur()}
-        value={Number(value)}
+        value={value}
         onChange={e => handleInputValueChange(e.target.value)}
         suggestion={
           <SwapCoinBalanceDependant
@@ -92,5 +92,9 @@ const PositionedAmountInput = styled(AmountTextInput)`
   font-family: inherit;
   &:hover {
     outline: none;
+  }
+  &::placeholder {
+    font-size: 18px;
+    font-weight: 400;
   }
 `
