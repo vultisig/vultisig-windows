@@ -1,3 +1,4 @@
+import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -43,7 +44,6 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '../../utils/tx/getStandardTx'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
 

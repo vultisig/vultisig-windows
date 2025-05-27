@@ -1,3 +1,7 @@
+import {
+  getCurrentVaultId,
+  setCurrentVaultId,
+} from '@clients/extension/src/vault/state/currentVaultId'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   CoreStorage,
@@ -21,10 +25,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getDefaultChains } from '../chain/state/defaultChains'
 import { getInitialView } from '../navigation/state'
 import { getFiatCurrency, setFiatCurrency } from '../preferences/fiatCurrency'
-import {
-  getCurrentVaultId,
-  setCurrentVaultId,
-} from '../vault/state/currentVaultId'
 import {
   getVaultFolders,
   updateVaultFolders,
