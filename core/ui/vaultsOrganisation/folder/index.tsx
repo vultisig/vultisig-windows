@@ -12,7 +12,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -25,7 +24,7 @@ export const VaultFolderPage = () => {
   const { mutate } = useSetCurrentVaultIdMutation()
   const { id, name } = useCurrentVaultFolder()
   const navigate = useCoreNavigate()
-  const navigateBack = useNavigateBack()
+
   const currentVaultId = useCurrentVaultId()
   const vaults = useFolderVaults(id)
 
@@ -58,7 +57,13 @@ export const VaultFolderPage = () => {
                     <VaultSigners vault={vault} />
                   </>
                 }
-                onClick={() => mutate(vaultId, { onSuccess: navigateBack })}
+                onClick={() =>
+                  mutate(vaultId, {
+                    onSuccess: () => {
+                      navigate({ id: 'vault' })
+                    },
+                  })
+                }
                 title={vault.name}
                 hoverable
               />
