@@ -5,6 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
+type GetDefaultChainsFunction = () => Promise<Chain[]>
+
+export type DefaultChainsStorage = {
+  getDefaultChains: GetDefaultChainsFunction
+}
+
 export const initialDefaultChains = [
   Chain.Bitcoin,
   Chain.Ethereum,

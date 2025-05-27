@@ -7,7 +7,7 @@ export enum StorageKey {
   vaultFolders = 'vaultFolders',
   addressBookItems = 'addressBookItems',
   language = 'language',
-  isVaultBalanceVisible = 'isVaultBalanceVisible',
+  isBalanceVisible = 'isVaultBalanceVisible',
   hasFinishedOnboarding = 'hasFinishedOnboarding',
   initialView = 'initialView',
   coinFinderIgnore = 'coinFinderIgnore',
