@@ -35,6 +35,9 @@ func NewStore() (*Store, error) {
 	if dbPath == "" {
 		if runtime.GOOS == "linux" {
 			dbPath = "/home/" + os.Getenv("USER") + "/.vultisig/"
+			if err := os.MkdirAll(dbPath, 0700); err != nil {
+				return nil, fmt.Errorf("fail to create directory, err: %w", err)
+			}
 		} else {
 			// Get the current running folder
 			exePath, err := os.Executable()

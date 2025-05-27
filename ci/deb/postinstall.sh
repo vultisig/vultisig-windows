@@ -1,5 +1,4 @@
-mkdir -p ~/.vultisig
-chmod 700 ~/.vultisig  
+
 # reload desktop database to load app in list of available
 update-desktop-database /usr/share/applications
 # update icons
