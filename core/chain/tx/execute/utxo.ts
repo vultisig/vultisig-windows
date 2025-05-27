@@ -17,5 +17,5 @@ export const executeUtxoTx: ExecuteTxResolver<UtxoChain> = async ({
     tx: stripHexPrefix(walletCore.HexCoding.encode(output.encoded)),
   })
 
-  return output.transactionId
+  return { txHash: output.transactionId }
 }
