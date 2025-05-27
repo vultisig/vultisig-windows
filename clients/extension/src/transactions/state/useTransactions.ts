@@ -5,8 +5,6 @@ import { useCallback } from 'react'
 
 import { getVaultsTransactions, transactionsQueryKey } from './transactions'
 
-export const currentVaultTransactionsQueryKey = ['currentVaultTransactions']
-
 const useTransactionsQuery = () => {
   return useQuery({
     queryKey: transactionsQueryKey,

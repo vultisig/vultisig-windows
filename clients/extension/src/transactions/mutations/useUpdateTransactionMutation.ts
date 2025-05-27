@@ -7,15 +7,14 @@ import {
   setVaultsTransactions,
   transactionsQueryKey,
 } from '../state/transactions'
-import { currentVaultTransactionsQueryKey } from '../state/useTransactions'
 
-type AddOrUpdateInput = {
+type UpdateTransactionInput = {
   vaultId: string
   transaction: ITransaction
 }
 
 export const useUpdateTransactionMutation = (
-  options?: UseMutationOptions<any, any, AddOrUpdateInput, unknown>
+  options?: UseMutationOptions<any, any, UpdateTransactionInput, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
   return useMutation({
@@ -50,7 +49,7 @@ export const useUpdateTransactionMutation = (
       return updated
     },
     onSuccess: async () => {
-      await invalidate(transactionsQueryKey, currentVaultTransactionsQueryKey)
+      await invalidate(transactionsQueryKey)
     },
     ...options,
   })
