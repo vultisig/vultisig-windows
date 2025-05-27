@@ -1,5 +1,5 @@
 import { AddressBookListItem } from '@core/ui/address-book/item'
-import { ScanQrView } from '@core/ui/qr/ScanQrView'
+import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -109,7 +109,7 @@ export const ManageReceiver = () => {
                 }}
               />
               <IconButton
-                icon={<CameraIcon size={20} />}
+                icon={<CameraIcon fontSize={20} />}
                 onClick={() => setViewState('scanner')}
               />
               <IconButton

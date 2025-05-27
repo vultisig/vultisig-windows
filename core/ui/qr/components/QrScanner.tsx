@@ -1,3 +1,9 @@
+import {
+  BorderImageWrapper,
+  Video,
+  VideoWrapper,
+} from '@core/ui/qr/components/styles'
+import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { Image } from '@lib/ui/image/Image'
@@ -10,9 +16,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { readQrCode } from '../utils/readQrCode'
-import { BorderImageWrapper, Video, VideoWrapper } from './ScanQrView.styled'
 
 export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   const { t } = useTranslation()
