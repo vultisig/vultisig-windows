@@ -10,6 +10,7 @@ import {
   getChainId,
 } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
 import {
   getBytes,
@@ -46,7 +47,6 @@ import {
 } from '../../utils/tx/getStandardTx'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
-import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
