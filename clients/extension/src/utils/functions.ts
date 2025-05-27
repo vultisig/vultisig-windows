@@ -59,6 +59,10 @@ export const checkERC20Function = async (
   return await api.getIsFunctionSelector(functionSelector)
 }
 
+export const isPopupView = () => {
+  return chrome.extension.getViews({ type: 'popup' }).length > 0
+}
+
 export const splitString = (str: string, size: number): string[] => {
   const result: string[] = []
 
