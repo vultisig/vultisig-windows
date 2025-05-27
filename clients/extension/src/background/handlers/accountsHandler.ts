@@ -29,8 +29,11 @@ export const handleFindAccounts = async (
   const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) return []
+
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)] ?? null
+  const currentSession = vaultSessions[getDappHostname(sender)]
+
+  if (!currentSession) return []
 
   // Check if the chain already exists in the vault's portfolio
   const vaultsCoins = await storage.getCoins()
@@ -38,17 +41,14 @@ export const handleFindAccounts = async (
     account => isFeeCoin(account) && account.chain === chain
   )
 
-  if (existingAccount) {
-    return [existingAccount.address]
-  }
+  if (existingAccount) return [existingAccount.address]
 
   // If not derive the address from the vault's public key via deriveAddress()
+  const walletCore = await getWalletCore()
   const vaults = await storage.getVaults()
   const vault = shouldBePresent(
     vaults.find(vault => getVaultId(vault) === currentVaultId)
   )
-
-  const walletCore = await getWalletCore()
 
   const publicKey = getPublicKey({
     chain,
@@ -63,9 +63,6 @@ export const handleFindAccounts = async (
     walletCore,
   })
 
-  if (!currentSession) {
-    return []
-  }
   return [address]
 }
 
