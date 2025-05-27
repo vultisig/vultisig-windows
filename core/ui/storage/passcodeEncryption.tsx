@@ -3,11 +3,11 @@ type PasscodeEncryption = {
   encryptedSample: string
 }
 
-type PasscodeEncryptionValue = PasscodeEncryption | null
+export type PasscodeEncryptionValue = PasscodeEncryption | null
 
 export const initialPasscodeEncryptionValue: PasscodeEncryptionValue = null
 
 export type PasscodeEncryptionStorage = {
-  passcodeEncryption: PasscodeEncryptionValue
-  setPasscodeEncryption: (passcodeEncryption: PasscodeEncryptionValue) => void
+  getPasscodeEncryption: () => Promise<PasscodeEncryptionValue>
+  setPasscodeEncryption: (value: PasscodeEncryptionValue) => Promise<void>
 }
