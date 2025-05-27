@@ -3,6 +3,7 @@ import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/m
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -85,12 +86,10 @@ export const ConnectedDappsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button
+          <IconButton
             icon={<ChevronLeftIcon fontSize={20} />}
             onClick={navigateBack}
             size="m"
-            kind="default"
-            fitContent
           />
         }
         title={
@@ -116,7 +115,6 @@ export const ConnectedDappsPage = () => {
                       onClick={() => handleDisconnect(host, session.url)}
                       size="l"
                       kind="alert"
-                      fitContent
                       disabled={isDisconnecting}
                     />
                   }

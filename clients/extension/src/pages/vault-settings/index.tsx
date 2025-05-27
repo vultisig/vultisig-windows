@@ -1,6 +1,6 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
@@ -25,11 +25,10 @@ export const VaultSettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button
+          <IconButton
             icon={<ChevronLeftIcon fontSize={20} />}
             onClick={navigateBack}
             size="m"
-            fitContent
           />
         }
         title={

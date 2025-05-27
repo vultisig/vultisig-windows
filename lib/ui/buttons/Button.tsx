@@ -24,8 +24,6 @@ type ButtonKind =
   | 'ghost'
   | 'idle'
   | 'alert'
-  | 'default'
-  | 'link'
 
 interface ContainerProps {
   size: ButtonSize
@@ -34,7 +32,6 @@ interface ContainerProps {
   isRounded?: boolean
   icon?: ReactNode
   kind: ButtonKind
-  fitContent?: boolean
 }
 
 const Container = styled(UnstyledButton)<ContainerProps>`
@@ -46,54 +43,41 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   font-weight: 600;
   flex-shrink: 0;
 
-  ${({ size, fitContent, isRounded }) =>
+  ${({ size, isRounded }) =>
     match(size, {
       xs: () => css`
         ${horizontalPadding(8)}
         height: 28px;
         font-size: 12px;
-        ${!fitContent && horizontalPadding(8)}
       `,
       s: () => css`
         border-radius: ${isRounded ? '20px' : '4px'};
         font-size: 12px;
         height: 20px;
         min-width: 20px;
-        ${!fitContent && horizontalPadding(10)}
       `,
       m: () => css`
         border-radius: ${isRounded ? '24px' : '6px'};
         font-size: 12px;
         height: 24px;
         min-width: 24px;
-        ${!fitContent && horizontalPadding(12)}
       `,
       l: () => css`
         border-radius: ${isRounded ? '36px' : '8px'};
         font-size: 14px;
         height: 40px;
         min-width: 40px;
-        ${!fitContent && horizontalPadding(16)}
       `,
       xl: () => css`
         border-radius: ${isRounded ? '46px' : '12px'};
         font-size: 14px;
         height: 46px;
         min-width: 46px;
-        ${!fitContent && horizontalPadding(16)}
       `,
     })}
 
   ${({ kind, isDisabled }) =>
     match(kind, {
-      default: () => css`
-        background-color: ${getColor('buttonBackgroundDisabled')};
-        color: ${getColor('textPrimary')};
-      `,
-      link: () => css`
-        background-color: ${getColor('buttonBackgroundDisabled')};
-        color: ${getColor('textExtraLight')};
-      `,
       primary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
@@ -136,12 +120,6 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     css`
       &:hover {
         ${match(kind, {
-          default: () => css`
-            background: transparent;
-          `,
-          link: () => css`
-            background: ${getColor('backgroundTertiary')};
-          `,
           primary: () => css`
             background: ${getColor('buttonPrimaryWebHover')};
           `,
@@ -184,7 +162,6 @@ type ButtonProps = Omit<
   isLoading?: boolean
   isRounded?: boolean
   kind?: ButtonKind
-  fitContent?: boolean
   onClick?: () => void
   as?: React.ElementType
 }

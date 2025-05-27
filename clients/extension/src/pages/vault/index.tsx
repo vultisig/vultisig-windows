@@ -10,6 +10,8 @@ import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -48,6 +50,7 @@ const ConnectedApp = styled(Button)`
   border-radius: 50%;
   color: ${getColor('textExtraLight')};
   position: initial;
+  ${horizontalPadding(8)};
 
   &:hover {
     color: ${getColor('textPrimary')};
@@ -70,7 +73,6 @@ export const VaultPage = () => {
           <ConnectedApp
             onClick={() => navigate({ id: 'connectedDapps' })}
             size="l"
-            fitContent
           >
             <WorldIcon fontSize={20} />
             <ConnectedAppStatus
@@ -81,12 +83,10 @@ export const VaultPage = () => {
         secondaryControls={
           <>
             <UploadQrPrompt />
-            <ConnectedApp
+            <IconButton
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
               size="m"
-              kind="default"
-              fitContent
             />
           </>
         }
