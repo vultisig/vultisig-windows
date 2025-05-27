@@ -521,7 +521,7 @@ export const en = {
     },
     connectingWithServer: 'Connecting with server...',
     connectionSuccess: 'Connection successful!',
-    takeMinute: 'This should only take a minute',
+    takeMinute: 'This should only take a second',
     vaultInitializationStarting: 'Vault initiation starting...',
     emailRequired: 'Email is required',
     emailIncorrect: 'Incorrect e-mail, please check',

@@ -490,7 +490,7 @@ export const es = {
     },
     connectingWithServer: 'Conectando con el servidor...',
     connectionSuccess: '¡Conexión exitosa!',
-    takeMinute: 'Esto solo tomará un minuto',
+    takeMinute: 'Esto solo tomará un segundo',
     vaultInitializationStarting: 'Iniciando la inicialización del baúl...',
     emailRequired: 'Correo electrónico es obligatorio',
     emailIncorrect: 'Correo electrónico incorrecto, por favor verifique',
