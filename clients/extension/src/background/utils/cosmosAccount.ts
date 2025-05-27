@@ -1,12 +1,12 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
-import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
-import { getVaults } from '@clients/extension/src/vault/state/vaults'
 import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { hexToBytes } from '@lib/utils/hexToBytes'
+
+import { storage } from '../../storage'
 
 interface CosmosAccount {
   pubkey: number[]
@@ -22,9 +22,9 @@ export const generateCosmosAccount = async (
   chain: Chain
 ): Promise<CosmosAccount[] | undefined> => {
   try {
-    const currentVaultId = await getCurrentVaultId()
+    const currentVaultId = await storage.getCurrentVaultId()
 
-    const vaults = await getVaults()
+    const vaults = await storage.getVaults()
     const currentVault = shouldBePresent(
       vaults.find(vault => getVaultId(vault) === currentVaultId)
     )

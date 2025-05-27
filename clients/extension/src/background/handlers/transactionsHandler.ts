@@ -1,8 +1,8 @@
-import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
+import { storage } from '../../storage'
 import {
   addTransactionToVault,
   getVaultTransactions,
@@ -18,7 +18,7 @@ export const handleSendTransaction = async (
   const uuid = uuidv4()
 
   try {
-    const currentVaultId = shouldBePresent(await getCurrentVaultId())
+    const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
 
     await addTransactionToVault(currentVaultId, {
       ...transaction,

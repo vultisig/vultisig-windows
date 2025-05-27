@@ -7,6 +7,15 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
+type GetFiatCurrencyFunction = () => Promise<FiatCurrency>
+
+type SetFiatCurrencyFunction = (value: FiatCurrency) => Promise<void>
+
+export type FiatCurrencyStorage = {
+  getFiatCurrency: GetFiatCurrencyFunction
+  setFiatCurrency: SetFiatCurrencyFunction
+}
+
 export const useFiatCurrencyQuery = () => {
   const { getFiatCurrency } = useCore()
 

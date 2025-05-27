@@ -1,4 +1,3 @@
-import { getCurrentVaultId } from '@clients/extension/src/vault/state/currentVaultId'
 import { Chain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -9,12 +8,11 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { getVaultAppSessions } from '../../sessions/state/appSessions'
+import { storage } from '../../storage'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredRequest } from '../../utils/storage'
-import { getVaults } from '../../vault/state/vaults'
-import { getVaultsCoins } from '../../vault/state/vaultsCoins'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
@@ -28,14 +26,14 @@ export const handleFindAccounts = async (
   chain: Chain,
   sender: string
 ): Promise<string[]> => {
-  const currentVaultId = await getCurrentVaultId()
+  const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) return []
   const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null
 
   // Check if the chain already exists in the vault's portfolio
-  const vaultsCoins = await getVaultsCoins()
+  const vaultsCoins = await storage.getCoins()
   const existingAccount = vaultsCoins[currentVaultId].find(
     account => isFeeCoin(account) && account.chain === chain
   )
@@ -45,7 +43,7 @@ export const handleFindAccounts = async (
   }
 
   // If not derive the address from the vault's public key via deriveAddress()
-  const vaults = await getVaults()
+  const vaults = await storage.getVaults()
   const vault = shouldBePresent(
     vaults.find(vault => getVaultId(vault) === currentVaultId)
   )
@@ -74,8 +72,8 @@ export const handleFindAccounts = async (
 const handleFindVault = async (
   sender: string
 ): Promise<Messaging.GetVault.Response> => {
-  const vaults = await getVaults()
-  const currentVaultId = await getCurrentVaultId()
+  const vaults = await storage.getVaults()
+  const currentVaultId = await storage.getCurrentVaultId()
   if (!currentVaultId) return undefined
   const vaultSessions = await getVaultAppSessions(currentVaultId)
   const currentSession = vaultSessions[getDappHostname(sender)] ?? null
