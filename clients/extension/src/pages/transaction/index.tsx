@@ -38,6 +38,7 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
 import { formatUnits, toUtf8String } from 'ethers'
@@ -60,13 +61,23 @@ export const TransactionPage = () => {
       const keysignMessagePayload: KeysignMessagePayload =
         await matchRecordUnion(transaction.transactionPayload, {
           keysign: async keysign => {
-            const chainKind = getChainKind(keysign.chain)
-            const gasSettings: FeeSettings | null =
-              chainKind === 'evm'
-                ? { priority: 'fast', gasLimit: defaultEvmSwapGasLimit }
-                : chainKind === 'utxo'
-                  ? { priority: 'fast' }
-                  : null
+            const gasSettings: FeeSettings | null = match(
+              getChainKind(keysign.chain),
+              {
+                evm: () => ({
+                  priority: 'fast',
+                  gasLimit: defaultEvmSwapGasLimit,
+                }),
+                utxo: () => ({ priority: 'fast' }),
+                cosmos: () => null,
+                sui: () => null,
+                solana: () => null,
+                polkadot: () => null,
+                ton: () => null,
+                ripple: () => null,
+                tron: () => null,
+              }
+            )
 
             const keysignPayload = await getKeysignPayload(
               keysign,
