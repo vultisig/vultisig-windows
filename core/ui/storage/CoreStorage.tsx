@@ -8,6 +8,7 @@ import { FiatCurrencyStorage } from './fiatCurrency'
 import { InitialViewStorage } from './initialView'
 import { LanguageStorage } from './language'
 import { OnboardingStorage } from './onboarding'
+import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
@@ -22,4 +23,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   LanguageStorage &
   BalanceVisibilityStorage &
   OnboardingStorage &
-  InitialViewStorage
+  InitialViewStorage &
+  PasscodeEncryptionStorage
