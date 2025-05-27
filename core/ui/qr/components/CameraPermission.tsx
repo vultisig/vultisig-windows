@@ -16,11 +16,9 @@ export const CameraPermission = () => {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      await navigator.permissions
-        .query({ name: 'camera' })
-        .then(({ state }) => {
-          if (state === 'denied') throw Error(t('camera_access_blocked'))
-        })
+      const { state } = await navigator.permissions.query({ name: 'camera' })
+
+      if (state === 'denied') throw Error(t('camera_access_blocked'))
 
       await navigator.mediaDevices.getUserMedia({ video: true })
 

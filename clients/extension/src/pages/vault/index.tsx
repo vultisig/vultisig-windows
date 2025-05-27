@@ -5,7 +5,6 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
@@ -57,8 +56,7 @@ const ConnectedApp = styled(Button)`
 export const VaultPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const navigate = useCoreNavigate()
-  const appNavigate = useAppNavigate()
+  const navigate = useAppNavigate()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
   const addresses = useCurrentVaultAddresses()
@@ -69,7 +67,7 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
-            onClick={() => appNavigate({ id: 'connectedDapps' })}
+            onClick={() => navigate({ id: 'connectedDapps' })}
             size="md"
             fitContent
           >
