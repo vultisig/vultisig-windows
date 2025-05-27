@@ -1,7 +1,6 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { useMutation } from '@tanstack/react-query'
-
-import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 
 export const useProcessQrMutation = () => {
   const navigate = useCoreNavigate()
