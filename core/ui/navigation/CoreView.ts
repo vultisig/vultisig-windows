@@ -52,11 +52,13 @@ export type CoreView =
   | { id: 'setupFastVault' }
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
+  | { id: 'signCustomMessage' }
   | { id: 'swap'; state: { coin: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
+  | { id: 'vaultBackup' }
   | { id: 'vaultDetails' }
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
   | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }
