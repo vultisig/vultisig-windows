@@ -3,7 +3,7 @@ import { FitPageContent } from '@lib/ui/page/PageContent'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { EnablePasscodeInput } from './EnabelPasscodeInput'
+import { EnablePasscodeInput } from './EnablePasscodeInput'
 
 export const ManagePasscodeEncryptionPage = () => {
   const { t } = useTranslation()
