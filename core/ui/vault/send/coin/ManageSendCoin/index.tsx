@@ -1,3 +1,4 @@
+import { Match } from '@lib/ui/base/Match'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { useFocusedSendField } from '../../providers/FocusedSendFieldProvider'
@@ -19,36 +20,40 @@ const variants = {
 
 export const ManageSendCoin = () => {
   const [{ field }] = useFocusedSendField()
-  const isOpen = field === 'coin'
+  const value = field === 'coin' ? 'open' : 'closed'
 
   return (
     <motion.div layout>
       <AnimatePresence initial={false}>
-        {isOpen ? (
-          <motion.div
-            key="open"
-            variants={variants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            style={{
-              overflow: 'hidden',
-            }}
-          >
-            <ManageSendCoinInputField />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="collapsed"
-            variants={variants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            style={{ overflow: 'hidden' }}
-          >
-            <ManageSendCoinCollapsedInputField />
-          </motion.div>
-        )}
+        <Match
+          value={value}
+          open={() => (
+            <motion.div
+              key="open"
+              variants={variants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              style={{
+                overflow: 'hidden',
+              }}
+            >
+              <ManageSendCoinInputField />
+            </motion.div>
+          )}
+          closed={() => (
+            <motion.div
+              key="collapsed"
+              variants={variants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              style={{ overflow: 'hidden' }}
+            >
+              <ManageSendCoinCollapsedInputField />
+            </motion.div>
+          )}
+        />
       </AnimatePresence>
     </motion.div>
   )
