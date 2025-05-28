@@ -4,6 +4,7 @@ import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../../../chain/coin/icon/ChainCoinIcon'
@@ -19,7 +20,7 @@ export const ManageSendCoinCollapsedInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
   const { logo, ticker, chain, id } = coin
-
+  const { t } = useTranslation()
   const [
     {
       field,
@@ -27,6 +28,7 @@ export const ManageSendCoinCollapsedInputField = () => {
     },
     setFocusedSendField,
   ] = useFocusedSendField()
+
   const isOpen = field === 'coin'
 
   return (

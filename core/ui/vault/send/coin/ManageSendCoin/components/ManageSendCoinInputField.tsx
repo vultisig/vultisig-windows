@@ -1,4 +1,5 @@
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
+import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { HorizontalLine } from '../../../components/HorizontalLine'
@@ -9,6 +10,7 @@ import { useFocusedSendField } from '../../../providers/FocusedSendFieldProvider
 export const ManageSendCoinInputField = () => {
   const [, setViewState] = useCoreViewState<'send'>()
   const [, setFocusedSendField] = useFocusedSendField()
+  const { t } = useTranslation()
 
   return (
     <SendInputContainer
