@@ -34,9 +34,14 @@ func NewStore() (*Store, error) {
 	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
 	if dbPath == "" {
 		if runtime.GOOS == "linux" {
-			dbPath = "/home/" + os.Getenv("USER") + "/.vultisig/"
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				return nil, fmt.Errorf("failed to get user home directory: %w", err)
+			}
+			dbPath = filepath.Join(homeDir, ".vultisig")
+			// Create directory if it doesn't exist
 			if err := os.MkdirAll(dbPath, 0700); err != nil {
-				return nil, fmt.Errorf("fail to create directory, err: %w", err)
+				return nil, fmt.Errorf("failed to create vultisig directory: %w", err)
 			}
 		} else {
 			// Get the current running folder
