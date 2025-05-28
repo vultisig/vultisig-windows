@@ -10,6 +10,7 @@ import {
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -18,6 +19,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -36,6 +38,7 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
 import { formatUnits, toUtf8String } from 'ethers'
@@ -58,10 +61,29 @@ export const TransactionPage = () => {
       const keysignMessagePayload: KeysignMessagePayload =
         await matchRecordUnion(transaction.transactionPayload, {
           keysign: async keysign => {
+            const gasSettings: FeeSettings | null = match(
+              getChainKind(keysign.chain),
+              {
+                evm: () => ({
+                  priority: 'fast',
+                  gasLimit: defaultEvmSwapGasLimit,
+                }),
+                utxo: () => ({ priority: 'fast' }),
+                cosmos: () => null,
+                sui: () => null,
+                solana: () => null,
+                polkadot: () => null,
+                ton: () => null,
+                ripple: () => null,
+                tron: () => null,
+              }
+            )
+
             const keysignPayload = await getKeysignPayload(
               keysign,
               vault,
-              walletCore
+              walletCore,
+              gasSettings
             )
 
             keysign.txFee = String(
