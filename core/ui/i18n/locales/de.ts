@@ -325,10 +325,9 @@ export const de = {
     'Der Tresorname darf höchstens 50 Zeichen lang sein',
   supported_file_types: 'Unterstützte Dateitypen: .bak & .vult',
   vault_name_already_exists: 'Tresorname muss eindeutig sein',
-  vault_settings_address_book_save_addresses_button: 'Adresse speichern',
-  vault_settings_address_book_edit_addresses_title: 'Adresse bearbeiten',
-  vault_settings_address_book_address_title_field: 'Titel',
-  vault_settings_address_book_address_placeholder: 'Hier eingeben',
+  edit_address: 'Adresse bearbeiten',
+  title: 'Titel',
+  type_here: 'Hier eingeben',
   vault_settings_address_book_invalid_address_error:
     'Ungültige Adresse für die ausgewählte Blockchain!',
   vault_settings_address_book_repeated_address_error:
@@ -339,7 +338,7 @@ export const de = {
     'Adresse muss mindestens 1 Zeichen lang sein.',
   vault_settings_address_book_title_max_length_error:
     'Titel darf maximal 50 Zeichen lang sein.',
-  address_book_list_item_network: 'Netzwerk',
+  network: 'Netzwerk',
   session_init: 'Sitzung wird initialisiert...',
   session_init_failed: 'Sitzung konnte nicht initialisiert werden',
   select_at_least_one_device: 'Wählen Sie mindestens ein Gerät aus',

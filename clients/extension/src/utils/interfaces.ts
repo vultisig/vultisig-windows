@@ -2,10 +2,8 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
-import { Vault } from '@core/ui/vault/Vault'
-import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
 export namespace Messaging {
@@ -16,7 +14,7 @@ export namespace Messaging {
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
-      | SendTransactionResponse
+      | TxResult
   }
 
   export namespace GetVault {
@@ -48,12 +46,7 @@ export interface AccountsProps {
   sender: string
 }
 
-export interface SendTransactionResponse {
-  raw: any
-  txResponse: string
-}
-
-interface CustomMessage {
+interface ICustomTransactionPayload {
   method: string
   address: string
   message: string
@@ -150,14 +143,10 @@ export interface TransactionDetails {
   ibcTransaction?: IMsgTransfer
 }
 
-export interface ITransaction {
+export type IKeysignTransactionPayload = {
   transactionDetails: TransactionDetails
   chain: Chain
   contract?: string
-  customMessage?: CustomMessage
-  customSignature?: string
-  id: string
-  status: 'default' | 'error' | 'pending' | 'success'
   memo?: {
     isParsed: boolean
     value: string | ParsedMemoParams | undefined
@@ -165,29 +154,25 @@ export interface ITransaction {
   gas?: string
   gasLimit?: string
   txFee?: string
-  isDeposit?: boolean
-  isCustomMessage?: boolean
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
+  isDeposit?: boolean
+}
+
+type ITransactionPayload =
+  | {
+      keysign: IKeysignTransactionPayload
+    }
+  | {
+      custom: ICustomTransactionPayload
+    }
+  | { serialized: Uint8Array }
+
+export interface ITransaction {
+  id?: string
+  status: 'default' | 'error' | 'pending' | 'success'
+  transactionPayload: ITransactionPayload
   txHash?: string
+  encoded?: any
   windowId?: number
-  raw?: any
-}
-
-export interface SignedTransaction {
-  inputData?: Uint8Array
-  signatures: Record<string, KeysignSignature>
-  transaction?: ITransaction
-  vault?: Vault
-  walletCore: WalletCore
-}
-
-export interface FastSignInput {
-  public_key: string
-  messages: string[]
-  session: string
-  hex_encryption_key: string
-  derive_path: string
-  is_ecdsa: boolean
-  vault_password: string
 }

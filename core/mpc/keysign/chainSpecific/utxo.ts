@@ -12,15 +12,22 @@ import {
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 
+const getByteFee = async (chain: UtxoChain) => {
+  if (chain === UtxoChain.Zcash) {
+    return 1000
+  }
+
+  const { data } = await getUtxoStats(chain)
+  return data.suggested_transaction_fee_per_byte_sat
+}
+
 export const getUtxoSpecific: ChainSpecificResolver<
   UTXOSpecific,
   UtxoFeeSettings
 > = async ({ coin, feeSettings, amount }) => {
   const chain = coin.chain as UtxoChain
 
-  const { data } = await getUtxoStats(chain)
-
-  let byteFee = data.suggested_transaction_fee_per_byte_sat
+  let byteFee = await getByteFee(chain)
   if (feeSettings) {
     byteFee = adjustByteFee(byteFee, feeSettings)
   }

@@ -1,5 +1,4 @@
 import { Button } from '@clients/extension/src/components/button'
-import { MiddleTruncate } from '@clients/extension/src/components/middle-truncate'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
@@ -11,6 +10,7 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -22,13 +22,12 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { UploadQrPrompt } from './UploadQrPrompt'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -80,7 +79,12 @@ export const VaultPage = () => {
         }
         secondaryControls={
           <>
-            <UploadQrPrompt />
+            <Button
+              icon={<CameraIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'uploadQr', state: {} })}
+              size="sm"
+              fitContent
+            />
             <Button
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}

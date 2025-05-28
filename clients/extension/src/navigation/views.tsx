@@ -14,17 +14,14 @@ import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
-import { VaultSettingsPage } from '@clients/extension/src/pages/vault-settings'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
-import AddressBookSettingsPage from '@core/ui/vault/vaultAddressBook/AddressBookSettingsPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  addressBook: AddressBookSettingsPage,
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
   joinKeygen: JoinKeygenPage,
@@ -53,7 +50,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   transactionTab: TransactionPage,
   vault: VaultPage,
-  vaultSettings: VaultSettingsPage,
   vaultsTab: GetVaultsPage,
 }
 

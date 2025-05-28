@@ -10,10 +10,12 @@ import {
   getChainId,
 } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
 import {
+  getBytes,
+  isHexString,
   JsonRpcProvider,
-  toUtf8String,
   TransactionRequest,
   TypedDataEncoder,
 } from 'ethers'
@@ -25,6 +27,7 @@ import {
   updateAppSession,
   VaultsAppSessions,
 } from '../../sessions/state/appSessions'
+import { storage } from '../../storage'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -35,7 +38,6 @@ import { EventMethod, RequestMethod } from '../../utils/constants'
 import {
   ITransaction,
   Messaging,
-  SendTransactionResponse,
   TransactionDetails,
   TransactionType,
 } from '../../utils/interfaces'
@@ -43,10 +45,8 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '../../utils/tx/getStandardTx'
-import { getCurrentVaultId } from '../../vault/state/currentVaultId'
 import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
 import { handleSendTransaction } from './transactionsHandler'
-
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
@@ -57,9 +57,7 @@ export const handleRequest = (
   chain: Chain,
   sender: string
 ): Promise<
-  | Messaging.Chain.Response
-  | ThorchainProviderResponse<ThorchainProviderMethod>
-  | SendTransactionResponse
+  Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
@@ -140,7 +138,10 @@ export const handleRequest = (
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
-          handleSendTransaction(_transaction as ITransaction, chain)
+          handleSendTransaction({
+            transactionPayload: { serialized: _transaction.serializedTx },
+            status: 'default',
+          })
             .then(result => resolve(result))
             .catch(reject)
         } else {
@@ -155,12 +156,15 @@ export const handleRequest = (
             chain
           ).then(standardTx => {
             const modifiedTransaction: ITransaction = {
-              transactionDetails: standardTx as TransactionDetails,
-              chain,
-              id: '',
+              transactionPayload: {
+                keysign: {
+                  transactionDetails: standardTx as TransactionDetails,
+                  chain,
+                },
+              },
               status: 'default',
             }
-            handleSendTransaction(modifiedTransaction, chain)
+            handleSendTransaction(modifiedTransaction)
               .then(result => resolve(result))
               .catch(reject)
           })
@@ -180,12 +184,15 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const modifiedTransaction: ITransaction = {
-                transactionDetails: standardTx!,
-                chain,
-                id: '',
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx!,
+                    chain,
+                  },
+                },
                 status: 'default',
               }
-              handleSendTransaction(modifiedTransaction, chain)
+              handleSendTransaction(modifiedTransaction)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -213,15 +220,17 @@ export const handleRequest = (
               } as TransactionType.WalletTransaction,
               chain
             ).then(standardTx => {
-              let modifiedTransaction: ITransaction = {} as ITransaction
-              modifiedTransaction = {
-                transactionDetails: standardTx as TransactionDetails,
-                isDeposit: true,
-                chain,
-                id: '',
+              const modifiedTransaction: ITransaction = {
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx as TransactionDetails,
+                    chain,
+                    isDeposit: true,
+                  },
+                },
                 status: 'default',
               }
-              handleSendTransaction(modifiedTransaction, chain)
+              handleSendTransaction(modifiedTransaction)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -338,7 +347,7 @@ export const handleRequest = (
           return
         }
 
-        getCurrentVaultId().then(async vaultId => {
+        storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
           const allSessions = await getVaultsAppSessions()
@@ -436,7 +445,7 @@ export const handleRequest = (
 
         const chain = shouldBePresent(getChainByChainId(param.chainId))
 
-        getCurrentVaultId().then(async vaultId => {
+        storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
           const host = getDappHostname(sender)
 
@@ -515,7 +524,7 @@ export const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_CALL: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as TransactionRequest[]
 
           if (transaction) {
             getEvmRpcProvider(chain as EvmChain)
@@ -576,31 +585,17 @@ export const handleRequest = (
             }
 
             const hashMessage = TypedDataEncoder.encode(domain, types, message)
-            handleSendTransaction(
-              {
-                customMessage: {
+            handleSendTransaction({
+              transactionPayload: {
+                custom: {
                   method,
                   address: String(address),
                   message: hashMessage,
                 },
-                isCustomMessage: true,
-                chain: chain,
-                transactionDetails: {
-                  amount: { amount: '0', decimals: 0 },
-                  from: String(address),
-                  to: '',
-                  asset: {
-                    chain: Chain.Ethereum,
-                    ticker: 'ETH',
-                  },
-                },
-                id: '',
-                status: 'default',
-                isDeposit: false,
               },
-              chain
-            )
-              .then(result => resolve(result))
+              status: 'default',
+            })
+              .then(result => resolve(ensureHexPrefix(result.txHash)))
               .catch(error => {
                 reject(error)
               })
@@ -616,32 +611,28 @@ export const handleRequest = (
       case RequestMethod.METAMASK.PERSONAL_SIGN: {
         if (Array.isArray(params)) {
           const [message, address] = params
-          const utf8Message = toUtf8String(String(message))
-          handleSendTransaction(
-            {
-              customMessage: {
+
+          let messageBytes: Uint8Array
+          if (typeof message === 'string' && isHexString(message)) {
+            messageBytes = getBytes(message)
+          } else {
+            messageBytes = new TextEncoder().encode(String(message))
+          }
+
+          const prefix = `\x19Ethereum Signed Message:\n${messageBytes.length}`
+          const fullMessage = prefix + new TextDecoder().decode(messageBytes)
+
+          handleSendTransaction({
+            transactionPayload: {
+              custom: {
                 method,
                 address: String(address),
-                message: `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`,
+                message: fullMessage,
               },
-              isCustomMessage: true,
-              chain: chain,
-              transactionDetails: {
-                amount: { amount: '0', decimals: 0 },
-                from: String(address),
-                to: '',
-                asset: {
-                  chain: Chain.Ethereum,
-                  ticker: 'ETH',
-                },
-              },
-              id: '',
-              status: 'default',
-              isDeposit: false,
             },
-            chain
-          )
-            .then(result => resolve(result))
+            status: 'default',
+          })
+            .then(result => resolve(ensureHexPrefix(result.txHash)))
             .catch(reject)
         } else {
           reject()
@@ -663,13 +654,16 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const tx: ITransaction = {
-                transactionDetails: standardTx,
-                isDeposit: true,
-                chain: chain,
-                id: '',
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx,
+                    chain,
+                    isDeposit: true,
+                  },
+                },
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
+              handleSendTransaction(tx)
                 .then(result => resolve(result))
                 .catch(reject)
             })
@@ -692,12 +686,15 @@ export const handleRequest = (
               chain
             ).then(standardTx => {
               const tx: ITransaction = {
-                transactionDetails: standardTx,
-                chain: chain,
-                id: '',
+                transactionPayload: {
+                  keysign: {
+                    transactionDetails: standardTx,
+                    chain,
+                  },
+                },
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
+              handleSendTransaction(tx)
                 .then(result => resolve(result))
                 .catch(reject)
             })

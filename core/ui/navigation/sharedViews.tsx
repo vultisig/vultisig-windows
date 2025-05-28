@@ -1,18 +1,25 @@
+import { AddressBookPage } from '@core/ui/address-book'
+import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
+import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
+import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
-import { UploadQrPage } from '@core/ui/qr/upload/UploadQrPage'
+import { UploadQrPage } from '@core/ui/qr/upload'
+import { VaultBackupPage } from '@core/ui/vault/backup'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
+import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
+import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
@@ -32,8 +39,11 @@ import ChainSelectionScreen from '../vault/send/addressSelector/components/chain
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'addCustomToken'
   | 'address'
+  | 'addressBook'
   | 'airdropRegister'
+  | 'createAddressBookItem'
   | 'createVaultFolder'
   | 'currencySettings'
   | 'deeplink'
@@ -49,13 +59,17 @@ export type SharedViewId = Extract<
   | 'renameVault'
   | 'reshareVault'
   | 'send'
+  | 'signCustomMessage'
   | 'swap'
+  | 'updateAddressBookItem'
   | 'updateVaultFolder'
   | 'uploadQr'
+  | 'vaultBackup'
   | 'vaultChainDetail'
   | 'vaultChainCoinDetail'
-  | 'vaultFolder'
   | 'vaultDetails'
+  | 'vaultFolder'
+  | 'vaultSettings'
   | 'vaults'
   | 'addAddress'
   | 'chainSelection'
@@ -64,8 +78,11 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  addCustomToken: AddCustomTokenPage,
   address: AddressPage,
+  addressBook: AddressBookPage,
   airdropRegister: AirdropRegisterPage,
+  createAddressBookItem: CreateAddressBookItemPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
@@ -80,21 +97,25 @@ export const sharedViews: Views<SharedViewId> = {
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
+  signCustomMessage: SignCustomMessagePage,
   swap: SwapPage,
+  updateAddressBookItem: UpdateAddressBookItemPage,
   updateVaultFolder: () => (
     <CurrentVaultFolderPageProvider>
       <UpdateVaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
   uploadQr: UploadQrPage,
-  vaultChainDetail: VaultChainPage,
+  vaultBackup: VaultBackupPage,
   vaultChainCoinDetail: VaultChainCoinPage,
+  vaultChainDetail: VaultChainPage,
   vaultDetails: VaultDetailsPage,
   vaultFolder: () => (
     <CurrentVaultFolderPageProvider>
       <VaultFolderPage />
     </CurrentVaultFolderPageProvider>
   ),
+  vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
   addAddress: AddAddressForm,
   chainSelection: ChainSelectionScreen,

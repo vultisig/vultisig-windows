@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -32,12 +33,24 @@ type Store struct {
 func NewStore() (*Store, error) {
 	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
 	if dbPath == "" {
-		// Get the current running folder
-		exePath, err := os.Executable()
-		if err != nil {
-			return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+		if runtime.GOOS == "linux" {
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				return nil, fmt.Errorf("failed to get user home directory: %w", err)
+			}
+			dbPath = filepath.Join(homeDir, ".vultisig")
+			// Create directory if it doesn't exist
+			if err := os.MkdirAll(dbPath, 0700); err != nil {
+				return nil, fmt.Errorf("failed to create vultisig directory: %w", err)
+			}
+		} else {
+			// Get the current running folder
+			exePath, err := os.Executable()
+			if err != nil {
+				return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+			}
+			dbPath = exePath
 		}
-		dbPath = exePath
 	}
 	exeDir := filepath.Dir(dbPath)
 	// Construct the full path to the database file
@@ -343,11 +356,12 @@ func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
 		"title",
 		"address",
 		"chain",
+		"\"order\"",
 	}
 	query := fmt.Sprintf(`INSERT OR REPLACE INTO address_book (%s) VALUES (%s)`,
 		strings.Join(columns, ", "),
 		generatePlaceholders(len(columns)))
-	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain)
+	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain, item.Order)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert address book item, err: %w", err)
 	}
@@ -366,8 +380,8 @@ func (s *Store) DeleteAddressBookItem(id string) error {
 
 // Update address book item by id
 func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
-	query := `UPDATE address_book SET title = ?, address = ?, chain = ? WHERE id = ?`
-	_, err := s.db.Exec(query, item.Title, item.Address, item.Chain, item.ID)
+	query := `UPDATE address_book SET title = ?, address = ?, chain = ?, "order" = ? WHERE id = ?`
+	_, err := s.db.Exec(query, item.Title, item.Address, item.Chain, item.Order, item.ID)
 	if err != nil {
 		return fmt.Errorf("could not update address book item, err: %w", err)
 	}
@@ -376,7 +390,7 @@ func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
 
 // Get all address book items
 func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
-	query := `SELECT id, title, address, chain FROM address_book`
+	query := `SELECT id, title, address, chain, "order" FROM address_book ORDER BY "order"`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query address book, err: %w", err)
@@ -386,7 +400,7 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 	var addressBookItems []AddressBookItem
 	for rows.Next() {
 		var addressBookItem AddressBookItem
-		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain); err != nil {
+		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
 			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 		}
 		addressBookItems = append(addressBookItems, addressBookItem)
@@ -397,18 +411,18 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 
 // GetAddressBookItem retrieves a single address book item by ID
 func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
-	query := `SELECT id, title, address, chain FROM address_book WHERE id = ?`
+	query := `SELECT id, title, address, chain, "order" FROM address_book WHERE id = ?`
 	row := s.db.QueryRow(query, id)
-	
+
 	var item AddressBookItem
-	err := row.Scan(&item.ID, &item.Title, &item.Address, &item.Chain)
+	err := row.Scan(&item.ID, &item.Title, &item.Address, &item.Chain, &item.Order)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("address book item not found")
 		}
 		return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 	}
-	
+
 	return &item, nil
 }
 
@@ -575,7 +589,7 @@ func (s *Store) DeleteVaultFolder(id string) error {
 func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 	query := `SELECT id, name, "order" FROM vault_folders WHERE id = ?`
 	row := s.db.QueryRow(query, id)
-	
+
 	var folder VaultFolder
 	err := row.Scan(&folder.ID, &folder.Name, &folder.Order)
 	if err != nil {
@@ -584,7 +598,7 @@ func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 		}
 		return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
 	}
-	
+
 	return &folder, nil
 }
 
