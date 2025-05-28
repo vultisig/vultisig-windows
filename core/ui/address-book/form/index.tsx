@@ -1,8 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { useCreateAddressBookItem } from '@core/ui/address-book/hooks/useCreateAddressBookItem'
+import { useUpdateAddressBookItem } from '@core/ui/address-book/hooks/useUpdateAddressBookItem'
 import { AddressBookItem } from '@core/ui/address-book/model'
 import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -44,6 +47,17 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
+  const [state] = useCoreViewState<'updateAddressBookItem'>()
+  const {
+    createAddressBookItem,
+    error: createError,
+    isPending: isCreatePending,
+  } = useCreateAddressBookItem()
+  const {
+    updateAddressBookItem,
+    error: updateError,
+    isPending: isUpdatePending,
+  } = useUpdateAddressBookItem()
 
   const schema = z
     .object({
@@ -99,8 +113,17 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     defaultValues,
   })
 
+  const handleSubmitForm = (values: AddressBookFormValues) => {
+    if (state?.id) {
+      updateAddressBookItem(state.id, values)
+    } else {
+      createAddressBookItem(values)
+    }
+    onSubmit(values)
+  }
+
   return (
-    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
+    <VStack as="form" onSubmit={handleSubmit(handleSubmitForm)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{title || t('add_address')}</PageHeaderTitle>}
@@ -135,16 +158,22 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             </Text>
           )}
         </VStack>
-        {error && (
+        {(error || createError || updateError) && (
           <Text color="danger" size={14}>
-            {extractErrorMsg(error)}
+            {extractErrorMsg(error || createError || updateError)}
           </Text>
         )}
       </PageContent>
       <PageFooter>
         <Button
           isDisabled={!isValid || !isDirty}
-          isLoading={isLoading || isPending || isValidating}
+          isLoading={
+            isLoading ||
+            isPending ||
+            isCreatePending ||
+            isUpdatePending ||
+            isValidating
+          }
           type="submit"
         >
           {t('save')}

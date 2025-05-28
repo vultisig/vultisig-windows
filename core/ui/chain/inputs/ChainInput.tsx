@@ -20,6 +20,7 @@ const ChainSelector = styled(HStack)`
   border-radius: 8px;
   align-items: center;
   gap: 12px;
+  height: 56px;
   justify-content: space-between;
 `
 

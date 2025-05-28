@@ -2,41 +2,22 @@ import {
   AddressBookForm,
   AddressBookFormValues,
 } from '@core/ui/address-book/form'
-import {
-  useAddressBookItemOrders,
-  useCreateAddressBookItemMutation,
-} from '@core/ui/storage/addressBook'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { useCreateAddressBookItem } from '@core/ui/address-book/hooks/useCreateAddressBookItem'
 import { useTranslation } from 'react-i18next'
-import { v4 as uuidv4 } from 'uuid'
 
 export const CreateAddressBookItemPage = () => {
   const { t } = useTranslation()
-  const { mutate, error, isPending } = useCreateAddressBookItemMutation()
-  const addressBookItemOrders = useAddressBookItemOrders()
-  const navigateBack = useNavigateBack()
+  const { createAddressBookItem, error, isPending } = useCreateAddressBookItem()
 
-  const handleCreateAddress = (values: AddressBookFormValues) => {
-    const { address, chain, title } = values
-
-    mutate(
-      {
-        address,
-        chain,
-        id: uuidv4(),
-        order: getLastItemOrder(addressBookItemOrders),
-        title,
-      },
-      { onSuccess: navigateBack }
-    )
+  const handleSubmit = (values: AddressBookFormValues) => {
+    createAddressBookItem(values)
   }
 
   return (
     <AddressBookForm
       error={error}
       isPending={isPending}
-      onSubmit={handleCreateAddress}
+      onSubmit={handleSubmit}
       title={t('add_address')}
     />
   )
