@@ -86,6 +86,19 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(ReshareMessageSchema, message)
           },
+          // TODO: Check if this is correct for plugins
+          plugin: () => {
+            const message = create(ReshareMessageSchema, {
+              sessionId,
+              serviceName,
+              encryptionKeyHex: hexEncryptionKey,
+              useVultisigRelay,
+              vaultName,
+              ...assertKeygenReshareFields(keygenVault),
+              libType,
+            })
+            return toBinary(ReshareMessageSchema, message)
+          },
         })
 
         const jsonData = toCompressedString({

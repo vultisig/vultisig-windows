@@ -7,8 +7,8 @@ import { ChildrenProp } from '@lib/ui/props'
 export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
   const [{ keygenType }] = useCoreViewState<'joinKeygen'>()
 
-  if (keygenType === 'migrate') {
-    throw new Error('Migrate keygen is not supported in extension')
+  if (keygenType === 'migrate' || keygenType === 'plugin') {
+    throw new Error(`${keygenType} keygen is not supported in extension`)
   }
 
   return (

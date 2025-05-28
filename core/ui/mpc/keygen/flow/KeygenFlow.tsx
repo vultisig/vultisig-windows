@@ -33,6 +33,8 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
     create: () => t('creating_vault'),
     reshare: () => t('reshare'),
     migrate: () => t('upgrade'),
+    // todo: add plugin keygen type
+    plugin: () => 'Plugin Keygen',
   })
 
   return (

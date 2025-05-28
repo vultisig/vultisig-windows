@@ -38,8 +38,11 @@ export const ReshareVaultKeygenActionProvider = ({
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, peers }) => {
       onStepChange('ecdsa')
+      console.log('Starting reshare keygen action...')
+      console.log('peers:', peers)
 
       const signers = [localPartyId, ...peers]
+      console.log('signers:', signers)
 
       const sharedFinalVaultFields = {
         signers,
@@ -47,11 +50,13 @@ export const ReshareVaultKeygenActionProvider = ({
         libType: 'DKLS' as MpcLib,
         isBackedUp: false,
       }
+      console.log('sharedFinalVaultFields:', sharedFinalVaultFields)
 
       const { oldParties } = assertKeygenReshareFields(keygenVault)
+      console.log('oldParties:', oldParties)
 
       const oldCommittee = oldParties.filter(party => signers.includes(party))
-
+      console.log('oldCommittee:', oldCommittee)
       const dklsKeygen = new DKLS(
         'reshare',
         isInitiatingDevice,
@@ -62,14 +67,16 @@ export const ReshareVaultKeygenActionProvider = ({
         oldCommittee,
         encryptionKeyHex
       )
-
+      console.log('dklsKeygen:', dklsKeygen)
       const oldEcdsaKeyshare =
         'existingVault' in keygenVault
           ? keygenVault.existingVault.keyShares.ecdsa
           : undefined
-
+      console.log('oldEcdsaKeyshare:', oldEcdsaKeyshare)
       const dklsResult =
         await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
+      console.log('dklsResult:', dklsResult)
+      console.log('starting eddsa keygen...')
 
       onStepChange('eddsa')
 
@@ -84,6 +91,7 @@ export const ReshareVaultKeygenActionProvider = ({
         encryptionKeyHex,
         new Uint8Array(0)
       )
+      console.log('schnorrKeygen:', schnorrKeygen)
 
       const oldEddsaKeyshare =
         'existingVault' in keygenVault

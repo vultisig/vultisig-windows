@@ -11,13 +11,11 @@ type Input = {
   local_party_id: string
   old_parties: string[]
   old_reshare_prefix: string
-  encryption_password: string
   email: string
-  reshare_type?: number
-  lib_type?: number
+  plugin_id: string
 }
 
-export const reshareWithServer = async (input: Input) => {
+export const reshareWithVerifier = async (input: Input) => {
   const url = `${fastVaultServerUrl}/reshare`
 
   const response = await fetch(url, {

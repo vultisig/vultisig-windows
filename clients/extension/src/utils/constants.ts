@@ -16,6 +16,7 @@ export enum MessageKey {
   PRIORITY = 'priority',
   VAULT = 'vault',
   VAULTS = 'vaults',
+  PLUGIN = 'plugin',
 }
 
 export enum Instance {
