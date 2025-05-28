@@ -23,7 +23,7 @@ export const useCreateVaultMutation = (
   const invalidateQueries = useInvalidateQueries()
   const vaults = useVaults()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
-  const [passcode] = usePasscode()
+  const passcode = usePasscode()
 
   const { createVault, getDefaultChains } = useCore()
 
