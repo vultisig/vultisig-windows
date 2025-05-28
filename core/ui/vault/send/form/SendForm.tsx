@@ -19,6 +19,10 @@ import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
+import {
+  FocusedSendFieldProvider,
+  initialFocusedSendFieldValue,
+} from '../providers/FocusedSendFieldProvider'
 import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
 import { ManageReceiver } from '../receiver/ManageReceiver'
 import { RefreshSend } from '../RefreshSend'
@@ -59,20 +63,24 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           })}
         >
           <VStack gap={16}>
-            <ManageSendCoin />
-            <Sender />
-            <ManageReceiver />
-            <ManageMemo />
-            <ManageAmount />
-            <AmountInGlobalCurrencyDisplay />
-            <VStack gap={8}>
-              <StrictInfoRow>
-                <SendGasFeeWrapper />
-              </StrictInfoRow>
-              <StrictInfoRow>
-                <SendFiatFee />
-              </StrictInfoRow>
-            </VStack>
+            <FocusedSendFieldProvider
+              initialValue={initialFocusedSendFieldValue}
+            >
+              <ManageSendCoin />
+              <Sender />
+              <ManageReceiver />
+              <ManageMemo />
+              <ManageAmount />
+              <AmountInGlobalCurrencyDisplay />
+              <VStack gap={8}>
+                <StrictInfoRow>
+                  <SendGasFeeWrapper />
+                </StrictInfoRow>
+                <StrictInfoRow>
+                  <SendFiatFee />
+                </StrictInfoRow>
+              </VStack>
+            </FocusedSendFieldProvider>
           </VStack>
           <Button
             isLoading={isLoading && isPending}
