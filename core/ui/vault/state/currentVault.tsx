@@ -4,7 +4,10 @@ import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { useMemo } from 'react'
 
+import { decryptVaultKeyshares } from '../../passcodeEncryption/core/vaultKeyshares'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 
@@ -24,8 +27,23 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const id = useCurrentVaultId()
   const vaults = useVaults()
+  const [passcode] = usePasscode()
 
-  const value = vaults.find(vault => getVaultId(vault) === id)
+  const value = useMemo(() => {
+    const vault = vaults.find(vault => getVaultId(vault) === id)
+
+    if (vault && passcode) {
+      return {
+        ...vault,
+        keyShares: decryptVaultKeyshares({
+          keyshares: vault.keyShares,
+          key: passcode,
+        }),
+      }
+    }
+
+    return vault
+  }, [vaults, id, passcode])
 
   return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
 }

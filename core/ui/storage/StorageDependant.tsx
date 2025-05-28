@@ -8,6 +8,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
+import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
@@ -63,9 +64,11 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
             <RootErrorBoundary>
               <VaultsProvider value={vaults}>
                 <CurrentVaultIdProvider value={currentVaultId}>
-                  <RootCurrentVaultProvider>
-                    {children}
-                  </RootCurrentVaultProvider>
+                  <PasscodeProvider initialValue={null}>
+                    <RootCurrentVaultProvider>
+                      {children}
+                    </RootCurrentVaultProvider>
+                  </PasscodeProvider>
                 </CurrentVaultIdProvider>
               </VaultsProvider>
             </RootErrorBoundary>

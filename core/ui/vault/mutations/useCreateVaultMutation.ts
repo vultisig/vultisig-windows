@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultKeyshares } from '../../passcodeEncryption/core/vaultKeyshares'
-import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useAssertPasscode } from '../../passcodeEncryption/state/passcode'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
@@ -23,7 +23,7 @@ export const useCreateVaultMutation = (
   const invalidateQueries = useInvalidateQueries()
   const vaults = useVaults()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
-  const passcode = usePasscode()
+  const passcode = useAssertPasscode()
 
   const { createVault, getDefaultChains } = useCore()
 
