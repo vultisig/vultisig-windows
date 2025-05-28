@@ -20,78 +20,20 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
-const Content = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-`
-
-const ChainList = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 8px;
-  background-color: #061b3a;
-  border-radius: 12px;
-`
-
-const ChainItem = styled(HStack)`
-  cursor: pointer;
-  height: 60px;
-  min-height: 58px;
-  padding: 12px 20px;
-  gap: 16px;
-  border-bottom-right-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-bottom-width: 1px;
-  border-bottom-color: #11284a;
-  transition: background-color 0.2s;
-  background-color: #061b3a;
-  justify-content: space-between;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`
-
-const ChainContent = styled(HStack)`
-  gap: 16px;
-  align-items: center;
-`
-
-const Checkbox = styled.div<{ checked?: boolean }>`
-  width: 20px;
-  height: 20px;
-  border: 1px solid ${props => (props.checked ? '#4CAF50' : '#11284A')};
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #061b3a;
-
-  &:after {
-    content: '';
-    width: 6px;
-    height: 10px;
-    border: 2px solid #4caf50;
-    border-top: 0;
-    border-left: 0;
-    transform: rotate(45deg) translate(-1px, -1px);
-    display: ${props => (props.checked ? 'block' : 'none')};
-  }
-`
+import {
+  ChainContent,
+  ChainItem,
+  ChainList,
+  Checkbox,
+  Container,
+  Content,
+} from './ChainSelectionScreen.styles'
 
 export const ChainSelectionScreen = () => {
   const { t } = useTranslation()
-  const goBack = useNavigateBack()
   const navigate = useNavigate()
+  const goBack = useNavigateBack()
   const [state] = useCoreViewState<'chainSelection'>()
   const [search, setSearch] = useState('')
   const [selectedChain, setSelectedChain] = useState<Chain | null>(
@@ -118,6 +60,11 @@ export const ChainSelectionScreen = () => {
   }, [chainOptions, search])
 
   const handleChainSelect = (chain: Chain) => {
+    console.log('Chain selected:', chain)
+    if (state.onChainSelect) {
+      console.log('Calling onChainSelect with chain:', chain)
+      state.onChainSelect(chain)
+    }
     setSelectedChain(chain)
     state.onChainSelect(chain)
     navigate({
