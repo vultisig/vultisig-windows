@@ -25,13 +25,11 @@ export const useDisablePasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
+      await invalidateQueries([StorageKey.vaults])
+
       setPasscode(null)
       await setPasscodeEncryption(null)
-
-      await invalidateQueries(
-        [StorageKey.passcodeEncryption],
-        [StorageKey.vaults]
-      )
+      await invalidateQueries([StorageKey.passcodeEncryption])
     },
   })
 }
