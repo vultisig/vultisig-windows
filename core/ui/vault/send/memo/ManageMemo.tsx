@@ -4,18 +4,35 @@ import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
-import { text } from '@lib/ui/text'
+import { Text, text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSendMemo } from '../state/memo'
 
-const Input = styled(TextInput)`
-  ${text({
-    family: 'mono',
-    weight: 400,
-  })}
-`
+export const ManageMemo = () => {
+  const [value, setValue] = useSendMemo()
+  const { t } = useTranslation()
+  const [isOpen, { toggle }] = useBoolean(!!value)
+
+  return (
+    <InputContainer>
+      <Label onClick={toggle}>
+        <Text as="span" color="shy" size={12}>
+          {t('add_memo')}
+        </Text>
+        <CollapsableStateIndicator isOpen={isOpen} />
+      </Label>
+      {isOpen && (
+        <TextInput
+          placeholder={t('enter_memo')}
+          value={value}
+          onValueChange={setValue}
+        />
+      )}
+    </InputContainer>
+  )
+}
 
 const Label = styled(InputLabel)`
   ${interactive};
@@ -29,29 +46,3 @@ const Label = styled(InputLabel)`
     font-size: 16px;
   }
 `
-
-export const ManageMemo = () => {
-  const [value, setValue] = useSendMemo()
-
-  const { t } = useTranslation()
-
-  const [isOpen, { toggle }] = useBoolean(!!value)
-
-  return (
-    <InputContainer>
-      <Label onClick={toggle}>
-        <span>
-          {t('memo')} ({t('optional')})
-        </span>
-        <CollapsableStateIndicator isOpen={isOpen} />
-      </Label>
-      {isOpen && (
-        <Input
-          placeholder={t('enter_memo')}
-          value={value}
-          onValueChange={setValue}
-        />
-      )}
-    </InputContainer>
-  )
-}

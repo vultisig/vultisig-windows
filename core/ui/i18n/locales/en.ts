@@ -22,6 +22,7 @@ export const en = {
     'dApps will appear here whenever you interact with them',
   open_desktop: 'Open Desktop',
   percentage: 'Percentage',
+  add_memo: 'Add MEMO',
   portfolio_overview: 'Portfolio Overview',
   prioritize_vultisig: 'Prioritize Vultisig',
   privacy_policy: 'Privacy Policy',

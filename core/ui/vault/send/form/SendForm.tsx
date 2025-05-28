@@ -13,13 +13,11 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ManageAddresses } from '../addresses/ManageAddresses'
-import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
-import { ManageAmount } from '../amount/ManageSendAmount'
+import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
-import { ManageMemo } from '../memo/ManageMemo'
 import {
   FocusedSendFieldProvider,
   initialFocusedSendFieldValue,
@@ -67,9 +65,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
             >
               <ManageSendCoin />
               <ManageAddresses />
-              <ManageMemo />
               <ManageAmount />
-              <AmountInGlobalCurrencyDisplay />
               <VStack gap={8}>
                 <StrictInfoRow>
                   <SendGasFeeWrapper />

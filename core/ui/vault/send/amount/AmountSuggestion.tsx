@@ -2,34 +2,40 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
-import { text } from '@lib/ui/text'
 import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const Container = styled(UnstyledButton)`
+const Container = styled(UnstyledButton)<{
+  isActive?: boolean
+}>`
   width: 56px;
   height: 30px;
   ${borderRadius.s};
-  background: ${getColor('foreground')};
-
-  ${text({
-    size: 12,
-    weight: '600',
-    color: 'contrast',
-  })}
-
   ${centerContent};
+  background-color: ${({ isActive }) =>
+    isActive ? getColor('buttonPrimaryWeb') : getColor('foreground')};
 
   &:hover {
     background: ${getHoverVariant('foreground')};
   }
 `
 
-export const AmountSuggestion: React.FC<ValueProp<number> & OnClickProp> = ({
-  value,
-  onClick,
-}) => {
-  return <Container onClick={onClick}>{toPercents(value)}</Container>
+export const AmountSuggestion: FC<
+  ValueProp<number> &
+    OnClickProp & {
+      isActive?: boolean
+    }
+> = ({ value, onClick, isActive }) => {
+  const formattedValue = toPercents(value)
+  const { t } = useTranslation()
+
+  return (
+    <Container isActive={isActive} onClick={onClick}>
+      {value === 1 ? t('max') : formattedValue}
+    </Container>
+  )
 }

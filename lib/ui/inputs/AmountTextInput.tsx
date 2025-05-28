@@ -26,7 +26,6 @@ const UnitContainer = styled.div`
 const Input = styled(TextInput)`
   ${text({
     size: 16,
-    family: 'mono',
     weight: '400',
   })}
 `
