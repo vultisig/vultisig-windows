@@ -24,6 +24,7 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -32,7 +33,8 @@ import { toUtf8String } from 'ethers'
 export const getKeysignPayload = (
   transaction: IKeysignTransactionPayload,
   vault: Vault,
-  walletCore: WalletCore
+  walletCore: WalletCore,
+  feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -85,6 +87,7 @@ export const getKeysignPayload = (
           transactionType: transaction.transactionDetails.ibcTransaction
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
+          feeSettings,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {

@@ -2,6 +2,8 @@ export const en = {
   address_book: 'Address Book',
   assets: 'assets',
   available: 'Available',
+  camera_access_blocked:
+    'Camera access is blocked. Please enable it in your browser settings.',
   check_for_update: 'Check for Update',
   connected_dapps: 'Connected dApps',
   default_chains: 'Default Chains',
@@ -30,6 +32,7 @@ export const en = {
   support: 'Support',
   terms: 'Terms',
   terms_of_service: 'Terms of Service',
+  try_in_expanded_mode: 'Try in expanded mode',
   twitter: 'Twitter',
   vultisig_community: 'Vultisig Community',
   remove: 'Remove',

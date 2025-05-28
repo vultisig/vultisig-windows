@@ -27,6 +27,7 @@ export enum UtxoChain {
   Litecoin = 'Litecoin',
   Dogecoin = 'Dogecoin',
   Dash = 'Dash',
+  Zcash = 'Zcash',
 }
 
 export enum CosmosChain {

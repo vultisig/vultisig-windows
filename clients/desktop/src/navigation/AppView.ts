@@ -11,8 +11,6 @@ export type AppView =
   | { id: 'migrateVault' }
   | { id: 'onboarding' }
   | { id: 'shareVault' }
-  | { id: 'signCustomMessage' }
-  | { id: 'vaultBackup' }
   | { id: 'vaultFAQ' }
   | { id: 'vaultFolder'; state: { id: string } }
 
