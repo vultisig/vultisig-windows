@@ -74,6 +74,10 @@ export function SaveVaultFolder(arg1) {
   return window['go']['storage']['Store']['SaveVaultFolder'](arg1);
 }
 
+export function SaveVaultsKeyShares(arg1) {
+  return window['go']['storage']['Store']['SaveVaultsKeyShares'](arg1);
+}
+
 export function UpdateAddressBookItem(arg1) {
   return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
 }

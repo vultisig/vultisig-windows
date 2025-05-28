@@ -1,8 +1,10 @@
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { useMutation } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useCore } from '../../state/core'
+import { StorageKey } from '../../storage/StorageKey'
 import {
   decryptedPasscodeEncoding,
   encryptedPasscodeEncoding,
@@ -10,6 +12,7 @@ import {
 
 export const useSetPasscodeMutation = () => {
   const { setPasscodeEncryption } = useCore()
+  const invalidateQueries = useInvalidateQueries()
 
   return useMutation({
     mutationFn: async (passcode: string) => {
@@ -23,6 +26,11 @@ export const useSetPasscodeMutation = () => {
         sample,
         encryptedSample,
       })
+
+      await invalidateQueries(
+        [StorageKey.passcodeEncryption],
+        [StorageKey.vaults]
+      )
     },
   })
 }
