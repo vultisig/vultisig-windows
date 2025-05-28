@@ -16,6 +16,7 @@ export const PasscodeInput = ({ onChange, label }: PasscodeInputProps) => {
         onValueChange={value =>
           onChange(value.length === passcodeLength ? value : null)
         }
+        includePasteButton={false}
       />
     </>
   )
