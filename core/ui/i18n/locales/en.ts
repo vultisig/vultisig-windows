@@ -839,4 +839,9 @@ export const en = {
   no_token_found: 'No token found',
   invalid_token_address: 'Enter a valid token address',
   security: 'Security',
+  app_lock_passcode: 'App Lock Passcode',
+  app_lock_passcode_description:
+    'Add an extra layer of security by requiring a passcode to unlock the app.',
+  on: 'On',
+  off: 'Off',
 }
