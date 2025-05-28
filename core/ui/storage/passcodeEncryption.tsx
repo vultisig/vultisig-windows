@@ -34,3 +34,9 @@ export const usePasscodeEncryption = () => {
 
   return shouldBeDefined(data)
 }
+
+export const useHasPasscodeEncryption = () => {
+  const data = usePasscodeEncryption()
+
+  return data !== null
+}
