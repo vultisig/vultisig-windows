@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ManageAddresses } from '../addresses/ManageAddresses'
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
 import { ManageAmount } from '../amount/ManageSendAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
@@ -24,9 +25,7 @@ import {
   initialFocusedSendFieldValue,
 } from '../providers/FocusedSendFieldProvider'
 import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
-import { ManageReceiver } from '../receiver/ManageReceiver'
 import { RefreshSend } from '../RefreshSend'
-import { Sender } from '../sender/Sender'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
@@ -67,8 +66,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
               initialValue={initialFocusedSendFieldValue}
             >
               <ManageSendCoin />
-              <Sender />
-              <ManageReceiver />
+              <ManageAddresses />
               <ManageMemo />
               <ManageAmount />
               <AmountInGlobalCurrencyDisplay />

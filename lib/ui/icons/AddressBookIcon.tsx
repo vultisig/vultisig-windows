@@ -1,24 +1,17 @@
-const AddressBookIcon = ({ size = 20 }) => (
+const AddressBookIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
+    width="1em"
+    height="0.952em"
+    viewBox="0 0 21 20"
     fill="none"
-    viewBox="0 0 20 20"
   >
     <path
-      stroke="#fff"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
-      d="M13.75 2.5V10l-2.5-1.875L8.75 10V2.5"
-    />
-    <path
-      stroke="#fff"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M3.75 16.875A1.875 1.875 0 0 1 5.625 15H16.25V2.5H5.625A1.875 1.875 0 0 0 3.75 4.375v12.5ZM3.75 16.875v.625H15"
+      d="M3.833 16.25V3.75a2.083 2.083 0 0 1 2.084-2.083h10.416a.833.833 0 0 1 .834.833v15a.833.833 0 0 1-.834.834H5.917a2.083 2.083 0 0 1-2.084-2.084Zm0 0a2.083 2.083 0 0 1 2.084-2.083h11.25m-10-3.333L10.5 5l3.333 5.834m-5.75-1.667h4.75"
     />
   </svg>
 )
