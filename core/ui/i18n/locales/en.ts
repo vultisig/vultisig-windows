@@ -844,4 +844,9 @@ export const en = {
     'Add an extra layer of security by requiring a passcode to unlock the app.',
   on: 'On',
   off: 'Off',
+  enter_passcode: 'Enter Passcode',
+  confirm_passcode: 'Confirm Passcode',
+  passcodes_do_not_match: 'Passcodes do not match',
+  set_passcode: 'Set Passcode',
+  encrypting_vault_keyshares: 'Encrypting vault keyshares...',
 }

@@ -11,7 +11,7 @@ interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   length?: number
   onCompleted?: (value: string) => void
   onValueChange?: (value: string) => void
-  validation: 'invalid' | 'valid' | undefined
+  validation?: 'invalid' | 'valid'
 }
 
 export const OTPInput = ({
