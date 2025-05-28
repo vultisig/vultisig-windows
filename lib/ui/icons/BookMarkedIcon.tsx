@@ -1,7 +1,7 @@
-import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
-export const BookMarkedIcon: FC<LinearIconProps> = props => (
+export const BookMarkedIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
     height="1em"

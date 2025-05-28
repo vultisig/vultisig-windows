@@ -1,7 +1,7 @@
-import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
-export const CameraIcon: FC<LinearIconProps> = props => (
+export const CameraIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
     height="1em"

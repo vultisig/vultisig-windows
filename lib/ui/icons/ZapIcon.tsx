@@ -1,7 +1,7 @@
-import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
-export const ZapIcon: FC<LinearIconProps> = props => (
+export const ZapIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
     height="1em"

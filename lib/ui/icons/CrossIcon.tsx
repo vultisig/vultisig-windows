@@ -1,7 +1,7 @@
-import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
-export const CrossIcon: FC<LinearIconProps> = props => (
+export const CrossIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
     height="1em"

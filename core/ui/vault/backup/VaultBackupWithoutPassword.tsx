@@ -2,7 +2,7 @@ import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultM
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { UserLockIcon } from '@lib/ui/icons/UserLockIcon'
+import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
@@ -42,7 +42,7 @@ export const VaultBackupWithoutPassword = ({
         <VStack justifyContent="center" gap={36}>
           <VStack gap={16}>
             <IconContainer>
-              <UserLockIcon />
+              <LockKeyholeIcon />
             </IconContainer>
             <Text size={22} centerHorizontally>
               {t('backup_password_prompt')}

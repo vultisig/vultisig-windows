@@ -1,7 +1,7 @@
-import { FilledIconProps } from '@lib/ui/icons/IconProps'
+import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
-export const DiscordIcon: FC<FilledIconProps> = props => (
+export const DiscordIcon: FC<SvgProps> = props => (
   <svg
     fill="currentColor"
     height="1em"
