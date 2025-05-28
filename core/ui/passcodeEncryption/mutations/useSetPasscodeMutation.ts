@@ -14,11 +14,13 @@ import {
   encryptedPasscodeEncoding,
 } from '../core/config'
 import { encryptVaultKeyShares } from '../core/vaultKeyShares'
+import { usePasscode } from '../state/passcode'
 
 export const useSetPasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const invalidateQueries = useInvalidateQueries()
   const vaults = useVaults()
+  const [, setPasscode] = usePasscode()
 
   return useMutation({
     mutationFn: async (passcode: string) => {
@@ -35,6 +37,7 @@ export const useSetPasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
+      setPasscode(passcode)
       await setPasscodeEncryption({
         sample,
         encryptedSample,

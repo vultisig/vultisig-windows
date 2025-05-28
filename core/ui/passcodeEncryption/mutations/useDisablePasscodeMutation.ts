@@ -8,11 +8,12 @@ import { StorageKey } from '../../storage/StorageKey'
 import { useVaults } from '../../storage/vaults'
 import { getVaultId } from '../../vault/Vault'
 import { decryptVaultKeyShares } from '../core/vaultKeyShares'
-import { useAssertPasscode } from '../state/passcode'
+import { useAssertPasscode, usePasscode } from '../state/passcode'
 
 export const useDisablePasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const invalidateQueries = useInvalidateQueries()
+  const [, setPasscode] = usePasscode()
   const passcode = useAssertPasscode()
   const vaults = useVaults()
 
@@ -24,6 +25,7 @@ export const useDisablePasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
+      setPasscode(null)
       await setPasscodeEncryption(null)
 
       await invalidateQueries(
