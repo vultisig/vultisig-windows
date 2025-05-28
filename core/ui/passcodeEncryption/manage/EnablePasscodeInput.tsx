@@ -15,7 +15,9 @@ export const EnablePasscodeInput = ({
       <Text height="large" size={16} color="contrast">
         {t('app_lock_passcode')}
       </Text>
-      <Text size={12}>{t('app_lock_passcode_description')}</Text>
+      <Text color="supporting" size={12}>
+        {t('app_lock_passcode_description')}
+      </Text>
       <Switch
         value={value}
         onChange={onChange}
