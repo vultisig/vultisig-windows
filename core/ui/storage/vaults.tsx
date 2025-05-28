@@ -10,7 +10,7 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { getVaultId, Vault, VaultKeyshares } from '../vault/Vault'
+import { getVaultId, Vault, VaultKeyShares } from '../vault/Vault'
 import { StorageKey } from './StorageKey'
 
 export type UpdateVaultInput = {
@@ -28,8 +28,8 @@ type GetVaultsFunction = () => Promise<Vault[]>
 
 type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
-type UpdateVaultsKeyshares = (
-  value: Record<string, VaultKeyshares>
+type UpdateVaultsKeyShares = (
+  value: Record<string, VaultKeyShares>
 ) => Promise<void>
 
 export type VaultsStorage = {
@@ -37,7 +37,7 @@ export type VaultsStorage = {
   createVault: CreateVaultFunction
   updateVault: UpdateVaultFunction
   deleteVault: DeleteVaultFunction
-  updateVaultsKeyshares: UpdateVaultsKeyshares
+  updateVaultsKeyShares: UpdateVaultsKeyShares
 }
 
 type MergeVaultsWithCoinsInput = {

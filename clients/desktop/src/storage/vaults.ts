@@ -41,23 +41,23 @@ export const vaultsStorage: VaultsStorage = {
     return vault
   },
   getVaults,
-  updateVaultsKeyshares: async vaultsKeyshares => {
+  updateVaultsKeyShares: async vaultsKeyShares => {
     const vaults = await getVaults()
 
-    const storageVaultsKeyshares = recordMap(
-      vaultsKeyshares,
-      (keyshares, vaultId) => {
+    const storageVaultsKeyShares = recordMap(
+      vaultsKeyShares,
+      (keyShares, vaultId) => {
         const { publicKeys } = shouldBePresent(
           vaults.find(v => getVaultId(v) === vaultId)
         )
 
-        return toEntries(keyshares).map(({ key, value }) => ({
+        return toEntries(keyShares).map(({ key, value }) => ({
           public_key: publicKeys[key],
           keyshare: value,
         }))
       }
     )
 
-    await SaveVaultsKeyShares(storageVaultsKeyshares)
+    await SaveVaultsKeyShares(storageVaultsKeyShares)
   },
 }
