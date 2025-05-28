@@ -1,25 +1,25 @@
-import { VaultKeyshares } from '@core/ui/vault/Vault'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { recordMap } from '@lib/utils/record/recordMap'
 
+import { VaultKeyShares } from '../../vault/Vault'
 import { decryptedPasscodeEncoding, encryptedPasscodeEncoding } from './config'
 
 type Input = {
-  keyshares: VaultKeyshares
+  keyShares: VaultKeyShares
   key: string
 }
 
-export const encryptVaultKeyshares = ({ keyshares, key }: Input) =>
-  recordMap(keyshares, value =>
+export const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
+  recordMap(keyShares, value =>
     encryptWithAesGcm({
       key,
       value: Buffer.from(value, decryptedPasscodeEncoding),
     }).toString(encryptedPasscodeEncoding)
   )
 
-export const decryptVaultKeyshares = ({ keyshares, key }: Input) =>
-  recordMap(keyshares, value =>
+export const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
+  recordMap(keyShares, value =>
     decryptWithAesGcm({
       key,
       value: Buffer.from(value, encryptedPasscodeEncoding),

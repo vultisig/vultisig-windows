@@ -6,7 +6,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
-import { decryptVaultKeyshares } from '../../passcodeEncryption/core/vaultKeyshares'
+import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
@@ -35,8 +35,8 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     if (vault && passcode) {
       return {
         ...vault,
-        keyShares: decryptVaultKeyshares({
-          keyshares: vault.keyShares,
+        keyShares: decryptVaultKeyShares({
+          keyShares: vault.keyShares,
           key: passcode,
         }),
       }
