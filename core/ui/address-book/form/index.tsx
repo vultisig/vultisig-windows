@@ -35,7 +35,7 @@ type AddressBookFormProps = {
 }
 
 export const AddressBookForm: FC<AddressBookFormProps> = ({
-  defaultValues = { address: '', chain: Chain.Bitcoin, title: '' },
+  defaultValues = { address: '', chain: undefined, title: '' },
   error,
   isPending,
   onSubmit,
@@ -103,7 +103,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{title || t('add_address')}</PageHeaderTitle>}
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>

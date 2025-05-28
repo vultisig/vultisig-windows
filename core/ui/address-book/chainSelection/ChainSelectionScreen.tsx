@@ -10,6 +10,7 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -90,6 +91,7 @@ const Checkbox = styled.div<{ checked?: boolean }>`
 export const ChainSelectionScreen = () => {
   const { t } = useTranslation()
   const goBack = useNavigateBack()
+  const navigate = useNavigate()
   const [state] = useCoreViewState<'chainSelection'>()
   const [search, setSearch] = useState('')
   const [selectedChain, setSelectedChain] = useState<Chain | null>(
@@ -118,6 +120,10 @@ export const ChainSelectionScreen = () => {
   const handleChainSelect = (chain: Chain) => {
     setSelectedChain(chain)
     state.onChainSelect(chain)
+    navigate({
+      id: 'addAddress',
+      state: { selectedChain: chain }
+    })
   }
 
   const getChainBalance = (chain: Chain) => {

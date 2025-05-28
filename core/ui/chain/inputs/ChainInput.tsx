@@ -9,6 +9,8 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import { panel } from '@lib/ui/panel/Panel'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useEffect } from 'react'
 
 import { ChainEntityIcon } from '../coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '../metadata/getChainLogoSrc'
@@ -26,6 +28,14 @@ const ChainSelector = styled(HStack)`
 export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [state] = useCoreViewState<'chainSelection'>()
+  const selectedChain = state?.selectedChain
+
+  useEffect(() => {
+    if (selectedChain) {
+      onChange(selectedChain)
+    }
+  }, [selectedChain, onChange])
 
   const handleChainClick = () => {
     navigate({
@@ -43,16 +53,21 @@ export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
         {t('chain')}
       </Text>
       <ChainSelector onClick={handleChainClick}>
-        <>
-          <ChainEntityIcon
-            value={getChainLogoSrc(value)}
-            style={{ fontSize: 24 }}
-          />
-          <Text color="contrast" size={14} weight="500">
-          {value}
-        </Text>
-        </>
-
+        {value ? (
+          <>
+            <ChainEntityIcon
+              value={getChainLogoSrc(value)}
+              style={{ fontSize: 24 }}
+            />
+            <Text color="contrast" size={14} weight="500">
+              {value}
+            </Text>
+          </>
+        ) : (
+          <Text color="shy" size={14} weight="500">
+            {t('select_chains')}
+          </Text>
+        )}
         <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
       </ChainSelector>
     </VStack>
