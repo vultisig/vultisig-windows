@@ -4,17 +4,26 @@ import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { pipe } from '@lib/utils/pipe'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
+import { encryptVaultKeyshares } from '../../passcodeEncryption/core/vaultKeyshares'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
+import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
+import { useVaults } from '../../storage/vaults'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
   const invalidateQueries = useInvalidateQueries()
+  const vaults = useVaults()
+  const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const [passcode] = usePasscode()
 
   const { createVault, getDefaultChains } = useCore()
 
@@ -23,9 +32,29 @@ export const useCreateVaultMutation = (
 
   const walletCore = useAssertWalletCore()
 
+  const { t } = useTranslation()
+
   return useMutation({
     mutationFn: async (input: Vault) => {
-      const vault = await createVault(input)
+      if (vaults.find(v => getVaultId(v) === getVaultId(input))) {
+        throw new Error(t('vault_already_exists'))
+      }
+
+      const vault = await createVault(
+        pipe(input, input => {
+          if (hasPasscodeEncryption) {
+            return {
+              ...input,
+              keyShares: encryptVaultKeyshares({
+                keyshares: input.keyShares,
+                key: passcode,
+              }),
+            }
+          }
+
+          return input
+        })
+      )
 
       await invalidateQueries([StorageKey.vaults])
 
