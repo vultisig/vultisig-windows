@@ -849,4 +849,5 @@ export const en = {
   passcodes_do_not_match: 'Passcodes do not match',
   set_passcode: 'Set Passcode',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
+  decrypting_vault_keyshares: 'Decrypting vault keyshares...',
 }

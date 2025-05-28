@@ -37,16 +37,14 @@ export const useSetPasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
+      await invalidateQueries([StorageKey.vaults])
+
       setPasscode(passcode)
       await setPasscodeEncryption({
         sample,
         encryptedSample,
       })
-
-      await invalidateQueries(
-        [StorageKey.passcodeEncryption],
-        [StorageKey.vaults]
-      )
+      await invalidateQueries([StorageKey.passcodeEncryption])
     },
   })
 }
