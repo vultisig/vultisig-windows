@@ -16,6 +16,7 @@ import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { HorizontalLine } from '../components/HorizontalLine'
 import { SendInputContainer } from '../components/SendInputContainer'
+import { ManageMemo } from '../memo/ManageMemo'
 import { useFocusedSendField } from '../providers/FocusedSendFieldProvider'
 import { useSendAmount } from '../state/amount'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
@@ -49,7 +50,6 @@ export const ManageAmountInputField = () => {
     <SendInputContainer>
       <InputLabel>{t('amount')}</InputLabel>
       <HorizontalLine />
-
       <ActionInsideInteractiveElement
         render={() => (
           <AmountTextInput
@@ -108,6 +108,7 @@ export const ManageAmountInputField = () => {
           </TotalBalanceWrapper>
         )}
       />
+      <ManageMemo />
     </SendInputContainer>
   )
 }

@@ -161,7 +161,7 @@ export const ManageReceiverAddressInputField = () => {
 }
 
 const AddressFieldWrapper = styled(VStack)`
-  background-color: ${getColor('foregroundDark')};
+  background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 16px;
   ${borderRadius.m}
@@ -169,8 +169,7 @@ const AddressFieldWrapper = styled(VStack)`
 
 const Input = styled(TextInput)`
   background: transparent;
-  background-color: ${getColor('foregroundDark')};
-  background-color: ${getColor('foregroundDark')};
+  background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   &:hover,
   &:focus {

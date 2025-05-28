@@ -2,6 +2,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'
@@ -35,7 +36,7 @@ export const AmountSuggestion: FC<
 
   return (
     <Container isActive={isActive} onClick={onClick}>
-      {value === 1 ? t('max') : formattedValue}
+      <Text>{value === 1 ? t('max') : formattedValue}</Text>
     </Container>
   )
 }
