@@ -1,27 +1,17 @@
-import { FC, SVGProps } from 'react'
+import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { FC } from 'react'
 
-export const CloudUploadIcon: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = '1em',
-  stroke = 'currentColor',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 1.5,
-  width = '1em',
-  ...props
-}) => (
+export const CloudUploadIcon: FC<LinearIconProps> = props => (
   <svg
+    fill="none"
+    height="1em"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1.5"
     viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
+    width="1em"
+    {...props}
   >
     <path d="M12.0002 13.0002V21.0002M12.0002 13.0002L8.00024 17.0002M12.0002 13.0002L16.0002 17.0002M4.00034 14.8993C3.25738 14.1402 2.69691 13.222 2.36137 12.2142C2.02584 11.2064 1.92405 10.1355 2.0637 9.08256C2.20335 8.02962 2.5808 7.02226 3.16743 6.1368C3.75407 5.25133 4.53452 4.51098 5.44967 3.97182C6.36482 3.43265 7.39067 3.10882 8.44951 3.02484C9.50835 2.94087 10.5724 3.09895 11.5611 3.48712C12.5498 3.8753 13.4372 4.48337 14.1561 5.2653C14.8749 6.04723 15.4065 6.9825 15.7103 8.00026H17.5003C18.4659 8.00015 19.4058 8.31059 20.1813 8.8857C20.9569 9.46082 21.5269 10.2701 21.8071 11.1941C22.0874 12.118 22.063 13.1076 21.7377 14.0166C21.4123 14.9257 20.8032 15.706 20.0003 16.2423" />
   </svg>

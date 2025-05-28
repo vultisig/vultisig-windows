@@ -7,7 +7,7 @@ import {
   textInputHeight,
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
-import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -87,7 +87,7 @@ export const ServerPasswordHintStep = ({
               )}
               action={
                 <UnstyledButton onClick={() => setValue('passwordHint', '')}>
-                  <CircledCloseIcon />
+                  <CircleCrossIcon />
                 </UnstyledButton>
               }
               actionPlacerStyles={{

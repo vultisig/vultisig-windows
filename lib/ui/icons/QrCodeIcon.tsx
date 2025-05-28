@@ -1,26 +1,18 @@
-export const QrCodeIcon = () => (
+import { LinearIconProps } from '@lib/ui/icons/IconProps'
+import { FC } from 'react'
+
+export const QrCodeIcon: FC<LinearIconProps> = props => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
-    viewBox="0 0 24 24"
     fill="none"
+    height="1em"
     stroke="currentColor"
-    strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    strokeWidth="1.5"
+    viewBox="0 0 24 24"
+    width="1em"
+    {...props}
   >
-    <rect width="5" height="5" x="3" y="3" rx="1" />
-    <rect width="5" height="5" x="16" y="3" rx="1" />
-    <rect width="5" height="5" x="3" y="16" rx="1" />
-    <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
-    <path d="M21 21v.01" />
-    <path d="M12 7v3a2 2 0 0 1-2 2H7" />
-    <path d="M3 12h.01" />
-    <path d="M12 3h.01" />
-    <path d="M12 16v.01" />
-    <path d="M16 12h1" />
-    <path d="M21 12v.01" />
-    <path d="M12 21v-1" />
+    <path d="M21 16H18C17.4696 16 16.9609 16.2107 16.5858 16.5858C16.2107 16.9609 16 17.4696 16 18V21M21 21V21.01M12 7V10C12 10.5304 11.7893 11.0391 11.4142 11.4142C11.0391 11.7893 10.5304 12 10 12H7M3 12H3.01M12 3H12.01M12 16V16.01M16 12H17M21 12V12.01M12 21V20M4 3H7C7.55228 3 8 3.44772 8 4V7C8 7.55228 7.55228 8 7 8H4C3.44772 8 3 7.55228 3 7V4C3 3.44772 3.44772 3 4 3ZM17 3H20C20.5523 3 21 3.44772 21 4V7C21 7.55228 20.5523 8 20 8H17C16.4477 8 16 7.55228 16 7V4C16 3.44772 16.4477 3 17 3ZM4 16H7C7.55228 16 8 16.4477 8 17V20C8 20.5523 7.55228 21 7 21H4C3.44772 21 3 20.5523 3 20V17C3 16.4477 3.44772 16 4 16Z" />
   </svg>
 )

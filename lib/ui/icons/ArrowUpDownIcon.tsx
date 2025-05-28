@@ -1,7 +1,7 @@
 import { LinearIconProps } from '@lib/ui/icons/IconProps'
 import { FC } from 'react'
 
-export const ChevronRightIcon: FC<LinearIconProps> = props => (
+export const ArrowUpDownIcon: FC<LinearIconProps> = props => (
   <svg
     fill="none"
     height="1em"
@@ -13,6 +13,6 @@ export const ChevronRightIcon: FC<LinearIconProps> = props => (
     width="1em"
     {...props}
   >
-    <path d="M9 18L15 12L9 6" />
+    <path d="M21 16L17 20M17 20L13 16M17 20V4M3 8L7 4M7 4L11 8M7 4V20" />
   </svg>
 )
