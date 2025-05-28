@@ -11,7 +11,7 @@ type EnablePasscodeInputProps = InputProps<boolean> & {
 }
 
 const ActionContainer = styled.div`
-  ${vStack({ alignItems: 'center' })}
+  ${vStack({ justifyContent: 'center' })}
   min-height: 34px;
 `
 
