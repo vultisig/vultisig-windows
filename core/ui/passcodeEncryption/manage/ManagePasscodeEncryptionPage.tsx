@@ -1,19 +1,23 @@
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { EnablePasscodeInput } from './EnablePasscodeInput'
+import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
+import { ManagePasscode } from './ManagePasscode'
+import { SetPasscode } from './SetPasscode'
 
 export const ManagePasscodeEncryptionPage = () => {
   const { t } = useTranslation()
-  const [value, setValue] = useState(false)
+  const hasPasscodeEnabled = useHasPasscodeEncryption()
 
   return (
     <>
       <FlowPageHeader title={t('security')} />
       <FitPageContent contentMaxWidth={360}>
-        <EnablePasscodeInput value={value} onChange={setValue} />
+        <VStack gap={16}>
+          {hasPasscodeEnabled ? <ManagePasscode /> : <SetPasscode />}
+        </VStack>
       </FitPageContent>
     </>
   )
