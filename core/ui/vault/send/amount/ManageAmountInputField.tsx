@@ -102,7 +102,7 @@ export const ManageAmountInputField = () => {
             <Text as="span" size={14} color="contrast">
               Balance available:
             </Text>{' '}
-            <Text color="shy" size={14}>
+            <Text size={14}>
               {`${fromChainAmount(amount, decimals)} ${ticker} `}
             </Text>
           </TotalBalanceWrapper>
