@@ -45,5 +45,15 @@ export const vaultsStorage: VaultsStorage = {
 
     return vault
   },
+  updateVaultsKeyshares: async vaultsKeyshares => {
+    const vaults = await getVaults()
+
+    const newVaults = vaults.map(vault => ({
+      ...vault,
+      keyShares: vaultsKeyshares[getVaultId(vault)],
+    }))
+
+    await updateVaults(newVaults)
+  },
   getVaults,
 }

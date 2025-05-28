@@ -602,6 +602,78 @@ func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 	return &folder, nil
 }
 
+// SaveVaultsKeyShares atomically updates keyshares for multiple vaults in a single transaction
+func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string][]KeyShare) error {
+	if len(vaultKeyShares) == 0 {
+		return nil // Nothing to update
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("could not begin transaction: %w", err)
+	}
+	defer func() {
+		if err != nil {
+			if rbErr := tx.Rollback(); rbErr != nil {
+				s.log.Error().Err(rbErr).Msg("could not rollback transaction")
+			}
+		}
+	}()
+
+	// First, delete all existing keyshares for all vaults in the map
+	vaultIDs := make([]string, 0, len(vaultKeyShares))
+	for vaultID := range vaultKeyShares {
+		vaultIDs = append(vaultIDs, vaultID)
+	}
+	
+	// Create placeholders for the IN clause
+	placeholders := generatePlaceholders(len(vaultIDs))
+	deleteQuery := fmt.Sprintf("DELETE FROM keyshares WHERE public_key_ecdsa IN (%s)", placeholders)
+	
+	// Convert vaultIDs to []interface{} for Exec
+	args := make([]interface{}, len(vaultIDs))
+	for i, id := range vaultIDs {
+		args[i] = id
+	}
+	
+	_, err = tx.Exec(deleteQuery, args...)
+	if err != nil {
+		return fmt.Errorf("could not delete existing keyshares: %w", err)
+	}
+
+	// Then insert all new keyshares
+	columns := []string{
+		"public_key_ecdsa",
+		"public_key",
+		"keyshare",
+	}
+	insertQuery := fmt.Sprintf(`INSERT INTO keyshares (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
+
+	stmt, err := tx.Prepare(insertQuery)
+	if err != nil {
+		return fmt.Errorf("could not prepare statement: %w", err)
+	}
+	defer stmt.Close()
+
+	// Insert keyshares for all vaults
+	for vaultPublicKeyECDSA, keyShares := range vaultKeyShares {
+		for _, keyShare := range keyShares {
+			_, err = stmt.Exec(vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
+			if err != nil {
+				return fmt.Errorf("could not insert keyshare %s for vault %s: %w", keyShare.PublicKey, vaultPublicKeyECDSA, err)
+			}
+		}
+	}
+
+	if err = tx.Commit(); err != nil {
+		return fmt.Errorf("could not commit transaction: %w", err)
+	}
+
+	return nil
+}
+
 // Close the db connection
 func (s *Store) Close() error {
 	return s.db.Close()
