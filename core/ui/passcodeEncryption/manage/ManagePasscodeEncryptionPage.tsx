@@ -1,5 +1,4 @@
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { useTranslation } from 'react-i18next'
 
@@ -15,9 +14,7 @@ export const ManagePasscodeEncryptionPage = () => {
     <>
       <FlowPageHeader title={t('security')} />
       <FitPageContent contentMaxWidth={360}>
-        <VStack gap={16}>
-          {hasPasscodeEnabled ? <ManagePasscode /> : <SetPasscode />}
-        </VStack>
+        {hasPasscodeEnabled ? <ManagePasscode /> : <SetPasscode />}
       </FitPageContent>
     </>
   )
