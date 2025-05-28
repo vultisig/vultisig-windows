@@ -4,7 +4,6 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -12,6 +11,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
 import { ManageAmount } from '../amount/ManageSendAmount'
@@ -24,6 +24,17 @@ import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuer
 import { ManageReceiver } from '../receiver/ManageReceiver'
 import { RefreshSend } from '../RefreshSend'
 import { Sender } from '../sender/Sender'
+
+const FormContent = styled(PageContent)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 64px);
+`
+
+const FormFields = styled(VStack)`
+  flex: 1;
+`
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
@@ -50,7 +61,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         }
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageContent
+      <FormContent
         as="form"
         scrollable
         gap={40}
@@ -59,26 +70,26 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           isDisabled,
         })}
       >
-        <WithProgressIndicator value={0.2}>
-          <VStack gap={16}>
-            <ManageSendCoin />
-            <Sender />
-            <ManageReceiver />
-            <ManageMemo />
-            <ManageAmount />
-            <AmountInGlobalCurrencyDisplay />
-            <VStack gap={8}>
-              <StrictInfoRow>
-                <SendGasFeeWrapper />
-              </StrictInfoRow>
-              <StrictInfoRow>
-                <SendFiatFee />
-              </StrictInfoRow>
+        <FormFields gap={16}>
+          <WithProgressIndicator value={0.2}>
+            <VStack gap={16}>
+              <ManageSendCoin />
+              <Sender />
+              <ManageReceiver />
+              <ManageMemo />
+              <ManageAmount />
+              <AmountInGlobalCurrencyDisplay />
+              <VStack gap={8}>
+                <StrictInfoRow>
+                  <SendGasFeeWrapper />
+                </StrictInfoRow>
+                <StrictInfoRow>
+                  <SendFiatFee />
+                </StrictInfoRow>
+              </VStack>
             </VStack>
-          </VStack>
-        </WithProgressIndicator>
-      </PageContent>
-      <PageFooter>
+          </WithProgressIndicator>
+        </FormFields>
         <Button
           isLoading={isLoading && isPending}
           isDisabled={isDisabled}
@@ -86,7 +97,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         >
           {t('continue')}
         </Button>
-      </PageFooter>
+      </FormContent>
     </>
   )
 }
