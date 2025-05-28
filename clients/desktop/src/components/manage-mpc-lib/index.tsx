@@ -1,7 +1,9 @@
 import { useVaultCreationMpcLib } from '@clients/desktop/src/mpc/state/vaultCreationMpcLib'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { Switch } from '@lib/ui/inputs/switchControlContainer'
+import { Switch } from '@lib/ui/inputs/switch'
+import { HStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
+import { Text } from '@lib/ui/text'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +12,7 @@ export const ManageMpcLib = () => {
   const [visible, setVisible] = useState(false)
   const [value, setValue] = useVaultCreationMpcLib()
   const clickCount = useRef(0)
+  const isDKLS = value === 'DKLS'
 
   const handleClick = () => {
     if (clickCount.current < 5) {
@@ -34,11 +37,13 @@ export const ManageMpcLib = () => {
           title={t('advanced')}
           width={368}
         >
-          <Switch
-            value={value === 'DKLS'}
-            onChange={() => setValue(value === 'DKLS' ? 'GG20' : 'DKLS')}
-            label={t('enable_dkls')}
-          />
+          <HStack gap={8}>
+            <Switch
+              checked={isDKLS}
+              onChange={() => setValue(isDKLS ? 'GG20' : 'DKLS')}
+            />
+            <Text size={16}>{t('enable_dkls')}</Text>
+          </HStack>
         </Modal>
       )}
     </>
