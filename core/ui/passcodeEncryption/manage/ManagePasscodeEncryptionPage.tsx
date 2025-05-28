@@ -12,7 +12,7 @@ export const ManagePasscodeEncryptionPage = () => {
   return (
     <>
       <FlowPageHeader title={t('security')} />
-      <FitPageContent>
+      <FitPageContent contentMaxWidth={360}>
         <EnablePasscodeInput value={value} onChange={setValue} />
       </FitPageContent>
     </>
