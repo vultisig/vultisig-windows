@@ -13,12 +13,6 @@ import { Address } from '@solana/web3.js'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 
-/// Base fee in lamports
-// regardless of its complexity Solana charges a fixed base transaction fee of 5000 lamports per transaction.
-// This base fee is separate from the priority fee.
-
-const SOLANA_BASE_FEE = 5000 // 0.000005 SOL
-
 export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
   coin,
   receiver,
@@ -33,16 +27,16 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
     .getRecentPrioritizationFees([coin.address as Address])
     .send()
 
-  const highPriorityFee = Math.max(
-    ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-    solanaConfig.priorityFeeLimit
-  )
-
-  const totalFee = SOLANA_BASE_FEE + highPriorityFee
+  // regardless of its complexity Solana charges a fixed base transaction fee of 5000 lamports per transaction.
+  const highPriorityFee =
+    Math.max(
+      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
+      solanaConfig.priorityFeeLimit
+    ) + solanaConfig.baseFee
 
   const result = create(SolanaSpecificSchema, {
     recentBlockHash,
-    priorityFee: totalFee.toString(),
+    priorityFee: highPriorityFee.toString(),
   })
 
   if (!isFeeCoin(coin)) {
