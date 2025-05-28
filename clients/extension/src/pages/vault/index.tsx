@@ -181,7 +181,6 @@ export const VaultPage = () => {
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
           onClick={() => navigate({ id: 'manageVaultChains' })}
           kind="primary"
-          isRounded
         >
           {t('manage_chains')}
         </Button>

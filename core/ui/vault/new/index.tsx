@@ -26,7 +26,6 @@ export const NewVaultPage = () => {
       <PageFooter gap={16}>
         <Button
           kind="primary"
-          isRounded
           onClick={() => navigate({ id: 'setupVault', state: {} })}
         >
           {t('create_new_vault')}
@@ -35,7 +34,6 @@ export const NewVaultPage = () => {
         <VStack gap={12}>
           <Button
             kind="secondary"
-            isRounded
             onClick={() =>
               navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
@@ -43,7 +41,6 @@ export const NewVaultPage = () => {
             {t('scan_qr')}
           </Button>
           <Button
-            isRounded
             kind="secondary"
             onClick={() => navigate({ id: 'importVault' })}
           >

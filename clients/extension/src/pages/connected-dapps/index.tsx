@@ -102,7 +102,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button onClick={handleDisconnectAll} kind="primary" isRounded>
+            <Button onClick={handleDisconnectAll} kind="primary">
               {t('disconnect_all')}
             </Button>
           </PageFooter>

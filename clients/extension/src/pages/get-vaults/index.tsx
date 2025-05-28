@@ -105,7 +105,6 @@ export const GetVaultsPage = () => {
           onClick={handleSubmit}
           disabled={!vaultIds.length}
           kind="primary"
-          isRounded
         >
           {t('connect')}
         </Button>

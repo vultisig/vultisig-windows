@@ -29,7 +29,6 @@ interface ContainerProps {
   size: ButtonSize
   isDisabled?: boolean
   isLoading?: boolean
-  isRounded?: boolean
   icon?: ReactNode
   kind: ButtonKind
 }
@@ -42,8 +41,9 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
+  ${horizontalPadding(16)}
 
-  ${({ size, isRounded }) =>
+  ${({ size }) =>
     match(size, {
       xs: () => css`
         ${horizontalPadding(8)}
@@ -51,25 +51,25 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         font-size: 12px;
       `,
       s: () => css`
-        border-radius: ${isRounded ? '20px' : '4px'};
+        border-radius: 20px;
         font-size: 12px;
         height: 20px;
         min-width: 20px;
       `,
       m: () => css`
-        border-radius: ${isRounded ? '24px' : '6px'};
+        border-radius: 24px;
         font-size: 12px;
         height: 24px;
         min-width: 24px;
       `,
       l: () => css`
-        border-radius: ${isRounded ? '36px' : '8px'};
+        border-radius: 36px;
         font-size: 14px;
         height: 40px;
         min-width: 40px;
       `,
       xl: () => css`
-        border-radius: ${isRounded ? '46px' : '12px'};
+        border-radius: 46px;
         font-size: 14px;
         height: 46px;
         min-width: 46px;
@@ -160,7 +160,6 @@ type ButtonProps = Omit<
   size?: ButtonSize
   isDisabled?: boolean | string
   isLoading?: boolean
-  isRounded?: boolean
   kind?: ButtonKind
   onClick?: () => void
   as?: React.ElementType
