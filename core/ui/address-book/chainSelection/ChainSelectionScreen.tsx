@@ -87,7 +87,7 @@ const Checkbox = styled.div<{ checked?: boolean }>`
   }
 `
 
-const ChainSelectionScreen = () => {
+export const ChainSelectionScreen = () => {
   const { t } = useTranslation()
   const goBack = useNavigateBack()
   const [state] = useCoreViewState<'chainSelection'>()
@@ -211,4 +211,3 @@ const ChainSelectionScreen = () => {
   )
 }
 
-export default ChainSelectionScreen

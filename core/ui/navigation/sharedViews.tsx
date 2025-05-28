@@ -31,11 +31,10 @@ import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create
 import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/provider'
 import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
+import { AddressBookForm } from '@core/ui/address-book/form' 
 import { Views } from '@lib/ui/navigation/Views'
 
-import { AddCustomTokenPage } from '../chain/coin/addCustomToken/AddCustomTokenPage'
-import AddAddressForm from '../vault/send/addressSelector/components/addAddressForm/AddAddressForm'
-import ChainSelectionScreen from '../vault/send/addressSelector/components/chainSelection/ChainSelectionScreen'
+import { ChainSelectionScreen } from '@core/ui/address-book/chainSelection/ChainSelectionScreen'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -117,7 +116,6 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
-  addAddress: AddAddressForm,
+  addAddress: AddressBookForm,
   chainSelection: ChainSelectionScreen,
-  addCustomToken: AddCustomTokenPage,
 }
