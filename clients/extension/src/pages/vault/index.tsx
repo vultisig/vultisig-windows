@@ -86,7 +86,7 @@ export const VaultPage = () => {
               onClick={() => navigate({ id: 'uploadQr', state: {} })}
               size="m"
             />
-            <Button
+            <IconButton
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
               size="m"
