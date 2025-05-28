@@ -9,8 +9,8 @@ import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/Balanc
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -122,7 +122,7 @@ export const ChainSelectionScreen = () => {
     state.onChainSelect(chain)
     navigate({
       id: 'addAddress',
-      state: { selectedChain: chain }
+      state: { selectedChain: chain },
     })
   }
 
@@ -216,4 +216,3 @@ export const ChainSelectionScreen = () => {
     </Container>
   )
 }
-

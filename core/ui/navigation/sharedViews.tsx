@@ -1,5 +1,7 @@
 import { AddressBookPage } from '@core/ui/address-book'
+import { ChainSelectionScreen } from '@core/ui/address-book/chainSelection/ChainSelectionScreen'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
+import { AddressBookForm } from '@core/ui/address-book/form'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
@@ -31,10 +33,7 @@ import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create
 import { CurrentVaultFolderPageProvider } from '@core/ui/vaultsOrganisation/folder/provider'
 import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update'
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
-import { AddressBookForm } from '@core/ui/address-book/form' 
 import { Views } from '@lib/ui/navigation/Views'
-
-import { ChainSelectionScreen } from '@core/ui/address-book/chainSelection/ChainSelectionScreen'
 
 export type SharedViewId = Extract<
   CoreViewId,
