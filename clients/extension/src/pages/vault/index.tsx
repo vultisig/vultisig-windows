@@ -12,6 +12,7 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { WorldIcon } from '@lib/ui/icons/WorldIcon'
@@ -29,8 +30,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { UploadQrPrompt } from './UploadQrPrompt'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
@@ -82,8 +81,12 @@ export const VaultPage = () => {
         }
         secondaryControls={
           <>
-            <UploadQrPrompt />
             <IconButton
+              icon={<CameraIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'uploadQr', state: {} })}
+              size="m"
+            />
+            <Button
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
               size="m"

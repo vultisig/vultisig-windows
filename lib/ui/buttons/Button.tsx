@@ -168,6 +168,7 @@ type ButtonProps = Omit<
 
 const Hide = styled.div`
   opacity: 0;
+  gap: 8px;
 `
 
 export const Button = ({
@@ -183,13 +184,16 @@ export const Button = ({
 }: ButtonProps) => {
   const content = isLoading ? (
     <>
-      <Hide>{children}</Hide>
+      <Hide>
+        {icon}
+        {children}
+      </Hide>
       <CenterAbsolutely>
         <Spinner />
       </CenterAbsolutely>
     </>
   ) : (
-    <HStack gap={8}>
+    <HStack gap={8} alignItems="center">
       {icon}
       {children}
     </HStack>

@@ -35,6 +35,7 @@ export const nativeSwapEnabledChainsRecord = {
     Chain.Dash,
     Chain.Bitcoin,
     Chain.Arbitrum,
+    Chain.Zcash,
   ],
 } as const
 
@@ -59,4 +60,5 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Kujira]: 'KUJI',
   [Chain.Dash]: 'DASH',
   [Chain.Arbitrum]: 'ARB',
+  [Chain.Zcash]: 'ZEC',
 }
