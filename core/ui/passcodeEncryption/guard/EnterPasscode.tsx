@@ -1,5 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { takeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
+import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { UnlockIcon } from '@lib/ui/icons/UnlockIcon'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
@@ -7,7 +7,8 @@ import { panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useMemo, useState } from 'react'
+import { attempt } from '@lib/utils/attempt'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -17,7 +18,7 @@ import { PasscodeInput } from '../manage/PasscodeInput'
 import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
-  ${takeWholeSpaceAbsolutely}
+  ${takeWholeSpace}
   background: ${getColor('background')};
 `
 
@@ -28,7 +29,8 @@ const Container = styled.div`
     rgba(2, 18, 42, 0.41) 100%
   );
 
-  ${takeWholeSpaceAbsolutely}
+  ${takeWholeSpace};
+
   ${vStack({
     alignItems: 'center',
     justifyContent: 'center',
@@ -61,17 +63,34 @@ export const EnterPasscode = () => {
     }
 
     const { sample, encryptedSample } = shouldBePresent(passcodeEncryption)
-    const decryptedSample = decryptSample({
-      key: inputValue,
-      value: sample,
-    })
+    const decryptedSampleResult = attempt(() =>
+      decryptSample({
+        key: inputValue,
+        value: encryptedSample,
+      })
+    )
 
-    if (decryptedSample !== encryptedSample) {
+    console.log({ decryptedSampleResult })
+
+    if (
+      'error' in decryptedSampleResult ||
+      decryptedSampleResult.data !== sample
+    ) {
       return t('invalid_passcode')
     }
 
     return false
   }, [inputValue, passcodeEncryption, t])
+
+  const handleSubmit = useCallback(() => {
+    setPasscode(inputValue)
+  }, [inputValue, setPasscode])
+
+  useEffect(() => {
+    if (inputValue && !isDisabled) {
+      handleSubmit()
+    }
+  }, [inputValue, isDisabled, handleSubmit])
 
   return (
     <Wrapper>
@@ -88,9 +107,7 @@ export const EnterPasscode = () => {
           as="form"
           {...getFormProps({
             isDisabled,
-            onSubmit: () => {
-              setPasscode(inputValue)
-            },
+            onSubmit: handleSubmit,
           })}
         >
           <PasscodeInput onChange={setInputValue} />

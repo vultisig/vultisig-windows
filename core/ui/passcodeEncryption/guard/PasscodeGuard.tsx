@@ -11,10 +11,5 @@ export const PasscodeGuard = ({ children }: ChildrenProp) => {
 
   const isLocked = hasPasscodeEnabled && !passcode
 
-  return (
-    <>
-      {children}
-      {isLocked && <EnterPasscode />}
-    </>
-  )
+  return isLocked ? <EnterPasscode /> : <>{children}</>
 }
