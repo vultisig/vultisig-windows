@@ -50,7 +50,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             tabIndex={0}
             onClick={handlePrevAnimation}
           >
-            <ChevronLeftIcon width={14} height={14} />
+            <ChevronLeftIcon fontSize={14} />
             <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
           <UnstyledButton onClick={onCompleteSteps}>
