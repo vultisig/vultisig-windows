@@ -62,7 +62,7 @@ export const EnterPasscode = () => {
       return t('enter_passcode')
     }
 
-    const { sample, encryptedSample } = shouldBePresent(passcodeEncryption)
+    const { encryptedSample } = shouldBePresent(passcodeEncryption)
     const decryptedSampleResult = attempt(() =>
       decryptSample({
         key: inputValue,
@@ -70,12 +70,7 @@ export const EnterPasscode = () => {
       })
     )
 
-    console.log({ decryptedSampleResult })
-
-    if (
-      'error' in decryptedSampleResult ||
-      decryptedSampleResult.data !== sample
-    ) {
+    if ('error' in decryptedSampleResult) {
       return t('invalid_passcode')
     }
 

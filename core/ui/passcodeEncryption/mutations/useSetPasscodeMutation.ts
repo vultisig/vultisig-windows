@@ -37,7 +37,6 @@ export const useSetPasscodeMutation = () => {
 
       setPasscode(passcode)
       await setPasscodeEncryption({
-        sample,
         encryptedSample,
       })
       await invalidateQueries([StorageKey.passcodeEncryption])
