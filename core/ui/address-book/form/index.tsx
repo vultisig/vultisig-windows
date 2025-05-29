@@ -31,7 +31,7 @@ import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { UseMutationResult } from '@tanstack/react-query'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -134,6 +134,12 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     defaultValues,
   })
 
+  useEffect(() => {
+    if (stateAddAddress?.selectedChain) {
+      setValue('chain', stateAddAddress.selectedChain, { shouldValidate: true })
+    }
+  }, [stateAddAddress?.selectedChain, setValue])
+
   const handleSubmitForm = (values: AddressBookFormValues) => {
     if (state?.id) {
       updateAddressBookItem(state.id, values)
@@ -169,7 +175,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       <PageContent gap={16} flexGrow scrollable>
         <ChainInput
           value={watch('chain')}
-          onChange={newChain => setValue('chain', newChain)}
+          onChange={newChain => setValue('chain', newChain, { shouldValidate: true })}
         />
         <VStack gap={8}>
           <TextInput
