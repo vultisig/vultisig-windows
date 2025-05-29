@@ -3,7 +3,7 @@ import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGc
 import { recordMap } from '@lib/utils/record/recordMap'
 
 import { VaultKeyShares } from '../../vault/Vault'
-import { decryptedPasscodeEncoding, encryptedPasscodeEncoding } from './config'
+import { passcodeEncryptionConfig } from './config'
 
 type Input = {
   keyShares: VaultKeyShares
@@ -14,14 +14,14 @@ export const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
   recordMap(keyShares, value =>
     encryptWithAesGcm({
       key,
-      value: Buffer.from(value, decryptedPasscodeEncoding),
-    }).toString(encryptedPasscodeEncoding)
+      value: Buffer.from(value, passcodeEncryptionConfig.plainTextEncoding),
+    }).toString(passcodeEncryptionConfig.encryptedEncoding)
   )
 
 export const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
   recordMap(keyShares, value =>
     decryptWithAesGcm({
       key,
-      value: Buffer.from(value, encryptedPasscodeEncoding),
-    }).toString(decryptedPasscodeEncoding)
+      value: Buffer.from(value, passcodeEncryptionConfig.encryptedEncoding),
+    }).toString(passcodeEncryptionConfig.plainTextEncoding)
   )

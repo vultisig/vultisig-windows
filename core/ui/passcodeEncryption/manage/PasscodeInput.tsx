@@ -2,7 +2,7 @@ import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { OTPInput } from '@lib/ui/inputs/OTPInput'
 import { InputProps, LabelProp } from '@lib/ui/props'
 
-import { passcodeLength } from '../core/config'
+import { passcodeEncryptionConfig } from '../core/config'
 
 type PasscodeInputProps = Omit<InputProps<string | null>, 'value'> &
   Partial<LabelProp>
@@ -12,10 +12,14 @@ export const PasscodeInput = ({ onChange, label }: PasscodeInputProps) => {
     <>
       {label && <InputLabel>{label}</InputLabel>}
       <OTPInput
-        length={passcodeLength}
+        length={passcodeEncryptionConfig.passcodeLength}
         onCompleted={value => onChange(value)}
         onValueChange={value =>
-          onChange(value.length === passcodeLength ? value : null)
+          onChange(
+            value.length === passcodeEncryptionConfig.passcodeLength
+              ? value
+              : null
+          )
         }
         includePasteButton={false}
       />
