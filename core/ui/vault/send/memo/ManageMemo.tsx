@@ -1,19 +1,29 @@
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { Text, text } from '@lib/ui/text'
+import { attempt } from '@lib/utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCore } from '../../../state/core'
 import { useSendMemo } from '../state/memo'
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
   const { t } = useTranslation()
   const [isOpen, { toggle }] = useBoolean(!!value)
+  const { getClipboardText } = useCore()
 
   return (
     <InputContainer>
@@ -24,10 +34,30 @@ export const ManageMemo = () => {
         <CollapsableStateIndicator isOpen={isOpen} />
       </Label>
       {isOpen && (
-        <TextInput
-          placeholder={t('enter_memo')}
-          value={value}
-          onValueChange={setValue}
+        <ActionInsideInteractiveElement
+          render={() => (
+            <TextInput
+              placeholder={t('enter_memo')}
+              value={value}
+              onValueChange={setValue}
+            />
+          )}
+          action={
+            <IconButton
+              icon={<PasteIcon />}
+              onClick={async () => {
+                const { data } = await attempt(getClipboardText)
+
+                if (data) {
+                  setValue(data)
+                }
+              }}
+            />
+          }
+          actionPlacerStyles={{
+            right: textInputHorizontalPadding,
+            bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
+          }}
         />
       )}
     </InputContainer>
