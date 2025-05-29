@@ -181,23 +181,24 @@ export const Button = ({
   ref,
   ...rest
 }: ButtonProps) => {
-  const content = isLoading ? (
-    <>
-      <Hide>
-        {icon}
-        {children}
-      </Hide>
-      <CenterAbsolutely>
-        <Spinner />
-      </CenterAbsolutely>
-    </>
-  ) : icon ? (
+  const innerContent = icon ? (
     <HStack gap={8} alignItems="center">
       {icon}
       {children}
     </HStack>
   ) : (
     children
+  )
+
+  const content = isLoading ? (
+    <>
+      <Hide>{innerContent}</Hide>
+      <CenterAbsolutely>
+        <Spinner />
+      </CenterAbsolutely>
+    </>
+  ) : (
+    innerContent
   )
 
   const containerProps = {
