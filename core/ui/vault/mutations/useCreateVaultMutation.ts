@@ -4,13 +4,14 @@ import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
-import { useAssertPasscode } from '../../passcodeEncryption/state/passcode'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
@@ -23,7 +24,7 @@ export const useCreateVaultMutation = (
   const invalidateQueries = useInvalidateQueries()
   const vaults = useVaults()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
-  const passcode = useAssertPasscode()
+  const passcode = usePasscode()
 
   const { createVault, getDefaultChains } = useCore()
 
@@ -47,7 +48,7 @@ export const useCreateVaultMutation = (
               ...input,
               keyShares: encryptVaultKeyShares({
                 keyShares,
-                key: passcode,
+                key: shouldBePresent(passcode),
               }),
             }
           }
