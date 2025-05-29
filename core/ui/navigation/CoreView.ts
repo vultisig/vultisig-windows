@@ -65,7 +65,6 @@ export type CoreView =
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
   | { id: 'vaultSettings' }
-  | { id: 'addAddress'; state: { selectedChain?: Chain; headerTitle?: string } }
   | { id: 'manageVaults' }
 
 export type CoreViewId = CoreView['id']

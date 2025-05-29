@@ -1,6 +1,5 @@
 import { AddressBookPage } from '@core/ui/address-book'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
-import { AddressBookForm } from '@core/ui/address-book/form'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
@@ -68,7 +67,6 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultSettings'
   | 'vaults'
-  | 'addAddress'
   | 'manageVaultFolder'
   | 'addCustomToken'
 >
@@ -113,5 +111,4 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
-  addAddress: AddressBookForm,
 }
