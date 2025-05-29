@@ -11,7 +11,8 @@ interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   length?: number
   onCompleted?: (value: string) => void
   onValueChange?: (value: string) => void
-  validation: 'invalid' | 'valid' | undefined
+  validation?: 'invalid' | 'valid'
+  includePasteButton?: boolean
 }
 
 export const OTPInput = ({
@@ -20,6 +21,7 @@ export const OTPInput = ({
   onCompleted,
   className,
   validation,
+  includePasteButton = true,
   ...props
 }: OTPInputProps) => {
   const { otp, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
@@ -47,7 +49,9 @@ export const OTPInput = ({
           {...props}
         />
       ))}
-      <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
+      {includePasteButton && (
+        <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
+      )}
     </HStack>
   )
 }
