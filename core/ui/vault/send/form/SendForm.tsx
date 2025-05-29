@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import { ManageAddresses } from '../addresses/ManageAddresses'
 import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
-import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import {
   initialSendFormFieldState,
   SendFormFieldStateProvider,
@@ -39,12 +38,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        secondaryControls={
-          <>
-            <ManageFeeSettings />
-            <RefreshSend />
-          </>
-        }
+        secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
       <PageWrapper>

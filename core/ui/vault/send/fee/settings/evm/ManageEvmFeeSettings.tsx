@@ -20,9 +20,12 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { SendFiatFeeValue } from '../../SendFiatFeeValue'
 import { SendGasFeeValue } from '../../SendGasFeeValue'
@@ -77,12 +80,18 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         onClose,
       })}
       onClose={onClose}
-      title={t('advanced')}
-      footer={<Button type="submit">{t('save')}</Button>}
+      title={t('advanced_gas_fee')}
+      footer={
+        <StyledButton kind="accent" type="submit">
+          {t('save')}
+        </StyledButton>
+      }
     >
       <VStack gap={12}>
         <InputContainer>
-          <InputLabel>{t('priority')}</InputLabel>
+          <Text size={14} color="supporting">
+            {t('priority')}
+          </Text>
           <RadioInput
             options={feePriorities}
             value={value.priority}
@@ -92,7 +101,11 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         </InputContainer>
         <BaseFee />
         <AmountTextInput
-          label={<InputLabel>{t('gas_limit')}</InputLabel>}
+          label={
+            <Text size={14} color="supporting">
+              {t('gas_limit')}
+            </Text>
+          }
           value={value.gasLimit}
           onValueChange={gasLimit => setValue({ ...value, gasLimit })}
         />
@@ -120,3 +133,7 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     </Modal>
   )
 }
+
+const StyledButton = styled(Button)`
+  background-color: ${getColor('buttonPrimaryWeb')};
+`

@@ -19,6 +19,7 @@ import { HorizontalLine } from '../components/HorizontalLine'
 import { SendInputContainer } from '../components/SendInputContainer'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
+import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
 import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendAmount } from '../state/amount'
@@ -51,7 +52,10 @@ export const ManageAmountInputField = () => {
 
   return (
     <SendInputContainer>
-      <InputLabel>{t('amount')}</InputLabel>
+      <HStack justifyContent="space-between" alignItems="center">
+        <InputLabel>{t('amount')}</InputLabel>
+        <ManageFeeSettings />
+      </HStack>
       <HorizontalLine />
       <ActionInsideInteractiveElement
         render={() => (

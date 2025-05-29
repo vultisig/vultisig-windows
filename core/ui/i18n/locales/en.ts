@@ -16,6 +16,7 @@ export const en = {
   general: 'General',
   github: 'Github',
   legal: 'Legal',
+  advanced_gas_fee: 'Advanced gas fee',
   manage_chains: 'Manage Chains',
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
