@@ -42,7 +42,14 @@ export const ManageReceiverAddressInputField = () => {
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const addressBookItems = useAddressBookItems()
 
-  const [, setFocusedSendField] = useSendFormFieldState()
+  const [
+    {
+      errors: { address: addressError },
+    },
+    setFocusedSendField,
+  ] = useSendFormFieldState()
+
+  const error = !!addressError && value ? addressError : undefined
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
@@ -112,47 +119,60 @@ export const ManageReceiverAddressInputField = () => {
             </Modal>
           )}
           default={() => (
-            <ActionInsideInteractiveElement
-              render={({ actionSize }) => (
-                <Input
-                  placeholder={t('enter_address')}
-                  value={value}
-                  onValueChange={value => handleUpdateReceiverAddress(value)}
-                  style={{
-                    paddingRight: actionSize.width + textInputHorizontalPadding,
-                  }}
-                />
-              )}
-              action={
-                <HStack gap={8}>
-                  <IconButton
-                    icon={<PasteIcon />}
-                    onClick={async () => {
-                      const { data } = await attempt(getClipboardText)
-
-                      if (data) {
-                        handleUpdateReceiverAddress(data)
+            <VStack gap={8}>
+              <ActionInsideInteractiveElement
+                render={({ actionSize }) => (
+                  <VStack gap={4}>
+                    <Input
+                      validation={error ? 'warning' : undefined}
+                      placeholder={t('enter_address')}
+                      value={value}
+                      onValueChange={value =>
+                        handleUpdateReceiverAddress(value)
                       }
-                    }}
-                  />
-                  <IconButton
-                    icon={<CameraIcon fontSize={20} />}
-                    onClick={() => setViewState('scanner')}
-                  />
-                  <IconButton
-                    style={{
-                      fontSize: 20,
-                    }}
-                    icon={<AddressBookIcon />}
-                    onClick={() => setViewState('addressBook')}
-                  />
-                </HStack>
-              }
-              actionPlacerStyles={{
-                right: textInputHorizontalPadding,
-                bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
-              }}
-            />
+                      style={{
+                        paddingRight:
+                          actionSize.width + textInputHorizontalPadding,
+                      }}
+                    />
+                  </VStack>
+                )}
+                action={
+                  <HStack gap={8}>
+                    <IconButton
+                      icon={<PasteIcon />}
+                      onClick={async () => {
+                        const { data } = await attempt(getClipboardText)
+
+                        if (data) {
+                          handleUpdateReceiverAddress(data)
+                        }
+                      }}
+                    />
+                    <IconButton
+                      icon={<CameraIcon fontSize={20} />}
+                      onClick={() => setViewState('scanner')}
+                    />
+                    <IconButton
+                      style={{
+                        fontSize: 20,
+                      }}
+                      icon={<AddressBookIcon />}
+                      onClick={() => setViewState('addressBook')}
+                    />
+                  </HStack>
+                }
+                actionPlacerStyles={{
+                  right: textInputHorizontalPadding,
+                  bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
+                }}
+              />
+              {error && (
+                <Text size={12} color="warning">
+                  {error}
+                </Text>
+              )}
+            </VStack>
           )}
         />
       </VStack>
@@ -167,16 +187,16 @@ const AddressFieldWrapper = styled(VStack)`
   ${borderRadius.m}
 `
 
-const Input = styled(TextInput)`
+const Input = styled(TextInput)<{
+  validation?: 'warning' | undefined
+}>`
   background: transparent;
   background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  &:hover,
-  &:focus {
-    outline: none;
-    border: none;
-  }
-  border: none;
+  border: 1px solid
+    ${({ validation }) =>
+      validation === 'warning'
+        ? getColor('alertWarning')
+        : getColor('foregroundExtra')};
 `
 
 const FixedScanQRView = styled(ScanQrView)`

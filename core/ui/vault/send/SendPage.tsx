@@ -5,6 +5,10 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
+import {
+  initialSendFormFieldState,
+  SendFormFieldStateProvider,
+} from './providers/SendFormFieldStateProvider'
 import { SendAmountProvider } from './state/amount'
 import { SendMemoProvider } from './state/memo'
 import { SendReceiverProvider } from './state/receiver'
@@ -28,7 +32,13 @@ export const SendPage = () => {
             <SendMemoProvider initialValue="">
               <Match
                 value={step}
-                form={() => <SendForm onFinish={toNextStep} />}
+                form={() => (
+                  <SendFormFieldStateProvider
+                    initialValue={initialSendFormFieldState}
+                  >
+                    <SendForm onFinish={toNextStep} />
+                  </SendFormFieldStateProvider>
+                )}
                 verify={() => <SendVerify onBack={toPreviousStep} />}
               />
             </SendMemoProvider>

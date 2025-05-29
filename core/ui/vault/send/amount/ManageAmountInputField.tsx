@@ -3,7 +3,7 @@ import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInterac
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -34,7 +34,15 @@ export const ManageAmountInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
   const { decimals, ticker } = coin
-  const [, setFocusedSendField] = useSendFormFieldState()
+
+  const [
+    {
+      errors: { amount: amountError },
+    },
+    setFocusedSendField,
+  ] = useSendFormFieldState()
+
+  const error = !!amountError && value ? amountError : undefined
 
   const handleUpdateAmount = useCallback(
     (value: number) => {
@@ -57,64 +65,72 @@ export const ManageAmountInputField = () => {
         <ManageFeeSettings />
       </HStack>
       <HorizontalLine />
-      <ActionInsideInteractiveElement
-        render={() => (
-          <AmountTextInput
-            suggestion={
-              <SendCoinBalanceDependant
-                pending={() => null}
-                error={() => null}
-                success={amount => (
-                  <HStack alignItems="center" gap={4}>
-                    {suggestions.map(suggestion => {
-                      const suggestionValue =
-                        fromChainAmount(amount, decimals) * suggestion
+      <VStack gap={8}>
+        <ActionInsideInteractiveElement
+          render={() => (
+            <AmountTextInput
+              validation={error ? 'warning' : undefined}
+              suggestion={
+                <SendCoinBalanceDependant
+                  pending={() => null}
+                  error={() => null}
+                  success={amount => (
+                    <HStack alignItems="center" gap={4}>
+                      {suggestions.map(suggestion => {
+                        const suggestionValue =
+                          fromChainAmount(amount, decimals) * suggestion
 
-                      return (
-                        <AmountSuggestion
-                          isActive={
-                            value ? isEqual(value, suggestionValue) : false
-                          }
-                          onClick={() => {
-                            handleUpdateAmount(suggestionValue)
-                          }}
-                          key={suggestion}
-                          value={suggestion}
-                        />
-                      )
-                    })}
-                  </HStack>
-                )}
-              />
-            }
-            placeholder={t('enter_amount')}
-            value={value}
-            onValueChange={setValue}
-          />
+                        return (
+                          <AmountSuggestion
+                            isActive={
+                              value ? isEqual(value, suggestionValue) : false
+                            }
+                            onClick={() => {
+                              handleUpdateAmount(suggestionValue)
+                            }}
+                            key={suggestion}
+                            value={suggestion}
+                          />
+                        )
+                      })}
+                    </HStack>
+                  )}
+                />
+              }
+              placeholder={t('enter_amount')}
+              value={value}
+              onValueChange={setValue}
+            />
+          )}
+          action={<AmountInGlobalCurrencyDisplay />}
+          actionPlacerStyles={{
+            right: 12,
+            bottom: 20,
+          }}
+        />
+        {error && (
+          <Text size={12} color="warning">
+            {error}
+          </Text>
         )}
-        action={<AmountInGlobalCurrencyDisplay />}
-        actionPlacerStyles={{
-          right: 12,
-          bottom: 20,
-        }}
-      />
-      <SendCoinBalanceDependant
-        pending={() => null}
-        error={() => null}
-        success={amount => (
-          <TotalBalanceWrapper
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text as="span" size={14} color="contrast">
-              Balance available:
-            </Text>{' '}
-            <Text size={14}>
-              {`${fromChainAmount(amount, decimals)} ${ticker} `}
-            </Text>
-          </TotalBalanceWrapper>
-        )}
-      />
+        <SendCoinBalanceDependant
+          pending={() => null}
+          error={() => null}
+          success={amount => (
+            <TotalBalanceWrapper
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text as="span" size={14} color="contrast">
+                {t('balance_available')}:
+              </Text>{' '}
+              <Text size={14}>
+                {`${fromChainAmount(amount, decimals)} ${ticker} `}
+              </Text>
+            </TotalBalanceWrapper>
+          )}
+        />
+      </VStack>
       <ManageMemo />
       <HorizontalLine />
       <StrictInfoRow>
