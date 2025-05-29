@@ -1,4 +1,3 @@
-import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 
@@ -15,14 +14,11 @@ export const ManagePasscode = () => {
   const { t } = useTranslation()
 
   return (
-    <>
-      <EnablePasscodeInput
-        value={true}
-        onChange={() => disablePasscodeMutation()}
-        pendingMessage={isPending ? t('decrypting_vault_keyshares') : undefined}
-        errorMessage={error ? extractErrorMsg(error) : undefined}
-      />
-      <Text>manage passcode...</Text>
-    </>
+    <EnablePasscodeInput
+      value={true}
+      onChange={() => disablePasscodeMutation()}
+      pendingMessage={isPending ? t('decrypting_vault_keyshares') : undefined}
+      errorMessage={error ? extractErrorMsg(error) : undefined}
+    />
   )
 }
