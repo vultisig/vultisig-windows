@@ -5,7 +5,6 @@ import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendGasFeeValue = () => {
   const chainSpecific = useSendChainSpecific()
-  console.log('🚀 ~ SendGasFeeValue ~ chainSpecific:', chainSpecific)
   const [{ coin: coinKey }] = useCurrentSendCoin()
   const fees = formatFee({
     chain: coinKey.chain,

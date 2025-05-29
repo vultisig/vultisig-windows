@@ -10,9 +10,7 @@ type FocusedSendFieldContext = {
     address: boolean
   }
   errors: {
-    coin?: string
-    amount?: string
-    address?: string
+    [key: string]: string
   }
 }
 

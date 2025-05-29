@@ -17,10 +17,15 @@ export const ManageAddressesInputFieldCollapsed = () => {
     {
       field,
       fieldsChecked: { address: isAddressFieldChecked },
+      errors: { address: addressError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
 
+  console.log(
+    '🚀 ~ ManageAddressesInputFieldCollapsed ~ isAddressFieldChecked:',
+    isAddressFieldChecked
+  )
   const isOpen = field === 'address'
 
   return (
@@ -39,7 +44,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
         </Text>
       </HStack>
       <HStack gap={12}>
-        {isAddressFieldChecked && (
+        {!addressError && isAddressFieldChecked && (
           <IconWrapper>
             <CheckmarkIcon />
           </IconWrapper>

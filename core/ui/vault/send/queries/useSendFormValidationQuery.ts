@@ -67,25 +67,28 @@ export const useSendFormValidationQuery = () => {
   const { error } = query
 
   useEffect(() => {
-    if (isSendFormValidationError(error)) {
-      setFormState(prev => ({
-        ...prev,
-        errors: {
-          ...prev.errors,
-          [error.field]: error.message,
-        },
-      }))
-    }
+    setFormState(prev => {
+      const newErrors = { ...(prev.errors as Record<string, string>) }
 
-    if (addressError) {
-      setFormState(prev => ({
+      // Handle query (amount) error
+      if (isSendFormValidationError(error)) {
+        newErrors[error.field] = error.message
+      } else {
+        delete newErrors['amount']
+      }
+
+      // Handle address error
+      if (addressError) {
+        newErrors[addressError.field] = addressError.message
+      } else {
+        delete newErrors['address']
+      }
+
+      return {
         ...prev,
-        errors: {
-          ...prev.errors,
-          [addressError.field]: addressError.message,
-        },
-      }))
-    }
+        errors: newErrors,
+      }
+    })
   }, [addressError, error, setFormState])
 
   return query
