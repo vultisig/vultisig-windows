@@ -15,6 +15,7 @@ export const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
     encryptWithAesGcm({
       key,
       value: Buffer.from(value, passcodeEncryptionConfig.plainTextEncoding),
+      useSalt: passcodeEncryptionConfig.useSalt,
     }).toString(passcodeEncryptionConfig.encryptedEncoding)
   )
 
@@ -23,5 +24,6 @@ export const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
     decryptWithAesGcm({
       key,
       value: Buffer.from(value, passcodeEncryptionConfig.encryptedEncoding),
+      useSalt: passcodeEncryptionConfig.useSalt,
     }).toString(passcodeEncryptionConfig.plainTextEncoding)
   )
