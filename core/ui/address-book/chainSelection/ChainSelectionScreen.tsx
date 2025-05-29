@@ -60,9 +60,7 @@ export const ChainSelectionScreen = () => {
   }, [chainOptions, search])
 
   const handleChainSelect = (chain: Chain) => {
-    console.log('Chain selected:', chain)
     if (state.onChainSelect) {
-      console.log('Calling onChainSelect with chain:', chain)
       state.onChainSelect(chain)
     }
     setSelectedChain(chain)
