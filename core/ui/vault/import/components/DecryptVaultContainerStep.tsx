@@ -22,6 +22,7 @@ export const DecryptVaultContainerStep = ({
           decryptWithAesGcm({
             key: password,
             value: vault,
+            useSalt: false,
           }),
         v => new Uint8Array(v),
         binary => fromBinary(VaultSchema, binary),
