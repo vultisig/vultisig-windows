@@ -1,4 +1,4 @@
-export type SendFormValidationError = {
+type SendFormValidationError = {
   message: string
   field: 'amount' | 'address' | 'coin'
 }

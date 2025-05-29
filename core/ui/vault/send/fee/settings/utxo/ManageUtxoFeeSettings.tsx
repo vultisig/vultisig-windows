@@ -93,6 +93,7 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
           />
         </InputContainer>
         <AmountTextInput
+          labelPosition="left"
           label={
             <Text size={14} color="supporting">
               {t('network_rate')} (sats/vbyte)

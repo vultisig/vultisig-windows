@@ -40,7 +40,7 @@ export const AmountTextInput = ({
   suggestion,
   label,
   placeholder,
-  labelPosition = 'left',
+  labelPosition = 'right',
   type = 'number',
   ref,
   ...props

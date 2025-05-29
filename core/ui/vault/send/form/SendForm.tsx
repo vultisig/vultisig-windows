@@ -9,7 +9,6 @@ import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { ManageAddresses } from '../addresses/ManageAddresses'
 import { ManageAmount } from '../amount/ManageAmount'
@@ -37,36 +36,30 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageWrapper>
-        <PageContent
-          as="form"
-          gap={40}
-          {...getFormProps({
-            onSubmit: onFinish,
-            isDisabled,
-          })}
+      <PageContent
+        as="form"
+        gap={40}
+        {...getFormProps({
+          onSubmit: onFinish,
+          isDisabled,
+        })}
+      >
+        <VStack gap={16}>
+          <ManageSendCoin />
+          <ManageAddresses />
+          <ManageAmount />
+        </VStack>
+        <Button
+          style={{
+            marginTop: 'auto',
+          }}
+          isLoading={isLoading && isPending}
+          isDisabled={isDisabled}
+          type="submit"
         >
-          <VStack gap={16}>
-            <ManageSendCoin />
-            <ManageAddresses />
-            <ManageAmount />
-          </VStack>
-          <Button
-            isLoading={isLoading && isPending}
-            isDisabled={isDisabled}
-            type="submit"
-          >
-            {t('continue')}
-          </Button>
-        </PageContent>
-      </PageWrapper>
+          {t('continue')}
+        </Button>
+      </PageContent>
     </>
   )
 }
-
-const PageWrapper = styled(VStack)`
-  width: 800px;
-  max-width: min(100%, 800px);
-  margin-inline: auto;
-  flex: 1;
-`

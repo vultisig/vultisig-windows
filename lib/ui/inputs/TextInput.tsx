@@ -66,10 +66,6 @@ const TextInputContainer = styled.input<{
   validation?: 'valid' | 'invalid' | 'warning'
 }>`
   ${textInput};
-  ${({ validation }) => {
-    console.log('## validation', validation)
-  }}
-
   ${({ validation }) =>
     validation === 'valid'
       ? css`
