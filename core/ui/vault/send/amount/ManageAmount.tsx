@@ -1,12 +1,12 @@
 import { Match } from '@lib/ui/base/Match'
 import { motion } from 'framer-motion'
 
-import { useFocusedSendField } from '../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { ManageAmountInputField } from './ManageAmountInputField'
 import { ManageAmountInputFieldCollapsed } from './ManageAmountInputFieldCollapsed'
 
 export const ManageAmount = () => {
-  const [{ field }] = useFocusedSendField()
+  const [{ field }] = useSendFormFieldState()
   const value = field == 'amount' ? 'open' : 'closed'
 
   return (

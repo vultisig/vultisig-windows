@@ -4,6 +4,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack } from '@lib/ui/layout/Stack'
+import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isEqual } from '@lib/utils/number/isEqual'
@@ -16,8 +17,10 @@ import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { HorizontalLine } from '../components/HorizontalLine'
 import { SendInputContainer } from '../components/SendInputContainer'
+import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
+import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageMemo } from '../memo/ManageMemo'
-import { useFocusedSendField } from '../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendAmount } from '../state/amount'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
@@ -30,7 +33,7 @@ export const ManageAmountInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
   const { decimals, ticker } = coin
-  const [, setFocusedSendField] = useFocusedSendField()
+  const [, setFocusedSendField] = useSendFormFieldState()
 
   const handleUpdateAmount = useCallback(
     (value: number) => {
@@ -109,6 +112,13 @@ export const ManageAmountInputField = () => {
         )}
       />
       <ManageMemo />
+      <HorizontalLine />
+      <StrictInfoRow>
+        <SendFiatFee />
+      </StrictInfoRow>
+      <StrictInfoRow>
+        <SendGasFeeWrapper />
+      </StrictInfoRow>
     </SendInputContainer>
   )
 }

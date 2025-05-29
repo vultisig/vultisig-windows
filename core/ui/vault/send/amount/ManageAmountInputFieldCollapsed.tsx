@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SendInputContainer } from '../components/SendInputContainer'
-import { useFocusedSendField } from '../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendAmount } from '../state/amount'
 
 export const ManageAmountInputFieldCollapsed = () => {
@@ -19,7 +19,7 @@ export const ManageAmountInputFieldCollapsed = () => {
       fieldsChecked: { amount: isAmountFieldChecked },
     },
     setFocusedSendField,
-  ] = useFocusedSendField()
+  ] = useSendFormFieldState()
 
   const isOpen = field === 'address'
 

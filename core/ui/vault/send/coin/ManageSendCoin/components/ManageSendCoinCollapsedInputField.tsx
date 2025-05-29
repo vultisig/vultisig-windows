@@ -14,7 +14,7 @@ import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { SendInputContainer } from '../../../components/SendInputContainer'
-import { useFocusedSendField } from '../../../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../../../providers/SendFormFieldStateProvider'
 
 export const ManageSendCoinCollapsedInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
@@ -27,7 +27,7 @@ export const ManageSendCoinCollapsedInputField = () => {
       fieldsChecked: { coin: isCoinFieldChecked },
     },
     setFocusedSendField,
-  ] = useFocusedSendField()
+  ] = useSendFormFieldState()
 
   const isOpen = field === 'coin'
 
@@ -65,7 +65,7 @@ export const ManageSendCoinCollapsedInputField = () => {
         </HStack>
       </HStack>
       <HStack gap={12}>
-        {isCoinFieldChecked && (
+        {isCoinFieldChecked && !isOpen && (
           <IconWrapper>
             <CheckmarkIcon />
           </IconWrapper>

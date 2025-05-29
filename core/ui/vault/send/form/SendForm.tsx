@@ -1,7 +1,6 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
-import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -15,13 +14,11 @@ import styled from 'styled-components'
 import { ManageAddresses } from '../addresses/ManageAddresses'
 import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
-import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import {
-  FocusedSendFieldProvider,
-  initialFocusedSendFieldValue,
-} from '../providers/FocusedSendFieldProvider'
+  initialSendFormFieldState,
+  SendFormFieldStateProvider,
+} from '../providers/SendFormFieldStateProvider'
 import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
 import { RefreshSend } from '../RefreshSend'
 
@@ -60,21 +57,13 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           })}
         >
           <VStack gap={16}>
-            <FocusedSendFieldProvider
-              initialValue={initialFocusedSendFieldValue}
+            <SendFormFieldStateProvider
+              initialValue={initialSendFormFieldState}
             >
               <ManageSendCoin />
               <ManageAddresses />
               <ManageAmount />
-              <VStack gap={8}>
-                <StrictInfoRow>
-                  <SendGasFeeWrapper />
-                </StrictInfoRow>
-                <StrictInfoRow>
-                  <SendFiatFee />
-                </StrictInfoRow>
-              </VStack>
-            </FocusedSendFieldProvider>
+            </SendFormFieldStateProvider>
           </VStack>
           <Button
             isLoading={isLoading && isPending}

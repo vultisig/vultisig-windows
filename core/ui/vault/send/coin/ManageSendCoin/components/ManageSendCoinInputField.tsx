@@ -18,7 +18,9 @@ export const ManageSendCoinInputField = () => {
       <HorizontalLine />
       <SendCoinInput
         value={coin}
-        onChange={coin => setViewState(prev => ({ ...prev, coin }))}
+        onChange={coin => {
+          setViewState(prev => ({ ...prev, coin }))
+        }}
       />
     </SendInputContainer>
   )

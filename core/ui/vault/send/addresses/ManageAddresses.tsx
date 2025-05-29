@@ -1,12 +1,12 @@
 import { Match } from '@lib/ui/base/Match'
 import { motion } from 'framer-motion'
 
-import { useFocusedSendField } from '../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { ManageReceiverAddressInputField } from './components/ManageAddressesInputField'
 import { ManageAddressesInputFieldCollapsed } from './components/ManageAddressesInputFieldCollapsed'
 
 export const ManageAddresses = () => {
-  const [{ field }] = useFocusedSendField()
+  const [{ field }] = useSendFormFieldState()
   const value = field == 'address' ? 'open' : 'closed'
 
   return (

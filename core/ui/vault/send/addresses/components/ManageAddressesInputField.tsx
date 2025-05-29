@@ -26,7 +26,7 @@ import { useAddressBookItems } from '../../../../storage/addressBook'
 import { useCurrentVault } from '../../../state/currentVault'
 import { HorizontalLine } from '../../components/HorizontalLine'
 import { SendInputContainer } from '../../components/SendInputContainer'
-import { useFocusedSendField } from '../../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../../providers/SendFormFieldStateProvider'
 import { useSender } from '../../sender/hooks/useSender'
 import { useSendReceiver } from '../../state/receiver'
 
@@ -42,7 +42,7 @@ export const ManageReceiverAddressInputField = () => {
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const addressBookItems = useAddressBookItems()
 
-  const [, setFocusedSendField] = useFocusedSendField()
+  const [, setFocusedSendField] = useSendFormFieldState()
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {

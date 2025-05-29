@@ -1,7 +1,7 @@
 import { Match } from '@lib/ui/base/Match'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { useFocusedSendField } from '../../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../../providers/SendFormFieldStateProvider'
 import { ManageSendCoinCollapsedInputField } from './components/ManageSendCoinCollapsedInputField'
 import { ManageSendCoinInputField } from './components/ManageSendCoinInputField'
 
@@ -19,14 +19,13 @@ const variants = {
 }
 
 export const ManageSendCoin = () => {
-  const [{ field }] = useFocusedSendField()
-  const value = field === 'coin' ? 'open' : 'closed'
+  const [{ field }] = useSendFormFieldState()
 
   return (
     <motion.div layout>
       <AnimatePresence initial={false}>
         <Match
-          value={value}
+          value={field === 'coin' ? 'open' : 'closed'}
           open={() => (
             <motion.div
               key="open"

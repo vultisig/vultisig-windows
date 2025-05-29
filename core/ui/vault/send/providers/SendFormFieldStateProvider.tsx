@@ -11,16 +11,16 @@ type FocusedSendFieldContext = {
   }
 }
 
-export const initialFocusedSendFieldValue: FocusedSendFieldContext = {
+export const initialSendFormFieldState: FocusedSendFieldContext = {
   field: 'amount',
   fieldsChecked: {
-    coin: false,
+    coin: true,
     amount: false,
     address: false,
   },
 }
 
 export const {
-  useState: useFocusedSendField,
-  provider: FocusedSendFieldProvider,
-} = getStateProviderSetup<FocusedSendFieldContext>('FocusedSendFieldProvider')
+  useState: useSendFormFieldState,
+  provider: SendFormFieldStateProvider,
+} = getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')

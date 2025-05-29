@@ -32,8 +32,6 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
-
-  if (!coin) return
   const { logo, chain, ticker, id } = coin
 
   return (

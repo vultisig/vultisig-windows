@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SendInputContainer } from '../../components/SendInputContainer'
-import { useFocusedSendField } from '../../providers/FocusedSendFieldProvider'
+import { useSendFormFieldState } from '../../providers/SendFormFieldStateProvider'
 import { useSendReceiver } from '../../state/receiver'
 
 export const ManageAddressesInputFieldCollapsed = () => {
@@ -19,7 +19,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
       fieldsChecked: { address: isAddressFieldChecked },
     },
     setFocusedSendField,
-  ] = useFocusedSendField()
+  ] = useSendFormFieldState()
 
   const isOpen = field === 'address'
 
