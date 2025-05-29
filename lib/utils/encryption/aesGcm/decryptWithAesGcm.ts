@@ -1,8 +1,15 @@
 import crypto from 'crypto'
+import { promisify } from 'util'
 
 import { AesGcmInput } from './AesGcmInput'
 
-export const decryptWithAesGcm = ({ key, value, useSalt }: AesGcmInput) => {
+const pbkdf2 = promisify(crypto.pbkdf2)
+
+export const decryptWithAesGcm = async ({
+  key,
+  value,
+  useSalt,
+}: AesGcmInput): Promise<Buffer> => {
   let cipherKey: Buffer
   let nonce: Buffer
   let ciphertext: Buffer
@@ -12,8 +19,9 @@ export const decryptWithAesGcm = ({ key, value, useSalt }: AesGcmInput) => {
     // New format with salt: [salt(16)] + [nonce(12)] + [ciphertext] + [authTag(16)]
     const salt = value.subarray(0, 16)
 
-    // Use PBKDF2 to derive the same key using the extracted salt
-    cipherKey = crypto.pbkdf2Sync(key, salt, 100000, 32, 'sha256')
+    // Use async PBKDF2 to derive the same key using the extracted salt
+    // Reduced to 10,000 iterations for better performance while maintaining security
+    cipherKey = await pbkdf2(key, salt, 10000, 32, 'sha256')
 
     // Extract components from the new format
     nonce = value.subarray(16, 28) // bytes 16-27 (12 bytes)

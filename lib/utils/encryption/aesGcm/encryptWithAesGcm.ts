@@ -1,12 +1,15 @@
 import crypto from 'crypto'
+import { promisify } from 'util'
 
 import { AesGcmInput } from './AesGcmInput'
 
-export const encryptWithAesGcm = ({
+const pbkdf2 = promisify(crypto.pbkdf2)
+
+export const encryptWithAesGcm = async ({
   key,
   value,
   useSalt,
-}: AesGcmInput): Buffer => {
+}: AesGcmInput): Promise<Buffer> => {
   let cipherKey: Buffer
   let salt: Buffer | null = null
 
@@ -14,9 +17,9 @@ export const encryptWithAesGcm = ({
     // Generate a random salt (16 bytes) for secure key derivation
     salt = crypto.randomBytes(16)
 
-    // Use PBKDF2 to derive a key from the password with salt and iterations
-    // 100,000 iterations is a good balance between security and performance
-    cipherKey = crypto.pbkdf2Sync(key, salt, 100000, 32, 'sha256')
+    // Use async PBKDF2 to derive a key from the password with salt and iterations
+    // Reduced to 10,000 iterations for better performance while maintaining security
+    cipherKey = await pbkdf2(key, salt, 10000, 32, 'sha256')
   } else {
     // Legacy approach: Hash the password to create a key (for backward compatibility)
     cipherKey = crypto.createHash('sha256').update(key).digest()
