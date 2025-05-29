@@ -75,6 +75,11 @@ jobs:
         run: yarn install
       - name: Build extension
         run: yarn workspace @clients/extension build
+      - name: Upload dist to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-dist-${{ github.sha }}
+          path: clients/extension/dist
   build:
     needs: lint
     strategy:
