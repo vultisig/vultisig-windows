@@ -58,7 +58,6 @@ export const GlobalStyle = createGlobalStyle`
 
   html, body, #root, #__next {
     height: 100%;
-    position: relative;
   }
 
   body {
