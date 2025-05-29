@@ -1,4 +1,4 @@
-const AddressBookIcon = () => (
+const BookAIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -15,4 +15,4 @@ const AddressBookIcon = () => (
     />
   </svg>
 )
-export default AddressBookIcon
+export default BookAIcon

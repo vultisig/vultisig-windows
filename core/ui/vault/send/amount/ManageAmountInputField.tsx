@@ -26,7 +26,7 @@ import { useSendAmount } from '../state/amount'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
 
-const suggestions = [0.25, 0.5, 1]
+const suggestions = [0.25, 0.5, 0.75, 1]
 
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()

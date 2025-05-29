@@ -4,7 +4,7 @@ import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
-import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
+import BookAIcon from '@lib/ui/icons/BookAIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -157,7 +157,7 @@ export const ManageReceiverAddressInputField = () => {
                       style={{
                         fontSize: 20,
                       }}
-                      icon={<AddressBookIcon />}
+                      icon={<BookAIcon />}
                       onClick={() => setViewState('addressBook')}
                     />
                   </HStack>

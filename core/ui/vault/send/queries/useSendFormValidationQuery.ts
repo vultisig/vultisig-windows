@@ -91,5 +91,8 @@ export const useSendFormValidationQuery = () => {
     })
   }, [addressError, error, setFormState])
 
-  return query
+  return {
+    isLoading: query.isLoading,
+    isPending: query.isPending,
+  }
 }
