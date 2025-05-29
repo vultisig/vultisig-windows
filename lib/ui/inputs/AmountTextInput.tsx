@@ -13,6 +13,7 @@ type AmountTextInputProps = Omit<TextInputProps, 'value' | 'onValueChange'> & {
   shouldBePositive?: boolean
   shouldBeInteger?: boolean
   suggestion?: ReactNode
+  labelPosition?: 'left' | 'right'
 }
 
 const UnitContainer = styled.div`
@@ -39,6 +40,7 @@ export const AmountTextInput = ({
   suggestion,
   label,
   placeholder,
+  labelPosition = 'left',
   type = 'number',
   ref,
   ...props
@@ -55,7 +57,7 @@ export const AmountTextInput = ({
       label={
         <HStack
           alignItems="center"
-          justifyContent="flex-end"
+          justifyContent={labelPosition === 'left' ? 'flex-start' : 'flex-end'}
           gap={16}
           fullWidth
         >

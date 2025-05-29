@@ -4,57 +4,89 @@ import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { isSendFormValidationError } from '../utils/isSendFormValidationError'
 import { useSendChainSpecificQuery } from './useSendChainSpecificQuery'
 
 export const useSendFormValidationQuery = () => {
   const [receiver] = useSendReceiver()
   const [{ coin: coinKey }] = useCurrentSendCoin()
-
-  const { t } = useTranslation()
+  const [, setFormState] = useSendFormFieldState()
   const coin = useCurrentVaultCoin(coinKey)
+  const { t } = useTranslation()
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const chanSpecificQuery = useSendChainSpecificQuery()
   const [amount] = useSendAmount()
-
   const walletCore = useAssertWalletCore()
 
-  return useTransformQueriesData(
+  const query = useTransformQueriesData(
     {
       balance: balanceQuery,
       chanSpecific: chanSpecificQuery,
     },
     useCallback(
       ({ balance }) => {
-        if (
-          !isValidAddress({
-            address: receiver,
-            chain: coin.chain,
-            walletCore,
-          })
-        ) {
-          throw new Error(t('send_invalid_receiver_address'))
-        }
-
         if (!amount) {
-          throw new Error(t('amount_required'))
+          throw { message: t('amount_required'), field: 'amount' }
         }
 
         const maxAmount = fromChainAmount(balance, coin.decimals)
 
         if (amount > maxAmount) {
-          throw new Error(t('send_amount_exceeds_balance'))
+          throw { message: t('not_enough_for_gas'), field: 'amount' }
         }
 
         return null
       },
-      [amount, coin, receiver, t, walletCore]
+      [amount, coin.decimals, t]
     )
   )
+  const addressError = useMemo(
+    () =>
+      !!receiver &&
+      !isValidAddress({
+        address: receiver,
+        chain: coin.chain,
+        walletCore,
+      })
+        ? {
+            message: t('send_invalid_receiver_address'),
+            field: 'address',
+          }
+        : undefined,
+    [coin.chain, receiver, t, walletCore]
+  )
+
+  const { error } = query
+
+  useEffect(() => {
+    if (isSendFormValidationError(error)) {
+      setFormState(prev => ({
+        ...prev,
+        errors: {
+          ...prev.errors,
+          [error.field]: error.message,
+        },
+      }))
+    }
+
+    if (addressError) {
+      setFormState(prev => ({
+        ...prev,
+        errors: {
+          ...prev.errors,
+          [addressError.field]: addressError.message,
+        },
+      }))
+    }
+  }, [addressError, error, setFormState])
+
+  return query
 }
