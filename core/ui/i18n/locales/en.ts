@@ -850,4 +850,8 @@ export const en = {
   set_passcode: 'Set Passcode',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   decrypting_vault_keyshares: 'Decrypting vault keyshares...',
+  app_locked: 'App Locked',
+  app_locked_description: 'Enter your passcode to continue.',
+  invalid_passcode: 'Invalid passcode',
+  unlock: 'Unlock',
 }
