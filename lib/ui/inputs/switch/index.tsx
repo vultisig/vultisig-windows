@@ -1,24 +1,25 @@
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC } from 'react'
+import { FC, isValidElement, KeyboardEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+
+const StyledLabel = styled.span`
+  opacity: 1;
+  transition: 0.2s;
+`
 
 const StyledSpinner = styled(Spinner)`
   left: 4px;
   top: 4px;
 `
 
-const StyledSlider = styled.span<{
-  hoverable?: boolean
-}>`
+const StyledSlider = styled.span<{ checked?: boolean }>`
   background-color: ${getColor('neutralSix')};
   border-radius: 24px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 24px;
+  position: relative;
   transition: 0.2s;
+  width: 40px;
 
   &:before {
     background-color: ${getColor('neutralOne')};
@@ -32,69 +33,72 @@ const StyledSlider = styled.span<{
     width: 20px;
   }
 
-  ${({ hoverable }) => {
-    return hoverable
+  ${({ checked }) => {
+    return checked
       ? css`
-          cursor: pointer;
+          background-color: ${getColor('primaryAccentFour')};
 
-          &:hover {
-            background-color: ${getColor('neutralSeven')};
+          ${StyledSpinner} {
+            transform: translateX(16px);
+          }
+
+          &:before {
+            transform: translateX(16px);
           }
         `
       : css``
   }}
 `
 
-const StyledInput = styled.input<{
+const StyledSwitch = styled.div<{
+  checked?: boolean
+  disabled?: boolean
   hoverable?: boolean
 }>`
-  height: 0;
-  opacity: 0;
-  width: 0;
+  align-items: center;
+  border-radius: 24px;
+  display: flex;
+  gap: 8px;
+  position: relative;
 
-  &:checked {
-    + ${StyledSlider} {
-      background-color: ${getColor('primaryAccentFour')};
+  ${({ checked, disabled, hoverable }) => {
+    return disabled
+      ? css`
+          ${StyledSlider} {
+            background-color: ${getColor('neutralSix')};
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+        `
+      : hoverable
+        ? css`
+            cursor: pointer;
 
-      ${StyledSpinner} {
-        transform: translateX(16px);
-      }
-
-      &:before {
-        transform: translateX(16px);
-      }
-
-      ${({ hoverable }) => {
-        return hoverable
-          ? css`
-              &:hover {
-                background-color: ${getColor('primaryAccentThree')};
+            &:focus,
+            &:hover {
+              ${StyledLabel} {
+                opacity: 0.8;
               }
-            `
-          : css``
-      }}
-    }
-  }
 
-  &:disabled {
-    + ${StyledSlider} {
-      background-color: ${getColor('neutralSix')};
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-  }
+              ${StyledSlider} {
+                background-color: ${getColor(
+                  checked ? 'primaryAccentThree' : 'neutralSeven'
+                )};
+              }
+            }
+          `
+        : css``
+  }}
 `
 
-const StyledSwitch = styled.div`
+const StyledContainer = styled.div`
   display: flex;
-  height: 24px;
-  position: relative;
-  width: 40px;
 `
 
 interface SwitchProps {
   checked?: boolean
   disabled?: boolean
+  label?: ReactNode
   loading?: boolean
   onChange?: (value: boolean) => void
 }
@@ -102,6 +106,7 @@ interface SwitchProps {
 export const Switch: FC<SwitchProps> = ({
   checked = false,
   disabled = false,
+  label,
   loading = false,
   onChange,
 }) => {
@@ -109,17 +114,34 @@ export const Switch: FC<SwitchProps> = ({
     if (onChange && !disabled && !loading) onChange(!checked)
   }
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
   return (
-    <StyledSwitch>
-      <StyledInput
+    <StyledContainer>
+      <StyledSwitch
         checked={checked}
         disabled={disabled || loading}
         hoverable={!!onChange}
-        type="checkbox"
-      />
-      <StyledSlider hoverable={!!onChange} onClick={handleClick}>
-        {loading && <StyledSpinner size={16} />}
-      </StyledSlider>
-    </StyledSwitch>
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+      >
+        <StyledSlider checked={checked}>
+          {loading && <StyledSpinner size={16} />}
+        </StyledSlider>
+        {label ? (
+          isValidElement(label) ? (
+            label
+          ) : (
+            <StyledLabel>{label}</StyledLabel>
+          )
+        ) : null}
+      </StyledSwitch>
+    </StyledContainer>
   )
 }

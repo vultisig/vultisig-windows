@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { ActionProp, MessageProp } from '@lib/ui/props'
@@ -25,7 +25,7 @@ export const FullPageFlowErrorState = ({
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
           <CloseButton onClick={() => navigate({ id: 'vault' })}>
-            <CloseIcon />
+            <CrossIcon />
           </CloseButton>
         }
       />

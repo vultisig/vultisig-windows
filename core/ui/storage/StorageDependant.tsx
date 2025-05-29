@@ -8,6 +8,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
+import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
@@ -21,6 +22,7 @@ import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useInitialViewQuery } from './initialView'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
+import { usePasscodeEncryptionQuery } from './passcodeEncryption'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
@@ -36,6 +38,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
   const initialView = useInitialViewQuery()
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
+  const passcodeEncryption = usePasscodeEncryptionQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -49,6 +52,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     hasFinishedOnboarding,
     initialView,
     coinFinderIgnore,
+    passcodeEncryption,
   })
 
   return (
@@ -60,9 +64,11 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
             <RootErrorBoundary>
               <VaultsProvider value={vaults}>
                 <CurrentVaultIdProvider value={currentVaultId}>
-                  <RootCurrentVaultProvider>
-                    {children}
-                  </RootCurrentVaultProvider>
+                  <PasscodeProvider initialValue={null}>
+                    <RootCurrentVaultProvider>
+                      {children}
+                    </RootCurrentVaultProvider>
+                  </PasscodeProvider>
                 </CurrentVaultIdProvider>
               </VaultsProvider>
             </RootErrorBoundary>

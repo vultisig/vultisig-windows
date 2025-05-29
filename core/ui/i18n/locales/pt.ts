@@ -486,7 +486,7 @@ export const pt = {
     },
     connectingWithServer: 'Conectando com o servidor...',
     connectionSuccess: 'Conexão bem-sucedida!',
-    takeMinute: 'Isso deve levar apenas um minuto',
+    takeMinute: 'Isso deve levar apenas um segundo',
     vaultInitializationStarting: 'Iniciando a inicialização do cofre...',
     emailRequired: 'E-mail é obrigatório',
     emailIncorrect: 'E-mail incorreto, por favor verifique',

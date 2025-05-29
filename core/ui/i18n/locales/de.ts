@@ -492,7 +492,7 @@ export const de = {
     },
     connectingWithServer: 'Mit dem Server verbinden...',
     connectionSuccess: 'Verbindung erfolgreich!',
-    takeMinute: 'Dies sollte nur eine Minute dauern',
+    takeMinute: 'Dies sollte nur eine Sekunde dauern',
     vaultInitializationStarting: 'Tresor-Initialisierung startet...',
     emailRequired: 'E-Mail ist erforderlich',
     emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
