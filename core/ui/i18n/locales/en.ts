@@ -352,6 +352,7 @@ export const en = {
   gwei: 'Gwei',
   total_fee: 'Total Fees',
   network_fee: 'Network fee',
+  est_network_fee: 'Est. Network Fee',
   swap_fee: 'Swap fee',
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
