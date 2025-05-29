@@ -52,25 +52,3 @@ export const ChainContent = styled(HStack)`
   gap: 16px;
   align-items: center;
 `
-
-export const Checkbox = styled.div<{ checked?: boolean }>`
-  width: 20px;
-  height: 20px;
-  border: 1px solid ${props => (props.checked ? '#4CAF50' : '#11284A')};
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #061b3a;
-
-  &:after {
-    content: '';
-    width: 6px;
-    height: 10px;
-    border: 2px solid #4caf50;
-    border-top: 0;
-    border-left: 0;
-    transform: rotate(45deg) translate(-1px, -1px);
-    display: ${props => (props.checked ? 'block' : 'none')};
-  }
-`

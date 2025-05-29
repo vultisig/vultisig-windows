@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -13,7 +14,6 @@ import {
   ChainContent,
   ChainItem,
   ChainList,
-  Checkbox,
   Content,
   FullScreenContainer,
 } from './ChainSelectionScreen.styles'
@@ -91,7 +91,10 @@ export const ChainSelectionScreen = ({
                     {option.value}
                   </Text>
                 </ChainContent>
-                <Checkbox checked={isSelected} />
+                <Checkbox
+                  value={isSelected}
+                  onChange={() => handleChainSelect(option.value as Chain)}
+                />
               </ChainItem>
             )
           })}
