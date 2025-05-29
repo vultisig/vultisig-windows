@@ -24,7 +24,7 @@ export const RadioInput = <T extends string>({
 
         return (
           <Button
-            kind={isActive ? 'primary' : 'outlined'}
+            kind={isActive ? 'accent' : 'secondary'}
             key={option}
             onClick={() => onChange(option)}
           >

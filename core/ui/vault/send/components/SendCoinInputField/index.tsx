@@ -4,20 +4,15 @@ import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
-import { useTransferDirection } from '@core/ui/state/transferDirection'
-import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
-import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { match } from '@lib/utils/match'
-import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
-import { CoinWrapper, Container } from './SwapCoinInputField.styled'
+import { CoinWrapper } from './SendCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
   Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
@@ -26,22 +21,17 @@ type CoinInputContainerProps = ValueProp<
   onCoinClick: () => void
 }
 
-export const SwapCoinInputField = ({
+export const SendCoinInputField = ({
   value,
   onChainClick,
   onCoinClick,
 }: CoinInputContainerProps) => {
   const { ticker, chain, id } = value
-  const { t } = useTranslation()
-  const side = useTransferDirection()
 
   return (
-    <Container side={side} justifyContent="center" gap={16}>
+    <VStack justifyContent="center" gap={16}>
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
-          <Text weight="500" size={12} color="shy">
-            {t(side)}
-          </Text>
           <HStack gap={4} alignItems="center">
             <ChainEntityIcon
               value={getChainLogoSrc(chain)}
@@ -62,7 +52,6 @@ export const SwapCoinInputField = ({
             </HStack>
           </HStack>
         </HStack>
-        <CoinBalance value={value} />
       </HStack>
       <HStack flexGrow justifyContent="space-between" alignItems="center">
         <CoinWrapper
@@ -92,11 +81,8 @@ export const SwapCoinInputField = ({
             <ChevronRightIcon />
           </HStack>
         </CoinWrapper>
-        {match(side, {
-          to: () => <ToAmount />,
-          from: () => <ManageFromAmount />,
-        })}
+        <CoinBalance value={value} />
       </HStack>
-    </Container>
+    </VStack>
   )
 }

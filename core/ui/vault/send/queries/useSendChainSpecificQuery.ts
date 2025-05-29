@@ -13,9 +13,7 @@ export const useSendChainSpecificQuery = () => {
   const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const [feeSettings] = useFeeSettings()
-
   const [receiver] = useSendReceiver()
-
   const [amount] = useSendAmount()
 
   return useStateDependentQuery({

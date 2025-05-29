@@ -15,6 +15,7 @@ export const es = {
   percentage_to_unstake: 'Porcentaje para retirar',
   staked_amount: 'Cantidad apostada',
   signing_transaction: 'Firma de la transacción',
+  asset_selection: 'Selección de activos',
   chain: 'Cadena',
   staked: 'Apostado',
   unexpected_error: 'Error inesperado',

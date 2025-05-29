@@ -8,7 +8,7 @@ export const SendFiatFee = () => {
 
   return (
     <>
-      <span>{t('network_fee')}</span>
+      <span>{t('est_network_fee')}</span>
       <SendChainSpecificProvider>
         <SendFiatFeeValue />
       </SendChainSpecificProvider>
