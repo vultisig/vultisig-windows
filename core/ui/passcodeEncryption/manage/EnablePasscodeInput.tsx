@@ -1,4 +1,4 @@
-import { Switch } from '@lib/ui/inputs/switchControlContainer'
+import { Switch } from '@lib/ui/inputs/switch'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -36,9 +36,9 @@ export const EnablePasscodeInput = ({
           <Text color="supporting">{pendingMessage}</Text>
         ) : (
           <Switch
-            value={value}
-            onChange={onChange}
+            checked={value}
             label={t(value ? 'on' : 'off').toUpperCase()}
+            onChange={onChange}
           />
         )}
       </ActionContainer>
