@@ -4,7 +4,7 @@ import { useCameraPermissionQuery } from '@core/ui/qr/hooks/useCameraPermissionQ
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
-import { UploadIcon } from '@lib/ui/icons/UploadIcon'
+import { HardDriveUploadIcon } from '@lib/ui/icons/HardDriveUploadIcon'
 import { Center } from '@lib/ui/layout/Center'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -58,7 +58,7 @@ export const ScanQrView = ({
         <PageFooter>
           <Button onClick={onUploadQrViewRequest}>
             <HStack gap={8}>
-              <UploadIcon />
+              <HardDriveUploadIcon />
               {t('upload_qr_code_image')}
             </HStack>
           </Button>

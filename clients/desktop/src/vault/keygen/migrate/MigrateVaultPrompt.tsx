@@ -1,6 +1,6 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { UpgradeIcon } from '@lib/ui/icons/UpgradeIcon'
+import { ArrowUpFromDotIcon } from '@lib/ui/icons/ArrowUpFromDotIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -31,7 +31,7 @@ export const MigrateVaultPrompt = () => {
 
   return (
     <Container onClick={() => navigate({ id: 'migrateVault' })}>
-      <UpgradeIcon style={{ fontSize: 24 }} />
+      <ArrowUpFromDotIcon style={{ fontSize: 24 }} />
       <Text weight="500" size={13}>
         {t('upgrade_your_vault_now')}
       </Text>

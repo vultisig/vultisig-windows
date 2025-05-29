@@ -1,5 +1,5 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { FileIcon } from '@lib/ui/icons/FileIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -29,7 +29,7 @@ export const UploadedFileItem = ({
         </IconContainer>
         <Text color="regular">{fileName}</Text>
       </HStack>
-      <IconButton icon={<CloseIcon />} title="Remove" onClick={onRemove} />
+      <IconButton icon={<CrossIcon />} title="Remove" onClick={onRemove} />
     </HStack>
   )
 }
