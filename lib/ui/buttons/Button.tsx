@@ -191,11 +191,13 @@ export const Button = ({
         <Spinner />
       </CenterAbsolutely>
     </>
-  ) : (
+  ) : icon ? (
     <HStack gap={8} alignItems="center">
       {icon}
       {children}
     </HStack>
+  ) : (
+    children
   )
 
   const containerProps = {
