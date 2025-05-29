@@ -4,22 +4,15 @@ import {
   feePriorities,
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
-import {
-  SendChainSpecificValueProvider,
-  useSendChainSpecific,
-} from '@core/ui/vault/send/fee/SendChainSpecificProvider'
-import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
+import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
@@ -27,9 +20,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SendFiatFeeValue } from '../../SendFiatFeeValue'
-import { SendGasFeeValue } from '../../SendGasFeeValue'
-import { FeeContainer } from '../FeeContainer'
+import { HorizontalLine } from '../../../components/HorizontalLine'
 import { useFeeSettings } from '../state/feeSettings'
 import { BaseFee } from './baseFee/BaseFee'
 
@@ -67,8 +58,6 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     [value]
   )
 
-  const chainSpecificQuery = useSendChainSpecificQuery()
-
   return (
     <Modal
       as="form"
@@ -88,6 +77,9 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       }
     >
       <VStack gap={12}>
+        <LineWrapper>
+          <HorizontalLine />
+        </LineWrapper>
         <InputContainer>
           <Text size={14} color="supporting">
             {t('priority')}
@@ -101,6 +93,7 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         </InputContainer>
         <BaseFee />
         <AmountTextInput
+          labelPosition="left"
           label={
             <Text size={14} color="supporting">
               {t('gas_limit')}
@@ -109,26 +102,6 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
           value={value.gasLimit}
           onValueChange={gasLimit => setValue({ ...value, gasLimit })}
         />
-        <InputContainer>
-          <InputLabel>
-            {t('total_fee')} ({t('gwei')})
-          </InputLabel>
-          <FeeContainer>
-            <MatchQuery
-              value={chainSpecificQuery}
-              success={value => (
-                <SendChainSpecificValueProvider value={value}>
-                  <span>
-                    <SendGasFeeValue />
-                  </span>
-                  <SendFiatFeeValue />
-                </SendChainSpecificValueProvider>
-              )}
-              error={() => t('failed_to_load')}
-              pending={() => <Spinner />}
-            />
-          </FeeContainer>
-        </InputContainer>
       </VStack>
     </Modal>
   )
@@ -136,4 +109,9 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
 
 const StyledButton = styled(Button)`
   background-color: ${getColor('buttonPrimaryWeb')};
+`
+
+const LineWrapper = styled.div`
+  margin-top: -5px;
+  margin-bottom: 14px;
 `

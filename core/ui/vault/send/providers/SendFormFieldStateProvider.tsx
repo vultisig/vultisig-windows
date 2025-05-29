@@ -9,6 +9,11 @@ type FocusedSendFieldContext = {
     amount: boolean
     address: boolean
   }
+  errors: {
+    coin?: string
+    amount?: string
+    address?: string
+  }
 }
 
 export const initialSendFormFieldState: FocusedSendFieldContext = {
@@ -18,6 +23,7 @@ export const initialSendFormFieldState: FocusedSendFieldContext = {
     amount: false,
     address: false,
   },
+  errors: {},
 }
 
 export const {

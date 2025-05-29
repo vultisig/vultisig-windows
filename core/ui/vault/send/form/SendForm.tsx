@@ -14,10 +14,6 @@ import styled from 'styled-components'
 import { ManageAddresses } from '../addresses/ManageAddresses'
 import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
-import {
-  initialSendFormFieldState,
-  SendFormFieldStateProvider,
-} from '../providers/SendFormFieldStateProvider'
 import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
 import { RefreshSend } from '../RefreshSend'
 
@@ -51,13 +47,9 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           })}
         >
           <VStack gap={16}>
-            <SendFormFieldStateProvider
-              initialValue={initialSendFormFieldState}
-            >
-              <ManageSendCoin />
-              <ManageAddresses />
-              <ManageAmount />
-            </SendFormFieldStateProvider>
+            <ManageSendCoin />
+            <ManageAddresses />
+            <ManageAmount />
           </VStack>
           <Button
             isLoading={isLoading && isPending}
