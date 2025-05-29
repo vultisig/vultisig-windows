@@ -1,6 +1,6 @@
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, isValidElement, ReactNode } from 'react'
+import { FC, isValidElement, KeyboardEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledLabel = styled.span`
@@ -74,6 +74,7 @@ const StyledSwitch = styled.div<{
         ? css`
             cursor: pointer;
 
+            &:focus,
             &:hover {
               ${StyledLabel} {
                 opacity: 0.8;
@@ -113,13 +114,22 @@ export const Switch: FC<SwitchProps> = ({
     if (onChange && !disabled && !loading) onChange(!checked)
   }
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
   return (
     <StyledContainer>
       <StyledSwitch
         checked={checked}
         disabled={disabled || loading}
         hoverable={!!onChange}
-        onClick={() => handleClick()}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
       >
         <StyledSlider checked={checked}>
           {loading && <StyledSpinner size={16} />}
