@@ -17,7 +17,7 @@ type FocusedSendFieldContext = {
 }
 
 export const initialSendFormFieldState: FocusedSendFieldContext = {
-  field: 'amount',
+  field: 'coin',
   fieldsChecked: {
     coin: true,
     amount: false,
