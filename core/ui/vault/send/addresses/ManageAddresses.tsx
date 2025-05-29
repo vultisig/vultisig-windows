@@ -1,7 +1,7 @@
 import { Match } from '@lib/ui/base/Match'
 import { motion } from 'framer-motion'
 
-import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
+import { useSendFormFieldState } from '../state/formFields'
 import { ManageReceiverAddressInputField } from './components/ManageAddressesInputField'
 import { ManageAddressesInputFieldCollapsed } from './components/ManageAddressesInputFieldCollapsed'
 

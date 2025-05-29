@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SendInputContainer } from '../components/SendInputContainer'
-import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendAmount } from '../state/amount'
+import { useSendFormFieldState } from '../state/formFields'
 
 export const ManageAmountInputFieldCollapsed = () => {
   const { t } = useTranslation()

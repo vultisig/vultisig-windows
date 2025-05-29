@@ -1,7 +1,7 @@
 import { Match } from '@lib/ui/base/Match'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { useSendFormFieldState } from '../../providers/SendFormFieldStateProvider'
+import { useSendFormFieldState } from '../../state/formFields'
 import { ManageSendCoinCollapsedInputField } from './components/ManageSendCoinCollapsedInputField'
 import { ManageSendCoinInputField } from './components/ManageSendCoinInputField'
 

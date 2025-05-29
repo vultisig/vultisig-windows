@@ -14,7 +14,7 @@ import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { SendInputContainer } from '../../../components/SendInputContainer'
-import { useSendFormFieldState } from '../../../providers/SendFormFieldStateProvider'
+import { useSendFormFieldState } from '../../../state/formFields'
 
 export const ManageSendCoinCollapsedInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()

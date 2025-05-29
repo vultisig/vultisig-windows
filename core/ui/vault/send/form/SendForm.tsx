@@ -12,9 +12,9 @@ import { useTranslation } from 'react-i18next'
 import { ManageAddresses } from '../addresses/ManageAddresses'
 import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
-import { useSendFormFieldState } from '../providers/SendFormFieldStateProvider'
 import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
 import { RefreshSend } from '../RefreshSend'
+import { useSendFormFieldState } from '../state/formFields'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()

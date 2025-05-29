@@ -5,11 +5,11 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
+import { SendAmountProvider } from './state/amount'
 import {
   initialSendFormFieldState,
   SendFormFieldStateProvider,
-} from './providers/SendFormFieldStateProvider'
-import { SendAmountProvider } from './state/amount'
+} from './state/formFields'
 import { SendMemoProvider } from './state/memo'
 import { SendReceiverProvider } from './state/receiver'
 import { SendFeesProvider } from './state/sendFees'
