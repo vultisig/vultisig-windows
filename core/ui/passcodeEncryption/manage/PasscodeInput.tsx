@@ -4,12 +4,13 @@ import { InputProps, LabelProp } from '@lib/ui/props'
 
 import { passcodeLength } from '../core/config'
 
-type PasscodeInputProps = Omit<InputProps<string | null>, 'value'> & LabelProp
+type PasscodeInputProps = Omit<InputProps<string | null>, 'value'> &
+  Partial<LabelProp>
 
 export const PasscodeInput = ({ onChange, label }: PasscodeInputProps) => {
   return (
     <>
-      <InputLabel>{label}</InputLabel>
+      {label && <InputLabel>{label}</InputLabel>}
       <OTPInput
         length={passcodeLength}
         onCompleted={value => onChange(value)}
