@@ -1,11 +1,14 @@
-import { FC, SVGProps } from 'react'
+import { SvgProps } from '@lib/ui/props'
+import { FC } from 'react'
 
-export const VultisigLogoIcon: FC<SVGProps<SVGSVGElement>> = ({
-  height = '1em',
-  width = '1em',
-  ...props
-}) => (
-  <svg viewBox="0 0 24 24" {...{ ...props, height, width }}>
+export const VultisigLogoIcon: FC<SvgProps> = props => (
+  <svg
+    fill="currentColor"
+    height="1em"
+    viewBox="0 0 24 24"
+    width="1em"
+    {...props}
+  >
     <path
       d="M2.06417 19.7173L0.5 18.1532L0.61805 18.0745L9.0193 12.4277L11.8328 14.0608L11.6558 14.1591L2.06417 19.7173Z"
       fill="url(#linear_paint_0)"

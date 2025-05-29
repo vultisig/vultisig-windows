@@ -27,7 +27,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
-import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
+import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -88,7 +88,7 @@ export const VaultChainPage = () => {
           <PageHeaderIconButtons>
             <PageHeaderIconButton
               onClick={refresh}
-              icon={isPending ? <Spinner /> : <RefreshIcon />}
+              icon={isPending ? <Spinner /> : <RefreshCwIcon />}
             />
           </PageHeaderIconButtons>
         }

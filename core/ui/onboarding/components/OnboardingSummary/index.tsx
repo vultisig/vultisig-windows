@@ -1,14 +1,16 @@
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
-import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
-import { CloudStackIcon } from '@lib/ui/icons/CloudStackIcon'
-import { CloudWithToolkeyIcon } from '@lib/ui/icons/CloudWithToolkeyIcon'
-import { TriangleExclamationIcon } from '@lib/ui/icons/TriangleExclamationIcon'
+import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
+import { LayersIcon } from '@lib/ui/icons/LayersIcon'
+import { SplitIcon } from '@lib/ui/icons/SplitIcon'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import {
   ContentWrapper,
@@ -19,6 +21,10 @@ import {
   Wrapper,
 } from './OnboardingSummary.styles'
 
+const StyledIcon = styled(TriangleAlertIcon)`
+  color: ${getColor('alertWarning')};
+`
+
 export const OnboardingSummary = () => {
   const { t } = useTranslation()
   const { mutateAsync: setHasFinishedOnboarding } =
@@ -28,23 +34,19 @@ export const OnboardingSummary = () => {
   const items = [
     {
       title: t('fastVaultSetup.summary.summaryItemOneTitle'),
-      icon: <CloudWithToolkeyIcon />,
+      icon: <CloudDownloadIcon fontSize={24} />,
     },
     {
       title: t('fastVaultSetup.summary.summaryItemTwoTitle'),
-      icon: <ArrowSplitIcon />,
+      icon: <SplitIcon fontSize={24} />,
     },
     {
       title: t('fastVaultSetup.summary.summaryItemThreeTitle'),
-      icon: <CloudStackIcon />,
+      icon: <LayersIcon fontSize={24} />,
     },
     {
       title: t('fastVaultSetup.summary.summaryItemFourTitle'),
-      icon: (
-        <div style={{ fontSize: 24, width: 18 }}>
-          <TriangleExclamationIcon />
-        </div>
-      ),
+      icon: <StyledIcon fontSize={24} />,
     },
   ]
 

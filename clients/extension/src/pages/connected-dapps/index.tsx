@@ -1,10 +1,11 @@
-import { Button } from '@clients/extension/src/components/button'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/mutations/useClearVaultSessionsMutation'
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { EventMethod } from '@clients/extension/src/utils/constants'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -60,11 +61,10 @@ export const ConnectedDappsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button
+          <IconButton
             icon={<ChevronLeftIcon fontSize={20} />}
             onClick={navigateBack}
-            size="sm"
-            fitContent
+            size="m"
           />
         }
         title={
@@ -88,9 +88,8 @@ export const ConnectedDappsPage = () => {
                     <Button
                       icon={<LinkTwoOffIcon fontSize={20} />}
                       onClick={() => handleDisconnect(host, session.url)}
-                      size="md"
-                      status="error"
-                      fitContent
+                      size="l"
+                      kind="alert"
                     />
                   }
                   title={
@@ -103,7 +102,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button onClick={handleDisconnectAll} type="primary" block rounded>
+            <Button onClick={handleDisconnectAll} kind="primary">
               {t('disconnect_all')}
             </Button>
           </PageFooter>

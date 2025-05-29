@@ -8,10 +8,11 @@ import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { cropText } from '../css/cropText'
+import { HStack } from '../layout/Stack'
 import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
@@ -28,7 +29,7 @@ interface ContainerProps {
   size: ButtonSize
   isDisabled?: boolean
   isLoading?: boolean
-  isRounded?: boolean
+  icon?: ReactNode
   kind: ButtonKind
 }
 
@@ -40,6 +41,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
+  ${horizontalPadding(16)}
 
   ${({ size }) =>
     match(size, {
@@ -49,24 +51,28 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         font-size: 12px;
       `,
       s: () => css`
-        ${horizontalPadding(16)}
-        height: 36px;
-        font-size: 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        height: 20px;
+        min-width: 20px;
       `,
       m: () => css`
-        ${horizontalPadding(20)}
-        height: 40px;
-        font-size: 16px;
+        border-radius: 24px;
+        font-size: 12px;
+        height: 24px;
+        min-width: 24px;
       `,
       l: () => css`
-        ${horizontalPadding(20)}
-        height: 48px;
-        font-size: 16px;
+        border-radius: 36px;
+        font-size: 14px;
+        height: 40px;
+        min-width: 40px;
       `,
       xl: () => css`
-        ${horizontalPadding(28)}
-        height: 56px;
-        font-size: 16px;
+        border-radius: 46px;
+        font-size: 14px;
+        height: 46px;
+        min-width: 46px;
       `,
     })}
 
@@ -75,14 +81,14 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       primary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
-          : getColor('primary')};
-        color: ${isDisabled ? getColor('mistExtra') : getColor('textDark')};
+          : getColor('buttonPrimaryWeb')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
       secondary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
-          : getColor('foregroundExtra')};
-        color: ${isDisabled ? getColor('mistExtra') : getColor('contrast')};
+          : getColor('backgroundTertiary')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
       outlined: () => css`
         font-weight: 700;
@@ -115,10 +121,10 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         ${match(kind, {
           primary: () => css`
-            background: ${getHoverVariant('primary')};
+            background: ${getColor('buttonPrimaryWebHover')};
           `,
           secondary: () => css`
-            background: ${getHoverVariant('foregroundSuperContrast')};
+            background: ${getColor('buttonPrimaryWeb')};
           `,
           outlined: () => css``,
           ghost: () => css`
@@ -154,7 +160,6 @@ type ButtonProps = Omit<
   size?: ButtonSize
   isDisabled?: boolean | string
   isLoading?: boolean
-  isRounded?: boolean
   kind?: ButtonKind
   onClick?: () => void
   as?: React.ElementType
@@ -162,27 +167,38 @@ type ButtonProps = Omit<
 
 const Hide = styled.div`
   opacity: 0;
+  gap: 8px;
 `
 
 export const Button = ({
   children,
-  size = 'm',
+  size = 'l',
   isDisabled = false,
   isLoading = false,
   onClick,
+  icon,
   kind = 'primary',
   ref,
   ...rest
 }: ButtonProps) => {
+  const innerContent = icon ? (
+    <HStack gap={8} alignItems="center">
+      {icon}
+      {children}
+    </HStack>
+  ) : (
+    children
+  )
+
   const content = isLoading ? (
     <>
-      <Hide>{children}</Hide>
+      <Hide>{innerContent}</Hide>
       <CenterAbsolutely>
         <Spinner />
       </CenterAbsolutely>
     </>
   ) : (
-    children
+    innerContent
   )
 
   const containerProps = {
@@ -190,6 +206,7 @@ export const Button = ({
     size,
     isDisabled: !!isDisabled,
     isLoading,
+    icon,
     onClick: isDisabled || isLoading ? undefined : onClick,
     ...rest,
   }

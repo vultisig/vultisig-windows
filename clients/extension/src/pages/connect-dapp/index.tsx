@@ -1,4 +1,3 @@
-import { Button } from '@clients/extension/src/components/button'
 import { useAddVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useAddVaultSessionMutation'
 import {
   getDappHost,
@@ -11,6 +10,8 @@ import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -81,11 +82,10 @@ export const ConnectDAppPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <Button
+          <IconButton
             icon={<CrossIcon fontSize={20} />}
             onClick={handleClose}
-            size="sm"
-            fitContent
+            size="m"
           />
         }
         title={
@@ -113,7 +113,7 @@ export const ConnectDAppPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button onClick={handleSubmit} type="primary" block rounded>
+        <Button onClick={handleSubmit} kind="primary">
           {t('connect')}
         </Button>
       </PageFooter>
