@@ -494,7 +494,7 @@ export const it = {
     },
     connectingWithServer: 'Connessione al server...',
     connectionSuccess: 'Connessione riuscita!',
-    takeMinute: 'Questo richiederà solo un minuto',
+    takeMinute: 'Questo richiederà solo un secondo',
     vaultInitializationStarting: "Avvio dell'inizializzazione del vault...",
     emailRequired: 'Email richiesta',
     emailIncorrect: 'Email errata, si prega di controllare',
