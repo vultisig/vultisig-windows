@@ -21,7 +21,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
     <MigrateInfoScreen
       art={<PartToShareArt src="/core/images/part-to-share.png" />}
       title={<Trans i18nKey="upgrade_shares_info" components={{ b: <b /> }} />}
-      action={<Button onClick={onFinish}>{t('next')}</Button>}
+      action={<Button kind="primary" label={t('next')} onClick={onFinish} />}
     />
   )
 
@@ -36,7 +36,13 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
               components={{ b: <b /> }}
             />
           }
-          action={<Button onClick={onFinish}>{t('upgrade_now')}</Button>}
+          action={
+            <Button
+              kind="primary"
+              label={t('upgrade_now')}
+              onClick={onFinish}
+            />
+          }
         />
       )}
       to={() => (
@@ -54,7 +60,13 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
                       components={{ b: <b /> }}
                     />
                   }
-                  action={<Button onClick={onFinish}>{t('next')}</Button>}
+                  action={
+                    <Button
+                      kind="primary"
+                      label={t('next')}
+                      onClick={onFinish}
+                    />
+                  }
                 />
               )}
               to={() => renderFinalScreen()}

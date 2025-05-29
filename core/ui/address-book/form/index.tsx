@@ -143,12 +143,12 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={!isValid || !isDirty}
-          isLoading={isLoading || isPending || isValidating}
-          type="submit"
-        >
-          {t('save')}
-        </Button>
+          disabled={!isValid || !isDirty}
+          htmlType="submit"
+          kind="primary"
+          label={t('save')}
+          loading={isLoading || isPending || isValidating}
+        />
       </PageFooter>
     </VStack>
   )

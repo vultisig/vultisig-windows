@@ -88,23 +88,18 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
         </Content>
         <BottomItemsWrapper>
           <VStack gap={4}>
-            <BackupButton onClick={onCompleted} size="m">
-              <DownloadIcon />
-              <Text as="span" size={14}>
-                {t('backup_now')}
-              </Text>
-            </BackupButton>
+            <Button
+              icon={<DownloadIcon />}
+              kind="primary"
+              label={t('backup_now')}
+              onClick={onCompleted}
+            />
           </VStack>
         </BottomItemsWrapper>
       </Wrapper>
     </PageContent>
   )
 }
-
-const BackupButton = styled(Button)`
-  font-size: 20px;
-  gap: 8px;
-`
 
 const BottomItemsWrapper = styled(VStack)`
   min-height: 30px;

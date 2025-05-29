@@ -21,6 +21,7 @@ export const en = {
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
   open_desktop: 'Open Desktop',
+  paste: 'Paste',
   percentage: 'Percentage',
   portfolio_overview: 'Portfolio Overview',
   prioritize_vultisig: 'Prioritize Vultisig',

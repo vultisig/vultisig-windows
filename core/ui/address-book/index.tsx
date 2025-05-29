@@ -110,9 +110,11 @@ export const AddressBookPage = () => {
       </PageContent>
       {!isEditMode && (
         <PageFooter>
-          <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
-            {t('add_address')}
-          </Button>
+          <Button
+            kind="primary"
+            label={t('add_address')}
+            onClick={() => navigate({ id: 'createAddressBookItem' })}
+          />
         </PageFooter>
       )}
     </VStack>
@@ -130,9 +132,11 @@ export const AddressBookPage = () => {
         </Text>
       </PageContent>
       <PageFooter>
-        <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
-          {t('add_address')}
-        </Button>
+        <Button
+          kind="primary"
+          label={t('add_address')}
+          onClick={() => navigate({ id: 'createAddressBookItem' })}
+        />
       </PageFooter>
     </VStack>
   )

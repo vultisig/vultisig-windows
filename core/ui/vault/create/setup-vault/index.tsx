@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
+import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
@@ -22,7 +23,6 @@ import styled, { useTheme } from 'styled-components'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
-  ConfirmButton,
   ContentWrapper,
   DescriptionContentWrapper,
   DescriptionTitleWrapper,
@@ -143,7 +143,7 @@ export const SetupVaultPage = () => {
               ))}
             </DescriptionContentWrapper>
           </DescriptionWrapper>
-          <ConfirmButton type="submit">{t('next')}</ConfirmButton>
+          <Button htmlType="submit" kind="primary" label={t('next')} />
         </ContentWrapper>
       </PageContent>
     </VStack>

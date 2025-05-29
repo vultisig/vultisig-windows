@@ -5,7 +5,8 @@ import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -98,7 +99,7 @@ export const ManageReceiver = () => {
           )}
           action={
             <HStack gap={8}>
-              <IconButton
+              <Button
                 icon={<ClipboardPasteIcon />}
                 onClick={async () => {
                   const { data } = await attempt(getClipboardText)
@@ -107,14 +108,17 @@ export const ManageReceiver = () => {
                     setValue(data)
                   }
                 }}
+                size="sm"
               />
-              <IconButton
+              <Button
                 icon={<CameraIcon fontSize={20} />}
                 onClick={() => setViewState('scanner')}
+                size="sm"
               />
-              <IconButton
+              <Button
                 icon={<BookMarkedIcon />}
                 onClick={() => setViewState('addressBook')}
+                size="sm"
               />
             </HStack>
           }

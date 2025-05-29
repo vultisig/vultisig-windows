@@ -11,7 +11,6 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -122,7 +121,7 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <Wrapper>
+    <VStack gap={24}>
       <AnimationWrapper>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
@@ -184,10 +183,10 @@ export const SwapKeysignTxOverview = ({
                 >
                   {hash}
                 </Text>
-                <IconButton
-                  size="s"
-                  onClick={() => trackTransaction(hash)}
+                <Button
                   icon={<SquareArrowOutUpRightIcon />}
+                  onClick={() => trackTransaction(hash)}
+                  size="md"
                 />
               </HStack>
             </HStack>
@@ -266,46 +265,21 @@ export const SwapKeysignTxOverview = ({
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth justifyContent="space-between">
           <Button
-            onClick={() => trackTransaction(txHash)}
-            style={{
-              flex: 1,
-            }}
             kind="secondary"
-          >
-            {t('track')}
-          </Button>
-          <StyledButton
-            onClick={() =>
-              navigate(
-                { id: 'vault' },
-                {
-                  replace: true,
-                }
-              )
-            }
-          >
-            {t('done')}
-          </StyledButton>
+            label={t('track')}
+            onClick={() => trackTransaction(txHash)}
+            style={{ flex: 1 }}
+          ></Button>
+          <Button
+            kind="primary"
+            label={t('done')}
+            onClick={() => navigate({ id: 'vault' }, { replace: true })}
+          />
         </HStack>
       </VStack>
-    </Wrapper>
+    </VStack>
   )
 }
-
-const StyledButton = styled(Button)`
-  background-color: hsl(224, 75%, 50%);
-  color: ${getColor('contrast')};
-  font-weight: 600;
-  flex: 1;
-
-  &:hover {
-    background-color: hsla(224, 75%, 50%, 0.9);
-  }
-`
-
-const Wrapper = styled(VStack)`
-  gap: 24px;
-`
 
 const AnimationWrapper = styled.div`
   width: 100%;

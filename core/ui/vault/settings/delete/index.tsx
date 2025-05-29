@@ -123,13 +123,13 @@ export const DeleteVaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={isDisabled}
-          isLoading={isPending}
-          kind="alert"
+          disabled={isDisabled}
+          kind="primary"
+          label={t('delete')}
+          loading={isPending}
           onClick={handleConfirm}
-        >
-          {t('delete')}
-        </Button>
+          status="error"
+        />
       </PageFooter>
     </VStack>
   )

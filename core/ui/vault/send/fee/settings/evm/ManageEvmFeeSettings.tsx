@@ -78,7 +78,7 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       })}
       onClose={onClose}
       title={t('advanced')}
-      footer={<Button type="submit">{t('save')}</Button>}
+      footer={<Button htmlType="submit" kind="primary" label={t('save')} />}
     >
       <VStack gap={12}>
         <InputContainer>

@@ -21,7 +21,7 @@ export const FailedQueryOverlay: React.FC<FailedQueryOverlayProps> = ({
       <QueryOverlayContent>
         <VStack alignItems="center" gap={8}>
           {title}
-          <Button onClick={onClose}>{closeText}</Button>
+          <Button kind="primary" label={closeText} onClick={onClose} />
         </VStack>
       </QueryOverlayContent>
     </Backdrop>

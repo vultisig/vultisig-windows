@@ -1,4 +1,4 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -88,21 +88,20 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
+            label={t('tap')}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleteSteps
             }
-          >
-            {t('tap')}
-          </NextAnimationButton>
+          />
         </VStack>
       </ContentWrapper>
     </PageContent>
   )
 }
 
-const NextAnimationButton = styled(IconButton)`
+const NextAnimationButton = styled(Button)`
   flex-shrink: 0;
   width: 84px;
   height: 48px;

@@ -10,7 +10,6 @@ import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
@@ -48,6 +47,7 @@ const ConnectedApp = styled(Button)`
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
   color: ${getColor('textExtraLight')};
+  padding: 0;
   position: initial;
   ${horizontalPadding(8)};
 
@@ -70,26 +70,29 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
+            label={
+              <>
+                <WorldIcon fontSize={20} />
+                <ConnectedAppStatus
+                  connected={Object.values(sessions).length > 0}
+                />
+              </>
+            }
             onClick={() => navigate({ id: 'connectedDapps' })}
-            size="l"
-          >
-            <WorldIcon fontSize={20} />
-            <ConnectedAppStatus
-              connected={Object.values(sessions).length > 0}
-            />
-          </ConnectedApp>
+            size="md"
+          />
         }
         secondaryControls={
           <>
-            <IconButton
+            <Button
               icon={<CameraIcon fontSize={20} />}
               onClick={() => navigate({ id: 'uploadQr', state: {} })}
-              size="m"
+              size="md"
             />
-            <IconButton
+            <Button
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
-              size="m"
+              size="md"
             />
           </>
         }
@@ -179,11 +182,10 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
-          onClick={() => navigate({ id: 'manageVaultChains' })}
           kind="primary"
-        >
-          {t('manage_chains')}
-        </Button>
+          label={t('manage_chains')}
+          onClick={() => navigate({ id: 'manageVaultChains' })}
+        />
       </PageFooter>
     </VStack>
   )

@@ -36,14 +36,13 @@ export const ToggleSwitch = <T extends string | number>({
     <Wrapper>
       {options.map(({ value, disabled, icon, label }) => (
         <ToggleButton
-          key={value}
           active={active === value}
-          onClick={() => handleClick(value)}
           disabled={disabled}
-        >
-          {icon}
-          {label}
-        </ToggleButton>
+          key={value}
+          icon={icon}
+          label={label}
+          onClick={() => handleClick(value)}
+        />
       ))}
     </Wrapper>
   )

@@ -120,13 +120,13 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
           message={extractErrorMsg(error)}
           action={
             <Button
+              kind="primary"
+              label={t('try_again')}
               onClick={() => {
                 resetStreamState()
                 getStream()
               }}
-            >
-              {t('try_again')}
-            </Button>
+            />
           }
         />
       )}

@@ -186,9 +186,13 @@ export const UpdateVaultFolderPage = () => {
         <AddVaultsToFolder />
       </PageContent>
       <PageFooter>
-        <Button isDisabled={isDisabled} isLoading={isPending} type="submit">
-          {t('save_changes')}
-        </Button>
+        <Button
+          disabled={!!isDisabled}
+          htmlType="submit"
+          kind="primary"
+          label={t('save_changes')}
+          loading={isPending}
+        ></Button>
       </PageFooter>
     </VStack>
   )

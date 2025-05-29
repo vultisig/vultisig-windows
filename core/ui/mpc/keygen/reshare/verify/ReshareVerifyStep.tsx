@@ -77,7 +77,7 @@ export const ReshareVerifyStep: React.FC<OnBackProp & OnFinishProp> = ({
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('new_vault_setup_disclaimer')}</InfoBlock>
-          <Button onClick={onFinish}>{t('start')}</Button>
+          <Button kind="primary" label={t('start')} onClick={onFinish} />
         </VStack>
       </PageContent>
     </>

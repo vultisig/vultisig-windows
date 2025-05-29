@@ -33,9 +33,11 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       extra={
         <>
           <Text color="shy">{`${chain} ${t('network')}`}</Text>
-          <Button kind="alert" onClick={() => mutate(id)}>
-            <TrashIcon fontSize={20} />
-          </Button>
+          <Button
+            icon={<TrashIcon fontSize={20} />}
+            onClick={() => mutate(id)}
+            status="error"
+          />
         </>
       }
       icon={

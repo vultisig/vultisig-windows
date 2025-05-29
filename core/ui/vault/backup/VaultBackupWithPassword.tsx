@@ -52,14 +52,6 @@ const ActionsWrapper = styled(VStack)`
   margin-bottom: 32px;
 `
 
-const InfoPill = styled(Button)`
-  pointer-events: none;
-  justify-content: flex-start;
-  white-space: wrap;
-  gap: 4px;
-  height: 40px;
-`
-
 const createVaultBackupSchema = (t: TFunction) =>
   z
     .object({
@@ -176,20 +168,21 @@ export const VaultBackupWithPassword = ({
             </div>
           </VStack>
           <ActionsWrapper gap={16}>
-            <InfoPill kind="outlined">
-              <InfoGradientIcon />{' '}
-              <Text as="span" color="contrast" size={13}>
-                {t('vault_backup_page_password_info')}
-              </Text>
-            </InfoPill>
             <Button
-              isDisabled={!isValid || !isDirty || isPending}
-              type="submit"
-            >
-              {isPending
-                ? t('vault_backup_page_submit_loading_button_text')
-                : t('save')}
-            </Button>
+              icon={<InfoGradientIcon />}
+              kind="secondary"
+              label={t('vault_backup_page_password_info')}
+            />
+            <Button
+              disabled={!isValid || !isDirty || isPending}
+              htmlType="submit"
+              kind="primary"
+              label={
+                isPending
+                  ? t('vault_backup_page_submit_loading_button_text')
+                  : t('save')
+              }
+            />
             {error && (
               <Text size={12} color="danger">
                 {error?.message}

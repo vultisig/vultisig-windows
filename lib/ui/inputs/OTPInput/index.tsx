@@ -3,6 +3,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useOtp } from './useOTP'
@@ -24,6 +25,7 @@ export const OTPInput = ({
   includePasteButton = true,
   ...props
 }: OTPInputProps) => {
+  const { t } = useTranslation()
   const { otp, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
     length,
     onValueChange,
@@ -50,7 +52,11 @@ export const OTPInput = ({
         />
       ))}
       {includePasteButton && (
-        <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
+        <PasteButton
+          kind="primary"
+          label={t('paste')}
+          onClick={() => handlePaste()}
+        />
       )}
     </HStack>
   )

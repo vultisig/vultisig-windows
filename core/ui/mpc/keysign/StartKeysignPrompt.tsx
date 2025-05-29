@@ -26,7 +26,9 @@ export const StartKeysignPrompt = ({
   return (
     <VStack gap={20}>
       <Button
-        isDisabled={isDisabled}
+        disabled={!!isDisabled}
+        kind="primary"
+        label={t('sign')}
         onClick={() => {
           navigate({
             id: 'keysign',
@@ -37,13 +39,12 @@ export const StartKeysignPrompt = ({
             },
           })
         }}
-      >
-        {t('sign')}
-      </Button>
+      />
       {securityType === 'fast' && (
         <Button
-          kind="outlined"
-          isDisabled={isDisabled}
+          disabled={!!isDisabled}
+          kind="secondary"
+          label={t('fast_sign')}
           onClick={() => {
             navigate({
               id: 'keysign',
@@ -54,9 +55,7 @@ export const StartKeysignPrompt = ({
               },
             })
           }}
-        >
-          {t('fast_sign')}
-        </Button>
+        />
       )}
     </VStack>
   )
