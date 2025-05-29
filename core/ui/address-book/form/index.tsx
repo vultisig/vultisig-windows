@@ -66,6 +66,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
   const [state] = useCoreViewState<'updateAddressBookItem'>()
+  const [stateAddAddress] = useCoreViewState<'addAddress'>()
   const { getClipboardText } = useCore()
   const [showScanner, setShowScanner] = useState(false)
   const {
@@ -158,7 +159,11 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     <VStack as="form" onSubmit={handleSubmit(handleSubmitForm)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{title || t('add_address')}</PageHeaderTitle>}
+        title={
+          <PageHeaderTitle>
+            {title || stateAddAddress?.headerTitle}
+          </PageHeaderTitle>
+        }
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>

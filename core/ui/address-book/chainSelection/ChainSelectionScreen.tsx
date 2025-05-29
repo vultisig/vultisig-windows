@@ -67,7 +67,10 @@ export const ChainSelectionScreen = () => {
     state.onChainSelect(chain)
     navigate({
       id: 'addAddress',
-      state: { selectedChain: chain },
+      state: {
+        selectedChain: chain,
+        headerTitle: t('add_address'),
+      },
     })
   }
 
