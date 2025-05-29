@@ -122,7 +122,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     })
 
   const {
-    formState: { errors, isDirty, isLoading, isValid, isValidating },
+    formState: { errors, isDirty, isValid },
     handleSubmit,
     register,
     setValue,
@@ -219,13 +219,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       <PageFooter>
         <Button
           isDisabled={!isValid || !isDirty}
-          isLoading={
-            isLoading ||
-            isPending ||
-            isCreatePending ||
-            isUpdatePending ||
-            isValidating
-          }
+          isLoading={isPending || isCreatePending || isUpdatePending}
           type="submit"
         >
           {t('save')}
