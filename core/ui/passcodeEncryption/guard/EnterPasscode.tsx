@@ -62,7 +62,7 @@ export const EnterPasscode = () => {
       return t('enter_passcode')
     }
 
-    const { encryptedSample } = shouldBePresent(passcodeEncryption)
+    const { sample, encryptedSample } = shouldBePresent(passcodeEncryption)
     const decryptedSampleResult = attempt(() =>
       decryptSample({
         key: inputValue,
@@ -70,9 +70,16 @@ export const EnterPasscode = () => {
       })
     )
 
-    if ('error' in decryptedSampleResult) {
+    console.log({ decryptedSampleResult })
+
+    if (
+      'error' in decryptedSampleResult ||
+      decryptedSampleResult.data !== sample
+    ) {
       return t('invalid_passcode')
     }
+
+    return false
   }, [inputValue, passcodeEncryption, t])
 
   const handleSubmit = useCallback(() => {

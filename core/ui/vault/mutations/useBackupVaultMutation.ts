@@ -38,7 +38,6 @@ const createBackup = async (vault: Vault, password?: string) => {
     const encryptedVault = encryptWithAesGcm({
       key: password,
       value: Buffer.from(vaultData),
-      useSalt: false,
     })
     vaultContainer.vault = encryptedVault.toString('base64')
   } else {

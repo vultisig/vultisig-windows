@@ -10,7 +10,6 @@ export const decodeDecryptMessage = async (
   const decryptedMessage = decryptWithAesGcm({
     key: Buffer.from(hexEncryptionKey, 'hex'),
     value: encryptedMessage,
-    useSalt: false,
   })
   return Buffer.from(decryptedMessage.toString('utf-8'), 'base64')
 }
@@ -23,7 +22,6 @@ export const encodeEncryptMessage = async (
   const encryptedMessage = encryptWithAesGcm({
     key: Buffer.from(hexEncryptionKey, 'hex'),
     value: Buffer.from(base64EncodedMessage),
-    useSalt: false,
   })
   return encryptedMessage.toString('base64')
 }
