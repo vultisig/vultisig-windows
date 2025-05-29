@@ -69,8 +69,6 @@ export type SharedViewId = Extract<
   | 'vaultFolder'
   | 'vaultSettings'
   | 'vaults'
-  | 'manageVaultFolder'
-  | 'addCustomToken'
   | 'managePasscodeEncryption'
 >
 
