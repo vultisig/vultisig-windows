@@ -1,7 +1,7 @@
 import { Hoverable } from '@lib/ui/base/Hoverable'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { OnClickProp, UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -23,7 +23,7 @@ export const ModalCloseButton = (props: OnClickProp & UiProps) => {
   return (
     <Container {...props}>
       <IconWrapper>
-        <CloseIcon />
+        <CrossIcon />
       </IconWrapper>
     </Container>
   )

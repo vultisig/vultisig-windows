@@ -1,5 +1,5 @@
 import { AddressBookListItem } from '@core/ui/address-book/item'
-import { ScanQrView } from '@core/ui/qr/ScanQrView'
+import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -10,9 +10,9 @@ import {
   textInputHeight,
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
-import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
+import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { PasteIcon } from '@lib/ui/icons/PasteIcon'
+import { ClipboardPasteIcon } from '@lib/ui/icons/ClipboardPasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -99,7 +99,7 @@ export const ManageReceiver = () => {
           action={
             <HStack gap={8}>
               <IconButton
-                icon={<PasteIcon />}
+                icon={<ClipboardPasteIcon />}
                 onClick={async () => {
                   const { data } = await attempt(getClipboardText)
 
@@ -109,11 +109,11 @@ export const ManageReceiver = () => {
                 }}
               />
               <IconButton
-                icon={<CameraIcon size={20} />}
+                icon={<CameraIcon fontSize={20} />}
                 onClick={() => setViewState('scanner')}
               />
               <IconButton
-                icon={<AddressBookIcon />}
+                icon={<BookMarkedIcon />}
                 onClick={() => setViewState('addressBook')}
               />
             </HStack>

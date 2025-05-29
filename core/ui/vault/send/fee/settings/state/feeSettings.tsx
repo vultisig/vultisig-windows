@@ -7,7 +7,7 @@ import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { omit } from '@lib/utils/record/omit'
 import { useCallback, useMemo } from 'react'
 
-type FeeSettings = EvmFeeSettings | UtxoFeeSettings
+export type FeeSettings = EvmFeeSettings | UtxoFeeSettings
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 
 type FeeSettingsRecord = Record<string, FeeSettings>

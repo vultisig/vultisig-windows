@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
+import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { OnClickProp } from '@lib/ui/props'
@@ -13,6 +13,6 @@ export const PageHeaderRefresh: React.FC<PageHeaderRefreshProps> = ({
 }) => (
   <PageHeaderIconButton
     onClick={onClick}
-    icon={isPending ? <Spinner /> : <RefreshIcon />}
+    icon={isPending ? <Spinner /> : <RefreshCwIcon />}
   />
 )
