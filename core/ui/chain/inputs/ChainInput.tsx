@@ -1,15 +1,14 @@
 import { Chain } from '@core/chain/Chain'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { panel } from '@lib/ui/panel/Panel'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ChainSelectionScreen } from '../../address-book/chainSelection/ChainSelectionScreen'
 import { ChainEntityIcon } from '../coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '../metadata/getChainLogoSrc'
 
@@ -26,24 +25,11 @@ const ChainSelector = styled(HStack)`
 
 export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const [state] = useCoreViewState<'chainSelection'>()
-  const selectedChain = state?.selectedChain
+  const [showChainSelection, setShowChainSelection] = useState(false)
 
-  useEffect(() => {
-    if (selectedChain) {
-      onChange(selectedChain)
-    }
-  }, [selectedChain, onChange])
-
-  const handleChainClick = () => {
-    navigate({
-      id: 'chainSelection',
-      state: {
-        selectedChain: value,
-        onChainSelect: onChange,
-      },
-    })
+  const handleChainSelect = (chain: Chain) => {
+    onChange?.(chain)
+    setShowChainSelection(false)
   }
 
   return (
@@ -51,7 +37,7 @@ export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
       <Text color="light" size={12} weight="500">
         {t('chain')}
       </Text>
-      <ChainSelector onClick={handleChainClick}>
+      <ChainSelector onClick={() => setShowChainSelection(true)}>
         {value ? (
           <>
             <ChainEntityIcon
@@ -69,6 +55,9 @@ export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
         )}
         <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
       </ChainSelector>
+      {showChainSelection && (
+        <ChainSelectionScreen chain={value} onChainSelect={handleChainSelect} />
+      )}
     </VStack>
   )
 }

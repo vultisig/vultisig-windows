@@ -1,5 +1,4 @@
 import { AddressBookPage } from '@core/ui/address-book'
-import { ChainSelectionScreen } from '@core/ui/address-book/chainSelection/ChainSelectionScreen'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
 import { AddressBookForm } from '@core/ui/address-book/form'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
@@ -70,7 +69,6 @@ export type SharedViewId = Extract<
   | 'vaultSettings'
   | 'vaults'
   | 'addAddress'
-  | 'chainSelection'
   | 'manageVaultFolder'
   | 'addCustomToken'
 >
@@ -116,5 +114,4 @@ export const sharedViews: Views<SharedViewId> = {
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
   addAddress: AddressBookForm,
-  chainSelection: ChainSelectionScreen,
 }

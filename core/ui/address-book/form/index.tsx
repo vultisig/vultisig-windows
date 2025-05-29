@@ -1,22 +1,16 @@
 import { Chain } from '@core/chain/Chain'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
-import { useCreateAddressBookItem } from '@core/ui/address-book/hooks/useCreateAddressBookItem'
-import { useUpdateAddressBookItem } from '@core/ui/address-book/hooks/useUpdateAddressBookItem'
 import { AddressBookItem } from '@core/ui/address-book/model'
 import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
-import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '@lib/ui/css/textInput'
+import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
+import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -31,11 +25,13 @@ import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { UseMutationResult } from '@tanstack/react-query'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
+
+import { useCore } from '../../state/core'
 
 const FixedScanQRView = styled(ScanQrView)`
   position: fixed;
@@ -64,21 +60,9 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
 }) => {
   const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
-  const walletCore = useAssertWalletCore()
-  const [state] = useCoreViewState<'updateAddressBookItem'>()
-  const [stateAddAddress] = useCoreViewState<'addAddress'>()
-  const { getClipboardText } = useCore()
   const [showScanner, setShowScanner] = useState(false)
-  const {
-    createAddressBookItem,
-    error: createError,
-    isPending: isCreatePending,
-  } = useCreateAddressBookItem()
-  const {
-    updateAddressBookItem,
-    error: updateError,
-    isPending: isUpdatePending,
-  } = useUpdateAddressBookItem()
+  const walletCore = useAssertWalletCore()
+  const { getClipboardText } = useCore()
 
   const schema = z
     .object({
@@ -123,7 +107,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     })
 
   const {
-    formState: { errors, isDirty, isLoading, isValid },
+    formState: { errors, isDirty, isLoading, isValid, isValidating },
     handleSubmit,
     register,
     setValue,
@@ -133,22 +117,6 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     mode: 'onBlur',
     defaultValues,
   })
-
-  useEffect(() => {
-    if (stateAddAddress?.selectedChain) {
-      setValue('chain', stateAddAddress.selectedChain, { shouldValidate: true })
-    }
-  }, [stateAddAddress?.selectedChain, setValue])
-
-  const handleSubmitForm = (values: AddressBookFormValues) => {
-    if (state?.id) {
-      updateAddressBookItem(state.id, values)
-    } else {
-      createAddressBookItem(values)
-    }
-    onSubmit(values)
-  }
-
   const handlePaste = async () => {
     const { data } = await attempt(getClipboardText)
     if (data) {
@@ -162,20 +130,16 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   }
 
   return (
-    <VStack as="form" onSubmit={handleSubmit(handleSubmitForm)} fullHeight>
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>
-            {title || stateAddAddress?.headerTitle}
-          </PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{title}</PageHeaderTitle>}
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>
         <ChainInput
           value={watch('chain')}
-          onChange={newChain => setValue('chain', newChain, { shouldValidate: true })}
+          onChange={newChain => setValue('chain', newChain)}
         />
         <VStack gap={8}>
           <TextInput
@@ -221,18 +185,16 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             </Text>
           )}
         </VStack>
-        {(error || createError || updateError) && (
+        {error && (
           <Text color="danger" size={14}>
-            {extractErrorMsg(error || createError || updateError)}
+            {extractErrorMsg(error)}
           </Text>
         )}
       </PageContent>
       <PageFooter>
         <Button
           isDisabled={!isValid || !isDirty}
-          isLoading={
-            isLoading || isPending || isCreatePending || isUpdatePending
-          }
+          isLoading={isLoading || isPending || isValidating}
           type="submit"
         >
           {t('save')}

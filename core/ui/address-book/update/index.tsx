@@ -2,23 +2,34 @@ import {
   AddressBookForm,
   AddressBookFormValues,
 } from '@core/ui/address-book/form'
-import { useUpdateAddressBookItem } from '@core/ui/address-book/hooks/useUpdateAddressBookItem'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useAddressBookItems } from '@core/ui/storage/addressBook'
+import {
+  useAddressBookItems,
+  useUpdateAddressBookItemMutation,
+} from '@core/ui/storage/addressBook'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const UpdateAddressBookItemPage = () => {
   const { t } = useTranslation()
-  const [state] = useCoreViewState<'updateAddressBookItem'>()
+  const [{ id }] = useCoreViewState<'updateAddressBookItem'>()
+  const { mutate, error, isPending } = useUpdateAddressBookItemMutation()
   const addressBookItems = useAddressBookItems()
-  const { updateAddressBookItem, error, isPending } = useUpdateAddressBookItem()
+  const navigateBack = useNavigateBack()
 
-  const addressBookItem = addressBookItems.find(item => item.id === state?.id)
+  const addressBookItem = useMemo(
+    () => addressBookItems.find(item => item.id === id),
+    [addressBookItems, id]
+  )
 
-  const handleSubmit = (values: AddressBookFormValues) => {
-    if (state?.id) {
-      updateAddressBookItem(state.id, values)
-    }
+  const handleUpdateAddress = (values: AddressBookFormValues) => {
+    const { address, chain, title } = values
+
+    mutate(
+      { id, fields: { address, chain, title } },
+      { onSuccess: navigateBack }
+    )
   }
 
   return (
@@ -26,7 +37,7 @@ export const UpdateAddressBookItemPage = () => {
       defaultValues={addressBookItem}
       error={error}
       isPending={isPending}
-      onSubmit={handleSubmit}
+      onSubmit={handleUpdateAddress}
       title={t('edit_address')}
     />
   )

@@ -1,11 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -18,18 +14,23 @@ import {
   ChainItem,
   ChainList,
   Checkbox,
-  Container,
   Content,
+  FullScreenContainer,
 } from './ChainSelectionScreen.styles'
 
-export const ChainSelectionScreen = () => {
+type ChainSelectionScreenProps = {
+  chain?: Chain
+  onChainSelect: (chain: Chain) => void
+}
+
+export const ChainSelectionScreen = ({
+  chain,
+  onChainSelect,
+}: ChainSelectionScreenProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const goBack = useNavigateBack()
-  const [state] = useCoreViewState<'chainSelection'>()
   const [search, setSearch] = useState('')
   const [selectedChain, setSelectedChain] = useState<Chain | null>(
-    state?.selectedChain || null
+    chain || null
   )
 
   const chainOptions = useMemo(() => {
@@ -49,24 +50,18 @@ export const ChainSelectionScreen = () => {
   }, [chainOptions, search])
 
   const handleChainSelect = (chain: Chain) => {
-    if (state.onChainSelect) {
-      state.onChainSelect(chain)
-    }
     setSelectedChain(chain)
-    state.onChainSelect(chain)
-    navigate({
-      id: 'addAddress',
-      state: {
-        selectedChain: chain,
-        headerTitle: t('add_address'),
-      },
-    })
+    onChainSelect(chain)
   }
 
   return (
-    <Container>
+    <FullScreenContainer>
       <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={goBack} />}
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={() => onChainSelect(selectedChain as Chain)}
+          />
+        }
         title={<PageHeaderTitle>{t('select_chains')}</PageHeaderTitle>}
       />
       <Content>
@@ -102,6 +97,6 @@ export const ChainSelectionScreen = () => {
           })}
         </ChainList>
       </Content>
-    </Container>
+    </FullScreenContainer>
   )
 }
