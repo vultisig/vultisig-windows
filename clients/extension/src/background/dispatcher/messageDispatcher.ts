@@ -101,9 +101,8 @@ export const dispatchMessage = async (
     return match(type, {
       [MessageKey.VAULT]: () => handleGetVault(safeOrigin),
       [MessageKey.VAULTS]: () => handleGetVaults(popupMessenger),
-      [MessageKey.PLUGIN]: () => {
-        handlePluginRequest(message, dappHostname)
-      },
+      [MessageKey.PLUGIN]: () =>
+        handlePluginRequest(message, dappHostname, popupMessenger),
     } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
   } catch {
     console.warn(`Unhandled message type: ${type}`)

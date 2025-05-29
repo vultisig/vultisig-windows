@@ -24,12 +24,6 @@ export const injectToWindow = () => {
         { type: MessageKey.VAULTS, message: {} },
         { id: uuidv4() }
       ),
-    plugin: async (request: any) =>
-      messengers.background.send(
-        'providerRequest',
-        { type: MessageKey.PLUGIN, message: request },
-        { id: uuidv4() }
-      ),
   }
 
   Object.defineProperty(window, 'vultisig', {

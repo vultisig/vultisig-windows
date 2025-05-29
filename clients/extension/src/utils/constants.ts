@@ -110,5 +110,6 @@ export namespace RequestMethod {
     SEND_TRANSACTION = 'send_transaction',
     WALLET_ADD_CHAIN = 'wallet_add_chain',
     WALLET_SWITCH_CHAIN = 'wallet_switch_chain',
+    PLUGIN_REQUEST_RESHARE = 'plugin_request_reshare',
   }
 }

@@ -1,5 +1,10 @@
-import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
+import {
+  generateLocalPartyId,
+  hasServer,
+  parseLocalPartyId,
+} from '@core/mpc/devices/localPartyId'
 import { recommendedPeers, requiredPeers } from '@core/mpc/devices/peers/config'
+import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
@@ -38,7 +43,9 @@ import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useMemo } from 'react'
+import { matchQuery } from '@tanstack/react-query'
+import { on } from 'events'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
@@ -48,8 +55,6 @@ const educationUrl: Record<KeygenType, string> = {
   migrate: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   reshare:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
-  // TODO: add plugin education URL
-  plugin: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
 }
 
 const recommendedDevicesTarget = recommendedPeers + 1
@@ -57,7 +62,8 @@ const recommendedDevicesTarget = recommendedPeers + 1
 export const KeygenPeerDiscoveryStep = ({
   onFinish,
   onBack,
-}: KeygenPeerDiscoveryStepProps) => {
+  onJoinUrl,
+}: KeygenPeerDiscoveryStepProps & Partial<{ onJoinUrl: any }>) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
@@ -103,6 +109,12 @@ export const KeygenPeerDiscoveryStep = ({
     }
   }, [keygenType, missingPeers, selectedPeers.length, t])
 
+  useEffect(() => {
+    if (joinUrlQuery.data && onJoinUrl) {
+      onJoinUrl(joinUrlQuery.data)
+    }
+  }, [joinUrlQuery.data])
+
   return (
     <>
       <MpcPeersCorrector />
@@ -135,7 +147,7 @@ export const KeygenPeerDiscoveryStep = ({
       >
         <PageFormFrame>
           <PeersPageContentFrame>
-            <QueryBasedQrCode value={joinUrlQuery} />
+            {!onJoinUrl && <QueryBasedQrCode value={joinUrlQuery} />}
             <PeersManagerFrame>
               <Match
                 value={serverType}

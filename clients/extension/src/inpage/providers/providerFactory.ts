@@ -8,6 +8,7 @@ import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
+import { PluginProvider } from './plugin'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
@@ -27,5 +28,6 @@ export const createProviders = () => {
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
+    plugin: PluginProvider.getInstance(),
   }
 }

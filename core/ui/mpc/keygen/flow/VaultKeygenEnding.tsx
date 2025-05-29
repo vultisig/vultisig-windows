@@ -21,8 +21,6 @@ export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
           migrate={() => <MigrateSuccess />}
           reshare={() => <KeygenFlowSuccess />}
           create={() => <KeygenFlowSuccess />}
-          // TODO:
-          plugin={() => <>{'Finished adding plugin'}</>}
         />
       )}
     />

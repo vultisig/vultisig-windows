@@ -13,17 +13,14 @@ import { KeygenFlow } from '../flow/KeygenFlow'
 import { MigrateFastKeygenServerActionProvider } from '../migrate/fast/MigrateFastKeygenServerActionProvider'
 import { ReshareFastKeygenServerActionProvider } from '../reshare/ReshareFastKeygenServerActionProvider'
 import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
-import { ResharePluginActionProvider } from '../reshare/ResharePluginActionProvider'
 
 const serverActionProviders: Record<KeygenType, ComponentType<any>> = {
   create: CreateFastKeygenServerActionProvider,
   reshare: ReshareFastKeygenServerActionProvider,
   migrate: MigrateFastKeygenServerActionProvider,
-  plugin: ResharePluginActionProvider,
 }
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
-  //
   const keygenType = useCurrentKeygenType()
 
   const ServerActionProvider = serverActionProviders[keygenType]
@@ -38,11 +35,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
       to={() => (
         <ValueTransfer<string[]>
           from={({ onFinish }) => (
-            <WaitForServerStep
-              onBack={onBack}
-              onFinish={onFinish}
-              value={keygenType}
-            />
+            <WaitForServerStep onBack={onBack} onFinish={onFinish} />
           )}
           to={({ value }) => (
             <MpcPeersProvider value={value}>

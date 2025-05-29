@@ -10,17 +10,12 @@ import { KeygenType } from '@core/mpc/keygen/KeygenType'
 export const WaitForServerStep = ({
   onFinish,
   onBack,
-  value: keygenType,
 }: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<KeygenType>>) => {
   const peersQuery = useMpcPeerOptionsQuery()
 
   useEffect(() => {
     if (peersQuery.data) {
-      if (keygenType === 'plugin' && peersQuery.data.length === 4) {
-        onFinish(peersQuery.data)
-      } else if (keygenType != 'plugin') {
-        onFinish(peersQuery.data)
-      }
+      onFinish(peersQuery.data)
     }
   }, [peersQuery.data, onFinish])
 
