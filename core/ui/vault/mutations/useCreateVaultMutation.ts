@@ -7,7 +7,6 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
@@ -16,13 +15,11 @@ import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
-import { useVaults } from '../../storage/vaults'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
   const invalidateQueries = useInvalidateQueries()
-  const vaults = useVaults()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const [passcode] = usePasscode()
 
@@ -33,14 +30,8 @@ export const useCreateVaultMutation = (
 
   const walletCore = useAssertWalletCore()
 
-  const { t } = useTranslation()
-
   return useMutation({
     mutationFn: async (input: Vault) => {
-      if (vaults.find(v => getVaultId(v) === getVaultId(input))) {
-        throw new Error(t('vault_already_exists'))
-      }
-
       const vault = await createVault(
         pipe(input, ({ keyShares }) => {
           if (hasPasscodeEncryption) {
