@@ -10,7 +10,7 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -76,7 +76,7 @@ export const CreateVaultNameStep = ({
               )}
               action={
                 <UnstyledButton onClick={() => setName('')}>
-                  <CircledCloseIcon />
+                  <CircleCrossIcon />
                 </UnstyledButton>
               }
               actionPlacerStyles={{

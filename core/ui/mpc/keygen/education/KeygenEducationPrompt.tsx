@@ -1,5 +1,5 @@
 import { useCore } from '@core/ui/state/core'
-import { QuestionMarkIcon } from '@lib/ui/icons/QuestionMarkIcon'
+import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 
 const resourceUrl =
@@ -13,7 +13,7 @@ export const KeygenEducationPrompt = () => {
       onClick={() => {
         openUrl(resourceUrl)
       }}
-      icon={<QuestionMarkIcon />}
+      icon={<CircleHelpIcon />}
     />
   )
 }
