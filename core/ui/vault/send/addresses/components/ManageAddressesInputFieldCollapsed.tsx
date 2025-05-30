@@ -22,10 +22,6 @@ export const ManageAddressesInputFieldCollapsed = () => {
     setFocusedSendField,
   ] = useSendFormFieldState()
 
-  console.log(
-    '🚀 ~ ManageAddressesInputFieldCollapsed ~ isAddressFieldChecked:',
-    isAddressFieldChecked
-  )
   const isOpen = field === 'address'
 
   return (
