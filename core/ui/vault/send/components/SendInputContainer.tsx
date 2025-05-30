@@ -5,7 +5,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const SendInputContainer = styled(VStack)`
-  ${interactive}
+  ${interactive};
   gap: 16px;
   padding: 12px;
   ${borderRadius.m};
