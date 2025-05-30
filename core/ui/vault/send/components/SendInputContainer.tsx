@@ -8,6 +8,6 @@ export const SendInputContainer = styled(VStack)`
   ${interactive}
   gap: 16px;
   padding: 12px;
-  ${borderRadius.m}
-  border:1px solid  ${getColor('foregroundSuper')};
+  ${borderRadius.m};
+  border: 1px solid ${getColor('foregroundSuper')};
 `
