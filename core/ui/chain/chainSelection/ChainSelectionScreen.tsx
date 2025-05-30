@@ -35,10 +35,6 @@ export const ChainSelectionScreen = ({
     )
   }, [search])
 
-  const handleChainSelect = (chain: Chain) => {
-    onChange(chain)
-  }
-
   return (
     <FullScreenContainer>
       <PageHeader
@@ -63,7 +59,7 @@ export const ChainSelectionScreen = ({
               <ChainItem
                 key={option}
                 alignItems="center"
-                onClick={() => handleChainSelect(option)}
+                onClick={() => onChange(option)}
               >
                 <ChainContent>
                   <ChainEntityIcon
@@ -76,7 +72,7 @@ export const ChainSelectionScreen = ({
                 </ChainContent>
                 <Checkbox
                   value={isSelected}
-                  onChange={() => handleChainSelect(option)}
+                  onChange={() => onChange(option)}
                 />
               </ChainItem>
             )

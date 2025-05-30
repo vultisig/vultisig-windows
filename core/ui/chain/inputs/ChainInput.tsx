@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChainSelectionScreen } from '../../address-book/chainSelection/ChainSelectionScreen'
+import { ChainSelectionScreen } from '../chainSelection/ChainSelectionScreen'
 import { ChainEntityIcon } from '../coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '../metadata/getChainLogoSrc'
 
