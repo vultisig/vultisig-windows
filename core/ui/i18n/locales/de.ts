@@ -13,6 +13,7 @@ export const de = {
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
   youre_swapping: 'Du tauschst',
+  asset_selection: 'Asset-Auswahl',
   percentage: 'Prozentsatz',
   selected_chain_missing_in_your_vault:
     'Ausgewählte Blockchain fehlt in deinem Tresor',
@@ -879,4 +880,33 @@ export const de = {
   enter_contract_address: 'Vertragsadresse eingeben',
   no_token_found: 'Kein Token gefunden',
   invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
+  extension_vault_import_restriction:
+    'Nur DKLS-Tresore können in die Erweiterung importiert werden',
+  vault_type_does_not_match: 'Tresortyp stimmt nicht überein',
+  camera_access_blocked:
+    'Der Kamerazugriff ist blockiert. Bitte aktivieren Sie ihn in Ihren Browsereinstellungen.',
+  balance_available: 'Verfügbares Guthaben',
+  not_enough_for_gas:
+    'Nicht genügend Geld vorhanden, um die Gasgebühren zu decken',
+  wrong_address_for_chain: 'Falsche Adresse für ausgewählte Kette',
+  advanced_gas_fee: 'Vorab-Gasgebühr',
+  add_memo: 'MEMO hinzufügen',
+  try_in_expanded_mode: 'Versuchen Sie es im erweiterten Modus',
+  est_network_fee: 'Geschätzte Netzwerkgebühr',
+  security: 'Sicherheit',
+  app_lock_passcode: 'Passcode für die App-Sperre',
+  app_lock_passcode_description:
+    'Fügen Sie eine zusätzliche Sicherheitsebene hinzu, indem Sie zum Entsperren der App einen Passcode verlangen.',
+  on: 'An',
+  off: 'Aus',
+  enter_passcode: 'Passcode eingeben',
+  confirm_passcode: 'Passcode bestätigen',
+  passcodes_do_not_match: 'Die Passwörter stimmen nicht überein',
+  set_passcode: 'Passcode festlegen',
+  encrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden verschlüsselt …',
+  decrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden entschlüsselt …',
+  app_locked: 'App gesperrt',
+  app_locked_description: 'Geben Sie Ihren Passcode ein, um fortzufahren.',
+  invalid_passcode: 'Ungültiger Passcode',
+  unlock: 'Entsperren',
 }

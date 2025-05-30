@@ -8,7 +8,7 @@ export const StrictInfoRow = styled.div`
     justifyContent: 'space-between',
     fullWidth: true,
   })}
-
+  text-align: right;
   ${text({
     color: 'shy',
     size: 12,

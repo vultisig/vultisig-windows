@@ -24,6 +24,7 @@ type ButtonKind =
   | 'ghost'
   | 'idle'
   | 'alert'
+  | 'accent'
 
 interface ContainerProps {
   size: ButtonSize
@@ -84,6 +85,12 @@ const Container = styled(UnstyledButton)<ContainerProps>`
           : getColor('buttonPrimaryWeb')};
         color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
+      accent: () => css`
+        background: ${isDisabled
+          ? getColor('buttonPrimaryWeb')
+          : getColor('buttonPrimaryWeb')};
+        color: ${isDisabled ? getColor('contrast') : getColor('contrast')};
+      `,
       secondary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
@@ -121,6 +128,9 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         ${match(kind, {
           primary: () => css`
+            background: ${getColor('buttonPrimaryWebHover')};
+          `,
+          accent: () => css`
             background: ${getColor('buttonPrimaryWebHover')};
           `,
           secondary: () => css`

@@ -16,6 +16,7 @@ export const it = {
   verify_password_periodic_message:
     'Verifica la password di condivisione del server',
   select_asset: 'Seleziona asset',
+  asset_selection: 'Selezione asset',
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
   percentage: 'Percentuale',
@@ -872,4 +873,35 @@ export const it = {
   enter_contract_address: "Inserisci l'indirizzo del contratto",
   no_token_found: 'Nessun token trovato',
   invalid_token_address: 'Inserisci un indirizzo token valido',
+  extension_vault_import_restriction:
+    "Solo i vault DKLS possono essere importati nell'estensione",
+  vault_type_does_not_match: 'Il tipo di caveau non corrisponde',
+  camera_access_blocked:
+    "L'accesso alla telecamera è bloccato. Abilitalo nelle impostazioni del browser.",
+  balance_available: 'Saldo disponibile',
+  not_enough_for_gas:
+    'Non ci sono fondi sufficienti per coprire le spese del carburante',
+  wrong_address_for_chain: 'Indirizzo errato per la catena selezionata',
+  advanced_gas_fee: 'Commissione gas anticipata',
+  add_memo: 'Aggiungi MEMO',
+  try_in_expanded_mode: 'Prova in modalità espansa',
+  est_network_fee: 'Commissione di rete stimata',
+  security: 'Sicurezza',
+  app_lock_passcode: 'Codice di accesso al blocco app',
+  app_lock_passcode_description:
+    "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
+  on: 'SU',
+  off: 'Spento',
+  enter_passcode: 'Inserisci il codice di accesso',
+  confirm_passcode: 'Conferma codice di accesso',
+  passcodes_do_not_match: 'I codici di accesso non corrispondono',
+  set_passcode: 'Imposta codice di accesso',
+  encrypting_vault_keyshares:
+    'Crittografia delle condivisioni delle chiavi del vault...',
+  decrypting_vault_keyshares:
+    'Decifratura delle condivisioni delle chiavi del vault...',
+  app_locked: 'App bloccata',
+  app_locked_description: 'Inserisci il tuo codice di accesso per continuare.',
+  invalid_passcode: 'Codice di accesso non valido',
+  unlock: 'Sbloccare',
 }
