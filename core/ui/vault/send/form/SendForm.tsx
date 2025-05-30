@@ -7,7 +7,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ManageAddresses } from '../addresses/ManageAddresses'
@@ -28,7 +28,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     Object.keys(errors).length > 0 ||
     Object.values(fieldsChecked).some(v => !v)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setFormState(prev =>
       areEqualRecords(prev.errors, errors) ? prev : { ...prev, errors }
     )
