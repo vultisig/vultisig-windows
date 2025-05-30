@@ -871,4 +871,33 @@ export const es = {
   enter_contract_address: 'Ingrese la dirección del contrato',
   no_token_found: 'No se encontró ningún token',
   invalid_token_address: 'Introduzca una dirección de token válida',
+  extension_vault_import_restriction:
+    'Solo se pueden importar bóvedas DKLS en la extensión',
+  vault_type_does_not_match: 'El tipo de bóveda no coincide',
+  camera_access_blocked:
+    'El acceso a la cámara está bloqueado. Habilítalo en la configuración de tu navegador.',
+  balance_available: 'Saldo disponible',
+  not_enough_for_gas:
+    'No hay suficientes fondos disponibles para cubrir las tarifas del gas',
+  wrong_address_for_chain: 'Dirección incorrecta para la cadena seleccionada',
+  advanced_gas_fee: 'Tarifa de gas anticipada',
+  add_memo: 'Añadir MEMO',
+  try_in_expanded_mode: 'Pruébelo en modo expandido',
+  est_network_fee: 'Tarifa de red estimada',
+  security: 'Seguridad',
+  app_lock_passcode: 'Código de acceso de bloqueo de aplicaciones',
+  app_lock_passcode_description:
+    'Agregue una capa adicional de seguridad al solicitar un código de acceso para desbloquear la aplicación.',
+  on: 'En',
+  off: 'Apagado',
+  enter_passcode: 'Introducir código de acceso',
+  confirm_passcode: 'Confirmar contraseña',
+  passcodes_do_not_match: 'Las contraseñas no coinciden',
+  set_passcode: 'Establecer código de acceso',
+  encrypting_vault_keyshares: 'Cifrando claves compartidas de bóveda...',
+  decrypting_vault_keyshares: 'Descifrando claves compartidas de bóveda...',
+  app_locked: 'Aplicación bloqueada',
+  app_locked_description: 'Introduzca su contraseña para continuar.',
+  invalid_passcode: 'Código de acceso no válido',
+  unlock: 'Descubrir',
 }
