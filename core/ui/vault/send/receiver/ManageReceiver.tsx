@@ -30,9 +30,10 @@ const Input = styled(TextInput)`
   })}
 `
 
-const FixedScanQRView = styled(ScanQrView)`
-  position: fixed;
-  inset: 0;
+const FullHeightScanQRView = styled(ScanQrView)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
@@ -61,7 +62,7 @@ export const ManageReceiver = () => {
           onClose={() => setViewState('default')}
           withDefaultStructure={false}
         >
-          <FixedScanQRView onFinish={onScanSuccess} />
+          <FullHeightScanQRView onFinish={onScanSuccess} />
         </Modal>
       )}
       addressBook={() => (

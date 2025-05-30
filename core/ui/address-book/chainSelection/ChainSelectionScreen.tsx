@@ -6,6 +6,7 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,49 +19,32 @@ import {
   FullScreenContainer,
 } from './ChainSelectionScreen.styles'
 
-type ChainSelectionScreenProps = {
-  chain?: Chain
-  onChainSelect: (chain: Chain) => void
-}
-
 export const ChainSelectionScreen = ({
-  chain,
-  onChainSelect,
-}: ChainSelectionScreenProps) => {
+  value,
+  onChange,
+}: InputProps<Chain>) => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const [selectedChain, setSelectedChain] = useState<Chain | null>(
-    chain || null
-  )
-
-  const chainOptions = useMemo(() => {
-    return Object.values(Chain).map(chain => ({
-      value: chain,
-      label: chain,
-    }))
-  }, [])
+  const chain = value
 
   const filteredChains = useMemo(() => {
-    if (!search) return chainOptions
+    if (!search) return Object.values(Chain)
 
     const normalizedSearch = search.toLowerCase()
-    return chainOptions.filter(option =>
-      option.value.toLowerCase().includes(normalizedSearch)
+    return Object.values(Chain).filter(chain =>
+      chain.toLowerCase().includes(normalizedSearch)
     )
-  }, [chainOptions, search])
+  }, [search])
 
   const handleChainSelect = (chain: Chain) => {
-    setSelectedChain(chain)
-    onChainSelect(chain)
+    onChange(chain)
   }
 
   return (
     <FullScreenContainer>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton
-            onClick={() => onChainSelect(selectedChain as Chain)}
-          />
+          <PageHeaderBackButton onClick={() => onChange(chain as Chain)} />
         }
         title={<PageHeaderTitle>{t('select_chains')}</PageHeaderTitle>}
       />
@@ -74,26 +58,26 @@ export const ChainSelectionScreen = ({
           {t('chains')}
         </Text>
         <ChainList>
-          {filteredChains.map(option => {
-            const isSelected = selectedChain === option.value
+          {filteredChains.map(chain => {
+            const isSelected = value === chain
             return (
               <ChainItem
-                key={option.value}
+                key={chain}
                 alignItems="center"
-                onClick={() => handleChainSelect(option.value as Chain)}
+                onClick={() => handleChainSelect(chain)}
               >
                 <ChainContent>
                   <ChainEntityIcon
-                    value={getChainLogoSrc(option.value)}
+                    value={getChainLogoSrc(chain)}
                     style={{ width: 24, height: 24, marginRight: 16 }}
                   />
                   <Text color="contrast" size={14} weight="500">
-                    {option.value}
+                    {chain}
                   </Text>
                 </ChainContent>
                 <Checkbox
                   value={isSelected}
-                  onChange={() => handleChainSelect(option.value as Chain)}
+                  onChange={() => handleChainSelect(chain)}
                 />
               </ChainItem>
             )

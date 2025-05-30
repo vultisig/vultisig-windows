@@ -56,7 +56,7 @@ export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
         <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
       </ChainSelector>
       {showChainSelection && (
-        <ChainSelectionScreen chain={value} onChainSelect={handleChainSelect} />
+        <ChainSelectionScreen value={value} onChange={handleChainSelect} />
       )}
     </VStack>
   )

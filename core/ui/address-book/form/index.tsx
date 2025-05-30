@@ -33,9 +33,10 @@ import { z } from 'zod'
 
 import { useCore } from '../../state/core'
 
-const FixedScanQRView = styled(ScanQrView)`
-  position: fixed;
-  inset: 0;
+const FullHeightScanQRView = styled(ScanQrView)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 export type AddressBookFormValues = Pick<
@@ -206,7 +207,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
           onClose={() => setShowScanner(false)}
           withDefaultStructure={false}
         >
-          <FixedScanQRView onFinish={handleScanSuccess} />
+          <FullHeightScanQRView onFinish={handleScanSuccess} />
         </Modal>
       )}
     </VStack>
