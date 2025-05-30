@@ -33,8 +33,8 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   } = useBackupOverviewStepsAnimations(signers.length)
 
   return (
-    <PageContent>
-      <ProgressWrapper gap={16}>
+    <Wrapper>
+      <ProgressWrapper gap={16} alignItems="center">
         <Text size={18}>
           {t(
             animations.indexOf(currentAnimation) === 0
@@ -58,8 +58,10 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <VStack gap={12}>
+        <DescriptionWrapper>
           <AnimationDescription animation={currentAnimation} />
+        </DescriptionWrapper>
+        <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
@@ -71,9 +73,9 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           >
             {t('tap')}
           </NextAnimationButton>
-        </VStack>
+        </BottomItemsWrapper>
       </VStack>
-    </PageContent>
+    </Wrapper>
   )
 }
 
@@ -95,6 +97,25 @@ const NextAnimationButton = styled(IconButton)`
 `
 
 const ProgressWrapper = styled(VStack)`
+  padding: 16px;
+`
+
+const Wrapper = styled(PageContent)`
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`
+
+const DescriptionWrapper = styled.div`
+  flex-shrink: 0;
+  max-width: 600px;
   margin-inline: auto;
-  margin-top: 48px;
+`
+
+const BottomItemsWrapper = styled.div`
+  flex-shrink: 0;
+  padding: 8px 0;
+  display: flex;
+  justify-content: center;
 `

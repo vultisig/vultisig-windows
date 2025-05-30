@@ -43,15 +43,17 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
         />
       </ProgressWrapper>
       <VStack justifyContent="space-between" flexGrow>
-        <RiveWrapper>
-          <AnimationComponent
-            style={{
-              flexGrow: 1,
-            }}
-          />
-        </RiveWrapper>
-        <BottomItemsWrapper gap={12} alignItems="center">
-          <AnimationDescription animation={currentAnimation} />
+          <RiveWrapper>
+            <AnimationComponent
+              style={{
+                flexGrow: 1,
+              }}
+            />
+          </RiveWrapper>
+          <DescriptionWrapper>
+            <AnimationDescription animation={currentAnimation} />
+          </DescriptionWrapper>
+        <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
@@ -87,15 +89,25 @@ const NextAnimationButton = styled(IconButton)`
 `
 
 const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`
-
-const BottomItemsWrapper = styled(VStack)`
-  max-width: 600px;
-  margin-inline: auto;
+  padding: 16px;
 `
 
 const Wrapper = styled(PageContent)`
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`
+
+const DescriptionWrapper = styled.div`
+  flex-shrink: 0;
+  max-width: 600px;
+  margin-inline: auto;
+`
+
+const BottomItemsWrapper = styled.div`
+  flex-shrink: 0;
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
 `
