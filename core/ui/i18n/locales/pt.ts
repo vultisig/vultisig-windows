@@ -863,4 +863,32 @@ export const pt = {
   extension_vault_import_restriction:
     'Somente os cofres DKLS podem ser importados na extensão',
   vault_type_does_not_match: 'O tipo de cofre não corresponde',
+  camera_access_blocked:
+    'O acesso à câmera está bloqueado. Ative-o nas configurações do seu navegador.',
+  balance_available: 'Saldo disponível',
+  not_enough_for_gas:
+    'Não há fundos suficientes disponíveis para cobrir as taxas de gás',
+  wrong_address_for_chain: 'Endereço errado para a cadeia selecionada',
+  advanced_gas_fee: 'Taxa de gás antecipada',
+  add_memo: 'Adicionar MEMO',
+  try_in_expanded_mode: 'Experimente no modo expandido',
+  est_network_fee: 'Taxa de rede estimada',
+  security: 'Segurança',
+  app_lock_passcode: 'Senha de bloqueio do aplicativo',
+  app_lock_passcode_description:
+    'Adicione uma camada extra de segurança exigindo uma senha para desbloquear o aplicativo.',
+  on: 'Sobre',
+  off: 'Desligado',
+  enter_passcode: 'Digite a senha',
+  confirm_passcode: 'Confirmar senha',
+  passcodes_do_not_match: 'As senhas não correspondem',
+  set_passcode: 'Definir senha',
+  encrypting_vault_keyshares:
+    'Criptografando compartilhamentos de chaves do cofre...',
+  decrypting_vault_keyshares:
+    'Descriptografando compartilhamentos de chaves do cofre...',
+  app_locked: 'Aplicativo bloqueado',
+  app_locked_description: 'Digite sua senha para continuar.',
+  invalid_passcode: 'Senha inválida',
+  unlock: 'Desbloquear',
 }
