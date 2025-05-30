@@ -43,7 +43,7 @@ export const ManageAmountInputField = () => {
 
   const error = !!amountError && value ? amountError : undefined
 
-  const handleUpdateAmount = (value: number) => {
+  const handleUpdateAmount = (value: number | null) => {
     setValue(value)
     setFocusedSendField(state => ({
       ...state,
@@ -95,7 +95,7 @@ export const ManageAmountInputField = () => {
               }
               placeholder={t('enter_amount')}
               value={value}
-              onValueChange={handleUpdateAmount}
+              onValueChange={value => handleUpdateAmount(value)}
             />
           )}
           action={<AmountInGlobalCurrencyDisplay />}
