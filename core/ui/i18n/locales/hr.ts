@@ -11,10 +11,12 @@ export const hr = {
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
   select_asset: 'Odaberite imovinu',
+  you_are_sending: 'Šalješ',
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',
   asset_selection: 'Odabir imovine',
+  send_overview: 'Pošalji pregled',
   verify_password_periodic_message:
     'Potvrdite lozinku za dijeljenje poslužitelja',
   approval_tx: 'Transakcija odobrenja',

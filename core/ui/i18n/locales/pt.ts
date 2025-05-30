@@ -15,7 +15,9 @@ export const pt = {
   search_field_placeholder: 'Pesquisar..',
   percentage: 'Percentagem',
   asset_selection: 'Seleção de ativos',
+  you_are_sending: 'Você está enviando',
   unexpected_error: 'Erro inesperado',
+  send_overview: 'Enviar visão geral',
   approval_tx: 'Transação de aprovação',
   verify_password_periodic_message:
     'Verifique sua senha de compartilhamento do servidor',
