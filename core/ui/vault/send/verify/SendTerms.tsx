@@ -1,6 +1,7 @@
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -22,7 +23,7 @@ export const SendTerms = () => {
         return (
           <Item
             key={index}
-            label={t(term)}
+            label={<Text size={14}>{t(term)}</Text>}
             value={value[index]}
             onChange={v =>
               setValue(prev => updateAtIndex(prev, index, () => v))
