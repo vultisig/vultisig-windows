@@ -8,7 +8,6 @@ import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isEqual } from '@lib/utils/number/isEqual'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -44,19 +43,16 @@ export const ManageAmountInputField = () => {
 
   const error = !!amountError && value ? amountError : undefined
 
-  const handleUpdateAmount = useCallback(
-    (value: number) => {
-      setValue(value)
-      setFocusedSendField(state => ({
-        ...state,
-        fieldsChecked: {
-          ...state.fieldsChecked,
-          amount: value ? true : false,
-        },
-      }))
-    },
-    [setFocusedSendField, setValue]
-  )
+  const handleUpdateAmount = (value: number) => {
+    setValue(value)
+    setFocusedSendField(state => ({
+      ...state,
+      fieldsChecked: {
+        ...state.fieldsChecked,
+        amount: value ? true : false,
+      },
+    }))
+  }
 
   return (
     <SendInputContainer>
@@ -99,7 +95,7 @@ export const ManageAmountInputField = () => {
               }
               placeholder={t('enter_amount')}
               value={value}
-              onValueChange={setValue}
+              onValueChange={handleUpdateAmount}
             />
           )}
           action={<AmountInGlobalCurrencyDisplay />}
