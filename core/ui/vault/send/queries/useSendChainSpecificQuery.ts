@@ -18,7 +18,7 @@ export const useSendChainSpecificQuery = () => {
 
   return useStateDependentQuery({
     state: {
-      amount: amount ?? undefined,
+      amount: amount ?? 0,
     },
     getQuery: ({ amount }) => {
       const input: ChainSpecificResolverInput = {

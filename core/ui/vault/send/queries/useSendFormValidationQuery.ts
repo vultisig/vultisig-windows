@@ -4,6 +4,7 @@ import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,7 +13,6 @@ import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
-import { isSendFormValidationError } from '../utils/isSendFormValidationError'
 import { useSendChainSpecificQuery } from './useSendChainSpecificQuery'
 
 export const useSendFormValidationQuery = () => {
@@ -48,48 +48,43 @@ export const useSendFormValidationQuery = () => {
       [amount, coin.decimals, t]
     )
   )
-  const addressError = useMemo(
-    () =>
-      !!receiver &&
-      !isValidAddress({
-        address: receiver,
-        chain: coin.chain,
-        walletCore,
-      })
-        ? {
-            message: t('send_invalid_receiver_address'),
-            field: 'address',
-          }
-        : undefined,
-    [coin.chain, receiver, t, walletCore]
-  )
 
-  const { error } = query
+  const errors = useMemo(() => {
+    const res: Record<string, string> = {}
 
-  useEffect(() => {
+    if (!amount) {
+      res.amount = t('amount_required')
+    } else {
+      const max = fromChainAmount(balanceQuery.data ?? '0', coin.decimals)
+      if (amount > max) res.amount = t('not_enough_for_gas')
+    }
+
+    if (
+      receiver &&
+      !isValidAddress({ address: receiver, chain: coin.chain, walletCore })
+    ) {
+      res.address = t('send_invalid_receiver_address')
+    }
+
+    return res
+  }, [
+    amount,
+    balanceQuery.data,
+    coin.decimals,
+    coin.chain,
+    receiver,
+    walletCore,
+    t,
+  ])
+
+  const setErrors = useCallback(() => {
     setFormState(prev => {
-      const newErrors = { ...(prev.errors as Record<string, string>) }
-
-      // Handle query (amount) error
-      if (isSendFormValidationError(error)) {
-        newErrors[error.field] = error.message
-      } else {
-        delete newErrors['amount']
-      }
-
-      // Handle address error
-      if (addressError) {
-        newErrors[addressError.field] = addressError.message
-      } else {
-        delete newErrors['address']
-      }
-
-      return {
-        ...prev,
-        errors: newErrors,
-      }
+      if (areEqualRecords(prev.errors, errors)) return prev
+      return { ...prev, errors }
     })
-  }, [addressError, error, setFormState])
+  }, [errors, setFormState])
+
+  useEffect(setErrors, [setErrors])
 
   return {
     isLoading: query.isLoading,
