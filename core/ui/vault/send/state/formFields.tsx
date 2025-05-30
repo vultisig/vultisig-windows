@@ -1,5 +1,7 @@
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 
+import { SendFormShape, ValidationResult } from '../form/formShape'
+
 type FocusedSendField = 'coin' | 'amount' | 'address' | null
 
 type FocusedSendFieldContext = {
@@ -9,18 +11,12 @@ type FocusedSendFieldContext = {
     amount: boolean
     address: boolean
   }
-  errors: {
-    [key: string]: string
-  }
+  errors: ValidationResult<SendFormShape>
 }
 
 export const initialSendFormFieldState: FocusedSendFieldContext = {
   field: 'coin',
-  fieldsChecked: {
-    coin: true,
-    amount: false,
-    address: false,
-  },
+  fieldsChecked: { coin: true, amount: false, address: false },
   errors: {},
 }
 
