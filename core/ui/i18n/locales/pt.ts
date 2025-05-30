@@ -234,6 +234,7 @@ export const pt = {
   vault_details_page_signer_word: 'Signatário',
   vault_edit_page_title: 'Editar cofre',
   address_book: 'Agenda de endereços',
+  address_book_empty: 'Seu livro de endereços está vazio',
   default_chains: 'Blockchains padrão',
   share_app: 'Compartilhe o aplicativo',
   legal: 'Legal',
@@ -856,6 +857,10 @@ export const pt = {
     'Por favor, forneça permissão para a câmera escanear o código QR',
   grant_camera_permission: 'Conceder permissão para câmera',
   failed_to_get_camera_permission: 'Falha ao obter permissão para câmera',
+  address_book_empty_instruction:
+    'Clique em "Adicionar endereço" para adicionar seus endereços favoritos',
+  select_chains: 'Selecionar Chains',
+  chains: 'Chains',
   failed_to_migrate_storage: 'Falha ao migrar o armazenamento',
   custom_token: 'Token personalizado',
   find_custom_token: 'Encontre seu token personalizado',

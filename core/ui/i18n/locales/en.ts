@@ -1,5 +1,6 @@
 export const en = {
   address_book: 'Address Book',
+  address_book_empty: 'Your Address Book is empty',
   assets: 'assets',
   available: 'Available',
   camera_access_blocked:
@@ -842,6 +843,10 @@ export const en = {
     'Please provide camera permission to scan the QR code',
   grant_camera_permission: 'Grant Camera Permission',
   failed_to_get_camera_permission: 'Failed to get camera permission',
+  address_book_empty_instruction:
+    'Click "Add Address" to add your favorite addresses',
+  select_chains: 'Select Chains',
+  chains: 'Chains',
   custom_token: 'Custom Token',
   find_custom_token: 'Find Your Custom Token',
   enter_contract_address: 'Enter Contract Address',

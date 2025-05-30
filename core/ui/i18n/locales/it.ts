@@ -241,6 +241,7 @@ export const it = {
   vault_details_page_signer_word: 'Firmatario',
   vault_edit_page_title: 'Modifica cassaforte',
   address_book: 'Rubrica indirizzi',
+  address_book_empty: 'La tua rubrica è vuota',
   default_chains: 'Blockchain predefinite',
   share_app: "Condividi l'app",
   legal: 'Legale',
@@ -864,6 +865,10 @@ export const it = {
   grant_camera_permission: "Concedi l'autorizzazione per la telecamera",
   failed_to_get_camera_permission:
     "Impossibile ottenere l'autorizzazione per la fotocamera",
+  address_book_empty_instruction:
+    'Clicca su "Aggiungi indirizzo" per aggiungere i tuoi indirizzi preferiti',
+  select_chains: 'Seleziona Chains',
+  chains: 'Chains',
   failed_to_migrate_storage: "Impossibile migrare l'archiviazione",
   custom_token: 'Token personalizzato',
   find_custom_token: 'Trova il tuo token personalizzato',
