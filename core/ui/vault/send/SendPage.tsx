@@ -6,6 +6,10 @@ import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
+import {
+  initialSendFormFieldState,
+  SendFormFieldStateProvider,
+} from './state/formFields'
 import { SendMemoProvider } from './state/memo'
 import { SendReceiverProvider } from './state/receiver'
 import { SendFeesProvider } from './state/sendFees'
@@ -28,7 +32,13 @@ export const SendPage = () => {
             <SendMemoProvider initialValue="">
               <Match
                 value={step}
-                form={() => <SendForm onFinish={toNextStep} />}
+                form={() => (
+                  <SendFormFieldStateProvider
+                    initialValue={initialSendFormFieldState}
+                  >
+                    <SendForm onFinish={toNextStep} />
+                  </SendFormFieldStateProvider>
+                )}
                 verify={() => <SendVerify onBack={toPreviousStep} />}
               />
             </SendMemoProvider>

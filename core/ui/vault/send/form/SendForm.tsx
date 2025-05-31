@@ -1,52 +1,44 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
-import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo } from 'react'
+import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
+import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
-import { ManageAmount } from '../amount/ManageSendAmount'
+import { ManageAddresses } from '../addresses/ManageAddresses'
+import { ManageAmount } from '../amount/ManageAmount'
 import { ManageSendCoin } from '../coin/ManageSendCoin'
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
-import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
-import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
-import { ManageMemo } from '../memo/ManageMemo'
-import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
-import { ManageReceiver } from '../receiver/ManageReceiver'
+import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
+import { useSendFormValidation } from '../queries/useSendFormValidation'
 import { RefreshSend } from '../RefreshSend'
-import { Sender } from '../sender/Sender'
+import { useSendFormFieldState } from '../state/formFields'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
+  useSendChainSpecificQuery()
   const { t } = useTranslation()
+  const [{ fieldsChecked }, setFormState] = useSendFormFieldState()
+  const { errors, isLoading, isPending } = useSendFormValidation()
+  const isDisabled =
+    isPending ||
+    Object.keys(errors).length > 0 ||
+    Object.values(fieldsChecked).some(v => !v)
 
-  const { error, isLoading, isPending } = useSendFormValidationQuery()
-
-  const isDisabled = useMemo(() => {
-    if (isPending) {
-      return true
-    }
-
-    return error ? extractErrorMsg(error) : false
-  }, [error, isPending])
+  useLayoutEffect(() => {
+    setFormState(prev =>
+      areEqualRecords(prev.errors, errors) ? prev : { ...prev, errors }
+    )
+  }, [errors, setFormState])
 
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        secondaryControls={
-          <>
-            <ManageFeeSettings />
-            <RefreshSend />
-          </>
-        }
+        secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
       <PageContent
@@ -57,24 +49,11 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           isDisabled,
         })}
       >
-        <WithProgressIndicator value={0.2}>
-          <VStack gap={16}>
-            <ManageSendCoin />
-            <Sender />
-            <ManageReceiver />
-            <ManageMemo />
-            <ManageAmount />
-            <AmountInGlobalCurrencyDisplay />
-            <VStack gap={8}>
-              <StrictInfoRow>
-                <SendGasFeeWrapper />
-              </StrictInfoRow>
-              <StrictInfoRow>
-                <SendFiatFee />
-              </StrictInfoRow>
-            </VStack>
-          </VStack>
-        </WithProgressIndicator>
+        <VStack gap={16}>
+          <ManageSendCoin />
+          <ManageAddresses />
+          <ManageAmount />
+        </VStack>
         <Button
           disabled={!!isDisabled}
           htmlType="submit"
