@@ -1,4 +1,4 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { evmChainRpcUrls } from '@core/chain/chains/evm/chainInfo'
@@ -106,7 +106,7 @@ export const handleRequest = (
                   `${EventMethod.CONNECT}:${getDappHost(sender)}`,
                   {
                     address: account,
-                    chainId: getChainId(chain),
+                    chainId: getChainId(chain as EvmChain),
                   }
                 )
               } catch (err) {
@@ -131,7 +131,11 @@ export const handleRequest = (
       }
       case RequestMethod.VULTISIG.CHAIN_ID:
       case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        resolve(getChainId(chain))
+        if (getChainKind(chain) === 'evm' || getChainKind(chain) === 'cosmos') {
+          resolve(getChainId(chain as EvmChain | CosmosChain))
+        } else {
+          resolve('')
+        }
 
         break
       }
@@ -454,22 +458,24 @@ export const handleRequest = (
 
           if (!previousSession) throw new Error(`No session found for ${host}`)
 
-          const isEVM = getChainKind(chain) === 'evm'
           const isCosmos = getChainKind(chain) === 'cosmos'
-          const chainId = getChainId(chain)
+          const isEVM = getChainKind(chain) === 'evm'
+          const chainId =
+            isCosmos || isEVM ? getChainId(chain as CosmosChain | EvmChain) : ''
 
           await updateAppSession({
             vaultId: safeVaultId,
             host,
             fields: {
-              selectedEVMChainId: isEVM
-                ? (chainId as EVMChainId)
-                : previousSession.selectedEVMChainId,
               selectedCosmosChainId: isCosmos
                 ? (chainId as CosmosChainId)
                 : previousSession.selectedCosmosChainId,
+              selectedEVMChainId: isEVM
+                ? (chainId as EVMChainId)
+                : previousSession.selectedEVMChainId,
             },
           })
+
           resolve(param.chainId)
         })
 
@@ -641,7 +647,14 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        resolve(String(parseInt(getChainId(chain), 16)))
+        if (getChainKind(chain) === 'evm' || getChainKind(chain) === 'cosmos') {
+          resolve(
+            String(parseInt(getChainId(chain as EvmChain | CosmosChain), 16))
+          )
+        } else {
+          resolve('')
+        }
+
         break
       }
       case RequestMethod.CTRL.DEPOSIT: {

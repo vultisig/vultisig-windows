@@ -1,6 +1,6 @@
-import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from '../Chain'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 
-const chainIdRecord: Record<Chain, string> = {
+const chainIdRecord: Record<CosmosChain | EvmChain, string> = {
   [EvmChain.Arbitrum]: '0xa4b1',
   [EvmChain.Avalanche]: '0xa86a',
   [EvmChain.Base]: '0x2105',
@@ -12,13 +12,6 @@ const chainIdRecord: Record<Chain, string> = {
   [EvmChain.Polygon]: '0x89',
   [EvmChain.Zksync]: '0x144',
 
-  [UtxoChain.Bitcoin]: '0x1f96',
-  [UtxoChain.BitcoinCash]: '0x2710',
-  [UtxoChain.Litecoin]: 'Litecoin_litecoin',
-  [UtxoChain.Dogecoin]: '0x7d0',
-  [UtxoChain.Dash]: 'Dash_dash',
-  [UtxoChain.Zcash]: 'Zcash_zcash',
-
   [CosmosChain.THORChain]: 'thorchain-1',
   [CosmosChain.Cosmos]: 'cosmoshub-4',
   [CosmosChain.Osmosis]: 'osmosis-1',
@@ -29,21 +22,18 @@ const chainIdRecord: Record<Chain, string> = {
   [CosmosChain.TerraClassic]: 'columbus-5',
   [CosmosChain.Noble]: 'noble-1',
   [CosmosChain.Akash]: 'akashnet-2',
-
-  [OtherChain.Sui]: '0x35834a8a',
-  [OtherChain.Solana]: 'Solana_mainnet-beta',
-  [OtherChain.Polkadot]: '0x3e4',
-  [OtherChain.Ton]: '0x44c',
-  [OtherChain.Ripple]: '0x1df4',
-  [OtherChain.Tron]: '0x2b6653dc',
 }
 
-type DeriveChainId<T> = T extends Chain ? (typeof chainIdRecord)[T] : never
+type DeriveChainId<T> = T extends CosmosChain | EvmChain
+  ? (typeof chainIdRecord)[T]
+  : never
 type ChainIdRecord = typeof chainIdRecord
 export type EVMChainId = ChainIdRecord[EvmChain]
 export type CosmosChainId = ChainIdRecord[CosmosChain]
 
-export function getChainId<T extends Chain>(chain: T): DeriveChainId<T> {
+export function getChainId<T extends CosmosChain | EvmChain>(
+  chain: T
+): DeriveChainId<T> {
   return chainIdRecord[chain] as DeriveChainId<T>
 }
 
