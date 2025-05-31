@@ -72,9 +72,12 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       onClose={onClose}
       title={<Text size={17}>{t('advanced_gas_fee')}</Text>}
       footer={
-        <Button kind="accent" isDisabled={isDisabled} type="submit">
-          {t('save')}
-        </Button>
+        <Button
+          disabled={!!isDisabled}
+          htmlType="submit"
+          kind="primary"
+          label={t('save')}
+        />
       }
     >
       <VStack gap={12}>

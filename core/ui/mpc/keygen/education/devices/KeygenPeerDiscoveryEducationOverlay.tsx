@@ -33,7 +33,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
               {t('downloadVultisig')}
             </Text>
           </VStack>
-          <Button onClick={onFinish}>{t('next')}</Button>
+          <Button kind="primary" label={t('next')} onClick={onFinish} />
         </OverlayContentWrapper>
       </OverlayContent>
     </OverlayWrapper>

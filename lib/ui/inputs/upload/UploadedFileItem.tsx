@@ -1,4 +1,4 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { FileIcon } from '@lib/ui/icons/FileIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -29,7 +29,12 @@ export const UploadedFileItem = ({
         </IconContainer>
         <Text color="regular">{fileName}</Text>
       </HStack>
-      <IconButton icon={<CrossIcon />} title="Remove" onClick={onRemove} />
+      <Button
+        icon={<CrossIcon />}
+        title="Remove"
+        onClick={onRemove}
+        size="sm"
+      />
     </HStack>
   )
 }

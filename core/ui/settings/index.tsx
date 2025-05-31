@@ -3,7 +3,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
@@ -223,50 +223,45 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 {t('share_app')}
               </Text>
               <HStack gap={8} alignItems="center">
-                <IconButton
+                <Button
                   icon={<LinkedinIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
                     )
                   }
-                  size="l"
                 />
-                <IconButton
+                <Button
                   icon={<FacebookIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
                     )
                   }
-                  size="l"
                 />
-                <IconButton
+                <Button
                   icon={<RedditIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
                     )
                   }
-                  size="l"
                 />
-                <IconButton
+                <Button
                   icon={<WhatsAppIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
                     )
                   }
-                  size="l"
                 />
-                <IconButton
+                <Button
                   icon={<TwitterIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
                     )
                   }
-                  size="l"
                 />
               </HStack>
             </VStack>
@@ -274,7 +269,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               <Text color="contrast" size={13} weight={500} cropped>
                 {shareURL}
               </Text>
-              <IconButton
+              <Button
                 icon={<CopyIcon fontSize={iconSize} />}
                 onClick={handleCopy}
               />

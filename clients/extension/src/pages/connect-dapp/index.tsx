@@ -11,7 +11,6 @@ import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -20,7 +19,7 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -82,17 +81,13 @@ export const ConnectDAppPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <IconButton
+          <Button
             icon={<CrossIcon fontSize={20} />}
             onClick={handleClose}
-            size="m"
+            size="md"
           />
         }
-        title={
-          <Text color="contrast" size={18} weight={500}>
-            {t('connect_with_vultisig')}
-          </Text>
-        }
+        title={<PageHeaderTitle>{t('connect_with_vultisig')}</PageHeaderTitle>}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
@@ -113,9 +108,7 @@ export const ConnectDAppPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button onClick={handleSubmit} kind="primary">
-          {t('connect')}
-        </Button>
+        <Button kind="primary" label={t('connect')} onClick={handleSubmit} />
       </PageFooter>
     </VStack>
   ) : (

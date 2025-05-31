@@ -79,12 +79,12 @@ export const FastVaultPasswordVerification = () => {
         />
         <VStack gap={6}>
           <Button
+            disabled={!!isDisabled || isPending}
+            kind="primary"
+            label={t('verify')}
+            loading={isPending}
             onClick={() => mutate()}
-            isDisabled={isDisabled || isPending}
-            isLoading={isPending}
-          >
-            {t('verify')}
-          </Button>
+          />
           {error && (
             <Text size={12} color="danger">
               {t('incorrect_password')}

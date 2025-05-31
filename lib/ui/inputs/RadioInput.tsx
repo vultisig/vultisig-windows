@@ -24,12 +24,11 @@ export const RadioInput = <T extends string>({
 
         return (
           <Button
-            kind={isActive ? 'accent' : 'secondary'}
             key={option}
+            kind={isActive ? 'primary' : 'secondary'}
+            label={renderOption(option)}
             onClick={() => onChange(option)}
-          >
-            {renderOption(option)}
-          </Button>
+          />
         )
       })}
     </UniformColumnGrid>

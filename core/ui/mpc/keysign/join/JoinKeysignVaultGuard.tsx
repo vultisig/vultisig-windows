@@ -28,9 +28,11 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('wrong_vault_try_again')}
         action={
-          <Button onClick={() => navigate({ id: 'vaults' })}>
-            {t('change_vault')}
-          </Button>
+          <Button
+            kind="primary"
+            label={t('change_vault')}
+            onClick={() => navigate({ id: 'vaults' })}
+          />
         }
       />
     )

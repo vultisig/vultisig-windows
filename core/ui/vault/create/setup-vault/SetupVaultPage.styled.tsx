@@ -1,4 +1,3 @@
-import { Button } from '@lib/ui/buttons/Button'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
@@ -27,11 +26,6 @@ export const DescriptionContentWrapper = styled(VStack)`
   border-bottom-left-radius: 16px;
   gap: 8px;
   width: 100%;
-`
-
-export const ConfirmButton = styled(Button)`
-  width: 100%;
-  align-self: center;
 `
 
 export const DescriptionWrapper = styled(VStack)`

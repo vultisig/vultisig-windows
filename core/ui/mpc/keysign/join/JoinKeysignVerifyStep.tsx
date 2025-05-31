@@ -24,7 +24,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
             <JoinKeysignTxOverview />
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <Button onClick={onFinish}>{t('join_keysign')}</Button>
+        <Button kind="primary" label={t('join_keysign')} onClick={onFinish} />
       </PageContent>
     </>
   )

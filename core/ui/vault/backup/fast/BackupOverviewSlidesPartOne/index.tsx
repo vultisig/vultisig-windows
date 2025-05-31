@@ -1,4 +1,4 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -55,21 +55,20 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
+            label={t('tap')}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleted
             }
-          >
-            {t('tap')}
-          </NextAnimationButton>
+          />
         </BottomItemsWrapper>
       </VStack>
     </Wrapper>
   )
 }
 
-const NextAnimationButton = styled(IconButton)`
+const NextAnimationButton = styled(Button)`
   flex-shrink: 0;
   width: 84px;
   height: 48px;

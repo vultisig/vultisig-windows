@@ -95,19 +95,19 @@ export const OnboardingPage = () => {
           <MultistepProgressIndicator value={stepIndex} steps={steps.length} />
           <VStack fullWidth gap={12}>
             <Button
-              onClick={() => {
-                if (isLastScreen) {
-                  completeOnboarding()
-                } else {
-                  setStepIndex(prev => prev + 1)
-                }
-              }}
-            >
-              {t('next')}
-            </Button>
-            <Button kind="ghost" onClick={completeOnboarding}>
-              {t('skip')}
-            </Button>
+              kind="primary"
+              label={t('next')}
+              onClick={() =>
+                isLastScreen
+                  ? completeOnboarding()
+                  : setStepIndex(prev => prev + 1)
+              }
+            />
+            <Button
+              kind="primary"
+              label={t('skip')}
+              onClick={completeOnboarding}
+            />
           </VStack>
         </VStack>
       </Container>

@@ -62,9 +62,12 @@ export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('password_to_decrypt')}</InfoBlock>
-          <Button isLoading={isPending} type="submit">
-            {t('continue')}
-          </Button>
+          <Button
+            htmlType="submit"
+            kind="primary"
+            label={t('continue')}
+            loading={isPending}
+          />
           {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>

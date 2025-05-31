@@ -31,7 +31,9 @@ export const DeeplinkPage = () => {
         pending={() => <FlowPendingPageContent title={t('processing_url')} />}
         error={error => (
           <FlowErrorPageContent
-            action={<Button onClick={goBack}>{t('back')}</Button>}
+            action={
+              <Button kind="primary" label={t('back')} onClick={goBack} />
+            }
             title={t('failed_to_process_url')}
             message={extractErrorMsg(error)}
           />

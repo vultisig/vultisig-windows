@@ -41,9 +41,11 @@ const UpdateAvailablePopup = () => {
           localVersion,
         })}
       </Text>
-      <StyledButton onClickCapture={() => navigate({ id: 'checkUpdate' })}>
-        {t('updatePopup.updateButton')}
-      </StyledButton>
+      <StyledButton
+        kind="primary"
+        label={t('updatePopup.updateButton')}
+        onClickCapture={() => navigate({ id: 'checkUpdate' })}
+      />
     </FixedWrapper>
   )
 }

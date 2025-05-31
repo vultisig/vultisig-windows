@@ -1,6 +1,7 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -47,7 +48,7 @@ export const AddCustomTokenPage = () => {
               />
             )}
             action={
-              <IconButton
+              <Button
                 icon={<PasteIcon />}
                 onClick={async () => {
                   const { data } = await attempt(getClipboardText)
@@ -56,6 +57,7 @@ export const AddCustomTokenPage = () => {
                     setValue(data)
                   }
                 }}
+                size="md"
               />
             }
             actionPlacerStyles={{

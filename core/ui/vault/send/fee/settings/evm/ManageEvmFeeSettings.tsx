@@ -69,12 +69,8 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         onClose,
       })}
       onClose={onClose}
-      title={t('advanced_gas_fee')}
-      footer={
-        <StyledButton kind="accent" type="submit">
-          {t('save')}
-        </StyledButton>
-      }
+      title={t('advanced')}
+      footer={<Button htmlType="submit" kind="primary" label={t('save')} />}
     >
       <VStack gap={12}>
         <LineWrapper>

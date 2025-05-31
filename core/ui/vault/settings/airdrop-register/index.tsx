@@ -90,9 +90,11 @@ export const AirdropRegisterPage = () => {
         <SaveAsImage
           fileName={vault.name}
           renderTrigger={({ onClick }) => (
-            <Button kind="primary" onClick={onClick}>
-              {t('vault_register_for_airdrop_save_vault_QR_button')}
-            </Button>
+            <Button
+              kind="primary"
+              label={t('vault_register_for_airdrop_save_vault_QR_button')}
+              onClick={onClick}
+            />
           )}
           value={<ShareVaultCard />}
         />

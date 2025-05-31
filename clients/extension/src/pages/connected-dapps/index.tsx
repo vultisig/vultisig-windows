@@ -5,17 +5,16 @@ import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions
 import { EventMethod } from '@clients/extension/src/utils/constants'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -30,7 +29,6 @@ export const ConnectedDappsPage = () => {
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
   const sessionsArray = Object.entries(sessions)
   const currentVaultId = useCurrentVaultId()
-  const navigateBack = useNavigateBack()
 
   const handleDisconnect = async (host: string, url: string) => {
     try {
@@ -60,18 +58,8 @@ export const ConnectedDappsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          <IconButton
-            icon={<ChevronLeftIcon fontSize={20} />}
-            onClick={navigateBack}
-            size="m"
-          />
-        }
-        title={
-          <Text color="contrast" size={18} weight={500}>
-            {t('connected_dapps')}
-          </Text>
-        }
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('connected_dapps')}</PageHeaderTitle>}
         hasBorder
       />
       {sessionsArray.length ? (
@@ -88,8 +76,8 @@ export const ConnectedDappsPage = () => {
                     <Button
                       icon={<LinkTwoOffIcon fontSize={20} />}
                       onClick={() => handleDisconnect(host, session.url)}
-                      size="l"
-                      kind="alert"
+                      size="lg"
+                      status="error"
                     />
                   }
                   title={
@@ -102,9 +90,11 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button onClick={handleDisconnectAll} kind="primary">
-              {t('disconnect_all')}
-            </Button>
+            <Button
+              kind="primary"
+              label={t('disconnect_all')}
+              onClick={handleDisconnectAll}
+            />
           </PageFooter>
         </>
       ) : (

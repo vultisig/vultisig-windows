@@ -1,5 +1,5 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -61,22 +61,21 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
+            label={t('tap')}
             onClick={
               is5PlusDevice &&
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleted
             }
-          >
-            {t('tap')}
-          </NextAnimationButton>
+          />
         </VStack>
       </VStack>
     </PageContent>
   )
 }
 
-const NextAnimationButton = styled(IconButton)`
+const NextAnimationButton = styled(Button)`
   flex-shrink: 0;
   width: 84px;
   height: 48px;

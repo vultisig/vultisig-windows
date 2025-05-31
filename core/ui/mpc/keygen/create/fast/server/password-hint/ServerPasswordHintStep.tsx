@@ -15,7 +15,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import type { TFunction } from 'i18next'
+import { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -103,16 +103,17 @@ export const ServerPasswordHintStep = ({
           </VStack>
         </VStack>
         <ButtonsWrapper fullWidth gap={8}>
-          <StyledButton
-            type="button"
+          <Button
             kind="secondary"
+            label={t('skip')}
             onClick={() => onFinish()}
-          >
-            {t('skip')}
-          </StyledButton>
-          <StyledButton type="submit" isDisabled={!!errors.passwordHint}>
-            {t('next')}
-          </StyledButton>
+          />
+          <Button
+            disabled={!!errors.passwordHint}
+            htmlType="submit"
+            kind="primary"
+            label={t('next')}
+          />
         </ButtonsWrapper>
       </PageContent>
     </>
@@ -121,8 +122,4 @@ export const ServerPasswordHintStep = ({
 
 const ButtonsWrapper = styled(HStack)`
   align-self: center;
-`
-
-const StyledButton = styled(Button)`
-  flex: 1;
 `

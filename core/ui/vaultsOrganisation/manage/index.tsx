@@ -160,9 +160,11 @@ export const ManageVaultsPage = () => {
         <ManageVaults />
       </PageContent>
       <PageFooter>
-        <Button onClick={() => navigate({ id: 'createVaultFolder' })}>
-          {t('create_folder')}
-        </Button>
+        <Button
+          kind="primary"
+          label={t('create_folder')}
+          onClick={() => navigate({ id: 'createVaultFolder' })}
+        />
       </PageFooter>
     </VStack>
   )

@@ -20,11 +20,10 @@ export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
+      kind="secondary"
+      label={t('deposit')}
       onClick={() => navigate({ id: 'deposit', state: { coin: value } })}
-      kind="outlined"
       style={{ textTransform: 'uppercase' }}
-    >
-      {t('deposit')}
-    </Button>
+    />
   )
 }

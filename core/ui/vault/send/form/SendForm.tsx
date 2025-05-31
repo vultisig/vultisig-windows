@@ -55,15 +55,12 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAmount />
         </VStack>
         <Button
-          style={{
-            marginTop: 'auto',
-          }}
-          isLoading={isLoading && isPending}
-          isDisabled={isDisabled}
-          type="submit"
-        >
-          {t('continue')}
-        </Button>
+          disabled={!!isDisabled}
+          htmlType="submit"
+          kind="primary"
+          label={t('continue')}
+          loading={isLoading && isPending}
+        />
       </PageContent>
     </>
   )
