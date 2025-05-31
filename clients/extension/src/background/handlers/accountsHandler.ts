@@ -91,7 +91,7 @@ const handleFindVault = async (
   }
 }
 
-export function handleWithConnection<T>(
+function handleWithConnection<T>(
   findFn: () => Promise<T>,
   sender: string,
   options?: { chain?: Chain; timeoutMs?: number; maxRetries?: number }

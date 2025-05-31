@@ -29,7 +29,6 @@ export const reshareWithServer = async (input: Input) => {
   })
 
   await assertFetchResponse(response)
-  console.log('Reshare with server response:', response)
 
   return response
 }

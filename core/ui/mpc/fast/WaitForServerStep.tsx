@@ -1,3 +1,4 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp, OnFinishProp, ValueProp } from '@lib/ui/props'
 import { useEffect } from 'react'
@@ -5,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useMpcPeerOptionsQuery } from '../devices/queries/useMpcPeerOptionsQuery'
 import { ServerFeedback } from './ServerFeedback'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 
 export const WaitForServerStep = ({
   onFinish,

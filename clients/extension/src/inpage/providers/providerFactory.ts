@@ -4,11 +4,11 @@ import { Cosmos } from './cosmos'
 import { Dash } from './dash'
 import { Ethereum } from './ethereum'
 import { MAYAChain } from './maya'
+import { PluginProvider } from './plugin'
 import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
-import { PluginProvider } from './plugin'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)

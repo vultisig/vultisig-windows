@@ -1,10 +1,5 @@
-import {
-  generateLocalPartyId,
-  hasServer,
-  parseLocalPartyId,
-} from '@core/mpc/devices/localPartyId'
+import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { recommendedPeers, requiredPeers } from '@core/mpc/devices/peers/config'
-import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
@@ -43,8 +38,6 @@ import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { matchQuery } from '@tanstack/react-query'
-import { on } from 'events'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -113,7 +106,7 @@ export const KeygenPeerDiscoveryStep = ({
     if (joinUrlQuery.data && onJoinUrl) {
       onJoinUrl(joinUrlQuery.data)
     }
-  }, [joinUrlQuery.data])
+  }, [joinUrlQuery.data, onJoinUrl])
 
   return (
     <>

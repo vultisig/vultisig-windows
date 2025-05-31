@@ -21,6 +21,7 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
 import { Views } from '@lib/ui/navigation/Views'
+
 import { PluginPage } from '../pages/plugin'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {

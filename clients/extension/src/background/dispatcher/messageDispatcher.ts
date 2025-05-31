@@ -16,9 +16,9 @@ import { match } from '@lib/utils/match'
 
 import { Messenger } from '../../messengers/createMessenger'
 import { handleGetVault, handleGetVaults } from '../handlers/accountsHandler'
+import { handlePluginRequest } from '../handlers/pluginHandler'
 import { handleRequest } from '../handlers/requestHandler'
 import { generateCosmosAccount } from '../utils/cosmosAccount'
-import { handlePluginRequest } from '../handlers/pluginHandler'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -101,8 +101,7 @@ export const dispatchMessage = async (
     return match(type, {
       [MessageKey.VAULT]: () => handleGetVault(safeOrigin),
       [MessageKey.VAULTS]: () => handleGetVaults(popupMessenger),
-      [MessageKey.PLUGIN]: () =>
-        handlePluginRequest(message, dappHostname, popupMessenger),
+      [MessageKey.PLUGIN]: () => handlePluginRequest(message, popupMessenger),
     } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
   } catch {
     console.warn(`Unhandled message type: ${type}`)
