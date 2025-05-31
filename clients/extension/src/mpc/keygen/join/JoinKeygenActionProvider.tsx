@@ -8,7 +8,7 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
   const [{ keygenType }] = useCoreViewState<'joinKeygen'>()
 
   if (keygenType === 'migrate') {
-    throw new Error('Migrate keygen is not supported in extension')
+    throw new Error(`${keygenType} keygen is not supported in extension`)
   }
 
   return (

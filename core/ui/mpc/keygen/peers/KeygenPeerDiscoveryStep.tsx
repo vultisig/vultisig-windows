@@ -38,7 +38,7 @@ import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
@@ -55,7 +55,8 @@ const recommendedDevicesTarget = recommendedPeers + 1
 export const KeygenPeerDiscoveryStep = ({
   onFinish,
   onBack,
-}: KeygenPeerDiscoveryStepProps) => {
+  onJoinUrl,
+}: KeygenPeerDiscoveryStepProps & Partial<{ onJoinUrl: any }>) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
@@ -101,6 +102,12 @@ export const KeygenPeerDiscoveryStep = ({
     }
   }, [keygenType, missingPeers, selectedPeers.length, t])
 
+  useEffect(() => {
+    if (joinUrlQuery.data && onJoinUrl) {
+      onJoinUrl(joinUrlQuery.data)
+    }
+  }, [joinUrlQuery.data, onJoinUrl])
+
   return (
     <>
       <MpcPeersCorrector />
@@ -133,7 +140,7 @@ export const KeygenPeerDiscoveryStep = ({
       >
         <PageFormFrame>
           <PeersPageContentFrame>
-            <QueryBasedQrCode value={joinUrlQuery} />
+            {!onJoinUrl && <QueryBasedQrCode value={joinUrlQuery} />}
             <PeersManagerFrame>
               <Match
                 value={serverType}
