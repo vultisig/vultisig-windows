@@ -134,7 +134,7 @@ export const handleRequest = (
         if (getChainKind(chain) === 'evm' || getChainKind(chain) === 'cosmos') {
           resolve(getChainId(chain as EvmChain | CosmosChain))
         } else {
-          resolve('')
+          reject()
         }
 
         break
@@ -647,12 +647,12 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        if (getChainKind(chain) === 'evm' || getChainKind(chain) === 'cosmos') {
+        if (getChainKind(chain) === 'evm') {
           resolve(
             String(parseInt(getChainId(chain as EvmChain | CosmosChain), 16))
           )
         } else {
-          resolve('')
+          reject()
         }
 
         break

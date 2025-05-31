@@ -49,7 +49,9 @@ export const ConnectDAppPage = () => {
     const isCosmos = getChainKind(chain) === 'cosmos'
     const isEVM = getChainKind(chain) === 'evm'
     const chainId =
-      isCosmos || isEVM ? getChainId(chain as CosmosChain | EvmChain) : ''
+      isCosmos || isEVM
+        ? getChainId(chain as CosmosChain | EvmChain)
+        : undefined
 
     await setCurrentVaultId(vaultId)
     await addSession({
@@ -57,7 +59,7 @@ export const ConnectDAppPage = () => {
       session: {
         host: getDappHostname(sender),
         url: getDappHost(sender),
-        chainIds: [chainId],
+        chainIds: chainId ? [chainId] : undefined,
         selectedCosmosChainId: isCosmos
           ? (chainId as CosmosChainId)
           : undefined,
