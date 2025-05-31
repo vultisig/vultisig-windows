@@ -7,7 +7,7 @@ type LeanFeeCoin = Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>
 
 const ether: LeanFeeCoin = {
   ticker: 'ETH',
-  logo: 'ethereum',
+  logo: 'eth',
   decimals: 18,
   priceProviderId: 'ethereum',
 }
