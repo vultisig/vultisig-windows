@@ -5,7 +5,7 @@ import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adj
 import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
+import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -55,7 +55,7 @@ export const VaultChainCoinPage = () => {
                   }),
                 ])
               }
-              icon={isInvalidating ? <Spinner /> : <RefreshIcon />}
+              icon={isInvalidating ? <Spinner /> : <RefreshCwIcon />}
             />
           </PageHeaderIconButtons>
         }

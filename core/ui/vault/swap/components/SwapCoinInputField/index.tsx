@@ -7,7 +7,6 @@ import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDis
 import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
-import { SwapCoinBalance } from '@core/ui/vault/swap/form/SwapCoinBalance'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -17,6 +16,7 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
+import { CoinBalance } from '../CoinBalance'
 import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
@@ -62,7 +62,7 @@ export const SwapCoinInputField = ({
             </HStack>
           </HStack>
         </HStack>
-        <SwapCoinBalance value={value} />
+        <CoinBalance value={value} />
       </HStack>
       <HStack flexGrow justifyContent="space-between" alignItems="center">
         <CoinWrapper

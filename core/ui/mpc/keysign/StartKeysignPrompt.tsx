@@ -38,11 +38,10 @@ export const StartKeysignPrompt = ({
           })
         }}
       >
-        {t('sign')}
+        {t('sign_transaction')}
       </Button>
       {securityType === 'fast' && (
         <Button
-          kind="outlined"
           isDisabled={isDisabled}
           onClick={() => {
             navigate({

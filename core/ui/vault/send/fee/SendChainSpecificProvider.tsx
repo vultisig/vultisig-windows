@@ -1,5 +1,5 @@
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
@@ -22,7 +22,7 @@ export const SendChainSpecificProvider: React.FC<ChildrenProp> = ({
   return (
     <MatchQuery
       value={chainSpecificQuery}
-      pending={() => <Spinner />}
+      pending={() => <Skeleton width="88px" height="12px" />}
       error={() => <StrictText>{t('failed_to_load')}</StrictText>}
       success={value => (
         <SendChainSpecificValueProvider value={value}>

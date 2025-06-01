@@ -1,9 +1,10 @@
-import { Button } from '@clients/extension/src/components/button'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import { VaultExport } from '@clients/extension/src/utils/interfaces'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -62,11 +63,10 @@ export const GetVaultsPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <Button
+          <IconButton
             icon={<CrossIcon fontSize={20} />}
             onClick={handleClose}
-            size="sm"
-            fitContent
+            size="m"
           />
         }
         title={
@@ -104,9 +104,7 @@ export const GetVaultsPage = () => {
         <Button
           onClick={handleSubmit}
           disabled={!vaultIds.length}
-          type="primary"
-          block
-          rounded
+          kind="primary"
         >
           {t('connect')}
         </Button>

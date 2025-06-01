@@ -4,7 +4,9 @@ import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { Spinner } from '@lib/ui/loaders/Spinner'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Skeleton } from '@lib/ui/loaders/Skeleton'
+import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useEffect } from 'react'
 
@@ -38,9 +40,25 @@ export const SendFiatFeeValue = () => {
     })
   }, [formattedAmount, setFees])
 
-  if (isPending) return <Spinner />
+  if (isPending)
+    return (
+      <VStack>
+        <Skeleton width="88" height="12" />
+        <Skeleton width="48" height="12" />
+      </VStack>
+    )
+
   if (!price || !humanReadableFeeValue) return null
 
   formattedAmount = formatAmount(humanReadableFeeValue * price, fiatCurrency)
-  return <>{formattedAmount}</>
+  return (
+    <VStack>
+      <Text size={14}>
+        {humanReadableFeeValue} {coinKey.id}
+      </Text>
+      <Text size={14} color="shy">
+        {formattedAmount}
+      </Text>
+    </VStack>
+  )
 }

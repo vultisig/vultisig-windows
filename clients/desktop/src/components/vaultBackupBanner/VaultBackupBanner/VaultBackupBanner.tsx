@@ -18,7 +18,7 @@ const VaultBackupBanner = () => {
       onClick={() => navigate({ id: 'vaultBackup' })}
       data-testid="VaultBackupBanner-Content"
     >
-      <TriangleAlertIcon height={24} width={24} />
+      <TriangleAlertIcon fontSize={24} />
       <Text color="regular" size={14} weight="500">
         {t('vault_backup_banner_title')}
       </Text>

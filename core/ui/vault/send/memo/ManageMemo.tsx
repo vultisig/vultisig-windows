@@ -1,21 +1,68 @@
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
-import { text } from '@lib/ui/text'
+import { Text, text } from '@lib/ui/text'
+import { attempt } from '@lib/utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCore } from '../../../state/core'
 import { useSendMemo } from '../state/memo'
 
-const Input = styled(TextInput)`
-  ${text({
-    family: 'mono',
-    weight: 400,
-  })}
-`
+export const ManageMemo = () => {
+  const [value, setValue] = useSendMemo()
+  const { t } = useTranslation()
+  const [isOpen, { toggle }] = useBoolean(!!value)
+  const { getClipboardText } = useCore()
+
+  return (
+    <InputContainer>
+      <Label onClick={toggle}>
+        <Text as="span" color="shy" size={12}>
+          {t('add_memo')}
+        </Text>
+        <CollapsableStateIndicator isOpen={isOpen} />
+      </Label>
+      {isOpen && (
+        <ActionInsideInteractiveElement
+          render={() => (
+            <TextInput
+              placeholder={t('enter_memo')}
+              value={value}
+              onValueChange={setValue}
+            />
+          )}
+          action={
+            <IconButton
+              icon={<PasteIcon />}
+              onClick={async () => {
+                const { data } = await attempt(getClipboardText)
+
+                if (data) {
+                  setValue(data)
+                }
+              }}
+            />
+          }
+          actionPlacerStyles={{
+            right: textInputHorizontalPadding,
+            bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
+          }}
+        />
+      )}
+    </InputContainer>
+  )
+}
 
 const Label = styled(InputLabel)`
   ${interactive};
@@ -29,29 +76,3 @@ const Label = styled(InputLabel)`
     font-size: 16px;
   }
 `
-
-export const ManageMemo = () => {
-  const [value, setValue] = useSendMemo()
-
-  const { t } = useTranslation()
-
-  const [isOpen, { toggle }] = useBoolean(!!value)
-
-  return (
-    <InputContainer>
-      <Label onClick={toggle}>
-        <span>
-          {t('memo')} ({t('optional')})
-        </span>
-        <CollapsableStateIndicator isOpen={isOpen} />
-      </Label>
-      {isOpen && (
-        <Input
-          placeholder={t('enter_memo')}
-          value={value}
-          onValueChange={setValue}
-        />
-      )}
-    </InputContainer>
-  )
-}

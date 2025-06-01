@@ -9,16 +9,18 @@ import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
+import { HorizontalLine } from '../../../components/HorizontalLine'
 import { useSendChainSpecific } from '../../SendChainSpecificProvider'
 import { useFeeSettings } from '../state/feeSettings'
 
@@ -68,16 +70,21 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         isDisabled,
       })}
       onClose={onClose}
-      title={t('advanced')}
+      title={<Text size={17}>{t('advanced_gas_fee')}</Text>}
       footer={
-        <Button isDisabled={isDisabled} type="submit">
+        <Button kind="accent" isDisabled={isDisabled} type="submit">
           {t('save')}
         </Button>
       }
     >
       <VStack gap={12}>
+        <LineWrapper>
+          <HorizontalLine />
+        </LineWrapper>
         <InputContainer>
-          <InputLabel>{t('priority')}</InputLabel>
+          <Text size={14} color="supporting">
+            {t('priority')}
+          </Text>
           <RadioInput
             options={feePriorities}
             value={typeof value.priority === 'number' ? null : value.priority}
@@ -86,7 +93,12 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
           />
         </InputContainer>
         <AmountTextInput
-          label={<InputLabel>{t('network_rate')} (sats/vbyte)</InputLabel>}
+          labelPosition="left"
+          label={
+            <Text size={14} color="supporting">
+              {t('network_rate')} (sats/vbyte)
+            </Text>
+          }
           value={
             value.priority
               ? adjustByteFee(Number(byteFee), { priority: value.priority })
@@ -100,3 +112,8 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     </Modal>
   )
 }
+
+const LineWrapper = styled.div`
+  margin-top: -5px;
+  margin-bottom: 14px;
+`
