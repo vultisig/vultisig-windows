@@ -1,14 +1,17 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  NextAnimationButton,
+  ProgressWrapper,
+  Wrapper,
+} from '../../shared/BackupOverviewSlides.styles'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
@@ -43,16 +46,16 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
         />
       </ProgressWrapper>
       <VStack justifyContent="space-between" flexGrow>
-          <RiveWrapper>
-            <AnimationComponent
-              style={{
-                flexGrow: 1,
-              }}
-            />
-          </RiveWrapper>
-          <DescriptionWrapper>
-            <AnimationDescription animation={currentAnimation} />
-          </DescriptionWrapper>
+        <RiveWrapper>
+          <AnimationComponent
+            style={{
+              flexGrow: 1,
+            }}
+          />
+        </RiveWrapper>
+        <DescriptionWrapper>
+          <AnimationDescription animation={currentAnimation} />
+        </DescriptionWrapper>
         <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
@@ -70,44 +73,3 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
     </Wrapper>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
-
-const ProgressWrapper = styled(VStack)`
-  padding: 16px;
-`
-
-const Wrapper = styled(PageContent)`
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
-
-const DescriptionWrapper = styled.div`
-  flex-shrink: 0;
-  max-width: 600px;
-  margin-inline: auto;
-`
-
-const BottomItemsWrapper = styled.div`
-  flex-shrink: 0;
-  padding: 16px 0;
-  display: flex;
-  justify-content: center;
-`
