@@ -24,7 +24,9 @@ export class PluginProvider {
     return PluginProvider.instance
   }
 
-  async request(data: Messaging.Plugin.Request) {
+  async request(
+    data: Messaging.Plugin.Request
+  ): Promise<Messaging.Plugin.Response> {
     const response = await messengers.background.send<
       any,
       Messaging.Plugin.Response

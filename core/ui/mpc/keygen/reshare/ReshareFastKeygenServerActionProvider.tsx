@@ -50,6 +50,7 @@ export const ReshareFastKeygenServerActionProvider = ({
     resharePrefix,
     sessionId,
     signers,
+    keygenType,
   ])
 
   return (

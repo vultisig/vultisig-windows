@@ -6,7 +6,7 @@ import { KeygenFlow } from '../flow/KeygenFlow'
 import { ReshareVerifyStep } from './verify/ReshareVerifyStep'
 
 type PluginParams = {
-  onJoinUrl: any
+  onJoinUrl: (joinUrl: string) => void
 }
 
 export const ReshareSecureVaultFlow = ({

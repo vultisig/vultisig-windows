@@ -1,3 +1,4 @@
+import { isServer } from '@core/mpc/devices/localPartyId'
 import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
@@ -13,9 +14,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MpcSession } from './MpcSession'
-import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentKeygenType } from '../keygen/state/currentKeygenType'
+import { MpcSession } from './MpcSession'
 
 export const StartMpcSessionStep = ({
   onBack,

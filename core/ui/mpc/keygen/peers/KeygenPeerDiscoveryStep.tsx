@@ -58,7 +58,8 @@ export const KeygenPeerDiscoveryStep = ({
   onFinish,
   onBack,
   onJoinUrl,
-}: KeygenPeerDiscoveryStepProps & Partial<{ onJoinUrl: any }>) => {
+}: KeygenPeerDiscoveryStepProps &
+  Partial<{ onJoinUrl: (joinUrl: string) => void }>) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
   const selectedPeers = useMpcPeers()
