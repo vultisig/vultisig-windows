@@ -5,7 +5,7 @@ import { injectToWindow } from './utils/windowInjector'
 const keepAlive = () => {
   setInterval(() => {
     messengers.background.send('ping', {})
-  }, 1000)
+  }, 10000)
 }
 
 if (shouldInjectProvider()) {
