@@ -7,7 +7,6 @@ export type MpcDevice =
   | 'android'
   | 'server'
   | 'extension'
-  | 'verifier'
 
 const mpcDeviceName: Record<MpcDevice, string> = {
   windows: 'Windows',
@@ -18,7 +17,6 @@ const mpcDeviceName: Record<MpcDevice, string> = {
   android: 'Android',
   server: 'Server',
   extension: 'Extension',
-  verifier: 'Verifier',
 }
 
 type DeviceType = 'phone' | 'tablet' | 'desktop' | 'server' | 'browser'
@@ -32,7 +30,6 @@ const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   android: 'phone',
   server: 'server',
   extension: 'browser',
-  verifier: 'server',
 }
 
 export const formatMpcDeviceName = (deviceName: string) => {
