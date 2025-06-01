@@ -29,7 +29,6 @@ export const useJoinKeygenUrlQuery = () => {
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
-
   const keygenType = useCurrentKeygenType()
 
   const vaultName = useKeygenVaultName()
@@ -49,6 +48,20 @@ export const useJoinKeygenUrlQuery = () => {
         )
 
         const useVultisigRelay = serverType === 'relay'
+
+        const handleReshare = () => {
+          const message = create(ReshareMessageSchema, {
+            sessionId,
+            serviceName,
+            encryptionKeyHex: hexEncryptionKey,
+            useVultisigRelay,
+            vaultName,
+            ...assertKeygenReshareFields(keygenVault),
+            libType,
+          })
+          return toBinary(ReshareMessageSchema, message)
+        }
+
         const binary = match(keygenType, {
           create: () => {
             const message = create(KeygenMessageSchema, {
@@ -62,18 +75,8 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(KeygenMessageSchema, message)
           },
-          reshare: () => {
-            const message = create(ReshareMessageSchema, {
-              sessionId,
-              serviceName,
-              encryptionKeyHex: hexEncryptionKey,
-              useVultisigRelay,
-              vaultName,
-              ...assertKeygenReshareFields(keygenVault),
-              libType,
-            })
-            return toBinary(ReshareMessageSchema, message)
-          },
+          reshare: handleReshare,
+          plugin: handleReshare,
           migrate: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
@@ -92,10 +95,12 @@ export const useJoinKeygenUrlQuery = () => {
           sevenZip,
           binary,
         })
-
+        const tssType = toTssType(
+          keygenType === 'plugin' ? 'reshare' : keygenType
+        )
         return addQueryParams(deepLinkBaseUrl, {
           type: 'NewVault',
-          tssType: toTssType(keygenType),
+          tssType: tssType,
           jsonData,
         })
       },

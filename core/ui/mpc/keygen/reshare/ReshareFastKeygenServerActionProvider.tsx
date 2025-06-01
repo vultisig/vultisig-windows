@@ -9,10 +9,12 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAction'
+import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 export const ReshareFastKeygenServerActionProvider = ({
   children,
 }: ChildrenProp) => {
+  const keygenType = useCurrentKeygenType()
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
 
@@ -35,6 +37,8 @@ export const ReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
+      lib_type: keygenType === 'plugin' ? 1 : undefined,
+      reshare_type: keygenType === 'plugin' ? 1 : undefined,
     })
   }, [
     email,

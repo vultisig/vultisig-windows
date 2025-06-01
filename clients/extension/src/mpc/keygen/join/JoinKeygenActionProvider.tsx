@@ -24,6 +24,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
           {children}
         </ReshareVaultKeygenActionProvider>
       )}
+      plugin={() => (
+        <ReshareVaultKeygenActionProvider>
+          {children}
+        </ReshareVaultKeygenActionProvider>
+      )}
     />
   )
 }

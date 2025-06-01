@@ -14,6 +14,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { MpcSession } from './MpcSession'
+import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
+import { useCurrentKeygenType } from '../keygen/state/currentKeygenType'
 
 export const StartMpcSessionStep = ({
   onBack,
@@ -24,10 +26,14 @@ export const StartMpcSessionStep = ({
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
-
+  const keygenType = useCurrentKeygenType()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      return startMpcSession({ serverUrl, sessionId, devices })
+      const filteredDevices =
+        keygenType === 'plugin'
+          ? devices.filter(device => !isServer(device))
+          : devices
+      return startMpcSession({ serverUrl, sessionId, devices: filteredDevices })
     },
     onSuccess: () => onFinish(),
   })

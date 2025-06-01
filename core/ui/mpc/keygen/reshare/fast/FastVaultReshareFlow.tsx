@@ -12,7 +12,6 @@ import { FastKeygenFlow } from '../../fast/FastKeygenFlow'
 const reshareVaultSteps = ['email', 'password', 'keygen'] as const
 
 export const FastVaultReshareFlow = () => {
-  /////
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: reshareVaultSteps,
     onExit: useNavigateBack(),
@@ -32,7 +31,6 @@ export const FastVaultReshareFlow = () => {
             <SetServerPasswordStep onFinish={toNextStep} />
           )
         }
-        // maybe add add plugin here
         keygen={() => <FastKeygenFlow onBack={toPreviousStep} />}
       />
     </>

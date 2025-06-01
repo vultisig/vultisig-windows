@@ -18,6 +18,7 @@ const serverActionProviders: Record<KeygenType, ComponentType<any>> = {
   create: CreateFastKeygenServerActionProvider,
   reshare: ReshareFastKeygenServerActionProvider,
   migrate: MigrateFastKeygenServerActionProvider,
+  plugin: ReshareFastKeygenServerActionProvider,
 }
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {

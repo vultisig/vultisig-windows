@@ -33,6 +33,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
     create: () => t('creating_vault'),
     reshare: () => t('reshare'),
     migrate: () => t('upgrade'),
+    plugin: () => t('reshare'),
   })
 
   return (
@@ -40,7 +41,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       value={keygenMutationState}
       success={vault => {
         const renderEnding = () => {
-          if (hasServer(vault.signers)) {
+          if (hasServer(vault.signers) || keygenType === 'plugin') {
             return <KeygenFlowEnding onBack={onBack} />
           }
 

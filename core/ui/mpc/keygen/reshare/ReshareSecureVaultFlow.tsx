@@ -6,24 +6,16 @@ import { KeygenFlow } from '../flow/KeygenFlow'
 import { ReshareVerifyStep } from './verify/ReshareVerifyStep'
 
 type PluginParams = {
-  isAddPlugin: boolean
   onJoinUrl: any
 }
 
-type ReshareSecureVaultFlowProps = {
-  pluginParams?: PluginParams
-}
-
 export const ReshareSecureVaultFlow = ({
-  pluginParams,
-}: Partial<ReshareSecureVaultFlowProps>) => {
+  onJoinUrl,
+}: Partial<PluginParams>) => {
   return (
     <StepTransition
       from={({ onFinish }) => (
-        <KeygenPeerDiscoveryStep
-          onFinish={onFinish}
-          onJoinUrl={pluginParams?.onJoinUrl}
-        />
+        <KeygenPeerDiscoveryStep onFinish={onFinish} onJoinUrl={onJoinUrl} />
       )}
       to={({ onBack }) => (
         <StepTransition
