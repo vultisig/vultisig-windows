@@ -647,7 +647,7 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        if (getChainKind(chain) === 'evm') {
+        if (getChainKind(chain) === 'evm' || getChainKind(chain) === 'cosmos') {
           resolve(
             String(parseInt(getChainId(chain as EvmChain | CosmosChain), 16))
           )
