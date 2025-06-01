@@ -37,7 +37,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
 
   return (
     <Wrapper>
-      <ProgressWrapper gap={16} alignItems="center">
+      <ProgressWrapper gap={16}>
         <Text size={18}>
           {t(
             animations.indexOf(currentAnimation) === 0

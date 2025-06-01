@@ -23,6 +23,7 @@ export const NextAnimationButton = styled(IconButton)`
 
 export const ProgressWrapper = styled(VStack)`
   padding: 16px;
+  align-items: center;
 `
 
 export const Wrapper = styled(PageContent)`
