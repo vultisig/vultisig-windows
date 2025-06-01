@@ -3,8 +3,7 @@ import { VaultExport } from '@clients/extension/src/utils/interfaces'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -63,11 +62,7 @@ export const GetVaultsPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <IconButton
-            icon={<CrossIcon fontSize={20} />}
-            onClick={handleClose}
-            size="m"
-          />
+          <Button icon={<CrossIcon />} onClick={handleClose} />
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -102,12 +97,10 @@ export const GetVaultsPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          onClick={handleSubmit}
           disabled={!vaultIds.length}
-          kind="primary"
-        >
-          {t('connect')}
-        </Button>
+          label={t('connect')}
+          onClick={handleSubmit}
+        />
       </PageFooter>
     </VStack>
   ) : (

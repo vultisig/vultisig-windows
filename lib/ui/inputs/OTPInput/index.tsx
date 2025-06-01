@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
@@ -50,7 +50,7 @@ export const OTPInput = ({
         />
       ))}
       {includePasteButton && (
-        <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
+        <PasteButton label="Paste" onClick={() => handlePaste()} />
       )}
     </HStack>
   )

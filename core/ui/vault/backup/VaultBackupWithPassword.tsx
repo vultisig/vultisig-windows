@@ -1,7 +1,6 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/buttons/Button'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
@@ -41,7 +40,7 @@ const InputField = styled.input`
   }
 `
 
-const IconButton = styled(UnstyledButton)`
+const IconButton = styled(Button)`
   position: absolute;
   right: 12px;
   top: 50%;
@@ -136,10 +135,10 @@ export const VaultBackupWithPassword = ({
                 />
 
                 <IconButton
+                  icon={<EyeIcon fontSize={20} />}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  <EyeIcon />
-                </IconButton>
+                  unstyled
+                />
               </InputFieldWrapper>
               {errors.password?.message && (
                 <Text size={12} color="danger">
@@ -159,12 +158,12 @@ export const VaultBackupWithPassword = ({
                 />
 
                 <IconButton
+                  icon={<EyeIcon fontSize={20} />}
                   onClick={() =>
                     setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
                   }
-                >
-                  <EyeIcon />
-                </IconButton>
+                  unstyled
+                />
               </InputFieldWrapper>
               {errors.verifiedPassword && (
                 <Text size={12} color="danger">
@@ -176,20 +175,20 @@ export const VaultBackupWithPassword = ({
             </div>
           </VStack>
           <ActionsWrapper gap={16}>
-            <InfoPill kind="outlined">
-              <InfoGradientIcon />{' '}
-              <Text as="span" color="contrast" size={13}>
-                {t('vault_backup_page_password_info')}
-              </Text>
-            </InfoPill>
+            <InfoPill
+              icon={<InfoGradientIcon />}
+              label={t('vault_backup_page_password_info')}
+              type="secondary"
+            />
             <Button
-              isDisabled={!isValid || !isDirty || isPending}
-              type="submit"
-            >
-              {isPending
-                ? t('vault_backup_page_submit_loading_button_text')
-                : t('save')}
-            </Button>
+              disabled={!isValid || !isDirty || isPending}
+              htmlType="submit"
+              label={
+                isPending
+                  ? t('vault_backup_page_submit_loading_button_text')
+                  : t('save')
+              }
+            />
             {error && (
               <Text size={12} color="danger">
                 {error?.message}

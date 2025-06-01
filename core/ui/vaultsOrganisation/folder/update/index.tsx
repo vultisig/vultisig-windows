@@ -10,7 +10,7 @@ import { DeleteVaultFolder } from '@core/ui/vaultsOrganisation/folder/delete'
 import { useAddVaultToFolderMutation } from '@core/ui/vaultsOrganisation/folder/mutations/useAddVaultToFolderMutation'
 import { useRemoveVaultFromFolderMutation } from '@core/ui/vaultsOrganisation/folder/mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
@@ -186,9 +186,12 @@ export const UpdateVaultFolderPage = () => {
         <AddVaultsToFolder />
       </PageContent>
       <PageFooter>
-        <Button isDisabled={isDisabled} isLoading={isPending} type="submit">
-          {t('save_changes')}
-        </Button>
+        <Button
+          disabled={!!isDisabled}
+          label={t('save_changes')}
+          loading={isPending}
+          htmlType="submit"
+        />
       </PageFooter>
     </VStack>
   )

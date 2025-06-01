@@ -11,7 +11,7 @@ import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/button'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { LinkIcon } from '@lib/ui/icons/LinkIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -101,12 +101,10 @@ export const KeysignTxOverview = ({
           <Text weight="600" size={20} color="contrast">
             {t('transaction')}
           </Text>
-          <IconButton icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
-          <IconButton
-            onClick={() => {
-              openUrl(blockExplorerUrl)
-            }}
+          <Button icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
+          <Button
             icon={<LinkIcon />}
+            onClick={() => openUrl(blockExplorerUrl)}
           />
         </HStack>
         <Text family="mono" color="primary" size={14} weight="400">

@@ -10,8 +10,7 @@ import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Animation } from '@lib/ui/animations/Animation'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -184,10 +183,10 @@ export const SwapKeysignTxOverview = ({
                 >
                   {hash}
                 </Text>
-                <IconButton
-                  size="s"
-                  onClick={() => trackTransaction(hash)}
+                <Button
                   icon={<SquareArrowOutUpRightIcon />}
+                  onClick={() => trackTransaction(hash)}
+                  size="sm"
                 />
               </HStack>
             </HStack>
@@ -266,26 +265,16 @@ export const SwapKeysignTxOverview = ({
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth justifyContent="space-between">
           <Button
+            label={t('track')}
             onClick={() => trackTransaction(txHash)}
-            style={{
-              flex: 1,
-            }}
-            kind="secondary"
-          >
-            {t('track')}
-          </Button>
+            style={{ flex: 1 }}
+            type="secondary"
+          />
           <StyledButton
-            onClick={() =>
-              navigate(
-                { id: 'vault' },
-                {
-                  replace: true,
-                }
-              )
-            }
-          >
-            {t('done')}
-          </StyledButton>
+            label={t('done')}
+            onClick={() => navigate({ id: 'vault' }, { replace: true })}
+            weight={600}
+          />
         </HStack>
       </VStack>
     </Wrapper>
@@ -295,7 +284,6 @@ export const SwapKeysignTxOverview = ({
 const StyledButton = styled(Button)`
   background-color: hsl(224, 75%, 50%);
   color: ${getColor('contrast')};
-  font-weight: 600;
   flex: 1;
 
   &:hover {

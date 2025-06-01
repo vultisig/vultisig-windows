@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { ErrorBoundaryFallbackProps } from '@lib/ui/errors/ErrorBoundary'
@@ -66,21 +66,17 @@ export const RootErrorFallback = ({
         </VStack>
         <UniformColumnGrid gap={20}>
           <Button
-            onClick={() => {
-              openUrl(reportErrorUrl)
-            }}
-            kind="outlined"
-          >
-            {t('report_error')}
-          </Button>
+            label={t('report_error')}
+            onClick={() => openUrl(reportErrorUrl)}
+            type="secondary"
+          />
           <Button
+            label={t('try_again')}
             onClick={() => {
               navigate({ id: 'vault' })
               clearError()
             }}
-          >
-            {t('try_again')}
-          </Button>
+          />
         </UniformColumnGrid>
       </PageContent>
     </VStack>

@@ -5,7 +5,7 @@ import {
   useAddressBookItems,
   useUpdateAddressBookItemMutation,
 } from '@core/ui/storage/addressBook'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
@@ -110,9 +110,10 @@ export const AddressBookPage = () => {
       </PageContent>
       {!isEditMode && (
         <PageFooter>
-          <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
-            {t('add_address')}
-          </Button>
+          <Button
+            label={t('add_address')}
+            onClick={() => navigate({ id: 'createAddressBookItem' })}
+          />
         </PageFooter>
       )}
     </VStack>
@@ -130,9 +131,10 @@ export const AddressBookPage = () => {
         </Text>
       </PageContent>
       <PageFooter>
-        <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
-          {t('add_address')}
-        </Button>
+        <Button
+          label={t('add_address')}
+          onClick={() => navigate({ id: 'createAddressBookItem' })}
+        />
       </PageFooter>
     </VStack>
   )

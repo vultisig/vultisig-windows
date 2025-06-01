@@ -1,6 +1,11 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { CustomToken } from '@core/ui/chain/coin/addCustomToken/CustomToken'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useCore } from '@core/ui/state/core'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/button'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -14,11 +19,6 @@ import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useCore } from '../../../state/core'
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider'
-import { CustomToken } from './CustomToken'
 
 export const AddCustomTokenPage = () => {
   const { t } = useTranslation()
@@ -47,14 +47,12 @@ export const AddCustomTokenPage = () => {
               />
             )}
             action={
-              <IconButton
+              <Button
                 icon={<PasteIcon />}
                 onClick={async () => {
                   const { data } = await attempt(getClipboardText)
 
-                  if (data) {
-                    setValue(data)
-                  }
+                  if (data) setValue(data)
                 }}
               />
             }

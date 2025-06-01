@@ -1,6 +1,6 @@
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { JoinKeysignTxOverview } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxOverview'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -24,7 +24,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
             <JoinKeysignTxOverview />
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <Button onClick={onFinish}>{t('join_keysign')}</Button>
+        <Button label={t('join_keysign')} onClick={onFinish} />
       </PageContent>
     </>
   )

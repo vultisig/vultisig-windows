@@ -2,7 +2,7 @@ import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultM
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -76,12 +76,11 @@ export const VaultRenamePage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={!isValid || !isDirty}
-          isLoading={updateVaultMutation.isPending}
-          type="submit"
-        >
-          {t('save')}
-        </Button>
+          disabled={!isValid || !isDirty}
+          label={t('save')}
+          loading={updateVaultMutation.isPending}
+          htmlType="submit"
+        />
       </PageFooter>
     </VStack>
   )

@@ -9,9 +9,7 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { Button } from '@lib/ui/button'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
@@ -49,7 +47,6 @@ const ConnectedApp = styled(Button)`
   border-radius: 50%;
   color: ${getColor('textExtraLight')};
   position: initial;
-  ${horizontalPadding(8)};
 
   &:hover {
     color: ${getColor('textPrimary')};
@@ -70,26 +67,27 @@ export const VaultPage = () => {
       <PageHeader
         primaryControls={
           <ConnectedApp
+            icon={
+              <>
+                <WorldIcon fontSize={20} />
+                <ConnectedAppStatus
+                  connected={Object.values(sessions).length > 0}
+                />
+              </>
+            }
             onClick={() => navigate({ id: 'connectedDapps' })}
-            size="l"
-          >
-            <WorldIcon fontSize={20} />
-            <ConnectedAppStatus
-              connected={Object.values(sessions).length > 0}
-            />
-          </ConnectedApp>
+            size="lg"
+          />
         }
         secondaryControls={
           <>
-            <IconButton
-              icon={<CameraIcon fontSize={20} />}
+            <Button
+              icon={<CameraIcon />}
               onClick={() => navigate({ id: 'uploadQr', state: {} })}
-              size="m"
             />
-            <IconButton
-              icon={<SettingsIcon fontSize={20} />}
+            <Button
+              icon={<SettingsIcon />}
               onClick={() => navigate({ id: 'settings' })}
-              size="m"
             />
           </>
         }
@@ -179,11 +177,9 @@ export const VaultPage = () => {
       <PageFooter>
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
+          label={t('manage_chains')}
           onClick={() => navigate({ id: 'manageVaultChains' })}
-          kind="primary"
-        >
-          {t('manage_chains')}
-        </Button>
+        />
       </PageFooter>
     </VStack>
   )

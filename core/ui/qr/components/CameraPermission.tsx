@@ -1,6 +1,6 @@
 import { cameraPermissionQueryKey } from '@core/ui/qr/hooks/useCameraPermissionQuery'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -31,13 +31,16 @@ export const CameraPermission = () => {
       <VStack alignItems="center" gap={12}>
         <Text centerHorizontally>{t('provide_camera_permission')}</Text>
         {client === 'extension' && innerWidth <= 400 ? (
-          <Button onClick={() => openUrl(location.href)}>
-            {t('try_in_expanded_mode')}
-          </Button>
+          <Button
+            label={t('try_in_expanded_mode')}
+            onClick={() => openUrl(location.href)}
+          />
         ) : (
-          <Button onClick={() => mutate()} isLoading={isPending}>
-            {error ? t('try_again') : t('grant_camera_permission')}
-          </Button>
+          <Button
+            label={error ? t('try_again') : t('grant_camera_permission')}
+            loading={isPending}
+            onClick={() => mutate()}
+          />
         )}
         {error && (
           <Text color="danger" centerHorizontally>

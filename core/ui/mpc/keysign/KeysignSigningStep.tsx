@@ -11,7 +11,7 @@ import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignT
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -83,14 +83,13 @@ export const KeysignSigningStep = ({
                             />
                           </TxOverviewPanel>
                           <Button
+                            label={t('complete')}
                             onClick={() =>
                               isDAppSigning
                                 ? onFinish(txResult)
                                 : navigate({ id: 'vault' })
                             }
-                          >
-                            {t('complete')}
-                          </Button>
+                          />
                         </>
                       )}
                     />
@@ -105,9 +104,10 @@ export const KeysignSigningStep = ({
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                       {isDAppSigning && (
-                        <Button onClick={() => onFinish(txResult)}>
-                          {t('complete')}
-                        </Button>
+                        <Button
+                          label={t('complete')}
+                          onClick={() => onFinish(txResult)}
+                        />
                       )}
                     </>
                   ),

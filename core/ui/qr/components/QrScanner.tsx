@@ -4,7 +4,7 @@ import {
   VideoWrapper,
 } from '@core/ui/qr/components/styles'
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { Image } from '@lib/ui/image/Image'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
@@ -120,13 +120,12 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
           message={extractErrorMsg(error)}
           action={
             <Button
+              label={t('try_again')}
               onClick={() => {
                 resetStreamState()
                 getStream()
               }}
-            >
-              {t('try_again')}
-            </Button>
+            />
           }
         />
       )}

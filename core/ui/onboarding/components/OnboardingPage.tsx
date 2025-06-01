@@ -1,6 +1,6 @@
 import { ProductEnhancedLogo } from '@core/ui/product/logo/ProductEnhancedLogo'
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
@@ -95,19 +95,18 @@ export const OnboardingPage = () => {
           <MultistepProgressIndicator value={stepIndex} steps={steps.length} />
           <VStack fullWidth gap={12}>
             <Button
-              onClick={() => {
-                if (isLastScreen) {
-                  completeOnboarding()
-                } else {
-                  setStepIndex(prev => prev + 1)
-                }
-              }}
-            >
-              {t('next')}
-            </Button>
-            <Button kind="ghost" onClick={completeOnboarding}>
-              {t('skip')}
-            </Button>
+              label={t('next')}
+              onClick={() =>
+                isLastScreen
+                  ? completeOnboarding()
+                  : setStepIndex(prev => prev + 1)
+              }
+            />
+            <Button
+              label={t('skip')}
+              onClick={completeOnboarding}
+              type="default"
+            />
           </VStack>
         </VStack>
       </Container>

@@ -4,7 +4,7 @@ import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { ValueProp } from '@lib/ui/props'
@@ -45,7 +45,7 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
       <FlowErrorPageContent
         title={t('failed_to_save_vault')}
         message={error}
-        action={<Button onClick={navigateBack}>{t('back')}</Button>}
+        action={<Button label={t('back')} onClick={navigateBack} />}
       />
     )
   }

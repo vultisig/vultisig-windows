@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -86,9 +85,11 @@ export const ServerPasswordHintStep = ({
                 />
               )}
               action={
-                <UnstyledButton onClick={() => setValue('passwordHint', '')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
+                <Button
+                  icon={<CircleCrossIcon />}
+                  onClick={() => setValue('passwordHint', '')}
+                  unstyled
+                />
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,
@@ -104,15 +105,15 @@ export const ServerPasswordHintStep = ({
         </VStack>
         <ButtonsWrapper fullWidth gap={8}>
           <StyledButton
-            type="button"
-            kind="secondary"
+            label={t('skip')}
             onClick={() => onFinish()}
-          >
-            {t('skip')}
-          </StyledButton>
-          <StyledButton type="submit" isDisabled={!!errors.passwordHint}>
-            {t('next')}
-          </StyledButton>
+            type="secondary"
+          />
+          <StyledButton
+            disabled={!!errors.passwordHint}
+            htmlType="submit"
+            label={t('next')}
+          />
         </ButtonsWrapper>
       </PageContent>
     </>

@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
@@ -21,7 +21,7 @@ export const FailedQueryOverlay: React.FC<FailedQueryOverlayProps> = ({
       <QueryOverlayContent>
         <VStack alignItems="center" gap={8}>
           {title}
-          <Button onClick={onClose}>{closeText}</Button>
+          <Button label={closeText} onClick={onClose} />
         </VStack>
       </QueryOverlayContent>
     </Backdrop>

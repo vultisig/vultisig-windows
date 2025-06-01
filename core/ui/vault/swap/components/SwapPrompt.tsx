@@ -1,9 +1,8 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { Button } from '@lib/ui/buttons/Button'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { Button } from '@lib/ui/button'
 import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
-
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const SwapPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
@@ -11,11 +10,10 @@ export const SwapPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
+      label={t('swap')}
       onClick={() => navigate({ id: 'swap', state: { coin: value } })}
-      kind="outlined"
       style={{ textTransform: 'uppercase' }}
-    >
-      {t('swap')}
-    </Button>
+      type="secondary"
+    />
   )
 }

@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'
@@ -36,14 +36,13 @@ export const ToggleSwitch = <T extends string | number>({
     <Wrapper>
       {options.map(({ value, disabled, icon, label }) => (
         <ToggleButton
-          key={value}
           active={active === value}
-          onClick={() => handleClick(value)}
           disabled={disabled}
-        >
-          {icon}
-          {label}
-        </ToggleButton>
+          icon={icon}
+          key={value}
+          label={label}
+          onClick={() => handleClick(value)}
+        />
       ))}
     </Wrapper>
   )
@@ -69,7 +68,5 @@ const ToggleButton = styled(Button)<{
       active ? getColor('background') : 'transparent'};
   }
 
-  ${hStack({
-    gap: 4,
-  })};
+  ${hStack({ gap: 4 })};
 `

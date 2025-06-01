@@ -1,5 +1,5 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
@@ -58,19 +58,16 @@ export const VaultBackupWithoutPassword = ({
           </VStack>
           <VStack gap={12}>
             <Button
-              isLoading={isPending}
-              kind="primary"
+              label={t('backup_without_password')}
+              loading={isPending}
               onClick={() => backupVault({})}
-            >
-              {t('backup_without_password')}
-            </Button>
+            />
             <Button
-              isDisabled={isPending}
-              kind="secondary"
+              disabled={isPending}
+              label={t('use_password')}
               onClick={onPasswordRequest}
-            >
-              {t('use_password')}
-            </Button>
+              type="secondary"
+            />
           </VStack>
         </VStack>
       </FitPageContent>

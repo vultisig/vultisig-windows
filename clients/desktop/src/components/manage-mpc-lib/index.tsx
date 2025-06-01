@@ -1,5 +1,5 @@
 import { useVaultCreationMpcLib } from '@clients/desktop/src/mpc/state/vaultCreationMpcLib'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/button'
 import { Switch } from '@lib/ui/inputs/switch'
 import { Modal } from '@lib/ui/modal'
 import { useRef, useState } from 'react'
@@ -24,9 +24,11 @@ export const ManageMpcLib = () => {
 
   return (
     <>
-      <UnstyledButton onClick={handleClick}>
-        (BUILD {__APP_BUILD__})
-      </UnstyledButton>
+      <Button
+        label={`(BUILD ${__APP_BUILD__})`}
+        onClick={handleClick}
+        unstyled
+      />
 
       {visible && (
         <Modal

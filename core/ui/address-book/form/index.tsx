@@ -7,8 +7,8 @@ import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { Button } from '@lib/ui/button'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
@@ -168,9 +168,9 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             )}
             action={
               <HStack gap={8}>
-                <IconButton icon={<PasteIcon />} onClick={handlePaste} />
-                <IconButton
-                  icon={<CameraIcon fontSize={20} />}
+                <Button icon={<PasteIcon />} onClick={handlePaste} />
+                <Button
+                  icon={<CameraIcon />}
                   onClick={() => setShowScanner(true)}
                 />
               </HStack>
@@ -194,12 +194,11 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={!isValid || !isDirty}
-          isLoading={isLoading || isPending}
-          type="submit"
-        >
-          {t('save')}
-        </Button>
+          disabled={!isValid || !isDirty}
+          htmlType="submit"
+          label={t('save')}
+          loading={isLoading || isPending}
+        />
       </PageFooter>
       {showScanner && (
         <Modal

@@ -5,7 +5,7 @@ import { useDeleteVaultMutation } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { Divider } from '@lib/ui/divider'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
@@ -123,13 +123,12 @@ export const DeleteVaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={isDisabled}
-          isLoading={isPending}
-          kind="alert"
+          disabled={isDisabled}
+          label={t('delete')}
+          loading={isPending}
           onClick={handleConfirm}
-        >
-          {t('delete')}
-        </Button>
+          status="danger"
+        />
       </PageFooter>
     </VStack>
   )

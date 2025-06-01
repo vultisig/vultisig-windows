@@ -9,7 +9,7 @@ import {
 } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -215,9 +215,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             </VStack>
           )}
         </WithProgressIndicator>
-        <Button type="submit" isDisabled={!isValid}>
-          {t('continue')}
-        </Button>
+        <Button disabled={!isValid} htmlType="submit" label={t('continue')} />
       </PageContent>
     </DepositFormHandlersProvider>
   )

@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -35,24 +35,21 @@ export const ReshareVaultPage = () => {
       <PageFooter gap={16}>
         <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
         <Button
-          kind="primary"
+          label={t('start_reshare')}
           onClick={() =>
             match(securityType, {
               fast: () => navigate({ id: 'reshareVaultFast' }),
               secure: () => navigate({ id: 'reshareVaultSecure' }),
             })
           }
-        >
-          {t('start_reshare')}
-        </Button>
+        />
         <Button
-          kind="outlined"
+          label={t('join_reshare')}
           onClick={() =>
             navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
           }
-        >
-          {t('join_reshare')}
-        </Button>
+          type="secondary"
+        />
       </PageFooter>
     </VStack>
   )

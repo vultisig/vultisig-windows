@@ -1,6 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
@@ -177,9 +177,11 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
           </HStack>
-          <Button isDisabled={!isAgreed} onClick={onFinish}>
-            {t('fastVaultSetup.summary.start_using_vault')}
-          </Button>
+          <Button
+            disabled={!isAgreed}
+            label={t('fastVaultSetup.summary.start_using_vault')}
+            onClick={onFinish}
+          />
         </VStack>
       </Wrapper>
     </AnimatedVisibility>

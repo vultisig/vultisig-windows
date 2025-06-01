@@ -1,9 +1,8 @@
 import { useEmail } from '@core/ui/state/email'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -84,9 +83,11 @@ export const ServerEmailStep = ({
                 />
               )}
               action={
-                <UnstyledButton onClick={() => setValue('email', '')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
+                <Button
+                  icon={<CircleCrossIcon />}
+                  onClick={() => setValue('email', '')}
+                  unstyled
+                />
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,
@@ -102,9 +103,11 @@ export const ServerEmailStep = ({
           </VStack>
         </VStack>
         <VStack gap={20}>
-          <Button type="submit" isDisabled={!!errors.email}>
-            {t('next')}
-          </Button>
+          <Button
+            disabled={!!errors.email}
+            htmlType="submit"
+            label={t('next')}
+          />
         </VStack>
       </PageContent>
     </>

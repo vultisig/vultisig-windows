@@ -2,8 +2,7 @@ import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useCore } from '@core/ui/state/core'
 import { ShareVaultCard } from '@core/ui/vault/share/ShareVaultCard'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/button'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -16,7 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const StyledButton = styled(UnstyledButton)`
+const StyledButton = styled(Button)`
   background-color: ${getColor('foreground')};
   border-radius: 8px;
   color: ${getColor('primary')};
@@ -73,10 +72,10 @@ export const AirdropRegisterPage = () => {
           <Text color="contrast" size={18} weight={500}>
             {t('vault_register_for_airdrop_list_item_2_part_1')}{' '}
             <StyledButton
+              label={t('vault_register_for_airdrop_list_item_2_part_2')}
               onClick={() => openUrl('https://airdrop.vultisig.com')}
-            >
-              {t('vault_register_for_airdrop_list_item_2_part_2')}
-            </StyledButton>
+              unstyled
+            />
           </Text>
           <Text color="contrast" size={18} weight={500}>
             {t('vault_register_for_airdrop_list_item_3')}
@@ -90,9 +89,10 @@ export const AirdropRegisterPage = () => {
         <SaveAsImage
           fileName={vault.name}
           renderTrigger={({ onClick }) => (
-            <Button kind="primary" onClick={onClick}>
-              {t('vault_register_for_airdrop_save_vault_QR_button')}
-            </Button>
+            <Button
+              label={t('vault_register_for_airdrop_save_vault_QR_button')}
+              onClick={onClick}
+            />
           )}
           value={<ShareVaultCard />}
         />

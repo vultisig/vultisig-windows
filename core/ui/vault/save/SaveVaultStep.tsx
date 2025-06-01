@@ -1,6 +1,6 @@
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
@@ -34,7 +34,7 @@ export const SaveVaultStep: React.FC<
           <FlowErrorPageContent
             title={t('failed_to_save_vault')}
             message={extractErrorMsg(error)}
-            action={<Button onClick={onBack}>{t('back')}</Button>}
+            action={<Button label={t('back')} onClick={onBack} />}
           />
         )}
       />

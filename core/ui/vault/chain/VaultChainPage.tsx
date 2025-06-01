@@ -23,8 +23,7 @@ import {
   useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/button'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -113,17 +112,17 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <IconButton
+                <Button
+                  icon={<CopyIcon />}
                   onClick={() => copyAddress(address)}
                   title="Copy address"
-                  icon={<CopyIcon />}
                 />
-                <IconButton
-                  title="Address QR code"
+                <Button
                   icon={<QrCodeIcon />}
                   onClick={() =>
                     navigate({ id: 'address', state: { address } })
                   }
+                  title="Address QR code"
                 />
                 <VaultAddressLink value={address} />
               </HStack>
@@ -180,7 +179,8 @@ export const VaultChainPage = () => {
               ).map(adjustVaultChainCoinsLogos)
 
               return orderedCoins.map(coin => (
-                <UnstyledButton
+                <Button
+                  icon={<VaultChainCoinItem value={coin} />}
                   key={coin.id}
                   onClick={() =>
                     navigate({
@@ -188,9 +188,8 @@ export const VaultChainPage = () => {
                       state: { coin },
                     })
                   }
-                >
-                  <VaultChainCoinItem value={coin} />
-                </UnstyledButton>
+                  unstyled
+                />
               ))
             }}
           />

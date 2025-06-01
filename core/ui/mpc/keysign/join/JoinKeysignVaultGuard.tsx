@@ -1,15 +1,14 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
-
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
   const [{ vaultId, keysignMsg }] = useCoreViewState<'joinKeysign'>()
@@ -28,9 +27,10 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('wrong_vault_try_again')}
         action={
-          <Button onClick={() => navigate({ id: 'vaults' })}>
-            {t('change_vault')}
-          </Button>
+          <Button
+            label={t('change_vault')}
+            onClick={() => navigate({ id: 'vaults' })}
+          />
         }
       />
     )
@@ -43,7 +43,7 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('vault_type_does_not_match')}
         action={
-          <Button onClick={() => navigate({ id: 'vault' })}>{t('back')}</Button>
+          <Button label={t('back')} onClick={() => navigate({ id: 'vault' })} />
         }
       />
     )

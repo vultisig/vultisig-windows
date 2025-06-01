@@ -2,11 +2,9 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteVaultFolderMutation } from '@core/ui/storage/vaultFolders'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/buttons/Button'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/button'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -26,9 +24,12 @@ export const DeleteVaultFolder = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <UnstyledButton onClick={onOpen}>
-          {isPending ? <Spinner /> : <StyledIcon fontSize={20} />}
-        </UnstyledButton>
+        <Button
+          icon={<StyledIcon fontSize={20} />}
+          loading={isPending}
+          onClick={onOpen}
+          unstyled
+        />
       )}
       renderContent={({ onClose }) => (
         <Modal isOpen={true} onClose={onClose} title={t('delete_folder')}>
@@ -38,7 +39,9 @@ export const DeleteVaultFolder = () => {
             </Text>
             <VStack gap={8}>
               <Button
-                onClick={() => {
+                label={t('delete')}
+                loading={isPending}
+                onClick={() =>
                   mutate(id, {
                     onSuccess: () => {
                       onClose()
@@ -46,15 +49,9 @@ export const DeleteVaultFolder = () => {
                     },
                     onError: error => console.error(error),
                   })
-                }}
-                isLoading={isPending}
-                kind="primary"
-              >
-                {t('delete')}
-              </Button>
-              <Button onClick={onClose} kind="secondary">
-                {t('cancel')}
-              </Button>
+                }
+              />
+              <Button label={t('cancel')} onClick={onClose} type="secondary" />
             </VStack>
           </VStack>
         </Modal>

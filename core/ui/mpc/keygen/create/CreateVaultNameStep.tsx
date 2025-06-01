@@ -2,9 +2,8 @@ import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { useVaultNames } from '@core/ui/storage/vaults'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -75,9 +74,11 @@ export const CreateVaultNameStep = ({
                 />
               )}
               action={
-                <UnstyledButton onClick={() => setName('')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
+                <Button
+                  icon={<CircleCrossIcon />}
+                  onClick={() => setName('')}
+                  unstyled
+                />
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,
@@ -86,9 +87,7 @@ export const CreateVaultNameStep = ({
             />
           </VStack>
         </VStack>
-        <Button type="submit" isDisabled={isDisabled}>
-          {t('next')}
-        </Button>
+        <Button disabled={!!isDisabled} htmlType="submit" label={t('next')} />
       </PageContent>
     </>
   )

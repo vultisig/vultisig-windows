@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -47,9 +47,7 @@ export const DecryptVaultView = ({
           />
         </VStack>
         <VStack gap={20}>
-          <Button isLoading={isPending} type="submit">
-            {t('continue')}
-          </Button>
+          <Button htmlType="submit" label={t('continue')} loading={isPending} />
           {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>

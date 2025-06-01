@@ -2,7 +2,7 @@ import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -62,9 +62,7 @@ export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('password_to_decrypt')}</InfoBlock>
-          <Button isLoading={isPending} type="submit">
-            {t('continue')}
-          </Button>
+          <Button htmlType="submit" label={t('continue')} loading={isPending} />
           {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>

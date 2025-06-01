@@ -1,5 +1,5 @@
+import { Button } from '@lib/ui/button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -53,11 +53,14 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             <ChevronLeftIcon fontSize={14} />
             <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
-          <UnstyledButton onClick={onCompleteSteps}>
-            <Text color="shy" size={isSmall ? 14 : 18}>
-              {t('skip')}
-            </Text>
-          </UnstyledButton>
+          <Button
+            label={
+              <Text color="shy" size={isSmall ? 14 : 18}>
+                {t('skip')}
+              </Text>
+            }
+            onClick={onCompleteSteps}
+          />
         </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted

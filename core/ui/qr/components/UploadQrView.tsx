@@ -1,5 +1,5 @@
 import { useProcessQrMutation } from '@core/ui/qr/hooks/useProcessQrMutation'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { QrImageDropZone } from '@lib/ui/qr/upload/QrImageDropZone'
@@ -29,14 +29,13 @@ export const UploadQrView = () => {
       </PageContent>
       <PageFooter>
         <Button
-          isLoading={isPending}
+          disabled={!file}
+          label={t('continue')}
+          loading={isPending}
           onClick={() => {
             if (file) mutate(file)
           }}
-          isDisabled={!file}
-        >
-          {t('continue')}
-        </Button>
+        />
       </PageFooter>
     </>
   )

@@ -1,5 +1,5 @@
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { LayersIcon } from '@lib/ui/icons/LayersIcon'
@@ -91,11 +91,10 @@ export const OnboardingSummary = () => {
             </Text>
           </HStack>
           <Button
-            isDisabled={!isChecked}
+            disabled={!isChecked}
+            label={t('fastVaultSetup.summary.ctaText')}
             onClick={() => setHasFinishedOnboarding(true)}
-          >
-            {t('fastVaultSetup.summary.ctaText')}
-          </Button>
+          />
         </VStack>
       </Wrapper>
     </AnimatedVisibility>

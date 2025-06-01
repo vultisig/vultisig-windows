@@ -7,7 +7,7 @@ import { useVaultFolders } from '@core/ui/storage/vaultFolders'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -97,9 +97,10 @@ export const VaultsPage = () => {
         ) : null}
       </PageContent>
       <PageFooter>
-        <Button onClick={() => navigate({ id: 'newVault' })}>
-          {t('add_new_vault')}
-        </Button>
+        <Button
+          label={t('add_new_vault')}
+          onClick={() => navigate({ id: 'newVault' })}
+        />
       </PageFooter>
     </VStack>
   )

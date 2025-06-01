@@ -1,5 +1,5 @@
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -67,9 +67,12 @@ export const SetPasscode = () => {
               onChange={setConfirmPasscode}
               label={t('confirm_passcode')}
             />
-            <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
-              {t('set_passcode')}
-            </Button>
+            <Button
+              disabled={!!isDisabled}
+              htmlType="submit"
+              label={t('set_passcode')}
+              loading={isPending}
+            />
           </>
         )}
       />

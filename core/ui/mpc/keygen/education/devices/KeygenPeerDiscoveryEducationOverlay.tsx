@@ -1,5 +1,5 @@
 import { Animation } from '@lib/ui/animations/Animation'
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
@@ -33,7 +33,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
               {t('downloadVultisig')}
             </Text>
           </VStack>
-          <Button onClick={onFinish}>{t('next')}</Button>
+          <Button label={t('next')} onClick={onFinish} />
         </OverlayContentWrapper>
       </OverlayContent>
     </OverlayWrapper>
