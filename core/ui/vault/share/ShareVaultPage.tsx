@@ -9,9 +9,15 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { getColor } from '@lib/ui/theme/getters'
 import { toPng } from 'html-to-image'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+const StyledIcon = styled(ShareIcon)`
+  color: ${getColor('backgroundPrimary')};
+`
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation()
@@ -60,7 +66,8 @@ export const ShareVaultPage = () => {
         <VStack gap={8} fullWidth>
           <Button onClick={shareQrImage} kind="primary">
             <HStack gap={4} alignItems="center">
-              <ShareIcon stroke="#02132B" /> <span>{t('vault_qr_share')}</span>
+              <StyledIcon />
+              <span>{t('vault_qr_share')}</span>
             </HStack>
           </Button>
 

@@ -9,7 +9,7 @@ import { sameDimensions } from '../css/sameDimensions'
 import { toSizeUnit } from '../css/toSizeUnit'
 import { UnstyledButton } from './UnstyledButton'
 
-export type IconButtonSize = 's' | 'm' | 'l'
+type IconButtonSize = 's' | 'm' | 'l'
 
 type IconButtonKind = 'regular'
 

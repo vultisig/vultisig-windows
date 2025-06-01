@@ -19,17 +19,18 @@ interface CheckboxProps extends InvisibleHTMLCheckboxProps {
 }
 
 const Box = styled.div<{ isChecked: boolean }>`
-  ${sameDimensions(24)}
+  ${sameDimensions(20)}
   ${centerContent};
   border-radius: 100%;
   color: ${getColor('success')};
   background: ${getColor('foregroundExtra')};
   font-size: 16px;
+  padding: 2px;
 
   ${({ isChecked }) =>
     isChecked
       ? css`
-          border: 1px solid ${getColor('success')};
+          border: 1px solid ${getColor('foregroundExtra')};
         `
       : css`
           &:hover {
