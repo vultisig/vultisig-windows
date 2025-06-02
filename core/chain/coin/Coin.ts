@@ -16,6 +16,13 @@ export type Coin = CoinKey & {
   logo?: string
 }
 
+export const coinMetadataFields: (keyof Coin)[] = [
+  'priceProviderId',
+  'decimals',
+  'ticker',
+  'logo',
+]
+
 export type CoinAmount = {
   decimals: number
   amount: bigint
