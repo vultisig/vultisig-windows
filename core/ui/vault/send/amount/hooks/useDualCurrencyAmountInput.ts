@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useSendAmount } from '../../state/amount'
 import { useSendFormFieldState } from '../../state/formFields'
-
-type CurrencyInputMode = 'base' | 'fiat'
+import { CurrencyInputMode } from '../ManageAmountInputField'
 
 interface UseDualCurrencyAmountInputProps {
   coinPrice: number | undefined
