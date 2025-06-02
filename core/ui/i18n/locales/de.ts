@@ -923,4 +923,9 @@ export const de = {
   minute_one: '{{count}} Minute',
   minute_other: '{{count}} Minuten',
   never: 'Niemals',
+  change_passcode: 'Passcode ändern',
+  current_passcode: 'Aktueller Passcode',
+  new_passcode: 'Neuer Passcode',
+  confirm_new_passcode: 'Neuen Passcode bestätigen',
+  enter_new_passcode: 'Geben Sie den neuen Passcode ein',
 }

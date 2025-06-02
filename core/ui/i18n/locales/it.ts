@@ -918,4 +918,9 @@ export const it = {
   minute_one: '{{count}} minuto',
   minute_other: '{{count}} minuti',
   never: 'Mai',
+  change_passcode: 'Cambia codice di accesso',
+  current_passcode: 'Codice di accesso attuale',
+  new_passcode: 'Nuovo codice di accesso',
+  confirm_new_passcode: 'Conferma nuovo codice di accesso',
+  enter_new_passcode: 'Inserisci il nuovo codice di accesso',
 }

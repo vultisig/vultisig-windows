@@ -897,4 +897,9 @@ export const hr = {
   minute_one: '{{count}} minuta',
   minute_other: '{{count}} minuta',
   never: 'Nikada',
+  change_passcode: 'Promjena lozinke',
+  current_passcode: 'Trenutna lozinka',
+  new_passcode: 'Nova lozinka',
+  confirm_new_passcode: 'Potvrdite novu lozinku',
+  enter_new_passcode: 'Unesite novu lozinku',
 }
