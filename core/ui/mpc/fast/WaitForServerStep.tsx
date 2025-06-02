@@ -10,19 +10,19 @@ import { ServerFeedback } from './ServerFeedback'
 export const WaitForServerStep = ({
   onFinish,
   onBack,
-  value: keygenType,
-}: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<KeygenType>>) => {
+  value: isPluginReshare,
+}: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<boolean>>) => {
   const peersQuery = useMpcPeerOptionsQuery()
   const { t } = useTranslation()
   useEffect(() => {
     if (peersQuery.data) {
-      if (keygenType && keygenType === 'plugin' && peersQuery.data.length > 3) {
+      if (isPluginReshare && peersQuery.data.length > 3) {
         onFinish(peersQuery.data)
-      } else if (!keygenType || keygenType != 'plugin') {
+      } else if (!isPluginReshare) {
         onFinish(peersQuery.data)
       }
     }
-  }, [peersQuery.data, onFinish, keygenType])
+  }, [peersQuery.data, onFinish, isPluginReshare])
 
   return (
     <>

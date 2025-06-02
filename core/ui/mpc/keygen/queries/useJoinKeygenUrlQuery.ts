@@ -49,19 +49,6 @@ export const useJoinKeygenUrlQuery = () => {
 
         const useVultisigRelay = serverType === 'relay'
 
-        const handleReshare = () => {
-          const message = create(ReshareMessageSchema, {
-            sessionId,
-            serviceName,
-            encryptionKeyHex: hexEncryptionKey,
-            useVultisigRelay,
-            vaultName,
-            ...assertKeygenReshareFields(keygenVault),
-            libType,
-          })
-          return toBinary(ReshareMessageSchema, message)
-        }
-
         const binary = match(keygenType, {
           create: () => {
             const message = create(KeygenMessageSchema, {
@@ -75,8 +62,18 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(KeygenMessageSchema, message)
           },
-          reshare: handleReshare,
-          plugin: handleReshare,
+          reshare: () => {
+            const message = create(ReshareMessageSchema, {
+              sessionId,
+              serviceName,
+              encryptionKeyHex: hexEncryptionKey,
+              useVultisigRelay,
+              vaultName,
+              ...assertKeygenReshareFields(keygenVault),
+              libType,
+            })
+            return toBinary(ReshareMessageSchema, message)
+          },
           migrate: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,

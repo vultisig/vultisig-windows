@@ -21,21 +21,20 @@ export const StartMpcSessionStep = ({
   onBack,
   onFinish,
   value,
-  keygenType,
+  isPluginReshare,
 }: Partial<OnBackProp> &
   OnFinishProp &
   ValueProp<MpcSession> &
-  Partial<{ keygenType: KeygenType }>) => {
+  Partial<{ isPluginReshare: boolean }>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      const filteredDevices =
-        keygenType && keygenType === 'plugin'
-          ? devices.filter(device => !isServer(device))
-          : devices
+      const filteredDevices = isPluginReshare
+        ? devices.filter(device => !isServer(device))
+        : devices
       return startMpcSession({ serverUrl, sessionId, devices: filteredDevices })
     },
     onSuccess: () => onFinish(),

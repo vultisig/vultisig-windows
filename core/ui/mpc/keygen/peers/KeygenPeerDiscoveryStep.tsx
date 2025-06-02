@@ -48,8 +48,6 @@ const educationUrl: Record<KeygenType, string> = {
   migrate: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   reshare:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
-  plugin:
-    'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
 
 const recommendedDevicesTarget = recommendedPeers + 1

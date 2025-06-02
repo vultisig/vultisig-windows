@@ -23,9 +23,9 @@ export const PluginPage = () => {
     <ReshareVaultFlowProviders>
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
-          <CurrentKeygenTypeProvider value="plugin">
+          <CurrentKeygenTypeProvider value="reshare">
             <JoinKeygenUrlSender onJoinUrl={onJoinUrl} />
-            <FastVaultReshareFlow />
+            <FastVaultReshareFlow isPluginReshare={true} />
           </CurrentKeygenTypeProvider>
         </PasswordProvider>
       </EmailProvider>

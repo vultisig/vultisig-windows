@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { RenderProp, ValueProp } from '@lib/ui/props'
 
@@ -8,17 +7,17 @@ import { StartMpcSessionStep } from './StartMpcSessionStep'
 export const StartMpcSessionFlow = ({
   render,
   value,
-  keygenType,
+  isPluginReshare,
 }: RenderProp &
   ValueProp<MpcSession> &
-  Partial<{ keygenType: KeygenType }>) => {
+  Partial<{ isPluginReshare: boolean }>) => {
   return (
     <StepTransition
       from={({ onFinish }) => (
         <StartMpcSessionStep
           onFinish={onFinish}
           value={value}
-          keygenType={keygenType}
+          isPluginReshare={isPluginReshare}
         />
       )}
       to={() => render()}

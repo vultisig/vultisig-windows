@@ -18,35 +18,40 @@ const serverActionProviders: Record<KeygenType, ComponentType<any>> = {
   create: CreateFastKeygenServerActionProvider,
   reshare: ReshareFastKeygenServerActionProvider,
   migrate: MigrateFastKeygenServerActionProvider,
-  plugin: ReshareFastKeygenServerActionProvider,
 }
 
-export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
+export const FastKeygenFlow = ({
+  onBack,
+  isPluginReshare,
+}: OnBackProp & Partial<{ isPluginReshare: boolean }>) => {
   const keygenType = useCurrentKeygenType()
 
   const ServerActionProvider = serverActionProviders[keygenType]
 
   return (
     <StepTransition
-      from={({ onFinish }) => (
-        <ServerActionProvider>
-          <FastKeygenServerActionStep onFinish={onFinish} onBack={onBack} />
-        </ServerActionProvider>
-      )}
+      from={({ onFinish }) => {
+        const props = keygenType === 'reshare' ? { isPluginReshare } : {}
+        return (
+          <ServerActionProvider {...props}>
+            <FastKeygenServerActionStep onFinish={onFinish} onBack={onBack} />
+          </ServerActionProvider>
+        )
+      }}
       to={() => (
         <ValueTransfer<string[]>
           from={({ onFinish }) => (
             <WaitForServerStep
               onBack={onBack}
               onFinish={onFinish}
-              value={keygenType}
+              value={isPluginReshare}
             />
           )}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
                 value="keygen"
-                keygenType={keygenType}
+                isPluginReshare={isPluginReshare}
                 render={() => <KeygenFlow onBack={onBack} />}
               />
             </MpcPeersProvider>

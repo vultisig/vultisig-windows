@@ -1,1 +1,1 @@
-export type KeygenType = 'create' | 'reshare' | 'migrate' | 'plugin'
+export type KeygenType = 'create' | 'reshare' | 'migrate'

@@ -14,7 +14,8 @@ import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 export const ReshareFastKeygenServerActionProvider = ({
   children,
-}: ChildrenProp) => {
+  isPluginReshare,
+}: ChildrenProp & Partial<{ isPluginReshare: boolean }>) => {
   const keygenType = useCurrentKeygenType()
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -38,8 +39,8 @@ export const ReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
-      lib_type: keygenType === 'plugin' ? toLibType('DKLS') : undefined,
-      reshare_type: keygenType === 'plugin' ? 1 : undefined,
+      lib_type: isPluginReshare ? toLibType('DKLS') : undefined,
+      reshare_type: isPluginReshare ? 1 : undefined,
     })
   }, [
     email,
