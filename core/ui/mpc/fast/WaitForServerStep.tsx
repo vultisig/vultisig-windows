@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp, OnFinishProp, ValueProp } from '@lib/ui/props'
 import { useEffect } from 'react'
