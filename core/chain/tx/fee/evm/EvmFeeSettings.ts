@@ -1,6 +1,4 @@
-import { FeePriority } from '../FeePriority'
-
 export type EvmFeeSettings = {
-  priority: FeePriority
+  priority: number
   gasLimit: number
 }
