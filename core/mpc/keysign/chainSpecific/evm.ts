@@ -6,9 +6,8 @@ import { getEvmClient } from '@core/chain/chains/evm/client'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getEvmBaseFee } from '@core/chain/tx/fee/evm/getEvmBaseFee'
+import { getEvmDefaultPriorityFee } from '@core/chain/tx/fee/evm/getEvmDefaultPriorityFee'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
-import { getEvmMaxPriorityFee } from '@core/chain/tx/fee/evm/getEvmMaxPriorityFee'
-import { defaultFeePriority } from '@core/chain/tx/fee/FeePriority'
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
@@ -60,11 +59,8 @@ export const getEthereumSpecific: ChainSpecificResolver<
     })
 
   const baseFee = await getEvmBaseFee(chain)
-
-  const priorityFeeMapValue = await getEvmMaxPriorityFee(chain)
-
-  const feePriority = feeSettings?.priority ?? defaultFeePriority
-  const priorityFee = priorityFeeMapValue[feePriority]
+  const defaultPriorityFee = await getEvmDefaultPriorityFee(chain)
+  const priorityFee = feeSettings?.priority ?? defaultPriorityFee
 
   let maxFeePerGasWei = Number(
     BigInt(Math.round(Number(baseFee) * baseFeeMultiplier + priorityFee))
