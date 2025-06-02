@@ -48,7 +48,7 @@ export const dispatchMessage = async (
       return getCosmosChainByChainId(selectedCosmosChainId)
     },
     [MessageKey.ETHEREUM_REQUEST]: () => {
-      const chainId = `0x${getEvmChainId(Chain.Ethereum).toString(16)}`
+      const chainId = getEvmChainId(Chain.Ethereum)
 
       const selectedEVMChainId = Object.values(sessions).reduce(
         (acc, vault) => vault[dappHostname]?.selectedEVMChainId ?? acc,

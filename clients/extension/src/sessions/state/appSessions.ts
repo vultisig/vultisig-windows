@@ -12,7 +12,6 @@ type UpdateAppSessionFieldsInput = {
 
 export interface AppSession {
   host: string
-  chainIds?: string[]
   addresses?: string[]
   url: string
   selectedEVMChainId?: string

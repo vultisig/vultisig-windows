@@ -1,5 +1,7 @@
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
+import { numberToHex } from '@lib/utils/hex/numberToHex'
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { Chain as ViemChain } from 'viem'
 import {
@@ -41,6 +43,11 @@ const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.Avalanche]: avalanche,
 }
 
+const evmChainId: Record<EvmChain, string> = recordMap(
+  evmDefaultChainInfo,
+  chain => numberToHex(chain.id)
+)
+
 export const evmChainInfo = recordMap(
   evmDefaultChainInfo,
   (chain, chainKey) => {
@@ -56,15 +63,10 @@ export const evmChainInfo = recordMap(
   }
 )
 
-export const getEvmChainId = (chain: EvmChain): number => {
-  return evmChainInfo[chain].id
+export const getEvmChainId = (chain: EvmChain): string => {
+  return evmChainId[chain]
 }
 
 export const getEvmChainByChainId = (chainId: string): Chain | undefined => {
-  const parsedId = parseInt(chainId, 16)
-
-  const [chain] =
-    Object.entries(evmChainInfo).find(([, { id }]) => id === parsedId) || []
-
-  return chain as Chain | undefined
+  return mirrorRecord(evmChainId)[chainId]
 }

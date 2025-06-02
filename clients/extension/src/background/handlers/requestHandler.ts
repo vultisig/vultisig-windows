@@ -118,7 +118,7 @@ export const handleRequest = (
                   `${EventMethod.CONNECT}:${getDappHost(sender)}`,
                   {
                     address: account,
-                    chainId: `0x${getEvmChainId(chain as EvmChain).toString(16)}`,
+                    chainId: getEvmChainId(chain as EvmChain),
                   }
                 )
               } catch (err) {
@@ -146,7 +146,7 @@ export const handleRequest = (
         let chainId: string | undefined = undefined
 
         if (getChainKind(chain) === 'evm') {
-          chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+          chainId = getEvmChainId(chain as EvmChain)
         } else if (getChainKind(chain) === 'cosmos') {
           chainId = getCosmosChainId(chain as CosmosChain)
         }
@@ -385,9 +385,6 @@ export const handleRequest = (
               vaultId: safeVaultId,
               host: host,
               fields: {
-                chainIds: Array.from(
-                  new Set([...(previousSession.chainIds ?? []), param.chainId])
-                ),
                 selectedCosmosChainId:
                   getChainKind(chain) === 'cosmos'
                     ? param.chainId
@@ -494,7 +491,7 @@ export const handleRequest = (
                   : previousSession.selectedCosmosChainId,
               selectedEVMChainId:
                 getChainKind(chain) === 'evm'
-                  ? `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+                  ? getEvmChainId(chain as EvmChain)
                   : previousSession.selectedEVMChainId,
             },
           })
@@ -673,12 +670,12 @@ export const handleRequest = (
         let chainId: string | undefined = undefined
 
         if (getChainKind(chain) === 'evm') {
-          chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+          chainId = getEvmChainId(chain as EvmChain)
         } else if (getChainKind(chain) === 'cosmos') {
           chainId = getCosmosChainId(chain as CosmosChain)
         }
 
-        if (chainId) resolve(String(parseInt(chainId, 16)))
+        if (chainId) resolve(parseInt(chainId, 16).toString())
         else reject()
 
         break

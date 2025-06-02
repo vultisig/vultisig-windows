@@ -9,6 +9,7 @@ import {
   OneInchTokensResponse,
 } from '@core/chain/coin/oneInch/token'
 import { rootApiUrl } from '@core/config'
+import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
@@ -25,7 +26,8 @@ export const useWhitelistedCoinsQuery = (chain: Chain) => {
           chain,
         })
       } else {
-        const evmChainId = getEvmChainId(chain as EvmChain)
+        const evmChainId = hexToNumber(getEvmChainId(chain as EvmChain))
+
         if (evmChainId) {
           const url = `${rootApiUrl}/1inch/swap/v6.0/${evmChainId}/tokens`
           const data = await queryUrl<OneInchTokensResponse>(url)

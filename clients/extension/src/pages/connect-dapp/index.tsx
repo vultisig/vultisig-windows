@@ -47,14 +47,6 @@ export const ConnectDAppPage = () => {
   const handleSubmit = async () => {
     if (!vaultId || !sender || !chain) return
 
-    let chainId: string | undefined = undefined
-
-    if (getChainKind(chain) === 'evm') {
-      chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
-    } else if (getChainKind(chain) === 'cosmos') {
-      chainId = getCosmosChainId(chain as CosmosChain)
-    }
-
     await setCurrentVaultId(vaultId)
 
     await addSession({
@@ -62,10 +54,14 @@ export const ConnectDAppPage = () => {
       session: {
         host: getDappHostname(sender),
         url: getDappHost(sender),
-        chainIds: chainId ? [chainId] : undefined,
         selectedCosmosChainId:
-          getChainKind(chain) === 'cosmos' ? chainId : undefined,
-        selectedEVMChainId: getChainKind(chain) === 'evm' ? chainId : undefined,
+          getChainKind(chain) === 'cosmos'
+            ? getCosmosChainId(chain as CosmosChain)
+            : undefined,
+        selectedEVMChainId:
+          getChainKind(chain) === 'evm'
+            ? getEvmChainId(chain as EvmChain)
+            : undefined,
       },
     })
 
