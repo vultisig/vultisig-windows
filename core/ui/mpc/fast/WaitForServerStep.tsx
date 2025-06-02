@@ -5,21 +5,20 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeerOptionsQuery } from '../devices/queries/useMpcPeerOptionsQuery'
-import { useCurrentKeygenType } from '../keygen/state/currentKeygenType'
 import { ServerFeedback } from './ServerFeedback'
 
 export const WaitForServerStep = ({
   onFinish,
   onBack,
+  value: keygenType,
 }: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<KeygenType>>) => {
   const peersQuery = useMpcPeerOptionsQuery()
-  const keygenType = useCurrentKeygenType()
   const { t } = useTranslation()
   useEffect(() => {
     if (peersQuery.data) {
-      if (keygenType === 'plugin' && peersQuery.data.length > 3) {
+      if (keygenType && keygenType === 'plugin' && peersQuery.data.length > 3) {
         onFinish(peersQuery.data)
-      } else if (keygenType != 'plugin') {
+      } else if (!keygenType || keygenType != 'plugin') {
         onFinish(peersQuery.data)
       }
     }

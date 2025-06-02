@@ -1,4 +1,5 @@
 import { isServer } from '@core/mpc/devices/localPartyId'
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
@@ -14,23 +15,25 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentKeygenType } from '../keygen/state/currentKeygenType'
 import { MpcSession } from './MpcSession'
 
 export const StartMpcSessionStep = ({
   onBack,
   onFinish,
   value,
-}: Partial<OnBackProp> & OnFinishProp & ValueProp<MpcSession>) => {
+  keygenType,
+}: Partial<OnBackProp> &
+  OnFinishProp &
+  ValueProp<MpcSession> &
+  Partial<{ keygenType: KeygenType }>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
-  const keygenType = useCurrentKeygenType()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
       const filteredDevices =
-        keygenType === 'plugin'
+        keygenType && keygenType === 'plugin'
           ? devices.filter(device => !isServer(device))
           : devices
       return startMpcSession({ serverUrl, sessionId, devices: filteredDevices })
