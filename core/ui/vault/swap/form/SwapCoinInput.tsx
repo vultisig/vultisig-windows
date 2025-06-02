@@ -23,8 +23,11 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
+import { useToCoin } from '../state/toCoin'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
@@ -32,6 +35,9 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
+  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [currentToCoin] = useToCoin()
+  const side = useTransferDirection()
 
   if (!coin) return
   const { logo, chain, ticker, id } = coin
@@ -110,11 +116,18 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               options={coins.filter(c => c.chain === coin?.chain)}
             />
           )}
-
           {isChainModalOpen && (
             <SelectItemModal
               title={t('select_network')}
-              optionComponent={ChainOption}
+              optionComponent={props => {
+                const currentItemChain = props.value.chain
+                const isSelected =
+                  side === 'from'
+                    ? currentItemChain === fromCoinKey.chain
+                    : currentItemChain === currentToCoin.chain
+
+                return <ChainOption {...props} isSelected={isSelected} />
+              }}
               onFinish={(newValue: CoinKey | undefined) => {
                 if (newValue) {
                   onChange(newValue)

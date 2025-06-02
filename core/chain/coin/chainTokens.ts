@@ -1,8 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
+import { Coin } from './Coin'
 import {
   CHAINS_WITH_IBC_TOKENS,
   IBC_TOKENS,
@@ -12,7 +13,9 @@ import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { initializeChainTokens } from './utils/initializeChainTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
-const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+const leanChainNativeTokens: Partial<
+  Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>
+> = {
   [Chain.MayaChain]: [
     {
       ticker: 'MAYA',
@@ -32,7 +35,9 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   ],
 }
 
-const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+const leanChainTokens: Partial<
+  Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>
+> = {
   [Chain.THORChain]: [
     {
       ticker: 'TCY',
@@ -65,7 +70,6 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       ticker: 'VULT',
       logo: 'vult',
       decimals: 18,
-      priceProviderId: '',
       id: '0xb788144DF611029C60b859DF47e79B7726C4DEBa',
     },
     {
@@ -277,12 +281,6 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       decimals: 18,
       id: '0x46B9144771Cb3195D66e4EDA643a7493fADCAF9D',
     },
-    {
-      ticker: 'COQ',
-      logo: 'coq',
-      decimals: 18,
-      id: '0x420FcA0121DC28039145009570975747295f2329',
-    },
   ],
   [Chain.BSC]: [
     {
@@ -376,13 +374,6 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       id: '0x4c5d8A75F3762c1561D96f177694f67378705E98',
     },
     {
-      ticker: 'OM',
-      logo: 'om',
-      decimals: 18,
-      priceProviderId: 'om',
-      id: '0x3992B27dA26848C2b19CeA6Fd25ad5568B68AB98',
-    },
-    {
       ticker: 'W',
       logo: 'w',
       decimals: 18,
@@ -403,18 +394,11 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       priceProviderId: 'SNX',
       id: '0x22e6966B799c4D5B13BE962E1D117b56327FDa66',
     },
-    {
-      ticker: 'AERO',
-      logo: 'aero',
-      decimals: 18,
-      priceProviderId: 'AERO',
-      id: '0x940181a94A35A4569E4529A3CDfB74e38FD98631',
-    },
   ],
   [Chain.Arbitrum]: [
     {
       ticker: 'ARB',
-      logo: 'arbitrum',
+      logo: 'arb',
       decimals: 18,
       priceProviderId: 'arbitrum',
       id: '0x912ce59144191c1204e64559fe8253a0e49e6548',
@@ -693,36 +677,6 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       id: '0x76DA31D7C9CbEAE102aff34D3398bC450c8374c1',
     },
     {
-      ticker: 'bLOOKS',
-      logo: 'blooks',
-      decimals: 18,
-      id: '0x406F10d635be12ad33D6B133C6DA89180f5B999e',
-    },
-    {
-      ticker: 'BAG',
-      logo: 'bag',
-      decimals: 18,
-      id: '0xb9dfCd4CF589bB8090569cb52FaC1b88Dbe4981F',
-    },
-    {
-      ticker: 'ZERO',
-      logo: 'zero',
-      decimals: 18,
-      id: '0x357f93E17FdabEcd3fEFc488a2d27dff8065d00f',
-    },
-    {
-      ticker: 'AI',
-      logo: 'anyinu',
-      decimals: 18,
-      id: '0x764933fbAd8f5D04Ccd088602096655c2ED9879F',
-    },
-    {
-      ticker: 'JUICE',
-      logo: 'juice',
-      decimals: 18,
-      id: '0x818a92bc81Aad0053d72ba753fb5Bc3d0C5C0923',
-    },
-    {
       ticker: 'OMNI',
       logo: 'omni',
       decimals: 18,
@@ -915,8 +869,13 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
   ],
 }
 
-export const chainNativeTokens: Partial<Record<Chain, Coin[]>> = recordMap(
-  leanChainNativeTokens as Record<Chain, Omit<Coin, 'chain'>[]>,
+export const chainNativeTokens: Partial<
+  Record<Chain, RequiredFields<Coin, 'logo'>[]>
+> = recordMap(
+  leanChainNativeTokens as Record<
+    Chain,
+    Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]
+  >,
   (tokens, chain) => tokens.map(token => ({ ...token, chain }))
 )
 
@@ -933,12 +892,14 @@ const mergedLeanChainTokens = Object.values(Chain).reduce(
 
     return acc
   },
-  {} as Partial<Record<Chain, Omit<Coin, 'chain'>[]>>
+  {} as Partial<Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>>
 )
 
-type TokenWithoutChain = Omit<Coin, 'chain'>
+type TokenWithoutChain = Omit<RequiredFields<Coin, 'logo'>, 'chain'>
 
-export const chainTokens: Partial<Record<Chain, Coin[]>> = (() => {
+export const chainTokens: Partial<
+  Record<Chain, RequiredFields<Coin, 'logo'>[]>
+> = (() => {
   const base = initializeChainTokens(
     mergedLeanChainTokens as Record<Chain, TokenWithoutChain[]>
   )

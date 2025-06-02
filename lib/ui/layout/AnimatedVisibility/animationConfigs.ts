@@ -24,10 +24,19 @@ const bottomToTopAnimationConfig = {
   leave: { opacity: 0, transform: 'translateY(100%)' },
 }
 
+const exitToTopAnimationConfig = {
+  duration: 300,
+  easing: ((t: number) => t * (2 - t)) as SpringConfig['easing'],
+  from: { opacity: 0, transform: 'translateY(10px)', height: 0 },
+  enter: { opacity: 1, transform: 'translateY(0)', height: 'auto' },
+  leave: { opacity: 0, transform: 'translateY(-10px)', height: 0 },
+}
+
 export const configsMap = {
   bottomToTop: bottomToTopAnimationConfig,
   scale: defaultAnimationConfig,
   topToBottom: topToBottomAnimationConfig,
+  exitToTop: exitToTopAnimationConfig,
 }
 
 export type ConfigKey = keyof typeof configsMap
