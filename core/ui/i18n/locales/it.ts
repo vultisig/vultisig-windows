@@ -18,6 +18,7 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   send_overview: 'Invia panoramica',
   approval_tx: 'Transazione di approvazione',
+  send_to: 'Invia a',
   priority_fee: 'Commissione prioritaria',
   you_are_sending: 'Stai inviando',
   priority_fee_tooltip_content:

@@ -18,6 +18,7 @@ export const pt = {
   base_fee_tooltip_content:
     'Uma pequena gorjeta para acelerar sua transação. Gorjetas maiores podem fazer com que ela seja processada mais rapidamente.',
   percentage: 'Percentagem',
+  send_to: 'Enviar para',
   asset_selection: 'Seleção de ativos',
   you_are_sending: 'Você está enviando',
   unexpected_error: 'Erro inesperado',
