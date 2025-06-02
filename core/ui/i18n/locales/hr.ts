@@ -885,4 +885,9 @@ export const hr = {
   app_locked_description: 'Unesite svoju lozinku za nastavak.',
   invalid_passcode: 'Nevažeća lozinka',
   unlock: 'Otključati',
+  change_passcode: 'Promjena lozinke',
+  current_passcode: 'Trenutna lozinka',
+  new_passcode: 'Nova lozinka',
+  confirm_new_passcode: 'Potvrdite novu lozinku',
+  enter_new_passcode: 'Unesite novu lozinku',
 }
