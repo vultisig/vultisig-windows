@@ -17,6 +17,7 @@ export const hr = {
   unexpected_error: 'Neočekivana pogreška',
   asset_selection: 'Odabir imovine',
   send_overview: 'Pošalji pregled',
+  priority_fee: 'Prioritetna naknada',
   verify_password_periodic_message:
     'Potvrdite lozinku za dijeljenje poslužitelja',
   approval_tx: 'Transakcija odobrenja',

@@ -14,6 +14,7 @@ export const de = {
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
   you_are_sending: 'Du sendest',
+  priority_fee: 'Prioritätsgebühr',
   youre_swapping: 'Du tauschst',
   asset_selection: 'Asset-Auswahl',
   percentage: 'Prozentsatz',

@@ -17,6 +17,7 @@ export const pt = {
   asset_selection: 'Seleção de ativos',
   you_are_sending: 'Você está enviando',
   unexpected_error: 'Erro inesperado',
+  priority_fee: 'Taxa prioritária',
   send_overview: 'Enviar visão geral',
   approval_tx: 'Transação de aprovação',
   verify_password_periodic_message:

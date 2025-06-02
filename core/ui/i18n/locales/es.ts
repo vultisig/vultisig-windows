@@ -12,6 +12,7 @@ export const es = {
   swap_overview: 'Resumen de intercambio',
   overview: 'Visión general',
   you_are_sending: 'Estás enviando',
+  priority_fee: 'Tarifa prioritaria',
   percentage: 'Porcentaje',
   send_overview: 'Enviar resumen',
   percentage_to_unstake: 'Porcentaje para retirar',

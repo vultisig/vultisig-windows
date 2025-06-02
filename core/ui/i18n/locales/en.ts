@@ -363,6 +363,7 @@ export const en = {
   normal: 'Normal',
   fast: 'Fast',
   priority: 'Priority',
+  priority_fee: 'Priority fee',
   signing_error: 'Signing Error. Please try again.',
   joining_session: 'Joining session...',
   failed_to_join_session: 'Failed to join session',
