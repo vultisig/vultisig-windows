@@ -60,7 +60,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
 
   const baseFee = await getEvmBaseFee(chain)
   const defaultPriorityFee = await getEvmDefaultPriorityFee(chain)
-  const priorityFee = feeSettings?.priority ?? defaultPriorityFee
+  const priorityFee = feeSettings?.priorityFee ?? defaultPriorityFee
 
   let maxFeePerGasWei = Number(
     BigInt(Math.round(Number(baseFee) * baseFeeMultiplier + priorityFee))

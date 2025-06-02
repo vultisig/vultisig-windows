@@ -27,6 +27,7 @@ import { AmountInReverseCurrencyDisplay } from './AmountInReverseCurrencyDisplay
 import { AmountSuggestion } from './AmountSuggestion'
 import { CurrencySwitch } from './AmountSwitch'
 import { useDualCurrencyAmountInput } from './hooks/useDualCurrencyAmountInput'
+import { baseToFiat } from './utils'
 
 const suggestions = [0.25, 0.5, 0.75, 1]
 export type CurrencyInputMode = 'base' | 'fiat'
@@ -81,9 +82,8 @@ export const ManageAmountInputField = () => {
                             const suggestionValue =
                               currencyInputMode === 'base'
                                 ? suggestionBaseValue
-                                : coinPrice
-                                  ? suggestionBaseValue * coinPrice
-                                  : 0
+                                : (baseToFiat(suggestionBaseValue, coinPrice) ??
+                                  0)
 
                             return (
                               <AmountSuggestion
@@ -93,16 +93,14 @@ export const ManageAmountInputField = () => {
                                     : false
                                 }
                                 onClick={() => {
-                                  const baseAmount = suggestionBaseValue
-
-                                  const inputValueToSet =
+                                  handleUpdateAmount(
                                     currencyInputMode === 'base'
-                                      ? baseAmount
-                                      : coinPrice
-                                        ? baseAmount * coinPrice
-                                        : null
-
-                                  handleUpdateAmount(inputValueToSet)
+                                      ? suggestionBaseValue
+                                      : baseToFiat(
+                                          suggestionBaseValue,
+                                          coinPrice
+                                        )
+                                  )
                                 }}
                                 key={suggestion}
                                 value={suggestion}
