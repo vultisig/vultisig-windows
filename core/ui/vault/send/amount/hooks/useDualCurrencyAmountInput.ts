@@ -20,13 +20,17 @@ export const useDualCurrencyAmountInput = ({
 
   const handleUpdateAmount = useCallback(
     (rawValue: number | null) => {
-      setInputValue(rawValue)
+      // Prevent negative amounts
+      const sanitizedValue = rawValue !== null && rawValue < 0 ? 0 : rawValue
+      setInputValue(sanitizedValue)
 
       const baseValue =
         currencyInputMode === 'base'
-          ? rawValue
-          : coinPrice && rawValue !== null
-            ? rawValue / coinPrice
+          ? sanitizedValue
+          : coinPrice && sanitizedValue !== null
+            ? coinPrice > 0
+              ? sanitizedValue / coinPrice
+              : null
             : null
 
       setValue(baseValue)

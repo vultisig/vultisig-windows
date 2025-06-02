@@ -6,6 +6,15 @@ export const getEvmDefaultPriorityFee = async (
 ): Promise<number> => {
   const publicClient = getEvmClient(chain)
 
-  const maxPriorityFeePerGas = await publicClient.estimateMaxPriorityFeePerGas()
-  return Number(maxPriorityFeePerGas)
+  try {
+    const maxPriorityFeePerGas =
+      await publicClient.estimateMaxPriorityFeePerGas()
+    return Number(maxPriorityFeePerGas)
+  } catch (error) {
+    console.warn(
+      `Failed to fetch priority fee for ${chain}, using fallback:`,
+      error
+    )
+    return 1000000000 // 1 gwei
+  }
 }
