@@ -11,9 +11,9 @@ import { match } from '@lib/utils/match'
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UnstyledButton } from '../button'
 import { cropText } from '../css/cropText'
 import { HStack } from '../layout/Stack'
-import { UnstyledButton } from './UnstyledButton'
 
 type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 

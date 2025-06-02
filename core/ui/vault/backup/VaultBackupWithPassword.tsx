@@ -135,9 +135,10 @@ export const VaultBackupWithPassword = ({
                 />
 
                 <IconButton
-                  icon={<EyeIcon fontSize={20} />}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                />
+                >
+                  <EyeIcon fontSize={20} />
+                </IconButton>
               </InputFieldWrapper>
               {errors.password?.message && (
                 <Text size={12} color="danger">
@@ -157,11 +158,12 @@ export const VaultBackupWithPassword = ({
                 />
 
                 <IconButton
-                  icon={<EyeIcon fontSize={20} />}
                   onClick={() =>
                     setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
                   }
-                />
+                >
+                  <EyeIcon fontSize={20} />
+                </IconButton>
               </InputFieldWrapper>
               {errors.verifiedPassword && (
                 <Text size={12} color="danger">

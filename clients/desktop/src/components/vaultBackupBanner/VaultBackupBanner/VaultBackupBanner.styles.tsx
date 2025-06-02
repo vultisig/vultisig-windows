@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { UnstyledButton } from '@lib/ui/button'
 import styled from 'styled-components'
 
 export const ContentWrapperButton = styled(UnstyledButton)`

@@ -74,10 +74,9 @@ export const CreateVaultNameStep = ({
                 />
               )}
               action={
-                <UnstyledButton
-                  icon={<CircleCrossIcon />}
-                  onClick={() => setName('')}
-                />
+                <UnstyledButton onClick={() => setName('')}>
+                  <CircleCrossIcon />
+                </UnstyledButton>
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,

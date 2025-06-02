@@ -85,10 +85,9 @@ export const ServerPasswordHintStep = ({
                 />
               )}
               action={
-                <UnstyledButton
-                  icon={<CircleCrossIcon />}
-                  onClick={() => setValue('passwordHint', '')}
-                />
+                <UnstyledButton onClick={() => setValue('passwordHint', '')}>
+                  <CircleCrossIcon />
+                </UnstyledButton>
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,

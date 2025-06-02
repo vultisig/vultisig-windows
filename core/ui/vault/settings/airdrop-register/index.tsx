@@ -72,9 +72,10 @@ export const AirdropRegisterPage = () => {
           <Text color="contrast" size={18} weight={500}>
             {t('vault_register_for_airdrop_list_item_2_part_1')}{' '}
             <StyledButton
-              label={t('vault_register_for_airdrop_list_item_2_part_2')}
               onClick={() => openUrl('https://airdrop.vultisig.com')}
-            />
+            >
+              {t('vault_register_for_airdrop_list_item_2_part_2')}
+            </StyledButton>
           </Text>
           <Text color="contrast" size={18} weight={500}>
             {t('vault_register_for_airdrop_list_item_3')}

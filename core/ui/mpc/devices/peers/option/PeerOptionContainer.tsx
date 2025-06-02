@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { UnstyledButton } from '@lib/ui/button'
 import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'

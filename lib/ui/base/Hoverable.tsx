@@ -2,7 +2,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../buttons/UnstyledButton'
+import { UnstyledButton } from '../button'
 import { absoluteOutline } from '../css/absoluteOutline'
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'

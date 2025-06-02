@@ -3,11 +3,11 @@ import { match } from '@lib/utils/match'
 import { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UnstyledButton } from '../button'
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
 import { sameDimensions } from '../css/sameDimensions'
 import { toSizeUnit } from '../css/toSizeUnit'
-import { UnstyledButton } from './UnstyledButton'
 
 type IconButtonSize = 's' | 'm' | 'l'
 

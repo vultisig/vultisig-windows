@@ -1,6 +1,6 @@
 import { MpcServerType, mpcServerTypes } from '@core/mpc/MpcServerType'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { UnstyledButton } from '@lib/ui/button'
 import { text } from '@lib/ui/text'
 import { getPairComplement } from '@lib/utils/pair/getPairComplement'
 import { useTranslation } from 'react-i18next'

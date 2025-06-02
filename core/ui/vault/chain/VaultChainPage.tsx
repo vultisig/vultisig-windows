@@ -180,7 +180,6 @@ export const VaultChainPage = () => {
 
               return orderedCoins.map(coin => (
                 <UnstyledButton
-                  icon={<VaultChainCoinItem value={coin} />}
                   key={coin.id}
                   onClick={() =>
                     navigate({
@@ -188,7 +187,9 @@ export const VaultChainPage = () => {
                       state: { coin },
                     })
                   }
-                />
+                >
+                  <VaultChainCoinItem value={coin} />
+                </UnstyledButton>
               ))
             }}
           />

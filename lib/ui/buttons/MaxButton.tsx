@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { UnstyledButton } from '../button'
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
 import { horizontalPadding } from '../css/horizontalPadding'
@@ -7,7 +8,6 @@ import { textInputHeight } from '../css/textInput'
 import { toSizeUnit } from '../css/toSizeUnit'
 import { text } from '../text'
 import { getColor } from '../theme/getters'
-import { UnstyledButton } from './UnstyledButton'
 
 export const maxButtonOffset = 8
 const maxButtonHeight = textInputHeight - maxButtonOffset * 2

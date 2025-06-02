@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { UnstyledButton } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { OnClickProp, ValueProp } from '@lib/ui/props'

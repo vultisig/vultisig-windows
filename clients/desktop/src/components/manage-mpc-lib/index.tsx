@@ -25,9 +25,8 @@ export const ManageMpcLib = () => {
   return (
     <>
       <UnstyledButton
-        label={`(BUILD ${__APP_BUILD__})`}
         onClick={handleClick}
-      />
+      >{`(BUILD ${__APP_BUILD__})`}</UnstyledButton>
 
       {visible && (
         <Modal

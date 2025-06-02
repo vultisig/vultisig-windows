@@ -5,6 +5,7 @@ import { Opener } from '@lib/ui/base/Opener'
 import { Button, UnstyledButton } from '@lib/ui/button'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -24,11 +25,9 @@ export const DeleteVaultFolder = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <UnstyledButton
-          icon={<StyledIcon fontSize={20} />}
-          loading={isPending}
-          onClick={onOpen}
-        />
+        <UnstyledButton onClick={onOpen}>
+          {isPending ? <Spinner /> : <StyledIcon fontSize={20} />}
+        </UnstyledButton>
       )}
       renderContent={({ onClose }) => (
         <Modal isOpen={true} onClose={onClose} title={t('delete_folder')}>

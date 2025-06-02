@@ -83,10 +83,9 @@ export const ServerEmailStep = ({
                 />
               )}
               action={
-                <UnstyledButton
-                  icon={<CircleCrossIcon />}
-                  onClick={() => setValue('email', '')}
-                />
+                <UnstyledButton onClick={() => setValue('email', '')}>
+                  <CircleCrossIcon />
+                </UnstyledButton>
               }
               actionPlacerStyles={{
                 right: textInputHorizontalPadding,

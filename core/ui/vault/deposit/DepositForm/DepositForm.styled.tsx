@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { UnstyledButton } from '@lib/ui/button'
 import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { Text, text } from '@lib/ui/text'
