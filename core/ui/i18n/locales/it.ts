@@ -14,6 +14,7 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   send_overview: 'Invia panoramica',
   approval_tx: 'Transazione di approvazione',
+  priority_fee: 'Commissione prioritaria',
   you_are_sending: 'Stai inviando',
   verify_password_periodic_message:
     'Verifica la password di condivisione del server',
