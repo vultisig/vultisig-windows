@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# TypeScript Type Checking
+
+## Context
+- After making TypeScript changes across the monorepo
+- Before committing code changes
+
+## Requirements
+- Always use `yarn typecheck` from the root of the monorepo to verify all TypeScript types are correct
+- The command should exit with code 0 if all types are valid
+
+## Command
+```bash
+yarn typecheck
+```
