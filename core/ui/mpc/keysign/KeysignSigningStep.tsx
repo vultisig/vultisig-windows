@@ -56,6 +56,9 @@ export const KeysignSigningStep = ({
       success={txResults => {
         const txResult = getLastItem(txResults)
 
+        const handleFinish = () =>
+          isDAppSigning ? onFinish(txResult) : navigate({ id: 'vault' })
+
         return (
           <>
             <PageHeader
@@ -80,7 +83,7 @@ export const KeysignSigningStep = ({
                             <TxSuccess
                               value={payload}
                               onSeeTxDetails={onSeeTxDetails}
-                              onFinish={() => onFinish?.(txResult)}
+                              onFinish={handleFinish}
                             />
                           )}
                           to={() => (
@@ -93,13 +96,7 @@ export const KeysignSigningStep = ({
                                   value={payload}
                                 />
                               </TxOverviewPanel>
-                              <Button
-                                onClick={() =>
-                                  isDAppSigning
-                                    ? onFinish(txResult)
-                                    : navigate({ id: 'vault' })
-                                }
-                              >
+                              <Button onClick={handleFinish}>
                                 {t('complete')}
                               </Button>
                             </>
