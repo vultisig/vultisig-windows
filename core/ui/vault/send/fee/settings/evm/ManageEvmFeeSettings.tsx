@@ -67,10 +67,10 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   )
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && persistentValue?.priority == null) {
       setValue(prev => ({ ...prev, priority: defaultFeePriority }))
     }
-  }, [defaultFeePriority, isSuccess])
+  }, [defaultFeePriority, isSuccess, persistentValue?.priority])
 
   return (
     <Modal
