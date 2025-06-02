@@ -4,7 +4,7 @@ import { Cosmos } from './cosmos'
 import { Dash } from './dash'
 import { Ethereum } from './ethereum'
 import { MAYAChain } from './maya'
-import { PluginProvider } from './plugin'
+import { requestPlugin } from './plugin'
 import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
@@ -28,6 +28,6 @@ export const createProviders = () => {
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
-    plugin: PluginProvider.getInstance(),
+    plugin: { request: requestPlugin },
   }
 }

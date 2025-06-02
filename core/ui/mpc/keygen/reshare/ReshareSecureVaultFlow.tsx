@@ -5,18 +5,10 @@ import { StartMpcSessionFlow } from '../../session/StartMpcSessionFlow'
 import { KeygenFlow } from '../flow/KeygenFlow'
 import { ReshareVerifyStep } from './verify/ReshareVerifyStep'
 
-type PluginParams = {
-  onJoinUrl: (joinUrl: string) => void
-}
-
-export const ReshareSecureVaultFlow = ({
-  onJoinUrl,
-}: Partial<PluginParams>) => {
+export const ReshareSecureVaultFlow = () => {
   return (
     <StepTransition
-      from={({ onFinish }) => (
-        <KeygenPeerDiscoveryStep onFinish={onFinish} onJoinUrl={onJoinUrl} />
-      )}
+      from={({ onFinish }) => <KeygenPeerDiscoveryStep onFinish={onFinish} />}
       to={({ onBack }) => (
         <StepTransition
           from={({ onFinish }) => (

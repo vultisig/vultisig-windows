@@ -95,12 +95,9 @@ export const useJoinKeygenUrlQuery = () => {
           sevenZip,
           binary,
         })
-        const tssType = toTssType(
-          keygenType === 'plugin' ? 'reshare' : keygenType
-        )
         return addQueryParams(deepLinkBaseUrl, {
           type: 'NewVault',
-          tssType: tssType,
+          tssType: toTssType(keygenType),
           jsonData,
         })
       },

@@ -5,12 +5,13 @@ import { KeygenType } from '../../keygen/KeygenType'
 import { KeygenMessageSchema } from '../vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '../vultisig/keygen/v1/reshare_message_pb'
 
-export type TssType = 'Keygen' | 'Reshare' | 'Migrate'
+export type TssType = 'Keygen' | 'Reshare' | 'Migrate' | 'Plugin'
 
 const tssKeygenTypeRecord: Record<TssType, KeygenType> = {
   Keygen: 'create',
   Reshare: 'reshare',
   Migrate: 'migrate',
+  Plugin: 'plugin',
 }
 
 export const toTssType = (keygenType: KeygenType): TssType =>
@@ -23,4 +24,5 @@ export const tssMessageSchema: Record<TssType, GenMessage<any>> = {
   Keygen: KeygenMessageSchema,
   Reshare: ReshareMessageSchema,
   Migrate: ReshareMessageSchema,
+  Plugin: ReshareMessageSchema,
 }
