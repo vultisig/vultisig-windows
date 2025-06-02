@@ -35,7 +35,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
   } = useBackupOverviewStepsAnimations(signers.length, deviceNumber)
 
   return (
-    <Wrapper>
+    <PageContent>
       <ProgressWrapper gap={16}>
         <Text size={18}>
           {t(
@@ -54,16 +54,10 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
       </ProgressWrapper>
       <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper>
-          <AnimationComponent
-            style={{
-              flexGrow: 1,
-            }}
-          />
+          <AnimationComponent />
         </RiveWrapper>
-        <DescriptionWrapper>
+        <VStack gap={12}>
           <AnimationDescription animation={currentAnimation} />
-        </DescriptionWrapper>
-        <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
@@ -76,9 +70,9 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
           >
             {t('tap')}
           </NextAnimationButton>
-        </BottomItemsWrapper>
+        </VStack>
       </VStack>
-    </Wrapper>
+    </PageContent>
   )
 }
 
@@ -100,25 +94,6 @@ const NextAnimationButton = styled(IconButton)`
 `
 
 const ProgressWrapper = styled(VStack)`
-  padding: 16px;
-`
-
-const Wrapper = styled(PageContent)`
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
-
-const DescriptionWrapper = styled.div`
-  flex-shrink: 0;
-  max-width: 600px;
   margin-inline: auto;
-`
-
-const BottomItemsWrapper = styled.div`
-  flex-shrink: 0;
-  padding: 16px 0;
-  display: flex;
-  justify-content: center;
+  margin-top: 48px;
 `

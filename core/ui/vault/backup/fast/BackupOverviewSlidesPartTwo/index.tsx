@@ -77,5 +77,6 @@ const NextAnimationButton = styled(IconButton)`
 `
 
 const ProgressWrapper = styled(VStack)`
-  padding: 16px;
+  margin-inline: auto;
+  margin-top: 48px;
 `
