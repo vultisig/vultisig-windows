@@ -10,6 +10,7 @@ import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -96,9 +97,16 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
         <AmountTextInput
           labelPosition="left"
           label={
-            <Text size={14} color="supporting">
-              {t('priority_fee')}
-            </Text>
+            <Tooltip
+              content={<Text>{t('priority_fee_tooltip_content')}</Text>}
+              renderOpener={props => {
+                return (
+                  <Text size={14} color="supporting" {...props}>
+                    {t('priority_fee')} ({t('gwei')})
+                  </Text>
+                )
+              }}
+            />
           }
           value={value.priority}
           onValueChange={priority =>
@@ -109,9 +117,16 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
         <AmountTextInput
           labelPosition="left"
           label={
-            <Text size={14} color="supporting">
-              {t('gas_limit')}
-            </Text>
+            <Tooltip
+              content={<Text>{t('gas_limit_tooltip_content')}</Text>}
+              renderOpener={props => {
+                return (
+                  <Text size={14} color="supporting" {...props}>
+                    {t('gas_limit')}
+                  </Text>
+                )
+              }}
+            />
           }
           value={value.gasLimit}
           onValueChange={gasLimit => setValue({ ...value, gasLimit })}
