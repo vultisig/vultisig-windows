@@ -28,7 +28,12 @@ import { useSendFormFieldState } from '../state/formFields'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
 
-const suggestions = [0.25, 0.5, 0.75, 1]
+const SUGGESTIONS = {
+  QUARTER: 0.25,
+  HALF: 0.5,
+  THREE_QUARTERS: 0.75,
+  MAX: 1,
+} as const
 
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()
@@ -79,21 +84,17 @@ export const ManageAmountInputField = () => {
                   error={() => null}
                   success={amount => (
                     <HStack alignItems="center" gap={4}>
-                      {suggestions.map(suggestion => {
-                        let suggestionValue
-                        if (suggestion === 1) {
-                          // For max amount, subtract fees
-                          const feeAmount = chainSpecificQuery.data
-                            ? getFeeAmount(chainSpecificQuery.data)
-                            : BigInt(0)
-                          suggestionValue = fromChainAmount(
-                            amount - feeAmount,
-                            decimals
-                          )
-                        } else {
-                          suggestionValue =
-                            fromChainAmount(amount, decimals) * suggestion
-                        }
+                      {Object.values(SUGGESTIONS).map(suggestion => {
+                        const suggestionValue =
+                          suggestion === SUGGESTIONS.MAX
+                            ? fromChainAmount(
+                                amount -
+                                  (chainSpecificQuery.data
+                                    ? getFeeAmount(chainSpecificQuery.data)
+                                    : BigInt(0)),
+                                decimals
+                              )
+                            : fromChainAmount(amount, decimals) * suggestion
 
                         return (
                           <AmountSuggestion
