@@ -2,7 +2,7 @@ import React, { ComponentProps, Fragment, ReactNode } from 'react'
 
 import { Stack } from './Stack'
 
-export type StackSeparatedByProps = ComponentProps<typeof Stack> & {
+type StackSeparatedByProps = ComponentProps<typeof Stack> & {
   separator: ReactNode
 }
 
