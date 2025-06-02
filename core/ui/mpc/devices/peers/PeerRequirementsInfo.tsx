@@ -1,7 +1,7 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -46,7 +46,7 @@ export const PeerRequirementsInfo = () => {
         <span>{t('scanQrInstruction')}</span>
       </Text>
       <CloseButton onClick={hide}>
-        <CloseIcon />
+        <CrossIcon />
       </CloseButton>
     </Container>
   )

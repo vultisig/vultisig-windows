@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
+import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { getSplAssociatedAccount } from '@core/chain/chains/solana/spl/getSplAssociatedAccount'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
@@ -26,10 +27,12 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
     .getRecentPrioritizationFees([coin.address as Address])
     .send()
 
-  const highPriorityFee = Math.max(
-    ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-    0
-  )
+  // regardless of its complexity Solana charges a fixed base transaction fee of 5000 lamports per transaction.
+  const highPriorityFee =
+    Math.max(
+      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
+      solanaConfig.priorityFeeLimit
+    ) + solanaConfig.baseFee
 
   const result = create(SolanaSpecificSchema, {
     recentBlockHash,

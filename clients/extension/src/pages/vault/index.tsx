@@ -1,4 +1,3 @@
-import { Button } from '@clients/extension/src/components/button'
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
@@ -10,6 +9,9 @@ import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChai
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { LinkTwoIcon } from '@lib/ui/icons/LinkTwoIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
@@ -46,7 +48,8 @@ const ConnectedApp = styled(Button)`
   border: solid 1px ${getColor('borderLight')};
   border-radius: 50%;
   color: ${getColor('textExtraLight')};
-  position: relative;
+  position: initial;
+  ${horizontalPadding(8)};
 
   &:hover {
     color: ${getColor('textPrimary')};
@@ -68,8 +71,7 @@ export const VaultPage = () => {
         primaryControls={
           <ConnectedApp
             onClick={() => navigate({ id: 'connectedDapps' })}
-            size="md"
-            fitContent
+            size="l"
           >
             <WorldIcon fontSize={20} />
             <ConnectedAppStatus
@@ -79,17 +81,15 @@ export const VaultPage = () => {
         }
         secondaryControls={
           <>
-            <Button
+            <IconButton
               icon={<CameraIcon fontSize={20} />}
               onClick={() => navigate({ id: 'uploadQr', state: {} })}
-              size="sm"
-              fitContent
+              size="m"
             />
-            <Button
+            <IconButton
               icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'settings' })}
-              size="sm"
-              fitContent
+              size="m"
             />
           </>
         }
@@ -180,9 +180,7 @@ export const VaultPage = () => {
         <Button
           icon={<LinkTwoIcon fontSize={16} strokeWidth={2} />}
           onClick={() => navigate({ id: 'manageVaultChains' })}
-          type="primary"
-          block
-          rounded
+          kind="primary"
         >
           {t('manage_chains')}
         </Button>

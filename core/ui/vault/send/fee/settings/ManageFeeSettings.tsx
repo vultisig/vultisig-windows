@@ -12,7 +12,6 @@ export const ManageFeeSettings = () => {
       coin: { chain },
     },
   ] = useCoreViewState<'send'>()
-
   const chainKind = getChainKind(chain)
 
   return (

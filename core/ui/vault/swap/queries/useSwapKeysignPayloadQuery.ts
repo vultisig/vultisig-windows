@@ -91,6 +91,7 @@ export const useSwapKeysignPayloadQuery = () => {
           blockchainSpecific: chainSpecific,
           vaultLocalPartyId: vault.localPartyId,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+          libType: vault.libType,
           ...swapSpecificFields,
         })
 

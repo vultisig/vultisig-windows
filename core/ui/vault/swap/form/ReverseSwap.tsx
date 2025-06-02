@@ -1,14 +1,13 @@
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ReverseIcon } from '@lib/ui/icons/ReverseIcon'
+import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useToCoin } from '../state/toCoin'
 
 const Wrapper = styled(HStack)`
   background-color: ${getColor('background')};
@@ -71,7 +70,7 @@ export const ReverseSwap = () => {
           setToCoin(fromCoin)
         }}
       >
-        <ReverseIcon />
+        <ArrowUpDownIcon />
       </Button>
     </Wrapper>
   )

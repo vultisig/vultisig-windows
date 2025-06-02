@@ -12,7 +12,7 @@ export const TxOverviewRow = styled.div`
   })}
 
   ${text({
-    weight: 600,
+    weight: 500,
     size: 16,
     color: 'contrast',
   })}

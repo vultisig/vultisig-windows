@@ -1,5 +1,6 @@
 import { Opener } from '@lib/ui/base/Opener'
-import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { GasPumpIcon } from '@lib/ui/icons/GasPumpIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -22,17 +23,34 @@ export const ManageFeeSettingsFrame = ({
 
   return (
     <Opener
-      renderOpener={({ onOpen }) => (
-        <PageHeaderIconButton onClick={onOpen} icon={<SettingsIcon />} />
-      )}
+      renderOpener={({ onOpen }) => {
+        return (
+          <PageHeaderIconButton
+            onClick={() => {
+              onOpen()
+            }}
+            icon={
+              <IconWrapper
+                style={{
+                  fontSize: 16,
+                }}
+              >
+                <GasPumpIcon />
+              </IconWrapper>
+            }
+          />
+        )
+      }}
       renderContent={({ onClose }) => (
         <MatchQuery
           value={chainSpecificQuery}
-          success={value => (
-            <SendChainSpecificValueProvider value={value}>
-              {render({ onClose })}
-            </SendChainSpecificValueProvider>
-          )}
+          success={value => {
+            return (
+              <SendChainSpecificValueProvider value={value}>
+                {render({ onClose })}
+              </SendChainSpecificValueProvider>
+            )
+          }}
           pending={() => (
             <PendingQueryOverlay
               onClose={onClose}
