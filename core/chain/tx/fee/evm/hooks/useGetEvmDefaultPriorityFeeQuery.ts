@@ -9,7 +9,7 @@ export const useGetEvmDefaultPriorityFeeQuery = ({
   chain: EvmChain
 }) => {
   return useQuery({
-    queryKey: ['evmDefaultPriorityFee'],
-    queryFn: async () => await getEvmDefaultPriorityFee(chain),
+    queryKey: ['evmDefaultPriorityFee', chain],
+    queryFn: () => getEvmDefaultPriorityFee(chain),
   })
 }
