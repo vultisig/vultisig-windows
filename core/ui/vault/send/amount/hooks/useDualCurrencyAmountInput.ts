@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSendAmount } from '../../state/amount'
 import { useSendFormFieldState } from '../../state/formFields'
 import { CurrencyInputMode } from '../ManageAmountInputField'
+import { baseToFiat, clampNonNegative, fiatToBase } from '../utils'
 
 interface UseDualCurrencyAmountInputProps {
   coinPrice: number | undefined
@@ -18,28 +19,18 @@ export const useDualCurrencyAmountInput = ({
   const [, setFocusedSendField] = useSendFormFieldState()
 
   const handleUpdateAmount = useCallback(
-    (rawValue: number | null) => {
-      // Prevent negative amounts
-      const sanitizedValue = rawValue !== null && rawValue < 0 ? 0 : rawValue
-      setInputValue(sanitizedValue)
+    (raw: number | null) => {
+      const clean = clampNonNegative(raw)
+      setInputValue(clean)
 
-      const baseValue =
-        currencyInputMode === 'base'
-          ? sanitizedValue
-          : coinPrice && sanitizedValue !== null
-            ? coinPrice > 0
-              ? sanitizedValue / coinPrice
-              : null
-            : null
+      const base =
+        currencyInputMode === 'base' ? clean : fiatToBase(clean, coinPrice)
 
-      setValue(baseValue)
+      setValue(base)
 
-      setFocusedSendField(state => ({
-        ...state,
-        fieldsChecked: {
-          ...state.fieldsChecked,
-          amount: !!baseValue,
-        },
+      setFocusedSendField(s => ({
+        ...s,
+        fieldsChecked: { ...s.fieldsChecked, amount: !!base },
       }))
     },
     [coinPrice, currencyInputMode, setFocusedSendField, setValue]
@@ -47,21 +38,12 @@ export const useDualCurrencyAmountInput = ({
 
   useEffect(() => {
     if (value !== null) {
-      const updatedInput =
-        currencyInputMode === 'base'
-          ? value
-          : coinPrice
-            ? value * coinPrice
-            : null
+      const display =
+        currencyInputMode === 'base' ? value : baseToFiat(value, coinPrice)
 
-      setInputValue(updatedInput)
+      setInputValue(display)
     }
   }, [value, coinPrice, currencyInputMode])
 
-  return {
-    inputValue,
-    handleUpdateAmount,
-    currencyInputMode,
-    value,
-  }
+  return { inputValue, handleUpdateAmount, currencyInputMode, value }
 }

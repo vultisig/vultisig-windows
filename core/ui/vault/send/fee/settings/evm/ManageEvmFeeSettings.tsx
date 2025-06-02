@@ -1,6 +1,6 @@
 import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { useGetEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useGetEvmDefaultPriorityFeeQuery'
+import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -22,7 +22,7 @@ import { useFeeSettings } from '../state/feeSettings'
 import { BaseFee } from './baseFee/BaseFee'
 
 type FeeSettingsFormShape = {
-  priority: number
+  priorityFee: number
   gasLimit: number | null
 }
 
@@ -36,7 +36,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   ] = useCoreViewState<'send'>()
 
   const { data: defaultFeePriority = 0, isSuccess } =
-    useGetEvmDefaultPriorityFeeQuery({
+    useEvmDefaultPriorityFeeQuery({
       chain: chain as EvmChain,
     })
 
@@ -53,7 +53,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const [value, setValue] = useState<FeeSettingsFormShape>(
     () =>
       persistentValue ?? {
-        priority: defaultFeePriority,
+        priorityFee: defaultFeePriority,
         gasLimit: Number(defaultGasLimit),
       }
   )
@@ -67,10 +67,10 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   )
 
   useEffect(() => {
-    if (isSuccess && persistentValue?.priority == null) {
-      setValue(prev => ({ ...prev, priority: defaultFeePriority }))
+    if (isSuccess && persistentValue?.priorityFee == null) {
+      setValue(prev => ({ ...prev, priorityFee: defaultFeePriority }))
     }
-  }, [defaultFeePriority, isSuccess, persistentValue?.priority])
+  }, [defaultFeePriority, isSuccess, persistentValue?.priorityFee])
 
   return (
     <Modal
@@ -108,9 +108,9 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
               }}
             />
           }
-          value={value.priority}
-          onValueChange={priority =>
-            setValue({ ...value, priority: priority ?? 0 })
+          value={value.priorityFee}
+          onValueChange={priorityFee =>
+            setValue({ ...value, priorityFee: priorityFee ?? 0 })
           }
         />
         <BaseFee />

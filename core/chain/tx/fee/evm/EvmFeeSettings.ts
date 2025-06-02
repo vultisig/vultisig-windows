@@ -1,4 +1,4 @@
 export type EvmFeeSettings = {
-  priority: number
+  priorityFee: number
   gasLimit: number
 }

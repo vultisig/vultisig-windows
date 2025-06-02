@@ -4,6 +4,7 @@ import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DollarIcon } from '@lib/ui/icons/DollarIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { CurrencyInputMode } from './ManageAmountInputField'
@@ -13,20 +14,20 @@ type Props = {
   onClick: (value: CurrencyInputMode) => void
 }
 
-const config = [
-  { mode: 'base', icon: <CoinsIcon /> },
-  { mode: 'fiat', icon: <DollarIcon /> },
-] as const
+const currencyModeIcon: Record<CurrencyInputMode, ReactNode> = {
+  base: <CoinsIcon />,
+  fiat: <DollarIcon />,
+}
 
 export const CurrencySwitch = ({ onClick, value }: Props) => {
   return (
     <Wrapper gap={2}>
-      {config.map(({ mode, icon }) => (
+      {Object.entries(currencyModeIcon).map(([mode, icon]) => (
         <IconButton
           key={mode}
           icon={icon}
           kind={value === mode ? 'primary' : 'regular'}
-          onClick={() => onClick(mode)}
+          onClick={() => onClick(mode as CurrencyInputMode)}
         />
       ))}
     </Wrapper>
