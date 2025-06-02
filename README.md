@@ -156,10 +156,12 @@ Inside each feature or domain folder, organize files by their technical purpose:
 
 - GET operations, data fetching hooks
 - Organized by entity or API endpoint
+- File names don't need the full hook name (e.g., `coinBalance.ts` instead of `useCoinBalanceQuery.ts`)
 
 **`mutations/`** - React Query mutations for data modification
 
 - POST, PUT, DELETE operations
 - State-changing operations
+- File names don't need the full hook name (e.g., `changePasscode.ts` instead of `useChangePasscodeMutation.ts`)
 
 **Note:** No `/components` folder needed - most files are already components, and non-component code goes into the folders above.
