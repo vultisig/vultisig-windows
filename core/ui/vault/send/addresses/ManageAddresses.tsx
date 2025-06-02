@@ -1,6 +1,7 @@
 import { Match } from '@lib/ui/base/Match'
-import { motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 
+import { AnimatedFieldContainer } from '../amount/AnimatedFieldContainer'
 import { useSendFormFieldState } from '../state/formFields'
 import { ManageReceiverAddressInputField } from './components/ManageAddressesInputField'
 import { ManageAddressesInputFieldCollapsed } from './components/ManageAddressesInputFieldCollapsed'
@@ -10,16 +11,20 @@ export const ManageAddresses = () => {
   const value = field == 'address' ? 'open' : 'closed'
 
   return (
-    <motion.div layout>
+    <AnimatePresence mode="wait">
       <Match
         value={value}
         open={() => (
-          <motion.div>
+          <AnimatedFieldContainer key="open">
             <ManageReceiverAddressInputField />
-          </motion.div>
+          </AnimatedFieldContainer>
         )}
-        closed={() => <ManageAddressesInputFieldCollapsed />}
+        closed={() => (
+          <AnimatedFieldContainer key="closed">
+            <ManageAddressesInputFieldCollapsed />
+          </AnimatedFieldContainer>
+        )}
       />
-    </motion.div>
+    </AnimatePresence>
   )
 }
