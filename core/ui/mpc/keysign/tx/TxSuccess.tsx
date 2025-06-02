@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Animation } from '@lib/ui/animations/Animation'
@@ -10,18 +9,13 @@ import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChainCoinIcon } from '../../../chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '../../../chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '../../../chain/coin/icon/utils/shouldDisplayChainLogo'
-import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import { TxOverviewAmount } from './TxOverviewAmount'
 
 export const TxSuccess = ({
   onFinish,
@@ -35,14 +29,9 @@ export const TxSuccess = ({
   const { t } = useTranslation()
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const amount = fromChainAmount(BigInt(value.toAmount), coin.decimals)
-  const priceQuery = useCoinPriceQuery({
-    coin,
-  })
-
-  const { id, ticker, chain } = coin
 
   return (
-    <Wrapper justifyContent="space-between" gap={36} flexGrow>
+    <Wrapper gap={36} flexGrow>
       <AnimationWrapper>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
@@ -52,35 +41,7 @@ export const TxSuccess = ({
         </AnimatedVisibility>
       </AnimationWrapper>
       <VStack gap={8} fullWidth>
-        <OverviewWrapper alignItems="center" gap={12}>
-          {coin && (
-            <ChainCoinIcon
-              coinSrc={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
-              chainSrc={
-                shouldDisplayChainLogo({
-                  ticker,
-                  chain,
-                  isNative: isFeeCoin({
-                    id,
-                    chain,
-                  }),
-                })
-                  ? getChainLogoSrc(coin.chain)
-                  : undefined
-              }
-              style={{ fontSize: 16 }}
-            />
-          )}
-          <VStack alignItems="center">
-            <Text>{amount}</Text>
-            <MatchQuery
-              value={priceQuery}
-              success={price => (
-                <Text color="supporting">{price.toFixed(2)}</Text>
-              )}
-            />
-          </VStack>
-        </OverviewWrapper>
+        <TxOverviewAmount amount={amount} value={coin} />
         <TxDetailsButton
           justifyContent="space-between"
           alignItems="center"
@@ -95,7 +56,14 @@ export const TxSuccess = ({
           <ChevronRightIcon />
         </TxDetailsButton>
       </VStack>
-      <Button onClick={onFinish}>{t('done')}</Button>
+      <Button
+        style={{
+          marginTop: 'auto',
+        }}
+        onClick={onFinish}
+      >
+        {t('done')}
+      </Button>
     </Wrapper>
   )
 }
@@ -120,17 +88,14 @@ const SuccessText = styled(GradientText)`
   right: 0;
 `
 
-const OverviewWrapper = styled(VStack)`
-  border-radius: 16px;
-  padding: 16px;
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-`
-
 const TxDetailsButton = styled(HStack)`
   padding: 16px 24px;
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;
   ${interactive};
+
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
 `
