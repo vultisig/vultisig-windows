@@ -34,12 +34,19 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '@clients/extension/src/utils/tx/getStandardTx'
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import {
+  getCosmosChainByChainId,
+  getCosmosChainId,
+} from '@core/chain/chains/cosmos/chainInfo'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { evmChainRpcUrls } from '@core/chain/chains/evm/chainInfo'
+import {
+  evmChainRpcUrls,
+  getEvmChainByChainId,
+  getEvmChainId,
+} from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
@@ -111,7 +118,7 @@ export const handleRequest = (
                   `${EventMethod.CONNECT}:${getDappHost(sender)}`,
                   {
                     address: account,
-                    chainId: getChainId(chain as EvmChain),
+                    chainId: `0x${getEvmChainId(chain as EvmChain).toString(16)}`,
                   }
                 )
               } catch (err) {
@@ -136,7 +143,13 @@ export const handleRequest = (
       }
       case RequestMethod.VULTISIG.CHAIN_ID:
       case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        const chainId = getChainId(chain)
+        let chainId: string | undefined = undefined
+
+        if (getChainKind(chain) === 'evm') {
+          chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+        } else if (getChainKind(chain) === 'cosmos') {
+          chainId = getCosmosChainId(chain as CosmosChain)
+        }
 
         if (chainId) resolve(chainId)
         else reject()
@@ -349,7 +362,11 @@ export const handleRequest = (
           reject()
           break
         }
-        const chain = getChainByChainId(param.chainId)
+
+        const chain =
+          getCosmosChainByChainId(param.chainId) ||
+          getEvmChainByChainId(param.chainId)
+
         if (!chain) {
           reject()
           return
@@ -453,7 +470,10 @@ export const handleRequest = (
           break
         }
 
-        const chain = shouldBePresent(getChainByChainId(param.chainId))
+        const chain = shouldBePresent(
+          getCosmosChainByChainId(param.chainId) ||
+            getEvmChainByChainId(param.chainId)
+        )
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
@@ -464,19 +484,17 @@ export const handleRequest = (
 
           if (!previousSession) throw new Error(`No session found for ${host}`)
 
-          const chainId = getChainId(chain)
-
           await updateAppSession({
             vaultId: safeVaultId,
             host,
             fields: {
               selectedCosmosChainId:
                 getChainKind(chain) === 'cosmos'
-                  ? chainId
+                  ? getCosmosChainId(chain as CosmosChain)
                   : previousSession.selectedCosmosChainId,
               selectedEVMChainId:
                 getChainKind(chain) === 'evm'
-                  ? chainId
+                  ? `0x${getEvmChainId(chain as EvmChain).toString(16)}`
                   : previousSession.selectedEVMChainId,
             },
           })
@@ -652,7 +670,13 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        const chainId = getChainId(chain)
+        let chainId: string | undefined = undefined
+
+        if (getChainKind(chain) === 'evm') {
+          chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+        } else if (getChainKind(chain) === 'cosmos') {
+          chainId = getCosmosChainId(chain as CosmosChain)
+        }
 
         if (chainId) resolve(String(parseInt(chainId, 16)))
         else reject()

@@ -4,9 +4,10 @@ import {
   getDappHostname,
 } from '@clients/extension/src/utils/connectedApps'
 import { getStoredRequest } from '@clients/extension/src/utils/storage'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
-import { getChainId } from '@core/chain/coin/ChainId'
+import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
+import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -46,7 +47,13 @@ export const ConnectDAppPage = () => {
   const handleSubmit = async () => {
     if (!vaultId || !sender || !chain) return
 
-    const chainId = getChainId(chain)
+    let chainId: string | undefined = undefined
+
+    if (getChainKind(chain) === 'evm') {
+      chainId = `0x${getEvmChainId(chain as EvmChain).toString(16)}`
+    } else if (getChainKind(chain) === 'cosmos') {
+      chainId = getCosmosChainId(chain as CosmosChain)
+    }
 
     await setCurrentVaultId(vaultId)
 

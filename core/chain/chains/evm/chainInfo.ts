@@ -1,7 +1,7 @@
-import { EvmChain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { recordMap } from '@lib/utils/record/recordMap'
-import { Chain } from 'viem'
+import { Chain as ViemChain } from 'viem'
 import {
   arbitrum,
   avalanche,
@@ -28,7 +28,7 @@ export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
 }
 
-const evmDefaultChainInfo: Record<EvmChain, Chain> = {
+const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.Ethereum]: mainnet,
   [EvmChain.Base]: base,
   [EvmChain.Arbitrum]: arbitrum,
@@ -58,4 +58,13 @@ export const evmChainInfo = recordMap(
 
 export const getEvmChainId = (chain: EvmChain): number => {
   return evmChainInfo[chain].id
+}
+
+export const getEvmChainByChainId = (chainId: string): Chain | undefined => {
+  const parsedId = parseInt(chainId, 16)
+
+  const [chain] =
+    Object.entries(evmChainInfo).find(([, { id }]) => id === parsedId) || []
+
+  return chain as Chain | undefined
 }

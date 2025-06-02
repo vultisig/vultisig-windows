@@ -1,4 +1,4 @@
-import { CosmosChain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 
 const cosmosChainId: Record<CosmosChain, string> = {
   [CosmosChain.THORChain]: 'thorchain-1',
@@ -15,4 +15,11 @@ const cosmosChainId: Record<CosmosChain, string> = {
 
 export const getCosmosChainId = (chain: CosmosChain): string => {
   return cosmosChainId[chain]
+}
+
+export const getCosmosChainByChainId = (chainId: string): Chain | undefined => {
+  const [chain] =
+    Object.entries(cosmosChainId).find(([, id]) => id === chainId) || []
+
+  return chain as Chain | undefined
 }
