@@ -13,21 +13,7 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
   const [{ keygenType, keygenMsg }] = useCoreViewState<'joinKeygen'>()
   const { libType } = keygenMsg
   const mpcLib = fromLibType(libType)
-  const reshareActionProvider = (
-    <Match
-      value={mpcLib}
-      DKLS={() => (
-        <DKLSReshareKeygenActionProvider>
-          {children}
-        </DKLSReshareKeygenActionProvider>
-      )}
-      GG20={() => (
-        <GG20ReshareKeygenActionProvider>
-          {children}
-        </GG20ReshareKeygenActionProvider>
-      )}
-    />
-  )
+
   return (
     <Match
       value={keygenType}
@@ -46,8 +32,21 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
           )}
         />
       )}
-      reshare={() => reshareActionProvider}
-      plugin={() => reshareActionProvider}
+      reshare={() => (
+        <Match
+          value={mpcLib}
+          DKLS={() => (
+            <DKLSReshareKeygenActionProvider>
+              {children}
+            </DKLSReshareKeygenActionProvider>
+          )}
+          GG20={() => (
+            <GG20ReshareKeygenActionProvider>
+              {children}
+            </GG20ReshareKeygenActionProvider>
+          )}
+        />
+      )}
       migrate={() => (
         <MigrateVaultKeygenActionProvider>
           {children}
