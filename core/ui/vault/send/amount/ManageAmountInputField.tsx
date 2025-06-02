@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -21,6 +22,7 @@ import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
+import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
@@ -34,6 +36,7 @@ export const ManageAmountInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
   const { decimals, ticker } = coin
+  const chainSpecificQuery = useSendChainSpecificQuery()
 
   const [
     {
@@ -77,17 +80,27 @@ export const ManageAmountInputField = () => {
                   success={amount => (
                     <HStack alignItems="center" gap={4}>
                       {suggestions.map(suggestion => {
-                        const suggestionValue =
-                          fromChainAmount(amount, decimals) * suggestion
+                        let suggestionValue
+                        if (suggestion === 1) {
+                          // For max amount, subtract fees
+                          const feeAmount = chainSpecificQuery.data
+                            ? getFeeAmount(chainSpecificQuery.data)
+                            : BigInt(0)
+                          suggestionValue = fromChainAmount(
+                            amount - feeAmount,
+                            decimals
+                          )
+                        } else {
+                          suggestionValue =
+                            fromChainAmount(amount, decimals) * suggestion
+                        }
 
                         return (
                           <AmountSuggestion
                             isActive={
                               value ? isEqual(value, suggestionValue) : false
                             }
-                            onClick={() => {
-                              handleUpdateAmount(suggestionValue)
-                            }}
+                            onClick={() => handleUpdateAmount(suggestionValue)}
                             key={suggestion}
                             value={suggestion}
                           />
