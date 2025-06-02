@@ -649,7 +649,7 @@ const leanChainTokens: Partial<
       ticker: 'WETH',
       logo: 'weth',
       decimals: 18,
-      priceProviderId: 'eth',
+      priceProviderId: 'ethereum',
       id: '0x4300000000000000000000000000000000000004',
     },
     {
