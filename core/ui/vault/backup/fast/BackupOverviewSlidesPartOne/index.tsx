@@ -1,14 +1,17 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  NextAnimationButton,
+  ProgressWrapper,
+  Wrapper,
+} from '../../shared/BackupOverviewSlides.styles'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
@@ -50,8 +53,10 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <BottomItemsWrapper gap={12} alignItems="center">
+        <DescriptionWrapper>
           <AnimationDescription animation={currentAnimation} />
+        </DescriptionWrapper>
+        <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
@@ -68,34 +73,3 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
     </Wrapper>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`
-
-const BottomItemsWrapper = styled(VStack)`
-  max-width: 600px;
-  margin-inline: auto;
-`
-
-const Wrapper = styled(PageContent)`
-  overflow-y: hidden;
-`
