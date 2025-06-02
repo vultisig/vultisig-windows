@@ -1,36 +1,43 @@
+import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import {
-  defaultFeePriority,
-  feePriorities,
-  FeePriority,
-} from '@core/chain/tx/fee/FeePriority'
+import { useGetEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useGetEvmDefaultPriorityFeeQuery'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
-import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
-import { useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { HorizontalLine } from '../../../components/HorizontalLine'
 import { useFeeSettings } from '../state/feeSettings'
 import { BaseFee } from './baseFee/BaseFee'
 
 type FeeSettingsFormShape = {
-  priority: FeePriority
+  priority: number
   gasLimit: number | null
 }
 
-export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
+export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
+
+  const [
+    {
+      coin: { chain },
+    },
+  ] = useCoreViewState<'send'>()
+
+  const { data: defaultFeePriority = 0, isSuccess } =
+    useGetEvmDefaultPriorityFeeQuery({
+      chain: chain as EvmChain,
+    })
 
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
@@ -58,6 +65,12 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     [value]
   )
 
+  useEffect(() => {
+    if (isSuccess) {
+      setValue(prev => ({ ...prev, priority: defaultFeePriority }))
+    }
+  }, [defaultFeePriority, isSuccess])
+
   return (
     <Modal
       as="form"
@@ -80,17 +93,18 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         <LineWrapper>
           <HorizontalLine />
         </LineWrapper>
-        <InputContainer>
-          <Text size={14} color="supporting">
-            {t('priority')}
-          </Text>
-          <RadioInput
-            options={feePriorities}
-            value={value.priority}
-            onChange={priority => setValue({ ...value, priority })}
-            renderOption={t}
-          />
-        </InputContainer>
+        <AmountTextInput
+          labelPosition="left"
+          label={
+            <Text size={14} color="supporting">
+              {t('priority_fee')}
+            </Text>
+          }
+          value={value.priority}
+          onValueChange={priority =>
+            setValue({ ...value, priority: priority ?? 0 })
+          }
+        />
         <BaseFee />
         <AmountTextInput
           labelPosition="left"
