@@ -26,10 +26,11 @@ export const useWhitelistedCoinsQuery = (chain: Chain) => {
           chain,
         })
       } else {
-        const evmChainId = hexToNumber(getEvmChainId(chain as EvmChain))
+        const evmChainId = getEvmChainId(chain as EvmChain)
 
         if (evmChainId) {
-          const url = `${rootApiUrl}/1inch/swap/v6.0/${evmChainId}/tokens`
+          const parsedChainId = hexToNumber(evmChainId)
+          const url = `${rootApiUrl}/1inch/swap/v6.0/${parsedChainId}/tokens`
           const data = await queryUrl<OneInchTokensResponse>(url)
 
           const oneInchTokens = Object.values(data.tokens)
