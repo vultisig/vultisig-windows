@@ -354,6 +354,7 @@ export const en = {
   gwei: 'GWEI',
   total_fee: 'Total Fees',
   network_fee: 'Network fee',
+  send_to: 'Send to',
   est_network_fee: 'Est. Network Fee',
   base_fee_tooltip_content:
     'A small tip to speed up your transaction. Higher tips can get your transaction processed faster.',

@@ -15,6 +15,7 @@ export const es = {
     'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   swap_overview: 'Resumen de intercambio',
   overview: 'Visión general',
+  send_to: 'Enviar a',
   you_are_sending: 'Estás enviando',
   priority_fee: 'Tarifa prioritaria',
   priority_fee_tooltip_content:

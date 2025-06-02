@@ -13,6 +13,7 @@ export const de = {
   start_transaction: 'Transaktion starten',
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
+  send_to: 'Senden an',
   priority_fee_tooltip_content:
     'Ein kleines Trinkgeld, um Ihre Transaktion zu beschleunigen. Höhere Trinkgelder können die Verarbeitung beschleunigen.',
   you_are_sending: 'Du sendest',

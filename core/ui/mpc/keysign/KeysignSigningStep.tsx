@@ -11,6 +11,7 @@ import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignT
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -26,6 +27,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../../state/core'
+import { TxSuccess } from './tx/TxSuccess'
 import { normalizeTxHash } from './utils/normalizeTxHash'
 
 type KeysignSigningStepProps = {
@@ -73,25 +75,36 @@ export const KeysignSigningStep = ({
                         />
                       )}
                       default={() => (
-                        <>
-                          <TxOverviewPanel>
-                            <KeysignTxOverview
-                              txHash={normalizeTxHash(txResult.txHash, {
-                                memo: payload?.memo,
-                              })}
+                        <StepTransition
+                          from={({ onFinish: onSeeTxDetails }) => (
+                            <TxSuccess
                               value={payload}
+                              onSeeTxDetails={onSeeTxDetails}
+                              onFinish={() => onFinish?.(txResult)}
                             />
-                          </TxOverviewPanel>
-                          <Button
-                            onClick={() =>
-                              isDAppSigning
-                                ? onFinish(txResult)
-                                : navigate({ id: 'vault' })
-                            }
-                          >
-                            {t('complete')}
-                          </Button>
-                        </>
+                          )}
+                          to={() => (
+                            <>
+                              <TxOverviewPanel>
+                                <KeysignTxOverview
+                                  txHash={normalizeTxHash(txResult.txHash, {
+                                    memo: payload?.memo,
+                                  })}
+                                  value={payload}
+                                />
+                              </TxOverviewPanel>
+                              <Button
+                                onClick={() =>
+                                  isDAppSigning
+                                    ? onFinish(txResult)
+                                    : navigate({ id: 'vault' })
+                                }
+                              >
+                                {t('complete')}
+                              </Button>
+                            </>
+                          )}
+                        />
                       )}
                     />
                   ),

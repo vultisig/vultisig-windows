@@ -87,7 +87,7 @@ export const ManageReceiverAddressInputField = () => {
         </AddressFieldWrapper>
       </VStack>
       <VStack gap={12}>
-        <Text color="shy">{t('to')}</Text>
+        <Text color="shy">{t('send_to')}</Text>
         <Match
           value={viewState}
           scanner={() => (
