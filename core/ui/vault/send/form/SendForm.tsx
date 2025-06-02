@@ -42,6 +42,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       />
       <PageContent
         as="form"
+        scrollable
         gap={40}
         {...getFormProps({
           onSubmit: onFinish,
