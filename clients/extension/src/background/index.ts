@@ -2,6 +2,7 @@ import { initializeMessenger } from '@clients/extension/src/messengers/initializ
 
 import { MessageKey } from '../utils/constants'
 import { dispatchMessage } from './dispatcher/messageDispatcher'
+import { keepAliveHandler } from './handlers/keepAliveHandler'
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -40,3 +41,4 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
     }
   }
 )
+keepAliveHandler()
