@@ -4,9 +4,9 @@ import {
   getDappHostname,
 } from '@clients/extension/src/utils/connectedApps'
 import { getStoredRequest } from '@clients/extension/src/utils/storage'
-import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
-import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
+import { getChainId } from '@core/chain/coin/ChainId'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -46,24 +46,19 @@ export const ConnectDAppPage = () => {
   const handleSubmit = async () => {
     if (!vaultId || !sender || !chain) return
 
-    const isCosmos = getChainKind(chain) === 'cosmos'
-    const isEVM = getChainKind(chain) === 'evm'
-    const chainId =
-      isCosmos || isEVM
-        ? getChainId(chain as CosmosChain | EvmChain)
-        : undefined
+    const chainId = getChainId(chain)
 
     await setCurrentVaultId(vaultId)
+
     await addSession({
       vaultId: vaultId,
       session: {
         host: getDappHostname(sender),
         url: getDappHost(sender),
         chainIds: chainId ? [chainId] : undefined,
-        selectedCosmosChainId: isCosmos
-          ? (chainId as CosmosChainId)
-          : undefined,
-        selectedEVMChainId: isEVM ? (chainId as EVMChainId) : undefined,
+        selectedCosmosChainId:
+          getChainKind(chain) === 'cosmos' ? chainId : undefined,
+        selectedEVMChainId: getChainKind(chain) === 'evm' ? chainId : undefined,
       },
     })
 

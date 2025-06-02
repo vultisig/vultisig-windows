@@ -1,7 +1,5 @@
-import { CosmosChainId, EVMChainId } from '@core/chain/coin/ChainId'
-
-import { getPersistentState } from '../../state/persistent/getPersistentState'
-import { setPersistentState } from '../../state/persistent/setPersistentState'
+import { getPersistentState } from '@clients/extension/src/state/persistent/getPersistentState'
+import { setPersistentState } from '@clients/extension/src/state/persistent/setPersistentState'
 
 export const appSessionsQueryKey = ['appSessions']
 const [key] = appSessionsQueryKey
@@ -17,8 +15,8 @@ export interface AppSession {
   chainIds?: string[]
   addresses?: string[]
   url: string
-  selectedEVMChainId?: EVMChainId
-  selectedCosmosChainId?: CosmosChainId
+  selectedEVMChainId?: string
+  selectedCosmosChainId?: string
 }
 
 export type VaultsAppSessions = Record<string, Record<string, AppSession>>

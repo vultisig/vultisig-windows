@@ -1,3 +1,10 @@
+import {
+  handleGetVault,
+  handleGetVaults,
+} from '@clients/extension/src/background/handlers/accountsHandler'
+import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
+import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
+import { Messenger } from '@clients/extension/src/messengers/createMessenger'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
 import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
@@ -5,19 +12,9 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
-import {
-  CosmosChainId,
-  EVMChainId,
-  getChainByChainId,
-  getChainId,
-} from '@core/chain/coin/ChainId'
+import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
-
-import { Messenger } from '../../messengers/createMessenger'
-import { handleGetVault, handleGetVaults } from '../handlers/accountsHandler'
-import { handleRequest } from '../handlers/requestHandler'
-import { generateCosmosAccount } from '../utils/cosmosAccount'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -34,20 +31,31 @@ export const dispatchMessage = async (
   }
   const chainSelectors = {
     [MessageKey.COSMOS_REQUEST]: () => {
-      const selectedCosmosChainId = Object.values(sessions).reduce(
-        (acc: CosmosChainId, vault) =>
-          vault[dappHostname]?.selectedCosmosChainId ?? acc,
-        getChainId(Chain.Cosmos) as CosmosChainId
-      )
-      return getChainByChainId(selectedCosmosChainId)
+      const chainId = getChainId(Chain.Cosmos)
+
+      if (chainId) {
+        const selectedCosmosChainId = Object.values(sessions).reduce(
+          (acc, vault) => vault[dappHostname]?.selectedCosmosChainId ?? acc,
+          chainId
+        )
+
+        return getChainByChainId(selectedCosmosChainId)
+      } else {
+        return undefined
+      }
     },
     [MessageKey.ETHEREUM_REQUEST]: () => {
-      const selectedEVMChainId = Object.values(sessions).reduce(
-        (acc: EVMChainId, vault) =>
-          vault[dappHostname]?.selectedEVMChainId ?? acc,
-        getChainId(Chain.Ethereum) as EVMChainId
-      )
-      return getChainByChainId(selectedEVMChainId)
+      const chainId = getChainId(Chain.Ethereum)
+
+      if (chainId) {
+        const selectedEVMChainId = Object.values(sessions).reduce(
+          (acc, vault) => vault[dappHostname]?.selectedEVMChainId ?? acc,
+          chainId
+        )
+        return getChainByChainId(selectedEVMChainId)
+      } else {
+        return undefined
+      }
     },
   } as const
 
