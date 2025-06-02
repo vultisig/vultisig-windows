@@ -2,7 +2,7 @@ import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useCore } from '@core/ui/state/core'
 import { ShareVaultCard } from '@core/ui/vault/share/ShareVaultCard'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/button'
+import { Button, UnstyledButton } from '@lib/ui/button'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -15,7 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(UnstyledButton)`
   background-color: ${getColor('foreground')};
   border-radius: 8px;
   color: ${getColor('primary')};
@@ -74,7 +74,6 @@ export const AirdropRegisterPage = () => {
             <StyledButton
               label={t('vault_register_for_airdrop_list_item_2_part_2')}
               onClick={() => openUrl('https://airdrop.vultisig.com')}
-              unstyled
             />
           </Text>
           <Text color="contrast" size={18} weight={500}>

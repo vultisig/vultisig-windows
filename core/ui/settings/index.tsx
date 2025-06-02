@@ -3,7 +3,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { Button } from '@lib/ui/button'
+import { Button, UnstyledButton } from '@lib/ui/button'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -203,10 +203,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <Button
+          <UnstyledButton
             label={`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}
             onClick={() => openUrl(shareURL)}
-            unstyled
           />
           {props.client === 'desktop' && props.manageMpcLib}
         </PageFooter>

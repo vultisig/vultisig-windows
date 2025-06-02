@@ -12,15 +12,15 @@ type Type = 'default' | 'link' | 'primary' | 'secondary'
 type Weight = 400 | 500 | 600 | 700
 
 const StyledButton = styled.button<{
-  btnOnly: boolean
   btnType: Type
   disabled: boolean
+  iconOnly: boolean
   size: Size
   status: Status
   unstyled?: boolean
   weight: Weight
 }>`
-  ${({ btnOnly, btnType, disabled, size, status, unstyled, weight }) =>
+  ${({ btnType, disabled, iconOnly, size, status, unstyled, weight }) =>
     unstyled
       ? css`
           ${interactive};
@@ -43,43 +43,43 @@ const StyledButton = styled.button<{
           gap: 8px;
           justify-content: center;
           transition: all 0.2s;
-          width: ${btnOnly ? 'auto' : '100%'};
+          width: ${iconOnly ? 'auto' : '100%'};
 
           ${match(size, {
             xs: () => css`
-              border-radius: ${btnOnly ? '4px' : '20px'};
-              font-size: ${btnOnly ? '16px' : '12px'};
+              border-radius: ${iconOnly ? '4px' : '20px'};
+              font-size: ${iconOnly ? '16px' : '12px'};
               height: 20px;
               min-width: 20px;
-              ${!btnOnly && horizontalPadding(10)}
+              ${!iconOnly && horizontalPadding(10)}
             `,
             sm: () => css`
-              border-radius: ${btnOnly ? '6px' : '24px'};
-              font-size: ${btnOnly ? '18px' : '12px'};
+              border-radius: ${iconOnly ? '6px' : '24px'};
+              font-size: ${iconOnly ? '18px' : '12px'};
               height: 24px;
               min-width: 24px;
-              ${!btnOnly && horizontalPadding(12)}
+              ${!iconOnly && horizontalPadding(12)}
             `,
             md: () => css`
-              border-radius: ${btnOnly ? '8px' : '32px'};
-              font-size: ${btnOnly ? '20px' : '12px'};
+              border-radius: ${iconOnly ? '8px' : '32px'};
+              font-size: ${iconOnly ? '20px' : '12px'};
               height: 32px;
               min-width: 32px;
-              ${!btnOnly && horizontalPadding(16)}
+              ${!iconOnly && horizontalPadding(16)}
             `,
             lg: () => css`
-              border-radius: ${btnOnly ? '10px' : '36px'};
-              font-size: ${btnOnly ? '24px' : '12px'};
+              border-radius: ${iconOnly ? '10px' : '36px'};
+              font-size: ${iconOnly ? '24px' : '12px'};
               height: 36px;
               min-width: 36px;
-              ${!btnOnly && horizontalPadding(16)}
+              ${!iconOnly && horizontalPadding(16)}
             `,
             xl: () => css`
-              border-radius: ${btnOnly ? '12px' : '46px'};
-              font-size: ${btnOnly ? '32px' : '14px'};
+              border-radius: ${iconOnly ? '12px' : '46px'};
+              font-size: ${iconOnly ? '32px' : '14px'};
               height: 46px;
               min-width: 46px;
-              ${!btnOnly && horizontalPadding(16)}
+              ${!iconOnly && horizontalPadding(16)}
             `,
           })}
 
@@ -222,15 +222,15 @@ export const Button: FC<ButtonProps> = ({
   weight = 500,
   ...props
 }) => {
-  const btnOnly = !label && !!icon
+  const iconOnly = !label && !!icon
 
   return (
     <StyledButton
       {...{
         disabled: disabled || loading,
-        btnOnly,
-        btnType: type ? type : btnOnly ? 'default' : 'primary',
-        size: size ? size : btnOnly ? 'md' : 'xl',
+        btnType: type ? type : iconOnly ? 'default' : 'primary',
+        iconOnly,
+        size: size ? size : iconOnly ? 'md' : 'xl',
         status,
         type: htmlType,
         weight,
@@ -242,3 +242,7 @@ export const Button: FC<ButtonProps> = ({
     </StyledButton>
   )
 }
+
+export const UnstyledButton: FC<ButtonProps> = props => (
+  <Button {...props} unstyled />
+)

@@ -23,7 +23,7 @@ import {
   useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Button } from '@lib/ui/button'
+import { Button, UnstyledButton } from '@lib/ui/button'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -179,7 +179,7 @@ export const VaultChainPage = () => {
               ).map(adjustVaultChainCoinsLogos)
 
               return orderedCoins.map(coin => (
-                <Button
+                <UnstyledButton
                   icon={<VaultChainCoinItem value={coin} />}
                   key={coin.id}
                   onClick={() =>
@@ -188,7 +188,6 @@ export const VaultChainPage = () => {
                       state: { coin },
                     })
                   }
-                  unstyled
                 />
               ))
             }}

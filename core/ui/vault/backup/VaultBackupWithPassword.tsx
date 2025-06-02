@@ -1,6 +1,6 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/button'
+import { Button, UnstyledButton } from '@lib/ui/button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
@@ -40,7 +40,7 @@ const InputField = styled.input`
   }
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(UnstyledButton)`
   position: absolute;
   right: 12px;
   top: 50%;
@@ -137,7 +137,6 @@ export const VaultBackupWithPassword = ({
                 <IconButton
                   icon={<EyeIcon fontSize={20} />}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                  unstyled
                 />
               </InputFieldWrapper>
               {errors.password?.message && (
@@ -162,7 +161,6 @@ export const VaultBackupWithPassword = ({
                   onClick={() =>
                     setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
                   }
-                  unstyled
                 />
               </InputFieldWrapper>
               {errors.verifiedPassword && (

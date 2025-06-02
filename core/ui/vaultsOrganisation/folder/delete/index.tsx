@@ -2,7 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteVaultFolderMutation } from '@core/ui/storage/vaultFolders'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/button'
+import { Button, UnstyledButton } from '@lib/ui/button'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -24,11 +24,10 @@ export const DeleteVaultFolder = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <Button
+        <UnstyledButton
           icon={<StyledIcon fontSize={20} />}
           loading={isPending}
           onClick={onOpen}
-          unstyled
         />
       )}
       renderContent={({ onClose }) => (
