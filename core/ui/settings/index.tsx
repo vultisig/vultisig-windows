@@ -155,6 +155,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 icon={<LockIcon style={{ fontSize: iconSize }} />}
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
+                hoverable
+                showArrow
               />
             )}
           </SettingsSection>

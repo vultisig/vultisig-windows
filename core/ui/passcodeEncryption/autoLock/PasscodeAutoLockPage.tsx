@@ -41,12 +41,10 @@ export const PasscodeAutoLockPage = () => {
     <VStack fullHeight>
       <FlowPageHeader title={t('lock_time')} />
       <FitPageContent contentMaxWidth={360}>
-        <VStack gap={24}>
-          <VStack gap={4}>
-            <Text size={16} color="contrast">
-              {t('lock_vultisig_automatically_after')}
-            </Text>
-          </VStack>
+        <VStack gap={8}>
+          <Text size={14} color="contrast">
+            {t('lock_vultisig_automatically_after')}
+          </Text>
           <List>
             {passcodeAutoLockOptions.map(value => {
               const isSelected = value === currentValue
