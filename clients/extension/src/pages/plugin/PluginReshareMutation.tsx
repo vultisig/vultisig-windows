@@ -9,10 +9,11 @@ const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
 export const PluginReshareMutation = ({ value }: ValueProp<string>) => {
   const { mutate: shareJoinUrl, ...mutationState } = useMutation({
-    mutationFn: async (url: string) =>
+    mutationFn: async (joinUrl: string) => {
       await backgroundMessenger.send('plugin:reshare', {
-        url,
-      }),
+        joinUrl,
+      })
+    },
   })
 
   useEffect(() => {
