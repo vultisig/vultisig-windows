@@ -396,6 +396,7 @@ export const en = {
     'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
   transaction_hash_copied: 'Transaction hash copied',
+  tx_hash: 'Transaction hash',
   asset: 'Asset',
   balance: 'Balance',
   staked: 'Staked',

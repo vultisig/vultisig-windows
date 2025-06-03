@@ -5,6 +5,7 @@ import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/coin/icon/ChainCoinIcon'
@@ -12,6 +13,7 @@ import { getCoinLogoSrc } from '../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '../../../chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
 import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import { useFiatCurrency } from '../../../storage/fiatCurrency'
 
 export const TxOverviewAmount = ({
   amount,
@@ -23,7 +25,7 @@ export const TxOverviewAmount = ({
   const priceQuery = useCoinPriceQuery({
     coin: value,
   })
-
+  const fiatCurrency = useFiatCurrency()
   return (
     <OverviewWrapper alignItems="center" gap={12}>
       {value && (
@@ -45,12 +47,14 @@ export const TxOverviewAmount = ({
         />
       )}
       <VStack alignItems="center">
-        <Text size={18}>{amount}</Text>
+        <Text size={18}>
+          {amount} {ticker}
+        </Text>
         <MatchQuery
           value={priceQuery}
           success={price => (
             <Text size={13} color="supporting">
-              {price.toFixed(2)}
+              {formatAmount(amount * price, fiatCurrency)}
             </Text>
           )}
         />

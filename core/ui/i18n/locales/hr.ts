@@ -10,6 +10,7 @@ export const hr = {
   onboarding_view4_description:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
+  tx_hash: 'Hash transakcije',
   gas_limit_tooltip_content:
     'Maksimalna količina gasa koju ćete platiti. Može se povećati ako ograničenje nije dovoljno za slanje transakcija.',
   select_asset: 'Odaberite imovinu',
