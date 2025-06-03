@@ -24,18 +24,18 @@ export const useAutoLock = () => {
       return
     }
 
-    const autoLockTimeMs = convertDuration(passcodeAutoLock, 'min', 'ms')
-    const timeElapsed = Date.now() - passcodeUpdatedAt
-    const timeRemaining = autoLockTimeMs - timeElapsed
+    const lockAt =
+      passcodeUpdatedAt + convertDuration(passcodeAutoLock, 'min', 'ms')
+    const timeUntilLock = lockAt - Date.now()
 
-    if (timeRemaining <= 0) {
+    if (timeUntilLock <= 0) {
       setPasscode(null)
       return
     }
 
     const timeoutId = setTimeout(() => {
       setPasscode(null)
-    }, timeRemaining)
+    }, timeUntilLock)
 
     return () => {
       clearTimeout(timeoutId)
