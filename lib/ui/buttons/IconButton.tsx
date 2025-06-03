@@ -11,7 +11,7 @@ import { toSizeUnit } from '../css/toSizeUnit'
 
 type IconButtonSize = 's' | 'm' | 'l'
 
-type IconButtonKind = 'regular'
+type IconButtonKind = 'regular' | 'primary'
 
 export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
   s: 24,
@@ -38,6 +38,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
 
   color: ${matchColor('kind', {
     regular: 'contrast',
+    primary: 'contrast',
   })};
 
   font-size: ${({ size }) => toSizeUnit(iconButtonIconSizeRecord[size])};
@@ -47,6 +48,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   background: ${({ kind, theme: { colors } }) =>
     match(kind, {
       regular: () => colors.transparent,
+      primary: () => colors.buttonPrimaryWeb,
     }).toCssValue()};
 
   ${({ isDisabled, kind, theme }) =>
@@ -55,10 +57,12 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         background: ${match(kind, {
           regular: () => theme.colors.mist.toCssValue(),
+          primary: () => theme.colors.buttonPrimaryWebHover.toCssValue(),
         })};
 
         color: ${match(kind, {
           regular: () => getColor('contrast'),
+          primary: () => getColor('contrast'),
         })};
       }
     `}

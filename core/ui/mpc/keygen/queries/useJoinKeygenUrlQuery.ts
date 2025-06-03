@@ -17,11 +17,12 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useVaultCreationMpcLib } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { match } from '@lib/utils/match'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
+
+import { useCore } from '../../../state/core'
 
 export const useJoinKeygenUrlQuery = () => {
   const sessionId = useMpcSessionId()
@@ -36,7 +37,7 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenVault = useKeygenVault()
 
-  const vaultCreationMpcLib = useVaultCreationMpcLib()
+  const { vaultCreationMpcLib } = useCore()
 
   return useTransformQueryData(
     useSevenZipQuery(),

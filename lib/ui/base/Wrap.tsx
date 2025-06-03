@@ -1,11 +1,9 @@
-import { ReactNode } from 'react'
-
 import { ChildrenProp } from '../props'
 
 type WrapProps = ChildrenProp & {
-  wrap?: (children: ReactNode) => ReactNode
+  wrap?: React.ComponentType<ChildrenProp>
 }
 
-export const Wrap = ({ children, wrap }: WrapProps) => {
-  return wrap ? wrap(children) : children
+export const Wrap = ({ children, wrap: Wrapper }: WrapProps) => {
+  return Wrapper ? <Wrapper>{children}</Wrapper> : children
 }
