@@ -13,10 +13,17 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  gas_limit_tooltip_content:
+    'A quantidade máxima de gás que você pagará. Pode ser aumentada se o limite de gás não for suficiente para enviar transações.',
+  base_fee_tooltip_content:
+    'Uma pequena gorjeta para acelerar sua transação. Gorjetas maiores podem fazer com que ela seja processada mais rapidamente.',
   percentage: 'Percentagem',
   asset_selection: 'Seleção de ativos',
   you_are_sending: 'Você está enviando',
   unexpected_error: 'Erro inesperado',
+  priority_fee: 'Taxa prioritária',
+  priority_fee_tooltip_content:
+    'Uma pequena gorjeta para acelerar sua transação. Gorjetas maiores podem fazer com que ela seja processada mais rapidamente.',
   send_overview: 'Enviar visão geral',
   approval_tx: 'Transação de aprovação',
   verify_password_periodic_message:
@@ -639,7 +646,7 @@ export const pt = {
   priority: 'Prioridade',
   gas_limit: 'Limite de gás',
   current_base_fee: 'Taxa base atual',
-  gwei: 'Gwei',
+  gwei: 'GWEI',
   total_fee: 'Taxa total',
   network_rate: 'Taxa de rede',
   network_rate_required: 'A taxa de rede é necessária',

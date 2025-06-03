@@ -8,6 +8,8 @@ import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
@@ -20,9 +22,17 @@ export const BaseFee = () => {
 
   return (
     <InputContainer>
-      <InputLabel>
-        {t('current_base_fee')} ({t('gwei')})
-      </InputLabel>
+      <Tooltip
+        content={<Text>{t('base_fee_tooltip_content')}</Text>}
+        renderOpener={props => {
+          return (
+            <InputLabel color="supporting" {...props}>
+              {t('current_base_fee')} ({t('gwei')})
+            </InputLabel>
+          )
+        }}
+      />
+
       <FeeContainer>
         <MatchQuery
           value={query}
