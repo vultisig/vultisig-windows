@@ -24,6 +24,7 @@ const OptionItem = styled.label<{ isSelected: boolean }>`
   position: relative;
   align-items: center;
   min-height: 56px;
+  font-size: 16px;
   ${borderRadius.m};
   ${interactive}
   color: ${getColor('textShy')};
