@@ -5,10 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export const passcodeAutoLockDurations = [1, 5, 10, 15, 30] as const
-
-export type PasscodeAutoLockDuration =
-  (typeof passcodeAutoLockDurations)[number]
+const passcodeAutoLockDurations = [1, 5, 10, 15, 30] as const
 
 export const passcodeAutoLockOptions = [
   ...passcodeAutoLockDurations,
@@ -38,10 +35,4 @@ export const usePasscodeAutoLock = () => {
   const { data } = usePasscodeAutoLockQuery()
 
   return shouldBeDefined(data)
-}
-
-export const useHasPasscodeAutoLock = () => {
-  const data = usePasscodeAutoLock()
-
-  return data !== null
 }
