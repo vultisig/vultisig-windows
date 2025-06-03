@@ -29,7 +29,8 @@
     "@solana/spl-token": "^0.4.13",
     "axios": "^1.8.3",
     "mipd": "^0.0.7",
-    "styled-components": "^6.1.16"
+    "styled-components": "^6.1.16",
+    "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
     "@core/config": "workspace:*",
