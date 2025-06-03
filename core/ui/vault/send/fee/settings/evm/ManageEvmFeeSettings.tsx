@@ -1,25 +1,23 @@
 import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
-import { Button } from '@lib/ui/buttons/Button'
+import { BaseFee } from '@core/ui/vault/send/fee/settings/evm/baseFee/BaseFee'
+import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { Button } from '@lib/ui/button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
-import { HorizontalLine } from '../../../components/HorizontalLine'
-import { useFeeSettings } from '../state/feeSettings'
-import { BaseFee } from './baseFee/BaseFee'
 
 type FeeSettingsFormShape = {
   priorityFee: number
@@ -84,11 +82,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       })}
       onClose={onClose}
       title={t('advanced_gas_fee')}
-      footer={
-        <StyledButton kind="accent" type="submit">
-          {t('save')}
-        </StyledButton>
-      }
+      footer={<Button htmlType="submit">{t('save')}</Button>}
     >
       <VStack gap={12}>
         <LineWrapper>
@@ -135,10 +129,6 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     </Modal>
   )
 }
-
-const StyledButton = styled(Button)`
-  background-color: ${getColor('buttonPrimary')};
-`
 
 const LineWrapper = styled.div`
   margin-top: -5px;

@@ -5,7 +5,10 @@ import {
 } from '@core/chain/tx/fee/FeePriority'
 import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
 import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
-import { Button } from '@lib/ui/buttons/Button'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
+import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { Button } from '@lib/ui/button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
@@ -19,10 +22,6 @@ import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValu
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { HorizontalLine } from '../../../components/HorizontalLine'
-import { useSendChainSpecific } from '../../SendChainSpecificProvider'
-import { useFeeSettings } from '../state/feeSettings'
 
 type FormShape = {
   priority: FeePriority | number | null
@@ -72,7 +71,7 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       onClose={onClose}
       title={<Text size={17}>{t('advanced_gas_fee')}</Text>}
       footer={
-        <Button kind="accent" isDisabled={isDisabled} type="submit">
+        <Button disabled={!!isDisabled} htmlType="submit">
           {t('save')}
         </Button>
       }

@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { Button } from '@lib/ui/button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { UiProps } from '@lib/ui/props'
 
@@ -24,9 +24,9 @@ export const RadioInput = <T extends string>({
 
         return (
           <Button
-            kind={isActive ? 'accent' : 'secondary'}
             key={option}
             onClick={() => onChange(option)}
+            type={isActive ? 'primary' : 'secondary'}
           >
             {renderOption(option)}
           </Button>

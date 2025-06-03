@@ -186,20 +186,18 @@ const StyledButton = styled.button<{
             })}
 
             &:hover {
-              background-color: ${getColor('buttonSecondaryHover')};
-
               ${match(status, {
                 default: () => css`
-                  color: ${getColor('buttonPrimary')};
+                  background-color: ${getColor('buttonSecondaryHover')};
                 `,
                 danger: () => css`
-                  color: ${getColor('alertError')};
+                  background-color: ${getColor('alertError')};
                 `,
                 success: () => css`
-                  color: ${getColor('alertSuccess')};
+                  background-color: ${getColor('alertSuccess')};
                 `,
                 warning: () => css`
-                  color: ${getColor('alertWarning')};
+                  background-color: ${getColor('alertWarning')};
                 `,
               })}
             }

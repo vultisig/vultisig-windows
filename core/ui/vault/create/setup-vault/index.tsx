@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
+import { Button } from '@lib/ui/button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '@lib/ui/icons/LightningGradientIcon'
@@ -10,6 +11,7 @@ import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
@@ -22,7 +24,6 @@ import styled, { useTheme } from 'styled-components'
 import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
-  ConfirmButton,
   ContentWrapper,
   DescriptionContentWrapper,
   DescriptionTitleWrapper,
@@ -45,16 +46,13 @@ export const SetupVaultPage = () => {
   }, [navigate, value])
 
   return (
-    <VStack
-      style={{
-        minHeight: '100%',
-      }}
-    >
+    <VStack as="form" {...getFormProps({ onSubmit: onStart })} fullHeight>
       <PageHeader
         title={<PageHeaderTitle>{t('chooseSetup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
+        hasBorder
       />
-      <PageContent flexGrow as="form" {...getFormProps({ onSubmit: onStart })}>
+      <PageContent flexGrow>
         <ContentWrapper alignItems="center" gap={20} flexGrow>
           <ArtContainer data-testid="SetupVaultPage-ArtContainer">
             <RiveComponent />
@@ -143,9 +141,11 @@ export const SetupVaultPage = () => {
               ))}
             </DescriptionContentWrapper>
           </DescriptionWrapper>
-          <ConfirmButton type="submit">{t('next')}</ConfirmButton>
         </ContentWrapper>
       </PageContent>
+      <PageFooter>
+        <Button htmlType="submit">{t('next')}</Button>
+      </PageFooter>
     </VStack>
   )
 }
