@@ -10,7 +10,7 @@ import { MigrateSuccess } from '../migrate/MigrateSuccess'
 import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 
 export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
-  const opertaionType = useCurrentKeygenOperationType()
+  const operationType = useCurrentKeygenOperationType()
 
   return (
     <StepTransition
@@ -19,7 +19,7 @@ export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
       )}
       to={() =>
         matchDiscriminatedUnion<KeygenOperation, JSX.Element>(
-          opertaionType,
+          operationType,
           'operation',
           'type',
           {

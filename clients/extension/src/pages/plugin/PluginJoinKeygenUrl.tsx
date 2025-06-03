@@ -5,16 +5,26 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { PluginReshareMutation } from './PluginReshareMutation'
+import { OnFinishProp } from '@lib/ui/props'
+import { Center } from '@lib/ui/layout/Center'
 
-export const PluginJoinKeygenUrl = () => {
+export const PluginJoinKeygenUrl = ({ onFinish }: OnFinishProp) => {
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const { t } = useTranslation()
   return (
     <MatchQuery
       value={joinUrlQuery}
-      pending={() => <Spinner />}
-      error={() => <StrictText>{t('failed_to_generate_join_url')}</StrictText>}
-      success={url => <PluginReshareMutation value={url} />}
+      pending={() => (
+        <Center>
+          <Spinner />
+        </Center>
+      )}
+      error={() => (
+        <Center>
+          <StrictText>{t('failed_to_generate_join_url')}</StrictText>
+        </Center>
+      )}
+      success={url => <PluginReshareMutation value={url} onFinish={onFinish} />}
     />
   )
 }

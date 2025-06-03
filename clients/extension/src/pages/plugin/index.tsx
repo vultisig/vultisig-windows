@@ -5,6 +5,7 @@ import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
 
 import { PluginJoinKeygenUrl } from './PluginJoinKeygenUrl'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 
 export const PluginPage = () => {
   return (
@@ -14,8 +15,12 @@ export const PluginPage = () => {
           <CurrentKeygenOperationTypeProvider
             value={{ operation: 'reshare', type: 'plugin' }}
           >
-            <PluginJoinKeygenUrl />
-            <FastVaultReshareFlow isPluginReshare={true} />
+            <StepTransition
+              from={({ onFinish }) => (
+                <PluginJoinKeygenUrl onFinish={onFinish} />
+              )}
+              to={() => <FastVaultReshareFlow isPluginReshare={true} />}
+            />
           </CurrentKeygenOperationTypeProvider>
         </PasswordProvider>
       </EmailProvider>
