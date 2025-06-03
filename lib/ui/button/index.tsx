@@ -222,7 +222,7 @@ const StyledIconButton = styled.button<{
     display: flex;
     justify-content: center;
     transition: all 0.2s;
-    width: 'auto';
+    width: auto;
 
     ${match(size, {
       xs: () => css`
