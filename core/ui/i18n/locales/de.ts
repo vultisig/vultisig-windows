@@ -13,7 +13,10 @@ export const de = {
   start_transaction: 'Transaktion starten',
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
+  priority_fee_tooltip_content:
+    'Ein kleines Trinkgeld, um Ihre Transaktion zu beschleunigen. Höhere Trinkgelder können die Verarbeitung beschleunigen.',
   you_are_sending: 'Du sendest',
+  priority_fee: 'Prioritätsgebühr',
   youre_swapping: 'Du tauschst',
   asset_selection: 'Asset-Auswahl',
   percentage: 'Prozentsatz',
@@ -648,7 +651,11 @@ export const de = {
   priority: 'Priorität',
   gas_limit: 'Gasgrenze',
   current_base_fee: 'Aktuelle Grundgebühr',
-  gwei: 'Gwei',
+  gwei: 'GWEI',
+  gas_limit_tooltip_content:
+    'Der maximale Gasbetrag, den Sie bezahlen. Kann erhöht werden, wenn das Gaslimit nicht ausreicht, um Transaktionen zu senden.',
+  base_fee_tooltip_content:
+    'Ein kleines Trinkgeld, um Ihre Transaktion zu beschleunigen. Höhere Trinkgelder können die Verarbeitung beschleunigen.',
   total_fee: 'Gesamtgebühr',
   network_rate: 'Netzwerkrate',
   network_rate_required: 'Netzwerkrate ist erforderlich',
