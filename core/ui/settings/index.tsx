@@ -108,22 +108,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               showArrow
             />
           </SettingsSection>
-          <SettingsSection title={t('security')}>
-            <ListItem
-              icon={<SecurityIcon style={{ fontSize: iconSize }} />}
-              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
-              title={t('security')}
-              hoverable
-              showArrow
-            />
-            {hasPasscodeEncryption && (
-              <ListItem
-                icon={<LockIcon style={{ fontSize: iconSize }} />}
-                onClick={() => navigate({ id: 'passcodeAutoLock' })}
-                title={t('lock_time')}
-              />
-            )}
-          </SettingsSection>
+
           <SettingsSection title={t('general')}>
             <ListItem
               extra={languageName[language]}
@@ -156,6 +141,22 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               showArrow
             />
             {props.client === 'extension' && props.expandView}
+          </SettingsSection>
+          <SettingsSection title={t('security')}>
+            <ListItem
+              icon={<SecurityIcon style={{ fontSize: iconSize }} />}
+              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
+              title={t('security')}
+              hoverable
+              showArrow
+            />
+            {hasPasscodeEncryption && (
+              <ListItem
+                icon={<LockIcon style={{ fontSize: iconSize }} />}
+                onClick={() => navigate({ id: 'passcodeAutoLock' })}
+                title={t('lock_time')}
+              />
+            )}
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem
