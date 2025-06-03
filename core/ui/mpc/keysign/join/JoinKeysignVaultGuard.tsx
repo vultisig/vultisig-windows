@@ -27,10 +27,9 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('wrong_vault_try_again')}
         action={
-          <Button
-            label={t('change_vault')}
-            onClick={() => navigate({ id: 'vaults' })}
-          />
+          <Button onClick={() => navigate({ id: 'vaults' })}>
+            {t('change_vault')}
+          </Button>
         }
       />
     )
@@ -43,7 +42,7 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       <FullPageFlowErrorState
         message={t('vault_type_does_not_match')}
         action={
-          <Button label={t('back')} onClick={() => navigate({ id: 'vault' })} />
+          <Button onClick={() => navigate({ id: 'vault' })}>{t('back')}</Button>
         }
       />
     )

@@ -137,7 +137,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
 }
 
 const StyledButton = styled(Button)`
-  background-color: ${getColor('buttonPrimaryWeb')};
+  background-color: ${getColor('buttonPrimary')};
 `
 
 const LineWrapper = styled.div`

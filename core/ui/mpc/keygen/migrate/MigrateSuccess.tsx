@@ -13,10 +13,9 @@ export const MigrateSuccess = () => {
       art={<Animation src="/core/animations/upgrade-success.riv" />}
       title={<Trans i18nKey="upgrade_success" components={{ b: <b /> }} />}
       action={
-        <Button
-          label={t('go_to_vault')}
-          onClick={() => navigate({ id: 'vault' })}
-        />
+        <Button onClick={() => navigate({ id: 'vault' })}>
+          {t('go_to_vault')}
+        </Button>
       }
     />
   )

@@ -64,16 +64,16 @@ export const ShareVaultPage = () => {
           </div>
         </VStack>
         <VStack gap={8} fullWidth>
-          <Button
-            icon={<StyledIcon fontSize={20} />}
-            label={t('vault_qr_share')}
-            onClick={shareQrImage}
-          />
+          <Button icon={<StyledIcon fontSize={20} />} onClick={shareQrImage}>
+            {t('vault_qr_share')}
+          </Button>
 
           <SaveAsImage
             fileName={`VaultQR-${name}-${lastThreeUID}`}
             renderTrigger={({ onClick }) => (
-              <Button label={t('save')} onClick={onClick} type="secondary" />
+              <Button onClick={onClick} type="secondary">
+                {t('save')}
+              </Button>
             )}
             value={<ShareVaultCard />}
           />

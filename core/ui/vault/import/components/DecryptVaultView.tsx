@@ -47,7 +47,9 @@ export const DecryptVaultView = ({
           />
         </VStack>
         <VStack gap={20}>
-          <Button htmlType="submit" label={t('continue')} loading={isPending} />
+          <Button htmlType="submit" loading={isPending}>
+            {t('continue')}
+          </Button>
           {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>

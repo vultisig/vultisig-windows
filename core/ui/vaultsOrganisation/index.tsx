@@ -97,10 +97,9 @@ export const VaultsPage = () => {
         ) : null}
       </PageContent>
       <PageFooter>
-        <Button
-          label={t('add_new_vault')}
-          onClick={() => navigate({ id: 'newVault' })}
-        />
+        <Button onClick={() => navigate({ id: 'newVault' })}>
+          {t('add_new_vault')}
+        </Button>
       </PageFooter>
     </VStack>
   )

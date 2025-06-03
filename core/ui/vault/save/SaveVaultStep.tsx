@@ -34,7 +34,7 @@ export const SaveVaultStep: React.FC<
           <FlowErrorPageContent
             title={t('failed_to_save_vault')}
             message={extractErrorMsg(error)}
-            action={<Button label={t('back')} onClick={onBack} />}
+            action={<Button onClick={onBack}>{t('back')}</Button>}
           />
         )}
       />

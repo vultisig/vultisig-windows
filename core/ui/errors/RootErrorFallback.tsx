@@ -65,18 +65,17 @@ export const RootErrorFallback = ({
           {info && <StackTrace>{info.componentStack}</StackTrace>}
         </VStack>
         <UniformColumnGrid gap={20}>
+          <Button onClick={() => openUrl(reportErrorUrl)} type="secondary">
+            {t('report_error')}
+          </Button>
           <Button
-            label={t('report_error')}
-            onClick={() => openUrl(reportErrorUrl)}
-            type="secondary"
-          />
-          <Button
-            label={t('try_again')}
             onClick={() => {
               navigate({ id: 'vault' })
               clearError()
             }}
-          />
+          >
+            {t('try_again')}
+          </Button>
         </UniformColumnGrid>
       </PageContent>
     </VStack>

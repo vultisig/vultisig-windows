@@ -24,24 +24,25 @@ export const NewVaultPage = () => {
         <ProductLogoBlock />
       </PageContent>
       <PageFooter gap={16}>
-        <Button
-          label={t('create_new_vault')}
-          onClick={() => navigate({ id: 'setupVault', state: {} })}
-        />
+        <Button onClick={() => navigate({ id: 'setupVault', state: {} })}>
+          {t('create_new_vault')}
+        </Button>
         <Divider text={t('or').toUpperCase()} />
         <VStack gap={12}>
           <Button
-            label={t('scan_qr')}
             onClick={() =>
               navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
             type="secondary"
-          />
+          >
+            {t('scan_qr')}
+          </Button>
           <Button
-            label={t('import_vault')}
             onClick={() => navigate({ id: 'importVault' })}
             type="secondary"
-          />
+          >
+            {t('import_vault')}
+          </Button>
         </VStack>
       </PageFooter>
     </VStack>

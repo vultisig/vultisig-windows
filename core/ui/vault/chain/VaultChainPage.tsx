@@ -23,7 +23,7 @@ import {
   useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Button, UnstyledButton } from '@lib/ui/button'
+import { IconButton, UnstyledButton } from '@lib/ui/button'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -112,18 +112,20 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <Button
-                  icon={<CopyIcon />}
+                <IconButton
                   onClick={() => copyAddress(address)}
                   title="Copy address"
-                />
-                <Button
-                  icon={<QrCodeIcon />}
+                >
+                  <CopyIcon />
+                </IconButton>
+                <IconButton
                   onClick={() =>
                     navigate({ id: 'address', state: { address } })
                   }
                   title="Address QR code"
-                />
+                >
+                  <QrCodeIcon />
+                </IconButton>
                 <VaultAddressLink value={address} />
               </HStack>
             </HStack>

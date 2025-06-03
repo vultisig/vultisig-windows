@@ -18,7 +18,7 @@ const Container = styled(UnstyledButton)<{
   ${borderRadius.s};
   ${centerContent};
   background-color: ${({ isActive }) =>
-    isActive ? getColor('buttonPrimaryWeb') : getColor('foreground')};
+    isActive ? getColor('buttonPrimary') : getColor('foreground')};
 
   &:hover {
     background: ${getHoverVariant('foreground')};

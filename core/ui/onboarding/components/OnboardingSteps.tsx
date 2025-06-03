@@ -1,3 +1,7 @@
+import { AnimationDescription } from '@core/ui/onboarding/components/AnimationDescriptions'
+import { RiveWrapper } from '@core/ui/onboarding/components/Onobarding.styled'
+import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
+import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
 import { Button } from '@lib/ui/button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
@@ -10,11 +14,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useResponsiveness } from '../../providers/ResponsivenessProivder'
-import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
-import { AnimationDescription } from './AnimationDescriptions'
-import { RiveWrapper } from './Onobarding.styled'
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void
@@ -53,14 +52,11 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             <ChevronLeftIcon fontSize={14} />
             <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
-          <Button
-            label={
-              <Text color="shy" size={isSmall ? 14 : 18}>
-                {t('skip')}
-              </Text>
-            }
-            onClick={onCompleteSteps}
-          />
+          <Button onClick={onCompleteSteps}>
+            <Text color="shy" size={isSmall ? 14 : 18}>
+              {t('skip')}
+            </Text>
+          </Button>
         </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted

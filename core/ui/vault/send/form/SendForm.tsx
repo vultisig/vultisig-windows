@@ -57,9 +57,10 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         <Button
           disabled={isDisabled}
           htmlType="submit"
-          label={t('continue')}
           loading={isLoading && isPending}
-        />
+        >
+          {t('continue')}
+        </Button>
       </PageContent>
     </>
   )

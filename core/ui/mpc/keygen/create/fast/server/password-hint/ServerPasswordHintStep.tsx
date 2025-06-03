@@ -17,7 +17,6 @@ import { Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 import { z } from 'zod'
 
 import { useVaultPasswordHint } from './state/password-hint'
@@ -101,27 +100,15 @@ export const ServerPasswordHintStep = ({
             )}
           </VStack>
         </VStack>
-        <ButtonsWrapper fullWidth gap={8}>
-          <StyledButton
-            label={t('skip')}
-            onClick={() => onFinish()}
-            type="secondary"
-          />
-          <StyledButton
-            disabled={!!errors.passwordHint}
-            htmlType="submit"
-            label={t('next')}
-          />
-        </ButtonsWrapper>
+        <HStack gap={8} fullWidth>
+          <Button onClick={() => onFinish()} type="secondary">
+            {t('skip')}
+          </Button>
+          <Button disabled={!!errors.passwordHint} htmlType="submit">
+            {t('next')}
+          </Button>
+        </HStack>
       </PageContent>
     </>
   )
 }
-
-const ButtonsWrapper = styled(HStack)`
-  align-self: center;
-`
-
-const StyledButton = styled(Button)`
-  flex: 1;
-`

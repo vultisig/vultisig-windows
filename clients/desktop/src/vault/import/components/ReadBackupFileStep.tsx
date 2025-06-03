@@ -58,7 +58,7 @@ export const ReadBackupFileStep = ({
         pending={() => <FlowPendingPageContent title={t('importing_vault')} />}
         error={error => (
           <FlowErrorPageContent
-            action={<Button label={t('back')} onClick={navigateBack} />}
+            action={<Button onClick={navigateBack}>{t('back')}</Button>}
             title={t('failed_to_import_vault')}
             message={extractErrorMsg(error)}
           />

@@ -86,12 +86,9 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
           </VStack>
         </Content>
         <BottomItemsWrapper>
-          <Button
-            icon={<DownloadIcon />}
-            label={t('backup_now')}
-            onClick={onCompleted}
-            size="sm"
-          />
+          <Button icon={<DownloadIcon />} onClick={onCompleted} size="sm">
+            {t('backup_now')}
+          </Button>
         </BottomItemsWrapper>
       </Wrapper>
     </PageContent>

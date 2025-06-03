@@ -1,7 +1,7 @@
 import { useCore } from '@core/ui/state/core'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
 import {
@@ -43,8 +43,7 @@ export const ManageMemo = () => {
             />
           )}
           action={
-            <Button
-              icon={<PasteIcon />}
+            <IconButton
               onClick={async () => {
                 const { data } = await attempt(getClipboardText)
 
@@ -52,7 +51,9 @@ export const ManageMemo = () => {
                   setValue(data)
                 }
               }}
-            />
+            >
+              <PasteIcon />
+            </IconButton>
           }
           actionPlacerStyles={{
             right: textInputHorizontalPadding,

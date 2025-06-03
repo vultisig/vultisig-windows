@@ -35,21 +35,23 @@ export const ReshareVaultPage = () => {
       <PageFooter gap={16}>
         <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
         <Button
-          label={t('start_reshare')}
           onClick={() =>
             match(securityType, {
               fast: () => navigate({ id: 'reshareVaultFast' }),
               secure: () => navigate({ id: 'reshareVaultSecure' }),
             })
           }
-        />
+        >
+          {t('start_reshare')}
+        </Button>
         <Button
-          label={t('join_reshare')}
           onClick={() =>
             navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
           }
           type="secondary"
-        />
+        >
+          {t('join_reshare')}
+        </Button>
       </PageFooter>
     </VStack>
   )

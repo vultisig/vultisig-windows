@@ -10,7 +10,7 @@ import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Animation } from '@lib/ui/animations/Animation'
-import { Button } from '@lib/ui/button'
+import { Button, IconButton } from '@lib/ui/button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -183,11 +183,9 @@ export const SwapKeysignTxOverview = ({
                 >
                   {hash}
                 </Text>
-                <Button
-                  icon={<SquareArrowOutUpRightIcon />}
-                  onClick={() => trackTransaction(hash)}
-                  size="sm"
-                />
+                <IconButton onClick={() => trackTransaction(hash)} size="sm">
+                  <SquareArrowOutUpRightIcon />
+                </IconButton>
               </HStack>
             </HStack>
           ))}
@@ -263,33 +261,18 @@ export const SwapKeysignTxOverview = ({
             </HStack>
           )}
         </SwapInfoWrapper>
-        <HStack gap={8} fullWidth justifyContent="space-between">
-          <Button
-            label={t('track')}
-            onClick={() => trackTransaction(txHash)}
-            style={{ flex: 1 }}
-            type="secondary"
-          />
-          <StyledButton
-            label={t('done')}
-            onClick={() => navigate({ id: 'vault' }, { replace: true })}
-            weight={600}
-          />
+        <HStack gap={8} fullWidth>
+          <Button onClick={() => trackTransaction(txHash)} type="secondary">
+            {t('track')}
+          </Button>
+          <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
+            {t('done')}
+          </Button>
         </HStack>
       </VStack>
     </Wrapper>
   )
 }
-
-const StyledButton = styled(Button)`
-  background-color: hsl(224, 75%, 50%);
-  color: ${getColor('contrast')};
-  flex: 1;
-
-  &:hover {
-    background-color: hsla(224, 75%, 50%, 0.9);
-  }
-`
 
 const Wrapper = styled(VStack)`
   gap: 24px;

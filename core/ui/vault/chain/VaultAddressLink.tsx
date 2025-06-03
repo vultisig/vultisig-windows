@@ -1,6 +1,6 @@
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { BoxIcon } from '@lib/ui/icons/BoxIcon'
 import { ValueProp } from '@lib/ui/props'
 
@@ -12,8 +12,7 @@ export const VaultAddressLink = ({ value }: ValueProp<string>) => {
   const { openUrl } = useCore()
 
   return (
-    <Button
-      icon={<BoxIcon />}
+    <IconButton
       onClick={() => {
         const url = getBlockExplorerUrl({
           chain,
@@ -23,6 +22,8 @@ export const VaultAddressLink = ({ value }: ValueProp<string>) => {
         openUrl(url)
       }}
       title="Block explorer"
-    />
+    >
+      {<BoxIcon />}
+    </IconButton>
   )
 }

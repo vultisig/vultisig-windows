@@ -175,20 +175,17 @@ export const VaultBackupWithPassword = ({
             </div>
           </VStack>
           <ActionsWrapper gap={16}>
-            <InfoPill
-              icon={<InfoGradientIcon />}
-              label={t('vault_backup_page_password_info')}
-              type="secondary"
-            />
+            <InfoPill icon={<InfoGradientIcon />} type="secondary">
+              {t('vault_backup_page_password_info')}
+            </InfoPill>
             <Button
               disabled={!isValid || !isDirty || isPending}
               htmlType="submit"
-              label={
-                isPending
-                  ? t('vault_backup_page_submit_loading_button_text')
-                  : t('save')
-              }
-            />
+            >
+              {isPending
+                ? t('vault_backup_page_submit_loading_button_text')
+                : t('save')}
+            </Button>
             {error && (
               <Text size={12} color="danger">
                 {error?.message}

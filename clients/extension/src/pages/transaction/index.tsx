@@ -23,7 +23,7 @@ import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -158,7 +158,9 @@ export const TransactionPage = () => {
         <VStack fullHeight>
           <PageHeader
             primaryControls={
-              <Button icon={<CrossIcon />} onClick={handleClose} />
+              <IconButton onClick={handleClose}>
+                <CrossIcon />
+              </IconButton>
             }
             title={
               <PageHeaderTitle>{`${t('sign_transaction')}`}</PageHeaderTitle>

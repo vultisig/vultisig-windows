@@ -77,10 +77,11 @@ export const VaultRenamePage = () => {
       <PageFooter>
         <Button
           disabled={!isValid || !isDirty}
-          label={t('save')}
           loading={updateVaultMutation.isPending}
           htmlType="submit"
-        />
+        >
+          {t('save')}
+        </Button>
       </PageFooter>
     </VStack>
   )

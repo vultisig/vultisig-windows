@@ -3,7 +3,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteAddressBookItemMutation } from '@core/ui/storage/addressBook'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { ListItem } from '@lib/ui/list/item'
@@ -33,11 +33,9 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       extra={
         <>
           <Text color="shy">{`${chain} ${t('network')}`}</Text>
-          <Button
-            icon={<TrashIcon />}
-            onClick={() => mutate(id)}
-            status="danger"
-          />
+          <IconButton onClick={() => mutate(id)} status="danger">
+            <TrashIcon />
+          </IconButton>
         </>
       }
       icon={

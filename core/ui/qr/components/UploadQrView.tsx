@@ -30,12 +30,13 @@ export const UploadQrView = () => {
       <PageFooter>
         <Button
           disabled={!file}
-          label={t('continue')}
           loading={isPending}
           onClick={() => {
             if (file) mutate(file)
           }}
-        />
+        >
+          {t('continue')}
+        </Button>
       </PageFooter>
     </>
   )

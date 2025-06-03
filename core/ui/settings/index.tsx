@@ -3,7 +3,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { Button, UnstyledButton } from '@lib/ui/button'
+import { IconButton, UnstyledButton } from '@lib/ui/button'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -222,61 +222,65 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 {t('share_app')}
               </Text>
               <HStack gap={8} alignItems="center">
-                <Button
-                  icon={<LinkedinIcon fontSize={38} />}
+                <IconButton
                   onClick={() =>
                     openUrl(
                       `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
                     )
                   }
                   size="xl"
-                />
-                <Button
-                  icon={<FacebookIcon fontSize={38} />}
+                >
+                  <LinkedinIcon fontSize={38} />
+                </IconButton>
+                <IconButton
                   onClick={() =>
                     openUrl(
                       `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
                     )
                   }
                   size="xl"
-                />
-                <Button
-                  icon={<RedditIcon fontSize={38} />}
+                >
+                  <FacebookIcon fontSize={38} />
+                </IconButton>
+                <IconButton
                   onClick={() =>
                     openUrl(
                       `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
                     )
                   }
                   size="xl"
-                />
-                <Button
-                  icon={<WhatsAppIcon fontSize={38} />}
+                >
+                  <RedditIcon fontSize={38} />
+                </IconButton>
+                <IconButton
                   onClick={() =>
                     openUrl(
                       `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
                     )
                   }
                   size="xl"
-                />
-                <Button
-                  icon={<TwitterIcon fontSize={38} />}
+                >
+                  <WhatsAppIcon fontSize={38} />
+                </IconButton>
+                <IconButton
                   onClick={() =>
                     openUrl(
                       `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
                     )
                   }
                   size="xl"
-                />
+                >
+                  <TwitterIcon fontSize={38} />
+                </IconButton>
               </HStack>
             </VStack>
             <HStack gap={8} alignItems="center">
               <Text color="contrast" size={13} weight={500} cropped>
                 {shareURL}
               </Text>
-              <Button
-                icon={<CopyIcon fontSize={iconSize} />}
-                onClick={handleCopy}
-              />
+              <IconButton onClick={handleCopy}>
+                <CopyIcon fontSize={iconSize} />
+              </IconButton>
             </HStack>
           </VStack>
         </Modal>

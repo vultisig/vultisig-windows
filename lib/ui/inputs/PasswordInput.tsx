@@ -1,5 +1,5 @@
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
@@ -30,10 +30,9 @@ export const PasswordInput: React.FC<
         />
       )}
       action={
-        <Button
-          icon={shouldHideValue ? <EyeOffIcon /> : <EyeIcon />}
-          onClick={toggle}
-        />
+        <IconButton onClick={toggle}>
+          {shouldHideValue ? <EyeOffIcon /> : <EyeIcon />}
+        </IconButton>
       }
       actionPlacerStyles={{
         right: textInputHorizontalPadding,

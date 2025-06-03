@@ -1,89 +1,100 @@
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { interactive } from '@lib/ui/css/interactive'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Size } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type ButtonSize = Extract<Size, 'sm' | 'md'>
+type IconBtnSize = Exclude<Size, 'xxl'>
+
+type HtmlType = 'button' | 'submit' | 'reset'
 type Status = 'default' | 'danger' | 'success' | 'warning'
-type Type = 'default' | 'link' | 'primary' | 'secondary'
-type Weight = 400 | 500 | 600 | 700
+type Type = 'primary' | 'secondary' | 'link'
+
+interface GeneralProps
+  extends Pick<
+    HTMLAttributes<HTMLButtonElement>,
+    'children' | 'className' | 'onClick' | 'onClickCapture' | 'style' | 'title'
+  > {
+  disabled?: boolean
+  htmlType?: HtmlType
+  loading?: boolean
+  status?: Status
+  type?: Type
+}
+
+interface ButtonProps extends GeneralProps {
+  icon?: ReactNode
+  size?: ButtonSize
+}
+
+interface IconButtonProps extends GeneralProps {
+  size?: IconBtnSize
+}
 
 const StyledButton = styled.button<{
   btnType: Type
   disabled: boolean
-  iconOnly: boolean
-  size: Size
+  loading: boolean
+  size: ButtonSize
   status: Status
-  weight: Weight
 }>`
-  ${({ btnType, disabled, iconOnly, size, status, weight }) => css`
+  ${({ btnType, disabled, loading, size, status }) => css`
     align-items: center;
     border: none;
     cursor: pointer;
     display: flex;
-    font-weight: ${weight};
     gap: 8px;
     justify-content: center;
     transition: all 0.2s;
-    width: ${iconOnly ? 'auto' : '100%'};
+    width: 100%;
 
-    ${match(size, {
-      xs: () => css`
-        border-radius: ${iconOnly ? '4px' : '20px'};
-        font-size: ${iconOnly ? '16px' : '12px'};
-        height: 20px;
-        min-width: 20px;
-        ${!iconOnly && horizontalPadding(10)}
-      `,
-      sm: () => css`
-        border-radius: ${iconOnly ? '6px' : '24px'};
-        font-size: ${iconOnly ? '18px' : '12px'};
-        height: 24px;
-        min-width: 24px;
-        ${!iconOnly && horizontalPadding(12)}
-      `,
-      md: () => css`
-        border-radius: ${iconOnly ? '8px' : '32px'};
-        font-size: ${iconOnly ? '20px' : '12px'};
-        height: 32px;
-        min-width: 32px;
-        ${!iconOnly && horizontalPadding(16)}
-      `,
-      lg: () => css`
-        border-radius: ${iconOnly ? '10px' : '36px'};
-        font-size: ${iconOnly ? '24px' : '12px'};
-        height: 36px;
-        min-width: 36px;
-        ${!iconOnly && horizontalPadding(16)}
-      `,
-      xl: () => css`
-        border-radius: ${iconOnly ? '12px' : '46px'};
-        font-size: ${iconOnly ? '32px' : '14px'};
-        height: 46px;
-        min-width: 46px;
-        ${!iconOnly && horizontalPadding(16)}
-      `,
-    })}
-
-    ${disabled
+    ${disabled || loading
       ? css`
-          background-color: ${getColor('buttonBackgroundDisabled')};
           color: ${getColor('buttonTextDisabled')};
           cursor: default;
+
+          ${match(btnType, {
+            link: () => css``,
+            primary: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+            `,
+            secondary: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+            `,
+          })}
         `
       : match(btnType, {
-          default: () => css`
+          link: () => css`
             background-color: transparent;
             color: ${getColor('textPrimary')};
 
+            ${match(size, {
+              sm: () => css`
+                border-radius: 26px;
+                font-size: 14px;
+                font-weight: 500;
+                height: 26px;
+                min-width: 26px;
+                ${horizontalPadding(4)}
+              `,
+              md: () => css`
+                border-radius: 28px;
+                font-size: 16px;
+                font-weight: 500;
+                height: 28px;
+                min-width: 28px;
+                ${horizontalPadding(4)}
+              `,
+            })}
+
             &:hover {
-              background-color: ${getColor('backgroundTertiary')};
               ${match(status, {
                 default: () => css`
-                  color: ${getColor('textPrimary')};
+                  color: ${getColor('buttonPrimaryHover')};
                 `,
                 danger: () => css`
                   color: ${getColor('alertError')};
@@ -97,11 +108,179 @@ const StyledButton = styled.button<{
               })}
             }
           `,
-          link: () => css`
-            background-color: transparent;
-            color: ${getColor('textExtraLight')};
+          primary: () => css`
+            color: ${getColor('textPrimary')};
+
+            ${match(size, {
+              sm: () => css`
+                border-radius: 46px;
+                font-size: 14px;
+                font-weight: 600;
+                height: 46px;
+                min-width: 46px;
+                ${horizontalPadding(24)}
+              `,
+              md: () => css`
+                border-radius: 48px;
+                font-size: 16px;
+                font-weight: 500;
+                height: 48px;
+                min-width: 48px;
+                ${horizontalPadding(32)}
+              `,
+            })}
+
+            ${match(status, {
+              default: () => css`
+                background-color: ${getColor('buttonPrimary')};
+              `,
+              danger: () => css`
+                background-color: ${getColor('alertError')};
+              `,
+              success: () => css`
+                background-color: ${getColor('alertSuccess')};
+              `,
+              warning: () => css`
+                background-color: ${getColor('alertWarning')};
+              `,
+            })}
 
             &:hover {
+              ${match(status, {
+                default: () => css`
+                  background-color: ${getColor('buttonPrimaryHover')};
+                `,
+                danger: () => css`
+                  background-color: ${getColor('alertError')};
+                `,
+                success: () => css`
+                  background-color: ${getColor('alertSuccess')};
+                `,
+                warning: () => css`
+                  background-color: ${getColor('alertWarning')};
+                `,
+              })}
+            }
+          `,
+          secondary: () => css`
+            background-color: ${getColor('buttonSecondary')};
+            color: ${getColor('textPrimary')};
+
+            ${match(size, {
+              sm: () => css`
+                border-radius: 46px;
+                font-size: 14px;
+                font-weight: 600;
+                height: 46px;
+                min-width: 46px;
+                ${horizontalPadding(24)}
+              `,
+              md: () => css`
+                border-radius: 48px;
+                font-size: 16px;
+                font-weight: 500;
+                height: 48px;
+                min-width: 48px;
+                ${horizontalPadding(32)}
+              `,
+            })}
+
+            &:hover {
+              background-color: ${getColor('buttonSecondaryHover')};
+
+              ${match(status, {
+                default: () => css`
+                  color: ${getColor('buttonPrimary')};
+                `,
+                danger: () => css`
+                  color: ${getColor('alertError')};
+                `,
+                success: () => css`
+                  color: ${getColor('alertSuccess')};
+                `,
+                warning: () => css`
+                  color: ${getColor('alertWarning')};
+                `,
+              })}
+            }
+          `,
+        })}
+  `}
+`
+
+const StyledIconButton = styled.button<{
+  btnType: Type
+  disabled: boolean
+  loading: boolean
+  size: IconBtnSize
+  status: Status
+}>`
+  ${({ btnType, disabled, loading, size, status }) => css`
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    transition: all 0.2s;
+    width: 'auto';
+
+    ${match(size, {
+      xs: () => css`
+        border-radius: 24px;
+        font-size: 16px;
+        height: 24px;
+        min-width: 24px;
+      `,
+      sm: () => css`
+        border-radius: 28px;
+        font-size: 20px;
+        height: 28px;
+        min-width: 28px;
+      `,
+      md: () => css`
+        border-radius: 32px;
+        font-size: 16px;
+        height: 32px;
+        min-width: 32px;
+      `,
+      lg: () => css`
+        border-radius: 40px;
+        font-size: 16px;
+        height: 40px;
+        min-width: 40px;
+      `,
+      xl: () => css`
+        border-radius: 52px;
+        font-size: 20px;
+        height: 52px;
+        min-width: 52px;
+        ${horizontalPadding(32)}
+      `,
+    })}
+
+    ${disabled || loading
+      ? css`
+          color: ${getColor('buttonTextDisabled')};
+          cursor: default;
+
+          ${match(btnType, {
+            link: () => css``,
+            primary: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+            `,
+            secondary: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+            `,
+          })}
+        `
+      : match(btnType, {
+          link: () => css`
+            background-color: transparent;
+            color: ${getColor('textPrimary')};
+
+            &:hover {
+              background-color: ${getColor('buttonLinkHover')};
+
               ${match(status, {
                 default: () => css`
                   color: ${getColor('textPrimary')};
@@ -123,7 +302,7 @@ const StyledButton = styled.button<{
 
             ${match(status, {
               default: () => css`
-                background-color: ${getColor('buttonPrimaryWeb')};
+                background-color: ${getColor('buttonPrimary')};
               `,
               danger: () => css`
                 background-color: ${getColor('alertError')};
@@ -139,7 +318,7 @@ const StyledButton = styled.button<{
             &:hover {
               ${match(status, {
                 default: () => css`
-                  background-color: ${getColor('buttonPrimaryWebHover')};
+                  background-color: ${getColor('buttonPrimaryHover')};
                 `,
                 danger: () => css`
                   background-color: ${getColor('alertError')};
@@ -154,13 +333,15 @@ const StyledButton = styled.button<{
             }
           `,
           secondary: () => css`
-            background-color: ${getColor('backgroundTertiary')};
+            background-color: ${getColor('buttonSecondary')};
             color: ${getColor('textPrimary')};
 
             &:hover {
+              background-color: ${getColor('buttonSecondaryHover')};
+
               ${match(status, {
                 default: () => css`
-                  color: ${getColor('buttonPrimaryWeb')};
+                  color: ${getColor('textPrimary')};
                 `,
                 danger: () => css`
                   color: ${getColor('alertError')};
@@ -178,54 +359,57 @@ const StyledButton = styled.button<{
   `}
 `
 
-interface ButtonProps
-  extends Pick<
-    HTMLAttributes<HTMLButtonElement>,
-    'className' | 'onClick' | 'onClickCapture' | 'style' | 'title'
-  > {
-  disabled?: boolean
-  htmlType?: 'button' | 'submit' | 'reset'
-  icon?: ReactNode
-  label?: ReactNode
-  loading?: boolean
-  size?: Size
-  status?: Status
-  type?: Type
-  weight?: Weight
-}
-
 export const Button: FC<ButtonProps> = ({
+  children,
   disabled = false,
   htmlType,
   icon,
-  label,
   loading = false,
-  size,
+  size = 'md',
   status = 'default',
-  type,
-  weight = 500,
+  type = 'primary',
   ...props
-}) => {
-  const iconOnly = !label && !!icon
+}) => (
+  <StyledButton
+    {...props}
+    {...{
+      btnType: type,
+      disabled,
+      loading,
+      size,
+      status,
+      type: htmlType,
+    }}
+  >
+    {loading ? <Spinner /> : icon}
+    {children}
+  </StyledButton>
+)
 
-  return (
-    <StyledButton
-      {...{
-        disabled: disabled || loading,
-        btnType: type ? type : iconOnly ? 'default' : 'primary',
-        iconOnly,
-        size: size ? size : iconOnly ? 'md' : 'xl',
-        status,
-        type: htmlType,
-        weight,
-      }}
-      {...props}
-    >
-      {loading ? <Spinner /> : icon}
-      {label}
-    </StyledButton>
-  )
-}
+export const IconButton: FC<IconButtonProps> = ({
+  children,
+  disabled = false,
+  htmlType,
+  loading = false,
+  size = 'md',
+  status = 'default',
+  type = 'link',
+  ...props
+}) => (
+  <StyledIconButton
+    {...props}
+    {...{
+      btnType: type,
+      disabled,
+      loading,
+      size,
+      status,
+      type: htmlType,
+    }}
+  >
+    {loading ? <Spinner /> : children}
+  </StyledIconButton>
+)
 
 export const UnstyledButton = styled.button`
   ${interactive};

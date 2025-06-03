@@ -4,7 +4,7 @@ import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/m
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { EventMethod } from '@clients/extension/src/utils/constants'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { Button } from '@lib/ui/button'
+import { Button, IconButton } from '@lib/ui/button'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -60,7 +60,9 @@ export const ConnectedDappsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <Button icon={<ChevronLeftIcon />} onClick={navigateBack} />
+          <IconButton onClick={navigateBack}>
+            <ChevronLeftIcon />
+          </IconButton>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -80,11 +82,12 @@ export const ConnectedDappsPage = () => {
                 <ListItem
                   key={host}
                   extra={
-                    <Button
-                      icon={<LinkTwoOffIcon />}
+                    <IconButton
                       onClick={() => handleDisconnect(host, session.url)}
                       status="danger"
-                    />
+                    >
+                      <LinkTwoOffIcon />
+                    </IconButton>
                   }
                   title={
                     <Text color="contrast" size={14} weight={500}>
@@ -96,7 +99,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button label={t('disconnect_all')} onClick={handleDisconnectAll} />
+            <Button onClick={handleDisconnectAll}>{t('disconnect_all')}</Button>
           </PageFooter>
         </>
       ) : (

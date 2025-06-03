@@ -10,7 +10,7 @@ import { CosmosChainId, EVMChainId, getChainId } from '@core/chain/coin/ChainId'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/button'
+import { Button, IconButton } from '@lib/ui/button'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -81,7 +81,9 @@ export const ConnectDAppPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <Button icon={<CrossIcon />} onClick={handleClose} />
+          <IconButton onClick={handleClose}>
+            <CrossIcon />
+          </IconButton>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -108,7 +110,7 @@ export const ConnectDAppPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button label={t('connect')} onClick={handleSubmit} />
+        <Button onClick={handleSubmit}>{t('connect')}</Button>
       </PageFooter>
     </VStack>
   ) : (

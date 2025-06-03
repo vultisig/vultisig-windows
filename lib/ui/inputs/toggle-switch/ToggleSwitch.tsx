@@ -40,9 +40,10 @@ export const ToggleSwitch = <T extends string | number>({
           disabled={disabled}
           icon={icon}
           key={value}
-          label={label}
           onClick={() => handleClick(value)}
-        />
+        >
+          {label}
+        </ToggleButton>
       ))}
     </Wrapper>
   )

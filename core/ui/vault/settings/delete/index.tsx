@@ -124,11 +124,12 @@ export const DeleteVaultPage = () => {
       <PageFooter>
         <Button
           disabled={isDisabled}
-          label={t('delete')}
           loading={isPending}
           onClick={handleConfirm}
           status="danger"
-        />
+        >
+          {t('delete')}
+        </Button>
       </PageFooter>
     </VStack>
   )

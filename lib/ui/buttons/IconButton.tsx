@@ -48,7 +48,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   background: ${({ kind, theme: { colors } }) =>
     match(kind, {
       regular: () => colors.transparent,
-      primary: () => colors.buttonPrimaryWeb,
+      primary: () => colors.buttonPrimary,
     }).toCssValue()};
 
   ${({ isDisabled, kind, theme }) =>
@@ -57,7 +57,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         background: ${match(kind, {
           regular: () => theme.colors.mist.toCssValue(),
-          primary: () => theme.colors.buttonPrimaryWebHover.toCssValue(),
+          primary: () => theme.colors.buttonPrimaryHover.toCssValue(),
         })};
 
         color: ${match(kind, {

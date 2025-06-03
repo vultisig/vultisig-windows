@@ -215,7 +215,9 @@ export const DepositForm: FC<DepositFormProps> = ({
             </VStack>
           )}
         </WithProgressIndicator>
-        <Button disabled={!isValid} htmlType="submit" label={t('continue')} />
+        <Button disabled={!isValid} htmlType="submit">
+          {t('continue')}
+        </Button>
       </PageContent>
     </DepositFormHandlersProvider>
   )

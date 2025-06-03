@@ -57,9 +57,10 @@ export const ScanQrView = ({
         <PageFooter>
           <Button
             icon={<HardDriveUploadIcon fontSize={20} />}
-            label={t('upload_qr_code_image')}
             onClick={onUploadQrViewRequest}
-          />
+          >
+            {t('upload_qr_code_image')}
+          </Button>
         </PageFooter>
       )}
     </>

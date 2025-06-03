@@ -50,7 +50,7 @@ export const OTPInput = ({
         />
       ))}
       {includePasteButton && (
-        <PasteButton label="Paste" onClick={() => handlePaste()} />
+        <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
       )}
     </HStack>
   )

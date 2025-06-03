@@ -83,13 +83,14 @@ export const KeysignSigningStep = ({
                             />
                           </TxOverviewPanel>
                           <Button
-                            label={t('complete')}
                             onClick={() =>
                               isDAppSigning
                                 ? onFinish(txResult)
                                 : navigate({ id: 'vault' })
                             }
-                          />
+                          >
+                            {t('complete')}
+                          </Button>
                         </>
                       )}
                     />
@@ -104,10 +105,9 @@ export const KeysignSigningStep = ({
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                       {isDAppSigning && (
-                        <Button
-                          label={t('complete')}
-                          onClick={() => onFinish(txResult)}
-                        />
+                        <Button onClick={() => onFinish(txResult)}>
+                          {t('complete')}
+                        </Button>
                       )}
                     </>
                   ),

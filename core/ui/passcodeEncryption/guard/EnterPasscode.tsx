@@ -1,3 +1,7 @@
+import { decryptSample } from '@core/ui/passcodeEncryption/core/sample'
+import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
+import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
+import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { Button } from '@lib/ui/button'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -11,11 +15,6 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
-import { decryptSample } from '../core/sample'
-import { PasscodeInput } from '../manage/PasscodeInput'
-import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
   ${takeWholeSpace}
@@ -110,8 +109,9 @@ export const EnterPasscode = () => {
             icon={<UnlockIcon fontSize={20} />}
             disabled={!!isDisabled}
             htmlType="submit"
-            label={t('unlock')}
-          />
+          >
+            {t('unlock')}
+          </Button>
         </Content>
       </Container>
     </Wrapper>

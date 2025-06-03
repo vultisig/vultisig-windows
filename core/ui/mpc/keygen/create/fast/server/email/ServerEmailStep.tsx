@@ -101,11 +101,9 @@ export const ServerEmailStep = ({
           </VStack>
         </VStack>
         <VStack gap={20}>
-          <Button
-            disabled={!!errors.email}
-            htmlType="submit"
-            label={t('next')}
-          />
+          <Button disabled={!!errors.email} htmlType="submit">
+            {t('next')}
+          </Button>
         </VStack>
       </PageContent>
     </>

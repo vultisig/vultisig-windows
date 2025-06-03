@@ -37,7 +37,6 @@ export const DeleteVaultFolder = () => {
             </Text>
             <VStack gap={8}>
               <Button
-                label={t('delete')}
                 loading={isPending}
                 onClick={() =>
                   mutate(id, {
@@ -48,8 +47,12 @@ export const DeleteVaultFolder = () => {
                     onError: error => console.error(error),
                   })
                 }
-              />
-              <Button label={t('cancel')} onClick={onClose} type="secondary" />
+              >
+                {t('delete')}
+              </Button>
+              <Button onClick={onClose} type="secondary">
+                {t('cancel')}
+              </Button>
             </VStack>
           </VStack>
         </Modal>

@@ -31,16 +31,13 @@ export const CameraPermission = () => {
       <VStack alignItems="center" gap={12}>
         <Text centerHorizontally>{t('provide_camera_permission')}</Text>
         {client === 'extension' && innerWidth <= 400 ? (
-          <Button
-            label={t('try_in_expanded_mode')}
-            onClick={() => openUrl(location.href)}
-          />
+          <Button onClick={() => openUrl(location.href)}>
+            {t('try_in_expanded_mode')}
+          </Button>
         ) : (
-          <Button
-            label={error ? t('try_again') : t('grant_camera_permission')}
-            loading={isPending}
-            onClick={() => mutate()}
-          />
+          <Button loading={isPending} onClick={() => mutate()}>
+            {error ? t('try_again') : t('grant_camera_permission')}
+          </Button>
         )}
         {error && (
           <Text color="danger" centerHorizontally>

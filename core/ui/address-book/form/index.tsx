@@ -7,7 +7,7 @@ import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/button'
+import { Button, IconButton } from '@lib/ui/button'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
@@ -168,11 +168,12 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             )}
             action={
               <HStack gap={8}>
-                <Button icon={<PasteIcon />} onClick={handlePaste} />
-                <Button
-                  icon={<CameraIcon />}
-                  onClick={() => setShowScanner(true)}
-                />
+                <IconButton onClick={handlePaste}>
+                  <PasteIcon />
+                </IconButton>
+                <IconButton onClick={() => setShowScanner(true)}>
+                  <CameraIcon />
+                </IconButton>
               </HStack>
             }
             actionPlacerStyles={{
@@ -196,9 +197,10 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
         <Button
           disabled={!isValid || !isDirty}
           htmlType="submit"
-          label={t('save')}
           loading={isLoading || isPending}
-        />
+        >
+          {t('save')}
+        </Button>
       </PageFooter>
       {showScanner && (
         <Modal

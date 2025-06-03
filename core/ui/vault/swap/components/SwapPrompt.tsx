@@ -10,10 +10,11 @@ export const SwapPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
-      label={t('swap')}
       onClick={() => navigate({ id: 'swap', state: { coin: value } })}
       style={{ textTransform: 'uppercase' }}
       type="secondary"
-    />
+    >
+      {t('swap')}
+    </Button>
   )
 }

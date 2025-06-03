@@ -10,10 +10,11 @@ export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return (
     <Button
-      label={t('send')}
       onClick={() => navigate({ id: 'send', state: { coin: value } })}
       style={{ textTransform: 'uppercase' }}
       type="secondary"
-    />
+    >
+      {t('send')}
+    </Button>
   )
 }

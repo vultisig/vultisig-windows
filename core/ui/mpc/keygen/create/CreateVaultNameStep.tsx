@@ -85,7 +85,9 @@ export const CreateVaultNameStep = ({
             />
           </VStack>
         </VStack>
-        <Button disabled={!!isDisabled} htmlType="submit" label={t('next')} />
+        <Button disabled={!!isDisabled} htmlType="submit">
+          {t('next')}
+        </Button>
       </PageContent>
     </>
   )

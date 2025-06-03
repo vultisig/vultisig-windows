@@ -82,13 +82,13 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       primary: () => css`
         background: ${isDisabled
           ? getColor('buttonBackgroundDisabled')
-          : getColor('buttonPrimaryWeb')};
+          : getColor('buttonPrimary')};
         color: ${isDisabled ? getColor('mistExtra') : getColor('textPrimary')};
       `,
       accent: () => css`
         background: ${isDisabled
-          ? getColor('buttonPrimaryWeb')
-          : getColor('buttonPrimaryWeb')};
+          ? getColor('buttonPrimary')
+          : getColor('buttonPrimary')};
         color: ${isDisabled ? getColor('contrast') : getColor('contrast')};
       `,
       secondary: () => css`
@@ -128,13 +128,13 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       &:hover {
         ${match(kind, {
           primary: () => css`
-            background: ${getColor('buttonPrimaryWebHover')};
+            background: ${getColor('buttonPrimaryHover')};
           `,
           accent: () => css`
-            background: ${getColor('buttonPrimaryWebHover')};
+            background: ${getColor('buttonPrimaryHover')};
           `,
           secondary: () => css`
-            background: ${getColor('buttonPrimaryWeb')};
+            background: ${getColor('buttonPrimary')};
           `,
           outlined: () => css``,
           ghost: () => css`

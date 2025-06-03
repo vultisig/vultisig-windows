@@ -8,21 +8,16 @@ import { useTranslation } from 'react-i18next'
 
 export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
-
   const chain = isOneOf(value.chain, depositEnabledChains)
-
   const navigate = useCoreNavigate()
 
-  if (!chain) {
-    return null
-  }
-
-  return (
+  return chain ? (
     <Button
-      label={t('deposit')}
       onClick={() => navigate({ id: 'deposit', state: { coin: value } })}
       style={{ textTransform: 'uppercase' }}
       type="secondary"
-    />
-  )
+    >
+      {t('deposit')}
+    </Button>
+  ) : null
 }

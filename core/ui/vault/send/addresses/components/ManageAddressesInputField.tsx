@@ -10,7 +10,7 @@ import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/button'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
@@ -139,8 +139,7 @@ export const ManageReceiverAddressInputField = () => {
                 )}
                 action={
                   <HStack gap={8}>
-                    <Button
-                      icon={<PasteIcon />}
+                    <IconButton
                       onClick={async () => {
                         const { data } = await attempt(getClipboardText)
 
@@ -148,15 +147,15 @@ export const ManageReceiverAddressInputField = () => {
                           handleUpdateReceiverAddress(data)
                         }
                       }}
-                    />
-                    <Button
-                      icon={<CameraIcon />}
-                      onClick={() => setViewState('scanner')}
-                    />
-                    <Button
-                      icon={<BookAIcon />}
-                      onClick={() => setViewState('addressBook')}
-                    />
+                    >
+                      <PasteIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setViewState('scanner')}>
+                      <CameraIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setViewState('addressBook')}>
+                      <BookAIcon />
+                    </IconButton>
                   </HStack>
                 }
                 actionPlacerStyles={{
