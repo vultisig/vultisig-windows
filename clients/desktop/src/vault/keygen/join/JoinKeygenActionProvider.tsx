@@ -79,43 +79,4 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       ),
     }
   )
-
-  // <Match
-  //   value={keygenType}
-  //   create={() => (
-  //     <Match
-  //       value={mpcLib}
-  //       DKLS={() => (
-  //         <DKLSCreateKeygenActionProvider>
-  //           {children}
-  //         </DKLSCreateKeygenActionProvider>
-  //       )}
-  //       GG20={() => (
-  //         <GG20CreateKeygenActionProvider>
-  //           {children}
-  //         </GG20CreateKeygenActionProvider>
-  //       )}
-  //     />
-  //   )}
-  //   reshare={() => (
-  //     <Match
-  //       value={mpcLib}
-  //       DKLS={() => (
-  //         <DKLSReshareKeygenActionProvider>
-  //           {children}
-  //         </DKLSReshareKeygenActionProvider>
-  //       )}
-  //       GG20={() => (
-  //         <GG20ReshareKeygenActionProvider>
-  //           {children}
-  //         </GG20ReshareKeygenActionProvider>
-  //       )}
-  //     />
-  //   )}
-  //   migrate={() => (
-  //     <MigrateVaultKeygenActionProvider>
-  //       {children}
-  //     </MigrateVaultKeygenActionProvider>
-  //   )}
-  // />
 }
