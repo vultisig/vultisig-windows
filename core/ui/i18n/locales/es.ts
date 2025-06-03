@@ -9,9 +9,16 @@ export const es = {
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   select_asset: 'Seleccionar activo',
   moreInfo: 'Más información',
+  gas_limit_tooltip_content:
+    'La cantidad máxima de gas que pagarás. Puede aumentarse si el límite de gas no es suficiente para enviar transacciones.',
+  base_fee_tooltip_content:
+    'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   swap_overview: 'Resumen de intercambio',
   overview: 'Visión general',
   you_are_sending: 'Estás enviando',
+  priority_fee: 'Tarifa prioritaria',
+  priority_fee_tooltip_content:
+    'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   percentage: 'Porcentaje',
   send_overview: 'Enviar resumen',
   percentage_to_unstake: 'Porcentaje para retirar',
@@ -650,7 +657,7 @@ export const es = {
   priority: 'Prioridad',
   gas_limit: 'Límite de gas',
   current_base_fee: 'Tarifa base actual',
-  gwei: 'Gwei',
+  gwei: 'GWEI',
   total_fee: 'Tarifa total',
   network_rate: 'Tasa de red',
   network_rate_required: 'Se requiere velocidad de red',
