@@ -1,18 +1,18 @@
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+import { queryOneInch } from '@core/chain/coin/find/evm/queryOneInch'
+import { FindCoinsResolver } from '@core/chain/coin/find/FindCoinsResolver'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { attempt } from '@lib/utils/attempt'
 import { NoDataError } from '@lib/utils/error/NoDataError'
-
-import { FindCoinsResolver } from '../FindCoinsResolver'
-import { queryOneInch } from './queryOneInch'
+import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
   chain,
 }) => {
-  const oneInchChainId = getEvmChainId(chain)
+  const oneInchChainId = hexToNumber(getEvmChainId(chain))
 
   const balanceResult = await attempt(
     queryOneInch<Record<string, string>>(
