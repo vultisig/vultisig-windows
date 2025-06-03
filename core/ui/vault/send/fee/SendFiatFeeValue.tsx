@@ -52,7 +52,7 @@ export const SendFiatFeeValue = () => {
 
   formattedAmount = formatAmount(humanReadableFeeValue * price, fiatCurrency)
   return (
-    <VStack>
+    <VStack alignItems="flex-end">
       <Text size={14}>
         {humanReadableFeeValue} {coinKey.id}
       </Text>

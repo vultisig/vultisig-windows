@@ -25,8 +25,10 @@ import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCore } from '../../state/core'
+import { TxOverviewContainer } from './tx/TxOverviewContainer'
 import { TxSuccess } from './tx/TxSuccess'
 import { normalizeTxHash } from './utils/normalizeTxHash'
 
@@ -85,30 +87,34 @@ export const KeysignSigningStep = ({
                           />
                         )}
                         default={() => (
-                          <StepTransition
-                            from={({ onFinish: onSeeTxDetails }) => (
-                              <TxSuccess
-                                value={payload}
-                                onSeeTxDetails={onSeeTxDetails}
-                                onFinish={handleFinish}
-                              />
-                            )}
-                            to={() => (
-                              <>
-                                <TxOverviewPanel>
+                          <TxOverviewContainer>
+                            <StepTransition
+                              from={({ onFinish: onSeeTxDetails }) => (
+                                <>
+                                  <TxSuccess
+                                    value={payload}
+                                    onSeeTxDetails={onSeeTxDetails}
+                                  />
+                                  <PositionedButton onClick={handleFinish}>
+                                    {t('done')}
+                                  </PositionedButton>
+                                </>
+                              )}
+                              to={() => (
+                                <>
                                   <KeysignTxOverview
                                     txHash={normalizeTxHash(txResult.txHash, {
                                       memo: payload?.memo,
                                     })}
                                     value={payload}
                                   />
-                                </TxOverviewPanel>
-                                <Button onClick={handleFinish}>
-                                  {t('complete')}
-                                </Button>
-                              </>
-                            )}
-                          />
+                                  <PositionedButton onClick={handleFinish}>
+                                    {t('complete')}
+                                  </PositionedButton>
+                                </>
+                              )}
+                            />
+                          </TxOverviewContainer>
                         )}
                       />
                     )
@@ -162,3 +168,7 @@ export const KeysignSigningStep = ({
     />
   )
 }
+
+const PositionedButton = styled(Button)`
+  margin-top: auto;
+`
