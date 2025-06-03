@@ -56,7 +56,7 @@ export function useStepNavigation<T>({
 
       return steps[0]
     })
-  }, [steps])
+  }, [steps, onExit])
 
   return { step, setStep, toNextStep, toPreviousStep, toFirstStep }
 }

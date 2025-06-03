@@ -1,4 +1,3 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -6,22 +5,18 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useResponsiveness } from '../../providers/ResponsivenessProivder'
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  NextAnimationButton,
+} from '../../vault/backup/shared/BackupOverviewSlides.styles'
 import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
 import { AnimationDescription } from './AnimationDescriptions'
 import { RiveWrapper } from './Onobarding.styled'
-import {
-  Wrapper,
-  ProgressWrapper,
-  DescriptionWrapper,
-  BottomItemsWrapper,
-  NextAnimationButton,
-} from '../../vault/backup/shared/BackupOverviewSlides.styles'
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void

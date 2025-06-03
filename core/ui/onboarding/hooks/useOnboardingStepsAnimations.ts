@@ -11,7 +11,6 @@ export const useOnboardingStepsAnimations = () => {
   const {
     step: currentAnimation,
     toNextStep: toNextAnimation,
-    toPreviousStep: toPrevAnimation,
     toFirstStep: toFirstAnimation,
   } = useStepNavigation({
     steps: ONBOARDING_ANIMATIONS,
