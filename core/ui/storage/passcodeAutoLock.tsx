@@ -5,7 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type PasscodeAutoLockTime = 1 | 5 | 10 | 15 | 30
+export const passcodeAutoLockDurations = [1, 5, 10, 15, 30]
+
+export type PasscodeAutoLockTime = (typeof passcodeAutoLockDurations)[number]
 
 export type PasscodeAutoLockValue = PasscodeAutoLockTime | null
 

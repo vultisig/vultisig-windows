@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
 
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
-import { useAutoLock } from '../core/autoLock'
+import { useAutoLock } from '../autoLock/core/autoLock'
 import { usePasscode } from '../state/passcode'
 import { EnterPasscode } from './EnterPasscode'
 

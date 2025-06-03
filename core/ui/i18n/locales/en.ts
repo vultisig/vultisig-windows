@@ -622,7 +622,7 @@ export const en = {
   provider: 'Provider',
   swap_terms: {
     input: 'The swap amount is correct',
-    output: 'I agree with the min. amount I’ll receive',
+    output: "I agree with the min. amount I'll receive",
   },
   swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:

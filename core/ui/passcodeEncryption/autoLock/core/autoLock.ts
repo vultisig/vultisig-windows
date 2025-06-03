@@ -2,8 +2,8 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useEffect } from 'react'
 import { useState } from 'react'
 
-import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
-import { usePasscode } from '../state/passcode'
+import { usePasscodeAutoLock } from '../../../storage/passcodeAutoLock'
+import { usePasscode } from '../../state/passcode'
 
 export const useAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
