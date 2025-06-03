@@ -914,4 +914,10 @@ export const es = {
   app_locked_description: 'Introduzca su contraseña para continuar.',
   invalid_passcode: 'Código de acceso no válido',
   unlock: 'Descubrir',
+  lock_time: 'Tiempo de bloqueo',
+  lock_vultisig_automatically_after:
+    'Bloquear Vultisig automáticamente después de...',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minutos',
+  never: 'Nunca',
 }

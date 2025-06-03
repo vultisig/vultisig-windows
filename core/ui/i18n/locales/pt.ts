@@ -905,4 +905,10 @@ export const pt = {
   app_locked_description: 'Digite sua senha para continuar.',
   invalid_passcode: 'Senha inválida',
   unlock: 'Desbloquear',
+  lock_time: 'Tempo de bloqueio',
+  lock_vultisig_automatically_after:
+    'Bloquear Vultisig automaticamente após...',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minutos',
+  never: 'Nunca',
 }

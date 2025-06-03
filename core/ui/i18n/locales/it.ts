@@ -456,7 +456,7 @@ export const it = {
       verifyingCode: 'Verifica del codice in corso, attendere',
       backupVault: 'Esegui il backup del vault',
       shareOnlineBackup: 'preferibilmente online.',
-      shareSecurely: 'per garantire l’accesso,',
+      shareSecurely: "per garantire l'accesso,",
       securely: 'in modo sicuro, preferibilmente',
       online: 'online',
       backupConfirmationDescription:
@@ -913,4 +913,9 @@ export const it = {
   app_locked_description: 'Inserisci il tuo codice di accesso per continuare.',
   invalid_passcode: 'Codice di accesso non valido',
   unlock: 'Sbloccare',
+  lock_time: 'Tempo di blocco',
+  lock_vultisig_automatically_after: 'Blocca Vultisig automaticamente dopo...',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minuti',
+  never: 'Mai',
 }

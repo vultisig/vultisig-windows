@@ -68,7 +68,7 @@ export const hr = {
   scanThe: 'Olvassa be',
   qrCode: 'a QR-kódot',
   downloadVultisig:
-    'Töltse le a Vultisig alkalmazást más eszközeire, és válassza a „QR-kód beolvasása” lehetőséget',
+    'Töltse le a Vultisig alkalmazást más eszközeire, és válassza a "QR-kód beolvasása" lehetőséget',
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
   sayHelloTo: 'Mondd, hogy helló',
@@ -892,4 +892,9 @@ export const hr = {
   app_locked_description: 'Unesite svoju lozinku za nastavak.',
   invalid_passcode: 'Nevažeća lozinka',
   unlock: 'Otključati',
+  lock_time: 'Vrijeme zaključavanja',
+  lock_vultisig_automatically_after: 'Automatski zaključaj Vultisig nakon...',
+  minute_one: '{{count}} minuta',
+  minute_other: '{{count}} minuta',
+  never: 'Nikada',
 }
