@@ -141,12 +141,7 @@ export const KeygenPeerDiscoveryStep = ({
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
-                relay={() =>
-                  opertaionType.operation === 'reshare' &&
-                  opertaionType.type === 'migrate' ? null : (
-                    <PeerRequirementsInfo />
-                  )
-                }
+                relay={() => (isMigrate ? null : <PeerRequirementsInfo />)}
               />
               <PeersManagerTitle target={devicesTarget} />
               <PeersContainer>
