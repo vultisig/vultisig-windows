@@ -1,0 +1,60 @@
+import { Wrap } from '@lib/ui/base/Wrap'
+import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
+import { VStack } from '@lib/ui/layout/Stack'
+import { ChildrenProp } from '@lib/ui/props'
+import { darkTheme } from '@lib/ui/theme/darkTheme'
+import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
+import { ToastProvider } from '@lib/ui/toast/ToastProvider'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import React from 'react'
+
+import { WalletCoreProvider } from './chain/providers/WalletCoreProvider'
+import { PasscodeGuard } from './passcodeEncryption/guard/PasscodeGuard'
+import { ResponsivenessProvider } from './providers/ResponsivenessProivder'
+import { CoreProvider, CoreState } from './state/core'
+import { StorageDependant } from './storage/StorageDependant'
+import { ActiveVaultOnly } from './vault/ActiveVaultOnly'
+import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
+import { CoinsMetadataManager } from './vault/chain/coin/metadata/CoinsMetadataManager'
+
+type CoreAppProps = Partial<ChildrenProp> & {
+  coreState: CoreState
+  queryClient: QueryClient
+  migrationsManager?: React.ComponentType<ChildrenProp>
+}
+
+export const CoreApp = ({
+  children,
+  coreState,
+  queryClient,
+  migrationsManager: MigrationsManager,
+}: CoreAppProps) => {
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <GlobalStyle />
+      <CoreProvider value={coreState}>
+        <QueryClientProvider client={queryClient}>
+          <WalletCoreProvider>
+            <Wrap wrap={MigrationsManager}>
+              <StorageDependant>
+                <ToastProvider>
+                  <ResponsivenessProvider>
+                    <PasscodeGuard>
+                      <VStack fullSize>
+                        {children}
+                        <ActiveVaultOnly>
+                          <CoinFinder />
+                          <CoinsMetadataManager />
+                        </ActiveVaultOnly>
+                      </VStack>
+                    </PasscodeGuard>
+                  </ResponsivenessProvider>
+                </ToastProvider>
+              </StorageDependant>
+            </Wrap>
+          </WalletCoreProvider>
+        </QueryClientProvider>
+      </CoreProvider>
+    </ThemeProvider>
+  )
+}

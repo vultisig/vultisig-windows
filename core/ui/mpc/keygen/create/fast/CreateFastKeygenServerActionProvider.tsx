@@ -5,12 +5,12 @@ import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useVaultCreationMpcLib } from '@core/ui/mpc/state/vaultCreationMpcLib'
 import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
+import { useCore } from '../../../../state/core'
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
 
 export const CreateFastKeygenServerActionProvider = ({
@@ -22,7 +22,7 @@ export const CreateFastKeygenServerActionProvider = ({
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const mpcLib = useVaultCreationMpcLib()
+  const { vaultCreationMpcLib } = useCore()
 
   const action = useCallback(async () => {
     await setupVaultWithServer({
@@ -33,9 +33,17 @@ export const CreateFastKeygenServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
-      lib_type: toLibType(mpcLib),
+      lib_type: toLibType(vaultCreationMpcLib),
     })
-  }, [email, hexChainCode, hexEncryptionKey, mpcLib, name, password, sessionId])
+  }, [
+    email,
+    hexChainCode,
+    hexEncryptionKey,
+    vaultCreationMpcLib,
+    name,
+    password,
+    sessionId,
+  ])
 
   return (
     <FastKeygenServerActionProvider value={action}>
