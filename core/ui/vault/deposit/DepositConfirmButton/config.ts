@@ -2,7 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { match } from '@lib/utils/match'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableChain, StakeableChain } from '../constants'
+import { isStakeableChain, StakeableChain } from '../config'
 
 type TransactionConfig = {
   requiresAmount?: boolean

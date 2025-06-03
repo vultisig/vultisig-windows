@@ -6,9 +6,9 @@ import { RequiredFields } from '@lib/utils/types/RequiredFields'
 import { chainFeeCoin } from './chainFeeCoin'
 import { Coin } from './Coin'
 import {
-  CHAINS_WITH_IBC_TOKENS,
-  IBC_TOKENS,
-  IBC_TRANSFERRABLE_TOKENS_PER_CHAIN,
+  chainsWithIbcTokens,
+  ibcTokens,
+  ibcTransferrableTokensPerChain,
 } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { initializeChainTokens } from './utils/initializeChainTokens'
@@ -905,8 +905,8 @@ export const chainTokens: Partial<
     mergedLeanChainTokens as Record<Chain, TokenWithoutChain[]>
   )
 
-  for (const chain of CHAINS_WITH_IBC_TOKENS) {
-    const ibcMeta = IBC_TRANSFERRABLE_TOKENS_PER_CHAIN[chain] ?? []
+  for (const chain of chainsWithIbcTokens) {
+    const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
     const current = base[chain] ?? []
 
     const patched = patchTokensWithIBCIds(current, ibcMeta)
@@ -921,7 +921,7 @@ export const chainTokens: Partial<
 
   base[Chain.THORChain] = [
     ...(base[Chain.THORChain] ?? []),
-    ...IBC_TOKENS.map(t => ({
+    ...ibcTokens.map(t => ({
       ...t,
       chain: Chain.THORChain,
       decimals: chainFeeCoin[Chain.THORChain].decimals,

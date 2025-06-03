@@ -7,10 +7,7 @@ import { FC } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import {
-  STAKEABLE_ASSETS_TICKERS,
-  StakeableAssetTicker,
-} from '../../../constants'
+import { stakeableAssetsTickers, StakeableAssetTicker } from '../../../config'
 import { FormData } from '../..'
 import { DepositActionOption } from '../../DepositActionOption'
 
@@ -27,7 +24,7 @@ export const StakeTokenExplorer: FC<Props> = ({
   activeOption,
 }) => {
   const coins = useCurrentVaultCoins().filter(coin =>
-    STAKEABLE_ASSETS_TICKERS.includes(coin.ticker as StakeableAssetTicker)
+    stakeableAssetsTickers.includes(coin.ticker as StakeableAssetTicker)
   )
   const { t } = useTranslation()
 

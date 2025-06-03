@@ -50,7 +50,7 @@ const getDerivePathBytes = (derivePath: string): number[] => {
 
   return pathBuf
 }
-const HARDENED_OFFSET = 0x80000000
+const hardenedOffset = 0x80000000
 const derivePubKeyFromPath = (
   pubKey: Uint8Array,
   chainCode: Uint8Array,
@@ -61,7 +61,7 @@ const derivePubKeyFromPath = (
 
   let currentNode = rootNode
   for (const index of path) {
-    if (index >= HARDENED_OFFSET) {
+    if (index >= hardenedOffset) {
       throw new Error(
         `Cannot derive hardened child (index ${index}) from a public key`
       )

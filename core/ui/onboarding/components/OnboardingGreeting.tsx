@@ -1,13 +1,14 @@
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { GradientText, Text } from '@lib/ui/text'
+import { Milliseconds } from '@lib/utils/time'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useResponsiveness } from '../../providers/ResponsivenessProivder'
 
-const DELAY_BEFORE_NEXT_STEP_IN_MS = 500
+const delayBeforeNextStep: Milliseconds = 500
 
 type OnboardingGreetingProps = {
   onCompleteGreeting: () => void
@@ -41,7 +42,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         animationConfig="bottomToTop"
         delay={300}
         onAnimationComplete={() =>
-          setTimeout(onCompleteGreeting, DELAY_BEFORE_NEXT_STEP_IN_MS)
+          setTimeout(onCompleteGreeting, delayBeforeNextStep)
         }
       >
         <ContentWrapper>

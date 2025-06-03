@@ -4,7 +4,7 @@ import { Coin } from '@core/chain/coin/Coin'
 
 import { ChainAction } from '../ChainAction'
 
-const UNBOUND_TRANSACTION_AMOUNT = 0
+const unboundTransactionAmount = 0
 
 function getDustDepositAmountString(decimals: number) {
   return (1 / Math.pow(10, decimals)).toFixed(decimals)
@@ -32,7 +32,7 @@ export const getFormattedFormData = (
     ('amount' in formData && chainAction === 'unbond') ||
     ('amount' in formData && chainAction === 'unbond_with_lp')
   ) {
-    formattedFormData.amount = UNBOUND_TRANSACTION_AMOUNT
+    formattedFormData.amount = unboundTransactionAmount
   }
 
   // If 'amount' doesn't exist in the current formData as it's not mandatory for MayaChain unbond_with_lp Form, we need to hardcode the amount to 0.00000001 for the transaction

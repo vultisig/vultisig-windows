@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { IBC_TOKENS, TOKEN_MERGE_CONTRACTS } from '@core/chain/coin/ibc'
+import { ibcTokens, tokenMergeContracts } from '@core/chain/coin/ibc'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -20,15 +20,15 @@ const useUserMergeAcceptedTokens = () => {
       .filter(
         coin =>
           coin.chain === Chain.THORChain &&
-          IBC_TOKENS.some(
+          ibcTokens.some(
             ibcToken =>
               ibcToken.ticker.toUpperCase() === coin.ticker.toUpperCase()
           ) &&
-          TOKEN_MERGE_CONTRACTS[coin.ticker.toUpperCase()]
+          tokenMergeContracts[coin.ticker.toUpperCase()]
       )
       .map(coin => ({
         ...coin,
-        thorchainAddress: TOKEN_MERGE_CONTRACTS[coin.ticker.toUpperCase()],
+        thorchainAddress: tokenMergeContracts[coin.ticker.toUpperCase()],
       }))
   }, [userCoins])
 }
