@@ -1,4 +1,5 @@
 import { MpcDevice } from '@core/mpc/devices/MpcDevice'
+import { MpcLib } from '@core/mpc/mpcLib'
 import { MpcServerType } from '@core/mpc/MpcServerType'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { NameProp } from '@lib/utils/entities/props'
@@ -23,6 +24,7 @@ export type CoreState = CoreStorage & {
   openUrl: (url: string) => void
   saveFile: SaveFileFunction
   mpcDevice: MpcDevice
+  vaultCreationMpcLib: MpcLib
   getClipboardText: () => Promise<string>
   version: string
   isLocalModeAvailable: boolean

@@ -1,7 +1,18 @@
+import {
+  CosmosMsgType,
+  RequestMethod,
+} from '@clients/extension/src/utils/constants'
+import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
+import {
+  Messaging,
+  TransactionDetails,
+  TransactionType,
+} from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
+import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
+import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainByChainId } from '@core/chain/coin/ChainId'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import {
   CosmJSOfflineSigner,
@@ -27,13 +38,6 @@ import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
 
-import { CosmosMsgType, RequestMethod } from '../../utils/constants'
-import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
-import {
-  Messaging,
-  TransactionDetails,
-  TransactionType,
-} from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
 
 class XDEFIMessageRequester {
@@ -228,7 +232,9 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('Unsupported message type')
     }
 
-    const txChain = getChainByChainId(chainId)
+    const txChain =
+      getCosmosChainByChainId(chainId) || getEvmChainByChainId(chainId)
+
     if (!txChain) {
       throw new Error(`Chain not supported: ${chainId}`)
     }

@@ -6,6 +6,7 @@ import { Wrap } from '@lib/ui/base/Wrap'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { ChildrenProp } from '@lib/ui/props'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -21,6 +22,12 @@ const PromptsContainer = styled.div`
   ${vStack({ gap: 20 })}
 `
 
+const PromptsWrapper = ({ children }: ChildrenProp) => {
+  return areEmptyChildren(children) ? null : (
+    <PromptsContainer>{children}</PromptsContainer>
+  )
+}
+
 export const VaultOverview = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -29,13 +36,7 @@ export const VaultOverview = () => {
 
   return (
     <VStack fullHeight>
-      <Wrap
-        wrap={children =>
-          areEmptyChildren(children) ? null : (
-            <PromptsContainer>{children}</PromptsContainer>
-          )
-        }
-      >
+      <Wrap wrap={PromptsWrapper}>
         {!isBackedUp && <VaultBackupBanner />}
         {libType !== 'DKLS' && <MigrateVaultPrompt />}
       </Wrap>
