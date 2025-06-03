@@ -3,7 +3,7 @@ import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useId } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
@@ -29,7 +29,7 @@ const OptionItem = styled.label<{ isSelected: boolean }>`
   ${interactive}
   color: ${getColor('textShy')};
   ${horizontalPadding(16)}
-  background: ${getColor('backgroundsSecondary')};
+  background: ${getColor('foreground')};
   ${hStack({
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -38,14 +38,8 @@ const OptionItem = styled.label<{ isSelected: boolean }>`
   border: 1px solid ${getColor('foregroundExtra')};
 
   &:hover {
-    background: ${getColor('backgroundTertiary')};
+    background: ${getColor('foregroundExtra')};
   }
-
-  ${({ isSelected }) =>
-    isSelected &&
-    css`
-      background: ${getColor('backgroundTertiary')};
-    `}
 `
 
 const CheckContainer = styled.div`
