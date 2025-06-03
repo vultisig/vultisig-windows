@@ -1,14 +1,52 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { evmChainRpcUrls } from '@core/chain/chains/evm/chainInfo'
-import { getEvmClient } from '@core/chain/chains/evm/client'
 import {
-  CosmosChainId,
-  EVMChainId,
-  getChainByChainId,
-  getChainId,
-} from '@core/chain/coin/ChainId'
+  handleFindAccounts,
+  handleGetAccounts,
+} from '@clients/extension/src/background/handlers/accountsHandler'
+import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
+import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+import {
+  getVaultsAppSessions,
+  setVaultsAppSessions,
+  updateAppSession,
+  VaultsAppSessions,
+} from '@clients/extension/src/sessions/state/appSessions'
+import { storage } from '@clients/extension/src/storage'
+import {
+  ThorchainProviderMethod,
+  ThorchainProviderResponse,
+} from '@clients/extension/src/types/thorchain'
+import api from '@clients/extension/src/utils/api'
+import {
+  getDappHost,
+  getDappHostname,
+} from '@clients/extension/src/utils/connectedApps'
+import {
+  EventMethod,
+  RequestMethod,
+} from '@clients/extension/src/utils/constants'
+import {
+  ITransaction,
+  Messaging,
+  TransactionDetails,
+  TransactionType,
+} from '@clients/extension/src/utils/interfaces'
+import {
+  getStandardTransactionDetails,
+  isBasicTransaction,
+} from '@clients/extension/src/utils/tx/getStandardTx'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import {
+  getCosmosChainByChainId,
+  getCosmosChainId,
+} from '@core/chain/chains/cosmos/chainInfo'
+import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import {
+  evmChainRpcUrls,
+  getEvmChainByChainId,
+  getEvmChainId,
+} from '@core/chain/chains/evm/chainInfo'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
@@ -20,38 +58,12 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { initializeMessenger } from '../../messengers/initializeMessenger'
-import {
-  getVaultsAppSessions,
-  setVaultsAppSessions,
-  updateAppSession,
-  VaultsAppSessions,
-} from '../../sessions/state/appSessions'
-import { storage } from '../../storage'
-import {
-  ThorchainProviderMethod,
-  ThorchainProviderResponse,
-} from '../../types/thorchain'
-import api from '../../utils/api'
-import { getDappHost, getDappHostname } from '../../utils/connectedApps'
-import { EventMethod, RequestMethod } from '../../utils/constants'
-import {
-  ITransaction,
-  Messaging,
-  TransactionDetails,
-  TransactionType,
-} from '../../utils/interfaces'
-import {
-  getStandardTransactionDetails,
-  isBasicTransaction,
-} from '../../utils/tx/getStandardTx'
-import { handleFindAccounts, handleGetAccounts } from './accountsHandler'
-import { handleSendTransaction } from './transactionsHandler'
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
 
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
+
 export const handleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain,
@@ -106,7 +118,7 @@ export const handleRequest = (
                   `${EventMethod.CONNECT}:${getDappHost(sender)}`,
                   {
                     address: account,
-                    chainId: getChainId(chain),
+                    chainId: getEvmChainId(chain as EvmChain),
                   }
                 )
               } catch (err) {
@@ -131,7 +143,16 @@ export const handleRequest = (
       }
       case RequestMethod.VULTISIG.CHAIN_ID:
       case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        resolve(getChainId(chain))
+        let chainId: string | undefined = undefined
+
+        if (getChainKind(chain) === 'evm') {
+          chainId = getEvmChainId(chain as EvmChain)
+        } else if (getChainKind(chain) === 'cosmos') {
+          chainId = getCosmosChainId(chain as CosmosChain)
+        }
+
+        if (chainId) resolve(chainId)
+        else reject()
 
         break
       }
@@ -341,7 +362,11 @@ export const handleRequest = (
           reject()
           break
         }
-        const chain = getChainByChainId(param.chainId)
+
+        const chain =
+          getCosmosChainByChainId(param.chainId) ||
+          getEvmChainByChainId(param.chainId)
+
         if (!chain) {
           reject()
           return
@@ -352,23 +377,22 @@ export const handleRequest = (
           const host = getDappHostname(sender)
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
+
           if (!previousSession) throw new Error(`No session found for ${host}`)
-          const isEVM = getChainKind(chain) === 'evm'
-          const isCosmos = getChainKind(chain) === 'cosmos'
+
           try {
             await updateAppSession({
               vaultId: safeVaultId,
               host: host,
               fields: {
-                selectedEVMChainId: isEVM
-                  ? (param.chainId as EVMChainId)
-                  : previousSession.selectedEVMChainId,
-                selectedCosmosChainId: isCosmos
-                  ? (param.chainId as CosmosChainId)
-                  : previousSession.selectedCosmosChainId,
-                chainIds: Array.from(
-                  new Set([...(previousSession.chainIds ?? []), param.chainId])
-                ),
+                selectedCosmosChainId:
+                  getChainKind(chain) === 'cosmos'
+                    ? param.chainId
+                    : previousSession.selectedCosmosChainId,
+                selectedEVMChainId:
+                  getChainKind(chain) === 'evm'
+                    ? param.chainId
+                    : previousSession.selectedEVMChainId,
               },
             })
             resolve(param.chainId)
@@ -443,7 +467,10 @@ export const handleRequest = (
           break
         }
 
-        const chain = shouldBePresent(getChainByChainId(param.chainId))
+        const chain = shouldBePresent(
+          getCosmosChainByChainId(param.chainId) ||
+            getEvmChainByChainId(param.chainId)
+        )
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
@@ -454,22 +481,21 @@ export const handleRequest = (
 
           if (!previousSession) throw new Error(`No session found for ${host}`)
 
-          const isEVM = getChainKind(chain) === 'evm'
-          const isCosmos = getChainKind(chain) === 'cosmos'
-          const chainId = getChainId(chain)
-
           await updateAppSession({
             vaultId: safeVaultId,
             host,
             fields: {
-              selectedEVMChainId: isEVM
-                ? (chainId as EVMChainId)
-                : previousSession.selectedEVMChainId,
-              selectedCosmosChainId: isCosmos
-                ? (chainId as CosmosChainId)
-                : previousSession.selectedCosmosChainId,
+              selectedCosmosChainId:
+                getChainKind(chain) === 'cosmos'
+                  ? getCosmosChainId(chain as CosmosChain)
+                  : previousSession.selectedCosmosChainId,
+              selectedEVMChainId:
+                getChainKind(chain) === 'evm'
+                  ? getEvmChainId(chain as EvmChain)
+                  : previousSession.selectedEVMChainId,
             },
           })
+
           resolve(param.chainId)
         })
 
@@ -641,7 +667,17 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        resolve(String(parseInt(getChainId(chain), 16)))
+        let chainId: string | undefined = undefined
+
+        if (getChainKind(chain) === 'evm') {
+          chainId = getEvmChainId(chain as EvmChain)
+        } else if (getChainKind(chain) === 'cosmos') {
+          chainId = getCosmosChainId(chain as CosmosChain)
+        }
+
+        if (chainId) resolve(parseInt(chainId, 16).toString())
+        else reject()
+
         break
       }
       case RequestMethod.CTRL.DEPOSIT: {
