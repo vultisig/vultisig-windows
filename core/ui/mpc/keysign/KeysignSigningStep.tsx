@@ -68,43 +68,51 @@ export const KeysignSigningStep = ({
               <MatchRecordUnion
                 value={payload}
                 handlers={{
-                  keysign: payload => (
-                    <Match
-                      value={payload.swapPayload.value ? 'swap' : 'default'}
-                      swap={() => (
-                        <SwapKeysignTxOverview
-                          txHashes={txResults.map(tx => tx.txHash)}
-                          value={payload}
-                        />
-                      )}
-                      default={() => (
-                        <StepTransition
-                          from={({ onFinish: onSeeTxDetails }) => (
-                            <TxSuccess
-                              value={payload}
-                              onSeeTxDetails={onSeeTxDetails}
-                              onFinish={handleFinish}
-                            />
-                          )}
-                          to={() => (
-                            <>
-                              <TxOverviewPanel>
-                                <KeysignTxOverview
-                                  txHash={normalizeTxHash(txResult.txHash, {
-                                    memo: payload?.memo,
-                                  })}
-                                  value={payload}
-                                />
-                              </TxOverviewPanel>
-                              <Button onClick={handleFinish}>
-                                {t('complete')}
-                              </Button>
-                            </>
-                          )}
-                        />
-                      )}
-                    />
-                  ),
+                  keysign: payload => {
+                    const { swapPayload, memo } = payload
+                    const isSwapTx =
+                      (swapPayload && swapPayload.value) ||
+                      memo?.startsWith('=') ||
+                      memo?.toLowerCase().startsWith('swap')
+
+                    return (
+                      <Match
+                        value={isSwapTx ? 'swap' : 'default'}
+                        swap={() => (
+                          <SwapKeysignTxOverview
+                            txHashes={txResults.map(tx => tx.txHash)}
+                            value={payload}
+                          />
+                        )}
+                        default={() => (
+                          <StepTransition
+                            from={({ onFinish: onSeeTxDetails }) => (
+                              <TxSuccess
+                                value={payload}
+                                onSeeTxDetails={onSeeTxDetails}
+                                onFinish={handleFinish}
+                              />
+                            )}
+                            to={() => (
+                              <>
+                                <TxOverviewPanel>
+                                  <KeysignTxOverview
+                                    txHash={normalizeTxHash(txResult.txHash, {
+                                      memo: payload?.memo,
+                                    })}
+                                    value={payload}
+                                  />
+                                </TxOverviewPanel>
+                                <Button onClick={handleFinish}>
+                                  {t('complete')}
+                                </Button>
+                              </>
+                            )}
+                          />
+                        )}
+                      />
+                    )
+                  },
                   custom: payload => (
                     <>
                       <TxOverviewPanel>
