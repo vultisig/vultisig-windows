@@ -6,7 +6,7 @@ import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { useSevenZipQuery } from '@core/ui/compression/queries/useSevenZipQuery'
-import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import {
   assertKeygenReshareFields,
   useKeygenVault,
@@ -29,7 +29,7 @@ export const useJoinKeygenUrlQuery = () => {
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
-  const keygenType = useCurrentKeygenType()
+  const operationType = useCurrentKeygenOperationType()
 
   const vaultName = useKeygenVaultName()
 
@@ -49,7 +49,7 @@ export const useJoinKeygenUrlQuery = () => {
 
         const useVultisigRelay = serverType === 'relay'
 
-        const binary = match(keygenType, {
+        const binary = match(operationType.operation, {
           create: () => {
             const message = create(KeygenMessageSchema, {
               sessionId,
@@ -74,18 +74,6 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(ReshareMessageSchema, message)
           },
-          migrate: () => {
-            const message = create(ReshareMessageSchema, {
-              sessionId,
-              serviceName,
-              encryptionKeyHex: hexEncryptionKey,
-              useVultisigRelay,
-              vaultName,
-              ...assertKeygenReshareFields(keygenVault),
-              libType,
-            })
-            return toBinary(ReshareMessageSchema, message)
-          },
         })
 
         const jsonData = toCompressedString({
@@ -94,14 +82,14 @@ export const useJoinKeygenUrlQuery = () => {
         })
         return addQueryParams(deepLinkBaseUrl, {
           type: 'NewVault',
-          tssType: toTssType(keygenType),
+          tssType: toTssType(operationType),
           jsonData,
         })
       },
       [
         hexChainCode,
         hexEncryptionKey,
-        keygenType,
+        operationType,
         keygenVault,
         serverType,
         serviceName,

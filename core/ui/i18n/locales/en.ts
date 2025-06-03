@@ -431,6 +431,7 @@ export const en = {
     'For all Reshare actions the threshold of devices is always required.',
   start_reshare: 'Start Reshare',
   failed_to_generate_qr_code: 'Failed to generate QR code',
+  failed_to_generate_join_url: 'Failed to generate QR code',
   vault_already_exists: 'Vault already exists',
   vault_already_exists_message: 'Please select a different vault.',
   vault_missing_public_key: 'Vault missing public key',

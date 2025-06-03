@@ -43,7 +43,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       }
 
       const dklsKeygen = new DKLS(
-        'create',
+        { operation: 'create' },
         isInitiatingDevice,
         serverUrl,
         sessionId,
@@ -57,7 +57,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       onStepChange('eddsa')
 
       const schnorrKeygen = new Schnorr(
-        'create',
+        { operation: 'create' },
         isInitiatingDevice,
         serverUrl,
         sessionId,

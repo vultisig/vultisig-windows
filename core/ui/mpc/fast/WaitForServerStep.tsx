@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeerOptionsQuery } from '../devices/queries/useMpcPeerOptionsQuery'
+import { pluginPeersConfig } from './config'
 import { ServerFeedback } from './ServerFeedback'
 
 export const WaitForServerStep = ({
@@ -13,9 +14,13 @@ export const WaitForServerStep = ({
 }: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<boolean>>) => {
   const peersQuery = useMpcPeerOptionsQuery()
   const { t } = useTranslation()
+
   useEffect(() => {
     if (peersQuery.data) {
-      if (isPluginReshare && peersQuery.data.length > 3) {
+      if (
+        isPluginReshare &&
+        peersQuery.data.length >= pluginPeersConfig.minimumJoinedParties
+      ) {
         onFinish(peersQuery.data)
       } else if (!isPluginReshare) {
         onFinish(peersQuery.data)

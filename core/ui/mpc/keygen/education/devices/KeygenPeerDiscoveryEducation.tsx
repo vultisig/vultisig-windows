@@ -1,4 +1,4 @@
-import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 
 import { KeygenPeerDiscoveryEducationOverlay } from './KeygenPeerDiscoveryEducationOverlay'
@@ -6,9 +6,9 @@ import { KeygenPeerDiscoveryEducationOverlay } from './KeygenPeerDiscoveryEducat
 export const KeygenPeerDiscoveryEducation = () => {
   const [shouldShowOverlay, { unset: closeOverlay }] = useBoolean(true)
 
-  const keygenType = useCurrentKeygenType()
+  const operationType = useCurrentKeygenOperationType()
 
-  if (keygenType === 'create' && shouldShowOverlay) {
+  if (operationType.operation === 'create' && shouldShowOverlay) {
     return <KeygenPeerDiscoveryEducationOverlay onFinish={closeOverlay} />
   }
 

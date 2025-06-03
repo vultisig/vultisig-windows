@@ -5,15 +5,11 @@ import { Match } from '@lib/ui/base/Match'
 import { ChildrenProp } from '@lib/ui/props'
 
 export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
-  const [{ keygenType }] = useCoreViewState<'joinKeygen'>()
-
-  if (keygenType === 'migrate') {
-    throw new Error(`${keygenType} keygen is not supported in extension`)
-  }
+  const [{ operationType }] = useCoreViewState<'joinKeygen'>()
 
   return (
     <Match
-      value={keygenType}
+      value={operationType.operation}
       create={() => (
         <CreateVaultKeygenActionProvider>
           {children}

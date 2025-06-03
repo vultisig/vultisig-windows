@@ -1,5 +1,6 @@
 import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
 import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
+import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
@@ -10,7 +11,7 @@ import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAction'
 
-export const ReshareFastKeygenServerActionProvider = ({
+export const PluginReshareFastKeygenServerActionProvider = ({
   children,
 }: ChildrenProp) => {
   const sessionId = useMpcSessionId()
@@ -18,7 +19,7 @@ export const ReshareFastKeygenServerActionProvider = ({
 
   const [password] = useVaultPassword()
 
-  const { name, hexChainCode, publicKeys, resharePrefix, signers } =
+  const { name, hexChainCode, publicKeys, resharePrefix, signers, libType } =
     useCurrentVault()
 
   const [email] = useEmail()
@@ -35,6 +36,8 @@ export const ReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
+      lib_type: toLibType(libType),
+      reshare_type: 1,
     })
   }, [
     email,
@@ -46,6 +49,7 @@ export const ReshareFastKeygenServerActionProvider = ({
     resharePrefix,
     sessionId,
     signers,
+    libType,
   ])
 
   return (

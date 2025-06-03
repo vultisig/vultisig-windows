@@ -1,8 +1,9 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
-import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -11,7 +12,7 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { match } from '@lib/utils/match'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,13 +28,20 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
   const { t } = useTranslation()
 
-  const keygenType = useCurrentKeygenType()
+  const operationType = useCurrentKeygenOperationType()
 
-  const title = match(keygenType, {
-    create: () => t('creating_vault'),
-    reshare: () => t('reshare'),
-    migrate: () => t('upgrade'),
-  })
+  const title = matchDiscriminatedUnion<KeygenOperation, string>(
+    operationType,
+    'operation',
+    'type',
+    {
+      create: () => t('creating_vault'),
+      reshare: () => t('reshare'),
+      migrate: () => t('upgrade'),
+      plugin: () => t('reshare'),
+      regular: () => t('reshare'),
+    }
+  )
 
   return (
     <MatchQuery
@@ -61,7 +69,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
         return (
           <CurrentVaultProvider value={vault}>
-            {keygenType === 'create' ? (
+            {operationType.operation === 'create' ? (
               <StepTransition
                 from={({ onFinish }) => (
                   <CreateVaultSuccessScreen onFinish={onFinish} />

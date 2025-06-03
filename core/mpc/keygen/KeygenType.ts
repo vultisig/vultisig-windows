@@ -1,1 +1,3 @@
-export type KeygenType = 'create' | 'reshare' | 'migrate'
+import { KeygenOperation } from './KeygenOperation'
+
+export type KeygenType = KeygenOperation['operation']

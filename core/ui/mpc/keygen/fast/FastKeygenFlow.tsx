@@ -1,8 +1,9 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
-import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
+import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp } from '@lib/ui/props'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { ComponentType } from 'react'
 
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
@@ -11,29 +12,34 @@ import { MpcPeersProvider } from '../../state/mpcPeers'
 import { CreateFastKeygenServerActionProvider } from '../create/fast/CreateFastKeygenServerActionProvider'
 import { KeygenFlow } from '../flow/KeygenFlow'
 import { MigrateFastKeygenServerActionProvider } from '../migrate/fast/MigrateFastKeygenServerActionProvider'
+import { PluginReshareFastKeygenServerActionProvider } from '../reshare/PluginReshareFastKeygenServerActionProvider'
 import { ReshareFastKeygenServerActionProvider } from '../reshare/ReshareFastKeygenServerActionProvider'
 import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
 
-const serverActionProviders: Record<KeygenType, ComponentType<any>> = {
-  create: CreateFastKeygenServerActionProvider,
-  reshare: ReshareFastKeygenServerActionProvider,
-  migrate: MigrateFastKeygenServerActionProvider,
-}
-
 export const FastKeygenFlow = ({
   onBack,
-  isPluginReshare,
 }: OnBackProp & Partial<{ isPluginReshare: boolean }>) => {
-  const keygenType = useCurrentKeygenType()
+  const operationType = useCurrentKeygenOperationType()
 
-  const ServerActionProvider = serverActionProviders[keygenType]
+  const ServerActionProvider = matchDiscriminatedUnion<
+    KeygenOperation,
+    ComponentType<any>
+  >(operationType, 'operation', 'type', {
+    create: () => CreateFastKeygenServerActionProvider,
+    migrate: () => MigrateFastKeygenServerActionProvider,
+    reshare: () => ReshareFastKeygenServerActionProvider,
+    regular: () => ReshareFastKeygenServerActionProvider,
+    plugin: () => PluginReshareFastKeygenServerActionProvider,
+  })
+
+  const isPluginReshare =
+    operationType.operation === 'reshare' && operationType.type === 'plugin'
 
   return (
     <StepTransition
       from={({ onFinish }) => {
-        const props = keygenType === 'reshare' ? { isPluginReshare } : {}
         return (
-          <ServerActionProvider {...props}>
+          <ServerActionProvider>
             <FastKeygenServerActionStep onFinish={onFinish} onBack={onBack} />
           </ServerActionProvider>
         )
