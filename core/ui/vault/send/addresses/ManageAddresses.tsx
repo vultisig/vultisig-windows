@@ -11,7 +11,7 @@ export const ManageAddresses = () => {
   const value = field == 'address' ? 'open' : 'closed'
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <Match
         value={value}
         open={() => (
