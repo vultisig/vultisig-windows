@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
-  passcodeAutoLockDurations,
+  passcodeAutoLockOptions,
   PasscodeAutoLockValue,
   usePasscodeAutoLock,
 } from '../../storage/passcodeAutoLock'
@@ -37,14 +37,6 @@ export const PasscodeAutoLockPage = () => {
     setAutoLock(value)
   }
 
-  const options = [
-    ...passcodeAutoLockDurations.map(duration => ({
-      value: duration,
-      label: t('minute', { count: duration }),
-    })),
-    { value: null, label: t('never') },
-  ]
-
   return (
     <VStack fullHeight>
       <FlowPageHeader title={t('lock_time')} />
@@ -56,13 +48,15 @@ export const PasscodeAutoLockPage = () => {
             </Text>
           </VStack>
           <List>
-            {options.map(({ value, label }) => {
+            {passcodeAutoLockOptions.map(value => {
               const isSelected = value === currentValue
 
               return (
                 <ListItem
-                  key={label}
-                  title={label}
+                  key={value}
+                  title={
+                    value === null ? t('never') : t('minute', { count: value })
+                  }
                   onClick={() => handleOptionSelect(value)}
                   extra={
                     isSelected && (
