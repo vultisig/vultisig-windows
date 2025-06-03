@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: 
+globs: *.ts,*.tsx
 alwaysApply: false
 ---
 # Internationalization (i18n) Workflow
@@ -11,7 +11,7 @@ alwaysApply: false
 - Always add translations to all supported language files
 
 ## Supported Languages
-The project supports 6 languages with files located in [core/ui/i18n/locales/](mdc:core/ui/i18n/locales/):
+The project supports 6 languages with files located in [core/ui/i18n/locales/](mdc:core/ui/i18n/locales):
 - English: [en.ts](mdc:core/ui/i18n/locales/en.ts)
 - German: [de.ts](mdc:core/ui/i18n/locales/de.ts) 
 - Spanish: [es.ts](mdc:core/ui/i18n/locales/es.ts)
