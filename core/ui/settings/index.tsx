@@ -14,6 +14,7 @@ import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
+import { LockIcon } from '@lib/ui/icons/LockIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
@@ -37,6 +38,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useHasPasscodeEncryption } from '../storage/passcodeEncryption'
 import { SettingsSection } from './SettingsSection'
 
 interface ExtensionSettings {
@@ -77,6 +79,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
       })
   }
 
+  const hasPasscodeEncryption = useHasPasscodeEncryption()
+
   return (
     <>
       <VStack fullHeight>
@@ -103,6 +107,22 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
+          </SettingsSection>
+          <SettingsSection title={t('security')}>
+            <ListItem
+              icon={<SecurityIcon style={{ fontSize: iconSize }} />}
+              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
+              title={t('security')}
+              hoverable
+              showArrow
+            />
+            {hasPasscodeEncryption && (
+              <ListItem
+                icon={<LockIcon style={{ fontSize: iconSize }} />}
+                onClick={() => navigate({ id: 'passcodeAutoLock' })}
+                title={t('lock_time')}
+              />
+            )}
           </SettingsSection>
           <SettingsSection title={t('general')}>
             <ListItem
@@ -132,13 +152,6 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               icon={<MegaphoneIcon fontSize={iconSize} />}
               onClick={() => {}}
               title={t('referral_code')}
-              hoverable
-              showArrow
-            />
-            <ListItem
-              icon={<SecurityIcon style={{ fontSize: iconSize }} />}
-              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
-              title={t('security')}
               hoverable
               showArrow
             />
