@@ -916,13 +916,15 @@ export const chainTokens: Partial<
     }
   }
 
+  const THORChainExcludedIBCTickers = ['USK', 'ASTRO']
+
   base[Chain.THORChain] = [
     ...(base[Chain.THORChain] ?? []),
     ...IBC_TOKENS.map(t => ({
       ...t,
       chain: Chain.THORChain,
       id: `thor.${t.ticker.toLowerCase()}`,
-    })),
+    })).filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
   ]
 
   return base
