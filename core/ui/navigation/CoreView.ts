@@ -67,6 +67,7 @@ export type CoreView =
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
+  | { id: 'passcodeAutoLock' }
 
 export type CoreViewId = CoreView['id']
 

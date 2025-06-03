@@ -33,6 +33,7 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 
 export type SharedViewId = Extract<
@@ -70,6 +71,7 @@ export type SharedViewId = Extract<
   | 'vaultSettings'
   | 'vaults'
   | 'managePasscodeEncryption'
+  | 'passcodeAutoLock'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -113,4 +115,5 @@ export const sharedViews: Views<SharedViewId> = {
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
+  passcodeAutoLock: PasscodeAutoLockPage,
 }
