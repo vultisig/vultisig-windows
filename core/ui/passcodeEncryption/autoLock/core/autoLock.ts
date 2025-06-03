@@ -9,23 +9,21 @@ export const useAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
   const passcodeAutoLock = usePasscodeAutoLock()
 
-  const [passcodeUpdatedAt, setPasscodeUpdatedAt] = useState<number | null>(
+  const [passcodeEnteredAt, setPasscodeEnteredAt] = useState<number | null>(
     null
   )
 
   useEffect(() => {
-    if (passcode) {
-      setPasscodeUpdatedAt(Date.now())
-    }
+    setPasscodeEnteredAt(passcode ? Date.now() : null)
   }, [passcode])
 
   useEffect(() => {
-    if (!passcodeAutoLock || !passcodeUpdatedAt || !passcode) {
+    if (!passcodeAutoLock || !passcodeEnteredAt || !passcode) {
       return
     }
 
     const lockAt =
-      passcodeUpdatedAt + convertDuration(passcodeAutoLock, 'min', 'ms')
+      passcodeEnteredAt + convertDuration(passcodeAutoLock, 'min', 'ms')
     const timeUntilLock = lockAt - Date.now()
 
     if (timeUntilLock <= 0) {
@@ -40,5 +38,5 @@ export const useAutoLock = () => {
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [passcodeAutoLock, passcodeUpdatedAt, passcode, setPasscode])
+  }, [passcode, passcodeAutoLock, passcodeEnteredAt, setPasscode])
 }
