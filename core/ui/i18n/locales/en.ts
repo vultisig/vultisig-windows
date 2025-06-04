@@ -878,4 +878,9 @@ export const en = {
   invalid_passcode: 'Invalid passcode',
   unlock: 'Unlock',
   vault_type_does_not_match: 'Vault type does not match',
+  change_passcode: 'Change Passcode',
+  current_passcode: 'Current Passcode',
+  new_passcode: 'New Passcode',
+  confirm_new_passcode: 'Confirm New Passcode',
+  enter_new_passcode: 'Enter new passcode',
 }

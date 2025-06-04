@@ -907,4 +907,9 @@ export const pt = {
   app_locked_description: 'Digite sua senha para continuar.',
   invalid_passcode: 'Senha inválida',
   unlock: 'Desbloquear',
+  change_passcode: 'Alterar senha',
+  current_passcode: 'Senha atual',
+  new_passcode: 'Nova senha',
+  confirm_new_passcode: 'Confirmar nova senha',
+  enter_new_passcode: 'Digite a nova senha',
 }

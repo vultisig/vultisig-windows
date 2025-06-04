@@ -916,4 +916,9 @@ export const es = {
   app_locked_description: 'Introduzca su contraseña para continuar.',
   invalid_passcode: 'Código de acceso no válido',
   unlock: 'Descubrir',
+  change_passcode: 'Cambiar código de acceso',
+  current_passcode: 'Código de acceso actual',
+  new_passcode: 'Nueva contraseña',
+  confirm_new_passcode: 'Confirmar nueva contraseña',
+  enter_new_passcode: 'Introduzca la nueva contraseña',
 }

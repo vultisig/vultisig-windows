@@ -920,4 +920,9 @@ export const de = {
   app_locked_description: 'Geben Sie Ihren Passcode ein, um fortzufahren.',
   invalid_passcode: 'Ungültiger Passcode',
   unlock: 'Entsperren',
+  change_passcode: 'Passcode ändern',
+  current_passcode: 'Aktueller Passcode',
+  new_passcode: 'Neuer Passcode',
+  confirm_new_passcode: 'Neuen Passcode bestätigen',
+  enter_new_passcode: 'Geben Sie den neuen Passcode ein',
 }

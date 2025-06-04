@@ -88,6 +88,10 @@ const stack = ({
   `}
 `
 
+export const Stack = styled.div<StackProps>`
+  ${stack}
+`
+
 export const vStack = (props: FixedDirectionStackProps = {}) =>
   stack({ ...props, direction: 'column' })
 
