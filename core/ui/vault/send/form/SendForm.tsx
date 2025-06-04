@@ -51,7 +51,6 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       >
         <VStack
           style={{
-            height: 500,
             overflow: 'hidden',
           }}
           gap={16}

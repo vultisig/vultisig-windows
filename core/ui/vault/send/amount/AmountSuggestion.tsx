@@ -29,13 +29,14 @@ export const AmountSuggestion: FC<
   ValueProp<number> &
     OnClickProp & {
       isActive?: boolean
+      className?: string
     }
-> = ({ value, onClick, isActive }) => {
+> = ({ value, onClick, isActive, className }) => {
   const formattedValue = toPercents(value)
   const { t } = useTranslation()
 
   return (
-    <Container isActive={isActive} onClick={onClick}>
+    <Container className={className} isActive={isActive} onClick={onClick}>
       <Text>{value === 1 ? t('max') : formattedValue}</Text>
     </Container>
   )
