@@ -46,7 +46,11 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
       to={() => (
         <ValueTransfer<string[]>
           from={({ onFinish }) => (
-            <WaitForServerStep onBack={onBack} onFinish={onFinish} />
+            <WaitForServerStep
+              onBack={onBack}
+              onFinish={onFinish}
+              value={keygenOperation}
+            />
           )}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
