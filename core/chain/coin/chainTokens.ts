@@ -3,6 +3,7 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
+import { chainFeeCoin } from './chainFeeCoin'
 import { Coin } from './Coin'
 import {
   CHAINS_WITH_IBC_TOKENS,
@@ -923,6 +924,7 @@ export const chainTokens: Partial<
     ...IBC_TOKENS.map(t => ({
       ...t,
       chain: Chain.THORChain,
+      decimals: chainFeeCoin[Chain.THORChain].decimals,
       id: `thor.${t.ticker.toLowerCase()}`,
     })).filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
   ]
