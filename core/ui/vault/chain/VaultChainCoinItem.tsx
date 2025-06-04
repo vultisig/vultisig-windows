@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
@@ -35,11 +34,7 @@ export const VaultChainCoinItem = ({
       <ChainCoinIcon
         coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
         chainSrc={
-          shouldDisplayChainLogo({
-            ticker,
-            chain,
-            isNative: isFeeCoin({ id, chain }),
-          })
+          shouldDisplayChainLogo({ id, chain })
             ? getChainLogoSrc(chain)
             : undefined
         }

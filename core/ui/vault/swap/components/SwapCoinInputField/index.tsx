@@ -1,5 +1,4 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
@@ -31,7 +30,7 @@ export const SwapCoinInputField = ({
   onChainClick,
   onCoinClick,
 }: CoinInputContainerProps) => {
-  const { ticker, chain, id } = value
+  const { chain } = value
   const { t } = useTranslation()
   const side = useTransferDirection()
 
@@ -75,13 +74,7 @@ export const SwapCoinInputField = ({
           <ChainCoinIcon
             coinSrc={value.logo ? getCoinLogoSrc(value.logo) : undefined}
             chainSrc={
-              shouldDisplayChainLogo({
-                ticker,
-                chain,
-                isNative: isFeeCoin({ id, chain }),
-              })
-                ? getChainLogoSrc(chain)
-                : undefined
+              shouldDisplayChainLogo(value) ? getChainLogoSrc(chain) : undefined
             }
             style={{ fontSize: 32 }}
           />

@@ -1,4 +1,3 @@
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -19,7 +18,7 @@ import { useSendFormFieldState } from '../../../state/formFields'
 export const ManageSendCoinCollapsedInputField = () => {
   const [{ coin: coinKey }] = useCoreViewState<'send'>()
   const coin = useCurrentVaultCoin(coinKey)
-  const { logo, ticker, chain, id } = coin
+  const { logo, ticker, chain } = coin
   const { t } = useTranslation()
   const [
     {
@@ -47,16 +46,7 @@ export const ManageSendCoinCollapsedInputField = () => {
           <ChainCoinIcon
             coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
             chainSrc={
-              shouldDisplayChainLogo({
-                ticker: ticker,
-                chain: chain,
-                isNative: isFeeCoin({
-                  id: id,
-                  chain: chain,
-                }),
-              })
-                ? getChainLogoSrc(chain)
-                : undefined
+              shouldDisplayChainLogo(coin) ? getChainLogoSrc(chain) : undefined
             }
             style={{ fontSize: 16 }}
           />
