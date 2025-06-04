@@ -1,5 +1,4 @@
 import './App.css'
-import './extensions/string'
 
 import { Buffer } from 'buffer'
 import { createRoot } from 'react-dom/client'
