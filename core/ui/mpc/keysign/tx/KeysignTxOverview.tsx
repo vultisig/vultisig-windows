@@ -1,32 +1,31 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { nativeSwapChains } from '@core/chain/swap/native/NativeSwapChain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useCopyTxHash } from '@core/ui/chain/hooks/useCopyTxHash'
-import { SwapTrackingLink } from '@core/ui/chain/swap/SwapTrackingLink'
-import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
-import { LinkIcon } from '@lib/ui/icons/LinkIcon'
+import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
+import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
+import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
+import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { useCore } from '../../../state/core'
-import { useFiatCurrency } from '../../../storage/fiatCurrency'
+import { useCurrentVault } from '../../../vault/state/currentVault'
+import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
+import { TxOverviewAmount } from './TxOverviewAmount'
 
 export const KeysignTxOverview = ({
   value,
@@ -35,29 +34,19 @@ export const KeysignTxOverview = ({
   txHash: string
 }) => {
   const { t } = useTranslation()
-  const copyTxHash = useCopyTxHash()
-  const fiatCurrency = useFiatCurrency()
   const {
     coin: potentialCoin,
     toAddress,
     memo,
     toAmount,
     blockchainSpecific,
-    swapPayload,
   } = value
 
   const { openUrl } = useCore()
-
-  const isSwapTx =
-    (swapPayload && swapPayload.value) ||
-    memo?.startsWith('=') ||
-    memo?.toLowerCase().startsWith('swap')
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
+  const vaultCoin = useCurrentVaultCoin(coin)
   const { decimals } = coin
-
-  const coinPriceQuery = useCoinPriceQuery({
-    coin,
-  })
+  const { name } = useCurrentVault()
 
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
@@ -76,80 +65,83 @@ export const KeysignTxOverview = ({
     })
   }, [blockchainSpecific, chain])
 
-  const blockExplorerChain: Chain = useMemo(() => {
-    if (isSwapTx && swapPayload && swapPayload.value) {
-      return matchDiscriminatedUnion(swapPayload, 'case', 'value', {
-        thorchainSwapPayload: () => Chain.THORChain,
-        mayachainSwapPayload: () => Chain.MayaChain,
-        oneinchSwapPayload: () => chain as Chain,
-      })
-    }
-
-    return chain as Chain
-  }, [chain, isSwapTx, swapPayload])
-
   const blockExplorerUrl = getBlockExplorerUrl({
-    chain: blockExplorerChain,
+    chain,
     entity: 'tx',
     value: txHash,
   })
 
   return (
-    <>
-      <VStack gap={16}>
-        <HStack alignItems="center" gap={4}>
-          <Text weight="600" size={20} color="contrast">
-            {t('transaction')}
-          </Text>
-          <IconButton icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
-          <IconButton
-            onClick={() => {
-              openUrl(blockExplorerUrl)
-            }}
-            icon={<LinkIcon />}
-          />
-        </HStack>
-        <Text family="mono" color="primary" size={14} weight="400">
-          {txHash}
-        </Text>
-      </VStack>
-      {toAddress && (
-        <TxOverviewRow>
-          <span>{t('to')}</span>
-          <span>{toAddress}</span>
-        </TxOverviewRow>
-      )}
-      <TxOverviewAmount
-        value={fromChainAmount(BigInt(toAmount), decimals)}
-        ticker={coin.ticker}
-      />
-      {memo && <TxOverviewMemo value={memo} />}
+    <VStack gap={16}>
       {formattedToAmount && (
-        <>
-          <MatchQuery
-            value={coinPriceQuery}
-            success={price => (
-              <TxOverviewRow>
-                <span>{t('value')}</span>
-                <span>
-                  {formatAmount(formattedToAmount * price, fiatCurrency)}
-                </span>
-              </TxOverviewRow>
-            )}
-            error={() => null}
-            pending={() => null}
-          />
-        </>
+        <TxOverviewAmount amount={formattedToAmount} value={coin} />
       )}
-      {networkFeesFormatted && (
+      <Content gap={16}>
+        <VStack gap={16}>
+          <HStack justifyContent="space-between" alignItems="center" gap={4}>
+            <Text color="shy">{t('tx_hash')}</Text>
+            <HStack alignItems="center" gap={4}>
+              <Text
+                style={{
+                  maxWidth: '150px',
+                }}
+                cropped
+              >
+                {txHash}
+              </Text>
+              <IconButton
+                onClick={() => {
+                  openUrl(blockExplorerUrl)
+                }}
+                icon={<SquareArrowOutUpRightIcon />}
+              />
+            </HStack>
+          </HStack>
+        </VStack>
         <TxOverviewRow>
-          <span>{t('network_fee')}</span>
-          <span>{networkFeesFormatted}</span>
+          <Text color="shy">{t('from')}</Text>
+          <Text size={14}>
+            {name}{' '}
+            <Text size={14} as="span" color="shy">
+              ({formatWalletAddress(vaultCoin.address)})
+            </Text>
+          </Text>
         </TxOverviewRow>
-      )}
-      {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (
-        <SwapTrackingLink value={blockExplorerUrl} />
-      )}
-    </>
+        {toAddress && (
+          <TxOverviewRow>
+            <Text color="shy">{t('to')}</Text>
+            <Text>{toAddress}</Text>
+          </TxOverviewRow>
+        )}
+        {memo && <TxOverviewMemo value={memo} />}
+        <TxOverviewRow>
+          <Text color="shy">{capitalizeFirstLetter(t('network'))}</Text>
+          <HStack gap={8}>
+            <ChainEntityIcon
+              value={getChainLogoSrc(chain)}
+              style={{ fontSize: 16 }}
+            />
+            <Text size={14}>{chain}</Text>
+          </HStack>
+        </TxOverviewRow>
+        {networkFeesFormatted && (
+          <TxOverviewRow>
+            <Text color="shy">{t('est_network_fee')}</Text>
+            <span>{networkFeesFormatted}</span>
+          </TxOverviewRow>
+        )}
+      </Content>
+    </VStack>
   )
 }
+
+const Content = styled(SeparatedByLine)`
+  border-radius: 16px;
+  padding: 16px;
+  background-color: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+
+  > * {
+    font-size: 14px;
+  }
+`
