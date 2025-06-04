@@ -1,9 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -26,7 +23,7 @@ export const SendCoinInputField = ({
   onChainClick,
   onCoinClick,
 }: CoinInputContainerProps) => {
-  const { ticker, chain, id } = value
+  const { chain } = value
 
   return (
     <VStack justifyContent="center" gap={16}>
@@ -61,19 +58,7 @@ export const SendCoinInputField = ({
           alignItems="center"
           gap={8}
         >
-          <ChainCoinIcon
-            coinSrc={value.logo ? getCoinLogoSrc(value.logo) : undefined}
-            chainSrc={
-              shouldDisplayChainLogo({
-                ticker,
-                chain,
-                isNative: isFeeCoin({ id, chain }),
-              })
-                ? getChainLogoSrc(chain)
-                : undefined
-            }
-            style={{ fontSize: 32 }}
-          />
+          <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <HStack gap={4}>
             <Text weight="500" size={16} color="contrast">
               {value.ticker}

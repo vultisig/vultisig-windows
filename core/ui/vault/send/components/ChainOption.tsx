@@ -1,8 +1,5 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
@@ -11,8 +8,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
-
 type Props = {
   isSelected?: boolean
 } & ValueProp<Coin> &
@@ -20,7 +15,7 @@ type Props = {
   IsActiveProp
 
 export const ChainOption = ({ value, onClick, isSelected }: Props) => {
-  const { chain, logo, ticker, id } = value
+  const { chain } = value
 
   return (
     <Container
@@ -31,19 +26,7 @@ export const ChainOption = ({ value, onClick, isSelected }: Props) => {
     >
       <HStack alignItems="center" justifyContent="space-between">
         <HStack fullWidth alignItems="center" gap={12}>
-          <ChainCoinIcon
-            coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-            chainSrc={
-              shouldDisplayChainLogo({
-                ticker,
-                chain,
-                isNative: isFeeCoin({ id, chain }),
-              })
-                ? getChainLogoSrc(chain)
-                : undefined
-            }
-            style={{ fontSize: 32 }}
-          />
+          <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <VStack alignItems="start">
             <Text color="contrast" size={14} weight="500">
               {chain}
