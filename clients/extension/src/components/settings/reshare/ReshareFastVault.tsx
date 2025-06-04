@@ -9,9 +9,7 @@ export const ReshareFastVault = () => (
   <ReshareVaultFlowProviders>
     <PasswordProvider initialValue="">
       <EmailProvider initialValue="">
-        <CurrentKeygenOperationTypeProvider
-          value={{ operation: 'reshare', type: 'regular' }}
-        >
+        <CurrentKeygenOperationTypeProvider value={{ reshare: 'regular' }}>
           <ReshareVaultKeygenActionProvider>
             <FastVaultReshareFlow />
           </ReshareVaultKeygenActionProvider>

@@ -4,19 +4,22 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeerOptionsQuery } from '../devices/queries/useMpcPeerOptionsQuery'
+import { useCurrentKeygenOperationType } from '../keygen/state/currentKeygenOperationType'
 import { pluginPeersConfig } from './config'
 import { ServerFeedback } from './ServerFeedback'
 
 export const WaitForServerStep = ({
   onFinish,
   onBack,
-  value: isPluginReshare,
 }: OnFinishProp<string[]> & OnBackProp & Partial<ValueProp<boolean>>) => {
   const peersQuery = useMpcPeerOptionsQuery()
   const { t } = useTranslation()
+  const keygenOperation = useCurrentKeygenOperationType()
 
   useEffect(() => {
     if (peersQuery.data) {
+      const isPluginReshare =
+        'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
       if (
         isPluginReshare &&
         peersQuery.data.length >= pluginPeersConfig.minimumJoinedParties
@@ -26,7 +29,7 @@ export const WaitForServerStep = ({
         onFinish(peersQuery.data)
       }
     }
-  }, [peersQuery.data, onFinish, isPluginReshare])
+  }, [keygenOperation, onFinish, peersQuery.data])
 
   return (
     <>

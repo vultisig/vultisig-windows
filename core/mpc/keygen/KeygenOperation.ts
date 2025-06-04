@@ -1,5 +1,3 @@
 import { ReshareType } from './ReshareType'
 
-export type KeygenOperation =
-  | { operation: 'create' }
-  | { operation: 'reshare'; type: ReshareType }
+export type KeygenOperation = { create: true } | { reshare: ReshareType }

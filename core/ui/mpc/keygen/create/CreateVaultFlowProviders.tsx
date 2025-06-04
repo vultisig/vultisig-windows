@@ -23,7 +23,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentKeygenOperationTypeProvider
-                      value={{ operation: 'create' }}
+                      value={{ create: true }}
                     >
                       <GeneratedVaultNameProvider>
                         <CreateFlowKeygenVaultProvider>

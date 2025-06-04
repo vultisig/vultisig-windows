@@ -48,7 +48,7 @@ export const ReshareVaultKeygenActionProvider = ({
       const { oldParties } = assertKeygenReshareFields(keygenVault)
       const oldCommittee = oldParties.filter(party => signers.includes(party))
       const dklsKeygen = new DKLS(
-        { operation: 'reshare', type: 'regular' },
+        { reshare: 'regular' },
         isInitiatingDevice,
         serverUrl,
         sessionId,
@@ -67,7 +67,7 @@ export const ReshareVaultKeygenActionProvider = ({
       onStepChange('eddsa')
 
       const schnorrKeygen = new Schnorr(
-        { operation: 'reshare', type: 'regular' },
+        { reshare: 'regular' },
         isInitiatingDevice,
         serverUrl,
         sessionId,

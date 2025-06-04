@@ -3,7 +3,8 @@ import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/current
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp } from '@lib/ui/props'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { ComponentType } from 'react'
 
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
@@ -16,24 +17,22 @@ import { PluginReshareFastKeygenServerActionProvider } from '../reshare/PluginRe
 import { ReshareFastKeygenServerActionProvider } from '../reshare/ReshareFastKeygenServerActionProvider'
 import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
 
-export const FastKeygenFlow = ({
-  onBack,
-}: OnBackProp & Partial<{ isPluginReshare: boolean }>) => {
+export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const operationType = useCurrentKeygenOperationType()
 
-  const ServerActionProvider = matchDiscriminatedUnion<
+  const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
     ComponentType<any>
-  >(operationType, 'operation', 'type', {
+  >(operationType, {
     create: () => CreateFastKeygenServerActionProvider,
-    migrate: () => MigrateFastKeygenServerActionProvider,
-    reshare: () => ReshareFastKeygenServerActionProvider,
-    regular: () => ReshareFastKeygenServerActionProvider,
-    plugin: () => PluginReshareFastKeygenServerActionProvider,
+    reshare: reshareType => {
+      return match(reshareType, {
+        regular: () => ReshareFastKeygenServerActionProvider,
+        migrate: () => MigrateFastKeygenServerActionProvider,
+        plugin: () => PluginReshareFastKeygenServerActionProvider,
+      })
+    },
   })
-
-  const isPluginReshare =
-    operationType.operation === 'reshare' && operationType.type === 'plugin'
 
   return (
     <StepTransition
@@ -47,17 +46,12 @@ export const FastKeygenFlow = ({
       to={() => (
         <ValueTransfer<string[]>
           from={({ onFinish }) => (
-            <WaitForServerStep
-              onBack={onBack}
-              onFinish={onFinish}
-              value={isPluginReshare}
-            />
+            <WaitForServerStep onBack={onBack} onFinish={onFinish} />
           )}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
                 value="keygen"
-                isPluginReshare={isPluginReshare}
                 render={() => <KeygenFlow onBack={onBack} />}
               />
             </MpcPeersProvider>

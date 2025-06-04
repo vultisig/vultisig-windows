@@ -14,26 +14,25 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentKeygenOperationType } from '../keygen/state/currentKeygenOperationType'
 import { MpcSession } from './MpcSession'
 
 export const StartMpcSessionStep = ({
   onBack,
   onFinish,
   value,
-  isPluginReshare,
-}: Partial<OnBackProp> &
-  OnFinishProp &
-  ValueProp<MpcSession> &
-  Partial<{ isPluginReshare: boolean }>) => {
+}: Partial<OnBackProp> & OnFinishProp & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
+  const keygenOperation = useCurrentKeygenOperationType()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      const filteredDevices = isPluginReshare
-        ? devices.filter(device => !isServer(device))
-        : devices
+      const filteredDevices =
+        'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+          ? devices.filter(device => !isServer(device))
+          : devices
       return startMpcSession({ serverUrl, sessionId, devices: filteredDevices })
     },
     onSuccess: () => onFinish(),

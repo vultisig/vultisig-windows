@@ -11,9 +11,7 @@ export const FastReshareVaultPage = () => {
     <ReshareVaultFlowProviders>
       <PasswordProvider initialValue="">
         <EmailProvider initialValue="">
-          <CurrentKeygenOperationTypeProvider
-            value={{ operation: 'reshare', type: 'regular' }}
-          >
+          <CurrentKeygenOperationTypeProvider value={{ reshare: 'regular' }}>
             <ReshareVaultKeygenActionProvider>
               <MpcMediatorManager />
               <FastVaultReshareFlow />

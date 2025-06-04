@@ -5,7 +5,7 @@ import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } f
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
 import { ChildrenProp } from '@lib/ui/props'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { JSX } from 'react'
 
 import { MigrateVaultKeygenActionProvider } from '../../migrate/MigrateVaultKeygenActionProvider'
@@ -17,66 +17,51 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
   const { libType } = keygenMsg
   const mpcLib = fromLibType(libType)
 
-  return matchDiscriminatedUnion<KeygenOperation, JSX.Element>(
-    operationType,
-    'operation',
-    'type',
-    {
-      create: () => (
-        <Match
-          value={mpcLib}
-          DKLS={() => (
-            <DKLSCreateKeygenActionProvider>
-              {children}
-            </DKLSCreateKeygenActionProvider>
-          )}
-          GG20={() => (
-            <GG20CreateKeygenActionProvider>
-              {children}
-            </GG20CreateKeygenActionProvider>
-          )}
-        />
-      ),
-      migrate: () => (
-        <MigrateVaultKeygenActionProvider>
-          {children}
-        </MigrateVaultKeygenActionProvider>
-      ),
-      plugin: () => (
-        <DKLSReshareKeygenActionProvider>
-          {children}
-        </DKLSReshareKeygenActionProvider>
-      ),
-      regular: () => (
-        <Match
-          value={mpcLib}
-          DKLS={() => (
-            <DKLSReshareKeygenActionProvider>
-              {children}
-            </DKLSReshareKeygenActionProvider>
-          )}
-          GG20={() => (
-            <GG20ReshareKeygenActionProvider>
-              {children}
-            </GG20ReshareKeygenActionProvider>
-          )}
-        />
-      ),
-      reshare: () => (
-        <Match
-          value={mpcLib}
-          DKLS={() => (
-            <DKLSReshareKeygenActionProvider>
-              {children}
-            </DKLSReshareKeygenActionProvider>
-          )}
-          GG20={() => (
-            <GG20ReshareKeygenActionProvider>
-              {children}
-            </GG20ReshareKeygenActionProvider>
-          )}
-        />
-      ),
-    }
-  )
+  return matchRecordUnion<KeygenOperation, JSX.Element>(operationType, {
+    create: () => (
+      <Match
+        value={mpcLib}
+        DKLS={() => (
+          <DKLSCreateKeygenActionProvider>
+            {children}
+          </DKLSCreateKeygenActionProvider>
+        )}
+        GG20={() => (
+          <GG20CreateKeygenActionProvider>
+            {children}
+          </GG20CreateKeygenActionProvider>
+        )}
+      />
+    ),
+    reshare: reshareType => (
+      <Match
+        value={reshareType}
+        migrate={() => (
+          <MigrateVaultKeygenActionProvider>
+            {children}
+          </MigrateVaultKeygenActionProvider>
+        )}
+        plugin={() => (
+          <DKLSReshareKeygenActionProvider>
+            {children}
+          </DKLSReshareKeygenActionProvider>
+        )}
+        regular={() => (
+          <Match
+            value={mpcLib}
+            DKLS={() => (
+              <DKLSReshareKeygenActionProvider>
+                {children}
+              </DKLSReshareKeygenActionProvider>
+            )}
+            GG20={() => (
+              <GG20ReshareKeygenActionProvider>
+                {children}
+              </GG20ReshareKeygenActionProvider>
+            )}
+          />
+        )}
+      />
+    ),
+  })
 }

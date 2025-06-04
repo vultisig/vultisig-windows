@@ -12,14 +12,12 @@ export const PluginPage = () => {
     <ReshareVaultFlowProviders>
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
-          <CurrentKeygenOperationTypeProvider
-            value={{ operation: 'reshare', type: 'plugin' }}
-          >
+          <CurrentKeygenOperationTypeProvider value={{ reshare: 'plugin' }}>
             <StepTransition
               from={({ onFinish }) => (
                 <PluginJoinKeygenUrl onFinish={onFinish} />
               )}
-              to={() => <FastVaultReshareFlow isPluginReshare={true} />}
+              to={() => <FastVaultReshareFlow />}
             />
           </CurrentKeygenOperationTypeProvider>
         </PasswordProvider>

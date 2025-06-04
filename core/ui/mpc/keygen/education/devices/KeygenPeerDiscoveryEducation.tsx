@@ -8,7 +8,7 @@ export const KeygenPeerDiscoveryEducation = () => {
 
   const operationType = useCurrentKeygenOperationType()
 
-  if (operationType.operation === 'create' && shouldShowOverlay) {
+  if ('create' in operationType && shouldShowOverlay) {
     return <KeygenPeerDiscoveryEducationOverlay onFinish={closeOverlay} />
   }
 

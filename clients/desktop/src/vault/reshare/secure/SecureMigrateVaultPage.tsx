@@ -11,9 +11,7 @@ import { MigrateVaultKeygenActionProvider } from '../../migrate/MigrateVaultKeyg
 export const SecureMigrateVaultPage = () => {
   return (
     <ReshareVaultFlowProviders>
-      <CurrentKeygenOperationTypeProvider
-        value={{ operation: 'reshare', type: 'migrate' }}
-      >
+      <CurrentKeygenOperationTypeProvider value={{ reshare: 'migrate' }}>
         <MigrateVaultKeygenActionProvider>
           <MpcMediatorManager />
           <StepTransition

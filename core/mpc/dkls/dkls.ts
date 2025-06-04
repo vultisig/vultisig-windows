@@ -186,11 +186,11 @@ export class DKLS {
         )
       }
       let session: KeygenSession
-      if (this.keygenOperation.operation === 'create') {
+      if ('create' in this.keygenOperation) {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
       } else if (
-        this.keygenOperation.operation === 'reshare' &&
-        this.keygenOperation.type === 'migrate'
+        'reshare' in this.keygenOperation &&
+        this.keygenOperation.reshare === 'migrate'
       ) {
         session = KeygenSession.migrate(
           this.setupMessage,

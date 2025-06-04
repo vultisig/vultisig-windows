@@ -37,6 +37,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
+import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -70,9 +71,7 @@ export const KeygenPeerDiscoveryStep = ({
 
   const opertaionType = useCurrentKeygenOperationType()
   const isMigrate = useMemo(() => {
-    return (
-      opertaionType.operation === 'reshare' && opertaionType.type === 'migrate'
-    )
+    return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
   }, [opertaionType])
   const missingPeers = useMemo(() => {
     if (isMigrate) {
@@ -117,7 +116,7 @@ export const KeygenPeerDiscoveryStep = ({
               <>
                 <PageHeaderIconButton
                   onClick={() => {
-                    openUrl(educationUrl[opertaionType.operation])
+                    openUrl(educationUrl[getRecordUnionKey(opertaionType)])
                   }}
                   icon={<InfoIcon />}
                 />

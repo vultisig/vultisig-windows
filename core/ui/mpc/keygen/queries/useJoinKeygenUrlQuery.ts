@@ -1,6 +1,7 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { deepLinkBaseUrl } from '@core/config'
+import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -18,7 +19,7 @@ import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
-import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
 
@@ -50,32 +51,35 @@ export const useJoinKeygenUrlQuery = () => {
 
         const useVultisigRelay = serverType === 'relay'
 
-        const binary = match(operationType.operation, {
-          create: () => {
-            const message = create(KeygenMessageSchema, {
-              sessionId,
-              hexChainCode,
-              serviceName,
-              encryptionKeyHex: hexEncryptionKey,
-              useVultisigRelay,
-              vaultName,
-              libType,
-            })
-            return toBinary(KeygenMessageSchema, message)
-          },
-          reshare: () => {
-            const message = create(ReshareMessageSchema, {
-              sessionId,
-              serviceName,
-              encryptionKeyHex: hexEncryptionKey,
-              useVultisigRelay,
-              vaultName,
-              ...assertKeygenReshareFields(keygenVault),
-              libType,
-            })
-            return toBinary(ReshareMessageSchema, message)
-          },
-        })
+        const binary = matchRecordUnion<KeygenOperation, Uint8Array>(
+          operationType,
+          {
+            create: () => {
+              const message = create(KeygenMessageSchema, {
+                sessionId,
+                hexChainCode,
+                serviceName,
+                encryptionKeyHex: hexEncryptionKey,
+                useVultisigRelay,
+                vaultName,
+                libType,
+              })
+              return toBinary(KeygenMessageSchema, message)
+            },
+            reshare: () => {
+              const message = create(ReshareMessageSchema, {
+                sessionId,
+                serviceName,
+                encryptionKeyHex: hexEncryptionKey,
+                useVultisigRelay,
+                vaultName,
+                ...assertKeygenReshareFields(keygenVault),
+                libType,
+              })
+              return toBinary(ReshareMessageSchema, message)
+            },
+          }
+        )
 
         const jsonData = toCompressedString({
           sevenZip,

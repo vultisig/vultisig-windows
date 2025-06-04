@@ -6,13 +6,15 @@ import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingSt
 import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,18 +32,15 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
   const operationType = useCurrentKeygenOperationType()
 
-  const title = matchDiscriminatedUnion<KeygenOperation, string>(
-    operationType,
-    'operation',
-    'type',
-    {
-      create: () => t('creating_vault'),
-      reshare: () => t('reshare'),
-      migrate: () => t('upgrade'),
-      plugin: () => t('reshare'),
-      regular: () => t('reshare'),
-    }
-  )
+  const title = matchRecordUnion<KeygenOperation, string>(operationType, {
+    create: () => t('creating_vault'),
+    reshare: value =>
+      match(value, {
+        migrate: () => t('upgrade'),
+        plugin: () => t('reshare'),
+        regular: () => t('reshare'),
+      }),
+  })
 
   return (
     <MatchQuery
@@ -69,16 +68,20 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
         return (
           <CurrentVaultProvider value={vault}>
-            {operationType.operation === 'create' ? (
-              <StepTransition
-                from={({ onFinish }) => (
-                  <CreateVaultSuccessScreen onFinish={onFinish} />
-                )}
-                to={renderEnding}
-              />
-            ) : (
-              renderEnding()
-            )}
+            <MatchRecordUnion
+              value={operationType}
+              handlers={{
+                create: () => (
+                  <StepTransition
+                    from={({ onFinish }) => (
+                      <CreateVaultSuccessScreen onFinish={onFinish} />
+                    )}
+                    to={renderEnding}
+                  />
+                ),
+                reshare: renderEnding,
+              }}
+            />
           </CurrentVaultProvider>
         )
       }}

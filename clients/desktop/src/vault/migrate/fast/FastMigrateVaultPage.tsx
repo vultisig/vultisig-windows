@@ -11,9 +11,7 @@ export const FastMigrateVaultPage = () => {
     <ReshareVaultFlowProviders>
       <PasswordProvider initialValue="">
         <EmailProvider initialValue="">
-          <CurrentKeygenOperationTypeProvider
-            value={{ operation: 'reshare', type: 'migrate' }}
-          >
+          <CurrentKeygenOperationTypeProvider value={{ reshare: 'migrate' }}>
             <MigrateVaultKeygenActionProvider>
               <FastVaultReshareFlow />
             </MigrateVaultKeygenActionProvider>

@@ -8,9 +8,7 @@ import { ReshareVaultKeygenActionProvider } from '../../keygen/reshare/ReshareVa
 export const SecureReshareVaultPage = () => {
   return (
     <ReshareVaultFlowProviders>
-      <CurrentKeygenOperationTypeProvider
-        value={{ operation: 'reshare', type: 'regular' }}
-      >
+      <CurrentKeygenOperationTypeProvider value={{ reshare: 'regular' }}>
         <ReshareVaultKeygenActionProvider>
           <MpcMediatorManager />
           <ReshareSecureVaultFlow />

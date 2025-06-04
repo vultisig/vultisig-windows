@@ -6,9 +6,7 @@ import { CurrentKeygenOperationTypeProvider } from '@core/ui/mpc/keygen/state/cu
 export const ReshareSecureVault = () => {
   return (
     <ReshareVaultFlowProviders>
-      <CurrentKeygenOperationTypeProvider
-        value={{ operation: 'reshare', type: 'regular' }}
-      >
+      <CurrentKeygenOperationTypeProvider value={{ reshare: 'regular' }}>
         <DKLSKeygenActionProvider>
           <ReshareSecureVaultFlow />
         </DKLSKeygenActionProvider>

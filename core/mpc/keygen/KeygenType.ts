@@ -1,3 +1,5 @@
 import { KeygenOperation } from './KeygenOperation'
 
-export type KeygenType = KeygenOperation['operation']
+type UnionKeys<T> = T extends any ? keyof T : never
+
+export type KeygenType = UnionKeys<KeygenOperation>
