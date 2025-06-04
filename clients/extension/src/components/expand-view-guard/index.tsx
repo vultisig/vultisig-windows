@@ -2,16 +2,13 @@ import { isPopupView } from '@clients/extension/src/utils/functions'
 import { useCore } from '@core/ui/state/core'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { FC, ReactNode, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
-interface ExpandViewGuardProps {
-  children: ReactNode
-}
-
-export const ExpandViewGuard: FC<ExpandViewGuardProps> = ({ children }) => {
+export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const { t } = useTranslation()
   const [expandView, setExpandView] = useState(false)
   const { openUrl } = useCore()
