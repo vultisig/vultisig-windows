@@ -1,9 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -24,17 +21,11 @@ export const SwapCoinItem = ({
     coin,
   })
 
-  const { chain, ticker } = coin
+  const { ticker } = coin
 
   return (
     <SwapVStackItem gap={12} alignItems="center">
-      <ChainCoinIcon
-        coinSrc={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
-        chainSrc={
-          shouldDisplayChainLogo(coin) ? getChainLogoSrc(chain) : undefined
-        }
-        style={{ fontSize: 36 }}
-      />
+      <CoinIcon coin={coin} style={{ fontSize: 36 }} />
       <div>
         <Text centerHorizontally color="contrast" size={14}>
           {tokenAmount} {ticker.toUpperCase()}

@@ -1,9 +1,7 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
 import {
   useCurrentVaultCoin,
@@ -21,7 +19,6 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { useSendFormFieldState } from '../state/formFields'
 import { ChainOption } from './ChainOption'
 import { SendCoinInputField } from './SendCoinInputField'
@@ -35,7 +32,6 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
-  const { logo, chain } = coin
 
   const handleAutoAdvance = () => {
     setFormFieldState(state => ({
@@ -83,15 +79,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     }}
                     gap={4}
                   >
-                    <ChainCoinIcon
-                      coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-                      chainSrc={
-                        shouldDisplayChainLogo(coin)
-                          ? getChainLogoSrc(chain)
-                          : undefined
-                      }
-                      style={{ fontSize: 16 }}
-                    />
+                    <CoinIcon coin={coin} style={{ fontSize: 16 }} />
                     <HStack alignItems="center">
                       <Text size={12} weight={500}>
                         {coin.chain}

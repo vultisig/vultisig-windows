@@ -10,7 +10,7 @@ export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
 }
 
-type CoinMetadata = {
+export type CoinMetadata = {
   priceProviderId?: string
   decimals: number
   ticker: string

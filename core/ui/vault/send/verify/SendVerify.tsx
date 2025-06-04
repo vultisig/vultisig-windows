@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
@@ -20,10 +21,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChainCoinIcon } from '../../../chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
-import { getCoinLogoSrc } from '../../../chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '../../../chain/coin/icon/utils/shouldDisplayChainLogo'
 import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { useCurrentVault } from '../../state/currentVault'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
@@ -46,7 +44,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const cappedAmountQuery = useSendCappedAmountQuery()
 
-  const { logo, chain, ticker } = coin
+  const { chain, ticker } = coin
 
   return (
     <>
@@ -61,15 +59,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               {t('you_are_sending')}
             </Text>
             <HStack gap={8}>
-              <ChainCoinIcon
-                coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-                chainSrc={
-                  shouldDisplayChainLogo(coin)
-                    ? getChainLogoSrc(chain)
-                    : undefined
-                }
-                style={{ fontSize: 16 }}
-              />
+              <CoinIcon coin={coin} style={{ fontSize: 32 }} />
               <Text size={17}>
                 <MatchQuery
                   value={cappedAmountQuery}
