@@ -921,12 +921,14 @@ export const chainTokens: Partial<
 
   base[Chain.THORChain] = [
     ...(base[Chain.THORChain] ?? []),
-    ...ibcTokens.map(t => ({
-      ...t,
-      chain: Chain.THORChain,
-      decimals: chainFeeCoin[Chain.THORChain].decimals,
-      id: `thor.${t.ticker.toLowerCase()}`,
-    })).filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
+    ...ibcTokens
+      .map(t => ({
+        ...t,
+        chain: Chain.THORChain,
+        decimals: chainFeeCoin[Chain.THORChain].decimals,
+        id: `thor.${t.ticker.toLowerCase()}`,
+      }))
+      .filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
   ]
 
   return base
