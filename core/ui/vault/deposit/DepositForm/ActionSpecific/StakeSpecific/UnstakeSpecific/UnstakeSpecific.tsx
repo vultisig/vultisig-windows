@@ -1,6 +1,6 @@
 import { Match } from '@lib/ui/base/Match'
 
-import { StakeableAssetTicker, StakeableChain } from '../../../../constants'
+import { StakeableAssetTicker, StakeableChain } from '../../../../config'
 import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
 import { StakeSpecific } from '../StakeSpecific'
 import { UnstakeTCYSpecific } from './UnstakeTCYSpecific'

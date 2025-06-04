@@ -2,27 +2,27 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useCallback } from 'react'
 
-const STATE_MACHINE_NAME = 'State Machine 1'
-const INPUT_NAME = 'Index'
+const stateMachineName = 'State Machine 1'
+const inputName = 'Index'
 
-export const BACKUP_VAULT_ANIMATIONS = [1, 2, 3] as const
+export const backupVaultAnimations = [1, 2, 3] as const
 
 export const useBackupOverviewStepsAnimations = () => {
   const { step: currentAnimation, toNextStep: toNextAnimation } =
     useStepNavigation({
-      steps: BACKUP_VAULT_ANIMATIONS,
+      steps: backupVaultAnimations,
     })
 
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/fast-vault-backup-overview.riv',
     autoplay: true,
-    stateMachines: [STATE_MACHINE_NAME],
+    stateMachines: [stateMachineName],
   })
 
   const stateMachineInput = useStateMachineInput(
     rive,
-    STATE_MACHINE_NAME,
-    INPUT_NAME
+    stateMachineName,
+    inputName
   )
 
   const handleNextAnimation = useCallback(() => {
@@ -33,7 +33,7 @@ export const useBackupOverviewStepsAnimations = () => {
   }, [stateMachineInput, toNextAnimation])
 
   return {
-    animations: BACKUP_VAULT_ANIMATIONS,
+    animations: backupVaultAnimations,
     animationComponent: RiveComponent,
     currentAnimation,
     handleNextAnimation,

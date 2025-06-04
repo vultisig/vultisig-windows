@@ -177,7 +177,7 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
           </HStack>
-          <Button isDisabled={!isAgreed} onClick={onFinish}>
+          <Button disabled={!isAgreed} onClick={onFinish}>
             {t('fastVaultSetup.summary.start_using_vault')}
           </Button>
         </VStack>

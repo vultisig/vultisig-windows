@@ -1,4 +1,4 @@
-const MEMO_KEYWORDS = ['switch', 'merge', 'channel']
+const memoKeywords = ['switch', 'merge', 'channel']
 
 export const normalizeTxHash = (
   hash: string,
@@ -7,7 +7,7 @@ export const normalizeTxHash = (
   const { memo } = options
   const has0xPrefix = hash.toLowerCase().startsWith('0x')
   const memoTriggers = memo
-    ? MEMO_KEYWORDS.some(keyword => memo.toLowerCase().includes(keyword))
+    ? memoKeywords.some(keyword => memo.toLowerCase().includes(keyword))
     : false
 
   return has0xPrefix && memoTriggers ? hash.slice(2) : hash

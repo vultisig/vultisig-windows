@@ -1,3 +1,10 @@
+import { useVersionCheck } from '@clients/desktop/src/lib/hooks/useVersionCheck'
+import {
+  CenteredText,
+  Content,
+  DownloadButton,
+  FixedWrapper,
+} from '@clients/desktop/src/pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage.styles'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -8,20 +15,11 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import {
-  CenteredText,
-  Content,
-  DownloadButton,
-  FixedWrapper,
-} from './VaultCheckUpdatePage.styles'
-
 const VaultCheckUpdatePage = () => {
   const { t } = useTranslation()
+  const { openUrl, version } = useCore()
   const { latestVersion, updateAvailable, remoteError, isLoading } =
     useVersionCheck()
-
-  const { openUrl, version } = useCore()
 
   let content: ReactNode
 

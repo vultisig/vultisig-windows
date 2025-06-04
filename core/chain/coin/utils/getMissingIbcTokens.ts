@@ -3,7 +3,7 @@ import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
 import { Chain } from '../../Chain'
 import { Coin } from '../Coin'
-import { IBC_TOKENS } from '../ibc'
+import { ibcTokens } from '../ibc'
 
 export const getMissingIBCTokens = (
   existing: RequiredFields<Coin, 'logo'>[],
@@ -15,9 +15,11 @@ export const getMissingIBCTokens = (
   const seen = new Set(existing.map(key))
 
   return withoutUndefined(
-    IBC_TOKENS.filter(t => !seen.has(key(t))).map(t => {
-      const meta = ibcMeta.find(i => i.ticker === t.ticker)
-      return meta ? { ...t, chain, id: meta.id } : undefined
-    })
+    ibcTokens
+      .filter(t => !seen.has(key(t)))
+      .map(t => {
+        const meta = ibcMeta.find(i => i.ticker === t.ticker)
+        return meta ? { ...t, chain, id: meta.id } : undefined
+      })
   )
 }

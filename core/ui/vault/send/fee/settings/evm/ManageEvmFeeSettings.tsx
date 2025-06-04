@@ -1,36 +1,42 @@
+import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import {
-  defaultFeePriority,
-  feePriorities,
-  FeePriority,
-} from '@core/chain/tx/fee/FeePriority'
+import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
+import { BaseFee } from '@core/ui/vault/send/fee/settings/evm/baseFee/BaseFee'
+import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
-import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
-import { useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { HorizontalLine } from '../../../components/HorizontalLine'
-import { useFeeSettings } from '../state/feeSettings'
-import { BaseFee } from './baseFee/BaseFee'
-
 type FeeSettingsFormShape = {
-  priority: FeePriority
+  priorityFee: number
   gasLimit: number | null
 }
 
-export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
+export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
+
+  const [
+    {
+      coin: { chain },
+    },
+  ] = useCoreViewState<'send'>()
+
+  const { data: defaultFeePriority = 0, isSuccess } =
+    useEvmDefaultPriorityFeeQuery({
+      chain: chain as EvmChain,
+    })
 
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
@@ -45,7 +51,7 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const [value, setValue] = useState<FeeSettingsFormShape>(
     () =>
       persistentValue ?? {
-        priority: defaultFeePriority,
+        priorityFee: defaultFeePriority,
         gasLimit: Number(defaultGasLimit),
       }
   )
@@ -57,6 +63,12 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     }),
     [value]
   )
+
+  useEffect(() => {
+    if (isSuccess && persistentValue?.priorityFee == null) {
+      setValue(prev => ({ ...prev, priorityFee: defaultFeePriority }))
+    }
+  }, [defaultFeePriority, isSuccess, persistentValue?.priorityFee])
 
   return (
     <Modal
@@ -70,34 +82,45 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       })}
       onClose={onClose}
       title={t('advanced_gas_fee')}
-      footer={
-        <StyledButton kind="accent" type="submit">
-          {t('save')}
-        </StyledButton>
-      }
+      footer={<Button htmlType="submit">{t('save')}</Button>}
     >
       <VStack gap={12}>
         <LineWrapper>
           <HorizontalLine />
         </LineWrapper>
-        <InputContainer>
-          <Text size={14} color="supporting">
-            {t('priority')}
-          </Text>
-          <RadioInput
-            options={feePriorities}
-            value={value.priority}
-            onChange={priority => setValue({ ...value, priority })}
-            renderOption={t}
-          />
-        </InputContainer>
+        <AmountTextInput
+          labelPosition="left"
+          label={
+            <Tooltip
+              content={<Text>{t('priority_fee_tooltip_content')}</Text>}
+              renderOpener={props => {
+                return (
+                  <Text size={14} color="supporting" {...props}>
+                    {t('priority_fee')} ({t('gwei')})
+                  </Text>
+                )
+              }}
+            />
+          }
+          value={value.priorityFee}
+          onValueChange={priorityFee =>
+            setValue({ ...value, priorityFee: priorityFee ?? 0 })
+          }
+        />
         <BaseFee />
         <AmountTextInput
           labelPosition="left"
           label={
-            <Text size={14} color="supporting">
-              {t('gas_limit')}
-            </Text>
+            <Tooltip
+              content={<Text>{t('gas_limit_tooltip_content')}</Text>}
+              renderOpener={props => {
+                return (
+                  <Text size={14} color="supporting" {...props}>
+                    {t('gas_limit')}
+                  </Text>
+                )
+              }}
+            />
           }
           value={value.gasLimit}
           onValueChange={gasLimit => setValue({ ...value, gasLimit })}
@@ -106,10 +129,6 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
     </Modal>
   )
 }
-
-const StyledButton = styled(Button)`
-  background-color: ${getColor('buttonPrimaryWeb')};
-`
 
 const LineWrapper = styled.div`
   margin-top: -5px;

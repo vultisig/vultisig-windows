@@ -29,7 +29,9 @@ export const UploadedFileItem = ({
         </IconContainer>
         <Text color="regular">{fileName}</Text>
       </HStack>
-      <IconButton icon={<CrossIcon />} title="Remove" onClick={onRemove} />
+      <IconButton onClick={onRemove} title="Remove">
+        <CrossIcon />
+      </IconButton>
     </HStack>
   )
 }

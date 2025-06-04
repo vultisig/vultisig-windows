@@ -8,7 +8,8 @@ import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
@@ -168,11 +169,12 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             )}
             action={
               <HStack gap={8}>
-                <IconButton icon={<PasteIcon />} onClick={handlePaste} />
-                <IconButton
-                  icon={<CameraIcon fontSize={20} />}
-                  onClick={() => setShowScanner(true)}
-                />
+                <IconButton onClick={handlePaste}>
+                  <PasteIcon />
+                </IconButton>
+                <IconButton onClick={() => setShowScanner(true)}>
+                  <CameraIcon />
+                </IconButton>
               </HStack>
             }
             actionPlacerStyles={{
@@ -194,9 +196,9 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={!isValid || !isDirty}
-          isLoading={isLoading || isPending}
-          type="submit"
+          disabled={!isValid || !isDirty}
+          htmlType="submit"
+          loading={isLoading || isPending}
         >
           {t('save')}
         </Button>

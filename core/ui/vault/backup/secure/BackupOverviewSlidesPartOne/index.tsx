@@ -1,18 +1,20 @@
+import { AnimationDescription } from '@core/ui/vault/backup/secure/BackupOverviewSlidesPartOne/AnimationDescription'
+import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/secure/BackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
+import { RiveWrapper } from '@core/ui/vault/backup/secure/BackupOverviewSlidesPartOne/VaultOverviewSlides.styles'
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  ProgressWrapper,
+  Wrapper,
+} from '@core/ui/vault/backup/shared/BackupOverviewSlides.styles'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { AnimationDescription } from './AnimationDescription'
-import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
-import { RiveWrapper } from './VaultOverviewSlides.styles'
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -33,7 +35,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   } = useBackupOverviewStepsAnimations(signers.length)
 
   return (
-    <PageContent>
+    <Wrapper>
       <ProgressWrapper gap={16}>
         <Text size={18}>
           {t(
@@ -58,43 +60,22 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <VStack gap={12}>
+        <DescriptionWrapper>
           <AnimationDescription animation={currentAnimation} />
-          <NextAnimationButton
+        </DescriptionWrapper>
+        <BottomItemsWrapper>
+          <IconButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleted
             }
           >
-            {t('tap')}
-          </NextAnimationButton>
-        </VStack>
+            <ChevronRightIcon />
+          </IconButton>
+        </BottomItemsWrapper>
       </VStack>
-    </PageContent>
+    </Wrapper>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`

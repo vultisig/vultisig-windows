@@ -35,7 +35,7 @@ export const CameraPermission = () => {
             {t('try_in_expanded_mode')}
           </Button>
         ) : (
-          <Button onClick={() => mutate()} isLoading={isPending}>
+          <Button loading={isPending} onClick={() => mutate()}>
             {error ? t('try_again') : t('grant_camera_permission')}
           </Button>
         )}

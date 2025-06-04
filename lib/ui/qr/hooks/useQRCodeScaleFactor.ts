@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
 
-const SCALE_NORMAL = 1
-const SCALE_SMALL = 0.75
+const normalScale = 1
+const smallScale = 0.75
 
 export const useQRCodeScaleFactor = (enabled: boolean) => {
-  const [scale, setScale] = useState(SCALE_NORMAL)
+  const [scale, setScale] = useState(normalScale)
 
   useEffect(() => {
     if (!enabled) return
 
     const handleWheel = (event: WheelEvent) => {
       if (event.deltaY > 0) {
-        setScale(SCALE_SMALL)
+        setScale(smallScale)
       } else {
-        setScale(SCALE_NORMAL)
+        setScale(normalScale)
       }
     }
 

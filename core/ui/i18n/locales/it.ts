@@ -10,11 +10,20 @@ export const it = {
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  tx_hash: 'Hash della transazione',
+  gas_limit_tooltip_content:
+    'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
+  base_fee_tooltip_content:
+    'Una piccola mancia per velocizzare la tua transazione. Mance più alte possono farla elaborare più rapidamente.',
   unexpected_error: 'Errore imprevisto',
   youre_swapping: 'Stai scambiando',
   send_overview: 'Invia panoramica',
   approval_tx: 'Transazione di approvazione',
+  send_to: 'Invia a',
+  priority_fee: 'Commissione prioritaria',
   you_are_sending: 'Stai inviando',
+  priority_fee_tooltip_content:
+    'Una piccola mancia per velocizzare la tua transazione. Mance più alte possono farla elaborare più rapidamente.',
   verify_password_periodic_message:
     'Verifica la password di condivisione del server',
   select_asset: 'Seleziona asset',

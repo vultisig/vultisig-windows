@@ -4,7 +4,7 @@ import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPubl
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -64,17 +64,14 @@ export const ShareVaultPage = () => {
           </div>
         </VStack>
         <VStack gap={8} fullWidth>
-          <Button onClick={shareQrImage} kind="primary">
-            <HStack gap={4} alignItems="center">
-              <StyledIcon />
-              <span>{t('vault_qr_share')}</span>
-            </HStack>
+          <Button icon={<StyledIcon fontSize={20} />} onClick={shareQrImage}>
+            {t('vault_qr_share')}
           </Button>
 
           <SaveAsImage
             fileName={`VaultQR-${name}-${lastThreeUID}`}
             renderTrigger={({ onClick }) => (
-              <Button kind="outlined" onClick={onClick}>
+              <Button onClick={onClick} type="secondary">
                 {t('save')}
               </Button>
             )}
