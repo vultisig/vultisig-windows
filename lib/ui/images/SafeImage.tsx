@@ -2,12 +2,12 @@ import { ReactNode } from 'react'
 
 import { useBoolean } from '../hooks/useBoolean'
 
-interface RenderParams {
+type RenderParams = {
   src: string
   onError: () => void
 }
 
-interface Props {
+type Props = {
   src?: string
   fallback?: ReactNode
   render: (params: RenderParams) => void

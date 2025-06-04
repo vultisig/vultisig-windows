@@ -2,7 +2,7 @@ import { match } from '@lib/utils/match'
 import path from 'path'
 import { format, resolveConfig } from 'prettier'
 
-interface FormatCodeParams {
+type FormatCodeParams = {
   extension: 'ts' | 'tsx' | 'json'
   content: string
 }

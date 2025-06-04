@@ -12,10 +12,10 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface AddressBookListItemProps extends AddressBookItem {
+type AddressBookListItemProps = {
   isEditMode?: boolean
   onSelect?: (address: string) => void
-}
+} & AddressBookItem
 
 export const AddressBookListItem: FC<AddressBookListItemProps> = ({
   isEditMode,

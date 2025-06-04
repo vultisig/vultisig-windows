@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 
 const currentDirname = dirname(fileURLToPath(import.meta.url))
 
-interface FormatCodeParams {
+type FormatCodeParams = {
   extension: 'ts' | 'tsx' | 'json'
   content: string
 }

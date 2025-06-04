@@ -6,7 +6,7 @@ import {
 
 type KeysignMessagePayloadType = 'custom' | 'keysign'
 
-interface KeysignMessagePayloadMap {
+type KeysignMessagePayloadMap = {
   custom: CustomMessagePayload
   keysign: KeysignPayload
 }

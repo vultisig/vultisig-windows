@@ -2,7 +2,7 @@ import { DefaultTheme } from 'styled-components'
 
 import { ThemeColors } from './ThemeColors'
 
-interface ThemeGetterParams {
+type ThemeGetterParams = {
   theme: DefaultTheme
 }
 

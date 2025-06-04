@@ -1,7 +1,7 @@
 import { rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-interface TonAccountInfoResponse {
+type TonAccountInfoResponse = {
   ok: boolean
   result: {
     address: {

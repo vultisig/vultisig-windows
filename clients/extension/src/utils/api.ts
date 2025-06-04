@@ -12,13 +12,13 @@ import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 namespace Derivation {
-  export interface Params {
+  export type Params = {
     publicKeyEcdsa: string
     hexChainCode: string
     derivePath: string
   }
 
-  export interface Props {
+  export type Props = {
     publicKey: string
   }
 }

@@ -1,6 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 
-export interface SendFormShape {
+export type SendFormShape = {
   amount: number | null
   address: string
   coin: Coin | null

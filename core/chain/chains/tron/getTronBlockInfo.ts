@@ -1,7 +1,7 @@
 import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-interface TronBlockHeader {
+type TronBlockHeader = {
   raw_data?: {
     timestamp?: number
     number?: number
@@ -12,11 +12,11 @@ interface TronBlockHeader {
   }
 }
 
-interface TronBlock {
+type TronBlock = {
   block_header?: TronBlockHeader
 }
 
-interface BlockChainSpecificTron {
+type BlockChainSpecificTron = {
   timestamp: number
   expiration: number
   blockHeaderTimestamp: number
@@ -131,7 +131,7 @@ async function getTriggerConstantContractFee(
   // 4. Make the POST request
   const url = 'https://api.trongrid.io/walletsolidity/triggerconstantcontract'
 
-  interface TriggerContractResponse {
+  type TriggerContractResponse = {
     energy_used?: number
     energy_penalty?: number
   }

@@ -14,7 +14,7 @@ import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
-interface SwapFeesProps {
+type SwapFeesProps = {
   RowComponent: ComponentType<PropsWithChildren>
 }
 

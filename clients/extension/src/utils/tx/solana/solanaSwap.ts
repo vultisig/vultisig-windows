@@ -11,7 +11,7 @@ import { JupiterInstructionParser } from './jupiter-instruction-parser'
 import { RaydiumInstructionParser } from './raydium-instruction-parser'
 import { ParsedSolanaSwapParams, PartialInstruction } from './types/types'
 
-export interface AddressTableLookup {
+export type AddressTableLookup = {
   accountKey: string
   writableIndexes: number[]
   readonlyIndexes: number[]

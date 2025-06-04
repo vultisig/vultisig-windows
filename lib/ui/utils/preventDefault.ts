@@ -1,4 +1,4 @@
-interface Event {
+type Event = {
   preventDefault: () => void
 }
 

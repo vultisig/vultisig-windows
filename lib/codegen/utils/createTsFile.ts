@@ -1,7 +1,7 @@
 import { createFile } from './createFile'
 import { formatCode } from './formatCode'
 
-interface CreateTsFileParams {
+type CreateTsFileParams = {
   extension?: 'ts' | 'tsx'
   directory: string
   fileName: string

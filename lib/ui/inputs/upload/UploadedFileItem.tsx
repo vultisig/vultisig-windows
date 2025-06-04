@@ -12,7 +12,7 @@ const IconContainer = styled(IconWrapper)`
   font-size: 20px;
 `
 
-interface UploadedFileItemProps {
+type UploadedFileItemProps = {
   fileName: string
   onRemove: () => void
 }
