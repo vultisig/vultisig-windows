@@ -28,11 +28,11 @@ import { useSendFormFieldState } from '../state/formFields'
 import { AmountInGlobalCurrencyDisplay } from './AmountInGlobalCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
 
-const SUGGESTIONS = {
-  QUARTER: 0.25,
-  HALF: 0.5,
-  THREE_QUARTERS: 0.75,
-  MAX: 1,
+const suggestions = {
+  quarter: 0.25,
+  half: 0.5,
+  threeQuarters: 0.75,
+  max: 1,
 } as const
 
 export const ManageAmountInputField = () => {
@@ -84,9 +84,9 @@ export const ManageAmountInputField = () => {
                   error={() => null}
                   success={amount => (
                     <HStack alignItems="center" gap={4}>
-                      {Object.values(SUGGESTIONS).map(suggestion => {
+                      {Object.values(suggestions).map(suggestion => {
                         const suggestionValue =
-                          suggestion === SUGGESTIONS.MAX
+                          suggestion === suggestions.max
                             ? fromChainAmount(
                                 amount -
                                   (chainSpecificQuery.data
