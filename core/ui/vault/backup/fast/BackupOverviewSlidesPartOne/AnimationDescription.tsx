@@ -5,10 +5,10 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations'
+import { backupVaultAnimations } from './hooks/useBackupOverviewStepsAnimations'
 
 type AnimationDescriptionProps = {
-  animation: (typeof BACKUP_VAULT_ANIMATIONS)[number]
+  animation: (typeof backupVaultAnimations)[number]
 }
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,

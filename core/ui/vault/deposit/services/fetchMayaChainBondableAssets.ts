@@ -1,9 +1,9 @@
-import { MAYACHAIN_POOLS_ENDPOINT } from '../constants'
+import { mayachainPoolsEndpoint } from '../config'
 import { MayaChainPool } from '../types/mayaChain'
 
 export const fetchMayaChainAssets = async (): Promise<MayaChainPool[]> => {
   try {
-    const response = await fetch(MAYACHAIN_POOLS_ENDPOINT)
+    const response = await fetch(mayachainPoolsEndpoint)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }

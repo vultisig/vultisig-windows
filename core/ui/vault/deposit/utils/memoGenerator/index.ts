@@ -7,7 +7,7 @@ import { match } from '@lib/utils/match'
 import { FieldValues } from 'react-hook-form'
 
 import { ChainAction } from '../../ChainAction'
-import { StakeableChain } from '../../constants'
+import { StakeableChain } from '../../config'
 import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
 import { MayaChainPool } from '../../types/mayaChain'
 
