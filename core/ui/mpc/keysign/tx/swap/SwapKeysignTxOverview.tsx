@@ -61,12 +61,7 @@ export const SwapKeysignTxOverview = ({
   const vault = useCurrentVault()
   const { t } = useTranslation()
 
-  const {
-    coin: potentialFromCoin,
-    memo,
-    blockchainSpecific,
-    swapPayload,
-  } = value
+  const { coin: potentialFromCoin, blockchainSpecific, swapPayload } = value
 
   const {
     fromAmount,
@@ -75,10 +70,6 @@ export const SwapKeysignTxOverview = ({
   } = swapPayload.value as unknown as OneInchSwapPayload
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
 
-  const isSwapTx =
-    (swapPayload && swapPayload.value) ||
-    memo?.startsWith('=') ||
-    memo?.toLowerCase().startsWith('swap')
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
 
   const formattedFromAmount = useMemo(() => {
@@ -97,7 +88,7 @@ export const SwapKeysignTxOverview = ({
   }, [blockchainSpecific, chain])
 
   const blockExplorerChain: Chain = useMemo(() => {
-    if (isSwapTx && swapPayload && swapPayload.value) {
+    if (swapPayload.case) {
       return match(swapPayload.case, {
         thorchainSwapPayload: () => Chain.THORChain,
         mayachainSwapPayload: () => Chain.MayaChain,
@@ -106,7 +97,7 @@ export const SwapKeysignTxOverview = ({
     }
 
     return chain as Chain
-  }, [chain, isSwapTx, swapPayload])
+  }, [chain, swapPayload])
 
   const swapProvider = getSwapProvider(swapPayload)
 
