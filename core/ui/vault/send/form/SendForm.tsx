@@ -71,6 +71,6 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
 }
 
 const FormFieldsWrapper = styled(VStack)`
-  max-height: 510px;
+  max-height: 525x;
   overflow: hidden;
 `
