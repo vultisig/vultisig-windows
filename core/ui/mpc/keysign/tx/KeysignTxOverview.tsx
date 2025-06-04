@@ -4,8 +4,14 @@ import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
+import { useCore } from '@core/ui/state/core'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
@@ -19,13 +25,6 @@ import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
-import { useCore } from '../../../state/core'
-import { useCurrentVault } from '../../../vault/state/currentVault'
-import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
-import { TxOverviewAmount } from './TxOverviewAmount'
 
 export const KeysignTxOverview = ({
   value,
@@ -93,8 +92,9 @@ export const KeysignTxOverview = ({
                 onClick={() => {
                   openUrl(blockExplorerUrl)
                 }}
-                icon={<SquareArrowOutUpRightIcon />}
-              />
+              >
+                <SquareArrowOutUpRightIcon />
+              </IconButton>
             </HStack>
           </HStack>
         </VStack>

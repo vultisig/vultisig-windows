@@ -63,11 +63,9 @@ export const GetVaultsPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <IconButton
-            icon={<CrossIcon fontSize={20} />}
-            onClick={handleClose}
-            size="m"
-          />
+          <IconButton onClick={handleClose}>
+            <CrossIcon />
+          </IconButton>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -101,11 +99,7 @@ export const GetVaultsPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button
-          onClick={handleSubmit}
-          disabled={!vaultIds.length}
-          kind="primary"
-        >
+        <Button disabled={!vaultIds.length} onClick={handleSubmit}>
           {t('connect')}
         </Button>
       </PageFooter>

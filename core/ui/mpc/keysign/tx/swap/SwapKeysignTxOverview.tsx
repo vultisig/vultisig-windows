@@ -175,11 +175,9 @@ export const SwapKeysignTxOverview = ({
                 >
                   {hash}
                 </Text>
-                <IconButton
-                  size="s"
-                  onClick={() => trackTransaction(hash)}
-                  icon={<SquareArrowOutUpRightIcon />}
-                />
+                <IconButton onClick={() => trackTransaction(hash)} size="sm">
+                  <SquareArrowOutUpRightIcon />
+                </IconButton>
               </HStack>
             </HStack>
           ))}
@@ -255,44 +253,18 @@ export const SwapKeysignTxOverview = ({
             </HStack>
           )}
         </SwapInfoWrapper>
-        <HStack gap={8} fullWidth justifyContent="space-between">
-          <Button
-            onClick={() => trackTransaction(txHash)}
-            style={{
-              flex: 1,
-            }}
-            kind="secondary"
-          >
+        <HStack gap={8} fullWidth>
+          <Button onClick={() => trackTransaction(txHash)} type="secondary">
             {t('track')}
           </Button>
-          <StyledButton
-            onClick={() =>
-              navigate(
-                { id: 'vault' },
-                {
-                  replace: true,
-                }
-              )
-            }
-          >
+          <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
             {t('done')}
-          </StyledButton>
+          </Button>
         </HStack>
       </VStack>
     </Wrapper>
   )
 }
-
-const StyledButton = styled(Button)`
-  background-color: hsl(224, 75%, 50%);
-  color: ${getColor('contrast')};
-  font-weight: 600;
-  flex: 1;
-
-  &:hover {
-    background-color: hsla(224, 75%, 50%, 0.9);
-  }
-`
 
 const Wrapper = styled(VStack)`
   gap: 24px;

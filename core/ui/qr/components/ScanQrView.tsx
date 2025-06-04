@@ -6,7 +6,6 @@ import { Button } from '@lib/ui/buttons/Button'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { HardDriveUploadIcon } from '@lib/ui/icons/HardDriveUploadIcon'
 import { Center } from '@lib/ui/layout/Center'
-import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -56,11 +55,11 @@ export const ScanQrView = ({
       </PageContent>
       {onUploadQrViewRequest && (
         <PageFooter>
-          <Button onClick={onUploadQrViewRequest}>
-            <HStack gap={8}>
-              <HardDriveUploadIcon />
-              {t('upload_qr_code_image')}
-            </HStack>
+          <Button
+            icon={<HardDriveUploadIcon fontSize={20} />}
+            onClick={onUploadQrViewRequest}
+          >
+            {t('upload_qr_code_image')}
           </Button>
         </PageFooter>
       )}

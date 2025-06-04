@@ -1,3 +1,6 @@
+import { EnablePasscodeInput } from '@core/ui/passcodeEncryption/manage/EnablePasscodeInput'
+import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
+import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -6,10 +9,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useSetPasscodeMutation } from '../mutations/useSetPasscodeMutation'
-import { EnablePasscodeInput } from './EnablePasscodeInput'
-import { PasscodeInput } from './PasscodeInput'
 
 export const SetPasscode = () => {
   const [passcode, setPasscode] = useState<string | null>(null)
@@ -67,7 +66,7 @@ export const SetPasscode = () => {
               onChange={setConfirmPasscode}
               label={t('confirm_passcode')}
             />
-            <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
+            <Button disabled={isDisabled} htmlType="submit" loading={isPending}>
               {t('set_passcode')}
             </Button>
           </>
