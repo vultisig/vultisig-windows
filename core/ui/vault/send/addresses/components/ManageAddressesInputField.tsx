@@ -8,13 +8,9 @@ import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
-import { textInputHeight } from '@lib/ui/css/textInput'
 import BookAIcon from '@lib/ui/icons/BookAIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
@@ -120,54 +116,39 @@ export const ManageReceiverAddressInputField = () => {
           )}
           default={() => (
             <VStack gap={8}>
-              <ActionInsideInteractiveElement
-                render={({ actionSize }) => (
-                  <VStack gap={4}>
-                    <Input
-                      validation={error ? 'warning' : undefined}
-                      placeholder={t('enter_address')}
-                      value={value}
-                      onValueChange={value =>
-                        handleUpdateReceiverAddress(value)
-                      }
-                      style={{
-                        paddingRight:
-                          actionSize.width + textInputHorizontalPadding,
-                      }}
-                    />
-                  </VStack>
+              <VStack gap={4}>
+                <Input
+                  validation={error ? 'warning' : undefined}
+                  placeholder={t('enter_address')}
+                  value={value}
+                  onValueChange={value => handleUpdateReceiverAddress(value)}
+                />
+                {error && (
+                  <Text size={12} color="warning">
+                    {error}
+                  </Text>
                 )}
-                action={
-                  <HStack gap={8}>
-                    <IconButton
-                      onClick={async () => {
-                        const { data } = await attempt(getClipboardText)
+              </VStack>
 
-                        if (data) {
-                          handleUpdateReceiverAddress(data)
-                        }
-                      }}
-                    >
-                      <PasteIcon />
-                    </IconButton>
-                    <IconButton onClick={() => setViewState('scanner')}>
-                      <CameraIcon />
-                    </IconButton>
-                    <IconButton onClick={() => setViewState('addressBook')}>
-                      <BookAIcon />
-                    </IconButton>
-                  </HStack>
-                }
-                actionPlacerStyles={{
-                  right: textInputHorizontalPadding,
-                  bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
-                }}
-              />
-              {error && (
-                <Text size={12} color="warning">
-                  {error}
-                </Text>
-              )}
+              <HStack gap={8}>
+                <StyledIconButton
+                  onClick={async () => {
+                    const { data } = await attempt(getClipboardText)
+
+                    if (data) {
+                      handleUpdateReceiverAddress(data)
+                    }
+                  }}
+                >
+                  <PasteIcon />
+                </StyledIconButton>
+                <StyledIconButton onClick={() => setViewState('scanner')}>
+                  <CameraIcon />
+                </StyledIconButton>
+                <StyledIconButton onClick={() => setViewState('addressBook')}>
+                  <BookAIcon />
+                </StyledIconButton>
+              </HStack>
             </VStack>
           )}
         />
@@ -198,4 +179,17 @@ const Input = styled(TextInput)<{
 const FixedScanQRView = styled(ScanQrView)`
   position: fixed;
   inset: 0;
+`
+
+const StyledIconButton = styled(IconButton)`
+  padding: 12px 16px;
+  width: 103px;
+  height: 46px;
+  background-color: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  ${borderRadius.s}
+
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
 `

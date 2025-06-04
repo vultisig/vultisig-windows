@@ -4,13 +4,22 @@ import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
+type SendValue = {
+  coin: CoinKey
+  isIntentionalCoinSelection: boolean
+}
+
+export const SendPrompt = ({
+  value: { coin, isIntentionalCoinSelection },
+}: ValueProp<SendValue>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
   return (
     <Button
-      onClick={() => navigate({ id: 'send', state: { coin: value } })}
+      onClick={() =>
+        navigate({ id: 'send', state: { coin, isIntentionalCoinSelection } })
+      }
       style={{ textTransform: 'uppercase' }}
       type="secondary"
     >

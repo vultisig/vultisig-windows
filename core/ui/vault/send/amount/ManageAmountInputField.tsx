@@ -69,48 +69,6 @@ export const ManageAmountInputField = () => {
               render={() => (
                 <AmountTextInput
                   validation={error ? 'warning' : undefined}
-                  suggestion={
-                    <SendCoinBalanceDependant
-                      pending={() => null}
-                      error={() => null}
-                      success={amount => (
-                        <HStack alignItems="center" gap={4}>
-                          {suggestions.map(suggestion => {
-                            const baseAmount = fromChainAmount(amount, decimals)
-                            const suggestionBaseValue = baseAmount * suggestion
-
-                            const suggestionValue =
-                              currencyInputMode === 'base'
-                                ? suggestionBaseValue
-                                : (baseToFiat(suggestionBaseValue, coinPrice) ??
-                                  0)
-
-                            return (
-                              <AmountSuggestion
-                                isActive={
-                                  inputValue
-                                    ? isEqual(inputValue, suggestionValue)
-                                    : false
-                                }
-                                onClick={() => {
-                                  handleUpdateAmount(
-                                    currencyInputMode === 'base'
-                                      ? suggestionBaseValue
-                                      : baseToFiat(
-                                          suggestionBaseValue,
-                                          coinPrice
-                                        )
-                                  )
-                                }}
-                                key={suggestion}
-                                value={suggestion}
-                              />
-                            )
-                          })}
-                        </HStack>
-                      )}
-                    />
-                  }
                   placeholder={t('enter_amount')}
                   value={inputValue}
                   onValueChange={value => handleUpdateAmount(value)}
@@ -125,6 +83,46 @@ export const ManageAmountInputField = () => {
                 right: 12,
                 bottom: 20,
               }}
+            />
+            <SendCoinBalanceDependant
+              pending={() => null}
+              error={() => null}
+              success={amount => (
+                <HStack alignItems="center" gap={4}>
+                  <CurrencySwitch
+                    value={currencyInputMode}
+                    onClick={value => setCurrencyInputMode(value)}
+                  />
+                  {suggestions.map(suggestion => {
+                    const baseAmount = fromChainAmount(amount, decimals)
+                    const suggestionBaseValue = baseAmount * suggestion
+
+                    const suggestionValue =
+                      currencyInputMode === 'base'
+                        ? suggestionBaseValue
+                        : (baseToFiat(suggestionBaseValue, coinPrice) ?? 0)
+
+                    return (
+                      <SuggestionOption
+                        isActive={
+                          inputValue
+                            ? isEqual(inputValue, suggestionValue)
+                            : false
+                        }
+                        onClick={() => {
+                          handleUpdateAmount(
+                            currencyInputMode === 'base'
+                              ? suggestionBaseValue
+                              : baseToFiat(suggestionBaseValue, coinPrice)
+                          )
+                        }}
+                        key={suggestion}
+                        value={suggestion}
+                      />
+                    )
+                  })}
+                </HStack>
+              )}
             />
             {error && (
               <Text size={12} color="warning">
@@ -149,10 +147,6 @@ export const ManageAmountInputField = () => {
               )}
             />
           </VStack>
-          <CurrencySwitch
-            value={currencyInputMode}
-            onClick={value => setCurrencyInputMode(value)}
-          />
         </HStack>
       </VStack>
       <ManageMemo />
@@ -171,4 +165,9 @@ const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};
   padding: 16px;
   ${borderRadius.m}
+`
+
+const SuggestionOption = styled(AmountSuggestion)`
+  padding: 6px 18px;
+  width: fit-content;
 `
