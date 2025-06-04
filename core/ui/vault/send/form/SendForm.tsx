@@ -16,6 +16,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   useSendChainSpecificQuery()
@@ -49,16 +50,11 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           isDisabled,
         })}
       >
-        <VStack
-          style={{
-            overflow: 'hidden',
-          }}
-          gap={16}
-        >
+        <FormFieldsWrapper gap={16}>
           <ManageSendCoin />
           <ManageAddresses />
           <ManageAmount />
-        </VStack>
+        </FormFieldsWrapper>
         <Button
           style={{
             marginTop: 'auto',
@@ -73,3 +69,8 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     </>
   )
 }
+
+const FormFieldsWrapper = styled(VStack)`
+  max-height: 510px;
+  overflow: hidden;
+`
