@@ -9,7 +9,7 @@ import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQue
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
-interface VerifySwapFeesProps {
+type VerifySwapFeesProps = {
   RowComponent: ComponentType<PropsWithChildren>
 }
 

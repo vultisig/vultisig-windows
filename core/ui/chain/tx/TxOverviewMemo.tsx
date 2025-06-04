@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TxOverviewChainDataRow } from './TxOverviewRow'
 
-interface InitialState {
+type InitialState = {
   parsedMemo?: ParsedMemoParams
 }
 

@@ -13,7 +13,7 @@ interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   onValueChange?: (value: string) => void
   validation?: 'invalid' | 'valid'
   includePasteButton?: boolean
-}
+} & ComponentProps<typeof InputBoxContainer>
 
 export const OTPInput = ({
   length = 4,

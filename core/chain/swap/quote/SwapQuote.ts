@@ -3,7 +3,7 @@ import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
 type SwapType = 'native' | 'general'
 
-interface SwapQuoteMap {
+type SwapQuoteMap = {
   native: NativeSwapQuote
   general: GeneralSwapQuote
 }

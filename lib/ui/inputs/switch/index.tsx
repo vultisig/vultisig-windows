@@ -95,7 +95,7 @@ const StyledContainer = styled.div`
   display: flex;
 `
 
-interface SwitchProps {
+type SwitchProps = {
   checked?: boolean
   disabled?: boolean
   label?: ReactNode

@@ -11,7 +11,7 @@ export const PageContent = styled(VStack)`
   flex-grow: 1;
 `
 
-interface FitPageContentProps {
+type FitPageContentProps = {
   contentMaxWidth?: number
 }
 
