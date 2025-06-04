@@ -49,12 +49,21 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           isDisabled,
         })}
       >
-        <VStack gap={16}>
+        <VStack
+          style={{
+            height: 500,
+            overflow: 'hidden',
+          }}
+          gap={16}
+        >
           <ManageSendCoin />
           <ManageAddresses />
           <ManageAmount />
         </VStack>
         <Button
+          style={{
+            marginTop: 'auto',
+          }}
           disabled={isDisabled}
           htmlType="submit"
           loading={isLoading && isPending}
