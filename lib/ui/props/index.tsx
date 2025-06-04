@@ -1,5 +1,7 @@
 import { ElementType, ReactNode, SVGProps } from 'react'
 
+export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+
 export type OnCloseProp = {
   onClose: () => void
 }

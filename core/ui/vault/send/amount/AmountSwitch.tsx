@@ -25,10 +25,11 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
       {Object.entries(currencyModeIcon).map(([mode, icon]) => (
         <IconButton
           key={mode}
-          icon={icon}
-          kind={value === mode ? 'primary' : 'regular'}
+          type={value === mode ? 'primary' : 'link'}
           onClick={() => onClick(mode as CurrencyInputMode)}
-        />
+        >
+          {icon}
+        </IconButton>
       ))}
     </Wrapper>
   )

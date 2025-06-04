@@ -1,3 +1,4 @@
+import { backupEducationUrl } from '@core/ui/vault/backup/education'
 import { Button } from '@lib/ui/buttons/Button'
 import DownloadIcon from '@lib/ui/icons/DownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,8 +10,6 @@ import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { backupEducationUrl } from '../../education'
 
 const Wrapper = styled(VStack)`
   max-width: 800px;
@@ -87,24 +86,14 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
           </VStack>
         </Content>
         <BottomItemsWrapper>
-          <VStack gap={4}>
-            <BackupButton onClick={onCompleted} size="m">
-              <DownloadIcon />
-              <Text as="span" size={14}>
-                {t('backup_now')}
-              </Text>
-            </BackupButton>
-          </VStack>
+          <Button icon={<DownloadIcon />} onClick={onCompleted} size="sm">
+            {t('backup_now')}
+          </Button>
         </BottomItemsWrapper>
       </Wrapper>
     </PageContent>
   )
 }
-
-const BackupButton = styled(Button)`
-  font-size: 20px;
-  gap: 8px;
-`
 
 const BottomItemsWrapper = styled(VStack)`
   min-height: 30px;

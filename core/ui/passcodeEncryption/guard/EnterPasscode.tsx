@@ -1,8 +1,12 @@
+import { decryptSample } from '@core/ui/passcodeEncryption/core/sample'
+import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
+import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
+import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { Button } from '@lib/ui/buttons/Button'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { UnlockIcon } from '@lib/ui/icons/UnlockIcon'
-import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -11,11 +15,6 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
-import { decryptSample } from '../core/sample'
-import { PasscodeInput } from '../manage/PasscodeInput'
-import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
   ${takeWholeSpace}
@@ -106,11 +105,12 @@ export const EnterPasscode = () => {
           })}
         >
           <PasscodeInput onChange={setInputValue} />
-          <Button type="submit" isDisabled={isDisabled}>
-            <HStack alignItems="center" gap={8}>
-              <UnlockIcon fontSize={20} />
-              <Text>{t('unlock')}</Text>
-            </HStack>
+          <Button
+            icon={<UnlockIcon fontSize={20} />}
+            disabled={isDisabled}
+            htmlType="submit"
+          >
+            {t('unlock')}
           </Button>
         </Content>
       </Container>

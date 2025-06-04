@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { productReleasesApiUrl } from '../../../versioning/config'
 import { isValidVersion, isVersionNewer } from './utils'
 
-const useVersionCheck = () => {
+export const useVersionCheck = () => {
   const { version } = useCore()
 
   const {
@@ -50,5 +50,3 @@ const useVersionCheck = () => {
     isLoading: isRemoteFetching,
   }
 }
-
-export default useVersionCheck

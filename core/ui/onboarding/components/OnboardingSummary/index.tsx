@@ -91,7 +91,7 @@ export const OnboardingSummary = () => {
             </Text>
           </HStack>
           <Button
-            isDisabled={!isChecked}
+            disabled={!isChecked}
             onClick={() => setHasFinishedOnboarding(true)}
           >
             {t('fastVaultSetup.summary.ctaText')}

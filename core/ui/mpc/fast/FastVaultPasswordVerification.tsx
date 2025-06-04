@@ -1,4 +1,7 @@
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -10,10 +13,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useUpdateVaultMutation } from '../../vault/mutations/useUpdateVaultMutation'
-import { useCurrentVault } from '../../vault/state/currentVault'
-import { getVaultId } from '../../vault/Vault'
 
 const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
 
@@ -79,9 +78,9 @@ export const FastVaultPasswordVerification = () => {
         />
         <VStack gap={6}>
           <Button
+            disabled={isDisabled || isPending}
+            loading={isPending}
             onClick={() => mutate()}
-            isDisabled={isDisabled || isPending}
-            isLoading={isPending}
           >
             {t('verify')}
           </Button>

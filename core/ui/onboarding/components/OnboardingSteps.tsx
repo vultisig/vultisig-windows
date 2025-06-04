@@ -1,20 +1,18 @@
+import { AnimationDescription } from '@core/ui/onboarding/components/AnimationDescriptions'
+import { RiveWrapper } from '@core/ui/onboarding/components/Onobarding.styled'
+import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
+import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
+import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useResponsiveness } from '../../providers/ResponsivenessProivder'
-import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
-import { AnimationDescription } from './AnimationDescriptions'
-import { RiveWrapper } from './Onobarding.styled'
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void
@@ -53,11 +51,11 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             <ChevronLeftIcon fontSize={14} />
             <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
-          <UnstyledButton onClick={onCompleteSteps}>
+          <Button onClick={onCompleteSteps}>
             <Text color="shy" size={isSmall ? 14 : 18}>
               {t('skip')}
             </Text>
-          </UnstyledButton>
+          </Button>
         </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
@@ -85,39 +83,21 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           }}
         >
           <AnimationDescription animation={currentAnimation} />
-          <NextAnimationButton
+          <IconButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleteSteps
             }
           >
-            {t('tap')}
-          </NextAnimationButton>
+            <ChevronRightIcon />
+          </IconButton>
         </VStack>
       </ContentWrapper>
     </PageContent>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
 
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;
