@@ -1,9 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
@@ -18,13 +16,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
-import { getChainLogoSrc } from '../../metadata/getChainLogoSrc'
-
 export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, logo, ticker, decimals } = value
+  const { chain, ticker, decimals } = value
   const coin = useCurrentVaultCoin(value)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const priceQuery = useCoinPriceQuery({
@@ -42,13 +38,7 @@ export const CoinOption = ({
       alignItems="center"
     >
       <HStack alignItems="center" gap={12}>
-        <ChainCoinIcon
-          coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-          chainSrc={
-            shouldDisplayChainLogo(coin) ? getChainLogoSrc(chain) : undefined
-          }
-          style={{ fontSize: 32 }}
-        />
+        <CoinIcon coin={coin} style={{ fontSize: 32 }} />
         <HStack gap={8} alignItems="center">
           <Text color="contrast" size={13} weight="500">
             {ticker}

@@ -9,12 +9,14 @@ export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
 }
 
-export type Coin = CoinKey & {
+export type CoinMetadata = {
   priceProviderId?: string
   decimals: number
   ticker: string
   logo?: string
 }
+
+export type Coin = CoinKey & CoinMetadata
 
 export const coinMetadataFields: (keyof Coin)[] = [
   'priceProviderId',

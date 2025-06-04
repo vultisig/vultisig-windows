@@ -1,8 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
@@ -71,13 +69,7 @@ export const SwapCoinInputField = ({
           alignItems="center"
           gap={8}
         >
-          <ChainCoinIcon
-            coinSrc={value.logo ? getCoinLogoSrc(value.logo) : undefined}
-            chainSrc={
-              shouldDisplayChainLogo(value) ? getChainLogoSrc(chain) : undefined
-            }
-            style={{ fontSize: 32 }}
-          />
+          <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <HStack gap={4}>
             <Text weight="500" size={16} color="contrast">
               {value.ticker}

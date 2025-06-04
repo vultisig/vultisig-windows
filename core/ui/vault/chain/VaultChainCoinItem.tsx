@@ -1,8 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -14,8 +12,6 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
-import { getChainLogoSrc } from '../../chain/metadata/getChainLogoSrc'
-
 export const VaultChainCoinItem = ({
   value,
 }: ValueProp<
@@ -25,21 +21,13 @@ export const VaultChainCoinItem = ({
     Partial<EntityWithPrice> &
     CoinKey
 >) => {
-  const { logo, ticker, amount, decimals, price, id, chain } = value
+  const { ticker, amount, decimals, price } = value
   const fiatCurrency = useFiatCurrency()
   const balance = fromChainAmount(amount, decimals)
 
   return (
     <HStack fullWidth alignItems="center" gap={12}>
-      <ChainCoinIcon
-        coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-        chainSrc={
-          shouldDisplayChainLogo({ id, chain })
-            ? getChainLogoSrc(chain)
-            : undefined
-        }
-        style={{ fontSize: 32 }}
-      />
+      <CoinIcon coin={value} style={{ fontSize: 32 }} />
       <VStack fullWidth gap={8}>
         <HStack fullWidth justifyContent="space-between" alignItems="center">
           <Text color="contrast" size={20} weight="500">
