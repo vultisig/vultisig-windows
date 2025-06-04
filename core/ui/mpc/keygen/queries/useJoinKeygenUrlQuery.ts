@@ -7,7 +7,7 @@ import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { useSevenZipQuery } from '@core/ui/compression/queries/useSevenZipQuery'
-import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import {
   assertKeygenReshareFields,
   useKeygenVault,
@@ -31,7 +31,7 @@ export const useJoinKeygenUrlQuery = () => {
   const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
-  const operationType = useCurrentKeygenOperationType()
+  const keygenOperation = useKeygenOperation()
 
   const vaultName = useKeygenVaultName()
 
@@ -52,7 +52,7 @@ export const useJoinKeygenUrlQuery = () => {
         const useVultisigRelay = serverType === 'relay'
 
         const binary = matchRecordUnion<KeygenOperation, Uint8Array>(
-          operationType,
+          keygenOperation,
           {
             create: () => {
               const message = create(KeygenMessageSchema, {
@@ -87,14 +87,14 @@ export const useJoinKeygenUrlQuery = () => {
         })
         return addQueryParams(deepLinkBaseUrl, {
           type: 'NewVault',
-          tssType: toTssType(operationType),
+          tssType: toTssType(keygenOperation),
           jsonData,
         })
       },
       [
         hexChainCode,
         hexEncryptionKey,
-        operationType,
+        keygenOperation,
         keygenVault,
         serverType,
         serviceName,

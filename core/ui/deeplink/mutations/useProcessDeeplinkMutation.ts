@@ -50,12 +50,12 @@ export const useProcessDeeplinkMutation = () => {
               payload
             )
 
-            const operationType = fromTssType(queryParams.tssType)
+            const keygenOperation = fromTssType(queryParams.tssType)
             navigate(
               {
                 id: 'joinKeygen',
                 state: {
-                  operationType,
+                  keygenOperation,
                   keygenMsg,
                 },
               },

@@ -1,7 +1,7 @@
 import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
-import { CurrentKeygenOperationTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 
@@ -11,7 +11,7 @@ import { MigrateVaultKeygenActionProvider } from '../../migrate/MigrateVaultKeyg
 export const SecureMigrateVaultPage = () => {
   return (
     <ReshareVaultFlowProviders>
-      <CurrentKeygenOperationTypeProvider value={{ reshare: 'migrate' }}>
+      <KeygenOperationProvider value={{ reshare: 'migrate' }}>
         <MigrateVaultKeygenActionProvider>
           <MpcMediatorManager />
           <StepTransition
@@ -26,7 +26,7 @@ export const SecureMigrateVaultPage = () => {
             )}
           />
         </MigrateVaultKeygenActionProvider>
-      </CurrentKeygenOperationTypeProvider>
+      </KeygenOperationProvider>
     </ReshareVaultFlowProviders>
   )
 }

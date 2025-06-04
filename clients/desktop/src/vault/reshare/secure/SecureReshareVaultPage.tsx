@@ -1,6 +1,6 @@
 import { ReshareSecureVaultFlow } from '@core/ui/mpc/keygen/reshare/ReshareSecureVaultFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
-import { CurrentKeygenOperationTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { ReshareVaultKeygenActionProvider } from '../../keygen/reshare/ReshareVaultKeygenActionProvider'
@@ -8,12 +8,12 @@ import { ReshareVaultKeygenActionProvider } from '../../keygen/reshare/ReshareVa
 export const SecureReshareVaultPage = () => {
   return (
     <ReshareVaultFlowProviders>
-      <CurrentKeygenOperationTypeProvider value={{ reshare: 'regular' }}>
+      <KeygenOperationProvider value={{ reshare: 'regular' }}>
         <ReshareVaultKeygenActionProvider>
           <MpcMediatorManager />
           <ReshareSecureVaultFlow />
         </ReshareVaultKeygenActionProvider>
-      </CurrentKeygenOperationTypeProvider>
+      </KeygenOperationProvider>
     </ReshareVaultFlowProviders>
   )
 }

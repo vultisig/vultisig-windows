@@ -1,6 +1,6 @@
 import { CreateFlowKeygenVaultProvider } from '@core/ui/mpc/keygen/create/state/keygenVault'
 import { GeneratedVaultNameProvider } from '@core/ui/mpc/keygen/create/state/vaultName'
-import { CurrentKeygenOperationTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { GeneratedHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -22,9 +22,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
               <MpcServerTypeProvider initialValue="relay">
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
-                    <CurrentKeygenOperationTypeProvider
-                      value={{ create: true }}
-                    >
+                    <KeygenOperationProvider value={{ create: true }}>
                       <GeneratedVaultNameProvider>
                         <CreateFlowKeygenVaultProvider>
                           <MpcPeersSelectionProvider>
@@ -32,7 +30,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                           </MpcPeersSelectionProvider>
                         </CreateFlowKeygenVaultProvider>
                       </GeneratedVaultNameProvider>
-                    </CurrentKeygenOperationTypeProvider>
+                    </KeygenOperationProvider>
                   </ServerUrlDerivedFromServerTypeProvider>
                 </GeneratedMpcLocalPartyIdProvider>
               </MpcServerTypeProvider>

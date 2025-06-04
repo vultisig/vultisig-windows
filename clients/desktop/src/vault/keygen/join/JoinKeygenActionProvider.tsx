@@ -13,11 +13,11 @@ import { CreateVaultLegacyKeygenActionProvider as GG20CreateKeygenActionProvider
 import { ReshareVaultLegacyKeygenActionProvider as GG20ReshareKeygenActionProvider } from '../reshare/ReshareVaultLegacyKeygenActionProvider'
 
 export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
-  const [{ operationType, keygenMsg }] = useCoreViewState<'joinKeygen'>()
+  const [{ keygenOperation, keygenMsg }] = useCoreViewState<'joinKeygen'>()
   const { libType } = keygenMsg
   const mpcLib = fromLibType(libType)
 
-  return matchRecordUnion<KeygenOperation, JSX.Element>(operationType, {
+  return matchRecordUnion<KeygenOperation, JSX.Element>(keygenOperation, {
     create: () => (
       <Match
         value={mpcLib}

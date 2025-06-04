@@ -1,5 +1,5 @@
 import { VaultKeygenBackupFlow } from '@core/ui/mpc/keygen/backup/VaultKeygenBackupFlow'
-import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -9,7 +9,7 @@ import { MigrateSuccess } from '../migrate/MigrateSuccess'
 import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 
 export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
-  const operationType = useCurrentKeygenOperationType()
+  const keygenOperation = useKeygenOperation()
 
   return (
     <StepTransition
@@ -18,7 +18,7 @@ export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
       )}
       to={() => (
         <MatchRecordUnion
-          value={operationType}
+          value={keygenOperation}
           handlers={{
             create: () => <KeygenFlowSuccess />,
             reshare: value => (

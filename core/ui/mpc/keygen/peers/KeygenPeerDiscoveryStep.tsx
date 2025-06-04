@@ -15,7 +15,7 @@ import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerO
 import { KeygenPeerDiscoveryEducation } from '@core/ui/mpc/keygen/education/devices/KeygenPeerDiscoveryEducation'
 import { DownloadKeygenQrCode } from '@core/ui/mpc/keygen/qr/DownloadKeygenQrCode'
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
-import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -69,7 +69,7 @@ export const KeygenPeerDiscoveryStep = ({
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
 
-  const opertaionType = useCurrentKeygenOperationType()
+  const opertaionType = useKeygenOperation()
   const isMigrate = useMemo(() => {
     return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
   }, [opertaionType])

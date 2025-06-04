@@ -14,7 +14,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentKeygenOperationType } from '../keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '../keygen/state/currentKeygenOperationType'
 import { MpcSession } from './MpcSession'
 
 export const StartMpcSessionStep = ({
@@ -26,7 +26,7 @@ export const StartMpcSessionStep = ({
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
-  const keygenOperation = useCurrentKeygenOperationType()
+  const keygenOperation = useKeygenOperation()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
       const filteredDevices =

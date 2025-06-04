@@ -23,7 +23,7 @@ export type CoreView =
   | {
       id: 'joinKeygen'
       state: {
-        operationType: KeygenOperation
+        keygenOperation: KeygenOperation
         keygenMsg: KeygenMessage | ReshareMessage
       }
     }

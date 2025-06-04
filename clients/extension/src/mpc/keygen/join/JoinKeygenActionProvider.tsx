@@ -5,11 +5,11 @@ import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ChildrenProp } from '@lib/ui/props'
 
 export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
-  const [{ operationType }] = useCoreViewState<'joinKeygen'>()
+  const [{ keygenOperation }] = useCoreViewState<'joinKeygen'>()
 
   return (
     <MatchRecordUnion
-      value={operationType}
+      value={keygenOperation}
       handlers={{
         create: () => (
           <CreateVaultKeygenActionProvider>

@@ -1,4 +1,4 @@
-import { CurrentKeygenOperationTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
@@ -10,7 +10,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { JoinKeygenVaultProvider } from './state/keygenVault'
 
 export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
-  const [{ operationType, keygenMsg }] = useCoreViewState<'joinKeygen'>()
+  const [{ keygenOperation, keygenMsg }] = useCoreViewState<'joinKeygen'>()
 
   const { sessionId, useVultisigRelay, serviceName, encryptionKeyHex } =
     keygenMsg
@@ -22,11 +22,11 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
       <MpcServiceNameProvider value={serviceName}>
         <MpcServerTypeProvider initialValue={serverType}>
           <MpcSessionIdProvider value={sessionId}>
-            <CurrentKeygenOperationTypeProvider value={operationType}>
+            <KeygenOperationProvider value={keygenOperation}>
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                 <JoinKeygenVaultProvider>{children}</JoinKeygenVaultProvider>
               </CurrentHexEncryptionKeyProvider>
-            </CurrentKeygenOperationTypeProvider>
+            </KeygenOperationProvider>
           </MpcSessionIdProvider>
         </MpcServerTypeProvider>
       </MpcServiceNameProvider>

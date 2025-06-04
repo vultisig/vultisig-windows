@@ -1,5 +1,5 @@
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
-import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp } from '@lib/ui/props'
@@ -18,12 +18,12 @@ import { ReshareFastKeygenServerActionProvider } from '../reshare/ReshareFastKey
 import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
-  const operationType = useCurrentKeygenOperationType()
+  const keygenOperation = useKeygenOperation()
 
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
     ComponentType<any>
-  >(operationType, {
+  >(keygenOperation, {
     create: () => CreateFastKeygenServerActionProvider,
     reshare: reshareType => {
       return match(reshareType, {

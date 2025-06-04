@@ -3,7 +3,7 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
-import { useCurrentKeygenOperationType } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -30,9 +30,9 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
 
   const { t } = useTranslation()
 
-  const operationType = useCurrentKeygenOperationType()
+  const keygenOperation = useKeygenOperation()
 
-  const title = matchRecordUnion<KeygenOperation, string>(operationType, {
+  const title = matchRecordUnion<KeygenOperation, string>(keygenOperation, {
     create: () => t('creating_vault'),
     reshare: value =>
       match(value, {
@@ -69,7 +69,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
         return (
           <CurrentVaultProvider value={vault}>
             <MatchRecordUnion
-              value={operationType}
+              value={keygenOperation}
               handlers={{
                 create: () => (
                   <StepTransition
