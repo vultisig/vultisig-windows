@@ -71,7 +71,7 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       onClose={onClose}
       title={<Text size={17}>{t('advanced_gas_fee')}</Text>}
       footer={
-        <Button disabled={!!isDisabled} htmlType="submit">
+        <Button disabled={isDisabled} htmlType="submit">
           {t('save')}
         </Button>
       }

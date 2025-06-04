@@ -37,7 +37,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
           <SwapInfo />
         </VStack>
       </VStack>
-      <Button disabled={!!isDisabled} htmlType="submit">
+      <Button disabled={isDisabled} htmlType="submit">
         {typeof isDisabled === 'string' ? isDisabled : t('continue')}
       </Button>
     </PageContent>

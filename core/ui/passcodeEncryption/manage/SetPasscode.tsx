@@ -66,11 +66,7 @@ export const SetPasscode = () => {
               onChange={setConfirmPasscode}
               label={t('confirm_passcode')}
             />
-            <Button
-              disabled={!!isDisabled}
-              htmlType="submit"
-              loading={isPending}
-            >
+            <Button disabled={isDisabled} htmlType="submit" loading={isPending}>
               {t('set_passcode')}
             </Button>
           </>

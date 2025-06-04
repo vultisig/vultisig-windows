@@ -25,7 +25,7 @@ export const StartKeysignPrompt = ({
   return (
     <VStack gap={20}>
       <Button
-        disabled={!!isDisabled}
+        disabled={isDisabled}
         onClick={() =>
           navigate({
             id: 'keysign',
@@ -41,7 +41,7 @@ export const StartKeysignPrompt = ({
       </Button>
       {securityType === 'fast' && (
         <Button
-          disabled={!!isDisabled}
+          disabled={isDisabled}
           onClick={() =>
             navigate({
               id: 'keysign',

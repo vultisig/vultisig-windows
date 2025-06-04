@@ -105,7 +105,7 @@ export const ServerPasswordHintStep = ({
           <Button onClick={() => onFinish()} type="secondary">
             {t('skip')}
           </Button>
-          <Button disabled={!!errors.passwordHint} htmlType="submit">
+          <Button disabled={errors.passwordHint?.message} htmlType="submit">
             {t('next')}
           </Button>
         </HStack>

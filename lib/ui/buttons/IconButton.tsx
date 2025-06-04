@@ -5,6 +5,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 
 type IconBtnSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
@@ -16,7 +17,7 @@ type IconButtonProps = Pick<
   HTMLAttributes<HTMLButtonElement>,
   'children' | 'className' | 'onClick' | 'style' | 'title'
 > & {
-  disabled?: boolean
+  disabled?: boolean | string
   htmlType?: HtmlType
   loading?: boolean
   size?: IconBtnSize
@@ -177,28 +178,39 @@ const StyledIconButton = styled.button<{
 
 export const IconButton: FC<IconButtonProps> = ({
   children,
-  disabled = false,
+  disabled,
   htmlType,
   loading = false,
   size = 'md',
   status = 'default',
   type = 'link',
-  ...props
-}) => (
-  <StyledIconButton
-    {...props}
-    {...{
-      btnType: type,
-      disabled,
-      loading,
-      size,
-      status,
-      type: htmlType,
-    }}
-  >
-    {loading ? <Spinner /> : children}
-  </StyledIconButton>
-)
+  ...rest
+}) => {
+  const props = {
+    ...rest,
+    btnType: type,
+    disabled: !!disabled,
+    loading,
+    size,
+    status,
+    type: htmlType,
+  }
+
+  return typeof disabled === 'string' ? (
+    <Tooltip
+      content={disabled}
+      renderOpener={options => (
+        <StyledIconButton {...options} {...props}>
+          {loading ? <Spinner /> : children}
+        </StyledIconButton>
+      )}
+    />
+  ) : (
+    <StyledIconButton {...props}>
+      {loading ? <Spinner /> : children}
+    </StyledIconButton>
+  )
+}
 
 export const iconButtonSizeRecord = { s: 24, m: 32, l: 40 }
 

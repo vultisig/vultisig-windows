@@ -78,7 +78,7 @@ export const FastVaultPasswordVerification = () => {
         />
         <VStack gap={6}>
           <Button
-            disabled={!!isDisabled || isPending}
+            disabled={isDisabled || isPending}
             loading={isPending}
             onClick={() => mutate()}
           >
