@@ -1,15 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { EthereumL2Chain } from '@core/chain/Chain'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 
-const ETHTicker = chainFeeCoin[Chain.Ethereum].ticker
-export const shouldDisplayChainLogo = ({
-  ticker,
-  chain,
-  isNative,
-}: {
-  ticker: string
-  chain: Chain
-  isNative: boolean
-}): boolean => {
-  return !isNative || (ticker === ETHTicker && chain !== Chain.Ethereum)
-}
+export const shouldDisplayChainLogo = (coin: CoinKey): boolean =>
+  isOneOf(coin.chain, Object.values(EthereumL2Chain)) && isFeeCoin(coin)

@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
@@ -47,7 +46,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const cappedAmountQuery = useSendCappedAmountQuery()
 
-  const { logo, chain, ticker, id } = coin
+  const { logo, chain, ticker } = coin
 
   return (
     <>
@@ -65,14 +64,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               <ChainCoinIcon
                 coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
                 chainSrc={
-                  shouldDisplayChainLogo({
-                    ticker: ticker,
-                    chain: chain,
-                    isNative: isFeeCoin({
-                      id: id,
-                      chain: chain,
-                    }),
-                  })
+                  shouldDisplayChainLogo(coin)
                     ? getChainLogoSrc(chain)
                     : undefined
                 }

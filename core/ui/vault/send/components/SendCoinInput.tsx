@@ -1,5 +1,4 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
@@ -36,7 +35,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
-  const { logo, chain, ticker, id } = coin
+  const { logo, chain } = coin
 
   const handleAutoAdvance = () => {
     setFormFieldState(state => ({
@@ -87,14 +86,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     <ChainCoinIcon
                       coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
                       chainSrc={
-                        shouldDisplayChainLogo({
-                          ticker: ticker,
-                          chain: chain,
-                          isNative: isFeeCoin({
-                            id: id,
-                            chain: chain,
-                          }),
-                        })
+                        shouldDisplayChainLogo(coin)
                           ? getChainLogoSrc(chain)
                           : undefined
                       }

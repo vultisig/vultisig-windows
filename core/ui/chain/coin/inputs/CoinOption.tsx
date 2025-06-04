@@ -1,7 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
@@ -25,7 +24,7 @@ export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, logo, ticker, id, decimals } = value
+  const { chain, logo, ticker, decimals } = value
   const coin = useCurrentVaultCoin(value)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const priceQuery = useCoinPriceQuery({
@@ -46,13 +45,7 @@ export const CoinOption = ({
         <ChainCoinIcon
           coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
           chainSrc={
-            shouldDisplayChainLogo({
-              ticker,
-              chain,
-              isNative: isFeeCoin({ id, chain }),
-            })
-              ? getChainLogoSrc(chain)
-              : undefined
+            shouldDisplayChainLogo(coin) ? getChainLogoSrc(chain) : undefined
           }
           style={{ fontSize: 32 }}
         />

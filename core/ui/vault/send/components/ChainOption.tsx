@@ -1,5 +1,4 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
@@ -20,7 +19,7 @@ type Props = {
   IsActiveProp
 
 export const ChainOption = ({ value, onClick, isSelected }: Props) => {
-  const { chain, logo, ticker, id } = value
+  const { chain, logo, id } = value
 
   return (
     <Container
@@ -34,11 +33,7 @@ export const ChainOption = ({ value, onClick, isSelected }: Props) => {
           <ChainCoinIcon
             coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
             chainSrc={
-              shouldDisplayChainLogo({
-                ticker,
-                chain,
-                isNative: isFeeCoin({ id, chain }),
-              })
+              shouldDisplayChainLogo({ id, chain })
                 ? getChainLogoSrc(chain)
                 : undefined
             }

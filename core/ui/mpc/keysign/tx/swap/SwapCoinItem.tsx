@@ -1,5 +1,4 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
@@ -32,16 +31,7 @@ export const SwapCoinItem = ({
       <ChainCoinIcon
         coinSrc={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
         chainSrc={
-          shouldDisplayChainLogo({
-            ticker: coin.ticker,
-            chain: chain,
-            isNative: isFeeCoin({
-              id: coin.id,
-              chain: chain,
-            }),
-          })
-            ? getChainLogoSrc(chain)
-            : undefined
+          shouldDisplayChainLogo(coin) ? getChainLogoSrc(chain) : undefined
         }
         style={{ fontSize: 36 }}
       />
