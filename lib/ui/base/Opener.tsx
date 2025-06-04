@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 import { useBoolean } from '../hooks/useBoolean'
 
-interface RenderOpenerParams {
+type RenderOpenerParams = {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void

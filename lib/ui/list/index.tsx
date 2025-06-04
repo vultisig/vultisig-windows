@@ -18,13 +18,9 @@ const StyledList = styled.div<{ bordered?: boolean }>`
   }}
 `
 
-interface ListProps
-  extends Pick<
-    HTMLAttributes<HTMLDivElement>,
-    'children' | 'onClick' | 'style'
-  > {
+type ListProps = {
   bordered?: boolean
-}
+} & Pick<HTMLAttributes<HTMLDivElement>, 'children' | 'onClick' | 'style'>
 
 export const List: FC<ListProps> = ({ children, ...rest }) => {
   return <StyledList {...rest}>{children}</StyledList>

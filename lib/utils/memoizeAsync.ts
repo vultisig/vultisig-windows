@@ -3,7 +3,7 @@ type Cache<T> = {
   updatedAt: number
 }
 
-interface MemoizeAsyncOptions {
+type MemoizeAsyncOptions = {
   cacheTime?: number
 }
 

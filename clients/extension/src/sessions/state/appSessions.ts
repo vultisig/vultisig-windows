@@ -10,7 +10,7 @@ type UpdateAppSessionFieldsInput = {
   fields: Partial<AppSession>
 }
 
-export interface AppSession {
+export type AppSession = {
   host: string
   addresses?: string[]
   url: string

@@ -16,11 +16,10 @@ type SharedTextInputProps = Partial<LabelProp> &
     validation?: 'valid' | 'invalid' | 'warning'
   }
 
-export interface TextInputProps
-  extends ComponentProps<typeof TextInputContainer>,
-    SharedTextInputProps {
+export type TextInputProps = {
   inputOverlay?: React.ReactNode
-}
+} & ComponentProps<typeof TextInputContainer> &
+  SharedTextInputProps
 
 export const TextInput = ({
   onValueChange,

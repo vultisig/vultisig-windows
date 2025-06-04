@@ -1,6 +1,6 @@
 import { AccountsProps } from '@clients/extension/src/utils/interfaces'
 
-interface LocalStorage {
+type LocalStorage = {
   accounts?: AccountsProps
 }
 type LocalStorageKeys = keyof LocalStorage

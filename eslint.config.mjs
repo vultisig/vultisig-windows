@@ -98,6 +98,14 @@ export default [
       'simple-import-sort/exports': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-namespace': 'off',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+  // Override for declaration files where interfaces are required for module augmentation
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
 ]

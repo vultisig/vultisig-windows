@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 
 type Key = string
 
-interface UseKeyPressOptions {
+type UseKeyPressOptions = {
   isEnabled?: boolean
   shouldStopPropagation?: boolean
   shouldPreventDefault?: boolean

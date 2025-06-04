@@ -26,7 +26,7 @@ type ButtonKind =
   | 'alert'
   | 'accent'
 
-interface ContainerProps {
+type ContainerProps = {
   size: ButtonSize
   isDisabled?: boolean
   isLoading?: boolean

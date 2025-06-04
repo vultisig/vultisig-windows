@@ -8,7 +8,7 @@ import { hexToBytes } from '@lib/utils/hexToBytes'
 
 import { storage } from '../../storage'
 
-interface CosmosAccount {
+type CosmosAccount = {
   pubkey: number[]
   address: string
   algo: 'secp256k1'

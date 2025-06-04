@@ -1,12 +1,12 @@
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 
-export interface PartialInstruction {
+export type PartialInstruction = {
   programId: any
   programData: Uint8Array
   accounts: any
 }
 
-export interface ParsedSolanaSwapParams {
+export type ParsedSolanaSwapParams = {
   authority: string | undefined
   inputToken: SolanaJupiterToken
   outputToken: SolanaJupiterToken
@@ -14,7 +14,7 @@ export interface ParsedSolanaSwapParams {
   outAmount: number
 }
 
-export interface ParsedInstructionsSolanaSwapParams {
+export type ParsedInstructionsSolanaSwapParams = {
   authority: string
   inputMint: string
   outputMint: string

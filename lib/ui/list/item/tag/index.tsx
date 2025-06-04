@@ -41,11 +41,10 @@ const StyledListItemTag = styled.span<{ status: Status }>`
   }}
 `
 
-interface ListItemTagProps
-  extends Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> {
+type ListItemTagProps = {
   status?: Status
   title: string
-}
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
 
 export const ListItemTag: FC<ListItemTagProps> = ({
   status = 'default',

@@ -39,13 +39,13 @@ import { useTranslation } from 'react-i18next'
 
 import { SettingsSection } from './SettingsSection'
 
-interface ExtensionSettings {
+type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
   prioritize: ReactNode
 }
 
-interface DesktopSettings {
+type DesktopSettings = {
   client: Extract<Client, 'desktop'>
   checkUpdate: ReactNode
   manageMpcLib: ReactNode

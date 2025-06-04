@@ -7,7 +7,7 @@ import { absoluteOutline } from '../css/absoluteOutline'
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
 
-interface HighlightProps {
+type HighlightProps = {
   horizontalOffset: number | string
   verticalOffset: number | string
 }

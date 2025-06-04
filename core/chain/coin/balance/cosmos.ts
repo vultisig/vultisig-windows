@@ -41,7 +41,7 @@ export const getCosmosCoinBalance: CoinBalanceResolver<
   return BigInt(data.balance ?? 0)
 }
 
-interface WasmQueryResponse {
+type WasmQueryResponse = {
   data: {
     balance: string
   }

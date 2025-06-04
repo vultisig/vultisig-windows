@@ -43,11 +43,11 @@ const StyledDivider = styled.div<{ placement: Placement }>`
   }
 `
 
-interface DividerProps extends HTMLAttributes<HTMLDivElement> {
+type DividerProps = {
   placement?: Placement
   text: string
   textProps?: HTMLAttributes<HTMLSpanElement>
-}
+} & HTMLAttributes<HTMLDivElement>
 
 export const Divider: FC<DividerProps> = ({
   placement = 'center',

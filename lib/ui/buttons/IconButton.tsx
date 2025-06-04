@@ -25,7 +25,7 @@ export const iconButtonIconSizeRecord: Record<IconButtonSize, number> = {
   l: 18,
 }
 
-interface ContainerProps {
+type ContainerProps = {
   size: IconButtonSize
   kind: IconButtonKind
   isDisabled?: boolean
