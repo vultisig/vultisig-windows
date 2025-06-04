@@ -764,9 +764,10 @@ export const chainNativeTokens: Partial<
     }))
 )
 
-const mergedLeanChainTokens = Object.entries(
-  leanChainTokens as Record<Chain, LeanChainTokensRecord>
-).reduce(
+const mergedLeanChainTokens = Object.entries({
+  ...leanChainTokens,
+  ...leanChainNativeTokens,
+} as Record<Chain, LeanChainTokensRecord>).reduce(
   (acc, [chain, tokens]) => {
     const chainTokens = Object.entries(tokens).map(([id, token]) => ({
       ...token,
