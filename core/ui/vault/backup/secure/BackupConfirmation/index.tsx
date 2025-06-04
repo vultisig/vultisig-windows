@@ -1,5 +1,5 @@
 import { backupEducationUrl } from '@core/ui/vault/backup/education'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import DownloadIcon from '@lib/ui/icons/DownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'

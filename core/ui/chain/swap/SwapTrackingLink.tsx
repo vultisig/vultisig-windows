@@ -1,5 +1,5 @@
 import { useCore } from '@core/ui/state/core'
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ValueProp } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'

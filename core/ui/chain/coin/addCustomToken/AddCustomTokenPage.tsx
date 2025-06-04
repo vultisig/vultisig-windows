@@ -4,7 +4,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,

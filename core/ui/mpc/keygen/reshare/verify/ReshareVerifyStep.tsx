@@ -3,7 +3,7 @@ import { ReshareDeviceItem } from '@core/ui/mpc/keygen/reshare/verify/ReshareDev
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'

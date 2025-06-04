@@ -2,8 +2,9 @@ import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { useVaultNames } from '@core/ui/storage/vaults'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button, UnstyledButton } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,

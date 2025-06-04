@@ -1,6 +1,6 @@
 import { ProductEnhancedLogo } from '@core/ui/product/logo/ProductEnhancedLogo'
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'

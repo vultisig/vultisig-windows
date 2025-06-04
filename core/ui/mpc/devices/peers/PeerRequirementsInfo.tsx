@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'

@@ -2,7 +2,7 @@ import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultM
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'

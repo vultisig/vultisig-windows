@@ -11,7 +11,7 @@ import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignT
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'

@@ -1,8 +1,9 @@
 import { useEmail } from '@core/ui/state/email'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button, UnstyledButton } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,

@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useVaults } from '@core/ui/storage/vaults'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { Divider } from '@lib/ui/divider'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'

@@ -8,7 +8,7 @@ import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultM
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { VStack } from '@lib/ui/layout/Stack'

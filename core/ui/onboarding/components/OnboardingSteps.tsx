@@ -2,7 +2,7 @@ import { AnimationDescription } from '@core/ui/onboarding/components/AnimationDe
 import { RiveWrapper } from '@core/ui/onboarding/components/Onobarding.styled'
 import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
 import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -10,7 +10,6 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -84,39 +83,21 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           }}
         >
           <AnimationDescription animation={currentAnimation} />
-          <NextAnimationButton
+          <IconButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleteSteps
             }
           >
-            {t('tap')}
-          </NextAnimationButton>
+            <ChevronRightIcon />
+          </IconButton>
         </VStack>
       </ContentWrapper>
     </PageContent>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
 
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;

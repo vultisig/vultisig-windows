@@ -4,7 +4,7 @@ import {
   VideoWrapper,
 } from '@core/ui/qr/components/styles'
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { Image } from '@lib/ui/image/Image'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'

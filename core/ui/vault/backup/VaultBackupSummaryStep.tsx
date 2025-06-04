@@ -1,6 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'

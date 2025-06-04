@@ -1,6 +1,6 @@
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'

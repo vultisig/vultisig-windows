@@ -1,6 +1,6 @@
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { useCore } from '@core/ui/state/core'
-import { IconButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { BoxIcon } from '@lib/ui/icons/BoxIcon'
 import { ValueProp } from '@lib/ui/props'
 

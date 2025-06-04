@@ -2,7 +2,7 @@ import {
   useIsBalanceVisible,
   useSetIsBalanceVisibleMutation,
 } from '@core/ui/storage/balanceVisibility'
-import { IconButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
 

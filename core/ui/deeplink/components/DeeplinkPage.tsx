@@ -1,6 +1,6 @@
 import { useProcessDeeplinkMutation } from '@core/ui/deeplink/mutations/useProcessDeeplinkMutation'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'

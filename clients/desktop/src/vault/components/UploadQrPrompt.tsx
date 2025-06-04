@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'

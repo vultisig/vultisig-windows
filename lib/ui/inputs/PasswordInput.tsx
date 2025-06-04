@@ -1,5 +1,5 @@
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,

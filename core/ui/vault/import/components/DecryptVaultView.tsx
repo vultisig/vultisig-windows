@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'

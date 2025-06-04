@@ -2,7 +2,7 @@ import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileD
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'

@@ -1,6 +1,7 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, UnstyledButton } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'

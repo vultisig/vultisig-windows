@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'

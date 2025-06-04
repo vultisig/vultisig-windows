@@ -1,5 +1,5 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'

@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'

@@ -1,7 +1,7 @@
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'

@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { ErrorBoundaryFallbackProps } from '@lib/ui/errors/ErrorBoundary'

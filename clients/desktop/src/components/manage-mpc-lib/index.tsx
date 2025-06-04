@@ -1,5 +1,5 @@
 import { useVaultCreationMpcLib } from '@clients/desktop/src/mpc/state/vaultCreationMpcLib'
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { Switch } from '@lib/ui/inputs/switch'
 import { Modal } from '@lib/ui/modal'
 import { useRef, useState } from 'react'

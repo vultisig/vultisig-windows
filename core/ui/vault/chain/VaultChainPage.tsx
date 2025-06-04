@@ -23,7 +23,8 @@ import {
   useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { IconButton, UnstyledButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'

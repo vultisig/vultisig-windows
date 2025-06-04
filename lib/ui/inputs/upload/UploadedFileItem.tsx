@@ -1,4 +1,4 @@
-import { IconButton } from '@lib/ui/button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { FileIcon } from '@lib/ui/icons/FileIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'

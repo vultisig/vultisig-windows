@@ -1,6 +1,6 @@
 import { MpcServerTypeManager } from '@core/ui/mpc/server/MpcServerTypeManager'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,5 @@
 import { useProcessQrMutation } from '@core/ui/qr/hooks/useProcessQrMutation'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { QrImageDropZone } from '@lib/ui/qr/upload/QrImageDropZone'

@@ -1,6 +1,6 @@
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { JoinKeysignTxOverview } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxOverview'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'

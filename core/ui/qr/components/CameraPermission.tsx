@@ -1,6 +1,6 @@
 import { cameraPermissionQueryKey } from '@core/ui/qr/hooks/useCameraPermissionQuery'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'

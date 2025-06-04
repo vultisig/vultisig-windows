@@ -2,7 +2,7 @@ import { EnablePasscodeInput } from '@core/ui/passcodeEncryption/manage/EnablePa
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'

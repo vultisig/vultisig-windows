@@ -1,13 +1,12 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { textInputHeight } from '@lib/ui/css/textInput'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { UnstyledButton } from '../button'
-import { borderRadius } from '../css/borderRadius'
-import { centerContent } from '../css/centerContent'
-import { horizontalPadding } from '../css/horizontalPadding'
-import { textInputHeight } from '../css/textInput'
-import { toSizeUnit } from '../css/toSizeUnit'
-import { text } from '../text'
-import { getColor } from '../theme/getters'
 
 export const maxButtonOffset = 8
 const maxButtonHeight = textInputHeight - maxButtonOffset * 2

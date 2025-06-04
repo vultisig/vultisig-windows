@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { PageHeader } from '@lib/ui/page/PageHeader'

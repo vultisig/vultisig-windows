@@ -5,7 +5,7 @@ import {
   useAddressBookItems,
   useUpdateAddressBookItemMutation,
 } from '@core/ui/storage/addressBook'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'

@@ -1,5 +1,5 @@
 import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { LayersIcon } from '@lib/ui/icons/LayersIcon'

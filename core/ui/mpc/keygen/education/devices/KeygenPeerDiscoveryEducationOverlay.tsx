@@ -1,5 +1,5 @@
 import { Animation } from '@lib/ui/animations/Animation'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'

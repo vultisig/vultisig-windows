@@ -5,7 +5,7 @@ import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendCh
 import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormValidation'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'

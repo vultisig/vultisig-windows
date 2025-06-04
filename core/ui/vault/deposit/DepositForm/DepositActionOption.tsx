@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@lib/ui/button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'

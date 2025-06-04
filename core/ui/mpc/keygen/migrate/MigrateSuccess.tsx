@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Animation } from '@lib/ui/animations/Animation'
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
 

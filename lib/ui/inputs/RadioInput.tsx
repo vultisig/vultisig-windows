@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/button'
+import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { UiProps } from '@lib/ui/props'
 
