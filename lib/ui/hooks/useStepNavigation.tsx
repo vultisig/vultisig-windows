@@ -47,7 +47,7 @@ export function useStepNavigation<T>({
 
   const toFirstStep = useCallback(() => {
     setStep(steps[0])
-  }, [steps, onExit])
+  }, [steps])
 
   return { step, setStep, toNextStep, toPreviousStep, toFirstStep }
 }
