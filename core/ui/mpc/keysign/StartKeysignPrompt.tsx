@@ -1,11 +1,10 @@
+import { CoreView } from '@core/ui/navigation/CoreView'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
-
-import { CoreView } from '../../navigation/CoreView'
 
 type StartKeysignPromptProps = Omit<
   Extract<CoreView, { id: 'keysign' }>['state'],
@@ -26,8 +25,8 @@ export const StartKeysignPrompt = ({
   return (
     <VStack gap={20}>
       <Button
-        isDisabled={isDisabled}
-        onClick={() => {
+        disabled={isDisabled}
+        onClick={() =>
           navigate({
             id: 'keysign',
             state: {
@@ -36,14 +35,14 @@ export const StartKeysignPrompt = ({
               isDAppSigning,
             },
           })
-        }}
+        }
       >
         {t('sign_transaction')}
       </Button>
       {securityType === 'fast' && (
         <Button
-          isDisabled={isDisabled}
-          onClick={() => {
+          disabled={isDisabled}
+          onClick={() =>
             navigate({
               id: 'keysign',
               state: {
@@ -52,7 +51,7 @@ export const StartKeysignPrompt = ({
                 isDAppSigning,
               },
             })
-          }}
+          }
         >
           {t('fast_sign')}
         </Button>

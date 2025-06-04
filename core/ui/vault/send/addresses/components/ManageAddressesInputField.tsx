@@ -1,6 +1,17 @@
+import { AddressBookListItem } from '@core/ui/address-book/item'
+import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
+import { useCore } from '@core/ui/state/core'
+import { useAddressBookItems } from '@core/ui/storage/addressBook'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
+import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
@@ -18,17 +29,6 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { AddressBookListItem } from '../../../../address-book/item'
-import { ScanQrView } from '../../../../qr/components/ScanQrView'
-import { useCore } from '../../../../state/core'
-import { useAddressBookItems } from '../../../../storage/addressBook'
-import { useCurrentVault } from '../../../state/currentVault'
-import { HorizontalLine } from '../../components/HorizontalLine'
-import { SendInputContainer } from '../../components/SendInputContainer'
-import { useSender } from '../../sender/hooks/useSender'
-import { useSendFormFieldState } from '../../state/formFields'
-import { useSendReceiver } from '../../state/receiver'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
@@ -140,7 +140,6 @@ export const ManageReceiverAddressInputField = () => {
                 action={
                   <HStack gap={8}>
                     <IconButton
-                      icon={<PasteIcon />}
                       onClick={async () => {
                         const { data } = await attempt(getClipboardText)
 
@@ -148,18 +147,15 @@ export const ManageReceiverAddressInputField = () => {
                           handleUpdateReceiverAddress(data)
                         }
                       }}
-                    />
-                    <IconButton
-                      icon={<CameraIcon fontSize={20} />}
-                      onClick={() => setViewState('scanner')}
-                    />
-                    <IconButton
-                      style={{
-                        fontSize: 20,
-                      }}
-                      icon={<BookAIcon />}
-                      onClick={() => setViewState('addressBook')}
-                    />
+                    >
+                      <PasteIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setViewState('scanner')}>
+                      <CameraIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setViewState('addressBook')}>
+                      <BookAIcon />
+                    </IconButton>
                   </HStack>
                 }
                 actionPlacerStyles={{

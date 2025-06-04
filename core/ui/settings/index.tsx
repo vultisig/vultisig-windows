@@ -204,9 +204,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <UnstyledButton onClick={() => openUrl(shareURL)}>
-            {`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}
-          </UnstyledButton>
+          <UnstyledButton
+            onClick={() => openUrl(shareURL)}
+          >{`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}</UnstyledButton>
           {props.client === 'desktop' && props.manageMpcLib}
         </PageFooter>
       </VStack>
@@ -224,60 +224,64 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               </Text>
               <HStack gap={8} alignItems="center">
                 <IconButton
-                  icon={<LinkedinIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <LinkedinIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<FacebookIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <FacebookIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<RedditIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <RedditIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<WhatsAppIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <WhatsAppIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<TwitterIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <TwitterIcon fontSize={38} />
+                </IconButton>
               </HStack>
             </VStack>
             <HStack gap={8} alignItems="center">
               <Text color="contrast" size={13} weight={500} cropped>
                 {shareURL}
               </Text>
-              <IconButton
-                icon={<CopyIcon fontSize={iconSize} />}
-                onClick={handleCopy}
-              />
+              <IconButton onClick={handleCopy}>
+                <CopyIcon fontSize={iconSize} />
+              </IconButton>
             </HStack>
           </VStack>
         </Modal>

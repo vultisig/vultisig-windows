@@ -1,20 +1,19 @@
+import { AnimationDescription } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/AnimationDescription'
+import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
+import { RiveWrapper } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/VaultOverviewSlides.styles'
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  ProgressWrapper,
+  Wrapper,
+} from '@core/ui/vault/backup/shared/BackupOverviewSlides.styles'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import {
-  BottomItemsWrapper,
-  DescriptionWrapper,
-  NextAnimationButton,
-  ProgressWrapper,
-  Wrapper,
-} from '../../shared/BackupOverviewSlides.styles'
-import { AnimationDescription } from './AnimationDescription'
-import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
-import { RiveWrapper } from './VaultOverviewSlides.styles'
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -57,17 +56,17 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           <AnimationDescription animation={currentAnimation} />
         </DescriptionWrapper>
         <BottomItemsWrapper>
-          <NextAnimationButton
+          <IconButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleted
             }
+            size="xl"
           >
-            {t('tap')}
-          </NextAnimationButton>
+            <ChevronRightIcon />
+          </IconButton>
         </BottomItemsWrapper>
       </VStack>
     </Wrapper>
