@@ -38,7 +38,6 @@ const interactiveTextInput = css`
 export const textInput = css`
   ${textInputFrame};
   font-size: 14px;
-  font-weight: 700;
 
   ${textInputBackground};
   color: ${getColor('contrast')};
