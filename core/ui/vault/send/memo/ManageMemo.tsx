@@ -1,5 +1,8 @@
+import { useCore } from '@core/ui/state/core'
+import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
 import {
   textInputHeight,
@@ -15,9 +18,6 @@ import { Text, text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useCore } from '../../../state/core'
-import { useSendMemo } from '../state/memo'
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
@@ -44,7 +44,6 @@ export const ManageMemo = () => {
           )}
           action={
             <IconButton
-              icon={<PasteIcon />}
               onClick={async () => {
                 const { data } = await attempt(getClipboardText)
 
@@ -52,7 +51,9 @@ export const ManageMemo = () => {
                   setValue(data)
                 }
               }}
-            />
+            >
+              <PasteIcon />
+            </IconButton>
           }
           actionPlacerStyles={{
             right: textInputHorizontalPadding,

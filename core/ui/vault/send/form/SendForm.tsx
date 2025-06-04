@@ -1,3 +1,10 @@
+import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
+import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
+import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
+import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
+import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormValidation'
+import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
+import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,14 +16,6 @@ import { OnFinishProp } from '@lib/ui/props'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { ManageAddresses } from '../addresses/ManageAddresses'
-import { ManageAmount } from '../amount/ManageAmount'
-import { ManageSendCoin } from '../coin/ManageSendCoin'
-import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
-import { useSendFormValidation } from '../queries/useSendFormValidation'
-import { RefreshSend } from '../RefreshSend'
-import { useSendFormFieldState } from '../state/formFields'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   useSendChainSpecificQuery()
@@ -56,12 +55,9 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAmount />
         </VStack>
         <Button
-          style={{
-            marginTop: 'auto',
-          }}
-          isLoading={isLoading && isPending}
-          isDisabled={isDisabled}
-          type="submit"
+          disabled={isDisabled}
+          htmlType="submit"
+          loading={isLoading && isPending}
         >
           {t('continue')}
         </Button>

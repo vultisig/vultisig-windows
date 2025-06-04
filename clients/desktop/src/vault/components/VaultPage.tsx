@@ -1,3 +1,8 @@
+import { UpdateAvailablePopup } from '@clients/desktop/src/components/update-available-popup'
+import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
+import { RefreshVaultBalance } from '@clients/desktop/src/vault/balance/RefreshVaultBalance'
+import { UploadQrPrompt } from '@clients/desktop/src/vault/components/UploadQrPrompt'
+import { VaultOverview } from '@clients/desktop/src/vault/components/VaultOverview'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -9,12 +14,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
 import { PageHeaderToggleTitle } from '@lib/ui/page/PageHeaderToggleTitle'
-
-import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup'
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
-import { VaultOverview } from '../../vault/components/VaultOverview'
-import { UploadQrPrompt } from './UploadQrPrompt'
 
 export const VaultPage = () => {
   const vault = useCurrentVault()

@@ -1,9 +1,10 @@
+import { Seconds } from '@lib/utils/time'
 import { useEffect, useState } from 'react'
 
 import { useRefreshSwapQuoteMutation } from '../../mutations/useRefreshSwapQuoteMutation'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 
-export const useRefreshSwapQuoteInterval = (countdownTime: number) => {
+export const useRefreshSwapQuoteInterval = (countdownTime: Seconds) => {
   const [timeLeft, setTimeLeft] = useState(0)
 
   const { data: swapQuoteData, isPending: isSwapQuotePending } =

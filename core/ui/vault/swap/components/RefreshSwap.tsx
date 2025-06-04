@@ -3,15 +3,16 @@ import 'react-circular-progressbar/dist/styles.css'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Seconds } from '@lib/utils/time'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import styled from 'styled-components'
 
 import { useRefreshSwapQuoteInterval } from '../form/hooks/useRefreshSwapQuoteInterval'
 
-const COUNTDOWN_TIME = 60
+const countdownTime: Seconds = 60
 
 export const RefreshSwap = () => {
-  const timeLeft = useRefreshSwapQuoteInterval(COUNTDOWN_TIME)
+  const timeLeft = useRefreshSwapQuoteInterval(countdownTime)
 
   return (
     <Wrapper alignItems="center" gap={6}>

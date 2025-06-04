@@ -1,11 +1,11 @@
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useCallback, useEffect, useState } from 'react'
 
-const STATE_MACHINE_NAME = 'State Machine 1'
-const STATE_INPUT_NAME = 'Switch'
+const stateMachineName = 'State Machine 1'
+const stateInputName = 'Switch'
 
 // @antonio: required by product to switch animation initially. If switched too fast, the animation breaks we need a delay.
-const INITIAL_SWITCH_DELAY_MS = 360
+const initialSwitchDelayMs = 360
 
 export const useSetupVaultPageAnimation = () => {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -14,13 +14,13 @@ export const useSetupVaultPageAnimation = () => {
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/choose-vault.riv',
     autoplay: true,
-    stateMachines: [STATE_MACHINE_NAME],
+    stateMachines: [stateMachineName],
   })
 
   const stateMachineInput = useStateMachineInput(
     rive,
-    STATE_MACHINE_NAME,
-    STATE_INPUT_NAME
+    stateMachineName,
+    stateInputName
   )
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const useSetupVaultPageAnimation = () => {
     setTimeout(() => {
       stateMachineInput?.fire()
       setIsReady(true)
-    }, INITIAL_SWITCH_DELAY_MS)
+    }, initialSwitchDelayMs)
   }, [stateMachineInput])
 
   const onPlay = useCallback(() => {

@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const ON_COMPLETE_DELAY = 1000
+const onCompleteDelay = 1000
 
 export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
@@ -31,7 +31,7 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
 
   useEffect(() => {
     if (isSuccess) {
-      const timeoutId = setTimeout(onFinish, ON_COMPLETE_DELAY)
+      const timeoutId = setTimeout(onFinish, onCompleteDelay)
       return () => clearTimeout(timeoutId)
     }
   }, [isSuccess, onFinish])

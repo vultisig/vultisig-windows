@@ -1,3 +1,8 @@
+import { useIsSwapFormDisabled } from '@core/ui/vault/swap/form/hooks/useIsSwapFormDisabled'
+import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
+import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
+import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'
+import { ReverseSwap } from '@core/ui/vault/swap/form/ReverseSwap'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
@@ -6,12 +11,6 @@ import { OnFinishProp } from '@lib/ui/props'
 import { t } from 'i18next'
 import { FC } from 'react'
 import styled from 'styled-components'
-
-import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled'
-import { SwapInfo } from './info/SwapInfo'
-import { ManageFromCoin } from './ManageFromCoin'
-import { ManageToCoin } from './ManageToCoin'
-import { ReverseSwap } from './ReverseSwap'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
   const isDisabled = useIsSwapFormDisabled()
@@ -38,11 +37,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
           <SwapInfo />
         </VStack>
       </VStack>
-      <Button
-        isDisabled={isDisabled}
-        disabled={Boolean(isDisabled)}
-        type="submit"
-      >
+      <Button disabled={isDisabled} htmlType="submit">
         {typeof isDisabled === 'string' ? isDisabled : t('continue')}
       </Button>
     </PageContent>

@@ -23,4 +23,5 @@ export const FitPageContent = styled.div<FitPageContentProps>`
     })}
   ${verticalPadding(pageConfig.verticalPadding)};
   flex-grow: 1;
+  overflow: auto;
 `

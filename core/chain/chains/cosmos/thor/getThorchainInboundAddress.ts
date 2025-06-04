@@ -1,5 +1,8 @@
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { Chain } from '../../../Chain'
+import { cosmosRpcUrl } from '../cosmosRpcUrl'
+
 type ChainInfo = {
   address: string
   chain: string
@@ -17,8 +20,7 @@ type ChainInfo = {
   router: string
 }
 
-const THORCHAIN_INBOUND_ADDRESS_API =
-  'https://thornode.ninerealms.com/thorchain/inbound_addresses'
+const thorchainInboundAddressApi = `${cosmosRpcUrl[Chain.THORChain]}/thorchain/inbound_addresses`
 
 export const getThorchainInboundAddress = (): Promise<ChainInfo[]> =>
-  queryUrl(THORCHAIN_INBOUND_ADDRESS_API)
+  queryUrl(thorchainInboundAddressApi)

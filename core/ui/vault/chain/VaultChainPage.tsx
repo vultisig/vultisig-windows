@@ -116,15 +116,17 @@ export const VaultChainPage = () => {
                 <IconButton
                   onClick={() => copyAddress(address)}
                   title="Copy address"
-                  icon={<CopyIcon />}
-                />
+                >
+                  <CopyIcon />
+                </IconButton>
                 <IconButton
-                  title="Address QR code"
-                  icon={<QrCodeIcon />}
                   onClick={() =>
                     navigate({ id: 'address', state: { address } })
                   }
-                />
+                  title="Address QR code"
+                >
+                  <QrCodeIcon />
+                </IconButton>
                 <VaultAddressLink value={address} />
               </HStack>
             </HStack>

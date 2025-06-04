@@ -22,7 +22,8 @@ export const VaultAddressLink = ({ value }: ValueProp<string>) => {
         openUrl(url)
       }}
       title="Block explorer"
-      icon={<BoxIcon />}
-    />
+    >
+      {<BoxIcon />}
+    </IconButton>
   )
 }

@@ -106,7 +106,7 @@ export const CreateVaultFolderPage = () => {
         ) : null}
       </PageContent>
       <PageFooter>
-        <Button isDisabled={isDisabled} isLoading={isPending} type="submit">
+        <Button disabled={isDisabled} loading={isPending} htmlType="submit">
           {t('create')}
         </Button>
       </PageFooter>

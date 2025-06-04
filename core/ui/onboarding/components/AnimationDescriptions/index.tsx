@@ -1,7 +1,7 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
 
-import { ONBOARDING_ANIMATIONS } from '../../hooks/useOnboardingStepsAnimations'
+import { onboardingAnimations } from '../../hooks/useOnboardingStepsAnimations'
 import { VaultBackup } from './VaultBackup'
 import { VaultDevice } from './VaultDevice'
 import { VaultRecovery } from './VaultRecovery'
@@ -9,7 +9,7 @@ import { VaultSharesInfo } from './VaultSharesInfo'
 import { VaultSharesIntro } from './VaultSharesIntro'
 import { VaultUnlock } from './VaultUnlock'
 
-const ANIMATIONS_CONTENT = [
+const animationsContent = [
   () => <VaultSharesIntro />,
   () => <VaultSharesInfo />,
   () => <VaultDevice />,
@@ -19,8 +19,8 @@ const ANIMATIONS_CONTENT = [
 ]
 
 type AnimationDescriptionProps = {
-  animation: (typeof ONBOARDING_ANIMATIONS)[number]
+  animation: (typeof onboardingAnimations)[number]
 }
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
-}) => <VStack justifyContent="center">{ANIMATIONS_CONTENT[animation]()}</VStack>
+}) => <VStack justifyContent="center">{animationsContent[animation]()}</VStack>

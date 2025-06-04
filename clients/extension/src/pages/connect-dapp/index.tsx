@@ -84,11 +84,9 @@ export const ConnectDAppPage = () => {
     <VStack fullHeight>
       <PageHeader
         secondaryControls={
-          <IconButton
-            icon={<CrossIcon fontSize={20} />}
-            onClick={handleClose}
-            size="m"
-          />
+          <IconButton onClick={handleClose}>
+            <CrossIcon />
+          </IconButton>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -115,9 +113,7 @@ export const ConnectDAppPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button onClick={handleSubmit} kind="primary">
-          {t('connect')}
-        </Button>
+        <Button onClick={handleSubmit}>{t('connect')}</Button>
       </PageFooter>
     </VStack>
   ) : (

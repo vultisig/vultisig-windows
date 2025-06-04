@@ -6,7 +6,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
-import { isStakeableChain, StakeableChain } from '../constants'
+import { isStakeableChain, StakeableChain } from '../config'
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>

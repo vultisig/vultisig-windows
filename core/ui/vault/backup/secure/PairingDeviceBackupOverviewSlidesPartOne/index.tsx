@@ -5,7 +5,6 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -58,40 +57,23 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
         </RiveWrapper>
         <VStack gap={12}>
           <AnimationDescription animation={currentAnimation} />
-          <NextAnimationButton
+          <IconButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               is5PlusDevice &&
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleted
             }
+            size="xl"
           >
-            {t('tap')}
-          </NextAnimationButton>
+            <ChevronRightIcon />
+          </IconButton>
         </VStack>
       </VStack>
     </PageContent>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
 
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;

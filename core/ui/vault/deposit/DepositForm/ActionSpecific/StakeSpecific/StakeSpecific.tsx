@@ -7,7 +7,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { StakeableChain } from '../../../constants'
+import { StakeableChain } from '../../../config'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { StakeTokenExplorer } from './StakeTokenExplorer'

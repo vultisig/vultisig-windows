@@ -8,21 +8,19 @@ import {
   useIsTabletDeviceAndUp,
 } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
+import { Milliseconds } from '@lib/utils/time'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500
+const setupVaultSuccessScreenTime: Milliseconds = 2500
 
 export const CreateVaultSuccessScreen = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const isTabletDeviceAndUp = useIsTabletDeviceAndUp()
 
   useEffect(() => {
-    const timeoutId = setTimeout(
-      onFinish,
-      SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS
-    )
+    const timeoutId = setTimeout(onFinish, setupVaultSuccessScreenTime)
 
     return () => clearTimeout(timeoutId)
   }, [onFinish])
