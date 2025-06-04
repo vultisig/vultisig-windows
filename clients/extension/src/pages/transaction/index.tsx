@@ -41,13 +41,161 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
-import { formatUnits, toUtf8String } from 'ethers'
+import { formatUnits, toUtf8String, parseUnits } from 'ethers'
 import { t } from 'i18next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { GasPumpIcon } from '@lib/ui/icons/GasPumpIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
+import { Modal } from '@lib/ui/modal'
+import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { FeeContainer } from '@core/ui/vault/send/fee/settings/FeeContainer'
+import { useEvmBaseFeeQuery } from '@core/ui/chain/queries/evm/useEvmBaseFeeQuery'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { EvmChain } from '@core/chain/Chain'
+import { Opener } from '@lib/ui/base/Opener'
+import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { OnCloseProp } from '@lib/ui/props'
+import styled from 'styled-components'
+import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
+
+const GasFeeAdjuster = ({ 
+  keysignPayload, 
+  onFeeChange,
+  baseFee
+}: { 
+  keysignPayload: KeysignMessagePayload
+  onFeeChange: (fee: number) => void
+  baseFee: number
+}) => {
+  if (!('keysign' in keysignPayload)) return null
+  
+  const chain = getKeysignChain(keysignPayload.keysign)
+  const chainKind = getChainKind(chain)
+  
+  if (chainKind !== 'evm') return null
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [gasFee, setGasFee] = useState(() => {
+    // Get initial fee from transaction and convert from wei to gwei
+    const transactionPayload = keysignPayload.keysign as unknown as IKeysignTransactionPayload
+    if (transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas) {
+      return Number(formatUnits(BigInt(transactionPayload.transactionDetails.gasSettings.maxPriorityFeePerGas), gwei.decimals))
+    }
+    if (transactionPayload.maxPriorityFeePerGas) {
+      return Number(formatUnits(BigInt(transactionPayload.maxPriorityFeePerGas), gwei.decimals))
+    }
+    return 0
+  })
+
+  const handleSubmit = () => {
+    // Update the transaction with the new fee
+    if ('keysign' in keysignPayload) {
+      const keysign = keysignPayload.keysign
+      const totalFee = baseFee + gasFee
+      
+      // Update the transaction fee in the blockchain specific data
+      if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
+        const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string }
+        // Convert gwei to wei for blockchain
+        const priorityFeeInWei = (BigInt(Math.floor(gasFee * 1e9))).toString()
+        const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
+        evmSpecific.priorityFee = priorityFeeInWei
+        evmSpecific.maxFeePerGasWei = maxFeePerGasWei
+      }
+
+      // Update the transaction payload
+      const transactionPayload = keysign as unknown as IKeysignTransactionPayload
+      // Convert gwei to wei for blockchain
+      const priorityFeeInWei = (BigInt(Math.floor(gasFee * 1e9))).toString()
+      const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
+      transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
+      transactionPayload.maxFeePerGas = maxFeePerGasWei
+      transactionPayload.txFee = totalFee.toString()
+    }
+    onFeeChange(gasFee)
+    setIsOpen(false)
+  }
+
+  return (
+    <>
+      <IconButton onClick={() => setIsOpen(true)}>
+        <IconWrapper style={{ fontSize: 16 }}>
+          <GasPumpIcon />
+        </IconWrapper>
+      </IconButton>
+
+      {isOpen && (
+        <Modal
+          as="form"
+          {...getFormProps({
+            onSubmit: handleSubmit,
+            onClose: () => setIsOpen(false),
+          })}
+          onClose={() => setIsOpen(false)}
+          title={t('advanced_gas_fee')}
+          footer={<Button htmlType="submit">{t('save')}</Button>}
+        >
+          <VStack gap={12}>
+            <LineWrapper>
+              <HorizontalLine />
+            </LineWrapper>
+            <InputContainer>
+              <Text size={14} color="supporting">
+                {t('current_base_fee')} ({t('gwei')})
+              </Text>
+              <FeeContainer>
+                {formatTokenAmount(fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals))}
+              </FeeContainer>
+            </InputContainer>
+            <AmountTextInput
+              labelPosition="left"
+              label={
+                <Tooltip
+                  content={<Text>{t('priority_fee_tooltip_content')}</Text>}
+                  renderOpener={props => {
+                    return (
+                      <Text size={14} color="supporting" {...props}>
+                        {t('priority_fee')} ({t('gwei')})
+                      </Text>
+                    )
+                  }}
+                />
+              }
+              value={gasFee}
+              onValueChange={fee => {
+                if (fee === null) {
+                  setGasFee(0)
+                  return
+                }
+                // Convert to gwei using BigInt
+                const feeInGwei = Number(BigInt(Math.floor(fee * 1e9))) / 1e9
+                setGasFee(feeInGwei)
+              }}
+            />
+          </VStack>
+        </Modal>
+      )}
+    </>
+  )
+}
+
+const LineWrapper = styled.div`
+  margin-top: -5px;
+  margin-bottom: 14px;
+`
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+  const [updatedTxFee, setUpdatedTxFee] = useState<string | null>(null)
   const handleClose = (): void => {
     window.close()
   }
@@ -216,60 +364,107 @@ export const TransactionPage = () => {
                       <MatchRecordUnion
                         value={transaction.transactionPayload}
                         handlers={{
-                          keysign: transactionPayload => (
-                            <>
-                              <ListItem
-                                title={t('network_fee')}
-                                description={`${transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
-                              />
-                              {transactionPayload.memo?.isParsed ? (
-                                <>
-                                  <ListItem
-                                    title={t('function_signature')}
-                                    description={
-                                      <VStack as="pre" scrollable>
-                                        <Text as="code" family="mono">
-                                          {
-                                            (
-                                              transactionPayload.memo
-                                                .value as ParsedMemoParams
-                                            ).functionSignature
+                          keysign: transactionPayload => {
+                            const chain = getKeysignChain(keysign)
+                            const query = useEvmBaseFeeQuery(chain as EvmChain)
+                            const baseFee = query.data ? Number(formatUnits(query.data, gwei.decimals)) : 0
+                            
+                            return (
+                              <>
+                                <ListItem
+                                  title={t('network_fee')}
+                                  description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
+                                  extra={
+                                    <GasFeeAdjuster 
+                                      keysignPayload={keysignMessagePayload}
+                                      baseFee={baseFee}
+                                      onFeeChange={(fee) => {
+                                        console.log('fee', fee)
+                                        console.log('baseFee', baseFee)
+                                        console.log('totalFee', baseFee + fee)
+                                        console.log('keysignMessagePayload', keysignMessagePayload)
+                                        console.log('keysignMessagePayload type', typeof keysignMessagePayload)
+                                        console.log('keysignMessagePayload keys', Object.keys(keysignMessagePayload))
+                                        if ('keysign' in keysignMessagePayload) {
+                                          const keysign = keysignMessagePayload.keysign
+                                          const totalFee = baseFee + fee
+                                          
+                                          // Update the transaction fee in the blockchain specific data
+                                          if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
+                                            const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string }
+                                            // Convert gwei to wei for blockchain
+                                            const priorityFeeInWei = (BigInt(Math.floor(fee * 1e9))).toString()
+                                            const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
+                                            evmSpecific.priorityFee = priorityFeeInWei
+                                            evmSpecific.maxFeePerGasWei = maxFeePerGasWei
                                           }
-                                        </Text>
-                                      </VStack>
-                                    }
-                                  />
-                                  <ListItem
-                                    title={t('function_inputs')}
-                                    description={
-                                      <VStack as="pre" scrollable>
-                                        <Text as="code" family="mono">
-                                          {
-                                            (
-                                              transactionPayload.memo
-                                                .value as ParsedMemoParams
-                                            ).functionArguments
-                                          }
-                                        </Text>
-                                      </VStack>
-                                    }
-                                  />
-                                </>
-                              ) : (
-                                transactionPayload.memo?.value && (
-                                  <ListItem
-                                    title={t('memo')}
-                                    description={splitString(
-                                      transactionPayload.memo.value as string,
-                                      32
-                                    ).map((str, index) => (
-                                      <span key={index}>{str}</span>
-                                    ))}
-                                  />
-                                )
-                              )}
-                            </>
-                          ),
+
+                                          // Update the transaction payload
+                                          const transactionPayload = keysign as unknown as IKeysignTransactionPayload
+                                          // Convert gwei to wei for blockchain
+                                          const priorityFeeInWei = (BigInt(Math.floor(fee * 1e9))).toString()
+                                          const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
+                                          transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
+                                          transactionPayload.maxFeePerGas = maxFeePerGasWei
+                                          transactionPayload.txFee = totalFee.toString()
+                                          setUpdatedTxFee(totalFee.toString())
+                                          console.log('updated payload', transactionPayload)
+                                        } else {
+                                          console.log('keysign not found in payload')
+                                        }
+                                      }}
+                                    />
+                                  }
+                                />
+                                {transactionPayload.memo?.isParsed ? (
+                                  <>
+                                    <ListItem
+                                      title={t('function_signature')}
+                                      description={
+                                        <VStack as="pre" scrollable>
+                                          <Text as="code" family="mono">
+                                            {
+                                              (
+                                                transactionPayload.memo
+                                                  .value as ParsedMemoParams
+                                              ).functionSignature
+                                            }
+                                          </Text>
+                                        </VStack>
+                                      }
+                                    />
+                                    <ListItem
+                                      title={t('function_inputs')}
+                                      description={
+                                        <VStack as="pre" scrollable>
+                                          <Text as="code" family="mono">
+                                            {
+                                              (
+                                                transactionPayload.memo
+                                                  .value as ParsedMemoParams
+                                              ).functionArguments
+                                            }
+                                          </Text>
+                                        </VStack>
+                                      }
+                                    />
+                                  </>
+                                ) : (
+                                  transactionPayload.memo?.value && (
+                                    <ListItem
+                                      title={t('memo')}
+                                      description={splitString(
+                                        transactionPayload.memo.value as string,
+                                        32
+                                      ).map((str, index) => (
+                                        <span key={index}>{str}</span>
+                                      ))}
+                                    />
+                                  )
+                                )}
+                              </>
+                            )
+                          },
                           custom: () => null,
                           serialized: () => null,
                         }}
