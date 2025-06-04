@@ -2,10 +2,10 @@ import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Size } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
-import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 
 type IconBtnSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
