@@ -3,7 +3,7 @@ import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInterac
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -68,32 +68,38 @@ export const ManageAmountInputField = () => {
           <VStack flexGrow gap={8}>
             <ActionInsideInteractiveElement
               render={() => (
-                <AmountTextInput
-                  validation={error ? 'warning' : undefined}
-                  placeholder={t('enter_amount')}
-                  value={inputValue}
-                  onValueChange={value => handleUpdateAmount(value)}
-                />
+                <InputWrapper>
+                  <AmountTextInput
+                    validation={error ? 'warning' : undefined}
+                    placeholder={t('enter_amount')}
+                    value={inputValue}
+                    onValueChange={value => handleUpdateAmount(value)}
+                  />
+                  <AmountInReverseCurrencyDisplay value={currencyInputMode} />
+                </InputWrapper>
               )}
               action={
                 <HStack gap={8}>
-                  <AmountInReverseCurrencyDisplay value={currencyInputMode} />
+                  <CurrencySwitch
+                    value={currencyInputMode}
+                    onClick={value => setCurrencyInputMode(value)}
+                  />
                 </HStack>
               }
               actionPlacerStyles={{
-                right: 12,
-                bottom: 20,
+                right: 0,
+                bottom: 55,
               }}
             />
             <SendCoinBalanceDependant
               pending={() => null}
               error={() => null}
               success={amount => (
-                <HStack alignItems="center" gap={4}>
-                  <CurrencySwitch
-                    value={currencyInputMode}
-                    onClick={value => setCurrencyInputMode(value)}
-                  />
+                <HStack
+                  justifyContent="space-between"
+                  alignItems="center"
+                  gap={4}
+                >
                   {suggestions.map(suggestion => {
                     const baseAmount = fromChainAmount(amount, decimals)
                     const suggestionBaseValue = baseAmount * suggestion
@@ -158,6 +164,29 @@ export const ManageAmountInputField = () => {
   )
 }
 
+const InputWrapper = styled.div`
+  height: 170px;
+  ${vStack({
+    justifyContent: 'center',
+    alignItems: 'center',
+  })}
+  * > input {
+    text-align: center;
+    font-size: 32px;
+    background-color: transparent;
+    border: none;
+
+    &:focus,
+    &:hover {
+      outline: none;
+    }
+
+    &::placeholder {
+      font-size: 24px;
+    }
+  }
+`
+
 const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};
   padding: 16px;
@@ -165,6 +194,7 @@ const TotalBalanceWrapper = styled(HStack)`
 `
 
 const SuggestionOption = styled(AmountSuggestion)`
+  width: 100px;
   padding: 6px 18px;
-  width: fit-content;
+  border-radius: 99px;
 `

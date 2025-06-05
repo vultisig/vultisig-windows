@@ -2,7 +2,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DollarIcon } from '@lib/ui/icons/DollarIcon'
-import { HStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
@@ -35,7 +35,7 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
   )
 }
 
-const Wrapper = styled(HStack)`
+const Wrapper = styled(VStack)`
   padding: 8px 5px;
   font-size: 16px;
   color: ${getColor('contrast')};
