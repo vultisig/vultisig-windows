@@ -2,30 +2,30 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useCallback } from 'react'
 
-const STATE_MACHINE_NAME = 'State Machine 1'
-const INPUT_NAME = 'Index'
+const stateMachineName = 'State Machine 1'
+const inputName = 'Index'
 
-export const ONBOARDING_ANIMATIONS = [0, 1, 2, 3, 4, 5] as const
+export const onboardingAnimations = [0, 1, 2, 3, 4, 5] as const
 
 export const useOnboardingStepsAnimations = () => {
   const {
     step: currentAnimation,
     toNextStep: toNextAnimation,
-    toPreviousStep: toPrevAnimation,
+    toFirstStep: toFirstAnimation,
   } = useStepNavigation({
-    steps: ONBOARDING_ANIMATIONS,
+    steps: onboardingAnimations,
   })
 
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/onboarding.riv',
     autoplay: true,
-    stateMachines: [STATE_MACHINE_NAME],
+    stateMachines: [stateMachineName],
   })
 
   const stateMachineInput = useStateMachineInput(
     rive,
-    STATE_MACHINE_NAME,
-    INPUT_NAME
+    stateMachineName,
+    inputName
   )
 
   const handleNextAnimation = useCallback(() => {
@@ -43,12 +43,12 @@ export const useOnboardingStepsAnimations = () => {
       stateMachineInput.value - 1 >= 0
     ) {
       stateMachineInput.value -= 1
-      toPrevAnimation()
+      toFirstAnimation()
     }
-  }, [stateMachineInput, toPrevAnimation])
+  }, [stateMachineInput, toFirstAnimation])
 
   return {
-    animations: ONBOARDING_ANIMATIONS,
+    animations: onboardingAnimations,
     animationComponent: RiveComponent,
     currentAnimation,
     handlePrevAnimation,

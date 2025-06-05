@@ -10,6 +10,7 @@ export const it = {
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
   base_fee_tooltip_content:
@@ -18,6 +19,7 @@ export const it = {
   youre_swapping: 'Stai scambiando',
   send_overview: 'Invia panoramica',
   approval_tx: 'Transazione di approvazione',
+  send_to: 'Invia a',
   priority_fee: 'Commissione prioritaria',
   you_are_sending: 'Stai inviando',
   priority_fee_tooltip_content:
@@ -456,7 +458,7 @@ export const it = {
       verifyingCode: 'Verifica del codice in corso, attendere',
       backupVault: 'Esegui il backup del vault',
       shareOnlineBackup: 'preferibilmente online.',
-      shareSecurely: 'per garantire l’accesso,',
+      shareSecurely: "per garantire l'accesso,",
       securely: 'in modo sicuro, preferibilmente',
       online: 'online',
       backupConfirmationDescription:
@@ -913,4 +915,9 @@ export const it = {
   app_locked_description: 'Inserisci il tuo codice di accesso per continuare.',
   invalid_passcode: 'Codice di accesso non valido',
   unlock: 'Sbloccare',
+  lock_time: 'Tempo di blocco',
+  lock_vultisig_automatically_after: 'Blocca Vultisig automaticamente dopo...',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minuti',
+  never: 'Mai',
 }

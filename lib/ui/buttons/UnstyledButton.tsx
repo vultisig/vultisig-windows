@@ -1,6 +1,5 @@
+import { interactive } from '@lib/ui/css/interactive'
 import styled from 'styled-components'
-
-import { interactive } from '../css/interactive'
 
 export const UnstyledButton = styled.button.attrs(({ type = 'button' }) => ({
   type,

@@ -1,4 +1,5 @@
 import { ExpandView } from '@clients/extension/src/components/expand-view'
+import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-guard'
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
@@ -19,6 +20,7 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
+import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { PluginPage } from '../pages/plugin'
@@ -26,6 +28,11 @@ import { PluginPage } from '../pages/plugin'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
+  importVault: () => (
+    <ExpandViewGuard>
+      <ImportVaultPage />
+    </ExpandViewGuard>
+  ),
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignPage,

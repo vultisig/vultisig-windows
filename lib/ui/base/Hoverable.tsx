@@ -1,11 +1,10 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { absoluteOutline } from '@lib/ui/css/absoluteOutline'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
-
-import { UnstyledButton } from '../buttons/UnstyledButton'
-import { absoluteOutline } from '../css/absoluteOutline'
-import { borderRadius } from '../css/borderRadius'
-import { centerContent } from '../css/centerContent'
 
 interface HighlightProps {
   horizontalOffset: number | string

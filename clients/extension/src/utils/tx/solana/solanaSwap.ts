@@ -6,7 +6,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
 import api from '../../api'
-import { JUPITER_V6_PROGRAM_ID, Raydium_AMM_Routing } from './constants'
+import { jupiterV6ProgramId, raydiumAmmRouting } from './config'
 import { JupiterInstructionParser } from './jupiter-instruction-parser'
 import { RaydiumInstructionParser } from './raydium-instruction-parser'
 import { ParsedSolanaSwapParams, PartialInstruction } from './types/types'
@@ -66,8 +66,8 @@ export async function getParsedSolanaSwap(
     }
   }
 
-  if (staticAccountsPubkey.some(key => key.equals(JUPITER_V6_PROGRAM_ID))) {
-    const parser = new JupiterInstructionParser(JUPITER_V6_PROGRAM_ID)
+  if (staticAccountsPubkey.some(key => key.equals(jupiterV6ProgramId))) {
+    const parser = new JupiterInstructionParser(jupiterV6ProgramId)
     const { authority, inputMint, outputMint, inAmount, outAmount } =
       await parser.getInstructionParsedData(
         tx.instructions as PartialInstruction[],
@@ -81,8 +81,8 @@ export async function getParsedSolanaSwap(
     return { authority, inputToken, outputToken, inAmount, outAmount }
   }
 
-  if (staticAccountsPubkey.some(key => key.equals(Raydium_AMM_Routing))) {
-    const parser = new RaydiumInstructionParser(Raydium_AMM_Routing)
+  if (staticAccountsPubkey.some(key => key.equals(raydiumAmmRouting))) {
+    const parser = new RaydiumInstructionParser(raydiumAmmRouting)
     const { authority, inputMint, outputMint, inAmount, outAmount } =
       await parser.getInstructionParsedData(
         tx.instructions as PartialInstruction[],

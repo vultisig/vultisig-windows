@@ -138,7 +138,7 @@ export const VaultBackupWithPassword = ({
                 <IconButton
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                 >
-                  <EyeIcon />
+                  <EyeIcon fontSize={20} />
                 </IconButton>
               </InputFieldWrapper>
               {errors.password?.message && (
@@ -163,7 +163,7 @@ export const VaultBackupWithPassword = ({
                     setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
                   }
                 >
-                  <EyeIcon />
+                  <EyeIcon fontSize={20} />
                 </IconButton>
               </InputFieldWrapper>
               {errors.verifiedPassword && (
@@ -176,15 +176,12 @@ export const VaultBackupWithPassword = ({
             </div>
           </VStack>
           <ActionsWrapper gap={16}>
-            <InfoPill kind="outlined">
-              <InfoGradientIcon />{' '}
-              <Text as="span" color="contrast" size={13}>
-                {t('vault_backup_page_password_info')}
-              </Text>
+            <InfoPill icon={<InfoGradientIcon />} type="secondary">
+              {t('vault_backup_page_password_info')}
             </InfoPill>
             <Button
-              isDisabled={!isValid || !isDirty || isPending}
-              type="submit"
+              disabled={!isValid || !isDirty || isPending}
+              htmlType="submit"
             >
               {isPending
                 ? t('vault_backup_page_submit_loading_button_text')

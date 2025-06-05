@@ -3,6 +3,7 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
 import { SettingsPage } from '@core/ui/settings'
+import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
@@ -26,6 +27,7 @@ import { AppViewId } from './AppView'
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: VaultCheckUpdatePage,
   faq: FaqVaultPage,
+  importVault: ImportVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,

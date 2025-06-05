@@ -9,10 +9,12 @@ export const de = {
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
   search_field_placeholder: 'Suchen..',
+  tx_hash: 'Transaktions-Hash',
   send_overview: 'Übersicht senden',
   start_transaction: 'Transaktion starten',
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
+  send_to: 'Senden an',
   priority_fee_tooltip_content:
     'Ein kleines Trinkgeld, um Ihre Transaktion zu beschleunigen. Höhere Trinkgelder können die Verarbeitung beschleunigen.',
   you_are_sending: 'Du sendest',
@@ -70,7 +72,7 @@ export const de = {
   scanThe: 'Scannen Sie',
   qrCode: 'den QR-Code',
   downloadVultisig:
-    'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie „QR-Code scannen“',
+    'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie "QR-Code scannen"',
   sayHelloTo: 'Sag hallo zu',
   alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
   separatelyIna: 'separat in einer',
@@ -413,7 +415,7 @@ export const de = {
   join_session: 'Beitritt zur Sitzung',
   reshare_your_vault: 'Geben Sie Ihren Tresor erneut frei',
   reshare_explanation:
-    'Mit „Reshare“ können Sie die Anzahl der Geräte in einem Vault aktualisieren, erweitern oder reduzieren.',
+    'Mit "Reshare" können Sie die Anzahl der Geräte in einem Vault aktualisieren, erweitern oder reduzieren.',
   reshare_disclaimer:
     'Für alle Reshare-Aktionen ist immer der Geräteschwellenwert erforderlich.',
   start_reshare: 'Neu teilen starten',
@@ -710,14 +712,14 @@ export const de = {
       prop_0: 'Nur 1 Gerät erforderlich',
       prop_1: 'Lagern Sie kleinere Geldbeträge für den täglichen Gebrauch',
       prop_2: 'Vultiserver unterzeichnet sofort',
-      purpose: 'Nutzung als „Hot Wallet“',
+      purpose: 'Nutzung als "Hot Wallet"',
       title: 'Schnelle Einrichtung mit nur einem Gerät',
     },
     secure: {
       prop_0: 'Maximale Sicherheit mit mehreren Geräten',
       prop_1: 'Immer zugänglich mit Geräte-Backups',
       prop_2: 'Sichern Sie Vermögenswerte in beliebiger Höhe',
-      purpose: 'Nutzung als „Cold Wallet“',
+      purpose: 'Nutzung als "Cold Wallet"',
       title: 'Ultimative Sicherheit',
     },
   },
@@ -918,4 +920,9 @@ export const de = {
   app_locked_description: 'Geben Sie Ihren Passcode ein, um fortzufahren.',
   invalid_passcode: 'Ungültiger Passcode',
   unlock: 'Entsperren',
+  lock_time: 'Sperrzeit',
+  lock_vultisig_automatically_after: 'Vultisig automatisch sperren nach...',
+  minute_one: '{{count}} Minute',
+  minute_other: '{{count}} Minuten',
+  never: 'Niemals',
 }

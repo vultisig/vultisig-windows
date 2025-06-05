@@ -14,6 +14,7 @@ import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
+import { LockIcon } from '@lib/ui/icons/LockIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
@@ -37,6 +38,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useHasPasscodeEncryption } from '../storage/passcodeEncryption'
 import { SettingsSection } from './SettingsSection'
 
 interface ExtensionSettings {
@@ -77,6 +79,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
       })
   }
 
+  const hasPasscodeEncryption = useHasPasscodeEncryption()
+
   return (
     <>
       <VStack fullHeight>
@@ -104,6 +108,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               showArrow
             />
           </SettingsSection>
+
           <SettingsSection title={t('general')}>
             <ListItem
               extra={languageName[language]}
@@ -135,6 +140,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
+            {props.client === 'extension' && props.expandView}
+          </SettingsSection>
+          <SettingsSection title={t('security')}>
             <ListItem
               icon={<SecurityIcon style={{ fontSize: iconSize }} />}
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
@@ -142,7 +150,15 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-            {props.client === 'extension' && props.expandView}
+            {hasPasscodeEncryption && (
+              <ListItem
+                icon={<LockIcon style={{ fontSize: iconSize }} />}
+                onClick={() => navigate({ id: 'passcodeAutoLock' })}
+                title={t('lock_time')}
+                hoverable
+                showArrow
+              />
+            )}
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem
@@ -204,9 +220,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <UnstyledButton onClick={() => openUrl(shareURL)}>
-            {`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}
-          </UnstyledButton>
+          <UnstyledButton
+            onClick={() => openUrl(shareURL)}
+          >{`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}</UnstyledButton>
           {props.client === 'desktop' && props.manageMpcLib}
         </PageFooter>
       </VStack>
@@ -224,60 +240,64 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               </Text>
               <HStack gap={8} alignItems="center">
                 <IconButton
-                  icon={<LinkedinIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <LinkedinIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<FacebookIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <FacebookIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<RedditIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <RedditIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<WhatsAppIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <WhatsAppIcon fontSize={38} />
+                </IconButton>
                 <IconButton
-                  icon={<TwitterIcon fontSize={38} />}
                   onClick={() =>
                     openUrl(
                       `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
                     )
                   }
-                  size="l"
-                />
+                  size="xl"
+                >
+                  <TwitterIcon fontSize={38} />
+                </IconButton>
               </HStack>
             </VStack>
             <HStack gap={8} alignItems="center">
               <Text color="contrast" size={13} weight={500} cropped>
                 {shareURL}
               </Text>
-              <IconButton
-                icon={<CopyIcon fontSize={iconSize} />}
-                onClick={handleCopy}
-              />
+              <IconButton onClick={handleCopy}>
+                <CopyIcon fontSize={iconSize} />
+              </IconButton>
             </HStack>
           </VStack>
         </Modal>

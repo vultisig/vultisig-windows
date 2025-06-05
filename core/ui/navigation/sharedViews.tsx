@@ -15,7 +15,6 @@ import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
-import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
@@ -33,6 +32,7 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 
 export type SharedViewId = Extract<
@@ -47,7 +47,6 @@ export type SharedViewId = Extract<
   | 'deeplink'
   | 'deleteVault'
   | 'deposit'
-  | 'importVault'
   | 'languageSettings'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -70,6 +69,7 @@ export type SharedViewId = Extract<
   | 'vaultSettings'
   | 'vaults'
   | 'managePasscodeEncryption'
+  | 'passcodeAutoLock'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -83,7 +83,6 @@ export const sharedViews: Views<SharedViewId> = {
   deeplink: DeeplinkPage,
   deleteVault: DeleteVaultPage,
   deposit: DepositPage,
-  importVault: ImportVaultPage,
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
@@ -113,4 +112,5 @@ export const sharedViews: Views<SharedViewId> = {
   vaultSettings: VaultSettingsPage,
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
+  passcodeAutoLock: PasscodeAutoLockPage,
 }

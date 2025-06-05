@@ -13,11 +13,13 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  tx_hash: 'Hash da transação',
   gas_limit_tooltip_content:
     'A quantidade máxima de gás que você pagará. Pode ser aumentada se o limite de gás não for suficiente para enviar transações.',
   base_fee_tooltip_content:
     'Uma pequena gorjeta para acelerar sua transação. Gorjetas maiores podem fazer com que ela seja processada mais rapidamente.',
   percentage: 'Percentagem',
+  send_to: 'Enviar para',
   asset_selection: 'Seleção de ativos',
   you_are_sending: 'Você está enviando',
   unexpected_error: 'Erro inesperado',
@@ -905,4 +907,10 @@ export const pt = {
   app_locked_description: 'Digite sua senha para continuar.',
   invalid_passcode: 'Senha inválida',
   unlock: 'Desbloquear',
+  lock_time: 'Tempo de bloqueio',
+  lock_vultisig_automatically_after:
+    'Bloquear Vultisig automaticamente após...',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minutos',
+  never: 'Nunca',
 }

@@ -2,11 +2,12 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
+import { Milliseconds } from '@lib/utils/time'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { useInterval } from 'react-use'
 
-const SLIDE_DURATION_IN_MS = 6000
+const slideDuration: Milliseconds = 6000
 const steps = [
   'multiFactor',
   'selfCustodial',
@@ -65,7 +66,7 @@ const getContents = (t: TFunction): Record<Step, ContentItem> => ({
 
 export const KeygenProductEducation = () => {
   const { step, toNextStep } = useStepNavigation({ steps, circular: true })
-  useInterval(() => toNextStep(), SLIDE_DURATION_IN_MS)
+  useInterval(() => toNextStep(), slideDuration)
 
   const { t } = useTranslation()
   const contents = getContents(t)

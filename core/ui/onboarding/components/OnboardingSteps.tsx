@@ -1,4 +1,3 @@
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -6,12 +5,15 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useResponsiveness } from '../../providers/ResponsivenessProivder'
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  NextAnimationButton,
+} from '../../vault/backup/shared/BackupOverviewSlides.styles'
 import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
 import { AnimationDescription } from './AnimationDescriptions'
 import { RiveWrapper } from './Onobarding.styled'
@@ -38,7 +40,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
 
   return (
     <PageContent flexGrow style={{ overflowY: 'hidden' }}>
-      <ProgressWrapper gap={16}>
+      <VStack gap={16} style={{ marginInline: 'auto' }}>
         <HStack justifyContent="space-between" alignItems="baseline">
           <HStack
             gap={4}
@@ -66,8 +68,8 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           value={animations.indexOf(currentAnimation) + 1}
           variant="bars"
         />
-      </ProgressWrapper>
-      <ContentWrapper justifyContent="space-between" flexGrow>
+      </VStack>
+      <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper
           isLastAnimation={currentAnimation === animations.length - 1}
         >
@@ -77,53 +79,22 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <VStack
-          justifyContent="flex-end"
-          gap={12}
-          style={{
-            minHeight: !isSmall ? '170px' : '102px',
-          }}
-        >
+        <DescriptionWrapper>
           <AnimationDescription animation={currentAnimation} />
+        </DescriptionWrapper>
+        <BottomItemsWrapper>
           <NextAnimationButton
             disabled={isLoading}
-            icon={<ChevronRightIcon />}
             onClick={
               currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
                 : onCompleteSteps
             }
           >
-            {t('tap')}
+            <ChevronRightIcon />
           </NextAnimationButton>
-        </VStack>
-      </ContentWrapper>
+        </BottomItemsWrapper>
+      </VStack>
     </PageContent>
   )
 }
-
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-`
-
-const ContentWrapper = styled(VStack)`
-  margin-inline: auto;
-  position: relative;
-`

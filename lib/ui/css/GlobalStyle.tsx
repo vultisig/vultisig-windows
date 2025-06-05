@@ -94,6 +94,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background: ${getColor('background')};
     color: ${getColor('text')};
+    font-weight: 500;
   }
 
   input::-webkit-outer-spin-button,

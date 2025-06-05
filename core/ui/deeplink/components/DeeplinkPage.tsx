@@ -1,3 +1,5 @@
+import { useProcessDeeplinkMutation } from '@core/ui/deeplink/mutations/useProcessDeeplinkMutation'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
@@ -8,19 +10,13 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
-import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation'
-
 export const DeeplinkPage = () => {
   const { t } = useTranslation()
-
   const [{ url }] = useCoreViewState<'deeplink'>()
-
   const { mutate, ...mutationState } = useProcessDeeplinkMutation()
+  const navigateBack = useNavigateBack()
 
   useEffect(() => mutate(url), [url, mutate])
-
-  const goBack = useNavigateBack()
 
   return (
     <>
@@ -31,7 +27,7 @@ export const DeeplinkPage = () => {
         pending={() => <FlowPendingPageContent title={t('processing_url')} />}
         error={error => (
           <FlowErrorPageContent
-            action={<Button onClick={goBack}>{t('back')}</Button>}
+            action={<Button onClick={navigateBack}>{t('back')}</Button>}
             title={t('failed_to_process_url')}
             message={extractErrorMsg(error)}
           />

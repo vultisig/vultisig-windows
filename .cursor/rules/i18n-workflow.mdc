@@ -1,0 +1,108 @@
+---
+description: 
+globs: *.ts,*.tsx
+alwaysApply: false
+---
+# Internationalization (i18n) Workflow
+
+## Context
+- All user-facing text must be internationalized using the react-i18next system
+- Never hardcode text strings directly in components
+- Always add translations to all supported language files
+
+## Supported Languages
+The project supports 6 languages with files located in [core/ui/i18n/locales/](mdc:core/ui/i18n/locales):
+- English: [en.ts](mdc:core/ui/i18n/locales/en.ts)
+- German: [de.ts](mdc:core/ui/i18n/locales/de.ts) 
+- Spanish: [es.ts](mdc:core/ui/i18n/locales/es.ts)
+- Italian: [it.ts](mdc:core/ui/i18n/locales/it.ts)
+- Portuguese: [pt.ts](mdc:core/ui/i18n/locales/pt.ts)
+- Croatian: [hr.ts](mdc:core/ui/i18n/locales/hr.ts)
+
+## Required Workflow
+
+### 1. Never Hardcode Text
+❌ **NEVER do this:**
+```tsx
+<Text>Lock Time</Text>
+<Button>Save Changes</Button>
+```
+
+✅ **ALWAYS do this:**
+```tsx
+const { t } = useTranslation()
+<Text>{t('lock_time')}</Text>
+<Button>{t('save_changes')}</Button>
+```
+
+### 2. Add to English First
+Always start by adding the new translation key to [en.ts](mdc:core/ui/i18n/locales/en.ts):
+```typescript
+export const en = {
+  // ... existing translations ...
+  new_feature_title: 'New Feature Title',
+  new_feature_description: 'Description of the new feature',
+}
+```
+
+### 3. Update All Other Languages
+After adding to English, immediately update ALL other language files:
+- [de.ts](mdc:core/ui/i18n/locales/de.ts) - German translations
+- [es.ts](mdc:core/ui/i18n/locales/es.ts) - Spanish translations  
+- [it.ts](mdc:core/ui/i18n/locales/it.ts) - Italian translations
+- [pt.ts](mdc:core/ui/i18n/locales/pt.ts) - Portuguese translations
+- [hr.ts](mdc:core/ui/i18n/locales/hr.ts) - Croatian translations
+
+### 4. Pluralization Rules
+For text that needs pluralization, use i18next's built-in pluralization:
+
+❌ **NEVER do manual pluralization:**
+```tsx
+{count === 1 ? t('minute') : t('minutes')}
+```
+
+✅ **ALWAYS use i18next pluralization:**
+```tsx
+{t('minute', { count })}
+```
+
+With translation keys:
+```typescript
+// In all language files
+minute_one: '{{count}} minute',
+minute_other: '{{count}} minutes',
+```
+
+### 5. Translation Key Naming
+- Use snake_case for translation keys
+- Use descriptive, hierarchical names
+- Group related translations together
+- Example: `vault_settings_backup_title`, `error_network_connection_failed`
+
+### 6. Component Usage
+Always import and use the translation hook:
+```tsx
+import { useTranslation } from 'react-i18next'
+
+export const MyComponent = () => {
+  const { t } = useTranslation()
+  
+  return (
+    <div>
+      <h1>{t('page_title')}</h1>
+      <p>{t('page_description')}</p>
+    </div>
+  )
+}
+```
+
+## Enforcement
+- Every user-facing string must go through the translation system
+- No exceptions for "temporary" text or placeholders
+- All 6 language files must be updated simultaneously
+- Use proper pluralization for count-dependent text
+
+## File References
+- Main English translations: [en.ts](mdc:core/ui/i18n/locales/en.ts)
+- Translation hook usage examples can be found throughout the codebase
+- Follow existing patterns in the translation files for consistency

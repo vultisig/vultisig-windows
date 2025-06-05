@@ -354,6 +354,7 @@ export const en = {
   gwei: 'GWEI',
   total_fee: 'Total Fees',
   network_fee: 'Network fee',
+  send_to: 'Send to',
   est_network_fee: 'Est. Network Fee',
   base_fee_tooltip_content:
     'A small tip to speed up your transaction. Higher tips can get your transaction processed faster.',
@@ -395,6 +396,7 @@ export const en = {
     'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
   transaction_hash_copied: 'Transaction hash copied',
+  tx_hash: 'Transaction hash',
   asset: 'Asset',
   balance: 'Balance',
   staked: 'Staked',
@@ -623,7 +625,7 @@ export const en = {
   provider: 'Provider',
   swap_terms: {
     input: 'The swap amount is correct',
-    output: 'I agree with the min. amount I’ll receive',
+    output: "I agree with the min. amount I'll receive",
   },
   swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
@@ -807,7 +809,7 @@ export const en = {
   unsuccessful_copy_text: 'Failed to copy text',
   verify_send: 'Verify Send',
   view_tx: 'VIEW TX',
-  you_are_sending: 'You’re sending',
+  you_are_sending: "You're sending",
   view_in_airdrop: 'View in Airdrop',
   unbond_amount: 'Unbond Amount',
   sign_transaction: 'Sign Transaction',
@@ -828,11 +830,11 @@ export const en = {
   upgrade_now: 'Upgrade now',
   got_it: 'Got it',
   upgrade_vault_description:
-    'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
+    "Upgrade this vault to the <b>world's fastest MPC protocol</b> and sign faster than ever before",
   upgrade_all_devices:
     'Make sure that <b>all initial devices</b> are present when upgrading',
   upgrade_shares_info:
-    '<b>You’ll create new Vault Share backups</b>, store them as you did before',
+    "<b>You'll create new Vault Share backups</b>, store them as you did before",
   upgrade_success: 'Vault upgraded <b>successfully</b>',
   go_to_vault: 'Go to vault',
   backup_password_prompt:
@@ -842,7 +844,7 @@ export const en = {
   upgrade_your_vault_now: 'Upgrade your vault now',
   version: 'Version',
   vulti_share_not_saved_hint:
-    'If you didn’t save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.',
+    "If you didn't save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.",
   delete_folder_confirmation:
     'Are you sure you want to delete the "{{name}}" folder?',
   failed_to_connect_with_server: 'Failed to connect with server',
@@ -877,4 +879,9 @@ export const en = {
   invalid_passcode: 'Invalid passcode',
   unlock: 'Unlock',
   vault_type_does_not_match: 'Vault type does not match',
+  lock_time: 'Lock Time',
+  lock_vultisig_automatically_after: 'Lock Vultisig automatically after...',
+  minute_one: '{{count}} minute',
+  minute_other: '{{count}} minutes',
+  never: 'Never',
 }
