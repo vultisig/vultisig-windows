@@ -26,6 +26,8 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
+
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiverAddressInputField = () => {
@@ -123,11 +125,7 @@ export const ManageReceiverAddressInputField = () => {
                   value={value}
                   onValueChange={value => handleUpdateReceiverAddress(value)}
                 />
-                {error && (
-                  <Text size={12} color="warning">
-                    {error}
-                  </Text>
-                )}
+                {error && <AnimatedSendFormInputError error={error} />}
               </VStack>
 
               <HStack gap={8}>

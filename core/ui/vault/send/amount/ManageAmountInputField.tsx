@@ -16,6 +16,7 @@ import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPric
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
+import { AnimatedSendFormInputError } from '../components/AnimatedSendFormInputError'
 import { HorizontalLine } from '../components/HorizontalLine'
 import { SendInputContainer } from '../components/SendInputContainer'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
@@ -124,11 +125,7 @@ export const ManageAmountInputField = () => {
                 </HStack>
               )}
             />
-            {error && (
-              <Text size={12} color="warning">
-                {error}
-              </Text>
-            )}
+            {error && <AnimatedSendFormInputError error={error} />}
             <SendCoinBalanceDependant
               pending={() => null}
               error={() => null}
