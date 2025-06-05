@@ -25,7 +25,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
-import { useVaults } from '../../../../storage/vaults'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { AddressBookModal } from './AddressBookModal'
@@ -41,8 +40,6 @@ export const ManageReceiverAddressInputField = () => {
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const walletCore = useAssertWalletCore()
-  const vaults = useVaults()
-  console.log('🚀 ~ ManageReceiverAddressInputField ~ vaults:', vaults)
 
   const [
     {
