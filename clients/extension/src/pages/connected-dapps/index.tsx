@@ -61,11 +61,9 @@ export const ConnectedDappsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <IconButton
-            icon={<ChevronLeftIcon fontSize={20} />}
-            onClick={navigateBack}
-            size="m"
-          />
+          <IconButton onClick={navigateBack}>
+            <ChevronLeftIcon />
+          </IconButton>
         }
         title={
           <Text color="contrast" size={18} weight={500}>
@@ -85,12 +83,12 @@ export const ConnectedDappsPage = () => {
                 <ListItem
                   key={host}
                   extra={
-                    <Button
-                      icon={<LinkTwoOffIcon fontSize={20} />}
+                    <IconButton
                       onClick={() => handleDisconnect(host, session.url)}
-                      size="l"
-                      kind="alert"
-                    />
+                      status="danger"
+                    >
+                      <LinkTwoOffIcon />
+                    </IconButton>
                   }
                   title={
                     <Text color="contrast" size={14} weight={500}>
@@ -102,9 +100,7 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button onClick={handleDisconnectAll} kind="primary">
-              {t('disconnect_all')}
-            </Button>
+            <Button onClick={handleDisconnectAll}>{t('disconnect_all')}</Button>
           </PageFooter>
         </>
       ) : (

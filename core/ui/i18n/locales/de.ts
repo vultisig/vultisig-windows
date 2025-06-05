@@ -9,10 +9,12 @@ export const de = {
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
   search_field_placeholder: 'Suchen..',
+  tx_hash: 'Transaktions-Hash',
   send_overview: 'Übersicht senden',
   start_transaction: 'Transaktion starten',
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
   staked_amount: 'Gestakter Betrag',
+  send_to: 'Senden an',
   priority_fee_tooltip_content:
     'Ein kleines Trinkgeld, um Ihre Transaktion zu beschleunigen. Höhere Trinkgelder können die Verarbeitung beschleunigen.',
   you_are_sending: 'Du sendest',

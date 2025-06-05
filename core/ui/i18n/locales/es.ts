@@ -11,10 +11,12 @@ export const es = {
   moreInfo: 'Más información',
   gas_limit_tooltip_content:
     'La cantidad máxima de gas que pagarás. Puede aumentarse si el límite de gas no es suficiente para enviar transacciones.',
+  tx_hash: 'Hash de transacción',
   base_fee_tooltip_content:
     'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   swap_overview: 'Resumen de intercambio',
   overview: 'Visión general',
+  send_to: 'Enviar a',
   you_are_sending: 'Estás enviando',
   priority_fee: 'Tarifa prioritaria',
   priority_fee_tooltip_content:

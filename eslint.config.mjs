@@ -13,10 +13,11 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const filePath = fileURLToPath(import.meta.url)
+const baseDirectory = path.dirname(filePath)
+
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 })
@@ -98,6 +99,15 @@ export default [
       'simple-import-sort/exports': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-namespace': 'off',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'variable',
+          format: ['camelCase', 'PascalCase', 'snake_case'],
+          leadingUnderscore: 'allow',
+          trailingUnderscore: 'allow',
+        },
+      ],
     },
   },
 ]

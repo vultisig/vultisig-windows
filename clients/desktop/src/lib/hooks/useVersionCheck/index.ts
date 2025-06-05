@@ -2,10 +2,10 @@ import { useCore } from '@core/ui/state/core'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { useQuery } from '@tanstack/react-query'
 
-import { LATEST_VERSION_QUERY_KEY, VULTISIG_RELEASES_API } from './constants'
+import { productReleasesApiUrl } from '../../../versioning/config'
 import { isValidVersion, isVersionNewer } from './utils'
 
-const useVersionCheck = () => {
+export const useVersionCheck = () => {
   const { version } = useCore()
 
   const {
@@ -13,9 +13,9 @@ const useVersionCheck = () => {
     error: remoteError,
     isFetching: isRemoteFetching,
   } = useQuery({
-    queryKey: [LATEST_VERSION_QUERY_KEY],
+    queryKey: ['latestVersion'],
     queryFn: async () => {
-      const response = await fetch(VULTISIG_RELEASES_API)
+      const response = await fetch(productReleasesApiUrl)
       if (!response.ok) {
         throw new Error('Failed to fetch latest version data.')
       }
@@ -50,5 +50,3 @@ const useVersionCheck = () => {
     isLoading: isRemoteFetching,
   }
 }
-
-export default useVersionCheck

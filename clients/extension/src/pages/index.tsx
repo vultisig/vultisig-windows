@@ -1,3 +1,7 @@
+import { views } from '@clients/extension/src/navigation/views'
+import { StorageMigrationsManager } from '@clients/extension/src/providers/StorageMigrationManager'
+import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
+import { storage } from '@clients/extension/src/storage'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
@@ -8,11 +12,6 @@ import { QueryClient } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle } from 'styled-components'
-
-import { views } from '../navigation/views'
-import { StorageMigrationsManager } from '../providers/StorageMigrationManager'
-import { getManifestVersion } from '../state/utils/getManifestVersion'
-import { storage } from '../storage'
 
 const coreState: CoreState = {
   ...storage,

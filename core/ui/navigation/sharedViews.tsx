@@ -15,7 +15,6 @@ import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
-import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { SendPage } from '@core/ui/vault/send/SendPage'
@@ -48,7 +47,6 @@ export type SharedViewId = Extract<
   | 'deeplink'
   | 'deleteVault'
   | 'deposit'
-  | 'importVault'
   | 'languageSettings'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -85,7 +83,6 @@ export const sharedViews: Views<SharedViewId> = {
   deeplink: DeeplinkPage,
   deleteVault: DeleteVaultPage,
   deposit: DepositPage,
-  importVault: ImportVaultPage,
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,

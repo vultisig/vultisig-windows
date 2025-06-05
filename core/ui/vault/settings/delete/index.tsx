@@ -123,10 +123,10 @@ export const DeleteVaultPage = () => {
       </PageContent>
       <PageFooter>
         <Button
-          isDisabled={isDisabled}
-          isLoading={isPending}
-          kind="alert"
+          disabled={isDisabled}
+          loading={isPending}
           onClick={handleConfirm}
+          status="danger"
         >
           {t('delete')}
         </Button>

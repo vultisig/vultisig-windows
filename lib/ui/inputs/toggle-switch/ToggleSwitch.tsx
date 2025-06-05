@@ -36,12 +36,12 @@ export const ToggleSwitch = <T extends string | number>({
     <Wrapper>
       {options.map(({ value, disabled, icon, label }) => (
         <ToggleButton
-          key={value}
           active={active === value}
-          onClick={() => handleClick(value)}
           disabled={disabled}
+          icon={icon}
+          key={value}
+          onClick={() => handleClick(value)}
         >
-          {icon}
           {label}
         </ToggleButton>
       ))}
@@ -69,7 +69,5 @@ const ToggleButton = styled(Button)<{
       active ? getColor('background') : 'transparent'};
   }
 
-  ${hStack({
-    gap: 4,
-  })};
+  ${hStack({ gap: 4 })};
 `

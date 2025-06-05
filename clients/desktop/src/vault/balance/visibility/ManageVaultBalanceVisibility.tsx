@@ -12,10 +12,11 @@ export const ManageVaultBalanceVisibility = () => {
 
   return (
     <IconButton
-      size="l"
-      icon={value ? <EyeIcon /> : <EyeOffIcon />}
       onClick={() => setIsBalanceVisible(!value)}
+      size="lg"
       title={value ? 'Hide balance' : 'Show balance'}
-    />
+    >
+      {value ? <EyeIcon /> : <EyeOffIcon />}
+    </IconButton>
   )
 }

@@ -46,7 +46,6 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
     color: 'contrast',
     size: 14,
     weight: '400',
-    family: 'mono',
   })}
 
   ${interactive}

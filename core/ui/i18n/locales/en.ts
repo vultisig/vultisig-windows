@@ -354,6 +354,7 @@ export const en = {
   gwei: 'GWEI',
   total_fee: 'Total Fees',
   network_fee: 'Network fee',
+  send_to: 'Send to',
   est_network_fee: 'Est. Network Fee',
   base_fee_tooltip_content:
     'A small tip to speed up your transaction. Higher tips can get your transaction processed faster.',
@@ -395,6 +396,7 @@ export const en = {
     'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
   transaction_hash_copied: 'Transaction hash copied',
+  tx_hash: 'Transaction hash',
   asset: 'Asset',
   balance: 'Balance',
   staked: 'Staked',
