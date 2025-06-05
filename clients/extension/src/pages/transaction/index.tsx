@@ -65,6 +65,7 @@ import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { OnCloseProp } from '@lib/ui/props'
 import styled from 'styled-components'
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
+import { EvmFeeSettingsForm, EvmFeeSettingsFormValue } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
 
 const GasFeeAdjuster = ({ 
   keysignPayload, 
@@ -83,56 +84,45 @@ const GasFeeAdjuster = ({
   if (chainKind !== 'evm') return null
 
   const [isOpen, setIsOpen] = useState(false)
-  const [gasFee, setGasFee] = useState(() => {
-    // Get initial fee from transaction and convert from wei to gwei
+  const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
     const transactionPayload = keysignPayload.keysign as unknown as IKeysignTransactionPayload
-    if (transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas) {
-      return Number(formatUnits(BigInt(transactionPayload.transactionDetails.gasSettings.maxPriorityFeePerGas), gwei.decimals))
+    return {
+      priorityFee: transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas
+        ? Number(formatUnits(BigInt(transactionPayload.transactionDetails.gasSettings.maxPriorityFeePerGas), gwei.decimals))
+        : transactionPayload.maxPriorityFeePerGas
+          ? Number(formatUnits(BigInt(transactionPayload.maxPriorityFeePerGas), gwei.decimals))
+          : 0,
+      gasLimit: transactionPayload.transactionDetails?.gasSettings?.gasLimit
+        ? Number(transactionPayload.transactionDetails.gasSettings.gasLimit)
+        : transactionPayload.gasLimit
+          ? Number(transactionPayload.gasLimit)
+          : 21000,
     }
-    if (transactionPayload.maxPriorityFeePerGas) {
-      return Number(formatUnits(BigInt(transactionPayload.maxPriorityFeePerGas), gwei.decimals))
-    }
-    return 0
-  })
-  const [gasLimit, setGasLimit] = useState(() => {
-    const transactionPayload = keysignPayload.keysign as unknown as IKeysignTransactionPayload
-    if (transactionPayload.transactionDetails?.gasSettings?.gasLimit) {
-      return Number(transactionPayload.transactionDetails.gasSettings.gasLimit)
-    }
-    if (transactionPayload.gasLimit) {
-      return Number(transactionPayload.gasLimit)
-    }
-    return 21000
   })
 
-  const handleSubmit = () => {
-    // Update the transaction with the new fee and gas limit
+  const handleSave = () => {
     if ('keysign' in keysignPayload) {
       const keysign = keysignPayload.keysign
-      const totalFee = baseFee + gasFee
-      
+      const totalFee = baseFee + value.priorityFee
       // Update the transaction fee in the blockchain specific data
       if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
         const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string, gasLimit?: string }
-        // Convert gwei to wei for blockchain
-        const priorityFeeInWei = (BigInt(Math.floor(gasFee * 1e9))).toString()
-        const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
+        const priorityFeeInWei = (BigInt(Math.floor(value.priorityFee * 1e9))).toString()
+        const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9))).toString()
         evmSpecific.priorityFee = priorityFeeInWei
         evmSpecific.maxFeePerGasWei = maxFeePerGasWei
-        evmSpecific.gasLimit = gasLimit.toString()
+        evmSpecific.gasLimit = value.gasLimit.toString()
       }
-
       // Update the transaction payload
       const transactionPayload = keysign as unknown as IKeysignTransactionPayload
-      // Convert gwei to wei for blockchain
-      const priorityFeeInWei = (BigInt(Math.floor(gasFee * 1e9))).toString()
-      const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
+      const priorityFeeInWei = (BigInt(Math.floor(value.priorityFee * 1e9))).toString()
+      const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9))).toString()
       transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
       transactionPayload.maxFeePerGas = maxFeePerGasWei
-      transactionPayload.gasLimit = gasLimit.toString()
+      transactionPayload.gasLimit = value.gasLimit.toString()
       transactionPayload.txFee = totalFee.toString()
     }
-    onFeeChange(gasFee, gasLimit)
+    onFeeChange(value.priorityFee, value.gasLimit)
     setIsOpen(false)
   }
 
@@ -143,78 +133,14 @@ const GasFeeAdjuster = ({
           <GasPumpIcon />
         </IconWrapper>
       </IconButton>
-
       {isOpen && (
-        <Modal
-          as="form"
-          {...getFormProps({
-            onSubmit: handleSubmit,
-            onClose: () => setIsOpen(false),
-          })}
+        <EvmFeeSettingsForm
+          value={value}
+          onChange={setValue}
+          onSave={handleSave}
           onClose={() => setIsOpen(false)}
-          title={t('advanced_gas_fee')}
-          footer={<Button htmlType="submit">{t('save')}</Button>}
-        >
-          <VStack gap={12}>
-            <LineWrapper>
-              <HorizontalLine />
-            </LineWrapper>
-            <InputContainer>
-              <Text size={14} color="supporting">
-                {t('current_base_fee')} ({t('gwei')})
-              </Text>
-              <FeeContainer>
-                {formatTokenAmount(fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals))}
-              </FeeContainer>
-            </InputContainer>
-            <AmountTextInput
-              labelPosition="left"
-              label={
-                <Tooltip
-                  content={<Text>{t('priority_fee_tooltip_content')}</Text>}
-                  renderOpener={props => {
-                    return (
-                      <Text size={14} color="supporting" {...props}>
-                        {t('priority_fee')} ({t('gwei')})
-                      </Text>
-                    )
-                  }}
-                />
-              }
-              value={gasFee}
-              onValueChange={fee => {
-                if (fee === null) {
-                  setGasFee(0)
-                  return
-                }
-                // Convert to gwei using BigInt
-                const feeInGwei = Number(BigInt(Math.floor(fee * 1e9))) / 1e9
-                setGasFee(feeInGwei)
-              }}
-            />
-            <AmountTextInput
-              labelPosition="left"
-              label={
-                <Tooltip
-                  content={<Text>{t('gas_limit_tooltip_content')}</Text>}
-                  renderOpener={props => (
-                    <Text size={14} color="supporting" {...props}>
-                      {t('gas_limit')}
-                    </Text>
-                  )}
-                />
-              }
-              value={gasLimit}
-              onValueChange={limit => {
-                if (limit === null) {
-                  setGasLimit(21000)
-                  return
-                }
-                setGasLimit(Math.floor(limit))
-              }}
-            />
-          </VStack>
-        </Modal>
+          baseFee={baseFee}
+        />
       )}
     </>
   )

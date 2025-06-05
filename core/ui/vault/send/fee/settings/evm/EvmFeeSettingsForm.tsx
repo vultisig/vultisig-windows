@@ -1,0 +1,105 @@
+import { FC } from 'react'
+import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Modal } from '@lib/ui/modal'
+import { Text } from '@lib/ui/text'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
+import { FeeContainer } from '../FeeContainer'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+export type EvmFeeSettingsFormValue = {
+  priorityFee: number
+  gasLimit: number
+}
+
+type EvmFeeSettingsFormProps = {
+  value: EvmFeeSettingsFormValue
+  onChange: (value: EvmFeeSettingsFormValue) => void
+  onSave: () => void
+  onClose: () => void
+  baseFee: number
+}
+
+export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
+  value,
+  onChange,
+  onSave,
+  onClose,
+  baseFee,
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <Modal
+      as="form"
+      {...getFormProps({
+        onSubmit: onSave,
+        onClose,
+      })}
+      onClose={onClose}
+      title={t('advanced_gas_fee')}
+      footer={<Button htmlType="submit">{t('save')}</Button>}
+    >
+      <VStack gap={12}>
+        <LineWrapper>
+          <HorizontalLine />
+        </LineWrapper>
+        <InputContainer>
+          <Text size={14} color="supporting">
+            {t('current_base_fee')} ({t('gwei')})
+          </Text>
+          <FeeContainer>
+            {formatTokenAmount(fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals))}
+          </FeeContainer>
+        </InputContainer>
+        <AmountTextInput
+          labelPosition="left"
+          label={
+            <Tooltip
+              content={<Text>{t('priority_fee_tooltip_content')}</Text>}
+              renderOpener={props => (
+                <Text size={14} color="supporting" {...props}>
+                  {t('priority_fee')} ({t('gwei')})
+                </Text>
+              )}
+            />
+          }
+          value={value.priorityFee}
+          onValueChange={priorityFee =>
+            onChange({ ...value, priorityFee: priorityFee ?? 0 })
+          }
+        />
+        <AmountTextInput
+          labelPosition="left"
+          label={
+            <Tooltip
+              content={<Text>{t('gas_limit_tooltip_content')}</Text>}
+              renderOpener={props => (
+                <Text size={14} color="supporting" {...props}>
+                  {t('gas_limit')}
+                </Text>
+              )}
+            />
+          }
+          value={value.gasLimit}
+          onValueChange={gasLimit =>
+            onChange({ ...value, gasLimit: gasLimit ?? 21000 })
+          }
+        />
+      </VStack>
+    </Modal>
+  )
+}
+
+const LineWrapper = styled.div`
+  margin-top: -5px;
+  margin-bottom: 14px;
+` 

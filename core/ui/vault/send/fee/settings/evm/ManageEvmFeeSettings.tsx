@@ -18,11 +18,7 @@ import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValu
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-type FeeSettingsFormShape = {
-  priorityFee: number
-  gasLimit: number | null
-}
+import { EvmFeeSettingsForm, EvmFeeSettingsFormValue } from './EvmFeeSettingsForm'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
@@ -48,20 +44,12 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     'ethereumSpecific'
   )
 
-  const [value, setValue] = useState<FeeSettingsFormShape>(
+  const [value, setValue] = useState<EvmFeeSettingsFormValue>(
     () =>
       persistentValue ?? {
         priorityFee: defaultFeePriority,
         gasLimit: Number(defaultGasLimit),
       }
-  )
-
-  const guardedValue: EvmFeeSettings = useMemo(
-    () => ({
-      ...value,
-      gasLimit: value.gasLimit ?? 0,
-    }),
-    [value]
   )
 
   useEffect(() => {
@@ -70,63 +58,19 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     }
   }, [defaultFeePriority, isSuccess, persistentValue?.priorityFee])
 
+  const handleSave = () => {
+    setPersistentValue(value)
+    onClose()
+  }
+
   return (
-    <Modal
-      as="form"
-      {...getFormProps({
-        onSubmit: () => {
-          setPersistentValue(guardedValue)
-          onClose()
-        },
-        onClose,
-      })}
+    <EvmFeeSettingsForm
+      value={value}
+      onChange={setValue}
+      onSave={handleSave}
       onClose={onClose}
-      title={t('advanced_gas_fee')}
-      footer={<Button htmlType="submit">{t('save')}</Button>}
-    >
-      <VStack gap={12}>
-        <LineWrapper>
-          <HorizontalLine />
-        </LineWrapper>
-        <AmountTextInput
-          labelPosition="left"
-          label={
-            <Tooltip
-              content={<Text>{t('priority_fee_tooltip_content')}</Text>}
-              renderOpener={props => {
-                return (
-                  <Text size={14} color="supporting" {...props}>
-                    {t('priority_fee')} ({t('gwei')})
-                  </Text>
-                )
-              }}
-            />
-          }
-          value={value.priorityFee}
-          onValueChange={priorityFee =>
-            setValue({ ...value, priorityFee: priorityFee ?? 0 })
-          }
-        />
-        <BaseFee />
-        <AmountTextInput
-          labelPosition="left"
-          label={
-            <Tooltip
-              content={<Text>{t('gas_limit_tooltip_content')}</Text>}
-              renderOpener={props => {
-                return (
-                  <Text size={14} color="supporting" {...props}>
-                    {t('gas_limit')}
-                  </Text>
-                )
-              }}
-            />
-          }
-          value={value.gasLimit}
-          onValueChange={gasLimit => setValue({ ...value, gasLimit })}
-        />
-      </VStack>
-    </Modal>
+      baseFee={defaultFeePriority}
+    />
   )
 }
 
