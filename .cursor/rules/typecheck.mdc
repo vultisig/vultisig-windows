@@ -1,0 +1,33 @@
+---
+description: 
+globs: *.ts,*.tsx
+alwaysApply: false
+---
+# TypeScript Type Checking
+
+## Context
+- Only run typecheck when making changes that could potentially affect other files or introduce complex type issues
+- Avoid running typecheck for simple, isolated changes like adding translations, styling updates, or single-file modifications
+
+## When to Use
+- After modifying shared types, interfaces, or utility functions
+- When adding new dependencies or changing import/export structures
+- After refactoring that spans multiple files
+- When encountering TypeScript errors that might have cascading effects
+- When making changes to core infrastructure or shared components
+
+## When NOT to Use
+- Simple translation updates or i18n changes
+- Styling or CSS-only modifications
+- Single-file component updates that don't change interfaces
+- Adding new isolated components
+- Minor bug fixes within a single file
+
+## Requirements
+- Use `yarn typecheck` from the root of the monorepo to verify all TypeScript types are correct
+- Only run when the changes justify the time investment
+
+## Command
+```bash
+yarn typecheck
+```
