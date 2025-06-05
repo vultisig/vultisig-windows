@@ -11,6 +11,8 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  address_book_saved: 'Saved Addresses',
+  address_book_vault: 'My Vaults',
   extension_vault_import_restriction:
     'Only DKLS vaults can be imported in extension',
   failed_to_migrate_storage: 'Failed to migrate storage',

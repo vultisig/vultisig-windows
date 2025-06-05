@@ -1,8 +1,6 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
-import { AddressBookListItem } from '@core/ui/address-book/item'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
-import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -18,7 +16,6 @@ import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -28,8 +25,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
+import { useVaults } from '../../../../storage/vaults'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
 import { useCurrentSendCoin } from '../../state/sendCoin'
+import { AddressBookModal } from './AddressBookModal'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
@@ -41,8 +40,9 @@ export const ManageReceiverAddressInputField = () => {
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
-  const addressBookItems = useAddressBookItems()
   const walletCore = useAssertWalletCore()
+  const vaults = useVaults()
+  console.log('🚀 ~ ManageReceiverAddressInputField ~ vaults:', vaults)
 
   const [
     {
@@ -109,23 +109,13 @@ export const ManageReceiverAddressInputField = () => {
             </Modal>
           )}
           addressBook={() => (
-            <Modal
+            <AddressBookModal
               onClose={() => setViewState('default')}
-              title={t('address_book')}
-            >
-              <List>
-                {addressBookItems.map(item => (
-                  <AddressBookListItem
-                    key={item.id}
-                    onSelect={address => {
-                      handleUpdateReceiverAddress(address)
-                      setViewState('default')
-                    }}
-                    {...item}
-                  />
-                ))}
-              </List>
-            </Modal>
+              onSelect={address => {
+                handleUpdateReceiverAddress(address)
+                setViewState('default')
+              }}
+            />
           )}
           default={() => (
             <VStack gap={8}>
