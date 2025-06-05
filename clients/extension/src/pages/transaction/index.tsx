@@ -1,9 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
+import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
+import { EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -11,11 +13,13 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useEvmBaseFeeQuery } from '@core/ui/chain/queries/evm/useEvmBaseFeeQuery'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
@@ -41,115 +45,11 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
-import { formatUnits, toUtf8String, parseUnits } from 'ethers'
+import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
-import { GasPumpIcon } from '@lib/ui/icons/GasPumpIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
-import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { Modal } from '@lib/ui/modal'
-import { Button } from '@lib/ui/buttons/Button'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { FeeContainer } from '@core/ui/vault/send/fee/settings/FeeContainer'
-import { useEvmBaseFeeQuery } from '@core/ui/chain/queries/evm/useEvmBaseFeeQuery'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { gwei } from '@core/chain/tx/fee/evm/gwei'
-import { EvmChain } from '@core/chain/Chain'
-import { Opener } from '@lib/ui/base/Opener'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { OnCloseProp } from '@lib/ui/props'
-import styled from 'styled-components'
-import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
-import { EvmFeeSettingsForm, EvmFeeSettingsFormValue } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
+import { useEffect, useMemo, useState } from 'react'
 
-const GasFeeAdjuster = ({ 
-  keysignPayload, 
-  onFeeChange,
-  baseFee
-}: { 
-  keysignPayload: KeysignMessagePayload
-  onFeeChange: (fee: number, gasLimit: number) => void
-  baseFee: number
-}) => {
-  if (!('keysign' in keysignPayload)) return null
-  
-  const chain = getKeysignChain(keysignPayload.keysign)
-  const chainKind = getChainKind(chain)
-  
-  if (chainKind !== 'evm') return null
-
-  const [isOpen, setIsOpen] = useState(false)
-  const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
-    const transactionPayload = keysignPayload.keysign as unknown as IKeysignTransactionPayload
-    return {
-      priorityFee: transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas
-        ? Number(formatUnits(BigInt(transactionPayload.transactionDetails.gasSettings.maxPriorityFeePerGas), gwei.decimals))
-        : transactionPayload.maxPriorityFeePerGas
-          ? Number(formatUnits(BigInt(transactionPayload.maxPriorityFeePerGas), gwei.decimals))
-          : 0,
-      gasLimit: transactionPayload.transactionDetails?.gasSettings?.gasLimit
-        ? Number(transactionPayload.transactionDetails.gasSettings.gasLimit)
-        : transactionPayload.gasLimit
-          ? Number(transactionPayload.gasLimit)
-          : 21000,
-    }
-  })
-
-  const handleSave = () => {
-    if ('keysign' in keysignPayload) {
-      const keysign = keysignPayload.keysign
-      const totalFee = baseFee + value.priorityFee
-      // Update the transaction fee in the blockchain specific data
-      if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
-        const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string, gasLimit?: string }
-        const priorityFeeInWei = (BigInt(Math.floor(value.priorityFee * 1e9))).toString()
-        const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9))).toString()
-        evmSpecific.priorityFee = priorityFeeInWei
-        evmSpecific.maxFeePerGasWei = maxFeePerGasWei
-        evmSpecific.gasLimit = value.gasLimit.toString()
-      }
-      // Update the transaction payload
-      const transactionPayload = keysign as unknown as IKeysignTransactionPayload
-      const priorityFeeInWei = (BigInt(Math.floor(value.priorityFee * 1e9))).toString()
-      const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9))).toString()
-      transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
-      transactionPayload.maxFeePerGas = maxFeePerGasWei
-      transactionPayload.gasLimit = value.gasLimit.toString()
-      transactionPayload.txFee = totalFee.toString()
-    }
-    onFeeChange(value.priorityFee, value.gasLimit)
-    setIsOpen(false)
-  }
-
-  return (
-    <>
-      <IconButton onClick={() => setIsOpen(true)}>
-        <IconWrapper style={{ fontSize: 16 }}>
-          <GasPumpIcon />
-        </IconWrapper>
-      </IconButton>
-      {isOpen && (
-        <EvmFeeSettingsForm
-          value={value}
-          onChange={setValue}
-          onSave={handleSave}
-          onClose={() => setIsOpen(false)}
-          baseFee={baseFee}
-        />
-      )}
-    </>
-  )
-}
-
-const LineWrapper = styled.div`
-  margin-top: -5px;
-  margin-bottom: 14px;
-`
+import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -158,6 +58,7 @@ export const TransactionPage = () => {
   const handleClose = (): void => {
     window.close()
   }
+
   const { mutate: processTransaction, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const transactions = await getVaultTransactions(getVaultId(vault))
@@ -251,6 +152,20 @@ export const TransactionPage = () => {
     processTransaction()
   }, [processTransaction])
 
+  // Extract chain from keysignMessagePayload using useMemo
+  const keysignMessagePayload = mutationStatus.data?.keysignMessagePayload
+  const chain = useMemo(() => {
+    if (keysignMessagePayload && 'keysign' in keysignMessagePayload) {
+      return getKeysignChain(keysignMessagePayload.keysign)
+    }
+    return null
+  }, [keysignMessagePayload])
+
+  const query = useEvmBaseFeeQuery(chain as EvmChain)
+  const baseFee = query?.data
+    ? Number(formatUnits(query.data, gwei.decimals))
+    : 0
+
   return (
     <MatchQuery
       value={mutationStatus}
@@ -261,107 +176,134 @@ export const TransactionPage = () => {
           message={extractErrorMsg(error)}
         />
       )}
-      success={({ transaction, keysignMessagePayload }) => (
-        <VStack fullHeight>
-          <PageHeader
-            primaryControls={
-              <IconButton onClick={handleClose}>
-                <CrossIcon />
-              </IconButton>
-            }
-            title={
-              <PageHeaderTitle>{`${t('sign_transaction')}`}</PageHeaderTitle>
-            }
-            hasBorder
-          />
-          <PageContent flexGrow scrollable>
-            <List>
-              <MatchRecordUnion
-                value={keysignMessagePayload}
-                handlers={{
-                  custom: custom => (
-                    <>
-                      <ListItem
-                        title={t('method')}
-                        description={custom.method}
-                      />
-                      <ListItem
-                        title={t('message')}
-                        description={custom.message}
-                      />
-                    </>
-                  ),
-                  keysign: keysign => (
-                    <>
-                      <ListItem
-                        title={t('from')}
-                        description={
-                          <MiddleTruncate text={keysign.coin!.address} />
-                        }
-                      />
-                      {keysign.toAddress && (
+      success={({ transaction, keysignMessagePayload }) => {
+        return (
+          <VStack fullHeight>
+            <PageHeader
+              primaryControls={
+                <IconButton onClick={handleClose}>
+                  <CrossIcon />
+                </IconButton>
+              }
+              title={
+                <PageHeaderTitle>{`${t('sign_transaction')}`}</PageHeaderTitle>
+              }
+              hasBorder
+            />
+            <PageContent flexGrow scrollable>
+              <List>
+                <MatchRecordUnion
+                  value={keysignMessagePayload}
+                  handlers={{
+                    custom: custom => (
+                      <>
                         <ListItem
-                          title={t('to')}
+                          title={t('method')}
+                          description={custom.method}
+                        />
+                        <ListItem
+                          title={t('message')}
+                          description={custom.message}
+                        />
+                      </>
+                    ),
+                    keysign: keysign => (
+                      <>
+                        <ListItem
+                          title={t('from')}
                           description={
-                            <MiddleTruncate text={keysign.toAddress} />
+                            <MiddleTruncate text={keysign.coin!.address} />
                           }
                         />
-                      )}
-                      {keysign.toAmount && (
+                        {keysign.toAddress && (
+                          <ListItem
+                            title={t('to')}
+                            description={
+                              <MiddleTruncate text={keysign.toAddress} />
+                            }
+                          />
+                        )}
+                        {keysign.toAmount && (
+                          <ListItem
+                            title={t('amount')}
+                            description={`${formatUnits(
+                              keysign.toAmount,
+                              keysign.coin?.decimals
+                            )} ${keysign.coin?.ticker}`}
+                          />
+                        )}
                         <ListItem
-                          title={t('amount')}
-                          description={`${formatUnits(
-                            keysign.toAmount,
-                            keysign.coin?.decimals
-                          )} ${keysign.coin?.ticker}`}
+                          title="Network"
+                          description={getKeysignChain(keysign)}
                         />
-                      )}
-                      <ListItem
-                        title="Network"
-                        description={getKeysignChain(keysign)}
-                      />
-                      <MatchRecordUnion
-                        value={transaction.transactionPayload}
-                        handlers={{
-                          keysign: transactionPayload => {
-                            const chain = getKeysignChain(keysign)
-                            const query = useEvmBaseFeeQuery(chain as EvmChain)
-                            const baseFee = query.data ? Number(formatUnits(query.data, gwei.decimals)) : 0
-                            
-                            return (
+                        <MatchRecordUnion
+                          value={transaction.transactionPayload}
+                          handlers={{
+                            keysign: transactionPayload => (
                               <>
                                 <ListItem
                                   title={t('network_fee')}
                                   description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
                                   extra={
-                                    <GasFeeAdjuster 
+                                    <GasFeeAdjuster
                                       keysignPayload={keysignMessagePayload}
                                       baseFee={baseFee}
                                       onFeeChange={(fee, gasLimit) => {
-                                        if ('keysign' in keysignMessagePayload) {
-                                          const keysign = keysignMessagePayload.keysign
+                                        if (
+                                          'keysign' in keysignMessagePayload
+                                        ) {
+                                          const keysign =
+                                            keysignMessagePayload.keysign
                                           const totalFee = baseFee + fee
-                                          
+
                                           // Update the transaction fee in the blockchain specific data
-                                          if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
-                                            const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string, gasLimit?: string }
+                                          if (
+                                            keysign.blockchainSpecific &&
+                                            'evm' in keysign.blockchainSpecific
+                                          ) {
+                                            const evmSpecific = keysign
+                                              .blockchainSpecific.evm as {
+                                              priorityFee: string
+                                              maxFeePerGasWei: string
+                                              gasLimit?: string
+                                            }
                                             // Convert gwei to wei for blockchain
-                                            const priorityFeeInWei = (BigInt(Math.floor(fee * 1e9))).toString()
-                                            const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
-                                            evmSpecific.priorityFee = priorityFeeInWei
-                                            evmSpecific.maxFeePerGasWei = maxFeePerGasWei
-                                            evmSpecific.gasLimit = gasLimit.toString()
+                                            const priorityFeeInWei = BigInt(
+                                              Math.floor(fee * 1e9)
+                                            ).toString()
+                                            const maxFeePerGasWei = BigInt(
+                                              Math.floor(
+                                                (baseFee * 1.5 + fee) * 1e9
+                                              )
+                                            ).toString()
+                                            evmSpecific.priorityFee =
+                                              priorityFeeInWei
+                                            evmSpecific.maxFeePerGasWei =
+                                              maxFeePerGasWei
+                                            evmSpecific.gasLimit =
+                                              gasLimit.toString()
                                           }
 
                                           // Update the transaction payload
-                                          const transactionPayload = keysign as unknown as IKeysignTransactionPayload
+                                          const transactionPayload =
+                                            keysign as unknown as IKeysignTransactionPayload
                                           // Convert gwei to wei for blockchain
-                                          const priorityFeeInWei = (BigInt(Math.floor(fee * 1e9))).toString()
-                                          const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
-                                          transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
-                                          transactionPayload.maxFeePerGas = maxFeePerGasWei
-                                          transactionPayload.gasLimit = gasLimit.toString()
-                                          transactionPayload.txFee = totalFee.toString()
+                                          const priorityFeeInWei = BigInt(
+                                            Math.floor(fee * 1e9)
+                                          ).toString()
+                                          const maxFeePerGasWei = BigInt(
+                                            Math.floor(
+                                              (baseFee * 1.5 + fee) * 1e9
+                                            )
+                                          ).toString()
+                                          transactionPayload.maxPriorityFeePerGas =
+                                            priorityFeeInWei
+                                          transactionPayload.maxFeePerGas =
+                                            maxFeePerGasWei
+                                          transactionPayload.gasLimit =
+                                            gasLimit.toString()
+                                          transactionPayload.txFee =
+                                            totalFee.toString()
                                           setUpdatedTxFee(totalFee.toString())
                                         }
                                       }}
@@ -415,26 +357,26 @@ export const TransactionPage = () => {
                                   )
                                 )}
                               </>
-                            )
-                          },
-                          custom: () => null,
-                          serialized: () => null,
-                        }}
-                      />
-                    </>
-                  ),
-                }}
+                            ),
+                            custom: () => null,
+                            serialized: () => null,
+                          }}
+                        />
+                      </>
+                    ),
+                  }}
+                />
+              </List>
+            </PageContent>
+            <PageFooter>
+              <StartKeysignPrompt
+                keysignPayload={keysignMessagePayload}
+                isDAppSigning={true}
               />
-            </List>
-          </PageContent>
-          <PageFooter>
-            <StartKeysignPrompt
-              keysignPayload={keysignMessagePayload}
-              isDAppSigning={true}
-            />
-          </PageFooter>
-        </VStack>
-      )}
+            </PageFooter>
+          </VStack>
+        )
+      }}
     />
   )
 }

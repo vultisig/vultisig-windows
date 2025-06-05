@@ -1,19 +1,20 @@
-import { FC } from 'react'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { InputContainer } from '@lib/ui/inputs/InputContainer'
-import { FeeContainer } from '../FeeContainer'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { FeeContainer } from '../FeeContainer'
 
 export type EvmFeeSettingsFormValue = {
   priorityFee: number
@@ -57,7 +58,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             {t('current_base_fee')} ({t('gwei')})
           </Text>
           <FeeContainer>
-            {formatTokenAmount(fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals))}
+            {formatTokenAmount(
+              fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals)
+            )}
           </FeeContainer>
         </InputContainer>
         <AmountTextInput
@@ -102,4 +105,4 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
 const LineWrapper = styled.div`
   margin-top: -5px;
   margin-bottom: 14px;
-` 
+`
