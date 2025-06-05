@@ -16,6 +16,8 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { Text, text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
+import { motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -33,34 +35,45 @@ export const ManageMemo = () => {
         </Text>
         <CollapsableStateIndicator isOpen={isOpen} />
       </Label>
-      {isOpen && (
-        <ActionInsideInteractiveElement
-          render={() => (
-            <TextInput
-              placeholder={t('enter_memo')}
-              value={value}
-              onValueChange={setValue}
-            />
-          )}
-          action={
-            <IconButton
-              onClick={async () => {
-                const { data } = await attempt(getClipboardText)
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <motion.div
+            key="memo"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            <ActionInsideInteractiveElement
+              render={() => (
+                <TextInput
+                  placeholder={t('enter_memo')}
+                  value={value}
+                  onValueChange={setValue}
+                />
+              )}
+              action={
+                <IconButton
+                  onClick={async () => {
+                    const { data } = await attempt(getClipboardText)
 
-                if (data) {
-                  setValue(data)
-                }
+                    if (data) {
+                      setValue(data)
+                    }
+                  }}
+                >
+                  <PasteIcon />
+                </IconButton>
+              }
+              actionPlacerStyles={{
+                right: textInputHorizontalPadding,
+                bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
               }}
-            >
-              <PasteIcon />
-            </IconButton>
-          }
-          actionPlacerStyles={{
-            right: textInputHorizontalPadding,
-            bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
-          }}
-        />
-      )}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </InputContainer>
   )
 }

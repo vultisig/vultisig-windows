@@ -1,3 +1,4 @@
+import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { AddressBookListItem } from '@core/ui/address-book/item'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
@@ -26,19 +27,22 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
+import { useCurrentSendCoin } from '../../state/sendCoin'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiverAddressInputField = () => {
   const { t } = useTranslation()
   const address = useSender()
-
+  const [{ coin }] = useCurrentSendCoin()
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const addressBookItems = useAddressBookItems()
+  const walletCore = useAssertWalletCore()
 
   const [
     {
@@ -56,11 +60,18 @@ export const ManageReceiverAddressInputField = () => {
         ...state,
         fieldsChecked: {
           ...state.fieldsChecked,
-          address: value ? true : false,
+          address: !!value,
         },
+        field: isValidAddress({
+          address: value,
+          walletCore,
+          chain: coin?.chain,
+        })
+          ? 'amount'
+          : state.field,
       }))
     },
-    [setFocusedSendField, setValue]
+    [coin?.chain, setFocusedSendField, setValue, walletCore]
   )
 
   const onScanSuccess = useCallback(
