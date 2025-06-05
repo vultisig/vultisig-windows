@@ -12,7 +12,7 @@ type Option<T extends string | number> = {
 }
 
 type ToggleSwitchProps<T extends string | number> = {
-  options: Option<T>[]
+  options: Readonly<Option<T>[]>
   selected: T
   onChange?: (value: T) => void
   disabled?: boolean
