@@ -37,7 +37,7 @@ const leanChainNativeTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
   },
 }
 
-export const leanChainTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
+const leanChainTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
   [Chain.THORChain]: {
     tcy: {
       ticker: 'TCY',
@@ -820,5 +820,3 @@ export const chainTokens: Partial<
 
   return base
 })()
-
-console.log(JSON.stringify(chainTokens, null, 2))
