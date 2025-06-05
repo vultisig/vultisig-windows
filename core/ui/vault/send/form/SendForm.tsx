@@ -52,11 +52,11 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           isDisabled,
         })}
       >
-        <FormFieldsWrapper gap={16}>
+        <VStack gap={16}>
           <ManageSendCoin />
           <ManageAddresses />
           <ManageAmount />
-        </FormFieldsWrapper>
+        </VStack>
         <Button
           disabled={isDisabled}
           htmlType="submit"
@@ -74,9 +74,4 @@ const FormWrapper = styled(PageContent)`
   margin-inline: auto;
   overflow: auto;
   ${hideScrollbars}
-`
-
-const FormFieldsWrapper = styled(VStack)`
-  max-height: 525x;
-  overflow: hidden;
 `
