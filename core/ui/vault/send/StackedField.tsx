@@ -2,12 +2,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 export const StackedField = ({
   isOpen,
-  OpenComponent,
-  ClosedComponent,
+  renderOpen,
+  renderClose,
 }: {
   isOpen: boolean
-  OpenComponent: React.ReactNode
-  ClosedComponent: React.ReactNode
+  renderOpen: () => React.ReactNode
+  renderClose: () => React.ReactNode
 }) => {
   return (
     <div style={{ position: 'relative', minHeight: 1 }}>
@@ -24,7 +24,7 @@ export const StackedField = ({
             width: '100%',
           }}
         >
-          {OpenComponent}
+          {renderOpen()}
         </motion.div>
 
         <motion.div
@@ -39,7 +39,7 @@ export const StackedField = ({
             width: '100%',
           }}
         >
-          {ClosedComponent}
+          {renderClose()}
         </motion.div>
       </AnimatePresence>
     </div>

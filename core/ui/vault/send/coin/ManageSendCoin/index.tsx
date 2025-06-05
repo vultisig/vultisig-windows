@@ -9,8 +9,8 @@ export const ManageSendCoin = () => {
   return (
     <StackedField
       isOpen={field === 'coin'}
-      OpenComponent={<ManageSendCoinInputField />}
-      ClosedComponent={<ManageSendCoinCollapsedInputField />}
+      renderOpen={() => <ManageSendCoinInputField />}
+      renderClose={() => <ManageSendCoinCollapsedInputField />}
     />
   )
 }

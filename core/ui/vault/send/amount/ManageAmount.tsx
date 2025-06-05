@@ -9,8 +9,8 @@ export const ManageAmount = () => {
 
   return (
     <StackedField
-      OpenComponent={<ManageAmountInputField />}
-      ClosedComponent={<ManageAmountInputFieldCollapsed />}
+      renderOpen={() => <ManageAmountInputField />}
+      renderClose={() => <ManageAmountInputFieldCollapsed />}
       isOpen={value === 'open'}
     />
   )
