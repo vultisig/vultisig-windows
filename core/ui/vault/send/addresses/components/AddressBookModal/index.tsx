@@ -53,13 +53,15 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
           <Match
             value={addressBookSelectedOption}
             saved={() =>
-              addressBookItems.map(item => (
-                <AddressBookListItem
-                  key={item.id}
-                  onSelect={onSelect}
-                  {...item}
-                />
-              ))
+              addressBookItems
+                .filter(item => item.chain === coin.chain)
+                .map(item => (
+                  <AddressBookListItem
+                    key={item.id}
+                    onSelect={onSelect}
+                    {...item}
+                  />
+                ))
             }
             all={() =>
               vaultsAndAddressForSelectedCoin.map((value, idx) => (
