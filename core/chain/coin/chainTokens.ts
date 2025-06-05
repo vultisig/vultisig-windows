@@ -24,7 +24,7 @@ const leanChainNativeTokens: Partial<LeanChainTokensRecord> = {
     },
   },
   [Chain.TerraClassic]: {
-    ustc: {
+    uusd: {
       ticker: 'USTC',
       logo: 'ustc.png',
       decimals: 6,
@@ -530,7 +530,7 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       logo: 'busd',
       decimals: 18,
     },
-    '0x1BFD67037B42Cf73acF2047067bd4F2C47D9fD6': {
+    '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6': {
       ticker: 'WBTC',
       logo: 'wbtc',
       decimals: 8,
