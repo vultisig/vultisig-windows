@@ -1,10 +1,8 @@
-import { RequiredFields } from '@lib/utils/types/RequiredFields'
-
 import { Chain, CosmosChain } from '../Chain'
-import { Coin } from './Coin'
+import { Coin, KnownCoinMetadata } from './Coin'
 
 export const ibcTransferrableTokensPerChain: Partial<
-  Record<CosmosChain, Pick<RequiredFields<Coin, 'logo'>, 'ticker' | 'id'>[]>
+  Record<CosmosChain, Pick<Coin, 'ticker' | 'id'>[]>
 > = {
   [Chain.Kujira]: [
     {
@@ -96,7 +94,7 @@ export const ibcTransferrableTokensPerChain: Partial<
   ],
 }
 
-export const ibcTokens: Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>[] = [
+export const ibcTokens: KnownCoinMetadata[] = [
   { ticker: 'KUJI', logo: 'kuji', decimals: 6, priceProviderId: 'kujira' },
   {
     ticker: 'rKUJI',

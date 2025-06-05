@@ -1,18 +1,15 @@
 import { Chain, EthereumL2Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
+import { KnownCoin, KnownCoinMetadata } from '@core/chain/coin/Coin'
 import { recordMap } from '@lib/utils/record/recordMap'
-import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
-type LeanFeeCoin = Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>
-
-const ether: LeanFeeCoin = {
+const ether: KnownCoinMetadata = {
   ticker: 'ETH',
   logo: 'eth',
   decimals: 18,
   priceProviderId: 'ethereum',
 }
 
-const leanChainFeeCoin: Record<Chain, LeanFeeCoin> = {
+const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
   [Chain.Bitcoin]: {
     ticker: 'BTC',
     logo: 'btc',
@@ -175,11 +172,11 @@ const leanChainFeeCoin: Record<Chain, LeanFeeCoin> = {
   },
 }
 
-export const chainFeeCoin: Record<
-  Chain,
-  RequiredFields<Coin, 'logo'>
-> = recordMap(leanChainFeeCoin, (coin, chain) => ({
-  ...coin,
-  chain,
-  id: coin.ticker,
-}))
+export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(
+  leanChainFeeCoin,
+  (coin, chain) => ({
+    ...coin,
+    chain,
+    id: coin.ticker,
+  })
+)

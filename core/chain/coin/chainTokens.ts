@@ -1,25 +1,21 @@
 import { Chain } from '@core/chain/Chain'
-import { isEmpty } from '@lib/utils/array/isEmpty'
+import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
-import { RequiredFields } from '@lib/utils/types/RequiredFields'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 import { chainFeeCoin } from './chainFeeCoin'
-import { Coin } from './Coin'
+import { KnownCoin, KnownCoinMetadata } from './Coin'
 import {
   chainsWithIbcTokens,
   ibcTokens,
   ibcTransferrableTokensPerChain,
 } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
-import { initializeChainTokens } from './utils/initializeChainTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
-type LeanChainTokensRecord = Record<
-  string,
-  Omit<RequiredFields<Coin, 'logo'>, 'chain' | 'id'>
->
+type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
 
-const leanChainNativeTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
+const leanChainNativeTokens: Partial<LeanChainTokensRecord> = {
   [Chain.MayaChain]: {
     maya: {
       ticker: 'MAYA',
@@ -37,7 +33,7 @@ const leanChainNativeTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
   },
 }
 
-const leanChainTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
+const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
   [Chain.THORChain]: {
     tcy: {
       ticker: 'TCY',
@@ -752,45 +748,23 @@ const leanChainTokens: Partial<Record<Chain, LeanChainTokensRecord>> = {
   },
 }
 
-export const chainNativeTokens: Partial<
-  Record<Chain, RequiredFields<Coin, 'logo'>[]>
-> = recordMap(
-  leanChainNativeTokens as Record<Chain, LeanChainTokensRecord>,
-  (tokens, chain) =>
+const [chainNativeTokens, chainNonNativeTokens] = [
+  leanChainNativeTokens,
+  leanChainNonNativeTokens,
+].map(leanTokens =>
+  recordMap(withoutUndefinedFields(leanTokens), (tokens, chain) =>
     Object.entries(tokens).map(([id, token]) => ({
       ...token,
       chain,
       id,
     }))
-)
-
-const mergedLeanChainTokens = Object.entries({
-  ...leanChainTokens,
-  ...leanChainNativeTokens,
-} as Record<Chain, LeanChainTokensRecord>).reduce(
-  (acc, [chain, tokens]) => {
-    const chainTokens = Object.entries(tokens).map(([id, token]) => ({
-      ...token,
-      id,
-    }))
-
-    if (!isEmpty(chainTokens)) {
-      acc[chain as Chain] = chainTokens
-    }
-
-    return acc
-  },
-  {} as Partial<Record<Chain, Omit<RequiredFields<Coin, 'logo'>, 'chain'>[]>>
-)
-
-type TokenWithoutChain = Omit<RequiredFields<Coin, 'logo'>, 'chain'>
-
-export const chainTokens: Partial<
-  Record<Chain, RequiredFields<Coin, 'logo'>[]>
-> = (() => {
-  const base = initializeChainTokens(
-    mergedLeanChainTokens as Record<Chain, TokenWithoutChain[]>
   )
+)
+
+export { chainNativeTokens }
+
+export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
+  const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
 
   for (const chain of chainsWithIbcTokens) {
     const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
