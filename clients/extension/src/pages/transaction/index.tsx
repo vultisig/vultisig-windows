@@ -72,7 +72,7 @@ const GasFeeAdjuster = ({
   baseFee
 }: { 
   keysignPayload: KeysignMessagePayload
-  onFeeChange: (fee: number) => void
+  onFeeChange: (fee: number, gasLimit: number) => void
   baseFee: number
 }) => {
   if (!('keysign' in keysignPayload)) return null
@@ -94,21 +94,32 @@ const GasFeeAdjuster = ({
     }
     return 0
   })
+  const [gasLimit, setGasLimit] = useState(() => {
+    const transactionPayload = keysignPayload.keysign as unknown as IKeysignTransactionPayload
+    if (transactionPayload.transactionDetails?.gasSettings?.gasLimit) {
+      return Number(transactionPayload.transactionDetails.gasSettings.gasLimit)
+    }
+    if (transactionPayload.gasLimit) {
+      return Number(transactionPayload.gasLimit)
+    }
+    return 21000
+  })
 
   const handleSubmit = () => {
-    // Update the transaction with the new fee
+    // Update the transaction with the new fee and gas limit
     if ('keysign' in keysignPayload) {
       const keysign = keysignPayload.keysign
       const totalFee = baseFee + gasFee
       
       // Update the transaction fee in the blockchain specific data
       if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
-        const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string }
+        const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string, gasLimit?: string }
         // Convert gwei to wei for blockchain
         const priorityFeeInWei = (BigInt(Math.floor(gasFee * 1e9))).toString()
         const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
         evmSpecific.priorityFee = priorityFeeInWei
         evmSpecific.maxFeePerGasWei = maxFeePerGasWei
+        evmSpecific.gasLimit = gasLimit.toString()
       }
 
       // Update the transaction payload
@@ -118,9 +129,10 @@ const GasFeeAdjuster = ({
       const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + gasFee) * 1e9))).toString()
       transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
       transactionPayload.maxFeePerGas = maxFeePerGasWei
+      transactionPayload.gasLimit = gasLimit.toString()
       transactionPayload.txFee = totalFee.toString()
     }
-    onFeeChange(gasFee)
+    onFeeChange(gasFee, gasLimit)
     setIsOpen(false)
   }
 
@@ -178,6 +190,27 @@ const GasFeeAdjuster = ({
                 // Convert to gwei using BigInt
                 const feeInGwei = Number(BigInt(Math.floor(fee * 1e9))) / 1e9
                 setGasFee(feeInGwei)
+              }}
+            />
+            <AmountTextInput
+              labelPosition="left"
+              label={
+                <Tooltip
+                  content={<Text>{t('gas_limit_tooltip_content')}</Text>}
+                  renderOpener={props => (
+                    <Text size={14} color="supporting" {...props}>
+                      {t('gas_limit')}
+                    </Text>
+                  )}
+                />
+              }
+              value={gasLimit}
+              onValueChange={limit => {
+                if (limit === null) {
+                  setGasLimit(21000)
+                  return
+                }
+                setGasLimit(Math.floor(limit))
               }}
             />
           </VStack>
@@ -378,7 +411,7 @@ export const TransactionPage = () => {
                                     <GasFeeAdjuster 
                                       keysignPayload={keysignMessagePayload}
                                       baseFee={baseFee}
-                                      onFeeChange={(fee) => {
+                                      onFeeChange={(fee, gasLimit) => {
                                         console.log('fee', fee)
                                         console.log('baseFee', baseFee)
                                         console.log('totalFee', baseFee + fee)
@@ -391,12 +424,13 @@ export const TransactionPage = () => {
                                           
                                           // Update the transaction fee in the blockchain specific data
                                           if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
-                                            const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string }
+                                            const evmSpecific = keysign.blockchainSpecific.evm as { priorityFee: string, maxFeePerGasWei: string, gasLimit?: string }
                                             // Convert gwei to wei for blockchain
                                             const priorityFeeInWei = (BigInt(Math.floor(fee * 1e9))).toString()
                                             const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
                                             evmSpecific.priorityFee = priorityFeeInWei
                                             evmSpecific.maxFeePerGasWei = maxFeePerGasWei
+                                            evmSpecific.gasLimit = gasLimit.toString()
                                           }
 
                                           // Update the transaction payload
@@ -406,6 +440,7 @@ export const TransactionPage = () => {
                                           const maxFeePerGasWei = (BigInt(Math.floor((baseFee * 1.5 + fee) * 1e9))).toString()
                                           transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
                                           transactionPayload.maxFeePerGas = maxFeePerGasWei
+                                          transactionPayload.gasLimit = gasLimit.toString()
                                           transactionPayload.txFee = totalFee.toString()
                                           setUpdatedTxFee(totalFee.toString())
                                           console.log('updated payload', transactionPayload)
