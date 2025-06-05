@@ -338,12 +338,6 @@ export const TransactionPage = () => {
                                       keysignPayload={keysignMessagePayload}
                                       baseFee={baseFee}
                                       onFeeChange={(fee, gasLimit) => {
-                                        console.log('fee', fee)
-                                        console.log('baseFee', baseFee)
-                                        console.log('totalFee', baseFee + fee)
-                                        console.log('keysignMessagePayload', keysignMessagePayload)
-                                        console.log('keysignMessagePayload type', typeof keysignMessagePayload)
-                                        console.log('keysignMessagePayload keys', Object.keys(keysignMessagePayload))
                                         if ('keysign' in keysignMessagePayload) {
                                           const keysign = keysignMessagePayload.keysign
                                           const totalFee = baseFee + fee
@@ -369,9 +363,6 @@ export const TransactionPage = () => {
                                           transactionPayload.gasLimit = gasLimit.toString()
                                           transactionPayload.txFee = totalFee.toString()
                                           setUpdatedTxFee(totalFee.toString())
-                                          console.log('updated payload', transactionPayload)
-                                        } else {
-                                          console.log('keysign not found in payload')
                                         }
                                       }}
                                     />
