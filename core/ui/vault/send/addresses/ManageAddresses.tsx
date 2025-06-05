@@ -10,8 +10,8 @@ export const ManageAddresses = () => {
   return (
     <StackedField
       isOpen={value === 'open'}
-      OpenComponent={<ManageReceiverAddressInputField />}
-      ClosedComponent={<ManageAddressesInputFieldCollapsed />}
+      renderOpen={() => <ManageReceiverAddressInputField />}
+      renderClose={() => <ManageAddressesInputFieldCollapsed />}
     />
   )
 }

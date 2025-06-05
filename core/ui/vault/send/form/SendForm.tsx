@@ -70,7 +70,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
 }
 
 const FormWrapper = styled(PageContent)`
-  width: 468px;
+  width: min(468px, 100%);
   margin-inline: auto;
   overflow: auto;
   ${hideScrollbars}
