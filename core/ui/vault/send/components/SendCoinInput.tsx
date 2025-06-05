@@ -23,16 +23,31 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import { useSendFormFieldState } from '../state/formFields'
 import { ChainOption } from './ChainOption'
 import { SendCoinInputField } from './SendCoinInputField'
 
 export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
+  const [hasUserSelectedCoin, setHasUserSelectedCoin] = useState(false)
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
+
+  const [, setFormFieldState] = useSendFormFieldState()
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
   const { logo, chain, ticker, id } = coin
+
+  const handleAutoAdvance = () => {
+    setFormFieldState(state => ({
+      ...state,
+      field: 'address',
+      fieldsChecked: {
+        ...state.fieldsChecked,
+        coin: true,
+      },
+    }))
+  }
 
   return (
     <Opener
@@ -102,6 +117,10 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               onFinish={(newValue: CoinKey | undefined) => {
                 if (newValue) {
                   onChange(newValue)
+                  if (!hasUserSelectedCoin) {
+                    setHasUserSelectedCoin(true)
+                    handleAutoAdvance()
+                  }
                 }
                 setIsCoinModalOpen(false)
               }}
