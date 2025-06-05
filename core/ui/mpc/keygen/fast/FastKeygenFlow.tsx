@@ -3,10 +3,10 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
-import { OnBackProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp, ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { ComponentType } from 'react'
+import { ComponentType, useCallback } from 'react'
 
 import { pluginPeersConfig } from '../../fast/config'
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
@@ -21,6 +21,25 @@ import { FastKeygenServerActionStep } from './FastKeygenServerActionStep'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
+
+  const handlePeersChange = useCallback(
+    ({
+      value: peers,
+      onFinish,
+    }: ValueProp<string[]> & OnFinishProp<string[]>) => {
+      const isPluginReshare =
+        'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+
+      const shouldFinish =
+        !isPluginReshare ||
+        peers.length >= pluginPeersConfig.minimumJoinedParties
+
+      if (shouldFinish) {
+        onFinish(peers.filter(device => !isServer(device)))
+      }
+    },
+    [keygenOperation]
+  )
 
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
@@ -51,19 +70,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
             return (
               <WaitForServerStep
                 onBack={onBack}
-                onPeersChange={peers => {
-                  const isPluginReshare =
-                    'reshare' in keygenOperation &&
-                    keygenOperation.reshare === 'plugin'
-
-                  const shouldFinish =
-                    !isPluginReshare ||
-                    peers.length >= pluginPeersConfig.minimumJoinedParties
-
-                  if (shouldFinish) {
-                    onFinish(peers.filter(device => !isServer(device)))
-                  }
-                }}
+                onPeersChange={value => handlePeersChange({ value, onFinish })}
               />
             )
           }}
