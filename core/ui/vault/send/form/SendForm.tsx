@@ -6,6 +6,7 @@ import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormVa
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { Button } from '@lib/ui/buttons/Button'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -41,8 +42,9 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageContent
+      <FormWrapper
         as="form"
+        justifyContent="space-between"
         scrollable
         gap={40}
         {...getFormProps({
@@ -56,19 +58,23 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAmount />
         </FormFieldsWrapper>
         <Button
-          style={{
-            marginTop: 'auto',
-          }}
           disabled={isDisabled}
           htmlType="submit"
           loading={isLoading && isPending}
         >
           {t('continue')}
         </Button>
-      </PageContent>
+      </FormWrapper>
     </>
   )
 }
+
+const FormWrapper = styled(PageContent)`
+  width: 468px;
+  margin-inline: auto;
+  overflow: auto;
+  ${hideScrollbars}
+`
 
 const FormFieldsWrapper = styled(VStack)`
   max-height: 525x;
