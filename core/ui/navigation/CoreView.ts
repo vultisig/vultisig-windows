@@ -53,7 +53,6 @@ export type CoreView =
         coin?: CoinKey
         chain?: Chain
         address?: string
-        isIntentionalCoinSelection?: boolean
       }
     }
   | { id: 'settings' }
