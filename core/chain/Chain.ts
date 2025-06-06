@@ -44,12 +44,12 @@ export const IbcEnabledCosmosChain = {
 export type IbcEnabledCosmosChain =
   (typeof IbcEnabledCosmosChain)[keyof typeof IbcEnabledCosmosChain]
 
-export const VaultBasedCosmosChain = {
+const VaultBasedCosmosChain = {
   THORChain: 'THORChain',
   MayaChain: 'MayaChain',
 } as const
 
-export type VaultBasedCosmosChain =
+type VaultBasedCosmosChain =
   (typeof VaultBasedCosmosChain)[keyof typeof VaultBasedCosmosChain]
 
 export const CosmosChain = {

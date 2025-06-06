@@ -3,7 +3,7 @@ import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { getKujiraTokensOnThorChain } from '../chains/cosmos/thor/kujira-merge/getKujiraTokensOnThorChain'
+import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
 import { ibcTransferrableTokensPerChain } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
@@ -37,7 +37,7 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       decimals: 8,
       priceProviderId: 'tcy',
     },
-    ...getKujiraTokensOnThorChain(),
+    ...kujiraCoinsOnThorChain,
   },
 
   [Chain.Tron]: {

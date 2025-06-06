@@ -1,6 +1,6 @@
 import { KnownCoinMetadata } from '../../../../coin/Coin'
 
-export const kujiraThorChainTokens = [
+export const kujiraCoinsMigratedToThorChain = [
   'KUJI',
   'RKUJI',
   'FUZN',
@@ -9,10 +9,11 @@ export const kujiraThorChainTokens = [
   'LVN',
 ] as const
 
-export type KujiraThorChainToken = (typeof kujiraThorChainTokens)[number]
+type KujiraCoinMigratedToThorChain =
+  (typeof kujiraCoinsMigratedToThorChain)[number]
 
-export const kujiraThorChainTokenMergeContracts: Record<
-  KujiraThorChainToken,
+export const kujiraCoinThorChainMergeContracts: Record<
+  KujiraCoinMigratedToThorChain,
   string
 > = {
   KUJI: 'thor14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s3p2nzy',
@@ -24,8 +25,8 @@ export const kujiraThorChainTokenMergeContracts: Record<
 }
 
 // decimals will be different on ThorChain and Kujira
-export const kujiraThorChainTokenSharedMetadata: Record<
-  KujiraThorChainToken,
+export const kujiraCoinsMigratedToThorChainSharedMetadata: Record<
+  KujiraCoinMigratedToThorChain,
   Omit<KnownCoinMetadata, 'decimals'>
 > = {
   KUJI: {
@@ -58,4 +59,16 @@ export const kujiraThorChainTokenSharedMetadata: Record<
     logo: 'wink.png',
     priceProviderId: 'winkhub',
   },
+}
+
+export const kujiraCoinMigratedToThorChainDestinationId: Record<
+  KujiraCoinMigratedToThorChain,
+  string
+> = {
+  KUJI: 'thor.kuji',
+  RKUJI: 'thor.rkuji',
+  FUZN: 'thor.fuzn',
+  NSTK: 'thor.nstk',
+  WINK: 'thor.wink',
+  LVN: 'thor.lvn',
 }
