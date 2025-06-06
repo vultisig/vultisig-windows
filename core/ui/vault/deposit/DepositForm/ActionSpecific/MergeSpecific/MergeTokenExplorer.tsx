@@ -1,46 +1,21 @@
 import { Chain } from '@core/chain/Chain'
 import {
-  KujiraThorChainToken,
-  kujiraThorChainTokenMergeContracts,
+  kujiraCoinMigratedToThorChainDestinationId,
+  kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
+import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { Coin } from '@core/chain/coin/Coin'
-import { ibcTokens } from '@core/chain/coin/ibc'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { FC, useMemo } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { FormData } from '../..'
 import { DepositActionOption } from '../../DepositActionOption'
-
-const useUserMergeAcceptedTokens = () => {
-  const userCoins = useCurrentVaultCoins()
-
-  return useMemo(() => {
-    return userCoins
-      .filter(
-        coin =>
-          coin.chain === Chain.THORChain &&
-          ibcTokens.some(
-            ibcToken =>
-              ibcToken.ticker.toUpperCase() === coin.ticker.toUpperCase()
-          ) &&
-          kujiraThorChainTokenMergeContracts[
-            coin.ticker.toUpperCase() as KujiraThorChainToken
-          ]
-      )
-      .map(coin => ({
-        ...coin,
-        thorchainAddress:
-          kujiraThorChainTokenMergeContracts[
-            coin.ticker.toUpperCase() as KujiraThorChainToken
-          ],
-      }))
-  }, [userCoins])
-}
 
 type Props = {
   activeOption?: Coin
@@ -55,7 +30,12 @@ export const MergeTokenExplorer: FC<Props> = ({
   activeOption,
   setValue,
 }) => {
-  const tokens = useUserMergeAcceptedTokens()
+  const thorChainCoins = useCurrentVaultChainCoins(Chain.THORChain)
+
+  const tokens = useMemo(
+    () => thorChainCoins.filter(coin => coin.id in kujiraCoinsOnThorChain),
+    [thorChainCoins]
+  )
   const { t } = useTranslation()
 
   return (
@@ -75,9 +55,12 @@ export const MergeTokenExplorer: FC<Props> = ({
                 isActive={activeOption?.ticker === token.ticker}
                 onClick={() => {
                   onOptionClick(token)
-                  const selectedMergeAddress = tokens.find(
-                    t => t.ticker === token?.ticker
-                  )?.thorchainAddress
+                  const selectedMergeAddress =
+                    kujiraCoinThorChainMergeContracts[
+                      mirrorRecord(kujiraCoinMigratedToThorChainDestinationId)[
+                        token.id
+                      ]
+                    ]
 
                   setValue('selectedCoin', token, {
                     shouldValidate: true,
