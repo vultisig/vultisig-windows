@@ -1,9 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -16,12 +17,14 @@ import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPric
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
+import { AnimatedSendFormInputError } from '../components/AnimatedSendFormInputError'
 import { HorizontalLine } from '../components/HorizontalLine'
 import { SendInputContainer } from '../components/SendInputContainer'
 import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
+import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendFormFieldState } from '../state/formFields'
 import { AmountInReverseCurrencyDisplay } from './AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
@@ -30,6 +33,8 @@ import { useDualCurrencyAmountInput } from './hooks/useDualCurrencyAmountInput'
 import { baseToFiat } from './utils'
 
 const suggestions = [0.25, 0.5, 0.75, 1]
+const maxSuggestion = 1
+
 export type CurrencyInputMode = 'base' | 'fiat'
 
 export const ManageAmountInputField = () => {
@@ -52,6 +57,7 @@ export const ManageAmountInputField = () => {
 
   const { t } = useTranslation()
   const { decimals, ticker } = coin
+  const chainSpecificQuery = useSendChainSpecificQuery()
 
   const error = !!amountError && value ? amountError : undefined
 
@@ -67,70 +73,78 @@ export const ManageAmountInputField = () => {
           <VStack flexGrow gap={8}>
             <ActionInsideInteractiveElement
               render={() => (
-                <AmountTextInput
-                  validation={error ? 'warning' : undefined}
-                  suggestion={
-                    <SendCoinBalanceDependant
-                      pending={() => null}
-                      error={() => null}
-                      success={amount => (
-                        <HStack alignItems="center" gap={4}>
-                          {suggestions.map(suggestion => {
-                            const baseAmount = fromChainAmount(amount, decimals)
-                            const suggestionBaseValue = baseAmount * suggestion
-
-                            const suggestionValue =
-                              currencyInputMode === 'base'
-                                ? suggestionBaseValue
-                                : (baseToFiat(suggestionBaseValue, coinPrice) ??
-                                  0)
-
-                            return (
-                              <AmountSuggestion
-                                isActive={
-                                  inputValue
-                                    ? isEqual(inputValue, suggestionValue)
-                                    : false
-                                }
-                                onClick={() => {
-                                  handleUpdateAmount(
-                                    currencyInputMode === 'base'
-                                      ? suggestionBaseValue
-                                      : baseToFiat(
-                                          suggestionBaseValue,
-                                          coinPrice
-                                        )
-                                  )
-                                }}
-                                key={suggestion}
-                                value={suggestion}
-                              />
-                            )
-                          })}
-                        </HStack>
-                      )}
-                    />
-                  }
-                  placeholder={t('enter_amount')}
-                  value={inputValue}
-                  onValueChange={value => handleUpdateAmount(value)}
-                />
+                <InputWrapper>
+                  <AmountTextInput
+                    validation={error ? 'warning' : undefined}
+                    placeholder={t('enter_amount')}
+                    value={inputValue}
+                    onValueChange={value => handleUpdateAmount(value)}
+                  />
+                  <AmountInReverseCurrencyDisplay value={currencyInputMode} />
+                </InputWrapper>
               )}
               action={
                 <HStack gap={8}>
-                  <AmountInReverseCurrencyDisplay value={currencyInputMode} />
+                  <CurrencySwitch
+                    value={currencyInputMode}
+                    onClick={value => setCurrencyInputMode(value)}
+                  />
                 </HStack>
               }
               actionPlacerStyles={{
-                right: 12,
-                bottom: 20,
+                right: 0,
+                bottom: 55,
               }}
             />
-            {error && (
-              <Text size={12} color="warning">
-                {error}
-              </Text>
-            )}
+            <SendCoinBalanceDependant
+              pending={() => null}
+              error={() => null}
+              success={amount => (
+                <HStack
+                  justifyContent="space-between"
+                  alignItems="center"
+                  gap={4}
+                >
+                  {suggestions.map(suggestion => {
+                    const suggestionBaseValue =
+                      suggestion === maxSuggestion
+                        ? fromChainAmount(
+                            amount -
+                              (chainSpecificQuery.data
+                                ? getFeeAmount(chainSpecificQuery.data)
+                                : BigInt(0)),
+                            decimals
+                          )
+                        : fromChainAmount(amount, decimals) * suggestion
+
+                    const suggestionValue =
+                      currencyInputMode === 'base'
+                        ? suggestionBaseValue
+                        : (baseToFiat(suggestionBaseValue, coinPrice) ?? 0)
+
+                    return (
+                      <SuggestionOption
+                        isActive={
+                          inputValue
+                            ? isEqual(inputValue, suggestionValue)
+                            : false
+                        }
+                        onClick={() => {
+                          handleUpdateAmount(
+                            currencyInputMode === 'base'
+                              ? suggestionBaseValue
+                              : baseToFiat(suggestionBaseValue, coinPrice)
+                          )
+                        }}
+                        key={suggestion}
+                        value={suggestion}
+                      />
+                    )
+                  })}
+                </HStack>
+              )}
+            />
+            {error && <AnimatedSendFormInputError error={error} />}
             <SendCoinBalanceDependant
               pending={() => null}
               error={() => null}
@@ -149,10 +163,6 @@ export const ManageAmountInputField = () => {
               )}
             />
           </VStack>
-          <CurrencySwitch
-            value={currencyInputMode}
-            onClick={value => setCurrencyInputMode(value)}
-          />
         </HStack>
       </VStack>
       <ManageMemo />
@@ -167,8 +177,37 @@ export const ManageAmountInputField = () => {
   )
 }
 
+const InputWrapper = styled.div`
+  height: 170px;
+  ${vStack({
+    justifyContent: 'center',
+    alignItems: 'center',
+  })}
+  * > input {
+    text-align: center;
+    font-size: 32px;
+    background-color: transparent;
+    border: none;
+
+    &:focus,
+    &:hover {
+      outline: none;
+    }
+
+    &::placeholder {
+      font-size: 24px;
+    }
+  }
+`
+
 const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};
   padding: 16px;
   ${borderRadius.m}
+`
+
+const SuggestionOption = styled(AmountSuggestion)`
+  flex: 1;
+  padding: 6px 18px;
+  border-radius: 99px;
 `

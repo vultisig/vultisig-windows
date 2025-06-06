@@ -22,6 +22,7 @@ import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useInitialViewQuery } from './initialView'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
+import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
@@ -39,6 +40,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const initialView = useInitialViewQuery()
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
   const passcodeEncryption = usePasscodeEncryptionQuery()
+  const passcodeAutoLock = usePasscodeAutoLockQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -53,6 +55,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     initialView,
     coinFinderIgnore,
     passcodeEncryption,
+    passcodeAutoLock,
   })
 
   return (

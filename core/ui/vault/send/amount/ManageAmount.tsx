@@ -1,8 +1,5 @@
-import { Match } from '@lib/ui/base/Match'
-import { AnimatePresence } from 'framer-motion'
-
+import { StackedField } from '../StackedField'
 import { useSendFormFieldState } from '../state/formFields'
-import { AnimatedFieldContainer } from './AnimatedFieldContainer'
 import { ManageAmountInputField } from './ManageAmountInputField'
 import { ManageAmountInputFieldCollapsed } from './ManageAmountInputFieldCollapsed'
 
@@ -11,20 +8,10 @@ export const ManageAmount = () => {
   const value = field == 'amount' ? 'open' : 'closed'
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <Match
-        value={value}
-        open={() => (
-          <AnimatedFieldContainer key="open">
-            <ManageAmountInputField />
-          </AnimatedFieldContainer>
-        )}
-        closed={() => (
-          <AnimatedFieldContainer key="closed">
-            <ManageAmountInputFieldCollapsed />
-          </AnimatedFieldContainer>
-        )}
-      />
-    </AnimatePresence>
+    <StackedField
+      renderOpen={() => <ManageAmountInputField />}
+      renderClose={() => <ManageAmountInputFieldCollapsed />}
+      isOpen={value === 'open'}
+    />
   )
 }

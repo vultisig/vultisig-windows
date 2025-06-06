@@ -1,5 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { SendFormShape, ValidationResult } from '../form/formShape'
 
 type FocusedSendField = 'coin' | 'amount' | 'address' | null
@@ -14,13 +16,25 @@ type FocusedSendFieldContext = {
   errors: ValidationResult<SendFormShape>
 }
 
-export const initialSendFormFieldState: FocusedSendFieldContext = {
-  field: 'coin',
-  fieldsChecked: { coin: true, amount: false, address: false },
-  errors: {},
-}
-
 export const {
   useState: useSendFormFieldState,
-  provider: SendFormFieldStateProvider,
+  provider: InternalSendFormFieldsStateProvider,
 } = getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')
+
+export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
+  const [{ isIntentionalCoinSelection }] = useCoreViewState<'send'>()
+
+  const initialSendFormFieldState: FocusedSendFieldContext = {
+    field: isIntentionalCoinSelection ? 'address' : 'coin',
+    fieldsChecked: { coin: true, amount: false, address: false },
+    errors: {},
+  }
+
+  return (
+    <InternalSendFormFieldsStateProvider
+      initialValue={initialSendFormFieldState}
+    >
+      {children}
+    </InternalSendFormFieldsStateProvider>
+  )
+}

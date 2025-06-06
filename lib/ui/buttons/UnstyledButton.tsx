@@ -1,7 +1,9 @@
 import { interactive } from '@lib/ui/css/interactive'
 import styled from 'styled-components'
 
-export const UnstyledButton = styled.button`
+export const UnstyledButton = styled.button.attrs(({ type = 'button' }) => ({
+  type,
+}))`
   ${interactive};
   padding: 0;
   margin: 0;

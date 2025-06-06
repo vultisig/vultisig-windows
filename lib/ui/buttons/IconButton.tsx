@@ -7,6 +7,8 @@ import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UnstyledButton } from './UnstyledButton'
+
 type IconBtnSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
 type HtmlType = 'button' | 'submit' | 'reset'
@@ -25,7 +27,7 @@ type IconButtonProps = Pick<
   type?: Type
 }
 
-const StyledIconButton = styled.button<{
+const StyledIconButton = styled(UnstyledButton)<{
   btnType: Type
   disabled: boolean
   loading: boolean

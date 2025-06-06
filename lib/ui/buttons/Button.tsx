@@ -7,6 +7,8 @@ import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UnstyledButton } from './UnstyledButton'
+
 type ButtonSize = Extract<Size, 'sm' | 'md'>
 
 type HtmlType = 'button' | 'submit' | 'reset'
@@ -26,7 +28,7 @@ type ButtonProps = Pick<
   type?: Type
 }
 
-const StyledButton = styled.button<{
+const StyledButton = styled(UnstyledButton)<{
   btnType: Type
   disabled: boolean
   loading: boolean
