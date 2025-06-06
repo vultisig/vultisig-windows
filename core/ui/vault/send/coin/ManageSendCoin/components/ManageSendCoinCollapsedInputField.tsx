@@ -13,6 +13,7 @@ import { shouldDisplayChainLogo } from '../../../../../chain/coin/icon/utils/sho
 import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
+import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
 import { useSendFormFieldState } from '../../../state/formFields'
 
@@ -65,18 +66,14 @@ export const ManageSendCoinCollapsedInputField = () => {
           </Text>
         </HStack>
       </HStack>
-      <HStack gap={12}>
-        {!coinError && isCoinFieldChecked && !isOpen && (
-          <IconWrapper>
-            <CheckmarkIcon />
-          </IconWrapper>
-        )}
+      <SendFormIconsWrapper gap={12}>
+        {!coinError && isCoinFieldChecked && !isOpen && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
           </PencilIconWrapper>
         )}
-      </HStack>
+      </SendFormIconsWrapper>
     </CollapsedCoinInputContainer>
   )
 }
@@ -88,15 +85,6 @@ const CollapsedCoinInputContainer = styled(SendInputContainer)`
   })}
 `
 
-const IconWrapper = styled.div`
-  font-size: 16px;
-  color: ${getColor('success')};
-  line-height: 0;
-  border-radius: 99px;
-  border: 1px solid ${getColor('success')};
-`
-
 const PencilIconWrapper = styled.div`
   color: ${getColor('contrast')};
-  font-size: 16px;
 `

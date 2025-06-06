@@ -17,14 +17,12 @@ export const VaultPrimaryActions = ({ value }: Partial<ValueProp<CoinKey>>) => {
   }
 
   const coinKey = value ?? nativeCoins[0]
-  const isIntentionalCoinSelection = value !== undefined
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt
         value={{
           coin: coinKey,
-          isIntentionalCoinSelection,
         }}
       />
       {isOneOf(coinKey.chain, swapEnabledChains) && (
