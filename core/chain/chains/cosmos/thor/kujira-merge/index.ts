@@ -1,13 +1,19 @@
-export type KujiraThorChainToken =
-  | 'KUJI'
-  | 'RKUJI'
-  | 'FUZN'
-  | 'NSTK'
-  | 'WINK'
-  | 'LVN'
+import { KnownCoinMetadata } from '../../../../coin/Coin'
 
-export const kujiraThorChainTokenMergeContracts: Record<
-  KujiraThorChainToken,
+export const kujiraCoinsMigratedToThorChain = [
+  'KUJI',
+  'RKUJI',
+  'FUZN',
+  'NSTK',
+  'WINK',
+  'LVN',
+] as const
+
+type KujiraCoinMigratedToThorChain =
+  (typeof kujiraCoinsMigratedToThorChain)[number]
+
+export const kujiraCoinThorChainMergeContracts: Record<
+  KujiraCoinMigratedToThorChain,
   string
 > = {
   KUJI: 'thor14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s3p2nzy',
@@ -16,4 +22,53 @@ export const kujiraThorChainTokenMergeContracts: Record<
   NSTK: 'thor1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsmam5ck',
   WINK: 'thor1yw4xvtc43me9scqfr2jr2gzvcxd3a9y4eq7gaukreugw2yd2f8tsz3392y',
   LVN: 'thor1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lms7us4yf',
+}
+
+// decimals will be different on ThorChain and Kujira
+export const kujiraCoinsMigratedToThorChainSharedMetadata: Record<
+  KujiraCoinMigratedToThorChain,
+  Omit<KnownCoinMetadata, 'decimals'>
+> = {
+  KUJI: {
+    ticker: 'KUJI',
+    logo: 'kuji',
+    priceProviderId: 'kujira',
+  },
+  RKUJI: {
+    ticker: 'rKUJI',
+    logo: 'rkuji.png',
+    priceProviderId: 'kujira',
+  },
+  FUZN: {
+    ticker: 'FUZN',
+    logo: 'fuzn.png',
+    priceProviderId: 'fuzion',
+  },
+  LVN: {
+    ticker: 'LVN',
+    logo: 'levana',
+    priceProviderId: 'levana-protocol',
+  },
+  NSTK: {
+    ticker: 'NSTK',
+    logo: 'nstk.png',
+    priceProviderId: 'unstake-fi',
+  },
+  WINK: {
+    ticker: 'WINK',
+    logo: 'wink.png',
+    priceProviderId: 'winkhub',
+  },
+}
+
+export const kujiraCoinMigratedToThorChainDestinationId: Record<
+  KujiraCoinMigratedToThorChain,
+  string
+> = {
+  KUJI: 'thor.kuji',
+  RKUJI: 'thor.rkuji',
+  FUZN: 'thor.fuzn',
+  NSTK: 'thor.nstk',
+  WINK: 'thor.wink',
+  LVN: 'thor.lvn',
 }

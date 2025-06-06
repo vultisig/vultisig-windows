@@ -1,15 +1,11 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { chainFeeCoin } from './chainFeeCoin'
+import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
-import {
-  chainsWithIbcTokens,
-  ibcTokens,
-  ibcTransferrableTokensPerChain,
-} from './ibc'
+import { ibcTransferrableTokensPerChain } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
@@ -41,6 +37,7 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       decimals: 8,
       priceProviderId: 'tcy',
     },
+    ...kujiraCoinsOnThorChain,
   },
 
   [Chain.Tron]: {
@@ -766,7 +763,7 @@ export { chainNativeTokens }
 export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
   const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
 
-  for (const chain of chainsWithIbcTokens) {
+  Object.values(IbcEnabledCosmosChain).forEach(chain => {
     const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
     const current = base[chain] ?? []
 
@@ -776,21 +773,7 @@ export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
     if (patched.length || additions.length) {
       base[chain] = [...patched, ...additions]
     }
-  }
-
-  const THORChainExcludedIBCTickers = ['USK', 'ASTRO']
-
-  base[Chain.THORChain] = [
-    ...(base[Chain.THORChain] ?? []),
-    ...ibcTokens
-      .map(t => ({
-        ...t,
-        chain: Chain.THORChain,
-        decimals: chainFeeCoin[Chain.THORChain].decimals,
-        id: `thor.${t.ticker.toLowerCase()}`,
-      }))
-      .filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
-  ]
+  })
 
   return base
 })()

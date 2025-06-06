@@ -30,18 +30,34 @@ export enum UtxoChain {
   Zcash = 'Zcash',
 }
 
-export enum CosmosChain {
-  THORChain = 'THORChain',
-  Cosmos = 'Cosmos',
-  Osmosis = 'Osmosis',
-  MayaChain = 'MayaChain',
-  Dydx = 'Dydx',
-  Kujira = 'Kujira',
-  Terra = 'Terra',
-  TerraClassic = 'TerraClassic',
-  Noble = 'Noble',
-  Akash = 'Akash',
-}
+export const IbcEnabledCosmosChain = {
+  Cosmos: 'Cosmos',
+  Osmosis: 'Osmosis',
+  Dydx: 'Dydx',
+  Kujira: 'Kujira',
+  Terra: 'Terra',
+  TerraClassic: 'TerraClassic',
+  Noble: 'Noble',
+  Akash: 'Akash',
+} as const
+
+export type IbcEnabledCosmosChain =
+  (typeof IbcEnabledCosmosChain)[keyof typeof IbcEnabledCosmosChain]
+
+const VaultBasedCosmosChain = {
+  THORChain: 'THORChain',
+  MayaChain: 'MayaChain',
+} as const
+
+type VaultBasedCosmosChain =
+  (typeof VaultBasedCosmosChain)[keyof typeof VaultBasedCosmosChain]
+
+export const CosmosChain = {
+  ...IbcEnabledCosmosChain,
+  ...VaultBasedCosmosChain,
+} as const
+
+export type CosmosChain = (typeof CosmosChain)[keyof typeof CosmosChain]
 
 export enum OtherChain {
   Sui = 'Sui',
