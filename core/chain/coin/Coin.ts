@@ -1,4 +1,5 @@
 import { pick } from '@lib/utils/record/pick'
+import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
@@ -9,12 +10,19 @@ export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
 }
 
-export type Coin = CoinKey & {
+type CoinMetadata = {
   priceProviderId?: string
   decimals: number
   ticker: string
   logo?: string
 }
+
+export type Coin = CoinKey & CoinMetadata
+
+// Coin metadata coming from autodiscovery might miss logo field,
+// but all coins defined in the codebase should have logo field.
+export type KnownCoinMetadata = RequiredFields<CoinMetadata, 'logo'>
+export type KnownCoin = CoinKey & KnownCoinMetadata
 
 export const coinMetadataFields: (keyof Coin)[] = [
   'priceProviderId',

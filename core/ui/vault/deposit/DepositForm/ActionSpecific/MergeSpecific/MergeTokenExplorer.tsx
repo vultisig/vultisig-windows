@@ -1,6 +1,10 @@
 import { Chain } from '@core/chain/Chain'
+import {
+  KujiraThorChainToken,
+  kujiraThorChainTokenMergeContracts,
+} from '@core/chain/chains/cosmos/thor/kujira-merge'
 import { Coin } from '@core/chain/coin/Coin'
-import { ibcTokens, tokenMergeContracts } from '@core/chain/coin/ibc'
+import { ibcTokens } from '@core/chain/coin/ibc'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -24,11 +28,16 @@ const useUserMergeAcceptedTokens = () => {
             ibcToken =>
               ibcToken.ticker.toUpperCase() === coin.ticker.toUpperCase()
           ) &&
-          tokenMergeContracts[coin.ticker.toUpperCase()]
+          kujiraThorChainTokenMergeContracts[
+            coin.ticker.toUpperCase() as KujiraThorChainToken
+          ]
       )
       .map(coin => ({
         ...coin,
-        thorchainAddress: tokenMergeContracts[coin.ticker.toUpperCase()],
+        thorchainAddress:
+          kujiraThorChainTokenMergeContracts[
+            coin.ticker.toUpperCase() as KujiraThorChainToken
+          ],
       }))
   }, [userCoins])
 }
