@@ -11,8 +11,8 @@ import { TW, WalletCore } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig'
+import { ThorChainSwapEnabledChain } from '../../NativeSwapChain'
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto'
-import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains'
 
 type Input = {
   keysignPayload: KeysignPayload
@@ -31,7 +31,7 @@ export const getThorchainSwapTxInputData = async ({
   )
 
   const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
-  const fromChain = fromCoin.chain as ThorchainSwapEnabledChain
+  const fromChain = fromCoin.chain as ThorChainSwapEnabledChain
 
   const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
 
@@ -109,7 +109,7 @@ export const getThorchainSwapTxInputData = async ({
     throw new Error('Not implemented')
   }
 
-  return match(fromChain as ThorchainSwapEnabledChain, {
+  return match(fromChain as ThorChainSwapEnabledChain, {
     [Chain.THORChain]: getThorTxInputData,
     [Chain.Cosmos]: getCosmosTxInputData,
     [Chain.BitcoinCash]: getUtxoTxInputData,

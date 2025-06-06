@@ -1,11 +1,11 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 import { getKujiraTokensOnThorChain } from '../chains/cosmos/thor/kujira-merge/getKujiraTokensOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
-import { chainsWithIbcTokens, ibcTransferrableTokensPerChain } from './ibc'
+import { ibcTransferrableTokensPerChain } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
@@ -763,7 +763,7 @@ export { chainNativeTokens }
 export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
   const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
 
-  for (const chain of chainsWithIbcTokens) {
+  Object.values(IbcEnabledCosmosChain).forEach(chain => {
     const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
     const current = base[chain] ?? []
 
@@ -773,7 +773,7 @@ export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
     if (patched.length || additions.length) {
       base[chain] = [...patched, ...additions]
     }
-  }
+  })
 
   return base
 })()
