@@ -26,7 +26,7 @@ export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
 
   const initialSendFormFieldState: FocusedSendFieldContext = {
     field: coin ? 'address' : 'coin',
-    fieldsChecked: { coin: true, amount: false, address: false },
+    fieldsChecked: { coin: !!coin, amount: false, address: false },
     errors: {},
   }
 
