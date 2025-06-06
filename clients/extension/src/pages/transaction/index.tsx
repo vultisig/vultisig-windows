@@ -1,7 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
-import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
@@ -13,13 +12,12 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useEvmBaseFeeQuery } from '@core/ui/chain/queries/evm/useEvmBaseFeeQuery'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
@@ -50,7 +48,6 @@ import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
 import { GasFeeAdjuster } from './GasFeeAdjuster'
-import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -161,8 +158,7 @@ export const TransactionPage = () => {
     }
     return null
   }, [keysignMessagePayload])
-  const { data: defaultFeePriority = 0 } =
-  useEvmDefaultPriorityFeeQuery({
+  const { data: defaultFeePriority = 0 } = useEvmDefaultPriorityFeeQuery({
     chain: chain as EvmChain,
   })
 
@@ -247,14 +243,20 @@ export const TransactionPage = () => {
                                   extra={
                                     <GasFeeAdjuster
                                       keysignPayload={keysignMessagePayload}
-                                      baseFee={Number(transactionPayload.maxPriorityFeePerGas) || defaultFeePriority}
-                                      onFeeChange={(fee) => {
+                                      baseFee={
+                                        Number(
+                                          transactionPayload.maxPriorityFeePerGas
+                                        ) || defaultFeePriority
+                                      }
+                                      onFeeChange={fee => {
                                         if (
                                           'keysign' in keysignMessagePayload
                                         ) {
-                                          const currentTxFee = Number(transactionPayload.txFee)
+                                          const currentTxFee = Number(
+                                            transactionPayload.txFee
+                                          )
                                           const totalFee = currentTxFee + fee
-                
+
                                           setUpdatedTxFee(totalFee.toString())
                                         }
                                       }}
