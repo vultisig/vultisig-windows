@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -23,6 +24,7 @@ import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
+import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendFormFieldState } from '../state/formFields'
 import { AmountInReverseCurrencyDisplay } from './AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
@@ -31,6 +33,8 @@ import { useDualCurrencyAmountInput } from './hooks/useDualCurrencyAmountInput'
 import { baseToFiat } from './utils'
 
 const suggestions = [0.25, 0.5, 0.75, 1]
+const maxSuggestion = 1
+
 export type CurrencyInputMode = 'base' | 'fiat'
 
 export const ManageAmountInputField = () => {
@@ -53,6 +57,7 @@ export const ManageAmountInputField = () => {
 
   const { t } = useTranslation()
   const { decimals, ticker } = coin
+  const chainSpecificQuery = useSendChainSpecificQuery()
 
   const error = !!amountError && value ? amountError : undefined
 
@@ -101,8 +106,16 @@ export const ManageAmountInputField = () => {
                   gap={4}
                 >
                   {suggestions.map(suggestion => {
-                    const baseAmount = fromChainAmount(amount, decimals)
-                    const suggestionBaseValue = baseAmount * suggestion
+                    const suggestionBaseValue =
+                      suggestion === maxSuggestion
+                        ? fromChainAmount(
+                            amount -
+                              (chainSpecificQuery.data
+                                ? getFeeAmount(chainSpecificQuery.data)
+                                : BigInt(0)),
+                            decimals
+                          )
+                        : fromChainAmount(amount, decimals) * suggestion
 
                     const suggestionValue =
                       currencyInputMode === 'base'
