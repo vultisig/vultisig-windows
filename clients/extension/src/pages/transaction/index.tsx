@@ -50,6 +50,7 @@ import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
 import { GasFeeAdjuster } from './GasFeeAdjuster'
+import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -160,11 +161,10 @@ export const TransactionPage = () => {
     }
     return null
   }, [keysignMessagePayload])
-
-  const query = useEvmBaseFeeQuery(chain as EvmChain)
-  const baseFee = query?.data
-    ? Number(formatUnits(query.data, gwei.decimals))
-    : 0
+  const { data: defaultFeePriority = 0 } =
+  useEvmDefaultPriorityFeeQuery({
+    chain: chain as EvmChain,
+  })
 
   return (
     <MatchQuery
@@ -247,7 +247,7 @@ export const TransactionPage = () => {
                                   extra={
                                     <GasFeeAdjuster
                                       keysignPayload={keysignMessagePayload}
-                                      baseFee={Number(transactionPayload.txFee)}
+                                      baseFee={Number(transactionPayload.maxPriorityFeePerGas) || defaultFeePriority}
                                       onFeeChange={(fee) => {
                                         if (
                                           'keysign' in keysignMessagePayload
