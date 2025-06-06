@@ -31,12 +31,8 @@ import { CurrencySwitch } from './AmountSwitch'
 import { useDualCurrencyAmountInput } from './hooks/useDualCurrencyAmountInput'
 import { baseToFiat } from './utils'
 
-const suggestions = {
-  quarter: 0.25,
-  half: 0.5,
-  threeQuarters: 0.75,
-  max: 1,
-} as const
+const suggestions = [0.25, 0.5, 0.75, 1]
+const maxSuggestion = 1
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
@@ -86,7 +82,7 @@ export const ManageAmountInputField = () => {
                         <HStack alignItems="center" gap={4}>
                           {Object.values(suggestions).map(suggestion => {
                             const suggestionBaseValue =
-                              suggestion === suggestions.max
+                              suggestion === maxSuggestion
                                 ? fromChainAmount(
                                     amount -
                                       (chainSpecificQuery.data
