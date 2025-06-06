@@ -8,7 +8,7 @@ import { omit } from '@lib/utils/record/omit'
 import { useCallback, useMemo } from 'react'
 
 export type FeeSettings = EvmFeeSettings | UtxoFeeSettings
-import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
+import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 type FeeSettingsRecord = Record<string, FeeSettings>
 
@@ -30,7 +30,7 @@ export const FeeSettingsProvider = ({ children }: ChildrenProp) => (
 )
 
 export const useFeeSettings = <T extends FeeSettings>() => {
-  const [{ coin }] = useCoreViewState<'send'>()
+  const [{ coin }] = useCurrentSendCoin()
   const [record, setRecord] = useFeeSettingsRecord()
 
   const value = useMemo(() => {

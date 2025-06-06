@@ -11,14 +11,14 @@ import { ChainCoinIcon } from '../../../../../chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '../../../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '../../../../../chain/coin/icon/utils/shouldDisplayChainLogo'
 import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
-import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
 import { useSendFormFieldState } from '../../../state/formFields'
+import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 export const ManageSendCoinCollapsedInputField = () => {
-  const [{ coin: coinKey }] = useCoreViewState<'send'>()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const { logo, ticker, chain, id } = coin
   const { t } = useTranslation()

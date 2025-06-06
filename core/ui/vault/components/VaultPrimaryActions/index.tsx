@@ -12,11 +12,10 @@ import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
 
 type Props = {
   value?: CoinKey
-  chain: Chain
+  chain?: Chain
 }
 
 export const VaultPrimaryActions = ({ value, chain }: Props) => {
-  console.log('🚀 ~ VaultPrimaryActions ~ chain:', chain)
   const nativeCoins = useCurrentVaultNativeCoins()
 
   if (isEmpty(nativeCoins)) {
