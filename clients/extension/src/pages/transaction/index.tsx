@@ -248,43 +248,13 @@ export const TransactionPage = () => {
                                     <GasFeeAdjuster
                                       keysignPayload={keysignMessagePayload}
                                       baseFee={Number(transactionPayload.txFee)}
-                                      onFeeChange={(fee, gasLimit) => {
-                                        console.log('Fee:', fee)
-                                        console.log('Gas Limit:', gasLimit)
-                                        console.log('Base Fee:', baseFee)
+                                      onFeeChange={(fee) => {
                                         if (
                                           'keysign' in keysignMessagePayload
                                         ) {
-                                          const keysign = keysignMessagePayload.keysign
                                           const currentTxFee = Number(transactionPayload.txFee)
                                           const totalFee = currentTxFee + fee
-                                          console.log('Total Fee:', totalFee)
-                                          console.log("baseFee", currentTxFee)
-                                          console.log("fee", fee)
-              
-
-                                          if (
-                                            keysign.blockchainSpecific &&
-                                            'evm' in keysign.blockchainSpecific
-                                          ) {
-                                            const evmSpecific = keysign
-                                              .blockchainSpecific.evm as {
-                                              priorityFee: string
-                                              maxFeePerGasWei: string
-                                              gasLimit?: string
-                                            }
-                                            evmSpecific.priorityFee = fee.toString()
-                                            evmSpecific.maxFeePerGasWei = (currentTxFee * 1.5 + fee).toString()
-                                            evmSpecific.gasLimit = gasLimit.toString()
-                                          }
-
-                                          // Update the transaction payload
-                                          const updatedTransactionPayload =
-                                            keysign as unknown as IKeysignTransactionPayload
-                                          updatedTransactionPayload.maxPriorityFeePerGas = fee.toString()
-                                          updatedTransactionPayload.maxFeePerGas = (currentTxFee * 1.5 + fee).toString()
-                                          updatedTransactionPayload.gasLimit = gasLimit.toString()
-                                          updatedTransactionPayload.txFee = totalFee.toString()
+                
                                           setUpdatedTxFee(totalFee.toString())
                                         }
                                       }}

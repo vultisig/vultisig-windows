@@ -73,7 +73,11 @@ export const GasFeeAdjuster = ({
   const handleSave = () => {
     if ('keysign' in keysignPayload) {
       const keysign = keysignPayload.keysign
-      const totalFee = baseFee + value.priorityFee
+      const transactionPayload = keysign as unknown as IKeysignTransactionPayload
+      const maxFeePerGasWei = Number(
+        BigInt(Math.round(Number(baseFee) * 1.5 + value.priorityFee))
+      )
+      const totalFee = maxFeePerGasWei * value.gasLimit
 
       // Update the transaction fee in the blockchain specific data
       if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
@@ -83,14 +87,12 @@ export const GasFeeAdjuster = ({
           gasLimit?: string
         }
         evmSpecific.priorityFee = value.priorityFee.toString()
-        evmSpecific.maxFeePerGasWei = (baseFee * 1.5 + value.priorityFee).toString()
+        evmSpecific.maxFeePerGasWei = maxFeePerGasWei.toString()
         evmSpecific.gasLimit = value.gasLimit.toString()
       }
       // Update the transaction payload
-      const transactionPayload =
-        keysign as unknown as IKeysignTransactionPayload
       transactionPayload.maxPriorityFeePerGas = value.priorityFee.toString()
-      transactionPayload.maxFeePerGas = (baseFee * 1.5 + value.priorityFee).toString()
+      transactionPayload.maxFeePerGas = maxFeePerGasWei.toString()
       transactionPayload.gasLimit = value.gasLimit.toString()
       transactionPayload.txFee = totalFee.toString()
     }
