@@ -1,13 +1,10 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { TW } from '@trustwallet/wallet-core'
 
-import { nativeSwapEnabledChainsRecord } from '../NativeSwapChain'
-
-export type ThorchainSwapEnabledChain =
-  (typeof nativeSwapEnabledChainsRecord)[CosmosChain.THORChain][number]
+import { ThorChainSwapEnabledChain } from '../NativeSwapChain'
 
 export const thorchainSwapProtoChains: Record<
-  ThorchainSwapEnabledChain,
+  ThorChainSwapEnabledChain,
   TW.THORChainSwap.Proto.Chain
 > = {
   [Chain.Avalanche]: TW.THORChainSwap.Proto.Chain.AVAX,
