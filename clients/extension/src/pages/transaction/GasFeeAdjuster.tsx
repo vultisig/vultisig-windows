@@ -28,10 +28,11 @@ export const GasFeeAdjuster = ({
   const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
     if (!('keysign' in keysignPayload)) {
       return {
-        priorityFee: 0,
+        priorityFee: baseFee,
         gasLimit: 21000,
       }
     }
+    console.log('Base Fee in GasFeeAdjuster:', baseFee)
     const transactionPayload =
       keysignPayload.keysign as unknown as IKeysignTransactionPayload
     return {
@@ -73,6 +74,7 @@ export const GasFeeAdjuster = ({
     if ('keysign' in keysignPayload) {
       const keysign = keysignPayload.keysign
       const totalFee = baseFee + value.priorityFee
+
       // Update the transaction fee in the blockchain specific data
       if (keysign.blockchainSpecific && 'evm' in keysign.blockchainSpecific) {
         const evmSpecific = keysign.blockchainSpecific.evm as {
@@ -80,27 +82,15 @@ export const GasFeeAdjuster = ({
           maxFeePerGasWei: string
           gasLimit?: string
         }
-        const priorityFeeInWei = BigInt(
-          Math.floor(value.priorityFee * 1e9)
-        ).toString()
-        const maxFeePerGasWei = BigInt(
-          Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9)
-        ).toString()
-        evmSpecific.priorityFee = priorityFeeInWei
-        evmSpecific.maxFeePerGasWei = maxFeePerGasWei
+        evmSpecific.priorityFee = value.priorityFee.toString()
+        evmSpecific.maxFeePerGasWei = (baseFee * 1.5 + value.priorityFee).toString()
         evmSpecific.gasLimit = value.gasLimit.toString()
       }
       // Update the transaction payload
       const transactionPayload =
         keysign as unknown as IKeysignTransactionPayload
-      const priorityFeeInWei = BigInt(
-        Math.floor(value.priorityFee * 1e9)
-      ).toString()
-      const maxFeePerGasWei = BigInt(
-        Math.floor((baseFee * 1.5 + value.priorityFee) * 1e9)
-      ).toString()
-      transactionPayload.maxPriorityFeePerGas = priorityFeeInWei
-      transactionPayload.maxFeePerGas = maxFeePerGasWei
+      transactionPayload.maxPriorityFeePerGas = value.priorityFee.toString()
+      transactionPayload.maxFeePerGas = (baseFee * 1.5 + value.priorityFee).toString()
       transactionPayload.gasLimit = value.gasLimit.toString()
       transactionPayload.txFee = totalFee.toString()
     }
