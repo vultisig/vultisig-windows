@@ -4,6 +4,7 @@ import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DollarIcon } from '@lib/ui/icons/DollarIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
+import { LayoutGroup, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
@@ -22,25 +23,43 @@ const currencyModeIcon: Record<CurrencyInputMode, ReactNode> = {
 export const CurrencySwitch = ({ onClick, value }: Props) => {
   return (
     <Wrapper gap={2}>
-      {Object.entries(currencyModeIcon).map(([mode, icon]) => (
-        <IconButton
-          key={mode}
-          type={value === mode ? 'primary' : 'link'}
-          onClick={() => onClick(mode as CurrencyInputMode)}
-        >
-          {icon}
-        </IconButton>
-      ))}
+      <LayoutGroup>
+        {(Object.keys(currencyModeIcon) as CurrencyInputMode[])
+          .sort((a, b) => (a === value ? -1 : b === value ? 1 : 0)) // active first
+          .map(mode => {
+            const isActive = value === mode
+            return (
+              <AnimatedIconButton
+                layout
+                key={mode}
+                type={isActive ? 'primary' : 'link'}
+                onClick={() => onClick(mode)}
+                $isActive={isActive}
+              >
+                {currencyModeIcon[mode]}
+              </AnimatedIconButton>
+            )
+          })}
+      </LayoutGroup>
     </Wrapper>
   )
 }
+
+const AnimatedIconButton = motion(styled(IconButton)<{ $isActive: boolean }>`
+  border-radius: 50%;
+  scale: ${({ $isActive }) => ($isActive ? 1.1 : 1)};
+  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.6)};
+  transition:
+    scale 0.2s ease,
+    opacity 0.2s ease;
+`)
 
 const Wrapper = styled(VStack)`
   padding: 8px 5px;
   font-size: 16px;
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
-  ${borderRadius.l}
+  ${borderRadius.l};
 
   > button {
     border-radius: 50%;

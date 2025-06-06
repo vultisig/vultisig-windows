@@ -9,6 +9,7 @@ import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isEqual } from '@lib/utils/number/isEqual'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -74,12 +75,22 @@ export const ManageAmountInputField = () => {
             <ActionInsideInteractiveElement
               render={() => (
                 <InputWrapper>
-                  <AmountTextInput
-                    validation={error ? 'warning' : undefined}
-                    placeholder={t('enter_amount')}
-                    value={inputValue}
-                    onValueChange={value => handleUpdateAmount(value)}
-                  />
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currencyInputMode}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -20, opacity: 0 }}
+                      transition={{ duration: 0.18 }}
+                    >
+                      <AmountTextInput
+                        validation={error ? 'warning' : undefined}
+                        placeholder={t('enter_amount')}
+                        value={inputValue}
+                        onValueChange={handleUpdateAmount}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
                   <AmountInReverseCurrencyDisplay value={currencyInputMode} />
                 </InputWrapper>
               )}
