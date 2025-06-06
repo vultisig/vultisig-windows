@@ -22,10 +22,10 @@ export const {
 } = getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')
 
 export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
-  const [{ isIntentionalCoinSelection }] = useCoreViewState<'send'>()
+  const [{ coin }] = useCoreViewState<'send'>()
 
   const initialSendFormFieldState: FocusedSendFieldContext = {
-    field: isIntentionalCoinSelection ? 'address' : 'coin',
+    field: coin ? 'address' : 'coin',
     fieldsChecked: { coin: true, amount: false, address: false },
     errors: {},
   }
