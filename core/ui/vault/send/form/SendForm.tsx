@@ -6,6 +6,7 @@ import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormVa
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { Button } from '@lib/ui/buttons/Button'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -16,6 +17,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   useSendChainSpecificQuery()
@@ -40,8 +42,9 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageContent
+      <FormWrapper
         as="form"
+        justifyContent="space-between"
         scrollable
         gap={40}
         {...getFormProps({
@@ -61,7 +64,14 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         >
           {t('continue')}
         </Button>
-      </PageContent>
+      </FormWrapper>
     </>
   )
 }
+
+const FormWrapper = styled(PageContent)`
+  width: min(468px, 100%);
+  margin-inline: auto;
+  overflow: auto;
+  ${hideScrollbars}
+`

@@ -45,5 +45,9 @@ export function useStepNavigation<T>({
     })
   }, [steps, circular, onExit])
 
-  return { step, setStep, toNextStep, toPreviousStep }
+  const toFirstStep = useCallback(() => {
+    setStep(steps[0])
+  }, [steps])
+
+  return { step, setStep, toNextStep, toPreviousStep, toFirstStep }
 }

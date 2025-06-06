@@ -1,9 +1,4 @@
-import { AnimationDescription } from '@core/ui/onboarding/components/AnimationDescriptions'
-import { RiveWrapper } from '@core/ui/onboarding/components/Onobarding.styled'
-import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
-import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -12,7 +7,16 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+
+import { useResponsiveness } from '../../providers/ResponsivenessProivder'
+import {
+  BottomItemsWrapper,
+  DescriptionWrapper,
+  NextAnimationButton,
+} from '../../vault/backup/shared/BackupOverviewSlides.styles'
+import { useOnboardingStepsAnimations } from '../hooks/useOnboardingStepsAnimations'
+import { AnimationDescription } from './AnimationDescriptions'
+import { RiveWrapper } from './Onobarding.styled'
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void
@@ -36,7 +40,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
 
   return (
     <PageContent flexGrow style={{ overflowY: 'hidden' }}>
-      <ProgressWrapper gap={16}>
+      <VStack gap={16} style={{ marginInline: 'auto' }}>
         <HStack justifyContent="space-between" alignItems="baseline">
           <HStack
             gap={4}
@@ -51,11 +55,11 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             <ChevronLeftIcon fontSize={14} />
             <Text size={isSmall ? 14 : 18}>{t('back')}</Text>
           </HStack>
-          <Button onClick={onCompleteSteps}>
+          <UnstyledButton onClick={onCompleteSteps}>
             <Text color="shy" size={isSmall ? 14 : 18}>
               {t('skip')}
             </Text>
-          </Button>
+          </UnstyledButton>
         </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
@@ -64,8 +68,8 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           value={animations.indexOf(currentAnimation) + 1}
           variant="bars"
         />
-      </ProgressWrapper>
-      <ContentWrapper justifyContent="space-between" flexGrow>
+      </VStack>
+      <VStack justifyContent="space-between" flexGrow>
         <RiveWrapper
           isLastAnimation={currentAnimation === animations.length - 1}
         >
@@ -75,15 +79,11 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             }}
           />
         </RiveWrapper>
-        <VStack
-          justifyContent="flex-end"
-          gap={12}
-          style={{
-            minHeight: !isSmall ? '170px' : '102px',
-          }}
-        >
+        <DescriptionWrapper>
           <AnimationDescription animation={currentAnimation} />
-          <IconButton
+        </DescriptionWrapper>
+        <BottomItemsWrapper>
+          <NextAnimationButton
             disabled={isLoading}
             onClick={
               currentAnimation !== animations[animations.length - 1]
@@ -92,18 +92,9 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             }
           >
             <ChevronRightIcon />
-          </IconButton>
-        </VStack>
-      </ContentWrapper>
+          </NextAnimationButton>
+        </BottomItemsWrapper>
+      </VStack>
     </PageContent>
   )
 }
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-`
-
-const ContentWrapper = styled(VStack)`
-  margin-inline: auto;
-  position: relative;
-`

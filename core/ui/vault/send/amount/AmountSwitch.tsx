@@ -37,7 +37,6 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
 
 const Wrapper = styled(VStack)`
   padding: 8px 5px;
-  margin-top: 24px;
   font-size: 16px;
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};

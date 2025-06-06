@@ -1,27 +1,21 @@
-import { AddressBookListItem } from '@core/ui/address-book/item'
+import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
-import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
-import { textInputHeight } from '@lib/ui/css/textInput'
 import BookAIcon from '@lib/ui/icons/BookAIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -30,17 +24,22 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
+import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
+import { useCurrentSendCoin } from '../../state/sendCoin'
+import { AddressBookModal } from './AddressBookModal'
+
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiverAddressInputField = () => {
   const { t } = useTranslation()
   const address = useSender()
-
+  const [{ coin }] = useCurrentSendCoin()
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
-  const addressBookItems = useAddressBookItems()
+  const walletCore = useAssertWalletCore()
 
   const [
     {
@@ -58,11 +57,18 @@ export const ManageReceiverAddressInputField = () => {
         ...state,
         fieldsChecked: {
           ...state.fieldsChecked,
-          address: value ? true : false,
+          address: !!value,
         },
+        field: isValidAddress({
+          address: value,
+          walletCore,
+          chain: coin?.chain,
+        })
+          ? 'amount'
+          : state.field,
       }))
     },
-    [setFocusedSendField, setValue]
+    [coin?.chain, setFocusedSendField, setValue, walletCore]
   )
 
   const onScanSuccess = useCallback(
@@ -100,74 +106,45 @@ export const ManageReceiverAddressInputField = () => {
             </Modal>
           )}
           addressBook={() => (
-            <Modal
+            <AddressBookModal
               onClose={() => setViewState('default')}
-              title={t('address_book')}
-            >
-              <List>
-                {addressBookItems.map(item => (
-                  <AddressBookListItem
-                    key={item.id}
-                    onSelect={address => {
-                      handleUpdateReceiverAddress(address)
-                      setViewState('default')
-                    }}
-                    {...item}
-                  />
-                ))}
-              </List>
-            </Modal>
+              onSelect={address => {
+                handleUpdateReceiverAddress(address)
+                setViewState('default')
+              }}
+            />
           )}
           default={() => (
             <VStack gap={8}>
-              <ActionInsideInteractiveElement
-                render={({ actionSize }) => (
-                  <VStack gap={4}>
-                    <Input
-                      validation={error ? 'warning' : undefined}
-                      placeholder={t('enter_address')}
-                      value={value}
-                      onValueChange={value =>
-                        handleUpdateReceiverAddress(value)
-                      }
-                      style={{
-                        paddingRight:
-                          actionSize.width + textInputHorizontalPadding,
-                      }}
-                    />
-                  </VStack>
-                )}
-                action={
-                  <HStack gap={8}>
-                    <IconButton
-                      onClick={async () => {
-                        const { data } = await attempt(getClipboardText)
+              <VStack gap={4}>
+                <Input
+                  validation={error ? 'warning' : undefined}
+                  placeholder={t('enter_address')}
+                  value={value}
+                  onValueChange={value => handleUpdateReceiverAddress(value)}
+                />
+                {error && <AnimatedSendFormInputError error={error} />}
+              </VStack>
 
-                        if (data) {
-                          handleUpdateReceiverAddress(data)
-                        }
-                      }}
-                    >
-                      <PasteIcon />
-                    </IconButton>
-                    <IconButton onClick={() => setViewState('scanner')}>
-                      <CameraIcon />
-                    </IconButton>
-                    <IconButton onClick={() => setViewState('addressBook')}>
-                      <BookAIcon />
-                    </IconButton>
-                  </HStack>
-                }
-                actionPlacerStyles={{
-                  right: textInputHorizontalPadding,
-                  bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
-                }}
-              />
-              {error && (
-                <Text size={12} color="warning">
-                  {error}
-                </Text>
-              )}
+              <HStack gap={8}>
+                <StyledIconButton
+                  onClick={async () => {
+                    const { data } = await attempt(getClipboardText)
+
+                    if (data) {
+                      handleUpdateReceiverAddress(data)
+                    }
+                  }}
+                >
+                  <PasteIcon />
+                </StyledIconButton>
+                <StyledIconButton onClick={() => setViewState('scanner')}>
+                  <CameraIcon />
+                </StyledIconButton>
+                <StyledIconButton onClick={() => setViewState('addressBook')}>
+                  <BookAIcon />
+                </StyledIconButton>
+              </HStack>
             </VStack>
           )}
         />
@@ -198,4 +175,17 @@ const Input = styled(TextInput)<{
 const FixedScanQRView = styled(ScanQrView)`
   position: fixed;
   inset: 0;
+`
+
+const StyledIconButton = styled(IconButton)`
+  padding: 12px 16px;
+  width: 103px;
+  height: 46px;
+  background-color: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  ${borderRadius.s}
+
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
 `

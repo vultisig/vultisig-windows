@@ -1,6 +1,25 @@
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
+
+export const NextAnimationButton = styled(IconButton)`
+  flex-shrink: 0;
+  width: 84px;
+  height: 48px;
+  border-radius: 99px;
+  background-color: ${getColor('primary')};
+  align-self: center;
+
+  &:hover {
+    background-color: ${getColor('primary')};
+  }
+
+  & svg {
+    stroke: ${getColor('textDark')};
+  }
+`
 
 export const ProgressWrapper = styled(VStack)`
   padding: 16px;
