@@ -106,8 +106,16 @@ export const ManageAmountInputField = () => {
                   gap={4}
                 >
                   {suggestions.map(suggestion => {
-                    const baseAmount = fromChainAmount(amount, decimals)
-                    const suggestionBaseValue = baseAmount * suggestion
+                    const suggestionBaseValue =
+                      suggestion === maxSuggestion
+                        ? fromChainAmount(
+                            amount -
+                              (chainSpecificQuery.data
+                                ? getFeeAmount(chainSpecificQuery.data)
+                                : BigInt(0)),
+                            decimals
+                          )
+                        : fromChainAmount(amount, decimals) * suggestion
 
                     const suggestionValue =
                       currencyInputMode === 'base'
