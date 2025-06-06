@@ -3,6 +3,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
+import { SendCoinGuard } from './coin/SendCoinGuard'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
@@ -22,24 +23,24 @@ export const SendPage = () => {
   const [{ address }] = useCoreViewState<'send'>()
 
   return (
-    <SendFeesProvider initialValue={null}>
-      <FeeSettingsProvider>
-        <SendAmountProvider initialValue={null}>
-          <SendReceiverProvider initialValue={address ?? ''}>
-            <SendMemoProvider initialValue="">
-              <Match
-                value={step}
-                form={() => (
-                  <SendFormFieldsStateProvider>
-                    <SendForm onFinish={toNextStep} />
-                  </SendFormFieldsStateProvider>
-                )}
-                verify={() => <SendVerify onBack={toPreviousStep} />}
-              />
-            </SendMemoProvider>
-          </SendReceiverProvider>
-        </SendAmountProvider>
-      </FeeSettingsProvider>
-    </SendFeesProvider>
+    <SendFormFieldsStateProvider>
+      <SendCoinGuard>
+        <SendFeesProvider initialValue={null}>
+          <FeeSettingsProvider>
+            <SendAmountProvider initialValue={null}>
+              <SendReceiverProvider initialValue={address ?? ''}>
+                <SendMemoProvider initialValue="">
+                  <Match
+                    value={step}
+                    form={() => <SendForm onFinish={toNextStep} />}
+                    verify={() => <SendVerify onBack={toPreviousStep} />}
+                  />
+                </SendMemoProvider>
+              </SendReceiverProvider>
+            </SendAmountProvider>
+          </FeeSettingsProvider>
+        </SendFeesProvider>
+      </SendCoinGuard>
+    </SendFormFieldsStateProvider>
   )
 }

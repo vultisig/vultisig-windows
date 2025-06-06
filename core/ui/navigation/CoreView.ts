@@ -50,7 +50,8 @@ export type CoreView =
   | {
       id: 'send'
       state: {
-        coin: CoinKey
+        coin?: CoinKey
+        chain?: Chain
         address?: string
         isIntentionalCoinSelection?: boolean
       }
