@@ -6,6 +6,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { SendFormIconsWrapper } from '../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../components/SendInputContainer'
 import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
@@ -38,18 +39,14 @@ export const ManageAmountInputFieldCollapsed = () => {
           {amount}
         </Text>
       </HStack>
-      <HStack gap={12}>
-        {isAmountFieldChecked && (
-          <IconWrapper>
-            <CheckmarkIcon />
-          </IconWrapper>
-        )}
+      <SendFormIconsWrapper gap={12}>
+        {isAmountFieldChecked && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
           </PencilIconWrapper>
         )}
-      </HStack>
+      </SendFormIconsWrapper>
     </CollapsedCoinInputContainer>
   )
 }
@@ -61,15 +58,6 @@ const CollapsedCoinInputContainer = styled(SendInputContainer)`
   })}
 `
 
-const IconWrapper = styled.div`
-  font-size: 16px;
-  color: ${getColor('success')};
-  line-height: 0;
-  border-radius: 99px;
-  border: 1px solid ${getColor('success')};
-`
-
 const PencilIconWrapper = styled.div`
   color: ${getColor('contrast')};
-  font-size: 16px;
 `
