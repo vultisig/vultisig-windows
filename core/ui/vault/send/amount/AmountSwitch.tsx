@@ -25,11 +25,12 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
     <Wrapper gap={2}>
       <LayoutGroup>
         {(Object.keys(currencyModeIcon) as CurrencyInputMode[])
-          .sort((a, b) => (a === value ? -1 : b === value ? 1 : 0)) // active first
+          .sort((a, b) => (a === value ? -1 : b === value ? 1 : 0))
           .map(mode => {
             const isActive = value === mode
             return (
               <AnimatedIconButton
+                htmlType="button"
                 layout
                 key={mode}
                 type={isActive ? 'primary' : 'link'}
