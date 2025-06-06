@@ -12,7 +12,7 @@ export const SendCoinGuard = ({ children }: ChildrenProp) => {
     nativeCoins.find(coin => coin.chain === chain) || nativeCoins[0]
 
   useEffect(() => {
-    if (!coin) {
+    if (!coin && nativeCoin) {
       setCoin(pv => ({ ...pv, coin: nativeCoin }))
     }
   }, [coin, nativeCoin, setCoin])
