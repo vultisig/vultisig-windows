@@ -1,7 +1,7 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
 
-import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
+import { useCurrentSendCoin } from '../../state/sendCoin'
 import { ManageEvmFeeSettings } from './evm/ManageEvmFeeSettings'
 import { ManageFeeSettingsFrame } from './ManageFeeSettingsFrame'
 import { ManageUtxoFeeSettings } from './utxo/ManageUtxoFeeSettings'
@@ -11,7 +11,7 @@ export const ManageFeeSettings = () => {
     {
       coin: { chain },
     },
-  ] = useCoreViewState<'send'>()
+  ] = useCurrentSendCoin()
   const chainKind = getChainKind(chain)
 
   return (

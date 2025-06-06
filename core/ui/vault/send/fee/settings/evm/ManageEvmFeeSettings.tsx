@@ -1,7 +1,6 @@
 import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { BaseFee } from '@core/ui/vault/send/fee/settings/evm/baseFee/BaseFee'
@@ -19,6 +18,8 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCurrentSendCoin } from '../../../state/sendCoin'
+
 type FeeSettingsFormShape = {
   priorityFee: number
   gasLimit: number | null
@@ -31,7 +32,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     {
       coin: { chain },
     },
-  ] = useCoreViewState<'send'>()
+  ] = useCurrentSendCoin()
 
   const { data: defaultFeePriority = 0, isSuccess } =
     useEvmDefaultPriorityFeeQuery({

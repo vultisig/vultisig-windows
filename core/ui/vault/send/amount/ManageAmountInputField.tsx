@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { AnimatedSendFormInputError } from '../components/AnimatedSendFormInputError'
@@ -27,6 +26,7 @@ import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
 import { ManageMemo } from '../memo/ManageMemo'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendFormFieldState } from '../state/formFields'
+import { useCurrentSendCoin } from '../state/sendCoin'
 import { AmountInReverseCurrencyDisplay } from './AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from './AmountSuggestion'
 import { CurrencySwitch } from './AmountSwitch'
@@ -42,7 +42,7 @@ export const ManageAmountInputField = () => {
   const [currencyInputMode, setCurrencyInputMode] =
     useState<CurrencyInputMode>('base')
 
-  const [{ coin: coinKey }] = useCoreViewState<'send'>()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const { data: coinPrice } = useCoinPriceQuery({ coin })
   const { inputValue, handleUpdateAmount, value } = useDualCurrencyAmountInput({
