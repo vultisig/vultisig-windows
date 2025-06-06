@@ -3,13 +3,9 @@ import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { chainFeeCoin } from './chainFeeCoin'
+import { getKujiraTokensOnThorChain } from '../chains/cosmos/thor/kujira-merge/getKujiraTokensOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
-import {
-  chainsWithIbcTokens,
-  ibcTokens,
-  ibcTransferrableTokensPerChain,
-} from './ibc'
+import { chainsWithIbcTokens, ibcTransferrableTokensPerChain } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
@@ -41,6 +37,7 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       decimals: 8,
       priceProviderId: 'tcy',
     },
+    ...getKujiraTokensOnThorChain(),
   },
 
   [Chain.Tron]: {
@@ -777,20 +774,6 @@ export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
       base[chain] = [...patched, ...additions]
     }
   }
-
-  const THORChainExcludedIBCTickers = ['USK', 'ASTRO']
-
-  base[Chain.THORChain] = [
-    ...(base[Chain.THORChain] ?? []),
-    ...ibcTokens
-      .map(t => ({
-        ...t,
-        chain: Chain.THORChain,
-        decimals: chainFeeCoin[Chain.THORChain].decimals,
-        id: `thor.${t.ticker.toLowerCase()}`,
-      }))
-      .filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
-  ]
 
   return base
 })()
