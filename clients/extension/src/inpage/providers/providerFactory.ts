@@ -9,7 +9,6 @@ import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
-import { Zcash } from './zcash'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
@@ -30,6 +29,6 @@ export const createProviders = () => {
     plugin: { request: requestPlugin },
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
-    zcash: Zcash.getInstance(),
+    zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
   }
 }
