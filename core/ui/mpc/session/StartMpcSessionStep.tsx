@@ -24,7 +24,6 @@ export const StartMpcSessionStep = ({
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
-
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
       return startMpcSession({ serverUrl, sessionId, devices })

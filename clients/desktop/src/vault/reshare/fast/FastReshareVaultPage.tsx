@@ -1,6 +1,6 @@
 import { FastVaultReshareFlow } from '@core/ui/mpc/keygen/reshare/fast/FastVaultReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
-import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
 
@@ -11,12 +11,12 @@ export const FastReshareVaultPage = () => {
     <ReshareVaultFlowProviders>
       <PasswordProvider initialValue="">
         <EmailProvider initialValue="">
-          <CurrentKeygenTypeProvider value="reshare">
+          <KeygenOperationProvider value={{ reshare: 'regular' }}>
             <ReshareVaultKeygenActionProvider>
               <MpcMediatorManager />
               <FastVaultReshareFlow />
             </ReshareVaultKeygenActionProvider>
-          </CurrentKeygenTypeProvider>
+          </KeygenOperationProvider>
         </EmailProvider>
       </PasswordProvider>
     </ReshareVaultFlowProviders>

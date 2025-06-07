@@ -14,14 +14,14 @@ import {
 } from '../encodingAndEncryption'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
-import { KeygenType } from '../keygen/KeygenType'
+import { KeygenOperation } from '../keygen/KeygenOperation'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class Schnorr {
-  private readonly keygenType: KeygenType
+  private readonly keygenOperation: KeygenOperation
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -37,7 +37,7 @@ export class Schnorr {
   private readonly publicKey?: string
   private readonly chainCode?: string
   constructor(
-    keygenType: KeygenType,
+    keygenOperation: KeygenOperation,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
@@ -50,7 +50,7 @@ export class Schnorr {
     publicKey?: string,
     chainCode?: string
   ) {
-    this.keygenType = keygenType
+    this.keygenOperation = keygenOperation
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
@@ -160,9 +160,12 @@ export class Schnorr {
     this.isKeygenComplete = false
     try {
       let session: KeygenSession
-      if (this.keygenType === 'create') {
+      if ('create' in this.keygenOperation) {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
-      } else if (this.keygenType === 'migrate') {
+      } else if (
+        'reshare' in this.keygenOperation &&
+        this.keygenOperation.reshare === 'migrate'
+      ) {
         session = KeygenSession.migrate(
           this.setupMessage,
           this.localPartyId,

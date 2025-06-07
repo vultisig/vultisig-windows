@@ -15,7 +15,7 @@ import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerO
 import { KeygenPeerDiscoveryEducation } from '@core/ui/mpc/keygen/education/devices/KeygenPeerDiscoveryEducation'
 import { DownloadKeygenQrCode } from '@core/ui/mpc/keygen/qr/DownloadKeygenQrCode'
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
-import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -37,6 +37,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
+import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +46,6 @@ type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
 const educationUrl: Record<KeygenType, string> = {
   create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
-  migrate: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   reshare:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
@@ -69,37 +69,39 @@ export const KeygenPeerDiscoveryStep = ({
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
 
-  const keygenType = useCurrentKeygenType()
-
+  const opertaionType = useKeygenOperation()
+  const isMigrate = useMemo(() => {
+    return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
+  }, [opertaionType])
   const missingPeers = useMemo(() => {
-    if (keygenType === 'migrate') {
+    if (isMigrate) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
       const requiredPeers = without(signers, localPartyId)
       return without(requiredPeers, ...selectedPeers)
     }
 
     return []
-  }, [keygenVault, keygenType, localPartyId, selectedPeers])
+  }, [keygenVault, isMigrate, localPartyId, selectedPeers])
 
   const devicesTarget = useMemo(() => {
-    if (keygenType === 'migrate') {
+    if (isMigrate) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
 
       return Math.max(signers.length, selectedPeers.length + 1)
     }
 
     return recommendedDevicesTarget
-  }, [keygenType, keygenVault, selectedPeers.length])
+  }, [isMigrate, keygenVault, selectedPeers.length])
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
       return t('select_n_devices', { count: requiredPeers })
     }
 
-    if (keygenType === 'migrate' && missingPeers.length > 0) {
+    if (isMigrate && missingPeers.length > 0) {
       return `${t('missing_devices_for_migration')}: ${missingPeers.join(', ')}`
     }
-  }, [keygenType, missingPeers, selectedPeers.length, t])
+  }, [isMigrate, missingPeers, selectedPeers.length, t])
 
   return (
     <>
@@ -114,7 +116,7 @@ export const KeygenPeerDiscoveryStep = ({
               <>
                 <PageHeaderIconButton
                   onClick={() => {
-                    openUrl(educationUrl[keygenType])
+                    openUrl(educationUrl[getRecordUnionKey(opertaionType)])
                   }}
                   icon={<InfoIcon />}
                 />
@@ -138,9 +140,7 @@ export const KeygenPeerDiscoveryStep = ({
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
-                relay={() =>
-                  keygenType === 'migrate' ? null : <PeerRequirementsInfo />
-                }
+                relay={() => (isMigrate ? null : <PeerRequirementsInfo />)}
               />
               <PeersManagerTitle target={devicesTarget} />
               <PeersContainer>
@@ -148,10 +148,9 @@ export const KeygenPeerDiscoveryStep = ({
                 <MatchQuery
                   value={peerOptionsQuery}
                   success={peerOptions => {
-                    const placeholderCount =
-                      keygenType === 'migrate'
-                        ? missingPeers.length
-                        : recommendedPeers - peerOptions.length
+                    const placeholderCount = isMigrate
+                      ? missingPeers.length
+                      : recommendedPeers - peerOptions.length
 
                     return (
                       <>
@@ -161,7 +160,7 @@ export const KeygenPeerDiscoveryStep = ({
                         {range(placeholderCount).map(index => {
                           return (
                             <PeerPlaceholder key={index}>
-                              {keygenType === 'migrate'
+                              {isMigrate
                                 ? t('scan_with_device_name', {
                                     name: parseLocalPartyId(missingPeers[index])
                                       .deviceName,
@@ -172,7 +171,7 @@ export const KeygenPeerDiscoveryStep = ({
                             </PeerPlaceholder>
                           )
                         })}
-                        {keygenType !== 'migrate' && (
+                        {!isMigrate && (
                           <>
                             {peerOptions.length >= recommendedPeers && (
                               <PeerPlaceholder>

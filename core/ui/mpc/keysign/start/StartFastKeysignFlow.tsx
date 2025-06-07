@@ -36,9 +36,14 @@ export const StartFastKeysignFlow = ({
         server={() => <FastKeysignServerStep onFinish={toNextStep} />}
         keysign={() => (
           <ValueTransfer<string[]>
-            from={({ onFinish }) => (
-              <WaitForServerStep onBack={toPreviousStep} onFinish={onFinish} />
-            )}
+            from={({ onFinish }) => {
+              return (
+                <WaitForServerStep
+                  onBack={toPreviousStep}
+                  onPeersChange={onFinish}
+                />
+              )
+            }}
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
