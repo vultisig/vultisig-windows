@@ -65,7 +65,7 @@ export const RootErrorFallback = ({
           {info && <StackTrace>{info.componentStack}</StackTrace>}
         </VStack>
         <UniformColumnGrid gap={20}>
-          <Button onClick={() => openUrl(reportErrorUrl)} type="secondary">
+          <Button kind="secondary" onClick={() => openUrl(reportErrorUrl)}>
             {t('report_error')}
           </Button>
           <Button

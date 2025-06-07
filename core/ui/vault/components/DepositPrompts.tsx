@@ -13,9 +13,9 @@ export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
 
   return chain ? (
     <Button
+      kind="secondary"
       onClick={() => navigate({ id: 'deposit', state: { coin: value } })}
       style={{ textTransform: 'uppercase' }}
-      type="secondary"
     >
       {t('deposit')}
     </Button>

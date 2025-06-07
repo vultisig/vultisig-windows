@@ -25,8 +25,8 @@ export const RadioInput = <T extends string>({
         return (
           <Button
             key={option}
+            kind={isActive ? 'primary' : 'secondary'}
             onClick={() => onChange(option)}
-            type={isActive ? 'primary' : 'secondary'}
           >
             {renderOption(option)}
           </Button>

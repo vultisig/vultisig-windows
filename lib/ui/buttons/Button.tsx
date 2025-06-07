@@ -1,3 +1,4 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Size } from '@lib/ui/props'
@@ -7,35 +8,29 @@ import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from './UnstyledButton'
-
 type ButtonSize = Extract<Size, 'sm' | 'md'>
 
-type HtmlType = 'button' | 'submit' | 'reset'
 type Status = 'default' | 'danger' | 'success' | 'warning'
-type Type = 'primary' | 'secondary' | 'link'
+type Kind = 'primary' | 'secondary' | 'link'
 
-type ButtonProps = Pick<
-  HTMLAttributes<HTMLButtonElement>,
-  'children' | 'className' | 'onClick' | 'style'
-> & {
+type ButtonProps = HTMLAttributes<HTMLButtonElement> & {
   disabled?: boolean | string
-  htmlType?: HtmlType
   icon?: ReactNode
+  kind?: Kind
   loading?: boolean
   size?: ButtonSize
   status?: Status
-  type?: Type
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const StyledButton = styled(UnstyledButton)<{
-  btnType: Type
   disabled: boolean
+  kind: Kind
   loading: boolean
   size: ButtonSize
   status: Status
 }>`
-  ${({ btnType, disabled, loading, size, status }) => css`
+  ${({ disabled, kind, loading, size, status }) => css`
     align-items: center;
     border: none;
     cursor: pointer;
@@ -45,7 +40,7 @@ const StyledButton = styled(UnstyledButton)<{
     transition: all 0.2s;
     width: 100%;
 
-    ${match(btnType, {
+    ${match(kind, {
       link: () => css`
         ${match(size, {
           sm: () => css`
@@ -210,22 +205,20 @@ const StyledButton = styled(UnstyledButton)<{
 export const Button: FC<ButtonProps> = ({
   children,
   disabled,
-  htmlType,
   icon,
+  kind = 'primary',
   loading = false,
   size = 'md',
   status = 'default',
-  type = 'primary',
   ...rest
 }) => {
   const props = {
-    ...rest,
-    btnType: type,
+    kind,
     disabled: !!disabled,
     loading,
     size,
     status,
-    type: htmlType,
+    ...rest,
   }
 
   return typeof disabled === 'string' ? (

@@ -1,3 +1,4 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Size } from '@lib/ui/props'
@@ -7,34 +8,31 @@ import { match } from '@lib/utils/match'
 import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from './UnstyledButton'
-
 type IconBtnSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
-type HtmlType = 'button' | 'submit' | 'reset'
 type Status = 'default' | 'danger' | 'success' | 'warning'
-type Type = 'primary' | 'secondary' | 'link'
+type Kind = 'primary' | 'secondary' | 'link'
 
 type IconButtonProps = Pick<
   HTMLAttributes<HTMLButtonElement>,
   'children' | 'className' | 'onClick' | 'style' | 'title'
 > & {
   disabled?: boolean | string
-  htmlType?: HtmlType
   loading?: boolean
   size?: IconBtnSize
   status?: Status
-  type?: Type
+  kind?: Kind
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const StyledIconButton = styled(UnstyledButton)<{
-  btnType: Type
+  kind: Kind
   disabled: boolean
   loading: boolean
   size: IconBtnSize
   status: Status
 }>`
-  ${({ btnType, disabled, loading, size, status }) => css`
+  ${({ disabled, kind, loading, size, status }) => css`
     align-items: center;
     border: none;
     cursor: pointer;
@@ -82,7 +80,7 @@ const StyledIconButton = styled(UnstyledButton)<{
           color: ${getColor('buttonTextDisabled')};
           cursor: default;
 
-          ${match(btnType, {
+          ${match(kind, {
             link: () => css``,
             primary: () => css`
               background-color: ${getColor('buttonBackgroundDisabled')};
@@ -92,7 +90,7 @@ const StyledIconButton = styled(UnstyledButton)<{
             `,
           })}
         `
-      : match(btnType, {
+      : match(kind, {
           link: () => css`
             background-color: transparent;
             color: ${getColor('textPrimary')};
@@ -181,21 +179,19 @@ const StyledIconButton = styled(UnstyledButton)<{
 export const IconButton: FC<IconButtonProps> = ({
   children,
   disabled,
-  htmlType,
+  kind = 'link',
   loading = false,
   size = 'md',
   status = 'default',
-  type = 'link',
   ...rest
 }) => {
   const props = {
-    ...rest,
-    btnType: type,
     disabled: !!disabled,
+    kind,
     loading,
     size,
     status,
-    type: htmlType,
+    ...rest,
   }
 
   return typeof disabled === 'string' ? (

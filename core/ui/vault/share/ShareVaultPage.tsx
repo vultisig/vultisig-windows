@@ -71,7 +71,7 @@ export const ShareVaultPage = () => {
           <SaveAsImage
             fileName={`VaultQR-${name}-${lastThreeUID}`}
             renderTrigger={({ onClick }) => (
-              <Button onClick={onClick} type="secondary">
+              <Button kind="secondary" onClick={onClick}>
                 {t('save')}
               </Button>
             )}

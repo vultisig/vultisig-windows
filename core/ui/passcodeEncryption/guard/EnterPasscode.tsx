@@ -108,7 +108,7 @@ export const EnterPasscode = () => {
           <Button
             icon={<UnlockIcon fontSize={20} />}
             disabled={isDisabled}
-            htmlType="submit"
+            type="submit"
           >
             {t('unlock')}
           </Button>

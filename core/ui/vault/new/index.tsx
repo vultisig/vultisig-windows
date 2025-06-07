@@ -30,16 +30,16 @@ export const NewVaultPage = () => {
         <Divider text={t('or').toUpperCase()} />
         <VStack gap={12}>
           <Button
+            kind="secondary"
             onClick={() =>
               navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
             }
-            type="secondary"
           >
             {t('scan_qr')}
           </Button>
           <Button
+            kind="secondary"
             onClick={() => navigate({ id: 'importVault' })}
-            type="secondary"
           >
             {t('import_vault')}
           </Button>

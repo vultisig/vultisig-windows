@@ -103,7 +103,7 @@ export const OnboardingPage = () => {
             >
               {t('next')}
             </Button>
-            <Button onClick={completeOnboarding} type="secondary">
+            <Button kind="secondary" onClick={completeOnboarding}>
               {t('skip')}
             </Button>
           </VStack>
