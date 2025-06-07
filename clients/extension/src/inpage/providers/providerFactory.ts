@@ -5,11 +5,11 @@ import { Dash } from './dash'
 import { Ethereum } from './ethereum'
 import { MAYAChain } from './maya'
 import { requestPlugin } from './plugin'
+import { Ripple } from './ripple'
 import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
-import { Ripple } from './ripple'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)

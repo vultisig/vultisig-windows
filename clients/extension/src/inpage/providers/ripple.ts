@@ -23,25 +23,17 @@ export class Ripple extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request) {
-    try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.RIPPLE_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
-      return processBackgroundResponse(
-        data,
-        MessageKey.RIPPLE_REQUEST,
-        response
-      )
-    } catch (error) {
-      throw error
-    }
+    const response = await messengers.background.send<
+      any,
+      Messaging.Chain.Response
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.RIPPLE_REQUEST,
+        message: data,
+      },
+      { id: uuidv4() }
+    )
+    return processBackgroundResponse(data, MessageKey.RIPPLE_REQUEST, response)
   }
 }
