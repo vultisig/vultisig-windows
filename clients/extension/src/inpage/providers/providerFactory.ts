@@ -9,7 +9,7 @@ import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
-import { Zcash } from './zCash'
+import { Zcash } from './zcash'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
