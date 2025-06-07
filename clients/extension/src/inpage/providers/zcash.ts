@@ -8,12 +8,10 @@ import { Network } from '../constants'
 import { messengers } from '../messenger'
 
 export class Zcash extends EventEmitter {
-  public chainId: string
   public network: Network
   public static instance: Zcash | null = null
   constructor() {
     super()
-    this.chainId = 'ZCash_Zec'
     this.network = 'mainnet'
   }
 
