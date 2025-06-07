@@ -254,7 +254,7 @@ export const SwapKeysignTxOverview = ({
           )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
-          <Button onClick={() => trackTransaction(txHash)} type="secondary">
+          <Button kind="secondary" onClick={() => trackTransaction(txHash)}>
             {t('track')}
           </Button>
           <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
