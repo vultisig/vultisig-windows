@@ -1,23 +1,33 @@
 import { GenMessage } from '@bufbuild/protobuf/codegenv1'
-import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
+import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { KeygenType } from '../../keygen/KeygenType'
+import { KeygenOperation } from '../../keygen/KeygenOperation'
 import { KeygenMessageSchema } from '../vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '../vultisig/keygen/v1/reshare_message_pb'
 
 export type TssType = 'Keygen' | 'Reshare' | 'Migrate'
 
-const tssKeygenTypeRecord: Record<TssType, KeygenType> = {
-  Keygen: 'create',
-  Reshare: 'reshare',
-  Migrate: 'migrate',
+export const toTssType = (operation: KeygenOperation): TssType => {
+  return matchRecordUnion<KeygenOperation, TssType>(operation, {
+    create: () => 'Keygen',
+    reshare: reshareType => {
+      return match(reshareType, {
+        regular: () => 'Reshare',
+        migrate: () => 'Migrate',
+        plugin: () => 'Reshare',
+      })
+    },
+  })
 }
 
-export const toTssType = (keygenType: KeygenType): TssType =>
-  mirrorRecord(tssKeygenTypeRecord)[keygenType]
-
-export const fromTssType = (tssType: TssType): KeygenType =>
-  tssKeygenTypeRecord[tssType]
+export const fromTssType = (tssType: TssType): KeygenOperation => {
+  return match<TssType, KeygenOperation>(tssType, {
+    Keygen: () => ({ create: true }),
+    Migrate: () => ({ reshare: 'migrate' }),
+    Reshare: () => ({ reshare: 'regular' }),
+  })
+}
 
 export const tssMessageSchema: Record<TssType, GenMessage<any>> = {
   Keygen: KeygenMessageSchema,

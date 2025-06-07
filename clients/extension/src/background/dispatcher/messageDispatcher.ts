@@ -23,6 +23,8 @@ import {
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 
+import { handlePluginRequest } from '../handlers/pluginHandler'
+
 export const dispatchMessage = async (
   type: MessageKey,
   message: any,
@@ -107,6 +109,7 @@ export const dispatchMessage = async (
     return match(type, {
       [MessageKey.VAULT]: () => handleGetVault(safeOrigin),
       [MessageKey.VAULTS]: () => handleGetVaults(popupMessenger),
+      [MessageKey.PLUGIN]: () => handlePluginRequest(message, popupMessenger),
     } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
   } catch {
     console.warn(`Unhandled message type: ${type}`)

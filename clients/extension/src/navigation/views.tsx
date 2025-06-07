@@ -23,6 +23,8 @@ import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { PluginPage } from '../pages/plugin'
+
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
   connectTab: ConnectDAppPage,
@@ -58,6 +60,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   transactionTab: TransactionPage,
   vault: VaultPage,
   vaultsTab: GetVaultsPage,
+  pluginTab: PluginPage,
 }
 
 export const views: Views<AppViewId> = {
