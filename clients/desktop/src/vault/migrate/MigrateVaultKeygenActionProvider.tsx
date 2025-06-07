@@ -55,7 +55,7 @@ export const MigrateVaultKeygenActionProvider = ({
       const localUIEddsa = await GetLocalUIEdDSA(existingVault.keyShares.eddsa)
 
       const dklsKeygen = new DKLS(
-        'migrate',
+        { reshare: 'migrate' },
         isInitiatingDevice,
         serverUrl,
         sessionId,
@@ -71,7 +71,7 @@ export const MigrateVaultKeygenActionProvider = ({
 
       onStepChange('eddsa')
       const schnorrKeygen = new Schnorr(
-        'migrate',
+        { reshare: 'migrate' },
         isInitiatingDevice,
         serverUrl,
         sessionId,
