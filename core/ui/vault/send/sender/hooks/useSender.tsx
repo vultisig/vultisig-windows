@@ -1,12 +1,12 @@
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 
-import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
+import { useCurrentSendCoin } from '../../state/sendCoin'
 
 export const useSender = () => {
   const [
     {
       coin: { chain },
     },
-  ] = useCoreViewState<'send'>()
+  ] = useCurrentSendCoin()
   return useCurrentVaultAddress(chain)
 }

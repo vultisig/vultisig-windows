@@ -5,6 +5,7 @@ import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
 import { useSendAmount } from '../state/amount'
@@ -33,15 +34,25 @@ export const AmountInReverseCurrencyDisplay = ({
   }
 
   return (
-    <Text color="shy" size={14}>
-      {!sendAmount ? null : (
-        <MatchQuery
-          value={priceQuery}
-          success={renderConverted}
-          pending={() => t('loading')}
-          error={() => t('failed_to_load')}
-        />
-      )}
-    </Text>
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={value}
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 20, opacity: 0 }}
+        transition={{ duration: 0.18 }}
+      >
+        <Text color="shy" size={14}>
+          {!sendAmount ? null : (
+            <MatchQuery
+              value={priceQuery}
+              success={renderConverted}
+              pending={() => t('loading')}
+              error={() => t('failed_to_load')}
+            />
+          )}
+        </Text>
+      </motion.span>
+    </AnimatePresence>
   )
 }

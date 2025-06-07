@@ -11,6 +11,8 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   expand_view: 'Expand View',
+  address_book_saved: 'Saved Addresses',
+  address_book_vault: 'My Vaults',
   extension_vault_import_restriction:
     'Only DKLS vaults can be imported in extension',
   failed_to_migrate_storage: 'Failed to migrate storage',
@@ -67,7 +69,7 @@ export const en = {
   youre_swapping: "You're swapping",
   missing_public_key_ecdsa: 'Missing Public Key ECDSA',
   missing_verification_code: 'Missing Verification Code',
-  select_network: 'Select Network',
+  select_network: 'Select Chain',
   max_total_fees: 'Max. Total Fee',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:

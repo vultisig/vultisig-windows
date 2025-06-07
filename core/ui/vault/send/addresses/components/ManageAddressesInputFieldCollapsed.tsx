@@ -3,12 +3,14 @@ import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SendInputContainer } from '../../components/SendInputContainer'
 import { useSendFormFieldState } from '../../state/formFields'
 import { useSendReceiver } from '../../state/receiver'
+import { SendFormIconsWrapper } from './SendFormIconsWrapper'
 
 export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
@@ -34,23 +36,21 @@ export const ManageAddressesInputFieldCollapsed = () => {
       }}
     >
       <HStack gap={12} alignItems="center">
-        <Text size={14}>{t('address')}</Text>
-        <Text size={12} color="shy">
-          {address}
+        <Text cropped size={14}>
+          {t('address')}
+        </Text>
+        <Text cropped size={12} color="shy">
+          <MiddleTruncate text={address} width={250} />
         </Text>
       </HStack>
-      <HStack gap={12}>
-        {!addressError && isAddressFieldChecked && (
-          <IconWrapper>
-            <CheckmarkIcon />
-          </IconWrapper>
-        )}
+      <SendFormIconsWrapper gap={12}>
+        {!addressError && isAddressFieldChecked && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
           </PencilIconWrapper>
         )}
-      </HStack>
+      </SendFormIconsWrapper>
     </CollapsedCoinInputContainer>
   )
 }
@@ -62,15 +62,6 @@ const CollapsedCoinInputContainer = styled(SendInputContainer)`
   })}
 `
 
-const IconWrapper = styled.div`
-  font-size: 16px;
-  color: ${getColor('success')};
-  line-height: 0;
-  border-radius: 99px;
-  border: 1px solid ${getColor('success')};
-`
-
 const PencilIconWrapper = styled.div`
   color: ${getColor('contrast')};
-  font-size: 16px;
 `

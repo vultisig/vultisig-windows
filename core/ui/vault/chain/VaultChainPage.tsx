@@ -21,7 +21,6 @@ import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoi
 import {
   useCurrentVaultAddress,
   useCurrentVaultChainCoins,
-  useCurrentVaultNativeCoin,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -57,7 +56,6 @@ export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const fiatCurrency = useFiatCurrency()
-  const nativeCoin = useCurrentVaultNativeCoin(chain)
   const vaultCoins = useCurrentVaultChainCoins(chain)
   const address = useCurrentVaultAddress(chain)
   const hasMultipleCoinsSupport = chain in chainTokens
@@ -95,7 +93,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions value={nativeCoin} />
+        <VaultPrimaryActions chain={chain} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack

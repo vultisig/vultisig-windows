@@ -1,11 +1,9 @@
-import { RequiredFields } from '@lib/utils/types/RequiredFields'
-
-import { Coin } from '../Coin'
+import { Coin, KnownCoin } from '../Coin'
 
 export const patchTokensWithIBCIds = (
-  tokens: RequiredFields<Coin, 'logo'>[],
-  ibcTokens: Pick<RequiredFields<Coin, 'logo'>, 'ticker' | 'id'>[]
-): RequiredFields<Coin, 'logo'>[] =>
+  tokens: KnownCoin[],
+  ibcTokens: Pick<Coin, 'ticker' | 'id'>[]
+): KnownCoin[] =>
   tokens.map(token => {
     if (token.id) return token
     const match = ibcTokens.find(i => i.ticker === token.ticker)
