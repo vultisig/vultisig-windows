@@ -23,21 +23,17 @@ export class Zcash extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request) {
-    try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.ZCASH_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
-      return processBackgroundResponse(data, MessageKey.ZCASH_REQUEST, response)
-    } catch (error) {
-      throw error
-    }
+    const response = await messengers.background.send<
+      any,
+      Messaging.Chain.Response
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.ZCASH_REQUEST,
+        message: data,
+      },
+      { id: uuidv4() }
+    )
+    return processBackgroundResponse(data, MessageKey.ZCASH_REQUEST, response)
   }
 }
