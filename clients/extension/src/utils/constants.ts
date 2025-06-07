@@ -13,6 +13,7 @@ export enum MessageKey {
   MAYA_REQUEST = 'maya',
   SOLANA_REQUEST = 'solana',
   THOR_REQUEST = 'thor',
+  ZCASH_REQUEST = 'zcash',
   PRIORITY = 'priority',
   VAULT = 'vault',
   VAULTS = 'vaults',
