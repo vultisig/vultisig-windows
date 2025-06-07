@@ -9,6 +9,7 @@ import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
+import { Ripple } from './ripple'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
@@ -25,6 +26,7 @@ export const createProviders = () => {
     ethereum: new Ethereum(),
     litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
     mayachain: MAYAChain.getInstance(),
+    ripple: Ripple.getInstance(),
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
