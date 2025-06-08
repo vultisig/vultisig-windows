@@ -8,14 +8,15 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useEffect } from 'react'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const [{ coin: coinKey }] = useCoreViewState<'send'>()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
   const [, setFees] = useSendFees()
   const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
@@ -54,7 +55,7 @@ export const SendFiatFeeValue = () => {
   return (
     <VStack alignItems="flex-end">
       <Text size={14}>
-        {humanReadableFeeValue} {coinKey.id}
+        {formatTokenAmount(humanReadableFeeValue, coinKey.id)}
       </Text>
       <Text size={14} color="shy">
         {formattedAmount}

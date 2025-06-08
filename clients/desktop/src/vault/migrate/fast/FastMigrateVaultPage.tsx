@@ -1,6 +1,6 @@
 import { FastVaultReshareFlow } from '@core/ui/mpc/keygen/reshare/fast/FastVaultReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
-import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { EmailProvider } from '@core/ui/state/email'
 import { PasswordProvider } from '@core/ui/state/password'
 
@@ -11,11 +11,11 @@ export const FastMigrateVaultPage = () => {
     <ReshareVaultFlowProviders>
       <PasswordProvider initialValue="">
         <EmailProvider initialValue="">
-          <CurrentKeygenTypeProvider value={'migrate'}>
+          <KeygenOperationProvider value={{ reshare: 'migrate' }}>
             <MigrateVaultKeygenActionProvider>
               <FastVaultReshareFlow />
             </MigrateVaultKeygenActionProvider>
-          </CurrentKeygenTypeProvider>
+          </KeygenOperationProvider>
         </EmailProvider>
       </PasswordProvider>
     </ReshareVaultFlowProviders>

@@ -12,4 +12,5 @@ export enum StorageKey {
   initialView = 'initialView',
   coinFinderIgnore = 'coinFinderIgnore',
   passcodeEncryption = 'passcodeEncryption',
+  passcodeAutoLock = 'passcodeAutoLock',
 }

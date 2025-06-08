@@ -52,12 +52,6 @@ export const useCurrentVaultChainCoins = (chain: string) => {
   )
 }
 
-export const useCurrentVaultNativeCoin = (chain: string) => {
-  const nativeCoins = useCurrentVaultNativeCoins()
-
-  return shouldBePresent(nativeCoins.find(coin => coin.chain === chain))
-}
-
 export const useCurrentVaultCoin = (coinKey: CoinKey) => {
   const coins = useCurrentVaultCoins()
 

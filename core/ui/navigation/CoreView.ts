@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
@@ -23,7 +23,7 @@ export type CoreView =
   | {
       id: 'joinKeygen'
       state: {
-        keygenType: KeygenType
+        keygenOperation: KeygenOperation
         keygenMsg: KeygenMessage | ReshareMessage
       }
     }
@@ -47,7 +47,14 @@ export type CoreView =
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
-  | { id: 'send'; state: { coin: CoinKey; address?: string } }
+  | {
+      id: 'send'
+      state: {
+        coin?: CoinKey
+        chain?: Chain
+        address?: string
+      }
+    }
   | { id: 'settings' }
   | { id: 'setupFastVault' }
   | { id: 'setupSecureVault' }
@@ -67,6 +74,7 @@ export type CoreView =
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
+  | { id: 'passcodeAutoLock' }
 
 export type CoreViewId = CoreView['id']
 

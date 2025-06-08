@@ -1,7 +1,6 @@
 import { EvmChain } from '@core/chain/Chain'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { OnCloseProp } from '@lib/ui/props'
@@ -12,13 +11,14 @@ import {
   EvmFeeSettingsForm,
   EvmFeeSettingsFormValue,
 } from './EvmFeeSettingsForm'
+import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const [
     {
       coin: { chain },
     },
-  ] = useCoreViewState<'send'>()
+  ] = useCurrentSendCoin()
 
   const { data: defaultFeePriority = 0, isSuccess } =
     useEvmDefaultPriorityFeeQuery({
