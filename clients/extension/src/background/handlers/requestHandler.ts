@@ -55,7 +55,6 @@ import {
   isHexString,
   JsonRpcProvider,
   Signature,
-  toUtf8String,
   TransactionRequest,
   TypedDataEncoder,
 } from 'ethers'
