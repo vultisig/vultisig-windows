@@ -8,6 +8,7 @@ import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { clampDecimals } from '@lib/utils/number/clampDecimals'
 import { isEqual } from '@lib/utils/number/isEqual'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
@@ -141,10 +142,13 @@ export const ManageAmountInputField = () => {
                             : false
                         }
                         onClick={() => {
-                          handleUpdateAmount(
+                          const rawValue =
                             currencyInputMode === 'base'
                               ? suggestionBaseValue
-                              : baseToFiat(suggestionBaseValue, coinPrice)
+                              : (baseToFiat(suggestionBaseValue, coinPrice) ??
+                                0)
+                          handleUpdateAmount(
+                            clampDecimals(rawValue, coin.decimals)
                           )
                         }}
                         key={suggestion}
