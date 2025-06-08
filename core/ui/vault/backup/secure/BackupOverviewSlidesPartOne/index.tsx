@@ -54,13 +54,13 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
       <PageFooter alignItems="center">
         <IconButton
           disabled={isLoading}
-          kind="primary"
           onClick={
             currentAnimation !== animations[animations.length - 1]
               ? handleNextAnimation
               : onCompleted
           }
           size="xl"
+          type="primary"
         >
           <ChevronRightIcon />
         </IconButton>
