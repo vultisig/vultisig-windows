@@ -27,7 +27,7 @@ export const useSendFormValidation = () => {
         { coin, amount, address },
         {
           balance: balanceQuery.data,
-          balanceReady: !balanceQuery.isLoading && !balanceQuery.isPending,
+          balanceReady: !balanceQuery.isPending,
           coinDecimals: coin.decimals,
           chain: coin.chain,
           walletCore,
@@ -38,7 +38,6 @@ export const useSendFormValidation = () => {
       address,
       amount,
       balanceQuery.data,
-      balanceQuery.isLoading,
       balanceQuery.isPending,
       coin,
       t,
@@ -49,7 +48,6 @@ export const useSendFormValidation = () => {
   return {
     errors,
     isValid: Object.keys(errors).length === 0,
-    isLoading: balanceQuery.isLoading,
     isPending: balanceQuery.isPending,
   }
 }

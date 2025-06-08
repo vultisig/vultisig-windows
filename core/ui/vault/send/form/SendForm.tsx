@@ -23,7 +23,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
   useSendChainSpecificQuery()
   const { t } = useTranslation()
   const [{ fieldsChecked }, setFormState] = useSendFormFieldState()
-  const { errors, isLoading, isPending } = useSendFormValidation()
+  const { errors, isPending } = useSendFormValidation()
   const isDisabled =
     isPending ||
     Object.keys(errors).length > 0 ||
@@ -57,11 +57,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAddresses />
           <ManageAmount />
         </VStack>
-        <Button
-          disabled={isDisabled}
-          loading={isLoading && isPending}
-          type="submit"
-        >
+        <Button disabled={isDisabled} loading={isPending} type="submit">
           {t('continue')}
         </Button>
       </FormWrapper>

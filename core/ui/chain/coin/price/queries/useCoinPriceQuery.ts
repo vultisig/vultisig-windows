@@ -2,7 +2,6 @@ import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { Query } from '@lib/ui/query/Query'
-import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
 type UseCoinPricesQueryInput = {
@@ -26,7 +25,7 @@ export const useCoinPriceQuery = ({
 
     return {
       data,
-      ...pick(query, ['isPending', 'isLoading']),
+      isPending: query.isPending,
       error,
     }
   }, [query, coin])
