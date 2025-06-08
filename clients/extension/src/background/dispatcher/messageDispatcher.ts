@@ -69,6 +69,7 @@ export const dispatchMessage = async (
     [MessageKey.MAYA_REQUEST, Chain.MayaChain],
     [MessageKey.SOLANA_REQUEST, Chain.Solana],
     [MessageKey.THOR_REQUEST, Chain.THORChain],
+    [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
     [MessageKey.ZCASH_REQUEST, Chain.Zcash],
   ] as const
 
