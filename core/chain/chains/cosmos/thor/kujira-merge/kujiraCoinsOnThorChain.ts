@@ -1,23 +1,21 @@
-import { makeRecord } from '@lib/utils/record/makeRecord'
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
+import { recordMap } from '@lib/utils/record/recordMap'
 
 import { Chain } from '../../../../Chain'
 import { chainFeeCoin } from '../../../../coin/chainFeeCoin'
 import { KnownCoinMetadata } from '../../../../coin/Coin'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
-  kujiraCoinsMigratedToThorChain,
   kujiraCoinsMigratedToThorChainMetadata,
 } from '.'
 
 export const kujiraCoinsOnThorChain: Record<string, KnownCoinMetadata> =
-  makeRecord(kujiraCoinsMigratedToThorChain, coin => {
+  recordMap(mirrorRecord(kujiraCoinMigratedToThorChainDestinationId), coin => {
     const metadata = kujiraCoinsMigratedToThorChainMetadata[coin]
     const decimals = chainFeeCoin[Chain.THORChain].decimals
-    const id = kujiraCoinMigratedToThorChainDestinationId[coin]
 
     return {
       ...metadata,
       decimals,
-      id,
     }
   })
