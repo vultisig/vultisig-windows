@@ -8,14 +8,14 @@ export const SendCoinGuard = ({ children }: ChildrenProp) => {
   const [{ coin, chain }, setCoin] = useCoreViewState<'send'>()
 
   const nativeCoins = useCurrentVaultNativeCoins()
-  const nativeCoin =
+  const nativeCoinForCurrentChain =
     nativeCoins.find(coin => coin.chain === chain) || nativeCoins[0]
 
   useEffect(() => {
-    if (!coin && nativeCoin) {
-      setCoin(pv => ({ ...pv, coin: nativeCoin }))
+    if (!coin && nativeCoinForCurrentChain) {
+      setCoin(pv => ({ ...pv, coin: nativeCoinForCurrentChain }))
     }
-  }, [coin, nativeCoin, setCoin])
+  }, [coin, nativeCoinForCurrentChain, setCoin])
 
   if (!coin) return null
 
