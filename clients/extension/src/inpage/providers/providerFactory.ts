@@ -5,6 +5,7 @@ import { Dash } from './dash'
 import { Ethereum } from './ethereum'
 import { MAYAChain } from './maya'
 import { requestPlugin } from './plugin'
+import { Ripple } from './ripple'
 import { Solana } from './solana'
 import { THORChain } from './thorchain'
 import { UTXO } from './utxo'
@@ -23,11 +24,13 @@ export const createProviders = () => {
     dash: new Dash(),
     dogecoin: utxo(MessageKey.DOGECOIN_REQUEST, 'Dogecoin_dogecoin'),
     ethereum: new Ethereum(),
+    keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
     litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
     mayachain: MAYAChain.getInstance(),
+    ripple: Ripple.getInstance(),
+    plugin: { request: requestPlugin },
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
-    keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
-    plugin: { request: requestPlugin },
+    zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
   }
 }
