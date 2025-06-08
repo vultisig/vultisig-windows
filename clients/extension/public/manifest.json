@@ -25,6 +25,7 @@
   },
   "content_scripts": [
     {
+      "exclude_matches": ["https://*.google.com/*"],
       "js": ["content.js"],
       "matches": ["http://*/*", "https://*/*"]
     }
