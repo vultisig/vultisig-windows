@@ -2,6 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 
+import { DeriveChainKind } from '../../ChainKind'
+
 export const nativeSwapChains = [Chain.THORChain, Chain.MayaChain] as const
 export type NativeSwapChain = (typeof nativeSwapChains)[number]
 
@@ -15,18 +17,47 @@ export const nativeSwapApiBaseUrl: Record<NativeSwapChain, string> = {
   [Chain.MayaChain]: `${cosmosRpcUrl[Chain.MayaChain]}/mayachain`,
 }
 
+const thorChainSwapEnabledEvmChains = [
+  Chain.Avalanche,
+  Chain.BSC,
+  Chain.Ethereum,
+] as const
+
+export type ThorChainSwapEnabledEvmChain =
+  (typeof thorChainSwapEnabledEvmChains)[number]
+
+const thorChainSwapEnabledUtxoChains = [
+  Chain.BitcoinCash,
+  Chain.Bitcoin,
+  Chain.Dogecoin,
+  Chain.Litecoin,
+] as const
+
+export type ThorChainSwapEnabledUtxoChain =
+  (typeof thorChainSwapEnabledUtxoChains)[number]
+
+const thorChainSwapEnabledCosmosChains = [
+  Chain.Cosmos,
+  Chain.THORChain,
+] as const
+
+export type ThorChainSwapEnabledCosmosChain =
+  (typeof thorChainSwapEnabledCosmosChains)[number]
+
+export const thorChainSwapEnabledChains = [
+  ...thorChainSwapEnabledEvmChains,
+  ...thorChainSwapEnabledUtxoChains,
+  ...thorChainSwapEnabledCosmosChains,
+] as const
+
+export type ThorChainSwapEnabledChain =
+  (typeof thorChainSwapEnabledChains)[number]
+
+export type ThorChainSwapEnabledChainKind =
+  DeriveChainKind<ThorChainSwapEnabledChain>
+
 export const nativeSwapEnabledChainsRecord = {
-  [Chain.THORChain]: [
-    Chain.Avalanche,
-    Chain.BitcoinCash,
-    Chain.BSC,
-    Chain.Bitcoin,
-    Chain.Dogecoin,
-    Chain.Ethereum,
-    Chain.Cosmos,
-    Chain.Litecoin,
-    Chain.THORChain,
-  ],
+  [Chain.THORChain]: thorChainSwapEnabledChains,
   [Chain.MayaChain]: [
     Chain.MayaChain,
     Chain.THORChain,

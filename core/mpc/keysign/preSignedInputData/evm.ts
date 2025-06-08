@@ -1,18 +1,12 @@
 import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
-import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
+import {
+  toTwAmount,
+  toTwTransferData,
+} from '@core/chain/chains/evm/tx/trustwallet'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 
 import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
-
-const toTransferData = (memo: string | undefined) => {
-  if (memo && memo.startsWith('0x')) {
-    return Buffer.from(stripHexPrefix(memo), 'hex')
-  }
-
-  return Buffer.from(memo ?? '', 'utf8')
-}
 
 export const getEvmPreSignedInputData: PreSignedInputDataResolver<
   'ethereumSpecific'
@@ -22,17 +16,14 @@ export const getEvmPreSignedInputData: PreSignedInputDataResolver<
   const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = chainSpecific
 
   // Amount: converted to hexadecimal, stripped of '0x'
-  const amountHex = Buffer.from(
-    stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
-    'hex'
-  )
+  const amountHex = toTwAmount(keysignPayload.toAmount)
 
   // Send native tokens
   let toAddress = keysignPayload.toAddress
   let evmTransaction = TW.Ethereum.Proto.Transaction.create({
     transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
       amount: amountHex,
-      data: toTransferData(keysignPayload.memo),
+      data: toTwTransferData(keysignPayload.memo),
     }),
   })
 

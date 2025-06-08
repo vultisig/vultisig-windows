@@ -50,10 +50,11 @@ export const getTxInputData = async ({
       'case',
       'value',
       {
-        thorchainSwapPayload: () =>
+        thorchainSwapPayload: swapPayload =>
           getThorchainSwapTxInputData({
             keysignPayload,
             walletCore,
+            swapPayload,
           }),
         mayachainSwapPayload: () => {
           throw new Error('Mayachain swap not supported')
