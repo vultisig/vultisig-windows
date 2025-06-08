@@ -35,7 +35,11 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
         peers.length >= pluginPeersConfig.minimumJoinedParties
 
       if (shouldFinish) {
-        onFinish(peers.filter(device => !isServer(device)))
+        if (isPluginReshare) {
+          onFinish(peers.filter(device => !isServer(device)))
+        } else {
+          onFinish(peers)
+        }
       }
     },
     [keygenOperation]

@@ -11,6 +11,7 @@ export enum MessageKey {
   ETHEREUM_REQUEST = 'ethereum',
   LITECOIN_REQUEST = 'litecoin',
   MAYA_REQUEST = 'maya',
+  RIPPLE_REQUEST = 'ripple',
   SOLANA_REQUEST = 'solana',
   THOR_REQUEST = 'thor',
   ZCASH_REQUEST = 'zcash',
