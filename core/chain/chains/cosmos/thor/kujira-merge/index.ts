@@ -2,7 +2,7 @@ import { makeRecord } from '@lib/utils/record/makeRecord'
 
 import { KnownCoinMetadata } from '../../../../coin/Coin'
 
-export const kujiraCoinsMigratedToThorChain = [
+const kujiraCoinsMigratedToThorChain = [
   'kuji',
   'rkuji',
   'fuzn',
