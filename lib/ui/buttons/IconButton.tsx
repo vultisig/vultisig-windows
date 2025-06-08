@@ -37,42 +37,30 @@ const StyledIconButton = styled(UnstyledButton)<{
   ${({ btnType, disabled, loading, size, status }) => css`
     align-items: center;
     border: none;
+    border-radius: ${iconButtonSize[size]}px;
     cursor: pointer;
     display: flex;
+    height: ${iconButtonSize[size]}px;
     justify-content: center;
+    min-width: ${iconButtonSize[size]}px;
     transition: all 0.2s;
     width: auto;
 
     ${match(size, {
       xs: () => css`
-        border-radius: 24px;
         font-size: 16px;
-        height: 24px;
-        min-width: 24px;
       `,
       sm: () => css`
-        border-radius: 28px;
         font-size: 20px;
-        height: 28px;
-        min-width: 28px;
       `,
       md: () => css`
-        border-radius: 32px;
         font-size: 16px;
-        height: 32px;
-        min-width: 32px;
       `,
       lg: () => css`
-        border-radius: 40px;
         font-size: 16px;
-        height: 40px;
-        min-width: 40px;
       `,
       xl: () => css`
-        border-radius: 52px;
         font-size: 20px;
-        height: 52px;
-        min-width: 52px;
         ${horizontalPadding(32)}
       `,
     })}
@@ -214,6 +202,10 @@ export const IconButton: FC<IconButtonProps> = ({
   )
 }
 
-export const iconButtonSizeRecord = { s: 24, m: 32, l: 40 }
-
-export const iconButtonIconSizeRecord = { s: 14, m: 16, l: 18 }
+export const iconButtonSize: Record<IconBtnSize, number> = {
+  xs: 24,
+  sm: 28,
+  md: 32,
+  lg: 40,
+  xl: 52,
+}

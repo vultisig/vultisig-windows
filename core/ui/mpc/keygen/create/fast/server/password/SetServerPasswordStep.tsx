@@ -6,17 +6,28 @@ import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import type { TFunction } from 'i18next'
+import { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
+
+const StyledIcon = styled(InfoIcon)`
+  color: ${getColor('idle')};
+`
+
+const StyledTooltip = styled(VStack)`
+  background-color: ${getColor('white')};
+  color: ${getColor('text')};
+`
 
 const getPasswordSchema = (t: TFunction) =>
   z
@@ -46,12 +57,9 @@ export const SetServerPasswordStep = ({
     setValue,
     formState: { errors, isValid },
   } = useForm<PasswordSchema>({
-    resolver: zodResolver(getPasswordSchema(t)),
+    defaultValues: { password: storedPassword || '', confirmPassword: '' },
     mode: 'all',
-    defaultValues: {
-      password: storedPassword || '',
-      confirmPassword: '',
-    },
+    resolver: zodResolver(getPasswordSchema(t)),
   })
 
   const onSubmit = (data: PasswordSchema) => {
@@ -60,92 +68,73 @@ export const SetServerPasswordStep = ({
   }
 
   return (
-    <>
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
+        title={<PageHeaderTitle>{t('vultiserver_password')}</PageHeaderTitle>}
+        hasBorder
       />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
-        <VStack flexGrow gap={16}>
-          <VStack gap={8}>
-            <Text variant="h1Regular">{t('vultiserver_password')}</Text>
-            <PasswordWarningBlock
-              iconTooltipContent={
-                <TooltipWrapper>
-                  <Text color="reversed" size={16}>
-                    {t('moreInfo')}
-                  </Text>
-                  <Text size={13} color="shy">
-                    {t('secureVaultSetupPasswordTooltipContent')}
-                  </Text>
-                </TooltipWrapper>
+      <PageContent gap={16} flexGrow scrollable>
+        <WarningBlock
+          iconTooltipContent={
+            <StyledTooltip>
+              <Text color="reversed" size={16}>
+                {t('moreInfo')}
+              </Text>
+              <Text size={13} color="shy">
+                {t('secureVaultSetupPasswordTooltipContent')}
+              </Text>
+            </StyledTooltip>
+          }
+          icon={() => <StyledIcon />}
+          style={{ width: 'fit-content' }}
+        >
+          {t('fastVaultSetup.passwordCannotBeRecovered')}
+        </WarningBlock>
+        <VStack gap={8}>
+          <VStack gap={4}>
+            <PasswordInput
+              {...register('password')}
+              onValueChange={value => setValue('password', value)}
+              placeholder={t('enter_password')}
+              validation={
+                isValid ? 'valid' : errors.password ? 'invalid' : undefined
               }
-              icon={() => (
-                <IconWrapper>
-                  <InfoIcon />
-                </IconWrapper>
-              )}
-            >
-              {t('fastVaultSetup.passwordCannotBeRecovered')}
-            </PasswordWarningBlock>
+              autoFocus
+            />
+            {errors.password && errors.password?.message && (
+              <Text color="danger" size={12}>
+                {errors.password.message}
+              </Text>
+            )}
           </VStack>
-          <VStack gap={8}>
-            <VStack gap={4}>
-              <PasswordInput
-                {...register('password')}
-                validation={
-                  isValid ? 'valid' : errors.password ? 'invalid' : undefined
-                }
-                placeholder={t('enter_password')}
-                onValueChange={value => setValue('password', value)}
-                autoFocus
-              />
-              {errors.password && errors.password?.message && (
-                <Text color="danger" size={12}>
-                  {errors.password.message}
-                </Text>
-              )}
-            </VStack>
-            <VStack gap={4}>
-              <PasswordInput
-                {...register('confirmPassword')}
-                validation={
-                  isValid
-                    ? 'valid'
-                    : errors.confirmPassword
-                      ? 'invalid'
-                      : undefined
-                }
-                placeholder={t('verify_password')}
-                onValueChange={value => setValue('confirmPassword', value)}
-              />
-              {errors.confirmPassword && errors.confirmPassword.message && (
-                <Text color="danger" size={12}>
-                  {errors.confirmPassword.message}
-                </Text>
-              )}
-            </VStack>
+          <VStack gap={4}>
+            <PasswordInput
+              {...register('confirmPassword')}
+              onValueChange={value => setValue('confirmPassword', value)}
+              placeholder={t('verify_password')}
+              validation={
+                isValid
+                  ? 'valid'
+                  : errors.confirmPassword
+                    ? 'invalid'
+                    : undefined
+              }
+            />
+            {errors.confirmPassword && errors.confirmPassword.message && (
+              <Text color="danger" size={12}>
+                {errors.confirmPassword.message}
+              </Text>
+            )}
           </VStack>
         </VStack>
+      </PageContent>
+      <PageFooter>
         <Button disabled={!isValid} htmlType="submit">
           {t('next')}
         </Button>
-      </PageContent>
-    </>
+      </PageFooter>
+    </VStack>
   )
 }
-
-const PasswordWarningBlock = styled(WarningBlock)`
-  font-size: 13px;
-  max-width: fit-content;
-`
-
-const IconWrapper = styled.div`
-  font-size: 16px;
-  color: ${getColor('idle')};
-`
-
-const TooltipWrapper = styled.div`
-  background-color: ${getColor('white')};
-  color: ${getColor('text')};
-`

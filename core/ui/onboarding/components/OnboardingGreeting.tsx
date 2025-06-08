@@ -1,31 +1,17 @@
+import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { GradientText, Text } from '@lib/ui/text'
 import { Milliseconds } from '@lib/utils/time'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { useResponsiveness } from '../../providers/ResponsivenessProivder'
 
 const delayBeforeNextStep: Milliseconds = 500
 
 type OnboardingGreetingProps = {
   onCompleteGreeting: () => void
 }
-
-const Wrapper = styled.div`
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-`
-
-const ContentWrapper = styled(VStack)`
-  padding-inline: 20px;
-  margin-inline: auto;
-  text-align: center;
-`
 
 export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onCompleteGreeting,
@@ -34,24 +20,27 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   const { isSmall } = useResponsiveness()
 
   return (
-    <Wrapper data-testid="OnboardingGreeting-Wrapper">
-      <AnimatedVisibility
-        config={{
-          duration: 1000,
-        }}
-        animationConfig="bottomToTop"
-        delay={300}
-        onAnimationComplete={() =>
-          setTimeout(onCompleteGreeting, delayBeforeNextStep)
-        }
+    <VStack fullHeight>
+      <PageContent
+        alignItems="center"
+        justifyContent="center"
+        flexGrow
+        scrollable
       >
-        <ContentWrapper>
-          <Text size={isSmall ? 36 : 52}>
+        <AnimatedVisibility
+          animationConfig="bottomToTop"
+          config={{ duration: 1000 }}
+          delay={300}
+          onAnimationComplete={() =>
+            setTimeout(onCompleteGreeting, delayBeforeNextStep)
+          }
+        >
+          <Text size={isSmall ? 36 : 52} centerHorizontally>
             {t('sayGoodbyeTo')}{' '}
             <GradientText as="span">{t('seedPhrases')}</GradientText>
           </Text>
-        </ContentWrapper>
-      </AnimatedVisibility>
-    </Wrapper>
+        </AnimatedVisibility>
+      </PageContent>
+    </VStack>
   )
 }

@@ -3,8 +3,7 @@ import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEduca
 import { useVaultNames } from '@core/ui/storage/vaults'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
-import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -14,8 +13,10 @@ import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMemo } from 'react'
@@ -46,50 +47,46 @@ export const CreateVaultNameStep = ({
   }, [existingVaultNames, name, t])
 
   return (
-    <>
+    <VStack
+      as="form"
+      {...getFormProps({ onSubmit: onFinish, isDisabled })}
+      fullHeight
+    >
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
+        title={<PageHeaderTitle>{t('name_your_vault')}</PageHeaderTitle>}
+        hasBorder
       />
-      <PageContent
-        as="form"
-        {...getFormProps({ onSubmit: onFinish, isDisabled })}
-        justifyContent="space-between"
-        flexGrow
-      >
-        <VStack gap={16}>
-          <VStack>
-            <Text variant="h1Regular">{t('name_your_vault')}</Text>
-            <Text size={14} color="shy">
-              {t('vault_name_description')}
-            </Text>
-          </VStack>
-          <VStack flexGrow gap={4}>
-            <ActionInsideInteractiveElement
-              render={() => (
-                <TextInput
-                  placeholder={t('enter_vault_name')}
-                  value={name}
-                  onValueChange={setName}
-                  autoFocus
-                />
-              )}
-              action={
-                <UnstyledButton onClick={() => setName('')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
-              }
-              actionPlacerStyles={{
-                right: textInputHorizontalPadding,
-                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
-              }}
+      <PageContent gap={8} flexGrow scrollable>
+        <Text color="shy" size={14}>
+          {t('vault_name_description')}
+        </Text>
+        <ActionInsideInteractiveElement
+          render={() => (
+            <TextInput
+              placeholder={t('enter_vault_name')}
+              value={name}
+              onValueChange={setName}
+              autoFocus
             />
-          </VStack>
-        </VStack>
+          )}
+          action={
+            <IconButton onClick={() => setName('')}>
+              <CircleCrossIcon />
+            </IconButton>
+          }
+          actionPlacerStyles={{
+            bottom: (textInputHeight - iconButtonSize.md) / 2,
+            right: textInputHorizontalPadding,
+          }}
+        />
+      </PageContent>
+      <PageFooter>
         <Button disabled={isDisabled} htmlType="submit">
           {t('next')}
         </Button>
-      </PageContent>
-    </>
+      </PageFooter>
+    </VStack>
   )
 }

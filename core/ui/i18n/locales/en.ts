@@ -30,6 +30,7 @@ export const en = {
   open_desktop: 'Open Desktop',
   percentage: 'Percentage',
   add_memo: 'Add MEMO',
+  paste: 'Paste',
   portfolio_overview: 'Portfolio Overview',
   prioritize_vultisig: 'Prioritize Vultisig',
   privacy_policy: 'Privacy Policy',

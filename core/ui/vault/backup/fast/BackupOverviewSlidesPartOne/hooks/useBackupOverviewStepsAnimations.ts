@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
-export const backupVaultAnimations = [1, 2, 3] as const
+const backupVaultAnimations = [1, 2, 3] as const
 
 export const useBackupOverviewStepsAnimations = () => {
   const { step: currentAnimation, toNextStep: toNextAnimation } =

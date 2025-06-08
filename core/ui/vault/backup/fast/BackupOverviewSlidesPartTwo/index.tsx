@@ -1,15 +1,16 @@
-import { AnimationDescription } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo/AnimationDescription'
 import { useBackupOverviewStepsAnimationsPartTwo } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo/hooks/useBackupOverviewStepsAnimationsPartTwo'
-import { RiveWrapper } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo/VaultOverviewSlides.styles'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
+import { pageConfig } from '@lib/ui/page/config'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
+import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -21,11 +22,19 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
   const { t } = useTranslation()
   const { animationComponent: AnimationComponent, isLoading } =
     useBackupOverviewStepsAnimationsPartTwo()
+  const isLargeDevice = useIsTabletDeviceAndUp()
+  const fontSize = isLargeDevice ? 32 : 24
 
   return (
-    <PageContent>
-      <ProgressWrapper gap={16}>
-        <Text size={18}>{t('vault_overview')}</Text>
+    <VStack fullHeight>
+      <VStack
+        alignItems="center"
+        gap={16}
+        style={{ padding: pageConfig.verticalPadding }}
+      >
+        <Text size={18} centerHorizontally>
+          {t('vault_overview')}
+        </Text>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={3}
@@ -33,27 +42,30 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
           value={3}
           variant="bars"
         />
-      </ProgressWrapper>
-      <VStack justifyContent="space-between" flexGrow>
-        <RiveWrapper>
-          <AnimationComponent
-            style={{
-              flexGrow: 1,
-            }}
-          />
-        </RiveWrapper>
-        <VStack gap={12}>
-          <AnimationDescription />
-          <IconButton disabled={isLoading} onClick={onCompleted} size="xl">
-            <ChevronRightIcon />
-          </IconButton>
-        </VStack>
       </VStack>
-    </PageContent>
+      <PageContent alignItems="center" flexGrow>
+        <AnimationComponent />
+      </PageContent>
+      <PageFooter alignItems="center" gap={32}>
+        <AnimatedVisibility>
+          <Text size={fontSize} centerHorizontally>
+            {t('backup')}{' '}
+            <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
+            {t('fastVaultSetup.backup.securely')}{' '}
+            <GradientText as="span">
+              {t('fastVaultSetup.backup.shareOnlineBackup')}
+            </GradientText>
+          </Text>
+        </AnimatedVisibility>
+        <IconButton
+          disabled={isLoading}
+          kind="primary"
+          onClick={onCompleted}
+          size="xl"
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      </PageFooter>
+    </VStack>
   )
 }
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`
