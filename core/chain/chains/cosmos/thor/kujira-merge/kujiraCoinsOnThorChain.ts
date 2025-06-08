@@ -6,12 +6,12 @@ import { KnownCoinMetadata } from '../../../../coin/Coin'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinsMigratedToThorChain,
-  kujiraCoinsMigratedToThorChainSharedMetadata,
+  kujiraCoinsMigratedToThorChainMetadata,
 } from '.'
 
 export const kujiraCoinsOnThorChain: Record<string, KnownCoinMetadata> =
   makeRecord(kujiraCoinsMigratedToThorChain, coin => {
-    const metadata = kujiraCoinsMigratedToThorChainSharedMetadata[coin]
+    const metadata = kujiraCoinsMigratedToThorChainMetadata[coin]
     const decimals = chainFeeCoin[Chain.THORChain].decimals
     const id = kujiraCoinMigratedToThorChainDestinationId[coin]
 

@@ -1,12 +1,14 @@
+import { makeRecord } from '@lib/utils/record/makeRecord'
+
 import { KnownCoinMetadata } from '../../../../coin/Coin'
 
 export const kujiraCoinsMigratedToThorChain = [
-  'KUJI',
-  'RKUJI',
-  'FUZN',
-  'NSTK',
-  'WINK',
-  'LVN',
+  'kuji',
+  'rkuji',
+  'fuzn',
+  'nstk',
+  'wink',
+  'lvn',
 ] as const
 
 type KujiraCoinMigratedToThorChain =
@@ -16,45 +18,45 @@ export const kujiraCoinThorChainMergeContracts: Record<
   KujiraCoinMigratedToThorChain,
   string
 > = {
-  KUJI: 'thor14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s3p2nzy',
-  RKUJI: 'thor1yyca08xqdgvjz0psg56z67ejh9xms6l436u8y58m82npdqqhmmtqrsjrgh',
-  FUZN: 'thor1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrsw5xx2d',
-  NSTK: 'thor1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsmam5ck',
-  WINK: 'thor1yw4xvtc43me9scqfr2jr2gzvcxd3a9y4eq7gaukreugw2yd2f8tsz3392y',
-  LVN: 'thor1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lms7us4yf',
+  kuji: 'thor14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s3p2nzy',
+  rkuji: 'thor1yyca08xqdgvjz0psg56z67ejh9xms6l436u8y58m82npdqqhmmtqrsjrgh',
+  fuzn: 'thor1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrsw5xx2d',
+  nstk: 'thor1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsmam5ck',
+  wink: 'thor1yw4xvtc43me9scqfr2jr2gzvcxd3a9y4eq7gaukreugw2yd2f8tsz3392y',
+  lvn: 'thor1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lms7us4yf',
 }
 
 // decimals will be different on ThorChain and Kujira
-export const kujiraCoinsMigratedToThorChainSharedMetadata: Record<
+export const kujiraCoinsMigratedToThorChainMetadata: Record<
   KujiraCoinMigratedToThorChain,
   Omit<KnownCoinMetadata, 'decimals'>
 > = {
-  KUJI: {
+  kuji: {
     ticker: 'KUJI',
     logo: 'kuji',
     priceProviderId: 'kujira',
   },
-  RKUJI: {
+  rkuji: {
     ticker: 'rKUJI',
     logo: 'rkuji.png',
     priceProviderId: 'kujira',
   },
-  FUZN: {
+  fuzn: {
     ticker: 'FUZN',
     logo: 'fuzn.png',
     priceProviderId: 'fuzion',
   },
-  LVN: {
+  lvn: {
     ticker: 'LVN',
     logo: 'levana',
     priceProviderId: 'levana-protocol',
   },
-  NSTK: {
+  nstk: {
     ticker: 'NSTK',
     logo: 'nstk.png',
     priceProviderId: 'unstake-fi',
   },
-  WINK: {
+  wink: {
     ticker: 'WINK',
     logo: 'wink.png',
     priceProviderId: 'winkhub',
@@ -64,11 +66,4 @@ export const kujiraCoinsMigratedToThorChainSharedMetadata: Record<
 export const kujiraCoinMigratedToThorChainDestinationId: Record<
   KujiraCoinMigratedToThorChain,
   string
-> = {
-  KUJI: 'thor.kuji',
-  RKUJI: 'thor.rkuji',
-  FUZN: 'thor.fuzn',
-  NSTK: 'thor.nstk',
-  WINK: 'thor.wink',
-  LVN: 'thor.lvn',
-}
+> = makeRecord(kujiraCoinsMigratedToThorChain, id => `thor.${id}`)
