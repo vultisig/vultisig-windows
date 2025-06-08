@@ -70,6 +70,7 @@ export const dispatchMessage = async (
     [MessageKey.SOLANA_REQUEST, Chain.Solana],
     [MessageKey.THOR_REQUEST, Chain.THORChain],
     [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
+    [MessageKey.ZCASH_REQUEST, Chain.Zcash],
   ] as const
 
   for (const [key, chain] of basicRequests) {

@@ -14,6 +14,7 @@ export enum MessageKey {
   RIPPLE_REQUEST = 'ripple',
   SOLANA_REQUEST = 'solana',
   THOR_REQUEST = 'thor',
+  ZCASH_REQUEST = 'zcash',
   PRIORITY = 'priority',
   VAULT = 'vault',
   VAULTS = 'vaults',
