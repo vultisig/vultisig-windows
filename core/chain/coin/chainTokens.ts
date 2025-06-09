@@ -1,11 +1,10 @@
 import { Chain } from '@core/chain/Chain'
+import { makeRecord } from '@lib/utils/record/makeRecord'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
-import { recordMap } from '@lib/utils/record/recordMap'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 import { kujiraCoinsMigratedToThorChainMetadata } from '../chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
-import { KnownCoinMetadata } from './Coin'
+import { KnownCoin, KnownCoinMetadata } from './Coin'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
 
@@ -736,13 +735,22 @@ const [chainNativeTokens, chainNonNativeTokens] = [
   leanChainNativeTokens,
   leanChainNonNativeTokens,
 ].map(leanTokens =>
-  recordMap(withoutUndefinedFields(leanTokens), (tokens, chain) =>
-    Object.entries(tokens).map(([id, token]) => ({
-      ...token,
-      chain,
-      id,
-    }))
-  )
+  makeRecord(Object.values(Chain), chain => {
+    const result: KnownCoin[] = []
+
+    const tokens = leanTokens[chain]
+    if (tokens) {
+      Object.entries(tokens).forEach(([id, token]) => {
+        result.push({
+          ...token,
+          chain,
+          id,
+        })
+      })
+    }
+
+    return result
+  })
 )
 
 export { chainNativeTokens }
