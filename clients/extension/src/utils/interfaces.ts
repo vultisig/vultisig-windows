@@ -3,7 +3,6 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { TransactionResponse } from 'ethers'
 
 export namespace Messaging {
@@ -126,6 +125,23 @@ export namespace TransactionType {
   }
 
   export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
+}
+
+type IMsgTransfer = {
+  sourcePort: string
+  sourceChannel: string
+  token: {
+    denom: string
+    amount: string
+  }
+  sender: string
+  receiver: string
+  timeoutHeight: {
+    revisionNumber: string
+    revisionHeight: string
+  }
+  timeoutTimestamp: string
+  memo: string
 }
 
 export interface TransactionDetails {

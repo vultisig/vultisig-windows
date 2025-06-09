@@ -62,8 +62,8 @@ export const VaultBackupWithoutPassword = ({
             </Button>
             <Button
               disabled={isPending}
+              kind="secondary"
               onClick={onPasswordRequest}
-              type="secondary"
             >
               {t('use_password')}
             </Button>

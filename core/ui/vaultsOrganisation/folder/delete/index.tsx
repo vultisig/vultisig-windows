@@ -51,7 +51,7 @@ export const DeleteVaultFolder = () => {
               >
                 {t('delete')}
               </Button>
-              <Button onClick={onClose} type="secondary">
+              <Button kind="secondary" onClick={onClose}>
                 {t('cancel')}
               </Button>
             </VStack>

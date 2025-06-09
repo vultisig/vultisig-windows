@@ -1,3 +1,4 @@
+import { CurrencyInputMode } from '@core/ui/vault/send/amount/ManageAmountInputField'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
@@ -7,8 +8,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { LayoutGroup, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-
-import { CurrencyInputMode } from './ManageAmountInputField'
 
 type Props = {
   value: CurrencyInputMode
@@ -30,12 +29,11 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
             const isActive = value === mode
             return (
               <AnimatedIconButton
-                htmlType="button"
-                layout
-                key={mode}
-                type={isActive ? 'primary' : 'link'}
-                onClick={() => onClick(mode)}
                 $isActive={isActive}
+                key={mode}
+                kind={isActive ? 'primary' : 'link'}
+                onClick={() => onClick(mode)}
+                layout
               >
                 {currencyModeIcon[mode]}
               </AnimatedIconButton>

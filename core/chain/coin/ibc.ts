@@ -140,12 +140,3 @@ export const ibcTokens: KnownCoinMetadata[] = [
   },
   { ticker: 'USK', logo: 'usk.png', decimals: 6, priceProviderId: 'usk' },
 ]
-
-export const chainsWithIbcTokens: CosmosChain[] = [
-  Chain.Kujira,
-  Chain.Cosmos,
-  Chain.Osmosis,
-  Chain.Akash,
-  Chain.Dydx,
-  Chain.Noble,
-]

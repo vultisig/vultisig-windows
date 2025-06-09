@@ -45,10 +45,10 @@ export const ReshareVaultPage = () => {
           {t('start_reshare')}
         </Button>
         <Button
+          kind="secondary"
           onClick={() =>
             navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
           }
-          type="secondary"
         >
           {t('join_reshare')}
         </Button>

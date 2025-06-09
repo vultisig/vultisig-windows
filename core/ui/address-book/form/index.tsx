@@ -197,8 +197,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       <PageFooter>
         <Button
           disabled={!isValid || !isDirty}
-          htmlType="submit"
           loading={isLoading || isPending}
+          type="submit"
         >
           {t('save')}
         </Button>

@@ -7,7 +7,9 @@ import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
+import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
@@ -29,10 +31,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
-
-import { useCore } from '../../../../state/core'
-import { normalizeTxHash } from '../../utils/normalizeTxHash'
+import styled from 'styled-components'
 
 const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
   if (!value?.case) return null
@@ -113,46 +112,33 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <Wrapper>
-      <AnimationWrapper>
+    <VStack gap={24}>
+      <VStack style={{ height: 250, position: 'relative' }}>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
           <SuccessText centerHorizontally size={24}>
             {t('transaction_successful')}
           </SuccessText>
         </AnimatedVisibility>
-      </AnimationWrapper>
-      <VStack
-        style={{
-          width: 350,
-          marginInline: 'auto',
-        }}
-        alignItems="center"
-        gap={8}
-      >
-        <HStack
-          style={{
-            position: 'relative',
-          }}
-          gap={8}
-        >
+      </VStack>
+      <VStack alignItems="center" gap={8} style={{ marginInline: 'auto' }}>
+        <HStack gap={8} style={{ position: 'relative' }}>
           {fromCoin && (
             <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
           )}
-
-          <IconWrapper justifyContent="center" alignItems="center">
-            <IconInternalWrapper>
-              <ChevronRightIcon />
-            </IconInternalWrapper>
-          </IconWrapper>
           {toCoin && (
             <SwapCoinItem
               coin={toCoin}
               tokenAmount={parseFloat(toAmountDecimal)}
             />
           )}
+          <IconWrapper alignItems="center" justifyContent="center">
+            <IconInternalWrapper>
+              <ChevronRightIcon />
+            </IconInternalWrapper>
+          </IconWrapper>
         </HStack>
-        <SwapInfoWrapper gap={16} fullWidth fullHeight flexGrow>
+        <SwapInfoWrapper gap={16} fullWidth>
           {withoutUndefined([txHash, approvalTxHash]).map(hash => (
             <HStack
               key={hash}
@@ -254,7 +240,7 @@ export const SwapKeysignTxOverview = ({
           )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
-          <Button onClick={() => trackTransaction(txHash)} type="secondary">
+          <Button kind="secondary" onClick={() => trackTransaction(txHash)}>
             {t('track')}
           </Button>
           <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
@@ -262,26 +248,15 @@ export const SwapKeysignTxOverview = ({
           </Button>
         </HStack>
       </VStack>
-    </Wrapper>
+    </VStack>
   )
 }
 
-const Wrapper = styled(VStack)`
-  gap: 24px;
-`
-
-const AnimationWrapper = styled.div`
-  width: 100%;
-  height: 250px;
-  position: relative;
-  margin-inline: auto;
-`
-
 const SuccessText = styled(GradientText)`
-  position: absolute;
   bottom: 40px;
-  left: 0;
-  right: 0;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
 `
 
 const TrimmedText = styled(Text)<{
@@ -294,15 +269,11 @@ const TrimmedText = styled(Text)<{
   white-space: nowrap;
 `
 
-const swapBoxStyles = () => css`
+const SwapInfoWrapper = styled(SeparatedByLine)`
   border-radius: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   background-color: ${getColor('foreground')};
-`
-
-const SwapInfoWrapper = styled(SeparatedByLine)`
   padding: 24px;
-  ${swapBoxStyles()}
 `
 
 const IconWrapper = styled(HStack)`
