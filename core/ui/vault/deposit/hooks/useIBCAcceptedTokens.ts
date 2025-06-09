@@ -3,7 +3,6 @@ import { chainTokens } from '@core/chain/coin/chainTokens'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { useMemo } from 'react'
 
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
@@ -22,16 +21,12 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
       chainTokens[chain].filter(coin => coin.id.startsWith('ibc/'))
     )
 
-    return withoutDuplicates(
-      sourceCoins.filter(coin =>
-        ibcTokens.some(
-          ibc =>
-            ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
-            ibc.decimals === coin.decimals
-        )
-      ),
-      (tokenA, tokenB) =>
-        tokenA.ticker.toUpperCase() === tokenB.ticker.toUpperCase()
+    return sourceCoins.filter(coin =>
+      ibcTokens.some(
+        ibc =>
+          ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
+          ibc.decimals === coin.decimals
+      )
     )
   }, [sourceCoins, destinationChain])
 }
