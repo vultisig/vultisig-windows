@@ -1,34 +1,21 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Size } from '@lib/ui/props'
+import { ButtonProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import { FC, HTMLAttributes, ReactNode } from 'react'
+import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-type ButtonSize = Extract<Size, 'sm' | 'md'>
-
-type Status = 'default' | 'danger' | 'success' | 'warning'
-type Kind = 'primary' | 'secondary' | 'link'
-
-type ButtonProps = HTMLAttributes<HTMLButtonElement> & {
-  disabled?: boolean | string
-  icon?: ReactNode
-  kind?: Kind
-  loading?: boolean
-  size?: ButtonSize
-  status?: Status
-  type?: 'button' | 'submit' | 'reset'
-}
+type ButtonSize = Extract<ButtonProps['size'], 'sm' | 'md'>
 
 const StyledButton = styled(UnstyledButton)<{
   disabled: boolean
-  kind: Kind
+  kind: NonNullable<ButtonProps['kind']>
   loading: boolean
   size: ButtonSize
-  status: Status
+  status: NonNullable<ButtonProps['status']>
 }>`
   ${({ disabled, kind, loading, size, status }) => css`
     align-items: center;
@@ -202,7 +189,7 @@ const StyledButton = styled(UnstyledButton)<{
   `}
 `
 
-export const Button: FC<ButtonProps> = ({
+export const Button: FC<Omit<ButtonProps, 'size'> & { size?: ButtonSize }> = ({
   children,
   disabled,
   icon,
@@ -213,8 +200,8 @@ export const Button: FC<ButtonProps> = ({
   ...rest
 }) => {
   const props = {
-    kind,
     disabled: !!disabled,
+    kind,
     loading,
     size,
     status,

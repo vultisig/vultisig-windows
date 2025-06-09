@@ -1,6 +1,18 @@
-import { ElementType, ReactNode, SVGProps } from 'react'
+import { ButtonHTMLAttributes, ElementType, ReactNode, SVGProps } from 'react'
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+
+export type ButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'disabled'
+> & {
+  disabled?: boolean | string
+  icon?: ReactNode
+  kind?: 'primary' | 'secondary' | 'link'
+  loading?: boolean
+  size?: Size
+  status?: 'default' | 'danger' | 'success' | 'warning'
+}
 
 export type OnCloseProp = {
   onClose: () => void
