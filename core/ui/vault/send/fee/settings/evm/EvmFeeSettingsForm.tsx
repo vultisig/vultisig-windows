@@ -1,4 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
@@ -94,7 +96,15 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
           }
           value={value.gasLimit}
           onValueChange={gasLimit =>
-            onChange({ ...value, gasLimit: gasLimit ?? 21000 })
+            onChange({
+              ...value,
+              gasLimit:
+                gasLimit ??
+                getEvmGasLimit({
+                  chain: EvmChain.Ethereum,
+                  isNativeToken: true,
+                }),
+            })
           }
         />
       </VStack>

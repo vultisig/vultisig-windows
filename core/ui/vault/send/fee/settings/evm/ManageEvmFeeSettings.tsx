@@ -7,11 +7,11 @@ import { OnCloseProp } from '@lib/ui/props'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { FC, useEffect, useState } from 'react'
 
+import { useCurrentSendCoin } from '../../../state/sendCoin'
 import {
   EvmFeeSettingsForm,
   EvmFeeSettingsFormValue,
 } from './EvmFeeSettingsForm'
-import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const [
