@@ -13,12 +13,10 @@ import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -26,12 +24,13 @@ import { ValueProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getLastItem } from '@lib/utils/array/getLastItem'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { TrackTxPrompt } from './TrackTxPrompt'
 
 const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
   if (!value?.case) return null
@@ -52,10 +51,7 @@ export const SwapKeysignTxOverview = ({
   const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
     memo: value.memo,
   })
-  const isERC20Approve = Boolean(value.erc20ApprovePayload)
-  const [approvalTxHash, txHash] = isERC20Approve
-    ? [txHashes[0], txHashNormalized]
-    : [undefined, txHashNormalized]
+
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const { t } = useTranslation()
@@ -139,34 +135,18 @@ export const SwapKeysignTxOverview = ({
           </IconWrapper>
         </HStack>
         <SwapInfoWrapper gap={16} fullWidth>
-          {withoutUndefined([txHash, approvalTxHash]).map(hash => (
-            <HStack
-              key={hash}
-              fullWidth
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text weight="500" size={14} color="shy">
-                {hash === approvalTxHash ? t('approval_tx') : t('transaction')}
-              </Text>
-              <HStack gap={4} alignItems="center">
-                <Text
-                  style={{
-                    width: 100,
-                  }}
-                  cropped
-                  weight="500"
-                  size={14}
-                  color="contrast"
-                >
-                  {hash}
-                </Text>
-                <IconButton onClick={() => trackTransaction(hash)} size="sm">
-                  <SquareArrowOutUpRightIcon />
-                </IconButton>
-              </HStack>
-            </HStack>
-          ))}
+          <TrackTxPrompt
+            title={t('transaction')}
+            value={txHashNormalized}
+            chain={chain}
+          />
+          {'erc20Approve' in value && (
+            <TrackTxPrompt
+              title={t('approval_tx')}
+              value={txHashes[0]}
+              chain={chain}
+            />
+          )}
           {swapProvider && (
             <HStack
               fullWidth
@@ -240,7 +220,10 @@ export const SwapKeysignTxOverview = ({
           )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
-          <Button kind="secondary" onClick={() => trackTransaction(txHash)}>
+          <Button
+            kind="secondary"
+            onClick={() => trackTransaction(txHashNormalized)}
+          >
             {t('track')}
           </Button>
           <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
