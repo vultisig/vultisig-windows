@@ -16,7 +16,7 @@ export const PeerDiscoveryFormFooter = ({ isDisabled }: IsDisabledProp) => {
 
   return (
     <Container>
-      <Button disabled={isDisabled} htmlType="submit">
+      <Button disabled={isDisabled} type="submit">
         {isDisabled ? t('waitingOnDevices') : t('next')}
       </Button>
       {isLocalModeAvailable && <MpcServerTypeManager />}

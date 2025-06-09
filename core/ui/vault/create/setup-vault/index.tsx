@@ -144,7 +144,7 @@ export const SetupVaultPage = () => {
         </ContentWrapper>
       </PageContent>
       <PageFooter>
-        <Button htmlType="submit">{t('next')}</Button>
+        <Button type="submit">{t('next')}</Button>
       </PageFooter>
     </VStack>
   )
