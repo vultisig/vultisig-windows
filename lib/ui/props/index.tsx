@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ElementType, ReactNode, SVGProps } from 'react'
 
-export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
 export type ButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
