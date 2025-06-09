@@ -272,8 +272,6 @@ export const hr = {
   vault_backup_page_password_protection:
     'Opcionalna zaštita lozinkom vašeg trezora',
   vault_backup_page_password_error: 'Postavite snažnu lozinku i sačuvajte je.',
-  vault_backup_page_password_input_placeholder: 'Unesite lozinku',
-  vault_backup_page_verified_password_input_placeholder: 'Potvrdite lozinku',
   vault_backup_page_verified_password_error: 'Lozinke se moraju podudarati',
   vault_backup_page_submit_loading_button_text: 'Spremanje...',
   vault_backup_page_password_info:

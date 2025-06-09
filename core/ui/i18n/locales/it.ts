@@ -283,8 +283,6 @@ export const it = {
   vault_backup_page_password_protection:
     'Protezione opzionale con password per la tua cassaforte',
   vault_backup_page_password_error: 'Imposta una password sicura e conservala.',
-  vault_backup_page_password_input_placeholder: 'Inserisci la password',
-  vault_backup_page_verified_password_input_placeholder: 'Verifica la password',
   vault_backup_page_verified_password_error: 'Le password devono coincidere',
   vault_backup_page_submit_loading_button_text: 'Salvataggio...',
   vault_backup_page_password_info:

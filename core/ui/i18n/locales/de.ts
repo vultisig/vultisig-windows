@@ -279,8 +279,6 @@ export const de = {
     'Optionale Passwortschutz für Ihren Tresor',
   vault_backup_page_password_error:
     'Legen Sie ein sicheres Passwort fest und bewahren Sie es auf.',
-  vault_backup_page_password_input_placeholder: 'Passwort eingeben',
-  vault_backup_page_verified_password_input_placeholder: 'Passwort bestätigen',
   vault_backup_page_verified_password_error: 'Passwörter müssen übereinstimmen',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
   vault_backup_page_password_info:

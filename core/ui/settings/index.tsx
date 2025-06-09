@@ -14,11 +14,10 @@ import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
-import { LockIcon } from '@lib/ui/icons/LockIcon'
+import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
-import { SecurityIcon } from '@lib/ui/icons/SecurityIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
@@ -144,7 +143,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
-              icon={<SecurityIcon style={{ fontSize: iconSize }} />}
+              icon={<ShieldCheckIcon fontSize={iconSize} />}
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
               title={t('security')}
               hoverable
@@ -152,7 +151,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
             />
             {hasPasscodeEncryption && (
               <ListItem
-                icon={<LockIcon style={{ fontSize: iconSize }} />}
+                icon={<LockKeyholeIcon fontSize={iconSize} />}
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
                 hoverable
@@ -245,9 +244,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                       `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
                     )
                   }
-                  size="xl"
+                  size="lg"
                 >
-                  <LinkedinIcon fontSize={38} />
+                  <LinkedinIcon fontSize={24} />
                 </IconButton>
                 <IconButton
                   onClick={() =>
@@ -255,9 +254,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                       `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
                     )
                   }
-                  size="xl"
+                  size="lg"
                 >
-                  <FacebookIcon fontSize={38} />
+                  <FacebookIcon fontSize={24} />
                 </IconButton>
                 <IconButton
                   onClick={() =>
@@ -265,9 +264,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                       `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
                     )
                   }
-                  size="xl"
+                  size="lg"
                 >
-                  <RedditIcon fontSize={38} />
+                  <RedditIcon fontSize={24} />
                 </IconButton>
                 <IconButton
                   onClick={() =>
@@ -275,9 +274,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                       `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
                     )
                   }
-                  size="xl"
+                  size="lg"
                 >
-                  <WhatsAppIcon fontSize={38} />
+                  <WhatsAppIcon fontSize={24} />
                 </IconButton>
                 <IconButton
                   onClick={() =>
@@ -285,9 +284,9 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                       `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
                     )
                   }
-                  size="xl"
+                  size="lg"
                 >
-                  <TwitterIcon fontSize={38} />
+                  <TwitterIcon fontSize={24} />
                 </IconButton>
               </HStack>
             </VStack>
@@ -296,7 +295,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 {shareURL}
               </Text>
               <IconButton onClick={handleCopy}>
-                <CopyIcon fontSize={iconSize} />
+                <CopyIcon />
               </IconButton>
             </HStack>
           </VStack>

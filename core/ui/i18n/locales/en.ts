@@ -1,4 +1,7 @@
 export const en = {
+  password_do_not_match: 'Passwords do not match',
+  password_pattern_error:
+    'Password must be between {{min}} and {{max}} characters',
   address_book: 'Address Book',
   address_book_empty: 'Your Address Book is empty',
   assets: 'assets',
@@ -264,8 +267,6 @@ export const en = {
   vault_backup_page_password_protection:
     'Optional password protection of your Vault',
   vault_backup_page_password_error: 'Set a strong password and save it.',
-  vault_backup_page_password_input_placeholder: 'Enter password',
-  vault_backup_page_verified_password_input_placeholder: 'Verify password',
   vault_backup_page_verified_password_error: 'Passwords must match',
   vault_backup_page_submit_loading_button_text: 'Saving...',
   vault_backup_page_password_info:
@@ -554,7 +555,6 @@ export const en = {
     emailSetupTitle: 'This email is only used to send the server backup',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     confirmPasswordIsRequired: 'Confirm password is required',
-    passwordDoNotMatch: 'Passwords do not match',
     hintEmpty: 'Hint is empty',
     addOptionalHint: 'Add optional hint',
     hintDescription: 'This will be shown in case you forget your password',

@@ -12,37 +12,41 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
+import { TFunction } from 'i18next'
 import { useEffect, useMemo } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
+
+const createSchema = (t: TFunction) => {
+  return z.object({
+    name: z
+      .string()
+      .min(2, t('vault_rename_page_name_error'))
+      .max(50, t('vault_rename_page_name_error')),
+  })
+}
+
+type Schema = z.infer<ReturnType<typeof createSchema>>
 
 export const VaultRenamePage = () => {
   const { t } = useTranslation()
   const navigateBack = useNavigateBack()
   const currentVault = useCurrentVault()
   const updateVaultMutation = useUpdateVaultMutation()
-  const formSchema = useMemo(
-    () =>
-      z.object({
-        name: z.string().min(2, t('vault_rename_page_name_error')).max(50),
-      }),
-    [t]
-  )
+  const schema = useMemo(() => createSchema(t), [t])
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty },
-  } = useForm({
-    resolver: zodResolver(formSchema),
+  } = useForm<Schema>({
+    defaultValues: { name: currentVault.name },
     mode: 'onBlur',
-    defaultValues: {
-      name: currentVault.name,
-    },
+    resolver: zodResolver(schema),
   })
 
-  const onSubmit = ({ name }: FieldValues) => {
-    if (isValid && isDirty) {
+  const onSubmit = ({ name }: Schema) => {
+    if (isDirty) {
       updateVaultMutation.mutate({
         vaultId: getVaultId(currentVault),
         fields: { name },

@@ -115,9 +115,9 @@ export const DeleteVaultPage = () => {
             />
           ))}
         </List>
-        {error && (
+        {error?.message && (
           <Text color="danger" size={12}>
-            {error?.message}
+            {error.message}
           </Text>
         )}
       </PageContent>

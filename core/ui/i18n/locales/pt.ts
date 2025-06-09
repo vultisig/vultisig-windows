@@ -275,8 +275,6 @@ export const pt = {
   vault_backup_page_password_protection:
     'Proteção de senha opcional para seu cofre',
   vault_backup_page_password_error: 'Defina uma senha segura e a guarde bem.',
-  vault_backup_page_password_input_placeholder: 'Digite a senha',
-  vault_backup_page_verified_password_input_placeholder: 'Verificar senha',
   vault_backup_page_verified_password_error: 'As senhas devem ser iguais',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
   vault_backup_page_password_info:

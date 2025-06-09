@@ -285,8 +285,6 @@ export const es = {
     'Protección de contraseña opcional para su bóveda',
   vault_backup_page_password_error:
     'Establezca una contraseña segura y guárdela.',
-  vault_backup_page_password_input_placeholder: 'Ingrese la contraseña',
-  vault_backup_page_verified_password_input_placeholder: 'Verificar contraseña',
   vault_backup_page_verified_password_error: 'Las contraseñas deben coincidir',
   vault_backup_page_submit_loading_button_text: 'Guardando...',
   vault_backup_page_password_info:
