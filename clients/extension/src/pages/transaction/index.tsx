@@ -238,7 +238,7 @@ export const TransactionPage = () => {
                             keysign: transactionPayload => (
                               <>
                                 <ListItem
-                                  title={t('network_fee')}
+                                  title={t('est_network_fee')}
                                   description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
                                   extra={
                                     <GasFeeAdjuster

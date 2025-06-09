@@ -1,10 +1,8 @@
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { EvmChain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { getKeysignChain } from '@core/ui/mpc/keysign/utils/getKeysignChain'
 import {
   EvmFeeSettingsForm,
   EvmFeeSettingsFormValue,
@@ -27,35 +25,26 @@ export const GasFeeAdjuster = ({
   baseFee,
 }: GasFeeAdjusterProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  // Initialize gas settings state with values from transaction payload or fallback to defaults
+  // For custom messages: uses Ethereum defaults
+  // For regular transactions: uses values from transaction payload with fallbacks
   const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
     if (!('keysign' in keysignPayload)) {
-      // For custom messages, we don't have chain information, so fallback to Ethereum
+      // If we don't have chain information, fallback to Ethereum
       return {
         priorityFee: baseFee,
         gasLimit: getEvmGasLimit({
           chain: EvmChain.Ethereum,
           isNativeToken: true,
-        }), // Fallback to Ethereum for custom messages
+        }),
       }
     }
     const transactionPayload =
       keysignPayload.keysign as unknown as IKeysignTransactionPayload
 
-    const chain = getKeysignChain(keysignPayload.keysign)
-    const chainKind = getChainKind(chain)
-    if (chainKind !== 'evm') {
-      return {
-        priorityFee: baseFee,
-        gasLimit: getEvmGasLimit({
-          chain: EvmChain.Ethereum,
-          isNativeToken: true,
-        }), // Fallback to Ethereum if not EVM
-      }
-    }
-
     const isNative = keysignPayload.keysign.coin?.isNativeToken ?? false
     const defaultGasLimit = getEvmGasLimit({
-      chain: chain as EvmChain,
+      chain: transactionPayload.chain as EvmChain,
       isNativeToken: isNative,
     })
 
@@ -86,13 +75,6 @@ export const GasFeeAdjuster = ({
           : defaultGasLimit,
     }
   })
-
-  if (!('keysign' in keysignPayload)) return null
-
-  const chain = getKeysignChain(keysignPayload.keysign)
-  const chainKind = getChainKind(chain)
-
-  if (chainKind !== 'evm') return null
 
   const handleSave = () => {
     if ('keysign' in keysignPayload) {
