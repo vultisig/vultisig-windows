@@ -56,6 +56,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
         <AnimationDescription animation={currentAnimation} />
         <IconButton
           disabled={isLoading}
+          kind="primary"
           onClick={
             is5PlusDevice &&
             currentAnimation !== animations[animations.length - 1]
@@ -63,7 +64,6 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
               : onCompleted
           }
           size="xl"
-          type="primary"
         >
           <ChevronRightIcon />
         </IconButton>

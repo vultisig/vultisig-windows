@@ -185,7 +185,7 @@ export const IconButton: FC<
   )
 }
 
-export const iconButtonSize: Record<IconBtnSize, number> = {
+export const iconButtonSize: Record<ButtonSize, number> = {
   xs: 24,
   sm: 28,
   md: 32,

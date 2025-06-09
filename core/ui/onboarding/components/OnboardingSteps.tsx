@@ -69,13 +69,13 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
       <PageFooter>
         <IconButton
           disabled={isLoading}
+          kind="primary"
           onClick={
             currentAnimation !== animations[animations.length - 1]
               ? handleNextAnimation
               : onCompleteSteps
           }
           size="xl"
-          type="primary"
         >
           <ChevronRightIcon />
         </IconButton>

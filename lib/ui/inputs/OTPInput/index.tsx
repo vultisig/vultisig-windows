@@ -52,9 +52,9 @@ export const OTPInput = ({
       ))}
       {includePasteButton && (
         <Button
+          kind="secondary"
           onClick={() => handlePaste()}
           style={{ borderRadius: 12, width: 'auto' }}
-          type="secondary"
         >
           {t('paste')}
         </Button>

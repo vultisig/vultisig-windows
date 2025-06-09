@@ -59,9 +59,9 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
         </AnimatedVisibility>
         <IconButton
           disabled={isLoading}
+          kind="primary"
           onClick={onCompleted}
           size="xl"
-          type="primary"
         >
           <ChevronRightIcon />
         </IconButton>
