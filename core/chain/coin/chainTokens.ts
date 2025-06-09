@@ -696,6 +696,11 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       ...kujiraCoinsMigratedToThorChainMetadata.fuzn,
       decimals: 6,
     },
+
+    'ibc/B64A07C006C0F5E260A8AD50BD53568F1FD4A0D75B7A9F8765C81BEAFDA62053': {
+      ...kujiraCoinsMigratedToThorChainMetadata.lvn,
+      decimals: 6,
+    },
   },
   [Chain.Terra]: {
     terra13j2k5rfkg0qhk58vz63cze0uze4hwswlrfnm0fa4rnyggjyfrcnqcrs5z2: {
