@@ -9,7 +9,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
-import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
+import { getTxInputData } from '@core/ui/mpc/keysign/tx/inputData/getTxInputData'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
