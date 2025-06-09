@@ -31,7 +31,7 @@ const createSchema = (t: TFunction) => {
 
   return z
     .object({
-      password: z.string().min(1, message).max(30, message),
+      password: z.string().min(3, message).max(30, message),
       confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {

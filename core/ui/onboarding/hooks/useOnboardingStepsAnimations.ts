@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
-export const onboardingAnimations = [0, 1, 2, 3, 4, 5] as const
+const onboardingAnimations = [0, 1, 2, 3, 4, 5] as const
 
 export const useOnboardingStepsAnimations = () => {
   const {

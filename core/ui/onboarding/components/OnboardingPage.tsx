@@ -4,47 +4,21 @@ import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
-import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { Text, text } from '@lib/ui/text'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { Text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 type OnboardingStep = {
   artUrl: string
   content: ReactNode
 }
 
-const Container = styled.div`
-  ${vStack({
-    gap: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    fullWidth: true,
-  })}
-
-  max-width: 320px;
-`
-
-const Content = styled.div`
-  ${text({
-    color: 'contrast',
-    height: 'large',
-    centerHorizontally: true,
-  })}
-  min-height: 100px;
-`
-
-const ArtContainer = styled.div`
-  height: 260px;
-`
-
 export const OnboardingPage = () => {
   const { t } = useTranslation()
-
   const [stepIndex, setStepIndex] = useState(0)
-
   const { mutateAsync: setHasFinishedOnboarding } =
     useSetHasFinishedOnboardingMutation()
 
@@ -76,39 +50,41 @@ export const OnboardingPage = () => {
   const isLastScreen = stepIndex === steps.length - 1
 
   return (
-    <PageContent alignItems="center">
-      <Container>
+    <VStack fullHeight>
+      <PageContent alignItems="center" gap={60} justifyContent="center">
         <HStack gap={8} alignItems="center">
-          <ProductEnhancedLogo style={{ fontSize: 44 }} />
+          <ProductEnhancedLogo fontSize={44} />
           <Text color="contrast" size={36} weight="600">
             {t('vultisig')}
           </Text>
         </HStack>
-        <ArtContainer>
-          <SafeImage
-            src={artUrl}
-            render={props => <ContainImage {...props} />}
-          />
-        </ArtContainer>
-        <Content>{content}</Content>
-        <VStack fullWidth alignItems="center" gap={24}>
-          <MultistepProgressIndicator value={stepIndex} steps={steps.length} />
-          <VStack gap={8} fullWidth>
-            <Button
-              onClick={() =>
-                isLastScreen
-                  ? completeOnboarding()
-                  : setStepIndex(prev => prev + 1)
-              }
-            >
-              {t('next')}
-            </Button>
-            <Button kind="secondary" onClick={completeOnboarding}>
-              {t('skip')}
-            </Button>
-          </VStack>
+        <SafeImage
+          src={artUrl}
+          render={props => (
+            <ContainImage {...props} style={{ maxHeight: 260 }} />
+          )}
+        />
+        <Text color="contrast" height="large" centerHorizontally>
+          {content}
+        </Text>
+      </PageContent>
+      <PageFooter alignItems="center" gap={24}>
+        <MultistepProgressIndicator value={stepIndex} steps={steps.length} />
+        <VStack gap={16} fullWidth>
+          <Button
+            onClick={() =>
+              isLastScreen
+                ? completeOnboarding()
+                : setStepIndex(prev => prev + 1)
+            }
+          >
+            {t('next')}
+          </Button>
+          <Button kind="secondary" onClick={completeOnboarding}>
+            {t('skip')}
+          </Button>
         </VStack>
-      </Container>
-    </PageContent>
+      </PageFooter>
+    </VStack>
   )
 }
