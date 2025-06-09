@@ -127,7 +127,7 @@ export const SetServerPasswordStep = ({
             </VStack>
           </VStack>
         </VStack>
-        <Button disabled={!isValid} htmlType="submit">
+        <Button disabled={!isValid} type="submit">
           {t('next')}
         </Button>
       </PageContent>

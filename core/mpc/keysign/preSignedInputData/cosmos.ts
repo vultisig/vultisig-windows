@@ -1,7 +1,9 @@
+import { CosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -10,30 +12,39 @@ import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
 
 export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
   'cosmosSpecific'
-> = ({ keysignPayload, walletCore, chain, chainSpecific, ibcTransaction }) => {
+> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
   const denom = cosmosFeeCoinDenom[chain]
   let message: TW.Cosmos.Proto.Message[]
-  if (
-    chainSpecific.transactionType === TransactionType.IBC_TRANSFER &&
-    ibcTransaction
-  ) {
+  if (chainSpecific.transactionType === TransactionType.IBC_TRANSFER) {
+    const memo = shouldBePresent(keysignPayload.memo)
+    const [, channel] = memo.split(':')
+
+    const timeoutTimestamp = Long.fromString(
+      chainSpecific.ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
+    )
+
     message = [
       TW.Cosmos.Proto.Message.create({
         transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
-          ...ibcTransaction,
-          timeoutHeight: {
-            revisionNumber: Long.fromString(
-              ibcTransaction.timeoutHeight.revisionNumber
-            ),
-            revisionHeight: Long.fromString(
-              ibcTransaction.timeoutHeight.revisionHeight
-            ),
+          sourcePort: 'transfer',
+          sourceChannel: channel,
+          token: {
+            denom: coin.isNativeToken
+              ? cosmosFeeCoinDenom[coin.chain as CosmosChain]
+              : coin.contractAddress,
+            amount: keysignPayload.toAmount,
           },
-          timeoutTimestamp: Long.fromString(ibcTransaction.timeoutTimestamp),
+          sender: coin.address,
+          receiver: keysignPayload.toAddress,
+          timeoutHeight: {
+            revisionNumber: Long.fromString('0'),
+            revisionHeight: Long.fromString('0'),
+          },
+          timeoutTimestamp,
         }),
       }),
     ]

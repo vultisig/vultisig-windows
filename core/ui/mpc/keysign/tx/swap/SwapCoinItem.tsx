@@ -4,15 +4,14 @@ import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
-
-import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
-import { useFiatCurrency } from '../../../../storage/fiatCurrency'
 
 export const SwapCoinItem = ({
   coin,
@@ -68,9 +67,10 @@ export const SwapCoinItem = ({
 }
 
 const SwapVStackItem = styled(VStack)`
+  background-color: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 16px;
+  flex: 1;
   min-width: 169px;
   padding: 24px 16px;
-  border-radius: 16px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background-color: ${getColor('foreground')};
 `

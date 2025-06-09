@@ -126,7 +126,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               <Container onClick={onOpen}>
                 <HStack alignItems="center" gap={8}>
                   <Text weight="400" family="mono" size={16}>
-                    {t(`${selectedChainAction}`)}
+                    {t(selectedChainAction)}
                   </Text>
                 </HStack>
                 <IconWrapper style={{ fontSize: 20 }}>
@@ -215,7 +215,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             </VStack>
           )}
         </WithProgressIndicator>
-        <Button disabled={!isValid} htmlType="submit">
+        <Button disabled={!isValid} type="submit">
           {t('continue')}
         </Button>
       </PageContent>

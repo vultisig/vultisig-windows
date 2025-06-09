@@ -1,41 +1,23 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Size } from '@lib/ui/props'
+import { ButtonProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import { FC, HTMLAttributes, ReactNode } from 'react'
+import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from './UnstyledButton'
-
-type ButtonSize = Extract<Size, 'sm' | 'md'>
-
-type HtmlType = 'button' | 'submit' | 'reset'
-type Status = 'default' | 'danger' | 'success' | 'warning'
-type Type = 'primary' | 'secondary' | 'link'
-
-type ButtonProps = Pick<
-  HTMLAttributes<HTMLButtonElement>,
-  'children' | 'className' | 'onClick' | 'style'
-> & {
-  disabled?: boolean | string
-  htmlType?: HtmlType
-  icon?: ReactNode
-  loading?: boolean
-  size?: ButtonSize
-  status?: Status
-  type?: Type
-}
+type ButtonSize = Extract<ButtonProps['size'], 'sm' | 'md'>
 
 const StyledButton = styled(UnstyledButton)<{
-  btnType: Type
   disabled: boolean
+  kind: NonNullable<ButtonProps['kind']>
   loading: boolean
   size: ButtonSize
-  status: Status
+  status: NonNullable<ButtonProps['status']>
 }>`
-  ${({ btnType, disabled, loading, size, status }) => css`
+  ${({ disabled, kind, loading, size, status }) => css`
     align-items: center;
     border: none;
     cursor: pointer;
@@ -45,7 +27,7 @@ const StyledButton = styled(UnstyledButton)<{
     transition: all 0.2s;
     width: 100%;
 
-    ${match(btnType, {
+    ${match(kind, {
       link: () => css`
         ${match(size, {
           sm: () => css`
@@ -207,25 +189,23 @@ const StyledButton = styled(UnstyledButton)<{
   `}
 `
 
-export const Button: FC<ButtonProps> = ({
+export const Button: FC<Omit<ButtonProps, 'size'> & { size?: ButtonSize }> = ({
   children,
   disabled,
-  htmlType,
   icon,
+  kind = 'primary',
   loading = false,
   size = 'md',
   status = 'default',
-  type = 'primary',
   ...rest
 }) => {
   const props = {
-    ...rest,
-    btnType: type,
     disabled: !!disabled,
+    kind,
     loading,
     size,
     status,
-    type: htmlType,
+    ...rest,
   }
 
   return typeof disabled === 'string' ? (

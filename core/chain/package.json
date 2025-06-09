@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "printKnownTokens": "npx tsx scripts/printKnownTokens.ts"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
