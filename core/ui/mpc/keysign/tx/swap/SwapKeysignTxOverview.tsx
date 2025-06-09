@@ -57,8 +57,6 @@ export const SwapKeysignTxOverview = ({
 
   const { coin: potentialFromCoin, blockchainSpecific, swapPayload } = value
 
-  console.log(swapPayload)
-
   const {
     fromAmount,
     toAmountDecimal,
