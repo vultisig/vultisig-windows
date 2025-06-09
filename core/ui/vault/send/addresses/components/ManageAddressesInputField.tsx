@@ -126,7 +126,7 @@ export const ManageReceiverAddressInputField = () => {
                 {error && <AnimatedSendFormInputError error={error} />}
               </VStack>
 
-              <HStack gap={8}>
+              <HStack justifyContent="space-between" gap={8}>
                 <StyledIconButton
                   onClick={async () => {
                     const { data } = await attempt(getClipboardText)

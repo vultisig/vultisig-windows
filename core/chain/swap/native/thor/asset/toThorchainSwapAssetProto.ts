@@ -5,10 +5,8 @@ import { match } from '@lib/utils/match'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { TW } from '@trustwallet/wallet-core'
 
-import {
-  ThorchainSwapEnabledChain,
-  thorchainSwapProtoChains,
-} from '../thorchainSwapProtoChains'
+import { ThorChainSwapEnabledChain } from '../../NativeSwapChain'
+import { thorchainSwapProtoChains } from '../thorchainSwapProtoChains'
 
 type Input = CoinKey &
   EntityWithTicker & {
@@ -22,7 +20,7 @@ export const toThorchainSwapAssetProto = ({
   direction,
 }: Input) =>
   TW.THORChainSwap.Proto.Asset.create({
-    chain: thorchainSwapProtoChains[chain as ThorchainSwapEnabledChain],
+    chain: thorchainSwapProtoChains[chain as ThorChainSwapEnabledChain],
     symbol: ticker,
     ...(isFeeCoin({ chain, id })
       ? {}

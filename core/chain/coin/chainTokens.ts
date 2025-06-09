@@ -1,15 +1,12 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { chainFeeCoin } from './chainFeeCoin'
+import { kujiraCoinsMigratedToThorChainMetadata } from '../chains/cosmos/thor/kujira-merge'
+import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
-import {
-  chainsWithIbcTokens,
-  ibcTokens,
-  ibcTransferrableTokensPerChain,
-} from './ibc'
+import { ibcTransferrableTokensPerChain } from './ibc'
 import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
 import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
@@ -41,6 +38,7 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       decimals: 8,
       priceProviderId: 'tcy',
     },
+    ...kujiraCoinsOnThorChain,
   },
 
   [Chain.Tron]: {
@@ -597,22 +595,16 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'usd-coin',
     },
     'ibc/4363FD2EF60A7090E405B79A6C4337C5E9447062972028F5A99FB041B9571942': {
-      ticker: 'WINK',
-      logo: 'wink.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.wink,
       decimals: 6,
-      priceProviderId: 'winkhub',
     },
     'ibc/6C95083ADD352D5D47FB4BA427015796E5FEF17A829463AD05ECD392EB38D889': {
-      ticker: 'LVN',
-      logo: 'levana',
+      ...kujiraCoinsMigratedToThorChainMetadata.lvn,
       decimals: 6,
-      priceProviderId: 'levana-protocol',
     },
     'ibc/0B99C4EFF1BD05E56DEDEE1D88286DB79680C893724E0E7573BC369D79B5DDF3': {
-      ticker: 'NSTK',
-      logo: 'nstk.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.nstk,
       decimals: 6,
-      priceProviderId: 'unstake-fi',
     },
     'ibc/A47E814B0E8AE12D044637BCB4576FCA675EF66300864873FA712E1B28492B78': {
       ticker: 'USK',
@@ -627,16 +619,12 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'nami-protocol',
     },
     'ibc/6BBBB4B63C51648E9B8567F34505A9D5D8BAAC4C31D768971998BE8C18431C26': {
-      ticker: 'FUZN',
-      logo: 'fuzn.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.fuzn,
       decimals: 6,
-      priceProviderId: 'fuzion',
     },
     'ibc/50A69DC508ACCADE2DAC4B8B09AA6D9C9062FCBFA72BB4C6334367DECD972B06': {
-      ticker: 'rKUJI',
-      logo: 'rkuji.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.rkuji,
       decimals: 6,
-      priceProviderId: 'kujira',
     },
   },
   [Chain.Osmosis]: {
@@ -648,10 +636,8 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
     },
     'factory/osmo1mlng7pz4pnyxtpq0akfwall37czyk9lukaucsrn30ameplhhshtqdvfm5c/ulvn':
       {
-        ticker: 'LVN',
-        logo: 'levana',
+        ...kujiraCoinsMigratedToThorChainMetadata.lvn,
         decimals: 6,
-        priceProviderId: 'levana-protocol',
       },
   },
   [Chain.Kujira]: {
@@ -663,16 +649,12 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
         priceProviderId: 'usk',
       },
     'factory/kujira12cjjeytrqcj25uv349thltcygnp9k0kukpct0e/uwink': {
-      ticker: 'WINK',
-      logo: 'wink.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.wink,
       decimals: 6,
-      priceProviderId: 'winkhub',
     },
     'factory/kujira1aaudpfr9y23lt9d45hrmskphpdfaq9ajxd3ukh/unstk': {
-      ticker: 'NSTK',
-      logo: 'nstk.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.nstk,
       decimals: 6,
-      priceProviderId: 'unstake-fi',
     },
     'factory/kujira1643jxg8wasy5cfcn7xm8rd742yeazcksqlg4d7/umnta': {
       ticker: 'MNTA',
@@ -699,10 +681,8 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'terra-luna',
     },
     'factory/kujira1tsekaqv9vmem0zwskmf90gpf0twl6k57e8vdnq/urkuji': {
-      ticker: 'rKUJI',
-      logo: 'rKUJI.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.rkuji,
       decimals: 6,
-      priceProviderId: 'kujira',
     },
     'factory/kujira13x2l25mpkhwnwcwdzzd34cr8fyht9jlj7xu9g4uffe36g3fmln8qkvm3qn/unami':
       {
@@ -712,10 +692,8 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
         priceProviderId: 'nami-protocol',
       },
     'factory/kujira1sc6a0347cc5q3k890jj0pf3ylx2s38rh4sza4t/ufuzn': {
-      ticker: 'FUZN',
-      logo: 'fuzn.png',
+      ...kujiraCoinsMigratedToThorChainMetadata.fuzn,
       decimals: 6,
-      priceProviderId: 'fuzion',
     },
   },
   [Chain.Terra]: {
@@ -766,7 +744,7 @@ export { chainNativeTokens }
 export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
   const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
 
-  for (const chain of chainsWithIbcTokens) {
+  Object.values(IbcEnabledCosmosChain).forEach(chain => {
     const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
     const current = base[chain] ?? []
 
@@ -776,21 +754,7 @@ export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
     if (patched.length || additions.length) {
       base[chain] = [...patched, ...additions]
     }
-  }
-
-  const THORChainExcludedIBCTickers = ['USK', 'ASTRO']
-
-  base[Chain.THORChain] = [
-    ...(base[Chain.THORChain] ?? []),
-    ...ibcTokens
-      .map(t => ({
-        ...t,
-        chain: Chain.THORChain,
-        decimals: chainFeeCoin[Chain.THORChain].decimals,
-        id: `thor.${t.ticker.toLowerCase()}`,
-      }))
-      .filter(({ ticker }) => !THORChainExcludedIBCTickers.includes(ticker)),
-  ]
+  })
 
   return base
 })()

@@ -54,6 +54,7 @@ import {
   getBytes,
   isHexString,
   JsonRpcProvider,
+  Signature,
   TransactionRequest,
   TypedDataEncoder,
 } from 'ethers'
@@ -658,7 +659,17 @@ export const handleRequest = (
             },
             status: 'default',
           })
-            .then(result => resolve(ensureHexPrefix(result.txHash)))
+            .then(result => {
+              let sig = Signature.from(ensureHexPrefix(result.txHash))
+              if (sig.v < 27) {
+                sig = Signature.from({
+                  r: sig.r,
+                  s: sig.s,
+                  v: sig.v + 27,
+                })
+              }
+              resolve(ensureHexPrefix(sig.serialized))
+            })
             .catch(reject)
         } else {
           reject()
