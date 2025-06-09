@@ -1,14 +1,11 @@
-import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 import { kujiraCoinsMigratedToThorChainMetadata } from '../chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
-import { KnownCoin, KnownCoinMetadata } from './Coin'
-import { ibcTransferrableTokensPerChain } from './ibc'
-import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
-import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
+import { KnownCoinMetadata } from './Coin'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
 
@@ -626,6 +623,10 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       ...kujiraCoinsMigratedToThorChainMetadata.rkuji,
       decimals: 6,
     },
+    'ibc/4CC44260793F84006656DD868E017578F827A492978161DA31D7572BCB3F4289': {
+      decimals: 6,
+      ...kujiraCoinsMigratedToThorChainMetadata.kuji,
+    },
   },
   [Chain.Osmosis]: {
     uion: {
@@ -741,20 +742,7 @@ const [chainNativeTokens, chainNonNativeTokens] = [
 
 export { chainNativeTokens }
 
-export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
-  const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
-
-  Object.values(IbcEnabledCosmosChain).forEach(chain => {
-    const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
-    const current = base[chain] ?? []
-
-    const patched = patchTokensWithIBCIds(current, ibcMeta)
-    const additions = getMissingIBCTokens(patched, ibcMeta, chain)
-
-    if (patched.length || additions.length) {
-      base[chain] = [...patched, ...additions]
-    }
-  })
-
-  return base
-})()
+export const chainTokens = mergeRecordsOfArrays(
+  chainNativeTokens,
+  chainNonNativeTokens
+)
