@@ -10,7 +10,6 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { generateIbcTransaction } from '@core/mpc/keysign/preSignedInputData/ibc/generateIbcTransaction'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
@@ -26,7 +25,6 @@ import { keccak256 } from 'js-sha3'
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const ibcTransaction = generateIbcTransaction(payload)
 
   const keysignAction = useKeysignAction()
 
@@ -41,7 +39,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const inputs = await getTxInputData({
               keysignPayload: payload,
               walletCore,
-              ibcTransaction,
             })
 
             const groupedMsgs = inputs.map(txInputData =>

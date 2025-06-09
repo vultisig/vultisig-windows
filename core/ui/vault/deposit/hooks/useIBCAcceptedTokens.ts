@@ -1,7 +1,8 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
-import { chainsWithIbcTokens, ibcTokens } from '@core/chain/coin/ibc'
+import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
+import { ibcTokens } from '@core/chain/coin/ibc'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
@@ -10,7 +11,7 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
 
   if (
     !destinationChain ||
-    !chainsWithIbcTokens.includes(destinationChain as CosmosChain)
+    !isOneOf(destinationChain, Object.values(IbcEnabledCosmosChain))
   ) {
     return []
   }

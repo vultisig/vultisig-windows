@@ -15,18 +15,23 @@ export const nativeSwapApiBaseUrl: Record<NativeSwapChain, string> = {
   [Chain.MayaChain]: `${cosmosRpcUrl[Chain.MayaChain]}/mayachain`,
 }
 
+const thorChainSwapEnabledChains = [
+  Chain.Avalanche,
+  Chain.BitcoinCash,
+  Chain.BSC,
+  Chain.Bitcoin,
+  Chain.Dogecoin,
+  Chain.Ethereum,
+  Chain.Cosmos,
+  Chain.Litecoin,
+  Chain.THORChain,
+] as const
+
+export type ThorChainSwapEnabledChain =
+  (typeof thorChainSwapEnabledChains)[number]
+
 export const nativeSwapEnabledChainsRecord = {
-  [Chain.THORChain]: [
-    Chain.Avalanche,
-    Chain.BitcoinCash,
-    Chain.BSC,
-    Chain.Bitcoin,
-    Chain.Dogecoin,
-    Chain.Ethereum,
-    Chain.Cosmos,
-    Chain.Litecoin,
-    Chain.THORChain,
-  ],
+  [Chain.THORChain]: thorChainSwapEnabledChains,
   [Chain.MayaChain]: [
     Chain.MayaChain,
     Chain.THORChain,

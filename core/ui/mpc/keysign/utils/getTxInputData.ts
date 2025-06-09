@@ -3,7 +3,6 @@ import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20Ap
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getOneInchSwapTxInputData } from '@core/chain/swap/general/oneInch/tx/getOneInchSwapTxInputData'
 import { getThorchainSwapTxInputData } from '@core/chain/swap/native/thor/tx/getThorchainSwapTxInputData'
-import { IMsgTransfer } from '@core/mpc/keysign/preSignedInputData/ibc/IMsgTransfer'
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData/index'
 import {
   KeysignPayload,
@@ -17,13 +16,11 @@ import { getKeysignChain } from './getKeysignChain'
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  ibcTransaction?: IMsgTransfer
 }
 
 export const getTxInputData = async ({
   keysignPayload,
   walletCore,
-  ibcTransaction,
 }: Input): Promise<Uint8Array[]> => {
   const chain = getKeysignChain(keysignPayload)
 
@@ -73,7 +70,6 @@ export const getTxInputData = async ({
     keysignPayload,
     walletCore,
     chain,
-    ibcTransaction,
   })
 
   return [txInputData]
