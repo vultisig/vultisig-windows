@@ -4,7 +4,6 @@ import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapPro
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
-import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
@@ -58,11 +57,13 @@ export const SwapKeysignTxOverview = ({
 
   const { coin: potentialFromCoin, blockchainSpecific, swapPayload } = value
 
+  console.log(swapPayload)
+
   const {
     fromAmount,
     toAmountDecimal,
     toCoin: potentialToCoin,
-  } = swapPayload.value as unknown as OneInchSwapPayload
+  } = shouldBePresent(swapPayload.value)
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
 
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
