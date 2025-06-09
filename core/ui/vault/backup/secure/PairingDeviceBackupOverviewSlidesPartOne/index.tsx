@@ -1,17 +1,15 @@
+import { AnimationDescription } from '@core/ui/vault/backup/secure/PairingDeviceBackupOverviewSlidesPartOne/AnimationDescription'
+import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/secure/PairingDeviceBackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { AnimationDescription } from './AnimationDescription'
-import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
-import { RiveWrapper } from './VaultOverviewSlides.styles'
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -34,9 +32,9 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
   } = useBackupOverviewStepsAnimations(signers.length, deviceNumber)
 
   return (
-    <PageContent>
-      <ProgressWrapper gap={16}>
-        <Text size={18}>
+    <VStack alignItems="center" fullHeight>
+      <VStack gap={16}>
+        <Text size={18} centerHorizontally>
           {t(
             animations.indexOf(currentAnimation) === 0
               ? 'vaultOverview'
@@ -50,32 +48,26 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
           value={animations.indexOf(currentAnimation) + 1}
           variant="bars"
         />
-      </ProgressWrapper>
-      <VStack justifyContent="space-between" flexGrow>
-        <RiveWrapper>
-          <AnimationComponent />
-        </RiveWrapper>
-        <VStack gap={12}>
-          <AnimationDescription animation={currentAnimation} />
-          <IconButton
-            disabled={isLoading}
-            onClick={
-              is5PlusDevice &&
-              currentAnimation !== animations[animations.length - 1]
-                ? handleNextAnimation
-                : onCompleted
-            }
-            size="xl"
-          >
-            <ChevronRightIcon />
-          </IconButton>
-        </VStack>
       </VStack>
-    </PageContent>
+      <PageContent alignItems="center" flexGrow scrollable>
+        <AnimationComponent />
+      </PageContent>
+      <PageFooter alignItems="center" gap={12}>
+        <AnimationDescription animation={currentAnimation} />
+        <IconButton
+          disabled={isLoading}
+          kind="primary"
+          onClick={
+            is5PlusDevice &&
+            currentAnimation !== animations[animations.length - 1]
+              ? handleNextAnimation
+              : onCompleted
+          }
+          size="xl"
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      </PageFooter>
+    </VStack>
   )
 }
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`
