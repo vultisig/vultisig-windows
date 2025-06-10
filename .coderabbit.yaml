@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-language: "en-US"
+language: 'en-US'
 early_access: false
 reviews:
-  profile: "chill"
+  profile: 'chill'
   request_changes_workflow: false
   high_level_summary: true
   poem: true
@@ -12,5 +12,11 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+  path_instructions:
+    - path: '**/*.ts,**/*.tsx,**/*.js,**/*.jsx'
+      instructions: |
+        Review Guidelines - DO NOT suggest these changes:
+        - Undefined/Null Checks: Never suggest adding undefined or null checks when TypeScript types already guarantee the value exists. Trust TypeScript's type system - if a property or variable is typed as non-nullable, do not suggest optional chaining (?.) or null checks.
+        - Error Handling: Never suggest wrapping code in try-catch blocks or adding error handling. If the developers chose not to add error handling, respect that decision and do not propose adding it.
 chat:
   auto_reply: true
