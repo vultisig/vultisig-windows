@@ -51,6 +51,7 @@ export const SwapKeysignTxOverview = ({
 }) => {
   const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
     memo: value.memo,
+    chain: value.coin?.chain,
   })
   const isERC20Approve = Boolean(value.erc20ApprovePayload)
   const [approvalTxHash, txHash] = isERC20Approve

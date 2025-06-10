@@ -105,6 +105,7 @@ export const KeysignSigningStep = ({
                                   <KeysignTxOverview
                                     txHash={normalizeTxHash(txResult.txHash, {
                                       memo: payload?.memo,
+                                      chain: payload?.coin?.chain,
                                     })}
                                     value={payload}
                                   />
