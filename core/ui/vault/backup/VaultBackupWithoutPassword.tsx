@@ -1,11 +1,9 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -34,11 +32,7 @@ export const VaultBackupWithoutPassword = ({
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        title={<PageHeaderTitle>{t('backup')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton />}
-        hasBorder
-      />
+      <FlowPageHeader title={t('backup')} />
       <PageContent
         alignItems="center"
         justifyContent="center"

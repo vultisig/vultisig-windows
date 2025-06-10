@@ -1,12 +1,14 @@
 export const it = {
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
-  onboarding_view1_description:
+  onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
-  onboarding_view3_description:
+  onboarding_description_3:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
+  onboarding_description_4:
+    'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
@@ -55,8 +57,6 @@ export const it = {
   secureVaultSetupPasswordTooltipContent:
     'Ciò avviene perché la password viene utilizzata per crittografare localmente il file di backup, in modo simile alla crittografia di un disco rigido. Nel passo successivo, hai la possibilità di aggiungere un suggerimento.',
   select_network: 'Seleziona rete',
-  onboarding_view4_description:
-    'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
   waiting_for_devices_to_join: 'In attesa che altri dispositivi si uniscano',
   waiting_for_devices_to_join_description:

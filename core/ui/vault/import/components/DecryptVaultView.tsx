@@ -1,12 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 import { useMemo } from 'react'
@@ -52,11 +50,7 @@ export const DecryptVaultView = ({
       onSubmit={handleSubmit(({ password }) => onSubmit(password))}
       fullHeight
     >
-      <PageHeader
-        title={<PageHeaderTitle>{t('password')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton />}
-        hasBorder
-      />
+      <FlowPageHeader title={t('password')} />
       <PageContent flexGrow scrollable>
         <PasswordInput
           {...register('password')}

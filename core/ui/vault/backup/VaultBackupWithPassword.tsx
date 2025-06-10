@@ -1,13 +1,11 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text } from '@lib/ui/text'
@@ -60,11 +58,7 @@ export const VaultBackupWithPassword = ({
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <PageHeader
-        title={<PageHeaderTitle>{t('backup')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        hasBorder
-      />
+      <FlowPageHeader title={t('backup')} onBack={onBack} />
       <PageContent gap={16} flexGrow scrollable>
         <Text size={16} weight="600">
           {t('vault_backup_page_password_protection')}

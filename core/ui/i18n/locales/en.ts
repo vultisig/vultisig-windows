@@ -58,15 +58,15 @@ export const en = {
   vultisig: 'Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
   missing_destination_address: 'Missing Destination Address',
-  onboarding_view1_description:
+  onboarding_description_1:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'Vultisig does not track your activities or require any registrations. Vultisig is fully open-source, ensuring transparency and trust.',
-  onboarding_view3_description:
+  onboarding_description_3:
     'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
-  search_field_placeholder: 'Search..',
-  onboarding_view4_description:
+  onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
+  search_field_placeholder: 'Search..',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',

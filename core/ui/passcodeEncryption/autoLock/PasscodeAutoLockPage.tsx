@@ -4,12 +4,10 @@ import {
   PasscodeAutoLockValue,
   usePasscodeAutoLock,
 } from '@core/ui/storage/passcodeAutoLock'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { RadioOptionsList } from '@lib/ui/inputs/RadioOptionsList'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
@@ -24,11 +22,7 @@ export const PasscodeAutoLockPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        title={<PageHeaderTitle>{t('lock_time')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton />}
-        hasBorder
-      />
+      <FlowPageHeader title={t('lock_time')} />
       <PageContent alignItems="center" flexGrow scrollable>
         <VStack gap={8}>
           <Text size={14} color="contrast">

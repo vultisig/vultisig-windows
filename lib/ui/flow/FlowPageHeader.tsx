@@ -11,5 +11,6 @@ export const FlowPageHeader: React.FC<TitleProp & Partial<OnBackProp>> = ({
   <PageHeader
     title={<PageHeaderTitle>{title}</PageHeaderTitle>}
     primaryControls={<PageHeaderBackButton onClick={onBack} />}
+    hasBorder
   />
 )
