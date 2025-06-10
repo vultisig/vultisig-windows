@@ -1,8 +1,8 @@
+import { useVaultPasswordHint } from '@core/ui/mpc/keygen/create/fast/server/password-hint/state/password-hint'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
-import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -11,16 +11,16 @@ import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import type { TFunction } from 'i18next'
+import { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-import { useVaultPasswordHint } from './state/password-hint'
 
 const getPasswordHintSchema = (t: TFunction) =>
   z.object({
@@ -42,11 +42,9 @@ export const ServerPasswordHintStep = ({
     setValue,
     formState: { errors, isValid },
   } = useForm<PasswordHintSchema>({
-    resolver: zodResolver(getPasswordHintSchema(t)),
-    defaultValues: {
-      passwordHint: storedPasswordHint || '',
-    },
+    defaultValues: { passwordHint: storedPasswordHint || '' },
     mode: 'onChange',
+    resolver: zodResolver(getPasswordHintSchema(t)),
   })
 
   const onSubmit = (data: PasswordHintSchema) => {
@@ -55,53 +53,50 @@ export const ServerPasswordHintStep = ({
   }
 
   return (
-    <>
-      <PageHeader primaryControls={<PageHeaderBackButton onClick={onBack} />} />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
-        <VStack flexGrow gap={16}>
-          <VStack>
-            <Text variant="h1Regular">
-              {t('fastVaultSetup.addOptionalHint')}
-            </Text>
-            <Text size={14} color="shy">
-              {t('fastVaultSetup.hintDescription')}
-            </Text>
-          </VStack>
-          <VStack gap={4}>
-            <ActionInsideInteractiveElement
-              render={() => (
-                <TextInput
-                  {...register('passwordHint')}
-                  validation={
-                    isValid
-                      ? 'valid'
-                      : errors.passwordHint
-                        ? 'invalid'
-                        : undefined
-                  }
-                  placeholder={t('fastVaultSetup.enterHint')}
-                  autoFocus
-                  onValueChange={value => setValue('passwordHint', value)}
-                />
-              )}
-              action={
-                <UnstyledButton onClick={() => setValue('passwordHint', '')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        title={
+          <PageHeaderTitle>
+            {t('fastVaultSetup.addOptionalHint')}
+          </PageHeaderTitle>
+        }
+        hasBorder
+      />
+      <PageContent gap={8} flexGrow scrollable>
+        <Text color="shy" size={14}>
+          {t('fastVaultSetup.hintDescription')}
+        </Text>
+        <ActionInsideInteractiveElement
+          render={() => (
+            <TextInput
+              {...register('passwordHint')}
+              onValueChange={value => setValue('passwordHint', value)}
+              placeholder={t('fastVaultSetup.enterHint')}
+              validation={
+                isValid ? 'valid' : errors.passwordHint ? 'invalid' : undefined
               }
-              actionPlacerStyles={{
-                right: textInputHorizontalPadding,
-                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
-              }}
+              autoFocus
             />
-            {errors.passwordHint && errors.passwordHint.message && (
-              <Text color="danger" size={12}>
-                {errors.passwordHint.message}
-              </Text>
-            )}
-          </VStack>
-        </VStack>
-        <HStack gap={8} fullWidth>
+          )}
+          action={
+            <IconButton onClick={() => setValue('passwordHint', '')}>
+              <CircleCrossIcon />
+            </IconButton>
+          }
+          actionPlacerStyles={{
+            bottom: (textInputHeight - iconButtonSize.md) / 2,
+            right: textInputHorizontalPadding,
+          }}
+        />
+        {errors.passwordHint && errors.passwordHint.message && (
+          <Text color="danger" size={12}>
+            {errors.passwordHint.message}
+          </Text>
+        )}
+      </PageContent>
+      <PageFooter>
+        <HStack gap={8}>
           <Button kind="secondary" onClick={() => onFinish()}>
             {t('skip')}
           </Button>
@@ -109,7 +104,7 @@ export const ServerPasswordHintStep = ({
             {t('next')}
           </Button>
         </HStack>
-      </PageContent>
-    </>
+      </PageFooter>
+    </VStack>
   )
 }
