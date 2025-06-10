@@ -1,3 +1,4 @@
+import { isServer } from '@core/mpc/devices/localPartyId'
 import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
@@ -19,14 +20,24 @@ export const StartMpcSessionStep = ({
   onBack,
   onFinish,
   value,
-}: Partial<OnBackProp> & OnFinishProp & ValueProp<MpcSession>) => {
+  isPluginReshare,
+}: Partial<OnBackProp> &
+  OnFinishProp &
+  ValueProp<MpcSession> &
+  Partial<{ isPluginReshare: boolean }>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      return startMpcSession({ serverUrl, sessionId, devices })
+      return startMpcSession({
+        serverUrl,
+        sessionId,
+        devices: isPluginReshare
+          ? devices.filter(device => !isServer(device))
+          : devices,
+      })
     },
     onSuccess: () => onFinish(),
   })
