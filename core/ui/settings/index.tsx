@@ -220,9 +220,11 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          <UnstyledButton
-            onClick={() => openUrl(shareURL)}
-          >{`VULTISIG ${props.client === 'desktop' ? 'APP' : 'EXTENSION'} V${version}`}</UnstyledButton>
+          {props.client === 'extension' && (
+            <UnstyledButton onClick={() => openUrl(shareURL)}>
+              {`VULTISIG EXTENSION V${version}`}
+            </UnstyledButton>
+          )}
           {props.client === 'desktop' && props.manageMpcLib}
         </PageFooter>
       </VStack>
