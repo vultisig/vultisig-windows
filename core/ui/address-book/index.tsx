@@ -6,8 +6,8 @@ import {
   useUpdateAddressBookItemMutation,
 } from '@core/ui/storage/addressBook'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { DnDList } from '@lib/ui/dnd/DnDList'
-import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -16,12 +16,10 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '@lib/ui/list/item/DnDItemContainer'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -42,7 +40,6 @@ export const AddressBookPage = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const addressBookItems = useAddressBookItems()
   const navigate = useCoreNavigate()
-  const navigateBack = useNavigateBack()
 
   useEffect(() => setItems(addressBookItems), [addressBookItems])
 
@@ -50,17 +47,15 @@ export const AddressBookPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <PageHeaderIconButton
-            icon={<ChevronLeftIcon />}
-            onClick={() => (isEditMode ? setIsEditMode(false) : navigateBack())}
+          <PageHeaderBackButton
+            onClick={isEditMode ? () => setIsEditMode(false) : undefined}
           />
         }
         secondaryControls={
           !isEditMode && (
-            <PageHeaderIconButton
-              icon={<SquarePenIcon />}
-              onClick={() => setIsEditMode(true)}
-            />
+            <IconButton onClick={() => setIsEditMode(true)}>
+              <SquarePenIcon />
+            </IconButton>
           )
         }
         title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}

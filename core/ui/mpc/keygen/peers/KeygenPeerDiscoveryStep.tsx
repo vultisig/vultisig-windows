@@ -23,13 +23,13 @@ import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
@@ -114,12 +114,13 @@ export const KeygenPeerDiscoveryStep = ({
             value={joinUrlQuery}
             success={value => (
               <>
-                <PageHeaderIconButton
+                <IconButton
                   onClick={() => {
                     openUrl(educationUrl[getRecordUnionKey(opertaionType)])
                   }}
-                  icon={<InfoIcon />}
-                />
+                >
+                  <InfoIcon />
+                </IconButton>
                 <DownloadKeygenQrCode value={value} />
               </>
             )}

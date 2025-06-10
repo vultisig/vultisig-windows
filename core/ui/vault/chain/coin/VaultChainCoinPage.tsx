@@ -1,63 +1,49 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
 import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-
 export const VaultChainCoinPage = () => {
+  const { t } = useTranslation()
   const [{ coin: coinKey }] = useCoreViewState<'vaultChainCoinDetail'>()
   const coin = adjustVaultChainCoinsLogos(useCurrentVaultCoin(coinKey))
-
-  const balanceQuery = useBalanceQuery({
-    ...coinKey,
-    address: coin.address,
-  })
-
-  const priceQuery = useCoinPriceQuery({
-    coin,
-  })
+  const balanceQuery = useBalanceQuery({ ...coinKey, address: coin.address })
+  const priceQuery = useCoinPriceQuery({ coin })
 
   const { mutate: invalidateQueries, isPending: isInvalidating } =
     useInvalidateQueriesMutation()
-
-  const { t } = useTranslation()
 
   return (
     <VStack flexGrow data-testid="ManageVaultChainCoinPage-Coin">
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <PageHeaderIconButtons>
-            <PageHeaderIconButton
-              onClick={() =>
-                invalidateQueries([
-                  getBalanceQueryKey({
-                    ...coinKey,
-                    address: coin.address,
-                  }),
-                ])
-              }
-              icon={isInvalidating ? <Spinner /> : <RefreshCwIcon />}
-            />
-          </PageHeaderIconButtons>
+          <IconButton
+            loading={isInvalidating}
+            onClick={() =>
+              invalidateQueries([
+                getBalanceQueryKey({ ...coinKey, address: coin.address }),
+              ])
+            }
+          >
+            <RefreshCwIcon />
+          </IconButton>
         }
         title={<PageHeaderTitle>{coin.ticker}</PageHeaderTitle>}
       />
