@@ -71,11 +71,8 @@ export const KeysignSigningStep = ({
                 value={payload}
                 handlers={{
                   keysign: payload => {
-                    const { swapPayload, memo } = payload
-                    const isSwapTx =
-                      (swapPayload && swapPayload.value) ||
-                      memo?.startsWith('=') ||
-                      memo?.toLowerCase().startsWith('swap')
+                    const { swapPayload } = payload
+                    const isSwapTx = swapPayload && swapPayload.value
 
                     return (
                       <Match
