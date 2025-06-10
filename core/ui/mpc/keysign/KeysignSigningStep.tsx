@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
@@ -105,7 +106,7 @@ export const KeysignSigningStep = ({
                                   <KeysignTxOverview
                                     txHash={normalizeTxHash(txResult.txHash, {
                                       memo: payload?.memo,
-                                      chain: payload?.coin?.chain,
+                                      chain: payload?.coin?.chain as Chain,
                                     })}
                                     value={payload}
                                   />
