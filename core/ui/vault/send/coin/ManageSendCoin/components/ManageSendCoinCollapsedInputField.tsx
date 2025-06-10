@@ -1,4 +1,3 @@
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -7,10 +6,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChainCoinIcon } from '../../../../../chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '../../../../../chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '../../../../../chain/coin/icon/utils/shouldDisplayChainLogo'
-import { getChainLogoSrc } from '../../../../../chain/metadata/getChainLogoSrc'
+import { CoinIcon } from '../../../../../chain/coin/icon/CoinIcon'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
@@ -20,7 +16,7 @@ import { useCurrentSendCoin } from '../../../state/sendCoin'
 export const ManageSendCoinCollapsedInputField = () => {
   const [{ coin: coinKey }] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
-  const { logo, ticker, chain, id } = coin
+  const { ticker } = coin
   const { t } = useTranslation()
   const [
     {
@@ -45,22 +41,7 @@ export const ManageSendCoinCollapsedInputField = () => {
       <HStack gap={12} alignItems="center">
         <Text size={14}>{t('asset')}</Text>
         <HStack gap={4} alignItems="center">
-          <ChainCoinIcon
-            coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-            chainSrc={
-              shouldDisplayChainLogo({
-                ticker: ticker,
-                chain: chain,
-                isNative: isFeeCoin({
-                  id: id,
-                  chain: chain,
-                }),
-              })
-                ? getChainLogoSrc(chain)
-                : undefined
-            }
-            style={{ fontSize: 16 }}
-          />
+          <CoinIcon coin={coin} style={{ fontSize: 20 }} />
           <Text size={12} color="shy">
             {ticker}
           </Text>
