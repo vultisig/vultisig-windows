@@ -1,10 +1,7 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
 import {
   useCurrentVaultCoin,
@@ -22,7 +19,6 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
@@ -40,7 +36,6 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const side = useTransferDirection()
 
   if (!coin) return
-  const { logo, chain, ticker, id } = coin
 
   return (
     <Opener
@@ -77,22 +72,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     }}
                     gap={4}
                   >
-                    <ChainCoinIcon
-                      coinSrc={logo ? getCoinLogoSrc(logo) : undefined}
-                      chainSrc={
-                        shouldDisplayChainLogo({
-                          ticker: ticker,
-                          chain: chain,
-                          isNative: isFeeCoin({
-                            id: id,
-                            chain: chain,
-                          }),
-                        })
-                          ? getChainLogoSrc(chain)
-                          : undefined
-                      }
-                      style={{ fontSize: 16 }}
-                    />
+                    <CoinIcon coin={coin} style={{ fontSize: 16 }} />
                     <HStack alignItems="center">
                       <Text size={12} weight={500}>
                         {coin.chain}
