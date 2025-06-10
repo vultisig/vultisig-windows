@@ -2,8 +2,7 @@ import { useEmail } from '@core/ui/state/email'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
-import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
@@ -12,12 +11,14 @@ import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
-import type { TFunction } from 'i18next'
+import { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -47,11 +48,9 @@ export const ServerEmailStep = ({
     setValue,
     formState: { errors, isValid },
   } = useForm<EmailSchema>({
-    resolver: zodResolver(getEmailSchema(t)),
-    defaultValues: {
-      email: storedEmail || '',
-    },
+    defaultValues: { email: storedEmail || '' },
     mode: 'all',
+    resolver: zodResolver(getEmailSchema(t)),
   })
 
   const onSubmit = (data: EmailSchema) => {
@@ -60,53 +59,53 @@ export const ServerEmailStep = ({
   }
 
   return (
-    <>
-      <PageHeader primaryControls={<PageHeaderBackButton onClick={onBack} />} />
-      <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
-        <VStack flexGrow gap={16}>
-          <VStack>
-            <Text variant="h1Regular">{t('fastVaultSetup.enterEmail')}</Text>
-            <Text size={14} color="shy">
-              {t('fastVaultSetup.emailSetupTitle')}
-            </Text>
-          </VStack>
-          <VStack gap={4}>
-            <ActionInsideInteractiveElement
-              render={() => (
-                <TextInput
-                  {...register('email')}
-                  validation={
-                    isValid ? 'valid' : errors.email ? 'invalid' : undefined
-                  }
-                  placeholder={t('email')}
-                  autoFocus
-                  onValueChange={value => setValue('email', value)}
-                />
-              )}
-              action={
-                <UnstyledButton onClick={() => setValue('email', '')}>
-                  <CircleCrossIcon />
-                </UnstyledButton>
-              }
-              actionPlacerStyles={{
-                right: textInputHorizontalPadding,
-                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
-              }}
-            />
-
-            {errors.email && errors.email.message && (
-              <Text color="danger" size={12}>
-                {errors.email.message}
-              </Text>
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        title={
+          <PageHeaderTitle>{t('fastVaultSetup.enterEmail')}</PageHeaderTitle>
+        }
+        hasBorder
+      />
+      <PageContent gap={8} flexGrow scrollable>
+        <Text size={14} color="shy">
+          {t('fastVaultSetup.emailSetupTitle')}
+        </Text>
+        <VStack gap={4}>
+          <ActionInsideInteractiveElement
+            render={() => (
+              <TextInput
+                {...register('email')}
+                onValueChange={value => setValue('email', value)}
+                placeholder={t('email')}
+                validation={
+                  isValid ? 'valid' : errors.email ? 'invalid' : undefined
+                }
+                autoFocus
+              />
             )}
-          </VStack>
-        </VStack>
-        <VStack gap={20}>
-          <Button disabled={errors.email?.message} type="submit">
-            {t('next')}
-          </Button>
+            action={
+              <IconButton onClick={() => setValue('email', '')}>
+                <CircleCrossIcon />
+              </IconButton>
+            }
+            actionPlacerStyles={{
+              bottom: (textInputHeight - iconButtonSize.md) / 2,
+              right: textInputHorizontalPadding,
+            }}
+          />
+          {errors.email && errors.email.message && (
+            <Text color="danger" size={12}>
+              {errors.email.message}
+            </Text>
+          )}
         </VStack>
       </PageContent>
-    </>
+      <PageFooter>
+        <Button disabled={errors.email?.message} type="submit">
+          {t('next')}
+        </Button>
+      </PageFooter>
+    </VStack>
   )
 }

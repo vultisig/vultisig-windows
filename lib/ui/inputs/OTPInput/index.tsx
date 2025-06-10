@@ -1,11 +1,11 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { useOtp } from '@lib/ui/inputs/OTPInput/useOTP'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
-
-import { useOtp } from './useOTP'
 
 interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   length?: number
@@ -24,6 +24,7 @@ export const OTPInput = ({
   includePasteButton = true,
   ...props
 }: OTPInputProps) => {
+  const { t } = useTranslation()
   const { otp, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
     length,
     onValueChange,
@@ -50,7 +51,13 @@ export const OTPInput = ({
         />
       ))}
       {includePasteButton && (
-        <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
+        <Button
+          kind="secondary"
+          onClick={() => handlePaste()}
+          style={{ borderRadius: 12, width: 'auto' }}
+        >
+          {t('paste')}
+        </Button>
       )}
     </HStack>
   )
@@ -91,16 +98,4 @@ const InputBoxContainer = styled.input<{
             border-color: ${getColor('danger')};
           }
         `};
-`
-
-const PasteButton = styled(Button)`
-  background-color: ${getColor('foreground')};
-  padding: 16px;
-  cursor: pointer;
-  color: ${getColor('text')};
-  ${borderRadius.m}
-
-  &:hover {
-    background-color: ${getColor('foregroundExtra')};
-  }
 `
