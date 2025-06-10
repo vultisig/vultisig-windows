@@ -17,7 +17,7 @@ export const useOnboardingStepsAnimations = () => {
   })
 
   const { RiveComponent, rive } = useRive({
-    src: '/core/animations/onboarding.riv',
+    src: '/core/animations/quick_summary.riv',
     autoplay: true,
     stateMachines: [stateMachineName],
   })
