@@ -1,9 +1,11 @@
+import { Chain } from '@core/chain/Chain'
+
 const memoKeywords = ['switch', 'merge', 'channel']
 const no0xChains = ['THORChain', 'MayaChain']
 
 export const normalizeTxHash = (
   hash: string,
-  options: { memo?: string; chain?: string }
+  options: { memo?: string; chain?: Chain }
 ): string => {
   const { memo, chain } = options
   const has0xPrefix = hash.toLowerCase().startsWith('0x')
