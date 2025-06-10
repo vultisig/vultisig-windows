@@ -17,7 +17,6 @@ import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -105,8 +104,9 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const header = (
     <PageHeader
-      title={<PageHeaderTitle>{title}</PageHeaderTitle>}
       primaryControls={<PageHeaderBackButton />}
+      title={title}
+      hasBorder
     />
   )
 

@@ -1,8 +1,8 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { ChildrenProp, InputProps } from '@lib/ui/props'
 import styled from 'styled-components'
+import { Text } from '@lib/ui/text'
 
 type PageHeaderToggleTitleProps = ChildrenProp & InputProps<boolean>
 
@@ -11,9 +11,9 @@ const Indicator = styled(CollapsableStateIndicator)`
 `
 
 const Container = styled(UnstyledButton)`
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 12px;
 `
 
@@ -23,10 +23,10 @@ export const PageHeaderToggleTitle = ({
   onChange,
 }: PageHeaderToggleTitleProps) => {
   return (
-    <PageHeaderTitle>
+    <Text as="div" color="contrast" size={18} weight={500}>
       <Container onClick={() => onChange(!value)}>
         {children} <Indicator isOpen={value} />
       </Container>
-    </PageHeaderTitle>
+    </Text>
   )
 }

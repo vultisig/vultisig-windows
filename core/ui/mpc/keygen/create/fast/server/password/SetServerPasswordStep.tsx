@@ -9,7 +9,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
@@ -71,7 +70,7 @@ export const SetServerPasswordStep = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
-        title={<PageHeaderTitle>{t('vultiserver_password')}</PageHeaderTitle>}
+        title={t('vultiserver_password')}
         hasBorder
       />
       <PageContent gap={8} flexGrow scrollable>

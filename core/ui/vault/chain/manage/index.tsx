@@ -1,6 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -15,12 +16,9 @@ import { ListItemTag } from '@lib/ui/list/item/tag'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
 
 const NativeCoinItem: FC<Coin> = coin => {
   const currentCoins = useCurrentVaultNativeCoins()
@@ -100,7 +98,7 @@ export const ManageVaultChainsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('manage_chains')}</PageHeaderTitle>}
+        title={t('manage_chains')}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>

@@ -1,61 +1,75 @@
-import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
-import { TakeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
-import { hStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { ComponentProps, ReactNode } from 'react'
-import styled from 'styled-components'
+import { isValidElement, ReactNode } from 'react'
+import styled, { css } from 'styled-components'
 
-const Container = styled.header<{ hasBorder?: boolean }>`
-  ${centerContent};
-  min-height: 55px;
-  width: 100%;
+const StyledPageHeader = styled(HStack)<{ hasBorder?: boolean }>`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
-  border-bottom: ${({ hasBorder, theme }) =>
-    hasBorder ? `1px solid ${getColor('mistExtra')({ theme })}` : 'none'};
-`
-
-const Content = styled(TakeWholeSpace)`
+  min-height: 60px;
   position: relative;
-  ${centerContent};
+
+  ${({ hasBorder }) =>
+    hasBorder &&
+    css`
+      border-bottom: 1px solid ${getColor('mistExtra')};
+    `};
 `
 
-type PageHeaderProps = Omit<ComponentProps<typeof Container>, 'title'> & {
-  title?: ReactNode
+const StyledPrimaryControls = styled(HStack)`
+  left: ${pageConfig.horizontalPadding}px;
+  position: absolute;
+`
+
+const StyledSecondaryControls = styled(HStack)`
+  position: absolute;
+  right: ${pageConfig.horizontalPadding}px;
+`
+
+const StyledTitle = styled(Text)`
+  max-width: 50%;
+`
+
+type PageHeaderProps = {
+  hasBorder?: boolean
   primaryControls?: ReactNode
   secondaryControls?: ReactNode
-  hasBorder?: boolean
+  title?: ReactNode
 }
 
-const ControlsContainer = styled.div`
-  position: absolute;
-  ${hStack({
-    alignItems: 'center',
-    gap: 16,
-  })}
-`
-
 export const PageHeader = ({
-  title,
+  hasBorder = false,
   primaryControls,
   secondaryControls,
-  hasBorder = false,
+  title,
   ...rest
 }: PageHeaderProps) => {
   return (
-    <Container hasBorder={hasBorder} {...rest}>
-      <Content>
-        <ControlsContainer style={{ left: 0 }}>
-          {primaryControls}
-        </ControlsContainer>
-        {title}
-        <ControlsContainer style={{ right: 0 }}>
+    <StyledPageHeader
+      alignItems="center"
+      hasBorder={hasBorder}
+      justifyContent="center"
+      {...rest}
+    >
+      {primaryControls && (
+        <StyledPrimaryControls gap={8}>{primaryControls}</StyledPrimaryControls>
+      )}
+      {secondaryControls && (
+        <StyledSecondaryControls gap={8}>
           {secondaryControls}
-        </ControlsContainer>
-      </Content>
-    </Container>
+        </StyledSecondaryControls>
+      )}
+      {isValidElement(title) ? (
+        title
+      ) : (
+        <StyledTitle as="span" size={18} weight={500} cropped>
+          {title}
+        </StyledTitle>
+      )}
+    </StyledPageHeader>
   )
 }

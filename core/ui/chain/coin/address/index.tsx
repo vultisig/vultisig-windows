@@ -8,7 +8,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +21,6 @@ export const AddressPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('address')}</PageHeaderTitle>}
         secondaryControls={
           <SaveAsImage
             fileName={address}
@@ -34,6 +32,7 @@ export const AddressPage = () => {
             value={<PrintableQrCode title={address} value={address} />}
           />
         }
+        title={t('address')}
         hasBorder
       />
       <PageContent

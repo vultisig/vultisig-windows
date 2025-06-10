@@ -10,7 +10,6 @@ import { Match } from '@lib/ui/base/Match'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -70,7 +69,7 @@ export const UploadQrPage = () => {
               onClick={view !== 'scan' ? () => setView('scan') : undefined}
             />
           }
-          title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+          title={title}
           hasBorder
         />
         <Match

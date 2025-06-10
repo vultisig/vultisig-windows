@@ -19,7 +19,6 @@ import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
@@ -70,9 +69,10 @@ export const KeysignPeerDiscoveryStep = ({
     <>
       <MpcPeersCorrector />
       <PageHeader
-        title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<DownloadKeysignQrCode />}
+        title={t('scan_qr')}
+        hasBorder
       />
       <FitPageContent>
         <PageFormFrame>

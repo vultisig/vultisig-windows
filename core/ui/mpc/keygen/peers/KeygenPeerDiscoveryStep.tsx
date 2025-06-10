@@ -30,7 +30,6 @@ import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -107,7 +106,6 @@ export const KeygenPeerDiscoveryStep = ({
     <>
       <MpcPeersCorrector />
       <PageHeader
-        title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={
           <MatchQuery
@@ -126,6 +124,8 @@ export const KeygenPeerDiscoveryStep = ({
             )}
           />
         }
+        title={t('scan_qr')}
+        hasBorder
       />
       <FitPageContent
         as="form"

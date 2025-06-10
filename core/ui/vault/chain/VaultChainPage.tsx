@@ -34,7 +34,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
@@ -84,7 +83,8 @@ export const VaultChainPage = () => {
             <RefreshCwIcon />
           </IconButton>
         }
-        title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
+        title={chain}
+        hasBorder
       />
       <PageContent gap={16} flexGrow>
         <VaultPrimaryActions chain={chain} />

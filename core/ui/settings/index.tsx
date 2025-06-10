@@ -1,8 +1,10 @@
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
+import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
@@ -31,14 +33,10 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useHasPasscodeEncryption } from '../storage/passcodeEncryption'
-import { SettingsSection } from './SettingsSection'
 
 interface ExtensionSettings {
   client: Extract<Client, 'extension'>
@@ -85,7 +83,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
       <VStack fullHeight>
         <PageHeader
           primaryControls={<PageHeaderBackButton />}
-          title={<PageHeaderTitle>{t('settings')}</PageHeaderTitle>}
+          title={t('settings')}
           hasBorder
         />
         <PageContent gap={24} flexGrow scrollable>

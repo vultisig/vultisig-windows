@@ -20,7 +20,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
@@ -58,7 +57,7 @@ export const AddressBookPage = () => {
             </IconButton>
           )
         }
-        title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
+        title={t('address_book')}
         hasBorder
       />
       <PageContent flexGrow scrollable>
@@ -115,7 +114,7 @@ export const AddressBookPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('address_book')}</PageHeaderTitle>}
+        title={t('address_book')}
         hasBorder
       />
       <PageContent alignItems="center" justifyContent="center" flexGrow>

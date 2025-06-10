@@ -10,7 +10,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 import { useEffect, useMemo } from 'react'
@@ -62,7 +61,7 @@ export const VaultRenamePage = () => {
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('rename_vault')}</PageHeaderTitle>}
+        title={t('rename_vault')}
         hasBorder
       />
       <PageContent gap={12} flexGrow scrollable>
