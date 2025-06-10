@@ -12,6 +12,8 @@ import {
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 
+const dustStats = 600n
+
 const getByteFee = async (chain: UtxoChain) => {
   if (chain === UtxoChain.Zcash) {
     return 1000
@@ -38,8 +40,8 @@ export const getUtxoSpecific: ChainSpecificResolver<
 
   if (amount) {
     const balance = await getCoinBalance(coin)
-
-    result.sendMaxAmount = toChainAmount(amount, coin.decimals) === balance
+    const requested = toChainAmount(amount, coin.decimals)
+    result.sendMaxAmount = balance - requested <= dustStats
   }
 
   return result
