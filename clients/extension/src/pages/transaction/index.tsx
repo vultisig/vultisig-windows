@@ -4,7 +4,6 @@ import { splitString } from '@clients/extension/src/utils/functions'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
-import { EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -12,7 +11,6 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -45,7 +43,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
 import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { GasFeeAdjuster } from './GasFeeAdjuster'
 
@@ -150,18 +148,6 @@ export const TransactionPage = () => {
     processTransaction()
   }, [processTransaction])
 
-  // Extract chain from keysignMessagePayload using useMemo
-  const keysignMessagePayload = mutationStatus.data?.keysignMessagePayload
-  const chain = useMemo(() => {
-    if (keysignMessagePayload && 'keysign' in keysignMessagePayload) {
-      return getKeysignChain(keysignMessagePayload.keysign)
-    }
-    return null
-  }, [keysignMessagePayload])
-  const { data: defaultFeePriority = 0 } = useEvmDefaultPriorityFeeQuery({
-    chain: chain as EvmChain,
-  })
-
   return (
     <MatchQuery
       value={mutationStatus}
@@ -243,11 +229,11 @@ export const TransactionPage = () => {
                                   extra={
                                     <GasFeeAdjuster
                                       keysignPayload={keysignMessagePayload}
-                                      baseFee={
-                                        Number(
-                                          transactionPayload.txFee
-                                        )
-                                      }
+                                      gasLimit={Number(
+                                        transactionPayload.transactionDetails
+                                          ?.gasSettings?.gasLimit
+                                      )}
+                                      baseFee={Number(transactionPayload.txFee)}
                                       onFeeChange={fee => {
                                         if (
                                           'keysign' in keysignMessagePayload

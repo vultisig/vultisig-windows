@@ -17,11 +17,13 @@ type GasFeeAdjusterProps = {
   keysignPayload: KeysignMessagePayload
   onFeeChange: (fee: number, gasLimit: number) => void
   baseFee: number
+  gasLimit?: number
 }
 
 export const GasFeeAdjuster = ({
   keysignPayload,
   onFeeChange,
+  gasLimit,
   baseFee,
 }: GasFeeAdjusterProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -49,17 +51,16 @@ export const GasFeeAdjuster = ({
     })
 
     return {
-      priorityFee:  Number(
-            formatUnits(
-              BigInt(
-                transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas || 0
-              ),
-              gwei.decimals
-            )
+      priorityFee: Number(
+        formatUnits(
+          BigInt(
+            transactionPayload.transactionDetails?.gasSettings
+              ?.maxPriorityFeePerGas || 0
           ),
-      gasLimit:
-        Number(transactionPayload.transactionDetails?.gasSettings?.gasLimit) ||
-        defaultGasLimit,
+          gwei.decimals
+        )
+      ),
+      gasLimit: gasLimit || defaultGasLimit,
     }
   })
 
