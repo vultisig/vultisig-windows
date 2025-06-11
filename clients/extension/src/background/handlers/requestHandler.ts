@@ -59,6 +59,8 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
+import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
+
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
@@ -379,27 +381,29 @@ export const handleRequest = (
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
-          if (!previousSession) throw new Error(`No session found for ${host}`)
-
-          try {
-            await updateAppSession({
-              vaultId: safeVaultId,
-              host: host,
-              fields: {
-                selectedCosmosChainId:
-                  getChainKind(chain) === 'cosmos'
-                    ? param.chainId
-                    : previousSession.selectedCosmosChainId,
-                selectedEVMChainId:
-                  getChainKind(chain) === 'evm'
-                    ? param.chainId
-                    : previousSession.selectedEVMChainId,
-              },
-            })
-            resolve(param.chainId)
-          } catch (e) {
-            reject(e)
+          if (previousSession) {
+            try {
+              await updateAppSession({
+                vaultId: safeVaultId,
+                host: host,
+                fields: {
+                  selectedCosmosChainId:
+                    getChainKind(chain) === 'cosmos'
+                      ? param.chainId
+                      : previousSession.selectedCosmosChainId,
+                  selectedEVMChainId:
+                    getChainKind(chain) === 'evm'
+                      ? param.chainId
+                      : previousSession.selectedEVMChainId,
+                },
+              })
+            } catch (e) {
+              reject(e)
+            }
+          } else {
+            await setCurrentEVMChainId(param.chainId)
           }
+          resolve(param.chainId)
         })
 
         break
@@ -472,31 +476,37 @@ export const handleRequest = (
           getCosmosChainByChainId(param.chainId) ||
             getEvmChainByChainId(param.chainId)
         )
+        console.log('chain:', chain)
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
+          console.log('safeVaultId:', safeVaultId)
+
           const host = getDappHostname(sender)
+          console.log('host:', host)
 
           const allSessions = await getVaultsAppSessions()
+
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
-          if (!previousSession) throw new Error(`No session found for ${host}`)
-
-          await updateAppSession({
-            vaultId: safeVaultId,
-            host,
-            fields: {
-              selectedCosmosChainId:
-                getChainKind(chain) === 'cosmos'
-                  ? getCosmosChainId(chain as CosmosChain)
-                  : previousSession.selectedCosmosChainId,
-              selectedEVMChainId:
-                getChainKind(chain) === 'evm'
-                  ? getEvmChainId(chain as EvmChain)
-                  : previousSession.selectedEVMChainId,
-            },
-          })
-
+          if (previousSession) {
+            await updateAppSession({
+              vaultId: safeVaultId,
+              host,
+              fields: {
+                selectedCosmosChainId:
+                  getChainKind(chain) === 'cosmos'
+                    ? getCosmosChainId(chain as CosmosChain)
+                    : previousSession.selectedCosmosChainId,
+                selectedEVMChainId:
+                  getChainKind(chain) === 'evm'
+                    ? getEvmChainId(chain as EvmChain)
+                    : previousSession.selectedEVMChainId,
+              },
+            })
+          } else {
+            await setCurrentEVMChainId(param.chainId)
+          }
           resolve(param.chainId)
         })
 

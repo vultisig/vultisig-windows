@@ -1,12 +1,14 @@
 export const pt = {
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
-  onboarding_view1_description:
+  onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
-  onboarding_view3_description:
+  onboarding_description_3:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
+  onboarding_description_4:
+    'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
   chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
@@ -57,8 +59,6 @@ export const pt = {
   coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
   secureVaultSetupPasswordTooltipContent:
     'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. No próximo passo, você tem a opção de adicionar uma dica.',
-  onboarding_view4_description:
-    'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Você está no modo local',
@@ -275,8 +275,6 @@ export const pt = {
   vault_backup_page_password_protection:
     'Proteção de senha opcional para seu cofre',
   vault_backup_page_password_error: 'Defina uma senha segura e a guarde bem.',
-  vault_backup_page_password_input_placeholder: 'Digite a senha',
-  vault_backup_page_verified_password_input_placeholder: 'Verificar senha',
   vault_backup_page_verified_password_error: 'As senhas devem ser iguais',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
   vault_backup_page_password_info:

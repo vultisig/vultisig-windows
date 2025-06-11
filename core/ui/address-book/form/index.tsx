@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
@@ -21,7 +21,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -122,7 +121,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const handlePaste = async () => {
     const { data } = await attempt(getClipboardText)
     if (data) {
-      setValue('address', data)
+      setValue('address', data, { shouldValidate: true })
     }
   }
 
@@ -135,7 +134,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+        title={title}
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>
@@ -178,8 +177,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               </HStack>
             }
             actionPlacerStyles={{
+              bottom: (textInputHeight - iconButtonSize.md) / 2,
               right: textInputHorizontalPadding,
-              bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
             }}
           />
           {errors.address && (

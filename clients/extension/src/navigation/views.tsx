@@ -53,9 +53,11 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   setupFastVault: SetupFastVaultPage,
   setupSecureVault: SetupSecureVaultPage,
   setupVault: () => (
-    <ResponsivenessProvider>
-      <SetupVaultPageController />
-    </ResponsivenessProvider>
+    <ExpandViewGuard>
+      <ResponsivenessProvider>
+        <SetupVaultPageController />
+      </ResponsivenessProvider>
+    </ExpandViewGuard>
   ),
   transactionTab: TransactionPage,
   vault: VaultPage,

@@ -10,7 +10,7 @@ export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
 }
 
-type CoinMetadata = {
+export type CoinMetadata = {
   priceProviderId?: string
   decimals: number
   ticker: string
@@ -45,7 +45,7 @@ export const coinKeyToString = (coin: CoinKey): string =>
 
 export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
   const tokens = chainTokens[coinKey.chain]
-  if (tokens) {
+  if (tokens.length > 0) {
     const foundToken = tokens.find(token => token.id === coinKey.id)
     if (foundToken) return foundToken
   }

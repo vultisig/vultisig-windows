@@ -87,17 +87,7 @@ export const VaultPage = () => {
             </IconButton>
           </>
         }
-        title={
-          <Text
-            color="contrast"
-            size={18}
-            style={{ maxWidth: '50%' }}
-            weight={500}
-            cropped
-          >
-            {vault.name}
-          </Text>
-        }
+        title={vault.name}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>

@@ -9,7 +9,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
-import { getTxInputData } from '@core/ui/mpc/keysign/utils/getTxInputData'
+import { getTxInputData } from '@core/ui/mpc/keysign/tx/inputData/getTxInputData'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -17,7 +17,6 @@ import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -105,8 +104,9 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
 
   const header = (
     <PageHeader
-      title={<PageHeaderTitle>{title}</PageHeaderTitle>}
       primaryControls={<PageHeaderBackButton />}
+      title={title}
+      hasBorder
     />
   )
 

@@ -1,3 +1,5 @@
+import { MpcMediatorManager } from '@clients/desktop/src/mpc/serverType/MpcMediatorManager'
+import { useMpcServerUrlQuery } from '@clients/desktop/src/vault/keygen/server/queries/useMpcServerUrlQuery'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcSession } from '@core/ui/mpc/session/MpcSession'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
@@ -7,13 +9,9 @@ import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
-
-import { useMpcServerUrlQuery } from '../../vault/keygen/server/queries/useMpcServerUrlQuery'
-import { MpcMediatorManager } from './MpcMediatorManager'
 
 type JoinMpcServerUrlProviderInput = ChildrenProp & {
   mpcSession: MpcSession
@@ -47,10 +45,11 @@ export const JoinMpcServerUrlProvider = ({
       pending={() => (
         <>
           <PageHeader
-            title={<PageHeaderTitle>{t(`join_${mpcSession}`)}</PageHeaderTitle>}
+            title={t(`join_${mpcSession}`)}
             primaryControls={<PageHeaderBackButton />}
+            hasBorder
           />
-          <PageContent justifyContent="center" alignItems="center">
+          <PageContent alignItems="center" justifyContent="center">
             <MpcPendingMessage>{t('discovering_mediator')}</MpcPendingMessage>
           </PageContent>
         </>
