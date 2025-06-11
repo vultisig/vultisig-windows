@@ -1,5 +1,4 @@
-import { ChainCoinIcon } from '@core/ui/chain/coin/icon/ChainCoinIcon'
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -42,12 +41,7 @@ export const SwapVerify = () => {
         </Text>
         <VStack gap={16}>
           <HStack gap={8}>
-            <ChainCoinIcon
-              coinSrc={
-                fromCoin.logo ? getCoinLogoSrc(fromCoin.logo) : undefined
-              }
-              style={{ fontSize: 24 }}
-            />
+            <CoinIcon coin={fromCoin} style={{ fontSize: 24 }} />
             <Text weight="500" size={17} color="contrast">
               {fromAmount}{' '}
               <Text as="span" color="shy" size={17}>
@@ -62,10 +56,7 @@ export const SwapVerify = () => {
             <HorizontalLine />
           </HStack>
           <HStack gap={8}>
-            <ChainCoinIcon
-              coinSrc={toCoin.logo ? getCoinLogoSrc(toCoin.logo) : undefined}
-              style={{ fontSize: 24 }}
-            />
+            <CoinIcon coin={toCoin} style={{ fontSize: 24 }} />
             <MatchQuery
               value={outAmountQuery}
               error={() => t('failed_to_load')}

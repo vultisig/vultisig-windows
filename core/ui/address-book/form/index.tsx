@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
@@ -178,8 +178,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               </HStack>
             }
             actionPlacerStyles={{
+              bottom: (textInputHeight - iconButtonSize.md) / 2,
               right: textInputHorizontalPadding,
-              bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
             }}
           />
           {errors.address && (
@@ -197,8 +197,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       <PageFooter>
         <Button
           disabled={!isValid || !isDirty}
-          htmlType="submit"
           loading={isLoading || isPending}
+          type="submit"
         >
           {t('save')}
         </Button>

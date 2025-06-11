@@ -2,7 +2,7 @@ import { useCore } from '@core/ui/state/core'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
 import {
   textInputHeight,
@@ -67,8 +67,8 @@ export const ManageMemo = () => {
                 </IconButton>
               }
               actionPlacerStyles={{
+                bottom: (textInputHeight - iconButtonSize.md) / 2,
                 right: textInputHorizontalPadding,
-                bottom: (textInputHeight - iconButtonSizeRecord.m) / 2,
               }}
             />
           </motion.div>

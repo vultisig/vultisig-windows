@@ -1,78 +1,49 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Size } from '@lib/ui/props'
+import { ButtonProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import { FC, HTMLAttributes } from 'react'
+import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from './UnstyledButton'
-
-type IconBtnSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
-
-type HtmlType = 'button' | 'submit' | 'reset'
-type Status = 'default' | 'danger' | 'success' | 'warning'
-type Type = 'primary' | 'secondary' | 'link'
-
-type IconButtonProps = Pick<
-  HTMLAttributes<HTMLButtonElement>,
-  'children' | 'className' | 'onClick' | 'style' | 'title'
-> & {
-  disabled?: boolean | string
-  htmlType?: HtmlType
-  loading?: boolean
-  size?: IconBtnSize
-  status?: Status
-  type?: Type
-}
+type ButtonSize = Extract<ButtonProps['size'], 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
 const StyledIconButton = styled(UnstyledButton)<{
-  btnType: Type
   disabled: boolean
+  kind: NonNullable<ButtonProps['kind']>
   loading: boolean
-  size: IconBtnSize
-  status: Status
+  size: ButtonSize
+  status: NonNullable<ButtonProps['status']>
 }>`
-  ${({ btnType, disabled, loading, size, status }) => css`
+  ${({ disabled, kind, loading, size, status }) => css`
     align-items: center;
     border: none;
+    border-radius: ${iconButtonSize[size]}px;
     cursor: pointer;
     display: flex;
+    height: ${iconButtonSize[size]}px;
     justify-content: center;
+    min-width: ${iconButtonSize[size]}px;
     transition: all 0.2s;
     width: auto;
 
     ${match(size, {
       xs: () => css`
-        border-radius: 24px;
         font-size: 16px;
-        height: 24px;
-        min-width: 24px;
       `,
       sm: () => css`
-        border-radius: 28px;
         font-size: 20px;
-        height: 28px;
-        min-width: 28px;
       `,
       md: () => css`
-        border-radius: 32px;
         font-size: 16px;
-        height: 32px;
-        min-width: 32px;
       `,
       lg: () => css`
-        border-radius: 40px;
         font-size: 16px;
-        height: 40px;
-        min-width: 40px;
       `,
       xl: () => css`
-        border-radius: 52px;
         font-size: 20px;
-        height: 52px;
-        min-width: 52px;
         ${horizontalPadding(32)}
       `,
     })}
@@ -82,7 +53,7 @@ const StyledIconButton = styled(UnstyledButton)<{
           color: ${getColor('buttonTextDisabled')};
           cursor: default;
 
-          ${match(btnType, {
+          ${match(kind, {
             link: () => css``,
             primary: () => css`
               background-color: ${getColor('buttonBackgroundDisabled')};
@@ -92,7 +63,7 @@ const StyledIconButton = styled(UnstyledButton)<{
             `,
           })}
         `
-      : match(btnType, {
+      : match(kind, {
           link: () => css`
             background-color: transparent;
             color: ${getColor('textPrimary')};
@@ -178,24 +149,24 @@ const StyledIconButton = styled(UnstyledButton)<{
   `}
 `
 
-export const IconButton: FC<IconButtonProps> = ({
+export const IconButton: FC<
+  Omit<ButtonProps, 'size'> & { size?: ButtonSize }
+> = ({
   children,
   disabled,
-  htmlType,
+  kind = 'link',
   loading = false,
   size = 'md',
   status = 'default',
-  type = 'link',
   ...rest
 }) => {
   const props = {
-    ...rest,
-    btnType: type,
     disabled: !!disabled,
+    kind,
     loading,
     size,
     status,
-    type: htmlType,
+    ...rest,
   }
 
   return typeof disabled === 'string' ? (
@@ -214,6 +185,10 @@ export const IconButton: FC<IconButtonProps> = ({
   )
 }
 
-export const iconButtonSizeRecord = { s: 24, m: 32, l: 40 }
-
-export const iconButtonIconSizeRecord = { s: 14, m: 16, l: 18 }
+export const iconButtonSize: Record<ButtonSize, number> = {
+  xs: 24,
+  sm: 28,
+  md: 32,
+  lg: 40,
+  xl: 52,
+}

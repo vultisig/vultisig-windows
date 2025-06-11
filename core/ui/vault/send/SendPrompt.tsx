@@ -18,6 +18,7 @@ export const SendPrompt = ({
 
   return (
     <Button
+      kind="secondary"
       onClick={() =>
         navigate({
           id: 'send',
@@ -28,7 +29,6 @@ export const SendPrompt = ({
         })
       }
       style={{ textTransform: 'uppercase' }}
-      type="secondary"
     >
       {t('send')}
     </Button>

@@ -59,8 +59,8 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         </VStack>
         <Button
           disabled={isDisabled}
-          htmlType="submit"
           loading={isLoading && isPending}
+          type="submit"
         >
           {t('continue')}
         </Button>

@@ -1,11 +1,13 @@
 import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { OTPInput } from '@lib/ui/inputs/OTPInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
@@ -37,44 +39,46 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   }, [isSuccess, onFinish])
 
   return (
-    <>
-      <FlowPageHeader title={t('email')} />
-      <PageContent>
-        <VStack flexGrow gap={48}>
-          <VStack gap={4}>
-            <Text
-              variant={isLargeDevice ? 'h1Regular' : undefined}
-              size={!isLargeDevice ? 24 : undefined}
-            >
-              {t('fastVaultSetup.backup.enterCode')}
+    <VStack fullHeight>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('email')}</PageHeaderTitle>}
+        hasBorder
+      />
+      <PageContent gap={48} flexGrow scrollable>
+        <VStack gap={4}>
+          <Text
+            variant={isLargeDevice ? 'h1Regular' : undefined}
+            size={!isLargeDevice ? 24 : undefined}
+          >
+            {t('fastVaultSetup.backup.enterCode')}
+          </Text>
+          <Text size={14} color="shy">
+            {t('fastVaultSetup.backup.codeInfo')}
+          </Text>
+        </VStack>
+        <VStack gap={4}>
+          <OTPInput
+            validation={error ? 'invalid' : isSuccess ? 'valid' : undefined}
+            onCompleted={value => mutate(value)}
+          />
+          {error ? (
+            <Text size={13} color="danger">
+              {t('email_confirmation_code_error')}
             </Text>
-            <Text size={14} color="shy">
-              {t('fastVaultSetup.backup.codeInfo')}
-            </Text>
-          </VStack>
-          <VStack gap={4}>
-            <OTPInput
-              validation={error ? 'invalid' : isSuccess ? 'valid' : undefined}
-              onCompleted={value => mutate(value)}
-            />
-            {error ? (
-              <Text size={13} color="danger">
-                {t('email_confirmation_code_error')}
-              </Text>
-            ) : (
-              isPending && (
-                <HStack gap={4}>
-                  <StyledAnimatedLoader />
-                  <Text weight={500} as="span" color="contrast" size={13}>
-                    {t('fastVaultSetup.backup.verifyingCode')}
-                  </Text>
-                </HStack>
-              )
-            )}
-          </VStack>
+          ) : (
+            isPending && (
+              <HStack gap={4}>
+                <StyledAnimatedLoader />
+                <Text weight={500} as="span" color="contrast" size={13}>
+                  {t('fastVaultSetup.backup.verifyingCode')}
+                </Text>
+              </HStack>
+            )
+          )}
         </VStack>
       </PageContent>
-    </>
+    </VStack>
   )
 }
 
