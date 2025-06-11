@@ -47,30 +47,27 @@ export const SwapKeysignTxOverview = ({
 }: ValueProp<KeysignPayload> & {
   txHashes: string[]
 }) => {
+  const { t } = useTranslation()
+  const { openUrl } = useCore()
+  const navigate = useCoreNavigate()
+  const vault = useCurrentVault()
   const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
     memo: value.memo,
   })
-
-  const navigate = useCoreNavigate()
-  const vault = useCurrentVault()
-  const { t } = useTranslation()
-
   const { coin: potentialFromCoin, blockchainSpecific, swapPayload } = value
-
   const {
     fromAmount,
     toAmountDecimal,
     toCoin: potentialToCoin,
   } = shouldBePresent(swapPayload.value)
-  const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
-
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
+  const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
+  const swapProvider = getSwapProvider(swapPayload)
+  const { chain } = shouldBePresent(toCoin)
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
   }, [fromAmount, fromCoin.decimals])
-
-  const { chain } = shouldBePresent(toCoin)
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
@@ -93,10 +90,6 @@ export const SwapKeysignTxOverview = ({
     return chain as Chain
   }, [chain, swapPayload])
 
-  const swapProvider = getSwapProvider(swapPayload)
-
-  const { openUrl } = useCore()
-
   const trackTransaction = (tx: string) =>
     openUrl(
       getBlockExplorerUrl({
@@ -107,16 +100,21 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <VStack gap={24}>
+    <>
       <VStack style={{ height: 250, position: 'relative' }}>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
-          <SuccessText centerHorizontally size={24}>
+          <GradientText
+            as="span"
+            size={24}
+            style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
+            centerHorizontally
+          >
             {t('transaction_successful')}
-          </SuccessText>
+          </GradientText>
         </AnimatedVisibility>
       </VStack>
-      <VStack alignItems="center" gap={8} style={{ marginInline: 'auto' }}>
+      <VStack alignItems="center" gap={8}>
         <HStack gap={8} style={{ position: 'relative' }}>
           {fromCoin && (
             <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
@@ -230,16 +228,9 @@ export const SwapKeysignTxOverview = ({
           </Button>
         </HStack>
       </VStack>
-    </VStack>
+    </>
   )
 }
-
-const SuccessText = styled(GradientText)`
-  bottom: 40px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-`
 
 const TrimmedText = styled(Text)<{
   width?: number

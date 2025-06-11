@@ -7,7 +7,6 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
-import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -15,16 +14,15 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
+import { Panel } from '@lib/ui/panel/Panel'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
-import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 export const KeysignTxOverview = ({
   value,
@@ -33,6 +31,8 @@ export const KeysignTxOverview = ({
   txHash: string
 }) => {
   const { t } = useTranslation()
+  const { openUrl } = useCore()
+  const { name } = useCurrentVault()
   const {
     coin: potentialCoin,
     toAddress,
@@ -40,20 +40,15 @@ export const KeysignTxOverview = ({
     toAmount,
     blockchainSpecific,
   } = value
-
-  const { openUrl } = useCore()
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const vaultCoin = useCurrentVaultCoin(coin)
-  const { decimals } = coin
-  const { name } = useCurrentVault()
+  const { chain, decimals } = shouldBePresent(coin)
 
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
 
     return fromChainAmount(BigInt(toAmount), decimals)
   }, [toAmount, decimals])
-
-  const { chain } = shouldBePresent(coin)
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
@@ -71,77 +66,69 @@ export const KeysignTxOverview = ({
   })
 
   return (
-    <VStack gap={16}>
+    <>
       {formattedToAmount && (
         <TxOverviewAmount amount={formattedToAmount} value={coin} />
       )}
-      <Content gap={16}>
-        <VStack gap={16}>
-          <HStack justifyContent="space-between" alignItems="center" gap={4}>
-            <Text color="shy">{t('tx_hash')}</Text>
-            <HStack alignItems="center" gap={4}>
-              <Text
-                style={{
-                  maxWidth: '150px',
-                }}
-                cropped
-              >
-                {txHash}
+      <Panel>
+        <SeparatedByLine gap={16}>
+          <HStack alignItems="center" gap={8} justifyContent="space-between">
+            <Text color="shy" weight="500">
+              {t('tx_hash')}
+            </Text>
+            <HStack gap={4} alignItems="center">
+              <Text>
+                <MiddleTruncate text={txHash} width={140} />
               </Text>
-              <IconButton
-                onClick={() => {
-                  openUrl(blockExplorerUrl)
-                }}
-              >
+              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
                 <SquareArrowOutUpRightIcon />
               </IconButton>
             </HStack>
           </HStack>
-        </VStack>
-        <TxOverviewRow>
-          <Text color="shy">{t('from')}</Text>
-          <Text size={14}>
-            {name}{' '}
-            <Text size={14} as="span" color="shy">
-              ({formatWalletAddress(vaultCoin.address)})
+          <HStack alignItems="center" gap={8} justifyContent="space-between">
+            <Text color="shy" weight="500">
+              {t('from')}
             </Text>
-          </Text>
-        </TxOverviewRow>
-        {toAddress && (
-          <TxOverviewRow>
-            <Text color="shy">{t('to')}</Text>
-            <Text>{toAddress}</Text>
-          </TxOverviewRow>
-        )}
-        {memo && <TxOverviewMemo value={memo} />}
-        <TxOverviewRow>
-          <Text color="shy">{capitalizeFirstLetter(t('network'))}</Text>
-          <HStack gap={8}>
-            <ChainEntityIcon
-              value={getChainLogoSrc(chain)}
-              style={{ fontSize: 16 }}
-            />
-            <Text size={14}>{chain}</Text>
+            <HStack gap={4} alignItems="center">
+              <Text>{name}</Text>
+              <Text color="shy" weight="500" nowrap>
+                <MiddleTruncate text={`(${vaultCoin.address})`} width={80} />
+              </Text>
+            </HStack>
           </HStack>
-        </TxOverviewRow>
-        {networkFeesFormatted && (
-          <TxOverviewRow>
-            <Text color="shy">{t('est_network_fee')}</Text>
-            <span>{networkFeesFormatted}</span>
-          </TxOverviewRow>
-        )}
-      </Content>
-    </VStack>
+          {toAddress && (
+            <HStack alignItems="center" gap={8} justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('to')}
+              </Text>
+              <Text nowrap>
+                <MiddleTruncate text={toAddress} width={200} />
+              </Text>
+            </HStack>
+          )}
+          {memo && <TxOverviewMemo value={memo} />}
+          <HStack alignItems="center" gap={8} justifyContent="space-between">
+            <Text color="shy" weight="500">
+              {capitalizeFirstLetter(t('network'))}
+            </Text>
+            <HStack gap={4} alignItems="center">
+              <ChainEntityIcon
+                value={getChainLogoSrc(chain)}
+                style={{ fontSize: 16 }}
+              />
+              <Text>{chain}</Text>
+            </HStack>
+          </HStack>
+          {networkFeesFormatted && (
+            <HStack alignItems="center" gap={8} justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('est_network_fee')}
+              </Text>
+              <Text>{networkFeesFormatted}</Text>
+            </HStack>
+          )}
+        </SeparatedByLine>
+      </Panel>
+    </>
   )
 }
-
-const Content = styled(SeparatedByLine)`
-  border-radius: 16px;
-  padding: 16px;
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-
-  > * {
-    font-size: 14px;
-  }
-`

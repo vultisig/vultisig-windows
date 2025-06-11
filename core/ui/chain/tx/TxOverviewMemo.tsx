@@ -2,51 +2,51 @@ import {
   getParsedMemo,
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { TxOverviewChainDataRow } from './TxOverviewRow'
-
-interface InitialState {
-  parsedMemo?: ParsedMemoParams
-}
-
 export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
   const { t } = useTranslation()
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { parsedMemo } = state
+  const [parsedMemo, setParsedMemo] = useState<ParsedMemoParams | undefined>(
+    undefined
+  )
 
-  const componentDidMount = (): void => {
+  useEffect(() => {
     getParsedMemo(value)
-      .then(parsedMemo => {
-        setState(prevState => ({ ...prevState, parsedMemo }))
-      })
+      .then(setParsedMemo)
       .catch(() => {})
-  }
-
-  useEffect(componentDidMount, [value])
+  }, [value])
 
   return parsedMemo ? (
     <>
-      <TxOverviewChainDataRow>
-        <span>{t('function_signature')}</span>
-        <span>{parsedMemo.functionSignature}</span>
-      </TxOverviewChainDataRow>
-      <TxOverviewChainDataRow>
-        <span>{t('function_arguments')}</span>
-        <pre style={{ width: '100%' }}>
-          <code style={{ display: 'block', overflowX: 'auto', width: '100%' }}>
-            {parsedMemo.functionArguments}
-          </code>
-        </pre>
-      </TxOverviewChainDataRow>
+      <VStack gap={4}>
+        <Text color="shy">{t('function_signature')}</Text>
+        <Text color="primary" family="mono" size={13} weight="700">
+          {parsedMemo.functionSignature}
+        </Text>
+      </VStack>
+      <VStack gap={4}>
+        <Text color="shy">{t('function_arguments')}</Text>
+        <Text color="primary" family="mono" size={13} weight="700">
+          <pre style={{ width: '100%' }}>
+            <code
+              style={{ display: 'block', overflowX: 'auto', width: '100%' }}
+            >
+              {parsedMemo.functionArguments}
+            </code>
+          </pre>
+        </Text>
+      </VStack>
     </>
   ) : (
-    <TxOverviewChainDataRow>
-      <span>{t('memo')}</span>
-      <span>{value}</span>
-    </TxOverviewChainDataRow>
+    <VStack gap={4}>
+      <Text color="shy">{t('memo')}</Text>
+      <Text color="primary" family="mono" size={13} weight="700">
+        {value}
+      </Text>
+    </VStack>
   )
 }
