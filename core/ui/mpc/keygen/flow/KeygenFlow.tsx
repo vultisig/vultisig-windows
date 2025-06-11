@@ -18,7 +18,6 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
@@ -28,7 +27,6 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
     ...keygenMutationState
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
-  const navigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
@@ -53,7 +51,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       success={vault => {
         const renderEnding = () => {
           if (isPluginReshare) {
-            navigate({ id: 'vault' })
+            window.close()
             return
           } else if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
