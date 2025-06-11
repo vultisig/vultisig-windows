@@ -32,6 +32,7 @@ export const KeysignTxOverview = ({
 }: ValueProp<KeysignPayload> & {
   txHash: string
 }) => {
+  console.log('## value', value)
   const { t } = useTranslation()
   const {
     coin: potentialCoin,
@@ -102,15 +103,15 @@ export const KeysignTxOverview = ({
           <Text color="shy">{t('from')}</Text>
           <Text size={14}>
             {name}{' '}
-            <Text size={14} as="span" color="shy">
+            <RowValue size={14} as="span" color="shy">
               ({formatWalletAddress(vaultCoin.address)})
-            </Text>
+            </RowValue>
           </Text>
         </TxOverviewRow>
         {toAddress && (
           <TxOverviewRow>
             <Text color="shy">{t('to')}</Text>
-            <Text>{toAddress}</Text>
+            <RowValue>{toAddress}</RowValue>
           </TxOverviewRow>
         )}
         {memo && <TxOverviewMemo value={memo} />}
@@ -127,7 +128,7 @@ export const KeysignTxOverview = ({
         {networkFeesFormatted && (
           <TxOverviewRow>
             <Text color="shy">{t('est_network_fee')}</Text>
-            <span>{networkFeesFormatted}</span>
+            <RowValue>{networkFeesFormatted}</RowValue>
           </TxOverviewRow>
         )}
       </Content>
@@ -144,4 +145,8 @@ const Content = styled(SeparatedByLine)`
   > * {
     font-size: 14px;
   }
+`
+
+const RowValue = styled(Text)`
+  max-width: 100%;
 `
