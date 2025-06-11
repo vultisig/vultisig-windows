@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 
 const memoKeywords = ['switch', 'merge', 'channel']
-const no0xChains = ['THORChain', 'MayaChain']
 
 export const normalizeTxHash = (
   hash: string,
@@ -12,7 +12,9 @@ export const normalizeTxHash = (
   const memoTriggers = memo
     ? memoKeywords.some(keyword => memo.toLowerCase().includes(keyword))
     : false
-  const shouldRemove0x = chain ? no0xChains.includes(chain) : false
+  const shouldRemove0x = chain
+    ? isOneOf(chain, Object.values(VaultBasedCosmosChain))
+    : false
 
   return has0xPrefix && (memoTriggers || shouldRemove0x) ? hash.slice(2) : hash
 }
