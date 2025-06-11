@@ -32,7 +32,6 @@ export const KeysignTxOverview = ({
 }: ValueProp<KeysignPayload> & {
   txHash: string
 }) => {
-  console.log('## value', value)
   const { t } = useTranslation()
   const {
     coin: potentialCoin,
