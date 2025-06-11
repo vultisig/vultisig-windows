@@ -7,7 +7,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
@@ -42,7 +41,7 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('email')}</PageHeaderTitle>}
+        title={t('email')}
         hasBorder
       />
       <PageContent gap={48} flexGrow scrollable>

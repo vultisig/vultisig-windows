@@ -7,6 +7,7 @@ import { useFolderVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -15,8 +16,6 @@ import { ListItemTag } from '@lib/ui/list/item/tag'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { useTranslation } from 'react-i18next'
 
 export const VaultFolderPage = () => {
@@ -33,12 +32,13 @@ export const VaultFolderPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <PageHeaderIconButton
-            icon={<SquarePenIcon />}
+          <IconButton
             onClick={() => navigate({ id: 'updateVaultFolder', state: { id } })}
-          />
+          >
+            <SquarePenIcon />
+          </IconButton>
         }
-        title={<PageHeaderTitle>{name}</PageHeaderTitle>}
+        title={name}
         hasBorder
       />
       <PageContent flexGrow scrollable>

@@ -1,16 +1,14 @@
+import { SendChainSpecificValueProvider } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
+import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
 import { Opener } from '@lib/ui/base/Opener'
-import { GasPumpIcon } from '@lib/ui/icons/GasPumpIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FailedQueryOverlay } from '@lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '@lib/ui/query/components/overlay/PendingQueryOverlay'
 import { StrictText } from '@lib/ui/text'
 import { t } from 'i18next'
-
-import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQuery'
-import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider'
 
 type ManageFeeSettingsFrameProps = {
   render: (props: OnCloseProp) => React.ReactNode
@@ -23,24 +21,11 @@ export const ManageFeeSettingsFrame = ({
 
   return (
     <Opener
-      renderOpener={({ onOpen }) => {
-        return (
-          <PageHeaderIconButton
-            onClick={() => {
-              onOpen()
-            }}
-            icon={
-              <IconWrapper
-                style={{
-                  fontSize: 16,
-                }}
-              >
-                <GasPumpIcon />
-              </IconWrapper>
-            }
-          />
-        )
-      }}
+      renderOpener={({ onOpen }) => (
+        <IconButton onClick={() => onOpen()}>
+          <FuelIcon />
+        </IconButton>
+      )}
       renderContent={({ onClose }) => (
         <MatchQuery
           value={chainSpecificQuery}

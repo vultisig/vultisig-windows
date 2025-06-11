@@ -6,7 +6,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
@@ -21,7 +20,7 @@ export const ReshareVaultPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('reshare')}</PageHeaderTitle>}
+        title={t('reshare')}
         hasBorder
       />
       <PageContent gap={8} alignItems="center" justifyContent="center" flexGrow>
