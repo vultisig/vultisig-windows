@@ -12,7 +12,7 @@ const pluginReshareSteps = [
   'keygen',
 ] as const
 
-export const FastVaultReshareFlow = () => {
+export const PluginReshareFlow = () => {
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: pluginReshareSteps,
     onExit: useNavigateBack(),

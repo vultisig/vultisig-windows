@@ -1,4 +1,4 @@
-import { FastVaultReshareFlow } from '@core/ui/mpc/keygen/reshare/fast/FastVaultReshareFlow'
+import { PluginReshareFlow } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
 import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -19,7 +19,7 @@ export const PluginPage = () => {
                 from={({ onFinish }) => (
                   <PluginJoinKeygenUrl onFinish={onFinish} />
                 )}
-                to={() => <FastVaultReshareFlow />}
+                to={() => <PluginReshareFlow />}
               />
             </ReshareVaultKeygenActionProvider>
           </KeygenOperationProvider>
