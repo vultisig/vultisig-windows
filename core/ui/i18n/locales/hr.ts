@@ -902,4 +902,8 @@ export const hr = {
   new_passcode: 'Nova lozinka',
   confirm_new_passcode: 'Potvrdite novu lozinku',
   enter_new_passcode: 'Unesite novu lozinku',
+  address_book_saved: 'Spremljene adrese',
+  address_book_vault: 'Moji trezori',
+  paste: 'Zalijepiti',
+  failed_to_generate_join_url: 'Nije uspjelo generiranje QR koda',
 }

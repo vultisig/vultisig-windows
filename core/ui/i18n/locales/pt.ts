@@ -916,4 +916,8 @@ export const pt = {
   new_passcode: 'Nova senha',
   confirm_new_passcode: 'Confirmar nova senha',
   enter_new_passcode: 'Digite a nova senha',
+  address_book_saved: 'Endereços salvos',
+  address_book_vault: 'Meus Cofres',
+  paste: 'Colar',
+  failed_to_generate_join_url: 'Falha ao gerar o código QR',
 }

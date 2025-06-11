@@ -923,4 +923,8 @@ export const it = {
   new_passcode: 'Nuovo codice di accesso',
   confirm_new_passcode: 'Conferma nuovo codice di accesso',
   enter_new_passcode: 'Inserisci il nuovo codice di accesso',
+  address_book_saved: 'Indirizzi salvati',
+  address_book_vault: 'I miei caveau',
+  paste: 'Impasto',
+  failed_to_generate_join_url: 'Impossibile generare il codice QR',
 }

@@ -925,4 +925,8 @@ export const es = {
   new_passcode: 'Nueva contraseña',
   confirm_new_passcode: 'Confirmar nueva contraseña',
   enter_new_passcode: 'Introduzca la nueva contraseña',
+  address_book_saved: 'Direcciones guardadas',
+  address_book_vault: 'Mis bóvedas',
+  paste: 'Pasta',
+  failed_to_generate_join_url: 'No se pudo generar el código QR',
 }

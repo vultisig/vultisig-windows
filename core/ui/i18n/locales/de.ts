@@ -928,4 +928,8 @@ export const de = {
   new_passcode: 'Neuer Passcode',
   confirm_new_passcode: 'Neuen Passcode bestätigen',
   enter_new_passcode: 'Geben Sie den neuen Passcode ein',
+  address_book_saved: 'Gespeicherte Adressen',
+  address_book_vault: 'Meine Tresore',
+  paste: 'Paste',
+  failed_to_generate_join_url: 'QR-Code konnte nicht generiert werden',
 }
