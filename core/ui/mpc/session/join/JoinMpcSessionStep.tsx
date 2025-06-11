@@ -1,21 +1,19 @@
 import { joinMpcSession } from '@core/mpc/session/joinMpcSession'
+import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { FullPageFlowErrorState } from '../../../flow/FullPageFlowErrorState'
-import { MpcPendingMessage } from '../../status/MpcPendingMessage'
 
 export const JoinMpcSessionStep = ({
   onFinish,
@@ -58,7 +56,8 @@ export const JoinMpcSessionStep = ({
         <>
           <PageHeader
             primaryControls={<PageHeaderBackButton onClick={onBack} />}
-            title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+            title={title}
+            hasBorder
           />
           <PageContent data-testid="JoinKeygenStep-PageContent">
             <VStack flexGrow>

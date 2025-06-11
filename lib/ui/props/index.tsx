@@ -1,16 +1,14 @@
 import { ButtonHTMLAttributes, ElementType, ReactNode, SVGProps } from 'react'
 
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
 export type ButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'disabled'
 > & {
   disabled?: boolean | string
-  icon?: ReactNode
   kind?: 'primary' | 'secondary' | 'link'
   loading?: boolean
-  size?: Size
   status?: 'default' | 'danger' | 'success' | 'warning'
 }
 

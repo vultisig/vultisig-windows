@@ -1,21 +1,18 @@
-import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
-import { VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
-import { PageSlice } from '@lib/ui/page/PageSlice'
-import { Text } from '@lib/ui/text'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-import { getFaqData } from './constants'
+import { getFaqData } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/constants'
 import {
   FaqButton,
   FaqContent,
   HorizontalLine,
   Row,
-} from './FaqVaultPage.styles'
+} from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage.styles'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { PageSlice } from '@lib/ui/page/PageSlice'
+import { Text } from '@lib/ui/text'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const faqContentTransition = {
   duration: 0.3,
@@ -46,16 +43,9 @@ const FaqVaultPage = () => {
   }
 
   return (
-    <VStack flexGrow gap={16}>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>
-            {t('vault_rename_page_header_title')}
-          </PageHeaderTitle>
-        }
-      />
-      <PageSlice gap={16} flexGrow={true}>
+    <VStack flexGrow>
+      <FlowPageHeader title={t('vault_rename_page_header_title')} />
+      <PageSlice gap={16} flexGrow>
         {faqData.map(({ id, title, content }) => {
           const isCurrentRowExpanded = rowsExpanded[id]
 

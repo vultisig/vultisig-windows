@@ -10,7 +10,6 @@ import { List } from '@lib/ui/list'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
@@ -64,7 +63,7 @@ export const ManageVaultChainCoinsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('choose_tokens')}</PageHeaderTitle>}
+        title={t('choose_tokens')}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>

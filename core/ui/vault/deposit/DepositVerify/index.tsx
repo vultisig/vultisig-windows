@@ -11,7 +11,6 @@ import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { StrictText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
@@ -71,7 +70,8 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={<PageHeaderTitle>{t('verify')}</PageHeaderTitle>}
+        title={t('verify')}
+        hasBorder
       />
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>

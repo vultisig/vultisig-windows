@@ -8,6 +8,7 @@ import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -33,9 +34,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { PageHeaderIconButtons } from '@lib/ui/page/PageHeaderIconButtons'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
@@ -48,8 +46,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { getChainLogoSrc } from '../../chain/metadata/getChainLogoSrc'
 
 export const VaultChainPage = () => {
   const { t } = useTranslation()
@@ -83,14 +79,12 @@ export const VaultChainPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <PageHeaderIconButtons>
-            <PageHeaderIconButton
-              onClick={refresh}
-              icon={isPending ? <Spinner /> : <RefreshCwIcon />}
-            />
-          </PageHeaderIconButtons>
+          <IconButton loading={isPending} onClick={refresh}>
+            <RefreshCwIcon />
+          </IconButton>
         }
-        title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
+        title={chain}
+        hasBorder
       />
       <PageContent gap={16} flexGrow>
         <VaultPrimaryActions chain={chain} />

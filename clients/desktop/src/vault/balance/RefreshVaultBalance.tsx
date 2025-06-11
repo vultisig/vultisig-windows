@@ -3,7 +3,8 @@ import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoi
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { PageHeaderRefresh } from '@lib/ui/page/PageHeaderRefresh'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
@@ -26,5 +27,9 @@ export const RefreshVaultBalance = () => {
     },
   })
 
-  return <PageHeaderRefresh onClick={() => refresh()} isPending={isPending} />
+  return (
+    <IconButton loading={isPending} onClick={() => refresh()}>
+      <RefreshCwIcon />
+    </IconButton>
+  )
 }
