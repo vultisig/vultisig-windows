@@ -15,10 +15,11 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const {
@@ -27,7 +28,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
     ...keygenMutationState
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
-
+  const navigate = useCoreNavigate()
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
@@ -42,12 +43,19 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       }),
   })
 
+  const isPluginReshare = useMemo(() => {
+    return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+  }, [keygenOperation])
+
   return (
     <MatchQuery
       value={keygenMutationState}
       success={vault => {
         const renderEnding = () => {
-          if (hasServer(vault.signers)) {
+          if (isPluginReshare) {
+            navigate({ id: 'vault' })
+            return
+          } else if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
           }
 
