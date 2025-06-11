@@ -8,7 +8,6 @@ import Long from 'long'
 
 import { fromCommCoin } from '../../../types/utils/commCoin'
 import { PreSignedInputDataResolver } from '../PreSignedInputDataResolver'
-import { deriveThorchainActionFromMemo } from './utils/deriveThorchainActionFromMemo'
 
 export const getThorPreSignedInputData: PreSignedInputDataResolver<
   'thorchainSpecific'
@@ -17,9 +16,6 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     walletCore,
     chain,
   })
-
-  const memo = keysignPayload?.memo || ''
-  const action = deriveThorchainActionFromMemo(memo)
 
   const commCoin = assertField(keysignPayload, 'coin')
 
@@ -33,7 +29,7 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
   let message: TW.Cosmos.Proto.Message[]
 
-  if (action === 'merge') {
+  if (keysignPayload.memo?.startsWith('merge:')) {
     const fullDenom = keysignPayload.memo!.toLowerCase().replace('merge:', '')
 
     message = [
@@ -56,8 +52,8 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
         chain: 'THOR',
-        symbol: action === 'tcy' ? commCoin.ticker : 'RUNE',
-        ticker: action === 'tcy' ? commCoin.ticker : 'RUNE',
+        symbol: commCoin.ticker,
+        ticker: commCoin.ticker,
         synth: false,
       }),
     })
@@ -113,9 +109,7 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     memo: keysignPayload.memo || '',
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
-      gas: new Long(
-        action === 'merge' ? 20_000_000 : cosmosGasLimitRecord[chain]
-      ),
+      gas: new Long(cosmosGasLimitRecord[chain]),
     }),
   })
 
