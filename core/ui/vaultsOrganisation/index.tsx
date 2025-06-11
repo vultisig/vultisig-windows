@@ -8,6 +8,7 @@ import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -17,8 +18,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
@@ -35,12 +34,11 @@ export const VaultsPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <PageHeaderIconButton
-            icon={<SquarePenIcon />}
-            onClick={() => navigate({ id: 'manageVaults' })}
-          />
+          <IconButton onClick={() => navigate({ id: 'manageVaults' })}>
+            <SquarePenIcon />
+          </IconButton>
         }
-        title={<PageHeaderTitle>{t('vaults')}</PageHeaderTitle>}
+        title={t('vaults')}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>

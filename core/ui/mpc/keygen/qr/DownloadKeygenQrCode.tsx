@@ -2,8 +2,8 @@ import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { PrintableQrCode } from '@core/ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,9 @@ export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
     <SaveAsImage
       fileName={fileName}
       renderTrigger={({ onClick }) => (
-        <PageHeaderIconButton icon={<ShareIcon />} onClick={onClick} />
+        <IconButton onClick={onClick}>
+          <ShareIcon />
+        </IconButton>
       )}
       value={
         <PrintableQrCode

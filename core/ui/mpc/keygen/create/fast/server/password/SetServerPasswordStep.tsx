@@ -2,68 +2,66 @@ import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEduca
 import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { InfoIcon } from '@lib/ui/icons/InfoIcon'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { TFunction } from 'i18next'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-const StyledIcon = styled(InfoIcon)`
-  color: ${getColor('idle')};
-`
-
-const StyledTooltip = styled(VStack)`
+const StyledTooltip = styled.div`
   background-color: ${getColor('white')};
   color: ${getColor('text')};
 `
 
-const getPasswordSchema = (t: TFunction) =>
-  z
+const createSchema = (t: TFunction) => {
+  const message = t('password_pattern_error', { min: 3, max: 30 })
+
+  return z
     .object({
-      password: z.string().min(1, t('password_required')),
-      confirmPassword: z
-        .string()
-        .min(1, t('fastVaultSetup.confirmPasswordIsRequired')),
+      password: z.string().min(3, message).max(30, message),
+      confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {
-      message: t('fastVaultSetup.passwordDoNotMatch'),
+      message: t('password_do_not_match'),
       path: ['confirmPassword'],
     })
+}
 
-type PasswordSchema = z.infer<ReturnType<typeof getPasswordSchema>>
+type Schema = z.infer<ReturnType<typeof createSchema>>
 
 export const SetServerPasswordStep = ({
   onFinish,
   onBack,
 }: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
-  const [storedPassword, setStoredPassword] = useVaultPassword()
+  const [storedPassword = '', setStoredPassword] = useVaultPassword()
+
+  const schema = useMemo(() => createSchema(t), [t])
 
   const {
-    register,
-    handleSubmit,
-    setValue,
     formState: { errors, isValid },
-  } = useForm<PasswordSchema>({
-    defaultValues: { password: storedPassword || '', confirmPassword: '' },
+    handleSubmit,
+    register,
+  } = useForm<Schema>({
+    defaultValues: { password: storedPassword, confirmPassword: '' },
     mode: 'all',
-    resolver: zodResolver(getPasswordSchema(t)),
+    resolver: zodResolver(schema),
   })
 
-  const onSubmit = (data: PasswordSchema) => {
-    setStoredPassword(data.password)
+  const onSubmit = ({ password }: Schema) => {
+    setStoredPassword(password)
     onFinish()
   }
 
@@ -72,10 +70,29 @@ export const SetServerPasswordStep = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
-        title={<PageHeaderTitle>{t('vultiserver_password')}</PageHeaderTitle>}
+        title={t('vultiserver_password')}
         hasBorder
       />
-      <PageContent gap={16} flexGrow scrollable>
+      <PageContent gap={8} flexGrow scrollable>
+        <PasswordInput
+          {...register('password')}
+          error={errors.password?.message}
+          placeholder={t('enter_password')}
+          validation={
+            isValid ? 'valid' : errors.password ? 'invalid' : undefined
+          }
+          autoFocus
+        />
+        <PasswordInput
+          {...register('confirmPassword')}
+          error={errors.confirmPassword?.message}
+          placeholder={t('verify_password')}
+          validation={
+            isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
+          }
+        />
+      </PageContent>
+      <PageFooter gap={16}>
         <WarningBlock
           iconTooltipContent={
             <StyledTooltip>
@@ -87,50 +104,10 @@ export const SetServerPasswordStep = ({
               </Text>
             </StyledTooltip>
           }
-          icon={() => <StyledIcon />}
-          style={{ width: 'fit-content' }}
+          icon={CircleInfoIcon}
         >
           {t('fastVaultSetup.passwordCannotBeRecovered')}
         </WarningBlock>
-        <VStack gap={8}>
-          <VStack gap={4}>
-            <PasswordInput
-              {...register('password')}
-              onValueChange={value => setValue('password', value)}
-              placeholder={t('enter_password')}
-              validation={
-                isValid ? 'valid' : errors.password ? 'invalid' : undefined
-              }
-              autoFocus
-            />
-            {errors.password && errors.password?.message && (
-              <Text color="danger" size={12}>
-                {errors.password.message}
-              </Text>
-            )}
-          </VStack>
-          <VStack gap={4}>
-            <PasswordInput
-              {...register('confirmPassword')}
-              onValueChange={value => setValue('confirmPassword', value)}
-              placeholder={t('verify_password')}
-              validation={
-                isValid
-                  ? 'valid'
-                  : errors.confirmPassword
-                    ? 'invalid'
-                    : undefined
-              }
-            />
-            {errors.confirmPassword && errors.confirmPassword.message && (
-              <Text color="danger" size={12}>
-                {errors.confirmPassword.message}
-              </Text>
-            )}
-          </VStack>
-        </VStack>
-      </PageContent>
-      <PageFooter>
         <Button disabled={!isValid} type="submit">
           {t('next')}
         </Button>
