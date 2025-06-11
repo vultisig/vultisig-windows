@@ -49,30 +49,17 @@ export const GasFeeAdjuster = ({
     })
 
     return {
-      priorityFee: transactionPayload.transactionDetails?.gasSettings
-        ?.maxPriorityFeePerGas
-        ? Number(
+      priorityFee:  Number(
             formatUnits(
               BigInt(
-                transactionPayload.transactionDetails.gasSettings
-                  .maxPriorityFeePerGas
+                transactionPayload.transactionDetails?.gasSettings?.maxPriorityFeePerGas || 0
               ),
               gwei.decimals
             )
-          )
-        : transactionPayload.maxPriorityFeePerGas
-          ? Number(
-              formatUnits(
-                BigInt(transactionPayload.maxPriorityFeePerGas),
-                gwei.decimals
-              )
-            )
-          : 0,
-      gasLimit: transactionPayload.transactionDetails?.gasSettings?.gasLimit
-        ? Number(transactionPayload.transactionDetails.gasSettings.gasLimit)
-        : transactionPayload.gasLimit
-          ? Number(transactionPayload.gasLimit)
-          : defaultGasLimit,
+          ),
+      gasLimit:
+        Number(transactionPayload.transactionDetails?.gasSettings?.gasLimit) ||
+        defaultGasLimit,
     }
   })
 

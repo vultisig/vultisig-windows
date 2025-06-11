@@ -57,7 +57,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
         </LineWrapper>
         <InputContainer>
           <Text size={14} color="supporting">
-            {t('current_base_fee')} ({t('gwei')})
+            {t('current_base_fee')}
           </Text>
           <FeeContainer>
             {formatTokenAmount(
@@ -72,7 +72,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
               content={<Text>{t('priority_fee_tooltip_content')}</Text>}
               renderOpener={props => (
                 <Text size={14} color="supporting" {...props}>
-                  {t('priority_fee')} ({t('gwei')})
+                  {t('priority_fee')}
                 </Text>
               )}
             />

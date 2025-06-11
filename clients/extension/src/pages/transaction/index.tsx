@@ -245,8 +245,8 @@ export const TransactionPage = () => {
                                       keysignPayload={keysignMessagePayload}
                                       baseFee={
                                         Number(
-                                          transactionPayload.maxPriorityFeePerGas
-                                        ) || defaultFeePriority
+                                          transactionPayload.txFee
+                                        )
                                       }
                                       onFeeChange={fee => {
                                         if (
