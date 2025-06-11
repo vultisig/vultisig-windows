@@ -5,7 +5,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { FC, ReactNode } from 'react'
@@ -25,14 +24,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        title={
-          <PageHeaderTitle>
-            {t('fastVaultSetup.backup.backupVault')}
-          </PageHeaderTitle>
-        }
-        hasBorder
-      />
+      <PageHeader title={t('fastVaultSetup.backup.backupVault')} hasBorder />
       <PageContent alignItems="center" flexGrow scrollable>
         {riveComponent}
       </PageContent>

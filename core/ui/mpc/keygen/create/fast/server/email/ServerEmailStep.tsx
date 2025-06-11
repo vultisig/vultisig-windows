@@ -14,7 +14,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
@@ -62,9 +61,7 @@ export const ServerEmailStep = ({
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={
-          <PageHeaderTitle>{t('fastVaultSetup.enterEmail')}</PageHeaderTitle>
-        }
+        title={t('fastVaultSetup.enterEmail')}
         hasBorder
       />
       <PageContent gap={8} flexGrow scrollable>

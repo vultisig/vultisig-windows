@@ -8,7 +8,6 @@ import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -46,9 +45,7 @@ export const RootErrorFallback = ({
 
   return (
     <VStack fullSize>
-      <PageHeader
-        title={<PageHeaderTitle>{t('something_went_wrong')}</PageHeaderTitle>}
-      />
+      <PageHeader title={t('something_went_wrong')} />
       <PageContent gap={20}>
         <VStack flexGrow gap={40} alignItems="center" justifyContent="center">
           <FilledAlertIcon style={{ fontSize: 66 }} />

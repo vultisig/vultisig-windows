@@ -9,35 +9,46 @@ import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { ComponentPropsWithoutRef } from 'react'
 
 export const PasswordInput: React.FC<
-  ComponentPropsWithoutRef<typeof TextInput>
-> = ({ ...rest }) => {
+  ComponentPropsWithoutRef<typeof TextInput> & {
+    error?: string
+  }
+> = ({ error, ...rest }) => {
   const [shouldHideValue, { toggle }] = useBoolean(true)
 
   return (
-    <ActionInsideInteractiveElement
-      render={({ actionSize }) => (
-        <TextInput
-          type={shouldHideValue ? 'password' : 'text'}
-          autoComplete="off"
-          spellCheck="false"
-          {...rest}
-          style={{
-            paddingRight: actionSize.width + textInputHorizontalPadding,
-          }}
-        />
+    <VStack gap={4}>
+      <ActionInsideInteractiveElement
+        render={({ actionSize }) => (
+          <TextInput
+            {...rest}
+            autoComplete="off"
+            spellCheck="false"
+            type={shouldHideValue ? 'password' : 'text'}
+            style={{
+              paddingRight: actionSize.width + textInputHorizontalPadding,
+            }}
+          />
+        )}
+        action={
+          <IconButton onClick={toggle}>
+            {shouldHideValue ? <EyeOffIcon /> : <EyeIcon />}
+          </IconButton>
+        }
+        actionPlacerStyles={{
+          right: textInputHorizontalPadding,
+          bottom: (textInputHeight - iconButtonSize.md) / 2,
+        }}
+      />
+      {error && (
+        <Text color="danger" size={12}>
+          {error}
+        </Text>
       )}
-      action={
-        <IconButton onClick={toggle}>
-          {shouldHideValue ? <EyeOffIcon /> : <EyeIcon />}
-        </IconButton>
-      }
-      actionPlacerStyles={{
-        bottom: (textInputHeight - iconButtonSize.md) / 2,
-        right: textInputHorizontalPadding,
-      }}
-    />
+    </VStack>
   )
 }
