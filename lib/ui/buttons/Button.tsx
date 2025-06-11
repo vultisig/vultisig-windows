@@ -1,14 +1,14 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { ButtonProps } from '@lib/ui/props'
+import { ButtonProps, Size } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { match } from '@lib/utils/match'
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-type ButtonSize = Extract<ButtonProps['size'], 'sm' | 'md'>
+type ButtonSize = Extract<Size, 'sm' | 'md'>
 
 const StyledButton = styled(UnstyledButton)<{
   disabled: boolean
@@ -189,7 +189,9 @@ const StyledButton = styled(UnstyledButton)<{
   `}
 `
 
-export const Button: FC<Omit<ButtonProps, 'size'> & { size?: ButtonSize }> = ({
+export const Button: FC<
+  ButtonProps & { icon?: ReactNode; size?: ButtonSize }
+> = ({
   children,
   disabled,
   icon,

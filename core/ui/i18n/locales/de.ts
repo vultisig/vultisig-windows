@@ -1,12 +1,14 @@
 export const de = {
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   vultisig: 'Vultisig',
-  onboarding_view1_description:
+  onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'Vultisig verfolgt Ihre Aktivitäten nicht und erfordert keine Registrierung. Vultisig ist Open-Source, was Transparenz und Vertrauen gewährleistet.',
-  onboarding_view3_description:
+  onboarding_description_3:
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
+  onboarding_description_4:
+    'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   moreInfo: 'Mehr Info',
   search_field_placeholder: 'Suchen..',
   tx_hash: 'Transaktions-Hash',
@@ -53,8 +55,6 @@ export const de = {
   unexpected_error: 'Unerwarteter Fehler',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
-  onboarding_view4_description:
-    'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   create_new_vault: 'Neuen Tresor erstellen',
   import_existing_vault: 'Bestehenden Tresor importieren',
   serverTimedOut: 'Server hat die Zeit überschritten',
@@ -279,8 +279,6 @@ export const de = {
     'Optionale Passwortschutz für Ihren Tresor',
   vault_backup_page_password_error:
     'Legen Sie ein sicheres Passwort fest und bewahren Sie es auf.',
-  vault_backup_page_password_input_placeholder: 'Passwort eingeben',
-  vault_backup_page_verified_password_input_placeholder: 'Passwort bestätigen',
   vault_backup_page_verified_password_error: 'Passwörter müssen übereinstimmen',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
   vault_backup_page_password_info:

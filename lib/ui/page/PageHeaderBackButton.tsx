@@ -1,16 +1,14 @@
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnClickProp } from '@lib/ui/props'
-
-import { useNavigateBack } from '../navigation/hooks/useNavigateBack'
-import { PageHeaderIconButton } from './PageHeaderIconButton'
 
 export const PageHeaderBackButton = ({ onClick }: Partial<OnClickProp>) => {
   const goBack = useNavigateBack()
 
   return (
-    <PageHeaderIconButton
-      icon={<ChevronLeftIcon />}
-      onClick={onClick ?? goBack}
-    />
+    <IconButton onClick={onClick ?? goBack}>
+      <ChevronLeftIcon />
+    </IconButton>
   )
 }

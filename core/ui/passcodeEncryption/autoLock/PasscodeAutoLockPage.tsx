@@ -1,21 +1,20 @@
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { RadioOptionsList } from '@lib/ui/inputs/RadioOptionsList'
-import { VStack } from '@lib/ui/layout/Stack'
-import { FitPageContent } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
-
+import { useSetPasscodeAutoLockMutation } from '@core/ui/passcodeEncryption/autoLock/mutations/setPasscodeAutoLock'
 import {
   passcodeAutoLockOptions,
   PasscodeAutoLockValue,
   usePasscodeAutoLock,
-} from '../../storage/passcodeAutoLock'
-import { useSetPasscodeAutoLockMutation } from './mutations/setPasscodeAutoLock'
+} from '@core/ui/storage/passcodeAutoLock'
+import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { RadioOptionsList } from '@lib/ui/inputs/RadioOptionsList'
+import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { Text } from '@lib/ui/text'
+import { useTranslation } from 'react-i18next'
 
 export const PasscodeAutoLockPage = () => {
   const { t } = useTranslation()
-  const currentValue = usePasscodeAutoLock()
   const { mutate: setAutoLock } = useSetPasscodeAutoLockMutation()
+  const currentValue = usePasscodeAutoLock()
 
   const handleOptionSelect = (value: PasscodeAutoLockValue) => {
     setAutoLock(value)
@@ -24,7 +23,7 @@ export const PasscodeAutoLockPage = () => {
   return (
     <VStack fullHeight>
       <FlowPageHeader title={t('lock_time')} />
-      <FitPageContent contentMaxWidth={360}>
+      <PageContent alignItems="center" flexGrow scrollable>
         <VStack gap={8}>
           <Text size={14} color="contrast">
             {t('lock_vultisig_automatically_after')}
@@ -38,7 +37,7 @@ export const PasscodeAutoLockPage = () => {
             }
           />
         </VStack>
-      </FitPageContent>
+      </PageContent>
     </VStack>
   )
 }
