@@ -8,7 +8,7 @@ import {
   EvmFeeSettingsFormValue,
 } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { GasPumpIcon } from '@lib/ui/icons/GasPumpIcon'
+import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { useState } from 'react'
 import { formatUnits } from 'viem'
@@ -75,7 +75,7 @@ export const GasFeeAdjuster = ({
     <>
       <IconButton onClick={() => setIsOpen(true)}>
         <IconWrapper style={{ fontSize: 16 }}>
-          <GasPumpIcon />
+          <FuelIcon />
         </IconWrapper>
       </IconButton>
       {isOpen && (
