@@ -1,32 +1,32 @@
 import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
-import { ibcTokens } from '@core/chain/coin/ibc'
+import { chainTokens } from '@core/chain/coin/chainTokens'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
+import { useMemo } from 'react'
 
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
-  const coins = useCurrentVaultCoins()
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const sourceCoins = useCurrentVaultChainCoins(coinKey.chain)
 
-  if (
-    !destinationChain ||
-    !isOneOf(destinationChain, Object.values(IbcEnabledCosmosChain))
-  ) {
-    return []
-  }
+  return useMemo(() => {
+    if (
+      !destinationChain ||
+      !isOneOf(destinationChain, Object.values(IbcEnabledCosmosChain))
+    ) {
+      return []
+    }
 
-  return withoutDuplicates(
-    coins.filter(coin => {
-      const isIbcToken = ibcTokens.some(
+    const ibcTokens = Object.values(IbcEnabledCosmosChain).flatMap(chain =>
+      chainTokens[chain].filter(coin => coin.id.startsWith('ibc/'))
+    )
+
+    return sourceCoins.filter(coin =>
+      ibcTokens.some(
         ibc =>
           ibc.ticker.toUpperCase() === coin.ticker.toUpperCase() &&
-          ibc.decimals === coin.decimals &&
-          coin.chain === coinKey.chain
+          ibc.decimals === coin.decimals
       )
-      return isIbcToken
-    }),
-    (tokenA, tokenB) =>
-      tokenA.ticker.toUpperCase() === tokenB.ticker.toUpperCase()
-  )
+    )
+  }, [sourceCoins, destinationChain])
 }

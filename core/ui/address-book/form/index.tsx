@@ -121,7 +121,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const handlePaste = async () => {
     const { data } = await attempt(getClipboardText)
     if (data) {
-      setValue('address', data)
+      setValue('address', data, { shouldValidate: true })
     }
   }
 

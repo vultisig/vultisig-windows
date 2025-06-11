@@ -11,7 +11,7 @@ import {
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { getKeysignChain } from './getKeysignChain'
+import { getKeysignChain } from '../../utils/getKeysignChain'
 
 type Input = {
   keysignPayload: KeysignPayload
