@@ -18,8 +18,8 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const {
