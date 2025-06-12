@@ -1,20 +1,16 @@
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { getCoinType } from '@core/chain/coin/coinType'
-import { LifiSwapEnabledChain } from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
-import { OneInchSwapEnabledChain } from '@core/chain/swap/general/oneInch/OneInchSwapEnabledChains'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { OneInchSwapPayload } from '../../types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getSolanaTxInputData: TxInputDataResolver<
   'solanaSpecific'
-> = async ({ keysignPayload, chainSpecific, walletCore }) => {
+> = async ({ keysignPayload, chainSpecific, walletCore, chain }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const {
@@ -36,28 +32,14 @@ export const getSolanaTxInputData: TxInputDataResolver<
         mayachainSwapPayload: () => {
           throw new Error('Mayachain swap not supported')
         },
-        oneinchSwapPayload: () => {
-          const swapPayload = shouldBePresent(keysignPayload.swapPayload)
-            .value as OneInchSwapPayload
-
-          const fromCoin = shouldBePresent(swapPayload.fromCoin)
-          const fromChain = fromCoin.chain as
-            | OneInchSwapEnabledChain
-            | LifiSwapEnabledChain
-
-          const { blockchainSpecific } = keysignPayload
+        oneinchSwapPayload: swapPayload => {
           const tx = shouldBePresent(swapPayload.quote?.tx)
           const { data } = tx
-
-          const { recentBlockHash } = getBlockchainSpecificValue(
-            blockchainSpecific,
-            'solanaSpecific'
-          )
 
           const decodedData = walletCore.TransactionDecoder.decode(
             getCoinType({
               walletCore,
-              chain: fromChain,
+              chain,
             }),
             Buffer.from(data, 'base64')
           )

@@ -3,10 +3,7 @@ import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20Ap
 import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
 import { getSigningInputLegacyTxFields } from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
-import { LifiSwapEnabledChain } from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
-import { OneInchSwapEnabledChain } from '@core/chain/swap/general/oneInch/OneInchSwapEnabledChains'
 import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
-import { ThorChainSwapEnabledChain } from '@core/chain/swap/native/NativeSwapChain'
 import { toThorchainSwapAssetProto } from '@core/chain/swap/native/thor/asset/toThorchainSwapAssetProto'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
@@ -17,9 +14,7 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { fromCommCoin } from '../../types/utils/commCoin'
-import { OneInchSwapPayload } from '../../types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 const toTransferData = (memo: string | undefined) => {
@@ -54,6 +49,8 @@ export const getEvmTxInputData: TxInputDataResolver<
     return [approveTxInputData, ...restOfTxInputData]
   }
 
+  const { maxFeePerGasWei, priorityFee, nonce, gasLimit } = chainSpecific
+
   if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
     return matchDiscriminatedUnion(
       keysignPayload.swapPayload,
@@ -62,7 +59,6 @@ export const getEvmTxInputData: TxInputDataResolver<
       {
         thorchainSwapPayload: swapPayload => {
           const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
-          const fromChain = fromCoin.chain as ThorChainSwapEnabledChain
 
           const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
 
@@ -109,13 +105,10 @@ export const getEvmTxInputData: TxInputDataResolver<
             throw new Error(swapOutput.error.message)
           }
 
-          const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
-            chainSpecific
-
           const signingInput = TW.Ethereum.Proto.SigningInput.create({
             ...shouldBePresent(swapOutput.ethereum),
             ...getSigningInputEnvelopedTxFields({
-              chain: fromChain,
+              chain,
               walletCore,
               maxFeePerGasWei,
               priorityFee,
@@ -129,27 +122,13 @@ export const getEvmTxInputData: TxInputDataResolver<
         mayachainSwapPayload: () => {
           throw new Error('Mayachain swap not supported')
         },
-        oneinchSwapPayload: () => {
-          const swapPayload = shouldBePresent(keysignPayload.swapPayload)
-            .value as OneInchSwapPayload
-
-          const fromCoin = shouldBePresent(swapPayload.fromCoin)
-          const fromChain = fromCoin.chain as
-            | OneInchSwapEnabledChain
-            | LifiSwapEnabledChain
-
-          const { blockchainSpecific } = keysignPayload
+        oneinchSwapPayload: swapPayload => {
           const tx = shouldBePresent(swapPayload.quote?.tx)
           const { data } = tx
 
           const amountHex = Buffer.from(
             stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
             'hex'
-          )
-
-          const { nonce } = getBlockchainSpecificValue(
-            blockchainSpecific,
-            'ethereumSpecific'
           )
 
           const signingInput = TW.Ethereum.Proto.SigningInput.create({
@@ -161,7 +140,7 @@ export const getEvmTxInputData: TxInputDataResolver<
               },
             },
             ...getSigningInputLegacyTxFields({
-              chain: fromChain,
+              chain,
               walletCore,
               nonce,
               gasPrice: BigInt(tx.gasPrice || 0),
@@ -174,8 +153,6 @@ export const getEvmTxInputData: TxInputDataResolver<
       }
     )
   }
-
-  const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = chainSpecific
 
   // Amount: converted to hexadecimal, stripped of '0x'
   const amountHex = Buffer.from(
