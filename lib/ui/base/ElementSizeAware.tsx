@@ -4,12 +4,12 @@ import { useIsomorphicLayoutEffect } from 'react-use'
 
 import { useElementSize } from '../hooks/useElementSize'
 
-interface ElementSizeAwareRenderParams {
+type ElementSizeAwareRenderParams = {
   size: Dimensions | null
   setElement: (element: HTMLElement | null) => void
 }
 
-interface Props {
+type Props = {
   render: (params: ElementSizeAwareRenderParams) => ReactNode
   onChange?: (size: Dimensions | null) => void
 }

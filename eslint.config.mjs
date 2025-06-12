@@ -108,6 +108,14 @@ export default [
           trailingUnderscore: 'allow',
         },
       ],
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+  // Override for declaration files where interfaces are required for module augmentation
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
 ]
