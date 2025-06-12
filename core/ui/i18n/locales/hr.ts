@@ -61,7 +61,7 @@ export const hr = {
   optionalDevice: 'Opcionális eszköz',
   localMode: 'Helyi módban van',
   scanQrInstruction:
-    'Olvassa be a QR-kódot egy másik eszközzel. 3 eszköz ajánlott, 2 elegendő.',
+    'Olvassa be a QR-kódot egy másik eszközzel. {{max}} eszköz ajánlott, {{min}} elegendő.',
   devices: 'Eszközök',
   waitingOnDevices: 'Eszközökre várakozás...',
   switchToInternet: 'Váltás vissza az internetes módra',
