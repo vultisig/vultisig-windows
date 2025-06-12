@@ -10,6 +10,7 @@ import {
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useState } from 'react'
 import { formatUnits } from 'viem'
 
@@ -31,37 +32,37 @@ export const GasFeeAdjuster = ({
   // For custom messages: uses Ethereum defaults
   // For regular transactions: uses values from transaction payload with fallbacks
   const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
-    if (!('keysign' in keysignPayload)) {
-      // If we don't have chain information, fallback to Ethereum
-      return {
+    return matchRecordUnion(keysignPayload, {
+      keysign: payload => {
+        const transactionPayload =
+          payload as unknown as IKeysignTransactionPayload
+        const isNative = payload.coin?.isNativeToken ?? false
+        const defaultGasLimit = getEvmGasLimit({
+          chain: transactionPayload.chain as EvmChain,
+          isNativeToken: isNative,
+        })
+
+        return {
+          priorityFee: Number(
+            formatUnits(
+              BigInt(
+                transactionPayload.transactionDetails?.gasSettings
+                  ?.maxPriorityFeePerGas || 0
+              ),
+              gwei.decimals
+            )
+          ),
+          gasLimit: gasLimit || defaultGasLimit,
+        }
+      },
+      custom: () => ({
         priorityFee: baseFee,
         gasLimit: getEvmGasLimit({
           chain: EvmChain.Ethereum,
           isNativeToken: true,
         }),
-      }
-    }
-    const transactionPayload =
-      keysignPayload.keysign as unknown as IKeysignTransactionPayload
-
-    const isNative = keysignPayload.keysign.coin?.isNativeToken ?? false
-    const defaultGasLimit = getEvmGasLimit({
-      chain: transactionPayload.chain as EvmChain,
-      isNativeToken: isNative,
+      }),
     })
-
-    return {
-      priorityFee: Number(
-        formatUnits(
-          BigInt(
-            transactionPayload.transactionDetails?.gasSettings
-              ?.maxPriorityFeePerGas || 0
-          ),
-          gwei.decimals
-        )
-      ),
-      gasLimit: gasLimit || defaultGasLimit,
-    }
   })
 
   const handleSave = () => {
