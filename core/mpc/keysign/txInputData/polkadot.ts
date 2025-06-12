@@ -4,14 +4,14 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { GetPreSignedInputDataInput } from './PreSignedInputDataResolver'
+import { GetTxInputDataInput } from './TxInputDataResolver'
 
-export const getPolkadotPreSignedInputData = ({
+export const getPolkadotTxInputData = async ({
   keysignPayload,
   walletCore,
   chain,
   chainSpecific,
-}: GetPreSignedInputDataInput<'polkadotSpecific'>) => {
+}: GetTxInputDataInput<'polkadotSpecific'>) => {
   const {
     recentBlockHash,
     nonce,
@@ -67,5 +67,5 @@ export const getPolkadotPreSignedInputData = ({
     balanceCall: balance,
   })
 
-  return TW.Polkadot.Proto.SigningInput.encode(input).finish()
+  return [TW.Polkadot.Proto.SigningInput.encode(input).finish()]
 }

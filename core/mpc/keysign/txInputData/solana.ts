@@ -1,13 +1,20 @@
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
+import { getCoinType } from '@core/chain/coin/coinType'
+import { LifiSwapEnabledChain } from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
+import { OneInchSwapEnabledChain } from '@core/chain/swap/general/oneInch/OneInchSwapEnabledChains'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
+import { OneInchSwapPayload } from '../../types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
+import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
+export const getSolanaTxInputData: TxInputDataResolver<
   'solanaSpecific'
-> = ({ keysignPayload, chainSpecific, walletCore }) => {
+> = async ({ keysignPayload, chainSpecific, walletCore }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const {
@@ -16,6 +23,57 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
     toTokenAssociatedAddress,
     programId,
   } = chainSpecific
+
+  if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
+    return matchDiscriminatedUnion(
+      keysignPayload.swapPayload,
+      'case',
+      'value',
+      {
+        thorchainSwapPayload: () => {
+          throw new Error('ThorChain swap not supported')
+        },
+        mayachainSwapPayload: () => {
+          throw new Error('Mayachain swap not supported')
+        },
+        oneinchSwapPayload: () => {
+          const swapPayload = shouldBePresent(keysignPayload.swapPayload)
+            .value as OneInchSwapPayload
+
+          const fromCoin = shouldBePresent(swapPayload.fromCoin)
+          const fromChain = fromCoin.chain as
+            | OneInchSwapEnabledChain
+            | LifiSwapEnabledChain
+
+          const { blockchainSpecific } = keysignPayload
+          const tx = shouldBePresent(swapPayload.quote?.tx)
+          const { data } = tx
+
+          const { recentBlockHash } = getBlockchainSpecificValue(
+            blockchainSpecific,
+            'solanaSpecific'
+          )
+
+          const decodedData = walletCore.TransactionDecoder.decode(
+            getCoinType({
+              walletCore,
+              chain: fromChain,
+            }),
+            Buffer.from(data, 'base64')
+          )
+          const decodedOutput =
+            TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+
+          const signingInput = TW.Solana.Proto.SigningInput.create({
+            recentBlockhash: recentBlockHash,
+            rawMessage: decodedOutput.transaction,
+          })
+
+          return [TW.Solana.Proto.SigningInput.encode(signingInput).finish()]
+        },
+      }
+    )
+  }
 
   if (coin.isNativeToken) {
     const input = TW.Solana.Proto.SigningInput.create({
@@ -34,7 +92,7 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
       }),
     })
 
-    return TW.Solana.Proto.SigningInput.encode(input).finish()
+    return [TW.Solana.Proto.SigningInput.encode(input).finish()]
   }
 
   if (!fromTokenAssociatedAddress) {
@@ -68,7 +126,7 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
       }),
     })
 
-    return TW.Solana.Proto.SigningInput.encode(input).finish()
+    return [TW.Solana.Proto.SigningInput.encode(input).finish()]
   }
 
   const receiverAddress = walletCore.SolanaAddress.createWithString(
@@ -109,5 +167,5 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
     }),
   })
 
-  return TW.Solana.Proto.SigningInput.encode(input).finish()
+  return [TW.Solana.Proto.SigningInput.encode(input).finish()]
 }
