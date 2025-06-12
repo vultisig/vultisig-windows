@@ -100,7 +100,7 @@ export const ListItem: FC<ListItemProps> = ({
 }) => {
   return (
     <StyledListItem status={status} {...rest}>
-      {icon && icon}
+      {icon}
       {description ? (
         <StyledMeta>
           <StyledTitle>{title}</StyledTitle>
@@ -109,7 +109,7 @@ export const ListItem: FC<ListItemProps> = ({
       ) : (
         <StyledTitle>{title}</StyledTitle>
       )}
-      {extra && extra}
+      {extra}
       {showArrow && <ChevronRightIcon fontSize={16} />}
     </StyledListItem>
   )

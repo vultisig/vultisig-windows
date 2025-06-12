@@ -1,6 +1,5 @@
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
@@ -27,6 +26,7 @@ import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Modal } from '@lib/ui/modal'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -50,14 +50,13 @@ type DesktopSettings = {
   manageMpcLib: ReactNode
 }
 
-const iconSize = 20
-
 export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { addToast } = useToast()
   const { openUrl, version } = useCore()
   const navigate = useCoreNavigate()
+  const hasPasscodeEncryption = useHasPasscodeEncryption()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const shareURL =
@@ -76,8 +75,6 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
       })
   }
 
-  const hasPasscodeEncryption = useHasPasscodeEncryption()
-
   return (
     <>
       <VStack fullHeight>
@@ -87,29 +84,29 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           hasBorder
         />
         <PageContent gap={24} flexGrow scrollable>
-          <SettingsSection title={t('vault')}>
+          <List title={t('vault')}>
             {props.client === 'extension' && props.prioritize}
             <ListItem
-              icon={<SettingsIcon fontSize={iconSize} />}
+              icon={<SettingsIcon fontSize={20} />}
               onClick={() => navigate({ id: 'vaultSettings' })}
               title={t('vault_settings')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<VultisigLogoIcon fontSize={iconSize} />}
+              icon={<VultisigLogoIcon fontSize={20} />}
               onClick={() => navigate({ id: 'airdropRegister' })}
               status="success"
               title={t('register_your_vaults')}
               hoverable
               showArrow
             />
-          </SettingsSection>
+          </List>
 
-          <SettingsSection title={t('general')}>
+          <List title={t('general')}>
             <ListItem
               extra={languageName[language]}
-              icon={<LanguagesIcon fontSize={iconSize} />}
+              icon={<LanguagesIcon fontSize={20} />}
               onClick={() => navigate({ id: 'languageSettings' })}
               title={t('language')}
               hoverable
@@ -117,31 +114,31 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
             />
             <ListItem
               extra={currency.toUpperCase()}
-              icon={<CircleDollarSignIcon fontSize={iconSize} />}
+              icon={<CircleDollarSignIcon fontSize={20} />}
               onClick={() => navigate({ id: 'currencySettings' })}
               title={t('currency')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<BookMarkedIcon fontSize={iconSize} />}
+              icon={<BookMarkedIcon fontSize={20} />}
               onClick={() => navigate({ id: 'addressBook' })}
               title={t('address_book')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<MegaphoneIcon fontSize={iconSize} />}
+              icon={<MegaphoneIcon fontSize={20} />}
               onClick={() => {}}
               title={t('referral_code')}
               hoverable
               showArrow
             />
             {props.client === 'extension' && props.expandView}
-          </SettingsSection>
-          <SettingsSection title={t('security')}>
+          </List>
+          <List title={t('security')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              icon={<ShieldCheckIcon fontSize={20} />}
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
               title={t('security')}
               hoverable
@@ -149,17 +146,17 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
             />
             {hasPasscodeEncryption && (
               <ListItem
-                icon={<LockKeyholeIcon fontSize={iconSize} />}
+                icon={<LockKeyholeIcon fontSize={20} />}
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
                 hoverable
                 showArrow
               />
             )}
-          </SettingsSection>
-          <SettingsSection title={t('support')}>
+          </List>
+          <List title={t('support')}>
             <ListItem
-              icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
+              icon={<MessageCircleQuestionIcon fontSize={20} />}
               onClick={() => openUrl('https://vultisig.com/faq')}
               title={t('faq')}
               hoverable
@@ -167,30 +164,30 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
             />
             {props.client === 'desktop' && props.checkUpdate}
             <ListItem
-              icon={<ShareTwoIcon fontSize={iconSize} />}
+              icon={<ShareTwoIcon fontSize={20} />}
               onClick={() => setVisible(true)}
               title={t('share_app')}
               hoverable
               showArrow
             />
-          </SettingsSection>
-          <SettingsSection title={t('vultisig_community')}>
+          </List>
+          <List title={t('vultisig_community')}>
             <ListItem
-              icon={<TwitterIcon fontSize={iconSize} />}
+              icon={<TwitterIcon fontSize={20} />}
               onClick={() => openUrl('https://x.com/vultisig')}
               title={t('twitter')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<DiscordIcon fontSize={iconSize} />}
+              icon={<DiscordIcon fontSize={20} />}
               onClick={() => openUrl('https://discord.gg/ngvW8tRRfB')}
               title={t('discord')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<GithubIcon fontSize={iconSize} />}
+              icon={<GithubIcon fontSize={20} />}
               onClick={() =>
                 openUrl('https://github.com/vultisig/vultisig-windows')
               }
@@ -198,23 +195,23 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-          </SettingsSection>
-          <SettingsSection title={t('legal')}>
+          </List>
+          <List title={t('legal')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              icon={<ShieldCheckIcon fontSize={20} />}
               onClick={() => openUrl('https://vultisig.com/privacy')}
               title={t('privacy_policy')}
               hoverable
               showArrow
             />
             <ListItem
-              icon={<FileTextIcon fontSize={iconSize} />}
+              icon={<FileTextIcon fontSize={20} />}
               onClick={() => openUrl('https://vultisig.com/termofservice')}
               title={t('terms_of_service')}
               hoverable
               showArrow
             />
-          </SettingsSection>
+          </List>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
           {props.client === 'extension' && (

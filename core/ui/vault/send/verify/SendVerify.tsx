@@ -3,8 +3,6 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -19,20 +17,21 @@ import {
 } from '@core/ui/vault/send/verify/state/sendTerms'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
@@ -46,85 +45,55 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { chain, ticker } = coin
 
   return (
-    <>
+    <SendTermsProvider initialValue={sendTerms.map(() => false)}>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={t('send_overview')}
         hasBorder
       />
       <PageContent gap={12}>
-        <TxOverviewPanel>
-          <AmountWrapper gap={24}>
-            <Text size={15} color="supporting">
-              {t('you_are_sending')}
-            </Text>
-            <HStack gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 32 }} />
-              <Text size={17}>
-                <MatchQuery
-                  value={cappedAmountQuery}
-                  error={() => <Text>{t('failed_to_load')}</Text>}
-                  pending={() => <Spinner />}
-                  success={({ amount, decimals }) =>
-                    formatTokenAmount(fromChainAmount(amount, decimals))
-                  }
-                />
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
-              </Text>
-            </HStack>
-          </AmountWrapper>
-          <TxOverviewRow>
-            <RowTitle>{t('from')}</RowTitle>
-            <Text size={14}>
-              {name}{' '}
-              <Text size={14} as="span" color="shy">
-                ({formatWalletAddress(sender)})
-              </Text>
-            </Text>
-          </TxOverviewRow>
-          <TxOverviewRow>
-            <RowTitle>{t('to')}</RowTitle>
-            <Text size={14}>{receiver}</Text>
-          </TxOverviewRow>
-          <TxOverviewRow>
-            <RowTitle>{t('network')}</RowTitle>
-            <HStack gap={8}>
-              <ChainEntityIcon
-                value={getChainLogoSrc(chain)}
-                style={{ fontSize: 16 }}
+        <List title={t('you_are_sending')}>
+          <ListItem
+            icon={<CoinIcon coin={coin} style={{ fontSize: 32 }} />}
+            title={
+              <MatchQuery
+                value={cappedAmountQuery}
+                error={() => t('failed_to_load')}
+                pending={() => <Spinner />}
+                success={({ amount, decimals }) =>
+                  `${formatTokenAmount(fromChainAmount(amount, decimals))} ${ticker}`
+                }
               />
-              <Text size={14}>{chain}</Text>
-            </HStack>
-          </TxOverviewRow>
+            }
+          />
+          <ListItem
+            description={`${name} (${formatWalletAddress(sender)})`}
+            title={t('from')}
+          />
+          <ListItem
+            description={<MiddleTruncate text={receiver} />}
+            title={t('to')}
+          />
+          <ListItem
+            description={
+              <HStack gap={4} alignItems="center">
+                <ChainEntityIcon
+                  value={getChainLogoSrc(chain)}
+                  style={{ fontSize: 16 }}
+                />
+                {chain}
+              </HStack>
+            }
+            title={t('network')}
+          />
           {memo && <TxOverviewMemo value={memo} />}
-          <TxOverviewRow>
-            <SendFiatFee />
-          </TxOverviewRow>
-        </TxOverviewPanel>
-        <SendTermsProvider initialValue={sendTerms.map(() => false)}>
-          <SendTerms />
-          <VStack
-            style={{
-              marginTop: 'auto',
-            }}
-            gap={20}
-          >
-            <SendConfirm />
-          </VStack>
-        </SendTermsProvider>
+          <SendFiatFee />
+        </List>
+        <SendTerms />
       </PageContent>
-    </>
+      <PageFooter>
+        <SendConfirm />
+      </PageFooter>
+    </SendTermsProvider>
   )
 }
-
-const AmountWrapper = styled(VStack)`
-  padding-bottom: 20px !important;
-  margin-bottom: 12px;
-`
-
-const RowTitle = styled(Text)`
-  font-size: 13px;
-  color: ${getColor('textShy')};
-`

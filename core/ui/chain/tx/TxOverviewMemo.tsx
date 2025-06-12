@@ -3,6 +3,7 @@ import {
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { VStack } from '@lib/ui/layout/Stack'
+import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
@@ -22,31 +23,35 @@ export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
 
   return parsedMemo ? (
     <>
-      <VStack gap={4}>
-        <Text color="shy">{t('function_signature')}</Text>
-        <Text color="primary" family="mono" size={13} weight="700">
-          {parsedMemo.functionSignature}
-        </Text>
-      </VStack>
-      <VStack gap={4}>
-        <Text color="shy">{t('function_arguments')}</Text>
-        <Text color="primary" family="mono" size={13} weight="700">
-          <pre style={{ width: '100%' }}>
-            <code
-              style={{ display: 'block', overflowX: 'auto', width: '100%' }}
-            >
+      <ListItem
+        title={t('function_signature')}
+        description={
+          <VStack as="pre" scrollable>
+            <Text as="code" color="primary" family="mono">
+              {parsedMemo.functionSignature}
+            </Text>
+          </VStack>
+        }
+      />
+      <ListItem
+        title={t('function_inputs')}
+        description={
+          <VStack as="pre" scrollable>
+            <Text as="code" color="primary" family="mono">
               {parsedMemo.functionArguments}
-            </code>
-          </pre>
-        </Text>
-      </VStack>
+            </Text>
+          </VStack>
+        }
+      />
     </>
   ) : (
-    <VStack gap={4}>
-      <Text color="shy">{t('memo')}</Text>
-      <Text color="primary" family="mono" size={13} weight="700">
-        {value}
-      </Text>
-    </VStack>
+    <ListItem
+      title={t('memo')}
+      description={
+        <Text as="code" color="primary" family="mono">
+          {value}
+        </Text>
+      }
+    />
   )
 }

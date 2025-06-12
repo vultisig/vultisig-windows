@@ -1,8 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
@@ -17,6 +15,8 @@ import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -24,6 +24,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
@@ -123,13 +124,15 @@ export const KeysignSigningStep = ({
                 custom: payload => (
                   <>
                     <PageContent scrollable>
-                      <TxOverviewPanel>
+                      <List>
                         <KeysignCustomMessageInfo value={payload} />
-                        <TxOverviewChainDataRow>
-                          <span>{t('signature')}</span>
-                          <span>{txResult.txHash}</span>
-                        </TxOverviewChainDataRow>
-                      </TxOverviewPanel>
+                        <ListItem
+                          description={
+                            <MiddleTruncate text={txResult.txHash} />
+                          }
+                          title={t('signature')}
+                        />
+                      </List>
                     </PageContent>
                     {isDAppSigning && (
                       <PageFooter>

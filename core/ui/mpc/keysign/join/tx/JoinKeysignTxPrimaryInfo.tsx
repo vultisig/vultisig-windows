@@ -4,88 +4,75 @@ import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
-import {
-  TxOverviewChainDataRow,
-  TxOverviewPrimaryRowTitle,
-  TxOverviewRow,
-} from '@core/ui/chain/tx/TxOverviewRow'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../../storage/fiatCurrency'
-
 export const JoinKeysignTxPrimaryInfo = ({
   value,
 }: ValueProp<KeysignPayload>) => {
-  const { toAddress, memo, toAmount, blockchainSpecific } = value
-
-  const coin = fromCommCoin(assertField(value, 'coin'))
-
-  const { decimals, ticker } = shouldBePresent(coin)
-
   const { t } = useTranslation()
-
-  const coinPriceQuery = useCoinPriceQuery({
-    coin,
-  })
-
+  const { toAddress, memo, toAmount, blockchainSpecific } = value
+  const coin = fromCommCoin(assertField(value, 'coin'))
+  const { decimals, ticker } = shouldBePresent(coin)
+  const coinPriceQuery = useCoinPriceQuery({ coin })
   const fiatCurrency = useFiatCurrency()
 
   const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null
-    formatFee({
-      chain: coin.chain as Chain,
-      chainSpecific: blockchainSpecific,
-    })
+    return blockchainSpecific.value
+      ? formatFee({
+          chain: coin.chain as Chain,
+          chainSpecific: blockchainSpecific,
+        })
+      : null
   }, [blockchainSpecific, coin.chain])
 
   return (
     <>
-      <TxOverviewChainDataRow>
-        <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
-        <span>{coin.address}</span>
-      </TxOverviewChainDataRow>
-
-      <TxOverviewChainDataRow>
-        <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
-        <span>{toAddress}</span>
-      </TxOverviewChainDataRow>
+      <ListItem
+        description={<MiddleTruncate text={coin.address} />}
+        title={t('from')}
+      />
+      <ListItem
+        description={<MiddleTruncate text={toAddress} />}
+        title={t('to')}
+      />
       {memo && <TxOverviewMemo value={memo} />}
-      <TxOverviewAmount
-        value={fromChainAmount(BigInt(toAmount), decimals)}
-        ticker={ticker}
+      <ListItem
+        description={formatTokenAmount(
+          fromChainAmount(BigInt(toAmount), decimals),
+          ticker
+        )}
+        title={t('amount')}
       />
       <MatchQuery
         value={coinPriceQuery}
-        success={price =>
-          price ? (
-            <TxOverviewRow>
-              <span>{t('value')}</span>
-              <span>
-                {formatAmount(
-                  fromChainAmount(BigInt(toAmount), decimals) * price,
-                  fiatCurrency
-                )}
-              </span>
-            </TxOverviewRow>
-          ) : null
-        }
         error={() => null}
         pending={() => null}
+        success={price =>
+          price ? (
+            <ListItem
+              description={formatAmount(
+                fromChainAmount(BigInt(toAmount), decimals) * price,
+                fiatCurrency
+              )}
+              title={t('value')}
+            />
+          ) : null
+        }
       />
-      {networkFeesFormatted && (
-        <TxOverviewRow>
-          <span>{t('network_fee')}</span>
-          <span>{networkFeesFormatted}</span>
-        </TxOverviewRow>
-      )}
+      {networkFeesFormatted ? (
+        <ListItem description={networkFeesFormatted} title={t('network_fee')} />
+      ) : null}
     </>
   )
 }

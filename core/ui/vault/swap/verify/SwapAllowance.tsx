@@ -1,16 +1,14 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { useSwapKeysignPayloadQuery } from '@core/ui/vault/swap/queries/useSwapKeysignPayloadQuery'
+import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
-import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery'
-
 export const SwapAllowance = () => {
-  const query = useSwapKeysignPayloadQuery()
-
   const { t } = useTranslation()
+  const query = useSwapKeysignPayloadQuery()
 
   return (
     <MatchQuery
@@ -18,22 +16,18 @@ export const SwapAllowance = () => {
       error={() => null}
       pending={() => null}
       success={({ erc20ApprovePayload, coin }) => {
-        if (!erc20ApprovePayload) {
-          return null
-        }
+        if (!erc20ApprovePayload) return null
 
         const { decimals, ticker } = shouldBePresent(coin)
 
         return (
-          <TxOverviewChainDataRow>
-            <span>{t('allowance')}</span>
-            <span>
-              {formatTokenAmount(
-                fromChainAmount(erc20ApprovePayload.amount, decimals),
-                ticker
-              )}
-            </span>
-          </TxOverviewChainDataRow>
+          <ListItem
+            description={formatTokenAmount(
+              fromChainAmount(erc20ApprovePayload.amount, decimals),
+              ticker
+            )}
+            title={t('allowance')}
+          />
         )
       }}
     />

@@ -13,13 +13,13 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
-import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack } from '@lib/ui/layout/Stack'
-import { Panel } from '@lib/ui/panel/Panel'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -69,65 +69,46 @@ export const KeysignTxOverview = ({
       {formattedToAmount && (
         <TxOverviewAmount amount={formattedToAmount} value={coin} />
       )}
-      <Panel>
-        <SeparatedByLine gap={16}>
-          <HStack alignItems="center" gap={4} justifyContent="space-between">
-            <Text color="shy" weight="500">
-              {t('tx_hash')}
-            </Text>
-            <HStack alignItems="center" gap={4}>
-              <Text>
-                <MiddleTruncate text={txHash} width={140} />
-              </Text>
-              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
-                <SquareArrowOutUpRightIcon />
-              </IconButton>
-            </HStack>
-          </HStack>
-          <HStack alignItems="center" gap={4} justifyContent="space-between">
-            <Text color="shy" weight="500">
-              {t('from')}
-            </Text>
-            <HStack alignItems="center" gap={4}>
-              <Text>{name}</Text>
-              <Text color="shy" weight="500">
-                <MiddleTruncate text={`(${vaultCoin.address})`} width={80} />
-              </Text>
-            </HStack>
-          </HStack>
-          {toAddress && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
-              <Text color="shy" weight="500">
-                {t('to')}
-              </Text>
-              <Text>
-                <MiddleTruncate text={toAddress} width={200} />
-              </Text>
-            </HStack>
-          )}
-          {memo && <TxOverviewMemo value={memo} />}
-          <HStack alignItems="center" gap={4} justifyContent="space-between">
-            <Text color="shy" weight="500">
-              {t('network')}
-            </Text>
+      <List>
+        <ListItem
+          description={<MiddleTruncate text={txHash} />}
+          extra={
+            <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <SquareArrowOutUpRightIcon />
+            </IconButton>
+          }
+          title={t('tx_hash')}
+        />
+        <ListItem
+          description={`${name} (${formatWalletAddress(vaultCoin.address)})`}
+          title={t('from')}
+        />
+        {toAddress && (
+          <ListItem
+            description={<MiddleTruncate text={toAddress} />}
+            title={t('to')}
+          />
+        )}
+        {memo && <TxOverviewMemo value={memo} />}
+        <ListItem
+          description={
             <HStack alignItems="center" gap={4}>
               <ChainEntityIcon
                 value={getChainLogoSrc(chain)}
                 style={{ fontSize: 16 }}
               />
-              <Text>{chain}</Text>
+              {chain}
             </HStack>
-          </HStack>
-          {networkFeesFormatted && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
-              <Text color="shy" weight="500">
-                {t('est_network_fee')}
-              </Text>
-              <Text>{networkFeesFormatted}</Text>
-            </HStack>
-          )}
-        </SeparatedByLine>
-      </Panel>
+          }
+          title={t('network')}
+        />
+        {networkFeesFormatted ? (
+          <ListItem
+            description={networkFeesFormatted}
+            title={t('est_network_fee')}
+          />
+        ) : null}
+      </List>
     </>
   )
 }
