@@ -1,4 +1,5 @@
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,14 +20,21 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', { min: 3, max: 30 })
+  const message = t('password_pattern_error', passwordLenghtConfig)
 
-  return z.object({ password: z.string().min(3, message).max(30, message) })
+  return z.object({
+    password: z
+      .string()
+      .min(passwordLenghtConfig.min, message)
+      .max(passwordLenghtConfig.max, message),
+  })
 }
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
-export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
+export const ServerPasswordStep: React.FC<
+  OnFinishProp<{ password: string }>
+> = ({ onFinish }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
 

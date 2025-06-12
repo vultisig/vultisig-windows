@@ -13,7 +13,6 @@ import { getTxInputData } from '@core/ui/mpc/keysign/tx/inputData/getTxInputData
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -26,7 +25,14 @@ import { keccak256 } from 'js-sha3'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
+type FastKeysignServerStepProps = OnFinishProp & {
+  password: string
+}
+
+export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
+  onFinish,
+  password,
+}) => {
   const { t } = useTranslation()
 
   const { publicKeys } = useCurrentVault()
@@ -36,8 +42,6 @@ export const FastKeysignServerStep: React.FC<OnFinishProp> = ({ onFinish }) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const walletCore = useAssertWalletCore()
-
-  const [password] = useVaultPassword()
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
