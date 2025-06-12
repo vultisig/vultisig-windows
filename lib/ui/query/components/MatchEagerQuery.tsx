@@ -11,7 +11,7 @@ type MatchEagerQueryProps<T, E = unknown> = ValueProp<EagerQuery<T, E>> & {
 }
 
 export function MatchEagerQuery<T, E = unknown>({
-  value: { data, isPending, isLoading, errors },
+  value: { data, isPending, errors },
   error = () => null,
   pending = () => null,
   success,
@@ -25,13 +25,9 @@ export function MatchEagerQuery<T, E = unknown>({
     return <>{error(errors)}</>
   }
 
-  if (isLoading === false) {
-    return <>{inactive()}</>
-  }
-
   if (isPending) {
     return <>{pending()}</>
   }
 
-  return null
+  return <>{inactive()}</>
 }
