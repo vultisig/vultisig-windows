@@ -15,7 +15,7 @@ import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { WaitForServerStep } from '../../fast/WaitForServerStep'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 
-const keysignSteps = ['password', 'server', 'keysign'] as const
+const keysignSteps = ['server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
@@ -32,8 +32,17 @@ export const StartFastKeysignFlow = ({
     <PasswordProvider initialValue="">
       <Match
         value={step}
-        password={() => <ServerPasswordStep onFinish={toNextStep} />}
-        server={() => <FastKeysignServerStep onFinish={toNextStep} />}
+        server={() => (
+          <ValueTransfer<{ password: string }>
+            from={({ onFinish }) => <ServerPasswordStep onFinish={onFinish} />}
+            to={({ value: { password } }) => (
+              <FastKeysignServerStep
+                onFinish={toNextStep}
+                password={password}
+              />
+            )}
+          />
+        )}
         keysign={() => (
           <ValueTransfer<string[]>
             from={({ onFinish }) => {

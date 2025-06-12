@@ -26,7 +26,9 @@ const createSchema = (t: TFunction) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
-export const ServerPasswordStep: React.FC<OnFinishProp> = ({ onFinish }) => {
+export const ServerPasswordStep: React.FC<
+  OnFinishProp<{ password: string }>
+> = ({ onFinish }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
 
