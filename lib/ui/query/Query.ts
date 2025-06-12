@@ -1,14 +1,12 @@
 export type Query<T, E = unknown> = {
   data: T | undefined
   isPending: boolean
-  isLoading?: boolean
   error: E | null
 }
 
 export type EagerQuery<T, E = unknown> = {
   data: T | undefined
   isPending: boolean
-  isLoading?: boolean
   errors: E[]
 }
 
@@ -29,5 +27,4 @@ export const getResolvedQuery = <T>(data: T): Query<T> => ({
   data,
   error: null,
   isPending: false,
-  isLoading: false,
 })

@@ -1,6 +1,5 @@
 import { CoinBalanceResolverInput } from '@core/chain/coin/balance/CoinBalanceResolver'
 import { coinKeyToString } from '@core/chain/coin/Coin'
-import { pick } from '@lib/utils/record/pick'
 import { Exact } from '@lib/utils/types/Exact'
 import { useMemo } from 'react'
 
@@ -18,7 +17,7 @@ export const useBalanceQuery = <T extends CoinBalanceResolverInput>(
 
     return {
       data,
-      ...pick(query, ['isPending', 'isLoading']),
+      isPending: query.isPending,
       error,
     }
   }, [query, input])

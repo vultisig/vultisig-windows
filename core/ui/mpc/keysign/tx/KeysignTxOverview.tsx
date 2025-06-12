@@ -20,7 +20,6 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -72,11 +71,11 @@ export const KeysignTxOverview = ({
       )}
       <Panel>
         <SeparatedByLine gap={16}>
-          <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('tx_hash')}
             </Text>
-            <HStack gap={4} alignItems="center">
+            <HStack alignItems="center" gap={4}>
               <Text>
                 <MiddleTruncate text={txHash} width={140} />
               </Text>
@@ -85,33 +84,33 @@ export const KeysignTxOverview = ({
               </IconButton>
             </HStack>
           </HStack>
-          <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('from')}
             </Text>
-            <HStack gap={4} alignItems="center">
+            <HStack alignItems="center" gap={4}>
               <Text>{name}</Text>
-              <Text color="shy" weight="500" nowrap>
+              <Text color="shy" weight="500">
                 <MiddleTruncate text={`(${vaultCoin.address})`} width={80} />
               </Text>
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack alignItems="center" gap={8} justifyContent="space-between">
+            <HStack alignItems="center" gap={4} justifyContent="space-between">
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <Text nowrap>
+              <Text>
                 <MiddleTruncate text={toAddress} width={200} />
               </Text>
             </HStack>
           )}
           {memo && <TxOverviewMemo value={memo} />}
-          <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
-              {capitalizeFirstLetter(t('network'))}
+              {t('network')}
             </Text>
-            <HStack gap={4} alignItems="center">
+            <HStack alignItems="center" gap={4}>
               <ChainEntityIcon
                 value={getChainLogoSrc(chain)}
                 style={{ fontSize: 16 }}
@@ -120,7 +119,7 @@ export const KeysignTxOverview = ({
             </HStack>
           </HStack>
           {networkFeesFormatted && (
-            <HStack alignItems="center" gap={8} justifyContent="space-between">
+            <HStack alignItems="center" gap={4} justifyContent="space-between">
               <Text color="shy" weight="500">
                 {t('est_network_fee')}
               </Text>
