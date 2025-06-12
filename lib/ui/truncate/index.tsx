@@ -18,13 +18,13 @@ const StyledMiddleTruncate = styled.span<{ width?: number }>`
   }}
 `
 
-interface MiddleTruncateProps {
+type MiddleTruncateProps = {
   onClick?: () => void
   text: string
   width?: number
 }
 
-interface InitialState {
+type InitialState = {
   counter: number
   ellipsis: string
   truncating: boolean

@@ -79,8 +79,7 @@ const StyledListItem = styled.div<{
   }}
 `
 
-interface ListItemProps
-  extends Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> {
+type ListItemProps = {
   description?: ReactNode
   extra?: ReactNode
   hoverable?: boolean
@@ -88,7 +87,7 @@ interface ListItemProps
   showArrow?: boolean
   status?: Status
   title: ReactNode
-}
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
 
 export const ListItem: FC<ListItemProps> = ({
   description,

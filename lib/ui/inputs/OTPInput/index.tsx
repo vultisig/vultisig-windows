@@ -7,13 +7,13 @@ import { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
+type OTPInputProps = {
   length?: number
   onCompleted?: (value: string) => void
   onValueChange?: (value: string) => void
   validation?: 'invalid' | 'valid'
   includePasteButton?: boolean
-}
+} & ComponentProps<typeof InputBoxContainer>
 
 export const OTPInput = ({
   length = 4,

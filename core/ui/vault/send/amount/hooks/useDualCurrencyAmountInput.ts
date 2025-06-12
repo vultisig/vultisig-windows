@@ -5,7 +5,7 @@ import { useSendFormFieldState } from '../../state/formFields'
 import { CurrencyInputMode } from '../ManageAmountInputField'
 import { baseToFiat, clampNonNegative, fiatToBase } from '../utils'
 
-interface UseDualCurrencyAmountInputProps {
+type UseDualCurrencyAmountInputProps = {
   coinPrice: number | undefined
   currencyInputMode: CurrencyInputMode
 }

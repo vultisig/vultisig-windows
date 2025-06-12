@@ -1,4 +1,4 @@
-interface RetryParams<T> {
+type RetryParams<T> = {
   func: () => Promise<T>
   attempts?: number
   delay?: number
