@@ -1,14 +1,10 @@
-import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
+import { makeRecord } from '@lib/utils/record/makeRecord'
 import { mergeRecordsOfArrays } from '@lib/utils/record/mergeRecordsOfArrays'
-import { recordMap } from '@lib/utils/record/recordMap'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 import { kujiraCoinsMigratedToThorChainMetadata } from '../chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { KnownCoin, KnownCoinMetadata } from './Coin'
-import { ibcTransferrableTokensPerChain } from './ibc'
-import { getMissingIBCTokens } from './utils/getMissingIbcTokens'
-import { patchTokensWithIBCIds } from './utils/patchTokensWithIBCIds'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
 
@@ -626,6 +622,10 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       ...kujiraCoinsMigratedToThorChainMetadata.rkuji,
       decimals: 6,
     },
+    'ibc/4CC44260793F84006656DD868E017578F827A492978161DA31D7572BCB3F4289': {
+      decimals: 6,
+      ...kujiraCoinsMigratedToThorChainMetadata.kuji,
+    },
   },
   [Chain.Osmosis]: {
     uion: {
@@ -695,6 +695,11 @@ const leanChainNonNativeTokens: Partial<LeanChainTokensRecord> = {
       ...kujiraCoinsMigratedToThorChainMetadata.fuzn,
       decimals: 6,
     },
+
+    'ibc/B64A07C006C0F5E260A8AD50BD53568F1FD4A0D75B7A9F8765C81BEAFDA62053': {
+      ...kujiraCoinsMigratedToThorChainMetadata.lvn,
+      decimals: 6,
+    },
   },
   [Chain.Terra]: {
     terra13j2k5rfkg0qhk58vz63cze0uze4hwswlrfnm0fa4rnyggjyfrcnqcrs5z2: {
@@ -730,31 +735,27 @@ const [chainNativeTokens, chainNonNativeTokens] = [
   leanChainNativeTokens,
   leanChainNonNativeTokens,
 ].map(leanTokens =>
-  recordMap(withoutUndefinedFields(leanTokens), (tokens, chain) =>
-    Object.entries(tokens).map(([id, token]) => ({
-      ...token,
-      chain,
-      id,
-    }))
-  )
+  makeRecord(Object.values(Chain), chain => {
+    const result: KnownCoin[] = []
+
+    const tokens = leanTokens[chain]
+    if (tokens) {
+      Object.entries(tokens).forEach(([id, token]) => {
+        result.push({
+          ...token,
+          chain,
+          id,
+        })
+      })
+    }
+
+    return result
+  })
 )
 
 export { chainNativeTokens }
 
-export const chainTokens: Partial<Record<Chain, KnownCoin[]>> = (() => {
-  const base = mergeRecordsOfArrays(chainNativeTokens, chainNonNativeTokens)
-
-  Object.values(IbcEnabledCosmosChain).forEach(chain => {
-    const ibcMeta = ibcTransferrableTokensPerChain[chain] ?? []
-    const current = base[chain] ?? []
-
-    const patched = patchTokensWithIBCIds(current, ibcMeta)
-    const additions = getMissingIBCTokens(patched, ibcMeta, chain)
-
-    if (patched.length || additions.length) {
-      base[chain] = [...patched, ...additions]
-    }
-  })
-
-  return base
-})()
+export const chainTokens = mergeRecordsOfArrays(
+  chainNativeTokens,
+  chainNonNativeTokens
+)

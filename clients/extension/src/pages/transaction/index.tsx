@@ -32,7 +32,6 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -162,9 +161,7 @@ export const TransactionPage = () => {
                 <CrossIcon />
               </IconButton>
             }
-            title={
-              <PageHeaderTitle>{`${t('sign_transaction')}`}</PageHeaderTitle>
-            }
+            title={t('sign_transaction')}
             hasBorder
           />
           <PageContent flexGrow scrollable>

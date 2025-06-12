@@ -32,9 +32,7 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
         gap={16}
         style={{ padding: pageConfig.verticalPadding }}
       >
-        <Text size={18} centerHorizontally>
-          {t('vault_overview')}
-        </Text>
+        <Text size={18}>{t('vault_overview')}</Text>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={3}

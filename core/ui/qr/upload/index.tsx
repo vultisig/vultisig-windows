@@ -7,12 +7,9 @@ import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
-import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,7 +33,6 @@ export const UploadQrPage = () => {
   const vault = useVaults().find(vault => getVaultId(vault) === currentVaultId)
   const deriveChainFromWalletAddress = useDeriveChainFromWalletAddress()
   const navigate = useCoreNavigate()
-  const navigateBack = useNavigateBack()
 
   const onScanSuccess = useCallback(
     (value: string) => {
@@ -68,15 +64,12 @@ export const UploadQrPage = () => {
     <>
       <VStack fullHeight>
         <PageHeader
-          title={<PageHeaderTitle>{title}</PageHeaderTitle>}
           primaryControls={
-            <PageHeaderIconButton
-              icon={<ChevronLeftIcon />}
-              onClick={() =>
-                view === 'scan' ? navigateBack() : setView('scan')
-              }
+            <PageHeaderBackButton
+              onClick={view !== 'scan' ? () => setView('scan') : undefined}
             />
           }
+          title={title}
           hasBorder
         />
         <Match

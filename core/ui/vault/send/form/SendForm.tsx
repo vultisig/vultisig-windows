@@ -12,7 +12,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnFinishProp } from '@lib/ui/props'
 import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { useLayoutEffect } from 'react'
@@ -40,7 +39,8 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<RefreshSend />}
-        title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
+        title={t('send')}
+        hasBorder
       />
       <FormWrapper
         as="form"

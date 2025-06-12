@@ -49,6 +49,7 @@ export const SwapKeysignTxOverview = ({
 }) => {
   const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
     memo: value.memo,
+    chain: value.coin?.chain as Chain,
   })
 
   const navigate = useCoreNavigate()

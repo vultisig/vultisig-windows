@@ -1,56 +1,54 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
-import { centerContent } from '@lib/ui/css/centerContent'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { FitPageContent } from '@lib/ui/page/PageContent'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+const StyledIcon = styled(LockKeyholeIcon)`
+  background: ${getColor('backgroundsSecondary')};
+  border-radius: 16px;
+  font-size: 64px;
+  padding: 16px;
+`
+
 type VaultBackupWithoutPasswordProps = OnFinishProp & {
   onPasswordRequest: () => void
 }
-
-const IconContainer = styled.div`
-  background: ${getColor('foreground')};
-  font-size: 32px;
-  color: ${getColor('contrast')};
-  border-radius: 16px;
-  padding: 16px;
-  ${centerContent};
-  align-self: center;
-`
 
 export const VaultBackupWithoutPassword = ({
   onFinish,
   onPasswordRequest,
 }: VaultBackupWithoutPasswordProps) => {
+  const { t } = useTranslation()
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
     onSuccess: onFinish,
   })
 
-  const { t } = useTranslation()
-
   return (
-    <>
+    <VStack fullHeight>
       <FlowPageHeader title={t('backup')} />
-      <FitPageContent contentMaxWidth={360}>
-        <VStack justifyContent="center" gap={36}>
-          <VStack gap={16}>
-            <IconContainer>
-              <LockKeyholeIcon />
-            </IconContainer>
+      <PageContent
+        alignItems="center"
+        justifyContent="center"
+        flexGrow
+        scrollable
+      >
+        <VStack gap={36} style={{ maxWidth: 360 }}>
+          <VStack alignItems="center" gap={16}>
+            <StyledIcon />
             <Text size={22} centerHorizontally>
               {t('backup_password_prompt')}
             </Text>
             <Text
-              size={14}
               color="supporting"
               height="large"
+              size={14}
               centerHorizontally
             >
               {t('backup_password_info')}
@@ -69,7 +67,7 @@ export const VaultBackupWithoutPassword = ({
             </Button>
           </VStack>
         </VStack>
-      </FitPageContent>
-    </>
+      </PageContent>
+    </VStack>
   )
 }

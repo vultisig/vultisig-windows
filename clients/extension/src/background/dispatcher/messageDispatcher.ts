@@ -16,13 +16,11 @@ import {
   getCosmosChainByChainId,
   getCosmosChainId,
 } from '@core/chain/chains/cosmos/chainInfo'
-import {
-  getEvmChainByChainId,
-  getEvmChainId,
-} from '@core/chain/chains/evm/chainInfo'
+import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 
+import { getCurrentEVMChainId } from '../../storage/currentEvmChainId'
 import { handlePluginRequest } from '../handlers/pluginHandler'
 
 export const dispatchMessage = async (
@@ -49,12 +47,12 @@ export const dispatchMessage = async (
 
       return getCosmosChainByChainId(selectedCosmosChainId)
     },
-    [MessageKey.ETHEREUM_REQUEST]: () => {
-      const chainId = getEvmChainId(Chain.Ethereum)
+    [MessageKey.ETHEREUM_REQUEST]: async () => {
+      const defaultChainId = await getCurrentEVMChainId()
 
       const selectedEVMChainId = Object.values(sessions).reduce(
         (acc, vault) => vault[dappHostname]?.selectedEVMChainId ?? acc,
-        chainId
+        defaultChainId
       )
       return getEvmChainByChainId(selectedEVMChainId)
     },
@@ -78,7 +76,7 @@ export const dispatchMessage = async (
   }
   if (type in chainSelectors) {
     const selector = chainSelectors[type as keyof typeof chainSelectors]
-    const chain = selector?.()
+    const chain = await selector?.()
     if (!chain) return
     const response = await handleRequest(
       message,
