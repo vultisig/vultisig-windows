@@ -1,38 +1,38 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
+import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
+import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
+import { useSendMemo } from '@core/ui/vault/send/state/memo'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
+import { SendConfirm } from '@core/ui/vault/send/verify/SendConfirm'
+import { SendTerms } from '@core/ui/vault/send/verify/SendTerms'
+import {
+  sendTerms,
+  SendTermsProvider,
+} from '@core/ui/vault/send/verify/state/sendTerms'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
-import { useCurrentVault } from '../../state/currentVault'
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
-import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
-import { useSender } from '../sender/hooks/useSender'
-import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
-import { useCurrentSendCoin } from '../state/sendCoin'
-import { SendConfirm } from './SendConfirm'
-import { SendTerms } from './SendTerms'
-import { sendTerms, SendTermsProvider } from './state/sendTerms'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
@@ -43,14 +43,14 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const cappedAmountQuery = useSendCappedAmountQuery()
-
   const { chain, ticker } = coin
 
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={<PageHeaderTitle>{t('send_overview')}</PageHeaderTitle>}
+        title={t('send_overview')}
+        hasBorder
       />
       <PageContent gap={12}>
         <TxOverviewPanel>
@@ -89,7 +89,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             <Text size={14}>{receiver}</Text>
           </TxOverviewRow>
           <TxOverviewRow>
-            <RowTitle>{capitalizeFirstLetter(t('network'))}</RowTitle>
+            <RowTitle>{t('network')}</RowTitle>
             <HStack gap={8}>
               <ChainEntityIcon
                 value={getChainLogoSrc(chain)}

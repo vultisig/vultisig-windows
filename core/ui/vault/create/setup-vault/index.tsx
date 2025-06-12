@@ -1,4 +1,13 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useSetupVaultPageAnimation } from '@core/ui/vault/create/setup-vault/hooks/useSetupVaultPageAnimation'
+import {
+  ArtContainer,
+  ContentWrapper,
+  DescriptionContentWrapper,
+  DescriptionTitleWrapper,
+  DescriptionWrapper,
+  IconWrapper,
+} from '@core/ui/vault/create/setup-vault/SetupVaultPage.styled'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
@@ -14,22 +23,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
-
-import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
-import {
-  ArtContainer,
-  ContentWrapper,
-  DescriptionContentWrapper,
-  DescriptionTitleWrapper,
-  DescriptionWrapper,
-  IconWrapper,
-} from './SetupVaultPage.styled'
 
 export const SetupVaultPage = () => {
   const { RiveComponent, isPlaying, onPlay } = useSetupVaultPageAnimation()
@@ -48,8 +46,8 @@ export const SetupVaultPage = () => {
   return (
     <VStack as="form" {...getFormProps({ onSubmit: onStart })} fullHeight>
       <PageHeader
-        title={<PageHeaderTitle>{t('chooseSetup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
+        title={t('chooseSetup')}
         hasBorder
       />
       <PageContent flexGrow>

@@ -22,5 +22,7 @@ export const getVaultFromServer = async ({
 
   await assertFetchResponse(response)
 
-  return response.json()
+  return {
+    password,
+  }
 }

@@ -1,14 +1,13 @@
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { PrintableQrCode } from '@core/ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
-import { PageHeaderIconButton } from '@lib/ui/page/PageHeaderIconButton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
-
-import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 
 export const DownloadKeysignQrCode = () => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
@@ -26,7 +25,9 @@ export const DownloadKeysignQrCode = () => {
         <SaveAsImage
           fileName={`VaultKeysignQR-${name}-${lastThreeUID}`}
           renderTrigger={({ onClick }) => (
-            <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
+            <IconButton onClick={onClick}>
+              <FileUpIcon />
+            </IconButton>
           )}
           value={
             <PrintableQrCode

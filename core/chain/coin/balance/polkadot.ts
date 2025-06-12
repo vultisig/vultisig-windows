@@ -5,7 +5,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
-interface PolkadotAccountBalance {
+type PolkadotAccountBalance = {
   data: {
     account: {
       balance: number

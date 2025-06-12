@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
@@ -8,16 +9,18 @@ import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCus
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
+import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
+import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { Match } from '@lib/ui/base/Match'
+import { useCore } from '@core/ui/state/core'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -25,12 +28,6 @@ import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { useCore } from '../../state/core'
-import { TxOverviewContainer } from './tx/TxOverviewContainer'
-import { TxSuccess } from './tx/TxSuccess'
-import { normalizeTxHash } from './utils/normalizeTxHash'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
@@ -43,14 +40,13 @@ export const KeysignSigningStep = ({
   onFinish,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { version, mpcDevice } = useCore()
-  const isDAppSigning =
-    mpcDevice === 'extension' && typeof onFinish === 'function'
+  const { client, version } = useCore()
+  const navigate = useCoreNavigate()
+  const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
-  useEffect(startKeysign, [startKeysign])
 
-  const navigate = useCoreNavigate()
+  useEffect(startKeysign, [startKeysign])
 
   return (
     <MatchQuery
@@ -63,61 +59,70 @@ export const KeysignSigningStep = ({
 
         return (
           <>
-            <PageHeader
-              title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
-            />
-            <PageContent>
-              <MatchRecordUnion
-                value={payload}
-                handlers={{
-                  keysign: payload => {
-                    const { swapPayload } = payload
-                    const isSwapTx = swapPayload && swapPayload.value
+            <PageHeader title={t('overview')} hasBorder />
+            <MatchRecordUnion
+              value={payload}
+              handlers={{
+                keysign: payload => {
+                  const { swapPayload } = payload
+                  const isSwapTx = swapPayload && swapPayload.value
 
-                    return (
-                      <Match
-                        value={isSwapTx ? 'swap' : 'default'}
-                        swap={() => (
-                          <SwapKeysignTxOverview
-                            txHashes={txResults.map(tx => tx.txHash)}
-                            value={payload}
-                          />
-                        )}
-                        default={() => (
-                          <TxOverviewContainer>
-                            <StepTransition
-                              from={({ onFinish: onSeeTxDetails }) => (
-                                <>
-                                  <TxSuccess
-                                    value={payload}
-                                    onSeeTxDetails={onSeeTxDetails}
-                                  />
-                                  <PositionedButton onClick={handleFinish}>
-                                    {t('done')}
-                                  </PositionedButton>
-                                </>
-                              )}
-                              to={() => (
-                                <>
-                                  <KeysignTxOverview
-                                    txHash={normalizeTxHash(txResult.txHash, {
-                                      memo: payload?.memo,
-                                    })}
-                                    value={payload}
-                                  />
-                                  <PositionedButton onClick={handleFinish}>
-                                    {t('complete')}
-                                  </PositionedButton>
-                                </>
-                              )}
-                            />
-                          </TxOverviewContainer>
-                        )}
+                  return isSwapTx ? (
+                    <PageContent alignItems="center" scrollable>
+                      <SwapKeysignTxOverview
+                        txHashes={txResults.map(tx => tx.txHash)}
+                        value={payload}
                       />
-                    )
-                  },
-                  custom: payload => (
-                    <>
+                    </PageContent>
+                  ) : (
+                    <StepTransition
+                      from={({ onFinish: onSeeTxDetails }) => (
+                        <>
+                          <PageContent alignItems="center" scrollable>
+                            <VStack gap={16} maxWidth={576} fullWidth>
+                              <TxSuccess
+                                value={payload}
+                                onSeeTxDetails={onSeeTxDetails}
+                              />
+                            </VStack>
+                          </PageContent>
+                          <PageFooter alignItems="center">
+                            <VStack maxWidth={576} fullWidth>
+                              <Button onClick={handleFinish}>
+                                {t('done')}
+                              </Button>
+                            </VStack>
+                          </PageFooter>
+                        </>
+                      )}
+                      to={() => (
+                        <>
+                          <PageContent alignItems="center" scrollable>
+                            <VStack gap={16} maxWidth={576} fullWidth>
+                              <KeysignTxOverview
+                                txHash={normalizeTxHash(txResult.txHash, {
+                                  memo: payload?.memo,
+                                  chain: payload?.coin?.chain as Chain,
+                                })}
+                                value={payload}
+                              />
+                            </VStack>
+                          </PageContent>
+                          <PageFooter alignItems="center">
+                            <VStack maxWidth={576} fullWidth>
+                              <Button onClick={handleFinish}>
+                                {t('complete')}
+                              </Button>
+                            </VStack>
+                          </PageFooter>
+                        </>
+                      )}
+                    />
+                  )
+                },
+                custom: payload => (
+                  <>
+                    <PageContent scrollable>
                       <TxOverviewPanel>
                         <KeysignCustomMessageInfo value={payload} />
                         <TxOverviewChainDataRow>
@@ -125,47 +130,44 @@ export const KeysignSigningStep = ({
                           <span>{txResult.txHash}</span>
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
-                      {isDAppSigning && (
+                    </PageContent>
+                    {isDAppSigning && (
+                      <PageFooter>
                         <Button onClick={() => onFinish(txResult)}>
                           {t('complete')}
                         </Button>
-                      )}
-                    </>
-                  ),
-                }}
-              />
-            </PageContent>
+                      </PageFooter>
+                    )}
+                  </>
+                ),
+              }}
+            />
           </>
         )
       }}
       error={error => (
         <FullPageFlowErrorState
-          message={t('signing_error')}
           errorMessage={extractErrorMsg(error)}
+          message={t('signing_error')}
         />
       )}
       pending={() => (
         <>
           <PageHeader
             primaryControls={<PageHeaderBackButton onClick={onBack} />}
-            title={<PageHeaderTitle>{t('keysign')}</PageHeaderTitle>}
+            title={t('keysign')}
+            hasBorder
           />
-          <PageContent data-testid="KeysignVerifyStep-PageContent">
-            <VStack flexGrow>
-              <KeysignSigningState />
-            </VStack>
-            <VStack alignItems="center">
-              <Text color="shy" size={12}>
-                {t('version')} {version}
-              </Text>
-            </VStack>
+          <PageContent scrollable>
+            <KeysignSigningState />
           </PageContent>
+          <PageFooter alignItems="center">
+            <Text color="shy" size={12}>
+              {t('version')} {version}
+            </Text>
+          </PageFooter>
         </>
       )}
     />
   )
 }
-
-const PositionedButton = styled(Button)`
-  margin-top: auto;
-`

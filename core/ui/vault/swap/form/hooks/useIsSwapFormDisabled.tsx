@@ -28,7 +28,7 @@ export const useIsSwapFormDisabled = () => {
       return t('amount_required')
     }
 
-    if (balanceQuery.isPending || swapFeesQuery.isLoading) {
+    if (balanceQuery.isPending) {
       return t('loading')
     }
 
@@ -47,7 +47,7 @@ export const useIsSwapFormDisabled = () => {
       return t('insufficient_balance')
     }
 
-    if (swapQuoteQuery.isLoading) {
+    if (swapQuoteQuery.isPending) {
       return t('loading')
     }
 
@@ -63,10 +63,9 @@ export const useIsSwapFormDisabled = () => {
     balanceQuery.isPending,
     coin.decimals,
     swapFeesQuery.error,
-    swapFeesQuery.isLoading,
     swapQuoteQuery.data,
     swapQuoteQuery.error,
-    swapQuoteQuery.isLoading,
+    swapQuoteQuery.isPending,
     t,
   ])
 }

@@ -1,197 +1,105 @@
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { EyeIcon } from '@lib/ui/icons/EyeIcon'
-import InfoGradientIcon from '@lib/ui/icons/InfoGradientIcon'
+import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageSlice } from '@lib/ui/page/PageSlice'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { TFunction } from 'i18next'
-import { useMemo, useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 import { z } from 'zod'
 
-const InputFieldWrapper = styled.div`
-  position: relative;
-  background-color: ${getColor('foreground')};
-  ${borderRadius.m};
-`
+import { passwordLenghtConfig } from '../../security/password/config'
 
-const InputField = styled.input`
-  padding: 12px;
-  background-color: transparent;
-  display: block;
-  width: 100%;
-  color: ${getColor('text')};
+const createSchema = (t: TFunction) => {
+  const message = t('password_pattern_error', passwordLenghtConfig)
 
-  &::placeholder {
-    font-size: 13px;
-    color: ${getColor('textShy')};
-  }
-
-  &:focus {
-    outline: none;
-  }
-`
-
-const IconButton = styled(UnstyledButton)`
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-`
-
-const ActionsWrapper = styled(VStack)`
-  margin-bottom: 32px;
-`
-
-const InfoPill = styled(Button)`
-  pointer-events: none;
-  justify-content: flex-start;
-  white-space: wrap;
-  gap: 4px;
-  height: 40px;
-`
-
-const createVaultBackupSchema = (t: TFunction) =>
-  z
+  return z
     .object({
       password: z
         .string()
-        .min(3, t('vault_backup_page_password_error'))
-        .max(30),
-      verifiedPassword: z
-        .string()
-        .min(3, 'Set a strong password and save it.')
-        .max(30),
+        .min(passwordLenghtConfig.min, message)
+        .max(passwordLenghtConfig.max, message),
+      confirmPassword: z.string(),
     })
-    .refine(data => data.password === data.verifiedPassword, {
-      message: t('vault_backup_page_verified_password_error'),
-      path: ['verifiedPassword'],
+    .refine(data => data.password === data.confirmPassword, {
+      message: t('password_do_not_match'),
+      path: ['confirmPassword'],
     })
+}
 
-type VaultBackupSchema = z.infer<ReturnType<typeof createVaultBackupSchema>>
+type Schema = z.infer<ReturnType<typeof createSchema>>
 
 export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
 }: OnFinishProp & OnBackProp) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
-    useState(false)
-
   const { t } = useTranslation()
-  const {
-    mutate: backupVault,
-    isPending,
-    error,
-  } = useBackupVaultMutation({
+
+  const schema = useMemo(() => createSchema(t), [t])
+
+  const { error, isPending, mutate } = useBackupVaultMutation({
     onSuccess: onFinish,
   })
 
-  const vaultBackupSchema = useMemo(() => createVaultBackupSchema(t), [t])
-
   const {
-    register,
+    formState: { errors, isValid },
     handleSubmit,
-    formState: { errors, isValid, isDirty },
-  } = useForm<VaultBackupSchema>({
-    resolver: zodResolver(vaultBackupSchema),
+    register,
+  } = useForm<Schema>({
     mode: 'onBlur',
+    resolver: zodResolver(schema),
   })
 
-  const onSubmit = async (data?: FieldValues) => {
-    backupVault({ password: data?.password })
+  const onSubmit = ({ password }: Schema) => {
+    mutate({ password })
   }
 
   return (
-    <VStack flexGrow gap={16}>
-      <FlowPageHeader onBack={onBack} title={t('backup')} />
-      <PageSlice gap={16} flexGrow={true}>
-        <Text size={16} color="contrast" weight="600">
+    <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
+      <FlowPageHeader title={t('backup')} onBack={onBack} />
+      <PageContent gap={16} flexGrow scrollable>
+        <Text size={16} weight="600">
           {t('vault_backup_page_password_protection')}
         </Text>
-        <VStack
-          flexGrow={true}
-          justifyContent="space-between"
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <VStack gap={12}>
-            <div>
-              <InputFieldWrapper>
-                <InputField
-                  type={isPasswordVisible ? 'text' : 'password'}
-                  placeholder={t(
-                    'vault_backup_page_password_input_placeholder'
-                  )}
-                  {...register('password')}
-                />
-
-                <IconButton
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  <EyeIcon fontSize={20} />
-                </IconButton>
-              </InputFieldWrapper>
-              {errors.password?.message && (
-                <Text size={12} color="danger">
-                  {typeof errors.password.message === 'string' &&
-                    errors.password.message}
-                </Text>
-              )}
-            </div>
-            <div>
-              <InputFieldWrapper>
-                <InputField
-                  type={isVerifiedPasswordVisible ? 'text' : 'password'}
-                  placeholder={t(
-                    'vault_backup_page_verified_password_input_placeholder'
-                  )}
-                  {...register('verifiedPassword')}
-                />
-
-                <IconButton
-                  onClick={() =>
-                    setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
-                  }
-                >
-                  <EyeIcon fontSize={20} />
-                </IconButton>
-              </InputFieldWrapper>
-              {errors.verifiedPassword && (
-                <Text size={12} color="danger">
-                  {' '}
-                  {typeof errors.verifiedPassword.message === 'string' &&
-                    errors.verifiedPassword.message}
-                </Text>
-              )}
-            </div>
-          </VStack>
-          <ActionsWrapper gap={16}>
-            <InfoPill kind="secondary" icon={<InfoGradientIcon />}>
-              {t('vault_backup_page_password_info')}
-            </InfoPill>
-            <Button disabled={!isValid || !isDirty || isPending} type="submit">
-              {isPending
-                ? t('vault_backup_page_submit_loading_button_text')
-                : t('save')}
-            </Button>
-            {error && (
-              <Text size={12} color="danger">
-                {error?.message}
-              </Text>
-            )}
-          </ActionsWrapper>
+        <VStack gap={8}>
+          <PasswordInput
+            {...register('password')}
+            error={errors.password?.message}
+            placeholder={t('enter_password')}
+            validation={
+              isValid ? 'valid' : errors.password ? 'invalid' : undefined
+            }
+          />
+          <PasswordInput
+            {...register('confirmPassword')}
+            error={errors.confirmPassword?.message}
+            placeholder={t('verify_password')}
+            validation={
+              isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
+            }
+          />
         </VStack>
-      </PageSlice>
+      </PageContent>
+      <PageFooter gap={16}>
+        <InfoBlock>{t('vault_backup_page_password_info')}</InfoBlock>
+        <Button disabled={!isValid} loading={isPending} type="submit">
+          {isPending
+            ? t('vault_backup_page_submit_loading_button_text')
+            : t('save')}
+        </Button>
+        {error?.message && (
+          <Text color="danger" size={12}>
+            {error.message}
+          </Text>
+        )}
+      </PageFooter>
     </VStack>
   )
 }

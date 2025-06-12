@@ -8,7 +8,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '@lib/ui/page/PageHeaderTitle'
 import { getColor } from '@lib/ui/theme/getters'
 import { toPng } from 'html-to-image'
 import { useRef } from 'react'
@@ -55,7 +54,7 @@ export const ShareVaultPage = () => {
     <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('share_vault_qr')}</PageHeaderTitle>}
+        title={t('share_vault_qr')}
       />
       <PageContent alignItems="center" gap={40}>
         <VStack fullWidth alignItems="center" justifyContent="center" flexGrow>

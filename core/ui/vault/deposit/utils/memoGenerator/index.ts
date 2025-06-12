@@ -11,7 +11,7 @@ import { StakeableChain } from '../../config'
 import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
 import { MayaChainPool } from '../../types/mayaChain'
 
-interface MemoParams {
+type MemoParams = {
   selectedChainAction: ChainAction
   depositFormData: FieldValues
   bondableAsset: MayaChainPool['asset']

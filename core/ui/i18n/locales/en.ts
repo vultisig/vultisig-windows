@@ -1,4 +1,7 @@
 export const en = {
+  password_do_not_match: 'Passwords do not match',
+  password_pattern_error:
+    'Password must be between {{min}} and {{max}} characters',
   address_book: 'Address Book',
   address_book_empty: 'Your Address Book is empty',
   assets: 'assets',
@@ -55,15 +58,15 @@ export const en = {
   vultisig: 'Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
   missing_destination_address: 'Missing Destination Address',
-  onboarding_view1_description:
+  onboarding_description_1:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'Vultisig does not track your activities or require any registrations. Vultisig is fully open-source, ensuring transparency and trust.',
-  onboarding_view3_description:
+  onboarding_description_3:
     'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
-  search_field_placeholder: 'Search..',
-  onboarding_view4_description:
+  onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
+  search_field_placeholder: 'Search..',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',
@@ -264,8 +267,6 @@ export const en = {
   vault_backup_page_password_protection:
     'Optional password protection of your Vault',
   vault_backup_page_password_error: 'Set a strong password and save it.',
-  vault_backup_page_password_input_placeholder: 'Enter password',
-  vault_backup_page_verified_password_input_placeholder: 'Verify password',
   vault_backup_page_verified_password_error: 'Passwords must match',
   vault_backup_page_submit_loading_button_text: 'Saving...',
   vault_backup_page_password_info:
@@ -326,7 +327,7 @@ export const en = {
     'Address must be at least 1 character long.',
   vault_settings_address_book_title_max_length_error:
     'Title must be at most 50 characters long.',
-  network: 'network',
+  network: 'Network',
   session_init: 'Initializing session...',
   session_init_failed: 'Failed to initialize session',
   select_at_least_one_device: 'Select at least one device',
@@ -554,7 +555,6 @@ export const en = {
     emailSetupTitle: 'This email is only used to send the server backup',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     confirmPasswordIsRequired: 'Confirm password is required',
-    passwordDoNotMatch: 'Passwords do not match',
     hintEmpty: 'Hint is empty',
     addOptionalHint: 'Add optional hint',
     hintDescription: 'This will be shown in case you forget your password',

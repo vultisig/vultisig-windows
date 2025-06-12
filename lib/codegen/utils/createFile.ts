@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-interface CreateFileParams {
+type CreateFileParams = {
   directory: string
   fileName: string
   content: string

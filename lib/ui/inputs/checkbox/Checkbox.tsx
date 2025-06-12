@@ -13,10 +13,10 @@ import {
   InvisibleHTMLCheckboxProps,
 } from './InvisibleHTMLCheckbox'
 
-interface CheckboxProps extends InvisibleHTMLCheckboxProps {
+type CheckboxProps = {
   label?: ReactNode
   className?: string
-}
+} & InvisibleHTMLCheckboxProps
 
 const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(20)}

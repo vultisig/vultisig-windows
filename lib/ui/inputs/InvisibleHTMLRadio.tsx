@@ -1,6 +1,6 @@
 import { InvisibleInput } from './InvisibleInput'
 
-interface InvisibleHTMLRadioProps {
+type InvisibleHTMLRadioProps = {
   groupName: string
   value: string | number | null
   isSelected: boolean

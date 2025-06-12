@@ -25,15 +25,11 @@ export function MatchQuery<T, E = unknown>({
     return <>{error(value.error)}</>
   }
 
-  if (value.isLoading === false) {
-    return <>{inactive()}</>
-  }
-
   if (value.isPending) {
     return <>{pending()}</>
   }
 
-  return null
+  return <>{inactive()}</>
 }
 
 export type MatchQueryWrapperProps<T, E = unknown> = Pick<

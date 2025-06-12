@@ -6,7 +6,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
-interface HighlightProps {
+type HighlightProps = {
   horizontalOffset: number | string
   verticalOffset: number | string
 }

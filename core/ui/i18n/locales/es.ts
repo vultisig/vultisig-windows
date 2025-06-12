@@ -1,12 +1,14 @@
 export const es = {
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
-  onboarding_view1_description:
+  onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
-  onboarding_view2_description:
+  onboarding_description_2:
     'Vultisig no rastrea sus actividades ni requiere ningún registro. Vultisig es de código abierto, garantizando transparencia y confianza.',
-  onboarding_view3_description:
+  onboarding_description_3:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
+  onboarding_description_4:
+    'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
   moreInfo: 'Más información',
   gas_limit_tooltip_content:
@@ -59,8 +61,6 @@ export const es = {
   select_network: 'Seleccionar red',
   secureVaultSetupPasswordTooltipContent:
     'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de manera similar a cómo se cifra un disco duro. En el siguiente paso, tienes la opción de añadir una pista.',
-  onboarding_view4_description:
-    'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Estás en modo local',
@@ -285,8 +285,6 @@ export const es = {
     'Protección de contraseña opcional para su bóveda',
   vault_backup_page_password_error:
     'Establezca una contraseña segura y guárdela.',
-  vault_backup_page_password_input_placeholder: 'Ingrese la contraseña',
-  vault_backup_page_verified_password_input_placeholder: 'Verificar contraseña',
   vault_backup_page_verified_password_error: 'Las contraseñas deben coincidir',
   vault_backup_page_submit_loading_button_text: 'Guardando...',
   vault_backup_page_password_info:
@@ -349,7 +347,7 @@ export const es = {
     'La dirección debe tener al menos 1 carácter.',
   vault_settings_address_book_title_max_length_error:
     'El título debe tener como máximo 50 caracteres.',
-  network: 'red',
+  network: 'Red',
   session_init: 'Inicializando sesión...',
   session_init_failed: 'No se pudo iniciar la sesión',
   select_at_least_one_device: 'Seleccione al menos un dispositivo',
