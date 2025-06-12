@@ -327,7 +327,7 @@ export const en = {
     'Address must be at least 1 character long.',
   vault_settings_address_book_title_max_length_error:
     'Title must be at most 50 characters long.',
-  network: 'network',
+  network: 'Network',
   session_init: 'Initializing session...',
   session_init_failed: 'Failed to initialize session',
   select_at_least_one_device: 'Select at least one device',

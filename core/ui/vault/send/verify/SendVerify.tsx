@@ -28,7 +28,6 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
@@ -90,7 +89,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             <Text size={14}>{receiver}</Text>
           </TxOverviewRow>
           <TxOverviewRow>
-            <RowTitle>{capitalizeFirstLetter(t('network'))}</RowTitle>
+            <RowTitle>{t('network')}</RowTitle>
             <HStack gap={8}>
               <ChainEntityIcon
                 value={getChainLogoSrc(chain)}
