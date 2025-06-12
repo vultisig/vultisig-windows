@@ -64,7 +64,7 @@ export const ChangePasscode = () => {
           onClose={onClose}
           as="form"
           footer={
-            <Button isDisabled={isDisabled} isLoading={isPending} type="submit">
+            <Button disabled={isDisabled} loading={isPending} type="submit">
               {t('save')}
             </Button>
           }
