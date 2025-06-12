@@ -19,11 +19,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-interface RenderOpenerProps extends Record<string, unknown> {
+type RenderOpenerProps = {
   ref: (node: ReferenceType | null) => void
-}
+} & Record<string, unknown>
 
-interface TooltipProps {
+type TooltipProps = {
   content?: ReactNode
   renderOpener: (props: RenderOpenerProps) => ReactNode
   placement?: Placement

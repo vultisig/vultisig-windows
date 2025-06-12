@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-interface SearchFieldProps {
+type SearchFieldProps = {
   placeholderKey?: string
   onSearch?: (query: string) => void
 }

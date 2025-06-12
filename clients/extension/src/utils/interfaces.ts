@@ -45,12 +45,12 @@ export type VaultExport = {
   hexChainCode: string
 }
 
-export interface AccountsProps {
+export type AccountsProps = {
   chain: Chain
   sender: string
 }
 
-interface ICustomTransactionPayload {
+type ICustomTransactionPayload = {
   method: string
   address: string
   message: string
@@ -59,11 +59,11 @@ interface ICustomTransactionPayload {
 export namespace TransactionType {
   export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
 
-  interface BaseTransaction<T extends TxType> {
+  type BaseTransaction<T extends TxType> = {
     txType: T
   }
 
-  export interface MetaMask extends BaseTransaction<'MetaMask'> {
+  export type MetaMask = {
     from: string
     to: string
     value?: string
@@ -75,9 +75,9 @@ export namespace TransactionType {
     nonce?: string
     chainId?: string
     type?: string
-  }
+  } & BaseTransaction<'MetaMask'>
 
-  export interface Ctrl extends BaseTransaction<'Ctrl'> {
+  export type Ctrl = {
     amount: {
       amount: string
       decimals: number
@@ -91,9 +91,9 @@ export namespace TransactionType {
     gasLimit?: string
     memo: string
     recipient: string
-  }
+  } & BaseTransaction<'Ctrl'>
 
-  export interface Vultisig extends BaseTransaction<'Vultisig'> {
+  export type Vultisig = {
     asset: {
       chain: Chain
       ticker: string
@@ -104,15 +104,15 @@ export namespace TransactionType {
     amount?: { amount: string; decimals: number }
     data?: string
     gasLimit?: string
-  }
+  } & BaseTransaction<'Vultisig'>
 
-  export interface Keplr extends BaseTransaction<'Keplr'> {
+  export type Keplr = {
     amount: { amount: string; denom: string }[]
     from_address: string
     to_address: string
-  }
+  } & BaseTransaction<'Keplr'>
 
-  export interface Phantom extends BaseTransaction<'Phantom'> {
+  export type Phantom = {
     asset: {
       chain: Chain
       ticker?: string
@@ -122,7 +122,7 @@ export namespace TransactionType {
     from: string
     to?: string
     amount: string
-  }
+  } & BaseTransaction<'Phantom'>
 
   export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
 }
@@ -144,7 +144,7 @@ type IMsgTransfer = {
   memo: string
 }
 
-export interface TransactionDetails {
+export type TransactionDetails = {
   asset: {
     chain: Chain
     ticker: string
@@ -189,7 +189,7 @@ type ITransactionPayload =
     }
   | { serialized: Uint8Array }
 
-export interface ITransaction {
+export type ITransaction = {
   id?: string
   status: 'default' | 'error' | 'pending' | 'success'
   transactionPayload: ITransactionPayload

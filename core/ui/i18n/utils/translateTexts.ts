@@ -5,7 +5,7 @@ import { Language } from '../Language'
 
 const batchSize = 600
 
-interface TranslateTextsParams {
+type TranslateTextsParams = {
   texts: string[]
   from: Language
   to: Language

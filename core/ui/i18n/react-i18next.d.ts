@@ -5,7 +5,7 @@ import { translations } from './translations'
 
 // Simple declaration using the English translations as the type source
 declare module 'i18next' {
-  interface CustomTypeOptions {
+  type CustomTypeOptions = {
     resources: {
       translation: typeof translations.en
     }

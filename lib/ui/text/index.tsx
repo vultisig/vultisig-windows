@@ -49,7 +49,7 @@ type TextFontFamily = 'regular' | 'mono'
 
 export type TextColor = keyof ReturnType<typeof getTextColorRecord>
 
-export interface TextProps {
+export type TextProps = {
   color?: TextColor
   weight?: React.CSSProperties['fontWeight']
   size?: number
