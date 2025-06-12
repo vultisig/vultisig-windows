@@ -38,13 +38,13 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface ExtensionSettings {
+type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
   prioritize: ReactNode
 }
 
-interface DesktopSettings {
+type DesktopSettings = {
   client: Extract<Client, 'desktop'>
   checkUpdate: ReactNode
   manageMpcLib: ReactNode

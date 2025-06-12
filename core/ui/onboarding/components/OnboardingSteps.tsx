@@ -7,6 +7,7 @@ import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { pageConfig } from '@lib/ui/page/config'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -38,9 +39,10 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
     isLoading,
   } = useOnboardingStepsAnimations()
   const { isSmall } = useResponsiveness()
+  const navigateBack = useNavigateBack()
 
   return (
-    <VStack fullHeight>
+    <>
       <VStack
         alignItems="center"
         style={{ padding: pageConfig.verticalPadding }}
@@ -50,7 +52,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             <StyledButton
               icon={<ChevronLeftIcon fontSize={18} />}
               kind="link"
-              onClick={handlePrevAnimation}
+              onClick={!currentAnimation ? navigateBack : handlePrevAnimation}
               size="sm"
             >
               {t('back')}
@@ -137,7 +139,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           disabled={isLoading}
           kind="primary"
           onClick={
-            currentAnimation !== animations[animations.length - 1]
+            currentAnimation < animations.length - 1
               ? handleNextAnimation
               : onCompleteSteps
           }
@@ -146,6 +148,6 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           <ChevronRightIcon />
         </IconButton>
       </PageFooter>
-    </VStack>
+    </>
   )
 }

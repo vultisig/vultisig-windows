@@ -34,10 +34,9 @@ const StyledVaultSigners = styled.div`
   padding: 12px 16px;
 `
 
-interface VaultSignersProps
-  extends Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> {
+type VaultSignersProps = {
   vault: Vault
-}
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
 
 export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
   const { t } = useTranslation()

@@ -1,3 +1,4 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -18,6 +19,7 @@ export const VaultSettingsPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
+  const isFastVault = hasServer(vault.signers)
 
   return (
     <VStack fullHeight>
@@ -49,13 +51,15 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          <ListItem
-            icon={<ShareIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'reshareVault' })}
-            title={t('reshare')}
-            hoverable
-            showArrow
-          />
+          {!isFastVault && (
+            <ListItem
+              icon={<ShareIcon fontSize={20} />}
+              onClick={() => navigate({ id: 'reshareVault' })}
+              title={t('reshare')}
+              hoverable
+              showArrow
+            />
+          )}
           <ListItem
             icon={<SignatureIcon fontSize={20} />}
             onClick={() => navigate({ id: 'signCustomMessage' })}

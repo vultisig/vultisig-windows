@@ -1,7 +1,7 @@
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Interface } from 'ethers'
 
-export interface ParsedMemoParams {
+export type ParsedMemoParams = {
   functionSignature: string
   functionArguments: string
 }

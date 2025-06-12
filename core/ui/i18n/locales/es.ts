@@ -66,7 +66,7 @@ export const es = {
   localMode: 'Estás en modo local',
   fastVault: 'Fast Vault',
   scanQrInstruction:
-    'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
+    'Escanea el QR con otro dispositivo. Se recomienda configuración de {{max}} dispositivos, {{min}} son suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',
@@ -347,7 +347,7 @@ export const es = {
     'La dirección debe tener al menos 1 carácter.',
   vault_settings_address_book_title_max_length_error:
     'El título debe tener como máximo 50 caracteres.',
-  network: 'red',
+  network: 'Red',
   session_init: 'Inicializando sesión...',
   session_init_failed: 'No se pudo iniciar la sesión',
   select_at_least_one_device: 'Seleccione al menos un dispositivo',

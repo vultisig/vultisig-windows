@@ -65,7 +65,7 @@ export const it = {
   optionalDevice: 'Dispositivo opzionale',
   localMode: 'Sei in modalità locale',
   scanQrInstruction:
-    'Scansiona il QR con un altro dispositivo. Si consiglia un setup a 3 dispositivi, 2 sono sufficienti.',
+    'Scansiona il QR con un altro dispositivo. Si consiglia un setup a {{max}} dispositivi, {{min}} sono sufficienti.',
   devices: 'Dispositivi',
   waitingOnDevices: 'In attesa dei dispositivi...',
   switchToInternet: 'Torna alla modalità Internet',
@@ -344,7 +344,7 @@ export const it = {
   vault_settings_address_book_title_max_length_error:
     'Il titolo deve essere al massimo di 50 caratteri.',
   track: 'Traccia',
-  network: 'rete',
+  network: 'Rete',
   overview: 'Panoramica',
   signing_transaction: 'Firma della transazione',
   session_init: 'Inizializzazione sessione...',

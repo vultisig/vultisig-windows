@@ -5,9 +5,9 @@ import styled from 'styled-components'
 
 import { ElementSizeAware } from './ElementSizeAware'
 
-interface ActionInsideInteractiveElementRenderParams<
+type ActionInsideInteractiveElementRenderParams<
   T extends CSSProperties = CSSProperties,
-> {
+> = {
   actionSize: Dimensions
   actionPlacerStyles: T
 }

@@ -63,7 +63,7 @@ export const pt = {
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Você está no modo local',
   scanQrInstruction:
-    'Escaneie o QR com outro dispositivo. Configuração de 3 dispositivos recomendada, 2 são suficientes.',
+    'Escaneie o QR com outro dispositivo. Configuração de {{max}} dispositivos recomendada, {{min}} são suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Aguardando dispositivos...',
   switchToInternet: 'Voltar ao modo internet',
@@ -335,7 +335,7 @@ export const pt = {
     'O endereço deve ter pelo menos 1 caractere.',
   vault_settings_address_book_title_max_length_error:
     'O título deve ter no máximo 50 caracteres.',
-  network: 'rede',
+  network: 'Rede',
   session_init: 'Inicializando sessão...',
   session_init_failed: 'Falha ao iniciar a sessão',
   select_at_least_one_device: 'Selecione pelo menos um dispositivo',
