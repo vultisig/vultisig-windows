@@ -344,7 +344,7 @@ export const it = {
   vault_settings_address_book_title_max_length_error:
     'Il titolo deve essere al massimo di 50 caratteri.',
   track: 'Traccia',
-  network: 'rete',
+  network: 'Rete',
   overview: 'Panoramica',
   signing_transaction: 'Firma della transazione',
   session_init: 'Inizializzazione sessione...',
