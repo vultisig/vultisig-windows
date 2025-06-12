@@ -2,6 +2,7 @@ import { views } from '@clients/extension/src/navigation/views'
 import { StorageMigrationsManager } from '@clients/extension/src/providers/StorageMigrationManager'
 import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
 import { storage } from '@clients/extension/src/storage'
+import { isPopupView } from '@clients/extension/src/utils/functions'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
@@ -11,7 +12,7 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { QueryClient } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 
 const coreState: CoreState = {
   ...storage,
@@ -34,14 +35,24 @@ const coreState: CoreState = {
   vaultCreationMpcLib: 'DKLS',
 }
 
+const isPopup = isPopupView()
+
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
-    margin: 0 auto;
-    max-width: 1024px;
-    min-height: 600px;
     min-width: 400px;
     overflow: hidden;
-    width: 100%;
+
+    ${
+      isPopup
+        ? css`
+            min-height: 600px;
+          `
+        : css`
+            margin: 0 auto;
+            max-width: 1024px;
+            width: 100%;
+          `
+    }
   }
 `
 

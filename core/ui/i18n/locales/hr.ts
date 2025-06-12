@@ -327,7 +327,7 @@ export const hr = {
     'Adresa mora biti najmanje 1 znak.',
   vault_settings_address_book_title_max_length_error:
     'Naslov može imati najviše 50 znakova.',
-  network: 'mreža',
+  network: 'Mreža',
   session_init: 'Inicijalizacija sesije...',
   session_init_failed: 'Inicijalizacija sesije nije uspjela',
   select_at_least_one_device: 'Odaberite barem jedan uređaj',
