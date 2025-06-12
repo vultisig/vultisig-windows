@@ -1,4 +1,5 @@
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
+import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { useVaultPassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -26,11 +27,14 @@ const StyledTooltip = styled.div`
 `
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', { min: 3, max: 30 })
+  const message = t('password_pattern_error', passwordLenghtConfig)
 
   return z
     .object({
-      password: z.string().min(3, message).max(30, message),
+      password: z
+        .string()
+        .min(passwordLenghtConfig.min, message)
+        .max(passwordLenghtConfig.max, message),
       confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {

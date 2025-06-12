@@ -12,10 +12,17 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', { min: 3, max: 30 })
+import { passwordLenghtConfig } from '../../../security/password/config'
 
-  return z.object({ password: z.string().min(3, message).max(30, message) })
+const createSchema = (t: TFunction) => {
+  const message = t('password_pattern_error', passwordLenghtConfig)
+
+  return z.object({
+    password: z
+      .string()
+      .min(passwordLenghtConfig.min, message)
+      .max(passwordLenghtConfig.max, message),
+  })
 }
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
