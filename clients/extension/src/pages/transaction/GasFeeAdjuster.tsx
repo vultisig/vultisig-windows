@@ -83,7 +83,7 @@ export const GasFeeAdjuster = ({
         <EvmFeeSettingsForm
           value={value}
           onChange={setValue}
-          onSave={handleSave}
+          onFinish={handleSave}
           onClose={() => setIsOpen(false)}
           baseFee={baseFee}
         />

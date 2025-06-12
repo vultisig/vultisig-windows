@@ -9,6 +9,7 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
+import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
@@ -23,18 +24,16 @@ export type EvmFeeSettingsFormValue = {
   gasLimit: number
 }
 
-type EvmFeeSettingsFormProps = {
-  value: EvmFeeSettingsFormValue
-  onChange: (value: EvmFeeSettingsFormValue) => void
-  onSave: () => void
-  onClose: () => void
-  baseFee: number
-}
+type EvmFeeSettingsFormProps = InputProps<EvmFeeSettingsFormValue> &
+  OnCloseProp &
+  OnFinishProp & {
+    baseFee: number
+  }
 
 export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   value,
   onChange,
-  onSave,
+  onFinish,
   onClose,
   baseFee,
 }) => {
@@ -44,7 +43,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
     <Modal
       as="form"
       {...getFormProps({
-        onSubmit: onSave,
+        onSubmit: onFinish,
         onClose,
       })}
       onClose={onClose}

@@ -58,7 +58,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     <EvmFeeSettingsForm
       value={value}
       onChange={setValue}
-      onSave={handleSave}
+      onFinish={handleSave}
       onClose={onClose}
       baseFee={defaultFeePriority}
     />
