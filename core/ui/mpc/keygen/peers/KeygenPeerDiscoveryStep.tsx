@@ -1,5 +1,4 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
-import { requiredPeers } from '@core/mpc/devices/peers/config'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
@@ -76,6 +75,7 @@ export const KeygenPeerDiscoveryStep = ({
     if (isMigrate) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
       const requiredPeers = without(signers, localPartyId)
+
       return without(requiredPeers, ...selectedPeers)
     }
 
@@ -90,11 +90,11 @@ export const KeygenPeerDiscoveryStep = ({
     }
 
     return recommendedPeers
-  }, [isMigrate, keygenVault, selectedPeers.length])
+  }, [isMigrate, keygenVault, recommendedPeers, selectedPeers.length])
 
   const isDisabled = useMemo(() => {
-    if (selectedPeers.length < requiredPeers) {
-      return t('select_n_devices', { count: requiredPeers })
+    if (!selectedPeers.length) {
+      return t('select_n_devices', { count: 1 })
     }
 
     if (isMigrate && missingPeers.length > 0) {
