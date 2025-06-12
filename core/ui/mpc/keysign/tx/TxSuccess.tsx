@@ -1,20 +1,17 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { Animation } from '@lib/ui/animations/Animation'
-import { interactive } from '@lib/ui/css/interactive'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
-import { GradientText, Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { GradientText } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { TxOverviewAmount } from './TxOverviewAmount'
 
 export const TxSuccess = ({
   onSeeTxDetails,
@@ -22,10 +19,9 @@ export const TxSuccess = ({
 }: ValueProp<KeysignPayload> & {
   onSeeTxDetails: () => void
 }) => {
-  const { coin: potentialCoin } = value
   const { t } = useTranslation()
+  const { coin: potentialCoin, toAmount } = value
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { toAmount } = value
 
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
@@ -35,58 +31,32 @@ export const TxSuccess = ({
 
   return (
     <>
-      <AnimationWrapper>
+      <VStack style={{ height: 250, position: 'relative' }}>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
-          <SuccessText centerHorizontally size={24}>
+          <GradientText
+            as="span"
+            size={24}
+            style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
+            centerHorizontally
+          >
             {t('transaction_successful')}
-          </SuccessText>
+          </GradientText>
         </AnimatedVisibility>
-      </AnimationWrapper>
-      <VStack gap={8} fullWidth>
+      </VStack>
+      <VStack gap={8}>
         {formattedToAmount && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />
         )}
-        <TxDetailsButton
-          justifyContent="space-between"
-          alignItems="center"
-          fullWidth
-          role="button"
-          tabIndex={0}
-          onClick={onSeeTxDetails}
-        >
-          <Text size={14} color="contrast">
-            {t('transaction_details')}
-          </Text>
-          <ChevronRightIcon />
-        </TxDetailsButton>
+        <List>
+          <ListItem
+            onClick={onSeeTxDetails}
+            title={t('transaction_details')}
+            hoverable
+            showArrow
+          />
+        </List>
       </VStack>
     </>
   )
 }
-
-const AnimationWrapper = styled.div`
-  width: 100%;
-  height: 250px;
-  position: relative;
-  margin-inline: auto;
-`
-
-const SuccessText = styled(GradientText)`
-  position: absolute;
-  bottom: 40px;
-  left: 0;
-  right: 0;
-`
-
-const TxDetailsButton = styled(HStack)`
-  padding: 16px 24px;
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
-  ${interactive};
-
-  &:hover {
-    background-color: ${getColor('foregroundExtra')};
-  }
-`

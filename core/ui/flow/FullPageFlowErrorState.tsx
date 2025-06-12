@@ -14,8 +14,8 @@ type FullPageFlowErrorStateProps = Partial<ActionProp> &
 
 export const FullPageFlowErrorState = ({
   action,
-  message,
   errorMessage,
+  message,
 }: FullPageFlowErrorStateProps) => {
   const navigate = useCoreNavigate()
 
@@ -28,11 +28,12 @@ export const FullPageFlowErrorState = ({
             <CrossIcon />
           </CloseButton>
         }
+        hasBorder
       />
       <FlowErrorPageContent
         action={action}
-        title={message}
         message={errorMessage}
+        title={message}
       />
     </>
   )
