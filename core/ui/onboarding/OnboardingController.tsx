@@ -4,11 +4,7 @@ import { OnboardingSummary } from '@core/ui/onboarding/components/OnboardingSumm
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-const steps = [
-  'onboardingGreeting',
-  'onboardingSteps',
-  'onboardingSummary',
-] as const
+const steps = ['greeting', 'steps', 'summary'] as const
 
 export const OnboardingController = () => {
   const { step, toNextStep } = useStepNavigation({ steps })
@@ -16,11 +12,9 @@ export const OnboardingController = () => {
   return (
     <Match
       value={step}
-      onboardingGreeting={() => (
-        <OnboardingGreeting onCompleteGreeting={toNextStep} />
-      )}
-      onboardingSteps={() => <OnboardingSteps onCompleteSteps={toNextStep} />}
-      onboardingSummary={() => <OnboardingSummary />}
+      greeting={() => <OnboardingGreeting onCompleteGreeting={toNextStep} />}
+      steps={() => <OnboardingSteps onCompleteSteps={toNextStep} />}
+      summary={() => <OnboardingSummary />}
     />
   )
 }
