@@ -1,5 +1,4 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
-import { recommendedPeers, requiredPeers } from '@core/mpc/devices/peers/config'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
@@ -49,33 +48,34 @@ const educationUrl: Record<KeygenType, string> = {
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
 
-const recommendedDevicesTarget = recommendedPeers + 1
-
 export const KeygenPeerDiscoveryStep = ({
   onFinish,
   onBack,
 }: KeygenPeerDiscoveryStepProps) => {
-  const [serverType] = useMpcServerType()
   const { t } = useTranslation()
+  const { openUrl } = useCore()
+  const [serverType] = useMpcServerType()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = useMpcPeerOptionsQuery()
   const isLargeScreen = useIsTabletDeviceAndUp()
-
-  const { openUrl } = useCore()
-
   const joinUrlQuery = useJoinKeygenUrlQuery()
-
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
-
   const opertaionType = useKeygenOperation()
+
+  const recommendedPeers = useMemo(() => {
+    return !selectedPeers.length ? 2 : selectedPeers.length + 1
+  }, [selectedPeers])
+
   const isMigrate = useMemo(() => {
     return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
   }, [opertaionType])
+
   const missingPeers = useMemo(() => {
     if (isMigrate) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
       const requiredPeers = without(signers, localPartyId)
+
       return without(requiredPeers, ...selectedPeers)
     }
 
@@ -89,12 +89,12 @@ export const KeygenPeerDiscoveryStep = ({
       return Math.max(signers.length, selectedPeers.length + 1)
     }
 
-    return recommendedDevicesTarget
-  }, [isMigrate, keygenVault, selectedPeers.length])
+    return recommendedPeers
+  }, [isMigrate, keygenVault, recommendedPeers, selectedPeers.length])
 
   const isDisabled = useMemo(() => {
-    if (selectedPeers.length < requiredPeers) {
-      return t('select_n_devices', { count: requiredPeers })
+    if (!selectedPeers.length) {
+      return t('select_n_devices', { count: 1 })
     }
 
     if (isMigrate && missingPeers.length > 0) {
@@ -141,7 +141,11 @@ export const KeygenPeerDiscoveryStep = ({
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
-                relay={() => (isMigrate ? null : <PeerRequirementsInfo />)}
+                relay={() =>
+                  isMigrate ? null : (
+                    <PeerRequirementsInfo target={devicesTarget} />
+                  )
+                }
               />
               <PeersManagerTitle target={devicesTarget} />
               <PeersContainer>

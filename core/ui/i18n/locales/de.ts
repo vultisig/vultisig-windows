@@ -63,7 +63,7 @@ export const de = {
   optionalDevice: 'Optionales Gerät',
   localMode: 'Sie sind im lokalen Modus',
   scanQrInstruction:
-    'QR mit einem anderen Gerät scannen. 3-Geräte-Setup empfohlen, 2 reichen aus.',
+    'QR mit einem anderen Gerät scannen. {{max}}-Geräte-Setup empfohlen, {{min}} reichen aus.',
   devices: 'Geräte',
   waitingOnDevices: 'Warten auf Geräte...',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
