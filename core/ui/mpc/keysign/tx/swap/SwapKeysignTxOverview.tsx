@@ -25,6 +25,7 @@ import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -73,7 +74,10 @@ export const SwapKeysignTxOverview = ({
   const trackTransaction = (tx: string) =>
     openUrl(
       getBlockExplorerUrl({
-        chain,
+        chain: matchRecordUnion(swapPayload, {
+          native: ({ chain }) => chain,
+          general: () => chain,
+        }),
         entity: 'tx',
         value: tx,
       })
