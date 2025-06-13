@@ -1,11 +1,12 @@
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getSolanaTxInputData: TxInputDataResolver<
@@ -20,41 +21,35 @@ export const getSolanaTxInputData: TxInputDataResolver<
     programId,
   } = chainSpecific
 
-  if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
-    return matchDiscriminatedUnion(
-      keysignPayload.swapPayload,
-      'case',
-      'value',
-      {
-        thorchainSwapPayload: () => {
-          throw new Error('ThorChain swap not supported')
-        },
-        mayachainSwapPayload: () => {
-          throw new Error('Mayachain swap not supported')
-        },
-        oneinchSwapPayload: swapPayload => {
-          const tx = shouldBePresent(swapPayload.quote?.tx)
-          const { data } = tx
+  const swapPayload = getKeysignSwapPayload(keysignPayload)
 
-          const decodedData = walletCore.TransactionDecoder.decode(
-            getCoinType({
-              walletCore,
-              chain,
-            }),
-            Buffer.from(data, 'base64')
-          )
-          const decodedOutput =
-            TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+  if (swapPayload) {
+    return matchRecordUnion(swapPayload, {
+      native: () => {
+        throw new Error('Native swap not supported')
+      },
+      general: swapPayload => {
+        const tx = shouldBePresent(swapPayload.quote?.tx)
+        const { data } = tx
 
-          const signingInput = TW.Solana.Proto.SigningInput.create({
-            recentBlockhash: recentBlockHash,
-            rawMessage: decodedOutput.transaction,
-          })
+        const decodedData = walletCore.TransactionDecoder.decode(
+          getCoinType({
+            walletCore,
+            chain,
+          }),
+          Buffer.from(data, 'base64')
+        )
+        const decodedOutput =
+          TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
 
-          return [TW.Solana.Proto.SigningInput.encode(signingInput).finish()]
-        },
-      }
-    )
+        const signingInput = TW.Solana.Proto.SigningInput.create({
+          recentBlockhash: recentBlockHash,
+          rawMessage: decodedOutput.transaction,
+        })
+
+        return [TW.Solana.Proto.SigningInput.encode(signingInput).finish()]
+      },
+    })
   }
 
   if (coin.isNativeToken) {

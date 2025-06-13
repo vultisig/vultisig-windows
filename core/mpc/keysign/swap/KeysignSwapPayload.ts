@@ -1,15 +1,20 @@
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { SwapType } from '@core/chain/swap/quote/SwapQuote'
+import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { THORChainSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 
-export type KeysignSwapPayload = Exclude<
+import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+
+export type KeysignSwapPayload = {
+  [T in SwapType]: {
+    [K in T]: T extends 'native'
+      ? THORChainSwapPayload
+      : T extends 'general'
+        ? OneInchSwapPayload
+        : never
+  }
+}[SwapType]
+
+export type CommKeysignSwapPayload = Exclude<
   KeysignPayload['swapPayload'],
   { case: undefined; value?: undefined }
 >
-
-export const toKeysignSwapPayload = (
-  swapPayload: KeysignPayload['swapPayload']
-): KeysignSwapPayload => {
-  if (swapPayload.case === undefined) {
-    throw new Error('Swap payload case is undefined')
-  }
-  return swapPayload
-}
