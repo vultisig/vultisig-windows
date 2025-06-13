@@ -4,6 +4,7 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { match } from '@lib/utils/match'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
@@ -45,11 +46,37 @@ export const getUtxoTxInputData = async ({
       walletCore.BitcoinScript.buildPayToPublicKeyHash(pubKeyHash).data(),
   })
 
+  const getAmount = () => {
+    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
+      return keysignPayload.swapPayload.value.fromAmount
+    }
+
+    return keysignPayload.toAmount
+  }
+
+  const getDestinationAddress = (): string => {
+    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
+      return matchDiscriminatedUnion(
+        keysignPayload.swapPayload,
+        'case',
+        'value',
+        {
+          thorchainSwapPayload: payload => payload.vaultAddress,
+          mayachainSwapPayload: payload => payload.vaultAddress,
+          oneinchSwapPayload: () => {
+            throw new Error('Oneinch swap not supported')
+          },
+        }
+      )
+    }
+    return keysignPayload.toAddress
+  }
+
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
-    amount: Long.fromString(keysignPayload.toAmount),
+    amount: Long.fromString(getAmount()),
     useMaxAmount: sendMaxAmount,
-    toAddress: keysignPayload.toAddress,
+    toAddress: getDestinationAddress(),
     changeAddress: coin.address,
     byteFee: Long.fromString(byteFee),
     coinType: coinType.value,
