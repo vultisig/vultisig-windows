@@ -1,7 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   TxOverviewChainDataRow,
@@ -32,10 +31,7 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { toCoin, toAmountDecimal } = getRecordUnionValue(swapPayload)
   const toAmount = Number(toAmountDecimal)
 
-  const provider = getKeysignSwapProviderName({
-    swapPayload,
-    chain: getKeysignChain(value),
-  })
+  const provider = getKeysignSwapProviderName(swapPayload)
 
   return (
     <>

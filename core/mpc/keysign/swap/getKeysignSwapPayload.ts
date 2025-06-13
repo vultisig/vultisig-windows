@@ -1,3 +1,4 @@
+import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { SwapType } from '@core/chain/swap/quote/SwapQuote'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
@@ -12,6 +13,15 @@ const swapTypeRecord: Record<
   oneinchSwapPayload: 'general',
 }
 
+const chainRecord: Record<
+  NonNullable<KeysignPayload['swapPayload']['case']>,
+  VaultBasedCosmosChain | undefined
+> = {
+  thorchainSwapPayload: Chain.THORChain,
+  mayachainSwapPayload: Chain.MayaChain,
+  oneinchSwapPayload: undefined,
+}
+
 export const getKeysignSwapPayload = ({
   swapPayload,
 }: Pick<KeysignPayload, 'swapPayload'>): KeysignSwapPayload | undefined => {
@@ -20,6 +30,13 @@ export const getKeysignSwapPayload = ({
   }
 
   const swapType = swapTypeRecord[swapPayload.case]
+  const chain = chainRecord[swapPayload.case]
+
+  if (swapType === 'native' && chain) {
+    return {
+      [swapType]: { ...swapPayload.value, chain },
+    } as KeysignSwapPayload
+  }
 
   return {
     [swapType]: swapPayload.value,
