@@ -2,7 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
@@ -47,47 +47,45 @@ export const ManageFromAmount = () => {
   )
 
   return (
-    <AmountContainer gap={6} alignItems="flex-end">
-      <PositionedAmountInput
-        type="number"
-        placeholder={'0'}
-        onWheel={event => event.currentTarget.blur()}
-        value={value}
-        onChange={e => handleInputValueChange(e.target.value)}
-        suggestion={
-          <SwapCoinBalanceDependant
-            coin={swapCoin}
-            pending={() => null}
-            error={() => null}
-            success={amount => (
-              <HStack alignItems="center" gap={4}>
-                {suggestions.map(suggestion => (
-                  <AmountSuggestion
-                    onClick={() =>
-                      handleInputValueChange(
-                        String(fromChainAmount(amount, decimals) * suggestion)
-                      )
-                    }
-                    key={suggestion}
-                    value={suggestion}
-                  />
-                ))}
-              </HStack>
-            )}
-          />
-        }
+    <VStack gap={4} alignItems="flex-end">
+      <AmountContainer gap={6} alignItems="flex-end">
+        <PositionedAmountInput
+          type="number"
+          placeholder={'0'}
+          onWheel={event => event.currentTarget.blur()}
+          value={value}
+          onChange={e => handleInputValueChange(e.target.value)}
+        />
+        {value !== null && (
+          <SwapFiatAmount value={{ amount: value, ...fromCoinKey }} />
+        )}
+      </AmountContainer>
+      <SwapCoinBalanceDependant
+        coin={swapCoin}
+        pending={() => null}
+        error={() => null}
+        success={amount => (
+          <HStack alignItems="center" gap={4}>
+            {suggestions.map(suggestion => (
+              <AmountSuggestion
+                onClick={() =>
+                  handleInputValueChange(
+                    String(fromChainAmount(amount, decimals) * suggestion)
+                  )
+                }
+                key={suggestion}
+                value={suggestion}
+              />
+            ))}
+          </HStack>
+        )}
       />
-
-      {value !== null && (
-        <SwapFiatAmount value={{ amount: value, ...fromCoinKey }} />
-      )}
-    </AmountContainer>
+    </VStack>
   )
 }
 
 const PositionedAmountInput = styled(AmountTextInput)`
   text-align: right;
-
   border: none;
   font-family: inherit;
   &:hover {
