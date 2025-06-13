@@ -4,10 +4,13 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { match } from '@lib/utils/match'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { GetTxInputDataInput } from './TxInputDataResolver'
 
 export const getUtxoTxInputData = async ({
@@ -46,37 +49,25 @@ export const getUtxoTxInputData = async ({
       walletCore.BitcoinScript.buildPayToPublicKeyHash(pubKeyHash).data(),
   })
 
-  const getAmount = () => {
-    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
-      return keysignPayload.swapPayload.value.fromAmount
-    }
+  const swapPayload = getKeysignSwapPayload(keysignPayload)
+  const amount = swapPayload
+    ? getRecordUnionValue(swapPayload).fromAmount
+    : keysignPayload.toAmount
 
-    return keysignPayload.toAmount
-  }
-
-  const getDestinationAddress = (): string => {
-    if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
-      return matchDiscriminatedUnion(
-        keysignPayload.swapPayload,
-        'case',
-        'value',
-        {
-          thorchainSwapPayload: payload => payload.vaultAddress,
-          mayachainSwapPayload: payload => payload.vaultAddress,
-          oneinchSwapPayload: () => {
-            throw new Error('Oneinch swap not supported')
-          },
-        }
-      )
-    }
-    return keysignPayload.toAddress
-  }
+  const destinationAddress = swapPayload
+    ? matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
+        native: swapPayload => swapPayload.vaultAddress,
+        general: () => {
+          throw new Error('General swap not supported')
+        },
+      })
+    : keysignPayload.toAddress
 
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
-    amount: Long.fromString(getAmount()),
+    amount: Long.fromString(amount),
     useMaxAmount: sendMaxAmount,
-    toAddress: getDestinationAddress(),
+    toAddress: destinationAddress,
     changeAddress: coin.address,
     byteFee: Long.fromString(byteFee),
     coinType: coinType.value,

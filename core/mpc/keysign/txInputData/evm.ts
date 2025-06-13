@@ -8,13 +8,14 @@ import { toThorchainSwapAssetProto } from '@core/chain/swap/native/thor/asset/to
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { fromCommCoin } from '../../types/utils/commCoin'
 import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 const toTransferData = (memo: string | undefined) => {
@@ -51,107 +52,100 @@ export const getEvmTxInputData: TxInputDataResolver<
 
   const { maxFeePerGasWei, priorityFee, nonce, gasLimit } = chainSpecific
 
-  if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
-    return matchDiscriminatedUnion(
-      keysignPayload.swapPayload,
-      'case',
-      'value',
-      {
-        thorchainSwapPayload: swapPayload => {
-          const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
+  const swapPayload = getKeysignSwapPayload(keysignPayload)
 
-          const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
+  if (swapPayload) {
+    return matchRecordUnion(swapPayload, {
+      native: swapPayload => {
+        const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
 
-          const swapInput = TW.THORChainSwap.Proto.SwapInput.create({
-            fromAsset: toThorchainSwapAssetProto({
-              ...fromCoin,
-              direction: 'from',
-            }),
-            fromAddress: swapPayload.fromAddress,
-            toAsset: toThorchainSwapAssetProto({
-              ...toCoin,
-              direction: 'to',
-            }),
-            toAddress: swapPayload.toCoin?.address,
-            vaultAddress: swapPayload.vaultAddress,
-            routerAddress: swapPayload.routerAddress,
-            fromAmount: swapPayload.fromAmount,
-            toAmountLimit: swapPayload.toAmountLimit,
-            expirationTime: new Long(Number(swapPayload.expirationTime)),
-            streamParams: {
-              interval: swapPayload.streamingInterval,
-              quantity: swapPayload.streamingQuantity,
+        const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
+
+        const swapInput = TW.THORChainSwap.Proto.SwapInput.create({
+          fromAsset: toThorchainSwapAssetProto({
+            ...fromCoin,
+            direction: 'from',
+          }),
+          fromAddress: swapPayload.fromAddress,
+          toAsset: toThorchainSwapAssetProto({
+            ...toCoin,
+            direction: 'to',
+          }),
+          toAddress: swapPayload.toCoin?.address,
+          vaultAddress: swapPayload.vaultAddress,
+          routerAddress: swapPayload.routerAddress,
+          fromAmount: swapPayload.fromAmount,
+          toAmountLimit: swapPayload.toAmountLimit,
+          expirationTime: new Long(Number(swapPayload.expirationTime)),
+          streamParams: {
+            interval: swapPayload.streamingInterval,
+            quantity: swapPayload.streamingQuantity,
+          },
+          ...(swapPayload.isAffiliate
+            ? {
+                affiliateFeeAddress:
+                  nativeSwapAffiliateConfig.affiliateFeeAddress,
+                affiliateFeeRateBps:
+                  nativeSwapAffiliateConfig.affiliateFeeRateBps,
+              }
+            : {}),
+        })
+
+        const swapInputData =
+          TW.THORChainSwap.Proto.SwapInput.encode(swapInput).finish()
+
+        const swapOutputData = walletCore.THORChainSwap.buildSwap(swapInputData)
+
+        const swapOutput =
+          TW.THORChainSwap.Proto.SwapOutput.decode(swapOutputData)
+
+        if (swapOutput.error?.message) {
+          throw new Error(swapOutput.error.message)
+        }
+
+        const signingInput = TW.Ethereum.Proto.SigningInput.create({
+          ...shouldBePresent(swapOutput.ethereum),
+          ...getSigningInputEnvelopedTxFields({
+            chain,
+            walletCore,
+            maxFeePerGasWei,
+            priorityFee,
+            nonce,
+            gasLimit,
+          }),
+        })
+
+        return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
+      },
+      general: swapPayload => {
+        const tx = shouldBePresent(swapPayload.quote?.tx)
+        const { data } = tx
+
+        const amountHex = Buffer.from(
+          stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
+          'hex'
+        )
+
+        const signingInput = TW.Ethereum.Proto.SigningInput.create({
+          toAddress: tx.to,
+          transaction: {
+            contractGeneric: {
+              amount: amountHex,
+              data: Buffer.from(stripHexPrefix(data), 'hex'),
             },
-            ...(swapPayload.isAffiliate
-              ? {
-                  affiliateFeeAddress:
-                    nativeSwapAffiliateConfig.affiliateFeeAddress,
-                  affiliateFeeRateBps:
-                    nativeSwapAffiliateConfig.affiliateFeeRateBps,
-                }
-              : {}),
-          })
+          },
+          ...getSigningInputLegacyTxFields({
+            chain,
+            walletCore,
+            nonce,
+            gasPrice: BigInt(tx.gasPrice || 0),
+            gasLimit: BigInt(tx.gas),
+          }),
+        })
 
-          const swapInputData =
-            TW.THORChainSwap.Proto.SwapInput.encode(swapInput).finish()
-
-          const swapOutputData =
-            walletCore.THORChainSwap.buildSwap(swapInputData)
-
-          const swapOutput =
-            TW.THORChainSwap.Proto.SwapOutput.decode(swapOutputData)
-
-          if (swapOutput.error?.message) {
-            throw new Error(swapOutput.error.message)
-          }
-
-          const signingInput = TW.Ethereum.Proto.SigningInput.create({
-            ...shouldBePresent(swapOutput.ethereum),
-            ...getSigningInputEnvelopedTxFields({
-              chain,
-              walletCore,
-              maxFeePerGasWei,
-              priorityFee,
-              nonce,
-              gasLimit,
-            }),
-          })
-
-          return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
-        },
-        mayachainSwapPayload: () => {
-          throw new Error('Mayachain swap not supported')
-        },
-        oneinchSwapPayload: swapPayload => {
-          const tx = shouldBePresent(swapPayload.quote?.tx)
-          const { data } = tx
-
-          const amountHex = Buffer.from(
-            stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
-            'hex'
-          )
-
-          const signingInput = TW.Ethereum.Proto.SigningInput.create({
-            toAddress: tx.to,
-            transaction: {
-              contractGeneric: {
-                amount: amountHex,
-                data: Buffer.from(stripHexPrefix(data), 'hex'),
-              },
-            },
-            ...getSigningInputLegacyTxFields({
-              chain,
-              walletCore,
-              nonce,
-              gasPrice: BigInt(tx.gasPrice || 0),
-              gasLimit: BigInt(tx.gas),
-            }),
-          })
-
-          return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
-        },
-      }
-    )
+        return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
+      },
+    })
   }
 
   // Amount: converted to hexadecimal, stripped of '0x'
