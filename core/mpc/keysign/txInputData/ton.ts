@@ -2,11 +2,12 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
+import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTonPreSignedInputData: PreSignedInputDataResolver<
-  'tonSpecific'
-> = ({ keysignPayload, chainSpecific }) => {
+export const getTonTxInputData: TxInputDataResolver<'tonSpecific'> = async ({
+  keysignPayload,
+  chainSpecific,
+}) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const { expireAt, sequenceNumber } = chainSpecific
@@ -41,5 +42,5 @@ export const getTonPreSignedInputData: PreSignedInputDataResolver<
   const encodedInput =
     TW.TheOpenNetwork.Proto.SigningInput.encode(input).finish()
 
-  return encodedInput
+  return [encodedInput]
 }

@@ -2,11 +2,11 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
+import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getRipplePreSignedInputData: PreSignedInputDataResolver<
+export const getRippleTxInputData: TxInputDataResolver<
   'rippleSpecific'
-> = ({ keysignPayload, chainSpecific }) => {
+> = async ({ keysignPayload, chainSpecific }) => {
   const coin = assertField(keysignPayload, 'coin')
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
@@ -29,5 +29,5 @@ export const getRipplePreSignedInputData: PreSignedInputDataResolver<
     publicKey: new Uint8Array(pubKeyData),
     opPayment: payment,
   })
-  return TW.Ripple.Proto.SigningInput.encode(input).finish()
+  return [TW.Ripple.Proto.SigningInput.encode(input).finish()]
 }
