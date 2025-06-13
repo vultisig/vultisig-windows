@@ -1,16 +1,10 @@
-import { Chain } from '@core/chain/Chain'
 import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapProvider'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { KeysignSwapPayload } from './KeysignSwapPayload'
 
-type Input = {
-  swapPayload: KeysignSwapPayload
-  chain: Chain
-}
-
-export const getKeysignSwapProviderName = ({ swapPayload, chain }: Input) =>
+export const getKeysignSwapProviderName = (swapPayload: KeysignSwapPayload) =>
   matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
-    native: () => chain,
+    native: ({ chain }) => chain,
     general: () => generalSwapProviderName.oneinch,
   })
