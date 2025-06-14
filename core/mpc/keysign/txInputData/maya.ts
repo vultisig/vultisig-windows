@@ -4,14 +4,19 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }) => {
+  const { isDeposit, accountNumber, sequence } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'mayaSpecific'
+  )
+
   const coinType = getCoinType({
     walletCore,
     chain,
@@ -30,7 +35,7 @@ export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
   let message: TW.Cosmos.Proto.Message[]
 
-  if (chainSpecific.isDeposit) {
+  if (isDeposit) {
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
         chain: 'MAYA',
@@ -87,8 +92,8 @@ export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
     publicKey: new Uint8Array(pubKeyData),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
     chainId: 'mayachain-mainnet-v1',
-    accountNumber: new Long(Number(chainSpecific.accountNumber)),
-    sequence: new Long(Number(chainSpecific.sequence)),
+    accountNumber: new Long(Number(accountNumber)),
+    sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo: keysignPayload.memo || '',
     messages: message,
