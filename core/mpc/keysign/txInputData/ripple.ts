@@ -4,9 +4,10 @@ import Long from 'long'
 
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getRippleTxInputData: TxInputDataResolver<
-  'rippleSpecific'
-> = async ({ keysignPayload, chainSpecific }) => {
+export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
+  keysignPayload,
+  chainSpecific,
+}) => {
   const coin = assertField(keysignPayload, 'coin')
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 

@@ -39,7 +39,6 @@ const handlers: Record<KeysignChainSpecificKey, TxInputDataResolver<any>> = {
 }
 
 export const getTxInputData = (input: Input) => {
-  console.log('getTxInputData', input.keysignPayload)
   const { blockchainSpecific } = input.keysignPayload
   if (!blockchainSpecific.case) {
     throw new Error('Invalid blockchain specific')

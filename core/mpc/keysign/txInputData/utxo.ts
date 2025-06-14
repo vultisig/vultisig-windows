@@ -13,7 +13,7 @@ import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { GetTxInputDataInput } from './TxInputDataResolver'
 
-export const getUtxoTxInputData = async ({
+export const getUtxoTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
