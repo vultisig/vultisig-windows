@@ -56,7 +56,7 @@ export const getEvmTxInputData: TxInputDataResolver<
     if (swapPayload) {
       return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: ({ vaultAddress, routerAddress }) =>
-          coin.isNativeToken ? shouldBePresent(routerAddress) : vaultAddress,
+          coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
         general: ({ quote }) => shouldBePresent(quote?.tx?.to),
       })
     }
