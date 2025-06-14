@@ -4,13 +4,13 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { GetTxInputDataInput } from './TxInputDataResolver'
 
 export const getPolkadotTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }: GetTxInputDataInput<'polkadotSpecific'>) => {
   const {
     recentBlockHash,
@@ -19,7 +19,10 @@ export const getPolkadotTxInputData = ({
     specVersion,
     transactionVersion,
     genesisHash,
-  } = chainSpecific
+  } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'polkadotSpecific'
+  )
 
   // Amount: converted to hexadecimal, stripped of '0x'
   const amountHex = Buffer.from(

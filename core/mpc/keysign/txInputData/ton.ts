@@ -2,15 +2,18 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getTonTxInputData: TxInputDataResolver<'tonSpecific'> = ({
   keysignPayload,
-  chainSpecific,
 }) => {
   const coin = assertField(keysignPayload, 'coin')
 
-  const { expireAt, sequenceNumber } = chainSpecific
+  const { expireAt, sequenceNumber } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'tonSpecific'
+  )
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 

@@ -9,6 +9,7 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { GetTxInputDataInput } from './TxInputDataResolver'
@@ -17,9 +18,11 @@ export const getUtxoTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }: GetTxInputDataInput<'utxoSpecific'>) => {
-  const { byteFee, sendMaxAmount } = chainSpecific
+  const { byteFee, sendMaxAmount } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'utxoSpecific'
+  )
 
   const coin = shouldBePresent(keysignPayload.coin)
 
