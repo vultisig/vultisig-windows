@@ -13,11 +13,11 @@ import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
 import { toEvmTwAmount } from '@core/chain/chains/evm/tx/tw/toEvmTwAmount'
 import { toEvmTxData } from '@core/chain/chains/evm/tx/tw/toEvmTxData'
+import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
-import { encodeFunctionData } from 'viem'
 
 import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
@@ -83,45 +83,46 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
         native: ({ fromCoin, fromAmount, vaultAddress, expirationTime }) => {
           const { isNativeToken } = shouldBePresent(fromCoin)
 
+          const memo = shouldBePresent(keysignPayload.memo)
+
           if (isNativeToken) {
             return {
               transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
                 amount: toEvmTwAmount(fromAmount),
-                data: toEvmTxData(shouldBePresent(keysignPayload.memo)),
+                data: toEvmTxData(memo),
               }),
             }
           }
 
-          const contractAddress = shouldBePresent(fromCoin?.contractAddress)
+          const abiFunction =
+            walletCore.EthereumAbiFunction.createWithString('depositWithExpiry')
 
-          const data = encodeFunctionData({
-            abi: [
-              {
-                name: 'depositWithExpiry',
-                type: 'function',
-                inputs: [
-                  { name: 'vault', type: 'address' },
-                  { name: 'asset', type: 'address' },
-                  { name: 'amount', type: 'uint256' },
-                  { name: 'memo', type: 'string' },
-                  { name: 'expiration', type: 'uint256' },
-                ],
-              },
-            ],
-            functionName: 'depositWithExpiry',
-            args: [
-              vaultAddress as `0x${string}`,
-              contractAddress as `0x${string}`,
-              BigInt(fromAmount),
-              shouldBePresent(keysignPayload.memo),
-              expirationTime,
-            ],
+          const coinType = getCoinType({
+            walletCore,
+            chain,
           })
+
+          const vaultAddr = walletCore.AnyAddress.createWithString(
+            vaultAddress,
+            coinType
+          )
+          const contractAddr = walletCore.AnyAddress.createWithString(
+            shouldBePresent(fromCoin?.contractAddress),
+            coinType
+          )
+
+          abiFunction.addParamAddress(vaultAddr.data(), false)
+          abiFunction.addParamAddress(contractAddr.data(), false)
+          abiFunction.addParamUInt256(toEvmTwAmount(fromAmount), false)
+          abiFunction.addParamString(memo, false)
+          abiFunction.addParamUInt256(toEvmTwAmount(expirationTime), false)
+
+          const data = walletCore.EthereumAbi.encode(abiFunction)
 
           return {
             contractGeneric: {
               amount: toEvmTwAmount(0),
-              data: toEvmTxData(data),
+              data,
             },
           }
         },
