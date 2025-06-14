@@ -6,12 +6,12 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getSolanaTxInputData: TxInputDataResolver<'solanaSpecific'> = ({
   keysignPayload,
-  chainSpecific,
   walletCore,
   chain,
 }) => {
@@ -22,7 +22,10 @@ export const getSolanaTxInputData: TxInputDataResolver<'solanaSpecific'> = ({
     fromTokenAssociatedAddress,
     toTokenAssociatedAddress,
     programId,
-  } = chainSpecific
+  } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'solanaSpecific'
+  )
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
 

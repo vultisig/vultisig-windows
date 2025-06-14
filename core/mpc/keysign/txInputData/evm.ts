@@ -20,6 +20,7 @@ import { TW } from '@trustwallet/wallet-core'
 import { encodeFunctionData } from 'viem'
 
 import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
@@ -28,7 +29,6 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }) => {
   const coin = assertField(keysignPayload, 'coin')
 
@@ -44,14 +44,17 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
         create(KeysignPayloadSchema, restOfKeysignPayload)
       ),
       walletCore,
-      chainSpecific,
       chain,
     })
 
     return [approveTxInputData, ...restOfTxInputData]
   }
 
-  const { maxFeePerGasWei, priorityFee, nonce, gasLimit } = chainSpecific
+  const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
+    getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'ethereumSpecific'
+    )
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
 

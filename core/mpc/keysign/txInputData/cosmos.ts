@@ -8,26 +8,32 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
+  const { transactionType, ibcDenomTraces, accountNumber, sequence, gas } =
+    getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'cosmosSpecific'
+    )
+
   const denom = cosmosFeeCoinDenom[chain]
   let message: TW.Cosmos.Proto.Message[]
-  if (chainSpecific.transactionType === TransactionType.IBC_TRANSFER) {
+  if (transactionType === TransactionType.IBC_TRANSFER) {
     const memo = shouldBePresent(keysignPayload.memo)
     const [, channel] = memo.split(':')
 
     const timeoutTimestamp = Long.fromString(
-      chainSpecific.ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
+      ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
     )
 
     message = [
@@ -77,12 +83,12 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
     publicKey: new Uint8Array(pubKeyData),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
     chainId: walletCore.CoinTypeExt.chainId(coinType),
-    accountNumber: new Long(Number(chainSpecific.accountNumber)),
-    sequence: new Long(Number(chainSpecific.sequence)),
+    accountNumber: new Long(Number(accountNumber)),
+    sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo:
-      chainSpecific.transactionType !== TransactionType.VOTE &&
-      chainSpecific.transactionType !== TransactionType.IBC_TRANSFER
+      transactionType !== TransactionType.VOTE &&
+      transactionType !== TransactionType.IBC_TRANSFER
         ? keysignPayload.memo || ''
         : '',
     messages: message,
@@ -90,7 +96,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
       gas: new Long(Number(cosmosGasLimitRecord[chain])),
       amounts: [
         TW.Cosmos.Proto.Amount.create({
-          amount: chainSpecific.gas.toString(),
+          amount: gas.toString(),
           denom: denom,
         }),
       ],
