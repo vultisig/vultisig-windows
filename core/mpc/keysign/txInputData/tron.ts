@@ -1,16 +1,18 @@
-import { TronSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = async ({
+export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = ({
   keysignPayload,
-  chainSpecific,
 }) => {
-  const tronSpecific = chainSpecific as unknown as TronSpecific
+  const tronSpecific = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'tronSpecific'
+  )
 
   const isNative = keysignPayload?.coin?.isNativeToken
 

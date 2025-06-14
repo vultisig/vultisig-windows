@@ -1,7 +1,4 @@
-import {
-  getBlockchainSpecificValue,
-  KeysignChainSpecificKey,
-} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignChainSpecificKey } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -44,18 +41,12 @@ export const getTxInputData = (input: Input) => {
     throw new Error('Invalid blockchain specific')
   }
 
-  const chainSpecific = getBlockchainSpecificValue(
-    blockchainSpecific,
-    blockchainSpecific.case
-  )
-
   const chain = getKeysignChain(input.keysignPayload)
 
   const chainSpecificHandler = handlers[blockchainSpecific.case]
 
   return chainSpecificHandler({
     ...input,
-    chainSpecific,
     chain,
   })
 }

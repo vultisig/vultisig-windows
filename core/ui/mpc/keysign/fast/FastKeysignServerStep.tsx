@@ -47,7 +47,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
     mutationFn: async () => {
       return matchRecordUnion(keysignPayload, {
         keysign: async keysignPayload => {
-          const inputs = await getTxInputData({
+          const inputs = getTxInputData({
             keysignPayload,
             walletCore,
           })

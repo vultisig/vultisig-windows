@@ -2,15 +2,19 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getRippleTxInputData: TxInputDataResolver<
-  'rippleSpecific'
-> = async ({ keysignPayload, chainSpecific }) => {
+export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
+  keysignPayload,
+}) => {
+  const { gas, sequence, lastLedgerSequence } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'rippleSpecific'
+  )
+
   const coin = assertField(keysignPayload, 'coin')
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
-
-  const { gas, sequence, lastLedgerSequence } = chainSpecific
 
   const payment = TW.Ripple.Proto.OperationPayment.create({
     destination: keysignPayload.toAddress,

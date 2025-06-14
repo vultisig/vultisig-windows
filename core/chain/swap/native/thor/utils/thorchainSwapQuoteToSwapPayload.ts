@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
+import { CommKeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { THORChainSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { convertDuration } from '@lib/utils/time/convertDuration'
@@ -22,7 +22,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
   fromCoin,
   amount,
   toCoin,
-}: Input): KeysignSwapPayload => {
+}: Input): CommKeysignSwapPayload => {
   const isAffiliate = !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0
 
   const streamingInterval = nativeSwapStreamingInterval[quote.swapChain]
