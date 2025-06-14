@@ -15,4 +15,4 @@ export type GetTxInputDataInput<T extends KeysignChainSpecificKey> = {
 
 export type TxInputDataResolver<T extends KeysignChainSpecificKey> = (
   input: GetTxInputDataInput<T>
-) => Promise<Uint8Array<ArrayBufferLike>[]>
+) => Uint8Array<ArrayBufferLike>[]

@@ -9,9 +9,12 @@ import Long from 'long'
 import { fromCommCoin } from '../../../types/utils/commCoin'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 
-export const getThorTxInputData: TxInputDataResolver<
-  'thorchainSpecific'
-> = async ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
+  keysignPayload,
+  walletCore,
+  chain,
+  chainSpecific,
+}) => {
   const coinType = getCoinType({
     walletCore,
     chain,

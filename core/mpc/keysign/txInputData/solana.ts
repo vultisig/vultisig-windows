@@ -9,9 +9,12 @@ import Long from 'long'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSolanaTxInputData: TxInputDataResolver<
-  'solanaSpecific'
-> = async ({ keysignPayload, chainSpecific, walletCore, chain }) => {
+export const getSolanaTxInputData: TxInputDataResolver<'solanaSpecific'> = ({
+  keysignPayload,
+  chainSpecific,
+  walletCore,
+  chain,
+}) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const {

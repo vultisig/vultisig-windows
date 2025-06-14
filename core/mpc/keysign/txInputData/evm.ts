@@ -24,9 +24,12 @@ import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getEvmTxInputData: TxInputDataResolver<
-  'ethereumSpecific'
-> = async ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
+  keysignPayload,
+  walletCore,
+  chain,
+  chainSpecific,
+}) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
@@ -36,7 +39,7 @@ export const getEvmTxInputData: TxInputDataResolver<
       walletCore,
     })
 
-    const restOfTxInputData = await getEvmTxInputData({
+    const restOfTxInputData = getEvmTxInputData({
       keysignPayload: incrementKeysignPayloadNonce(
         create(KeysignPayloadSchema, restOfKeysignPayload)
       ),

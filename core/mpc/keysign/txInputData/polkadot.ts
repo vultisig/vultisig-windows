@@ -6,7 +6,7 @@ import Long from 'long'
 
 import { GetTxInputDataInput } from './TxInputDataResolver'
 
-export const getPolkadotTxInputData = async ({
+export const getPolkadotTxInputData = ({
   keysignPayload,
   walletCore,
   chain,

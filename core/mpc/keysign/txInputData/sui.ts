@@ -4,7 +4,7 @@ import Long from 'long'
 
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSuiTxInputData: TxInputDataResolver<'suicheSpecific'> = async ({
+export const getSuiTxInputData: TxInputDataResolver<'suicheSpecific'> = ({
   keysignPayload,
   chainSpecific,
 }) => {
