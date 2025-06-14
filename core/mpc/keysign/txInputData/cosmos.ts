@@ -10,9 +10,12 @@ import Long from 'long'
 
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getCosmosTxInputData: TxInputDataResolver<
-  'cosmosSpecific'
-> = async ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
+  keysignPayload,
+  walletCore,
+  chain,
+  chainSpecific,
+}) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')

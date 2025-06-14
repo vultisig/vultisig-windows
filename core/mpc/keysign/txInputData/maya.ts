@@ -6,7 +6,7 @@ import Long from 'long'
 
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = async ({
+export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
   keysignPayload,
   walletCore,
   chain,

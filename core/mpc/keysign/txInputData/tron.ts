@@ -6,7 +6,7 @@ import Long from 'long'
 
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = async ({
+export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = ({
   keysignPayload,
   chainSpecific,
 }) => {
