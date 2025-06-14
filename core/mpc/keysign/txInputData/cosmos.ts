@@ -8,11 +8,11 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
+import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
+export const getCosmosTxInputData: TxInputDataResolver<
   'cosmosSpecific'
-> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+> = async ({ keysignPayload, walletCore, chain, chainSpecific }) => {
   const coin = assertField(keysignPayload, 'coin')
 
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
@@ -94,5 +94,5 @@ export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
     }),
   })
 
-  return TW.Cosmos.Proto.SigningInput.encode(input).finish()
+  return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
