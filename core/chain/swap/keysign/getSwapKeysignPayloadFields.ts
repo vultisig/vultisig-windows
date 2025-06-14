@@ -11,6 +11,7 @@ import {
   OneInchTransaction,
   OneInchTransactionSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -27,7 +28,7 @@ type Input = {
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
-  Partial<Pick<KeysignPayload, 'swapPayload'>>
+  Partial<Pick<KeysignPayload, 'swapPayload' | 'erc20ApprovePayload'>>
 
 export const getSwapKeysignPayloadFields = ({
   amount,
@@ -35,7 +36,7 @@ export const getSwapKeysignPayloadFields = ({
   fromCoin,
   toCoin,
 }: Input): Output => {
-  return matchRecordUnion(quote, {
+  return matchRecordUnion<SwapQuote, Output>(quote, {
     general: quote => {
       const txMsg = matchRecordUnion<
         GeneralSwapTx,
@@ -91,23 +92,24 @@ export const getSwapKeysignPayloadFields = ({
 
         const toAddress = shouldBePresent(quote.router)
 
-        const result: Output = {
+        return {
           toAddress,
           swapPayload,
           memo: quote.memo,
+          erc20ApprovePayload: create(Erc20ApprovePayloadSchema, {
+            amount: amount.toString(),
+            spender: toAddress,
+          }),
         }
-
-        return result
       }
 
       const isDeposit =
         isFeeCoin(fromCoin) && fromCoin.chain === quote.swapChain
 
-      const result: Output = {
+      return {
         toAddress: isDeposit ? '' : shouldBePresent(quote.inbound_address),
         memo,
       }
-      return result
     },
   })
 }
