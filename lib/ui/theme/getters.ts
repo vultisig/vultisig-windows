@@ -21,7 +21,7 @@ export const matchColor =
   <T extends ThemeGetterParams, K extends keyof T, U = T[K]>(
     variable: K,
     matcher: U extends boolean ? BooleanMatcher : Matcher<MatcherType<U>>
-  ) =>  
+  ) =>
   (params: T) => {
     if (typeof params[variable] === 'boolean') {
       const booleanMatcher = matcher as BooleanMatcher
