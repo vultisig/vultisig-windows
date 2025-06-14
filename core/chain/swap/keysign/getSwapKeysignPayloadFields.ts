@@ -1,8 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { EvmChain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
@@ -17,6 +15,8 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
+import { EvmChain } from '../../Chain'
+import { isFeeCoin } from '../../coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
 
@@ -78,38 +78,32 @@ export const getSwapKeysignPayloadFields = ({
       }
     },
     native: quote => {
-      const { memo } = quote
+      const swapPayload = thorchainSwapQuoteToSwapPayload({
+        quote,
+        fromCoin,
+        amount,
+        toCoin,
+      })
+
+      const toAddress = shouldBePresent(quote.router)
+
+      const result: Output = {
+        toAddress,
+        swapPayload,
+        memo: quote.memo,
+      }
+
       if (
         isOneOf(fromCoin.chain, Object.values(EvmChain)) &&
         !isFeeCoin(fromCoin)
       ) {
-        const swapPayload = thorchainSwapQuoteToSwapPayload({
-          quote,
-          fromCoin,
-          amount,
-          toCoin,
+        result.erc20ApprovePayload = create(Erc20ApprovePayloadSchema, {
+          amount: amount.toString(),
+          spender: toAddress,
         })
-
-        const toAddress = shouldBePresent(quote.router)
-
-        return {
-          toAddress,
-          swapPayload,
-          memo: quote.memo,
-          erc20ApprovePayload: create(Erc20ApprovePayloadSchema, {
-            amount: amount.toString(),
-            spender: toAddress,
-          }),
-        }
       }
 
-      const isDeposit =
-        isFeeCoin(fromCoin) && fromCoin.chain === quote.swapChain
-
-      return {
-        toAddress: isDeposit ? '' : shouldBePresent(quote.inbound_address),
-        memo,
-      }
+      return result
     },
   })
 }
