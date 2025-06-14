@@ -1,30 +1,28 @@
 import { create } from '@bufbuild/protobuf'
 import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
-import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
-import { getSigningInputLegacyTxFields } from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
+import {
+  EnvelopedTxFeeFields,
+  getSigningInputEnvelopedTxFields,
+} from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
+import {
+  getSigningInputLegacyTxFields,
+  LegacyTxFeeFields,
+} from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
-import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
-import { toThorchainSwapAssetProto } from '@core/chain/swap/native/thor/asset/toThorchainSwapAssetProto'
+import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
+import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
+import { toEvmTwAmount } from '@core/chain/chains/evm/tx/tw/toEvmTwAmount'
+import { toEvmTxData } from '@core/chain/chains/evm/tx/tw/toEvmTxData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
-import Long from 'long'
+import { encodeFunctionData } from 'viem'
 
-import { fromCommCoin } from '../../types/utils/commCoin'
 import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
-
-const toTransferData = (memo: string | undefined) => {
-  if (memo && memo.startsWith('0x')) {
-    return Buffer.from(stripHexPrefix(memo), 'hex')
-  }
-
-  return Buffer.from(memo ?? '', 'utf8')
-}
 
 export const getEvmTxInputData: TxInputDataResolver<
   'ethereumSpecific'
@@ -54,138 +52,133 @@ export const getEvmTxInputData: TxInputDataResolver<
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
 
-  if (swapPayload) {
-    return matchRecordUnion(swapPayload, {
-      native: swapPayload => {
-        const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
+  const getToAddress = () => {
+    if (swapPayload) {
+      return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
+        native: ({ vaultAddress, routerAddress }) =>
+          coin.isNativeToken ? shouldBePresent(routerAddress) : vaultAddress,
+        general: ({ quote }) => shouldBePresent(quote?.tx?.to),
+      })
+    }
 
-        const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
+    if (coin.isNativeToken) {
+      return keysignPayload.toAddress
+    }
 
-        const swapInput = TW.THORChainSwap.Proto.SwapInput.create({
-          fromAsset: toThorchainSwapAssetProto({
-            ...fromCoin,
-            direction: 'from',
-          }),
-          fromAddress: swapPayload.fromAddress,
-          toAsset: toThorchainSwapAssetProto({
-            ...toCoin,
-            direction: 'to',
-          }),
-          toAddress: swapPayload.toCoin?.address,
-          vaultAddress: swapPayload.vaultAddress,
-          routerAddress: swapPayload.routerAddress,
-          fromAmount: swapPayload.fromAmount,
-          toAmountLimit: swapPayload.toAmountLimit,
-          expirationTime: new Long(Number(swapPayload.expirationTime)),
-          streamParams: {
-            interval: swapPayload.streamingInterval,
-            quantity: swapPayload.streamingQuantity,
-          },
-          ...(swapPayload.isAffiliate
-            ? {
-                affiliateFeeAddress:
-                  nativeSwapAffiliateConfig.affiliateFeeAddress,
-                affiliateFeeRateBps:
-                  nativeSwapAffiliateConfig.affiliateFeeRateBps,
-              }
-            : {}),
-        })
-
-        const swapInputData =
-          TW.THORChainSwap.Proto.SwapInput.encode(swapInput).finish()
-
-        const swapOutputData = walletCore.THORChainSwap.buildSwap(swapInputData)
-
-        const swapOutput =
-          TW.THORChainSwap.Proto.SwapOutput.decode(swapOutputData)
-
-        if (swapOutput.error?.message) {
-          throw new Error(swapOutput.error.message)
-        }
-
-        const signingInput = TW.Ethereum.Proto.SigningInput.create({
-          ...shouldBePresent(swapOutput.ethereum),
-          ...getSigningInputEnvelopedTxFields({
-            chain,
-            walletCore,
-            maxFeePerGasWei,
-            priorityFee,
-            nonce,
-            gasLimit,
-          }),
-        })
-
-        return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
-      },
-      general: swapPayload => {
-        const tx = shouldBePresent(swapPayload.quote?.tx)
-        const { data } = tx
-
-        const amountHex = Buffer.from(
-          stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
-          'hex'
-        )
-
-        const signingInput = TW.Ethereum.Proto.SigningInput.create({
-          toAddress: tx.to,
-          transaction: {
-            contractGeneric: {
-              amount: amountHex,
-              data: Buffer.from(stripHexPrefix(data), 'hex'),
-            },
-          },
-          ...getSigningInputLegacyTxFields({
-            chain,
-            walletCore,
-            nonce,
-            gasPrice: BigInt(tx.gasPrice || 0),
-            gasLimit: BigInt(tx.gas),
-          }),
-        })
-
-        return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
-      },
-    })
+    return coin.contractAddress
   }
 
-  // Amount: converted to hexadecimal, stripped of '0x'
-  const amountHex = Buffer.from(
-    stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
-    'hex'
-  )
+  const getTransaction = (): TW.Ethereum.Proto.ITransaction => {
+    if (swapPayload) {
+      return matchRecordUnion<
+        KeysignSwapPayload,
+        TW.Ethereum.Proto.ITransaction
+      >(swapPayload, {
+        native: ({ fromCoin, fromAmount, vaultAddress, expirationTime }) => {
+          const { isNativeToken } = shouldBePresent(fromCoin)
 
-  // Send native tokens
-  let toAddress = keysignPayload.toAddress
-  let evmTransaction = TW.Ethereum.Proto.Transaction.create({
-    transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
-      amount: amountHex,
-      data: toTransferData(keysignPayload.memo),
-    }),
-  })
+          if (isNativeToken) {
+            return {
+              transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
+                amount: toEvmTwAmount(fromAmount),
+                data: toEvmTxData(shouldBePresent(keysignPayload.memo)),
+              }),
+            }
+          }
 
-  // Send ERC20 tokens, it will replace the transaction object
-  if (!coin.isNativeToken) {
-    toAddress = coin.contractAddress
-    evmTransaction = TW.Ethereum.Proto.Transaction.create({
+          const contractAddress = shouldBePresent(fromCoin?.contractAddress)
+
+          const data = encodeFunctionData({
+            abi: [
+              {
+                name: 'depositWithExpiry',
+                type: 'function',
+                inputs: [
+                  { name: 'vault', type: 'address' },
+                  { name: 'asset', type: 'address' },
+                  { name: 'amount', type: 'uint256' },
+                  { name: 'memo', type: 'string' },
+                  { name: 'expiration', type: 'uint256' },
+                ],
+              },
+            ],
+            functionName: 'depositWithExpiry',
+            args: [
+              vaultAddress as `0x${string}`,
+              contractAddress as `0x${string}`,
+              BigInt(fromAmount),
+              shouldBePresent(keysignPayload.memo),
+              expirationTime,
+            ],
+          })
+
+          return {
+            contractGeneric: {
+              amount: toEvmTwAmount(0),
+              data: toEvmTxData(data),
+            },
+          }
+        },
+        general: ({ quote }) => {
+          const { data, value } = shouldBePresent(quote?.tx)
+
+          return {
+            contractGeneric: {
+              amount: toEvmTwAmount(value),
+              data: toEvmTxData(data),
+            },
+          }
+        },
+      })
+    }
+
+    const amount = toEvmTwAmount(keysignPayload.toAmount)
+
+    if (coin.isNativeToken) {
+      return {
+        transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
+          amount,
+          data: keysignPayload.memo
+            ? toEvmTxData(shouldBePresent(keysignPayload.memo))
+            : undefined,
+        }),
+      }
+    }
+
+    return {
       erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
-        amount: amountHex,
+        amount,
         to: keysignPayload.toAddress,
       }),
+    }
+  }
+
+  const getFeeFields = (): LegacyTxFeeFields | EnvelopedTxFeeFields => {
+    if (swapPayload && 'general' in swapPayload) {
+      const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
+
+      return getSigningInputLegacyTxFields({
+        gasPrice: BigInt(gasPrice || 0),
+        gasLimit: BigInt(gas),
+      })
+    }
+
+    return getSigningInputEnvelopedTxFields({
+      maxFeePerGasWei: maxFeePerGasWei,
+      priorityFee: priorityFee,
+      gasLimit: gasLimit,
     })
   }
 
-  // Create the signing input with the constants
   const input = TW.Ethereum.Proto.SigningInput.create({
-    toAddress: toAddress,
-    transaction: evmTransaction,
-    ...getSigningInputEnvelopedTxFields({
-      chain,
+    toAddress: getToAddress(),
+    transaction: TW.Ethereum.Proto.Transaction.create(getTransaction()),
+    chainId: getEvmTwChainId({
       walletCore,
-      maxFeePerGasWei: maxFeePerGasWei,
-      priorityFee: priorityFee,
-      nonce: nonce,
-      gasLimit: gasLimit,
+      chain,
     }),
+    nonce: getEvmTwNonce(nonce),
+    ...getFeeFields(),
   })
 
   return [TW.Ethereum.Proto.SigningInput.encode(input).finish()]
