@@ -7,14 +7,14 @@ import { match } from '@lib/utils/match'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { GetPreSignedInputDataInput } from './PreSignedInputDataResolver'
+import { GetTxInputDataInput } from './TxInputDataResolver'
 
-export const getUtxoPreSignedInputData = ({
+export const getUtxoTxInputData = async ({
   keysignPayload,
   walletCore,
   chain,
   chainSpecific,
-}: GetPreSignedInputDataInput<'utxoSpecific'>) => {
+}: GetTxInputDataInput<'utxoSpecific'>) => {
   const { byteFee, sendMaxAmount } = chainSpecific
 
   const coin = shouldBePresent(keysignPayload.coin)
@@ -86,5 +86,5 @@ export const getUtxoPreSignedInputData = ({
     input.plan.branchId = Buffer.from('5510e7c8', 'hex')
   }
 
-  return TW.Bitcoin.Proto.SigningInput.encode(input).finish()
+  return [TW.Bitcoin.Proto.SigningInput.encode(input).finish()]
 }
