@@ -15,6 +15,7 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
   walletCore,
   chain,
 }) => {
+  console.log('keysignPayload: ', keysignPayload)
   const { isDeposit, accountNumber, sequence } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'thorchainSpecific'
@@ -81,6 +82,8 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
           }),
       }),
     ]
+
+    console.log('deposit message: ', message)
   } else {
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
@@ -114,12 +117,15 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: keysignPayload.memo || '',
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),
     }),
   })
+
+  if (!isDeposit) {
+    input.memo = keysignPayload.memo || ''
+  }
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
