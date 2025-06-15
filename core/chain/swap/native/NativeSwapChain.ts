@@ -25,7 +25,6 @@ const thorChainSwapEnabledChains = [
   Chain.Cosmos,
   Chain.Litecoin,
   Chain.THORChain,
-  Chain.Base,
 ] as const
 
 export const nativeSwapEnabledChainsRecord = {
@@ -64,5 +63,4 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Dash]: 'DASH',
   [Chain.Arbitrum]: 'ARB',
   [Chain.Zcash]: 'ZEC',
-  [Chain.Base]: 'BASE',
 }
