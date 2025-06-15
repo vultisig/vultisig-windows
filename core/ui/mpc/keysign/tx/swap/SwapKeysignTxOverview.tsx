@@ -4,6 +4,7 @@ import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
+import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
@@ -48,6 +49,7 @@ export const SwapKeysignTxOverview = ({
     chain: value.coin?.chain as Chain,
   })
   const { coin: potentialFromCoin, blockchainSpecific } = value
+  console.log(value)
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
   const {
     fromAmount,
@@ -71,13 +73,18 @@ export const SwapKeysignTxOverview = ({
     })
   }, [blockchainSpecific, chain])
 
+  const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
+    swapPayload,
+    {
+      native: ({ chain }) => chain,
+      general: () => chain,
+    }
+  )
+
   const trackTransaction = (tx: string) =>
     openUrl(
       getBlockExplorerUrl({
-        chain: matchRecordUnion(swapPayload, {
-          native: ({ chain }) => chain,
-          general: () => chain,
-        }),
+        chain: blockExplorerChain,
         entity: 'tx',
         value: tx,
       })
@@ -119,7 +126,7 @@ export const SwapKeysignTxOverview = ({
           <TrackTxPrompt
             title={t('transaction')}
             value={txHashNormalized}
-            chain={chain}
+            chain={blockExplorerChain}
           />
           {'erc20Approve' in value && (
             <TrackTxPrompt
