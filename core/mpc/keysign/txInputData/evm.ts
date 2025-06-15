@@ -26,7 +26,7 @@ import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 const memoToTxData = (memo: string) =>
-  memo ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
+  memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
 export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
   keysignPayload,
