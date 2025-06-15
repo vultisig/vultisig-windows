@@ -15,7 +15,6 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
   walletCore,
   chain,
 }) => {
-  console.log('keysignPayload: ', keysignPayload)
   const { isDeposit, accountNumber, sequence } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'thorchainSpecific'
