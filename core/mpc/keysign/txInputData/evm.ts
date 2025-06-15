@@ -124,20 +124,22 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
           const data = walletCore.EthereumAbi.encode(abiFunction)
 
           return {
-            contractGeneric: {
-              amount: toEvmTwAmount(0),
-              data,
-            },
+            contractGeneric:
+              TW.Ethereum.Proto.Transaction.ContractGeneric.create({
+                amount: toEvmTwAmount(0),
+                data,
+              }),
           }
         },
         general: ({ quote }) => {
           const { data, value } = shouldBePresent(quote?.tx)
 
           return {
-            contractGeneric: {
-              amount: toEvmTwAmount(value),
-              data: toEvmTxData(data),
-            },
+            contractGeneric:
+              TW.Ethereum.Proto.Transaction.ContractGeneric.create({
+                amount: toEvmTwAmount(value),
+                data: toEvmTxData(data),
+              }),
           }
         },
       })
