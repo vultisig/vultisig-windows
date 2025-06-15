@@ -25,11 +25,15 @@ import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
+const memoToTxData = (memo: string) =>
+  memo ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
+
 export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
   keysignPayload,
   walletCore,
   chain,
 }) => {
+  console.log('getEvmTxInputData: ', keysignPayload)
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
@@ -89,7 +93,7 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
             return {
               transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
                 amount: toEvmTwAmount(fromAmount),
-                data: toEvmTxData(memo),
+                data: memoToTxData(memo),
               }),
             }
           }
@@ -146,7 +150,7 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
         transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
           amount,
           data: keysignPayload.memo
-            ? toEvmTxData(shouldBePresent(keysignPayload.memo))
+            ? memoToTxData(shouldBePresent(keysignPayload.memo))
             : undefined,
         }),
       }
