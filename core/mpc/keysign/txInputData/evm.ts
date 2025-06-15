@@ -33,7 +33,6 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
   walletCore,
   chain,
 }) => {
-  console.log('getEvmTxInputData: ', keysignPayload)
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
