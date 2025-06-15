@@ -1,3 +1,4 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -10,6 +11,7 @@ import jsxA11Y from 'eslint-plugin-jsx-a11y'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import storybook from 'eslint-plugin-storybook'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
@@ -49,6 +51,7 @@ export default [
       'react-hooks': fixupPluginRules(reactHooks),
       'simple-import-sort': simpleImportSort,
       'unused-imports': fixupPluginRules(unusedImportsPlugin),
+      storybook,
     },
 
     languageOptions: {
@@ -110,12 +113,12 @@ export default [
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
-  },
-  // Override for declaration files where interfaces are required for module augmentation
+  }, // Override for declaration files where interfaces are required for module augmentation
   {
     files: ['**/*.d.ts'],
     rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
+  ...storybook.configs['flat/recommended'],
 ]
