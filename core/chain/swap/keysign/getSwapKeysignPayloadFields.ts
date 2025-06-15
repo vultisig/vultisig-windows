@@ -12,7 +12,6 @@ import {
 import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { EvmChain } from '../../Chain'
@@ -88,9 +87,7 @@ export const getSwapKeysignPayloadFields = ({
       const isErc20 =
         isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
 
-      const toAddress = shouldBePresent(
-        isErc20 ? quote.router : quote.inbound_address
-      )
+      const toAddress = (isErc20 ? quote.router : quote.inbound_address) || ''
 
       const result: Output = {
         toAddress,
