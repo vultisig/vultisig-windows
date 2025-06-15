@@ -141,6 +141,7 @@ export class DKLSKeysign {
     }
   }
   private async KeysignOneMessage(messageToSign: string, attempt: number) {
+    this.isKeysignComplete = false
     console.log(
       'KeysignOneMessage attempt:',
       attempt,
