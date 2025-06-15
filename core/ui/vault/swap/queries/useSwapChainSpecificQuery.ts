@@ -1,9 +1,10 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { UtxoChain } from '@core/chain/Chain'
+import { EvmChain, UtxoChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
+import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
@@ -89,6 +90,12 @@ export const useSwapChainSpecificQuery = () => {
       if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
         input.feeSettings = {
           priority: 'fast',
+        }
+      }
+
+      if (isOneOf(fromCoin.chain, Object.values(EvmChain))) {
+        input.feeSettings = {
+          gasLimit: defaultEvmSwapGasLimit,
         }
       }
 

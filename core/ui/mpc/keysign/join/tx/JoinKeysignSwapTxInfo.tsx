@@ -1,10 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapProvider'
-import {
-  KeysignSwapPayload,
-  toKeysignSwapPayload,
-} from '@core/mpc/keysign/swap/KeysignSwapPayload'
+import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
+import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   TxOverviewChainDataRow,
@@ -12,10 +8,10 @@ import {
 } from '@core/ui/chain/tx/TxOverviewRow'
 import { ValueProp } from '@lib/ui/props'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { assertField } from '@lib/utils/record/assertField'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
 export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
@@ -30,28 +26,12 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
     t('swap'),
   ]).join(` ${t('and')} `)
 
-  const swapPayload = toKeysignSwapPayload(value.swapPayload)
+  const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
 
-  const swapPayloadValue = getDiscriminatedUnionValue(
-    swapPayload,
-    'case',
-    'value',
-    swapPayload.case
-  )
+  const { toCoin, toAmountDecimal } = getRecordUnionValue(swapPayload)
+  const toAmount = Number(toAmountDecimal)
 
-  const toCoin = assertField(swapPayloadValue, 'toCoin')
-  const toAmount = Number(swapPayloadValue.toAmountDecimal)
-
-  const provider = matchDiscriminatedUnion<KeysignSwapPayload, string>(
-    swapPayload,
-    'case',
-    'value',
-    {
-      thorchainSwapPayload: () => Chain.THORChain,
-      mayachainSwapPayload: () => Chain.MayaChain,
-      oneinchSwapPayload: () => generalSwapProviderName.oneinch,
-    }
-  )
+  const provider = getKeysignSwapProviderName(swapPayload)
 
   return (
     <>
@@ -72,10 +52,12 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
           )}
         </span>
       </TxOverviewRow>
-      <TxOverviewRow>
-        <span>{t('to_asset')}</span>
-        <span>{formatTokenAmount(toAmount, toCoin.ticker)}</span>
-      </TxOverviewRow>
+      {toCoin && (
+        <TxOverviewRow>
+          <span>{t('to_asset')}</span>
+          <span>{formatTokenAmount(toAmount, toCoin.ticker)}</span>
+        </TxOverviewRow>
+      )}
 
       {erc20ApprovePayload && (
         <>

@@ -1,7 +1,7 @@
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote'
 import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
-type SwapType = 'native' | 'general'
+export type SwapType = 'native' | 'general'
 
 type SwapQuoteMap = {
   native: NativeSwapQuote
