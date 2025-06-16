@@ -10,5 +10,3 @@ export const oneInchSwapEnabledChains = [
   Chain.Polygon,
   Chain.Base,
 ] as const
-
-export type OneInchSwapEnabledChain = (typeof oneInchSwapEnabledChains)[number]

@@ -141,6 +141,7 @@ export class DKLSKeysign {
     }
   }
   private async KeysignOneMessage(messageToSign: string, attempt: number) {
+    this.isKeysignComplete = false
     console.log(
       'KeysignOneMessage attempt:',
       attempt,
@@ -220,7 +221,7 @@ export class DKLSKeysign {
       return keysignSig
     }
   }
-  private async keygienWithRetry(messageToSign: string) {
+  private async keysignWithRetry(messageToSign: string) {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.KeysignOneMessage(messageToSign, i)
@@ -236,7 +237,7 @@ export class DKLSKeysign {
     await __wbg_init()
     let results: KeysignSignature[] = []
     for (const message of messsagesToSign) {
-      const signResult = await this.keygienWithRetry(message)
+      const signResult = await this.keysignWithRetry(message)
       if (signResult === undefined) {
         throw new Error('failed to sign message')
       }

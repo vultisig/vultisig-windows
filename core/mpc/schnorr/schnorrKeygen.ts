@@ -112,6 +112,11 @@ export class Schnorr {
           sessionId: this.sessionId,
         })
         const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
+        if (parsedMessages.length === 0) {
+          // no message to download, backoff for 100ms
+          await sleep(100)
+          continue
+        }
         for (const msg of parsedMessages) {
           const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
           if (this.cache[cacheKey]) {
@@ -126,6 +131,7 @@ export class Schnorr {
           )
           const isFinish = session.inputMessage(decryptedMessage)
           if (isFinish) {
+            await sleep(1000) // wait for 1 second to make sure all messages are processed
             this.isKeygenComplete = true
             console.log('keygen complete')
             return true

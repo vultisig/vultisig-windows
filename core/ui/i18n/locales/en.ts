@@ -386,7 +386,7 @@ export const en = {
   scan_with_device_name: 'Scan with {{name}}',
   localMode: "You're in local mode",
   scanQrInstruction:
-    'Scan QR with other device. 3-device setup recommended, 2 is sufficient.',
+    'Scan QR with other device. {{max}}-device setup recommended, {{min}} is sufficient.',
   devices: 'Devices',
   waitingOnDevices: 'Waiting on devices...',
   switchToInternet: 'Switch back to internet mode',

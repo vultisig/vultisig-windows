@@ -95,3 +95,5 @@ credentials.json
 
 mcp.json
 task.md
+*storybook.log
+storybook-static

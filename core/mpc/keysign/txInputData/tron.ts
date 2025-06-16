@@ -4,11 +4,12 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
+import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTronPreSignedInputData: PreSignedInputDataResolver<
-  'tronSpecific'
-> = ({ keysignPayload, chainSpecific }) => {
+export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = async ({
+  keysignPayload,
+  chainSpecific,
+}) => {
   const tronSpecific = chainSpecific as unknown as TronSpecific
 
   const isNative = keysignPayload?.coin?.isNativeToken
@@ -41,7 +42,7 @@ export const getTronPreSignedInputData: PreSignedInputDataResolver<
       }),
     })
 
-    return TW.Tron.Proto.SigningInput.encode(input).finish()
+    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
   } else {
     const amountHex = Buffer.from(
       stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
@@ -76,6 +77,6 @@ export const getTronPreSignedInputData: PreSignedInputDataResolver<
       }),
     })
 
-    return TW.Tron.Proto.SigningInput.encode(input).finish()
+    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
   }
 }

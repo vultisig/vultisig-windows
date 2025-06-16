@@ -66,7 +66,7 @@ export const es = {
   localMode: 'Estás en modo local',
   fastVault: 'Fast Vault',
   scanQrInstruction:
-    'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
+    'Escanea el QR con otro dispositivo. Se recomienda configuración de {{max}} dispositivos, {{min}} son suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',

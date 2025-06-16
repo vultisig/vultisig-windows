@@ -63,7 +63,7 @@ export const pt = {
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Você está no modo local',
   scanQrInstruction:
-    'Escaneie o QR com outro dispositivo. Configuração de 3 dispositivos recomendada, 2 são suficientes.',
+    'Escaneie o QR com outro dispositivo. Configuração de {{max}} dispositivos recomendada, {{min}} são suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Aguardando dispositivos...',
   switchToInternet: 'Voltar ao modo internet',
