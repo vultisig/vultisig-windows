@@ -18,6 +18,7 @@ import { EvmChain } from '../../Chain'
 import { isFeeCoin } from '../../coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 type Input = {
   amount: bigint
@@ -87,7 +88,9 @@ export const getSwapKeysignPayloadFields = ({
       const isErc20 =
         isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
 
-      const toAddress = (isErc20 ? quote.router : quote.inbound_address) || ''
+      const toAddress = shouldBePresent(
+        isErc20 ? quote.router : quote.inbound_address
+      )
 
       const result: Output = {
         toAddress,
