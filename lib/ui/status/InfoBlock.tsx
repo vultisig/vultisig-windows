@@ -49,7 +49,7 @@ export const InfoBlock = ({
           <Icon />
         </IconContainer>
       )}
-      <Text color="idle" size={14} weight="400">
+      <Text color="contrast" size={14} weight="400">
         {children}
       </Text>
     </Container>

@@ -1,7 +1,19 @@
 export const en = {
+  enter_your_password: 'Enter your password',
+  go_to_wallet: 'Go to wallet',
+  install_plugin: 'Install Plugin',
+  plugin_info: 'Plugin Info',
+  plugin_info_desc: 'You are installing [{{name}}] Plugin',
+  plugin_success_desc: 'Installation of [{{name}}] is completed',
+  plugin_password_desc:
+    'Enter your password to unlock your Server Share and start the plugin installation',
+  plugin_policy: 'Policy Review',
+  plugin_policy_desc:
+    'The verifier will always check that only these policies get executed. Giving you the security that only the authorized will get signed.',
   password_do_not_match: 'Passwords do not match',
   password_pattern_error:
     'Password must be between {{min}} and {{max}} characters',
+  success: 'Success',
   address_book: 'Address Book',
   address_book_empty: 'Your Address Book is empty',
   assets: 'assets',

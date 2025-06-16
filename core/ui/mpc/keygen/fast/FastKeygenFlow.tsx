@@ -1,4 +1,3 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
@@ -16,32 +15,28 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp, OnFinishProp, ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { ComponentType, useCallback } from 'react'
+import { ComponentType, useCallback, useMemo } from 'react'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
+  const isPluginReshare = useMemo(() => {
+    return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+  }, [keygenOperation])
 
   const handlePeersChange = useCallback(
     ({
       value: peers,
       onFinish,
     }: ValueProp<string[]> & OnFinishProp<string[]>) => {
-      const isPluginReshare =
-        'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
-
       const shouldFinish =
         !isPluginReshare ||
         peers.length >= pluginPeersConfig.minimumJoinedParties
 
       if (shouldFinish) {
-        if (isPluginReshare) {
-          onFinish(peers.filter(device => !isServer(device)))
-        } else {
-          onFinish(peers)
-        }
+        onFinish(peers)
       }
     },
-    [keygenOperation]
+    [isPluginReshare]
   )
 
   const ServerActionProvider = matchRecordUnion<
@@ -81,6 +76,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
                 value="keygen"
+                isPluginReshare={isPluginReshare}
                 render={() => <KeygenFlow onBack={onBack} />}
               />
             </MpcPeersProvider>
