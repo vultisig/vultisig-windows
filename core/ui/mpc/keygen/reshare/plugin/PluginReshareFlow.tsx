@@ -1,38 +1,43 @@
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
+import { FastKeygenFlow } from '@core/ui/mpc/keygen/fast/FastKeygenFlow'
+import { PluginInfoStep } from '@core/ui/mpc/keygen/reshare/plugin/PluginInfoStep'
+import { PluginPolicyStep } from '@core/ui/mpc/keygen/reshare/plugin/PluginPolicyStep'
+import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useTranslation } from 'react-i18next'
 
-import { PasswordProvider } from '../../../../state/password'
-import { FastKeygenFlow } from '../../fast/FastKeygenFlow'
-import { PluginReviewSteps } from './PluginReviewSteps'
-
-const pluginReshareSteps = ['review', 'keygen'] as const
+const steps = ['info', 'policy', 'keygen'] as const
 
 export const PluginReshareFlow = () => {
-  const { step, toPreviousStep, toNextStep } = useStepNavigation({
-    steps: pluginReshareSteps,
-    onExit: useNavigateBack(),
-  })
+  const { t } = useTranslation()
+  const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
 
   return (
-    <>
-      <Match
-        value={step}
-        review={() => <PluginReviewSteps onFinish={toNextStep} />}
-        keygen={() => (
-          <ValueTransfer<{ password: string }>
-            key="password"
-            from={({ onFinish }) => <ServerPasswordStep onFinish={onFinish} />}
-            to={({ value: { password } }) => (
-              <PasswordProvider initialValue={password}>
-                <FastKeygenFlow onBack={toPreviousStep} />
-              </PasswordProvider>
-            )}
-          />
-        )}
-      />
-    </>
+    <Match
+      value={step}
+      info={() => <PluginInfoStep name="" onNext={toNextStep} />}
+      policy={() => (
+        <PluginPolicyStep onBack={toPreviousStep} onNext={toNextStep} />
+      )}
+      keygen={() => (
+        <ValueTransfer<{ password: string }>
+          key="password"
+          from={({ onFinish }) => (
+            <ServerPasswordStep
+              description={t('plugin_password_desc')}
+              onBack={toPreviousStep}
+              onFinish={onFinish}
+            />
+          )}
+          to={({ value: { password } }) => (
+            <PasswordProvider initialValue={password}>
+              <FastKeygenFlow onBack={toPreviousStep} />
+            </PasswordProvider>
+          )}
+        />
+      )}
+    />
   )
 }
