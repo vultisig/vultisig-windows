@@ -46,7 +46,9 @@ export const KeysignTxOverview = ({
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
 
-    return fromChainAmount(BigInt(toAmount), decimals)
+    const amount = fromChainAmount(BigInt(toAmount), decimals)
+    if (amount === 0) return null
+    return amount
   }, [toAmount, decimals])
 
   const networkFeesFormatted = useMemo(() => {

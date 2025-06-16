@@ -26,7 +26,9 @@ export const TxSuccess = ({
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
 
-    return fromChainAmount(BigInt(toAmount), coin.decimals)
+    const amount = fromChainAmount(BigInt(toAmount), coin.decimals)
+    if (amount === 0) return null
+    return amount
   }, [toAmount, coin.decimals])
 
   return (
