@@ -88,9 +88,7 @@ export const getSwapKeysignPayloadFields = ({
       const isErc20 =
         isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
 
-      const toAddress = shouldBePresent(
-        isErc20 ? quote.router : quote.inbound_address
-      )
+      const toAddress = (isErc20 ? quote.router : quote.inbound_address) || ''
 
       const result: Output = {
         toAddress,
