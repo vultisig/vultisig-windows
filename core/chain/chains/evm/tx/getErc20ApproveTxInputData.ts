@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { EthereumSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -6,7 +5,10 @@ import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
+import { EvmChain } from '../../../Chain'
 import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields'
+import { getEvmTwChainId } from './tw/getEvmTwChainId'
+import { getEvmTwNonce } from './tw/getEvmTwNonce'
 
 type Input = {
   keysignPayload: KeysignPayload
@@ -27,7 +29,7 @@ export const getErc20ApproveTxInputData = ({
   )
 
   const coin = shouldBePresent(keysignPayload.coin)
-  const chain = coin.chain as Chain
+  const chain = coin.chain as EvmChain
 
   const { blockchainSpecific } = keysignPayload
 
@@ -41,13 +43,15 @@ export const getErc20ApproveTxInputData = ({
         spender,
       },
     },
+    chainId: getEvmTwChainId({
+      walletCore,
+      chain,
+    }),
+    nonce: getEvmTwNonce(nonce),
     toAddress: shouldBePresent(keysignPayload.coin).contractAddress,
     ...getSigningInputEnvelopedTxFields({
-      chain,
-      walletCore,
       maxFeePerGasWei,
       priorityFee,
-      nonce,
       gasLimit,
     }),
   })

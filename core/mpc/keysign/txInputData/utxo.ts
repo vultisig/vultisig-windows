@@ -4,18 +4,25 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { GetTxInputDataInput } from './TxInputDataResolver'
 
-export const getUtxoTxInputData = async ({
+export const getUtxoTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
-  chainSpecific,
 }: GetTxInputDataInput<'utxoSpecific'>) => {
-  const { byteFee, sendMaxAmount } = chainSpecific
+  const { byteFee, sendMaxAmount } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'utxoSpecific'
+  )
 
   const coin = shouldBePresent(keysignPayload.coin)
 
@@ -45,11 +52,25 @@ export const getUtxoTxInputData = async ({
       walletCore.BitcoinScript.buildPayToPublicKeyHash(pubKeyHash).data(),
   })
 
+  const swapPayload = getKeysignSwapPayload(keysignPayload)
+  const amount = swapPayload
+    ? getRecordUnionValue(swapPayload).fromAmount
+    : keysignPayload.toAmount
+
+  const destinationAddress = swapPayload
+    ? matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
+        native: swapPayload => swapPayload.vaultAddress,
+        general: () => {
+          throw new Error('General swap not supported')
+        },
+      })
+    : keysignPayload.toAddress
+
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
-    amount: Long.fromString(keysignPayload.toAmount),
+    amount: Long.fromString(amount),
     useMaxAmount: sendMaxAmount,
-    toAddress: keysignPayload.toAddress,
+    toAddress: destinationAddress,
     changeAddress: coin.address,
     byteFee: Long.fromString(byteFee),
     coinType: coinType.value,
