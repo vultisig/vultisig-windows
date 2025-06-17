@@ -1,8 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -38,6 +40,12 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   baseFee,
 }) => {
   const { t } = useTranslation()
+  const [{ coin: coinKey }] = useCurrentSendCoin()
+  const { ticker } = chainFeeCoin[coinKey.chain]
+  const priorityFeeInGwei = fromChainAmount(
+    BigInt(value.priorityFee),
+    gwei.decimals
+  )
 
   return (
     <Modal
@@ -56,7 +64,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
         </LineWrapper>
         <InputContainer>
           <Text size={14} color="supporting">
-            {t('current_base_fee')}
+            {t('current_base_fee')} ({ticker})
           </Text>
           <FeeContainer>
             {formatTokenAmount(
@@ -64,23 +72,22 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             )}
           </FeeContainer>
         </InputContainer>
-        <AmountTextInput
-          labelPosition="left"
-          label={
-            <Tooltip
-              content={<Text>{t('priority_fee_tooltip_content')}</Text>}
-              renderOpener={props => (
-                <Text size={14} color="supporting" {...props}>
-                  {t('priority_fee')}
-                </Text>
-              )}
-            />
-          }
-          value={value.priorityFee}
-          onValueChange={priorityFee =>
-            onChange({ ...value, priorityFee: priorityFee ?? 0 })
-          }
-        />
+        <InputContainer>
+          <Text size={14} color="supporting">
+            {t('priority_fee')} ({t('gwei')})
+          </Text>
+          <AmountTextInput
+            value={priorityFeeInGwei}
+            onValueChange={priorityFee =>
+              onChange({
+                ...value,
+                priorityFee: priorityFee
+                  ? Number(BigInt(Math.floor(priorityFee * 1e9)))
+                  : 0,
+              })
+            }
+          />
+        </InputContainer>
         <AmountTextInput
           labelPosition="left"
           label={

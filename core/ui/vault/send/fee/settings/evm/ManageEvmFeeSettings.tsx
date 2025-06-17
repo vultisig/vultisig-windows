@@ -1,6 +1,9 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { useEvmDefaultPriorityFeeQuery } from '@core/chain/tx/fee/evm/hooks/useEvmDefaultPriorityFeeQuery'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { OnCloseProp } from '@lib/ui/props'
@@ -24,6 +27,13 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     useEvmDefaultPriorityFeeQuery({
       chain: chain as EvmChain,
     })
+  const [{ coin: coinKey }] = useCurrentSendCoin()
+  const chainSpecific = useSendChainSpecific()
+  const fee = getFeeAmount(chainSpecific)
+
+  const { decimals } = chainFeeCoin[coinKey.chain]
+  const baseFee = fromChainAmount(fee, decimals)
+  console.log('baseFee', baseFee)
 
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
@@ -53,6 +63,8 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     setPersistentValue(value)
     onClose()
   }
+  console.log('defaultFeePriority', defaultFeePriority)
+  console.log('value', value)
 
   return (
     <EvmFeeSettingsForm
@@ -60,7 +72,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       onChange={setValue}
       onFinish={handleSave}
       onClose={onClose}
-      baseFee={defaultFeePriority}
+      baseFee={baseFee}
     />
   )
 }
