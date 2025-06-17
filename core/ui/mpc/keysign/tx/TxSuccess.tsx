@@ -26,9 +26,7 @@ export const TxSuccess = ({
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
 
-    const amount = fromChainAmount(BigInt(toAmount), coin.decimals)
-    if (amount === 0) return null
-    return amount
+    return fromChainAmount(BigInt(toAmount), coin.decimals)
   }, [toAmount, coin.decimals])
 
   return (
@@ -47,7 +45,7 @@ export const TxSuccess = ({
         </AnimatedVisibility>
       </VStack>
       <VStack gap={8}>
-        {formattedToAmount && (
+        {formattedToAmount !== null && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />
         )}
         <List>
