@@ -33,7 +33,6 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
 
   const { decimals } = chainFeeCoin[coinKey.chain]
   const baseFee = fromChainAmount(fee, decimals)
-  console.log('baseFee', baseFee)
 
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
@@ -63,8 +62,6 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     setPersistentValue(value)
     onClose()
   }
-  console.log('defaultFeePriority', defaultFeePriority)
-  console.log('value', value)
 
   return (
     <EvmFeeSettingsForm

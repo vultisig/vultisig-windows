@@ -66,11 +66,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
           <Text size={14} color="supporting">
             {t('current_base_fee')} ({ticker})
           </Text>
-          <FeeContainer>
-            {formatTokenAmount(
-              fromChainAmount(BigInt(Math.floor(baseFee * 1e9)), gwei.decimals)
-            )}
-          </FeeContainer>
+          <FeeContainer>{formatTokenAmount(baseFee)}</FeeContainer>
         </InputContainer>
         <InputContainer>
           <Text size={14} color="supporting">
