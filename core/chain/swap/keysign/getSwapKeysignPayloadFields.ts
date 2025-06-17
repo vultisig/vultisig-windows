@@ -18,7 +18,6 @@ import { EvmChain } from '../../Chain'
 import { isFeeCoin } from '../../coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 type Input = {
   amount: bigint
