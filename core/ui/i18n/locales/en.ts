@@ -1,4 +1,5 @@
 export const en = {
+  confirm: 'Confirm',
   enter_your_password: 'Enter your password',
   go_to_wallet: 'Go to wallet',
   install_plugin: 'Install Plugin',

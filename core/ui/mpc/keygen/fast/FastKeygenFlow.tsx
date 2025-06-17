@@ -32,9 +32,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
         !isPluginReshare ||
         peers.length >= pluginPeersConfig.minimumJoinedParties
 
-      if (shouldFinish) {
-        onFinish(peers)
-      }
+      if (shouldFinish) onFinish(peers)
     },
     [isPluginReshare]
   )
@@ -58,26 +56,23 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
       from={({ onFinish }) => {
         return (
           <ServerActionProvider>
-            <FastKeygenServerActionStep onFinish={onFinish} onBack={onBack} />
+            <FastKeygenServerActionStep onFinish={onFinish} />
           </ServerActionProvider>
         )
       }}
       to={() => (
         <ValueTransfer<string[]>
-          from={({ onFinish }) => {
-            return (
-              <WaitForServerStep
-                onBack={onBack}
-                onPeersChange={value => handlePeersChange({ value, onFinish })}
-              />
-            )
-          }}
+          from={({ onFinish }) => (
+            <WaitForServerStep
+              onFinish={value => handlePeersChange({ value, onFinish })}
+            />
+          )}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
-                value="keygen"
                 isPluginReshare={isPluginReshare}
                 render={() => <KeygenFlow onBack={onBack} />}
+                value="keygen"
               />
             </MpcPeersProvider>
           )}

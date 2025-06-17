@@ -1,3 +1,4 @@
+import { ColorName } from '@lib/ui/theme/getters'
 import { ButtonHTMLAttributes, ElementType, ReactNode, SVGProps } from 'react'
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
@@ -104,7 +105,10 @@ export type StatusProp<T> = {
   status: T
 }
 
-export type SvgProps = SVGProps<SVGSVGElement>
+export type SvgProps = SVGProps<SVGSVGElement> & {
+  color?: ColorName
+  gradient?: boolean
+}
 
 export type MessageProp = {
   message: ReactNode
