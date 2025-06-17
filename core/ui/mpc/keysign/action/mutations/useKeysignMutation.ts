@@ -36,7 +36,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           keysign: async payload => {
             const chain = getKeysignChain(payload)
 
-            const inputs = await getTxInputData({
+            const inputs = getTxInputData({
               keysignPayload: payload,
               walletCore,
             })

@@ -27,9 +27,6 @@ const thorChainSwapEnabledChains = [
   Chain.THORChain,
 ] as const
 
-export type ThorChainSwapEnabledChain =
-  (typeof thorChainSwapEnabledChains)[number]
-
 export const nativeSwapEnabledChainsRecord = {
   [Chain.THORChain]: thorChainSwapEnabledChains,
   [Chain.MayaChain]: [
