@@ -70,6 +70,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       onFinish={handleSave}
       onClose={onClose}
       baseFee={baseFee}
+      coinKey={coinKey}
     />
   )
 }

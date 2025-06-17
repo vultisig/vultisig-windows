@@ -235,11 +235,14 @@ export const TransactionPage = () => {
                                         if (
                                           'keysign' in keysignMessagePayload
                                         ) {
-                                          const currentTxFee = Number(
-                                            transactionPayload.txFee
-                                          )
-                                          const totalFee = currentTxFee + fee
-
+                                          const priorityFeeInBaseUnit =
+                                            formatUnits(
+                                              BigInt(fee),
+                                              keysign.coin?.decimals || 9
+                                            )
+                                          const totalFee =
+                                            Number(transactionPayload.txFee) +
+                                            Number(priorityFeeInBaseUnit)
                                           setUpdatedTxFee(totalFee.toString())
                                         }
                                       }}

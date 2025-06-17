@@ -1,10 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -30,6 +30,8 @@ type EvmFeeSettingsFormProps = InputProps<EvmFeeSettingsFormValue> &
   OnCloseProp &
   OnFinishProp & {
     baseFee: number
+    chain?: EvmChain
+    coinKey?: CoinKey
   }
 
 export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
@@ -38,10 +40,12 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   onFinish,
   onClose,
   baseFee,
+  chain,
+  coinKey,
 }) => {
   const { t } = useTranslation()
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const { ticker } = chainFeeCoin[coinKey.chain]
+  const feeChain = chain || coinKey?.chain || EvmChain.Ethereum
+  const { ticker } = chainFeeCoin[feeChain]
   const priorityFeeInGwei = fromChainAmount(
     BigInt(value.priorityFee),
     gwei.decimals
@@ -77,9 +81,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             onValueChange={priorityFee =>
               onChange({
                 ...value,
-                priorityFee: priorityFee
-                  ? Number(BigInt(Math.floor(priorityFee * 1e9)))
-                  : 0,
+                priorityFee: priorityFee ? Math.floor(priorityFee * 1e9) : 0,
               })
             }
           />
@@ -103,7 +105,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
               gasLimit:
                 gasLimit ??
                 getEvmGasLimit({
-                  chain: EvmChain.Ethereum,
+                  chain: feeChain as EvmChain,
                   isNativeToken: true,
                 }),
             })
@@ -113,7 +115,6 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
     </Modal>
   )
 }
-
 const LineWrapper = styled.div`
   margin-top: -5px;
   margin-bottom: 14px;

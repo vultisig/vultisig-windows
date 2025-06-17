@@ -1,8 +1,9 @@
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
-import { EvmChain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import {
   EvmFeeSettingsForm,
   EvmFeeSettingsFormValue,
@@ -72,6 +73,11 @@ export const GasFeeAdjuster = ({
     }
   }
 
+  const chain = matchRecordUnion(keysignPayload, {
+    keysign: payload => getKeysignChain(payload) as Chain,
+    custom: () => EvmChain.Ethereum,
+  })
+
   return (
     <>
       <IconButton onClick={() => setIsOpen(true)}>
@@ -86,6 +92,7 @@ export const GasFeeAdjuster = ({
           onFinish={handleSave}
           onClose={() => setIsOpen(false)}
           baseFee={baseFee}
+          chain={chain as EvmChain}
         />
       )}
     </>
