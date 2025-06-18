@@ -2,10 +2,12 @@ import {
   handleGetVault,
   handleGetVaults,
 } from '@clients/extension/src/background/handlers/accountsHandler'
+import { handlePluginRequest } from '@clients/extension/src/background/handlers/pluginHandler'
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
 import { Messenger } from '@clients/extension/src/messengers/createMessenger'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
+import { getCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
   MessageKey,
@@ -19,9 +21,6 @@ import {
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
-
-import { getCurrentEVMChainId } from '../../storage/currentEvmChainId'
-import { handlePluginRequest } from '../handlers/pluginHandler'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -65,9 +64,10 @@ export const dispatchMessage = async (
     [MessageKey.DOGECOIN_REQUEST, Chain.Dogecoin],
     [MessageKey.LITECOIN_REQUEST, Chain.Litecoin],
     [MessageKey.MAYA_REQUEST, Chain.MayaChain],
+    [MessageKey.POLKADOT_REQUEST, Chain.Polkadot],
+    [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
     [MessageKey.SOLANA_REQUEST, Chain.Solana],
     [MessageKey.THOR_REQUEST, Chain.THORChain],
-    [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
     [MessageKey.ZCASH_REQUEST, Chain.Zcash],
   ] as const
 

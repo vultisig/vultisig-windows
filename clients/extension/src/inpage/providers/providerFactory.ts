@@ -1,19 +1,20 @@
+import { Cosmos } from '@clients/extension/src/inpage/providers/cosmos'
+import { Dash } from '@clients/extension/src/inpage/providers/dash'
+import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
+import { MAYAChain } from '@clients/extension/src/inpage/providers/maya'
+import { requestPlugin } from '@clients/extension/src/inpage/providers/plugin'
+import { Polkadot } from '@clients/extension/src/inpage/providers/polkadot'
+import { Ripple } from '@clients/extension/src/inpage/providers/ripple'
+import { Solana } from '@clients/extension/src/inpage/providers/solana'
+import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
+import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
+import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { MessageKey } from '@clients/extension/src/utils/constants'
-
-import { Cosmos } from './cosmos'
-import { Dash } from './dash'
-import { Ethereum } from './ethereum'
-import { MAYAChain } from './maya'
-import { requestPlugin } from './plugin'
-import { Ripple } from './ripple'
-import { Solana } from './solana'
-import { THORChain } from './thorchain'
-import { UTXO } from './utxo'
-import { XDEFIKeplrProvider } from './xdefiKeplr'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
   const cosmosProvider = Cosmos.getInstance()
+
   return {
     bitcoin: utxo(MessageKey.BITCOIN_REQUEST, 'Bitcoin_bitcoin-mainnet'),
     bitcoincash: utxo(
@@ -27,8 +28,9 @@ export const createProviders = () => {
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
     litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
     mayachain: MAYAChain.getInstance(),
-    ripple: Ripple.getInstance(),
     plugin: { request: requestPlugin },
+    polkadot: Polkadot.getInstance(),
+    ripple: Ripple.getInstance(),
     solana: new Solana(),
     thorchain: THORChain.getInstance(),
     zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
