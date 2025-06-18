@@ -2,10 +2,7 @@ import { decryptSample } from '@core/ui/passcodeEncryption/core/sample'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
-import { Button } from '@lib/ui/buttons/Button'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { UnlockIcon } from '@lib/ui/icons/UnlockIcon'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -97,21 +94,8 @@ export const EnterPasscode = () => {
             {t('app_locked_description')}
           </Text>
         </VStack>
-        <Content
-          as="form"
-          {...getFormProps({
-            isDisabled,
-            onSubmit: handleSubmit,
-          })}
-        >
+        <Content>
           <PasscodeInput onChange={setInputValue} />
-          <Button
-            icon={<UnlockIcon fontSize={20} />}
-            disabled={isDisabled}
-            type="submit"
-          >
-            {t('unlock')}
-          </Button>
         </Content>
       </Container>
     </Wrapper>
