@@ -16,7 +16,6 @@ type Props = {
 }
 
 export const DepositActionSpecific = ({ action }: Props) => {
-  console.log('🚀 ~ DepositActionSpecific ~ action:', action)
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
