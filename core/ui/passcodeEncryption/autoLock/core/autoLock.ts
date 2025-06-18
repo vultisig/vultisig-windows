@@ -1,5 +1,5 @@
 import { convertDuration } from '@lib/utils/time/convertDuration'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useState } from 'react'
 
 import { usePasscodeAutoLock } from '../../../storage/passcodeAutoLock'
@@ -9,34 +9,79 @@ export const useAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
   const passcodeAutoLock = usePasscodeAutoLock()
 
-  const [passcodeEnteredAt, setPasscodeEnteredAt] = useState<number | null>(
+  const [lastInteractionAt, setLastInteractionAt] = useState<number | null>(
     null
   )
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const resetAutoLockTimer = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    if (!passcodeAutoLock || !passcode) {
+      return
+    }
+
+    const lockDelayMs = convertDuration(passcodeAutoLock, 'min', 'ms')
+
+    timeoutRef.current = setTimeout(() => {
+      setPasscode(null)
+    }, lockDelayMs)
+  }, [passcodeAutoLock, passcode, setPasscode])
+
+  const handleUserInteraction = () => {
+    setLastInteractionAt(Date.now())
+  }
 
   useEffect(() => {
-    setPasscodeEnteredAt(passcode ? Date.now() : null)
+    if (passcode) {
+      setLastInteractionAt(Date.now())
+    } else {
+      setLastInteractionAt(null)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+    }
   }, [passcode])
 
   useEffect(() => {
-    if (!passcodeAutoLock || !passcodeEnteredAt || !passcode) {
+    if (!passcode) {
       return
     }
 
-    const lockAt =
-      passcodeEnteredAt + convertDuration(passcodeAutoLock, 'min', 'ms')
-    const timeUntilLock = lockAt - Date.now()
+    const events = [
+      'mousedown',
+      'mousemove',
+      'keypress',
+      'scroll',
+      'touchstart',
+      'click',
+    ]
 
-    if (timeUntilLock <= 0) {
-      setPasscode(null)
-      return
-    }
-
-    const timeoutId = setTimeout(() => {
-      setPasscode(null)
-    }, timeUntilLock)
+    events.forEach(event => {
+      document.addEventListener(event, handleUserInteraction, true)
+    })
 
     return () => {
-      clearTimeout(timeoutId)
+      events.forEach(event => {
+        document.removeEventListener(event, handleUserInteraction, true)
+      })
     }
-  }, [passcode, passcodeAutoLock, passcodeEnteredAt, setPasscode])
+  }, [passcode])
+
+  useEffect(() => {
+    if (lastInteractionAt) {
+      resetAutoLockTimer()
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+    }
+  }, [lastInteractionAt, resetAutoLockTimer])
 }
