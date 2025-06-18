@@ -45,7 +45,7 @@ export const TxSuccess = ({
         </AnimatedVisibility>
       </VStack>
       <VStack gap={8}>
-        {formattedToAmount && (
+        {formattedToAmount !== null && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />
         )}
         <List>
