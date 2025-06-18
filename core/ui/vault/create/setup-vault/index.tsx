@@ -19,12 +19,12 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const DescriptionWrapper = styled(VStack)`
+const DescriptionWrapper = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;
 `
 
-export const DescriptionContentWrapper = styled(VStack)`
+const DescriptionContentWrapper = styled(VStack)`
   background-color: ${getColor('foreground')};
   border-top: 1px dotted ${getColor('textDark')};
   border-bottom-left-radius: 16px;

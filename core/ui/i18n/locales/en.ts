@@ -1,8 +1,11 @@
 export const en = {
+  connecting_to_verifier: 'Connecting to Verifier',
+  connecting_to_plugin: 'Connecting to Plugin',
   confirm: 'Confirm',
   enter_your_password: 'Enter your password',
   go_to_wallet: 'Go to wallet',
   install_plugin: 'Install Plugin',
+  installing_plugin: 'Installing Plugin',
   plugin_info: 'Plugin Info',
   plugin_info_desc: 'You are installing [{{name}}] Plugin',
   plugin_success_desc: 'Installation of [{{name}}] is completed',
@@ -11,6 +14,7 @@ export const en = {
   plugin_policy: 'Policy Review',
   plugin_policy_desc:
     'The verifier will always check that only these policies get executed. Giving you the security that only the authorized will get signed.',
+  plugin_policy_heading: 'This plugin will automatically access',
   password_do_not_match: 'Passwords do not match',
   password_pattern_error:
     'Password must be between {{min}} and {{max}} characters',

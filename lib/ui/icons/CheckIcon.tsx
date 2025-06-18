@@ -4,7 +4,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-export const Icon: FC<SvgProps> = ({ gradient, ...props }) => (
+const Icon: FC<SvgProps> = ({ gradient, ...props }) => (
   <svg
     fill="none"
     height="1em"
