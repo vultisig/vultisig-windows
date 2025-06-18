@@ -1,13 +1,18 @@
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { OTPInput } from '@lib/ui/inputs/OTPInput'
+import { OTPInput, OTPInputProps } from '@lib/ui/inputs/OTPInput'
 import { InputProps, LabelProp } from '@lib/ui/props'
 
 import { passcodeEncryptionConfig } from '../core/config'
 
 type PasscodeInputProps = Omit<InputProps<string | null>, 'value'> &
-  Partial<LabelProp>
+  Partial<LabelProp> &
+  Partial<Pick<OTPInputProps, 'validation'>>
 
-export const PasscodeInput = ({ onChange, label }: PasscodeInputProps) => {
+export const PasscodeInput = ({
+  onChange,
+  label,
+  validation,
+}: PasscodeInputProps) => {
   return (
     <>
       {label && <InputLabel>{label}</InputLabel>}
@@ -21,6 +26,7 @@ export const PasscodeInput = ({ onChange, label }: PasscodeInputProps) => {
               : null
           )
         }
+        validation={validation}
         includePasteButton={false}
       />
     </>
