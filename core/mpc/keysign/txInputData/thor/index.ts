@@ -81,8 +81,6 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
           }),
       }),
     ]
-
-    console.log('deposit message: ', message)
   } else {
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
