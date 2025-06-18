@@ -30,7 +30,7 @@ type EvmFeeSettingsFormProps = InputProps<EvmFeeSettingsFormValue> &
   OnCloseProp &
   OnFinishProp & {
     baseFee: number
-    chain?: EvmChain
+    chain: EvmChain
     coinKey?: CoinKey
   }
 
@@ -44,7 +44,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   coinKey,
 }) => {
   const { t } = useTranslation()
-  const feeChain = chain || coinKey?.chain || EvmChain.Ethereum
+  const feeChain = coinKey?.chain || chain
   const { ticker } = chainFeeCoin[feeChain]
   const priorityFeeInGwei = fromChainAmount(
     BigInt(value.priorityFee),

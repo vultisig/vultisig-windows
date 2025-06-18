@@ -71,6 +71,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       onClose={onClose}
       baseFee={baseFee}
       coinKey={coinKey}
+      chain={chain as EvmChain}
     />
   )
 }
