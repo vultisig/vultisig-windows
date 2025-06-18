@@ -10,7 +10,7 @@ import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecifi
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSolanaTxInputData: TxInputDataResolver<'solanaSpecific'> = ({
+export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
   keysignPayload,
   walletCore,
   chain,

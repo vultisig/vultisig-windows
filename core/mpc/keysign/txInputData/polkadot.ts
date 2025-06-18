@@ -11,7 +11,7 @@ export const getPolkadotTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
-}: GetTxInputDataInput<'polkadotSpecific'>) => {
+}: GetTxInputDataInput<'polkadot'>) => {
   const {
     recentBlockHash,
     nonce,

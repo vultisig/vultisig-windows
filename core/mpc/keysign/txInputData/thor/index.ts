@@ -10,7 +10,7 @@ import { fromCommCoin } from '../../../types/utils/commCoin'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 
-export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
+export const getThorTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
   chain,
@@ -35,53 +35,53 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
   const pubKeyData = Buffer.from(commCoin.hexPublicKey, 'hex')
 
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
-  let message: TW.Cosmos.Proto.Message[]
 
-  if (keysignPayload.memo?.startsWith('merge:')) {
-    const fullDenom = keysignPayload.memo!.toLowerCase().replace('merge:', '')
+  const getMessages = (): TW.Cosmos.Proto.Message[] => {
+    if (keysignPayload.memo?.startsWith('merge:')) {
+      const fullDenom = keysignPayload.memo!.toLowerCase().replace('merge:', '')
 
-    message = [
-      TW.Cosmos.Proto.Message.create({
-        wasmExecuteContractGeneric:
-          TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
-            senderAddress: commCoin.address,
-            contractAddress: keysignPayload.toAddress,
-            executeMsg: '{ "deposit": {} }',
-            coins: [
-              TW.Cosmos.Proto.Amount.create({
-                denom: fullDenom,
-                amount: keysignPayload.toAmount,
-              }),
-            ],
-          }),
-      }),
-    ]
-  } else if (isDeposit) {
-    thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
-      asset: TW.Cosmos.Proto.THORChainAsset.create({
-        chain: 'THOR',
-        symbol: commCoin.ticker,
-        ticker: commCoin.ticker,
-        synth: false,
-      }),
-    })
-    const toAmount = Number(keysignPayload.toAmount || '0')
-    if (toAmount > 0) {
-      thorchainCoin.amount = keysignPayload.toAmount
-      thorchainCoin.decimals = new Long(commCoin.decimals)
+      return [
+        TW.Cosmos.Proto.Message.create({
+          wasmExecuteContractGeneric:
+            TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+              senderAddress: commCoin.address,
+              contractAddress: keysignPayload.toAddress,
+              executeMsg: '{ "deposit": {} }',
+              coins: [
+                TW.Cosmos.Proto.Amount.create({
+                  denom: fullDenom,
+                  amount: keysignPayload.toAmount,
+                }),
+              ],
+            }),
+        }),
+      ]
+    } else if (isDeposit) {
+      thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
+        asset: TW.Cosmos.Proto.THORChainAsset.create({
+          chain: 'THOR',
+          symbol: commCoin.ticker,
+          ticker: commCoin.ticker,
+          synth: false,
+        }),
+      })
+      const toAmount = Number(keysignPayload.toAmount || '0')
+      if (toAmount > 0) {
+        thorchainCoin.amount = keysignPayload.toAmount
+        thorchainCoin.decimals = new Long(commCoin.decimals)
+      }
+
+      return [
+        TW.Cosmos.Proto.Message.create({
+          thorchainDepositMessage:
+            TW.Cosmos.Proto.Message.THORChainDeposit.create({
+              signer: fromAddr.data(),
+              memo: keysignPayload.memo || '',
+              coins: [thorchainCoin],
+            }),
+        }),
+      ]
     }
-
-    message = [
-      TW.Cosmos.Proto.Message.create({
-        thorchainDepositMessage:
-          TW.Cosmos.Proto.Message.THORChainDeposit.create({
-            signer: fromAddr.data(),
-            memo: keysignPayload.memo || '',
-            coins: [thorchainCoin],
-          }),
-      }),
-    ]
-  } else {
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
       coinType
@@ -91,7 +91,7 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
     }
     const coin = fromCommCoin(commCoin)
 
-    message = [
+    return [
       TW.Cosmos.Proto.Message.create({
         thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
           fromAddress: fromAddr.data(),
@@ -114,7 +114,7 @@ export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    messages: message,
+    messages: getMessages(),
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),
     }),

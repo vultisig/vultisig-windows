@@ -7,7 +7,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
+export const getMayaTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
   chain,
@@ -33,35 +33,35 @@ export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
   const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
-  let message: TW.Cosmos.Proto.Message[]
 
-  if (isDeposit) {
-    thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
-      asset: TW.Cosmos.Proto.THORChainAsset.create({
-        chain: 'MAYA',
-        symbol: 'CACAO',
-        ticker: 'CACAO',
-        synth: false,
-      }),
-    })
+  const getMessages = (): TW.Cosmos.Proto.Message[] => {
+    if (isDeposit) {
+      thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
+        asset: TW.Cosmos.Proto.THORChainAsset.create({
+          chain: 'MAYA',
+          symbol: 'CACAO',
+          ticker: 'CACAO',
+          synth: false,
+        }),
+      })
 
-    const toAmount = Number(keysignPayload.toAmount || '0')
-    if (toAmount > 0) {
-      thorchainCoin.amount = keysignPayload.toAmount
-      thorchainCoin.decimals = new Long(coin.decimals)
+      const toAmount = Number(keysignPayload.toAmount || '0')
+      if (toAmount > 0) {
+        thorchainCoin.amount = keysignPayload.toAmount
+        thorchainCoin.decimals = new Long(coin.decimals)
+      }
+
+      return [
+        TW.Cosmos.Proto.Message.create({
+          thorchainDepositMessage:
+            TW.Cosmos.Proto.Message.THORChainDeposit.create({
+              signer: fromAddr.data(),
+              memo: keysignPayload.memo || '',
+              coins: [thorchainCoin],
+            }),
+        }),
+      ]
     }
-
-    message = [
-      TW.Cosmos.Proto.Message.create({
-        thorchainDepositMessage:
-          TW.Cosmos.Proto.Message.THORChainDeposit.create({
-            signer: fromAddr.data(),
-            memo: keysignPayload.memo || '',
-            coins: [thorchainCoin],
-          }),
-      }),
-    ]
-  } else {
     const toAddress = walletCore.AnyAddress.createBech32(
       keysignPayload.toAddress,
       coinType,
@@ -72,7 +72,7 @@ export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
       throw new Error('To address is different from the bech32 address')
     }
 
-    message = [
+    return [
       TW.Cosmos.Proto.Message.create({
         thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
           fromAddress: fromAddr.data(),
@@ -96,7 +96,7 @@ export const getMayaTxInputData: TxInputDataResolver<'mayaSpecific'> = ({
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo: keysignPayload.memo || '',
-    messages: message,
+    messages: getMessages(),
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),
     }),
