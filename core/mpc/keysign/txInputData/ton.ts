@@ -5,7 +5,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTonTxInputData: TxInputDataResolver<'tonSpecific'> = ({
+export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   keysignPayload,
 }) => {
   const coin = assertField(keysignPayload, 'coin')

@@ -8,10 +8,10 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { TxInputDataResolver } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { TxInputDataResolver } from '../TxInputDataResolver'
 
-export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
+export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
   chain,
@@ -27,38 +27,40 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
     )
 
   const denom = cosmosFeeCoinDenom[chain]
-  let message: TW.Cosmos.Proto.Message[]
-  if (transactionType === TransactionType.IBC_TRANSFER) {
-    const memo = shouldBePresent(keysignPayload.memo)
-    const [, channel] = memo.split(':')
 
-    const timeoutTimestamp = Long.fromString(
-      ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
-    )
+  const getMessages = (): TW.Cosmos.Proto.Message[] => {
+    if (transactionType === TransactionType.IBC_TRANSFER) {
+      const memo = shouldBePresent(keysignPayload.memo)
+      const [, channel] = memo.split(':')
 
-    message = [
-      TW.Cosmos.Proto.Message.create({
-        transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
-          sourcePort: 'transfer',
-          sourceChannel: channel,
-          token: {
-            denom: coin.isNativeToken
-              ? cosmosFeeCoinDenom[coin.chain as CosmosChain]
-              : coin.contractAddress,
-            amount: keysignPayload.toAmount,
-          },
-          sender: coin.address,
-          receiver: keysignPayload.toAddress,
-          timeoutHeight: {
-            revisionNumber: Long.fromString('0'),
-            revisionHeight: Long.fromString('0'),
-          },
-          timeoutTimestamp,
+      const timeoutTimestamp = Long.fromString(
+        ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
+      )
+
+      return [
+        TW.Cosmos.Proto.Message.create({
+          transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
+            sourcePort: 'transfer',
+            sourceChannel: channel,
+            token: {
+              denom: coin.isNativeToken
+                ? cosmosFeeCoinDenom[coin.chain as CosmosChain]
+                : coin.contractAddress,
+              amount: keysignPayload.toAmount,
+            },
+            sender: coin.address,
+            receiver: keysignPayload.toAddress,
+            timeoutHeight: {
+              revisionNumber: Long.fromString('0'),
+              revisionHeight: Long.fromString('0'),
+            },
+            timeoutTimestamp,
+          }),
         }),
-      }),
-    ]
-  } else {
-    message = [
+      ]
+    }
+
+    return [
       TW.Cosmos.Proto.Message.create({
         sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
           fromAddress: coin.address,
@@ -91,7 +93,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmosSpecific'> = ({
       transactionType !== TransactionType.IBC_TRANSFER
         ? keysignPayload.memo || ''
         : '',
-    messages: message,
+    messages: getMessages(),
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(Number(cosmosGasLimitRecord[chain])),
       amounts: [

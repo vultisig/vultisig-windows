@@ -28,7 +28,7 @@ import { TxInputDataResolver } from './TxInputDataResolver'
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
-export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
+export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
   keysignPayload,
   walletCore,
   chain,

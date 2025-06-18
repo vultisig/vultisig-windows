@@ -5,7 +5,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
+export const getRippleTxInputData: TxInputDataResolver<'ripple'> = ({
   keysignPayload,
 }) => {
   const { gas, sequence, lastLedgerSequence } = getBlockchainSpecificValue(

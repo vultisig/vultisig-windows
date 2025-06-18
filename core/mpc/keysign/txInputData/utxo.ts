@@ -18,7 +18,7 @@ export const getUtxoTxInputData = ({
   keysignPayload,
   walletCore,
   chain,
-}: GetTxInputDataInput<'utxoSpecific'>) => {
+}: GetTxInputDataInput<'utxo'>) => {
   const { byteFee, sendMaxAmount } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'utxoSpecific'
