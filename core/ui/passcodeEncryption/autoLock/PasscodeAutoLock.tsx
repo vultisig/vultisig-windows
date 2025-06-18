@@ -1,13 +1,14 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useCallback, useEffect, useRef } from 'react'
 import { useState } from 'react'
 
-import { usePasscodeAutoLock } from '../../../storage/passcodeAutoLock'
-import { usePasscode } from '../../state/passcode'
+import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
+import { usePasscode } from '../state/passcode'
 
-export const useAutoLock = () => {
+export const PasscodeAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
-  const passcodeAutoLock = usePasscodeAutoLock()
+  const passcodeAutoLock = shouldBePresent(usePasscodeAutoLock())
 
   const [lastInteractionAt, setLastInteractionAt] = useState<number | null>(
     null
@@ -20,7 +21,7 @@ export const useAutoLock = () => {
       timeoutRef.current = null
     }
 
-    if (!passcodeAutoLock || !passcode) {
+    if (!passcode) {
       return
     }
 
@@ -84,4 +85,6 @@ export const useAutoLock = () => {
       }
     }
   }, [lastInteractionAt, resetAutoLockTimer])
+
+  return null
 }

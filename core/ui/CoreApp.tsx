@@ -45,15 +45,14 @@ export const CoreApp = ({
               <StorageDependant>
                 <ToastProvider>
                   <ResponsivenessProvider>
-                    <PasscodeGuard>
-                      <Container>
-                        {children}
-                        <ActiveVaultOnly>
-                          <CoinFinder />
-                          <CoinsMetadataManager />
-                        </ActiveVaultOnly>
-                      </Container>
-                    </PasscodeGuard>
+                    <Container>
+                      {children}
+                      <ActiveVaultOnly>
+                        <CoinFinder />
+                        <CoinsMetadataManager />
+                      </ActiveVaultOnly>
+                    </Container>
+                    <PasscodeGuard />
                   </ResponsivenessProvider>
                 </ToastProvider>
               </StorageDependant>

@@ -1,15 +1,15 @@
 import { TakeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
-import { ChildrenProp } from '@lib/ui/props'
 
+import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
-import { useAutoLock } from '../autoLock/core/autoLock'
+import { PasscodeAutoLock } from '../autoLock/PasscodeAutoLock'
 import { usePasscode } from '../state/passcode'
 import { EnterPasscode } from './EnterPasscode'
 
-export const PasscodeGuard = ({ children }: ChildrenProp) => {
+export const PasscodeGuard = () => {
   const [passcode] = usePasscode()
 
-  useAutoLock()
+  const passcodeAutoLock = usePasscodeAutoLock()
 
   const hasPasscodeEnabled = useHasPasscodeEncryption()
 
@@ -17,7 +17,7 @@ export const PasscodeGuard = ({ children }: ChildrenProp) => {
 
   return (
     <>
-      {children}
+      {passcodeAutoLock && <PasscodeAutoLock />}
       {isLocked && (
         <>
           <TakeWholeSpaceAbsolutely>
