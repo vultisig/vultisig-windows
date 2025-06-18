@@ -95,7 +95,12 @@ export const EnterPasscode = () => {
           </Text>
         </VStack>
         <Content>
-          <PasscodeInput onChange={setInputValue} />
+          <PasscodeInput
+            validation={
+              inputValue ? (isDisabled ? 'invalid' : 'valid') : undefined
+            }
+            onChange={setInputValue}
+          />
         </Content>
       </Container>
     </Wrapper>
