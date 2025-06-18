@@ -1,7 +1,7 @@
 import { chainFeeCoin } from './chainFeeCoin'
-import { chainTokens } from './chainTokens'
+import { knownTokens } from './knownTokens'
 
 export const coins = [
   ...Object.values(chainFeeCoin),
-  ...Object.values(chainTokens).flat(),
+  ...Object.values(knownTokens).flat(),
 ]

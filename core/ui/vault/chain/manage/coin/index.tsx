@@ -1,5 +1,5 @@
-import { chainTokens } from '@core/chain/coin/chainTokens'
 import { areEqualCoins } from '@core/chain/coin/Coin'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
@@ -26,7 +26,7 @@ export const ManageVaultChainCoinsPage = () => {
   const whitelistedQuery = useWhitelistedCoinsQuery(currentchain)
 
   const coins = useMemo(() => {
-    const currentChainCoins = sortCoinsAlphabetically(chainTokens[currentchain])
+    const currentChainCoins = sortCoinsAlphabetically(knownTokens[currentchain])
     const whitelistedCoins = sortCoinsAlphabetically(
       whitelistedQuery.data || []
     )
