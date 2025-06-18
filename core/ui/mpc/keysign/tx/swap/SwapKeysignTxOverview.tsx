@@ -49,7 +49,6 @@ export const SwapKeysignTxOverview = ({
     chain: value.coin?.chain as Chain,
   })
   const { coin: potentialFromCoin, blockchainSpecific } = value
-  console.log(value)
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
   const {
     fromAmount,
