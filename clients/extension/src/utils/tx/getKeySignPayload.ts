@@ -178,11 +178,9 @@ export const getKeysignPayload = (
 
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
-          toAmount: transaction.transactionDetails.amount?.amount
-            ? BigInt(
-                parseInt(String(transaction.transactionDetails.amount.amount))
-              ).toString()
-            : '0',
+          toAmount: BigInt(
+            parseInt(String(transaction.transactionDetails.amount?.amount))
+          ).toString(),
           memo: modifiedMemo ?? transaction.transactionDetails.data,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
