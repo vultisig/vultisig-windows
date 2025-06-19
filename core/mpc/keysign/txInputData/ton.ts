@@ -1,21 +1,17 @@
-import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
+import { getKeysignTwPublicKey } from '../utils/getKeysignTwPublicKey'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   keysignPayload,
 }) => {
-  const coin = assertField(keysignPayload, 'coin')
-
   const { expireAt, sequenceNumber } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'tonSpecific'
   )
-
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
   const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
@@ -35,7 +31,7 @@ export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
     expireAt: Number(expireAt.toString()),
     sequenceNumber: Number(sequenceNumber.toString()),
     messages: [tokenTransferMessage],
-    publicKey: new Uint8Array(pubKeyData),
+    publicKey: getKeysignTwPublicKey(keysignPayload),
   }
 
   // Native token transfer

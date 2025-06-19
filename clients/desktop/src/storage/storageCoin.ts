@@ -1,16 +1,15 @@
-import { Chain } from '@core/chain/Chain'
 import {
   AccountCoin,
   accountCoinKeyToString,
 } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getCommCoinKey } from '@core/mpc/types/utils/commCoin'
 
 import { storage } from '../../wailsjs/go/models'
 
 export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
   return {
-    id: coin.contract_address || coin.ticker,
-    chain: coin.chain as Chain,
+    ...getCommCoinKey(coin),
     address: coin.address,
     ticker: coin.ticker,
     logo: coin.logo || undefined,
