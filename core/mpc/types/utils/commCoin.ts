@@ -1,16 +1,41 @@
 import { create } from '@bufbuild/protobuf'
-import { Chain } from '@core/chain/Chain'
+import { CosmosChain } from '@core/chain/Chain'
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { assertChainField } from '@core/chain/utils/assertChainField'
 import {
   Coin as CommCoin,
   CoinSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+
+export const getCommCoinKey = (
+  coin: Pick<CommCoin, 'ticker' | 'chain'> &
+    Partial<Pick<CommCoin, 'contractAddress'>>
+) => {
+  const { chain } = assertChainField(coin)
+  const getId = () => {
+    if (coin.contractAddress) {
+      return coin.contractAddress
+    }
+
+    if (isOneOf(chain, Object.values(CosmosChain))) {
+      return cosmosFeeCoinDenom[chain]
+    }
+
+    return coin.ticker
+  }
+
+  return {
+    id: getId(),
+    chain,
+  }
+}
 
 export const fromCommCoin = (coin: CommCoin): AccountCoin => {
   return {
-    id: coin.contractAddress || coin.ticker,
-    chain: coin.chain as Chain,
+    ...getCommCoinKey(coin),
     address: coin.address,
     ticker: coin.ticker,
     logo: coin.logo,
