@@ -1,5 +1,5 @@
 import { Chain, EvmChain } from '@core/chain/Chain'
-import { getCoinType } from '@core/chain/coin/coinType'
+import { getTwChainId } from '@core/mpc/keysign/tw/getTwChainId'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -8,17 +8,12 @@ type Input = {
   chain: EvmChain
 }
 
-export const getEvmTwChainId = ({ walletCore, chain }: Input) => {
-  const coinType = getCoinType({
-    walletCore,
-    chain,
-  })
-
-  const chainId = BigInt(walletCore.CoinTypeExt.chainId(coinType))
+export const getEvmTwChainId = (input: Input) => {
+  const chainId = BigInt(getTwChainId(input))
 
   return Buffer.from(
     stripHexPrefix(
-      chainId.toString(16).padStart(chain === Chain.Zksync ? 4 : 2, '0')
+      chainId.toString(16).padStart(input.chain === Chain.Zksync ? 4 : 2, '0')
     ),
     'hex'
   )

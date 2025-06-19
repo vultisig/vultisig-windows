@@ -12,8 +12,9 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
+import { getTwChainId } from '../../tw/getTwChainId'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
-import { getKeysignTwPublicKey } from '../../utils/getKeysignTwPublicKey'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 import { getCosmosChainSpecific } from './chainSpecific'
 import { shouldPropagateMemo } from './memo'
@@ -196,23 +197,10 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
-  const getChainId = () => {
-    if (chain === Chain.MayaChain) {
-      return 'mayachain-mainnet-v1'
-    }
-
-    const coinType = getCoinType({
-      walletCore,
-      chain,
-    })
-
-    return walletCore.CoinTypeExt.chainId(coinType)
-  }
-
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: getKeysignTwPublicKey(keysignPayload),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
-    chainId: getChainId(),
+    chainId: getTwChainId({ walletCore, chain }),
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
