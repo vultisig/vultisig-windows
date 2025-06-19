@@ -1,8 +1,4 @@
-import {
-  Chain,
-  CosmosChainKind,
-  VaultBasedCosmosChain,
-} from '@core/chain/Chain'
+import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
@@ -10,6 +6,7 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -38,13 +35,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   const { memo } = keysignPayload
 
   const getMessages = (): TW.Cosmos.Proto.Message[] => {
-    return match<CosmosChainKind, TW.Cosmos.Proto.Message[]>(chainKind, {
-      ibcEnabled: () => {
-        const { transactionType, ibcDenomTraces } = getRecordUnionValue(
-          chainSpecific,
-          'ibcEnabled'
-        )
-
+    return matchRecordUnion(chainSpecific, {
+      ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
         if (transactionType === TransactionType.IBC_TRANSFER) {
           const memo = shouldBePresent(keysignPayload.memo)
           const [, channel] = memo.split(':')
@@ -89,7 +81,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           }),
         ]
       },
-      vaultBased: () => {
+      vaultBased: ({ isDeposit }) => {
         const coinType = getCoinType({
           walletCore,
           chain,
@@ -99,8 +91,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           coin.address,
           coinType
         )
-
-        const { isDeposit } = getRecordUnionValue(chainSpecific, 'vaultBased')
 
         if (keysignPayload.memo?.startsWith('merge:')) {
           const fullDenom = keysignPayload
