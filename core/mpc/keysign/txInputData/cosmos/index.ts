@@ -37,8 +37,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { memo } = keysignPayload
 
-  const denom = cosmosFeeCoinDenom[chain]
-
   const shouldPropagateMemo = match<CosmosChainKind, boolean>(chainKind, {
     ibcEnabled: () => {
       const { isDeposit } = getRecordUnionValue(chainSpecific, 'vaultBased')
@@ -217,7 +215,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
       result.amounts = [
         TW.Cosmos.Proto.Amount.create({
           amount: gasAmount.toString(),
-          denom: denom,
+          denom: cosmosFeeCoinDenom[chain],
         }),
       ]
     }
