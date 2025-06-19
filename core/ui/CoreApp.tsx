@@ -1,12 +1,13 @@
 import { Wrap } from '@lib/ui/base/Wrap'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
-import { VStack } from '@lib/ui/layout/Stack'
+import { vStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
+import styled from 'styled-components'
 
 import { WalletCoreProvider } from './chain/providers/WalletCoreProvider'
 import { PasscodeGuard } from './passcodeEncryption/guard/PasscodeGuard'
@@ -22,6 +23,11 @@ type CoreAppProps = Partial<ChildrenProp> & {
   queryClient: QueryClient
   migrationsManager?: React.ComponentType<ChildrenProp>
 }
+
+const Container = styled.div`
+  ${vStack({ fullSize: true, scrollable: true })}
+  isolation: isolate;
+`
 
 export const CoreApp = ({
   children,
@@ -39,15 +45,14 @@ export const CoreApp = ({
               <StorageDependant>
                 <ToastProvider>
                   <ResponsivenessProvider>
-                    <PasscodeGuard>
-                      <VStack fullSize>
-                        {children}
-                        <ActiveVaultOnly>
-                          <CoinFinder />
-                          <CoinsMetadataManager />
-                        </ActiveVaultOnly>
-                      </VStack>
-                    </PasscodeGuard>
+                    <Container>
+                      {children}
+                      <ActiveVaultOnly>
+                        <CoinFinder />
+                        <CoinsMetadataManager />
+                      </ActiveVaultOnly>
+                    </Container>
+                    <PasscodeGuard />
                   </ResponsivenessProvider>
                 </ToastProvider>
               </StorageDependant>
