@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
@@ -20,7 +21,8 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useMemo } from 'react'
+import { formatUnits } from 'ethers'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const KeysignTxOverview = ({
@@ -63,6 +65,33 @@ export const KeysignTxOverview = ({
     entity: 'tx',
     value: txHash,
   })
+
+  // Actual gas fee
+  const [actualFee, setActualFee] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchReceipt = async () => {
+      if (Object.values(EvmChain).includes(chain as EvmChain)) {
+        try {
+          const client = getEvmClient(chain as EvmChain)
+          const receipt = await client.getTransactionReceipt({
+            hash: txHash as `0x${string}`,
+          })
+          if (receipt && receipt.gasUsed && receipt.effectiveGasPrice) {
+            const actualFeeBigInt =
+              BigInt(receipt.gasUsed) * BigInt(receipt.effectiveGasPrice)
+            setActualFee(formatUnits(actualFeeBigInt, decimals))
+          }
+        } catch (error) {
+          console.error(
+            'Failed to fetch actual gas fee from transaction receipt:',
+            error
+          )
+        }
+      }
+    }
+    fetchReceipt()
+  }, [txHash, chain, coin, decimals])
 
   return (
     <>
@@ -118,14 +147,14 @@ export const KeysignTxOverview = ({
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          {networkFeesFormatted && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
-              <Text color="shy" weight="500">
-                {t('est_network_fee')}
-              </Text>
-              <Text>{networkFeesFormatted}</Text>
-            </HStack>
-          )}
+          <HStack alignItems="center" gap={4} justifyContent="space-between">
+            <Text color="shy" weight="500">
+              {t('network_fee')}
+            </Text>
+            <Text>
+              {actualFee ? `${actualFee} ${coin.ticker}` : networkFeesFormatted}
+            </Text>
+          </HStack>
         </SeparatedByLine>
       </Panel>
     </>
