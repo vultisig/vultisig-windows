@@ -19,8 +19,8 @@ import Long from 'long'
 import { fromCommCoin } from '../../../types/utils/commCoin'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from '../TxInputDataResolver'
-import { getCosmosSharedChainSpecificValue } from './chainSpecific/shared'
-import { getVaultBasedCosmosChainSpecificValue } from './chainSpecific/vaultBased'
+import { getCosmosSharedChainSpecific } from './chainSpecific/shared'
+import { getVaultBasedCosmosChainSpecific } from './chainSpecific/vaultBased'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
@@ -42,7 +42,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
     const shouldPropagateMemo = match<CosmosChainKind, boolean>(chainKind, {
       ibcEnabled: () => {
-        const { isDeposit } = getVaultBasedCosmosChainSpecificValue(
+        const { isDeposit } = getVaultBasedCosmosChainSpecific(
           chain as VaultBasedCosmosChain,
           keysignPayload.blockchainSpecific
         )
@@ -132,7 +132,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           coinType
         )
 
-        const { isDeposit } = getVaultBasedCosmosChainSpecificValue(
+        const { isDeposit } = getVaultBasedCosmosChainSpecific(
           chain as VaultBasedCosmosChain,
           keysignPayload.blockchainSpecific
         )
@@ -241,7 +241,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     return result
   }
 
-  const { accountNumber, sequence } = getCosmosSharedChainSpecificValue(
+  const { accountNumber, sequence } = getCosmosSharedChainSpecific(
     chain,
     keysignPayload.blockchainSpecific
   )

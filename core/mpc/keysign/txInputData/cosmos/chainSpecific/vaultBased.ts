@@ -5,7 +5,7 @@ import { MAYAChainSpecific } from '../../../../types/vultisig/keysign/v1/blockch
 import { KeysignPayload } from '../../../../types/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
 
-export const getVaultBasedCosmosChainSpecificValue = (
+export const getVaultBasedCosmosChainSpecific = (
   chain: VaultBasedCosmosChain,
   blockchainSpecific: KeysignPayload['blockchainSpecific']
 ) =>

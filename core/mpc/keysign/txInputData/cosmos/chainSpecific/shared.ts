@@ -9,9 +9,9 @@ import { match } from '@lib/utils/match'
 
 import { CosmosSpecific } from '../../../../types/vultisig/keysign/v1/blockchain_specific_pb'
 import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
-import { getVaultBasedCosmosChainSpecificValue } from './vaultBased'
+import { getVaultBasedCosmosChainSpecific } from './vaultBased'
 
-export const getCosmosSharedChainSpecificValue = (
+export const getCosmosSharedChainSpecific = (
   chain: CosmosChain,
   blockchainSpecific: KeysignPayload['blockchainSpecific']
 ) => {
@@ -24,7 +24,7 @@ export const getCosmosSharedChainSpecificValue = (
     ibcEnabled: () =>
       getBlockchainSpecificValue(blockchainSpecific, 'cosmosSpecific'),
     vaultBased: () =>
-      getVaultBasedCosmosChainSpecificValue(
+      getVaultBasedCosmosChainSpecific(
         chain as VaultBasedCosmosChain,
         blockchainSpecific
       ),
