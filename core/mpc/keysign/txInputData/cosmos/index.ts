@@ -10,7 +10,6 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../tw/getTwChainId'
 import { toTwAddress } from '../../tw/toTwAddress'
@@ -162,13 +161,11 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     })
 
     if (chainKind === 'ibcEnabled') {
-      const { gas: gasAmount } = getBlockchainSpecificValue(
-        keysignPayload.blockchainSpecific,
-        'cosmosSpecific'
-      )
+      const { gas } = getRecordUnionValue(chainSpecific, 'ibcEnabled')
+
       result.amounts = [
         TW.Cosmos.Proto.Amount.create({
-          amount: gasAmount.toString(),
+          amount: gas.toString(),
           denom: cosmosFeeCoinDenom[chain],
         }),
       ]
