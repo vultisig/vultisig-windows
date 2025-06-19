@@ -13,14 +13,15 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { assertField } from '@lib/utils/record/assertField'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { fromCommCoin } from '../../../types/utils/commCoin'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from '../TxInputDataResolver'
+import { getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosSharedChainSpecific } from './chainSpecific/shared'
-import { getVaultBasedCosmosChainSpecific } from './chainSpecific/vaultBased'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
@@ -33,44 +34,40 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const chainKind = getCosmosChainKind(chain)
 
-  const { blockchainSpecific, memo } = keysignPayload
+  const chainSpecific = getCosmosChainSpecific(
+    chain,
+    keysignPayload.blockchainSpecific
+  )
+
+  const { memo } = keysignPayload
 
   const denom = cosmosFeeCoinDenom[chain]
 
-  const getMemo = (): string | undefined => {
-    if (!memo) return
+  const shouldPropagateMemo = match<CosmosChainKind, boolean>(chainKind, {
+    ibcEnabled: () => {
+      const { isDeposit } = getRecordUnionValue(chainSpecific, 'vaultBased')
 
-    const shouldPropagateMemo = match<CosmosChainKind, boolean>(chainKind, {
-      ibcEnabled: () => {
-        const { isDeposit } = getVaultBasedCosmosChainSpecific(
-          chain as VaultBasedCosmosChain,
-          keysignPayload.blockchainSpecific
-        )
+      return !isDeposit
+    },
+    vaultBased: () => {
+      const { transactionType } = getRecordUnionValue(
+        chainSpecific,
+        'ibcEnabled'
+      )
 
-        return !isDeposit
-      },
-      vaultBased: () => {
-        const { transactionType } = getBlockchainSpecificValue(
-          blockchainSpecific,
-          'cosmosSpecific'
-        )
-
-        return !isOneOf(transactionType, [
-          TransactionType.IBC_TRANSFER,
-          TransactionType.VOTE,
-        ])
-      },
-    })
-
-    return shouldPropagateMemo ? memo : undefined
-  }
+      return !isOneOf(transactionType, [
+        TransactionType.IBC_TRANSFER,
+        TransactionType.VOTE,
+      ])
+    },
+  })
 
   const getMessages = (): TW.Cosmos.Proto.Message[] => {
     return match<CosmosChainKind, TW.Cosmos.Proto.Message[]>(chainKind, {
       ibcEnabled: () => {
-        const { transactionType, ibcDenomTraces } = getBlockchainSpecificValue(
-          keysignPayload.blockchainSpecific,
-          'cosmosSpecific'
+        const { transactionType, ibcDenomTraces } = getRecordUnionValue(
+          chainSpecific,
+          'ibcEnabled'
         )
 
         if (transactionType === TransactionType.IBC_TRANSFER) {
@@ -132,10 +129,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           coinType
         )
 
-        const { isDeposit } = getVaultBasedCosmosChainSpecific(
-          chain as VaultBasedCosmosChain,
-          keysignPayload.blockchainSpecific
-        )
+        const { isDeposit } = getRecordUnionValue(chainSpecific, 'vaultBased')
 
         if (keysignPayload.memo?.startsWith('merge:')) {
           const fullDenom = keysignPayload
@@ -266,7 +260,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: getMemo(),
+    memo: memo && shouldPropagateMemo ? memo : undefined,
     messages: getMessages(),
     fee: getFee(),
   })
