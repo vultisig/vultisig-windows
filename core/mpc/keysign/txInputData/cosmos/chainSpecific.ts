@@ -6,13 +6,13 @@ import {
   CosmosSpecific,
   MAYAChainSpecific,
   THORChainSpecific,
-} from '../../../../types/vultisig/keysign/v1/blockchain_specific_pb'
+} from '../../../types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   chainSpecificRecord,
   getBlockchainSpecificValue,
-} from '../../../chainSpecific/KeysignChainSpecific'
+} from '../../chainSpecific/KeysignChainSpecific'
 
-type CosmosChainSpecific =
+export type CosmosChainSpecific =
   | {
       ibcEnabled: CosmosSpecific
     }
