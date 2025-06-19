@@ -30,7 +30,6 @@ export enum UtxoChain {
   Zcash = 'Zcash',
 }
 
-// Single source of truth for cosmos chains organized by kind
 export const cosmosChainsByKind = {
   ibcEnabled: {
     Cosmos: 'Cosmos',
@@ -48,7 +47,6 @@ export const cosmosChainsByKind = {
   },
 } as const
 
-// Derived types and objects from the single source of truth
 export type CosmosChainKind = keyof typeof cosmosChainsByKind
 
 export const IbcEnabledCosmosChain = cosmosChainsByKind.ibcEnabled
