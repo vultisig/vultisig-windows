@@ -1,11 +1,10 @@
-import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
-import { getCoinType } from '@core/chain/coin/coinType'
+import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TW } from '@trustwallet/wallet-core'
@@ -14,6 +13,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../tw/getTwChainId'
+import { toTwAddress } from '../../tw/toTwAddress'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 import { getCosmosChainSpecific } from './chainSpecific'
@@ -33,7 +33,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     keysignPayload.blockchainSpecific
   )
 
-  const { memo } = keysignPayload
+  const { memo, toAddress } = keysignPayload
 
   const getMessages = (): TW.Cosmos.Proto.Message[] => {
     return matchRecordUnion(chainSpecific, {
@@ -56,7 +56,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   amount: keysignPayload.toAmount,
                 },
                 sender: coin.address,
-                receiver: keysignPayload.toAddress,
+                receiver: toAddress,
                 timeoutHeight: {
                   revisionNumber: Long.fromString('0'),
                   revisionHeight: Long.fromString('0'),
@@ -71,7 +71,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           TW.Cosmos.Proto.Message.create({
             sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
               fromAddress: coin.address,
-              toAddress: keysignPayload.toAddress,
+              toAddress,
               amounts: [
                 TW.Cosmos.Proto.Amount.create({
                   amount: keysignPayload.toAmount,
@@ -83,27 +83,20 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         ]
       },
       vaultBased: ({ isDeposit }) => {
-        const coinType = getCoinType({
+        const fromAddress = toTwAddress({
+          address: coin.address,
           walletCore,
           chain,
         })
-
-        const fromAddr = walletCore.AnyAddress.createWithString(
-          coin.address,
-          coinType
-        )
-
-        if (keysignPayload.memo?.startsWith('merge:')) {
-          const fullDenom = keysignPayload
-            .memo!.toLowerCase()
-            .replace('merge:', '')
+        if (memo && memo.startsWith('merge:')) {
+          const fullDenom = memo.toLowerCase().replace('merge:', '')
 
           return [
             TW.Cosmos.Proto.Message.create({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: coin.address,
-                  contractAddress: keysignPayload.toAddress,
+                  contractAddress: toAddress,
                   executeMsg: '{ "deposit": {} }',
                   coins: [
                     TW.Cosmos.Proto.Amount.create({
@@ -117,10 +110,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         } else if (isDeposit) {
           const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
             asset: TW.Cosmos.Proto.THORChainAsset.create({
-              chain: match(chain as VaultBasedCosmosChain, {
-                [Chain.THORChain]: () => 'THOR',
-                [Chain.MayaChain]: () => 'MAYA',
-              }),
+              chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
               symbol: coin.ticker,
               ticker: coin.ticker,
               synth: false,
@@ -136,37 +126,29 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             TW.Cosmos.Proto.Message.create({
               thorchainDepositMessage:
                 TW.Cosmos.Proto.Message.THORChainDeposit.create({
-                  signer: fromAddr.data(),
-                  memo: keysignPayload.memo || '',
+                  signer: fromAddress,
+                  memo,
                   coins: [depositCoin],
                 }),
             }),
           ]
         }
-        const toAddress = match(chain as VaultBasedCosmosChain, {
-          [Chain.THORChain]: () =>
-            walletCore.AnyAddress.createWithString(
-              keysignPayload.toAddress,
-              coinType
-            ),
-          [Chain.MayaChain]: () =>
-            walletCore.AnyAddress.createBech32(
-              keysignPayload.toAddress,
-              coinType,
-              'maya'
-            ),
-        })
+
         return [
           TW.Cosmos.Proto.Message.create({
             thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
-              fromAddress: fromAddr.data(),
+              fromAddress,
               amounts: [
                 TW.Cosmos.Proto.Amount.create({
                   denom: coin.id,
                   amount: keysignPayload.toAmount,
                 }),
               ],
-              toAddress: toAddress.data(),
+              toAddress: toTwAddress({
+                address: toAddress,
+                walletCore,
+                chain,
+              }),
             }),
           }),
         ]
