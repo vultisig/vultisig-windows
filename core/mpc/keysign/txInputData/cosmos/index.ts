@@ -16,6 +16,7 @@ import { toTwAddress } from '../../tw/toTwAddress'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 import { getCosmosChainSpecific } from './chainSpecific'
+import { getCosmosCoinAmount } from './coinAmount'
 import { shouldPropagateMemo } from './memo'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
@@ -50,10 +51,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
                 sourcePort: 'transfer',
                 sourceChannel: channel,
-                token: {
-                  denom: coin.id,
-                  amount: keysignPayload.toAmount,
-                },
+                token: getCosmosCoinAmount(keysignPayload),
                 sender: coin.address,
                 receiver: toAddress,
                 timeoutHeight: {
@@ -72,10 +70,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               fromAddress: coin.address,
               toAddress,
               amounts: [
-                TW.Cosmos.Proto.Amount.create({
-                  amount: keysignPayload.toAmount,
-                  denom: coin.id,
-                }),
+                TW.Cosmos.Proto.Amount.create(
+                  getCosmosCoinAmount(keysignPayload)
+                ),
               ],
             }),
           }),
@@ -138,10 +135,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
               fromAddress,
               amounts: [
-                TW.Cosmos.Proto.Amount.create({
-                  denom: coin.id,
-                  amount: keysignPayload.toAmount,
-                }),
+                TW.Cosmos.Proto.Amount.create(
+                  getCosmosCoinAmount(keysignPayload)
+                ),
               ],
               toAddress: toTwAddress({
                 address: toAddress,
