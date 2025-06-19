@@ -21,7 +21,6 @@ import { fromCommCoin } from '../../../types/utils/commCoin'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 import { getCosmosChainSpecific } from './chainSpecific'
-import { getCosmosSharedChainSpecific } from './chainSpecific/shared'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
@@ -235,10 +234,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     return result
   }
 
-  const { accountNumber, sequence } = getCosmosSharedChainSpecific(
-    chain,
-    keysignPayload.blockchainSpecific
-  )
+  const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
   const getChainId = () => {
     if (chain === Chain.MayaChain) {
