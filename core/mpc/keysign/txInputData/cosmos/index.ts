@@ -8,7 +8,6 @@ import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRe
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -20,6 +19,7 @@ import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { getKeysignTwPublicKey } from '../../utils/getKeysignTwPublicKey'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 import { getCosmosChainSpecific } from './chainSpecific'
+import { shouldPropagateMemo } from './memo'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
@@ -36,25 +36,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   )
 
   const { memo } = keysignPayload
-
-  const shouldPropagateMemo = match<CosmosChainKind, boolean>(chainKind, {
-    ibcEnabled: () => {
-      const { isDeposit } = getRecordUnionValue(chainSpecific, 'vaultBased')
-
-      return !isDeposit
-    },
-    vaultBased: () => {
-      const { transactionType } = getRecordUnionValue(
-        chainSpecific,
-        'ibcEnabled'
-      )
-
-      return !isOneOf(transactionType, [
-        TransactionType.IBC_TRANSFER,
-        TransactionType.VOTE,
-      ])
-    },
-  })
 
   const getMessages = (): TW.Cosmos.Proto.Message[] => {
     return match<CosmosChainKind, TW.Cosmos.Proto.Message[]>(chainKind, {
@@ -245,7 +226,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: memo && shouldPropagateMemo ? memo : undefined,
+    memo: memo && shouldPropagateMemo(chainSpecific) ? memo : undefined,
     messages: getMessages(),
     fee: getFee(),
   })
