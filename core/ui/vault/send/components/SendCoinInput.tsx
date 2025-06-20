@@ -1,5 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
@@ -124,7 +124,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               }}
               options={coins.filter(
                 coin =>
-                  isOneOf(coin.chain, swapEnabledChains) && isNativeCoin(coin)
+                  isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
               )}
               filterFunction={(option, query) =>
                 option.chain.toLowerCase().startsWith(query.toLowerCase())

@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { getTronBlockInfo } from '@core/chain/chains/tron/getTronBlockInfo'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   TronSpecific,
   TronSpecificSchema,
@@ -12,7 +12,7 @@ import { ChainSpecificResolver } from './ChainSpecificResolver'
 export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
   coin,
 }) => {
-  const isNative = isNativeCoin(coin)
+  const isNative = isFeeCoin(coin)
 
   const coinObject = create(CoinSchema, {
     address: coin.address,

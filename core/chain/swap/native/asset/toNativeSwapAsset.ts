@@ -1,8 +1,8 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 
+import { isFeeCoin } from '../../../coin/utils/isFeeCoin'
 import { nativeSwapChainIds, nativeSwapEnabledChains } from '../NativeSwapChain'
 
 export const toNativeSwapAsset = ({
@@ -18,7 +18,7 @@ export const toNativeSwapAsset = ({
 
   const key = `${swapChainId}.${ticker}`
 
-  if (isNativeCoin({ chain, id })) {
+  if (isFeeCoin({ chain, id })) {
     return key
   }
 
