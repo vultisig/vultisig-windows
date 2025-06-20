@@ -6,7 +6,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getTronTxInputData: TxInputDataResolver<'tronSpecific'> = ({
+export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   keysignPayload,
 }) => {
   const tronSpecific = getBlockchainSpecificValue(

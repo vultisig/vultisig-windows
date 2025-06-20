@@ -13,7 +13,6 @@ import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
 import { toEvmTwAmount } from '@core/chain/chains/evm/tx/tw/toEvmTwAmount'
 import { toEvmTxData } from '@core/chain/chains/evm/tx/tw/toEvmTxData'
-import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
@@ -23,12 +22,13 @@ import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_me
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
+import { toTwAddress } from '../tw/toTwAddress'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
-export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
+export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
   keysignPayload,
   walletCore,
   chain,
@@ -100,22 +100,22 @@ export const getEvmTxInputData: TxInputDataResolver<'ethereumSpecific'> = ({
           const abiFunction =
             walletCore.EthereumAbiFunction.createWithString('depositWithExpiry')
 
-          const coinType = getCoinType({
-            walletCore,
-            chain,
-          })
-
-          const vaultAddr = walletCore.AnyAddress.createWithString(
-            vaultAddress,
-            coinType
+          abiFunction.addParamAddress(
+            toTwAddress({
+              address: vaultAddress,
+              walletCore,
+              chain,
+            }),
+            false
           )
-          const contractAddr = walletCore.AnyAddress.createWithString(
-            shouldBePresent(fromCoin?.contractAddress),
-            coinType
+          abiFunction.addParamAddress(
+            toTwAddress({
+              address: shouldBePresent(fromCoin?.contractAddress),
+              walletCore,
+              chain,
+            }),
+            false
           )
-
-          abiFunction.addParamAddress(vaultAddr.data(), false)
-          abiFunction.addParamAddress(contractAddr.data(), false)
           abiFunction.addParamUInt256(toEvmTwAmount(fromAmount), false)
           abiFunction.addParamString(memo, false)
           abiFunction.addParamUInt256(toEvmTwAmount(expirationTime), false)
