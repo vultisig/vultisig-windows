@@ -45,7 +45,7 @@ export const KeysignTxFeeDisplay = ({
       error={() => (
         <HStack alignItems="center" gap={4} justifyContent="space-between">
           <Text color="shy" weight="500">
-            {t('network_fee')}
+            {t('est_network_fee')}
           </Text>
           <Text>{networkFeesFormatted}</Text>
         </HStack>
