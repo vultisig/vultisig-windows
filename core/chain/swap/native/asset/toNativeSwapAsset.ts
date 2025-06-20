@@ -18,7 +18,10 @@ export const toNativeSwapAsset = ({
 
   const key = `${swapChainId}.${ticker}`
 
-  if (isFeeCoin({ chain, id })) {
+  if (
+    isFeeCoin({ chain, id }) ||
+    isOneOf(chain, Object.values(nativeSwapEnabledChains))
+  ) {
     return key
   }
 

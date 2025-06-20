@@ -35,6 +35,11 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'tcy',
     },
+    'x/ruji': {
+      ticker: 'RUJI',
+      logo: 'ruji',
+      decimals: 8,
+    },
     ...kujiraCoinsOnThorChain,
   },
   [Chain.Cosmos]: {
