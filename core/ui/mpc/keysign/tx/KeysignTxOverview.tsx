@@ -23,6 +23,8 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { KeysignTxFeeDisplay } from './components/KeysignTxFeeDisplay'
+
 export const KeysignTxOverview = ({
   value,
   txHash,
@@ -118,14 +120,13 @@ export const KeysignTxOverview = ({
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          {networkFeesFormatted && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
-              <Text color="shy" weight="500">
-                {t('est_network_fee')}
-              </Text>
-              <Text>{networkFeesFormatted}</Text>
-            </HStack>
-          )}
+          <KeysignTxFeeDisplay
+            txHash={txHash}
+            chain={chain}
+            decimals={decimals}
+            ticker={coin.ticker}
+            networkFeesFormatted={networkFeesFormatted}
+          />
         </SeparatedByLine>
       </Panel>
     </>
