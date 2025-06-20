@@ -1,5 +1,5 @@
 import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
-import { chainTokens } from '@core/chain/coin/chainTokens'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
@@ -18,7 +18,7 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
     }
 
     const ibcTokens = Object.values(IbcEnabledCosmosChain).flatMap(chain =>
-      chainTokens[chain].filter(coin => coin.id.startsWith('ibc/'))
+      knownTokens[chain].filter(coin => coin.id.startsWith('ibc/'))
     )
 
     return sourceCoins.filter(coin =>

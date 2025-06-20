@@ -1,7 +1,7 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { chainTokens } from '@core/chain/coin/chainTokens'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
@@ -54,7 +54,7 @@ export const VaultChainPage = () => {
   const fiatCurrency = useFiatCurrency()
   const vaultCoins = useCurrentVaultChainCoins(chain)
   const address = useCurrentVaultAddress(chain)
-  const hasMultipleCoinsSupport = chainTokens[chain].length > 1
+  const hasMultipleCoinsSupport = knownTokens[chain].length > 1
   const copyAddress = useCopyAddress()
   const navigate = useCoreNavigate()
 
