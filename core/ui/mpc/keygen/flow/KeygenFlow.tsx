@@ -9,14 +9,10 @@ import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { Button } from '@lib/ui/buttons/Button'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnBackProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { GradientText, Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -26,7 +22,10 @@ import { useTranslation } from 'react-i18next'
 import { InstallPluginPendingState } from '../reshare/plugin/InstallPluginPendingState'
 import { mapKeygenStepToInstallStep } from '../reshare/plugin/InstallPluginStep'
 
-export const KeygenFlow = ({ onBack }: OnBackProp) => {
+export const KeygenFlow = ({
+  onBack,
+  onFinish,
+}: OnBackProp & Partial<OnFinishProp>) => {
   const {
     step,
     mutate: startKeygen,
@@ -56,27 +55,8 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       value={keygenMutationState}
       success={vault => {
         const renderEnding = () => {
-          if (isPluginReshare) {
-            return (
-              <>
-                <PageContent justifyContent="end">
-                  <GradientText
-                    as="span"
-                    size={28}
-                    weight={500}
-                    centerHorizontally
-                  >{`${t('success')}.`}</GradientText>
-                  <Text as="span" size={28} weight={500} centerHorizontally>
-                    {t('plugin_success_desc', { name: '' })}
-                  </Text>
-                </PageContent>
-                <PageFooter>
-                  <Button onClick={() => window.close()}>
-                    {t('go_to_wallet')}
-                  </Button>
-                </PageFooter>
-              </>
-            )
+          if (isPluginReshare && onFinish) {
+            onFinish()
           } else if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
           }

@@ -7,10 +7,15 @@ import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ValueProp } from '@lib/ui/props'
+import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
@@ -71,13 +76,42 @@ export const PluginReshareFlow = ({
               <WaitForPluginAndVerifier onFinish={onFinish} />
             )}
             to={({ value }) => (
-              <MpcPeersProvider value={value}>
-                <StartMpcSessionFlow
-                  render={() => <KeygenFlow onBack={toPreviousStep} />}
-                  value="keygen"
-                  isPluginReshare
-                />
-              </MpcPeersProvider>
+              <StepTransition
+                from={({ onFinish }) => (
+                  <MpcPeersProvider value={value}>
+                    <StartMpcSessionFlow
+                      render={() => (
+                        <KeygenFlow
+                          onBack={toPreviousStep}
+                          onFinish={onFinish}
+                        />
+                      )}
+                      value="keygen"
+                      isPluginReshare
+                    />
+                  </MpcPeersProvider>
+                )}
+                to={() => (
+                  <>
+                    <PageContent justifyContent="end">
+                      <GradientText
+                        as="span"
+                        size={28}
+                        weight={500}
+                        centerHorizontally
+                      >{`${t('success')}.`}</GradientText>
+                      <Text as="span" size={28} weight={500} centerHorizontally>
+                        {t('plugin_success_desc', { name: pluginInfo.title })}
+                      </Text>
+                    </PageContent>
+                    <PageFooter>
+                      <Button onClick={() => window.close()}>
+                        {t('go_to_wallet')}
+                      </Button>
+                    </PageFooter>
+                  </>
+                )}
+              />
             )}
           />
         </>
