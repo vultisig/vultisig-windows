@@ -1,5 +1,4 @@
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
-import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
 import { CreateFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/create/fast/CreateFastKeygenServerActionProvider'
 import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerActionStep'
@@ -12,30 +11,13 @@ import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
-import { OnBackProp, OnFinishProp, ValueProp } from '@lib/ui/props'
+import { OnBackProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { ComponentType, useCallback, useMemo } from 'react'
+import { ComponentType } from 'react'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
-  const isPluginReshare = useMemo(() => {
-    return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
-  }, [keygenOperation])
-
-  const handlePeersChange = useCallback(
-    ({
-      value: peers,
-      onFinish,
-    }: ValueProp<string[]> & OnFinishProp<string[]>) => {
-      const shouldFinish =
-        !isPluginReshare ||
-        peers.length >= pluginPeersConfig.minimumJoinedParties
-
-      if (shouldFinish) onFinish(peers)
-    },
-    [isPluginReshare]
-  )
 
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
@@ -62,15 +44,10 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
       }}
       to={() => (
         <ValueTransfer<string[]>
-          from={({ onFinish }) => (
-            <WaitForServerStep
-              onFinish={value => handlePeersChange({ value, onFinish })}
-            />
-          )}
+          from={({ onFinish }) => <WaitForServerStep onFinish={onFinish} />}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
-                isPluginReshare={isPluginReshare}
                 render={() => <KeygenFlow onBack={onBack} />}
                 value="keygen"
               />

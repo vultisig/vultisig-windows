@@ -1,4 +1,3 @@
-import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
@@ -10,6 +9,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { InstallPluginStep, installPluginSteps } from './InstallPluginStep'
 
 const Wrapper = styled(VStack)`
   overflow-y: hidden;
@@ -43,28 +44,28 @@ const IconWrapper = styled(VStack)`
 
 const pendingCompletion = 0.25
 
-const completion: Record<KeygenStep, number> = {
-  prepareVault: 0.5,
-  ecdsa: 0.7,
-  eddsa: 0.9,
+const completion: Partial<Record<InstallPluginStep, number>> = {
+  verifierServer: 0.5,
+  pluginServer: 0.7,
+  install: 0.9,
 }
 
-export const KeygenProgressIndicator = ({
+export const InstallPluginProgressIndicator = ({
   value,
-}: ValueProp<KeygenStep | null>) => {
+}: ValueProp<InstallPluginStep | null>) => {
   const { t } = useTranslation()
 
-  const texts: Record<KeygenStep, string> = {
-    prepareVault: t('connecting_to_verifier'),
-    ecdsa: t('connecting_to_plugin'),
-    eddsa: t('installing_plugin'),
+  const texts: Partial<Record<InstallPluginStep, string>> = {
+    verifierServer: t('connecting_to_verifier'),
+    pluginServer: t('connecting_to_plugin'),
+    install: t('installing_plugin'),
   }
 
   return (
     <Wrapper justifyContent="center">
       <>
-        {keygenSteps.map((status, index) => {
-          const isCompleted = value && keygenSteps.indexOf(value) > index
+        {installPluginSteps.map((status, index) => {
+          const isCompleted = value && installPluginSteps.indexOf(value) > index
 
           const text = texts[status]
 
@@ -83,7 +84,7 @@ export const KeygenProgressIndicator = ({
         })}
         <ProgressBarWrapper>
           <StyledProgressLine
-            value={value ? completion[value] : pendingCompletion}
+            value={value ? completion[value]! : pendingCompletion}
           />
         </ProgressBarWrapper>
       </>

@@ -44,7 +44,7 @@ const apiRef = {
   jupiter: {
     token: 'https://tokens.jup.ag/token',
   },
-  pluginMarketPlace: '',
+  pluginMarketPlace: 'http://95.217.108.62:8081/',
 }
 
 api.interceptors.request.use(

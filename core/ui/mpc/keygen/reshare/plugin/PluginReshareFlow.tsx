@@ -1,9 +1,7 @@
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerActionStep'
-import { KeygenFlow } from '@core/ui/mpc/keygen/reshare/plugin/KeygenFlow'
 import { PolicyReview } from '@core/ui/mpc/keygen/reshare/plugin/PolicyReview'
 import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
-import { WaitForServer } from '@core/ui/mpc/keygen/reshare/plugin/WaitForServer'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
@@ -14,6 +12,9 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
+
+import { KeygenFlow } from '../../flow/KeygenFlow'
+import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
 const steps = ['info', 'policy', 'password', 'keygen'] as const
 
@@ -66,11 +67,13 @@ export const PluginReshareFlow = ({
         <>
           <PageHeader title={t('installing_plugin')} hasBorder />
           <ValueTransfer<string[]>
-            from={({ onFinish }) => <WaitForServer onFinish={onFinish} />}
+            from={({ onFinish }) => (
+              <WaitForPluginAndVerifier onFinish={onFinish} />
+            )}
             to={({ value }) => (
               <MpcPeersProvider value={value}>
                 <StartMpcSessionFlow
-                  render={() => <KeygenFlow />}
+                  render={() => <KeygenFlow onBack={toPreviousStep} />}
                   value="keygen"
                   isPluginReshare
                 />

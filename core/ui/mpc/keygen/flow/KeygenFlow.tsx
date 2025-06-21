@@ -23,6 +23,9 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { InstallPluginPendingState } from '../reshare/plugin/InstallPluginPendingState'
+import { mapKeygenStepToInstallStep } from '../reshare/plugin/InstallPluginStep'
+
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const {
     step,
@@ -56,7 +59,6 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
           if (isPluginReshare) {
             return (
               <>
-                <PageHeader title={title} hasBorder />
                 <PageContent justifyContent="end">
                   <GradientText
                     as="span"
@@ -124,8 +126,16 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       )}
       pending={() => (
         <>
-          <PageHeader title={title} hasBorder />
-          <KeygenPendingState value={step} />
+          {isPluginReshare ? (
+            <InstallPluginPendingState
+              value={mapKeygenStepToInstallStep(step)}
+            />
+          ) : (
+            <>
+              <PageHeader title={title} hasBorder />
+              <KeygenPendingState value={step} />
+            </>
+          )}
         </>
       )}
     />
