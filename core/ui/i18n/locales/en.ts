@@ -7,8 +7,8 @@ export const en = {
   install_plugin: 'Install Plugin',
   installing_plugin: 'Installing Plugin',
   plugin_info: 'Plugin Info',
-  plugin_info_desc: 'You are installing [{{name}}] Plugin',
-  plugin_success_desc: 'Installation of [{{name}}] is completed',
+  plugin_info_desc: 'You are installing {{name}} Plugin',
+  plugin_success_desc: 'Installation of {{name}} is completed',
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
