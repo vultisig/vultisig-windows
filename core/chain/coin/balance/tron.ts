@@ -1,6 +1,6 @@
 import base58 from 'bs58'
 
-import { isNativeCoin } from '../utils/isNativeCoin'
+import { isFeeCoin } from '../utils/isFeeCoin'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 /**
@@ -9,7 +9,7 @@ import { CoinBalanceResolver } from './CoinBalanceResolver'
  * @returns Promise resolving to token balance as string
  */
 export const getTronCoinBalance: CoinBalanceResolver = async input => {
-  if (isNativeCoin(input)) {
+  if (isFeeCoin(input)) {
     // Native TRX balance
     const body = {
       address: input.address,

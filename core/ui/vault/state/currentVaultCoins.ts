@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
@@ -16,7 +16,7 @@ export const useCurrentVaultCoins = () => {
 export const useCurrentVaultNativeCoins = () => {
   const coins = useCurrentVaultCoins()
 
-  return useMemo(() => coins.filter(isNativeCoin), [coins])
+  return useMemo(() => coins.filter(isFeeCoin), [coins])
 }
 
 export const useCurrentVaultCoinsByChain = () => {
