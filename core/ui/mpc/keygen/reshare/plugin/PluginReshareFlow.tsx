@@ -12,18 +12,34 @@ import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 const steps = ['info', 'policy', 'password', 'keygen'] as const
 
-export const PluginReshareFlow = () => {
+export type PluginMetadata = {
+  id: string
+  title: string
+  description: string
+  server_endpoint: string
+  pricing_id: string
+  category_id: string
+  created_at: string // ISO date string
+  updated_at: string // ISO date string
+}
+
+export const PluginReshareFlow = ({
+  value: pluginInfo,
+}: ValueProp<PluginMetadata>) => {
   const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
 
   return (
     <Match
       value={step}
-      info={() => <PreviewInfo name="" onFinish={toNextStep} />}
+      info={() => (
+        <PreviewInfo value={pluginInfo.title} onFinish={toNextStep} />
+      )}
       policy={() => (
         <PolicyReview onBack={toPreviousStep} onFinish={toNextStep} />
       )}

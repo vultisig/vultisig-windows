@@ -3,7 +3,6 @@ import {
   getDappHost,
   getDappHostname,
 } from '@clients/extension/src/utils/connectedApps'
-import { getStoredRequest } from '@clients/extension/src/utils/storage'
 import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
@@ -24,6 +23,8 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { getStoredPendingRequest } from '../../utils/pendingRequests'
 
 type InitialState = {
   chain?: Chain
@@ -71,7 +72,11 @@ export const ConnectDAppPage = () => {
   useEffect(() => {
     const initRequest = async () => {
       try {
-        const { chain, sender } = await getStoredRequest()
+        const data = await getStoredPendingRequest('accounts')
+        if (!data) {
+          throw new Error('No request accounts request found')
+        }
+        const { chain, sender } = data
         setState(prevState => ({ ...prevState, chain, sender }))
       } catch (error) {
         console.error('Failed to get stored request:', error)

@@ -5,13 +5,13 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const PreviewInfo: FC<OnFinishProp & { name: string }> = ({
-  name,
+export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
+  value: name,
   onFinish,
 }) => {
   const { t } = useTranslation()
