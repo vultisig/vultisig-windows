@@ -46,7 +46,9 @@ export const coinKeyToString = (coin: CoinKey): string =>
 export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
   const tokens = knownTokens[coinKey.chain]
   if (tokens.length > 0) {
-    const foundToken = tokens.find(token => token.id === coinKey.id)
+    const foundToken = tokens.find(
+      token => token.id.toLowerCase() === coinKey.id.toLowerCase()
+    )
     if (foundToken) return foundToken
   }
 
