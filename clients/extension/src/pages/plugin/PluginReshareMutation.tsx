@@ -1,16 +1,16 @@
 import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
+import { Center } from '@lib/ui/layout/Center'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { StrictText } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import api from '../../utils/api'
 import { getStoredPendingRequest } from '../../utils/pendingRequests'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Center } from '@lib/ui/layout/Center'
-import { StrictText } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
 
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
