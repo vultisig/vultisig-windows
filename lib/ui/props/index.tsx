@@ -1,5 +1,7 @@
 import { ElementType, ReactNode, SVGProps } from 'react'
 
+import { ColorName } from '../theme/getters'
+
 export type OnCloseProp = {
   onClose: () => void
 }
