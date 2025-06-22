@@ -22,7 +22,7 @@ export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
   const peers = useMemo(() => peersQuery.data ?? [], [peersQuery.data])
 
   const hasVerifier = peers.some(p => p.startsWith('verifier'))
-  const hasPlugin = true
+  const hasPlugin = peers.some(p => p.startsWith('plugin'))
   const enoughPeers = peers.length >= pluginPeersConfig.minimumJoinedParties
 
   // Determine current step based on joined peers
