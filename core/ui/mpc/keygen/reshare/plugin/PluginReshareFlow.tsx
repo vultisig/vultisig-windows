@@ -1,6 +1,5 @@
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerActionStep'
-import { PolicyReview } from '@core/ui/mpc/keygen/reshare/plugin/PolicyReview'
 import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
@@ -21,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
-const steps = ['info', 'policy', 'password', 'keygen'] as const
+const steps = ['info', 'password', 'keygen'] as const
 
 export type PluginMetadata = {
   id: string
@@ -45,9 +44,6 @@ export const PluginReshareFlow = ({
       value={step}
       info={() => (
         <PreviewInfo value={pluginInfo.title} onFinish={toNextStep} />
-      )}
-      policy={() => (
-        <PolicyReview onBack={toPreviousStep} onFinish={toNextStep} />
       )}
       password={() => (
         <ValueTransfer<{ password: string }>
