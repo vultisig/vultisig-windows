@@ -7,6 +7,10 @@ import { useEffect } from 'react'
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import api from '../../utils/api'
 import { getStoredPendingRequest } from '../../utils/pendingRequests'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Center } from '@lib/ui/layout/Center'
+import { StrictText } from '@lib/ui/text'
+import { useTranslation } from 'react-i18next'
 
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
@@ -14,6 +18,7 @@ export const PluginReshareMutation = ({
   value,
   onFinish,
 }: ValueProp<string> & OnFinishProp<PluginMetadata>) => {
+  const { t } = useTranslation()
   const { mutate: processPluginReshare, ...mutationState } = useMutation({
     mutationFn: async (joinUrl: string) => {
       const request = await getStoredPendingRequest('plugin')
@@ -39,5 +44,19 @@ export const PluginReshareMutation = ({
     processPluginReshare(value)
   }, [processPluginReshare, value])
 
-  return <MatchQuery value={mutationState} />
+  return (
+    <MatchQuery
+      value={mutationState}
+      pending={() => (
+        <Center>
+          <Spinner />
+        </Center>
+      )}
+      error={() => (
+        <Center>
+          <StrictText>{t('failed_to_process_plugin_install')}</StrictText>
+        </Center>
+      )}
+    />
+  )
 }
