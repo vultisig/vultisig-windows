@@ -84,7 +84,11 @@ export const InstallPluginProgressIndicator = ({
         })}
         <ProgressBarWrapper>
           <StyledProgressLine
-            value={value ? completion[value]! : pendingCompletion}
+            value={
+              value
+                ? (completion[value] ?? pendingCompletion)
+                : pendingCompletion
+            }
           />
         </ProgressBarWrapper>
       </>

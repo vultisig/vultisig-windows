@@ -10,7 +10,10 @@ export const handlePluginRequest = async (
   request: Messaging.Plugin.Request,
   popupMessenger: Messenger
 ): Promise<Messaging.Plugin.Response> => {
-  const [params] = request.params
+  const [params] = request.params || []
+  if (!params) {
+    throw new Error('Missing required params in plugin request')
+  }
   return match(request.method, {
     [RequestMethod.VULTISIG.PLUGIN_REQUEST_RESHARE]: async () => {
       await setStoredPendingRequest('plugin', { id: params.id })
