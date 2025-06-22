@@ -1,4 +1,5 @@
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote'
+import { HybridSwapQuote } from '../hybrid/HybridSwapQuote'
 import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
 export type SwapType = 'native' | 'general' | 'hybrid'
@@ -6,7 +7,7 @@ export type SwapType = 'native' | 'general' | 'hybrid'
 type SwapQuoteMap = {
   native: NativeSwapQuote
   general: GeneralSwapQuote
-  hybrid: any
+  hybrid: HybridSwapQuote
 }
 
 export type SwapQuote = {

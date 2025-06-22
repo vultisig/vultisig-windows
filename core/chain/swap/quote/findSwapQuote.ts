@@ -76,6 +76,29 @@ export const findSwapQuote = ({
   const toChain = to.chain
 
   if (
+    isOneOf(fromChain, hybridSwapEnabledChains) &&
+    isOneOf(toChain, hybridSwapEnabledChains) &&
+    fromChain === toChain
+  ) {
+    fetchers.push(async (): Promise<SwapQuote> => {
+      const hybrid = await getHybridSwapQuote({
+        from: {
+          ...from,
+          chain: fromChain,
+        },
+        to: {
+          ...to,
+          chain: toChain,
+        },
+        amount,
+        isAffiliate,
+      })
+
+      return { hybrid }
+    })
+  }
+
+  if (
     isOneOf(fromChain, lifiSwapEnabledChains) &&
     isOneOf(toChain, lifiSwapEnabledChains)
   ) {
@@ -94,17 +117,6 @@ export const findSwapQuote = ({
       })
 
       return { general }
-    })
-  }
-
-  if (
-    isOneOf(fromChain, hybridSwapEnabledChains) &&
-    isOneOf(toChain, hybridSwapEnabledChains)
-  ) {
-    fetchers.push(async (): Promise<SwapQuote> => {
-      const hybrid = await getHybridSwapQuote()
-
-      return { hybrid }
     })
   }
 

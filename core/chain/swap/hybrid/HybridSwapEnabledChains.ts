@@ -10,5 +10,6 @@ export const hybridSwapEnabledChains = [
   Chain.Base,
   Chain.Zksync,
   Chain.Blast,
-  Chain.Bitcoin,
 ] as const
+
+export type HybridSwapEnabledChain = (typeof hybridSwapEnabledChains)[number]
