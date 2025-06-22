@@ -55,23 +55,6 @@ export const findSwapQuote = ({
     }
   )
 
-  if (
-    isOneOf(from.chain, oneInchSwapEnabledChains) &&
-    from.chain === to.chain
-  ) {
-    fetchers.push(async (): Promise<SwapQuote> => {
-      const general = await getOneInchSwapQuote({
-        account: pick(from, ['address', 'chain']),
-        fromCoinId: from.id,
-        toCoinId: to.id,
-        amount: toChainAmount(amount, from.decimals),
-        isAffiliate,
-      })
-
-      return { general }
-    })
-  }
-
   const fromChain = from.chain
   const toChain = to.chain
 
@@ -95,6 +78,23 @@ export const findSwapQuote = ({
       })
 
       return { hybrid }
+    })
+  }
+
+  if (
+    isOneOf(from.chain, oneInchSwapEnabledChains) &&
+    from.chain === to.chain
+  ) {
+    fetchers.push(async (): Promise<SwapQuote> => {
+      const general = await getOneInchSwapQuote({
+        account: pick(from, ['address', 'chain']),
+        fromCoinId: from.id,
+        toCoinId: to.id,
+        amount: toChainAmount(amount, from.decimals),
+        isAffiliate,
+      })
+
+      return { general }
     })
   }
 
