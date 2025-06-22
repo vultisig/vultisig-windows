@@ -11,16 +11,20 @@ const swapTypeRecord: Record<
   thorchainSwapPayload: 'native',
   mayachainSwapPayload: 'native',
   oneinchSwapPayload: 'general',
+  kyberswapSwapPayload: 'hybrid',
 }
 
-const chainRecord: Record<
-  NonNullable<KeysignPayload['swapPayload']['case']>,
-  VaultBasedCosmosChain | undefined
-> = {
-  thorchainSwapPayload: Chain.THORChain,
-  mayachainSwapPayload: Chain.MayaChain,
-  oneinchSwapPayload: undefined,
-}
+type NativeSwapPayloadCase = {
+  [K in keyof typeof swapTypeRecord]: (typeof swapTypeRecord)[K] extends 'native'
+    ? K
+    : never
+}[keyof typeof swapTypeRecord]
+
+const nativeChainRecord: Record<NativeSwapPayloadCase, VaultBasedCosmosChain> =
+  {
+    thorchainSwapPayload: Chain.THORChain,
+    mayachainSwapPayload: Chain.MayaChain,
+  }
 
 export const getKeysignSwapPayload = ({
   swapPayload,
@@ -30,9 +34,9 @@ export const getKeysignSwapPayload = ({
   }
 
   const swapType = swapTypeRecord[swapPayload.case]
-  const chain = chainRecord[swapPayload.case]
 
-  if (swapType === 'native' && chain) {
+  if (swapType === 'native') {
+    const chain = nativeChainRecord[swapPayload.case as NativeSwapPayloadCase]
     return {
       [swapType]: { ...swapPayload.value, chain },
     } as KeysignSwapPayload

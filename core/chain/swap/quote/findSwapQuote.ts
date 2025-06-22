@@ -11,6 +11,8 @@ import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
+import { getHybridSwapQuote } from '../hybrid/api/getHybridSwapQuote'
+import { hybridSwapEnabledChains } from '../hybrid/HybridSwapEnabledChains'
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
 import {
   nativeSwapChains,
@@ -92,6 +94,17 @@ export const findSwapQuote = ({
       })
 
       return { general }
+    })
+  }
+
+  if (
+    isOneOf(fromChain, hybridSwapEnabledChains) &&
+    isOneOf(toChain, hybridSwapEnabledChains)
+  ) {
+    fetchers.push(async (): Promise<SwapQuote> => {
+      const hybrid = await getHybridSwapQuote()
+
+      return { hybrid }
     })
   }
 
