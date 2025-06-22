@@ -4,7 +4,7 @@ import { RequiredFields } from '@lib/utils/types/RequiredFields'
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
 import { chainFeeCoin } from './chainFeeCoin'
-import { chainTokens } from './chainTokens'
+import { knownTokens } from './knownTokens'
 
 export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
@@ -44,9 +44,11 @@ export const coinKeyToString = (coin: CoinKey): string =>
   `${coin.chain}:${coin.id}`
 
 export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
-  const tokens = chainTokens[coinKey.chain]
+  const tokens = knownTokens[coinKey.chain]
   if (tokens.length > 0) {
-    const foundToken = tokens.find(token => token.id === coinKey.id)
+    const foundToken = tokens.find(
+      token => token.id.toLowerCase() === coinKey.id.toLowerCase()
+    )
     if (foundToken) return foundToken
   }
 

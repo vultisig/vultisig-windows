@@ -1,8 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { generalSwapProviderName } from '@core/chain/swap/general/GeneralSwapProvider'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
+import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
+import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
@@ -24,22 +26,13 @@ import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { TrackTxPrompt } from './TrackTxPrompt'
-
-const getSwapProvider = (value: KeysignPayload['swapPayload']) => {
-  if (!value?.case) return null
-
-  return match(value.case, {
-    thorchainSwapPayload: () => 'ThorChain',
-    mayachainSwapPayload: () => 'MayaChain',
-    oneinchSwapPayload: () => generalSwapProviderName.oneinch,
-  })
-}
 
 export const SwapKeysignTxOverview = ({
   value,
@@ -55,15 +48,15 @@ export const SwapKeysignTxOverview = ({
     memo: value.memo,
     chain: value.coin?.chain as Chain,
   })
-  const { coin: potentialFromCoin, blockchainSpecific, swapPayload } = value
+  const { coin: potentialFromCoin, blockchainSpecific } = value
+  const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
   const {
     fromAmount,
     toAmountDecimal,
     toCoin: potentialToCoin,
-  } = shouldBePresent(swapPayload.value)
+  } = getRecordUnionValue(swapPayload)
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
-  const swapProvider = getSwapProvider(swapPayload)
   const { chain } = shouldBePresent(toCoin)
 
   const formattedFromAmount = useMemo(() => {
@@ -79,17 +72,13 @@ export const SwapKeysignTxOverview = ({
     })
   }, [blockchainSpecific, chain])
 
-  const blockExplorerChain: Chain = useMemo(() => {
-    if (swapPayload.case) {
-      return match(swapPayload.case, {
-        thorchainSwapPayload: () => Chain.THORChain,
-        mayachainSwapPayload: () => Chain.MayaChain,
-        oneinchSwapPayload: () => chain as Chain,
-      })
+  const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
+    swapPayload,
+    {
+      native: ({ chain }) => chain,
+      general: () => chain,
     }
-
-    return chain as Chain
-  }, [chain, swapPayload])
+  )
 
   const trackTransaction = (tx: string) =>
     openUrl(
@@ -102,7 +91,7 @@ export const SwapKeysignTxOverview = ({
 
   return (
     <>
-      <VStack style={{ height: 250, position: 'relative' }}>
+      <VStack style={{ position: 'relative' }}>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
           <GradientText
@@ -136,7 +125,7 @@ export const SwapKeysignTxOverview = ({
           <TrackTxPrompt
             title={t('transaction')}
             value={txHashNormalized}
-            chain={chain}
+            chain={blockExplorerChain}
           />
           {'erc20Approve' in value && (
             <TrackTxPrompt
@@ -145,21 +134,15 @@ export const SwapKeysignTxOverview = ({
               chain={chain}
             />
           )}
-          {swapProvider && (
-            <HStack
-              fullWidth
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text weight="500" size={14} color="shy">
-                {t('provider')}
-              </Text>
+          <HStack fullWidth justifyContent="space-between" alignItems="center">
+            <Text weight="500" size={14} color="shy">
+              {t('provider')}
+            </Text>
 
-              <Text weight={500} size={14} color="contrast" cropped>
-                {swapProvider}
-              </Text>
-            </HStack>
-          )}
+            <Text weight={500} size={14} color="contrast" cropped>
+              {getKeysignSwapProviderName(swapPayload)}
+            </Text>
+          </HStack>
           <HStack fullWidth justifyContent="space-between" alignItems="center">
             <Text weight="500" size={14} color="shy">
               {t('from')}

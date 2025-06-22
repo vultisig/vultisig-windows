@@ -61,7 +61,7 @@ export const SwapCoinInputField = ({
         </HStack>
         <CoinBalance value={value} />
       </HStack>
-      <HStack flexGrow justifyContent="space-between" alignItems="center">
+      <HStack flexGrow justifyContent="space-between" alignItems="flex-start">
         <CoinWrapper
           role="button"
           tabIndex={0}

@@ -2,13 +2,16 @@ import { SuiCoin } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSuiTxInputData: TxInputDataResolver<'suicheSpecific'> = async ({
+export const getSuiTxInputData: TxInputDataResolver<'suicheSpecific'> = ({
   keysignPayload,
-  chainSpecific,
 }) => {
-  const { coins, referenceGasPrice } = chainSpecific
+  const { coins, referenceGasPrice } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'suicheSpecific'
+  )
 
   const inputData = TW.Sui.Proto.SigningInput.create({
     referenceGasPrice: Long.fromString(referenceGasPrice),

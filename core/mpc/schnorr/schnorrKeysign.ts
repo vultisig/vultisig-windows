@@ -150,6 +150,7 @@ export class SchnorrKeysign {
       'message:',
       messageToSign
     )
+    this.isKeysignComplete = false
     const messageHash = getMessageHash(messageToSign)
     console.log(
       'KeysignOneMessage:',

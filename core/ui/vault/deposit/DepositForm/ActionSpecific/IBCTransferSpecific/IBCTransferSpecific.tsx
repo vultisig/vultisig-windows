@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -67,7 +67,7 @@ export const IBCTransferSpecific = () => {
 
               const newNodeAddress =
                 vaultCoins.find(
-                  coin => coin.chain === selectedChain && isNativeCoin(coin)
+                  coin => coin.chain === selectedChain && isFeeCoin(coin)
                 )?.address || ''
 
               setValue('nodeAddress', newNodeAddress, {

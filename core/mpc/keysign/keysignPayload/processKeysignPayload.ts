@@ -11,6 +11,8 @@ import {
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { assertField } from '@lib/utils/record/assertField'
 
+import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
+
 export const processKeysignPayload = async (
   payload: KeysignPayload
 ): Promise<KeysignPayload> => {
@@ -19,7 +21,9 @@ export const processKeysignPayload = async (
   const coin = assertChainField(assertField(payload, 'coin'))
   const { chain } = coin
 
-  if ('swapPayload' in payload && payload.swapPayload.value) {
+  const swapPayload = getKeysignSwapPayload(payload)
+
+  if (swapPayload) {
     if (isOneOf(chain, Object.values(EvmChain)) && !coin.isNativeToken) {
       const allowance = await getErc20Allowance({
         chain,

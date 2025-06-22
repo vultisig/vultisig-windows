@@ -7,11 +7,19 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { fromCommCoin } from '../../../types/utils/commCoin'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from '../TxInputDataResolver'
 
-export const getThorTxInputData: TxInputDataResolver<
-  'thorchainSpecific'
-> = async ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+export const getThorTxInputData: TxInputDataResolver<'thorchainSpecific'> = ({
+  keysignPayload,
+  walletCore,
+  chain,
+}) => {
+  const { isDeposit, accountNumber, sequence } = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'thorchainSpecific'
+  )
+
   const coinType = getCoinType({
     walletCore,
     chain,
@@ -48,7 +56,7 @@ export const getThorTxInputData: TxInputDataResolver<
           }),
       }),
     ]
-  } else if (chainSpecific.isDeposit) {
+  } else if (isDeposit) {
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
         chain: 'THOR',
@@ -103,15 +111,18 @@ export const getThorTxInputData: TxInputDataResolver<
     publicKey: new Uint8Array(pubKeyData),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
     chainId: walletCore.CoinTypeExt.chainId(coinType),
-    accountNumber: new Long(Number(chainSpecific.accountNumber)),
-    sequence: new Long(Number(chainSpecific.sequence)),
+    accountNumber: new Long(Number(accountNumber)),
+    sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: keysignPayload.memo || '',
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),
     }),
   })
+
+  if (!isDeposit) {
+    input.memo = keysignPayload.memo || ''
+  }
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }

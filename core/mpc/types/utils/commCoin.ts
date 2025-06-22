@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   Coin as CommCoin,
   CoinSchema,
@@ -24,7 +24,7 @@ type ToCommCoinInput = AccountCoin & {
 }
 
 export const toCommCoin = (coin: ToCommCoinInput): CommCoin => {
-  const isNativeToken = isNativeCoin(coin)
+  const isNativeToken = isFeeCoin(coin)
 
   return create(CoinSchema, {
     chain: coin.chain,

@@ -36,6 +36,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -235,11 +236,16 @@ export const TransactionPage = () => {
                                         if (
                                           'keysign' in keysignMessagePayload
                                         ) {
-                                          const currentTxFee = Number(
-                                            transactionPayload.txFee
-                                          )
-                                          const totalFee = currentTxFee + fee
-
+                                          const priorityFeeInBaseUnit =
+                                            shouldBePresent(
+                                              formatUnits(
+                                                BigInt(fee),
+                                                keysign.coin?.decimals
+                                              )
+                                            )
+                                          const totalFee =
+                                            Number(transactionPayload.txFee) +
+                                            Number(priorityFeeInBaseUnit)
                                           setUpdatedTxFee(totalFee.toString())
                                         }
                                       }}
