@@ -28,6 +28,9 @@ export const useSwapOutputAmountQuery = () => {
           general: (quote: GeneralSwapQuote) => {
             return fromChainAmount(quote.dstAmount, toCoin.decimals)
           },
+          hybrid: ({ dstAmount }) => {
+            return fromChainAmount(dstAmount, toCoin.decimals)
+          },
         })
       },
       [toCoin.decimals, toCoinKey]

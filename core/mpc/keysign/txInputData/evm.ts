@@ -67,6 +67,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
         native: ({ vaultAddress, routerAddress }) =>
           coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
         general: ({ quote }) => shouldBePresent(quote?.tx?.to),
+        hybrid: ({ quote }) => shouldBePresent(quote?.tx?.to),
       })
     }
 
@@ -131,6 +132,17 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
           }
         },
         general: ({ quote }) => {
+          const { data, value } = shouldBePresent(quote?.tx)
+
+          return {
+            contractGeneric:
+              TW.Ethereum.Proto.Transaction.ContractGeneric.create({
+                amount: toEvmTwAmount(value),
+                data: toEvmTxData(data),
+              }),
+          }
+        },
+        hybrid: ({ quote }) => {
           const { data, value } = shouldBePresent(quote?.tx)
 
           return {
