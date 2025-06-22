@@ -11,6 +11,11 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KyberSwapPayloadSchema,
+  KyberSwapQuoteSchema,
+  KyberSwapTransactionSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/kyberswap_swap_payload_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -75,6 +80,54 @@ export const getSwapKeysignPayloadFields = ({
           value: swapPayload,
         },
       }
+    },
+    hybrid: quote => {
+      const tx = create(KyberSwapTransactionSchema, {
+        from: quote.tx.from,
+        to: quote.tx.to,
+        data: quote.tx.data,
+        value: quote.tx.value,
+        gasPrice: quote.tx.gasPrice,
+        gas: BigInt(quote.tx.gas),
+      })
+
+      const kyberSwapQuote = create(KyberSwapQuoteSchema, {
+        dstAmount: quote.dstAmount,
+        tx,
+      })
+
+      const swapPayload = create(KyberSwapPayloadSchema, {
+        fromCoin: toCommCoin(fromCoin),
+        toCoin: toCommCoin(toCoin),
+        fromAmount: amount.toString(),
+        toAmountDecimal: fromChainAmount(
+          quote.dstAmount,
+          toCoin.decimals
+        ).toFixed(toCoin.decimals),
+        quote: kyberSwapQuote,
+      })
+
+      const isErc20 =
+        isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
+
+      const toAddress = quote.tx.to
+
+      const result: Output = {
+        toAddress,
+        swapPayload: {
+          case: 'kyberswapSwapPayload',
+          value: swapPayload,
+        },
+      }
+
+      if (isErc20) {
+        result.erc20ApprovePayload = create(Erc20ApprovePayloadSchema, {
+          amount: amount.toString(),
+          spender: toAddress,
+        })
+      }
+
+      return result
     },
     native: quote => {
       const swapPayload = thorchainSwapQuoteToSwapPayload({
