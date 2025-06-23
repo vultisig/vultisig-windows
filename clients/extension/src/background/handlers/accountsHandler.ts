@@ -12,7 +12,7 @@ import { storage } from '../../storage'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { Messaging, VaultExport } from '../../utils/interfaces'
-import { setStoredRequest } from '../../utils/storage'
+import { setStoredPendingRequest } from '../../utils/pendingRequests'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
@@ -120,7 +120,7 @@ function handleWithConnection<T>(
           instance[Instance.CONNECT] = false
           resolve(result)
         } else {
-          setStoredRequest({
+          setStoredPendingRequest('accounts', {
             chain: options?.chain ?? Chain.Ethereum,
             sender,
           }).then(() => {

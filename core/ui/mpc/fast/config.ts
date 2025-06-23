@@ -1,3 +1,3 @@
 export const pluginPeersConfig = {
-  minimumJoinedParties: 4,
+  minimumJoinedParties: 3,
 }
