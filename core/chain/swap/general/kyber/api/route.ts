@@ -43,9 +43,13 @@ export const getKyberSwapRoute = async ({
   amount,
   isAffiliate,
 }: Input): Promise<KyberSwapRoute> => {
+  const [tokenIn, tokenOut] = [from, to].map(coin =>
+    isFeeCoin(coin) ? evmNativeCoinAddress : coin.id
+  )
+
   const routeParams: KyberSwapRouteParams = {
-    tokenIn: isFeeCoin(from) ? evmNativeCoinAddress : from.id,
-    tokenOut: isFeeCoin(to) ? evmNativeCoinAddress : to.id,
+    tokenIn,
+    tokenOut,
     amountIn: amount.toString(),
     saveGas: true,
     gasInclude: true,
