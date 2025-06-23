@@ -3,7 +3,7 @@ import { CustomToken } from '@core/ui/chain/coin/addCustomToken/CustomToken'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
-import { ActionInsideInteractiveElement } from '@lib/ui/base'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {

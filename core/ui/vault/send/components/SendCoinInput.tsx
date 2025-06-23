@@ -7,7 +7,7 @@ import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Opener } from '@lib/ui/base'
+import { Opener } from '@lib/ui/base/Opener'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
