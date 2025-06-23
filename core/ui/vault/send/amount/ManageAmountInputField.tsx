@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { ActionInsideInteractiveElement } from '@lib/ui/base'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
