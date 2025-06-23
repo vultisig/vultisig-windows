@@ -4,6 +4,7 @@ import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_sw
 import { THORChainSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 
 import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { KyberSwapPayload } from '../../types/vultisig/keysign/v1/kyberswap_swap_payload_pb'
 
 type NativeSwapPayload = THORChainSwapPayload & { chain: VaultBasedCosmosChain }
 
@@ -12,7 +13,7 @@ export type KeysignSwapPayload = {
     [K in T]: T extends 'native'
       ? NativeSwapPayload
       : T extends 'general'
-        ? OneInchSwapPayload
+        ? OneInchSwapPayload | KyberSwapPayload
         : never
   }
 }[SwapType]
