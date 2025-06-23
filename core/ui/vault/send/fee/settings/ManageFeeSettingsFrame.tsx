@@ -1,6 +1,6 @@
 import { SendChainSpecificValueProvider } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
-import { Opener } from '@lib/ui/base/Opener'
+import { Opener } from '@lib/ui/base'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { OnCloseProp } from '@lib/ui/props'

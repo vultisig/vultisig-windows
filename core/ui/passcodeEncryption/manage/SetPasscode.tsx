@@ -1,7 +1,7 @@
 import { EnablePasscodeInput } from '@core/ui/passcodeEncryption/manage/EnablePasscodeInput'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
-import { Opener } from '@lib/ui/base/Opener'
+import { Opener } from '@lib/ui/base'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
