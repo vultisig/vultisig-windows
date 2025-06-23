@@ -44,7 +44,7 @@ const apiRef = {
   jupiter: {
     token: 'https://tokens.jup.ag/token',
   },
-  pluginMarketPlace: '',
+  pluginMarketPlace: 'https://store.vultisigplugin.app/api/',
 }
 
 api.interceptors.request.use(
