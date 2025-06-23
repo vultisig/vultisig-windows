@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { DnDList } from './DnDList'
 
 type Fruit = { id: string; name: string }
-const INITIAL_FRUITS: Fruit[] = [
+const initialFruits: Fruit[] = [
   { id: 'apple', name: '🍎 Apple' },
   { id: 'banana', name: '🍌 Banana' },
   { id: 'cherry', name: '🍒 Cherry' },
@@ -23,7 +23,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 function DemoList() {
-  const [fruits, setFruits] = useState<Fruit[]>(INITIAL_FRUITS)
+  const [fruits, setFruits] = useState<Fruit[]>(initialFruits)
 
   return (
     <DnDList
