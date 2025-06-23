@@ -77,7 +77,6 @@ export const SwapKeysignTxOverview = ({
     {
       native: ({ chain }) => chain,
       general: () => chain,
-      hybrid: () => chain,
     }
   )
 

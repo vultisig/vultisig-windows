@@ -1,8 +1,8 @@
 import { Minutes } from '@lib/utils/time'
 
-export const hybridSwapTxLifespan: Minutes = 20
+export const kyberSwapTxLifespan: Minutes = 20
 
-export const hybridSwapSlippageTolerance: number = 100
+export const kyberSwapSlippageTolerance: number = 100
 
 export const kyberSwapAffiliateConfig = {
   source: 'vultisig-v0',

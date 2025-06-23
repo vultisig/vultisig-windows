@@ -11,8 +11,8 @@ import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
-import { getHybridSwapQuote } from '../hybrid/api/getHybridSwapQuote'
-import { hybridSwapEnabledChains } from '../hybrid/HybridSwapEnabledChains'
+import { getKyberSwapQuote } from '../general/kyber/api/quote'
+import { kyberSwapEnabledChains } from '../general/kyber/chains'
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
 import {
   nativeSwapChains,
@@ -57,14 +57,15 @@ export const findSwapQuote = ({
 
   const fromChain = from.chain
   const toChain = to.chain
+  const chainAmount = toChainAmount(amount, from.decimals)
 
   if (
-    isOneOf(fromChain, hybridSwapEnabledChains) &&
-    isOneOf(toChain, hybridSwapEnabledChains) &&
+    isOneOf(fromChain, kyberSwapEnabledChains) &&
+    isOneOf(toChain, kyberSwapEnabledChains) &&
     fromChain === toChain
   ) {
     fetchers.push(async (): Promise<SwapQuote> => {
-      const hybrid = await getHybridSwapQuote({
+      const general = await getKyberSwapQuote({
         from: {
           ...from,
           chain: fromChain,
@@ -73,11 +74,11 @@ export const findSwapQuote = ({
           ...to,
           chain: toChain,
         },
-        amount,
+        amount: chainAmount,
         isAffiliate,
       })
 
-      return { hybrid }
+      return { general }
     })
   }
 
@@ -90,7 +91,7 @@ export const findSwapQuote = ({
         account: pick(from, ['address', 'chain']),
         fromCoinId: from.id,
         toCoinId: to.id,
-        amount: toChainAmount(amount, from.decimals),
+        amount: chainAmount,
         isAffiliate,
       })
 
@@ -112,7 +113,7 @@ export const findSwapQuote = ({
           ...to,
           chain: toChain,
         },
-        amount: toChainAmount(amount, from.decimals),
+        amount: chainAmount,
         address: from.address,
       })
 

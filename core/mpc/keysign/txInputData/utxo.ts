@@ -60,9 +60,6 @@ export const getUtxoTxInputData = ({
   const destinationAddress = swapPayload
     ? matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: swapPayload => swapPayload.vaultAddress,
-        hybrid: () => {
-          throw new Error('Hybrid swap not supported')
-        },
         general: () => {
           throw new Error('General swap not supported')
         },

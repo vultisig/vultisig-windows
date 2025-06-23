@@ -7,6 +7,5 @@ export const getSwapQuoteProviderName = (quote: SwapQuote) => {
   return matchRecordUnion<SwapQuote, string>(quote, {
     native: ({ swapChain }) => swapChain,
     general: ({ provider }) => generalSwapProviderName[provider],
-    hybrid: () => 'KyberSwap',
   })
 }

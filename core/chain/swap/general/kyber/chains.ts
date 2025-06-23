@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 
-export const hybridSwapEnabledChains = [
+export const kyberSwapEnabledChains = [
   Chain.Ethereum,
   Chain.BSC,
   Chain.Arbitrum,
@@ -12,4 +12,4 @@ export const hybridSwapEnabledChains = [
   Chain.Blast,
 ] as const
 
-export type HybridSwapEnabledChain = (typeof hybridSwapEnabledChains)[number]
+export type KyberSwapEnabledChain = (typeof kyberSwapEnabledChains)[number]

@@ -67,14 +67,6 @@ export const useSwapFeesQuery = () => {
             }),
           })
         },
-        hybrid: ({ tx }) => ({
-          swap: {
-            chain: fromCoinKey.chain,
-            id: fromCoinKey.id,
-            amount: BigInt(tx.gasPrice) * BigInt(tx.gas),
-            decimals: fromFeeCoin.decimals,
-          },
-        }),
       })
     }
   )

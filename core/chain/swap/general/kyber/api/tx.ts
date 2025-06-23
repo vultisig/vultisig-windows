@@ -1,45 +1,55 @@
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { AccountCoin } from '../../../coin/AccountCoin'
-import { isFeeCoin } from '../../../coin/utils/isFeeCoin'
-import { NoSwapRoutesError } from '../../NoSwapRoutesError'
-import { HybridSwapEnabledChain } from '../HybridSwapEnabledChains'
-import { HybridSwapQuote } from '../HybridSwapQuote'
+import { AccountCoin } from '../../../../coin/AccountCoin'
+import { isFeeCoin } from '../../../../coin/utils/isFeeCoin'
+import { GeneralSwapQuote } from '../../GeneralSwapQuote'
+import { KyberSwapEnabledChain } from '../chains'
 import {
-  hybridSwapSlippageTolerance,
-  hybridSwapTxLifespan,
   kyberSwapAffiliateConfig,
-} from './config'
-import { getKyberSwapBaseUrl } from './getKyberSwapBaseUrl'
-import { KyberSwapBuildResponse } from './types'
+  kyberSwapSlippageTolerance,
+  kyberSwapTxLifespan,
+} from '../config'
+import { getKyberSwapBaseUrl } from './baseUrl'
 
 type GetKyberSwapTxInput = {
-  from: AccountCoin<HybridSwapEnabledChain>
+  from: AccountCoin<KyberSwapEnabledChain>
   routeSummary: any
   routerAddress: string
-  chainAmount: bigint
+  amount: bigint
   enableGasEstimation: boolean
   isAffiliate: boolean
 }
 
-export const getKyberSwapQuoteFromRoute = async ({
+type KyberSwapBuildResponse = {
+  code: number
+  data: {
+    amountOut: string
+    data: string
+    gas: string
+    routerAddress: string
+    gasPrice?: string
+  }
+}
+
+export const getKyberSwapTx = async ({
   from,
   routeSummary,
   routerAddress,
-  chainAmount,
+  amount,
   enableGasEstimation,
   isAffiliate,
-}: GetKyberSwapTxInput): Promise<HybridSwapQuote> => {
+}: GetKyberSwapTxInput): Promise<GeneralSwapQuote> => {
   const buildPayload = {
     routeSummary,
     sender: from.address,
     recipient: from.address,
-    slippageTolerance: hybridSwapSlippageTolerance,
+    slippageTolerance: kyberSwapSlippageTolerance,
     deadline: Math.round(
       convertDuration(
-        Date.now() + convertDuration(hybridSwapTxLifespan, 'min', 'ms'),
+        Date.now() + convertDuration(kyberSwapTxLifespan, 'min', 'ms'),
         'ms',
         's'
       )
@@ -67,27 +77,36 @@ export const getKyberSwapQuoteFromRoute = async ({
 
       if (isInError(message, 'execution reverted')) {
         throw new Error(`Transaction will revert: ${message}`)
-      } else if (isInError(message, 'insufficient allowance')) {
+      }
+
+      if (isInError(message, 'insufficient allowance')) {
         throw new Error(`Insufficient allowance: ${message}`)
-      } else if (isInError(message, 'insufficient funds')) {
+      }
+
+      if (isInError(message, 'insufficient funds')) {
         throw new Error(`Insufficient funds: ${message}`)
       }
+
+      throw new Error(extractErrorMsg(message))
     }
 
-    throw new NoSwapRoutesError()
+    throw new Error('Failed to build transaction')
   }
 
   const { amountOut, data, gas } = buildResponse.data
 
   return {
     dstAmount: amountOut,
+    provider: 'kyber',
     tx: {
-      from: from.address,
-      to: routerAddress,
-      data,
-      value: isFeeCoin(from) ? chainAmount.toString() : '0',
-      gasPrice: routeSummary?.gasPrice || '0',
-      gas: parseInt(gas),
+      evm: {
+        from: from.address,
+        to: routerAddress,
+        data,
+        value: isFeeCoin(from) ? amount.toString() : '0',
+        gasPrice: routeSummary?.gasPrice || '0',
+        gas: parseInt(gas),
+      },
     },
   }
 }

@@ -18,6 +18,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/kyberswap_swap_payload_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 import { EvmChain } from '../../Chain'
 import { isFeeCoin } from '../../coin/utils/isFeeCoin'
@@ -42,6 +43,61 @@ export const getSwapKeysignPayloadFields = ({
 }: Input): Output => {
   return matchRecordUnion<SwapQuote, Output>(quote, {
     general: quote => {
+      if (quote.provider === 'kyber') {
+        const { from, to, data, value, gasPrice, gas } = getRecordUnionValue(
+          quote.tx,
+          'evm'
+        )
+
+        const tx = create(KyberSwapTransactionSchema, {
+          from,
+          to,
+          data,
+          value,
+          gasPrice,
+          gas: BigInt(gas),
+        })
+
+        const kyberSwapQuote = create(KyberSwapQuoteSchema, {
+          dstAmount: quote.dstAmount,
+          tx,
+        })
+
+        const swapPayload = create(KyberSwapPayloadSchema, {
+          fromCoin: toCommCoin(fromCoin),
+          toCoin: toCommCoin(toCoin),
+          fromAmount: amount.toString(),
+          toAmountDecimal: fromChainAmount(
+            quote.dstAmount,
+            toCoin.decimals
+          ).toFixed(toCoin.decimals),
+          quote: kyberSwapQuote,
+        })
+
+        const isErc20 =
+          isOneOf(fromCoin.chain, Object.values(EvmChain)) &&
+          !isFeeCoin(fromCoin)
+
+        const toAddress = to
+
+        const result: Output = {
+          toAddress,
+          swapPayload: {
+            case: 'kyberswapSwapPayload',
+            value: swapPayload,
+          },
+        }
+
+        if (isErc20) {
+          result.erc20ApprovePayload = create(Erc20ApprovePayloadSchema, {
+            amount: amount.toString(),
+            spender: toAddress,
+          })
+        }
+
+        return result
+      }
+
       const txMsg = matchRecordUnion<
         GeneralSwapTx,
         Omit<OneInchTransaction, '$typeName' | 'swapFee'>
@@ -80,54 +136,6 @@ export const getSwapKeysignPayloadFields = ({
           value: swapPayload,
         },
       }
-    },
-    hybrid: quote => {
-      const tx = create(KyberSwapTransactionSchema, {
-        from: quote.tx.from,
-        to: quote.tx.to,
-        data: quote.tx.data,
-        value: quote.tx.value,
-        gasPrice: quote.tx.gasPrice,
-        gas: BigInt(quote.tx.gas),
-      })
-
-      const kyberSwapQuote = create(KyberSwapQuoteSchema, {
-        dstAmount: quote.dstAmount,
-        tx,
-      })
-
-      const swapPayload = create(KyberSwapPayloadSchema, {
-        fromCoin: toCommCoin(fromCoin),
-        toCoin: toCommCoin(toCoin),
-        fromAmount: amount.toString(),
-        toAmountDecimal: fromChainAmount(
-          quote.dstAmount,
-          toCoin.decimals
-        ).toFixed(toCoin.decimals),
-        quote: kyberSwapQuote,
-      })
-
-      const isErc20 =
-        isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
-
-      const toAddress = quote.tx.to
-
-      const result: Output = {
-        toAddress,
-        swapPayload: {
-          case: 'kyberswapSwapPayload',
-          value: swapPayload,
-        },
-      }
-
-      if (isErc20) {
-        result.erc20ApprovePayload = create(Erc20ApprovePayloadSchema, {
-          amount: amount.toString(),
-          spender: toAddress,
-        })
-      }
-
-      return result
     },
     native: quote => {
       const swapPayload = thorchainSwapQuoteToSwapPayload({

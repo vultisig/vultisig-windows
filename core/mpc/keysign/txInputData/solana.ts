@@ -34,9 +34,6 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
       native: () => {
         throw new Error('Native swap not supported')
       },
-      hybrid: () => {
-        throw new Error('Hybrid swap not supported')
-      },
       general: swapPayload => {
         const tx = shouldBePresent(swapPayload.quote?.tx)
         const { data } = tx

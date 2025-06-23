@@ -11,7 +11,7 @@ const swapTypeRecord: Record<
   thorchainSwapPayload: 'native',
   mayachainSwapPayload: 'native',
   oneinchSwapPayload: 'general',
-  kyberswapSwapPayload: 'hybrid',
+  kyberswapSwapPayload: 'general',
 }
 
 type NativeSwapPayloadCase = {
