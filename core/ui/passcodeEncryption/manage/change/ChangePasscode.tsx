@@ -1,4 +1,4 @@
-import { Opener } from '@lib/ui/base'
+import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'

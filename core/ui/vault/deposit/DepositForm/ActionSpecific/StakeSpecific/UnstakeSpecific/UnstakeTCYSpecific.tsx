@@ -5,7 +5,7 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { ActionInsideInteractiveElement } from '@lib/ui/base'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { MaxButton, maxButtonOffset } from '@lib/ui/buttons/MaxButton'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'

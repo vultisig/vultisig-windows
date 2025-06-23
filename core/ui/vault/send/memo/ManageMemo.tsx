@@ -1,6 +1,6 @@
 import { useCore } from '@core/ui/state/core'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
-import { ActionInsideInteractiveElement } from '@lib/ui/base'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'

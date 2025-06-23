@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteVaultFolderMutation } from '@core/ui/storage/vaultFolders'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
-import { Opener } from '@lib/ui/base'
+import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'

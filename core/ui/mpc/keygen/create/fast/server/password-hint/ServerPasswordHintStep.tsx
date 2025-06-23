@@ -1,6 +1,6 @@
 import { useVaultPasswordHint } from '@core/ui/mpc/keygen/create/fast/server/password-hint/state/password-hint'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ActionInsideInteractiveElement } from '@lib/ui/base'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
