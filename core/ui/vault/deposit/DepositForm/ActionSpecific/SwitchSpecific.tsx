@@ -1,7 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { Opener } from '@lib/ui/base/Opener'
+import { Opener } from '@lib/ui/base'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'

@@ -1,6 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { Match } from '@lib/ui/base/Match'
-import { Opener } from '@lib/ui/base/Opener'
+import { Opener } from '@lib/ui/base'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'

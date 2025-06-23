@@ -23,7 +23,7 @@ import {
   VaultChainCoin,
 } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Opener } from '@lib/ui/base/Opener'
+import { Opener } from '@lib/ui/base'
 import { Button } from '@lib/ui/buttons/Button'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
