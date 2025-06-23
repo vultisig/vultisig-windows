@@ -1,4 +1,5 @@
 import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { GeneralSwapProvider } from '@core/chain/swap/general/GeneralSwapProvider'
 import { SwapType } from '@core/chain/swap/quote/SwapQuote'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
@@ -20,11 +21,25 @@ type NativeSwapPayloadCase = {
     : never
 }[keyof typeof swapTypeRecord]
 
+type GeneralSwapPayloadCase = {
+  [K in keyof typeof swapTypeRecord]: (typeof swapTypeRecord)[K] extends 'general'
+    ? K
+    : never
+}[keyof typeof swapTypeRecord]
+
 const nativeChainRecord: Record<NativeSwapPayloadCase, VaultBasedCosmosChain> =
   {
     thorchainSwapPayload: Chain.THORChain,
     mayachainSwapPayload: Chain.MayaChain,
   }
+
+const generalProviderRecord: Record<
+  GeneralSwapPayloadCase,
+  GeneralSwapProvider
+> = {
+  oneinchSwapPayload: 'oneinch',
+  kyberswapSwapPayload: 'kyber',
+}
 
 export const getKeysignSwapPayload = ({
   swapPayload,
@@ -39,6 +54,14 @@ export const getKeysignSwapPayload = ({
     const chain = nativeChainRecord[swapPayload.case as NativeSwapPayloadCase]
     return {
       [swapType]: { ...swapPayload.value, chain },
+    } as KeysignSwapPayload
+  }
+
+  if (swapType === 'general') {
+    const provider =
+      generalProviderRecord[swapPayload.case as GeneralSwapPayloadCase]
+    return {
+      [swapType]: { ...swapPayload.value, provider },
     } as KeysignSwapPayload
   }
 
