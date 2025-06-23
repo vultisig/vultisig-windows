@@ -1,4 +1,7 @@
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useQuery } from '@tanstack/react-query'
 
@@ -27,7 +30,8 @@ export const usePasscodeAutoLockQuery = () => {
   return useQuery({
     queryKey: [StorageKey.passcodeAutoLock],
     queryFn: getPasscodeAutoLock,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
 
