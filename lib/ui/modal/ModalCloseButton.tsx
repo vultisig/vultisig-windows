@@ -1,4 +1,4 @@
-import { Hoverable } from '@lib/ui/base/Hoverable'
+import { Hoverable } from '../base/Hoverable'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
