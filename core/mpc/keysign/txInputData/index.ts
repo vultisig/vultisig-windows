@@ -1,16 +1,14 @@
-import { KeysignChainSpecificKey } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
 import { getCosmosTxInputData } from './cosmos'
 import { getEvmTxInputData } from './evm'
-import { getMayaTxInputData } from './maya'
 import { getPolkadotTxInputData } from './polkadot'
 import { getRippleTxInputData } from './ripple'
 import { getSolanaTxInputData } from './solana'
 import { getSuiTxInputData } from './sui'
-import { getThorTxInputData } from './thor'
 import { getTonTxInputData } from './ton'
 import { getTronTxInputData } from './tron'
 import { TxInputDataResolver } from './TxInputDataResolver'
@@ -21,18 +19,16 @@ type Input = {
   walletCore: WalletCore
 }
 
-const handlers: Record<KeysignChainSpecificKey, TxInputDataResolver<any>> = {
-  cosmosSpecific: getCosmosTxInputData,
-  ethereumSpecific: getEvmTxInputData,
-  mayaSpecific: getMayaTxInputData,
-  polkadotSpecific: getPolkadotTxInputData,
-  rippleSpecific: getRippleTxInputData,
-  solanaSpecific: getSolanaTxInputData,
-  suicheSpecific: getSuiTxInputData,
-  thorchainSpecific: getThorTxInputData,
-  tonSpecific: getTonTxInputData,
-  utxoSpecific: getUtxoTxInputData,
-  tronSpecific: getTronTxInputData,
+const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
+  cosmos: getCosmosTxInputData,
+  evm: getEvmTxInputData,
+  polkadot: getPolkadotTxInputData,
+  ripple: getRippleTxInputData,
+  solana: getSolanaTxInputData,
+  sui: getSuiTxInputData,
+  ton: getTonTxInputData,
+  utxo: getUtxoTxInputData,
+  tron: getTronTxInputData,
 }
 
 export const getTxInputData = (input: Input) => {
@@ -42,10 +38,9 @@ export const getTxInputData = (input: Input) => {
   }
 
   const chain = getKeysignChain(input.keysignPayload)
+  const chainKind = getChainKind(chain)
 
-  const chainSpecificHandler = handlers[blockchainSpecific.case]
-
-  return chainSpecificHandler({
+  return handlers[chainKind]({
     ...input,
     chain,
   })
