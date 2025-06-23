@@ -3,9 +3,10 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
+import { getKeysignTwPublicKey } from '../tw/getKeysignTwPublicKey'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
+export const getRippleTxInputData: TxInputDataResolver<'ripple'> = ({
   keysignPayload,
 }) => {
   const { gas, sequence, lastLedgerSequence } = getBlockchainSpecificValue(
@@ -14,7 +15,6 @@ export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
   )
 
   const coin = assertField(keysignPayload, 'coin')
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex')
 
   const account = coin.address
 
@@ -79,7 +79,7 @@ export const getRippleTxInputData: TxInputDataResolver<'rippleSpecific'> = ({
     fee: Long.fromString(gas.toString()),
     sequence: Number(sequence),
     lastLedgerSequence: Number(lastLedgerSequence),
-    publicKey: new Uint8Array(pubKeyData),
+    publicKey: getKeysignTwPublicKey(keysignPayload),
     ...getPayment(),
   })
 
