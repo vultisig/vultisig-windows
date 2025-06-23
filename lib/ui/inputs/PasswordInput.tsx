@@ -1,4 +1,4 @@
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { ActionInsideInteractiveElement } from '../base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {

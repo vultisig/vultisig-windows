@@ -1,6 +1,6 @@
 import { useEmail } from '@core/ui/state/email'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { ActionInsideInteractiveElement } from '@lib/ui/base'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
