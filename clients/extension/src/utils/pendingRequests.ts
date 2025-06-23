@@ -1,3 +1,6 @@
+import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import { useQuery } from '@tanstack/react-query'
+
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
 import { AccountsProps, PluginRequestProps } from './interfaces'
@@ -41,3 +44,12 @@ export const setStoredPendingRequest = async <K extends StoredRequestKey>(
   }
   await setPersistentState('storedRequest', updated)
 }
+
+export const useStoredPendingRequestQuery = <K extends StoredRequestKey>(
+  key: K
+) =>
+  useQuery({
+    queryKey: ['storedRequest', key],
+    queryFn: () => getStoredPendingRequest(key),
+    ...fixedDataQueryOptions,
+  })
