@@ -1,6 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { attempt } from '@lib/utils/attempt'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { isInError } from '@lib/utils/error/isInError'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
@@ -26,7 +26,7 @@ export const getKyberSwapQuote = async ({
     isAffiliate,
   })
 
-  const txWithGasEstimationResult = await attempt(
+  const tx = await attempt(
     getKyberSwapTx({
       from,
       routeSummary,
@@ -37,12 +37,9 @@ export const getKyberSwapQuote = async ({
     })
   )
 
-  if ('error' in txWithGasEstimationResult) {
-    if (
-      extractErrorMsg(txWithGasEstimationResult.error).includes(
-        'TransferHelper'
-      )
-    ) {
+  if ('error' in tx) {
+    const { error } = tx
+    if (isInError(error, 'TransferHelper')) {
       return getKyberSwapTx({
         from,
         routeSummary,
@@ -53,8 +50,8 @@ export const getKyberSwapQuote = async ({
       })
     }
 
-    throw txWithGasEstimationResult.error
+    throw error
   }
 
-  return txWithGasEstimationResult.data
+  return tx.data
 }
