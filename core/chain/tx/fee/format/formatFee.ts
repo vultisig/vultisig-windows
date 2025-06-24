@@ -39,6 +39,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       tonSpecific: () => tonConfig.fee,
       rippleSpecific: () => rippleTxFee,
       tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation || 0),
+      cardano: ({ byteFee }) => BigInt(byteFee),
     }
   )
 
