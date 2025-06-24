@@ -2,8 +2,9 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
-import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
@@ -189,6 +190,8 @@ export const getKeysignPayload = (
         })
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
+        } else if (transaction.chain === OtherChain.Cardano) {
+          keysignPayload.utxoInfo = await getCardanoUtxos(coin.address)
         }
         resolve(keysignPayload)
       } catch (error) {
