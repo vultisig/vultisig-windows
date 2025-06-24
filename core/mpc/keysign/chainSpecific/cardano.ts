@@ -3,7 +3,7 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getCardanoCurrentSlot } from '@core/chain/chains/cardano/client/currentSlot'
 import {
   cardanoDefaultFee,
-  cardanoDustStats,
+  cardanoNeglectableUtxoChange,
   cardanoSlotOffset,
 } from '@core/chain/chains/cardano/config'
 import { getCoinBalance } from '@core/chain/coin/balance'
@@ -28,7 +28,7 @@ export const getCardanoSpecific: ChainSpecificResolver<
   if (amount) {
     const balance = await getCoinBalance(coin)
     const requested = toChainAmount(amount, coin.decimals)
-    result.sendMaxAmount = balance - requested <= cardanoDustStats
+    result.sendMaxAmount = balance - requested <= cardanoNeglectableUtxoChange
   }
 
   return result

@@ -3,7 +3,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 import { fromChainAmount } from '../../../amount/fromChainAmount'
-import { cardanoDustStats, cardanoNeglectableUtxoChange } from '../config'
+import { cardanoMinSendAmount, cardanoNeglectableUtxoChange } from '../config'
 
 type Input = {
   amount: bigint
@@ -16,9 +16,9 @@ export const validateCardanoUtxoRequirements = ({
 }: Input): string | undefined => {
   const { decimals, ticker } = chainFeeCoin[Chain.Cardano]
 
-  if (amount < cardanoDustStats) {
+  if (amount < cardanoMinSendAmount) {
     const formattedAmount = formatTokenAmount(
-      fromChainAmount(cardanoDustStats, decimals),
+      fromChainAmount(cardanoMinSendAmount, decimals),
       ticker
     )
     return `Minimum send amount is ${formattedAmount}. Cardano requires this to prevent spam.`
@@ -30,7 +30,7 @@ export const validateCardanoUtxoRequirements = ({
     return
   }
 
-  if (remainingBalance < cardanoDustStats) {
+  if (remainingBalance < cardanoMinSendAmount) {
     return `This amount would leave too little change. 💡 Try 'Send Max' to avoid this issue.`
   }
 }
