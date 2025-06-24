@@ -1,14 +1,13 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { EvmChain } from '@core/chain/Chain'
+import { useTxFeeQuery } from '@core/ui/chain/tx/queries/useTxFeeQuery'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { useEvmFeeQuery } from '../queries/useEvmFeeQuery'
 import { TxFeeRow } from './TxFeeRow'
 
 type KeysignTxEvmFeeProps = {
   txHash: string
-  chain: EvmChain
+  chain: string
   ticker: string
   decimals: number
   estimatedFee: string | null
@@ -21,7 +20,7 @@ export const KeysignTxEvmFee = ({
   decimals,
   estimatedFee,
 }: KeysignTxEvmFeeProps) => {
-  const query = useEvmFeeQuery({ txHash, chain })
+  const query = useTxFeeQuery({ txHash, chain })
   const { t } = useTranslation()
 
   return (
