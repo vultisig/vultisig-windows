@@ -1,5 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
@@ -23,7 +23,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { KeysignTxFeeDisplay } from './components/KeysignTxFeeDisplay'
+import { KeysignTxEvmFee } from './components/KeysignTxEvmFee'
 
 export const KeysignTxOverview = ({
   value,
@@ -120,12 +120,12 @@ export const KeysignTxOverview = ({
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <KeysignTxFeeDisplay
+          <KeysignTxEvmFee
             txHash={txHash}
-            chain={chain}
-            decimals={decimals}
+            chain={chain as EvmChain}
             ticker={coin.ticker}
-            networkFeesFormatted={networkFeesFormatted}
+            decimals={decimals}
+            estimatedFee={networkFeesFormatted}
           />
         </SeparatedByLine>
       </Panel>
