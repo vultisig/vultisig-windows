@@ -1,9 +1,8 @@
 import { OtherChain } from '@core/chain/Chain'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { cardanoApiUrl } from '../../chains/cardano/client/config'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
-
-const cardanoApiBaseUrl = 'https://api.koios.rest/api/v1'
 
 type CardanoAddressInfoResponse = Array<{
   balance: string
@@ -12,7 +11,7 @@ type CardanoAddressInfoResponse = Array<{
 export const getCardanoCoinBalance: CoinBalanceResolver<
   OtherChain.Cardano
 > = async input => {
-  const url = `${cardanoApiBaseUrl}/address_info`
+  const url = `${cardanoApiUrl}/address_info`
 
   const requestBody = {
     _addresses: [input.address],
