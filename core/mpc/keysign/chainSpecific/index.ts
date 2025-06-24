@@ -1,3 +1,4 @@
+import { getCardanoSpecific } from './cardano'
 import {
   ChainSpecificResolver,
   ChainSpecificResolverInput,
@@ -31,6 +32,7 @@ const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   suicheSpecific: getSuiSpecific,
   tonSpecific: getTonSpecific,
   tronSpecific: getTronSpecific,
+  cardano: getCardanoSpecific,
 }
 
 export const getChainSpecific = async (
