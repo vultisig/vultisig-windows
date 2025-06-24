@@ -3,7 +3,6 @@ import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useEmail } from '@core/ui/state/email'
 import { useVaultPassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
@@ -22,15 +21,14 @@ export const PluginReshareFastKeygenServerActionProvider = ({
   const { name, hexChainCode, publicKeys, resharePrefix, signers, libType } =
     useCurrentVault()
 
-  const [email] = useEmail()
-
   const action = useCallback(async () => {
     await reshareWithServer({
       public_key: hasServer(signers) ? publicKeys.ecdsa : undefined,
       session_id: sessionId,
       hex_encryption_key: hexEncryptionKey,
       encryption_password: password,
-      email,
+      // TODO: Vultiserver should make email optional
+      email: 'temp@temp.com',
       name,
       old_parties: signers,
       hex_chain_code: hexChainCode,
@@ -40,7 +38,6 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       reshare_type: 1,
     })
   }, [
-    email,
     hexChainCode,
     hexEncryptionKey,
     name,

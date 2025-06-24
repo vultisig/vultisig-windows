@@ -1,14 +1,35 @@
-import { Button } from '@lib/ui/buttons/Button'
-import { HStack, hStack } from '@lib/ui/layout/Stack'
+import { Button, buttonSize } from '@lib/ui/buttons/Button'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+const StyledToggleSwitch = styled(HStack)`
+  background-color: ${getColor('foregroundExtra')};
+  border-radius: ${toSizeUnit(buttonSize.md)};
+  padding: 8px;
+`
+
+const StyledToggleButton = styled(Button)<{ active: boolean }>`
+  ${({ active, disabled }) =>
+    active
+      ? css`
+          background-color: ${getColor('backgroundPrimary')};
+          color: ${getColor('textPrimary')};
+        `
+      : disabled
+        ? css`
+            background-color: transparent;
+          `
+        : css``}
+  height: 44px;
+`
 
 type Option<T extends string | number> = {
+  icon?: ReactNode
   label: string
   value: T
-  icon?: ReactNode
-  disabled?: boolean
 }
 
 type ToggleSwitchProps<T extends string | number> = {
@@ -33,41 +54,23 @@ export const ToggleSwitch = <T extends string | number>({
   }
 
   return (
-    <Wrapper>
-      {options.map(({ value, disabled, icon, label }) => (
-        <ToggleButton
-          active={active === value}
-          disabled={disabled}
-          icon={icon}
-          key={value}
-          onClick={() => handleClick(value)}
-        >
-          {label}
-        </ToggleButton>
-      ))}
-    </Wrapper>
+    <StyledToggleSwitch gap={8}>
+      {options.map(({ value, icon, label }) => {
+        const isActive = active === value
+
+        return (
+          <StyledToggleButton
+            active={isActive}
+            disabled={isActive || disabled}
+            icon={icon}
+            key={value}
+            kind="link"
+            onClick={() => handleClick(value)}
+          >
+            {label}
+          </StyledToggleButton>
+        )
+      })}
+    </StyledToggleSwitch>
   )
 }
-
-const Wrapper = styled(HStack)`
-  border-radius: 99px;
-  background-color: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  padding: 8px;
-`
-
-const ToggleButton = styled(Button)<{
-  active: boolean
-}>`
-  flex: 1;
-  padding: 6px 12px;
-  background-color: ${({ active }) =>
-    active ? getColor('background') : 'transparent'};
-  color: ${getColor('text')};
-
-  &:hover {
-    background-color: ${({ active }) =>
-      active ? getColor('background') : 'transparent'};
-  }
-
-  ${hStack({ gap: 4 })};
-`

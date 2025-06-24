@@ -20,29 +20,31 @@ export const NewVaultPage = () => {
       {vaults.length > 0 && (
         <PageHeader primaryControls={<PageHeaderBackButton />} />
       )}
-      <PageContent alignItems="center" justifyContent="center" flexGrow>
+      <PageContent alignItems="center" justifyContent="center" scrollable>
         <ProductLogoBlock />
       </PageContent>
-      <PageFooter gap={16}>
-        <Button onClick={() => navigate({ id: 'setupVault', state: {} })}>
-          {t('create_new_vault')}
-        </Button>
-        <Divider text={t('or').toUpperCase()} />
-        <VStack gap={12}>
-          <Button
-            kind="secondary"
-            onClick={() =>
-              navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
-            }
-          >
-            {t('scan_qr')}
+      <PageFooter alignItems="center">
+        <VStack gap={16} maxWidth={576} fullWidth>
+          <Button onClick={() => navigate({ id: 'setupVault', state: {} })}>
+            {t('create_new_vault')}
           </Button>
-          <Button
-            kind="secondary"
-            onClick={() => navigate({ id: 'importVault' })}
-          >
-            {t('import_vault')}
-          </Button>
+          <Divider text={t('or').toUpperCase()} />
+          <VStack gap={12}>
+            <Button
+              kind="secondary"
+              onClick={() =>
+                navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
+              }
+            >
+              {t('scan_qr')}
+            </Button>
+            <Button
+              kind="secondary"
+              onClick={() => navigate({ id: 'importVault' })}
+            >
+              {t('import_vault')}
+            </Button>
+          </VStack>
         </VStack>
       </PageFooter>
     </VStack>
