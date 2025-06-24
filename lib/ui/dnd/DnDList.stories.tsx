@@ -41,7 +41,6 @@ function DemoList() {
           return next
         })
       }}
-      /* ─────────────── RENDER LIST ─────────────── */
       renderList={({ props }) => (
         <ul
           {...props}
@@ -56,7 +55,6 @@ function DemoList() {
           }}
         />
       )}
-      /* ─────────────── RENDER ITEM ─────────────── */
       renderItem={({ item, draggableProps, dragHandleProps, status }) => (
         <li
           {...draggableProps}
@@ -66,10 +64,10 @@ function DemoList() {
             borderRadius: 6,
             background:
               status === 'overlay'
-                ? '#f0f0f0'
+                ? 'black'
                 : status === 'placeholder'
                   ? 'transparent'
-                  : '#ffffff',
+                  : 'black',
             border: status === 'overlay' ? '1px dashed #999' : '1px solid #ddd',
             cursor: 'grab',
           }}
