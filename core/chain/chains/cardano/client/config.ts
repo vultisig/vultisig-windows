@@ -1,1 +1,1 @@
-export const cardanoApiUrl = 'https://api.koios.rest/api/v1'
+export const cardanoApiUrl = 'https://api.vultisig.com/cardano'
