@@ -71,6 +71,7 @@ export enum OtherChain {
   Ton = 'Ton',
   Ripple = 'Ripple',
   Tron = 'Tron',
+  Cardano = 'Cardano',
 }
 
 export const Chain = {
