@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { DnDList } from './DnDList'
 
 type Fruit = { id: string; name: string }
+
 const initialFruits: Fruit[] = [
   { id: 'apple', name: '🍎 Apple' },
   { id: 'banana', name: '🍌 Banana' },
