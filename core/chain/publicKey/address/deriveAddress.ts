@@ -5,6 +5,8 @@ import {
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
+import { deriveCardanoAddress } from './cardano'
+
 type DeriveAddressInput = {
   chain: Chain
   publicKey: PublicKey
@@ -29,6 +31,13 @@ export const deriveAddress = ({
       coinType,
       'maya'
     ).description()
+  }
+
+  if (chain === Chain.Cardano) {
+    return deriveCardanoAddress({
+      publicKey,
+      walletCore,
+    })
   }
 
   const address = walletCore.CoinTypeExt.deriveAddressFromPublicKey(
