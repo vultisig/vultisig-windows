@@ -29,12 +29,10 @@ type Story = StoryObj<typeof meta>
 export const Playground: Story = {}
 
 export const Unchecked: Story = {
-  name: 'Unchecked',
   args: { value: false },
 }
 
 export const Checked: Story = {
-  name: 'Checked',
   args: { value: true },
 }
 

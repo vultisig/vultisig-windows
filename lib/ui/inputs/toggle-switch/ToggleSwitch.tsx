@@ -12,6 +12,7 @@ const StyledToggleSwitch = styled(HStack)`
 `
 
 const StyledToggleButton = styled(Button)<{ active: boolean }>`
+  flex-shrink: 0;
   ${({ active, disabled }) =>
     active
       ? css`
