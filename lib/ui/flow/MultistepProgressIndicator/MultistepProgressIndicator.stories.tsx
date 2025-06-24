@@ -6,7 +6,7 @@ const maxSteps = 10 as const
 const VARIANTS = ['dots', 'bars'] as const
 
 const meta: Meta<typeof MultistepProgressIndicator> = {
-  title: 'Feedback/MultistepProgressIndicator',
+  title: 'Flow/MultistepProgressIndicator',
   component: MultistepProgressIndicator,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
