@@ -1,32 +1,33 @@
 ---
-description: USE absolute path imports WHEN importing from different packages TO maintain consistency
-globs: **/*.{ts,tsx}
-alwaysApply: true
+description: 
+globs: *.ts,*.tsx
+alwaysApply: false
 ---
-
-# Cross-Package Imports
+# Monorepo Package Imports
 
 ## Context
-- When importing files from a different package
-- Applies to all TypeScript and TypeScript React files
+- When importing files from other packages in the monorepo
+- Applies to all TypeScript and TypeScript React files in the project
+- This is a monorepo with packages
 
 ## Requirements
-- Always use absolute path imports (not relative paths) when importing from a different package
-- Use the appropriate module aliases (e.g., '@module/feature') for importing from different packages
-- Do not use relative paths like '../../../otherPackage/file' for cross-package imports
+- Always use proper package paths (not relative paths) when importing from the state directory
+- Use package-based imports from package.json names
+- Do not use relative path imports like '../../../../state/isInitiatingDevice'
+- Maintain consistency with monorepo package structure
 
 ## Examples
 <example>
-// Good: Using absolute path with module alias
-import { ComponentName } from '@module/feature/component'
+// Good: Using package path
+import { useIsInitiatingDevice } from '@your-org/ui/state/isInitiatingDevice'
 </example>
 
 <example type="invalid">
-// Bad: Using relative path to another package
-import { ComponentName } from '../../../otherPackage/feature/component'
+// Bad: Using relative path
+import { useIsInitiatingDevice } from '../../../../state/isInitiatingDevice'
 </example>
 
-<example type="invalid">
-// Bad: Using incorrect module alias
-import { ComponentName } from '@wrong-module/feature/component'
+<example>
+// Good: Using proper package import
+import { useIsInitiatingDevice } from '@your-package/ui/state/isInitiatingDevice'
 </example> 

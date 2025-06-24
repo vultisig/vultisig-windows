@@ -1,5 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
+import { CreateVaultSuccessScreen } from '@core/ui/mpc/keygen/create/CreateVaultSuccessScreen'
 import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
@@ -9,25 +10,28 @@ import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
-import { OnBackProp } from '@lib/ui/props'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CreateVaultSuccessScreen } from '../create/CreateVaultSuccessScreen'
+import { InstallPluginPendingState } from '../reshare/plugin/InstallPluginPendingState'
+import { mapKeygenStepToInstallStep } from '../reshare/plugin/InstallPluginStep'
 
-export const KeygenFlow = ({ onBack }: OnBackProp) => {
+export const KeygenFlow = ({
+  onBack,
+  onFinish,
+}: OnBackProp & Partial<OnFinishProp>) => {
   const {
     step,
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
-
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
@@ -37,17 +41,23 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
     reshare: value =>
       match(value, {
         migrate: () => t('upgrade'),
-        plugin: () => t('reshare'),
+        plugin: () => t('install_plugin'),
         regular: () => t('reshare'),
       }),
   })
+
+  const isPluginReshare = useMemo(() => {
+    return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+  }, [keygenOperation])
 
   return (
     <MatchQuery
       value={keygenMutationState}
       success={vault => {
         const renderEnding = () => {
-          if (hasServer(vault.signers)) {
+          if (isPluginReshare && onFinish) {
+            onFinish()
+          } else if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
           }
 
@@ -87,7 +97,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       }}
       error={error => (
         <>
-          <FlowPageHeader title={title} />
+          <PageHeader title={title} hasBorder />
           <FlowErrorPageContent
             title={t('keygen_failed')}
             message={extractErrorMsg(error)}
@@ -96,8 +106,16 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       )}
       pending={() => (
         <>
-          <FlowPageHeader title={title} />
-          <KeygenPendingState value={step} />
+          {isPluginReshare ? (
+            <InstallPluginPendingState
+              value={mapKeygenStepToInstallStep(step)}
+            />
+          ) : (
+            <>
+              <PageHeader title={title} hasBorder />
+              <KeygenPendingState value={step} />
+            </>
+          )}
         </>
       )}
     />

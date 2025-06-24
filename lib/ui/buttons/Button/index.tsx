@@ -229,3 +229,8 @@ export const Button: FC<
     </StyledButton>
   )
 }
+
+export const buttonSize: Record<ButtonSize, number> = {
+  sm: 26,
+  md: 28,
+}

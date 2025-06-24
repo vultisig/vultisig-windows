@@ -1,6 +1,11 @@
-import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { GeneralSwapProvider } from '@core/chain/swap/general/GeneralSwapProvider'
+import {
+  NativeSwapPayloadCase,
+  nativeSwapPayloadCase,
+} from '@core/chain/swap/native/NativeSwapChain'
 import { SwapType } from '@core/chain/swap/quote/SwapQuote'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 
 import { KeysignSwapPayload } from './KeysignSwapPayload'
 
@@ -11,15 +16,21 @@ const swapTypeRecord: Record<
   thorchainSwapPayload: 'native',
   mayachainSwapPayload: 'native',
   oneinchSwapPayload: 'general',
+  kyberswapSwapPayload: 'general',
 }
 
-const chainRecord: Record<
-  NonNullable<KeysignPayload['swapPayload']['case']>,
-  VaultBasedCosmosChain | undefined
+type GeneralSwapPayloadCase = {
+  [K in keyof typeof swapTypeRecord]: (typeof swapTypeRecord)[K] extends 'general'
+    ? K
+    : never
+}[keyof typeof swapTypeRecord]
+
+const generalProviderRecord: Record<
+  GeneralSwapPayloadCase,
+  GeneralSwapProvider
 > = {
-  thorchainSwapPayload: Chain.THORChain,
-  mayachainSwapPayload: Chain.MayaChain,
-  oneinchSwapPayload: undefined,
+  oneinchSwapPayload: 'oneinch',
+  kyberswapSwapPayload: 'kyber',
 }
 
 export const getKeysignSwapPayload = ({
@@ -30,11 +41,21 @@ export const getKeysignSwapPayload = ({
   }
 
   const swapType = swapTypeRecord[swapPayload.case]
-  const chain = chainRecord[swapPayload.case]
 
-  if (swapType === 'native' && chain) {
+  if (swapType === 'native') {
+    const chain = mirrorRecord(nativeSwapPayloadCase)[
+      swapPayload.case as NativeSwapPayloadCase
+    ]
     return {
       [swapType]: { ...swapPayload.value, chain },
+    } as KeysignSwapPayload
+  }
+
+  if (swapType === 'general') {
+    const provider =
+      generalProviderRecord[swapPayload.case as GeneralSwapPayloadCase]
+    return {
+      [swapType]: { ...swapPayload.value, provider },
     } as KeysignSwapPayload
   }
 

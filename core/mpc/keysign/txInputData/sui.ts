@@ -5,7 +5,7 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { TxInputDataResolver } from './TxInputDataResolver'
 
-export const getSuiTxInputData: TxInputDataResolver<'suicheSpecific'> = ({
+export const getSuiTxInputData: TxInputDataResolver<'sui'> = ({
   keysignPayload,
 }) => {
   const { coins, referenceGasPrice } = getBlockchainSpecificValue(

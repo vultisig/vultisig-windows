@@ -4,13 +4,13 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { OnFinishProp } from '@lib/ui/props'
-import { InfoBlock } from '@lib/ui/status/InfoBlock'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
@@ -32,9 +32,16 @@ const createSchema = (t: TFunction) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
-export const ServerPasswordStep: React.FC<
-  OnFinishProp<{ password: string }>
-> = ({ onFinish }) => {
+type ServerPasswordStepProps = Partial<OnBackProp> &
+  OnFinishProp<{ password: string }> & {
+    description?: string
+  }
+
+export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
+  description,
+  onBack,
+  onFinish,
+}) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
 
@@ -60,28 +67,35 @@ export const ServerPasswordStep: React.FC<
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <FlowPageHeader title={t('password')} />
-      <PageContent flexGrow scrollable>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        title={t('confirm')}
+        hasBorder
+      />
+      <PageContent gap={36} scrollable>
+        <VStack alignItems="center" gap={12}>
+          <Text size={28} weight={500} centerHorizontally>
+            {t('enter_your_password')}
+          </Text>
+          {description ? (
+            <Text color="shy" size={14} weight={500} centerHorizontally>
+              {description}
+            </Text>
+          ) : null}
+        </VStack>
         <PasswordInput
           {...register('password')}
-          error={errors.password?.message}
-          label={t('fast_vault_password')}
+          error={errors.password?.message || error?.message}
           placeholder={t('enter_password')}
           validation={
             isValid ? 'valid' : errors.password ? 'invalid' : undefined
           }
         />
       </PageContent>
-      <PageFooter gap={16}>
-        <InfoBlock>{t('password_to_decrypt')}</InfoBlock>
+      <PageFooter>
         <Button disabled={!isValid} loading={isPending} type="submit">
-          {t('continue')}
+          {t('confirm')}
         </Button>
-        {error?.message && (
-          <Text color="danger" size={12}>
-            {error.message}
-          </Text>
-        )}
       </PageFooter>
     </VStack>
   )
