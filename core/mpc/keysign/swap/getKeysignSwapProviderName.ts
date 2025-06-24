@@ -6,5 +6,5 @@ import { KeysignSwapPayload } from './KeysignSwapPayload'
 export const getKeysignSwapProviderName = (swapPayload: KeysignSwapPayload) =>
   matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
     native: ({ chain }) => chain,
-    general: () => generalSwapProviderName.oneinch,
+    general: ({ provider }) => generalSwapProviderName[provider],
   })

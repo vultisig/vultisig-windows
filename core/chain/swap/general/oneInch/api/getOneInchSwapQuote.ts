@@ -12,6 +12,8 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { pick } from '@lib/utils/record/pick'
 
+import { evmNativeCoinAddress } from '../../../../chains/evm/config'
+
 type Input = {
   account: ChainAccount
   fromCoinId: string
@@ -22,8 +24,6 @@ type Input = {
 
 const getBaseUrl = (chainId: number) =>
   `${rootApiUrl}/1inch/swap/v6.0/${chainId}/swap`
-
-const nativeCoinAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
 export const getOneInchSwapQuote = async ({
   account,
@@ -36,10 +36,10 @@ export const getOneInchSwapQuote = async ({
 
   const params = {
     src: isFeeCoin({ id: fromCoinId, chain: account.chain })
-      ? nativeCoinAddress
+      ? evmNativeCoinAddress
       : fromCoinId,
     dst: isFeeCoin({ id: toCoinId, chain: account.chain })
-      ? nativeCoinAddress
+      ? evmNativeCoinAddress
       : toCoinId,
     amount: amount.toString(),
     from: account.address,

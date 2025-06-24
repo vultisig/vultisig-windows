@@ -31,6 +31,9 @@ const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   suicheSpecific: getSuiSpecific,
   tonSpecific: getTonSpecific,
   tronSpecific: getTronSpecific,
+  cardano: () => {
+    throw new Error('Cardano is not supported')
+  },
 }
 
 export const getChainSpecific = async (
