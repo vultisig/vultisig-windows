@@ -1,6 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { deriveAddress } from '@core/chain/utils/deriveAddress'
 import { useCore } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
