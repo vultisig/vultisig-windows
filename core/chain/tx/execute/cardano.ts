@@ -2,7 +2,6 @@ import { Chain, OtherChain } from '@core/chain/Chain'
 import { attempt } from '@lib/utils/attempt'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 
 import { getCardanoTxHash } from '../../chains/cardano/tx/hash'
@@ -17,7 +16,7 @@ export const executeCardanoTx: ExecuteTxResolver<OtherChain.Cardano> = async ({
 
   assertErrorMessage(output.errorMessage)
 
-  const rawTx = stripHexPrefix(walletCore.HexCoding.encode(output.encoded))
+  const rawTx = walletCore.HexCoding.encode(output.encoded)
 
   const result = await attempt(
     broadcastUtxoTransaction({ chain: Chain.Cardano, tx: rawTx })
