@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ErrorFallbackContent } from '.'
 
 const meta: Meta<typeof ErrorFallbackContent> = {
-  title: 'Feedback/ErrorFallbackContent',
+  title: 'Flow/ErrorFallbackContent',
   component: ErrorFallbackContent,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
