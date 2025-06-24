@@ -1,4 +1,4 @@
-import { UtxoChain } from '@core/chain/Chain'
+import { OtherChain, UtxoChain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
@@ -21,7 +21,7 @@ export const capSendAmountToMax = ({
     return amount
   }
 
-  if (isOneOf(coin.chain, Object.values(UtxoChain))) {
+  if (isOneOf(coin.chain, [...Object.values(UtxoChain), OtherChain.Cardano])) {
     return amount
   }
 
