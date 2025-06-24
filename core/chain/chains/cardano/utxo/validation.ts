@@ -3,7 +3,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 import { fromChainAmount } from '../../../amount/fromChainAmount'
-import { cardanoMinSendAmount, cardanoNeglectableUtxoChange } from '../config'
+import { cardanoMinSendAmount } from '../config'
 
 type Input = {
   amount: bigint
@@ -26,7 +26,7 @@ export const validateCardanoUtxoRequirements = ({
 
   const remainingBalance = balance - amount
 
-  if (remainingBalance <= cardanoNeglectableUtxoChange) {
+  if (remainingBalance === 0n) {
     return
   }
 
