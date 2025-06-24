@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next'
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
 } & Partial<OnBackProp> &
-  Partial<OnFinishProp<TxResult>>
+  Partial<OnFinishProp<TxResult & { shouldClose: boolean }>>
 
 export const KeysignSigningStep = ({
   onBack,
@@ -53,9 +53,11 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={txResults => {
         const txResult = getLastItem(txResults)
-
+        if (isDAppSigning) onFinish({ ...txResult, shouldClose: false })
         const handleFinish = () =>
-          isDAppSigning ? onFinish(txResult) : navigate({ id: 'vault' })
+          isDAppSigning
+            ? onFinish({ ...txResult, shouldClose: true })
+            : navigate({ id: 'vault' })
 
         return (
           <>
@@ -133,7 +135,11 @@ export const KeysignSigningStep = ({
                     </PageContent>
                     {isDAppSigning && (
                       <PageFooter>
-                        <Button onClick={() => onFinish(txResult)}>
+                        <Button
+                          onClick={() =>
+                            onFinish({ ...txResult, shouldClose: true })
+                          }
+                        >
                           {t('complete')}
                         </Button>
                       </PageFooter>

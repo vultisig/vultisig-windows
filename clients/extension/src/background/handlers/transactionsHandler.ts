@@ -2,6 +2,7 @@ import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
+import { initializeMessenger } from '../../messengers/initializeMessenger'
 import { storage } from '../../storage'
 import {
   addTransactionToVault,
@@ -11,7 +12,7 @@ import {
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
 import { handleOpenPanel } from '../window/windowManager'
-
+const popupMessenger = initializeMessenger({ connect: 'popup' })
 export const handleSendTransaction = async (
   transaction: ITransaction
 ): Promise<TxResult> => {
@@ -42,6 +43,12 @@ export const handleSendTransaction = async (
     })
 
     return await new Promise<TxResult>((resolve, reject) => {
+      popupMessenger.reply(`tx_result_${uuid}`, (txResult: TxResult) => {
+        resolve({
+          txHash: txResult.txHash,
+          encoded: txResult.encoded ?? undefined,
+        })
+      })
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
 

@@ -7,31 +7,68 @@ import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { useCallback } from 'react'
 
+import { initializeMessenger } from '../../../messengers/initializeMessenger'
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
+
+const backgroundMessenger = initializeMessenger({ connect: 'background' })
+import { useRef } from 'react'
 
 export const StartKeysignPage = () => {
   const currentVaultId = useAssertCurrentVaultId()
   const { data: transactions } = useCurrentVaultTransactionsQuery()
   const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
+  const hasFinishedRef = useRef(false)
   const onFinish = useCallback(
-    async (txResult: TxResult) => {
-      if (!transactions || !transactions.length) {
-        throw new Error('No current transaction present')
+    async ({
+      txHash,
+      shouldClose,
+      encoded,
+    }: TxResult & { shouldClose: boolean }) => {
+      if (hasFinishedRef.current) {
+        if (shouldClose) {
+          window.close()
+        }
+        return
       }
+      hasFinishedRef.current = true
+
+      if (!transactions || !transactions.length) return
+
       const transaction = getLastItem(transactions)
+      if (!transaction?.id) return
 
-      await updateTransaction({
-        transaction: {
-          ...transaction,
-          status: 'success',
-          ...txResult,
-        },
-        vaultId: currentVaultId,
-      })
+      try {
+        await backgroundMessenger.send(`tx_result_${transaction.id}`, {
+          txHash,
+          encoded,
+        })
+      } catch (err) {
+        console.error('Failed to send background message:', err)
+      }
 
-      window.close()
+      try {
+        await updateTransaction({
+          transaction: {
+            ...transaction,
+            status: 'success',
+            txHash,
+            encoded,
+          },
+          vaultId: currentVaultId,
+        })
+      } catch (err) {
+        console.error('Failed to update transaction:', err)
+      }
+
+      if (shouldClose) {
+        try {
+          window.close()
+        } catch {
+          console.warn('Could not close window')
+        }
+      }
     },
     [currentVaultId, transactions, updateTransaction]
   )
