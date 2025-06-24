@@ -12,7 +12,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ActionInsideInteractiveElement } from '../base/ActionInsideInteractiveElement'
+import { ActionInsideInteractiveElement } from '../../base/ActionInsideInteractiveElement'
 
 export const PasswordInput: React.FC<
   ComponentPropsWithoutRef<typeof TextInput> & {

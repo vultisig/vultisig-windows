@@ -55,7 +55,6 @@ export const Checked: Story = {
 }
 
 export const Disabled: Story = {
-  name: 'Disabled',
   args: {
     disabled: true,
     label: "Can't touch this",
@@ -63,7 +62,6 @@ export const Disabled: Story = {
 }
 
 export const Loading: Story = {
-  name: 'Loading',
   args: {
     loading: true,
     label: <Text>Processing…</Text>,
