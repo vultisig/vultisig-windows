@@ -31,6 +31,6 @@ export const validateCardanoUtxoRequirements = ({
   }
 
   if (remainingBalance < cardanoMinSendAmount) {
-    return `This amount would leave too little change. 💡 Try 'Send Max' to avoid this issue.`
+    return `This amount would leave too little change. 💡 Try 'Max' to avoid this issue.`
   }
 }
