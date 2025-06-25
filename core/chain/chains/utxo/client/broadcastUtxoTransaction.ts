@@ -1,4 +1,4 @@
-import { OtherChain, UtxoChain } from '@core/chain/Chain'
+import { UtxoBasedChain } from '@core/chain/Chain'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 
@@ -18,7 +18,7 @@ type BlockchairBroadcastResponse =
     }
 
 type BroadcastUtxoTransactionInput = {
-  chain: UtxoChain | OtherChain.Cardano
+  chain: UtxoBasedChain
   tx: string
 }
 

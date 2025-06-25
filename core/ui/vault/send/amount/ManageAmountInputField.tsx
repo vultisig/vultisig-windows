@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { OtherChain, UtxoChain } from '@core/chain/Chain'
+import { UtxoBasedChain } from '@core/chain/Chain'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -125,10 +125,7 @@ export const ManageAmountInputField = () => {
 
                     if (
                       suggestion === maxSuggestion &&
-                      !isOneOf(coin.chain, [
-                        ...Object.values(UtxoChain),
-                        OtherChain.Cardano,
-                      ])
+                      !isOneOf(coin.chain, Object.values(UtxoBasedChain))
                     ) {
                       suggestionBaseValue = fromChainAmount(
                         amount -
