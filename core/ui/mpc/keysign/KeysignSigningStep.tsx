@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -29,20 +28,21 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type KeysignSigningStepProps = {
-  payload: KeysignMessagePayload
-} & Partial<OnBackProp> &
+import { TxHashProvider } from '../../chain/state/txHash'
+import { useKeysignMessagePayload } from './state/keysignMessagePayload'
+
+type KeysignSigningStepProps = Partial<OnBackProp> &
   Partial<OnFinishProp<TxResult>>
 
 export const KeysignSigningStep = ({
   onBack,
-  payload,
   onFinish,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
   const { client, version } = useCore()
   const navigate = useCoreNavigate()
   const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
+  const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -99,13 +99,14 @@ export const KeysignSigningStep = ({
                         <>
                           <PageContent alignItems="center" scrollable>
                             <VStack gap={16} maxWidth={576} fullWidth>
-                              <KeysignTxOverview
-                                txHash={normalizeTxHash(txResult.txHash, {
+                              <TxHashProvider
+                                value={normalizeTxHash(txResult.txHash, {
                                   memo: payload?.memo,
                                   chain: payload?.coin?.chain as Chain,
                                 })}
-                                value={payload}
-                              />
+                              >
+                                <KeysignTxOverview />
+                              </TxHashProvider>
                             </VStack>
                           </PageContent>
                           <PageFooter alignItems="center">

@@ -1,9 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
@@ -16,31 +13,28 @@ import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIc
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
-import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { KeysignTxEvmFee } from './components/KeysignTxEvmFee'
+import { useTxHash } from '../../../chain/state/txHash'
+import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
+import { KeysignTxFee } from './components/KeysignTxFee'
 
-export const KeysignTxOverview = ({
-  value,
-  txHash,
-}: ValueProp<KeysignPayload> & {
-  txHash: string
-}) => {
+export const KeysignTxOverview = () => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { name } = useCurrentVault()
+  const payload = useKeysignMessagePayload()
   const {
-    coin: potentialCoin,
     toAddress,
     memo,
     toAmount,
-    blockchainSpecific,
-  } = value
+    coin: potentialCoin,
+  } = getRecordUnionValue(payload, 'keysign')
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const vaultCoin = useCurrentVaultCoin(coin)
   const { chain, decimals } = shouldBePresent(coin)
@@ -51,14 +45,7 @@ export const KeysignTxOverview = ({
     return fromChainAmount(BigInt(toAmount), decimals)
   }, [toAmount, decimals])
 
-  const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null
-
-    return formatFee({
-      chain: chain as Chain,
-      chainSpecific: blockchainSpecific,
-    })
-  }, [blockchainSpecific, chain])
+  const txHash = useTxHash()
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
@@ -120,13 +107,7 @@ export const KeysignTxOverview = ({
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <KeysignTxEvmFee
-            txHash={txHash}
-            chain={chain as EvmChain}
-            ticker={coin.ticker}
-            decimals={decimals}
-            estimatedFee={networkFeesFormatted}
-          />
+          <KeysignTxFee />
         </SeparatedByLine>
       </Panel>
     </>
