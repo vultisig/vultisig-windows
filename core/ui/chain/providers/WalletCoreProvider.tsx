@@ -1,7 +1,10 @@
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +18,8 @@ const WalletCoreContext = createContext<WalletCore | null>(null)
 export const WalletCoreProvider = ({ children }: ChildrenProp) => {
   const query = useQuery({
     queryKey: ['walletCore'],
-    ...fixedDataQueryOptions,
+    ...noPersistQueryOptions,
+    ...noRefetchQueryOptions,
     queryFn: async () => {
       const wasm = await initWasm()
       return wasm
