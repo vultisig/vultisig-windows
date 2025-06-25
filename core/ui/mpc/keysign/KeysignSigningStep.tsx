@@ -26,13 +26,13 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
 } & Partial<OnBackProp> &
-  Partial<OnFinishProp<TxResult & { shouldClose: boolean }>>
+  Partial<OnFinishProp<TxResult>>
 
 export const KeysignSigningStep = ({
   onBack,
@@ -43,6 +43,7 @@ export const KeysignSigningStep = ({
   const { client, version } = useCore()
   const navigate = useCoreNavigate()
   const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
+  const hasFinishedRef = useRef(false)
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -53,11 +54,13 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={txResults => {
         const txResult = getLastItem(txResults)
-        if (isDAppSigning) onFinish({ ...txResult, shouldClose: false })
+        if (isDAppSigning && !hasFinishedRef.current) {
+          hasFinishedRef.current = true
+          onFinish({ ...txResult })
+        }
+
         const handleFinish = () =>
-          isDAppSigning
-            ? onFinish({ ...txResult, shouldClose: true })
-            : navigate({ id: 'vault' })
+          isDAppSigning ? onFinish({ ...txResult }) : navigate({ id: 'vault' })
 
         return (
           <>
@@ -135,11 +138,7 @@ export const KeysignSigningStep = ({
                     </PageContent>
                     {isDAppSigning && (
                       <PageFooter>
-                        <Button
-                          onClick={() =>
-                            onFinish({ ...txResult, shouldClose: true })
-                          }
-                        >
+                        <Button onClick={() => onFinish({ ...txResult })}>
                           {t('complete')}
                         </Button>
                       </PageFooter>

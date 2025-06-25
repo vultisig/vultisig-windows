@@ -6,13 +6,13 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { useCallback } from 'react'
+import { useRef } from 'react'
 
 import { initializeMessenger } from '../../../messengers/initializeMessenger'
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
 
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
-import { useRef } from 'react'
 
 export const StartKeysignPage = () => {
   const currentVaultId = useAssertCurrentVaultId()
@@ -21,15 +21,9 @@ export const StartKeysignPage = () => {
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const hasFinishedRef = useRef(false)
   const onFinish = useCallback(
-    async ({
-      txHash,
-      shouldClose,
-      encoded,
-    }: TxResult & { shouldClose: boolean }) => {
+    async ({ txHash, encoded }: TxResult) => {
       if (hasFinishedRef.current) {
-        if (shouldClose) {
-          window.close()
-        }
+        window.close()
         return
       }
       hasFinishedRef.current = true
@@ -60,14 +54,6 @@ export const StartKeysignPage = () => {
         })
       } catch (err) {
         console.error('Failed to update transaction:', err)
-      }
-
-      if (shouldClose) {
-        try {
-          window.close()
-        } catch {
-          console.warn('Could not close window')
-        }
       }
     },
     [currentVaultId, transactions, updateTransaction]

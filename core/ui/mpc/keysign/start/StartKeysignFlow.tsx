@@ -10,8 +10,7 @@ import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
 export const StartKeysignFlow = ({
   keysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp &
-  Partial<OnFinishProp<TxResult & { shouldClose: boolean }>>) => {
+}: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
   const [{ securityType }] = useCoreViewState<'keysign'>()
 
   return (
