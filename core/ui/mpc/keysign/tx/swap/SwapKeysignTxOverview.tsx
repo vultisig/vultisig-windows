@@ -12,17 +12,15 @@ import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
-import { GradientText, Text } from '@lib/ui/text'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -32,6 +30,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
 export const SwapKeysignTxOverview = ({
@@ -91,19 +90,7 @@ export const SwapKeysignTxOverview = ({
 
   return (
     <>
-      <VStack style={{ height: 220, position: 'relative' }} fullWidth>
-        <Animation src="/core/animations/vault-created.riv" />
-        <AnimatedVisibility delay={300}>
-          <GradientText
-            as="span"
-            size={24}
-            style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
-            centerHorizontally
-          >
-            {t('transaction_successful')}
-          </GradientText>
-        </AnimatedVisibility>
-      </VStack>
+      <TransactionSuccessAnimation />
       <VStack alignItems="center" gap={8}>
         <HStack gap={8} style={{ position: 'relative' }}>
           {fromCoin && (
