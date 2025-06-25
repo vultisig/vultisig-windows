@@ -36,6 +36,23 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   const { memo, toAddress } = keysignPayload
 
   const getMessages = (): TW.Cosmos.Proto.Message[] => {
+    if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
+      return [
+        TW.Cosmos.Proto.Message.create({
+          wasmExecuteContractGeneric:
+            TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+              senderAddress: coin.address,
+              contractAddress: toAddress,
+              executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
+              coins: [
+                TW.Cosmos.Proto.Amount.create(
+                  getCosmosCoinAmount(keysignPayload)
+                ),
+              ],
+            }),
+        }),
+      ]
+    }
     return matchRecordUnion(chainSpecific, {
       ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
         if (transactionType === TransactionType.IBC_TRANSFER) {
@@ -60,22 +77,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 },
                 timeoutTimestamp,
               }),
-            }),
-          ]
-        } else if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
-          return [
-            TW.Cosmos.Proto.Message.create({
-              wasmExecuteContractGeneric:
-                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
-                  senderAddress: coin.address,
-                  contractAddress: toAddress,
-                  executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
-                  coins: [
-                    TW.Cosmos.Proto.Amount.create(
-                      getCosmosCoinAmount(keysignPayload)
-                    ),
-                  ],
-                }),
             }),
           ]
         }
@@ -114,22 +115,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                       denom: fullDenom,
                       amount: keysignPayload.toAmount,
                     }),
-                  ],
-                }),
-            }),
-          ]
-        } else if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
-          return [
-            TW.Cosmos.Proto.Message.create({
-              wasmExecuteContractGeneric:
-                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
-                  senderAddress: coin.address,
-                  contractAddress: toAddress,
-                  executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
-                  coins: [
-                    TW.Cosmos.Proto.Amount.create(
-                      getCosmosCoinAmount(keysignPayload)
-                    ),
                   ],
                 }),
             }),
