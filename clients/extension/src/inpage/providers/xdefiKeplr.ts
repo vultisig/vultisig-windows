@@ -1,12 +1,8 @@
-import {
-  CosmosMsgType,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
 import {
   Messaging,
   TransactionDetails,
-  TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'

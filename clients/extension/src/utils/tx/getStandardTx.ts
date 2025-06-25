@@ -5,9 +5,10 @@ import {
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { ethers } from 'ethers'
-import { CosmosMsgType } from '../constants'
 import { match } from '@lib/utils/match'
+import { ethers } from 'ethers'
+
+import { CosmosMsgType } from '../constants'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
