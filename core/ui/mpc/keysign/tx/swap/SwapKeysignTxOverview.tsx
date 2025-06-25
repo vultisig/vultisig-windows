@@ -91,7 +91,7 @@ export const SwapKeysignTxOverview = ({
 
   return (
     <>
-      <VStack style={{ position: 'relative' }}>
+      <VStack style={{ height: 220, position: 'relative' }} fullWidth>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
           <GradientText

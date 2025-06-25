@@ -31,7 +31,7 @@ export const TxSuccess = ({
 
   return (
     <>
-      <VStack style={{ height: 250, position: 'relative' }}>
+      <VStack style={{ height: 220, position: 'relative' }} fullWidth>
         <Animation src="/core/animations/vault-created.riv" />
         <AnimatedVisibility delay={300}>
           <GradientText
