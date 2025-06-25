@@ -1,9 +1,11 @@
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { Entry } from '@lib/utils/entities/Entry'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -45,12 +47,9 @@ export const useVaultFoldersQuery = () => {
 
   return useQuery({
     queryKey: [StorageKey.vaultFolders],
-    queryFn: async () => {
-      const result = await getVaultFolders()
-
-      return sortEntitiesWithOrder(result)
-    },
-    ...fixedDataQueryOptions,
+    queryFn: getVaultFolders,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
 

@@ -13,15 +13,13 @@ type UseQueryGenericOptions = Partial<
   >
 >
 
-const noRefetchQueryOptions: UseQueryGenericOptions = {
+export const noRefetchQueryOptions: UseQueryGenericOptions = {
   refetchOnMount: false,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
 }
 
-export const fixedDataQueryOptions: UseQueryGenericOptions = {
-  ...noRefetchQueryOptions,
-  staleTime: Infinity,
+export const noPersistQueryOptions: UseQueryGenericOptions = {
   meta: { disablePersist: true },
 }
 
