@@ -1,4 +1,7 @@
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
@@ -51,5 +54,6 @@ export const useStoredPendingRequestQuery = <K extends StoredRequestKey>(
   useQuery({
     queryKey: ['storedRequest', key],
     queryFn: () => getStoredPendingRequest(key),
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })

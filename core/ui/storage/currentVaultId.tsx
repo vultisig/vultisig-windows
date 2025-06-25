@@ -1,7 +1,10 @@
 import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
@@ -47,7 +50,8 @@ export const useCurrentVaultIdQuery = () => {
   return useQuery({
     queryKey: [StorageKey.currentVaultId],
     queryFn: getCurrentVaultId,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
 

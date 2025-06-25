@@ -1,5 +1,8 @@
 import { Chain } from '@core/chain/Chain'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
@@ -25,6 +28,7 @@ export const useDefaultChainsQuery = () => {
   return useQuery({
     queryKey: [StorageKey.defaultChains],
     queryFn: getDefaultChains,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }

@@ -1,6 +1,9 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -29,7 +32,8 @@ export const useCoinFinderIgnoreQuery = () => {
   return useQuery({
     queryKey: [StorageKey.coinFinderIgnore],
     queryFn: getCoinFinderIgnore,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
 
