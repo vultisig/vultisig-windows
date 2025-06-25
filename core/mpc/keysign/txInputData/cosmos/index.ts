@@ -62,8 +62,23 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               }),
             }),
           ]
+        } else if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
+                  coins: [
+                    TW.Cosmos.Proto.Amount.create(
+                      getCosmosCoinAmount(keysignPayload)
+                    ),
+                  ],
+                }),
+            }),
+          ]
         }
-
         return [
           TW.Cosmos.Proto.Message.create({
             sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
@@ -99,6 +114,22 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                       denom: fullDenom,
                       amount: keysignPayload.toAmount,
                     }),
+                  ],
+                }),
+            }),
+          ]
+        } else if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
+                  coins: [
+                    TW.Cosmos.Proto.Amount.create(
+                      getCosmosCoinAmount(keysignPayload)
+                    ),
                   ],
                 }),
             }),

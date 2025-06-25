@@ -195,16 +195,10 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     return new Promise<AminoSignResponse>(resolve => {
-      const txDetails = signDoc.msgs.map(msg => {
-        if (msg.type === CosmosMsgType.MSG_SEND) {
-          return { txType: 'Keplr', ...msg.value } as TransactionType.Keplr
-        }
-      })
-
       this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [{ ...txDetails[0]!, txType: 'Keplr' }],
+          params: [{ ...signDoc, txType: 'Keplr' }],
         })
         .then(result => {
           resolve(result as any)
