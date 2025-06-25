@@ -1,13 +1,13 @@
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { Match } from '@lib/ui/base/Match'
 import { OnFinishProp } from '@lib/ui/props'
+import { useRef } from 'react'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
-import { useRef } from 'react'
 
 export const StartKeysignFlow = ({
   keysignActionProvider,
