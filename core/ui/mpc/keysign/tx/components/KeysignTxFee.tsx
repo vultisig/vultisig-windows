@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useTxHash } from '../../../../chain/state/txHash'
 import { useTxFeeQuery } from '../../../../chain/tx/queries/txFee'
 import { useKeysignMessagePayload } from '../../state/keysignMessagePayload'
-import { KeysingEstimatedFee } from './KeysignEstimatedTxFee'
+import { KeysignEstimatedFee } from './KeysignEstimatedTxFee'
 import { TxFeeRow } from './TxFeeRow'
 
 export const KeysignTxFee = () => {
@@ -26,7 +26,7 @@ export const KeysignTxFee = () => {
   return (
     <MatchQuery
       value={query}
-      error={() => <KeysingEstimatedFee />}
+      error={() => <KeysignEstimatedFee />}
       pending={() => (
         <TxFeeRow label={t('network_fee')}>
           <Spinner />

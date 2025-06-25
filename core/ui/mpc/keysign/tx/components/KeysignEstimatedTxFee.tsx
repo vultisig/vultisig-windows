@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useKeysignMessagePayload } from '../../state/keysignMessagePayload'
 import { TxFeeRow } from './TxFeeRow'
 
-export const KeysingEstimatedFee = () => {
+export const KeysignEstimatedFee = () => {
   const { t } = useTranslation()
   const payload = useKeysignMessagePayload()
   const { blockchainSpecific, coin: potentialCoin } = getRecordUnionValue(
