@@ -64,15 +64,11 @@ export const useCreateCoinMutation = () => {
       publicKeys: vault.publicKeys,
     })
 
-    console.log('publicKey:', publicKey)
-
     const address = deriveAddress({
       chain: coin.chain,
       publicKey,
       walletCore,
     })
-
-    console.log('address:', address)
 
     await createCoin({ vaultId, coin: { ...coin, address } })
 
