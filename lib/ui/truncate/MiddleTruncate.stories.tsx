@@ -1,19 +1,19 @@
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { ToastItem } from '../toast/ToastItem'
+import { MiddleTruncate } from '.'
 
-const meta: Meta<typeof ToastItem> = {
-  title: 'Foundation/Feedback/ToastItem',
-  component: ToastItem,
+const meta: Meta<typeof MiddleTruncate> = {
+  title: 'Foundation/Utils/MiddleTruncate',
+  component: MiddleTruncate,
   tags: ['autodocs'],
-  parameters: { layout: 'fullscreen' },
-  argTypes: {
-    children: { table: { disable: true } },
-  },
+  parameters: { layout: 'padded' },
   args: {
-    children: 'Saved successfully!',
+    text: '0x1234567890abcdef1234567890abcdef12345678',
+    width: 160,
+  },
+  argTypes: {
+    onClick: { table: { disable: true } },
   },
 }
 export default meta
@@ -21,52 +21,39 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  name: 'Default',
+  name: 'Default truncation',
 }
 
-export const LongMessage: Story = {
-  name: 'Long text message',
+export const CustomWidth: Story = {
+  name: 'Custom width 240 px',
   args: {
-    children:
-      'Your settings have been synced across all logged‑in devices. You can safely close this window.',
+    width: 240,
   },
 }
 
-export const WithIcon: Story = {
-  name: 'With inline icon',
-  args: {
-    children: (
-      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <TriangleAlertIcon />
-        Something went wrong. Try again.
-      </span>
-    ),
-  },
-}
-
-export const Interactive: Story = {
-  name: 'Interactive show / hide',
+export const InteractiveWidth: Story = {
+  name: 'Interactive width slider',
   render: args => {
-    const [visible, setVisible] = useState(false)
-
-    useEffect(() => {
-      let id: NodeJS.Timeout | undefined
-      if (visible) {
-        id = setTimeout(() => setVisible(false), 3000)
-      }
-      return () => clearTimeout(id)
-    }, [visible])
-
+    const [width, setWidth] = useState(160)
     return (
-      <>
-        <button
-          onClick={() => setVisible(true)}
-          style={{ position: 'fixed', top: 40, left: 40 }}
-        >
-          Show toast
-        </button>
-        {visible && <ToastItem {...args} />}
-      </>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <input
+          type="range"
+          min={80}
+          max={320}
+          value={width}
+          onChange={e => setWidth(Number(e.target.value))}
+          style={{ width: 240 }}
+        />
+        <MiddleTruncate {...args} width={width} />
+      </div>
     )
+  },
+}
+
+export const Clickable: Story = {
+  name: 'Clickable link',
+  args: {
+    onClick: () => alert('Clicked!'),
   },
 }
