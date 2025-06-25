@@ -1,5 +1,8 @@
 import { View } from '@lib/ui/navigation/View'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
@@ -17,6 +20,7 @@ export const useInitialViewQuery = () => {
   return useQuery({
     queryKey: [StorageKey.initialView],
     queryFn: getInitialView,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
