@@ -2,16 +2,15 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
-import { Animation } from '@lib/ui/animations/Animation'
-import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
-import { GradientText } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { TransactionSuccessAnimation } from './TransactionSuccessAnimation'
 
 export const TxSuccess = ({
   onSeeTxDetails,
@@ -31,19 +30,7 @@ export const TxSuccess = ({
 
   return (
     <>
-      <VStack style={{ height: 250, position: 'relative' }}>
-        <Animation src="/core/animations/vault-created.riv" />
-        <AnimatedVisibility delay={300}>
-          <GradientText
-            as="span"
-            size={24}
-            style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
-            centerHorizontally
-          >
-            {t('transaction_successful')}
-          </GradientText>
-        </AnimatedVisibility>
-      </VStack>
+      <TransactionSuccessAnimation />
       <VStack gap={8}>
         {formattedToAmount !== null && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />

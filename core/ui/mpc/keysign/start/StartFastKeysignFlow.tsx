@@ -13,6 +13,8 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnFinishProp } from '@lib/ui/props'
 
+import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+
 const keysignSteps = ['server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
@@ -46,10 +48,9 @@ export const StartFastKeysignFlow = ({
               <StartMpcSessionFlow
                 render={() => (
                   <KeysignActionProvider>
-                    <KeysignSigningStep
-                      payload={keysignPayload}
-                      onFinish={onFinish}
-                    />
+                    <KeysignMessagePayloadProvider value={keysignPayload}>
+                      <KeysignSigningStep onFinish={onFinish} />
+                    </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}
                 value="keysign"
