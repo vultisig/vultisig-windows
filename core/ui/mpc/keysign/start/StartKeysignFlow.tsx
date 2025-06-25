@@ -2,6 +2,7 @@ import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { Match } from '@lib/ui/base/Match'
 import { OnFinishProp } from '@lib/ui/props'
 
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
@@ -11,7 +12,16 @@ export const StartKeysignFlow = ({
   keysignActionProvider,
   onFinish,
 }: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
+  const navigate = useCoreNavigate()
   const [{ securityType }] = useCoreViewState<'keysign'>()
+
+  const handleFinish = (txResult: TxResult) => {
+    if (onFinish) {
+      onFinish(txResult)
+    } else {
+      navigate({ id: 'vault' })
+    }
+  }
 
   return (
     <Match
@@ -19,13 +29,13 @@ export const StartKeysignFlow = ({
       secure={() => (
         <StartSecureKeysignFlow
           keysignActionProvider={keysignActionProvider}
-          onFinish={onFinish}
+          onFinish={handleFinish}
         />
       )}
       fast={() => (
         <StartFastKeysignFlow
           keysignActionProvider={keysignActionProvider}
-          onFinish={onFinish}
+          onFinish={handleFinish}
         />
       )}
     />

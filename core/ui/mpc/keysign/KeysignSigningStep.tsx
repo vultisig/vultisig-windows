@@ -10,7 +10,6 @@ import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
 import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -31,17 +30,14 @@ import { useTranslation } from 'react-i18next'
 import { TxHashProvider } from '../../chain/state/txHash'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
-type KeysignSigningStepProps = Partial<OnBackProp> &
-  Partial<OnFinishProp<TxResult>>
+type KeysignSigningStepProps = Partial<OnBackProp> & OnFinishProp<TxResult>
 
 export const KeysignSigningStep = ({
   onBack,
   onFinish,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { client, version } = useCore()
-  const navigate = useCoreNavigate()
-  const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
+  const { version } = useCore()
   const hasFinishedRef = useRef(false)
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
@@ -54,13 +50,12 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={txResults => {
         const txResult = getLastItem(txResults)
-        if (isDAppSigning && !hasFinishedRef.current) {
+        if (!hasFinishedRef.current) {
           hasFinishedRef.current = true
           onFinish({ ...txResult })
         }
 
-        const handleFinish = () =>
-          isDAppSigning ? onFinish({ ...txResult }) : navigate({ id: 'vault' })
+        const handleFinish = () => onFinish({ ...txResult })
 
         return (
           <>
@@ -137,13 +132,9 @@ export const KeysignSigningStep = ({
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                     </PageContent>
-                    {isDAppSigning && (
-                      <PageFooter>
-                        <Button onClick={() => onFinish({ ...txResult })}>
-                          {t('complete')}
-                        </Button>
-                      </PageFooter>
-                    )}
+                    <PageFooter>
+                      <Button onClick={handleFinish}>{t('complete')}</Button>
+                    </PageFooter>
                   </>
                 ),
               }}

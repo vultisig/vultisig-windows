@@ -15,7 +15,7 @@ import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
   onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
+}: KeysignActionProviderProp & OnFinishProp<TxResult>) => {
   const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
     useCoreViewState<'keysign'>()
   const keysignPayload = useRefreshedKeysignPayload(
