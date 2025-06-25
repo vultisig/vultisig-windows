@@ -7,7 +7,7 @@ import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 
 import { JoinMpcServerUrlProvider } from '../../../mpc/serverType/JoinMpcServerUrlProvider'
 import { KeysignActionProvider } from '../action/KeysignActionProvider'
@@ -19,8 +19,13 @@ export const JoinKeysignPage = () => {
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]
   )
+  const hasFinishedRef = useRef(false)
   const handleFinish = () => {
-    navigate({ id: 'vault' })
+    if (!hasFinishedRef.current) {
+      hasFinishedRef.current = true
+    } else {
+      navigate({ id: 'vault' })
+    }
   }
 
   return (

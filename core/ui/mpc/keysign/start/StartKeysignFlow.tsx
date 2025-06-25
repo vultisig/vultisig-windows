@@ -7,6 +7,7 @@ import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { KeysignActionProviderProp } from './KeysignActionProviderProp'
 import { StartFastKeysignFlow } from './StartFastKeysignFlow'
 import { StartSecureKeysignFlow } from './StartSecureKeysignFlow'
+import { useRef } from 'react'
 
 export const StartKeysignFlow = ({
   keysignActionProvider,
@@ -14,12 +15,16 @@ export const StartKeysignFlow = ({
 }: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
   const navigate = useCoreNavigate()
   const [{ securityType }] = useCoreViewState<'keysign'>()
-
+  const hasFinishedRef = useRef(false)
   const handleFinish = (txResult: TxResult) => {
     if (onFinish) {
       onFinish(txResult)
     } else {
-      navigate({ id: 'vault' })
+      if (!hasFinishedRef.current) {
+        hasFinishedRef.current = true
+      } else {
+        navigate({ id: 'vault' })
+      }
     }
   }
 

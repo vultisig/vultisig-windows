@@ -473,15 +473,10 @@ export const handleRequest = (
           getCosmosChainByChainId(param.chainId) ||
             getEvmChainByChainId(param.chainId)
         )
-        console.log('chain:', chain)
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          console.log('safeVaultId:', safeVaultId)
-
           const host = getDappHostname(sender)
-          console.log('host:', host)
-
           const allSessions = await getVaultsAppSessions()
 
           const previousSession = allSessions?.[safeVaultId]?.[host]
