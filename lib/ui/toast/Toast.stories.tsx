@@ -20,9 +20,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
-  name: 'Default',
-}
+export const Default: Story = {}
 
 export const LongMessage: Story = {
   name: 'Long text message',

@@ -20,12 +20,9 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Rectangular: Story = {
-  name: 'Rectangular',
-}
+export const Rectangular: Story = {}
 
 export const Circular: Story = {
-  name: 'Circular',
   args: {
     variant: 'circular',
     width: '60px',
