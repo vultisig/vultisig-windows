@@ -10,6 +10,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnFinishProp } from '@lib/ui/props'
 
 import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
+import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
@@ -37,11 +38,9 @@ export const StartSecureKeysignFlow = ({
             value="keysign"
             render={() => (
               <KeysignActionProvider>
-                <KeysignSigningStep
-                  payload={keysignPayload}
-                  onBack={onBack}
-                  onFinish={onFinish}
-                />
+                <KeysignMessagePayloadProvider value={keysignPayload}>
+                  <KeysignSigningStep onBack={onBack} onFinish={onFinish} />
+                </KeysignMessagePayloadProvider>
               </KeysignActionProvider>
             )}
           />

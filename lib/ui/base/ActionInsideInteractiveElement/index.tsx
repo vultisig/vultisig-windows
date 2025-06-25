@@ -3,7 +3,7 @@ import { Dimensions } from '@lib/utils/entities/Dimensions'
 import { ComponentProps, CSSProperties, ReactNode, Ref } from 'react'
 import styled from 'styled-components'
 
-import { ElementSizeAware } from './ElementSizeAware'
+import { ElementSizeAware } from '../ElementSizeAware'
 
 type ActionInsideInteractiveElementRenderParams<
   T extends CSSProperties = CSSProperties,

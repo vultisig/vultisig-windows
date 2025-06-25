@@ -2,6 +2,7 @@ import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/Keysi
 import { JoinKeysignProviders } from '@core/ui/mpc/keysign/join/JoinKeysignProviders'
 import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
+import { KeysignMessagePayloadProvider } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -28,10 +29,9 @@ export const JoinKeysignPage = () => {
               value="keysign"
               render={() => (
                 <KeysignActionProvider>
-                  <KeysignSigningStep
-                    payload={keysignMessagePayload}
-                    onBack={onBack}
-                  />
+                  <KeysignMessagePayloadProvider value={keysignMessagePayload}>
+                    <KeysignSigningStep onBack={onBack} />
+                  </KeysignMessagePayloadProvider>
                 </KeysignActionProvider>
               )}
             />
