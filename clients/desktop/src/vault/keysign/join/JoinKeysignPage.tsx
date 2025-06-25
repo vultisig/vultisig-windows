@@ -4,6 +4,7 @@ import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVeri
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
@@ -13,11 +14,14 @@ import { KeysignActionProvider } from '../action/KeysignActionProvider'
 
 export const JoinKeysignPage = () => {
   const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
-
+  const navigate = useCoreNavigate()
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]
   )
+  const handleFinish = () => {
+    navigate({ id: 'vault' })
+  }
 
   return (
     <JoinKeysignProviders>
@@ -30,7 +34,10 @@ export const JoinKeysignPage = () => {
               render={() => (
                 <KeysignActionProvider>
                   <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-                    <KeysignSigningStep onBack={onBack} />
+                    <KeysignSigningStep
+                      onBack={onBack}
+                      onFinish={handleFinish}
+                    />
                   </KeysignMessagePayloadProvider>
                 </KeysignActionProvider>
               )}
