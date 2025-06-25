@@ -1,4 +1,7 @@
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useQuery } from '@tanstack/react-query'
 
@@ -24,7 +27,8 @@ export const usePasscodeEncryptionQuery = () => {
   return useQuery({
     queryKey: [StorageKey.passcodeEncryption],
     queryFn: getPasscodeEncryption,
-    ...fixedDataQueryOptions,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
   })
 }
 
