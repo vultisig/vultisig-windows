@@ -20,15 +20,30 @@ import { List } from '@lib/ui/list'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ListItem } from '@lib/ui/list/item'
 import { base64Decode } from '@bufbuild/protobuf/wire'
-import { PluginCreatePolicyProps } from '../../utils/interfaces'
-import { fromBinary } from '@bufbuild/protobuf'
+import {
+  PluginCreatePolicyProps,
+  PluginRequestUnion,
+} from '../../utils/interfaces'
+import { create, fromBinary } from '@bufbuild/protobuf'
 import { PolicySchema } from '../../types/gen/policy_pb'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+
+import { getVaultId } from '@core/ui/vault/Vault'
+
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { PageFooter } from '@lib/ui/page/PageFooter'
+import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
+import { getVaultTransactions } from '../../transactions/state/transactions'
+
+import { getLastItem } from '@lib/utils/array/getLastItem'
+
+import { useMutation } from '@tanstack/react-query'
+import { PluginCreatePolicy } from './PluginCreatePolicy'
 
 export const PluginPage = () => {
   const requestQuery = useStoredPendingRequestQuery('plugin')
-  const handleClose = (): void => {
-    window.close()
-  }
 
   return (
     <MatchQuery
@@ -51,30 +66,9 @@ export const PluginPage = () => {
                 </KeygenOperationProvider>
               </ReshareVaultFlowProviders>
             )}
-            PluginCreatePolicy={() => {
-              const decoded = base64Decode(
-                (pluginRequest.payload as PluginCreatePolicyProps).recipe
-              )
-
-              const policy = fromBinary(PolicySchema, decoded)
-              
-              return (
-                <VStack fullHeight>
-                  <PageHeader
-                    primaryControls={
-                      <IconButton onClick={handleClose}>
-                        <CrossIcon />
-                      </IconButton>
-                    }
-                    title="Create Policy"
-                    hasBorder
-                  />
-                  <PageContent flexGrow scrollable>
-                    <List></List>
-                  </PageContent>
-                </VStack>
-              )
-            }}
+            PluginCreatePolicy={() => (
+              <PluginCreatePolicy pluginRequest={pluginRequest} />
+            )}
           />
         )
       }}

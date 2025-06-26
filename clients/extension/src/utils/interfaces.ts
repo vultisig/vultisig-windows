@@ -61,13 +61,13 @@ export type ReshareRequestProps = {
 export type PluginCreatePolicyProps = {
   recipe: string // base64 encoded string
   publicKey: string
-  policyVersion: string
+  policyVersion: number
   pluginVersion: string
 }
 
 type ICustomTransactionPayload = {
   method: string
-  address: string
+  address?: string
   message: string
 }
 
