@@ -1,5 +1,5 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { Match } from '@lib/ui/base/Match'
+import { PartialMatch } from '@lib/ui/base/PartialMatch'
 
 import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
@@ -22,30 +22,28 @@ export const DepositActionSpecific = ({ action }: Props) => {
   const selectedCoin = getValues('selectedCoin') as Coin | null
 
   return (
-    <Match
+    <PartialMatch
       value={action}
-      bond_with_lp={() => (
-        <BondUnbondLPSpecific
-          assets={bondableAssets}
-          selectedAsset={selectedBondableAsset}
-        />
-      )}
-      unbond_with_lp={() => (
-        <BondUnbondLPSpecific
-          assets={bondableAssets}
-          selectedAsset={selectedBondableAsset}
-        />
-      )}
-      ibc_transfer={() => <IBCTransferSpecific />}
-      merge={() => <MergeSpecific selectedCoin={selectedCoin} />}
-      switch={() => <SwitchSpecific />}
-      unstake={() => <UnstakeSpecific />}
-      stake={() => <StakeSpecific />}
-      bond={() => null}
-      unbond={() => null}
-      leave={() => null}
-      custom={() => null}
-      vote={() => null}
+      if={{
+        bond_with_lp: () => (
+          <BondUnbondLPSpecific
+            assets={bondableAssets}
+            selectedAsset={selectedBondableAsset}
+          />
+        ),
+        unbond_with_lp: () => (
+          <BondUnbondLPSpecific
+            assets={bondableAssets}
+            selectedAsset={selectedBondableAsset}
+          />
+        ),
+        ibc_transfer: () => <IBCTransferSpecific />,
+        merge: () => <MergeSpecific selectedCoin={selectedCoin} />,
+        switch: () => <SwitchSpecific />,
+        unstake: () => <UnstakeSpecific />,
+        stake: () => <StakeSpecific />,
+      }}
+      else={() => null}
     />
   )
 }
