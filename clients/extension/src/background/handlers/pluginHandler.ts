@@ -5,6 +5,7 @@ import { RequestMethod } from '../../utils/constants'
 import { Messaging } from '../../utils/interfaces'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
 import { handleOpenPanel } from '../window/windowManager'
+import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 
 export const handlePluginRequest = async (
   request: Messaging.Plugin.Request,
@@ -16,7 +17,10 @@ export const handlePluginRequest = async (
   }
   return match(request.method, {
     [RequestMethod.VULTISIG.PLUGIN_REQUEST_RESHARE]: async () => {
-      await setStoredPendingRequest('plugin', { id: params.id })
+      await setStoredPendingRequest('plugin', {
+        type: 'ReshareRequest',
+        payload: { id: params.id },
+      })
       await handleOpenPanel({ id: 'pluginTab' })
 
       return new Promise((resolve, reject) => {
@@ -31,6 +35,20 @@ export const handlePluginRequest = async (
           }
         )
       })
+    },
+    [RequestMethod.VULTISIG.PLUGIN_CREATE_POLICY]: async () => {
+      await setStoredPendingRequest('plugin', {
+        type: 'PluginCreatePolicy',
+        payload: {
+          recipe: params.recipe,
+          publicKey: params.publicKey,
+          pluginVersion: params.pluginVersion,
+          policyVersion: params.policyVersion,
+        },
+      })
+
+      await handleOpenPanel({ id: 'pluginTab' })
+      return ''
     },
   })
 }

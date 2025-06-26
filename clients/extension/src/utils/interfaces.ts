@@ -50,8 +50,19 @@ export type AccountsProps = {
   sender: string
 }
 
-export type PluginRequestProps = {
+export type PluginRequestUnion =
+  | { type: 'ReshareRequest'; payload: ReshareRequestProps }
+  | { type: 'PluginCreatePolicy'; payload: PluginCreatePolicyProps }
+
+export type ReshareRequestProps = {
   id: string
+}
+
+export type PluginCreatePolicyProps = {
+  recipe: string // base64 encoded string
+  publicKey: string
+  policyVersion: string
+  pluginVersion: string
 }
 
 type ICustomTransactionPayload = {
