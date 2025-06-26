@@ -50,6 +50,10 @@ export type AccountsProps = {
   sender: string
 }
 
+export type PluginRequestProps = {
+  id: string
+}
+
 type ICustomTransactionPayload = {
   method: string
   address: string

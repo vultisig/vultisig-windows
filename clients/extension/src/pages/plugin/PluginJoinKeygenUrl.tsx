@@ -1,4 +1,5 @@
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
+import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
@@ -8,7 +9,9 @@ import { useTranslation } from 'react-i18next'
 
 import { PluginReshareMutation } from './PluginReshareMutation'
 
-export const PluginJoinKeygenUrl = ({ onFinish }: OnFinishProp) => {
+export const PluginJoinKeygenUrl = ({
+  onFinish,
+}: OnFinishProp<PluginMetadata>) => {
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const { t } = useTranslation()
   return (

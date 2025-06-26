@@ -24,4 +24,5 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
     tonSpecific: () => tonConfig.fee,
     tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation || 0),
     rippleSpecific: () => rippleTxFee,
+    cardano: ({ byteFee }) => BigInt(byteFee),
   })

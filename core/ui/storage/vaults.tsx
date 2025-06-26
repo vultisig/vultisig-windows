@@ -3,7 +3,10 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
-import { fixedDataQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noPersistQueryOptions,
+  noRefetchQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
@@ -66,13 +69,15 @@ export const useVaultsQuery = () => {
   const vaults = useQuery({
     queryKey: [StorageKey.vaults],
     queryFn: getVaults,
-    ...fixedDataQueryOptions,
+    ...noPersistQueryOptions,
+    ...noRefetchQueryOptions,
   })
 
   const coins = useQuery({
     queryKey: [StorageKey.vaultsCoins],
     queryFn: getCoins,
-    ...fixedDataQueryOptions,
+    ...noPersistQueryOptions,
+    ...noRefetchQueryOptions,
   })
 
   return useTransformQueriesData(

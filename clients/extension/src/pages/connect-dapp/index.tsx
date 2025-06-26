@@ -3,8 +3,7 @@ import {
   getDappHost,
   getDappHostname,
 } from '@clients/extension/src/utils/connectedApps'
-import { getStoredRequest } from '@clients/extension/src/utils/storage'
-import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
+import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
@@ -22,20 +21,17 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type InitialState = {
-  chain?: Chain
-  sender?: string
-}
+import { useStoredPendingRequestQuery } from '../../utils/pendingRequests'
 
 export const ConnectDAppPage = () => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
-  const initialState: InitialState = {}
-  const [state, setState] = useState(initialState)
-  const { sender, chain } = state
+  const { data } = useStoredPendingRequestQuery('accounts')
+  const sender = data?.sender
+  const chain = data?.chain
   const vaults = useVaults()
   const { mutateAsync: addSession } = useAddVaultSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
@@ -67,18 +63,6 @@ export const ConnectDAppPage = () => {
 
     handleClose()
   }
-
-  useEffect(() => {
-    const initRequest = async () => {
-      try {
-        const { chain, sender } = await getStoredRequest()
-        setState(prevState => ({ ...prevState, chain, sender }))
-      } catch (error) {
-        console.error('Failed to get stored request:', error)
-      }
-    }
-    initRequest()
-  }, [])
 
   return vaults.length ? (
     <VStack fullHeight>

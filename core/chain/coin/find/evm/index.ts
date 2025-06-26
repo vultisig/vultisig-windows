@@ -8,6 +8,8 @@ import { attempt } from '@lib/utils/attempt'
 import { NoDataError } from '@lib/utils/error/NoDataError'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 
+import { evmNativeCoinAddress } from '../../../chains/evm/config'
+
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
   chain,
@@ -34,10 +36,7 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
     .filter(([_, balance]) => BigInt(balance as string) > 0n) // Ensure the balance is non-zero
     .map(([tokenAddress]) => tokenAddress)
-    .filter(
-      tokenAddress =>
-        tokenAddress !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    )
+    .filter(tokenAddress => tokenAddress !== evmNativeCoinAddress)
 
   if (nonZeroBalanceTokenAddresses.length === 0) {
     return []

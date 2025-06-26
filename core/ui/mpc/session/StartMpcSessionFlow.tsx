@@ -7,11 +7,18 @@ import { StartMpcSessionStep } from './StartMpcSessionStep'
 export const StartMpcSessionFlow = ({
   render,
   value,
-}: RenderProp & ValueProp<MpcSession>) => {
+  isPluginReshare,
+}: RenderProp &
+  ValueProp<MpcSession> &
+  Partial<{ isPluginReshare: boolean }>) => {
   return (
     <StepTransition
       from={({ onFinish }) => (
-        <StartMpcSessionStep onFinish={onFinish} value={value} />
+        <StartMpcSessionStep
+          onFinish={onFinish}
+          value={value}
+          isPluginReshare={isPluginReshare}
+        />
       )}
       to={() => render()}
     />

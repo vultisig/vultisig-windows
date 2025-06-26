@@ -1,0 +1,1 @@
+export const evmNativeCoinAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'

@@ -1,18 +1,19 @@
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
+import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnFinishProp } from '@lib/ui/props'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { WaitForServerStep } from '../../fast/WaitForServerStep'
-import { KeysignActionProviderProp } from './KeysignActionProviderProp'
+import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 const keysignSteps = ['server', 'keysign'] as const
 
@@ -21,8 +22,7 @@ export const StartFastKeysignFlow = ({
   onFinish,
 }: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
-
-  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+  const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: useNavigateBack(),
   })
@@ -32,8 +32,8 @@ export const StartFastKeysignFlow = ({
       value={step}
       server={() => (
         <ValueTransfer<{ password: string }>
-          key="password"
           from={({ onFinish }) => <ServerPasswordStep onFinish={onFinish} />}
+          key="password"
           to={({ value: { password } }) => (
             <FastKeysignServerStep onFinish={toNextStep} password={password} />
           )}
@@ -41,27 +41,19 @@ export const StartFastKeysignFlow = ({
       )}
       keysign={() => (
         <ValueTransfer<string[]>
+          from={({ onFinish }) => <WaitForServerStep onFinish={onFinish} />}
           key="peers"
-          from={({ onFinish }) => {
-            return (
-              <WaitForServerStep
-                onBack={toPreviousStep}
-                onPeersChange={onFinish}
-              />
-            )
-          }}
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
-                value="keysign"
                 render={() => (
                   <KeysignActionProvider>
-                    <KeysignSigningStep
-                      payload={keysignPayload}
-                      onFinish={onFinish}
-                    />
+                    <KeysignMessagePayloadProvider value={keysignPayload}>
+                      <KeysignSigningStep onFinish={onFinish} />
+                    </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}
+                value="keysign"
               />
             </MpcPeersProvider>
           )}
