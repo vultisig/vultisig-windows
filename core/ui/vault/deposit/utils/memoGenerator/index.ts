@@ -121,6 +121,9 @@ export const generateMemo = ({
     switch: () => {
       return `switch:${thorchainAddress}`
     },
+    unmerge_ruji: () => {
+      return ''
+    },
   })
 }
 
