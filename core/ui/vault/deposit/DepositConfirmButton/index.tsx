@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { rujiContractAddress } from '@core/chain/chains/thorchain/ruji/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
@@ -43,6 +44,8 @@ export const DepositConfirmButton = ({
   const coin = useCurrentVaultCoin(
     selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
+
+  const isRUJIFunction = coin.ticker === 'RUJI'
 
   const transactionType =
     action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
@@ -100,7 +103,11 @@ export const DepositConfirmButton = ({
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
-        isTonFunction ? validatorAddress : receiver
+        isTonFunction
+          ? validatorAddress
+          : isRUJIFunction
+            ? rujiContractAddress
+            : receiver
       )
     }
 
@@ -113,20 +120,21 @@ export const DepositConfirmButton = ({
 
     return { keysign: keysignPayload }
   }, [
-    action,
-    amount,
-    chainSpecificQuery.data,
     chainSpecificQuery.isLoading,
+    chainSpecificQuery.data,
     coin,
-    isTonFunction,
-    memo,
-    receiver,
-    validatorAddress,
-    vault.hexChainCode,
-    vault.localPartyId,
-    vault.publicKeys,
-    vault.libType,
     walletCore,
+    vault.hexChainCode,
+    vault.publicKeys,
+    vault.localPartyId,
+    vault.libType,
+    memo,
+    action,
+    isTonFunction,
+    validatorAddress,
+    isRUJIFunction,
+    receiver,
+    amount,
   ])
 
   if (
