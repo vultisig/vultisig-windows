@@ -1,11 +1,14 @@
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { KeysignActionProvider } from '@core/ui/mpc/keysign/action/KeysignActionProvider'
+import {
+  KeysignMutationListener,
+  KeysignMutationListenerProvider,
+} from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { StartKeysignFlow } from '@core/ui/mpc/keysign/start/StartKeysignFlow'
 import { StartKeysignProviders } from '@core/ui/mpc/keysign/start/StartKeysignProviders'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { getLastItem } from '@lib/utils/array/getLastItem'
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
@@ -13,35 +16,47 @@ import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/us
 export const StartKeysignPage = () => {
   const currentVaultId = useAssertCurrentVaultId()
   const { data: transactions } = useCurrentVaultTransactionsQuery()
-  const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
+  const { mutate: updateTransaction } = useUpdateTransactionMutation()
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
-  const onFinish = useCallback(
-    async (txResult: TxResult) => {
-      if (!transactions || !transactions.length) {
-        throw new Error('No current transaction present')
-      }
-      const transaction = getLastItem(transactions)
 
-      await updateTransaction({
-        transaction: {
-          ...transaction,
-          status: 'success',
-          ...txResult,
-        },
-        vaultId: currentVaultId,
-      })
+  const keysignMutationListener: KeysignMutationListener = useMemo(
+    () => ({
+      onSuccess: txResults => {
+        if (!isDAppSigning) {
+          return
+        }
+        if (!transactions || !transactions.length) {
+          throw new Error('No current transaction present')
+        }
+        const transaction = getLastItem(transactions)
 
-      window.close()
-    },
-    [currentVaultId, transactions, updateTransaction]
+        const txResult = getLastItem(txResults)
+
+        updateTransaction(
+          {
+            transaction: {
+              ...transaction,
+              status: 'success',
+              ...txResult,
+            },
+            vaultId: currentVaultId,
+          },
+          {
+            onSuccess: () => {
+              window.close()
+            },
+          }
+        )
+      },
+    }),
+    [currentVaultId, isDAppSigning, transactions, updateTransaction]
   )
 
   return (
     <StartKeysignProviders>
-      <StartKeysignFlow
-        keysignActionProvider={KeysignActionProvider}
-        onFinish={isDAppSigning ? onFinish : undefined}
-      />
+      <KeysignMutationListenerProvider value={keysignMutationListener}>
+        <StartKeysignFlow keysignActionProvider={KeysignActionProvider} />
+      </KeysignMutationListenerProvider>
     </StartKeysignProviders>
   )
 }

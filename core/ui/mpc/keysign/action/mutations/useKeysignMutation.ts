@@ -14,6 +14,7 @@ import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
+import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -27,6 +28,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const vault = useCurrentVault()
 
   const keysignAction = useKeysignAction()
+  const mutationListener = useKeysignMutationListener()
 
   return useMutation({
     mutationFn: async () => {
@@ -124,5 +126,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         }
       )
     },
+    ...mutationListener,
   })
 }
