@@ -5,9 +5,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ChangeEvent, ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Spinner } from '../loaders/Spinner'
-import { InputContainer } from './InputContainer'
-import { InputLabel } from './InputLabel'
+import { Spinner } from '../../loaders/Spinner'
+import { InputContainer } from '../InputContainer'
+import { InputLabel } from '../InputLabel'
 
 type SharedTextInputProps = Partial<LabelProp> &
   ComponentProps<typeof TextInputContainer> & {
