@@ -165,13 +165,13 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     }
   }
 
-  const getFeeFields = (): LegacyTxFeeFields | EnvelopedTxFeeFields => {
+  const getFeeFields = (): EnvelopedTxFeeFields => {
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-
-      return getSigningInputLegacyTxFields({
-        gasPrice: BigInt(gasPrice || 0),
-        gasLimit: BigInt(gas),
+      return getSigningInputEnvelopedTxFields({
+        maxFeePerGasWei: gasPrice,
+        priorityFee: priorityFee,
+        gasLimit: gas.toString(),
       })
     }
 
