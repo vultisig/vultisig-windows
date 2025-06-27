@@ -10,6 +10,7 @@ import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
+import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
 
 type Props = {
   action: ChainAction
@@ -42,6 +43,7 @@ export const DepositActionSpecific = ({ action }: Props) => {
         switch: () => <SwitchSpecific />,
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
+        unmerge_ruji: () => <UnmergeSpecific />,
       }}
       else={() => null}
     />

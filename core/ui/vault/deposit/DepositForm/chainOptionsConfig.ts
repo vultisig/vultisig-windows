@@ -63,14 +63,7 @@ export const getRequiredFieldsPerChainAction = (
   chain: Chain
 ) => ({
   unmerge_ruji: {
-    fields: [
-      {
-        name: 'amount',
-        type: 'number',
-        label: 'Amount',
-        required: true,
-      },
-    ],
+    fields: [],
     schema: ({ totalAmountAvailable }: FunctionSchema) => {
       return z.object({
         amount: z
