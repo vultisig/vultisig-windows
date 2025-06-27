@@ -4,10 +4,6 @@ import {
   EnvelopedTxFeeFields,
   getSigningInputEnvelopedTxFields,
 } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
-import {
-  getSigningInputLegacyTxFields,
-  LegacyTxFeeFields,
-} from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
