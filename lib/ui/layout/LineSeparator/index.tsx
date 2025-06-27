@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { getColor } from '../theme/getters'
+import { getColor } from '../../theme/getters'
 
 export const LineSeparator = styled.div`
   height: 1px;

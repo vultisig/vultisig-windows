@@ -629,7 +629,18 @@ export const handleRequest = (
               },
               status: 'default',
             })
-              .then(result => resolve(ensureHexPrefix(result.txHash)))
+              .then(result => {
+                // For eth_signTypedData_v4, return the signature directly
+                let sig = Signature.from(ensureHexPrefix(result.txHash))
+                if (sig.v < 27) {
+                  sig = Signature.from({
+                    r: sig.r,
+                    s: sig.s,
+                    v: sig.v + 27,
+                  })
+                }
+                resolve(ensureHexPrefix(sig.serialized))
+              })
               .catch(error => {
                 reject(error)
               })

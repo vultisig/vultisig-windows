@@ -1,4 +1,3 @@
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
@@ -12,6 +11,8 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { ComponentPropsWithoutRef } from 'react'
+
+import { ActionInsideInteractiveElement } from '../../base/ActionInsideInteractiveElement'
 
 export const PasswordInput: React.FC<
   ComponentPropsWithoutRef<typeof TextInput> & {
