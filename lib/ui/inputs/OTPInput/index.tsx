@@ -1,60 +1,63 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { useOtp } from '@lib/ui/inputs/OTPInput/useOTP'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-export type OTPInputProps = {
+import { InputProps } from '../../props'
+import { useOtp } from './useOTP'
+
+export type OTPInputProps = InputProps<string | null> & {
   length?: number
-  onCompleted?: (value: string) => void
-  onValueChange?: (value: string) => void
   validation?: 'invalid' | 'valid'
   includePasteButton?: boolean
-} & ComponentProps<typeof InputBoxContainer>
+  autoFocusFirst?: boolean
+} & ComponentProps<typeof DigitInput>
 
 export const OTPInput = ({
   length = 4,
-  onValueChange,
-  onCompleted,
-  className,
+  value,
+  onChange,
   validation,
   includePasteButton = true,
-  ...props
+  autoFocusFirst = true,
+  className,
+  ...rest
 }: OTPInputProps) => {
   const { t } = useTranslation()
-  const { otp, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
-    length,
-    onValueChange,
-    onCompleted
+  const { chars, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
+    { length, value, onChange }
   )
 
   return (
-    <HStack alignItems="center" gap={10} className={className}>
-      {otp.map((data, index) => (
-        <InputBoxContainer
-          validation={validation}
-          autoFocus={index === 0}
-          key={index}
+    <HStack alignItems="center" gap={12} className={className}>
+      {chars.map((c, i) => (
+        <DigitInput
+          key={i}
           type="text"
-          value={data}
-          onKeyDown={e => handleKeyDown(e, index)}
-          onChange={e => handleChange(e, index)}
-          onPaste={handlePaste}
+          inputMode="numeric"
+          pattern="[0-9]*"
           maxLength={1}
+          value={c}
+          validation={validation}
+          autoFocus={autoFocusFirst && i === 0}
+          onChange={e => handleChange(e, i)}
+          onKeyDown={e => handleKeyDown(e, i)}
+          onPaste={handlePaste}
           ref={el => {
-            inputRefs.current[index] = el
+            inputRefs.current[i] = el
           }}
-          {...props}
+          {...rest}
         />
       ))}
+
       {includePasteButton && (
         <Button
           kind="secondary"
           onClick={() => handlePaste()}
-          style={{ borderRadius: 12, width: 'auto' }}
+          style={{ borderRadius: 12, minWidth: 72 }}
         >
           {t('paste')}
         </Button>
@@ -63,21 +66,21 @@ export const OTPInput = ({
   )
 }
 
-const InputBoxContainer = styled.input<{
-  validation?: 'invalid' | 'valid'
-}>`
-  width: 46px;
+const DigitInput = styled.input<{ validation?: 'invalid' | 'valid' }>`
+  flex: 1;
+  min-width: 46px;
   height: 46px;
   text-align: center;
   font-size: 18px;
   border: 2px solid ${getColor('foregroundExtra')};
-  background-color: ${getColor('foreground')};
+  background: ${getColor('foreground')};
   ${borderRadius.m}
   outline: none;
+  color: ${getColor('text')};
+
   &:focus {
     border-color: ${getColor('foregroundSuper')};
   }
-  color: ${getColor('text')};
 
   ${({ validation }) =>
     validation === 'valid'
