@@ -1,39 +1,47 @@
-import { ChangeEvent, ClipboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, ClipboardEvent, KeyboardEvent, useRef } from 'react'
 
-export const useOtp = (
-  length: number,
-  onValueChange?: (value: string) => void,
-  onCompleted?: (value: string) => void
-) => {
-  const [otp, setOtp] = useState(new Array(length).fill(''))
+type UseOtpArgs = {
+  length: number
+  value: string | null
+  onChange: (v: string | null) => void
+  onCompleted?: (v: string) => void
+}
+
+export const useOtp = ({
+  length,
+  value,
+  onChange,
+  onCompleted,
+}: UseOtpArgs) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = e.target.value
-    if (isNaN(Number(value))) return
+  const chars = (() => {
+    const arr = (value ?? '').split('')
+    while (arr.length < length) arr.push('')
+    return arr
+  })()
 
-    const newOtp = [...otp]
-    newOtp[index] = value.substring(value.length - 1)
-    setOtp(newOtp)
-
-    const otpValue = newOtp.join('')
-    onValueChange?.(otpValue)
-
-    if (index === length - 1) {
-      onCompleted?.(otpValue)
-    }
-
-    if (value && index < length - 1) {
-      inputRefs.current[index + 1]?.focus()
-    }
+  const commit = (next: string[]) => {
+    const joined = next.join('')
+    const filled = next.every(c => c !== '')
+    onChange(filled ? joined : null)
+    if (filled) onCompleted?.(joined)
   }
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus()
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
+    const digit = e.target.value.replace(/\D/g, '').slice(-1) // last numeric
+    if (!digit) return
+
+    const next = [...chars]
+    next[idx] = digit
+    commit(next)
+
+    if (idx < length - 1) inputRefs.current[idx + 1]?.focus()
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, idx: number) => {
+    if (e.key === 'Backspace' && !chars[idx] && idx > 0) {
+      inputRefs.current[idx - 1]?.focus()
     }
   }
 
@@ -47,30 +55,26 @@ export const useOtp = (
         text = await navigator.clipboard.readText()
       }
 
-      if (!text) return
+      const digits = text.replace(/\D/g, '').slice(0, length).split('')
+      if (!digits.length) return
 
-      const pastedOtp = text.slice(0, length).split('')
+      const next = [...chars]
+      digits.forEach((d, i) => (next[i] = d))
+      commit(next)
 
-      const newOtp = [...otp]
-      pastedOtp.forEach((char, index) => {
-        newOtp[index] = char
-      })
-
-      setOtp(newOtp)
-      onValueChange?.(newOtp.join(''))
-
-      if (newOtp.length === length) {
-        onCompleted?.(newOtp.join(''))
-      }
-
-      const lastFilledIndex = pastedOtp.length - 1
-      if (lastFilledIndex < length) {
-        inputRefs.current[lastFilledIndex]?.focus()
-      }
+      const firstEmpty = next.findIndex(c => !c)
+      const idx = firstEmpty === -1 ? length - 1 : firstEmpty
+      inputRefs.current[idx]?.focus()
     } catch (err) {
-      console.error('Failed to read clipboard contents: ', err)
+      console.error('Clipboard read failed', err)
     }
   }
 
-  return { otp, handleChange, handleKeyDown, handlePaste, inputRefs }
+  return {
+    chars,
+    handleChange,
+    handleKeyDown,
+    handlePaste,
+    inputRefs,
+  }
 }
