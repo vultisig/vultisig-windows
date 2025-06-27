@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 
 const staleTime = 30_000
 
-export const useRujiBalance = (address?: string) =>
+export const useRujiBalanceQuery = (address: string) =>
   useQuery({
     queryKey: ['rujiBalance', address],
     enabled: !!address,
