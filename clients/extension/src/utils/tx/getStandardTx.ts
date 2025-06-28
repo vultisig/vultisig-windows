@@ -36,6 +36,11 @@ const transactionHandlers: TransactionHandlers = {
         }
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
+        const formattedMessage = JSON.stringify(message.value.msg)
+          .replace(/^({)/, '$1 ')
+          .replace(/(})$/, ' $1')
+          .replace(/:/g, ': ')
+
         return {
           asset: {
             chain: chain,
@@ -47,7 +52,7 @@ const transactionHandlers: TransactionHandlers = {
           },
           from: message.value.sender,
           to: message.value.contract,
-          memo: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${message.value.msg}`,
+          data: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${formattedMessage}`,
         }
       },
     })
