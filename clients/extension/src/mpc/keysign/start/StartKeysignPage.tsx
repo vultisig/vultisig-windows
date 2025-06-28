@@ -10,8 +10,11 @@ import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { useMemo } from 'react'
 
+import { initializeMessenger } from '../../../messengers/initializeMessenger'
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
+
+const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
 export const StartKeysignPage = () => {
   const currentVaultId = useAssertCurrentVaultId()
@@ -32,21 +35,18 @@ export const StartKeysignPage = () => {
 
         const txResult = getLastItem(txResults)
 
-        updateTransaction(
-          {
-            transaction: {
-              ...transaction,
-              status: 'success',
-              ...txResult,
-            },
-            vaultId: currentVaultId,
+        updateTransaction({
+          transaction: {
+            ...transaction,
+            status: 'success',
+            ...txResult,
           },
-          {
-            onSuccess: () => {
-              window.close()
-            },
-          }
-        )
+          vaultId: currentVaultId,
+        })
+
+        backgroundMessenger.send(`tx_result_${transaction.id}`, {
+          ...txResult,
+        })
       },
     }),
     [currentVaultId, isDAppSigning, transactions, updateTransaction]

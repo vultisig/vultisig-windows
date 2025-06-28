@@ -28,6 +28,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
 type KeysignSigningStepProps = Partial<OnBackProp>
@@ -37,6 +38,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const { version } = useCore()
   const navigate = useCoreNavigate()
   const payload = useKeysignMessagePayload()
+  const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -48,7 +50,8 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
       success={txResults => {
         const txResult = getLastItem(txResults)
 
-        const handleFinish = () => navigate({ id: 'vault' })
+        const handleFinish = () =>
+          isDAppSigning ? window.close() : navigate({ id: 'vault' })
 
         return (
           <>
