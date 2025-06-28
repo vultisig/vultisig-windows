@@ -57,7 +57,8 @@ export const KeygenFlow = ({
         const renderEnding = () => {
           if (isPluginReshare && onFinish) {
             onFinish()
-          } else if (hasServer(vault.signers)) {
+          }
+          if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
           }
 
