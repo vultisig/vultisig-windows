@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
+import { Coin, getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
@@ -66,7 +66,8 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
-  const [{ coin }] = useCoreViewState<'deposit'>()
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const coin = getCoinFromCoinKey(coinKey)
 
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
@@ -93,6 +94,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   const selectedCoin = getValues('selectedCoin') as Coin | null
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
+  const isRujiUnmergeAction = selectedChainAction === 'unmerge_ruji'
 
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
@@ -157,13 +159,18 @@ export const DepositForm: FC<DepositFormProps> = ({
               {fieldsForChainAction.map(field => {
                 const showBalance =
                   field.name === 'amount' &&
-                  ['bond', 'ibc_transfer', 'switch', 'merge', 'stake'].includes(
-                    selectedChainAction
-                  )
+                  [
+                    'bond',
+                    'ibc_transfer',
+                    'switch',
+                    'merge',
+                    'stake',
+                    'unmerge_ruji',
+                  ].includes(selectedChainAction)
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
-                  : isTCYAction
+                  : isTCYAction || isRujiUnmergeAction
                     ? 0
                     : totalTokenAmount.toFixed(2)
 
@@ -171,7 +178,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge' &&
                   !isTCYAction
-                    ? (selectedCoin?.ticker ?? coin.id)
+                    ? selectedCoin?.ticker || coin?.ticker
                     : ''
 
                 return (
