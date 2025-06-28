@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -20,7 +19,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
@@ -29,20 +28,17 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
-type KeysignSigningStepProps = Partial<OnBackProp> &
-  Partial<OnFinishProp<TxResult>>
+type KeysignSigningStepProps = Partial<OnBackProp>
 
-export const KeysignSigningStep = ({
-  onBack,
-  onFinish,
-}: KeysignSigningStepProps) => {
+export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { client, version } = useCore()
+  const { version } = useCore()
   const navigate = useCoreNavigate()
-  const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
   const payload = useKeysignMessagePayload()
+  const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -55,7 +51,7 @@ export const KeysignSigningStep = ({
         const txResult = getLastItem(txResults)
 
         const handleFinish = () =>
-          isDAppSigning ? onFinish(txResult) : navigate({ id: 'vault' })
+          isDAppSigning ? window.close() : navigate({ id: 'vault' })
 
         return (
           <>
@@ -132,13 +128,9 @@ export const KeysignSigningStep = ({
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                     </PageContent>
-                    {isDAppSigning && (
-                      <PageFooter>
-                        <Button onClick={() => onFinish(txResult)}>
-                          {t('complete')}
-                        </Button>
-                      </PageFooter>
-                    )}
+                    <PageFooter>
+                      <Button onClick={handleFinish}>{t('complete')}</Button>
+                    </PageFooter>
                   </>
                 ),
               }}
