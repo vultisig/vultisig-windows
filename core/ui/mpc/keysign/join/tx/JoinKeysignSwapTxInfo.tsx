@@ -7,7 +7,7 @@ import {
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
 import { ValueProp } from '@lib/ui/props'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { assertField } from '@lib/utils/record/assertField'
@@ -21,10 +21,10 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
 
   const { t } = useTranslation()
 
-  const action = withoutUndefined([
-    erc20ApprovePayload ? t('approve') : undefined,
-    t('swap'),
-  ]).join(` ${t('and')} `)
+  const action = without(
+    [erc20ApprovePayload ? t('approve') : undefined, t('swap')],
+    undefined
+  ).join(` ${t('and')} `)
 
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
 

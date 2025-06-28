@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
+import { without } from '@lib/utils/array/without'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -54,8 +54,10 @@ export const getPreSigningHashes = ({
   assertErrorMessage(output.errorMessage)
 
   if ('hashPublicKeys' in output) {
-    return withoutNullOrUndefined(
-      output.hashPublicKeys.map(hash => hash?.dataHash)
+    return without(
+      output.hashPublicKeys.map(hash => hash?.dataHash),
+      null,
+      undefined
     )
   }
 
