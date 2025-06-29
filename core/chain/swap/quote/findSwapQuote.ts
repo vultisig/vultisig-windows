@@ -61,8 +61,7 @@ export const findSwapQuote = ({
 
   if (
     isOneOf(fromChain, kyberSwapEnabledChains) &&
-    isOneOf(toChain, kyberSwapEnabledChains) &&
-    fromChain === toChain
+    isOneOf(toChain, kyberSwapEnabledChains)
   ) {
     fetchers.push(async (): Promise<SwapQuote> => {
       const general = await getKyberSwapQuote({

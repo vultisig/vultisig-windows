@@ -5,6 +5,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 
 import { AccountCoin } from '../../../../coin/AccountCoin'
 import { isFeeCoin } from '../../../../coin/utils/isFeeCoin'
+import { defaultEvmSwapGasLimit } from '../../../../tx/fee/evm/evmGasLimit'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 import { KyberSwapEnabledChain } from '../chains'
 import {
@@ -93,7 +94,7 @@ export const getKyberSwapTx = async ({
     throw new Error('Failed to build transaction')
   }
 
-  const { amountOut, data, gas } = buildResponse.data
+  const { amountOut, data } = buildResponse.data
 
   return {
     dstAmount: amountOut,
@@ -105,7 +106,7 @@ export const getKyberSwapTx = async ({
         data,
         value: isFeeCoin(from) ? amount.toString() : '0',
         gasPrice: routeSummary?.gasPrice || '0',
-        gas: parseInt(gas),
+        gas: defaultEvmSwapGasLimit,
       },
     },
   }
