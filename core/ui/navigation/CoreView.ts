@@ -81,3 +81,6 @@ export type CoreViewId = CoreView['id']
 export const initialCoreView: CoreView = {
   id: 'vault',
 }
+
+export type CoreViewState<T extends CoreView['id']> =
+  Extract<CoreView, { id: T }> extends { state: infer S } ? S : never
