@@ -6,11 +6,11 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getPersistentState } from '../state/persistent/getPersistentState'
 import { setPersistentState } from '../state/persistent/setPersistentState'
-import { AccountsProps, PluginRequestProps } from './interfaces'
+import { AccountsProps, PluginRequestUnion } from './interfaces'
 
 type StoredRequestType = {
   accounts?: AccountsProps
-  plugin?: PluginRequestProps
+  plugin?: PluginRequestUnion
 }
 
 type StoredRequestKey = keyof StoredRequestType
