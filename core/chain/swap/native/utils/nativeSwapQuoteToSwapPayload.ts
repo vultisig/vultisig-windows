@@ -7,9 +7,12 @@ import { THORChainSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { addMinutes } from 'date-fns'
 
-import { nativeSwapDecimals } from '../../config'
-import { nativeSwapStreamingInterval } from '../../NativeSwapChain'
-import { NativeSwapQuote } from '../../NativeSwapQuote'
+import { nativeSwapDecimals } from '../config'
+import {
+  nativeSwapPayloadCase,
+  nativeSwapStreamingInterval,
+} from '../NativeSwapChain'
+import { NativeSwapQuote } from '../NativeSwapQuote'
 
 type Input = {
   quote: NativeSwapQuote
@@ -18,7 +21,7 @@ type Input = {
   amount: bigint
 }
 
-export const thorchainSwapQuoteToSwapPayload = ({
+export const nativeSwapQuoteToSwapPayload = ({
   quote,
   fromCoin,
   amount,
@@ -29,7 +32,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
   const streamingInterval = nativeSwapStreamingInterval[quote.swapChain]
 
   return {
-    case: 'thorchainSwapPayload',
+    case: nativeSwapPayloadCase[quote.swapChain],
     value: create(THORChainSwapPayloadSchema, {
       fromAddress: fromCoin.address,
       fromCoin: toCommCoin(fromCoin),

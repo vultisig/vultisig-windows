@@ -180,7 +180,7 @@ export const getKeysignPayload = (
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
           toAmount: BigInt(
-            parseInt(String(transaction.transactionDetails.amount?.amount))
+            parseInt(transaction.transactionDetails.amount?.amount ?? '0')
           ).toString(),
           memo: modifiedMemo ?? transaction.transactionDetails.data,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,

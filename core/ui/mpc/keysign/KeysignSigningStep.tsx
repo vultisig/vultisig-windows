@@ -1,6 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -21,7 +19,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
@@ -29,20 +27,18 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type KeysignSigningStepProps = {
-  payload: KeysignMessagePayload
-} & Partial<OnBackProp> &
-  Partial<OnFinishProp<TxResult>>
+import { TxHashProvider } from '../../chain/state/txHash'
+import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
+import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
-export const KeysignSigningStep = ({
-  onBack,
-  payload,
-  onFinish,
-}: KeysignSigningStepProps) => {
+type KeysignSigningStepProps = Partial<OnBackProp>
+
+export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { client, version } = useCore()
+  const { version } = useCore()
   const navigate = useCoreNavigate()
-  const isDAppSigning = client === 'extension' && typeof onFinish === 'function'
+  const payload = useKeysignMessagePayload()
+  const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -55,7 +51,7 @@ export const KeysignSigningStep = ({
         const txResult = getLastItem(txResults)
 
         const handleFinish = () =>
-          isDAppSigning ? onFinish(txResult) : navigate({ id: 'vault' })
+          isDAppSigning ? window.close() : navigate({ id: 'vault' })
 
         return (
           <>
@@ -99,13 +95,14 @@ export const KeysignSigningStep = ({
                         <>
                           <PageContent alignItems="center" scrollable>
                             <VStack gap={16} maxWidth={576} fullWidth>
-                              <KeysignTxOverview
-                                txHash={normalizeTxHash(txResult.txHash, {
+                              <TxHashProvider
+                                value={normalizeTxHash(txResult.txHash, {
                                   memo: payload?.memo,
                                   chain: payload?.coin?.chain as Chain,
                                 })}
-                                value={payload}
-                              />
+                              >
+                                <KeysignTxOverview />
+                              </TxHashProvider>
                             </VStack>
                           </PageContent>
                           <PageFooter alignItems="center">
@@ -131,13 +128,9 @@ export const KeysignSigningStep = ({
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                     </PageContent>
-                    {isDAppSigning && (
-                      <PageFooter>
-                        <Button onClick={() => onFinish(txResult)}>
-                          {t('complete')}
-                        </Button>
-                      </PageFooter>
-                    )}
+                    <PageFooter>
+                      <Button onClick={handleFinish}>{t('complete')}</Button>
+                    </PageFooter>
                   </>
                 ),
               }}
