@@ -10,6 +10,8 @@ export const it = {
   onboarding_description_4:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
+  incorrect_passcode: 'Codice errato',
+  passcodes_do_not_match: 'I codici non corrispondono',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
   digit_input_success_validation: 'Verifica riuscita',
