@@ -358,6 +358,7 @@ export const en = {
   failed_to_start_keysign: 'Failed to start Keysign',
   devices_list_title: 'With those Vault Shares',
   share: 'Share',
+  incorrect_passcode: 'Incorrect passcode',
   change_vault: 'Change Vault',
   read_msg: 'Reading keysign message...',
   read_msg_failed: 'Failed to read keysign message',
