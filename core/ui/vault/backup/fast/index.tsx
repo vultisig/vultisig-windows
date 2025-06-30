@@ -2,9 +2,9 @@ import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import {
-  DigitGroupInput,
-  DigitGroupInputProps,
-} from '@lib/ui/inputs/DigitGroupInput'
+  MultiCharacterInput,
+  MultiCharacterInputProps,
+} from '@lib/ui/inputs/MultiCharacterInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -13,10 +13,11 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const onCompleteDelay = 1000
+const emailConfirmationCodeLength = 4
 
 export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   const [input, setInput] = useState<string | null>('')
@@ -40,13 +41,22 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
     }
   }, [isSuccess, onFinish])
 
-  const inputState: DigitGroupInputProps['validation'] = isSuccess
-    ? 'valid'
-    : isPending
-      ? 'loading'
-      : error
-        ? 'invalid'
-        : 'idle'
+  useEffect(() => {
+    if (
+      input?.length === emailConfirmationCodeLength &&
+      !isPending &&
+      !isSuccess
+    ) {
+      mutate(input)
+    }
+  }, [error, input, isPending, isSuccess, mutate])
+
+  const inputState = useMemo<MultiCharacterInputProps['validation']>(() => {
+    if (isSuccess) return 'valid'
+    if (isPending) return 'loading'
+    if (error) return 'invalid'
+    return 'idle'
+  }, [isSuccess, isPending, error])
 
   return (
     <VStack fullHeight>
@@ -68,11 +78,11 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
           </Text>
         </VStack>
         <VStack gap={4}>
-          <DigitGroupInput
+          <MultiCharacterInput
             value={input}
             onChange={value => setInput(value)}
             validation={inputState}
-            onCompleted={value => mutate(value)}
+            length={emailConfirmationCodeLength}
           />
         </VStack>
       </PageContent>

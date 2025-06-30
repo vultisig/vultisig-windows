@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { DigitGroupInput } from '.'
+import { MultiCharacterInput } from '.'
 
-const meta: Meta<typeof DigitGroupInput> = {
-  title: 'Foundation/Inputs/DigitGroupInput',
-  component: DigitGroupInput,
+const meta: Meta<typeof MultiCharacterInput> = {
+  title: 'Foundation/Inputs/MultiCharacterInput',
+  component: MultiCharacterInput,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
@@ -23,7 +23,6 @@ const meta: Meta<typeof DigitGroupInput> = {
     includePasteButton: { control: 'boolean' },
     autoFocusFirst: { control: 'boolean' },
     onChange: { action: 'value change' },
-    onCompleted: { action: 'completed' },
   },
   args: {
     length: 4,
@@ -79,14 +78,7 @@ export const ControlledExample: Story = {
 
     return (
       <>
-        <DigitGroupInput
-          {...args}
-          value={value}
-          onChange={setValue}
-          onCompleted={val => {
-            console.log('Completed:', val)
-          }}
-        />
+        <MultiCharacterInput {...args} value={value} onChange={setValue} />
         <p style={{ marginTop: 16, fontFamily: 'monospace' }}>
           Current value: {value ?? 'null'}
         </p>

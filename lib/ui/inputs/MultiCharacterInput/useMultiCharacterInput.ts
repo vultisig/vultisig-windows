@@ -7,19 +7,17 @@ import {
   useState,
 } from 'react'
 
-type UseOtpArgs = {
+type UseMultiCharacterInputArgs = {
   length: number
   value: string | null
   onChange: (v: string | null) => void
-  onCompleted?: (v: string) => void
 }
 
-export const useMultiDigitInput = ({
+export const useMultiCharacterInput = ({
   length,
   value,
   onChange,
-  onCompleted,
-}: UseOtpArgs) => {
+}: UseMultiCharacterInputArgs) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   const [digits, setDigits] = useState<string[]>(() => {
@@ -34,10 +32,8 @@ export const useMultiDigitInput = ({
 
   const commit = (next: string[]) => {
     setDigits(next)
-
     const joined = next.join('')
     onChange(next.some(d => d) ? joined : null)
-    if (next.every(d => d)) onCompleted?.(joined)
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
