@@ -12,6 +12,9 @@ export const it = {
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  digit_input_success_validation: 'Verifica riuscita',
+  digit_input_error_validation: 'Errore nella verifica del codice, riprova',
+  digit_input_loading_validation: 'Verifica del codice in corso, attendere',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
