@@ -10,41 +10,37 @@ import styled, { css } from 'styled-components'
 import { Spinner } from '../../loaders/Spinner'
 import { InputProps, UiProps } from '../../props'
 import { Text } from '../../text'
-import { useMultiDigitInput } from './useMultiDigitInput'
+import { useMultiCharacterInput } from './useMultiCharacterInput'
 
 type DigitGroupInputValidationState = 'invalid' | 'valid' | 'idle' | 'loading'
 type ValidationMessages = Partial<
   Record<Exclude<DigitGroupInputValidationState, 'idle'>, string>
 >
 
-export type DigitGroupInputProps = InputProps<string | null> &
+export type MultiCharacterInputProps = InputProps<string | null> &
   Pick<UiProps, 'className'> & {
-    length?: number
+    length: number
     validation?: DigitGroupInputValidationState
     includePasteButton?: boolean
     autoFocusFirst?: boolean
     isValidating?: boolean
-    onCompleted?: (finalValue: string) => void
     validationMessages?: ValidationMessages
   }
 
-const defaultLength = 4
-
-export const DigitGroupInput = ({
-  length = defaultLength,
+export const MultiCharacterInput = ({
+  length,
   value,
   validationMessages = {},
   onChange,
-  onCompleted,
   validation = 'idle',
   includePasteButton = true,
   autoFocusFirst = true,
   className,
   ...rest
-}: DigitGroupInputProps) => {
+}: MultiCharacterInputProps) => {
   const { t } = useTranslation()
   const { digits, handleChange, handleKeyDown, handlePaste, inputRefs } =
-    useMultiDigitInput({ length, value, onChange, onCompleted })
+    useMultiCharacterInput({ length, value, onChange })
 
   const isDisabled = validation === 'loading'
 
