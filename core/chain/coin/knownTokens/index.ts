@@ -553,6 +553,26 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       decimals: 18,
     },
   },
+  [Chain.Zksync]: {
+    '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4': {
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+    },
+    '0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4': {
+      ticker: 'USDC.e',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+    },
+    '0x5A7d6A42eA5632bD2A2e8D5eAEb7bA7e7Eaf3E': {
+      ticker: 'ZK',
+      logo: 'zk',
+      decimals: 18,
+      priceProviderId: 'zksync',
+    },
+  },
   ...knownCosmosTokens,
 }
 
