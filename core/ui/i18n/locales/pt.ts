@@ -900,7 +900,6 @@ export const pt = {
   off: 'Desligado',
   enter_passcode: 'Digite a senha',
   confirm_passcode: 'Confirmar senha',
-  passcodes_do_not_match: 'As senhas não correspondem',
   set_passcode: 'Definir senha',
   encrypting_vault_keyshares:
     'Criptografando compartilhamentos de chaves do cofre...',

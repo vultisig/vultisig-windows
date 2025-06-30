@@ -908,7 +908,6 @@ export const it = {
   off: 'Spento',
   enter_passcode: 'Inserisci il codice di accesso',
   confirm_passcode: 'Conferma codice di accesso',
-  passcodes_do_not_match: 'I codici di accesso non corrispondono',
   set_passcode: 'Imposta codice di accesso',
   encrypting_vault_keyshares:
     'Crittografia delle condivisioni delle chiavi del vault...',
