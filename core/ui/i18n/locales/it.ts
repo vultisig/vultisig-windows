@@ -514,7 +514,6 @@ export const it = {
     passwordCannotBeRecovered:
       'La password non può essere reimpostata o recuperata',
     confirmPasswordIsRequired: 'Conferma password richiesta',
-    passwordDoNotMatch: 'Le password non corrispondono',
     hintEmpty: 'Suggerimento vuoto',
     addOptionalHint: 'Aggiungi suggerimento opzionale',
     hintDescription:
@@ -927,4 +926,27 @@ export const it = {
   address_book_vault: 'I miei caveau',
   paste: 'Impasto',
   failed_to_generate_join_url: 'Impossibile generare il codice QR',
+  connecting_to_verifier: 'Connessione al verificatore',
+  connecting_to_plugin: 'Connessione al plugin',
+  confirm: 'Confermare',
+  enter_your_password: 'Inserisci la tua password',
+  go_to_wallet: 'Vai al portafoglio',
+  install_plugin: 'Installa il plugin',
+  installing_plugin: 'Installazione del plugin',
+  plugin_info: 'Informazioni sul plugin',
+  plugin_info_desc: 'Stai installando il plugin {{name}}',
+  plugin_success_desc: "L'installazione di {{name}} è completata",
+  plugin_password_desc:
+    "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione del plugin",
+  plugin_policy: 'Revisione delle politiche',
+  plugin_policy_desc:
+    'Il verificatore controllerà sempre che solo queste policy vengano eseguite, garantendoti la sicurezza che solo i dati autorizzati verranno firmati.',
+  plugin_policy_heading: 'Questo plugin accederà automaticamente',
+  password_do_not_match: 'Le password non corrispondono',
+  password_pattern_error:
+    'La password deve essere compresa tra {{min}} e {{max}} caratteri',
+  success: 'Successo',
+  failed_to_process_plugin_install:
+    "Impossibile elaborare l'installazione del plugin",
+  hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
 }
