@@ -51,7 +51,7 @@ export const SwapKeysignTxOverview = ({
   } = getRecordUnionValue(swapPayload)
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
-  const { chain } = shouldBePresent(toCoin)
+  const { chain: sourceChain } = shouldBePresent(fromCoin)
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
@@ -61,16 +61,16 @@ export const SwapKeysignTxOverview = ({
     if (!blockchainSpecific.value) return null
 
     return formatFee({
-      chain: chain as Chain,
+      chain: sourceChain as Chain,
       chainSpecific: blockchainSpecific,
     })
-  }, [blockchainSpecific, chain])
+  }, [blockchainSpecific, sourceChain])
 
   const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
     swapPayload,
     {
       native: ({ chain }) => chain,
-      general: () => chain,
+      general: () => sourceChain,
     }
   )
 
@@ -113,7 +113,7 @@ export const SwapKeysignTxOverview = ({
             <TrackTxPrompt
               title={t('approval_tx')}
               value={txHashes[0]}
-              chain={chain}
+              chain={sourceChain}
             />
           )}
           <HStack fullWidth justifyContent="space-between" alignItems="center">
