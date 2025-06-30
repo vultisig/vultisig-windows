@@ -12,6 +12,9 @@ export const en = {
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
+  digit_input_success_validation: 'Verification succesful',
+  digit_input_error_validation: 'Error verifying code, please re-try',
+  digit_input_loading_validation: 'Verifying code, please wait',
   plugin_policy_desc:
     'The verifier will always check that only these policies get executed. Giving you the security that only the authorized will get signed.',
   plugin_policy_heading: 'This plugin will automatically access',

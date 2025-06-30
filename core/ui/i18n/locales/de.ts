@@ -1,5 +1,9 @@
 export const de = {
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
+  digit_input_success_validation: 'Verifizierung erfolgreich',
+  digit_input_error_validation:
+    'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
+  digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
   onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
