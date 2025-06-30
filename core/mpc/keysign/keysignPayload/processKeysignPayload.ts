@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
-import { EvmChain, UtxoChain } from '@core/chain/Chain'
+import { EvmChain, OtherChain, UtxoChain } from '@core/chain/Chain'
+import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getErc20Allowance } from '@core/chain/chains/evm/erc20/getErc20Allowance'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { assertChainField } from '@core/chain/utils/assertChainField'
@@ -43,6 +44,8 @@ export const processKeysignPayload = async (
 
   if (isOneOf(chain, Object.values(UtxoChain))) {
     result.utxoInfo = await getUtxos(assertChainField(coin))
+  } else if (chain === OtherChain.Cardano) {
+    result.utxoInfo = await getCardanoUtxos(coin.address)
   }
 
   return result

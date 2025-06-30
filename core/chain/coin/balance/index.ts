@@ -1,5 +1,6 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
+import { getCardanoCoinBalance } from './cardano'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 import { getCosmosCoinBalance } from './cosmos'
 import { getEvmCoinBalance } from './evm'
@@ -21,6 +22,7 @@ const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   polkadot: getPolkadotCoinBalance,
   solana: getSolanaCoinBalance,
   tron: getTronCoinBalance,
+  cardano: getCardanoCoinBalance,
 }
 
 export const getCoinBalance: CoinBalanceResolver = async input => {
