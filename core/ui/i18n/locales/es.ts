@@ -14,6 +14,7 @@ export const es = {
   onboarding_description_4:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
+  incorrect_passcode: 'Código incorrecto',
   moreInfo: 'Más información',
   gas_limit_tooltip_content:
     'La cantidad máxima de gas que pagarás. Puede aumentarse si el límite de gas no es suficiente para enviar transacciones.',

@@ -14,6 +14,8 @@ export const de = {
   onboarding_description_4:
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   moreInfo: 'Mehr Info',
+  incorrect_passcode: 'Falscher Passcode',
+  passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   tx_hash: 'Transaktions-Hash',
   send_overview: 'Übersicht senden',
@@ -914,7 +916,6 @@ export const de = {
   off: 'Aus',
   enter_passcode: 'Passcode eingeben',
   confirm_passcode: 'Passcode bestätigen',
-  passcodes_do_not_match: 'Die Passwörter stimmen nicht überein',
   set_passcode: 'Passcode festlegen',
   encrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden verschlüsselt …',
   decrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden entschlüsselt …',
