@@ -13,7 +13,7 @@ import { StartKeysignPromptProps } from './StartKeysignPromptProps'
 
 const clickDurationThreshold: Milliseconds = 300
 const registerPressDelay: Milliseconds = 200
-const requiredPressDuration: Milliseconds = 1500
+const requiredPressDuration: Milliseconds = 1600
 
 const Container = styled(Button)`
   position: relative;
@@ -28,7 +28,7 @@ const Fill = styled.div`
   pointer-events: none;
   background: ${getColor('mistExtra')};
   width: 0%;
-  animation: fillProgress ${requiredPressDuration}ms linear
+  animation: fillProgress ${requiredPressDuration - registerPressDelay}ms linear
     ${registerPressDelay}ms forwards;
 
   @keyframes fillProgress {
