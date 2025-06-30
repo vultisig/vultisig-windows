@@ -1,32 +1,39 @@
+import {
+  DigitGroupInput,
+  DigitGroupInputProps,
+} from '@lib/ui/inputs/DigitGroupInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { OTPInput, OTPInputProps } from '@lib/ui/inputs/OTPInput'
 import { InputProps, LabelProp } from '@lib/ui/props'
 
 import { passcodeEncryptionConfig } from '../core/config'
 
-type PasscodeInputProps = Omit<InputProps<string | null>, 'value'> &
+type PasscodeInputProps = InputProps<string | null> &
   Partial<LabelProp> &
-  Partial<Pick<OTPInputProps, 'validation'>>
+  Partial<Pick<DigitGroupInputProps, 'validation' | 'validationMessages'>>
 
 export const PasscodeInput = ({
+  value,
   onChange,
   label,
   validation,
+  validationMessages,
 }: PasscodeInputProps) => {
   return (
     <>
       {label && <InputLabel>{label}</InputLabel>}
-      <OTPInput
+      <DigitGroupInput
+        value={value}
         length={passcodeEncryptionConfig.passcodeLength}
         onCompleted={value => onChange(value)}
-        onValueChange={value =>
+        onChange={newValue =>
           onChange(
-            value.length === passcodeEncryptionConfig.passcodeLength
-              ? value
+            newValue?.length === passcodeEncryptionConfig.passcodeLength
+              ? newValue
               : null
           )
         }
         validation={validation}
+        validationMessages={validationMessages}
         includePasteButton={false}
       />
     </>
