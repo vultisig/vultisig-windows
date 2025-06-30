@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next'
 import { initializeMessenger } from '../../messengers/initializeMessenger'
 import api from '../../utils/api'
 import { getStoredPendingRequest } from '../../utils/pendingRequests'
-import { match } from 'assert'
 
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
@@ -23,7 +22,7 @@ export const PluginReshareMutation = ({
   const { mutate: processPluginReshare, ...mutationState } = useMutation({
     mutationFn: async (joinUrl: string) => {
       const request = await getStoredPendingRequest('plugin')
-      if (!request || request.type === 'PluginCreatePolicy') {
+      if (!request) {
         throw new Error('No plugin reshare request found')
       }
       const pluginInfo = await api.plugin.fetchPluginInfo(request.payload.id)
