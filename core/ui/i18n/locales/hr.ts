@@ -889,7 +889,6 @@ export const hr = {
   off: 'Isključeno',
   enter_passcode: 'Unesite lozinku',
   confirm_passcode: 'Potvrdite lozinku',
-  passcodes_do_not_match: 'Lozinke se ne podudaraju',
   set_passcode: 'Postavi lozinku',
   encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',
   decrypting_vault_keyshares: 'Dešifriranje dijeljenja ključeva trezora...',
