@@ -10,6 +10,8 @@ export const hr = {
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
+  incorrect_passcode: 'Netočan pristupni kod',
+  passcodes_do_not_match: 'Kodovi se ne podudaraju',
   tx_hash: 'Hash transakcije',
   digit_input_success_validation: 'Verifikacija uspješna',
   digit_input_error_validation: 'Pogreška pri provjeri koda, pokušajte ponovno',
