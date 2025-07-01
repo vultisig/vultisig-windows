@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -8,7 +7,6 @@ import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningSta
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
-import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -95,12 +93,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                         <>
                           <PageContent alignItems="center" scrollable>
                             <VStack gap={16} maxWidth={576} fullWidth>
-                              <TxHashProvider
-                                value={normalizeTxHash(txResult.txHash, {
-                                  memo: payload?.memo,
-                                  chain: payload?.coin?.chain as Chain,
-                                })}
-                              >
+                              <TxHashProvider value={txResult.txHash}>
                                 <KeysignTxOverview />
                               </TxHashProvider>
                             </VStack>
