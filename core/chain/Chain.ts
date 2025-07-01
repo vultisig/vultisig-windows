@@ -71,6 +71,7 @@ export enum OtherChain {
   Ton = 'Ton',
   Ripple = 'Ripple',
   Tron = 'Tron',
+  Cardano = 'Cardano',
 }
 
 export const Chain = {
@@ -81,3 +82,7 @@ export const Chain = {
 } as const
 
 export type Chain = (typeof Chain)[keyof typeof Chain]
+
+export const UtxoBasedChain = [...Object.values(UtxoChain), OtherChain.Cardano]
+
+export type UtxoBasedChain = (typeof UtxoBasedChain)[number]
