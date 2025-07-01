@@ -57,7 +57,7 @@ const StyledButton = styled(UnstyledButton)<{
             `
           : css`
               background-color: transparent;
-              color: ${getColor('textPrimary')};
+              color: ${getColor('text')};
 
               &:hover {
                 ${match(status, {
@@ -65,13 +65,13 @@ const StyledButton = styled(UnstyledButton)<{
                     color: ${getColor('buttonPrimaryHover')};
                   `,
                   danger: () => css`
-                    color: ${getColor('alertError')};
+                    color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    color: ${getColor('alertSuccess')};
+                    color: ${getColor('success')};
                   `,
                   warning: () => css`
-                    color: ${getColor('alertWarning')};
+                    color: ${getColor('idle')};
                   `,
                 })}
               }
@@ -104,20 +104,20 @@ const StyledButton = styled(UnstyledButton)<{
               cursor: default;
             `
           : css`
-              color: ${getColor('textPrimary')};
+              color: ${getColor('text')};
 
               ${match(status, {
                 default: () => css`
                   background-color: ${getColor('buttonPrimary')};
                 `,
                 danger: () => css`
-                  background-color: ${getColor('alertError')};
+                  background-color: ${getColor('danger')};
                 `,
                 success: () => css`
-                  background-color: ${getColor('alertSuccess')};
+                  background-color: ${getColor('success')};
                 `,
                 warning: () => css`
-                  background-color: ${getColor('alertWarning')};
+                  background-color: ${getColor('idle')};
                 `,
               })}
 
@@ -127,13 +127,13 @@ const StyledButton = styled(UnstyledButton)<{
                     background-color: ${getColor('buttonPrimaryHover')};
                   `,
                   danger: () => css`
-                    background-color: ${getColor('alertError')};
+                    background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('alertSuccess')};
+                    background-color: ${getColor('success')};
                   `,
                   warning: () => css`
-                    background-color: ${getColor('alertWarning')};
+                    background-color: ${getColor('idle')};
                   `,
                 })}
               }
@@ -167,7 +167,7 @@ const StyledButton = styled(UnstyledButton)<{
             `
           : css`
               background-color: ${getColor('buttonSecondary')};
-              color: ${getColor('textPrimary')};
+              color: ${getColor('text')};
 
               &:hover {
                 ${match(status, {
@@ -175,13 +175,13 @@ const StyledButton = styled(UnstyledButton)<{
                     background-color: ${getColor('buttonSecondaryHover')};
                   `,
                   danger: () => css`
-                    background-color: ${getColor('alertError')};
+                    background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('alertSuccess')};
+                    background-color: ${getColor('success')};
                   `,
                   warning: () => css`
-                    background-color: ${getColor('alertWarning')};
+                    background-color: ${getColor('idle')};
                   `,
                 })}
               }
