@@ -1,6 +1,9 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { rujiMergeDenom } from '@core/chain/chains/thorchain/ruji/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -122,7 +125,15 @@ export const generateMemo = ({
       return `switch:${thorchainAddress}`
     },
     unmerge_ruji: () => {
-      return ''
+      if (!amount) {
+        throw new Error('Amount is required for unmerge')
+      }
+
+      const sharesRaw = toChainAmount(
+        amount,
+        knownCosmosTokens.THORChain['x/ruji'].decimals
+      )
+      return `unmerge:${rujiMergeDenom}:${sharesRaw}`
     },
   })
 }

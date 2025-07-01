@@ -103,6 +103,23 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ]
+        } else if (memo?.startsWith('unmerge:')) {
+          // format: "unmerge:<denom>:<rawShares>"
+          const [, , rawShares] = memo.toLowerCase().split(':')
+
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: JSON.stringify({
+                    withdraw: { share_amount: rawShares },
+                  }),
+                  coins: [],
+                }),
+            }),
+          ]
         } else if (isDeposit) {
           const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
             asset: TW.Cosmos.Proto.THORChainAsset.create({

@@ -16,7 +16,8 @@ export const UnmergeSpecific = () => {
   const coinAddress = useCurrentVaultCoins().find(
     coin => coin.id === coin.id
   )?.address
-  const { data: { ruji: rujiBalance } = {} } = useRujiBalanceQuery(coinAddress)
+  const { data: { shares: rujiBalance } = {} } =
+    useRujiBalanceQuery(coinAddress)
 
   return (
     <VStack gap={12}>
