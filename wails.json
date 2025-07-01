@@ -3,9 +3,8 @@
   "name": "Vultisig",
   "outputfilename": "vultisig",
   "packageManager": "yarn@4.5.2",
-  "workspaces": [
-    "clients/desktop"
-  ],
+  "workspaces": ["clients/desktop"],
+  "devServer": "localhost:8081",
   "frontend:dir": "clients/desktop",
   "frontend:install": "yarn install",
   "frontend:build": "yarn build",
