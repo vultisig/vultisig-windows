@@ -6,7 +6,7 @@ type Status = 'default' | 'error' | 'info' | 'success' | 'warning'
 
 const StyledListItemTag = styled.span<{ status: Status }>`
   align-items: center;
-  background-color: ${getColor('backgroundsSecondary')};
+  background-color: ${getColor('foreground')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 20px;
   display: flex;
@@ -19,23 +19,23 @@ const StyledListItemTag = styled.span<{ status: Status }>`
     switch (status) {
       case 'error':
         return css`
-          color: ${getColor('alertError')};
+          color: ${getColor('danger')};
         `
       case 'info':
         return css`
-          color: ${getColor('alertInfo')};
+          color: ${getColor('primaryAlt')};
         `
       case 'success':
         return css`
-          color: ${getColor('alertSuccess')};
+          color: ${getColor('success')};
         `
       case 'warning':
         return css`
-          color: ${getColor('alertWarning')};
+          color: ${getColor('idle')};
         `
       default:
         return css`
-          color: ${getColor('textPrimary')};
+          color: ${getColor('text')};
         `
     }
   }}
