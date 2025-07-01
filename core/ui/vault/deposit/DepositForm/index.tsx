@@ -110,7 +110,7 @@ export const DepositForm: FC<DepositFormProps> = ({
 
   return (
     <DepositFormHandlersProvider
-      initialValue={{ setValue, getValues, watch, chain }}
+      initialValue={{ setValue, getValues, watch, chain, register }}
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
