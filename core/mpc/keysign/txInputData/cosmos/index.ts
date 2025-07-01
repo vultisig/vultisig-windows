@@ -115,7 +115,37 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             }),
           ],
         }
-      }
+      } else if (memo?.startsWith('unmerge:')) {
+          // format: "unmerge:<denom>:<rawShares>"
+          const [, , rawShares] = memo.toLowerCase().split(':')
+
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: JSON.stringify({
+                    withdraw: { share_amount: rawShares },
+                  }),
+                  coins: [],
+                }),
+            }),
+          ]
+        } else if (isDeposit) {
+          const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
+            asset: TW.Cosmos.Proto.THORChainAsset.create({
+              chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
+              symbol: coin.ticker,
+              ticker: coin.ticker,
+              synth: false,
+            }),
+          })
+          const toAmount = Number(keysignPayload.toAmount || '0')
+          if (toAmount > 0) {
+            depositCoin.amount = keysignPayload.toAmount
+            depositCoin.decimals = new Long(coin.decimals)
+          }
 
       if (isDeposit || getKeysignSwapPayload(keysignPayload)) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({

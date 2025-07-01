@@ -37,6 +37,7 @@ export const DepositConfirmButton = ({
 }: DepositConfirmButtonProps) => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const isTonFunction = coinKey.chain === Chain.Ton
+  const isRUJIUnmerge = action === 'unmerge_ruji'
   const { t } = useTranslation()
   const selectedCoin = depositFormData['selectedCoin']
     ? (depositFormData['selectedCoin'] as AccountCoin)
@@ -45,10 +46,12 @@ export const DepositConfirmButton = ({
     selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
 
-  const isRUJIFunction = coin.ticker === 'RUJI'
-
   const transactionType =
-    action === 'ibc_transfer' ? TransactionType.IBC_TRANSFER : undefined
+    action === 'ibc_transfer'
+      ? TransactionType.IBC_TRANSFER
+      : isRUJIUnmerge
+        ? TransactionType.THOR_UNMERGE
+        : undefined
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType)
   const vault = useCurrentVault()
   const config = transactionConfig(coinKey.chain)[action] || {}
@@ -100,41 +103,41 @@ export const DepositConfirmButton = ({
         'ibc_transfer',
         'switch',
         'merge',
+        'unmerge_ruji',
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
         isTonFunction
           ? validatorAddress
-          : isRUJIFunction
+          : isRUJIUnmerge
             ? rujiContractAddress
             : receiver
       )
     }
 
     if (!isOneOf(action, ['vote'])) {
-      keysignPayload.toAmount = toChainAmount(
-        shouldBePresent(amount),
-        coin.decimals
-      ).toString()
+      keysignPayload.toAmount = isRUJIUnmerge
+        ? '0'
+        : toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     }
 
     return { keysign: keysignPayload }
   }, [
-    chainSpecificQuery.isLoading,
-    chainSpecificQuery.data,
-    coin,
-    walletCore,
-    vault.hexChainCode,
-    vault.publicKeys,
-    vault.localPartyId,
-    vault.libType,
-    memo,
     action,
-    isTonFunction,
-    validatorAddress,
-    isRUJIFunction,
-    receiver,
     amount,
+    chainSpecificQuery.data,
+    chainSpecificQuery.isLoading,
+    coin,
+    isRUJIUnmerge,
+    isTonFunction,
+    memo,
+    receiver,
+    validatorAddress,
+    vault.hexChainCode,
+    vault.libType,
+    vault.localPartyId,
+    vault.publicKeys,
+    walletCore,
   ])
 
   if (
