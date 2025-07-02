@@ -1,8 +1,11 @@
+import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
@@ -14,8 +17,16 @@ const depositSteps = ['form', 'verify'] as const
 
 export const DepositPageController = () => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const coin = shouldBePresent(getCoinFromCoinKey(coinKey))
   const chainActionOptions =
-    chainActionsRecord[coinKey.chain as DepositEnabledChain]
+    chainActionsRecord[coin.chain as DepositEnabledChain]
+
+  const filteredChainActionOptions = chainActionOptions.filter(
+    action =>
+      action !== 'unmerge_ruji' ||
+      (action === 'unmerge_ruji' &&
+        coin.ticker === knownCosmosTokens.THORChain['x/ruji'].ticker)
+  )
 
   const [state, setState] = useState<{
     depositFormData: FieldValues
@@ -51,7 +62,7 @@ export const DepositPageController = () => {
             }))
           }
           onSubmit={handleDepositFormSubmit}
-          chainActionOptions={chainActionOptions}
+          chainActionOptions={filteredChainActionOptions}
           chain={coinKey.chain}
         />
       )}
