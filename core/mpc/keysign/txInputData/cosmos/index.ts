@@ -113,11 +113,16 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   ],
                 }),
             }),
-          ],
-        }
-      } else if (memo?.startsWith('unmerge:')) {
-          // format: "unmerge:<denom>:<rawShares>"
-          const [, , rawShares] = memo.toLowerCase().split(':')
+          ], }
+        } else if (memo?.startsWith('unmerge:')) {
+          const memoParts = memo.toLowerCase().split(':')
+          if (memoParts.length !== 3 || !memoParts[2]) {
+            throw new Error(
+              'Invalid unmerge memo format. Expected: unmerge:<denom>:<rawShares>'
+            )
+          }
+
+          const [, , rawShares] = memoParts
 
           return [
             TW.Cosmos.Proto.Message.create({
