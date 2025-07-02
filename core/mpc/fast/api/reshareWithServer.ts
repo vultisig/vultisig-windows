@@ -12,7 +12,6 @@ type Input = {
   old_parties: string[]
   old_reshare_prefix: string
   encryption_password: string
-  email: string
   reshare_type?: number
   lib_type?: number
 }
