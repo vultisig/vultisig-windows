@@ -84,14 +84,17 @@ export const ChangePasscode = () => {
             gap={14}
           >
             <PasscodeInput
+              value={currentPasscode}
               label={t('current_passcode')}
               onChange={setCurrentPasscode}
             />
             <PasscodeInput
+              value={newPasscode}
               label={t('new_passcode')}
               onChange={setNewPasscode}
             />
             <PasscodeInput
+              value={confirmNewPasscode}
               label={t('confirm_new_passcode')}
               onChange={setConfirmNewPasscode}
             />

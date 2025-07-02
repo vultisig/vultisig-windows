@@ -1,4 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { UtxoBasedChain } from '@core/chain/Chain'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -8,8 +10,8 @@ import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { clampDecimals } from '@lib/utils/number/clampDecimals'
-import { isEqual } from '@lib/utils/number/isEqual'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -118,29 +120,35 @@ export const ManageAmountInputField = () => {
                   gap={4}
                 >
                   {suggestions.map(suggestion => {
-                    const suggestionBaseValue =
-                      suggestion === maxSuggestion
-                        ? fromChainAmount(
-                            amount -
-                              (chainSpecificQuery.data
-                                ? getFeeAmount(chainSpecificQuery.data)
-                                : BigInt(0)),
-                            decimals
-                          )
-                        : fromChainAmount(amount, decimals) * suggestion
+                    let suggestionBaseValue =
+                      fromChainAmount(amount, decimals) * suggestion
+
+                    if (
+                      suggestion === maxSuggestion &&
+                      !isOneOf(coin.chain, Object.values(UtxoBasedChain))
+                    ) {
+                      suggestionBaseValue = fromChainAmount(
+                        amount -
+                          (chainSpecificQuery.data
+                            ? getFeeAmount(chainSpecificQuery.data)
+                            : BigInt(0)),
+                        decimals
+                      )
+                    }
 
                     const suggestionValue =
                       currencyInputMode === 'base'
                         ? suggestionBaseValue
                         : (baseToFiat(suggestionBaseValue, coinPrice) ?? 0)
 
+                    const isActive =
+                      inputValue !== null &&
+                      toChainAmount(inputValue, coin.decimals) ===
+                        toChainAmount(suggestionValue, coin.decimals)
+
                     return (
                       <SuggestionOption
-                        isActive={
-                          inputValue
-                            ? isEqual(inputValue, suggestionValue)
-                            : false
-                        }
+                        isActive={isActive}
                         onClick={() => {
                           const rawValue =
                             currencyInputMode === 'base'
