@@ -2,20 +2,21 @@ import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
-import { useCurrentVaultCoins } from '../../../../state/currentVaultCoins'
+import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useRujiBalanceQuery } from '../../../hooks/useRujiBalanceQuery'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { InputFieldWrapper } from '../../DepositForm.styled'
 
 export const UnmergeSpecific = () => {
+  const { t } = useTranslation()
   const [{ register }] = useDepositFormHandlers()
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coin = getCoinFromCoinKey(coinKey)
-  const coinAddress = useCurrentVaultCoins().find(
-    coin => coin.id === coin.id
-  )?.address
+  const coin = shouldBePresent(getCoinFromCoinKey(coinKey))
+  const coinAddress = shouldBePresent(useCurrentVaultCoin(coinKey)?.address)
   const { data: { shares: rujiBalance } = {} } =
     useRujiBalanceQuery(coinAddress)
 
@@ -23,10 +24,13 @@ export const UnmergeSpecific = () => {
     <VStack gap={12}>
       <InputContainer>
         <Text size={15} weight="400">
-          Amount {coin && `(Balance: ${rujiBalance} RUJI`}
+          {t('amount')}{' '}
+          {coin &&
+            rujiBalance !== undefined &&
+            `(${t('balance')}: ${rujiBalance} RUJI)`}{' '}
           <Text as="span" color="danger" size={14}>
-            *
-          </Text>
+            *{' '}
+          </Text>{' '}
         </Text>
 
         <InputFieldWrapper

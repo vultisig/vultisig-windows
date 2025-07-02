@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { rujiContractAddress } from '@core/chain/chains/thorchain/ruji/config'
+import { rujiContractAddress } from '@core/chain/chains/cosmos/thor/ruji-unmerge/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
@@ -107,12 +107,10 @@ export const DepositConfirmButton = ({
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
-        isTonFunction
-          ? validatorAddress
-          : isRUJIUnmerge
-            ? rujiContractAddress
-            : receiver
+        isTonFunction ? validatorAddress : receiver
       )
+    } else if (isRUJIUnmerge) {
+      keysignPayload.toAddress = rujiContractAddress
     }
 
     if (!isOneOf(action, ['vote'])) {
