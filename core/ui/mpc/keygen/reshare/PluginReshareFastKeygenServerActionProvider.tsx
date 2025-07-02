@@ -3,7 +3,7 @@ import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useVaultPassword } from '@core/ui/state/password'
+import { usePassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
@@ -16,7 +16,7 @@ export const PluginReshareFastKeygenServerActionProvider = ({
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
 
-  const [password] = useVaultPassword()
+  const [password] = usePassword()
 
   const { name, hexChainCode, publicKeys, resharePrefix, signers, libType } =
     useCurrentVault()
