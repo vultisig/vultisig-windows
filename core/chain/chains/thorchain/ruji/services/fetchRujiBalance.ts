@@ -1,5 +1,5 @@
 import { knownCosmosTokens } from '../../../../coin/knownTokens/cosmos'
-import { rujiGraphQlEndpoint } from '../config'
+import { rujiGraphQlEndpoint } from '../../../cosmos/thor/ruji-unmerge/config'
 
 type Gql = {
   data?: {
