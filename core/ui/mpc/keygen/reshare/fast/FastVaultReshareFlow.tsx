@@ -4,31 +4,33 @@ import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/passw
 import { SetServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/SetServerPasswordStep'
 import { FastKeygenFlow } from '@core/ui/mpc/keygen/fast/FastKeygenFlow'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Match } from '@lib/ui/base/Match'
-import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
-const reshareVaultSteps = ['email', 'password', 'keygen'] as const
+import { PasswordProvider } from '../../../../state/password'
 
 export const FastVaultReshareFlow = () => {
-  const { step, toPreviousStep, toNextStep } = useStepNavigation({
-    steps: reshareVaultSteps,
-    onExit: useNavigateBack(),
-  })
   const { signers, localPartyId } = useCurrentVault()
 
   return (
-    <Match
-      value={step}
-      email={() => <ServerEmailStep onFinish={toNextStep} />}
-      password={() =>
-        hasServer(signers) && !isServer(localPartyId) ? (
-          <ServerPasswordStep onFinish={toNextStep} />
-        ) : (
-          <SetServerPasswordStep onFinish={toNextStep} />
-        )
-      }
-      keygen={() => <FastKeygenFlow onBack={toPreviousStep} />}
+    <StepTransition
+      from={({ onFinish }) => <ServerEmailStep onFinish={onFinish} />}
+      to={({ onBack }) => (
+        <ValueTransfer<{ password: string }>
+          from={({ onFinish }) =>
+            hasServer(signers) && !isServer(localPartyId) ? (
+              <ServerPasswordStep onFinish={onFinish} onBack={onBack} />
+            ) : (
+              <SetServerPasswordStep onFinish={onFinish} onBack={onBack} />
+            )
+          }
+          to={({ value: { password }, onBack }) => (
+            <PasswordProvider initialValue={password}>
+              <FastKeygenFlow onBack={onBack} />
+            </PasswordProvider>
+          )}
+        />
+      )}
     />
   )
 }
