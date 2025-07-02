@@ -34,20 +34,6 @@ export const executeTx: ExecuteTxResolver = async input => {
 
   // Perform Blockaid scan with graceful failure for all chains
   let scanResult
-  // TO DELETE LATER
-  // const MOCK_BLOCKAID_WARNING_RESPONSE = {
-  //   data: {
-  //     validation: {
-  //       status: 'Success',
-  //       result_type: 'Warning',
-  //       description: 'This is a simulated Blockaid warning for testing.',
-  //       // You can add more fields if your UI expects them
-  //       classification: 'Suspicious',
-  //       features: [],
-  //       reason: 'Simulated for development',
-  //     },
-  //   },
-  // }
   let scanUnavailable = false
   if (input.rawTx && input.account_address && !input.skipBlockaid) {
     scanResult = await attempt(async () => {
@@ -61,7 +47,6 @@ export const executeTx: ExecuteTxResolver = async input => {
         data: input.rawTx!,
       })
     })
-    console.log('scanResult', scanResult)
     // scanResult = MOCK_BLOCKAID_WARNING_RESPONSE
     const validation = scanResult.data?.validation
     if (validation?.status !== 'Success') {

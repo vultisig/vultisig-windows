@@ -1,6 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { Chain } from '../../Chain'
+import { ScanResponse } from '@core/config/security/blockaid/types'
 
 type ExecuteTxInput<T extends Chain = Chain> = {
   chain: T
@@ -14,16 +15,7 @@ type ExecuteTxInput<T extends Chain = Chain> = {
 export type TxResult = {
   txHash: string
   encoded?: string
-  scanResult?: {
-    validation?: {
-      status: string
-      result_type?: string
-      classification?: string
-      description?: string
-      features?: unknown[]
-      reason?: string
-    }
-  }
+  scanResult?: ScanResponse
   scanUnavailable?: boolean
 }
 export type ExecuteTxResolver<T extends Chain = Chain> = (
