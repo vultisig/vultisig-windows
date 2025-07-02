@@ -1,4 +1,4 @@
-import { UtxoChain } from '@core/chain/Chain'
+import { UtxoBasedChain } from '@core/chain/Chain'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 
@@ -18,7 +18,7 @@ type BlockchairBroadcastResponse =
     }
 
 type BroadcastUtxoTransactionInput = {
-  chain: UtxoChain
+  chain: UtxoBasedChain
   tx: string
 }
 
@@ -28,6 +28,8 @@ export const broadcastUtxoTransaction = async ({
 }: BroadcastUtxoTransactionInput) => {
   const url = `${getBlockchairBaseUrl(chain)}/push/transaction`
 
+  console.log('broadcastUtxoTransaction input ', tx)
+
   const response: BlockchairBroadcastResponse = await fetch(url, {
     method: 'POST',
     headers: {
@@ -36,6 +38,8 @@ export const broadcastUtxoTransaction = async ({
     body: JSON.stringify({ data: tx }),
   }).then(res => res.json())
 
+  console.log('broadcastUtxoTransaction response', response)
+
   if (response.data) {
     return response.data.transaction_hash
   }
@@ -43,7 +47,15 @@ export const broadcastUtxoTransaction = async ({
   const error =
     'context' in response ? response.context.error : extractErrorMsg(response)
 
-  if (isInError(error, 'txn-mempool-conflict')) {
+  if (
+    isInError(
+      error,
+      'BadInputsUTxO',
+      'timed out',
+      'txn-mempool-conflict',
+      'already known'
+    )
+  ) {
     return null
   }
 

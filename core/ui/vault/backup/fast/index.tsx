@@ -1,9 +1,11 @@
 import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import { OTPInput } from '@lib/ui/inputs/OTPInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
+import {
+  MultiCharacterInput,
+  MultiCharacterInputProps,
+} from '@lib/ui/inputs/MultiCharacterInput'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
@@ -11,13 +13,15 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 const onCompleteDelay = 1000
+const emailConfirmationCodeLength = 4
 
 export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
+  const [input, setInput] = useState<string | null>('')
+
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const { isPending, mutate, error, isSuccess } = useMutation({
@@ -36,6 +40,23 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
       return () => clearTimeout(timeoutId)
     }
   }, [isSuccess, onFinish])
+
+  useEffect(() => {
+    if (
+      input?.length === emailConfirmationCodeLength &&
+      !isPending &&
+      !isSuccess
+    ) {
+      mutate(input)
+    }
+  }, [error, input, isPending, isSuccess, mutate])
+
+  const inputState = useMemo<MultiCharacterInputProps['validation']>(() => {
+    if (isSuccess) return 'valid'
+    if (isPending) return 'loading'
+    if (error) return 'invalid'
+    return 'idle'
+  }, [isSuccess, isPending, error])
 
   return (
     <VStack fullHeight>
@@ -57,32 +78,14 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
           </Text>
         </VStack>
         <VStack gap={4}>
-          <OTPInput
-            validation={error ? 'invalid' : isSuccess ? 'valid' : undefined}
-            onCompleted={value => mutate(value)}
+          <MultiCharacterInput
+            value={input}
+            onChange={value => setInput(value)}
+            validation={inputState}
+            length={emailConfirmationCodeLength}
           />
-          {error ? (
-            <Text size={13} color="danger">
-              {t('email_confirmation_code_error')}
-            </Text>
-          ) : (
-            isPending && (
-              <HStack gap={4}>
-                <StyledAnimatedLoader />
-                <Text weight={500} as="span" color="contrast" size={13}>
-                  {t('fastVaultSetup.backup.verifyingCode')}
-                </Text>
-              </HStack>
-            )
-          )}
         </VStack>
       </PageContent>
     </VStack>
   )
 }
-
-const StyledAnimatedLoader = styled(Spinner)`
-  width: fit-content;
-  position: relative;
-  font-size: 20px;
-`
