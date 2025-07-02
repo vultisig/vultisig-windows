@@ -909,6 +909,7 @@ export const de = {
   try_in_expanded_mode: 'Versuchen Sie es im erweiterten Modus',
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   security: 'Sicherheit',
+  security_scan_passed: 'Sicherheitsscan bestanden',
   app_lock_passcode: 'Passcode für die App-Sperre',
   app_lock_passcode_description:
     'Fügen Sie eine zusätzliche Sicherheitsebene hinzu, indem Sie zum Entsperren der App einen Passcode verlangen.',
@@ -937,4 +938,5 @@ export const de = {
   address_book_vault: 'Meine Tresore',
   paste: 'Paste',
   failed_to_generate_join_url: 'QR-Code konnte nicht generiert werden',
+  security_scan_unavailable: 'Sicherheitsüberprüfung nicht verfügbar',
 }

@@ -882,6 +882,7 @@ export const hr = {
   try_in_expanded_mode: 'Pokušajte u proširenom načinu rada',
   est_network_fee: 'Procijenjena mrežna naknada',
   security: 'Sigurnost',
+  security_scan_passed: 'Sigurnosna provjera uspješna',
   app_lock_passcode: 'Lozinka za zaključavanje aplikacije',
   app_lock_passcode_description:
     'Dodajte dodatni sloj sigurnosti tako što ćete zahtijevati lozinku za otključavanje aplikacije.',
@@ -910,4 +911,5 @@ export const hr = {
   address_book_vault: 'Moji trezori',
   paste: 'Zalijepiti',
   failed_to_generate_join_url: 'Nije uspjelo generiranje QR koda',
+  security_scan_unavailable: 'Sigurnosna provjera nije dostupna',
 }

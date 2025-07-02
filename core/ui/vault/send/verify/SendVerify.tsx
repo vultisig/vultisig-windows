@@ -5,6 +5,9 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { SecurityStatusBadge } from '@core/ui/security/components/SecurityStatusBadge'
+import { SecurityWarningModal } from '@core/ui/security/components/SecurityWarningModal'
+import { useBlockaidAddressScan } from '@core/ui/security/hooks/useBlockaidAddressScan'
 import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -30,7 +33,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -45,6 +48,17 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const cappedAmountQuery = useSendCappedAmountQuery()
   const { chain, ticker } = coin
 
+  const addressScanQuery = useBlockaidAddressScan({ chain, address: receiver })
+  const [warningVisible, setWarningVisible] = useState(false)
+  const [overrideRisk, setOverrideRisk] = useState(false)
+
+  /* auto-open warning modal */
+  useEffect(() => {
+    if (!overrideRisk) {
+      setWarningVisible(true)
+    }
+  }, [overrideRisk])
+
   return (
     <>
       <PageHeader
@@ -54,6 +68,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       />
       <PageContent gap={12}>
         <TxOverviewPanel>
+          <HStack justifyContent="flex-end">
+            <SecurityStatusBadge query={addressScanQuery} />
+          </HStack>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
               {t('you_are_sending')}
@@ -105,6 +122,15 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         </TxOverviewPanel>
         <SendTermsProvider initialValue={sendTerms.map(() => false)}>
           <SendTerms />
+          <SecurityWarningModal
+            visible={warningVisible}
+            scan={addressScanQuery.data}
+            onClose={() => setWarningVisible(false)}
+            onContinue={() => {
+              setOverrideRisk(true)
+              setWarningVisible(false)
+            }}
+          />
           <VStack
             style={{
               marginTop: 'auto',

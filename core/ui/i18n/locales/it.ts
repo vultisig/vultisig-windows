@@ -901,6 +901,7 @@ export const it = {
   try_in_expanded_mode: 'Prova in modalità espansa',
   est_network_fee: 'Commissione di rete stimata',
   security: 'Sicurezza',
+  security_scan_passed: 'Scansione di sicurezza superata',
   app_lock_passcode: 'Codice di accesso al blocco app',
   app_lock_passcode_description:
     "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
@@ -931,4 +932,5 @@ export const it = {
   address_book_vault: 'I miei caveau',
   paste: 'Impasto',
   failed_to_generate_join_url: 'Impossibile generare il codice QR',
+  security_scan_unavailable: 'Scansione di sicurezza non disponibile',
 }

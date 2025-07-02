@@ -893,6 +893,7 @@ export const pt = {
   try_in_expanded_mode: 'Experimente no modo expandido',
   est_network_fee: 'Taxa de rede estimada',
   security: 'Segurança',
+  security_scan_passed: 'Verificação de segurança aprovada',
   app_lock_passcode: 'Senha de bloqueio do aplicativo',
   app_lock_passcode_description:
     'Adicione uma camada extra de segurança exigindo uma senha para desbloquear o aplicativo.',
@@ -924,4 +925,5 @@ export const pt = {
   address_book_vault: 'Meus Cofres',
   paste: 'Colar',
   failed_to_generate_join_url: 'Falha ao gerar o código QR',
+  security_scan_unavailable: 'Verificação de segurança indisponível',
 }

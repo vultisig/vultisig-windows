@@ -26,6 +26,7 @@ import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
+import { Switch } from '@lib/ui/inputs/switch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Modal } from '@lib/ui/modal'
@@ -77,6 +78,17 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
+
+  // Blockaid toggle state
+  const [blockaidEnabled, setBlockaidEnabled] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem('blockaidEnabled') ?? 'true'
+      ) as boolean
+    } catch {
+      return true
+    }
+  })
 
   return (
     <>
@@ -142,20 +154,44 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('security')}>
             <ListItem
               icon={<ShieldCheckIcon fontSize={iconSize} />}
-              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
               title={t('security')}
               hoverable
               showArrow
+              onClick={() => navigate({ id: 'managePasscodeEncryption' })}
             />
             {hasPasscodeEncryption && (
               <ListItem
                 icon={<LockKeyholeIcon fontSize={iconSize} />}
-                onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
                 hoverable
                 showArrow
+                onClick={() => navigate({ id: 'passcodeAutoLock' })}
               />
             )}
+            <ListItem
+              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              title={t('blockaid_security_scan')}
+              extra={
+                <Switch
+                  checked={blockaidEnabled}
+                  onChange={enabled => {
+                    setBlockaidEnabled(enabled)
+                    localStorage.setItem(
+                      'blockaidEnabled',
+                      JSON.stringify(enabled)
+                    )
+                  }}
+                />
+              }
+              onClick={() => {
+                setBlockaidEnabled(!blockaidEnabled)
+                localStorage.setItem(
+                  'blockaidEnabled',
+                  JSON.stringify(!blockaidEnabled)
+                )
+              }}
+              hoverable
+            />
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem

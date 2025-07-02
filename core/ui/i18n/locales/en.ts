@@ -888,6 +888,7 @@ export const en = {
   no_token_found: 'No token found',
   invalid_token_address: 'Enter a valid token address',
   security: 'Security',
+  security_scan_passed: 'Security scan passed',
   app_lock_passcode: 'App Lock Passcode',
   app_lock_passcode_description:
     'Add an extra layer of security by requiring a passcode to unlock the app.',
@@ -914,4 +915,9 @@ export const en = {
   new_passcode: 'New Passcode',
   confirm_new_passcode: 'Confirm New Passcode',
   enter_new_passcode: 'Enter new passcode',
+  continue_anyway: 'Continue anyway',
+  security_scan_unavailable: 'Security scan unavailable',
+  blockaid_security_scan: 'Blockaid security scan',
+  blockaid_security_scan_desc:
+    'Enable or disable transaction security scanning for maximum protection.',
 }

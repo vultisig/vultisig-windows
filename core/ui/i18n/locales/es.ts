@@ -904,6 +904,7 @@ export const es = {
   try_in_expanded_mode: 'Pruébelo en modo expandido',
   est_network_fee: 'Tarifa de red estimada',
   security: 'Seguridad',
+  security_scan_passed: 'Escaneo de seguridad aprobado',
   app_lock_passcode: 'Código de acceso de bloqueo de aplicaciones',
   app_lock_passcode_description:
     'Agregue una capa adicional de seguridad al solicitar un código de acceso para desbloquear la aplicación.',
@@ -934,4 +935,5 @@ export const es = {
   address_book_vault: 'Mis bóvedas',
   paste: 'Pasta',
   failed_to_generate_join_url: 'No se pudo generar el código QR',
+  security_scan_unavailable: 'Escaneo de seguridad no disponible',
 }
