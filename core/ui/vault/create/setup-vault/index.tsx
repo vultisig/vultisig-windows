@@ -26,7 +26,8 @@ const DescriptionWrapper = styled(VStack)`
 
 const DescriptionContentWrapper = styled(VStack)`
   background-color: ${getColor('foreground')};
-  border-top: 1px dotted ${getColor('textDark')};
+  /* One off color, please add it in the theme if reusing it */
+  border-top: 1px dotted hsl(217, 91, 9);
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   padding: 16px;
@@ -67,7 +68,7 @@ export const SetupVaultPage = () => {
                 value: 'secure',
                 icon: (
                   <ShieldIcon
-                    color={value === 'secure' ? 'success' : undefined}
+                    color={value === 'secure' ? 'primary' : undefined}
                     fontSize={24}
                   />
                 ),
@@ -104,7 +105,7 @@ export const SetupVaultPage = () => {
             <DescriptionContentWrapper gap={8}>
               {getVaultSecurityProperties(value, t).map(prop => (
                 <HStack key={prop} alignItems="center" gap={6}>
-                  <CheckIcon color="success" fontSize={24} />
+                  <CheckIcon color="primary" fontSize={24} />
                   <Text color="contrast" size={14} weight="500">
                     {prop}
                   </Text>

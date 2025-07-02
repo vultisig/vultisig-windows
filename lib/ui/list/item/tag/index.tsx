@@ -27,7 +27,7 @@ const StyledListItemTag = styled.span<{ status: Status }>`
         `
       case 'success':
         return css`
-          color: ${getColor('success')};
+          color: ${getColor('primary')};
         `
       case 'warning':
         return css`

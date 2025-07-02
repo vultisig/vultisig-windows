@@ -62,13 +62,13 @@ const StyledButton = styled(UnstyledButton)<{
               &:hover {
                 ${match(status, {
                   default: () => css`
-                    color: ${getColor('buttonPrimaryHover')};
+                    color: ${getColor('buttonHover')};
                   `,
                   danger: () => css`
                     color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    color: ${getColor('success')};
+                    color: ${getColor('primary')};
                   `,
                   warning: () => css`
                     color: ${getColor('idle')};
@@ -114,7 +114,7 @@ const StyledButton = styled(UnstyledButton)<{
                   background-color: ${getColor('danger')};
                 `,
                 success: () => css`
-                  background-color: ${getColor('success')};
+                  background-color: ${getColor('primary')};
                 `,
                 warning: () => css`
                   background-color: ${getColor('idle')};
@@ -124,13 +124,13 @@ const StyledButton = styled(UnstyledButton)<{
               &:hover {
                 ${match(status, {
                   default: () => css`
-                    background-color: ${getColor('buttonPrimaryHover')};
+                    background-color: ${getColor('buttonHover')};
                   `,
                   danger: () => css`
                     background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('success')};
+                    background-color: ${getColor('primary')};
                   `,
                   warning: () => css`
                     background-color: ${getColor('idle')};
@@ -166,19 +166,19 @@ const StyledButton = styled(UnstyledButton)<{
               cursor: default;
             `
           : css`
-              background-color: ${getColor('buttonSecondary')};
+              background-color: ${getColor('foreground')};
               color: ${getColor('text')};
 
               &:hover {
                 ${match(status, {
                   default: () => css`
-                    background-color: ${getColor('buttonSecondaryHover')};
+                    background-color: ${getColor('buttonHover')};
                   `,
                   danger: () => css`
                     background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('success')};
+                    background-color: ${getColor('primary')};
                   `,
                   warning: () => css`
                     background-color: ${getColor('idle')};
