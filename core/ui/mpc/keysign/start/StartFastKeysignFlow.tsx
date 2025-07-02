@@ -1,4 +1,3 @@
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
@@ -11,7 +10,6 @@ import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { OnFinishProp } from '@lib/ui/props'
 
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
@@ -19,8 +17,7 @@ const keysignSteps = ['server', 'keysign'] as const
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
-  onFinish,
-}: KeysignActionProviderProp & Partial<OnFinishProp<TxResult>>) => {
+}: KeysignActionProviderProp) => {
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -49,7 +46,7 @@ export const StartFastKeysignFlow = ({
                 render={() => (
                   <KeysignActionProvider>
                     <KeysignMessagePayloadProvider value={keysignPayload}>
-                      <KeysignSigningStep onFinish={onFinish} />
+                      <KeysignSigningStep />
                     </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}

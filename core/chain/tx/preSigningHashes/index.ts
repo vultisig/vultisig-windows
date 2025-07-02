@@ -30,6 +30,7 @@ const decoders: Record<
   sui: TW.TxCompiler.Proto.PreSigningOutput.decode,
   ripple: TW.TxCompiler.Proto.PreSigningOutput.decode,
   tron: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  cardano: TW.TxCompiler.Proto.PreSigningOutput.decode,
 }
 
 export const getPreSigningHashes = ({

@@ -1,5 +1,9 @@
 export const de = {
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
+  digit_input_success_validation: 'Verifizierung erfolgreich',
+  digit_input_error_validation:
+    'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
+  digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
   onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
@@ -10,6 +14,8 @@ export const de = {
   onboarding_description_4:
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   moreInfo: 'Mehr Info',
+  incorrect_passcode: 'Falscher Passcode',
+  passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   tx_hash: 'Transaktions-Hash',
   send_overview: 'Übersicht senden',
@@ -910,7 +916,6 @@ export const de = {
   off: 'Aus',
   enter_passcode: 'Passcode eingeben',
   confirm_passcode: 'Passcode bestätigen',
-  passcodes_do_not_match: 'Die Passwörter stimmen nicht überein',
   set_passcode: 'Passcode festlegen',
   encrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden verschlüsselt …',
   decrypting_vault_keyshares: 'Vault-Schlüsselfreigaben werden entschlüsselt …',

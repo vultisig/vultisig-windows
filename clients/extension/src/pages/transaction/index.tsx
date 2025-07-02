@@ -80,6 +80,7 @@ export const TransactionPage = () => {
                 ton: () => null,
                 ripple: () => null,
                 tron: () => null,
+                cardano: () => null,
               }
             )
 
