@@ -1,6 +1,6 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { rujiMergeDenom } from '@core/chain/chains/thorchain/ruji/config'
+import { rujiMergeDenom } from '@core/chain/chains/cosmos/thor/ruji-unmerge/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
