@@ -34,8 +34,9 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     contrast: colors.contrast,
     danger: colors.danger,
     idle: colors.idle,
-    light: colors.textExtraLight,
-    warning: colors.alertWarning,
+    light: colors.textShy,
+    warning: colors.idle,
+    success: colors.primary,
   }) as const
 
 type TextHeight = 'small' | 'regular' | 'large'
