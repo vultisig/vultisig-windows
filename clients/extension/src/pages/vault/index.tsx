@@ -32,7 +32,7 @@ import styled from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
-    getColor(connected ? 'success' : 'primaryAlt')};
+    getColor(connected ? 'primary' : 'primaryAlt')};
   border: solid 4px ${getColor('buttonBackgroundDisabled')};
   border-radius: 50%;
   height: 16px;

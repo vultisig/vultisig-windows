@@ -11,11 +11,9 @@ export const darkTheme: DefaultTheme = {
     text: new HSLA(220, 67, 96),
     textSupporting: new HSLA(211, 10, 43),
     textShy: new HSLA(214, 21, 60),
-    textDark: new HSLA(217, 91, 9),
 
     primary: new HSLA(167, 78, 55),
     primaryAlt: new HSLA(224, 98, 64),
-    success: new HSLA(167, 78, 55),
     danger: new HSLA(0, 100, 68),
     idle: new HSLA(38, 100, 68),
     idleDark: new HSLA(39, 40, 15),
@@ -36,9 +34,7 @@ export const darkTheme: DefaultTheme = {
     buttonBackgroundDisabled: new HSLA(217, 57, 14),
     buttonLinkHover: new HSLA(0, 0, 100, 0.04),
     buttonPrimary: new HSLA(224, 75, 50),
-    buttonPrimaryHover: new HSLA(215, 75, 47),
-    buttonSecondary: new HSLA(216, 81, 13),
-    buttonSecondaryHover: new HSLA(215, 75, 47),
+    buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
 
     transparent: new HSLA(0, 0, 0, 0),

@@ -81,7 +81,7 @@ const StyledIconButton = styled(UnstyledButton)<{
                   color: ${getColor('danger')};
                 `,
                 success: () => css`
-                  color: ${getColor('success')};
+                  color: ${getColor('primary')};
                 `,
                 warning: () => css`
                   color: ${getColor('idle')};
@@ -100,7 +100,7 @@ const StyledIconButton = styled(UnstyledButton)<{
                 background-color: ${getColor('danger')};
               `,
               success: () => css`
-                background-color: ${getColor('success')};
+                background-color: ${getColor('primary')};
               `,
               warning: () => css`
                 background-color: ${getColor('idle')};
@@ -110,13 +110,13 @@ const StyledIconButton = styled(UnstyledButton)<{
             &:hover {
               ${match(status, {
                 default: () => css`
-                  background-color: ${getColor('buttonPrimaryHover')};
+                  background-color: ${getColor('buttonHover')};
                 `,
                 danger: () => css`
                   background-color: ${getColor('danger')};
                 `,
                 success: () => css`
-                  background-color: ${getColor('success')};
+                  background-color: ${getColor('primary')};
                 `,
                 warning: () => css`
                   background-color: ${getColor('idle')};
@@ -125,11 +125,11 @@ const StyledIconButton = styled(UnstyledButton)<{
             }
           `,
           secondary: () => css`
-            background-color: ${getColor('buttonSecondary')};
+            background-color: ${getColor('foreground')};
             color: ${getColor('text')};
 
             &:hover {
-              background-color: ${getColor('buttonSecondaryHover')};
+              background-color: ${getColor('buttonHover')};
 
               ${match(status, {
                 default: () => css`
@@ -139,7 +139,7 @@ const StyledIconButton = styled(UnstyledButton)<{
                   color: ${getColor('danger')};
                 `,
                 success: () => css`
-                  color: ${getColor('success')};
+                  color: ${getColor('primary')};
                 `,
                 warning: () => css`
                   color: ${getColor('idle')};
