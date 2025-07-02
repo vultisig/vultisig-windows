@@ -13,10 +13,10 @@ type Gql = {
       }
     }
   }
+  errors?: unknown[]
 }
 
 export const fetchRujiBalance = async (thorAddr: string) => {
-  console.log('🚀 ~ fetchRujiBalance ~ thorAddr:', thorAddr)
   const result = await fetch(rujiGraphQlEndpoint, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -43,6 +43,11 @@ export const fetchRujiBalance = async (thorAddr: string) => {
   if (!result.ok) throw new Error(`RUJI query failed: ${result.status}`)
 
   const json = (await result.json()) as Gql
+
+  if (json.errors) {
+    throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`)
+  }
+
   const accounts = json.data?.node?.merge?.accounts ?? []
 
   const rujiAcc = accounts.find(
