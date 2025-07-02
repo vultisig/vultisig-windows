@@ -170,6 +170,12 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 8,
     priceProviderId: 'zcash',
   },
+  [Chain.Cardano]: {
+    ticker: 'ADA',
+    logo: 'ada',
+    decimals: 6,
+    priceProviderId: 'cardano',
+  },
 }
 
 export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(

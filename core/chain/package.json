@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
+    "@cardano-sdk/core": "^0.46.1",
     "@core/config": "workspace:*",
     "@core/mpc": "workspace:*",
     "@cosmjs/stargate": "^0.33.1",

@@ -1,5 +1,6 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
+import { executeCardanoTx } from './cardano'
 import { executeCosmosTx } from './cosmos'
 import { executeEvmTx } from './evm'
 import { ExecuteTxResolver } from './ExecuteTxResolver'
@@ -12,6 +13,7 @@ import { executeTronTx } from './tron'
 import { executeUtxoTx } from './utxo'
 
 const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
+  cardano: executeCardanoTx,
   cosmos: executeCosmosTx,
   evm: executeEvmTx,
   polkadot: executePolkadotTx,

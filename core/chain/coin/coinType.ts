@@ -45,4 +45,5 @@ export const getCoinType = ({
     [Chain.Akash]: () => CoinType.akash,
     [Chain.Tron]: () => CoinType.tron,
     [Chain.Zcash]: () => CoinType.zcash,
+    [Chain.Cardano]: () => CoinType.cardano,
   })
