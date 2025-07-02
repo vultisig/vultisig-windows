@@ -103,7 +103,6 @@ export const DepositConfirmButton = ({
         'ibc_transfer',
         'switch',
         'merge',
-        'unmerge_ruji',
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
@@ -153,6 +152,8 @@ export const DepositConfirmButton = ({
   if (chainSpecificQuery.isLoading || !keysignPayload) {
     return <Text>{t('loading')}</Text>
   }
+
+  console.log('## keysign payload', keysignPayload)
 
   return <StartKeysignPrompt keysignPayload={keysignPayload} />
 }

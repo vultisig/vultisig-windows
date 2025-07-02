@@ -26,8 +26,7 @@ export const UnmergeSpecific = () => {
         <Text size={15} weight="400">
           {t('amount')}{' '}
           {coin &&
-            rujiBalance !== undefined &&
-            `(${t('balance')}: ${rujiBalance} RUJI)`}{' '}
+            `(${t('balance')}: ${rujiBalance === undefined ? '--' : rujiBalance} RUJI)`}{' '}
           <Text as="span" color="danger" size={14}>
             *{' '}
           </Text>{' '}
@@ -35,9 +34,8 @@ export const UnmergeSpecific = () => {
 
         <InputFieldWrapper
           as="input"
-          onWheel={e => e.currentTarget.blur()}
-          step="0.0001"
-          min={0}
+          step="any"
+          min={0.01}
           max={rujiBalance}
           type="number"
           required
