@@ -62,96 +62,112 @@ export class DKLS {
     this.localUI = localUI?.padEnd(64, '0')
   }
 
-  private async processOutbound(session: KeygenSession | QcSession) {
-    console.log('processOutbound')
-    while (true) {
-      try {
-        const message = session.outputMessage()
-        if (message === undefined) {
-          if (this.isKeygenComplete) {
-            console.log('stop processOutbound')
-            return
-          } else {
-            await sleep(100) // backoff for 100ms
-          }
-          continue
+  private async processOutbound(
+    session: KeygenSession | QcSession
+  ): Promise<boolean> {
+    try {
+      const message = session.outputMessage()
+      if (message === undefined) {
+        if (this.isKeygenComplete) {
+          console.log('stop processOutbound')
+          return true
+        } else {
+          await sleep(100)
+          return await this.processOutbound(session)
         }
-        console.log('outbound message:', message)
-        const messageToSend = await encodeEncryptMessage(
-          message.body,
-          this.hexEncryptionKey
-        )
-        message?.receivers.forEach(receiver => {
-          // send message to receiver
-          sendRelayMessage({
-            serverURL: this.serverURL,
-            localPartyId: this.localPartyId,
-            sessionId: this.sessionId,
-            message: messageToSend,
-            to: receiver,
-            sequenceNo: this.sequenceNo,
-            messageHash: getMessageHash(base64Encode(message.body)),
-          })
-          this.sequenceNo++
-        })
-      } catch (error) {
-        console.error('processOutbound error:', error)
       }
-    }
-  }
-
-  private async processInbound(session: KeygenSession | QcSession) {
-    const start = Date.now()
-    while (true) {
-      try {
-        const downloadMsg = await downloadRelayMessage({
+      console.log('outbound message:', message)
+      const messageToSend = await encodeEncryptMessage(
+        message.body,
+        this.hexEncryptionKey
+      )
+      message?.receivers.forEach(receiver => {
+        // send message to receiver
+        sendRelayMessage({
           serverURL: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
+          message: messageToSend,
+          to: receiver,
+          sequenceNo: this.sequenceNo,
+          messageHash: getMessageHash(base64Encode(message.body)),
         })
-        const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
-        if (parsedMessages.length === 0) {
-          // no message to download, backoff for 100ms
-          await sleep(100)
-          continue
-        }
-        for (const msg of parsedMessages) {
-          const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
-          if (this.cache[cacheKey]) {
-            continue
-          }
-          console.log(
-            `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
-          )
-          const decryptedMessage = await decodeDecryptMessage(
-            msg.body,
-            this.hexEncryptionKey
-          )
-          const isFinish = session.inputMessage(decryptedMessage)
-          if (isFinish) {
-            await sleep(1000) // wait for 1 second to make sure all messages are processed
-            this.isKeygenComplete = true
-            console.log('keygen complete')
-            return true
-          }
-          this.cache[cacheKey] = ''
-          await deleteRelayMessage({
-            serverURL: this.serverURL,
-            localPartyId: this.localPartyId,
-            sessionId: this.sessionId,
-            messageHash: msg.hash,
-          })
-        }
-        const end = Date.now()
-        // timeout after 1 minute
-        if (end - start > 1000 * 60 * 2) {
-          console.log('timeout')
-          this.isKeygenComplete = true
-          return false
-        }
-      } catch (error) {
-        console.error('processInbound error:', error)
+        this.sequenceNo++
+      })
+      await sleep(100)
+      return await this.processOutbound(session)
+    } catch (error) {
+      console.error('processOutbound error:', error)
+      await sleep(100)
+      return await this.processOutbound(session)
+    }
+  }
+
+  private async processInbound(
+    session: KeygenSession | QcSession,
+    start: number
+  ): Promise<boolean> {
+    try {
+      const downloadMsg = await downloadRelayMessage({
+        serverURL: this.serverURL,
+        localPartyId: this.localPartyId,
+        sessionId: this.sessionId,
+      })
+
+      const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
+
+      if (parsedMessages.length === 0) {
+        await sleep(100)
+        return await this.processInbound(session, start)
       }
+
+      for (const msg of parsedMessages) {
+        const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
+
+        if (this.cache[cacheKey]) continue
+
+        console.log(
+          `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
+        )
+
+        const decryptedMessage = await decodeDecryptMessage(
+          msg.body,
+          this.hexEncryptionKey
+        )
+
+        const isFinish = session.inputMessage(decryptedMessage)
+
+        if (isFinish) {
+          await sleep(1000) // wait for 1 second to make sure all messages are processed
+          this.isKeygenComplete = true
+          console.log('keygen complete')
+          return true
+        }
+
+        this.cache[cacheKey] = ''
+
+        await deleteRelayMessage({
+          serverURL: this.serverURL,
+          localPartyId: this.localPartyId,
+          sessionId: this.sessionId,
+          messageHash: msg.hash,
+        })
+      }
+
+      const elapsed = Date.now() // timeout after 1 minute
+
+      if (elapsed - start > 1000 * 60 * 2) {
+        console.log('timeout')
+        this.isKeygenComplete = true
+        return false
+      }
+
+      await sleep(100)
+      return await this.processInbound(session, start)
+    } catch (error) {
+      console.error('processInbound error:', error)
+      await sleep(100)
+      return await this.processInbound(session, start)
     }
   }
 
@@ -211,7 +227,7 @@ export class DKLS {
       }
 
       const outbound = this.processOutbound(session)
-      const inbound = this.processInbound(session)
+      const inbound = this.processInbound(session, Date.now())
       const [, inboundResult] = await Promise.all([outbound, inbound])
       if (inboundResult) {
         const keyShare = session.finish()
@@ -311,7 +327,7 @@ export class DKLS {
 
       try {
         const outbound = this.processOutbound(session)
-        const inbound = this.processInbound(session)
+        const inbound = this.processInbound(session, Date.now())
         const [, inboundResult] = await Promise.all([outbound, inbound])
         if (inboundResult) {
           const keyShare = session.finish()
