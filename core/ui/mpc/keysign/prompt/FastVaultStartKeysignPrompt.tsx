@@ -65,11 +65,11 @@ export const FastVaultStartKeysignPrompt = ({
   useEffect(() => {
     if (!startPressingAt) return
 
-    const interval = setInterval(() => {
+    const interval = setTimeout(() => {
       executeNavigation('secure')
     }, requiredPressDuration)
 
-    return () => clearInterval(interval)
+    return () => clearTimeout(interval)
   }, [executeNavigation, startPressingAt])
 
   return (
