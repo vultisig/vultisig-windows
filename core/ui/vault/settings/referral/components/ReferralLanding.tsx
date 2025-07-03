@@ -13,35 +13,41 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
 
   //TODO: translations
   return (
-    <Wrapper gap={24} flexGrow justifyContent="flex-end">
-      <ImageWrapper justifyContent="flex-end">
-        <PositionedImage src="/core/images/referrals_landing.svg" alt="" />
-      </ImageWrapper>
-      <ContentWrapper gap={24}>
-        <VStack gap={12}>
-          <Text centerHorizontally size={22}>
-            Invite friends.{' '}
-            <GradientText as="span" size={22}>
-              Earn rewards
-            </GradientText>
-            . Save on fees.
-          </Text>
-          <Text centerHorizontally>
-            Share your unique referral code to invite friends. They get a
-            discount and the more they trade, the more you earn — directly to
-            your wallet.
-          </Text>
-        </VStack>
-        <Button onClick={onFinish}>{t('next')}</Button>
-      </ContentWrapper>
-    </Wrapper>
+    <>
+      <Overlay />
+      <Wrapper gap={24} flexGrow justifyContent="flex-end">
+        <ImageWrapper justifyContent="flex-end">
+          <PositionedImage src="/core/images/referrals_landing.svg" alt="" />
+        </ImageWrapper>
+        <ContentWrapper gap={24}>
+          <VStack gap={12}>
+            <Text centerHorizontally size={22}>
+              Invite friends.{' '}
+              <GradientText as="span" size={22}>
+                Earn rewards
+              </GradientText>
+              . Save on fees.
+            </Text>
+            <Text centerHorizontally>
+              Share your unique referral code to invite friends. They get a
+              discount and the more they trade, the more you earn — directly to
+              your wallet.
+            </Text>
+          </VStack>
+          <ButtonWrapper>
+            <Button onClick={onFinish}>{t('next')}</Button>
+          </ButtonWrapper>
+        </ContentWrapper>
+      </Wrapper>
+    </>
   )
 }
 
 const Wrapper = styled(VStack)`
   position: absolute;
-  bottom: 143px;
-  margin-inline: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(100vw - 32px);
   padding: 0 36px 36px 36px;
   min-height: 460px;
   background-color: ${getColor('foregroundExtra')};
@@ -53,9 +59,16 @@ const Wrapper = styled(VStack)`
     height: 500px;
     margin-inline: auto;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     flex-grow: 0;
   }
+`
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 18, 43, 0.9);
+  z-index: 0;
 `
 
 const PositionedImage = styled.img`
@@ -82,4 +95,12 @@ const ImageWrapper = styled(VStack)`
 
 const ContentWrapper = styled(VStack)`
   padding-inline: 16px;
+`
+
+const ButtonWrapper = styled(VStack)`
+  align-self: center;
+
+  ${mediaQuery.tabletDeviceAndUp} {
+    align-self: stretch;
+  }
 `
