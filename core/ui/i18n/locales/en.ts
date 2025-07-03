@@ -914,4 +914,5 @@ export const en = {
   new_passcode: 'New Passcode',
   confirm_new_passcode: 'Confirm New Passcode',
   enter_new_passcode: 'Enter new passcode',
+  hold_for_paired_sign: 'Hold for paired sign',
 }

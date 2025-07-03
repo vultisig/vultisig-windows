@@ -516,7 +516,6 @@ export const es = {
     passwordCannotBeRecovered:
       'La contraseña no se puede restablecer ni recuperar',
     confirmPasswordIsRequired: 'Se requiere confirmación de contraseña',
-    passwordDoNotMatch: 'Las contraseñas no coinciden',
     hintEmpty: 'La pista está vacía',
     addOptionalHint: 'Agregar pista opcional',
     hintDescription: 'Esto se mostrará en caso de que olvide su contraseña',
@@ -934,4 +933,27 @@ export const es = {
   address_book_vault: 'Mis bóvedas',
   paste: 'Pasta',
   failed_to_generate_join_url: 'No se pudo generar el código QR',
+  connecting_to_verifier: 'Conexión al verificador',
+  connecting_to_plugin: 'Conexión al complemento',
+  confirm: 'Confirmar',
+  enter_your_password: 'Ingrese su contraseña',
+  go_to_wallet: 'Ir a la billetera',
+  install_plugin: 'Instalar complemento',
+  installing_plugin: 'Instalación del complemento',
+  plugin_info: 'Información del complemento',
+  plugin_info_desc: 'Estás instalando el complemento {{name}}',
+  plugin_success_desc: 'La instalación de {{name}} se ha completado',
+  plugin_password_desc:
+    'Ingrese su contraseña para desbloquear su servidor compartido e iniciar la instalación del complemento',
+  plugin_policy: 'Revisión de políticas',
+  plugin_policy_desc:
+    'El verificador siempre comprobará que solo se ejecuten estas políticas, lo que le garantiza que solo las personas autorizadas serán firmadas.',
+  plugin_policy_heading: 'Este complemento accederá automáticamente',
+  password_do_not_match: 'Las contraseñas no coinciden',
+  password_pattern_error:
+    'La contraseña debe tener entre {{min}} y {{max}} caracteres',
+  success: 'Éxito',
+  failed_to_process_plugin_install:
+    'No se pudo procesar la instalación del complemento',
+  hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
 }
