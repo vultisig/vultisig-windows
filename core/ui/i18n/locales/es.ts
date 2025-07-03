@@ -1,6 +1,10 @@
 export const es = {
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  digit_input_success_validation: 'Verificación exitosa',
+  digit_input_error_validation:
+    'Error al verificar el código, por favor intenta de nuevo',
+  digit_input_loading_validation: 'Verificando código, por favor espera',
   onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
   onboarding_description_2:
@@ -10,6 +14,7 @@ export const es = {
   onboarding_description_4:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
+  incorrect_passcode: 'Código incorrecto',
   moreInfo: 'Más información',
   gas_limit_tooltip_content:
     'La cantidad máxima de gas que pagarás. Puede aumentarse si el límite de gas no es suficiente para enviar transacciones.',

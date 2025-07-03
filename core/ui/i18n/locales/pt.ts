@@ -10,6 +10,11 @@ export const pt = {
   onboarding_description_4:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
+  incorrect_passcode: 'Código incorreto',
+  passcodes_do_not_match: 'Os códigos não correspondem',
+  digit_input_success_validation: 'Verificação bem-sucedida',
+  digit_input_error_validation: 'Erro ao verificar o código, tente novamente',
+  digit_input_loading_validation: 'Verificando o código, por favor aguarde',
   chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
@@ -894,7 +899,6 @@ export const pt = {
   off: 'Desligado',
   enter_passcode: 'Digite a senha',
   confirm_passcode: 'Confirmar senha',
-  passcodes_do_not_match: 'As senhas não correspondem',
   set_passcode: 'Definir senha',
   encrypting_vault_keyshares:
     'Criptografando compartilhamentos de chaves do cofre...',

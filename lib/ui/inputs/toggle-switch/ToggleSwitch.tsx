@@ -15,8 +15,8 @@ const StyledToggleButton = styled(Button)<{ active: boolean }>`
   ${({ active, disabled }) =>
     active
       ? css`
-          background-color: ${getColor('backgroundPrimary')};
-          color: ${getColor('textPrimary')};
+          background-color: ${getColor('background')};
+          color: ${getColor('text')};
         `
       : disabled
         ? css`

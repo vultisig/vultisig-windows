@@ -10,8 +10,13 @@ export const it = {
   onboarding_description_4:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
+  incorrect_passcode: 'Codice errato',
+  passcodes_do_not_match: 'I codici non corrispondono',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
+  digit_input_success_validation: 'Verifica riuscita',
+  digit_input_error_validation: 'Errore nella verifica del codice, riprova',
+  digit_input_loading_validation: 'Verifica del codice in corso, attendere',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
@@ -902,7 +907,6 @@ export const it = {
   off: 'Spento',
   enter_passcode: 'Inserisci il codice di accesso',
   confirm_passcode: 'Conferma codice di accesso',
-  passcodes_do_not_match: 'I codici di accesso non corrispondono',
   set_passcode: 'Imposta codice di accesso',
   encrypting_vault_keyshares:
     'Crittografia delle condivisioni delle chiavi del vault...',
