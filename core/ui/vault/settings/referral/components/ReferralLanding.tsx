@@ -11,7 +11,7 @@ import styled from 'styled-components'
 export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
-  //TODO: translations
+  //TODO: referral translations
   return (
     <>
       <Overlay />
