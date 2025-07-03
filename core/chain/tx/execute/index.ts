@@ -1,5 +1,6 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { blockaid } from '@core/config/security/blockaid'
+import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { attempt } from '@lib/utils/attempt'
 
 import { executeCardanoTx } from './cardano'
@@ -34,6 +35,7 @@ export const executeTx: ExecuteTxResolver = async input => {
 
   // Perform Blockaid scan with graceful failure for all chains
   let scanResult
+
   let scanUnavailable = false
   if (input.rawTx && input.account_address && !input.skipBlockaid) {
     scanResult = await attempt(async () => {
@@ -54,12 +56,12 @@ export const executeTx: ExecuteTxResolver = async input => {
     }
     // Handle result_type
     if (
-      validation?.result_type === 'Warning' ||
-      validation?.result_type === 'Malicious'
+      validation?.result_type === BlockaidResultTypes.Warning ||
+      validation?.result_type === BlockaidResultTypes.Malicious
     ) {
       const error: any = new Error('Security warning from Blockaid')
       error.type =
-        validation.result_type === 'Warning'
+        validation.result_type === BlockaidResultTypes.Warning
           ? 'blockaid-warning'
           : 'blockaid-malicious'
       error.blockaid = scanResult.data

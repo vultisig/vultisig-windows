@@ -1,7 +1,7 @@
+import { ScanResponse } from '@core/config/security/blockaid/types'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { Chain } from '../../Chain'
-import { ScanResponse } from '@core/config/security/blockaid/types'
 
 type ExecuteTxInput<T extends Chain = Chain> = {
   chain: T

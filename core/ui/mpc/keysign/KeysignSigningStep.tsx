@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -78,7 +79,8 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
     const hasSuccessfulScan = txResults.some(
       txResult =>
         txResult.scanResult?.validation?.status === 'Success' &&
-        txResult.scanResult?.validation?.result_type === 'Benign'
+        txResult.scanResult?.validation?.result_type ===
+          BlockaidResultTypes.Benign
     )
     setShowSecurityCheckmark(hasSuccessfulScan)
     // Check if scanUnavailable is true in the result

@@ -39,3 +39,9 @@ export const Endpoints = {
   },
   tokenScan: `${blockaid_base}/token/scan`,
 }
+
+export const BlockaidResultTypes = {
+  Benign: 'Benign',
+  Warning: 'Warning',
+  Malicious: 'Malicious',
+} as const

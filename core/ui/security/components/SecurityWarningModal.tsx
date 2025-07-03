@@ -1,7 +1,8 @@
+import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { ScanResponse } from '@core/config/security/blockaid/types'
 import { Button } from '@lib/ui/buttons/Button'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
@@ -28,18 +29,31 @@ export const SecurityWarningModal: FC<Props> = ({
   return (
     <Modal onClose={onClose} title={title} placement="center" width={360}>
       <VStack gap={16} alignItems="center">
-        <TriangleAlertIcon color="alertError" fontSize={32} />
+        <TriangleAlertIcon
+          color={
+            scan.validation?.result_type === BlockaidResultTypes.Malicious
+              ? 'alertError'
+              : 'alertWarning'
+          }
+          fontSize={32}
+        />
         <Text size={15} weight={500} centerHorizontally>
           {scan.validation?.reason ?? t('malicious_address_detected')}
         </Text>
-        <HStack gap={12} justifyContent="center">
-          <Button color="secondary" onClick={onClose} size="md">
+        <VStack gap={12} alignItems="center">
+          <Button color="primary" onClick={onClose} size="md">
             {t('cancel')}
           </Button>
-          <Button color="primary" onClick={onContinue} size="md">
+          <Text
+            color="shy"
+            size={12}
+            weight={500}
+            style={{ cursor: 'pointer' }}
+            onClick={onContinue}
+          >
             {t('continue_anyway')}
-          </Button>
-        </HStack>
+          </Text>
+        </VStack>
       </VStack>
     </Modal>
   )
