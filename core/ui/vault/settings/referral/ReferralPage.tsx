@@ -11,13 +11,15 @@ import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useTranslation } from 'react-i18next'
 
 import { ReferralLanding } from './components/ReferralLanding'
+import { ReferralsSummary } from './components/ReferralSummary'
 
-const steps = ['landing', 'how-it-works', 'create-or-save-referral']
+const steps = ['landing', 'summary', 'create-or-save-referral']
 
 export const ReferralPage = () => {
   const { t } = useTranslation()
   const { step, toNextStep, toFirstStep } = useStepNavigation({ steps })
 
+  // TODO: referral translations
   return (
     <>
       <PageHeader
@@ -49,6 +51,7 @@ export const ReferralPage = () => {
         <Match
           value={step}
           landing={() => <ReferralLanding onFinish={toNextStep} />}
+          summary={() => <ReferralsSummary onFinish={toNextStep} />}
         />
       </PageContent>
     </>
