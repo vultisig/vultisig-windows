@@ -27,8 +27,6 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       session_id: sessionId,
       hex_encryption_key: hexEncryptionKey,
       encryption_password: password,
-      // TODO: Vultiserver should make email optional
-      email: 'temp@temp.com',
       name,
       old_parties: signers,
       hex_chain_code: hexChainCode,
