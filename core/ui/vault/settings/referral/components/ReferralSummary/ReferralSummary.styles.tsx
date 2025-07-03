@@ -44,8 +44,8 @@ export const PillWrapper = styled.div`
     content: '';
     position: absolute;
     left: -2px;
-    bottom: -1780%;
-    height: 420px;
+    bottom: -470px;
+    height: 470px;
     width: 2px;
     background-color: ${getColor('foreground')};
   }
@@ -75,4 +75,19 @@ export const IconWrapper = styled(VStack)`
   justify-content: center;
   width: 24px;
   height: 24px;
+`
+
+export const Overlay = styled.div`
+  position: fixed;
+  width: 374px;
+  height: 416px;
+  border-radius: 416px;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background: linear-gradient(
+    82deg,
+    rgba(51, 230, 191, 0.15) 8.02%,
+    rgba(4, 57, 199, 0.15) 133.75%
+  );
+  filter: blur(126.94499969482422px);
 `
