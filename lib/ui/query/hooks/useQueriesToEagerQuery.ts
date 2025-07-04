@@ -1,5 +1,5 @@
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 
 import { EagerQuery, Query } from '../Query'
@@ -26,7 +26,10 @@ export function useQueriesToEagerQuery<T, R, E = unknown>({
     }
 
     try {
-      const resolvedQueries = withoutUndefined(queries.map(query => query.data))
+      const resolvedQueries = without(
+        queries.map(query => query.data),
+        undefined
+      )
       return {
         isPending,
         errors,

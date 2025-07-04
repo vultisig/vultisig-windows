@@ -514,7 +514,6 @@ export const de = {
     passwordCannotBeRecovered:
       'Passwort kann nicht zurückgesetzt oder wiederhergestellt werden',
     confirmPasswordIsRequired: 'Passwortbestätigung ist erforderlich',
-    passwordDoNotMatch: 'Passwörter stimmen nicht überein',
     hintEmpty: 'Hinweis ist leer',
     addOptionalHint: 'Optionalen Hinweis hinzufügen',
     hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen',
@@ -937,4 +936,27 @@ export const de = {
   address_book_vault: 'Meine Tresore',
   paste: 'Paste',
   failed_to_generate_join_url: 'QR-Code konnte nicht generiert werden',
+  connecting_to_verifier: 'Verbindung zum Verifier herstellen',
+  connecting_to_plugin: 'Verbindung zum Plugin herstellen',
+  confirm: 'Bestätigen',
+  enter_your_password: 'Geben Sie Ihr Passwort ein',
+  go_to_wallet: 'Zur Brieftasche',
+  install_plugin: 'Plugin installieren',
+  installing_plugin: 'Plugin installieren',
+  plugin_info: 'Plugin-Informationen',
+  plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
+  plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
+  plugin_password_desc:
+    'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die Plugin-Installation zu starten',
+  plugin_policy: 'Richtlinienüberprüfung',
+  plugin_policy_desc:
+    'Der Prüfer prüft stets, ob nur diese Richtlinien ausgeführt werden. So haben Sie die Sicherheit, dass nur autorisierte Personen unterzeichnen.',
+  plugin_policy_heading: 'Dieses Plugin greift automatisch zu',
+  password_do_not_match: 'Passwörter stimmen nicht überein',
+  password_pattern_error:
+    'Das Passwort muss zwischen {{min}} und {{max}} Zeichen lang sein',
+  success: 'Erfolg',
+  failed_to_process_plugin_install:
+    'Die Installation des Plugins konnte nicht durchgeführt werden.',
+  hold_for_paired_sign: 'Halten für gepaartes Zeichen',
 }

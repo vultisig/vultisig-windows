@@ -22,7 +22,7 @@ const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(20)}
   ${centerContent};
   border-radius: 100%;
-  color: ${getColor('success')};
+  color: ${getColor('primary')};
   background: ${getColor('foregroundExtra')};
   font-size: 16px;
   padding: 2px;

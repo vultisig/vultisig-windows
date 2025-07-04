@@ -23,7 +23,6 @@ export type MultiCharacterInputProps = InputProps<string | null> &
     validation?: DigitGroupInputValidationState
     includePasteButton?: boolean
     autoFocusFirst?: boolean
-    isValidating?: boolean
     validationMessages?: ValidationMessages
   }
 
@@ -44,16 +43,10 @@ export const MultiCharacterInput = ({
 
   const isDisabled = validation === 'loading'
 
-  const defaultValidationTexts = {
-    valid: t('digit_input_success_validation'),
-    invalid: t('digit_input_error_validation'),
-    loading: t('digit_input_loading_validation'),
-  }
-
   const derivedValidationMessages = {
-    valid: validationMessages.valid ?? defaultValidationTexts.valid,
-    invalid: validationMessages.invalid ?? defaultValidationTexts.invalid,
-    loading: validationMessages.loading ?? defaultValidationTexts.loading,
+    valid: validationMessages.valid ?? t('digit_input_success_validation'),
+    invalid: validationMessages.invalid ?? t('digit_input_error_validation'),
+    loading: validationMessages.loading ?? t('digit_input_loading_validation'),
   }
 
   return (

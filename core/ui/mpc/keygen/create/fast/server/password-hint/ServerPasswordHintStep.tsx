@@ -1,4 +1,4 @@
-import { useVaultPasswordHint } from '@core/ui/mpc/keygen/create/fast/server/password-hint/state/password-hint'
+import { usePasswordHint } from '@core/ui/mpc/keygen/create/fast/server/password-hint/state/password-hint'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
@@ -33,7 +33,7 @@ export const ServerPasswordHintStep = ({
   onBack,
 }: OnFinishProp & Partial<OnBackProp>) => {
   const { t } = useTranslation()
-  const [storedPasswordHint, setStoredPasswordHint] = useVaultPasswordHint()
+  const [storedPasswordHint, setStoredPasswordHint] = usePasswordHint()
 
   const {
     register,
