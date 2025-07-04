@@ -1,5 +1,6 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { blockaid } from '@core/config/security/blockaid'
+import { buildBlockaidScanPayload } from '@core/config/security/blockaid/buildScanPayload'
 import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { attempt } from '@lib/utils/attempt'
 
@@ -39,15 +40,16 @@ export const executeTx: ExecuteTxResolver = async input => {
   let scanUnavailable = false
   if (input.rawTx && input.account_address && !input.skipBlockaid) {
     scanResult = await attempt(async () => {
-      return await blockaid.scanTransaction({
-        chain: input.chain.toString().toLowerCase(),
-        account_address: input.account_address!,
-        simulate_with_estimated_gas: false,
-        metadata: {
-          domain: 'https://vultisig.com',
-        },
-        data: input.rawTx!,
-      })
+      return await blockaid.scanTransaction(
+        buildBlockaidScanPayload({
+          chain: input.chain,
+          accountAddress: input.account_address,
+          rawTx: input.rawTx,
+          metadata: {
+            domain: 'https://vultisig.com',
+          },
+        })
+      )
     })
     // scanResult = MOCK_BLOCKAID_WARNING_RESPONSE
     const validation = scanResult.data?.validation

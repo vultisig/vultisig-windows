@@ -25,7 +25,7 @@ class BlockaidService {
     }
   }
 
-  scanTransaction(input: TxScanInput) {
+  scanTransaction(input: any) {
     return this.post<ScanResponse>(Endpoints.txScan(input.chain), input)
   }
 

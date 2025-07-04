@@ -5,7 +5,7 @@ const blockaid_base = `${rootApiUrl}/blockaid/v0`
 export const Endpoints = {
   txScan: (chain: string) => {
     const chainLower = chain.toLowerCase()
-    if (chainLower.includes('solana')) {
+    if (chainLower.includes('solana') || chainLower.includes('mainnet')) {
       return `${blockaid_base}/solana/message/scan`
     } else if (chainLower.includes('sui')) {
       return `${blockaid_base}/sui/transaction/scan`
