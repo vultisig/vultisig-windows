@@ -43,7 +43,7 @@ export const DepositActionSpecific = ({ action }: Props) => {
         switch: () => <SwitchSpecific />,
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
-        unmerge_ruji: () => <UnmergeSpecific />,
+        unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
       }}
       else={() => null}
     />

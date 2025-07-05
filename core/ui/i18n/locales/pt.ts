@@ -687,6 +687,7 @@ export const pt = {
   vote: 'Voto',
   stake: 'Estaca',
   unstake: 'Desfazer stake',
+  unmerge: 'Desfazer merge',
   advanced: 'Avançado',
   low: 'Baixo',
   normal: 'Normal',
@@ -920,6 +921,7 @@ export const pt = {
   find_custom_token: 'Encontre seu token personalizado',
   enter_contract_address: 'Insira o endereço do contrato',
   no_token_found: 'Nenhum token encontrado',
+  no_mergeable_tokens_found: 'Nenhum token mesclável encontrado',
   invalid_token_address: 'Insira um endereço de token válido',
   extension_vault_import_restriction:
     'Somente os cofres DKLS podem ser importados na extensão',

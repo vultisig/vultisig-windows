@@ -215,6 +215,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
+  const fee = getFee()
+
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: getKeysignTwPublicKey(keysignPayload),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
@@ -226,6 +228,16 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     messages,
     fee: getFee(),
   })
+
+  console.log('=== COSMOS SIGNING INPUT ===')
+  console.log('Public Key:', input.publicKey)
+  console.log('Chain ID:', input.chainId)
+  console.log('Account Number:', accountNumber)
+  console.log('Sequence:', sequence)
+  console.log('Memo (propagated):', input.memo)
+  console.log('Messages:', messages)
+  console.log('Fee:', fee)
+  console.log('Should Propagate Memo:', shouldPropagateMemo(chainSpecific))
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }

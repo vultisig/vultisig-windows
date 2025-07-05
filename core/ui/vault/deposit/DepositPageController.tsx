@@ -1,5 +1,4 @@
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
@@ -21,12 +20,7 @@ export const DepositPageController = () => {
   const chainActionOptions =
     chainActionsRecord[coin.chain as DepositEnabledChain]
 
-  const filteredChainActionOptions = chainActionOptions.filter(
-    action =>
-      action !== 'unmerge_ruji' ||
-      (action === 'unmerge_ruji' &&
-        coin.ticker === knownCosmosTokens.THORChain['x/ruji'].ticker)
-  )
+  const filteredChainActionOptions = chainActionOptions
 
   const [state, setState] = useState<{
     depositFormData: FieldValues
