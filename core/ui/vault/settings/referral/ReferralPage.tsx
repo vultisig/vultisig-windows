@@ -8,16 +8,27 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
+import { CreateOrSaveReferral } from './components/CreateOrSaveReferral'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
 
 const steps = ['landing', 'summary', 'create-or-save-referral'] as const
 
+const getHeaderTitle = (step: (typeof steps)[number]) => {
+  return match(step, {
+    landing: () => 'Referral',
+    summary: () => 'Referral',
+    'create-or-save-referral': () => 'Vultisig - Referrals',
+  })
+}
+
 export const ReferralPage = () => {
   const { t } = useTranslation()
   const { step, toNextStep } = useStepNavigation({ steps })
+  const headerTitle = getHeaderTitle(step)
 
   // TODO: referral translations
   return (
@@ -44,15 +55,14 @@ export const ReferralPage = () => {
             }
           />
         }
-        title={t('referral')}
-        hasBorder
+        title={headerTitle}
       />
       <PageContent>
         <Match
           value={step}
           landing={() => <ReferralLanding onFinish={toNextStep} />}
           summary={() => <ReferralsSummary onFinish={toNextStep} />}
-          create-or-save-referral={() => <Text>Hello Fren</Text>}
+          create-or-save-referral={() => <CreateOrSaveReferral />}
         />
       </PageContent>
     </>
