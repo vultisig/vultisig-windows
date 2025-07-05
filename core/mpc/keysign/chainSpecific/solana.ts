@@ -9,7 +9,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
-import { Address } from '@solana/web3.js'
+import { address } from '@solana/web3.js'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 
@@ -24,7 +24,7 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
   ).value.blockhash.toString()
 
   const prioritizationFees = await client
-    .getRecentPrioritizationFees([coin.address as Address])
+    .getRecentPrioritizationFees([address(coin.address)])
     .send()
 
   // regardless of its complexity Solana charges a fixed base transaction fee of 5000 lamports per transaction.
