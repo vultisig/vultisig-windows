@@ -9,6 +9,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
@@ -24,29 +25,31 @@ const StyledIconWrapper = styled(IconWrapper)`
   color: ${getColor('primaryAlt')};
 `
 
+const items = [
+  {
+    title: 'referrals_summary.item_1.title',
+    description: 'referrals_summary.item_1.description',
+    icon: <TextCursorInputIcon />,
+  },
+  {
+    title: 'referrals_summary.item_2.title',
+    description: 'referrals_summary.item_2.description',
+    icon: <ShareTwoIcon />,
+  },
+  {
+    title: 'referrals_summary.item_3.title',
+    description: 'referrals_summary.item_3.description',
+    icon: <TrophyIcon />,
+  },
+  {
+    title: 'referrals_summary.item_4.title',
+    description: 'referrals_summary.item_4.description',
+    icon: <UserCheckIcon />,
+  },
+]
+
 export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
-  const items = [
-    {
-      title: 'Create your referral code',
-      description: 'Pick a short code and set your reward payout.',
-      icon: <TextCursorInputIcon />,
-    },
-    {
-      title: 'Share with friends',
-      description: 'Invite friends to use your code while swapping.',
-      icon: <ShareTwoIcon />,
-    },
-    {
-      title: 'Earn rewards automatically',
-      description: 'Get paid in your preferred asset every time they trade.',
-      icon: <TrophyIcon />,
-    },
-    {
-      title: 'Use Referral code',
-      description: 'Use a code from your friend and save on swap fees.',
-      icon: <UserCheckIcon />,
-    },
-  ]
+  const { t } = useTranslation()
 
   return (
     <>
@@ -80,21 +83,21 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
                   <MegaphoneIcon />
                 </IconWrapper>
                 <Text size={12} color="shy">
-                  Referral Program
+                  {t('referral_program')}
                 </Text>
               </PillWrapper>
               <ContentWrapper>
-                <Text variant="h1Regular">How it works</Text>
+                <Text variant="h1Regular">{t('how_it_works')}</Text>
                 <VStack gap={24}>
                   {items.map(({ title, icon, description }) => (
                     <SummaryListItem alignItems="center" key={title}>
                       <StyledIconWrapper>{icon}</StyledIconWrapper>
                       <VStack gap={4}>
                         <Text color="contrast" weight={500} size={13}>
-                          {title}
+                          {t(title)}
                         </Text>
                         <Text color="shy" weight={500} size={13}>
-                          {description}
+                          {t(description)}
                         </Text>
                       </VStack>
                     </SummaryListItem>
@@ -103,7 +106,7 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
               </ContentWrapper>
             </VStack>
 
-            <Button onClick={onFinish}>Get Started</Button>
+            <Button onClick={onFinish}>{t('get_started')}</Button>
           </Wrapper>
         </AnimatedVisibility>
       </VStack>
