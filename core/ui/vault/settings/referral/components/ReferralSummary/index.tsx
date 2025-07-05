@@ -1,52 +1,50 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
+import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
+import { TextCursorInputIcon } from '@lib/ui/icons/TextCursorInputIcon'
+import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
+import { UserCheckIcon } from '@lib/ui/icons/UserCheckIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
+import { VStack } from '@lib/ui/layout/Stack'
+import { OnFinishProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import styled from 'styled-components'
+
 import {
   ContentWrapper,
   IconWrapper,
   PillWrapper,
   SummaryListItem,
   Wrapper,
-} from '@core/ui/onboarding/components/OnboardingSummary/OnboardingSummary.styles'
-import { Button } from '@lib/ui/buttons/Button'
-import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
-import { LayersIcon } from '@lib/ui/icons/LayersIcon'
-import { SplitIcon } from '@lib/ui/icons/SplitIcon'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { VStack } from '@lib/ui/layout/Stack'
-import { OnFinishProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
+} from './ReferralSummary.styles'
 import { Overlay } from './ReferralSummary.styles'
 
-const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('idle')};
+const StyledIconWrapper = styled(IconWrapper)`
+  color: ${getColor('primaryAlt')};
 `
 
 export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
-  const { t } = useTranslation()
-
   const items = [
     {
       title: 'Create your referral code',
       description: 'Pick a short code and set your reward payout.',
-      icon: <CloudDownloadIcon fontSize={24} />,
+      icon: <TextCursorInputIcon />,
     },
     {
       title: 'Share with friends',
       description: 'Invite friends to use your code while swapping.',
-      icon: <SplitIcon fontSize={24} />,
+      icon: <ShareTwoIcon />,
     },
     {
       title: 'Earn rewards automatically',
       description: 'Get paid in your preferred asset every time they trade.',
-      icon: <LayersIcon fontSize={24} />,
+      icon: <TrophyIcon />,
     },
     {
       title: 'Use Referral code',
       description: 'Use a code from your friend and save on swap fees.',
-      icon: <StyledIcon fontSize={24} />,
+      icon: <UserCheckIcon />,
     },
   ]
 
@@ -69,31 +67,43 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
             data-testid="OnboardingSummary-Wrapper"
           >
             <VStack gap={46}>
-              <PillWrapper data-testid="OnboardingSummary-PillWrapper">
+              <PillWrapper
+                alignItems="center"
+                data-testid="OnboardingSummary-PillWrapper"
+              >
+                <IconWrapper
+                  style={{
+                    fontSize: 16,
+                    color: '#5CA7FF',
+                  }}
+                >
+                  <MegaphoneIcon />
+                </IconWrapper>
                 <Text size={12} color="shy">
                   Referral Program
                 </Text>
               </PillWrapper>
               <ContentWrapper>
-                <Text variant="h1Regular">
-                  {t('fastVaultSetup.summary.title')}
-                </Text>
+                <Text variant="h1Regular">How it works</Text>
                 <VStack gap={24}>
-                  {items.map(({ title, icon }) => (
+                  {items.map(({ title, icon, description }) => (
                     <SummaryListItem alignItems="center" key={title}>
-                      <IconWrapper>{icon}</IconWrapper>
-                      <Text color="contrast" weight={500} size={13}>
-                        {title}
-                      </Text>
+                      <StyledIconWrapper>{icon}</StyledIconWrapper>
+                      <VStack gap={4}>
+                        <Text color="contrast" weight={500} size={13}>
+                          {title}
+                        </Text>
+                        <Text color="shy" weight={500} size={13}>
+                          {description}
+                        </Text>
+                      </VStack>
                     </SummaryListItem>
                   ))}
                 </VStack>
               </ContentWrapper>
             </VStack>
 
-            <Button onClick={onFinish}>
-              {t('fastVaultSetup.summary.ctaText')}
-            </Button>
+            <Button onClick={onFinish}>Get Started</Button>
           </Wrapper>
         </AnimatedVisibility>
       </VStack>
