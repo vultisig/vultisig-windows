@@ -1,6 +1,5 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { rujiMergeDenom } from '@core/chain/chains/cosmos/thor/ruji-unmerge/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
@@ -124,16 +123,27 @@ export const generateMemo = ({
     switch: () => {
       return `switch:${thorchainAddress}`
     },
-    unmerge_ruji: () => {
+    unmerge: () => {
       if (!amount) {
         throw new Error('Amount is required for unmerge')
       }
+      if (!selectedCoin) {
+        throw new Error('Token is required for unmerge')
+      }
 
-      const sharesRaw = toChainAmount(
-        amount,
-        knownCosmosTokens.THORChain['x/ruji'].decimals
-      )
-      return `unmerge:${rujiMergeDenom}:${sharesRaw}`
+      const sharesRaw = toChainAmount(amount, selectedCoin.decimals)
+      // For unmerge, use the full coin ID (e.g., "thor.kuji")
+      const denom = selectedCoin.id
+      const memo = `unmerge:${denom}:${sharesRaw}`
+      
+      console.log('=== UNMERGE MEMO GENERATION ===')
+      console.log('Selected Coin:', selectedCoin)
+      console.log('Amount (decimal):', amount)
+      console.log('Shares Raw:', sharesRaw)
+      console.log('Denom:', denom)
+      console.log('Final Memo:', memo)
+      
+      return memo
     },
   })
 }

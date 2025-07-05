@@ -94,7 +94,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   const selectedCoin = getValues('selectedCoin') as Coin | null
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
-  const isRujiUnmergeAction = selectedChainAction === 'unmerge_ruji'
+  const isUnmergeAction = selectedChainAction === 'unmerge'
 
   const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
     coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
@@ -165,12 +165,12 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'switch',
                     'merge',
                     'stake',
-                    'unmerge_ruji',
+                    'unmerge',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
-                  : isTCYAction || isRujiUnmergeAction
+                  : isTCYAction || isUnmergeAction
                     ? 0
                     : totalTokenAmount.toFixed(2)
 

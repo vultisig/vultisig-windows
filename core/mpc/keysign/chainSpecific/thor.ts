@@ -5,13 +5,19 @@ import { getThorNetworkInfo } from '@core/chain/chains/cosmos/thor/getThorNetwor
 import {
   THORChainSpecific,
   THORChainSpecificSchema,
+  TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 
 export const getThorchainSpecific: ChainSpecificResolver<
   THORChainSpecific
-> = async ({ coin, isDeposit = false }) => {
+> = async ({ coin, isDeposit = false, transactionType = TransactionType.UNSPECIFIED }) => {
+  console.log('=== THORCHAIN SPECIFIC DEBUG ===')
+  console.log('Coin:', coin)
+  console.log('Is Deposit:', isDeposit)
+  console.log('Transaction Type:', transactionType)
+  
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain: coin.chain as CosmosChain,
@@ -19,10 +25,18 @@ export const getThorchainSpecific: ChainSpecificResolver<
 
   const { native_tx_fee_rune } = await getThorNetworkInfo()
 
-  return create(THORChainSpecificSchema, {
+  const thorchainSpecific = create(THORChainSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence ?? 0),
     fee: BigInt(native_tx_fee_rune),
     isDeposit,
+    transactionType,
   })
+  
+  console.log('THORChain Specific Data:', thorchainSpecific)
+  console.log('Account Number:', accountNumber)
+  console.log('Sequence:', sequence)
+  console.log('Fee:', native_tx_fee_rune)
+  
+  return thorchainSpecific
 }

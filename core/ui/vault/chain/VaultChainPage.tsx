@@ -5,6 +5,7 @@ import { knownTokens } from '@core/chain/coin/knownTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
@@ -87,7 +88,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions chain={chain} />
+        <VaultPrimaryActions coin={chainFeeCoin[chain]} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
