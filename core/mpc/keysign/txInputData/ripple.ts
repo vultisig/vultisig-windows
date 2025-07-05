@@ -32,7 +32,7 @@ export const getRippleTxInputData: TxInputDataResolver<'ripple'> = ({
         const payment = TW.Ripple.Proto.OperationPayment.create({
           destination: keysignPayload.toAddress,
           amount: Long.fromString(keysignPayload.toAmount),
-          destinationTag: Long.fromNumber(destinationTag),
+          destinationTag: Long.fromNumber(destinationTag) as any,
         })
 
         return {

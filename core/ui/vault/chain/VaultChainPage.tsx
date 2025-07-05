@@ -1,5 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { extractCoinKey } from '@core/chain/coin/Coin'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { knownTokens } from '@core/chain/coin/knownTokens'
@@ -88,7 +89,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions fromChain={chain} />
+        <VaultPrimaryActions coin={chainFeeCoin[chain]} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
