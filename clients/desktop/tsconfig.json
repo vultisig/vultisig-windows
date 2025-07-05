@@ -14,7 +14,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@core/ui/*": ["../../core/ui/*"],
+      "@core/chain/*": ["../../core/chain/*"],
+      "@core/config/*": ["../../core/config/*"],
+      "@core/mpc/*": ["../../core/mpc/*"],
+      "@lib/ui/*": ["../../lib/ui/*"],
+      "@lib/utils/*": ["../../lib/utils/*"]
+    }
   },
   "include": ["src", "global.d.ts", "../../core/ui/i18n/**/*.d.ts"],
   "exclude": ["node_modules", "dist"],

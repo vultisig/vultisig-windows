@@ -650,6 +650,7 @@ export const de = {
   vote: 'Abstimmung',
   stake: 'Einsatz',
   unstake: 'Abstecken',
+  unmerge: 'Entflechten',
   advanced: 'Fortschrittlich',
   low: 'Niedrig',
   normal: 'Normal',
@@ -893,6 +894,7 @@ export const de = {
   find_custom_token: 'Finden Sie Ihr benutzerdefiniertes Token',
   enter_contract_address: 'Vertragsadresse eingeben',
   no_token_found: 'Kein Token gefunden',
+  no_mergeable_tokens_found: 'Keine zusammenführbaren Token gefunden',
   invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden',

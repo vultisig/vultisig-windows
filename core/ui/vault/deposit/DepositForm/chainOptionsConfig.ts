@@ -62,6 +62,18 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
+  unmerge: {
+    fields: [],
+    schema: ({ totalAmountAvailable }: FunctionSchema) => {
+      return z.object({
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+      })
+    },
+  },
   merge: {
     fields: [
       {

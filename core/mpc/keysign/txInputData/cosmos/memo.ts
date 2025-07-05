@@ -11,5 +11,5 @@ export const shouldPropagateMemo = (chainSpecific: CosmosChainSpecific) =>
         TransactionType.IBC_TRANSFER,
         TransactionType.VOTE,
       ]),
-    vaultBased: ({ isDeposit }) => !isDeposit,
+    vaultBased: () => true,
   })

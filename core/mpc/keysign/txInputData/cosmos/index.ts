@@ -103,6 +103,37 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ]
+        } else if (memo?.startsWith('unmerge:')) {
+          const memoParts = memo.toLowerCase().split(':')
+          if (memoParts.length !== 3 || !memoParts[2]) {
+            throw new Error(
+              'Invalid unmerge memo format. Expected: unmerge:<denom>:<rawShares>'
+            )
+          }
+
+          const [, , rawShares] = memoParts
+
+          console.log('=== UNMERGE TX INPUT DATA ===')
+          console.log('Sender Address:', coin.address)
+          console.log('Contract Address:', toAddress)
+          console.log('Raw Shares:', rawShares)
+          console.log('Execute Msg:', JSON.stringify({
+            withdraw: { share_amount: rawShares },
+          }))
+
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: JSON.stringify({
+                    withdraw: { share_amount: rawShares },
+                  }),
+                  coins: [],
+                }),
+            }),
+          ]
         } else if (isDeposit) {
           const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
             asset: TW.Cosmos.Proto.THORChainAsset.create({
@@ -172,6 +203,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
+  const messages = getMessages()
+  const fee = getFee()
+  
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: getKeysignTwPublicKey(keysignPayload),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
@@ -180,9 +214,19 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo: memo && shouldPropagateMemo(chainSpecific) ? memo : undefined,
-    messages: getMessages(),
-    fee: getFee(),
+    messages: messages,
+    fee: fee,
   })
+
+  console.log('=== COSMOS SIGNING INPUT ===')
+  console.log('Public Key:', input.publicKey)
+  console.log('Chain ID:', input.chainId)
+  console.log('Account Number:', accountNumber)
+  console.log('Sequence:', sequence)
+  console.log('Memo (propagated):', input.memo)
+  console.log('Messages:', messages)
+  console.log('Fee:', fee)
+  console.log('Should Propagate Memo:', shouldPropagateMemo(chainSpecific))
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }

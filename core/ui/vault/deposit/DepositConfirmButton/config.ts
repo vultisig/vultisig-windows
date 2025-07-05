@@ -16,6 +16,7 @@ export const transactionConfig = (
   chain: Chain
 ): Record<ChainAction, TransactionConfig> => ({
   bond: { requiresAmount: true, requiresNodeAddress: true },
+  unmerge: { requiresAmount: true, requiresNodeAddress: false },
   unbond: { requiresAmount: false, requiresNodeAddress: true },
   leave: { requiresNodeAddress: true, requiresAmount: false },
   custom: {},
