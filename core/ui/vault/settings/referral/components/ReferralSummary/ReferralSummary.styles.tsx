@@ -1,5 +1,4 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -18,10 +17,6 @@ export const Wrapper = styled(PageContent)`
     width: 550px;
     margin-inline: auto;
   }
-`
-
-export const StyledCheckbox = styled(Checkbox)`
-  pointer-events: none;
 `
 
 export const ContentWrapper = styled(VStack)`
