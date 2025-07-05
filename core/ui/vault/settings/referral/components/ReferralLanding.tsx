@@ -69,6 +69,9 @@ const Overlay = styled.div`
   inset: 0;
   background: rgba(2, 18, 43, 0.9);
   z-index: 0;
+  box-shadow:
+    0px -1.071px 4.283px 0px rgba(255, 255, 255, 0.2) inset,
+    -2.142px 0px 5.14px -3.212px rgba(255, 255, 255, 0.4) inset;
 `
 
 const PositionedImage = styled.img`
@@ -87,6 +90,18 @@ const ImageWrapper = styled(VStack)`
     0px -1.071px 4.283px 0px rgba(255, 255, 255, 0.2) inset,
     -2.142px 0px 5.14px -3.212px rgba(255, 255, 255, 0.4) inset;
   border-radius: 36.834px;
+
+  &::before {
+    border-radius: 36.834px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
     top: -45%;
