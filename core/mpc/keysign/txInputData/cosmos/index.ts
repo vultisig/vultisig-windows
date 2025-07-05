@@ -84,6 +84,14 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           walletCore,
           chain,
         })
+
+        // For THORChain swaps, use vaultAddress if toAddress is empty
+        const destinationAddress =
+          toAddress ||
+          (keysignPayload.swapPayload?.case === 'thorchainSwapPayload'
+            ? (keysignPayload.swapPayload.value as any).vaultAddress
+            : '')
+
         if (memo && memo.startsWith('merge:')) {
           const fullDenom = memo.toLowerCase().replace('merge:', '')
 
@@ -92,7 +100,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: coin.address,
-                  contractAddress: toAddress,
+                  contractAddress: destinationAddress,
                   executeMsg: '{ "deposit": {} }',
                   coins: [
                     TW.Cosmos.Proto.Amount.create({
@@ -140,7 +148,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 ),
               ],
               toAddress: toTwAddress({
-                address: toAddress,
+                address: destinationAddress,
                 walletCore,
                 chain,
               }),
