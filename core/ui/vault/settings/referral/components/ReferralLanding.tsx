@@ -11,7 +11,6 @@ import styled from 'styled-components'
 export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
-  //TODO: referral translations
   return (
     <>
       <Overlay />
@@ -22,17 +21,13 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
         <ContentWrapper gap={24}>
           <VStack gap={12}>
             <Text centerHorizontally size={22}>
-              Invite friends.{' '}
+              {t('invite_friends')}.{' '}
               <GradientText as="span" size={22}>
-                Earn rewards
+                {t('earn_rewards')}
               </GradientText>
-              . Save on fees.
+              . {t('save_on_fees')}.
             </Text>
-            <Text centerHorizontally>
-              Share your unique referral code to invite friends. They get a
-              discount and the more they trade, the more you earn — directly to
-              your wallet.
-            </Text>
+            <Text centerHorizontally>{t('share_description')}</Text>
           </VStack>
           <ButtonWrapper>
             <Button onClick={onFinish}>{t('next')}</Button>

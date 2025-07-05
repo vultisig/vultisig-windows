@@ -36,6 +36,42 @@ export const es = {
   asset_selection: 'Selección de activos',
   chain: 'Cadena',
   staked: 'Apostado',
+  title_1: 'Referencia',
+  title_2: 'Vultisig - Referencias',
+  header_tooltip_title: 'Programa de Referidos',
+  header_tooltip_content:
+    'El programa de referidos se aplica a los swaps en THORChain y se basa en el mejor esfuerzo. Debes registrar un THORName para usar el referido de Vultisig. La tarifa de registro es de 10 RUNE y 1 RUNE por cada año, pagados a la red de THORChain.',
+  invite_friends: 'Invitar amigos',
+  earn_rewards: 'Ganar recompensas',
+  save_on_fees: 'Ahorrar en comisiones',
+  share_description:
+    'Comparte tu código de referido único para invitar amigos. Ellos obtienen un descuento y cuanto más intercambien, más ganas tú — directamente en tu billetera.',
+  referrals_summary: {
+    item_1: {
+      title: 'Crea tu código de referido',
+      description: 'Elige un código corto y establece tu recompensa.',
+    },
+    item_2: {
+      title: 'Compártelo con amigos',
+      description: 'Invita a tus amigos a usar tu código al hacer swaps.',
+    },
+    item_3: {
+      title: 'Gana recompensas automáticamente',
+      description:
+        'Recibe pagos en tu activo preferido cada vez que ellos operen.',
+    },
+    item_4: {
+      title: 'Usar código de referido',
+      description:
+        'Usa el código de un amigo y ahorra en comisiones de intercambio.',
+    },
+  },
+  referral_program: 'Programa de Referidos',
+  how_it_works: 'Cómo funciona',
+  get_started: 'Comenzar',
+  use_referral_code: 'Usar Código de Referido',
+  enter_referral_code_placeholder: 'Ingresa Código de Referido',
+  create_referral: 'Crear referido',
   unexpected_error: 'Error inesperado',
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',

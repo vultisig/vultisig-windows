@@ -5,9 +5,12 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const CreateOrSaveReferral = () => {
+  const { t } = useTranslation()
+
   return (
     <AnimatedVisibility
       animationConfig="bottomToTop"
@@ -23,16 +26,16 @@ export const CreateOrSaveReferral = () => {
         <DecorationImage src="/core/images/crypto-natives.png" alt="" />
         <VStack gap={16}>
           <VStack gap={8}>
-            <Text size={14}>Use Referral Code</Text>
-            <TextInput placeholder="Enter Referral Code" />
+            <Text size={14}>{t('use_referral_code')}</Text>
+            <TextInput placeholder={t('enter_referral_code_placeholder')} />
           </VStack>
-          <SaveReferralButton>Save</SaveReferralButton>
+          <SaveReferralButton>{t('save')}</SaveReferralButton>
           <HStack gap={16} alignItems="center">
             <DecorationLine />
-            <Text size={12}>OR</Text>
+            <Text size={12}>{t('or').toUpperCase()}</Text>
             <DecorationLine />
           </HStack>
-          <Button>Create referral</Button>
+          <Button>{t('create_referral')}</Button>
         </VStack>
       </Wrapper>
     </AnimatedVisibility>
