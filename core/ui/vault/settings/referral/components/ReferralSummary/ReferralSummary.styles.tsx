@@ -15,7 +15,7 @@ export const Wrapper = styled(PageContent)`
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
     height: 800px;
-    max-width: 550px;
+    width: 550px;
     margin-inline: auto;
   }
 `
@@ -31,9 +31,10 @@ export const ContentWrapper = styled(VStack)`
   ${borderRadius.s};
 `
 
-export const PillWrapper = styled.div`
+export const PillWrapper = styled(HStack)`
   position: relative;
   padding: 8px 12px;
+  height: 32px;
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 0px 9999px 9999px 0px;
@@ -44,8 +45,8 @@ export const PillWrapper = styled.div`
     content: '';
     position: absolute;
     left: -2px;
-    bottom: -470px;
-    height: 470px;
+    bottom: -1587%;
+    height: 393px;
     width: 2px;
     background-color: ${getColor('foreground')};
   }
