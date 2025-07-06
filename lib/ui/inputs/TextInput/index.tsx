@@ -86,11 +86,11 @@ const TextInputContainer = styled.input<{
           `
         : validation === 'warning' &&
           css`
-            border-color: ${getColor('alertWarning')};
+            border-color: ${getColor('idle')};
 
             &:focus,
             &:hover {
-              border-color: ${getColor('alertWarning')};
+              border-color: ${getColor('idle')};
             }
           `}
 `

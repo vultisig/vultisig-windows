@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('alertWarning')};
+  color: ${getColor('idle')};
 `
 
 export const OnboardingSummary = () => {

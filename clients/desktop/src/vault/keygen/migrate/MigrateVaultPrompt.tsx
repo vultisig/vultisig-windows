@@ -17,12 +17,12 @@ const Container = styled(UnstyledButton)`
   })}
   padding: 12px 16px;
   ${borderRadius.m};
-  color: ${getColor('success')};
+  color: ${getColor('primary')};
   border: 1px solid
     ${({ theme }) =>
-      theme.colors.success.getVariant({ a: () => 0.25 }).toCssValue()};
+      theme.colors.primary.getVariant({ a: () => 0.25 }).toCssValue()};
   background: ${({ theme }) =>
-    theme.colors.success.getVariant({ a: () => 0.1 }).toCssValue()};
+    theme.colors.primary.getVariant({ a: () => 0.1 }).toCssValue()};
 `
 
 export const MigrateVaultPrompt = () => {

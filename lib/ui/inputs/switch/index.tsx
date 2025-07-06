@@ -14,7 +14,7 @@ const StyledSpinner = styled(Spinner)`
 `
 
 const StyledSlider = styled.span<{ checked?: boolean }>`
-  background-color: ${getColor('neutralSix')};
+  background-color: ${getColor('mistExtra')};
   border-radius: 24px;
   height: 24px;
   position: relative;
@@ -22,7 +22,7 @@ const StyledSlider = styled.span<{ checked?: boolean }>`
   width: 40px;
 
   &:before {
-    background-color: ${getColor('neutralOne')};
+    background-color: ${getColor('white')};
     border-radius: 50%;
     content: '';
     height: 20px;
@@ -36,7 +36,7 @@ const StyledSlider = styled.span<{ checked?: boolean }>`
   ${({ checked }) => {
     return checked
       ? css`
-          background-color: ${getColor('primaryAccentFour')};
+          background-color: hsl(224, 98, 64);
 
           ${StyledSpinner} {
             transform: translateX(16px);
@@ -65,7 +65,7 @@ const StyledSwitch = styled.div<{
     return disabled
       ? css`
           ${StyledSlider} {
-            background-color: ${getColor('neutralSix')};
+            background-color: ${getColor('mistExtra')};
             cursor: not-allowed;
             opacity: 0.6;
           }
@@ -81,9 +81,9 @@ const StyledSwitch = styled.div<{
               }
 
               ${StyledSlider} {
-                background-color: ${getColor(
-                  checked ? 'primaryAccentThree' : 'neutralSeven'
-                )};
+                background-color: ${checked
+                  ? 'hsl(224, 75, 50)'
+                  : getColor('textSupporting')};
               }
             }
           `

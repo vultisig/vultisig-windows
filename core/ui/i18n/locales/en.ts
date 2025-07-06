@@ -920,4 +920,5 @@ export const en = {
   blockaid_security_scan: 'Blockaid security scan',
   blockaid_security_scan_desc:
     'Enable or disable transaction security scanning for maximum protection.',
+  hold_for_paired_sign: 'Hold for paired sign',
 }

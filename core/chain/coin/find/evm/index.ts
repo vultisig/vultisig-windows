@@ -3,7 +3,7 @@ import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { queryOneInch } from '@core/chain/coin/find/evm/queryOneInch'
 import { FindCoinsResolver } from '@core/chain/coin/find/FindCoinsResolver'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { attempt } from '@lib/utils/attempt'
 import { NoDataError } from '@lib/utils/error/NoDataError'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
@@ -47,13 +47,14 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     `/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
   )
 
-  const tokens = withoutUndefined(
+  const tokens = without(
     nonZeroBalanceTokenAddresses.map(
       tokenAddress => tokenInfoData[tokenAddress]
-    )
+    ),
+    undefined
   )
 
-  return withoutUndefined(
+  return without(
     tokens.map(token => {
       if (token.logoURI && token.providers.includes('CoinGecko')) {
         return {
@@ -65,6 +66,7 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
           address,
         }
       }
-    })
+    }),
+    undefined
   )
 }

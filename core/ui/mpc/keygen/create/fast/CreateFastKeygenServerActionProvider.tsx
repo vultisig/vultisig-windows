@@ -6,7 +6,7 @@ import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
-import { useVaultPassword } from '@core/ui/state/password'
+import { usePassword } from '@core/ui/state/password'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
@@ -17,7 +17,7 @@ export const CreateFastKeygenServerActionProvider = ({
   children,
 }: ChildrenProp) => {
   const [name] = useVaultName()
-  const [password] = useVaultPassword()
+  const [password] = usePassword()
   const [email] = useEmail()
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()

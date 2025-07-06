@@ -168,7 +168,7 @@ const Input = styled(TextInput)<{
   border: 1px solid
     ${({ validation }) =>
       validation === 'warning'
-        ? getColor('alertWarning')
+        ? getColor('idle')
         : getColor('foregroundExtra')};
 `
 

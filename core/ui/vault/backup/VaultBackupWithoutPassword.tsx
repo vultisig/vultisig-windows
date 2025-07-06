@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledIcon = styled(LockKeyholeIcon)`
-  background: ${getColor('backgroundsSecondary')};
+  background: ${getColor('foreground')};
   border-radius: 16px;
   font-size: 64px;
   padding: 16px;

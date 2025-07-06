@@ -43,7 +43,7 @@ const OptionItem = styled.label<{ isSelected: boolean }>`
 `
 
 const CheckContainer = styled.div`
-  background: ${getColor('success')};
+  background: ${getColor('primary')};
   ${round}
   color: ${getColor('background')};
   ${sameDimensions(20)};

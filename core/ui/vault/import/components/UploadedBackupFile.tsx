@@ -21,7 +21,7 @@ export const UploadedBackupFile = ({ value }: UploadedBackupFileProps) => {
 }
 
 const SuccessfulUploadedContainer = styled(DropZoneContainer)`
-  border: 1px solid ${getColor('success')};
+  border: 1px solid ${getColor('primary')};
   background: ${({ theme }) =>
-    theme.colors.success.getVariant({ a: () => 0.1 }).toCssValue()};
+    theme.colors.primary.getVariant({ a: () => 0.1 }).toCssValue()};
 `

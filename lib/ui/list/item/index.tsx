@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 type Status = 'default' | 'error' | 'success' | 'warning'
 
 const StyledDesc = styled.span`
-  color: ${getColor('textExtraLight')};
+  color: ${getColor('textShy')};
   flex: 1;
   font-size: 12px;
   font-weight: 500;
@@ -39,7 +39,7 @@ const StyledListItem = styled.div<{
   status: Status
 }>`
   align-items: center;
-  background-color: ${getColor('backgroundsSecondary')};
+  background-color: ${getColor('foreground')};
   display: flex;
   gap: 8px;
   min-height: 58px;
@@ -48,19 +48,19 @@ const StyledListItem = styled.div<{
     switch (status) {
       case 'error':
         return css`
-          color: ${getColor('alertError')};
+          color: ${getColor('danger')};
         `
       case 'success':
         return css`
-          color: ${getColor('alertSuccess')};
+          color: ${getColor('primary')};
         `
       case 'warning':
         return css`
-          color: ${getColor('alertWarning')};
+          color: ${getColor('idle')};
         `
       default:
         return css`
-          color: ${getColor('textPrimary')};
+          color: ${getColor('text')};
         `
     }
   }}
@@ -72,7 +72,7 @@ const StyledListItem = styled.div<{
         transition: all 0.2s;
 
         &:hover {
-          background-color: ${getColor('backgroundTertiary')};
+          background-color: ${getColor('foregroundExtra')};
         }
       `
     )

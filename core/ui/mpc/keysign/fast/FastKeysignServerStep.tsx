@@ -81,10 +81,14 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
           })
         },
         custom: ({ message }) => {
+          const messageToHash = message.startsWith('0x')
+            ? Buffer.from(message.slice(2), 'hex')
+            : message
+
           const { chain } = customMessageConfig
           return signWithServer({
             public_key: publicKeys.ecdsa,
-            messages: [keccak256(message)],
+            messages: [keccak256(messageToHash)],
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
             derive_path: walletCore.CoinTypeExt.derivationPath(

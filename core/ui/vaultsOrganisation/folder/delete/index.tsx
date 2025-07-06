@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledIcon = styled(TrashIcon)`
-  color: ${getColor('alertError')};
+  color: ${getColor('danger')};
 `
 
 export const DeleteVaultFolder = () => {

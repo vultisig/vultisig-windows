@@ -3,7 +3,6 @@ import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { without } from '@lib/utils/array/without'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 
@@ -26,7 +25,7 @@ export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
     cosmosFeeCoinDenom[chain]
   )
 
-  return withoutUndefined(
+  return without(
     denoms.map(denom => {
       const tickerAttempt = attempt(() =>
         shouldBePresent(denom.split(/[-.]/).at(1)?.toUpperCase())
@@ -48,6 +47,7 @@ export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
         logo,
         address,
       }
-    })
+    }),
+    undefined
   )
 }

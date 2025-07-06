@@ -610,12 +610,19 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
         if (Array.isArray(params)) {
           try {
-            const [address, msgParamsString] = params
-            const msgParams = JSON.parse(String(msgParamsString))
+            const [address, rawMsgParams] = params
+            let msgParams: any
+            try {
+              msgParams = JSON.parse(String(rawMsgParams))
+            } catch {
+              msgParams = rawMsgParams
+            }
+
             const { domain, types, message } = msgParams
-            // "EIP712Domain" is removed (ethers handles it separately)
-            if (types['EIP712Domain']) {
-              delete types['EIP712Domain']
+
+            // Remove EIP712Domain if present — ethers handles it internally
+            if (types?.EIP712Domain) {
+              delete types.EIP712Domain
             }
 
             const hashMessage = TypedDataEncoder.encode(domain, types, message)
@@ -630,7 +637,6 @@ export const handleRequest = (
               status: 'default',
             })
               .then(result => {
-                // For eth_signTypedData_v4, return the signature directly
                 let sig = Signature.from(ensureHexPrefix(result.txHash))
                 if (sig.v < 27) {
                   sig = Signature.from({

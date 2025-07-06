@@ -8,6 +8,7 @@ import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChildrenProp } from '@lib/ui/props'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { useTranslation } from 'react-i18next'
 
 export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
@@ -37,7 +38,11 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   const payload = keysignMsg.keysignPayload
 
-  if (payload && payload.libType && payload.libType !== vault.libType) {
+  if (
+    payload &&
+    payload.libType &&
+    !areLowerCaseEqual(payload.libType, vault.libType)
+  ) {
     return (
       <FullPageFlowErrorState
         message={t('vault_type_does_not_match')}

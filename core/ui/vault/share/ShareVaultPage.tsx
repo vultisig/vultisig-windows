@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledIcon = styled(ShareIcon)`
-  color: ${getColor('backgroundPrimary')};
+  color: ${getColor('background')};
 `
 
 export const ShareVaultPage = () => {

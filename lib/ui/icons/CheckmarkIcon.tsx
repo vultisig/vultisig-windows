@@ -33,7 +33,7 @@ export const CheckmarkIcon = () => {
 }
 
 const IconWrapper = styled(IconWrapperBase)`
-  color: ${getColor('success')};
-  border: 1px solid ${getColor('success')};
+  color: ${getColor('primary')};
+  border: 1px solid ${getColor('primary')};
   border-radius: 99px;
 `

@@ -5,7 +5,7 @@ import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPri
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
 import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
@@ -33,7 +33,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
     }
 
     if (pricesQuery.data && balancesQuery.data) {
-      const data = withoutUndefined(
+      const data = without(
         coins.map(coin => {
           const amount =
             shouldBePresent(balancesQuery.data)[coinKeyToString(coin)] ||
@@ -46,7 +46,8 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
             amount,
             price,
           }
-        })
+        }),
+        undefined
       )
 
       return getResolvedQuery(data)

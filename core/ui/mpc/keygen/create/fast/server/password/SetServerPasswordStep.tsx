@@ -1,6 +1,6 @@
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { passwordLenghtConfig } from '@core/ui/security/password/config'
-import { useVaultPassword } from '@core/ui/state/password'
+import { usePassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -48,9 +48,9 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 export const SetServerPasswordStep = ({
   onFinish,
   onBack,
-}: OnFinishProp & Partial<OnBackProp>) => {
+}: OnFinishProp<{ password: string }> & Partial<OnBackProp>) => {
   const { t } = useTranslation()
-  const [storedPassword = '', setStoredPassword] = useVaultPassword()
+  const [storedPassword = '', setStoredPassword] = usePassword()
 
   const schema = useMemo(() => createSchema(t), [t])
 
@@ -66,7 +66,7 @@ export const SetServerPasswordStep = ({
 
   const onSubmit = ({ password }: Schema) => {
     setStoredPassword(password)
-    onFinish()
+    onFinish({ password })
   }
 
   return (

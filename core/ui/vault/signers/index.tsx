@@ -9,15 +9,15 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledSuccessIcon = styled(ShieldIcon)`
-  color: ${getColor('alertWarning')};
+  color: ${getColor('idle')};
 `
 
 const StyledWarningIcon = styled(ZapIcon)`
-  color: ${getColor('alertWarning')};
+  color: ${getColor('idle')};
 `
 
 const StyledText = styled.span`
-  color: ${getColor('textExtraLight')};
+  color: ${getColor('textShy')};
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
@@ -25,7 +25,7 @@ const StyledText = styled.span`
 
 const StyledVaultSigners = styled.div`
   align-items: center;
-  background-color: ${getColor('backgroundsSecondary')};
+  background-color: ${getColor('foreground')};
   border: solid 1px ${getColor('borderLight')};
   border-radius: 16px;
   display: flex;

@@ -55,7 +55,7 @@ export const SendFiatFeeValue = () => {
   return (
     <VStack alignItems="flex-end">
       <Text size={14}>
-        {formatTokenAmount(humanReadableFeeValue, coinKey.id)}
+        {formatTokenAmount(humanReadableFeeValue, coin.ticker)}
       </Text>
       <Text size={14} color="shy">
         {formattedAmount}

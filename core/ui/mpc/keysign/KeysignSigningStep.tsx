@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
@@ -9,7 +8,6 @@ import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningSta
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
-import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SecurityWarningModal } from '@core/ui/security/components/SecurityWarningModal'
 import { useCore } from '@core/ui/state/core'
@@ -189,12 +187,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                                <TxHashProvider
-                                  value={normalizeTxHash(txResult.txHash, {
-                                    memo: payload?.memo,
-                                    chain: payload?.coin?.chain as Chain,
-                                  })}
-                                >
+                              <TxHashProvider value={txResult.txHash}>
                                   <KeysignTxOverview />
                                 </TxHashProvider>
                               </VStack>
