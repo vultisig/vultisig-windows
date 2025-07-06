@@ -81,19 +81,6 @@ export const DepositConfirmButton = ({
   const keysignPayload = useMemo(() => {
     if (chainSpecificQuery.isLoading) return
 
-    console.log('=== UNMERGE KEYSIGN DEBUG ===')
-    console.log('Action:', action)
-    console.log('Is Unmerge:', isUnmerge)
-    console.log('Coin:', coin)
-    console.log('Selected Coin:', selectedCoin)
-    console.log('Amount (raw input):', depositFormData['amount'])
-    console.log('Amount (parsed):', amount)
-    console.log('Memo:', memo)
-    console.log('Transaction Type:', transactionType)
-    console.log('Chain Specific Data:', chainSpecificQuery.data)
-    console.log('Vault publicKeys:', vault.publicKeys)
-    console.log('Deposit Form Data:', depositFormData)
-
     // TODO: handle affiliate fee and percentage
     const publicKey = getPublicKey({
       chain: coin.chain,
@@ -157,14 +144,6 @@ export const DepositConfirmButton = ({
     // Create the final payload with all the fields set
     const finalKeysignPayload = create(KeysignPayloadSchema, basePayload)
 
-    console.log('=== FINAL KEYSIGN PAYLOAD ===')
-    console.log('To Address:', finalKeysignPayload.toAddress)
-    console.log('To Amount:', finalKeysignPayload.toAmount)
-    console.log('Memo:', finalKeysignPayload.memo)
-    console.log('Coin:', finalKeysignPayload.coin)
-    console.log('Blockchain Specific:', finalKeysignPayload.blockchainSpecific)
-    console.log('Full Payload:', finalKeysignPayload)
-
     return { keysign: finalKeysignPayload }
   }, [
     action,
@@ -199,8 +178,6 @@ export const DepositConfirmButton = ({
   if (chainSpecificQuery.isLoading || !keysignPayload) {
     return <Text>{t('loading')}</Text>
   }
-
-  console.log('## keysign payload', keysignPayload)
 
   return <StartKeysignPrompt keysignPayload={keysignPayload} />
 }

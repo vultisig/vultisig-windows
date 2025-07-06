@@ -13,11 +13,6 @@ import { ChainSpecificResolver } from './ChainSpecificResolver'
 export const getThorchainSpecific: ChainSpecificResolver<
   THORChainSpecific
 > = async ({ coin, isDeposit = false, transactionType = TransactionType.UNSPECIFIED }) => {
-  console.log('=== THORCHAIN SPECIFIC DEBUG ===')
-  console.log('Coin:', coin)
-  console.log('Is Deposit:', isDeposit)
-  console.log('Transaction Type:', transactionType)
-  
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain: coin.chain as CosmosChain,
@@ -32,11 +27,6 @@ export const getThorchainSpecific: ChainSpecificResolver<
     isDeposit,
     transactionType,
   })
-  
-  console.log('THORChain Specific Data:', thorchainSpecific)
-  console.log('Account Number:', accountNumber)
-  console.log('Sequence:', sequence)
-  console.log('Fee:', native_tx_fee_rune)
   
   return thorchainSpecific
 }
