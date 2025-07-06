@@ -153,7 +153,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                                     }}
                                   >
                                     <TriangleAlertIcon
-                                      color="alertWarning"
+                                      color="danger"
                                       fontSize={14}
                                     />
                                     <Text
@@ -187,7 +187,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                              <TxHashProvider value={txResult.txHash}>
+                                <TxHashProvider value={txResult.txHash}>
                                   <KeysignTxOverview />
                                 </TxHashProvider>
                               </VStack>

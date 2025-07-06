@@ -32,8 +32,8 @@ export const SecurityWarningModal: FC<Props> = ({
         <TriangleAlertIcon
           color={
             scan.validation?.result_type === BlockaidResultTypes.Malicious
-              ? 'alertError'
-              : 'alertWarning'
+              ? 'danger'
+              : 'idle'
           }
           fontSize={32}
         />

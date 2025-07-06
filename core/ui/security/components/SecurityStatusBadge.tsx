@@ -16,7 +16,7 @@ export const SecurityStatusBadge = ({ query }: Props) => {
 
   return (
     <Wrapper color="red">
-      <TriangleAlertIcon color="alertError" fontSize={16} />
+      <TriangleAlertIcon color="danger" fontSize={16} />
     </Wrapper>
   )
 }
