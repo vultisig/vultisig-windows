@@ -136,13 +136,6 @@ export const generateMemo = ({
       const denom = selectedCoin.id
       const memo = `unmerge:${denom}:${sharesRaw}`
       
-      console.log('=== UNMERGE MEMO GENERATION ===')
-      console.log('Selected Coin:', selectedCoin)
-      console.log('Amount (decimal):', amount)
-      console.log('Shares Raw:', sharesRaw)
-      console.log('Denom:', denom)
-      console.log('Final Memo:', memo)
-      
       return memo
     },
   })
