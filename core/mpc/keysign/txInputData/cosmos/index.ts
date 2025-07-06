@@ -132,9 +132,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: coin.address,
                   contractAddress: toAddress,
-                  executeMsg: JSON.stringify({
-                    withdraw: { share_amount: rawShares },
-                  }),
+                  executeMsg: `{"withdraw":{"share_amount":"${rawShares}"}}`,
                   coins: [],
                 }),
             }),

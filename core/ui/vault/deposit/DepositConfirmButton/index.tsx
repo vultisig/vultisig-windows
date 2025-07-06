@@ -56,7 +56,7 @@ export const DepositConfirmButton = ({
     action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
-        ? TransactionType.THOR_UNMERGE
+        ? TransactionType.UNSPECIFIED // Using UNSPECIFIED instead of THOR_UNMERGE due to DKLS library bug that causes signing to fail
         : undefined
   
   // For chain specific query, we need a coin with address
