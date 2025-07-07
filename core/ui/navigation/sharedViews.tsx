@@ -34,10 +34,12 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { CreateOrSaveReferralPage } from '../vault/settings/referral/CreateOrSaveReferralPage'
 import { ReferralPage } from '../vault/settings/referral/ReferralPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'createOrSaveReferral'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -75,6 +77,7 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  createOrSaveReferral: CreateOrSaveReferralPage,
   referral: ReferralPage,
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
