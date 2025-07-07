@@ -990,4 +990,6 @@ export const it = {
   failed_to_process_plugin_install:
     "Impossibile elaborare l'installazione del plugin",
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
+  warning: 'Avviso',
+  malicious_address_detected: 'Indirizzo dannoso rilevato',
 }

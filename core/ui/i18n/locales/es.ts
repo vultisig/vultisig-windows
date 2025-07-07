@@ -994,4 +994,6 @@ export const es = {
   failed_to_process_plugin_install:
     'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
+  warning: 'Advertencia',
+  malicious_address_detected: 'Dirección maliciosa detectada',
 }

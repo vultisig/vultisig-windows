@@ -981,4 +981,6 @@ export const pt = {
   success: 'Sucesso',
   failed_to_process_plugin_install: 'Falha ao processar a instalação do plugin',
   hold_for_paired_sign: 'Segure para sinal de par',
+  warning: 'Aviso',
+  malicious_address_detected: 'Endereço malicioso detectado',
 }

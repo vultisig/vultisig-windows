@@ -959,4 +959,6 @@ export const en = {
   blockaid_security_scan_desc:
     'Enable or disable transaction security scanning for maximum protection.',
   hold_for_paired_sign: 'Hold for paired sign',
+  warning: 'Warning',
+  malicious_address_detected: 'Malicious address detected',
 }

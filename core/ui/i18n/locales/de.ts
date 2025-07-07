@@ -996,4 +996,6 @@ export const de = {
   failed_to_process_plugin_install:
     'Die Installation des Plugins konnte nicht durchgeführt werden.',
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
+  warning: 'Warnung',
+  malicious_address_detected: 'Bösartige Adresse erkannt',
 }
