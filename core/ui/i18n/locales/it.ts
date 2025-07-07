@@ -17,6 +17,15 @@ export const it = {
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
   digit_input_loading_validation: 'Verifica del codice in corso, attendere',
+  referral_reg_fee: 'Quota di registrazione',
+  create_referral: 'Crea referral',
+  select: 'Seleziona',
+  pick_referral_code: 'Scegli il codice referral',
+  referral_status: 'Stato',
+  referral_costs: 'Costi',
+  set_expiration: 'Imposta scadenza (in anni)',
+  expiration_date: 'Data di scadenza',
+  choose_payout_asset: 'Scegli asset di pagamento',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
@@ -80,7 +89,6 @@ export const it = {
   get_started: 'Inizia ora',
   use_referral_code: 'Usa Codice Referral',
   enter_referral_code_placeholder: 'Inserisci Codice Referral',
-  create_referral: 'Crea referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
   destination_address: 'Indirizzo di destinazione',
