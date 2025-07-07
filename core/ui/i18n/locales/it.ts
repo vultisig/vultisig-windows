@@ -953,4 +953,6 @@ export const it = {
   failed_to_process_plugin_install:
     "Impossibile elaborare l'installazione del plugin",
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
+  verify_password_periodic_message_description:
+    'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
 }

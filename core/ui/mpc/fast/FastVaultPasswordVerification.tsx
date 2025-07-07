@@ -10,49 +10,43 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
-  const [isOpen, setIsOpen] = useState(false)
   const [password, setPassword] = useState('')
 
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const { lastPasswordVerificationTime } = vault
   const vaultId = getVaultId(vault)
-  const { mutate: updateVault } = useUpdateVaultMutation()
+  const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   const { mutate, error, isPending } = useMutation({
-    mutationFn: async () =>
-      getVaultFromServer({
-        vaultId: vaultId,
-        password,
-      }),
-    onSuccess: () => {
-      updateVault({
+    mutationFn: async (password?: string) => {
+      if (password) {
+        await getVaultFromServer({
+          vaultId: vaultId,
+          password,
+        })
+      }
+      await updateVault({
         vaultId,
         fields: {
           lastPasswordVerificationTime: Date.now(),
         },
       })
-      setIsOpen(false)
     },
   })
 
-  useEffect(() => {
-    const now = Date.now()
+  const now = Date.now()
 
-    if (
-      !lastPasswordVerificationTime ||
-      now - lastPasswordVerificationTime > verificationTimeoutMs
-    ) {
-      setIsOpen(true)
-    }
-  }, [lastPasswordVerificationTime])
+  const shouldShowModal =
+    !lastPasswordVerificationTime ||
+    now - lastPasswordVerificationTime > verificationTimeoutMs
 
   const isDisabled = useMemo(() => {
     if (!password) {
@@ -60,14 +54,17 @@ export const FastVaultPasswordVerification = () => {
     }
   }, [password, t])
 
-  if (!isOpen) return null
+  if (!shouldShowModal) return null
 
   return (
     <StyledModal
       title={t('verify_password_periodic_message')}
-      onClose={() => setIsOpen(false)}
+      onClose={() => mutate(undefined)}
     >
       <VStack gap={16}>
+        <Text centerHorizontally size={12} color="supporting">
+          {t('verify_password_periodic_message_description')}
+        </Text>
         <PasswordInput
           placeholder={t('enter_password')}
           value={password}
@@ -80,7 +77,7 @@ export const FastVaultPasswordVerification = () => {
           <Button
             disabled={isDisabled || isPending}
             loading={isPending}
-            onClick={() => mutate()}
+            onClick={() => mutate(password)}
           >
             {t('verify')}
           </Button>
