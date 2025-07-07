@@ -19,6 +19,12 @@ export const useCurrentVaultNativeCoins = () => {
   return useMemo(() => coins.filter(isFeeCoin), [coins])
 }
 
+export const useCurrentVaultChains = () => {
+  const nativeCoins = useCurrentVaultNativeCoins()
+
+  return useMemo(() => nativeCoins.map(coin => coin.chain), [nativeCoins])
+}
+
 export const useCurrentVaultCoinsByChain = () => {
   const coins = useCurrentVaultCoins()
 

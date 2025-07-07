@@ -30,7 +30,7 @@ export const FeeSettingsProvider = ({ children }: ChildrenProp) => (
 )
 
 export const useFeeSettings = <T extends FeeSettings>() => {
-  const [{ coin }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const [record, setRecord] = useFeeSettingsRecord()
 
   const value = useMemo(() => {
