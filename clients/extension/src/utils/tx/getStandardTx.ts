@@ -20,6 +20,8 @@ type TransactionHandlers = {
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => {
     const [message] = tx.msgs
+    console.log("message", message);
+    
     return match(message.type, {
       [CosmosMsgType.MSG_SEND]: () => {
         return {
@@ -36,10 +38,10 @@ const transactionHandlers: TransactionHandlers = {
         }
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
-        const formattedMessage = JSON.stringify(message.value.msg)
-          .replace(/^({)/, '$1 ')
-          .replace(/(})$/, ' $1')
-          .replace(/:/g, ': ')
+        // const formattedMessage = JSON.stringify(message.value.msg)
+        //   .replace(/^({)/, '$1 ')
+        //   .replace(/(})$/, ' $1')
+        //   .replace(/:/g, ': ')
 
         return {
           asset: {
@@ -52,7 +54,7 @@ const transactionHandlers: TransactionHandlers = {
           },
           from: message.value.sender,
           to: message.value.contract,
-          data: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${formattedMessage}`,
+          data: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${JSON.stringify(message.value.msg)}`,
         }
       },
     })
@@ -135,6 +137,8 @@ export const getStandardTransactionDetails = async (
   tx: TransactionType.WalletTransaction,
   chain: Chain
 ): Promise<TransactionDetails> => {
+  console.log("getting standard transaction details for tx:", tx);
+  
   if (!tx || !tx.txType) {
     throw new Error('Invalid transaction object or missing txType')
   }

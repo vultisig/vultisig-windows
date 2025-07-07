@@ -100,6 +100,30 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           walletCore,
           chain,
         })
+
+        
+        if(keysignPayload.contractPayload.case === 'wasmExecuteContractPayload') {
+          console.log("keysignPayload.contractPayload", keysignPayload.contractPayload);
+          
+          const contractPayload = keysignPayload.contractPayload.value
+          return [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: contractPayload.senderAddress,
+                  contractAddress: contractPayload.contractAddress,
+                  executeMsg: contractPayload.executeMsg,
+                  coins: contractPayload.coins.map((c) => {
+                    return TW.Cosmos.Proto.Amount.create({
+                      denom: c.ticker,
+                      amount: keysignPayload.toAmount,
+                    })
+                  }),
+
+                }),
+            }),
+          ]
+        }
         if (memo && memo.startsWith('merge:')) {
           const fullDenom = memo.toLowerCase().replace('merge:', '')
 
