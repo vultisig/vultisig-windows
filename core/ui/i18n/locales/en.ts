@@ -482,7 +482,6 @@ export const en = {
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
-  // NEW TRANSLATONS START
   referral_reg_fee: 'Registration Fee',
   create_referral: 'Create Referral',
   select: 'Select',
@@ -492,7 +491,6 @@ export const en = {
   set_expiration: 'Set Expiration (in years)',
   expiration_date: 'Expiration Date',
   choose_payout_asset: 'Choose payout asset',
-  // NEW TRANSLATONS END
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
   referrals_summary: {

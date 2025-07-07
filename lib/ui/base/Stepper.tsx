@@ -41,7 +41,8 @@ export const Stepper = ({
         <Input
           type="number"
           onValueChange={value => {
-            onValueChange?.(parseInt(value))
+            const numValue = parseInt(value)
+            onValueChange(isNaN(numValue) ? null : numValue)
           }}
           value={value}
           min={min}

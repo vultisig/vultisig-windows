@@ -12,7 +12,7 @@ export const Fees = () => {
         <Text size={13} color="supporting">
           {t('referral_reg_fee')}
         </Text>
-        <VStack alignItems="flecx-end">
+        <VStack alignItems="flex-end">
           <Text size={14}>10 RUNE</Text>
           <Text size={14} color="supporting">
             $12.304
@@ -23,7 +23,7 @@ export const Fees = () => {
         <Text size={13} color="supporting">
           {t('referral_costs')}
         </Text>
-        <VStack alignItems="flecx-end">
+        <VStack alignItems="flex-end">
           <Text size={14}>2 x 1 RUNE</Text>
           <Text size={14} color="supporting">
             $$2.30
