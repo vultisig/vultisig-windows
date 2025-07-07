@@ -66,7 +66,7 @@ export const getSolanaSwapKeysignPayload = (
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: Number(0),
+          amount: '0',
           isDeposit: false,
           receiver: '',
         })

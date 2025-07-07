@@ -82,7 +82,7 @@ export const getKeysignPayload = (
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: Number(transaction.transactionDetails.amount?.amount),
+          amount: transaction.transactionDetails.amount?.amount,
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
           transactionType: transaction.transactionDetails.ibcTransaction

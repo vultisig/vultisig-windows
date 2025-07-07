@@ -8,7 +8,7 @@ export type ChainSpecificResolverInput<T = any> = {
   receiver?: string
   feeSettings?: T
   isDeposit?: boolean
-  amount?: number
+  amount?: string
   transactionType?: TransactionType
 }
 

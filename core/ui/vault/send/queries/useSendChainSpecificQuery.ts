@@ -1,3 +1,4 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -25,7 +26,7 @@ export const useSendChainSpecificQuery = () => {
         coin,
         receiver,
         feeSettings,
-        amount,
+        amount: toChainAmount(amount, coin.decimals).toString(),
       }
 
       return {

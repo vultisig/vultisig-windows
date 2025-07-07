@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
@@ -33,7 +32,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
 
   if (chain === Chain.Zksync) {
     const client = getEvmClient(chain).extend(publicActionsL2())
-    const value = toChainAmount(shouldBePresent(amount), coin.decimals)
+    const value = BigInt(shouldBePresent(amount))
 
     const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } =
       await client.estimateFee({

@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getCardanoCurrentSlot } from '@core/chain/chains/cardano/client/currentSlot'
 import {
   cardanoDefaultFee,
@@ -26,7 +25,7 @@ export const getCardanoSpecific: ChainSpecificResolver<
 
   if (amount) {
     const balance = await getCoinBalance(coin)
-    const requested = toChainAmount(amount, coin.decimals)
+    const requested = BigInt(amount)
     result.sendMaxAmount = balance === requested
   }
 
