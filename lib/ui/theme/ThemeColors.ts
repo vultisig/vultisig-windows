@@ -19,7 +19,7 @@ export type ThemeColors = {
   foregroundSuperContrast: HSLA
 
   overlay: HSLA
-  borderLight: HSLA
+  foregroundExtra: HSLA
   contrast: HSLA
   mist: HSLA
   mistExtra: HSLA
