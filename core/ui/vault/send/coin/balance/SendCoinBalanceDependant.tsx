@@ -1,5 +1,4 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import {
   MatchQuery,
@@ -12,8 +11,7 @@ import { useCurrentSendCoin } from '../../state/sendCoin'
 export const SendCoinBalanceDependant: React.FC<
   MatchQueryWrapperProps<bigint>
 > = props => {
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
 
   const query = useBalanceQuery(extractAccountCoinKey(coin))
 

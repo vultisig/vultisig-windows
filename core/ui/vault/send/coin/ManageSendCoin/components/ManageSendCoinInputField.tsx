@@ -10,7 +10,7 @@ import { useCurrentSendCoin } from '../../../state/sendCoin'
 export const ManageSendCoinInputField = () => {
   const [, setViewState] = useCoreViewState<'send'>()
   const { t } = useTranslation()
-  const [{ coin }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
 
   return (
     <SendInputContainer>

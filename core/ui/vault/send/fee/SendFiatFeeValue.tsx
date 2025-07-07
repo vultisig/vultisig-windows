@@ -3,7 +3,6 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
@@ -16,18 +15,17 @@ import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const [{ coin: coinKey }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const [, setFees] = useSendFees()
   const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
-  const coin = useCurrentVaultCoin(coinKey)
 
   const { isPending, data: price } = useCoinPriceQuery({
     coin,
   })
 
-  const { decimals } = chainFeeCoin[coinKey.chain]
+  const { decimals } = chainFeeCoin[coin.chain]
   const humanReadableFeeValue = fromChainAmount(fee, decimals)
 
   let formattedAmount: string | null = null
