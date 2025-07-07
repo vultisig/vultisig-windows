@@ -5,7 +5,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
@@ -21,11 +21,13 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
         <ContentWrapper gap={24}>
           <VStack gap={12}>
             <Text centerHorizontally size={22}>
-              {t('invite_friends')}.{' '}
-              <GradientText as="span" size={22}>
-                {t('earn_rewards')}
-              </GradientText>
-              . {t('save_on_fees')}.
+              <Trans
+                i18nKey="referral_landing_title"
+                components={{
+                  0: <Text as="span" centerHorizontally size={22} />,
+                  1: <GradientText as="span" size={22} />,
+                }}
+              />
             </Text>
             <Text centerHorizontally>{t('share_description')}</Text>
           </VStack>

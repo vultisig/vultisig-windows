@@ -19,9 +19,9 @@ const steps = ['landing', 'summary', 'create-or-save-referral'] as const
 
 const getHeaderTitle = (step: (typeof steps)[number]) => {
   return match(step, {
-    landing: () => 'title_1',
-    summary: () => 'title_1',
-    'create-or-save-referral': () => 'title_2',
+    landing: () => 'title_1' as const,
+    summary: () => 'title_1' as const,
+    'create-or-save-referral': () => 'title_2' as const,
   })
 }
 
