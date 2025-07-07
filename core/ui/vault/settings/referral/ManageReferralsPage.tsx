@@ -7,24 +7,18 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { CreateOrSaveReferralSelectionForm } from './components/CreateOrSaveReferralSelectionForm'
 import { CreateReferralForm } from './components/CreateReferralForm'
 import { EditReferralForm } from './components/EditReferralForm'
+import { ManageReferralsForm } from './components/ManageReferralsForm'
 import { ReferralPageWrapper } from './components/Referrals.styled'
 
-export const CreateOrSaveReferralPage = () => {
+export const ManageReferralsPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
   const [uiState, setUiState] = useState<
     'default' | 'create' | 'edit' | 'loading'
   >('default')
-
-  // TODO: needs conditional rendering
-  // 1) if the user's THORchain address has an associated name with it, we should show the EDIT referral screen
-  // 2) if the user's THORchain address has no associated name with it, we should show this landing screen
-  //  2.1) from here they can either input a referral and save it
-  //  2.2) or they can create a referral and save it
 
   return (
     <>
@@ -38,7 +32,7 @@ export const CreateOrSaveReferralPage = () => {
         <Match
           value={uiState}
           default={() => (
-            <CreateOrSaveReferralSelectionForm
+            <ManageReferralsForm
               onSaveReferral={() => {
                 // TODO: save referral
                 setUiState('loading')

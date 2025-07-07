@@ -13,7 +13,7 @@ type Props = {
   onCreateReferral: () => void
 }
 
-export const CreateOrSaveReferralSelectionForm = ({
+export const ManageReferralsForm = ({
   onSaveReferral,
   onCreateReferral,
 }: Props) => {
