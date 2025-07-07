@@ -5,7 +5,10 @@ import {
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { match } from '@lib/utils/match'
 import { ethers } from 'ethers'
+
+import { CosmosMsgType } from '../constants'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
@@ -15,18 +18,47 @@ type TransactionHandlers = {
 }
 
 const transactionHandlers: TransactionHandlers = {
-  Keplr: (tx, chain) => ({
-    asset: {
-      chain: chain,
-      ticker: tx.amount[0].denom,
-    },
-    amount: {
-      amount: tx.amount[0].amount,
-      decimals: chainFeeCoin[chain].decimals,
-    },
-    from: tx.from_address,
-    to: tx.to_address,
-  }),
+  Keplr: (tx, chain) => {
+    const [message] = tx.msgs
+    console.log('message', message)
+
+    return match(message.type, {
+      [CosmosMsgType.MSG_SEND]: () => {
+        return {
+          asset: {
+            chain: chain,
+            ticker: message.value!.amount[0].denom,
+          },
+          amount: {
+            amount: message.value.amount[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: message.value.from_address,
+          to: message.value.to_address,
+        }
+      },
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
+        // const formattedMessage = JSON.stringify(message.value.msg)
+        //   .replace(/^({)/, '$1 ')
+        //   .replace(/(})$/, ' $1')
+        //   .replace(/:/g, ': ')
+
+        return {
+          asset: {
+            chain: chain,
+            ticker: message.value!.funds[0].denom,
+          },
+          amount: {
+            amount: message.value.funds[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: message.value.sender,
+          to: message.value.contract,
+          data: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${JSON.stringify(message.value.msg)}`,
+        }
+      },
+    })
+  },
 
   Phantom: async (tx, chain) => {
     if (tx.asset.ticker && tx.asset.ticker === chainFeeCoin.Solana.ticker) {
@@ -105,6 +137,8 @@ export const getStandardTransactionDetails = async (
   tx: TransactionType.WalletTransaction,
   chain: Chain
 ): Promise<TransactionDetails> => {
+  console.log('getting standard transaction details for tx:', tx)
+
   if (!tx || !tx.txType) {
     throw new Error('Invalid transaction object or missing txType')
   }
