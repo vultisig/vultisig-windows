@@ -1,5 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { extractCoinKey } from '@core/chain/coin/Coin'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
@@ -179,7 +180,7 @@ export const VaultChainPage = () => {
                   onClick={() =>
                     navigate({
                       id: 'vaultChainCoinDetail',
-                      state: { coin },
+                      state: { coin: extractCoinKey(coin) },
                     })
                   }
                 >
