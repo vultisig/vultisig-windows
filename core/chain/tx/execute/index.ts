@@ -51,7 +51,6 @@ export const executeTx: ExecuteTxResolver = async input => {
         })
       )
     })
-    // scanResult = MOCK_BLOCKAID_WARNING_RESPONSE
     const validation = scanResult.data?.validation
     if (validation?.status !== 'Success') {
       scanUnavailable = true

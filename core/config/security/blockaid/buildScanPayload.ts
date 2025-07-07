@@ -1,3 +1,5 @@
+import bs58 from 'bs58'
+
 import { Chain } from '../../../chain/Chain'
 import { ChainKind, getChainKind } from '../../../chain/ChainKind'
 
@@ -22,6 +24,7 @@ export const buildBlockaidScanPayload = ({
   if (tx.startsWith('0x')) {
     tx = tx.slice(2)
   }
+  const base58Encoded = bs58.encode(Buffer.from(tx, 'hex'))
   switch (kind) {
     case 'evm':
       return {
@@ -39,10 +42,11 @@ export const buildBlockaidScanPayload = ({
       }
     case 'solana':
       return {
+        encoding: 'base58',
         chain: 'mainnet',
         account_address: accountAddress,
         metadata,
-        transactions: [tx],
+        transactions: [base58Encoded],
       }
     case 'sui':
       return {

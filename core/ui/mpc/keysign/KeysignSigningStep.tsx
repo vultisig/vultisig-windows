@@ -1,4 +1,5 @@
 import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
+import { ScanResponse } from '@core/config/security/blockaid/types'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -32,6 +33,11 @@ import { TxHashProvider } from '../../chain/state/txHash'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
+type BlockaidError = Error & {
+  type?: 'blockaid-warning' | 'blockaid-malicious'
+  blockaid?: ScanResponse
+}
+
 type KeysignSigningStepProps = Partial<OnBackProp>
 
 export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
@@ -42,7 +48,9 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const [showSecurityCheckmark, setShowSecurityCheckmark] = useState(false)
   const [showWarningModal, setShowWarningModal] = useState(false)
-  const [blockaidWarning, setBlockaidWarning] = useState<any>(null)
+  const [blockaidWarning, setBlockaidWarning] = useState<ScanResponse | null>(
+    null
+  )
   const [scanUnavailable, setScanUnavailable] = useState(false)
   const [skipBlockaid, setSkipBlockaid] = useState(false)
   const { mutate: startKeysign, ...mutationStatus } = useKeysignMutation(
@@ -56,12 +64,13 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
 
   useEffect(() => {
     if (mutationStatus.status === 'error' && mutationStatus.error) {
+      const error = mutationStatus.error as BlockaidError
       // Blockaid warning/malicious error
       if (
-        (mutationStatus.error as any).type === 'blockaid-warning' ||
-        (mutationStatus.error as any).type === 'blockaid-malicious'
+        error.type === 'blockaid-warning' ||
+        error.type === 'blockaid-malicious'
       ) {
-        setBlockaidWarning((mutationStatus.error as any).blockaid)
+        setBlockaidWarning(error.blockaid || null)
         setShowWarningModal(true)
         return
       }
