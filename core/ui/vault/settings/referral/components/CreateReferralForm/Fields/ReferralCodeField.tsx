@@ -37,11 +37,11 @@ export const ReferralCodeField = () => {
               <TextInput
                 {...field}
                 id="referral-name"
-                placeholder="Enter up to 4 characters"
+                placeholder={t('enter_up_to_4_characters_placeholder')}
               />
             )}
           />
-          <Button style={{ maxWidth: 97, fontSize: 14 }}>Search</Button>
+          <Button style={{ maxWidth: 97, fontSize: 14 }}>{t('search')}</Button>
         </HStack>
         {errors.referralName && (
           <FormFieldErrorText>{errors.referralName.message}</FormFieldErrorText>

@@ -117,7 +117,6 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 />
               )}
               onFinish={(newValue: CoinKey | undefined) => {
-                console.log('🚀 ~ newValue:', newValue)
                 if (newValue) {
                   onChange(newValue)
                 }

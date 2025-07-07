@@ -491,6 +491,8 @@ export const en = {
   set_expiration: 'Set Expiration (in years)',
   expiration_date: 'Expiration Date',
   choose_payout_asset: 'Choose payout asset',
+  enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
+  search: 'Search',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
   referrals_summary: {
