@@ -5,7 +5,6 @@ import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
 import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscoveryFormFooter'
 import { PeerPlaceholder } from '@core/ui/mpc/devices/peers/PeerPlaceholder'
-import { PeerRequirementsInfo } from '@core/ui/mpc/devices/peers/PeerRequirementsInfo'
 import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
 import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
@@ -39,6 +38,9 @@ import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { minKeygenDevices } from './config'
+import { KeygenDevicesRequirementsInfo } from './KeygenDevicesRequirementsInfo'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
@@ -89,8 +91,12 @@ export const KeygenPeerDiscoveryStep = ({
       return Math.max(signers.length, selectedPeers.length + 1)
     }
 
-    return recommendedPeers
-  }, [isMigrate, keygenVault, recommendedPeers, selectedPeers.length])
+    if (peerOptionsQuery.data === undefined) {
+      return minKeygenDevices
+    }
+
+    return Math.max(peerOptionsQuery.data.length + 1, minKeygenDevices)
+  }, [isMigrate, keygenVault, peerOptionsQuery.data, selectedPeers.length])
 
   const isDisabled = useMemo(() => {
     if (!selectedPeers.length) {
@@ -142,9 +148,7 @@ export const KeygenPeerDiscoveryStep = ({
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
                 relay={() =>
-                  isMigrate ? null : (
-                    <PeerRequirementsInfo target={devicesTarget} />
-                  )
+                  isMigrate ? null : <KeygenDevicesRequirementsInfo />
                 }
               />
               <PeersManagerTitle target={devicesTarget} />

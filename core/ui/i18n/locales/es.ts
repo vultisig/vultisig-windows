@@ -70,8 +70,6 @@ export const es = {
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Estás en modo local',
   fastVault: 'Fast Vault',
-  scanQrInstruction:
-    'Escanea el QR con otro dispositivo. Se recomienda configuración de {{max}} dispositivos, {{min}} son suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',
@@ -956,4 +954,6 @@ export const es = {
   failed_to_process_plugin_install:
     'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
+  keygen_devices_requirements_info:
+    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
 }
