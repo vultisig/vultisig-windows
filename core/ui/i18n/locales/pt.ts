@@ -110,8 +110,6 @@ export const pt = {
   create_new_vault: 'Criar novo cofre',
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Você está no modo local',
-  scanQrInstruction:
-    'Escaneie o QR com outro dispositivo. Configuração de {{max}} dispositivos recomendada, {{min}} são suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Aguardando dispositivos...',
   switchToInternet: 'Voltar ao modo internet',
@@ -991,4 +989,6 @@ export const pt = {
   hold_for_paired_sign: 'Segure para sinal de par',
   verify_password_periodic_message_description:
     'Pediremos periodicamente que você verifique sua senha de login rápido para que você sempre se lembre dela',
+  keygen_devices_requirements_info:
+    'Escaneie o QR com outro dispositivo. {{recommended}} - configuração do dispositivo recomendada, {{min}} é suficiente.',
 }
