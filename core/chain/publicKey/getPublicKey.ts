@@ -5,6 +5,7 @@ import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 
+import { getCardanoPublicKeyData } from './cardano'
 import { derivePublicKey } from './ecdsa/derivePublicKey'
 import { PublicKeys } from './PublicKeys'
 
@@ -30,7 +31,10 @@ export const getPublicKey = ({
 
   const publicKeyType = match(keysignType, {
     ecdsa: () => walletCore.PublicKeyType.secp256k1,
-    eddsa: () => walletCore.PublicKeyType.ed25519,
+    eddsa: () =>
+      chain === Chain.Cardano
+        ? walletCore.PublicKeyType.ed25519Cardano
+        : walletCore.PublicKeyType.ed25519,
   })
 
   const derivedPublicKey = match(keysignType, {
@@ -43,8 +47,16 @@ export const getPublicKey = ({
     eddsa: () => publicKeys.eddsa,
   })
 
+  const publicKeyData =
+    chain === Chain.Cardano
+      ? getCardanoPublicKeyData({
+          publicKey: derivedPublicKey,
+          hexChainCode,
+        })
+      : Buffer.from(derivedPublicKey, 'hex')
+
   const pubkey = walletCore.PublicKey.createWithData(
-    Buffer.from(derivedPublicKey, 'hex'),
+    publicKeyData,
     publicKeyType
   )
 

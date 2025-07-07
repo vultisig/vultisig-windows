@@ -4,10 +4,6 @@ import {
   EnvelopedTxFeeFields,
   getSigningInputEnvelopedTxFields,
 } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
-import {
-  getSigningInputLegacyTxFields,
-  LegacyTxFeeFields,
-} from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
@@ -165,13 +161,13 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     }
   }
 
-  const getFeeFields = (): LegacyTxFeeFields | EnvelopedTxFeeFields => {
+  const getFeeFields = (): EnvelopedTxFeeFields => {
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-
-      return getSigningInputLegacyTxFields({
-        gasPrice: BigInt(gasPrice || 0),
-        gasLimit: BigInt(gas),
+      return getSigningInputEnvelopedTxFields({
+        maxFeePerGasWei: gasPrice,
+        priorityFee: priorityFee,
+        gasLimit: gas.toString(),
       })
     }
 

@@ -2,8 +2,9 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
-import { Chain, CosmosChain, UtxoChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
@@ -24,13 +25,14 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
+
 import { CosmosMsgType } from '../constants'
-import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 
 export const getKeysignPayload = (
   transaction: IKeysignTransactionPayload,
@@ -39,10 +41,10 @@ export const getKeysignPayload = (
   feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
-    ; (async () => {
+    ;(async () => {
       try {
-        console.log("getting keysign payload for transaction:", transaction);
-        
+        console.log('getting keysign payload for transaction:', transaction)
+
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
@@ -180,35 +182,49 @@ export const getKeysignPayload = (
           }
         }
         let contractPayload = null
-        if (transaction.transactionDetails.data?.startsWith(CosmosMsgType.MSG_EXECUTE_CONTRACT)) {
-          const msg = JSON.parse(transaction.transactionDetails.data.replace(`${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`, ''))
-          console.log("msg", msg);
+        if (
+          transaction.transactionDetails.data?.startsWith(
+            CosmosMsgType.MSG_EXECUTE_CONTRACT
+          )
+        ) {
+          const msg = JSON.parse(
+            transaction.transactionDetails.data.replace(
+              `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
+              ''
+            )
+          )
+          console.log('msg', msg)
 
           contractPayload = create(WasmExecuteContractPayloadSchema, {
             contractAddress: transaction.transactionDetails.to,
             executeMsg: msg,
             senderAddress: transaction.transactionDetails.from,
-            coins: [coin]
+            coins: [coin],
           })
-          console.log("contractPayload", contractPayload);
-
+          console.log('contractPayload', contractPayload)
         }
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
           toAmount: BigInt(
-            parseInt(String(transaction.transactionDetails.amount?.amount))
+            parseInt(transaction.transactionDetails.amount?.amount ?? '0')
           ).toString(),
-          memo: contractPayload ? undefined : modifiedMemo ?? transaction.transactionDetails.data,
+          memo: contractPayload
+            ? undefined
+            : (modifiedMemo ?? transaction.transactionDetails.data),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,
-          contractPayload: contractPayload ? { case: "wasmExecuteContractPayload", value: contractPayload } : undefined,
+          contractPayload: contractPayload
+            ? { case: 'wasmExecuteContractPayload', value: contractPayload }
+            : undefined,
         })
-        console.log("keysignPayload", keysignPayload);
+        console.log('keysignPayload', keysignPayload)
 
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
+        } else if (transaction.chain === OtherChain.Cardano) {
+          keysignPayload.utxoInfo = await getCardanoUtxos(coin.address)
         }
         resolve(keysignPayload)
       } catch (error) {

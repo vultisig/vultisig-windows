@@ -54,6 +54,8 @@ export const chainSpecificRecord = {
   [Chain.Ripple]: 'rippleSpecific',
 
   [Chain.Tron]: 'tronSpecific',
+
+  [Chain.Cardano]: 'cardano',
 } as const satisfies Record<Chain, KeysignChainSpecificKey>
 
 export type ChainsBySpecific<T extends KeysignChainSpecificKey> = {

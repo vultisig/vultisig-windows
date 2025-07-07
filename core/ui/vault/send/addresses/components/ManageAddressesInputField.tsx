@@ -34,7 +34,7 @@ type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 export const ManageReceiverAddressInputField = () => {
   const { t } = useTranslation()
   const address = useSender()
-  const [{ coin }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
@@ -168,7 +168,7 @@ const Input = styled(TextInput)<{
   border: 1px solid
     ${({ validation }) =>
       validation === 'warning'
-        ? getColor('alertWarning')
+        ? getColor('idle')
         : getColor('foregroundExtra')};
 `
 

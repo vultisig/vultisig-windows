@@ -17,7 +17,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
+import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -80,6 +80,7 @@ export const TransactionPage = () => {
                 ton: () => null,
                 ripple: () => null,
                 tron: () => null,
+                cardano: () => null,
               }
             )
 

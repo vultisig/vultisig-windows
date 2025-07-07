@@ -66,8 +66,10 @@ export const getLifiSwapQuote = async ({
           const { gasCosts, feeCosts } = estimate
           const [networkFee] = shouldBePresent(gasCosts)
 
+          const fees = shouldBePresent(feeCosts)
+
           const swapFee = shouldBePresent(
-            shouldBePresent(feeCosts).find(fee => fee.name === 'LIFI Fixed Fee')
+            fees.find(fee => fee.name === 'LIFI Fixed Fee') || fees[0]
           )
 
           const swapFeeAssetId =

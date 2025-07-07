@@ -10,6 +10,11 @@ export const pt = {
   onboarding_description_4:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
+  incorrect_passcode: 'Código incorreto',
+  passcodes_do_not_match: 'Os códigos não correspondem',
+  digit_input_success_validation: 'Verificação bem-sucedida',
+  digit_input_error_validation: 'Erro ao verificar o código, tente novamente',
+  digit_input_loading_validation: 'Verificando o código, por favor aguarde',
   chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
@@ -38,6 +43,41 @@ export const pt = {
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
+  title_1: 'Indicação',
+  title_2: 'Vultisig - Indicações',
+  header_tooltip_title: 'Programa de Indicações',
+  header_tooltip_content:
+    'O programa de indicações se aplica às trocas na THORChain e é feito por melhor esforço. Você precisa registrar um THORName para usar a indicação da Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, pagos à rede THORChain.',
+  invite_friends: 'Convidar amigos',
+  earn_rewards: 'Ganhar recompensas',
+  save_on_fees: 'Economizar em taxas',
+  share_description:
+    'Compartilhe seu código único de indicação para convidar amigos. Eles ganham um desconto e quanto mais trocarem, mais você ganha — direto na sua carteira.',
+  referrals_summary: {
+    item_1: {
+      title: 'Crie seu código de indicação',
+      description: 'Escolha um código curto e defina sua recompensa.',
+    },
+    item_2: {
+      title: 'Compartilhe com amigos',
+      description: 'Convide amigos a usarem seu código ao fazer trocas.',
+    },
+    item_3: {
+      title: 'Ganhe recompensas automaticamente',
+      description:
+        'Receba pagamentos no ativo de sua preferência sempre que eles trocarem.',
+    },
+    item_4: {
+      title: 'Usar código de indicação',
+      description: 'Use o código de um amigo e economize nas taxas de troca.',
+    },
+  },
+  referral_program: 'Programa de Indicações',
+  how_it_works: 'Como funciona',
+  get_started: 'Começar',
+  use_referral_code: 'Usar Código de Indicação',
+  enter_referral_code_placeholder: 'Digite o Código de Indicação',
+  create_referral: 'Criar indicação',
   selected_chain_missing_in_your_vault:
     'A blockchain selecionada está ausente no seu cofre',
   select_destination_chain: 'Selecionar blockchain de destino',
@@ -505,7 +545,6 @@ export const pt = {
       'Este email é usado apenas para enviar o backup do servidor',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada',
     confirmPasswordIsRequired: 'Confirmação de senha é obrigatória',
-    passwordDoNotMatch: 'As senhas não coincidem',
     hintEmpty: 'Dica está vazia',
     addOptionalHint: 'Adicionar dica opcional',
     hintDescription: 'Isso será mostrado caso você esqueça sua senha',
@@ -895,7 +934,6 @@ export const pt = {
   off: 'Desligado',
   enter_passcode: 'Digite a senha',
   confirm_passcode: 'Confirmar senha',
-  passcodes_do_not_match: 'As senhas não correspondem',
   set_passcode: 'Definir senha',
   encrypting_vault_keyshares:
     'Criptografando compartilhamentos de chaves do cofre...',
@@ -920,4 +958,25 @@ export const pt = {
   address_book_vault: 'Meus Cofres',
   paste: 'Colar',
   failed_to_generate_join_url: 'Falha ao gerar o código QR',
+  connecting_to_verifier: 'Conectando ao Verificador',
+  connecting_to_plugin: 'Conectando ao plugin',
+  confirm: 'Confirmar',
+  enter_your_password: 'Digite sua senha',
+  go_to_wallet: 'Ir para a carteira',
+  install_plugin: 'Instalar plugin',
+  installing_plugin: 'Instalando o plugin',
+  plugin_info: 'Informações do plugin',
+  plugin_info_desc: 'Você está instalando o plugin {{name}}',
+  plugin_success_desc: 'A instalação do {{name}} foi concluída',
+  plugin_password_desc:
+    'Digite sua senha para desbloquear seu Compartilhamento de Servidor e iniciar a instalação do plugin',
+  plugin_policy: 'Revisão de Política',
+  plugin_policy_desc:
+    'O verificador sempre verificará se apenas essas políticas serão executadas, garantindo a você a segurança de que apenas os autorizados serão assinados.',
+  plugin_policy_heading: 'Este plugin acessará automaticamente',
+  password_do_not_match: 'As senhas não correspondem',
+  password_pattern_error: 'A senha deve ter entre {{min}} e {{max}} caracteres',
+  success: 'Sucesso',
+  failed_to_process_plugin_install: 'Falha ao processar a instalação do plugin',
+  hold_for_paired_sign: 'Segure para sinal de par',
 }

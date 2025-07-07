@@ -1,41 +1,27 @@
-import { Chain } from '@core/chain/Chain'
-import { CoinKey } from '@core/chain/coin/Coin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { DepositPrompt } from '@core/ui/vault/components/DepositPrompts'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { SwapPrompt } from '@core/ui/vault/swap/components/SwapPrompt'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
-import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
+import { CoreViewState } from '../../../navigation/CoreView'
+import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 
-type Props = {
-  value?: CoinKey
-  chain?: Chain
-}
+export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
+  const chain = 'fromChain' in state ? state.fromChain : state.coin.chain
 
-export const VaultPrimaryActions = ({ value, chain }: Props) => {
-  const nativeCoins = useCurrentVaultNativeCoins()
+  const feeCoin = useCurrentVaultCoin({ chain, id: chainFeeCoin[chain].id })
 
-  if (isEmpty(nativeCoins)) {
-    return null
-  }
-
-  const coinKey = value ?? nativeCoins[0]
+  const coin = 'coin' in state ? state.coin : feeCoin
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
-      <SendPrompt
-        value={{
-          coin: value,
-          chain: chain,
-        }}
-      />
-      {isOneOf(coinKey.chain, swapEnabledChains) && (
-        <SwapPrompt value={coinKey} />
-      )}
-      <DepositPrompt value={coinKey} />
+      <SendPrompt {...state} />
+      {isOneOf(chain, swapEnabledChains) && <SwapPrompt coin={coin} />}
+      {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
     </UniformColumnGrid>
   )
 }

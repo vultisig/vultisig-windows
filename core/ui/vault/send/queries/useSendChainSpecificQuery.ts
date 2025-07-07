@@ -1,6 +1,5 @@
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 
 import { getChainSpecificQueryKey } from '../../../chain/coin/queries/useChainSpecificQuery'
@@ -10,8 +9,7 @@ import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 
 export const useSendChainSpecificQuery = () => {
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
   const [feeSettings] = useFeeSettings()
   const [receiver] = useSendReceiver()
   const [amount] = useSendAmount()

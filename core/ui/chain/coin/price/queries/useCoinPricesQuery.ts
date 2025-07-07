@@ -9,7 +9,7 @@ import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { splitBy } from '@lib/utils/array/splitBy'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
@@ -83,7 +83,10 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
       }),
       queryFn: async () => {
         const prices = await getCoinPrices({
-          ids: withoutUndefined(regularCoins.map(coin => coin.priceProviderId)),
+          ids: without(
+            regularCoins.map(coin => coin.priceProviderId),
+            undefined
+          ),
           fiatCurrency,
         })
 

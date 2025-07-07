@@ -10,14 +10,14 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
+import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../tw/getTwChainId'
 import { toTwAddress } from '../../tw/toTwAddress'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { TxInputDataResolver } from '../TxInputDataResolver'
-import { getCosmosChainSpecific } from './chainSpecific'
+import { CosmosChainSpecific, getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosCoinAmount } from './coinAmount'
-import { shouldPropagateMemo } from './memo'
 
 export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   keysignPayload,
@@ -35,35 +35,24 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { memo, toAddress } = keysignPayload
 
-  const getMessages = (): TW.Cosmos.Proto.Message[] => {
-    if (memo && memo.startsWith('wasm/MsgExecuteContract')) {
-      return [
-        TW.Cosmos.Proto.Message.create({
-          wasmExecuteContractGeneric:
-            TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
-              senderAddress: coin.address,
-              contractAddress: toAddress,
-              executeMsg: memo.replace('wasm/MsgExecuteContract-', ''),
-              coins: [
-                TW.Cosmos.Proto.Amount.create(
-                  getCosmosCoinAmount(keysignPayload)
-                ),
-              ],
-            }),
-        }),
-      ]
+  const { messages, txMemo } = matchRecordUnion<
+    CosmosChainSpecific,
+    {
+      messages: TW.Cosmos.Proto.Message[]
+      txMemo?: string
     }
-    return matchRecordUnion(chainSpecific, {
-      ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
-        if (transactionType === TransactionType.IBC_TRANSFER) {
-          const memo = shouldBePresent(keysignPayload.memo)
-          const [, channel] = memo.split(':')
+  >(chainSpecific, {
+    ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
+      if (transactionType === TransactionType.IBC_TRANSFER) {
+        const memo = shouldBePresent(keysignPayload.memo)
+        const [, channel] = memo.split(':')
 
-          const timeoutTimestamp = Long.fromString(
-            ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
-          )
+        const timeoutTimestamp = Long.fromString(
+          ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
+        )
 
-          return [
+        return {
+          messages: [
             TW.Cosmos.Proto.Message.create({
               transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
                 sourcePort: 'transfer',
@@ -78,9 +67,12 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 timeoutTimestamp,
               }),
             }),
-          ]
+          ],
         }
-        return [
+      }
+
+      return {
+        messages: [
           TW.Cosmos.Proto.Message.create({
             sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
               fromAddress: coin.address,
@@ -92,42 +84,45 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               ],
             }),
           }),
-        ]
-      },
-      vaultBased: ({ isDeposit }) => {
-        const fromAddress = toTwAddress({
-          address: coin.address,
-          walletCore,
-          chain,
-        })
+        ],
+        txMemo: memo,
+      }
+    },
+    vaultBased: ({ isDeposit }) => {
+      const fromAddress = toTwAddress({
+        address: coin.address,
+        walletCore,
+        chain,
+      })
 
-        
-        if(keysignPayload.contractPayload.case === 'wasmExecuteContractPayload') {
-          console.log("keysignPayload.contractPayload", keysignPayload.contractPayload);
-          
-          const contractPayload = keysignPayload.contractPayload.value
-          return [
+      if (
+        keysignPayload.contractPayload &&
+        keysignPayload.contractPayload.case === 'wasmExecuteContractPayload'
+      ) {
+        const contractPayload = keysignPayload.contractPayload.value
+        return {
+          messages: [
             TW.Cosmos.Proto.Message.create({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: contractPayload.senderAddress,
                   contractAddress: contractPayload.contractAddress,
                   executeMsg: contractPayload.executeMsg,
-                  coins: contractPayload.coins.map((c) => {
+                  coins: contractPayload.coins.map(c => {
                     return TW.Cosmos.Proto.Amount.create({
                       denom: c.ticker,
                       amount: keysignPayload.toAmount,
                     })
                   }),
-
                 }),
             }),
-          ]
+          ],
         }
-        if (memo && memo.startsWith('merge:')) {
-          const fullDenom = memo.toLowerCase().replace('merge:', '')
+      } else if (memo && memo.startsWith('merge:')) {
+        const fullDenom = memo.toLowerCase().replace('merge:', '')
 
-          return [
+        return {
+          messages: [
             TW.Cosmos.Proto.Message.create({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
@@ -142,23 +137,27 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   ],
                 }),
             }),
-          ]
-        } else if (isDeposit) {
-          const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
-            asset: TW.Cosmos.Proto.THORChainAsset.create({
-              chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
-              symbol: coin.ticker,
-              ticker: coin.ticker,
-              synth: false,
-            }),
-          })
-          const toAmount = Number(keysignPayload.toAmount || '0')
-          if (toAmount > 0) {
-            depositCoin.amount = keysignPayload.toAmount
-            depositCoin.decimals = new Long(coin.decimals)
-          }
+          ],
+        }
+      }
 
-          return [
+      if (isDeposit || getKeysignSwapPayload(keysignPayload)) {
+        const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
+          asset: TW.Cosmos.Proto.THORChainAsset.create({
+            chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
+            symbol: coin.ticker,
+            ticker: coin.ticker,
+            synth: false,
+          }),
+        })
+        const toAmount = Number(keysignPayload.toAmount || '0')
+        if (toAmount > 0) {
+          depositCoin.amount = keysignPayload.toAmount
+          depositCoin.decimals = new Long(coin.decimals)
+        }
+
+        return {
+          messages: [
             TW.Cosmos.Proto.Message.create({
               thorchainDepositMessage:
                 TW.Cosmos.Proto.Message.THORChainDeposit.create({
@@ -167,10 +166,12 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   coins: [depositCoin],
                 }),
             }),
-          ]
+          ],
         }
+      }
 
-        return [
+      return {
+        messages: [
           TW.Cosmos.Proto.Message.create({
             thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
               fromAddress,
@@ -186,10 +187,11 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               }),
             }),
           }),
-        ]
-      },
-    })
-  }
+        ],
+        txMemo: memo,
+      }
+    },
+  })
 
   const getFee = () => {
     const result = TW.Cosmos.Proto.Fee.create({
@@ -219,8 +221,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: memo && shouldPropagateMemo(chainSpecific) ? memo : undefined,
-    messages: getMessages(),
+    memo: txMemo,
+    messages,
     fee: getFee(),
   })
 

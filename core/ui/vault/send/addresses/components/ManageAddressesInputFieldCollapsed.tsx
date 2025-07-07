@@ -10,13 +10,11 @@ import styled from 'styled-components'
 import { SendInputContainer } from '../../components/SendInputContainer'
 import { useSendFormFieldState } from '../../state/formFields'
 import { useSendReceiver } from '../../state/receiver'
-import { useCurrentSendCoin } from '../../state/sendCoin'
 import { SendFormIconsWrapper } from './SendFormIconsWrapper'
 
 export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [address] = useSendReceiver()
-  const [{ coin }] = useCurrentSendCoin()
 
   const [
     {
@@ -34,10 +32,6 @@ export const ManageAddressesInputFieldCollapsed = () => {
       onClick={() => {
         setFocusedSendField(state => ({
           ...state,
-          fieldsChecked: {
-            ...state.fieldsChecked,
-            coin: !!coin,
-          },
           field: 'address',
         }))
       }}

@@ -7,12 +7,8 @@ import { ManageFeeSettingsFrame } from './ManageFeeSettingsFrame'
 import { ManageUtxoFeeSettings } from './utxo/ManageUtxoFeeSettings'
 
 export const ManageFeeSettings = () => {
-  const [
-    {
-      coin: { chain },
-    },
-  ] = useCurrentSendCoin()
-  const chainKind = getChainKind(chain)
+  const coin = useCurrentSendCoin()
+  const chainKind = getChainKind(coin.chain)
 
   return (
     <PartialMatch

@@ -3,6 +3,7 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
+import { getCardanoTxInputData } from './cardano'
 import { getCosmosTxInputData } from './cosmos'
 import { getEvmTxInputData } from './evm'
 import { getPolkadotTxInputData } from './polkadot'
@@ -20,6 +21,7 @@ type Input = {
 }
 
 const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
+  cardano: getCardanoTxInputData,
   cosmos: getCosmosTxInputData,
   evm: getEvmTxInputData,
   polkadot: getPolkadotTxInputData,

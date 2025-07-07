@@ -20,8 +20,8 @@ type TransactionHandlers = {
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => {
     const [message] = tx.msgs
-    console.log("message", message);
-    
+    console.log('message', message)
+
     return match(message.type, {
       [CosmosMsgType.MSG_SEND]: () => {
         return {
@@ -137,8 +137,8 @@ export const getStandardTransactionDetails = async (
   tx: TransactionType.WalletTransaction,
   chain: Chain
 ): Promise<TransactionDetails> => {
-  console.log("getting standard transaction details for tx:", tx);
-  
+  console.log('getting standard transaction details for tx:', tx)
+
   if (!tx || !tx.txType) {
     throw new Error('Invalid transaction object or missing txType')
   }
