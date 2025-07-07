@@ -27,23 +27,23 @@ const StyledIconWrapper = styled(IconWrapper)`
 
 const items = [
   {
-    title: 'referrals_summary.item_1.title',
-    description: 'referrals_summary.item_1.description',
+    title: 'referrals_summary.item_1.title' as const,
+    description: 'referrals_summary.item_1.description' as const,
     icon: <TextCursorInputIcon />,
   },
   {
-    title: 'referrals_summary.item_2.title',
-    description: 'referrals_summary.item_2.description',
+    title: 'referrals_summary.item_2.title' as const,
+    description: 'referrals_summary.item_2.description' as const,
     icon: <ShareTwoIcon />,
   },
   {
-    title: 'referrals_summary.item_3.title',
-    description: 'referrals_summary.item_3.description',
+    title: 'referrals_summary.item_3.title' as const,
+    description: 'referrals_summary.item_3.description' as const,
     icon: <TrophyIcon />,
   },
   {
-    title: 'referrals_summary.item_4.title',
-    description: 'referrals_summary.item_4.description',
+    title: 'referrals_summary.item_4.title' as const,
+    description: 'referrals_summary.item_4.description' as const,
     icon: <UserCheckIcon />,
   },
 ]
@@ -105,7 +105,6 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
                 </VStack>
               </ContentWrapper>
             </VStack>
-
             <Button onClick={onFinish}>{t('get_started')}</Button>
           </Wrapper>
         </AnimatedVisibility>

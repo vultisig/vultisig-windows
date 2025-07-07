@@ -478,7 +478,9 @@ export const en = {
   header_tooltip_title: 'Referral Program',
   header_tooltip_content:
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
-  invite_friends: 'Invite friends',
+  referral_landing_title:
+    '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
   share_description:
