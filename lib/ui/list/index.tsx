@@ -3,7 +3,7 @@ import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledList = styled.div<{ bordered?: boolean }>`
-  background-color: ${getColor('borderLight')};
+  background-color: ${getColor('foregroundExtra')};
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@ const StyledList = styled.div<{ bordered?: boolean }>`
   ${({ bordered }) => {
     return bordered
       ? css`
-          border: solid 1px ${getColor('borderLight')};
+          border: solid 1px ${getColor('foregroundExtra')};
         `
       : css``
   }}
