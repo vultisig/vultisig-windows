@@ -19,7 +19,7 @@ type Props = {
 
 export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   const { t } = useTranslation()
-  const [{ coin }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const addressBookItems = useAddressBookItems()
   const vaults = useVaults()
 

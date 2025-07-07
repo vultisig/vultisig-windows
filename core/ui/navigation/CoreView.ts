@@ -49,9 +49,7 @@ export type CoreView =
   | { id: 'reshareVaultSecure' }
   | {
       id: 'send'
-      state: {
-        coin?: CoinKey
-        chain?: Chain
+      state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
       }
     }

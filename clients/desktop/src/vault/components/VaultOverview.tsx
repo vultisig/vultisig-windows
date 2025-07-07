@@ -1,5 +1,4 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
@@ -15,6 +14,7 @@ import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBan
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultChainItem } from './VaultChainItem'
+import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 
 const PromptsContainer = styled.div`
   padding-inline: 20px;
@@ -43,7 +43,7 @@ export const VaultOverview = () => {
       <PageContent gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
-          <VaultPrimaryActions />
+          <VaultOverviewPrimaryActions />
         </VStack>
         <VStack gap={16}>
           {vaultChainBalances.map(balance => (

@@ -17,21 +17,16 @@ import {
 } from './EvmFeeSettingsForm'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
-  const [
-    {
-      coin: { chain },
-    },
-  ] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
 
   const { data: defaultFeePriority = 0, isSuccess } =
     useEvmDefaultPriorityFeeQuery({
-      chain: chain as EvmChain,
+      chain: coin.chain as EvmChain,
     })
-  const [{ coin: coinKey }] = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
 
-  const { decimals } = chainFeeCoin[coinKey.chain]
+  const { decimals } = chainFeeCoin[coin.chain]
   const baseFee = fromChainAmount(fee, decimals)
 
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
@@ -70,8 +65,8 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       onFinish={handleSave}
       onClose={onClose}
       baseFee={baseFee}
-      coinKey={coinKey}
-      chain={chain as EvmChain}
+      coinKey={coin}
+      chain={coin.chain as EvmChain}
     />
   )
 }

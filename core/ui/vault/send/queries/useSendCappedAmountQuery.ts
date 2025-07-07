@@ -1,7 +1,6 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
@@ -13,8 +12,7 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 import { capSendAmountToMax } from '../utils/capSendAmountToMax'
 
 export const useSendCappedAmountQuery = () => {
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
   const [amount] = useSendAmount()
 
   const chainSpecificQuery = useSendChainSpecificQuery()

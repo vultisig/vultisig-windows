@@ -3,11 +3,24 @@ import 'i18next'
 
 import { translations } from './translations'
 
-// Simple declaration using the English translations as the type source
-declare module 'i18next' {
-  type CustomTypeOptions = {
+declare module 'react-i18next' {
+  interface CustomTypeOptions {
+    defaultNS: 'translation'
     resources: {
       translation: typeof translations.en
     }
+    keySeparator: '.'
+    nsSeparator: false
+  }
+}
+
+declare module 'i18next' {
+  interface CustomTypeOptions {
+    defaultNS: 'translation'
+    resources: {
+      translation: typeof translations.en
+    }
+    keySeparator: '.'
+    nsSeparator: false
   }
 }

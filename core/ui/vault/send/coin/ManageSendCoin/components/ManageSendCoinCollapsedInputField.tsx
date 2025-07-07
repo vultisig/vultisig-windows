@@ -7,15 +7,13 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CoinIcon } from '../../../../../chain/coin/icon/CoinIcon'
-import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
 import { useSendFormFieldState } from '../../../state/formFields'
 import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 export const ManageSendCoinCollapsedInputField = () => {
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
   const { ticker } = coin
   const { t } = useTranslation()
   const [

@@ -15,7 +15,7 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 export const ManageAmountInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [amount] = useSendAmount()
-  const [{ coin }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const [
     {
       field,

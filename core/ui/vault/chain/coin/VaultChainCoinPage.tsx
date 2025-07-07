@@ -47,7 +47,7 @@ export const VaultChainCoinPage = () => {
         title={coin.ticker}
       />
       <PageContent gap={16}>
-        <VaultPrimaryActions {...coin} />
+        <VaultPrimaryActions coin={coinKey} />
         <Panel>
           <MatchQuery
             value={balanceQuery}
