@@ -4,6 +4,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
@@ -14,6 +15,7 @@ import {
 import { ReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {
+  const { t } = useTranslation()
   const {
     control,
     formState: { errors },
@@ -25,7 +27,7 @@ export const ReferralCodeField = () => {
     <VStack gap={14}>
       <FormField>
         <FormFieldLabel htmlFor="referral-name">
-          Pick Referral Code
+          {t('pick_referral_code')}
         </FormFieldLabel>
         <HStack gap={8}>
           <Controller
@@ -47,11 +49,11 @@ export const ReferralCodeField = () => {
       </FormField>
       <StatusWrapper justifyContent="space-between" alignItems="center">
         <Text size={14} color="supporting">
-          Status
+          {t('referral_status')}
         </Text>
         <StatusPill>
           <Text size={13} color={status === 'available' ? 'success' : 'danger'}>
-            Available
+            {t('available')}
           </Text>
         </StatusPill>
       </StatusWrapper>

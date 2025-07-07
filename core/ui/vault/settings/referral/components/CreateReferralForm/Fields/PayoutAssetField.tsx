@@ -37,7 +37,7 @@ export const PayoutAssetField = () => {
   return (
     <FormField>
       <FormFieldLabel htmlFor="payout-asset">
-        Choose payout asset
+        {t('choose_payout_asset')}
       </FormFieldLabel>
       <Controller
         name="payoutAsset"
@@ -68,7 +68,7 @@ export const PayoutAssetField = () => {
                       </HStack>
                     </>
                   ) : (
-                    <Text>Select</Text>
+                    <Text>{t('select')}</Text>
                   )}
                   <IconWrapper
                     style={{
@@ -115,7 +115,7 @@ export const PayoutAssetField = () => {
                         .toLowerCase()
                         .startsWith(query.toLowerCase())
                     }
-                    title={t('Choose payout asset')}
+                    title={t('choose_payout_asset')}
                     optionComponent={CoinOption}
                     onFinish={(newValue: CoinKey | undefined) => {
                       if (newValue) {

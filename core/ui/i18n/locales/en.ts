@@ -472,7 +472,6 @@ export const en = {
   vault_missing_public_key: 'Vault missing public key',
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
-  // Referrals
   title_1: 'Referral',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
@@ -483,6 +482,17 @@ export const en = {
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
+  // NEW TRANSLATONS START
+  referral_reg_fee: 'Registration Fee',
+  create_referral: 'Create Referral',
+  select: 'Select',
+  pick_referral_code: 'Pick Referral Code',
+  referral_status: 'Status',
+  referral_costs: 'Costs',
+  set_expiration: 'Set Expiration (in years)',
+  expiration_date: 'Expiration Date',
+  choose_payout_asset: 'Choose payout asset',
+  // NEW TRANSLATONS END
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
   referrals_summary: {
@@ -508,8 +518,7 @@ export const en = {
   get_started: 'Get Started',
   use_referral_code: 'Use Referral Code',
   enter_referral_code_placeholder: 'Enter Referral Code',
-  create_referral: 'Create referral',
-  // Referrals end
+  create_referral_form: 'Create referral',
   secureVault: 'Secure Vault',
   active: 'Active',
   sayGoodbyeTo: 'Say goodbye to',

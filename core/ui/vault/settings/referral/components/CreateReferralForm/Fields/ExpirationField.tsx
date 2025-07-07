@@ -2,6 +2,7 @@ import { Stepper } from '@lib/ui/base/Stepper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import {
   FormField,
@@ -11,6 +12,7 @@ import {
 import { ReferralFormData } from '../config'
 
 export const ExpirationField = () => {
+  const { t } = useTranslation()
   const {
     control,
     formState: { errors },
@@ -20,7 +22,7 @@ export const ExpirationField = () => {
     <VStack gap={14}>
       <FormField>
         <FormFieldLabel htmlFor="expiration">
-          Set Expiration (in years)
+          {t('set_expiration')}
         </FormFieldLabel>
         <Controller
           name="expiration"
@@ -42,7 +44,7 @@ export const ExpirationField = () => {
       </FormField>
       <HStack justifyContent="space-between" alignItems="center">
         <Text size={14} color="supporting">
-          Expiration Date
+          {t('expiration_date')}
         </Text>
         <Text>21 June 2026</Text>
       </HStack>

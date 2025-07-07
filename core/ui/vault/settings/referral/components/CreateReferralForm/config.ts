@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { z } from 'zod'
 
-export const accountCoinSchema = z.object({
+const accountCoinSchema = z.object({
   chain: z.nativeEnum(Chain),
   id: z.string(),
   address: z.string(),
