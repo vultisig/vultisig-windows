@@ -61,6 +61,7 @@ export const UnmergeTokenExplorer: FC<Props> = ({
       return balance && balance.shares > 0
     })
   }, [thorChainCoins, tokenBalances])
+  console.log('🚀 ~ tokens ~ tokens:', tokens)
 
   const { t } = useTranslation()
 
