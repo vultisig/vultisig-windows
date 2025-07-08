@@ -130,9 +130,8 @@ export const DepositConfirmButton = ({
         coin.decimals
       ).toString()
     } else if (isUnmerge) {
-      // Determine the correct contract address based on the token
       let contractAddress: string
-      // For Kujira tokens migrated to THORChain
+
       const reverseLookup = mirrorRecord(
         kujiraCoinMigratedToThorChainDestinationId
       )
