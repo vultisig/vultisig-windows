@@ -76,12 +76,6 @@ export default defineConfig(async () => {
         stream: 'stream-browserify',
         buffer: 'buffer',
         'fs/promises': 'node-stdlib-browser/mock/empty',
-        '@core/ui': path.resolve(__dirname, '../../core/ui'),
-        '@core/chain': path.resolve(__dirname, '../../core/chain'),
-        '@core/config': path.resolve(__dirname, '../../core/config'),
-        '@core/mpc': path.resolve(__dirname, '../../core/mpc'),
-        '@lib/ui': path.resolve(__dirname, '../../lib/ui'),
-        '@lib/utils': path.resolve(__dirname, '../../lib/utils'),
       },
     },
     optimizeDeps: {
