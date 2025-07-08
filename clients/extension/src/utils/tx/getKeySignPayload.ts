@@ -29,7 +29,7 @@ import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
-import { toUtf8String } from 'ethers'
+import { formatUnits, toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
   transaction: IKeysignTransactionPayload,
@@ -82,7 +82,15 @@ export const getKeysignPayload = (
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: Number(transaction.transactionDetails.amount?.amount),
+          amount:
+            getChainKind(transaction.chain) === 'utxo'
+              ? Number(
+                  formatUnits(
+                    Number(transaction.transactionDetails.amount?.amount),
+                    chainFeeCoin[Chain.Bitcoin].decimals
+                  )
+                )
+              : Number(transaction.transactionDetails.amount?.amount),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
           transactionType: transaction.transactionDetails.ibcTransaction
