@@ -1,4 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin, getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -18,10 +17,6 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '@core/ui/vault/deposit/utils/schema'
-import {
-  useVaultChainCoinsQuery,
-  VaultChainCoin,
-} from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
@@ -37,6 +32,8 @@ import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+
+import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBance'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -90,20 +87,16 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onSubmit',
   })
 
-  const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
   const selectedCoin = getValues('selectedCoin') as Coin | null
+
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
-  const isUnmergeAction = selectedChainAction === 'unmerge'
 
-  const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
-    coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
-    ({} as VaultChainCoin)
-
-  const selectedCoinBalance = fromChainAmount(
-    selectedCoinAmount,
-    selectedCoinDecimals
-  )
+  const selectedCoinBalance = useSelectedCoinBalance({
+    action: selectedChainAction,
+    selectedCoin,
+    chain,
+  })
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
@@ -170,7 +163,7 @@ export const DepositForm: FC<DepositFormProps> = ({
 
                 const balance = selectedCoin
                   ? selectedCoinBalance
-                  : isTCYAction || isUnmergeAction
+                  : isTCYAction
                     ? 0
                     : totalTokenAmount.toFixed(2)
 
