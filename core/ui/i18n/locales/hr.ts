@@ -22,6 +22,41 @@ export const hr = {
   base_fee_tooltip_content:
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
+  title_1: 'Preporuka',
+  title_2: 'Vultisig - Preporuke',
+  header_tooltip_title: 'Program Preporuka',
+  header_tooltip_content:
+    'Program preporuka se primjenjuje na THORChain zamjene i temelji se na načelu najbolje namjere. Moraš registrirati THORName kako bi koristio Vultisig preporuke. Naknada za registraciju je 10 RUNE te 1 RUNE godišnje, što se plaća THORChain mreži.',
+  invite_friends: 'Pozovi prijatelje',
+  earn_rewards: 'Zaradi nagrade',
+  save_on_fees: 'Uštedi na naknadama',
+  share_description:
+    'Podijeli svoj jedinstveni kod preporuke kako bi pozvao prijatelje. Oni dobivaju popust, a što više trguju, ti više zarađuješ — izravno u tvoj novčanik.',
+  referrals_summary: {
+    item_1: {
+      title: 'Stvori svoj kod preporuke',
+      description: 'Odaberi kratak kod i postavi isplatu nagrade.',
+    },
+    item_2: {
+      title: 'Podijeli s prijateljima',
+      description: 'Pozovi prijatelje da koriste tvoj kod pri zamjeni.',
+    },
+    item_3: {
+      title: 'Zarađuj automatski',
+      description:
+        'Budi isplaćen u svojoj omiljenoj imovini svaki put kad oni trguju.',
+    },
+    item_4: {
+      title: 'Iskoristi kod preporuke',
+      description: 'Iskoristi kod prijatelja i uštedi na naknadama za zamjenu.',
+    },
+  },
+  referral_program: 'Program Preporuka',
+  how_it_works: 'Kako funkcionira',
+  get_started: 'Započni',
+  use_referral_code: 'Iskoristi Kod Preporuke',
+  enter_referral_code_placeholder: 'Unesi Kod Preporuke',
+  create_referral: 'Stvori preporuku',
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',

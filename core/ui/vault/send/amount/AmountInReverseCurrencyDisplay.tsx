@@ -1,6 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -17,8 +16,7 @@ export const AmountInReverseCurrencyDisplay = ({
 }: ValueProp<CurrencyInputMode>) => {
   const { t } = useTranslation()
   const [sendAmount] = useSendAmount()
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
   const fiatCurrency = useFiatCurrency()
 
   const priceQuery = useCoinPriceQuery({

@@ -132,7 +132,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
             />
             <ListItem
               icon={<MegaphoneIcon fontSize={iconSize} />}
-              onClick={() => {}}
+              onClick={() => navigate({ id: 'referral' })}
               title={t('referral_code')}
               hoverable
               showArrow

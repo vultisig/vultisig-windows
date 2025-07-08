@@ -472,6 +472,44 @@ export const en = {
   vault_missing_public_key: 'Vault missing public key',
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
+  // Referrals
+  title_1: 'Referral',
+  title_2: 'Vultisig - Referrals',
+  header_tooltip_title: 'Referral Program',
+  header_tooltip_content:
+    'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
+  referral_landing_title:
+    '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  invite_friends: 'Invite frwiends',
+  earn_rewards: 'Earn rewards',
+  save_on_fees: 'Save on fees',
+  share_description:
+    'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
+  referrals_summary: {
+    item_1: {
+      title: 'Create your referral code',
+      description: 'Pick a short code and set your reward payout.',
+    },
+    item_2: {
+      title: 'Share with friends',
+      description: 'Invite friends to use your code while swapping.',
+    },
+    item_3: {
+      title: 'Earn rewards automatically',
+      description: 'Get paid in your preferred asset every time they trade.',
+    },
+    item_4: {
+      title: 'Use Referral code',
+      description: 'Use a code from your friend and save on swap fees.',
+    },
+  },
+  referral_program: 'Referral Program',
+  how_it_works: 'How it works',
+  get_started: 'Get Started',
+  use_referral_code: 'Use Referral Code',
+  enter_referral_code_placeholder: 'Enter Referral Code',
+  create_referral: 'Create referral',
+  // Referrals end
   secureVault: 'Secure Vault',
   active: 'Active',
   sayGoodbyeTo: 'Say goodbye to',
