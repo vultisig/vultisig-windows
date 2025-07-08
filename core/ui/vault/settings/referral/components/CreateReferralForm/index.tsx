@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -30,15 +31,16 @@ export const CreateReferralForm = () => {
         flexGrow
         justifyContent="space-between"
       >
-        <VStack gap={14}>
+        <StackSeparatedBy
+          direction="column"
+          separator={<DecorationLine />}
+          gap={14}
+        >
           <ReferralCodeField />
-          <DecorationLine />
           <ExpirationField />
-          <DecorationLine />
           <PayoutAssetField />
-          <DecorationLine />
           <Fees />
-        </VStack>
+        </StackSeparatedBy>
         <Button type="submit">{t('create_referral_form')}</Button>
       </VStack>
     </FormProvider>

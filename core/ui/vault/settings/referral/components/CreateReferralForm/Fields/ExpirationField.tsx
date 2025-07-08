@@ -1,4 +1,4 @@
-import { Stepper } from '@lib/ui/base/Stepper'
+import { Stepper } from '@lib/ui/inputs/Stepper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -34,7 +34,7 @@ export const ExpirationField = () => {
               min={1}
               max={10}
               value={value}
-              onValueChange={onChange}
+              onChange={onChange}
             />
           )}
         />
