@@ -1,8 +1,8 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin, getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -13,7 +13,6 @@ import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { Container } from '../../DepositForm.styled'
-import { InputFieldWrapper } from '../../DepositForm.styled'
 import { UnmergeTokenExplorer } from './UnmergeTokenExplorer'
 
 type Props = {
@@ -22,7 +21,7 @@ type Props = {
 
 export const UnmergeSpecific = ({ selectedCoin }: Props) => {
   const { t } = useTranslation()
-  const [{ register, setValue, watch }] = useDepositFormHandlers()
+  const [{ setValue, watch }] = useDepositFormHandlers()
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const defaultCoin = shouldBePresent(getCoinFromCoinKey(coinKey))
   const coin = selectedCoin || defaultCoin
@@ -32,15 +31,14 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
   const { data: tokenBalances = [] } =
     useMergeableTokenBalancesQuery(coinAddress)
 
-  // Get the balance for the selected token
   const selectedTokenBalance = selectedCoin
     ? tokenBalances.find(tb => tb.symbol === selectedCoin.ticker)
     : null
 
-  // Convert shares to decimal format (8 decimals for THORChain tokens)
   const sharesInDecimal = selectedTokenBalance
-    ? selectedTokenBalance.shares / 1e8
+    ? fromChainAmount(selectedTokenBalance.shares, selectedCoin?.decimals || 8)
     : 0
+  console.log('🚀 ~ UnmergeSpecific ~ sharesInDecimal:', sharesInDecimal)
 
   return (
     <VStack gap={12}>
@@ -76,29 +74,6 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
           />
         )}
       />
-      <InputContainer>
-        <Text size={15} weight="400">
-          {t('amount')}{' '}
-          {selectedTokenBalance && (
-            <>
-              ({t('balance')}: {sharesInDecimal.toFixed(4)} shares)
-            </>
-          )}
-          <Text as="span" color="danger" size={14}>
-            *{' '}
-          </Text>{' '}
-        </Text>
-
-        <InputFieldWrapper
-          as="input"
-          step="any"
-          min={0.01}
-          max={sharesInDecimal || undefined}
-          type="number"
-          required
-          {...register('amount')}
-        />
-      </InputContainer>
     </VStack>
   )
 }
