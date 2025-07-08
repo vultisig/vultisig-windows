@@ -12,7 +12,11 @@ import { ChainSpecificResolver } from './ChainSpecificResolver'
 
 export const getThorchainSpecific: ChainSpecificResolver<
   THORChainSpecific
-> = async ({ coin, isDeposit = false, transactionType = TransactionType.UNSPECIFIED }) => {
+> = async ({
+  coin,
+  isDeposit = false,
+  transactionType = TransactionType.UNSPECIFIED,
+}) => {
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain: coin.chain as CosmosChain,
@@ -27,6 +31,6 @@ export const getThorchainSpecific: ChainSpecificResolver<
     isDeposit,
     transactionType,
   })
-  
+
   return thorchainSpecific
 }

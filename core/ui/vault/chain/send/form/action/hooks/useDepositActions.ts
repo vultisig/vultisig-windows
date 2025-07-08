@@ -1,7 +1,6 @@
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { ComponentWithValueProps } from '@lib/ui/props/value'
 import { useMemo } from 'react'
-
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { DepositAction } from '../../DepositAction'
 
@@ -9,7 +8,7 @@ export const useDepositActions = ({
   value: actionOptions,
 }: ComponentWithValueProps<DepositAction[]>) => {
   return useMemo(() => {
-    return actionOptions.value.map((action) => {
+    return actionOptions.value.map(action => {
       const actionMapping: Record<DepositAction, TransactionType> = {
         bond: TransactionType.BOND,
         unbond: TransactionType.UNBOND,
@@ -24,4 +23,4 @@ export const useDepositActions = ({
       }
     })
   }, [actionOptions.value])
-} 
+}
