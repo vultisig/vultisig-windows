@@ -39,7 +39,7 @@ import { ReferralPage } from '../vault/settings/referral/ReferralPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
-  | 'createOrSaveReferral'
+  | 'manageReferral'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -77,7 +77,7 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
-  createOrSaveReferral: ManageReferralsPage,
+  manageReferral: ManageReferralsPage,
   referral: ReferralPage,
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,

@@ -54,7 +54,7 @@ export const ReferralPage = () => {
             <ReferralsSummary
               onFinish={() =>
                 navigate({
-                  id: 'createOrSaveReferral',
+                  id: 'manageReferral',
                 })
               }
             />

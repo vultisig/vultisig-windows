@@ -20,7 +20,7 @@ export type CoreView =
   | { id: 'deleteVault' }
   | { id: 'deposit'; state: { coin: CoinKey } }
   | { id: 'referral' }
-  | { id: 'createOrSaveReferral' }
+  | { id: 'manageReferral' }
   | { id: 'importVault' }
   | {
       id: 'joinKeygen'

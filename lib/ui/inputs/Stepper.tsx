@@ -4,20 +4,19 @@ import styled from 'styled-components'
 import { UnstyledButton } from '../buttons/UnstyledButton'
 import { CircleMinusIcon } from '../icons/CircleMinusIcon'
 import { CirclePlusIcon } from '../icons/CirclePlusIcon'
-import { TextInput } from '../inputs/TextInput'
 import { HStack, VStack, vStack } from '../layout/Stack'
+import { InputProps } from '../props'
 import { getColor } from '../theme/getters'
+import { TextInput } from './TextInput'
 
-type StepperProps = {
-  value: number
-  onValueChange: (value: number | null) => void
+type StepperProps = InputProps<number | null> & {
   min: number
   max: number
 } & Partial<ComponentProps<typeof TextInput>>
 
 export const Stepper = ({
   value,
-  onValueChange,
+  onChange,
   min,
   max,
   ...rest
@@ -32,7 +31,7 @@ export const Stepper = ({
             return
           }
 
-          onValueChange(newValue)
+          onChange(newValue)
         }}
       >
         <CircleMinusIcon />
@@ -42,7 +41,7 @@ export const Stepper = ({
           type="number"
           onValueChange={value => {
             const numValue = parseInt(value)
-            onValueChange(isNaN(numValue) ? null : numValue)
+            onChange(isNaN(numValue) ? null : numValue)
           }}
           value={value}
           min={min}
@@ -58,7 +57,7 @@ export const Stepper = ({
             return
           }
 
-          onValueChange(newValue)
+          onChange(newValue)
         }}
       >
         <CirclePlusIcon />
