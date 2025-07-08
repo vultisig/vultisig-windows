@@ -113,18 +113,20 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   ],
                 }),
             }),
-          ], }
-        } else if (memo?.startsWith('unmerge:')) {
-          const memoParts = memo.toLowerCase().split(':')
-          if (memoParts.length !== 3 || !memoParts[2]) {
-            throw new Error(
-              'Invalid unmerge memo format. Expected: unmerge:<denom>:<rawShares>'
-            )
-          }
+          ],
+        }
+      } else if (memo?.startsWith('unmerge:')) {
+        const memoParts = memo.toLowerCase().split(':')
+        if (memoParts.length !== 3 || !memoParts[2]) {
+          throw new Error(
+            'Invalid unmerge memo format. Expected: unmerge:<denom>:<rawShares>'
+          )
+        }
 
-          const [, , rawShares] = memoParts
+        const [, , rawShares] = memoParts
 
-          return [
+        return {
+          messages: [
             TW.Cosmos.Proto.Message.create({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
@@ -136,21 +138,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   coins: [],
                 }),
             }),
-          ]
-        } else if (isDeposit) {
-          const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
-            asset: TW.Cosmos.Proto.THORChainAsset.create({
-              chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
-              symbol: coin.ticker,
-              ticker: coin.ticker,
-              synth: false,
-            }),
-          })
-          const toAmount = Number(keysignPayload.toAmount || '0')
-          if (toAmount > 0) {
-            depositCoin.amount = keysignPayload.toAmount
-            depositCoin.decimals = new Long(coin.decimals)
-          }
+          ],
+        }
+      }
 
       if (isDeposit || getKeysignSwapPayload(keysignPayload)) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
