@@ -1,8 +1,4 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-import { blockaid } from '@core/config/security/blockaid'
-import { buildBlockaidScanPayload } from '@core/config/security/blockaid/buildScanPayload'
-import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
-import { attempt } from '@lib/utils/attempt'
 
 import { executeCardanoTx } from './cardano'
 import { executeCosmosTx } from './cosmos'
@@ -31,51 +27,6 @@ const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
 
 export const executeTx: ExecuteTxResolver = async input => {
   const chainKind = getChainKind(input.chain)
-
   const handler = handlers[chainKind]
-
-  // Perform Blockaid scan with graceful failure for all chains
-  let scanResult
-
-  let scanUnavailable = false
-  if (input.rawTx && input.account_address && !input.skipBlockaid) {
-    scanResult = await attempt(async () => {
-      return await blockaid.scanTransaction(
-        buildBlockaidScanPayload({
-          chain: input.chain,
-          accountAddress: input.account_address,
-          rawTx: input.rawTx,
-          metadata: {
-            domain: 'https://vultisig.com',
-          },
-        })
-      )
-    })
-    const validation = scanResult.data?.validation
-    if (validation?.status !== 'Success') {
-      scanUnavailable = true
-    }
-    // Handle result_type
-    if (
-      validation?.result_type === BlockaidResultTypes.Warning ||
-      validation?.result_type === BlockaidResultTypes.Malicious
-    ) {
-      const error: any = new Error('Security warning from Blockaid')
-      error.type =
-        validation.result_type === BlockaidResultTypes.Warning
-          ? 'blockaid-warning'
-          : 'blockaid-malicious'
-      error.blockaid = scanResult.data
-      throw error
-    }
-    // Benign: proceed as normal
-  }
-
-  const result = await handler(input)
-
-  return {
-    ...result,
-    scanResult: scanResult?.data || undefined,
-    scanUnavailable,
-  }
+  return handler(input)
 }
