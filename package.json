@@ -18,6 +18,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "knip": "knip",
+    "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files"
   },
   "dependencies": {
