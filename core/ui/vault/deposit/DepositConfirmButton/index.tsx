@@ -103,6 +103,7 @@ export const DepositConfirmButton = ({
         'ibc_transfer',
         'switch',
         'merge',
+        'unmerge_ruji',
       ])
     ) {
       keysignPayload.toAddress = shouldBePresent(
