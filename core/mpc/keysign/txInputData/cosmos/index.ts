@@ -213,8 +213,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
-  const fee = getFee()
-
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: getKeysignTwPublicKey(keysignPayload),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,

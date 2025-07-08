@@ -9,4 +9,4 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
     staleTime,
     queryFn: () => fetchMergeableTokenBalances(address),
     enabled: !!address,
-  }) 
+  })
