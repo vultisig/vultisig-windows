@@ -25,8 +25,10 @@ const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
   tron: executeTronTx,
 }
 
-export const executeTx: ExecuteTxResolver = async input => {
+export const executeTx: ExecuteTxResolver = input => {
   const chainKind = getChainKind(input.chain)
+
   const handler = handlers[chainKind]
+
   return handler(input)
 }
