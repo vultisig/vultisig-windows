@@ -8,13 +8,13 @@ import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 
-import { Container } from '../../DepositForm.styled'
-import { UnmergeTokenExplorer } from './UnmergeTokenExplorer'
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
-import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { InputFieldWrapper } from '../../DepositForm.styled'
 import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
+import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
+import { Container } from '../../DepositForm.styled'
+import { InputFieldWrapper } from '../../DepositForm.styled'
+import { UnmergeTokenExplorer } from './UnmergeTokenExplorer'
 
 type Props = {
   selectedCoin: Coin | null
@@ -27,18 +27,19 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
   const defaultCoin = shouldBePresent(getCoinFromCoinKey(coinKey))
   const coin = selectedCoin || defaultCoin
   const coinAddress = shouldBePresent(useCurrentVaultCoin(coinKey)?.address)
-  
+
   // Fetch all mergeable token balances
-  const { data: tokenBalances = [] } = useMergeableTokenBalancesQuery(coinAddress)
-  
+  const { data: tokenBalances = [] } =
+    useMergeableTokenBalancesQuery(coinAddress)
+
   // Get the balance for the selected token
-  const selectedTokenBalance = selectedCoin 
+  const selectedTokenBalance = selectedCoin
     ? tokenBalances.find(tb => tb.symbol === selectedCoin.ticker)
     : null
-  
+
   // Convert shares to decimal format (8 decimals for THORChain tokens)
-  const sharesInDecimal = selectedTokenBalance 
-    ? selectedTokenBalance.shares / 1e8 
+  const sharesInDecimal = selectedTokenBalance
+    ? selectedTokenBalance.shares / 1e8
     : 0
 
   return (
@@ -65,7 +66,7 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
           <UnmergeTokenExplorer
             setValue={setValue}
             activeOption={watch('selectedCoin')}
-                          onOptionClick={(token: Coin) => {
+            onOptionClick={(token: Coin) => {
               setValue('selectedCoin', token, {
                 shouldValidate: true,
               })

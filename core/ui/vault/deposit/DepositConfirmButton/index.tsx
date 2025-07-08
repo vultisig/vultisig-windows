@@ -51,20 +51,24 @@ export const DepositConfirmButton = ({
   )
 
   const vault = useCurrentVault()
-  
+
   const transactionType =
     action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
         ? TransactionType.UNSPECIFIED // Using UNSPECIFIED instead of THOR_UNMERGE due to DKLS library bug that causes signing to fail
         : undefined
-  
+
   // For chain specific query, we need a coin with address
-  const coinForChainQuery = selectedCoin && coin.address
-    ? { ...selectedCoin, address: coin.address } as AccountCoin
-    : selectedCoin
-    
-  const chainSpecificQuery = useDepositChainSpecificQuery(transactionType, coinForChainQuery)
+  const coinForChainQuery =
+    selectedCoin && coin.address
+      ? ({ ...selectedCoin, address: coin.address } as AccountCoin)
+      : selectedCoin
+
+  const chainSpecificQuery = useDepositChainSpecificQuery(
+    transactionType,
+    coinForChainQuery
+  )
   const config = transactionConfig(coinKey.chain)[action] || {}
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
@@ -121,12 +125,17 @@ export const DepositConfirmButton = ({
       basePayload.toAddress = shouldBePresent(
         isTonFunction ? validatorAddress : receiver
       )
-      basePayload.toAmount = toChainAmount(shouldBePresent(amount), coin.decimals).toString()
+      basePayload.toAmount = toChainAmount(
+        shouldBePresent(amount),
+        coin.decimals
+      ).toString()
     } else if (isUnmerge) {
       // Determine the correct contract address based on the token
       let contractAddress: string
       // For Kujira tokens migrated to THORChain
-      const reverseLookup = mirrorRecord(kujiraCoinMigratedToThorChainDestinationId)
+      const reverseLookup = mirrorRecord(
+        kujiraCoinMigratedToThorChainDestinationId
+      )
       const tokenKey = reverseLookup[coin.id]
       if (tokenKey) {
         contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
@@ -135,12 +144,18 @@ export const DepositConfirmButton = ({
       }
       // For unmerge, set toAddress and toAmount with the selected coin amount
       basePayload.toAddress = contractAddress
-      basePayload.toAmount = toChainAmount(shouldBePresent(amount), coin.decimals).toString()
+      basePayload.toAmount = toChainAmount(
+        shouldBePresent(amount),
+        coin.decimals
+      ).toString()
     } else if (!isOneOf(action, ['vote'])) {
       // For other actions that need amount
-      basePayload.toAmount = toChainAmount(shouldBePresent(amount), coin.decimals).toString()
+      basePayload.toAmount = toChainAmount(
+        shouldBePresent(amount),
+        coin.decimals
+      ).toString()
     }
-    
+
     // Create the final payload with all the fields set
     const finalKeysignPayload = create(KeysignPayloadSchema, basePayload)
 

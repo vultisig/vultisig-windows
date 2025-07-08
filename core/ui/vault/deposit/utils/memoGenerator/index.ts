@@ -2,7 +2,6 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -135,7 +134,7 @@ export const generateMemo = ({
       // For unmerge, use the full coin ID (e.g., "thor.kuji")
       const denom = selectedCoin.id
       const memo = `unmerge:${denom}:${sharesRaw}`
-      
+
       return memo
     },
   })

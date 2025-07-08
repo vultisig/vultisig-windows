@@ -2,19 +2,22 @@ import { Chain } from '@core/chain/Chain'
 import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { Coin } from '@core/chain/coin/Coin'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
-import { useCurrentVaultChainCoins, useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCurrentVaultChainCoins,
+  useCurrentVaultCoin,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { FC, useMemo } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
+import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
 import { FormData } from '../..'
 import { DepositActionOption } from '../../DepositActionOption'
-import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
-import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 type Props = {
   activeOption?: Coin
@@ -27,36 +30,38 @@ export const UnmergeTokenExplorer: FC<Props> = ({
   onClose,
   onOptionClick,
   activeOption,
-  setValue,
 }) => {
   const thorChainCoins = useCurrentVaultChainCoins(Chain.THORChain)
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const coinAddress = shouldBePresent(useCurrentVaultCoin(coinKey)?.address)
-  
+
   // Fetch all mergeable token balances
-  const { data: tokenBalances = [] } = useMergeableTokenBalancesQuery(coinAddress)
+  const { data: tokenBalances = [] } =
+    useMergeableTokenBalancesQuery(coinAddress)
 
   const tokens = useMemo(() => {
     // Include tokens from kujira migration
-    const kujiraTokens = thorChainCoins.filter(coin => coin.id in kujiraCoinsOnThorChain)
-    
+    const kujiraTokens = thorChainCoins.filter(
+      coin => coin.id in kujiraCoinsOnThorChain
+    )
+
     // Include RUJI token
     const rujiToken = thorChainCoins.find(
       coin => coin.ticker === knownCosmosTokens.THORChain['x/ruji'].ticker
     )
-    
+
     const allTokens = [...kujiraTokens]
     if (rujiToken) {
       allTokens.push(rujiToken)
     }
-    
+
     // Filter to only show tokens with balance
     return allTokens.filter(token => {
       const balance = tokenBalances.find(tb => tb.symbol === token.ticker)
       return balance && balance.shares > 0
     })
   }, [thorChainCoins, tokenBalances])
-  
+
   const { t } = useTranslation()
 
   return (
@@ -80,7 +85,10 @@ export const UnmergeTokenExplorer: FC<Props> = ({
                   }}
                 />
                 {balance && (
-                  <HStack justifyContent="space-between" style={{ paddingLeft: 16, paddingRight: 16 }}>
+                  <HStack
+                    justifyContent="space-between"
+                    style={{ paddingLeft: 16, paddingRight: 16 }}
+                  >
                     <Text size={14} color="contrast">
                       {t('available')}:
                     </Text>
@@ -100,4 +108,4 @@ export const UnmergeTokenExplorer: FC<Props> = ({
       </VStack>
     </Modal>
   )
-} 
+}

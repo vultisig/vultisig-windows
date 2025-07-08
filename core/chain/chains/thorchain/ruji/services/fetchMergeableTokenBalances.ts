@@ -72,4 +72,4 @@ export const fetchMergeableTokenBalances = async (
       price,
     }
   })
-} 
+}
