@@ -36,12 +36,12 @@ export const dispatchMessage = async (
     return
   }
   const chainSelectors = {
-    [MessageKey.COSMOS_REQUEST]: () => {
-      const chainId = getCosmosChainId(Chain.Cosmos)
+    [MessageKey.COSMOS_REQUEST]: async () => {
+    const defaultChainId = await getCurrentEVMChainId()
 
       const selectedCosmosChainId = Object.values(sessions).reduce(
         (acc, vault) => vault[dappHostname]?.selectedCosmosChainId ?? acc,
-        chainId
+        defaultChainId
       )
 
       return getCosmosChainByChainId(selectedCosmosChainId)
