@@ -7,7 +7,7 @@ type Status = 'default' | 'error' | 'info' | 'success' | 'warning'
 const StyledListItemTag = styled.span<{ status: Status }>`
   align-items: center;
   background-color: ${getColor('foreground')};
-  border: solid 1px ${getColor('borderLight')};
+  border: solid 1px ${getColor('foregroundExtra')};
   border-radius: 20px;
   display: flex;
   font-size: 13px;

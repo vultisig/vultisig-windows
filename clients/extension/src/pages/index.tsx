@@ -7,7 +7,7 @@ import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
-import { queryKeyHashFn } from '@lib/ui/query/utils/queryKeyHashFn'
+import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { QueryClient } from '@tanstack/react-query'
 import { StrictMode } from 'react'
@@ -57,11 +57,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
 `
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryKeyHashFn,
-    },
-  },
+  defaultOptions: queryClientDefaultOptions,
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -8,7 +8,15 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const CreateOrSaveReferral = () => {
+type Props = {
+  onSaveReferral: () => void
+  onCreateReferral: () => void
+}
+
+export const ManageReferralsForm = ({
+  onSaveReferral,
+  onCreateReferral,
+}: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -22,33 +30,27 @@ export const CreateOrSaveReferral = () => {
         flexDirection: 'column',
       }}
     >
-      <Wrapper flexGrow gap={20}>
+      <VStack fullWidth flexGrow gap={20}>
         <DecorationImage src="/core/images/crypto-natives.png" alt="" />
         <VStack gap={16}>
           <VStack gap={8}>
             <Text size={14}>{t('use_referral_code')}</Text>
             <TextInput placeholder={t('enter_referral_code_placeholder')} />
           </VStack>
-          <SaveReferralButton>{t('save')}</SaveReferralButton>
+          <SaveReferralButton onClick={onSaveReferral}>
+            {t('save')}
+          </SaveReferralButton>
           <HStack gap={16} alignItems="center">
             <DecorationLine />
             <Text size={12}>{t('or').toUpperCase()}</Text>
             <DecorationLine />
           </HStack>
-          <Button>{t('create_referral')}</Button>
+          <Button onClick={onCreateReferral}>{t('create_referral')}</Button>
         </VStack>
-      </Wrapper>
+      </VStack>
     </AnimatedVisibility>
   )
 }
-
-const Wrapper = styled(VStack)`
-  @media (${mediaQuery.tabletDeviceAndUp}) {
-    max-width: 650px;
-    width: 100%;
-    margin-inline: auto;
-  }
-`
 
 const DecorationImage = styled.img`
   flex: 1;

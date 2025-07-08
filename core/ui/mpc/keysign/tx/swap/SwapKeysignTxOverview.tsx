@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
@@ -29,6 +28,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { KeysignTxFee } from '../components/KeysignTxFee'
 import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -42,7 +42,7 @@ export const SwapKeysignTxOverview = ({
   const { openUrl } = useCore()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
-  const { coin: potentialFromCoin, blockchainSpecific } = value
+  const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
   const {
     fromAmount,
@@ -56,15 +56,6 @@ export const SwapKeysignTxOverview = ({
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
   }, [fromAmount, fromCoin.decimals])
-
-  const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null
-
-    return formatFee({
-      chain: sourceChain as Chain,
-      chainSpecific: blockchainSpecific,
-    })
-  }, [blockchainSpecific, sourceChain])
 
   const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
     swapPayload,
@@ -166,21 +157,7 @@ export const SwapKeysignTxOverview = ({
               </TrimmedText>
             </HStack>
           )}
-          {toCoin && (
-            <HStack
-              fullWidth
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text weight="500" size={14} color="shy">
-                {t('network_fee')}
-              </Text>
-
-              <Text cropped weight={500} size={14} color="contrast">
-                {networkFeesFormatted}
-              </Text>
-            </HStack>
-          )}
+          <KeysignTxFee />
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button

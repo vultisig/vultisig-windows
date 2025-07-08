@@ -26,7 +26,7 @@ const StyledText = styled.span`
 const StyledVaultSigners = styled.div`
   align-items: center;
   background-color: ${getColor('foreground')};
-  border: solid 1px ${getColor('borderLight')};
+  border: solid 1px ${getColor('foregroundExtra')};
   border-radius: 16px;
   display: flex;
   gap: 8px;

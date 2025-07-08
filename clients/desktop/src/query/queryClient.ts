@@ -1,21 +1,16 @@
-import { queryKeyHashFn } from '@lib/ui/query/utils/queryKeyHashFn'
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import {
+  queryClientDefaultOptions,
+  queryClientGcTime,
+} from '@lib/ui/query/queryClientDefaultOptions'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
 import { PersistentStateKey } from '../state/persistentState'
 
-const maxAge = convertDuration(1, 'd', 'ms')
-
 export const getQueryClient = () => {
   const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        gcTime: maxAge,
-        queryKeyHashFn,
-      },
-    },
+    defaultOptions: queryClientDefaultOptions,
   })
 
   const localStoragePersistor = createSyncStoragePersister({
@@ -26,7 +21,7 @@ export const getQueryClient = () => {
   persistQueryClient({
     queryClient,
     persister: localStoragePersistor,
-    maxAge,
+    maxAge: queryClientGcTime,
     hydrateOptions: {},
     dehydrateOptions: {
       shouldDehydrateQuery: query => {

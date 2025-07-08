@@ -18,8 +18,8 @@ import {
   PillWrapper,
   SummaryListItem,
   Wrapper,
-} from './ReferralSummary.styles'
-import { Overlay } from './ReferralSummary.styles'
+} from './ReferralSummary.styled'
+import { Overlay } from './ReferralSummary.styled'
 
 const StyledIconWrapper = styled(IconWrapper)`
   color: ${getColor('primaryAlt')};
