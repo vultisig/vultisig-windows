@@ -482,6 +482,7 @@ export const en = {
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
+  unmerge_ruji: 'Unmerge',
   referral_reg_fee: 'Registration Fee',
   create_referral: 'Create Referral',
   select: 'Select',
