@@ -44,7 +44,7 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
 
 const ConnectedApp = styled(IconButton)`
   background-color: ${getColor('buttonBackgroundDisabled')};
-  border: solid 1px ${getColor('borderLight')};
+  border: solid 1px ${getColor('foregroundExtra')};
   border-radius: 50%;
   color: ${getColor('textShy')};
   position: initial;

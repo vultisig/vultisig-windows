@@ -1,5 +1,4 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -15,13 +14,9 @@ export const Wrapper = styled(PageContent)`
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
     height: 800px;
-    max-width: 550px;
+    width: 550px;
     margin-inline: auto;
   }
-`
-
-export const StyledCheckbox = styled(Checkbox)`
-  pointer-events: none;
 `
 
 export const ContentWrapper = styled(VStack)`
@@ -31,9 +26,10 @@ export const ContentWrapper = styled(VStack)`
   ${borderRadius.s};
 `
 
-export const PillWrapper = styled.div`
+export const PillWrapper = styled(HStack)`
   position: relative;
   padding: 8px 12px;
+  height: 32px;
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 0px 9999px 9999px 0px;
@@ -44,8 +40,8 @@ export const PillWrapper = styled.div`
     content: '';
     position: absolute;
     left: -2px;
-    bottom: -1780%;
-    height: 420px;
+    bottom: -1587%;
+    height: 393px;
     width: 2px;
     background-color: ${getColor('foreground')};
   }
@@ -75,4 +71,19 @@ export const IconWrapper = styled(VStack)`
   justify-content: center;
   width: 24px;
   height: 24px;
+`
+
+export const Overlay = styled.div`
+  position: fixed;
+  width: 374px;
+  height: 416px;
+  border-radius: 416px;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background: linear-gradient(
+    82deg,
+    rgba(51, 230, 191, 0.15) 8.02%,
+    rgba(4, 57, 199, 0.15) 133.75%
+  );
+  filter: blur(126.94499969482422px);
 `

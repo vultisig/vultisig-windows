@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { HStack } from '../layout/Stack'
+
 type SearchFieldProps = {
   placeholderKey?: string
   onSearch?: (query: string) => void
@@ -22,7 +24,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({ onSearch }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper justifyContent="center" alignItems="center" gap={8}>
       {!isFocused && (
         <SearchIconWrapper>
           <SearchIcon />
@@ -40,11 +42,11 @@ export const SearchField: React.FC<SearchFieldProps> = ({ onSearch }) => {
   )
 }
 
-const Wrapper = styled.div`
-  padding: 7px 8px;
+const Wrapper = styled(HStack)`
   position: relative;
-  background-color: rgba(120, 120, 128, 0.12);
+  background-color: ${getColor('foreground')};
   border-radius: 10px;
+  height: 48px;
 `
 
 const SearchIconWrapper = styled.div`
@@ -57,7 +59,8 @@ const SearchIconWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 10px;
+  padding-left: 20px;
+  line-height: 20px;
   font-size: 16px;
   border-radius: 4px;
   outline: none;

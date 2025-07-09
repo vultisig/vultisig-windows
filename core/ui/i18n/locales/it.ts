@@ -17,6 +17,15 @@ export const it = {
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
   digit_input_loading_validation: 'Verifica del codice in corso, attendere',
+  referral_reg_fee: 'Quota di registrazione',
+  create_referral: 'Crea referral',
+  select: 'Seleziona',
+  pick_referral_code: 'Scegli il codice referral',
+  referral_status: 'Stato',
+  referral_costs: 'Costi',
+  set_expiration: 'Imposta scadenza (in anni)',
+  expiration_date: 'Data di scadenza',
+  choose_payout_asset: 'Scegli asset di pagamento',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
@@ -46,6 +55,40 @@ export const it = {
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
+  title_1: 'Referral',
+  title_2: 'Vultisig - Referral',
+  header_tooltip_title: 'Programma di Referral',
+  header_tooltip_content:
+    'Il programma di referral si applica agli swap su THORChain e si basa sul miglior sforzo. Devi registrare un THORName per utilizzare il referral Vultisig. Il costo di registrazione è di 10 RUNE più 1 RUNE all’anno, da pagare alla rete THORChain.',
+  invite_friends: 'Invita amici',
+  earn_rewards: 'Guadagna ricompense',
+  save_on_fees: 'Risparmia sulle commissioni',
+  share_description:
+    'Condividi il tuo codice referral unico per invitare amici. Ricevono uno sconto e più scambiano, più guadagni — direttamente nel tuo wallet.',
+  referrals_summary: {
+    item_1: {
+      title: 'Crea il tuo codice referral',
+      description: 'Scegli un codice breve e imposta la tua ricompensa.',
+    },
+    item_2: {
+      title: 'Condividilo con gli amici',
+      description: 'Invita gli amici a usare il tuo codice durante gli swap.',
+    },
+    item_3: {
+      title: 'Guadagna ricompense automaticamente',
+      description:
+        'Ricevi pagamenti nel tuo asset preferito ogni volta che loro scambiano.',
+    },
+    item_4: {
+      title: 'Usa codice referral',
+      description: 'Usa il codice di un amico e risparmia sulle commissioni.',
+    },
+  },
+  referral_program: 'Programma di Referral',
+  how_it_works: 'Come funziona',
+  get_started: 'Inizia ora',
+  use_referral_code: 'Usa Codice Referral',
+  enter_referral_code_placeholder: 'Inserisci Codice Referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
   destination_address: 'Indirizzo di destinazione',
