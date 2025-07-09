@@ -12,7 +12,7 @@ import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
-const suggestions = [0.25, 0.5]
+const suggestions = [0.25, 0.5, 1]
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
