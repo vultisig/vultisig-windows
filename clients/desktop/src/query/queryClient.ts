@@ -22,7 +22,6 @@ export const getQueryClient = () => {
     queryClient,
     persister: localStoragePersistor,
     maxAge: queryClientGcTime,
-    hydrateOptions: {},
     dehydrateOptions: {
       shouldDehydrateQuery: query => {
         if (query.meta?.disablePersist) {
