@@ -59,7 +59,11 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
+import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
+import {
+  EIP1193Errors,
+  Exception,
+} from '@clients/extension/src/background/handlers/errorHandler'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
@@ -108,7 +112,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (account && getChainKind(chain) === 'evm') {
+            if (!account) throw new Exception(4001, EIP1193Errors[4001])
+
+            if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
                 `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
                 account
@@ -134,8 +140,7 @@ export const handleRequest = (
               Chain.Solana,
             ] as Chain[]
 
-            const result = specialChains.includes(chain) ? account : [account]
-            resolve(result)
+            resolve(specialChains.includes(chain) ? account : [account])
           })
           .catch(reject)
 
