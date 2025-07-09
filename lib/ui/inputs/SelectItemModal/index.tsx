@@ -25,7 +25,7 @@ export const SelectItemModal = <T extends { id: string; chain?: string }>({
 
   return (
     <Modal
-      width={480}
+      targetWidth={480}
       placement="center"
       title={title}
       onClose={() => onFinish()}
