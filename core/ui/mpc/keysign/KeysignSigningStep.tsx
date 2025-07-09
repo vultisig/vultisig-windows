@@ -52,7 +52,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
           isDAppSigning ? window.close() : navigate({ id: 'vault' })
 
         return (
-          <>
+          <TxHashProvider value={txResult.txHash}>
             <PageHeader title={t('overview')} hasBorder />
             <MatchRecordUnion
               value={payload}
@@ -93,9 +93,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                         <>
                           <PageContent alignItems="center" scrollable>
                             <VStack gap={16} maxWidth={576} fullWidth>
-                              <TxHashProvider value={txResult.txHash}>
-                                <KeysignTxOverview />
-                              </TxHashProvider>
+                              <KeysignTxOverview />
                             </VStack>
                           </PageContent>
                           <PageFooter alignItems="center">
@@ -128,7 +126,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                 ),
               }}
             />
-          </>
+          </TxHashProvider>
         )
       }}
       error={error => (

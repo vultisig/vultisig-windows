@@ -13,6 +13,15 @@ export const hr = {
   incorrect_passcode: 'Netočan pristupni kod',
   passcodes_do_not_match: 'Kodovi se ne podudaraju',
   tx_hash: 'Hash transakcije',
+  referral_reg_fee: 'Naknada za registraciju',
+  create_referral: 'Kreiraj preporuku',
+  select: 'Odaberi',
+  pick_referral_code: 'Odaberi kod preporuke',
+  referral_status: 'Status',
+  referral_costs: 'Troškovi',
+  set_expiration: 'Postavi istek (u godinama)',
+  expiration_date: 'Datum isteka',
+  choose_payout_asset: 'Odaberi sredstvo isplate',
   digit_input_success_validation: 'Verifikacija uspješna',
   digit_input_error_validation: 'Pogreška pri provjeri koda, pokušajte ponovno',
   digit_input_loading_validation: 'Provjera koda u tijeku, molimo pričekajte',
@@ -22,6 +31,40 @@ export const hr = {
   base_fee_tooltip_content:
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
+  title_1: 'Preporuka',
+  title_2: 'Vultisig - Preporuke',
+  header_tooltip_title: 'Program Preporuka',
+  header_tooltip_content:
+    'Program preporuka se primjenjuje na THORChain zamjene i temelji se na načelu najbolje namjere. Moraš registrirati THORName kako bi koristio Vultisig preporuke. Naknada za registraciju je 10 RUNE te 1 RUNE godišnje, što se plaća THORChain mreži.',
+  invite_friends: 'Pozovi prijatelje',
+  earn_rewards: 'Zaradi nagrade',
+  save_on_fees: 'Uštedi na naknadama',
+  share_description:
+    'Podijeli svoj jedinstveni kod preporuke kako bi pozvao prijatelje. Oni dobivaju popust, a što više trguju, ti više zarađuješ — izravno u tvoj novčanik.',
+  referrals_summary: {
+    item_1: {
+      title: 'Stvori svoj kod preporuke',
+      description: 'Odaberi kratak kod i postavi isplatu nagrade.',
+    },
+    item_2: {
+      title: 'Podijeli s prijateljima',
+      description: 'Pozovi prijatelje da koriste tvoj kod pri zamjeni.',
+    },
+    item_3: {
+      title: 'Zarađuj automatski',
+      description:
+        'Budi isplaćen u svojoj omiljenoj imovini svaki put kad oni trguju.',
+    },
+    item_4: {
+      title: 'Iskoristi kod preporuke',
+      description: 'Iskoristi kod prijatelja i uštedi na naknadama za zamjenu.',
+    },
+  },
+  referral_program: 'Program Preporuka',
+  how_it_works: 'Kako funkcionira',
+  get_started: 'Započni',
+  use_referral_code: 'Iskoristi Kod Preporuke',
+  enter_referral_code_placeholder: 'Unesi Kod Preporuke',
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',
@@ -630,6 +673,7 @@ export const hr = {
   vote: 'Glasanje',
   stake: 'Ulog',
   unstake: 'Kivonás',
+  unmerge: 'Razdvoji',
   advanced: 'Napredno',
   low: 'Niska',
   normal: 'Normalan',
@@ -867,6 +911,7 @@ export const hr = {
   find_custom_token: 'Pronađite svoj prilagođeni token',
   enter_contract_address: 'Unesite adresu ugovora',
   no_token_found: 'Nije pronađen token',
+  no_mergeable_tokens_found: 'Nisu pronađeni tokeni za spajanje',
   invalid_token_address: 'Unesite valjanu adresu tokena',
   extension_vault_import_restriction:
     'U ekstenziju se mogu uvesti samo DKLS trezori',
