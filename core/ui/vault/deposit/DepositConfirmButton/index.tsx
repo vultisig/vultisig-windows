@@ -59,15 +59,9 @@ export const DepositConfirmButton = ({
         ? TransactionType.UNSPECIFIED // Using UNSPECIFIED instead of THOR_UNMERGE due to DKLS library bug that causes signing to fail
         : undefined
 
-  // For chain specific query, we need a coin with address
-  const coinForChainQuery =
-    selectedCoin && coin.address
-      ? ({ ...selectedCoin, address: coin.address } as AccountCoin)
-      : selectedCoin
-
   const chainSpecificQuery = useDepositChainSpecificQuery(
     transactionType,
-    coinForChainQuery
+    selectedCoin
   )
   const config = transactionConfig(coinKey.chain)[action] || {}
   const receiver = config.requiresNodeAddress
