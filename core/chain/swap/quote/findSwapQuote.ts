@@ -114,7 +114,6 @@ export const findSwapQuote = ({
           chain: toChain,
         },
         amount: chainAmount,
-        address: from.address,
       })
 
       return { general }
