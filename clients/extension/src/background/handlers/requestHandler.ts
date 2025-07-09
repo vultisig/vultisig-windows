@@ -12,6 +12,7 @@ import {
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
 import { storage } from '@clients/extension/src/storage'
+import { setCurrentCosmosChainId } from '@clients/extension/src/storage/currentCosmosChainId'
 import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
@@ -474,17 +475,10 @@ export const handleRequest = (
           getCosmosChainByChainId(param.chainId) ||
             getEvmChainByChainId(param.chainId)
         )
-        console.log('chain:', chain)
-
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          console.log('safeVaultId:', safeVaultId)
-
           const host = getDappHostname(sender)
-          console.log('host:', host)
-
           const allSessions = await getVaultsAppSessions()
-
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
           if (previousSession) {
@@ -503,7 +497,11 @@ export const handleRequest = (
               },
             })
           } else {
-            await setCurrentEVMChainId(param.chainId)
+            if (getChainKind(chain) === 'evm') {
+              await setCurrentEVMChainId(param.chainId)
+            } else if (getChainKind(chain) === 'cosmos') {
+              await setCurrentCosmosChainId(param.chainId)
+            }
           }
           resolve(param.chainId)
         })
