@@ -86,11 +86,13 @@ export const getKeysignPayload = (
             getChainKind(transaction.chain) === 'utxo'
               ? Number(
                   formatUnits(
-                    Number(transaction.transactionDetails.amount?.amount),
-                    chainFeeCoin[Chain.Bitcoin].decimals
+                    Number(
+                      transaction.transactionDetails.amount?.amount ?? '0'
+                    ),
+                    accountCoin.decimals
                   )
                 )
-              : Number(transaction.transactionDetails.amount?.amount),
+              : Number(transaction.transactionDetails.amount?.amount ?? '0'),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
           transactionType: transaction.transactionDetails.ibcTransaction
