@@ -14,7 +14,7 @@ export const getQueryClient = () => {
   })
 
   const localStoragePersistor = createSyncStoragePersister({
-    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storage: window.localStorage,
     key: PersistentStateKey.ReactQueryState,
   })
 
