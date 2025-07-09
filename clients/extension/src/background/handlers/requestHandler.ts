@@ -60,6 +60,7 @@ import {
 } from 'ethers'
 
 import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
+import { safeJsonStringify } from '../utils/bigIntUtils'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
@@ -290,7 +291,7 @@ export const handleRequest = (
                   .then(client => {
                     client
                       .getTx(String(hash))
-                      .then(result => resolve(JSON.stringify(result)))
+                      .then(result => resolve(safeJsonStringify(result)))
                   })
                   .catch(error =>
                     reject(`Could not initialize Tendermint Client: ${error}`)
@@ -310,9 +311,7 @@ export const handleRequest = (
                 const client = getEvmClient(chain)
                 client
                   .getTransaction({ hash: String(hash) as `0x${string}` })
-                  .then(result => {
-                    resolve(JSON.stringify(result))
-                  })
+                  .then(result => resolve(safeJsonStringify(result)))
                   .catch(reject)
 
                 break
@@ -320,7 +319,7 @@ export const handleRequest = (
               default: {
                 api.utxo
                   .blockchairGetTx(chain, String(hash))
-                  .then(res => resolve(JSON.stringify(res)))
+                  .then(res => resolve(safeJsonStringify(res)))
                   .catch(reject)
 
                 break
