@@ -2,10 +2,7 @@ import {
   handleFindAccounts,
   handleGetAccounts,
 } from '@clients/extension/src/background/handlers/accountsHandler'
-import {
-  EIP1193Errors,
-  Exception,
-} from '@clients/extension/src/background/handlers/errorHandler'
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
@@ -111,7 +108,7 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (!account) throw new Exception(4001, EIP1193Errors[4001])
+            if (!account) throw new EIP1193Error(4001)
 
             if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(

@@ -1,16 +1,20 @@
-export class Exception extends Error {
-  code: number
+const codes = [4001, 4100, 4200, 4900, 4901] as const
 
-  constructor(code: number, message: string) {
-    super(message)
-    this.code = code
-  }
-}
-
-export const EIP1193Errors = {
+const errors: Record<Code, string> = {
   4001: 'User rejected the request',
   4100: 'Unauthorized',
   4200: 'Unsupported method',
   4900: 'Provider disconnected',
   4901: 'Chain disconnected',
-} as const
+}
+
+type Code = (typeof codes)[number]
+
+export class EIP1193Error extends Error {
+  code: number
+
+  constructor(code: Code) {
+    super(errors[code])
+    this.code = code
+  }
+}
