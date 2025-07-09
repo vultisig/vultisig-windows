@@ -1,8 +1,8 @@
 import bs58 from 'bs58'
 
+import { stripHexPrefix } from '../../../../lib/utils/hex/stripHexPrefix'
 import { Chain } from '../../../chain/Chain'
 import { ChainKind, getChainKind } from '../../../chain/ChainKind'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 
 type BlockaidScanPayload = Record<string, any>
 

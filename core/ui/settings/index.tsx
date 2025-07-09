@@ -2,6 +2,10 @@ import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { Client, useCore } from '@core/ui/state/core'
+import {
+  useBlockaidEnabled,
+  useSetBlockaidEnabledMutation,
+} from '@core/ui/storage/blockaid'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
@@ -78,17 +82,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
-
-  // Blockaid toggle state
-  const [blockaidEnabled, setBlockaidEnabled] = useState(() => {
-    try {
-      return JSON.parse(
-        localStorage.getItem('blockaidEnabled') ?? 'true'
-      ) as boolean
-    } catch {
-      return true
-    }
-  })
+  const blockaidEnabled = useBlockaidEnabled()
+  const setBlockaidEnabledMutation = useSetBlockaidEnabledMutation()
 
   return (
     <>
@@ -175,20 +170,12 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 <Switch
                   checked={blockaidEnabled}
                   onChange={enabled => {
-                    setBlockaidEnabled(enabled)
-                    localStorage.setItem(
-                      'blockaidEnabled',
-                      JSON.stringify(enabled)
-                    )
+                    setBlockaidEnabledMutation.mutate(enabled)
                   }}
                 />
               }
               onClick={() => {
-                setBlockaidEnabled(!blockaidEnabled)
-                localStorage.setItem(
-                  'blockaidEnabled',
-                  JSON.stringify(!blockaidEnabled)
-                )
+                setBlockaidEnabledMutation.mutate(!blockaidEnabled)
               }}
               hoverable
             />

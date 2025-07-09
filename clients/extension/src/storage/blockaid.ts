@@ -11,4 +11,4 @@ export const blockaidStorage: BlockaidStorage = {
   setBlockaidEnabled: async value => {
     await setPersistentState(StorageKey.blockaidEnabled, value)
   },
-} 
+}

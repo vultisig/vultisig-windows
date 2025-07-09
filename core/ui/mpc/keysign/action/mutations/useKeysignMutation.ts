@@ -20,6 +20,7 @@ import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignActio
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { useCore } from '@core/ui/state/core'
+import { useBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -41,6 +42,7 @@ export const useKeysignMutation = (
 
   const keysignAction = useKeysignAction()
   const mutationListener = useKeysignMutationListener()
+  const blockaidEnabled = useBlockaidEnabled()
 
   return useMutation({
     mutationFn: async () => {
@@ -121,6 +123,7 @@ export const useKeysignMutation = (
               if (
                 client === 'extension' &&
                 !options?.skipBlockaid &&
+                blockaidEnabled &&
                 rawTx &&
                 account_address
               ) {

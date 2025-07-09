@@ -49,4 +49,4 @@ export const useSetBlockaidEnabledMutation = () => {
   return useMutation({
     mutationFn,
   })
-} 
+}
