@@ -2,11 +2,19 @@ import { Wrap } from '@lib/ui/base/Wrap'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { vStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
+import {
+  queryClientDefaultOptions,
+  queryClientGcTime,
+} from '@lib/ui/query/queryClientDefaultOptions'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import React from 'react'
+import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
+import {
+  Persister,
+  PersistQueryClientProvider,
+} from '@tanstack/react-query-persist-client'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { WalletCoreProvider } from './chain/providers/WalletCoreProvider'
@@ -20,7 +28,7 @@ import { CoinsMetadataManager } from './vault/chain/coin/metadata/CoinsMetadataM
 
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
-  queryClient: QueryClient
+  persister: Persister
   migrationsManager?: React.ComponentType<ChildrenProp>
 }
 
@@ -32,14 +40,40 @@ const Container = styled.div`
 export const CoreApp = ({
   children,
   coreState,
-  queryClient,
+  persister,
   migrationsManager: MigrationsManager,
 }: CoreAppProps) => {
+  const queryClient = useMemo(() => {
+    return new QueryClient({
+      defaultOptions: queryClientDefaultOptions,
+    })
+  }, [])
+
+  const persistOptions = useMemo(() => {
+    return {
+      persister,
+      maxAge: queryClientGcTime,
+      dehydrateOptions: {
+        shouldDehydrateQuery: (query: any) => {
+          if (query.meta?.disablePersist) {
+            return false
+          }
+
+          return defaultShouldDehydrateQuery(query)
+        },
+      },
+      buster: 'v1',
+    }
+  }, [persister])
+
   return (
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={persistOptions}
+        >
           <WalletCoreProvider>
             <Wrap wrap={MigrationsManager}>
               <StorageDependant>
@@ -58,7 +92,7 @@ export const CoreApp = ({
               </StorageDependant>
             </Wrap>
           </WalletCoreProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </CoreProvider>
     </ThemeProvider>
   )

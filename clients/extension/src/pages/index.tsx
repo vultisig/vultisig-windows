@@ -7,12 +7,12 @@ import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
-import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
-import { QueryClient } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
+
+import { createChromeStoragePersister } from '../query/persister'
 
 const coreState: CoreState = {
   ...storage,
@@ -56,9 +56,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
   }
 `
 
-const queryClient = new QueryClient({
-  defaultOptions: queryClientDefaultOptions,
-})
+const persister = createChromeStoragePersister()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -66,7 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <CoreApp
       migrationsManager={StorageMigrationsManager}
       coreState={coreState}
-      queryClient={queryClient}
+      persister={persister}
     >
       <ActiveView views={views} />
     </CoreApp>
