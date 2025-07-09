@@ -2,6 +2,10 @@ import {
   handleFindAccounts,
   handleGetAccounts,
 } from '@clients/extension/src/background/handlers/accountsHandler'
+import {
+  EIP1193Errors,
+  Exception,
+} from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
@@ -11,6 +15,7 @@ import {
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
 import { storage } from '@clients/extension/src/storage'
+import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -58,12 +63,6 @@ import {
   TransactionRequest,
   TypedDataEncoder,
 } from 'ethers'
-
-import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
-import {
-  EIP1193Errors,
-  Exception,
-} from '@clients/extension/src/background/handlers/errorHandler'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
