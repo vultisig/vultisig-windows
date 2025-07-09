@@ -28,7 +28,7 @@ import { CoinsMetadataManager } from './vault/chain/coin/metadata/CoinsMetadataM
 
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
-  persister: Persister
+  queriesPersister: Persister
   migrationsManager?: React.ComponentType<ChildrenProp>
 }
 
@@ -40,7 +40,7 @@ const Container = styled.div`
 export const CoreApp = ({
   children,
   coreState,
-  persister,
+  queriesPersister,
   migrationsManager: MigrationsManager,
 }: CoreAppProps) => {
   const queryClient = useMemo(() => {
@@ -51,7 +51,7 @@ export const CoreApp = ({
 
   const persistOptions = useMemo(() => {
     return {
-      persister,
+      persister: queriesPersister,
       maxAge: queryClientGcTime,
       dehydrateOptions: {
         shouldDehydrateQuery: (query: any) => {
@@ -64,7 +64,7 @@ export const CoreApp = ({
       },
       buster: 'v1',
     }
-  }, [persister])
+  }, [queriesPersister])
 
   return (
     <ThemeProvider theme={darkTheme}>
