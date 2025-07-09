@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
@@ -29,7 +30,7 @@ import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
-import { formatUnits, toUtf8String } from 'ethers'
+import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
   transaction: IKeysignTransactionPayload,
@@ -82,17 +83,10 @@ export const getKeysignPayload = (
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount:
-            getChainKind(transaction.chain) === 'utxo'
-              ? Number(
-                  formatUnits(
-                    Number(
-                      transaction.transactionDetails.amount?.amount ?? '0'
-                    ),
-                    accountCoin.decimals
-                  )
-                )
-              : Number(transaction.transactionDetails.amount?.amount ?? '0'),
+          amount: fromChainAmount(
+            Number(transaction.transactionDetails.amount?.amount),
+            accountCoin.decimals
+          ),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
           transactionType: transaction.transactionDetails.ibcTransaction
