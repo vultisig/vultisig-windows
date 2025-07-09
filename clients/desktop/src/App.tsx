@@ -2,9 +2,7 @@ import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
-import { queryClientPersistKey } from '@core/ui/storage/config'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 
@@ -15,11 +13,7 @@ import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { views } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
 import { storage } from './storage'
-
-const persister = createSyncStoragePersister({
-  storage: window.localStorage,
-  key: queryClientPersistKey,
-})
+import { queriesPersister } from './storage/queriesPersister'
 
 const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
   ...storage,
@@ -60,7 +54,7 @@ const App = () => {
   )
 
   return (
-    <CoreApp coreState={coreState} persister={persister}>
+    <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />

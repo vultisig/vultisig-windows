@@ -12,7 +12,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
 
-import { createChromeStoragePersister } from '../query/persister'
+import { queriesPersister } from '../storage/queriesPersister'
 
 const coreState: CoreState = {
   ...storage,
@@ -56,15 +56,13 @@ const ExtensionGlobalStyle = createGlobalStyle`
   }
 `
 
-const persister = createChromeStoragePersister()
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ExtensionGlobalStyle />
     <CoreApp
       migrationsManager={StorageMigrationsManager}
       coreState={coreState}
-      persister={persister}
+      queriesPersister={queriesPersister}
     >
       <ActiveView views={views} />
     </CoreApp>
