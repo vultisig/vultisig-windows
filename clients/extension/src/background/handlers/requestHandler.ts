@@ -59,8 +59,8 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
 import { setCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
+import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
@@ -472,7 +472,7 @@ export const handleRequest = (
 
         const chain = shouldBePresent(
           getCosmosChainByChainId(param.chainId) ||
-          getEvmChainByChainId(param.chainId)
+            getEvmChainByChainId(param.chainId)
         )
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
