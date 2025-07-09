@@ -2,6 +2,7 @@ import {
   handleFindAccounts,
   handleGetAccounts,
 } from '@clients/extension/src/background/handlers/accountsHandler'
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
@@ -11,6 +12,8 @@ import {
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
 import { storage } from '@clients/extension/src/storage'
+import { setCurrentCosmosChainId } from '@clients/extension/src/storage/currentCosmosChainId'
+import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -59,9 +62,6 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { setCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
-import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
-
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
@@ -109,7 +109,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (account && getChainKind(chain) === 'evm') {
+            if (!account) throw new EIP1193Error(4001)
+
+            if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
                 `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
                 account
@@ -135,8 +137,7 @@ export const handleRequest = (
               Chain.Solana,
             ] as Chain[]
 
-            const result = specialChains.includes(chain) ? account : [account]
-            resolve(result)
+            resolve(specialChains.includes(chain) ? account : [account])
           })
           .catch(reject)
 
