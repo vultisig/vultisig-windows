@@ -1,6 +1,5 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { CoinKey } from '@core/chain/coin/Coin'
 import { lifiConfig } from '@core/chain/swap/general/lifi/config'
 import {
   lifiSwapChainId,
@@ -13,10 +12,10 @@ import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { createConfig, getQuote } from '@lifi/sdk'
 
+import { AccountCoinKey } from '../../../../coin/AccountCoin'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 
-type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
-  address: string
+type Input = Record<TransferDirection, AccountCoinKey<LifiSwapEnabledChain>> & {
   amount: bigint
 }
 
@@ -28,7 +27,6 @@ const setupLifi = memoize(() => {
 
 export const getLifiSwapQuote = async ({
   amount,
-  address,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
   setupLifi()
@@ -38,6 +36,9 @@ export const getLifiSwapQuote = async ({
   )
 
   const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id)
+  const [fromAddress, toAddress] = [transfer.from, transfer.to].map(
+    ({ address }) => address
+  )
 
   const quote = await getQuote({
     fromChain,
@@ -45,7 +46,8 @@ export const getLifiSwapQuote = async ({
     fromToken,
     toToken,
     fromAmount: amount.toString(),
-    fromAddress: address,
+    fromAddress,
+    toAddress,
     fee: lifiConfig.afffiliateFee,
   })
 
