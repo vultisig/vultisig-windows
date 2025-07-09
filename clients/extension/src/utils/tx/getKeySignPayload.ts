@@ -81,6 +81,17 @@ export const getKeysignPayload = (
           address: transaction.transactionDetails.from,
         } as AccountCoin
 
+        // Create fee settings with gas limit from transaction details if available
+        const effectiveFeeSettings = transaction.transactionDetails.gasSettings
+          ?.gasLimit
+          ? {
+              ...feeSettings,
+              gasLimit: Number(
+                transaction.transactionDetails.gasSettings.gasLimit
+              ),
+            }
+          : feeSettings
+
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: fromChainAmount(
@@ -92,7 +103,7 @@ export const getKeysignPayload = (
           transactionType: transaction.transactionDetails.ibcTransaction
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
-          feeSettings,
+          feeSettings: effectiveFeeSettings,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {
@@ -102,9 +113,6 @@ export const getKeysignPayload = (
             chainSpecific.value.priorityFee =
               transaction.transactionDetails.gasSettings
                 ?.maxPriorityFeePerGas ?? chainSpecific.value.priorityFee
-            chainSpecific.value.gasLimit =
-              transaction.transactionDetails.gasSettings?.gasLimit ??
-              chainSpecific.value.gasLimit
             break
           }
           case 'cosmosSpecific': {
