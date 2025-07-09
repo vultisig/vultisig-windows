@@ -1,44 +1,63 @@
+import { Chain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
+import { match } from '@lib/utils/match'
 
 const blockaid_base = `${rootApiUrl}/blockaid/v0`
 
-export const Endpoints = {
-  txScan: (chain: string) => {
-    const chainLower = chain.toLowerCase()
-    if (chainLower.includes('solana') || chainLower.includes('mainnet')) {
-      return `${blockaid_base}/solana/message/scan`
-    } else if (chainLower.includes('sui')) {
-      return `${blockaid_base}/sui/transaction/scan`
-    } else if (chainLower.includes('bitcoin')) {
-      return `${blockaid_base}/bitcoin/transaction-raw/scan`
-    } else {
-      // Default to EVM for all other chains
-      return `${blockaid_base}/evm/transaction-raw/scan`
+const getChainType = (chain: string) => {
+  const chainLower = chain.toLowerCase()
+  
+  // Create a mapping of patterns to chain types
+  const chainTypeMap = {
+    solana: ['solana', 'mainnet'],
+    sui: ['sui'],
+    bitcoin: ['bitcoin'],
+  } as const
+  
+  // Check each pattern and return the first match
+  for (const [chainType, patterns] of Object.entries(chainTypeMap)) {
+    if (patterns.some(pattern => chainLower.includes(pattern))) {
+      return chainType as 'solana' | 'sui' | 'bitcoin'
     }
+  }
+  
+  return 'evm' as const
+}
+
+export const Endpoints = {
+  txScan: (chain: Chain) => {
+    const chainType = getChainType(chain)
+    
+    return match(chainType, {
+      solana: () => `${blockaid_base}/solana/message/scan`,
+      sui: () => `${blockaid_base}/sui/transaction/scan`,
+      bitcoin: () => `${blockaid_base}/bitcoin/transaction-raw/scan`,
+      evm: () => `${blockaid_base}/evm/transaction-raw/scan`,
+    })
   },
   rawTxScan: (chain: string) => {
-    const chainLower = chain.toLowerCase()
-    if (chainLower.includes('bitcoin')) {
-      return `${blockaid_base}/bitcoin/transaction-raw/scan`
-    } else {
-      return `${blockaid_base}/evm/transaction-raw/scan`
-    }
+    const chainType = getChainType(chain)
+    
+    return match(chainType, {
+      bitcoin: () => `${blockaid_base}/bitcoin/transaction-raw/scan`,
+      evm: () => `${blockaid_base}/evm/transaction-raw/scan`,
+      solana: () => `${blockaid_base}/evm/transaction-raw/scan`, // fallback to EVM
+      sui: () => `${blockaid_base}/evm/transaction-raw/scan`, // fallback to EVM
+    })
   },
   addressScan: (chain: string) => {
-    const chainLower = chain.toLowerCase()
-    if (chainLower.includes('solana')) {
-      return `${blockaid_base}/solana/address/scan`
-    } else if (chainLower.includes('sui')) {
-      return `${blockaid_base}/sui/address/scan`
-    } else if (chainLower.includes('bitcoin')) {
-      return `${blockaid_base}/bitcoin/address/scan`
-    } else {
-      // Default to EVM for all other chains
-      return `${blockaid_base}/evm/address/scan`
-    }
+    const chainType = getChainType(chain)
+    
+    return match(chainType, {
+      solana: () => `${blockaid_base}/solana/address/scan`,
+      sui: () => `${blockaid_base}/sui/address/scan`,
+      bitcoin: () => `${blockaid_base}/bitcoin/address/scan`,
+      evm: () => `${blockaid_base}/evm/address/scan`,
+    })
   },
-  tokenScan: `${blockaid_base}/token/scan`,
 }
+
+
 
 export const BlockaidResultTypes = {
   Benign: 'Benign',

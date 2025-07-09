@@ -2,6 +2,7 @@ import { CoreStorage } from '@core/ui/storage/CoreStorage'
 
 import { addressBookStorage } from './addressBook'
 import { balanceVisibilityStorage } from './balanceVisibility'
+import { blockaidStorage } from './blockaid'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
@@ -16,6 +17,7 @@ import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
 
 export const storage: CoreStorage = {
+  ...blockaidStorage,
   ...coinFinderIgnoreStorage,
   ...fiatCurrencyStorage,
   ...currentVaultIdStorage,

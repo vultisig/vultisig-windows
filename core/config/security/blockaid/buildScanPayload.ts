@@ -2,6 +2,7 @@ import bs58 from 'bs58'
 
 import { Chain } from '../../../chain/Chain'
 import { ChainKind, getChainKind } from '../../../chain/ChainKind'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 
 type BlockaidScanPayload = Record<string, any>
 
@@ -20,10 +21,7 @@ export const buildBlockaidScanPayload = ({
 }: BuildBlockaidScanPayloadInput): BlockaidScanPayload => {
   const kind = getChainKind(chain as Chain) as ChainKind
   // Remove 0x prefix if present for solana
-  let tx = rawTx ?? ''
-  if (tx.startsWith('0x')) {
-    tx = tx.slice(2)
-  }
+  const tx = stripHexPrefix(rawTx ?? '')
   const base58Encoded = bs58.encode(Buffer.from(tx, 'hex'))
   switch (kind) {
     case 'evm':
