@@ -2,239 +2,284 @@
 // @generated from file vultisig/keysign/v1/keysign_message.proto (package vultisig.keysign.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
-import type { OneInchSwapPayload } from "./1inch_swap_payload_pb";
-import { file_vultisig_keysign_v1_1inch_swap_payload } from "./1inch_swap_payload_pb";
-import type { CardanoChainSpecific, CosmosSpecific, EthereumSpecific, MAYAChainSpecific, PolkadotSpecific, RippleSpecific, SolanaSpecific, SuiSpecific, THORChainSpecific, TonSpecific, TronSpecific, UTXOSpecific } from "./blockchain_specific_pb";
-import { file_vultisig_keysign_v1_blockchain_specific } from "./blockchain_specific_pb";
-import type { Coin } from "./coin_pb";
-import { file_vultisig_keysign_v1_coin } from "./coin_pb";
-import type { CustomMessagePayload } from "./custom_message_payload_pb";
-import { file_vultisig_keysign_v1_custom_message_payload } from "./custom_message_payload_pb";
-import type { Erc20ApprovePayload } from "./erc20_approve_payload_pb";
-import { file_vultisig_keysign_v1_erc20_approve_payload } from "./erc20_approve_payload_pb";
-import type { KyberSwapPayload } from "./kyberswap_swap_payload_pb";
-import { file_vultisig_keysign_v1_kyberswap_swap_payload } from "./kyberswap_swap_payload_pb";
-import type { THORChainSwapPayload } from "./thorchain_swap_payload_pb";
-import { file_vultisig_keysign_v1_thorchain_swap_payload } from "./thorchain_swap_payload_pb";
-import type { UtxoInfo } from "./utxo_info_pb";
-import { file_vultisig_keysign_v1_utxo_info } from "./utxo_info_pb";
-import type { Message } from "@bufbuild/protobuf";
+import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
+import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
+import type { OneInchSwapPayload } from './1inch_swap_payload_pb'
+import { file_vultisig_keysign_v1_1inch_swap_payload } from './1inch_swap_payload_pb'
+import type {
+  CardanoChainSpecific,
+  CosmosSpecific,
+  EthereumSpecific,
+  MAYAChainSpecific,
+  PolkadotSpecific,
+  RippleSpecific,
+  SolanaSpecific,
+  SuiSpecific,
+  THORChainSpecific,
+  TonSpecific,
+  TronSpecific,
+  UTXOSpecific,
+} from './blockchain_specific_pb'
+import { file_vultisig_keysign_v1_blockchain_specific } from './blockchain_specific_pb'
+import type { Coin } from './coin_pb'
+import { file_vultisig_keysign_v1_coin } from './coin_pb'
+import type { CustomMessagePayload } from './custom_message_payload_pb'
+import { file_vultisig_keysign_v1_custom_message_payload } from './custom_message_payload_pb'
+import type { Erc20ApprovePayload } from './erc20_approve_payload_pb'
+import { file_vultisig_keysign_v1_erc20_approve_payload } from './erc20_approve_payload_pb'
+import type { KyberSwapPayload } from './kyberswap_swap_payload_pb'
+import { file_vultisig_keysign_v1_kyberswap_swap_payload } from './kyberswap_swap_payload_pb'
+import type { THORChainSwapPayload } from './thorchain_swap_payload_pb'
+import { file_vultisig_keysign_v1_thorchain_swap_payload } from './thorchain_swap_payload_pb'
+import type { UtxoInfo } from './utxo_info_pb'
+import { file_vultisig_keysign_v1_utxo_info } from './utxo_info_pb'
+import type { Message } from '@bufbuild/protobuf'
 
 /**
  * Describes the file vultisig/keysign/v1/keysign_message.proto.
  */
-export const file_vultisig_keysign_v1_keysign_message: GenFile = /*@__PURE__*/
-  fileDesc("Cil2dWx0aXNpZy9rZXlzaWduL3YxL2tleXNpZ25fbWVzc2FnZS5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSKvAgoOS2V5c2lnbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIUCgxzZXJ2aWNlX25hbWUYAiABKAkSGgoSZW5jcnlwdGlvbl9rZXlfaGV4GAQgASgJEjwKD2tleXNpZ25fcGF5bG9hZBgFIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuS2V5c2lnblBheWxvYWQSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAYgASgIEhIKCnBheWxvYWRfaWQYByABKAkSTgoWY3VzdG9tX21lc3NhZ2VfcGF5bG9hZBgIIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuQ3VzdG9tTWVzc2FnZVBheWxvYWRIAIgBAUIZChdfY3VzdG9tX21lc3NhZ2VfcGF5bG9hZCK1CwoOS2V5c2lnblBheWxvYWQSJwoEY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhISCgp0b19hZGRyZXNzGAIgASgJEhEKCXRvX2Ftb3VudBgDIAEoCRI6Cg11dHhvX3NwZWNpZmljGAQgASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5VVFhPU3BlY2lmaWNIABJCChFldGhlcmV1bV9zcGVjaWZpYxgFIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuRXRoZXJldW1TcGVjaWZpY0gAEkQKEnRob3JjaGFpbl9zcGVjaWZpYxgGIAEoCzImLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3BlY2lmaWNIABI/Cg1tYXlhX3NwZWNpZmljGAcgASgLMiYudnVsdGlzaWcua2V5c2lnbi52MS5NQVlBQ2hhaW5TcGVjaWZpY0gAEj4KD2Nvc21vc19zcGVjaWZpYxgIIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zU3BlY2lmaWNIABI+Cg9zb2xhbmFfc3BlY2lmaWMYCSABKAsyIy52dWx0aXNpZy5rZXlzaWduLnYxLlNvbGFuYVNwZWNpZmljSAASQgoRcG9sa2Fkb3Rfc3BlY2lmaWMYCiABKAsyJS52dWx0aXNpZy5rZXlzaWduLnYxLlBvbGthZG90U3BlY2lmaWNIABI7Cg9zdWljaGVfc3BlY2lmaWMYCyABKAsyIC52dWx0aXNpZy5rZXlzaWduLnYxLlN1aVNwZWNpZmljSAASOAoMdG9uX3NwZWNpZmljGAwgASgLMiAudnVsdGlzaWcua2V5c2lnbi52MS5Ub25TcGVjaWZpY0gAEj4KD3JpcHBsZV9zcGVjaWZpYxgNIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuUmlwcGxlU3BlY2lmaWNIABI6Cg10cm9uX3NwZWNpZmljGA4gASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5Ucm9uU3BlY2lmaWNIABI8CgdjYXJkYW5vGA8gASgLMikudnVsdGlzaWcua2V5c2lnbi52MS5DYXJkYW5vQ2hhaW5TcGVjaWZpY0gAEjAKCXV0eG9faW5mbxgUIAMoCzIdLnZ1bHRpc2lnLmtleXNpZ24udjEuVXR4b0luZm8SEQoEbWVtbxgVIAEoCUgCiAEBEksKFnRob3JjaGFpbl9zd2FwX3BheWxvYWQYFiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLlRIT1JDaGFpblN3YXBQYXlsb2FkSAESSwoWbWF5YWNoYWluX3N3YXBfcGF5bG9hZBgXIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3dhcFBheWxvYWRIARJHChRvbmVpbmNoX3N3YXBfcGF5bG9hZBgYIAEoCzInLnZ1bHRpc2lnLmtleXNpZ24udjEuT25lSW5jaFN3YXBQYXlsb2FkSAESRwoWa3liZXJzd2FwX3N3YXBfcGF5bG9hZBgZIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuS3liZXJTd2FwUGF5bG9hZEgBEkwKFWVyYzIwX2FwcHJvdmVfcGF5bG9hZBgeIAEoCzIoLnZ1bHRpc2lnLmtleXNpZ24udjEuRXJjMjBBcHByb3ZlUGF5bG9hZEgDiAEBEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYHyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYICABKAkSEAoIbGliX3R5cGUYISABKAlCFQoTYmxvY2tjaGFpbl9zcGVjaWZpY0IOCgxzd2FwX3BheWxvYWRCBwoFX21lbW9CGAoWX2VyYzIwX2FwcHJvdmVfcGF5bG9hZEJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM", [file_vultisig_keysign_v1_1inch_swap_payload, file_vultisig_keysign_v1_blockchain_specific, file_vultisig_keysign_v1_coin, file_vultisig_keysign_v1_custom_message_payload, file_vultisig_keysign_v1_erc20_approve_payload, file_vultisig_keysign_v1_kyberswap_swap_payload, file_vultisig_keysign_v1_thorchain_swap_payload, file_vultisig_keysign_v1_utxo_info]);
+export const file_vultisig_keysign_v1_keysign_message: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Cil2dWx0aXNpZy9rZXlzaWduL3YxL2tleXNpZ25fbWVzc2FnZS5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSKvAgoOS2V5c2lnbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIUCgxzZXJ2aWNlX25hbWUYAiABKAkSGgoSZW5jcnlwdGlvbl9rZXlfaGV4GAQgASgJEjwKD2tleXNpZ25fcGF5bG9hZBgFIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuS2V5c2lnblBheWxvYWQSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAYgASgIEhIKCnBheWxvYWRfaWQYByABKAkSTgoWY3VzdG9tX21lc3NhZ2VfcGF5bG9hZBgIIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuQ3VzdG9tTWVzc2FnZVBheWxvYWRIAIgBAUIZChdfY3VzdG9tX21lc3NhZ2VfcGF5bG9hZCK1CwoOS2V5c2lnblBheWxvYWQSJwoEY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhISCgp0b19hZGRyZXNzGAIgASgJEhEKCXRvX2Ftb3VudBgDIAEoCRI6Cg11dHhvX3NwZWNpZmljGAQgASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5VVFhPU3BlY2lmaWNIABJCChFldGhlcmV1bV9zcGVjaWZpYxgFIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuRXRoZXJldW1TcGVjaWZpY0gAEkQKEnRob3JjaGFpbl9zcGVjaWZpYxgGIAEoCzImLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3BlY2lmaWNIABI/Cg1tYXlhX3NwZWNpZmljGAcgASgLMiYudnVsdGlzaWcua2V5c2lnbi52MS5NQVlBQ2hhaW5TcGVjaWZpY0gAEj4KD2Nvc21vc19zcGVjaWZpYxgIIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zU3BlY2lmaWNIABI+Cg9zb2xhbmFfc3BlY2lmaWMYCSABKAsyIy52dWx0aXNpZy5rZXlzaWduLnYxLlNvbGFuYVNwZWNpZmljSAASQgoRcG9sa2Fkb3Rfc3BlY2lmaWMYCiABKAsyJS52dWx0aXNpZy5rZXlzaWduLnYxLlBvbGthZG90U3BlY2lmaWNIABI7Cg9zdWljaGVfc3BlY2lmaWMYCyABKAsyIC52dWx0aXNpZy5rZXlzaWduLnYxLlN1aVNwZWNpZmljSAASOAoMdG9uX3NwZWNpZmljGAwgASgLMiAudnVsdGlzaWcua2V5c2lnbi52MS5Ub25TcGVjaWZpY0gAEj4KD3JpcHBsZV9zcGVjaWZpYxgNIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuUmlwcGxlU3BlY2lmaWNIABI6Cg10cm9uX3NwZWNpZmljGA4gASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5Ucm9uU3BlY2lmaWNIABI8CgdjYXJkYW5vGA8gASgLMikudnVsdGlzaWcua2V5c2lnbi52MS5DYXJkYW5vQ2hhaW5TcGVjaWZpY0gAEjAKCXV0eG9faW5mbxgUIAMoCzIdLnZ1bHRpc2lnLmtleXNpZ24udjEuVXR4b0luZm8SEQoEbWVtbxgVIAEoCUgCiAEBEksKFnRob3JjaGFpbl9zd2FwX3BheWxvYWQYFiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLlRIT1JDaGFpblN3YXBQYXlsb2FkSAESSwoWbWF5YWNoYWluX3N3YXBfcGF5bG9hZBgXIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3dhcFBheWxvYWRIARJHChRvbmVpbmNoX3N3YXBfcGF5bG9hZBgYIAEoCzInLnZ1bHRpc2lnLmtleXNpZ24udjEuT25lSW5jaFN3YXBQYXlsb2FkSAESRwoWa3liZXJzd2FwX3N3YXBfcGF5bG9hZBgZIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuS3liZXJTd2FwUGF5bG9hZEgBEkwKFWVyYzIwX2FwcHJvdmVfcGF5bG9hZBgeIAEoCzIoLnZ1bHRpc2lnLmtleXNpZ24udjEuRXJjMjBBcHByb3ZlUGF5bG9hZEgDiAEBEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYHyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYICABKAkSEAoIbGliX3R5cGUYISABKAlCFQoTYmxvY2tjaGFpbl9zcGVjaWZpY0IOCgxzd2FwX3BheWxvYWRCBwoFX21lbW9CGAoWX2VyYzIwX2FwcHJvdmVfcGF5bG9hZEJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM',
+    [
+      file_vultisig_keysign_v1_1inch_swap_payload,
+      file_vultisig_keysign_v1_blockchain_specific,
+      file_vultisig_keysign_v1_coin,
+      file_vultisig_keysign_v1_custom_message_payload,
+      file_vultisig_keysign_v1_erc20_approve_payload,
+      file_vultisig_keysign_v1_kyberswap_swap_payload,
+      file_vultisig_keysign_v1_thorchain_swap_payload,
+      file_vultisig_keysign_v1_utxo_info,
+    ]
+  )
 
 /**
  * @generated from message vultisig.keysign.v1.KeysignMessage
  */
-export type KeysignMessage = Message<"vultisig.keysign.v1.KeysignMessage"> & {
+export type KeysignMessage = Message<'vultisig.keysign.v1.KeysignMessage'> & {
   /**
    * @generated from field: string session_id = 1;
    */
-  sessionId: string;
+  sessionId: string
 
   /**
    * @generated from field: string service_name = 2;
    */
-  serviceName: string;
+  serviceName: string
 
   /**
    * @generated from field: string encryption_key_hex = 4;
    */
-  encryptionKeyHex: string;
+  encryptionKeyHex: string
 
   /**
    * @generated from field: vultisig.keysign.v1.KeysignPayload keysign_payload = 5;
    */
-  keysignPayload?: KeysignPayload;
+  keysignPayload?: KeysignPayload
 
   /**
    * @generated from field: bool use_vultisig_relay = 6;
    */
-  useVultisigRelay: boolean;
+  useVultisigRelay: boolean
 
   /**
    * @generated from field: string payload_id = 7;
    */
-  payloadId: string;
+  payloadId: string
 
   /**
    * @generated from field: optional vultisig.keysign.v1.CustomMessagePayload custom_message_payload = 8;
    */
-  customMessagePayload?: CustomMessagePayload;
-};
+  customMessagePayload?: CustomMessagePayload
+}
 
 /**
  * Describes the message vultisig.keysign.v1.KeysignMessage.
  * Use `create(KeysignMessageSchema)` to create a new message.
  */
-export const KeysignMessageSchema: GenMessage<KeysignMessage> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_keysign_message, 0);
+export const KeysignMessageSchema: GenMessage<KeysignMessage> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_keysign_message, 0)
 
 /**
  * @generated from message vultisig.keysign.v1.KeysignPayload
  */
-export type KeysignPayload = Message<"vultisig.keysign.v1.KeysignPayload"> & {
+export type KeysignPayload = Message<'vultisig.keysign.v1.KeysignPayload'> & {
   /**
    * @generated from field: vultisig.keysign.v1.Coin coin = 1;
    */
-  coin?: Coin;
+  coin?: Coin
 
   /**
    * @generated from field: string to_address = 2;
    */
-  toAddress: string;
+  toAddress: string
 
   /**
    * @generated from field: string to_amount = 3;
    */
-  toAmount: string;
+  toAmount: string
 
   /**
    * @generated from oneof vultisig.keysign.v1.KeysignPayload.blockchain_specific
    */
-  blockchainSpecific: {
-    /**
-     * @generated from field: vultisig.keysign.v1.UTXOSpecific utxo_specific = 4;
-     */
-    value: UTXOSpecific;
-    case: "utxoSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.EthereumSpecific ethereum_specific = 5;
-     */
-    value: EthereumSpecific;
-    case: "ethereumSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.THORChainSpecific thorchain_specific = 6;
-     */
-    value: THORChainSpecific;
-    case: "thorchainSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.MAYAChainSpecific maya_specific = 7;
-     */
-    value: MAYAChainSpecific;
-    case: "mayaSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.CosmosSpecific cosmos_specific = 8;
-     */
-    value: CosmosSpecific;
-    case: "cosmosSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.SolanaSpecific solana_specific = 9;
-     */
-    value: SolanaSpecific;
-    case: "solanaSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.PolkadotSpecific polkadot_specific = 10;
-     */
-    value: PolkadotSpecific;
-    case: "polkadotSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.SuiSpecific suiche_specific = 11;
-     */
-    value: SuiSpecific;
-    case: "suicheSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.TonSpecific ton_specific = 12;
-     */
-    value: TonSpecific;
-    case: "tonSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.RippleSpecific ripple_specific = 13;
-     */
-    value: RippleSpecific;
-    case: "rippleSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.TronSpecific tron_specific = 14;
-     */
-    value: TronSpecific;
-    case: "tronSpecific";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.CardanoChainSpecific cardano = 15;
-     */
-    value: CardanoChainSpecific;
-    case: "cardano";
-  } | { case: undefined; value?: undefined };
+  blockchainSpecific:
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.UTXOSpecific utxo_specific = 4;
+         */
+        value: UTXOSpecific
+        case: 'utxoSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.EthereumSpecific ethereum_specific = 5;
+         */
+        value: EthereumSpecific
+        case: 'ethereumSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.THORChainSpecific thorchain_specific = 6;
+         */
+        value: THORChainSpecific
+        case: 'thorchainSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.MAYAChainSpecific maya_specific = 7;
+         */
+        value: MAYAChainSpecific
+        case: 'mayaSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.CosmosSpecific cosmos_specific = 8;
+         */
+        value: CosmosSpecific
+        case: 'cosmosSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.SolanaSpecific solana_specific = 9;
+         */
+        value: SolanaSpecific
+        case: 'solanaSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.PolkadotSpecific polkadot_specific = 10;
+         */
+        value: PolkadotSpecific
+        case: 'polkadotSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.SuiSpecific suiche_specific = 11;
+         */
+        value: SuiSpecific
+        case: 'suicheSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.TonSpecific ton_specific = 12;
+         */
+        value: TonSpecific
+        case: 'tonSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.RippleSpecific ripple_specific = 13;
+         */
+        value: RippleSpecific
+        case: 'rippleSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.TronSpecific tron_specific = 14;
+         */
+        value: TronSpecific
+        case: 'tronSpecific'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.CardanoChainSpecific cardano = 15;
+         */
+        value: CardanoChainSpecific
+        case: 'cardano'
+      }
+    | { case: undefined; value?: undefined }
 
   /**
    * @generated from field: repeated vultisig.keysign.v1.UtxoInfo utxo_info = 20;
    */
-  utxoInfo: UtxoInfo[];
+  utxoInfo: UtxoInfo[]
 
   /**
    * @generated from field: optional string memo = 21;
    */
-  memo?: string;
+  memo?: string
 
   /**
    * @generated from oneof vultisig.keysign.v1.KeysignPayload.swap_payload
    */
-  swapPayload: {
-    /**
-     * @generated from field: vultisig.keysign.v1.THORChainSwapPayload thorchain_swap_payload = 22;
-     */
-    value: THORChainSwapPayload;
-    case: "thorchainSwapPayload";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.THORChainSwapPayload mayachain_swap_payload = 23;
-     */
-    value: THORChainSwapPayload;
-    case: "mayachainSwapPayload";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.OneInchSwapPayload oneinch_swap_payload = 24;
-     */
-    value: OneInchSwapPayload;
-    case: "oneinchSwapPayload";
-  } | {
-    /**
-     * @generated from field: vultisig.keysign.v1.KyberSwapPayload kyberswap_swap_payload = 25;
-     */
-    value: KyberSwapPayload;
-    case: "kyberswapSwapPayload";
-  } | { case: undefined; value?: undefined };
+  swapPayload:
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.THORChainSwapPayload thorchain_swap_payload = 22;
+         */
+        value: THORChainSwapPayload
+        case: 'thorchainSwapPayload'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.THORChainSwapPayload mayachain_swap_payload = 23;
+         */
+        value: THORChainSwapPayload
+        case: 'mayachainSwapPayload'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.OneInchSwapPayload oneinch_swap_payload = 24;
+         */
+        value: OneInchSwapPayload
+        case: 'oneinchSwapPayload'
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.KyberSwapPayload kyberswap_swap_payload = 25;
+         */
+        value: KyberSwapPayload
+        case: 'kyberswapSwapPayload'
+      }
+    | { case: undefined; value?: undefined }
 
   /**
    * @generated from field: optional vultisig.keysign.v1.Erc20ApprovePayload erc20_approve_payload = 30;
    */
-  erc20ApprovePayload?: Erc20ApprovePayload;
+  erc20ApprovePayload?: Erc20ApprovePayload
 
   /**
    * @generated from field: string vault_public_key_ecdsa = 31;
    */
-  vaultPublicKeyEcdsa: string;
+  vaultPublicKeyEcdsa: string
 
   /**
    * @generated from field: string vault_local_party_id = 32;
    */
-  vaultLocalPartyId: string;
+  vaultLocalPartyId: string
 
   /**
    * @generated from field: string lib_type = 33;
    */
-  libType: string;
-};
+  libType: string
+}
 
 /**
  * Describes the message vultisig.keysign.v1.KeysignPayload.
  * Use `create(KeysignPayloadSchema)` to create a new message.
  */
-export const KeysignPayloadSchema: GenMessage<KeysignPayload> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_keysign_message, 1);
-
+export const KeysignPayloadSchema: GenMessage<KeysignPayload> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_keysign_message, 1)

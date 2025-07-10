@@ -1,3 +1,4 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
@@ -120,6 +121,21 @@ export const generateMemo = ({
     },
     switch: () => {
       return `switch:${thorchainAddress}`
+    },
+    unmerge: () => {
+      if (!amount) {
+        throw new Error('Amount is required for unmerge')
+      }
+      if (!selectedCoin) {
+        throw new Error('Token is required for unmerge')
+      }
+
+      const sharesRaw = toChainAmount(amount, selectedCoin.decimals)
+      // For unmerge, use the full coin ID (e.g., "thor.kuji")
+      const denom = selectedCoin.id
+      const memo = `unmerge:${denom}:${sharesRaw}`
+
+      return memo
     },
   })
 }

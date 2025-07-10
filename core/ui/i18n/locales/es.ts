@@ -699,6 +699,7 @@ export const es = {
   vote: 'Votar',
   stake: 'Apostar',
   unstake: 'Desbloquear',
+  unmerge: 'Desagrupar',
   advanced: 'Avanzado',
   low: 'Bajo',
   normal: 'Normal',
@@ -932,6 +933,7 @@ export const es = {
   find_custom_token: 'Encuentra tu token personalizado',
   enter_contract_address: 'Ingrese la dirección del contrato',
   no_token_found: 'No se encontró ningún token',
+  no_mergeable_tokens_found: 'No se encontraron tokens fusionables',
   invalid_token_address: 'Introduzca una dirección de token válida',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',

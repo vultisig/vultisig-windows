@@ -14,13 +14,12 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
-import {
-  getCosmosChainByChainId,
-  getCosmosChainId,
-} from '@core/chain/chains/cosmos/chainInfo'
+import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
+
+import { getCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -36,12 +35,12 @@ export const dispatchMessage = async (
     return
   }
   const chainSelectors = {
-    [MessageKey.COSMOS_REQUEST]: () => {
-      const chainId = getCosmosChainId(Chain.Cosmos)
+    [MessageKey.COSMOS_REQUEST]: async () => {
+      const defaultChainId = await getCurrentCosmosChainId()
 
       const selectedCosmosChainId = Object.values(sessions).reduce(
         (acc, vault) => vault[dappHostname]?.selectedCosmosChainId ?? acc,
-        chainId
+        defaultChainId
       )
 
       return getCosmosChainByChainId(selectedCosmosChainId)
