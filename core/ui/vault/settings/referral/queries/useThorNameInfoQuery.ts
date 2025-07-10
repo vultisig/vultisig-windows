@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getNameInfo } from '../serivces/getThorname'
+import { getNameInfo } from '../services/getThorname'
 
 export const useThorNameInfoQuery = (name: string) =>
   useQuery({

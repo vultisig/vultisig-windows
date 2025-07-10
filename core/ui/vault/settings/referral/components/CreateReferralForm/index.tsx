@@ -9,7 +9,6 @@ import { DecorationLine } from '../Referrals.styled'
 import { ReferralFormData, referralSchema } from './config'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
-import { PayoutAssetField } from './Fields/PayoutAssetField'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 
 export const CreateReferralForm = () => {
@@ -42,7 +41,6 @@ export const CreateReferralForm = () => {
         >
           <ReferralCodeField />
           <ExpirationField />
-          <PayoutAssetField />
           <Fees />
         </StackSeparatedBy>
         <Button disabled={!isValid || !isDirty || isSubmitting} type="submit">

@@ -8,7 +8,7 @@ import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -17,6 +17,7 @@ import { CoinIcon } from '../../../../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../../../../chain/coin/inputs/CoinOption'
 import { ChainOption } from '../../../../../send/components/ChainOption'
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
+import { useActivePoolsQuery } from '../../../queries/useActivePoolsQuery'
 import {
   FormField,
   FormFieldErrorText,
@@ -24,10 +25,55 @@ import {
 } from '../../Referrals.styled'
 import { ReferralFormData } from '../config'
 
+// Needed due to the nature of the API response
+const chainMap: Record<string, string> = {
+  AVAX: 'Avalanche',
+  BASE: 'Base',
+  BCH: 'Bitcoin-Cash',
+  BTC: 'Bitcoin',
+  DOGE: 'Dogecoin',
+  ETH: 'Ethereum',
+  GAIA: 'Cosmos',
+  LTC: 'Litecoin',
+  THOR: 'THORChain',
+  XRP: 'XRP Ledger',
+}
+
+// Needed due to the nature of the API response
+const normChain = (c: string) => (chainMap[c.toUpperCase()] ?? c).toUpperCase()
+const normTicker = (t: string) => t.split('-')[0].toUpperCase()
+
 export const PayoutAssetField = () => {
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
   const coins = useCurrentVaultCoins()
   const { t } = useTranslation()
+  const { data: allowedPools = [] } = useActivePoolsQuery()
+  console.log('🚀 ~ PayoutAssetField ~ allowedPools:', allowedPools)
+
+  const allowedAssets = useMemo(
+    () =>
+      allowedPools.map(pool => {
+        const [chain, ticker] = pool.asset.split('.')
+
+        return {
+          chain,
+          ticker,
+        }
+      }),
+    [allowedPools]
+  )
+
+  const allowedCoins = useMemo(
+    () =>
+      coins.filter(coin =>
+        allowedAssets.some(
+          a =>
+            normChain(a.chain) === normChain(coin.chain) &&
+            normTicker(a.ticker) === normTicker(coin.ticker)
+        )
+      ),
+    [allowedAssets, coins]
+  )
 
   const {
     control,
@@ -123,7 +169,7 @@ export const PayoutAssetField = () => {
                       }
                       onClose()
                     }}
-                    options={coins.filter(c => c.chain === coin?.chain)}
+                    options={allowedCoins.filter(c => c.chain === coin?.chain)}
                   />
                   {isChainModalOpen && (
                     <SelectItemModal
