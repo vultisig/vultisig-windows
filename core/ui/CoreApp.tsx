@@ -9,9 +9,14 @@ import {
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
-import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
+import {
+  defaultShouldDehydrateQuery,
+  OmitKeyof,
+  QueryClient,
+} from '@tanstack/react-query'
 import {
   Persister,
+  PersistQueryClientOptions,
   PersistQueryClientProvider,
 } from '@tanstack/react-query-persist-client'
 import React, { useMemo } from 'react'
@@ -49,22 +54,23 @@ export const CoreApp = ({
     })
   }, [])
 
-  const persistOptions = useMemo(() => {
-    return {
-      persister: queriesPersister,
-      maxAge: queryClientGcTime,
-      dehydrateOptions: {
-        shouldDehydrateQuery: (query: any) => {
-          if (query.meta?.disablePersist) {
-            return false
-          }
+  const persistOptions: OmitKeyof<PersistQueryClientOptions, 'queryClient'> =
+    useMemo(() => {
+      return {
+        persister: queriesPersister,
+        maxAge: queryClientGcTime,
+        dehydrateOptions: {
+          shouldDehydrateQuery: query => {
+            if (query.meta?.disablePersist) {
+              return false
+            }
 
-          return defaultShouldDehydrateQuery(query)
+            return defaultShouldDehydrateQuery(query)
+          },
         },
-      },
-      buster: 'v1',
-    }
-  }, [queriesPersister])
+        buster: 'v1',
+      }
+    }, [queriesPersister])
 
   return (
     <ThemeProvider theme={darkTheme}>
