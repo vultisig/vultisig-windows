@@ -1008,4 +1008,11 @@ export const de = {
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
   warning: 'Warnung',
   malicious_address_detected: 'Bösartige Adresse erkannt',
+  security_warning: 'Sicherheitswarnung',
+  security_alert: 'Sicherheitswarnung',
+  transaction_flagged_risky:
+    'Diese Transaktion wurde von unserem Sicherheitsscanner als potenziell riskant eingestuft.',
+  transaction_flagged_malicious:
+    'Diese Transaktion wurde von unserem Sicherheitsscanner als bösartig eingestuft.',
+  proceed_at_own_risk: 'Auf eigene Gefahr fortfahren',
 }

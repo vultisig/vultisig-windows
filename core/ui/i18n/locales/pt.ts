@@ -993,4 +993,11 @@ export const pt = {
   hold_for_paired_sign: 'Segure para sinal de par',
   warning: 'Aviso',
   malicious_address_detected: 'Endereço malicioso detectado',
+  security_warning: 'Aviso de segurança',
+  security_alert: 'Alerta de segurança',
+  transaction_flagged_risky:
+    'Esta transação foi marcada como potencialmente arriscada pelo nosso scanner de segurança.',
+  transaction_flagged_malicious:
+    'Esta transação foi marcada como maliciosa pelo nosso scanner de segurança.',
+  proceed_at_own_risk: 'Proceda por sua conta e risco',
 }

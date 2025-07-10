@@ -973,4 +973,11 @@ export const en = {
   hold_for_paired_sign: 'Hold for paired sign',
   warning: 'Warning',
   malicious_address_detected: 'Malicious address detected',
+  security_warning: 'Security Warning',
+  security_alert: 'Security Alert',
+  transaction_flagged_risky:
+    'This transaction has been flagged as potentially risky by our security scanner.',
+  transaction_flagged_malicious:
+    'This transaction has been flagged as malicious by our security scanner.',
+  proceed_at_own_risk: 'Proceed at Own Risk',
 }

@@ -1006,4 +1006,11 @@ export const es = {
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   warning: 'Advertencia',
   malicious_address_detected: 'Dirección maliciosa detectada',
+  security_warning: 'Advertencia de seguridad',
+  security_alert: 'Alerta de seguridad',
+  transaction_flagged_risky:
+    'Esta transacción ha sido marcada como potencialmente riesgosa por nuestro escáner de seguridad.',
+  transaction_flagged_malicious:
+    'Esta transacción ha sido marcada como maliciosa por nuestro escáner de seguridad.',
+  proceed_at_own_risk: 'Proceder bajo su propio riesgo',
 }

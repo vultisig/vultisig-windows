@@ -16,12 +16,12 @@ export const SecurityStatusBadge = ({
 
   const validation = scanResult.validation
   if (validation?.result_type === BlockaidResultTypes.Warning) {
-    return <span className="text-yellow-600">⚠️ Warning</span>
+    return <span className="text-yellow-600"> Warning</span>
   }
 
   if (validation?.result_type === BlockaidResultTypes.Malicious) {
-    return <span className="text-red-600">🚨 Malicious</span>
+    return <span className="text-red-600"> Malicious</span>
   }
 
-  return <span className="text-green-600">✅ Safe</span>
+  return <span className="text-green-600"> Safe</span>
 }

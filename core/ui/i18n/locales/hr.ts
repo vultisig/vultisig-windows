@@ -979,4 +979,11 @@ export const hr = {
   hold_for_paired_sign: 'Držite za upareni znak',
   warning: 'Upozorenje',
   malicious_address_detected: 'Otkrivena zlonamjerna adresa',
+  security_warning: 'Sigurnosno upozorenje',
+  security_alert: 'Sigurnosno upozorenje',
+  transaction_flagged_risky:
+    'Ova transakcija je označena kao potencijalno rizična od strane našeg sigurnosnog skenera.',
+  transaction_flagged_malicious:
+    'Ova transakcija je označena kao zlonamjerna od strane našeg sigurnosnog skenera.',
+  proceed_at_own_risk: 'Nastavite na vlastitu odgovornost',
 }

@@ -1002,4 +1002,11 @@ export const it = {
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
   warning: 'Avviso',
   malicious_address_detected: 'Indirizzo dannoso rilevato',
+  security_warning: 'Avviso di sicurezza',
+  security_alert: 'Allerta di sicurezza',
+  transaction_flagged_risky:
+    'Questa transazione è stata contrassegnata come potenzialmente rischiosa dal nostro scanner di sicurezza.',
+  transaction_flagged_malicious:
+    'Questa transazione è stata contrassegnata come dannosa dal nostro scanner di sicurezza.',
+  proceed_at_own_risk: 'Procedi a tuo rischio',
 }
