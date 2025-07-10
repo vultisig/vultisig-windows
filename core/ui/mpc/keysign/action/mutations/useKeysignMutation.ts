@@ -11,18 +11,15 @@ import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
-import { useBlockaidScan } from '@core/ui/security/hooks/useBlockaidScan'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
-import { TW } from '@trustwallet/wallet-core'
 import { keccak256 } from 'js-sha3'
 
 import { KeysignMutationTxResult } from '../../types/KeysignMutationTxResult'
@@ -30,7 +27,6 @@ import { KeysignMutationTxResult } from '../../types/KeysignMutationTxResult'
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const { scanTransaction } = useBlockaidScan()
 
   const keysignAction = useKeysignAction()
   const mutationListener = useKeysignMutationListener()
@@ -93,36 +89,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 signatures: signaturesRecord,
               })
 
-              // Get account address for Blockaid scan
-              const coin = getKeysignCoin(payload)
-              const account_address = coin.address
-
-              // Get transaction data for Blockaid scan
-              let rawTx: string | undefined = undefined
-              if (getChainKind(chain) === 'evm') {
-                const { encoded } =
-                  TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
-                rawTx = walletCore.HexCoding.encode(encoded)
-              } else {
-                // For non-EVM chains, use the compiled transaction as raw data
-                rawTx = walletCore.HexCoding.encode(compiledTx)
-              }
-
-              // Use dedicated blockaid scan hook
-              const { scanResult, scanUnavailable, error } =
-                await scanTransaction({
-                  chain,
-                  accountAddress: account_address,
-                  rawTx,
-                  metadata: { domain: 'https://vultisig.com' },
-                })
-
-              // Handle blockaid errors with proper error handling
-              if (error) {
-                // Re-throw BlockaidError with proper type information
-                throw error
-              }
-
               const txResult = await executeTx({
                 compiledTx,
                 walletCore,
@@ -131,8 +97,8 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
               return {
                 ...txResult,
-                scanResult: scanResult || undefined,
-                scanUnavailable,
+                scanResult: undefined,
+                scanUnavailable: false,
               } as KeysignMutationTxResult
             })
           )

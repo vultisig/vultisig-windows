@@ -22,12 +22,16 @@ export const buildBlockaidScanPayload = ({
   // Remove 0x prefix if present for solana
   const tx = stripHexPrefix(rawTx ?? '')
   const base58Encoded = bs58.encode(Buffer.from(tx, 'hex'))
+  let evmData = rawTx
+  if (rawTx && rawTx.startsWith('{') && rawTx.includes('"method"')) {
+    evmData = JSON.parse(rawTx)
+  }
   switch (kind) {
     case 'evm':
       return {
         chain: chain.toString().toLowerCase(),
         account_address: accountAddress,
-        data: rawTx,
+        data: evmData,
         metadata,
       }
     case 'utxo':

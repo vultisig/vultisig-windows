@@ -1,8 +1,3 @@
-import {
-  BlockaidErrorTypes,
-  BlockaidResultTypes,
-} from '@core/config/security/blockaid/constants'
-import { BlockaidError } from '@core/config/security/blockaid/types'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
@@ -11,12 +6,10 @@ import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { SecurityWarningModal } from '@core/ui/security/components/SecurityWarningModal'
 import { useCore } from '@core/ui/state/core'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -27,7 +20,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TxHashProvider } from '../../chain/state/txHash'
@@ -44,9 +37,6 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const navigate = useCoreNavigate()
   const payload = useKeysignMessagePayload()
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
-  const [showSecurityCheckmark, setShowSecurityCheckmark] = useState(false)
-  const [blockaidError, setBlockaidError] = useState<BlockaidError | null>(null)
-  const [scanUnavailable, setScanUnavailable] = useState(false)
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
@@ -55,17 +45,6 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   }, [startKeysign])
 
   useEffect(() => {
-    if (mutationStatus.status === 'error' && mutationStatus.error) {
-      const error = mutationStatus.error as BlockaidError
-      // Blockaid warning/malicious error
-      if (
-        error.type === BlockaidErrorTypes.Warning ||
-        error.type === BlockaidErrorTypes.Malicious
-      ) {
-        setBlockaidError(error)
-        return
-      }
-    }
     if (mutationStatus.status !== 'success') return
     const txResults = mutationStatus.data
     if (!txResults || !Array.isArray(txResults) || txResults.length === 0)
@@ -73,43 +52,10 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
     if (!('keysign' in payload)) return
     const keysignPayload = payload.keysign
     if (keysignPayload.swapPayload && keysignPayload.swapPayload.value) return
-    // Check if any transaction has a successful scan result
-    const hasSuccessfulScan = txResults.some(
-      txResult =>
-        txResult.scanResult?.validation?.status === 'Success' &&
-        txResult.scanResult?.validation?.result_type ===
-          BlockaidResultTypes.Benign
-    )
-    setShowSecurityCheckmark(hasSuccessfulScan)
-    // Check if scanUnavailable is true in the result
-    setScanUnavailable(
-      !!(txResults && txResults[0] && txResults[0].scanUnavailable)
-    )
-  }, [
-    mutationStatus.status,
-    mutationStatus.data,
-    mutationStatus.error,
-    payload,
-  ])
-
-  const handleWarningContinue = () => {
-    setBlockaidError(null)
-  }
-
-  const handleWarningCancel = () => {
-    setBlockaidError(null)
-    // Optionally, navigate back or show a message
-  }
+  }, [mutationStatus.status, mutationStatus.data, payload])
 
   return (
     <>
-      {blockaidError && (
-        <SecurityWarningModal
-          error={blockaidError}
-          onContinue={handleWarningContinue}
-          onCancel={handleWarningCancel}
-        />
-      )}
       <MatchQuery
         value={mutationStatus}
         success={txResults => {
@@ -138,39 +84,10 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                                {scanUnavailable ? (
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      gap: 6,
-                                      padding: '8px 12px',
-                                      backgroundColor:
-                                        'var(--color-alertWarning)',
-                                      borderRadius: '16px',
-                                      marginBottom: 4,
-                                    }}
-                                  >
-                                    <TriangleAlertIcon
-                                      color="danger"
-                                      fontSize={14}
-                                    />
-                                    <Text
-                                      color="contrast"
-                                      size={12}
-                                      weight="500"
-                                    >
-                                      {t('security_scan_unavailable')}
-                                    </Text>
-                                  </div>
-                                ) : null}
                                 <TxSuccess
                                   value={payload}
                                   onSeeTxDetails={onSeeTxDetails}
-                                  showSecurityCheckmark={
-                                    showSecurityCheckmark && !scanUnavailable
-                                  }
+                                  payload={{ keysign: payload }}
                                 />
                               </VStack>
                             </PageContent>

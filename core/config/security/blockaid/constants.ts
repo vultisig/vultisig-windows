@@ -46,7 +46,7 @@ export const Endpoints = {
       solana: () => `${blockaid_base}/solana/message/scan`,
       sui: () => `${blockaid_base}/sui/transaction/scan`,
       bitcoin: () => `${blockaid_base}/bitcoin/transaction-raw/scan`,
-      evm: () => `${blockaid_base}/evm/transaction-raw/scan`,
+      evm: () => `${blockaid_base}/evm/json-rpc/scan`,
     })
   },
   rawTxScan: (chain: Chain) => {

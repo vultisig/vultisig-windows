@@ -14,15 +14,18 @@ import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCod
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useBlockaidScanResult } from '@core/ui/security/hooks/useBlockaidScanResult'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { range } from '@lib/utils/array/range'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcPeers } from '../../state/mpcPeers'
@@ -37,6 +40,8 @@ export const KeysignPeerDiscoveryStep = ({
   payload,
 }: KeysignPeerDiscoveryStepProps) => {
   const { t } = useTranslation()
+  const { scanTransaction } = useBlockaidScanResult()
+  const [scanUnavailable, setScanUnavailable] = useState(false)
 
   const peers = useMpcPeers()
   const { signers } = useCurrentVault()
@@ -55,6 +60,15 @@ export const KeysignPeerDiscoveryStep = ({
       onFinish(peers)
     }
   }, [isDisabled, onFinish, peers])
+
+  useEffect(() => {
+    const checkScanAvailability = async () => {
+      const { scanUnavailable } = await scanTransaction(payload)
+      setScanUnavailable(scanUnavailable)
+    }
+
+    checkScanAvailability()
+  }, [payload, scanTransaction])
 
   const joinUrlQuery = useJoinKeysignUrlQuery(payload)
 
@@ -78,6 +92,25 @@ export const KeysignPeerDiscoveryStep = ({
         <PageFormFrame>
           <PeersPageContentFrame>
             <QueryBasedQrCode value={joinUrlQuery} />
+            {scanUnavailable ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                  padding: '8px 12px',
+                  backgroundColor: 'var(--color-alertWarning)',
+                  borderRadius: '16px',
+                  marginBottom: 4,
+                }}
+              >
+                <TriangleAlertIcon color="danger" fontSize={14} />
+                <Text color="contrast" size={12} weight="500">
+                  {t('security_scan_unavailable')}
+                </Text>
+              </div>
+            ) : null}
             <PeersManagerFrame>
               {serverType === 'local' && <MpcLocalServerIndicator />}
               <PeersManagerTitle target={requiredSigners} />

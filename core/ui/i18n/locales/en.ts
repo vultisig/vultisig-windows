@@ -982,4 +982,12 @@ export const en = {
   transaction_flagged_malicious:
     'This transaction has been flagged as malicious by our security scanner.',
   proceed_at_own_risk: 'Proceed at Own Risk',
+  security_alert_malicious_transaction:
+    'Security Alert - Malicious Transaction',
+  security_warning_transaction: 'Security Warning - Suspicious Transaction',
+  malicious_transaction_warning:
+    'This transaction has been flagged as malicious. Proceeding may result in loss of funds.',
+  suspicious_transaction_warning:
+    'This transaction has been flagged as suspicious. Please review carefully before proceeding.',
+  continue_with_risk: 'Continue with Risk',
 }
