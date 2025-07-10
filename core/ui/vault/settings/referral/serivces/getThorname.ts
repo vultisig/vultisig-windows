@@ -1,6 +1,4 @@
-import { typedFetch } from '@lib/utils/fetch/typedFetch'
-
-const BASE = 'https://thornode.ninerealms.com/thorchain'
+import { thorchainNodeBaseUrl } from '../constants'
 
 export type ThorNameRaw = {
   name: string
@@ -10,14 +8,24 @@ export type ThorNameRaw = {
   affiliate_collector_rune: string
 }
 
-export const checkAvailability = async (name: string) => {
-  try {
-    await typedFetch<ThorNameRaw>(`${BASE}/thorname/${name}`)
-    return false // if we get JSON the name exists
-  } catch (e: any) {
-    return e.message.includes('404')
+export const getNameInfo = async (name: string): Promise<ThorNameRaw> => {
+  const res = await fetch(`${thorchainNodeBaseUrl}/thorname/${name}`)
+  if (!res.ok) {
+    throw new Error(`Failed to fetch: ${res.status}`)
   }
+  return res.json()
 }
 
-export const getNameInfo = (name: string) =>
-  typedFetch<ThorNameRaw>(`${BASE}/thorname/${name}`)
+export const checkAvailability = async (name: string): Promise<boolean> => {
+  try {
+    const res = await fetch(`${thorchainNodeBaseUrl}/thorname/${name}`)
+
+    if (!res.ok) return true
+
+    const data = await res.json()
+
+    return !('code' in data && data.code === 0)
+  } catch {
+    return true
+  }
+}
