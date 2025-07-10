@@ -974,6 +974,8 @@ export const en = {
   warning: 'Warning',
   malicious_address_detected: 'Malicious address detected',
   security_warning: 'Security Warning',
+  security_malicious: 'Malicious',
+  security_safe: 'Safe',
   security_alert: 'Security Alert',
   transaction_flagged_risky:
     'This transaction has been flagged as potentially risky by our security scanner.',

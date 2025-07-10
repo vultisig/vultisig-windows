@@ -255,7 +255,7 @@ export const hr = {
     ' kako bi osigurao da su vaša sredstva zaštićena od bilo kakvih prijetnji.',
   join_keygen_slider6_title: 'Kutak zajednice',
   join_keygen_slider6_note1:
-    'Pridružite se tisućama. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
+    'Pridružite se tisućuma. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
   join_keygen_slider6_note2: 'sigurne i rastuće zajednice',
   join_keygen_slider7_title: 'Istaknuta značajka',
   join_keygen_slider7_note1:
@@ -980,7 +980,8 @@ export const hr = {
   warning: 'Upozorenje',
   malicious_address_detected: 'Otkrivena zlonamjerna adresa',
   security_warning: 'Sigurnosno upozorenje',
-  security_alert: 'Sigurnosno upozorenje',
+  security_malicious: 'Zlonamjerno',
+  security_safe: 'Sigurno',
   transaction_flagged_risky:
     'Ova transakcija je označena kao potencijalno rizična od strane našeg sigurnosnog skenera.',
   transaction_flagged_malicious:

@@ -1007,7 +1007,8 @@ export const es = {
   warning: 'Advertencia',
   malicious_address_detected: 'Dirección maliciosa detectada',
   security_warning: 'Advertencia de seguridad',
-  security_alert: 'Alerta de seguridad',
+  security_malicious: 'Malicioso',
+  security_safe: 'Seguro',
   transaction_flagged_risky:
     'Esta transacción ha sido marcada como potencialmente riesgosa por nuestro escáner de seguridad.',
   transaction_flagged_malicious:

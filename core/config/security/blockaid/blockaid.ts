@@ -1,6 +1,7 @@
 import { rootApiUrl } from '@core/config'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
+import { attempt } from '../../../../lib/utils/attempt'
 import { Chain } from '../../../chain/Chain'
 import { Endpoints } from './constants'
 import {
@@ -13,8 +14,8 @@ const blockaid_client_id = 'vultisig-desktop-extension'
 
 class BlockaidClient {
   private async post<R extends BlockaidScanResult>(url: string, data: unknown) {
-    try {
-      const { data: res } = await axios.post<R>(url, data, {
+    const response = await attempt(async () => {
+      return await axios.post<R>(url, data, {
         timeout: 6_000,
         headers: {
           'client-id': blockaid_client_id,
@@ -22,11 +23,9 @@ class BlockaidClient {
           origin: rootApiUrl,
         },
       })
-      return res
-    } catch (err) {
-      console.warn('[Blockaid]', (err as AxiosError).message)
-      return null
-    }
+    })
+
+    return response.data?.data
   }
 
   scanTransaction(input: BlockaidScanPayload) {
@@ -43,9 +42,7 @@ class BlockaidClient {
         endpoint = `${rootApiUrl}/blockaid/v0/sui/transaction/scan`
       }
     } else {
-      // For other chains, use the existing endpoint logic
-      const chain = typeof input.chain === 'string' ? input.chain : input.chain
-      endpoint = Endpoints.txScan(chain as Chain)
+      endpoint = Endpoints.txScan(input.chain as Chain)
     }
 
     return this.post<BlockaidScanResult>(endpoint, input)

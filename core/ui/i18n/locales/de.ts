@@ -1009,7 +1009,8 @@ export const de = {
   warning: 'Warnung',
   malicious_address_detected: 'Bösartige Adresse erkannt',
   security_warning: 'Sicherheitswarnung',
-  security_alert: 'Sicherheitswarnung',
+  security_malicious: 'Bösartig',
+  security_safe: 'Sicher',
   transaction_flagged_risky:
     'Diese Transaktion wurde von unserem Sicherheitsscanner als potenziell riskant eingestuft.',
   transaction_flagged_malicious:

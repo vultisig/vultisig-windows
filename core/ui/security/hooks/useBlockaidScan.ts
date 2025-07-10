@@ -6,6 +6,7 @@ import {
 } from '@core/config/security/blockaid/types'
 import { useCore } from '@core/ui/state/core'
 import { useBlockaidEnabled } from '@core/ui/storage/blockaid'
+import { attempt } from '@lib/utils/attempt'
 import { useCallback } from 'react'
 
 type UseBlockaidScanInput = {
@@ -45,34 +46,37 @@ export const useBlockaidScan = (): UseBlockaidScanResult => {
         return { scanUnavailable: false }
       }
 
-      try {
-        const scanResult = await BlockaidService.scanTransaction({
+      const scanResponse = await attempt(async () => {
+        return await BlockaidService.scanTransaction({
           chain,
           accountAddress,
           rawTx,
           metadata,
         })
+      })
 
-        const validation = scanResult.validation
-        if (validation?.status !== 'Success') {
-          return { scanUnavailable: true }
-        }
-
-        const { isValid, error } =
-          BlockaidService.validateScanResult(scanResult)
-
-        if (!isValid && error) {
-          return { scanUnavailable: false, error }
-        }
-
-        return {
-          scanResult,
-          scanUnavailable: false,
-        }
-      } catch (error) {
+      if ('error' in scanResponse) {
         // Log error but don't fail the transaction
-        console.warn('Blockaid scan failed:', error)
+        console.warn('Blockaid scan failed:', scanResponse.error)
         return { scanUnavailable: true }
+      }
+
+      const scanResult = scanResponse.data
+
+      const validation = scanResult.validation
+      if (validation?.status !== 'Success') {
+        return { scanUnavailable: true }
+      }
+
+      const { isValid, error } = BlockaidService.validateScanResult(scanResult)
+
+      if (!isValid && error) {
+        return { scanUnavailable: false, error }
+      }
+
+      return {
+        scanResult,
+        scanUnavailable: false,
       }
     },
     [client, blockaidEnabled]

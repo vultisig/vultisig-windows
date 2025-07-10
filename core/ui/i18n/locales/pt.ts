@@ -994,7 +994,8 @@ export const pt = {
   warning: 'Aviso',
   malicious_address_detected: 'Endereço malicioso detectado',
   security_warning: 'Aviso de segurança',
-  security_alert: 'Alerta de segurança',
+  security_malicious: 'Malicioso',
+  security_safe: 'Seguro',
   transaction_flagged_risky:
     'Esta transação foi marcada como potencialmente arriscada pelo nosso scanner de segurança.',
   transaction_flagged_malicious:

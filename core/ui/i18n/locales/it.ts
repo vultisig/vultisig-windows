@@ -1003,7 +1003,8 @@ export const it = {
   warning: 'Avviso',
   malicious_address_detected: 'Indirizzo dannoso rilevato',
   security_warning: 'Avviso di sicurezza',
-  security_alert: 'Allerta di sicurezza',
+  security_malicious: 'Dannoso',
+  security_safe: 'Sicuro',
   transaction_flagged_risky:
     'Questa transazione è stata contrassegnata come potenzialmente rischiosa dal nostro scanner di sicurezza.',
   transaction_flagged_malicious:

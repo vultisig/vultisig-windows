@@ -4,6 +4,7 @@ import {
   noRefetchQueryOptions,
 } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
+import { attempt } from '@lib/utils/attempt'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
@@ -11,7 +12,7 @@ import { StorageKey } from './StorageKey'
 
 export const isBlockaidInitiallyEnabled = true
 
-type SetBlockaidEnabledFunction = (blockaidEnabled: boolean) => Promise<void>
+type SetBlockaidEnabledFunction = (input: boolean) => Promise<void>
 
 type GetBlockaidEnabledFunction = () => Promise<boolean>
 
@@ -50,18 +51,18 @@ export const useSetBlockaidEnabledMutation = () => {
   const invalidateQueries = useInvalidateQueries()
 
   const mutationFn: SetBlockaidEnabledFunction = async input => {
-    try {
-      // Validate input
-      if (typeof input !== 'boolean') {
-        throw new Error('Blockaid enabled must be a boolean value')
-      }
+    // Validate input
+    if (typeof input !== 'boolean') {
+      throw new Error('Blockaid enabled must be a boolean value')
+    }
 
+    const result = await attempt(async () => {
       await setBlockaidEnabled(input)
       await invalidateQueries([StorageKey.blockaidEnabled])
-    } catch (error) {
-      throw new Error(
-        `Failed to update blockaid setting: ${error instanceof Error ? error.message : 'Unknown error'}`
-      )
+    })
+
+    if ('error' in result) {
+      throw new Error(`Failed to update blockaid setting: ${result.error}`)
     }
   }
 
