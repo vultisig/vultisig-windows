@@ -55,8 +55,8 @@ export const Endpoints = {
     return match(chainType, {
       bitcoin: () => `${blockaid_base}/bitcoin/transaction-raw/scan`,
       evm: () => `${blockaid_base}/evm/transaction-raw/scan`,
-      solana: () => `${blockaid_base}/evm/transaction-raw/scan`, // fallback to EVM
-      sui: () => `${blockaid_base}/evm/transaction-raw/scan`, // fallback to EVM
+      solana: () => `${blockaid_base}/solana/transaction-raw/scan`,
+      sui: () => `${blockaid_base}/sui/transaction-raw/scan`,
     })
   },
   addressScan: (chain: Chain) => {
