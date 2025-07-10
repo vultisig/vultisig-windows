@@ -20,7 +20,11 @@ export const CreateReferralForm = () => {
     mode: 'onBlur',
   })
 
-  const onSubmit = methods.handleSubmit(data => console.log(data))
+  const {
+    handleSubmit,
+    formState: { isValid, isDirty, isSubmitting },
+  } = methods
+  const onSubmit = handleSubmit(data => console.log(data))
 
   return (
     <FormProvider {...methods}>
@@ -41,7 +45,9 @@ export const CreateReferralForm = () => {
           <PayoutAssetField />
           <Fees />
         </StackSeparatedBy>
-        <Button type="submit">{t('create_referral_form')}</Button>
+        <Button disabled={!isValid || !isDirty || isSubmitting} type="submit">
+          {t('create_referral_form')}
+        </Button>
       </VStack>
     </FormProvider>
   )
