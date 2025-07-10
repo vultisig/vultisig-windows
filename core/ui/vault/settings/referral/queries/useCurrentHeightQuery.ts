@@ -1,4 +1,4 @@
-import { getCurrentHeight } from '../serivces/getCurrentHeight'
+import { getCurrentHeight } from '../services/getCurrentHeight'
 
 export const useCurrentHeightQuery = () => {
   return {

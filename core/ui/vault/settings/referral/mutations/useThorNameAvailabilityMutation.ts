@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { checkAvailability } from '../serivces/getThorname'
+import { checkAvailability } from '../services/getThorname'
 
 export const useThorNameAvailabilityMutation = () =>
   useMutation({
