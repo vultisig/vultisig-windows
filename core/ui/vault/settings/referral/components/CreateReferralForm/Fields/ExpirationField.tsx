@@ -16,7 +16,18 @@ export const ExpirationField = () => {
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext<ReferralFormData>()
+
+  const expiration = watch('expiration')
+
+  const formattedExpirationDate = new Date(
+    new Date().setFullYear(new Date().getFullYear() + expiration)
+  ).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 
   return (
     <VStack gap={14}>
@@ -46,7 +57,7 @@ export const ExpirationField = () => {
         <Text size={14} color="supporting">
           {t('expiration_date')}
         </Text>
-        <Text>21 June 2026</Text>
+        <Text>{formattedExpirationDate}</Text>
       </HStack>
     </VStack>
   )
