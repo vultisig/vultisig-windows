@@ -23,6 +23,7 @@ export const CreateReferralForm = () => {
     handleSubmit,
     formState: { isValid, isDirty, isSubmitting },
   } = methods
+
   const onSubmit = handleSubmit(data => console.log(data))
 
   return (
