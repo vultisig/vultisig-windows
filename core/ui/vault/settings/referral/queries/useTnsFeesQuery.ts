@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTnsFees } from '../serivces/getFees'
+import { getTnsFees } from '../serivces/getTnsFees'
 
-export const useTnsFees = (years: number) =>
-  useQuery({
-    queryKey: ['tns-fees'],
+export const useTnsFeesQuery = (years: number) => {
+  return useQuery({
+    queryKey: ['tns-fees', years],
     queryFn: () => getTnsFees(years),
-    enabled: !!years,
   })
+}
