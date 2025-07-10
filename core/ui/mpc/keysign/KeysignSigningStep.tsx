@@ -44,16 +44,6 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
     startKeysign()
   }, [startKeysign])
 
-  useEffect(() => {
-    if (mutationStatus.status !== 'success') return
-    const txResults = mutationStatus.data
-    if (!txResults || !Array.isArray(txResults) || txResults.length === 0)
-      return
-    if (!('keysign' in payload)) return
-    const keysignPayload = payload.keysign
-    if (keysignPayload.swapPayload && keysignPayload.swapPayload.value) return
-  }, [mutationStatus.status, mutationStatus.data, payload])
-
   return (
     <>
       <MatchQuery
@@ -87,7 +77,6 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                                 <TxSuccess
                                   value={payload}
                                   onSeeTxDetails={onSeeTxDetails}
-                                  payload={{ keysign: payload }}
                                 />
                               </VStack>
                             </PageContent>

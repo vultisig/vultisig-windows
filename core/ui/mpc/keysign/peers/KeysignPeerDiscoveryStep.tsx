@@ -14,7 +14,6 @@ import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCod
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
-import { useBlockaidScanResult } from '@core/ui/security/hooks/useBlockaidScanResult'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
@@ -25,9 +24,10 @@ import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { range } from '@lib/utils/array/range'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useMpcPeers } from '../../state/mpcPeers'
 
 type KeysignPeerDiscoveryStepProps = {
@@ -40,11 +40,10 @@ export const KeysignPeerDiscoveryStep = ({
   payload,
 }: KeysignPeerDiscoveryStepProps) => {
   const { t } = useTranslation()
-  const { scanTransaction } = useBlockaidScanResult()
-  const [scanUnavailable, setScanUnavailable] = useState(false)
 
   const peers = useMpcPeers()
   const { signers } = useCurrentVault()
+  const [{ scanUnavailable }] = useCoreViewState<'keysign'>()
 
   const isDisabled = useMemo(() => {
     const requiredDevicesNumber = getKeygenThreshold(signers.length)
@@ -60,15 +59,6 @@ export const KeysignPeerDiscoveryStep = ({
       onFinish(peers)
     }
   }, [isDisabled, onFinish, peers])
-
-  useEffect(() => {
-    const checkScanAvailability = async () => {
-      const { scanUnavailable } = await scanTransaction(payload)
-      setScanUnavailable(scanUnavailable)
-    }
-
-    checkScanAvailability()
-  }, [payload, scanTransaction])
 
   const joinUrlQuery = useJoinKeysignUrlQuery(payload)
 

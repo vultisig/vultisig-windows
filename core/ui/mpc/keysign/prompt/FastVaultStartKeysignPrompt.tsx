@@ -66,7 +66,8 @@ export const FastVaultStartKeysignPrompt = ({
       setIsScanning(true)
       setSecurityError(null)
 
-      const { error } = await scanTransaction(keysignPayload)
+      const { error, scanUnavailable, scanResult } =
+        await scanTransaction(keysignPayload)
 
       if (error) {
         setSecurityError(error)
@@ -80,6 +81,8 @@ export const FastVaultStartKeysignPrompt = ({
         state: {
           securityType,
           keysignPayload,
+          scanUnavailable,
+          scanResult,
           ...coreViewState,
         },
       })

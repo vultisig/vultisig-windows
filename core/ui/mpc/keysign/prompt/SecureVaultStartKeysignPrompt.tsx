@@ -26,7 +26,8 @@ export const SecureVaultStartKeysignPrompt = ({
     setIsScanning(true)
     setSecurityError(null)
 
-    const { error } = await scanTransaction(keysignPayload)
+    const { error, scanUnavailable, scanResult } =
+      await scanTransaction(keysignPayload)
 
     if (error) {
       setSecurityError(error)
@@ -39,6 +40,8 @@ export const SecureVaultStartKeysignPrompt = ({
       state: {
         securityType: 'secure',
         keysignPayload,
+        scanUnavailable,
+        scanResult,
         ...coreViewState,
       },
     })

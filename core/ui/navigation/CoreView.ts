@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
+import { BlockaidScanResult } from '@core/config/security/blockaid/types'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -39,6 +40,8 @@ export type CoreView =
         securityType: VaultSecurityType
         keysignPayload: KeysignMessagePayload
         isDAppSigning?: boolean
+        scanResult?: BlockaidScanResult
+        scanUnavailable?: boolean
       }
     }
   | { id: 'languageSettings' }
