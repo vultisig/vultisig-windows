@@ -7,6 +7,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useThorNameAvailabilityQuery } from '../../../queries/useThorNameAvailabilityQuery'
 import {
   FormField,
   FormFieldErrorText,
@@ -19,9 +20,22 @@ export const ReferralCodeField = () => {
   const {
     control,
     formState: { errors },
+    getValues,
   } = useFormContext<ReferralFormData>()
+  const name = getValues('referralName')
+  console.log('🚀 ~ ReferralCodeField ~ name:', name)
 
-  const status = 'available'
+  const {
+    mutate: checkAvailability,
+    status,
+    data,
+    isPending,
+  } = useThorNameAvailabilityQuery()
+  console.log('🚀 ~ ReferralCodeField ~ status:', status)
+  console.log('🚀 ~ ReferralCodeField ~ isPending:', isPending)
+  console.log('🚀 ~ ReferralCodeField ~ data:', data)
+
+  const c = 'available'
 
   return (
     <VStack gap={14}>
@@ -41,7 +55,16 @@ export const ReferralCodeField = () => {
               />
             )}
           />
-          <Button style={{ maxWidth: 97, fontSize: 14 }}>{t('search')}</Button>
+          <Button
+            onClick={() => {
+              if (name) {
+                checkAvailability(name)
+              }
+            }}
+            style={{ maxWidth: 97, fontSize: 14 }}
+          >
+            {t('search')}
+          </Button>
         </HStack>
         {errors.referralName && (
           <FormFieldErrorText>{errors.referralName.message}</FormFieldErrorText>
@@ -52,7 +75,7 @@ export const ReferralCodeField = () => {
           {t('referral_status')}
         </Text>
         <StatusPill>
-          <Text size={13} color={status === 'available' ? 'success' : 'danger'}>
+          <Text size={13} color={c ? 'success' : 'danger'}>
             {t('available')}
           </Text>
         </StatusPill>
