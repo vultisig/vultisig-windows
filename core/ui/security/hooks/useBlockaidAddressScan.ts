@@ -1,9 +1,10 @@
+import { Chain } from '@core/chain/Chain'
 import { isBlockaidEnabled } from '@core/config/featureFlags'
 import { blockaid } from '@core/config/security/blockaid'
 import { useQuery } from '@tanstack/react-query'
 
 type Props = {
-  chain: string
+  chain: Chain | string
   address: string
 }
 

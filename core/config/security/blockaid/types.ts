@@ -1,3 +1,5 @@
+import { Chain } from '../../../chain/Chain'
+
 export type BlockaidScanPayload = {
   chain: string
   account_address?: string
@@ -10,7 +12,7 @@ export type BlockaidScanPayload = {
 }
 
 export type BlockaidAddressPayload = {
-  chain: string
+  chain: Chain | string
   address: string
 }
 

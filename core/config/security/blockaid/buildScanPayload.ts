@@ -47,7 +47,7 @@ export const buildBlockaidScanPayload = ({
       }
     case 'sui':
       return {
-        chain: chain.toString().toLowerCase(),
+        chain: 'mainnet',
         account_address: accountAddress,
         transaction: rawTx,
         metadata,

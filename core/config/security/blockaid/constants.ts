@@ -13,7 +13,7 @@ const getChainType = (chain: Chain | string) => {
 
     // Create a mapping of patterns to chain types
     const chainTypeMap = {
-      solana: ['solana', 'mainnet'],
+      solana: ['solana'],
       sui: ['sui'],
       bitcoin: ['bitcoin'],
     } as const
@@ -49,7 +49,7 @@ export const Endpoints = {
       evm: () => `${blockaid_base}/evm/transaction-raw/scan`,
     })
   },
-  rawTxScan: (chain: string) => {
+  rawTxScan: (chain: Chain) => {
     const chainType = getChainType(chain)
 
     return match(chainType, {
@@ -59,7 +59,7 @@ export const Endpoints = {
       sui: () => `${blockaid_base}/evm/transaction-raw/scan`, // fallback to EVM
     })
   },
-  addressScan: (chain: string) => {
+  addressScan: (chain: Chain) => {
     const chainType = getChainType(chain)
 
     return match(chainType, {

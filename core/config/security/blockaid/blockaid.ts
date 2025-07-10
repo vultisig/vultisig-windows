@@ -30,19 +30,31 @@ class BlockaidClient {
   }
 
   scanTransaction(input: BlockaidScanPayload) {
-    // Ensure chain is properly typed for txScan endpoint
-    const chain = typeof input.chain === 'string' ? input.chain : input.chain
-    return this.post<BlockaidScanResult>(
-      Endpoints.txScan(chain as Chain),
-      input
-    )
+    // Determine the correct endpoint based on payload structure
+    let endpoint: string
+
+    if (input.chain === 'mainnet') {
+      // For mainnet, differentiate between Solana and Sui based on payload structure
+      if (input.encoding === 'base58' && input.transactions) {
+        // This is a Solana transaction
+        endpoint = `${rootApiUrl}/blockaid/v0/solana/message/scan`
+      } else {
+        // This is a Sui transaction
+        endpoint = `${rootApiUrl}/blockaid/v0/sui/transaction/scan`
+      }
+    } else {
+      // For other chains, use the existing endpoint logic
+      const chain = typeof input.chain === 'string' ? input.chain : input.chain
+      endpoint = Endpoints.txScan(chain as Chain)
+    }
+
+    return this.post<BlockaidScanResult>(endpoint, input)
   }
 
   scanAddress(input: BlockaidAddressPayload) {
-    return this.post<BlockaidScanResult>(
-      Endpoints.addressScan(input.chain),
-      input
-    )
+    const endpoint = Endpoints.addressScan(input.chain as Chain)
+
+    return this.post<BlockaidScanResult>(endpoint, input)
   }
 
   async fullVerify(tx: BlockaidScanPayload, addr: BlockaidAddressPayload) {
