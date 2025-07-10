@@ -43,7 +43,7 @@ export class BlockaidService {
     chain,
     address,
   }: {
-    chain: string
+    chain: Chain
     address: string
   }): Promise<BlockaidScanResult> {
     const result = await attempt(async () => {
