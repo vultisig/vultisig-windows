@@ -3,14 +3,13 @@ import bs58 from 'bs58'
 import { stripHexPrefix } from '../../../../lib/utils/hex/stripHexPrefix'
 import { Chain } from '../../../chain/Chain'
 import { ChainKind, getChainKind } from '../../../chain/ChainKind'
-
-type BlockaidScanPayload = Record<string, any>
+import { BlockaidScanPayload } from './types'
 
 type BuildBlockaidScanPayloadInput = {
   chain: Chain | string
   accountAddress?: string
   rawTx?: string
-  metadata?: any
+  metadata?: Record<string, unknown>
 }
 
 export const buildBlockaidScanPayload = ({

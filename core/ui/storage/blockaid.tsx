@@ -21,11 +21,19 @@ export type BlockaidStorage = {
 }
 
 export const useBlockaidEnabledQuery = () => {
-  const { getBlockaidEnabled } = useCore()
+  const { getBlockaidEnabled, setBlockaidEnabled } = useCore()
 
   return useQuery({
     queryKey: [StorageKey.blockaidEnabled],
-    queryFn: getBlockaidEnabled,
+    queryFn: async () => {
+      const result = await getBlockaidEnabled()
+      // If the setting doesn't exist, initialize it with the default value
+      if (result === null || result === undefined) {
+        await setBlockaidEnabled(isBlockaidInitiallyEnabled)
+        return isBlockaidInitiallyEnabled
+      }
+      return result
+    },
     ...noRefetchQueryOptions,
     ...noPersistQueryOptions,
   })
@@ -42,8 +50,19 @@ export const useSetBlockaidEnabledMutation = () => {
   const invalidateQueries = useInvalidateQueries()
 
   const mutationFn: SetBlockaidEnabledFunction = async input => {
-    await setBlockaidEnabled(input)
-    await invalidateQueries([StorageKey.blockaidEnabled])
+    try {
+      // Validate input
+      if (typeof input !== 'boolean') {
+        throw new Error('Blockaid enabled must be a boolean value')
+      }
+
+      await setBlockaidEnabled(input)
+      await invalidateQueries([StorageKey.blockaidEnabled])
+    } catch (error) {
+      throw new Error(
+        `Failed to update blockaid setting: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
+    }
   }
 
   return useMutation({

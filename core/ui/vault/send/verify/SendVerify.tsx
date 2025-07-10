@@ -1,4 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import {
+  BlockaidErrorTypes,
+  BlockaidResultTypes,
+} from '@core/config/security/blockaid/constants'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -52,10 +56,16 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
 
   /* auto-open warning modal */
   useEffect(() => {
-    if (!overrideRisk) {
-      setWarningVisible(true)
+    if (!overrideRisk && addressScanQuery.data) {
+      const validation = addressScanQuery.data.validation
+      if (
+        validation?.result_type === BlockaidResultTypes.Warning ||
+        validation?.result_type === BlockaidResultTypes.Malicious
+      ) {
+        setWarningVisible(true)
+      }
     }
-  }, [overrideRisk])
+  }, [overrideRisk, addressScanQuery.data])
 
   return (
     <>
@@ -67,7 +77,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       <PageContent gap={12}>
         <TxOverviewPanel>
           <HStack justifyContent="flex-end">
-            <SecurityStatusBadge query={addressScanQuery} />
+            <SecurityStatusBadge
+              scanResult={addressScanQuery.data || undefined}
+            />
           </HStack>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
@@ -120,15 +132,25 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         </TxOverviewPanel>
         <SendTermsProvider initialValue={sendTerms.map(() => false)}>
           <SendTerms />
-          <SecurityWarningModal
-            visible={warningVisible}
-            scan={addressScanQuery.data}
-            onClose={() => setWarningVisible(false)}
-            onContinue={() => {
-              setOverrideRisk(true)
-              setWarningVisible(false)
-            }}
-          />
+          {warningVisible && addressScanQuery.data && (
+            <SecurityWarningModal
+              error={{
+                type:
+                  addressScanQuery.data.validation?.result_type ===
+                  BlockaidResultTypes.Warning
+                    ? BlockaidErrorTypes.Warning
+                    : BlockaidErrorTypes.Malicious,
+                message: 'Security warning from Blockaid',
+                blockaid: addressScanQuery.data,
+                name: 'BlockaidError',
+              }}
+              onContinue={() => {
+                setOverrideRisk(true)
+                setWarningVisible(false)
+              }}
+              onCancel={() => setWarningVisible(false)}
+            />
+          )}
           <VStack
             style={{
               marginTop: 'auto',

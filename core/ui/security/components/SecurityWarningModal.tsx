@@ -1,60 +1,47 @@
-import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
-import { ScanResponse } from '@core/config/security/blockaid/types'
+import { BlockaidErrorTypes } from '@core/config/security/blockaid/constants'
+import { BlockaidError } from '@core/config/security/blockaid/types'
 import { Button } from '@lib/ui/buttons/Button'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { Text } from '@lib/ui/text'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 
-type Props = {
-  visible: boolean
-  scan: ScanResponse | null | undefined
-  onClose: () => void
+type SecurityWarningModalProps = {
+  error: BlockaidError
   onContinue: () => void
+  onCancel: () => void
 }
 
-export const SecurityWarningModal: FC<Props> = ({
-  visible,
-  scan,
-  onClose,
+export const SecurityWarningModal = ({
+  error,
   onContinue,
-}) => {
-  const { t } = useTranslation()
-  if (!visible || !scan) return null
-
-  const title = t('warning')
+  onCancel,
+}: SecurityWarningModalProps) => {
+  const isWarning = error.type === BlockaidErrorTypes.Warning
 
   return (
-    <Modal onClose={onClose} title={title} placement="center" width={360}>
-      <VStack gap={16} alignItems="center">
-        <TriangleAlertIcon
-          color={
-            scan.validation?.result_type === BlockaidResultTypes.Malicious
-              ? 'danger'
-              : 'idle'
-          }
-          fontSize={32}
-        />
-        <Text size={15} weight={500} centerHorizontally>
-          {scan.validation?.reason ?? t('malicious_address_detected')}
-        </Text>
-        <VStack gap={12} alignItems="center">
-          <Button color="primary" onClick={onClose} size="md">
-            {t('cancel')}
+    <Modal
+      title={isWarning ? 'Security Warning' : 'Security Alert'}
+      onClose={onCancel}
+    >
+      <div className="p-6">
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">
+            {isWarning
+              ? 'This transaction has been flagged as potentially risky by our security scanner.'
+              : 'This transaction has been flagged as malicious by our security scanner.'}
+          </p>
+        </div>
+
+        <div className="flex justify-end gap-3">
+          <Button kind="secondary" onClick={onCancel}>
+            Cancel
           </Button>
-          <Text
-            color="shy"
-            size={12}
-            weight={500}
-            style={{ cursor: 'pointer' }}
+          <Button
+            status={isWarning ? 'warning' : 'danger'}
             onClick={onContinue}
           >
-            {t('continue_anyway')}
-          </Text>
-        </VStack>
-      </VStack>
+            {isWarning ? 'Continue Anyway' : 'Proceed at Own Risk'}
+          </Button>
+        </div>
+      </div>
     </Modal>
   )
 }

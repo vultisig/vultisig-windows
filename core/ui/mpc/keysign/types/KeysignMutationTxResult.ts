@@ -1,7 +1,7 @@
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
-import { ScanResponse } from '@core/config/security/blockaid/types'
+import { BlockaidScanResult } from '@core/config/security/blockaid/types'
 
-export type KeysignMutationTxResult = TxResult & {
-  scanResult?: ScanResponse
+export type KeysignMutationTxResult = {
+  txHash: string
+  scanResult?: BlockaidScanResult
   scanUnavailable?: boolean
 }

@@ -8,9 +8,6 @@ import { executeTx } from '@core/chain/tx/execute'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
-import { blockaid } from '@core/config/security/blockaid'
-import { buildBlockaidScanPayload } from '@core/config/security/blockaid/buildScanPayload'
-import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -19,10 +16,8 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
-import { useCore } from '@core/ui/state/core'
-import { useBlockaidEnabled } from '@core/ui/storage/blockaid'
+import { useBlockaidScan } from '@core/ui/security/hooks/useBlockaidScan'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
@@ -32,17 +27,13 @@ import { keccak256 } from 'js-sha3'
 
 import { KeysignMutationTxResult } from '../../types/KeysignMutationTxResult'
 
-export const useKeysignMutation = (
-  payload: KeysignMessagePayload,
-  options?: { skipBlockaid?: boolean }
-) => {
+export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const { client } = useCore()
+  const { scanTransaction } = useBlockaidScan()
 
   const keysignAction = useKeysignAction()
   const mutationListener = useKeysignMutationListener()
-  const blockaidEnabled = useBlockaidEnabled()
 
   return useMutation({
     mutationFn: async () => {
@@ -117,51 +108,30 @@ export const useKeysignMutation = (
                 rawTx = walletCore.HexCoding.encode(compiledTx)
               }
 
-              let scanResult
-              let scanUnavailable = false
-              // Only run Blockaid check for extension
-              if (
-                client === 'extension' &&
-                !options?.skipBlockaid &&
-                blockaidEnabled &&
-                rawTx &&
-                account_address
-              ) {
-                scanResult = await attempt(async () => {
-                  return await blockaid.scanTransaction(
-                    buildBlockaidScanPayload({
-                      chain,
-                      accountAddress: account_address,
-                      rawTx,
-                      metadata: { domain: 'https://vultisig.com' },
-                    })
-                  )
+              // Use dedicated blockaid scan hook
+              const { scanResult, scanUnavailable, error } =
+                await scanTransaction({
+                  chain,
+                  accountAddress: account_address,
+                  rawTx,
+                  metadata: { domain: 'https://vultisig.com' },
                 })
-                const validation = scanResult.data?.validation
-                if (validation?.status !== 'Success') {
-                  scanUnavailable = true
-                }
-                if (
-                  validation?.result_type === BlockaidResultTypes.Warning ||
-                  validation?.result_type === BlockaidResultTypes.Malicious
-                ) {
-                  const error: any = new Error('Security warning from Blockaid')
-                  error.type =
-                    validation.result_type === BlockaidResultTypes.Warning
-                      ? 'blockaid-warning'
-                      : 'blockaid-malicious'
-                  error.blockaid = scanResult.data
-                  throw error
-                }
+
+              // Handle blockaid errors with proper error handling
+              if (error) {
+                // Re-throw BlockaidError with proper type information
+                throw error
               }
+
               const txResult = await executeTx({
                 compiledTx,
                 walletCore,
                 chain,
               })
+
               return {
                 ...txResult,
-                scanResult: scanResult?.data || undefined,
+                scanResult: scanResult || undefined,
                 scanUnavailable,
               } as KeysignMutationTxResult
             })

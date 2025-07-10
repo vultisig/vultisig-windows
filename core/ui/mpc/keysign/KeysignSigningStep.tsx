@@ -1,7 +1,8 @@
-import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
-import { ScanResponse } from '@core/config/security/blockaid/types'
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
+import {
+  BlockaidErrorTypes,
+  BlockaidResultTypes,
+} from '@core/config/security/blockaid/constants'
+import { BlockaidError } from '@core/config/security/blockaid/types'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
@@ -30,13 +31,10 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { TxOverviewPanel } from '../../chain/tx/TxOverviewPanel'
+import { TxOverviewChainDataRow } from '../../chain/tx/TxOverviewRow'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
-
-type BlockaidError = Error & {
-  type?: 'blockaid-warning' | 'blockaid-malicious'
-  blockaid?: ScanResponse
-}
 
 type KeysignSigningStepProps = Partial<OnBackProp>
 
@@ -47,16 +45,10 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const payload = useKeysignMessagePayload()
   const [{ isDAppSigning }] = useCoreViewState<'keysign'>()
   const [showSecurityCheckmark, setShowSecurityCheckmark] = useState(false)
-  const [showWarningModal, setShowWarningModal] = useState(false)
-  const [blockaidWarning, setBlockaidWarning] = useState<ScanResponse | null>(
-    null
-  )
+  const [blockaidError, setBlockaidError] = useState<BlockaidError | null>(null)
   const [scanUnavailable, setScanUnavailable] = useState(false)
-  const [skipBlockaid, setSkipBlockaid] = useState(false)
-  const { mutate: startKeysign, ...mutationStatus } = useKeysignMutation(
-    payload,
-    { skipBlockaid }
-  )
+  const { mutate: startKeysign, ...mutationStatus } =
+    useKeysignMutation(payload)
 
   useEffect(() => {
     startKeysign()
@@ -67,11 +59,10 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
       const error = mutationStatus.error as BlockaidError
       // Blockaid warning/malicious error
       if (
-        error.type === 'blockaid-warning' ||
-        error.type === 'blockaid-malicious'
+        error.type === BlockaidErrorTypes.Warning ||
+        error.type === BlockaidErrorTypes.Malicious
       ) {
-        setBlockaidWarning(error.blockaid || null)
-        setShowWarningModal(true)
+        setBlockaidError(error)
         return
       }
     }
@@ -102,23 +93,23 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   ])
 
   const handleWarningContinue = () => {
-    setShowWarningModal(false)
-    setSkipBlockaid(true)
+    setBlockaidError(null)
   }
 
   const handleWarningCancel = () => {
-    setShowWarningModal(false)
+    setBlockaidError(null)
     // Optionally, navigate back or show a message
   }
 
   return (
     <>
-      <SecurityWarningModal
-        visible={showWarningModal}
-        scan={blockaidWarning}
-        onClose={handleWarningCancel}
-        onContinue={handleWarningContinue}
-      />
+      {blockaidError && (
+        <SecurityWarningModal
+          error={blockaidError}
+          onContinue={handleWarningContinue}
+          onCancel={handleWarningCancel}
+        />
+      )}
       <MatchQuery
         value={mutationStatus}
         success={txResults => {

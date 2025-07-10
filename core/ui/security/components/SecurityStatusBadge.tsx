@@ -1,22 +1,27 @@
-import { ScanResponse } from '@core/config/security/blockaid/types'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { BlockaidResultTypes } from '@core/config/security/blockaid/constants'
+import { BlockaidScanResult } from '@core/config/security/blockaid/types'
+import { useBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { QueryObserverResult } from '@tanstack/react-query'
-import styled from 'styled-components'
 
-const Wrapper = styled.span<{ color: string }>``
+export const SecurityStatusBadge = ({
+  scanResult,
+}: {
+  scanResult?: BlockaidScanResult
+}) => {
+  const query = useBlockaidEnabledQuery()
 
-type Props = {
-  query: QueryObserverResult<ScanResponse | null>
-}
-
-export const SecurityStatusBadge = ({ query }: Props) => {
   if (query.isFetching) return <Spinner size={12} />
-  if (!query.data) return null
 
-  return (
-    <Wrapper color="red">
-      <TriangleAlertIcon color="danger" fontSize={16} />
-    </Wrapper>
-  )
+  if (!scanResult) return null
+
+  const validation = scanResult.validation
+  if (validation?.result_type === BlockaidResultTypes.Warning) {
+    return <span className="text-yellow-600">⚠️ Warning</span>
+  }
+
+  if (validation?.result_type === BlockaidResultTypes.Malicious) {
+    return <span className="text-red-600">🚨 Malicious</span>
+  }
+
+  return <span className="text-green-600">✅ Safe</span>
 }
