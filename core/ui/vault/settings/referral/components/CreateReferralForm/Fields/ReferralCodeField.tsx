@@ -1,13 +1,17 @@
+import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
+import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useThorNameAvailabilityQuery } from '../../../queries/useThorNameAvailabilityQuery'
+import { useThorNameAvailabilityMutation } from '../../../mutations/useThorNameAvailabilityMutation'
 import {
   FormField,
   FormFieldErrorText,
@@ -23,19 +27,13 @@ export const ReferralCodeField = () => {
     getValues,
   } = useFormContext<ReferralFormData>()
   const name = getValues('referralName')
-  console.log('🚀 ~ ReferralCodeField ~ name:', name)
 
   const {
     mutate: checkAvailability,
+    error,
     status,
-    data,
-    isPending,
-  } = useThorNameAvailabilityQuery()
+  } = useThorNameAvailabilityMutation()
   console.log('🚀 ~ ReferralCodeField ~ status:', status)
-  console.log('🚀 ~ ReferralCodeField ~ isPending:', isPending)
-  console.log('🚀 ~ ReferralCodeField ~ data:', data)
-
-  const c = 'available'
 
   return (
     <VStack gap={14}>
@@ -71,14 +69,39 @@ export const ReferralCodeField = () => {
         )}
       </FormField>
       <StatusWrapper justifyContent="space-between" alignItems="center">
-        <Text size={14} color="supporting">
-          {t('referral_status')}
-        </Text>
-        <StatusPill>
-          <Text size={13} color={c ? 'success' : 'danger'}>
-            {t('available')}
-          </Text>
-        </StatusPill>
+        <Match
+          value={status}
+          pending={() => (
+            <CenterAbsolutely>
+              <Spinner size="1.5em" />
+            </CenterAbsolutely>
+          )}
+          error={() => (
+            <>
+              <Text size={14} color="supporting">
+                {t('referral_status')}
+              </Text>
+              <StatusPill>
+                <Text size={13} color="danger">
+                  {extractErrorMsg(error)}
+                </Text>
+              </StatusPill>
+            </>
+          )}
+          success={() => (
+            <>
+              <Text size={14} color="supporting">
+                {t('referral_status')}
+              </Text>
+              <StatusPill>
+                <Text size={13} color="success">
+                  {t('available')}
+                </Text>
+              </StatusPill>
+            </>
+          )}
+          idle={() => null}
+        />
       </StatusWrapper>
     </VStack>
   )
@@ -86,6 +109,7 @@ export const ReferralCodeField = () => {
 
 const StatusWrapper = styled(HStack)`
   height: 52px;
+  position: relative;
 `
 
 const StatusPill = styled.div`
