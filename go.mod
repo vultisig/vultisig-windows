@@ -12,10 +12,11 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20250316003201-2e7e570a4a74
 	github.com/vultisig/vultisig-relay v0.0.0-20250123035809-437215e7ea51
-	github.com/wailsapp/wails/v2 v2.10.1
+	github.com/wailsapp/wails/v2 v2.10.2
 )
 
 require (
+	github.com/gorilla/websocket v1.5.3 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/tools v0.30.0 // indirect
