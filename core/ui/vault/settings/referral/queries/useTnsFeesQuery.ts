@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getTnsFees } from '../serivces/getTnsFees'
+import { getTnsFees } from '../services/getTnsFees'
 
 export const useTnsFeesQuery = (years: number) => {
   return useQuery({

@@ -33,7 +33,6 @@ export const ReferralCodeField = () => {
     error,
     status,
   } = useThorNameAvailabilityMutation()
-  console.log('🚀 ~ ReferralCodeField ~ status:', status)
 
   return (
     <VStack gap={14}>
