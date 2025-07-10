@@ -37,8 +37,7 @@ export const useBlockaidScan = (): UseBlockaidScanResult => {
     }: UseBlockaidScanInput) => {
       // Only run Blockaid check for extension and when enabled
       if (
-        client !== 'extension' &&
-        client !== 'desktop' ||
+        client !== 'extension' ||
         !blockaidEnabled ||
         !rawTx ||
         !accountAddress
