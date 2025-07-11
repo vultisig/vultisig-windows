@@ -10,6 +10,7 @@ import { LanguageStorage } from './language'
 import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
+import { ReferralsOnboardingStorage } from './referrals'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
@@ -24,6 +25,7 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   LanguageStorage &
   BalanceVisibilityStorage &
   OnboardingStorage &
+  ReferralsOnboardingStorage &
   InitialViewStorage &
   PasscodeEncryptionStorage &
   PasscodeAutoLockStorage
