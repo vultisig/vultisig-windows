@@ -953,6 +953,7 @@ export const de = {
   try_in_expanded_mode: 'Versuchen Sie es im erweiterten Modus',
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   security: 'Sicherheit',
+  security_scan_passed: 'Sicherheitsscan bestanden',
   app_lock_passcode: 'Passcode für die App-Sperre',
   app_lock_passcode_description:
     'Fügen Sie eine zusätzliche Sicherheitsebene hinzu, indem Sie zum Entsperren der App einen Passcode verlangen.',
@@ -981,6 +982,7 @@ export const de = {
   address_book_vault: 'Meine Tresore',
   paste: 'Paste',
   failed_to_generate_join_url: 'QR-Code konnte nicht generiert werden',
+  security_scan_unavailable: 'Sicherheitsüberprüfung nicht verfügbar',
   connecting_to_verifier: 'Verbindung zum Verifier herstellen',
   connecting_to_plugin: 'Verbindung zum Plugin herstellen',
   confirm: 'Bestätigen',
@@ -1004,4 +1006,14 @@ export const de = {
   failed_to_process_plugin_install:
     'Die Installation des Plugins konnte nicht durchgeführt werden.',
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
+  warning: 'Warnung',
+  malicious_address_detected: 'Bösartige Adresse erkannt',
+  security_warning: 'Sicherheitswarnung',
+  security_malicious: 'Bösartig',
+  security_safe: 'Sicher',
+  transaction_flagged_risky:
+    'Diese Transaktion wurde von unserem Sicherheitsscanner als potenziell riskant eingestuft.',
+  transaction_flagged_malicious:
+    'Diese Transaktion wurde von unserem Sicherheitsscanner als bösartig eingestuft.',
+  proceed_at_own_risk: 'Auf eigene Gefahr fortfahren',
 }

@@ -1,5 +1,6 @@
 import { AddressBookStorage } from './addressBook'
 import { BalanceVisibilityStorage } from './balanceVisibility'
+import { BlockaidStorage } from './blockaid'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
@@ -13,7 +14,8 @@ import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
-export type CoreStorage = CoinFinderIgnoreStorage &
+export type CoreStorage = BlockaidStorage &
+  CoinFinderIgnoreStorage &
   FiatCurrencyStorage &
   CurrentVaultIdStorage &
   VaultsStorage &

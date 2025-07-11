@@ -1,10 +1,17 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import {
+  BlockaidErrorTypes,
+  BlockaidResultTypes,
+} from '@core/config/security/blockaid/constants'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { SecurityStatusBadge } from '@core/ui/security/components/SecurityStatusBadge'
+import { SecurityWarningModal } from '@core/ui/security/components/SecurityWarningModal'
+import { useBlockaidAddressScan } from '@core/ui/security/hooks/useBlockaidAddressScan'
 import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -29,7 +36,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -43,6 +50,23 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const cappedAmountQuery = useSendCappedAmountQuery()
   const { chain, ticker } = coin
 
+  const addressScanQuery = useBlockaidAddressScan({ chain, address: receiver })
+  const [warningVisible, setWarningVisible] = useState(false)
+  const [overrideRisk, setOverrideRisk] = useState(false)
+
+  /* auto-open warning modal */
+  useEffect(() => {
+    if (!overrideRisk && addressScanQuery.data) {
+      const validation = addressScanQuery.data.validation
+      if (
+        validation?.result_type === BlockaidResultTypes.Warning ||
+        validation?.result_type === BlockaidResultTypes.Malicious
+      ) {
+        setWarningVisible(true)
+      }
+    }
+  }, [overrideRisk, addressScanQuery.data])
+
   return (
     <>
       <PageHeader
@@ -52,6 +76,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       />
       <PageContent gap={12}>
         <TxOverviewPanel>
+          <HStack justifyContent="flex-end">
+            <SecurityStatusBadge
+              scanResult={addressScanQuery.data || undefined}
+            />
+          </HStack>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
               {t('you_are_sending')}
@@ -103,6 +132,25 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         </TxOverviewPanel>
         <SendTermsProvider initialValue={sendTerms.map(() => false)}>
           <SendTerms />
+          {warningVisible && addressScanQuery.data && (
+            <SecurityWarningModal
+              error={{
+                type:
+                  addressScanQuery.data.validation?.result_type ===
+                  BlockaidResultTypes.Warning
+                    ? BlockaidErrorTypes.Warning
+                    : BlockaidErrorTypes.Malicious,
+                message: 'Security warning from Blockaid',
+                blockaid: addressScanQuery.data,
+                name: 'BlockaidError',
+              }}
+              onContinue={() => {
+                setOverrideRisk(true)
+                setWarningVisible(false)
+              }}
+              onCancel={() => setWarningVisible(false)}
+            />
+          )}
           <VStack
             style={{
               marginTop: 'auto',

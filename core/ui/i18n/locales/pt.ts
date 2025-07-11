@@ -937,6 +937,7 @@ export const pt = {
   try_in_expanded_mode: 'Experimente no modo expandido',
   est_network_fee: 'Taxa de rede estimada',
   security: 'Segurança',
+  security_scan_passed: 'Verificação de segurança aprovada',
   app_lock_passcode: 'Senha de bloqueio do aplicativo',
   app_lock_passcode_description:
     'Adicione uma camada extra de segurança exigindo uma senha para desbloquear o aplicativo.',
@@ -968,6 +969,7 @@ export const pt = {
   address_book_vault: 'Meus Cofres',
   paste: 'Colar',
   failed_to_generate_join_url: 'Falha ao gerar o código QR',
+  security_scan_unavailable: 'Verificação de segurança indisponível',
   connecting_to_verifier: 'Conectando ao Verificador',
   connecting_to_plugin: 'Conectando ao plugin',
   confirm: 'Confirmar',
@@ -989,4 +991,14 @@ export const pt = {
   success: 'Sucesso',
   failed_to_process_plugin_install: 'Falha ao processar a instalação do plugin',
   hold_for_paired_sign: 'Segure para sinal de par',
+  warning: 'Aviso',
+  malicious_address_detected: 'Endereço malicioso detectado',
+  security_warning: 'Aviso de segurança',
+  security_malicious: 'Malicioso',
+  security_safe: 'Seguro',
+  transaction_flagged_risky:
+    'Esta transação foi marcada como potencialmente arriscada pelo nosso scanner de segurança.',
+  transaction_flagged_malicious:
+    'Esta transação foi marcada como maliciosa pelo nosso scanner de segurança.',
+  proceed_at_own_risk: 'Proceda por sua conta e risco',
 }
