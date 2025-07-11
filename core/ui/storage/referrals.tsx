@@ -45,7 +45,7 @@ export const useSetHasFinishedReferralsOnboardingMutation = () => {
 
   const mutationFn: SetHasFinishedReferralsOnboardingFunction = async input => {
     await setHasFinishedReferralsOnboarding(input)
-    await invalidateQueries([StorageKey.hasFinishedOnboarding])
+    await invalidateQueries([StorageKey.hasFinishedReferralsOnboarding])
   }
 
   return useMutation({

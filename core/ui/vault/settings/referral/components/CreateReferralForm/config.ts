@@ -1,11 +1,4 @@
-import { Chain } from '@core/chain/Chain'
 import { z } from 'zod'
-
-const accountCoinSchema = z.object({
-  chain: z.nativeEnum(Chain),
-  id: z.string(),
-  address: z.string(),
-})
 
 export const referralSchema = z.object({
   referralName: z

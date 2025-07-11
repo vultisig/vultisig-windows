@@ -18,10 +18,10 @@ export const referralsStorage: ReferralsOnboardingStorage = {
 
     return value
   },
-  setHasFinishedReferralsOnboarding: async hasFinishedOnboarding => {
+  setHasFinishedReferralsOnboarding: async hasFinishedReferralsOnboarding => {
     persistentStorage.setItem(
-      StorageKey.hasFinishedOnboarding,
-      hasFinishedOnboarding
+      StorageKey.hasFinishedReferralsOnboarding,
+      hasFinishedReferralsOnboarding
     )
   },
 }

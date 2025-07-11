@@ -48,7 +48,6 @@ export const PayoutAssetField = () => {
   const coins = useCurrentVaultCoins()
   const { t } = useTranslation()
   const { data: allowedPools = [] } = useActivePoolsQuery()
-  console.log('🚀 ~ PayoutAssetField ~ allowedPools:', allowedPools)
 
   const allowedAssets = useMemo(
     () =>
