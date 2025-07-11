@@ -55,7 +55,7 @@ export const VaultChainPage = () => {
   const fiatCurrency = useFiatCurrency()
   const vaultCoins = useCurrentVaultChainCoins(chain)
   const address = useCurrentVaultAddress(chain)
-  const hasMultipleCoinsSupport = knownTokens[chain].length > 1
+  const hasMultipleCoinsSupport = knownTokens[chain].length > 0
   const copyAddress = useCopyAddress()
   const navigate = useCoreNavigate()
 
