@@ -34,7 +34,6 @@ export const InputFieldWrapper = styled.div`
   ${text({
     size: 14,
     color: 'contrast',
-    family: 'mono',
   })}
 `
 

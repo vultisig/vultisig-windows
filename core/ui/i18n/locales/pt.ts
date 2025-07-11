@@ -14,6 +14,15 @@ export const pt = {
   passcodes_do_not_match: 'Os códigos não correspondem',
   digit_input_success_validation: 'Verificação bem-sucedida',
   digit_input_error_validation: 'Erro ao verificar o código, tente novamente',
+  referral_reg_fee: 'Taxa de registro',
+  create_referral: 'Criar indicação',
+  select: 'Selecionar',
+  pick_referral_code: 'Escolher código de indicação',
+  referral_status: 'Status',
+  referral_costs: 'Custos',
+  set_expiration: 'Definir expiração (em anos)',
+  expiration_date: 'Data de expiração',
+  choose_payout_asset: 'Escolher ativo de pagamento',
   digit_input_loading_validation: 'Verificando o código, por favor aguarde',
   chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
@@ -43,6 +52,40 @@ export const pt = {
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
+  title_1: 'Indicação',
+  title_2: 'Vultisig - Indicações',
+  header_tooltip_title: 'Programa de Indicações',
+  header_tooltip_content:
+    'O programa de indicações se aplica às trocas na THORChain e é feito por melhor esforço. Você precisa registrar um THORName para usar a indicação da Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, pagos à rede THORChain.',
+  invite_friends: 'Convidar amigos',
+  earn_rewards: 'Ganhar recompensas',
+  save_on_fees: 'Economizar em taxas',
+  share_description:
+    'Compartilhe seu código único de indicação para convidar amigos. Eles ganham um desconto e quanto mais trocarem, mais você ganha — direto na sua carteira.',
+  referrals_summary: {
+    item_1: {
+      title: 'Crie seu código de indicação',
+      description: 'Escolha um código curto e defina sua recompensa.',
+    },
+    item_2: {
+      title: 'Compartilhe com amigos',
+      description: 'Convide amigos a usarem seu código ao fazer trocas.',
+    },
+    item_3: {
+      title: 'Ganhe recompensas automaticamente',
+      description:
+        'Receba pagamentos no ativo de sua preferência sempre que eles trocarem.',
+    },
+    item_4: {
+      title: 'Usar código de indicação',
+      description: 'Use o código de um amigo e economize nas taxas de troca.',
+    },
+  },
+  referral_program: 'Programa de Indicações',
+  how_it_works: 'Como funciona',
+  get_started: 'Começar',
+  use_referral_code: 'Usar Código de Indicação',
+  enter_referral_code_placeholder: 'Digite o Código de Indicação',
   selected_chain_missing_in_your_vault:
     'A blockchain selecionada está ausente no seu cofre',
   select_destination_chain: 'Selecionar blockchain de destino',
@@ -644,6 +687,7 @@ export const pt = {
   vote: 'Voto',
   stake: 'Estaca',
   unstake: 'Desfazer stake',
+  unmerge: 'Desfazer merge',
   advanced: 'Avançado',
   low: 'Baixo',
   normal: 'Normal',
@@ -877,6 +921,7 @@ export const pt = {
   find_custom_token: 'Encontre seu token personalizado',
   enter_contract_address: 'Insira o endereço do contrato',
   no_token_found: 'Nenhum token encontrado',
+  no_mergeable_tokens_found: 'Nenhum token mesclável encontrado',
   invalid_token_address: 'Insira um endereço de token válido',
   extension_vault_import_restriction:
     'Somente os cofres DKLS podem ser importados na extensão',
