@@ -28,11 +28,11 @@ export const useBlockaidScanResult = (): UseBlockaidScanResultType => {
   const scanTransaction = useCallback(
     async (payload: KeysignMessagePayload) => {
       if (client !== 'extension' || !blockaidEnabled) {
-        return { scanUnavailable: false }
+        return { scanUnavailable: true }
       }
 
       if (!('keysign' in payload)) {
-        return { scanUnavailable: false }
+        return { scanUnavailable: true }
       }
 
       const keysignPayload = payload.keysign
