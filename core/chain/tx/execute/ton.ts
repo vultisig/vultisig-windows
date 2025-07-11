@@ -1,5 +1,4 @@
 import { rootApiUrl } from '@core/config'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
@@ -10,6 +9,8 @@ import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeTonTx: ExecuteTxResolver = async ({ compiledTx }) => {
   const output = TW.TheOpenNetwork.Proto.SigningOutput.decode(compiledTx)
+
+  const txHash = Buffer.from(output.hash).toString('hex')
 
   assertErrorMessage(output.errorMessage)
 
@@ -25,13 +26,9 @@ export const executeTonTx: ExecuteTxResolver = async ({ compiledTx }) => {
     })
   )
 
-  if ('error' in response && isInError(response.error, 'duplicate message')) {
-    return { txHash: '' }
+  if ('error' in response && !isInError(response.error, 'duplicate message')) {
+    throw response.error
   }
 
-  const { result } = shouldBePresent(response.data)
-
-  return {
-    txHash: Buffer.from(result.hash, 'base64').toString('hex'),
-  }
+  return { txHash }
 }
