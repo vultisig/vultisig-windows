@@ -694,6 +694,7 @@ export const it = {
   vote: 'Votare',
   stake: 'Palo',
   unstake: 'Ritirare',
+  unmerge: 'Separare',
   advanced: 'Avanzato',
   low: 'Basso',
   normal: 'Normale',
@@ -928,6 +929,7 @@ export const it = {
   find_custom_token: 'Trova il tuo token personalizzato',
   enter_contract_address: "Inserisci l'indirizzo del contratto",
   no_token_found: 'Nessun token trovato',
+  no_mergeable_tokens_found: 'Nessun token unificabile trovato',
   invalid_token_address: 'Inserisci un indirizzo token valido',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
