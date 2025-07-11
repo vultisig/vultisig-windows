@@ -25,7 +25,6 @@ const debounceDelayMs = 300
 export const Fees = () => {
   const { t } = useTranslation()
   const { watch } = useFormContext<ReferralFormData>()
-
   const expiration = watch('expiration')
   const debouncedExpiration = useDebounce(expiration, debounceDelayMs)
   const tnsFees = useTnsFeesQuery(debouncedExpiration)
