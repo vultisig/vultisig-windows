@@ -1,13 +1,10 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import __wbg_init, {
+import {
   KeygenSession,
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
-import { deleteRelayMessage } from '../deleteRelayMessage'
-import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
-import { waitForSetupMessage } from '../downloadSetupMessage'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -15,10 +12,14 @@ import {
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
+import { initializeMpcLib } from '../lib/initialize'
+import { deleteRelayMessage } from '../relayMessage/delete'
+import { getRelayMessages } from '../relayMessage/get'
+import { sendRelayMessage } from '../relayMessage/send'
 import { combineReshareCommittee } from '../reshareCommittee'
-import { sendRelayMessage } from '../sendRelayMessage'
+import { waitForSetupMessage } from '../setupMessage/get'
+import { uploadSetupMessage } from '../setupMessage/upload'
 import { sleep } from '../sleep'
-import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class Schnorr {
   private readonly keygenOperation: KeygenOperation
@@ -86,7 +87,7 @@ export class Schnorr {
         message?.receivers.forEach(receiver => {
           // send message to receiver
           sendRelayMessage({
-            serverURL: this.serverURL,
+            serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
             message: messageToSend,
@@ -106,12 +107,11 @@ export class Schnorr {
     const start = Date.now()
     while (true) {
       try {
-        const downloadMsg = await downloadRelayMessage({
-          serverURL: this.serverURL,
+        const parsedMessages = await getRelayMessages({
+          serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
         })
-        const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
         if (parsedMessages.length === 0) {
           // no message to download, backoff for 100ms
           await sleep(100)
@@ -138,7 +138,7 @@ export class Schnorr {
           }
           this.cache[cacheKey] = ''
           await deleteRelayMessage({
-            serverURL: this.serverURL,
+            serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
             messageHash: msg.hash,
@@ -204,7 +204,7 @@ export class Schnorr {
   }
 
   public async startKeygenWithRetry() {
-    await __wbg_init()
+    await initializeMpcLib('eddsa')
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startKeygen(i)
@@ -258,15 +258,14 @@ export class Schnorr {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: undefined,
-          additionalHeaders: 'eddsa',
+          messageId: 'eddsa',
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
-          serverURL: this.serverURL,
+          serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          additionalHeaders: 'eddsa',
+          messageId: 'eddsa',
         })
         setupMessage = await decodeDecryptMessage(
           encodedEncryptedSetupMsg,
@@ -307,7 +306,7 @@ export class Schnorr {
   }
 
   public async startReshareWithRetry(keyshare: string | undefined) {
-    await __wbg_init()
+    await initializeMpcLib('eddsa')
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startReshare(keyshare, i)
