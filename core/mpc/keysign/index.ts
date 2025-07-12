@@ -98,19 +98,16 @@ export const keysign = async ({
     mpcLibKeyshare
   )
 
-  let isKeysignComplete = false
+  const abortController = new AbortController()
+  const { signal } = abortController
 
   const processOutbound = async () => {
     let sequenceNo = 0
-    while (true) {
+    while (!signal.aborted) {
       try {
         const message = session.outputMessage()
         if (message === undefined) {
-          if (isKeysignComplete) {
-            return
-          } else {
-            await sleep(100)
-          }
+          await sleep(100)
           continue
         }
         const messageToSend = await encodeEncryptMessage(
@@ -139,7 +136,7 @@ export const keysign = async ({
   const processInbound = async () => {
     const cache: Record<string, string> = {}
     const start = Date.now()
-    while (true) {
+    while (!signal.aborted) {
       try {
         const parsedMessages = await getRelayMessages({
           serverUrl,
@@ -158,7 +155,7 @@ export const keysign = async ({
           )
           const isFinish = session.inputMessage(decryptedMessage)
           if (isFinish) {
-            isKeysignComplete = true
+            abortController.abort()
             return true
           }
           cache[cacheKey] = ''
@@ -172,13 +169,14 @@ export const keysign = async ({
         }
         const end = Date.now()
         if (end - start > 1000 * 60) {
-          isKeysignComplete = true
+          abortController.abort()
           return false
         }
       } catch (error) {
         console.error('processInbound error:', error)
       }
     }
+    return false
   }
 
   const [inboundResult] = await Promise.all([
