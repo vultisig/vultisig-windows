@@ -4,7 +4,7 @@ import { base64Encode } from '@lib/utils/base64Encode'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 
 import { encodeDERSignature } from '../../derSignature'
-import { waitForSetupMessage } from '../../downloadSetupMessage'
+import { waitForSetupMessage } from '../../setupMessage/get'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -18,7 +18,7 @@ import { deleteRelayMessage } from '../../relayMessage/delete'
 import { getRelayMessages } from '../../relayMessage/get'
 import { sendRelayMessage } from '../../relayMessage/send'
 import { sleep } from '../../sleep'
-import { uploadSetupMessage } from '../../uploadSetupMessage'
+import { uploadSetupMessage } from '../../setupMessage/upload'
 import { KeysignSignature } from '../KeysignSignature'
 
 type ExecuteKeysignInput = {
