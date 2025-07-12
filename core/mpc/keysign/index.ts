@@ -99,10 +99,9 @@ export const keysign = async ({
   )
 
   let isKeysignComplete = false
-  let sequenceNo = 0
-  const cache: Record<string, string> = {}
 
   const processOutbound = async () => {
+    let sequenceNo = 0
     while (true) {
       try {
         const message = session.outputMessage()
@@ -138,6 +137,7 @@ export const keysign = async ({
   }
 
   const processInbound = async () => {
+    const cache: Record<string, string> = {}
     const start = Date.now()
     while (true) {
       try {
