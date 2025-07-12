@@ -259,15 +259,14 @@ export class Schnorr {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: undefined,
-          additionalHeaders: 'eddsa',
+          messageId: 'eddsa',
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
-          serverURL: this.serverURL,
+          serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          additionalHeaders: 'eddsa',
+          messageId: 'eddsa',
         })
         setupMessage = await decodeDecryptMessage(
           encodedEncryptedSetupMsg,
