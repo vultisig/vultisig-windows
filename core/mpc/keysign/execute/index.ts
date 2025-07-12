@@ -1,6 +1,7 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
+import { retry } from '@lib/utils/query/retry'
 
 import { DKLSKeysign } from '../../dkls/dklsKeysign'
 import { initializeMpcLib } from '../../lib/initializeMpcLib'
@@ -62,6 +63,12 @@ export const executeKeysign = async ({
   )
 
   return chainPromises(
-    messages.map(message => () => instance.keysignWithRetry(message))
+    messages.map(
+      message => () =>
+        retry({
+          func: () => instance.KeysignOneMessage(message),
+          attempts: 3,
+        })
+    )
   )
 }

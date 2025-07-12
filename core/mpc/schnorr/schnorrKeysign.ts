@@ -137,13 +137,7 @@ export class SchnorrKeysign {
       }
     }
   }
-  private async KeysignOneMessage(messageToSign: string, attempt: number) {
-    console.log(
-      'KeysignOneMessage attempt:',
-      attempt,
-      'message:',
-      messageToSign
-    )
+  public async KeysignOneMessage(messageToSign: string) {
     this.isKeysignComplete = false
     const messageHash = getMessageHash(messageToSign)
     console.log(
@@ -215,18 +209,6 @@ export class SchnorrKeysign {
         jsonSignature: JSON.stringify(keysignSig),
       })
       return keysignSig
-    }
-  }
-  public async keysignWithRetry(messageToSign: string) {
-    for (let i = 0; i < 3; i++) {
-      try {
-        const result = await this.KeysignOneMessage(messageToSign, i)
-        if (result !== undefined) {
-          return result
-        }
-      } catch (error) {
-        console.error('Schnorr keysign error:', error)
-      }
     }
     throw new Error('failed to sign message')
   }
