@@ -174,13 +174,11 @@ export class DKLS {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: undefined,
-          additionalHeaders: undefined,
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
-          serverURL: this.serverURL,
+          serverUrl: this.serverURL,
           sessionId: this.sessionId,
         })
         this.setupMessage = await decodeDecryptMessage(
@@ -286,13 +284,11 @@ export class DKLS {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: undefined,
-          additionalHeaders: undefined,
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
-          serverURL: this.serverURL,
+          serverUrl: this.serverURL,
           sessionId: this.sessionId,
         })
         setupMessage = await decodeDecryptMessage(

@@ -1,7 +1,6 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
-import { retry } from '@lib/utils/query/retry'
 
 import { DKLSKeysign } from '../../dkls/dklsKeysign'
 import { waitForSetupMessage } from '../../downloadSetupMessage'
@@ -72,51 +71,43 @@ export const executeKeysign = async ({
   )
 
   return chainPromises(
-    messages.map(
-      message => () =>
-        retry({
-          func: async () => {
-            const getSetupMessage = async () => {
-              const messageHash = getMessageHash(message)
-              if (isInitiatingDevice) {
-                const setupMessage = SignSession[signatureAlgorithm].setup(
-                  Keyshare[signatureAlgorithm]
-                    .fromBytes(Buffer.from(keyShare, 'base64'))
-                    .keyId(),
-                  chainPath,
-                  Buffer.from(message, 'hex'),
-                  [...peers, localPartyId]
-                )
-                const encryptedSetupMessage = await encodeEncryptMessage(
-                  setupMessage,
-                  hexEncryptionKey
-                )
-                await uploadSetupMessage({
-                  serverUrl,
-                  sessionId,
-                  message: encryptedSetupMessage,
-                  messageId: messageHash,
-                })
+    messages.map(message => async () => {
+      const getSetupMessage = async () => {
+        const messageHash = getMessageHash(message)
+        if (isInitiatingDevice) {
+          const setupMessage = SignSession[signatureAlgorithm].setup(
+            Keyshare[signatureAlgorithm]
+              .fromBytes(Buffer.from(keyShare, 'base64'))
+              .keyId(),
+            chainPath,
+            Buffer.from(message, 'hex'),
+            [...peers, localPartyId]
+          )
+          const encryptedSetupMessage = await encodeEncryptMessage(
+            setupMessage,
+            hexEncryptionKey
+          )
+          await uploadSetupMessage({
+            serverUrl,
+            sessionId,
+            message: encryptedSetupMessage,
+            messageId: messageHash,
+          })
 
-                return setupMessage
-              }
-              const encodedEncryptedSetupMsg = await waitForSetupMessage({
-                serverURL: serverUrl,
-                sessionId,
-                messageId: messageHash,
-              })
-              return decodeDecryptMessage(
-                encodedEncryptedSetupMsg,
-                hexEncryptionKey
-              )
-            }
+          return setupMessage
+        }
 
-            const setupMessage = await getSetupMessage()
-
-            return instance.KeysignOneMessage(message, setupMessage)
-          },
-          attempts: 3,
+        const encodedEncryptedSetupMsg = await waitForSetupMessage({
+          serverUrl,
+          sessionId,
+          messageId: messageHash,
         })
-    )
+        return decodeDecryptMessage(encodedEncryptedSetupMsg, hexEncryptionKey)
+      }
+
+      const setupMessage = await getSetupMessage()
+
+      return instance.KeysignOneMessage(message, setupMessage)
+    })
   )
 }
