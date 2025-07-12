@@ -1,11 +1,11 @@
 type KeysignCompleteInput = {
-  serverURL: string
+  serverUrl: string
   sessionId: string
   messageId: string
   jsonSignature: string
 }
 export const markLocalPartyKeysignComplete = async ({
-  serverURL,
+  serverUrl,
   sessionId,
   messageId,
   jsonSignature,
@@ -15,7 +15,7 @@ export const markLocalPartyKeysignComplete = async ({
   }
   headers['message_id'] = messageId
   try {
-    const resp = await fetch(`${serverURL}/complete/${sessionId}/keysign`, {
+    const resp = await fetch(`${serverUrl}/complete/${sessionId}/keysign`, {
       method: 'POST',
       headers,
       body: jsonSignature,
