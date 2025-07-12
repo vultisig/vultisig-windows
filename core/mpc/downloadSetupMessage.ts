@@ -1,5 +1,6 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { retry } from '@lib/utils/query/retry'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 type DownloadSetupMessageInput = {
   serverUrl: string
@@ -11,21 +12,14 @@ const downloadSetupMessage = async ({
   serverUrl,
   sessionId,
   messageId,
-}: DownloadSetupMessageInput): Promise<string> => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  }
-  if (messageId) {
-    headers['message_id'] = messageId
-  }
-  const response = await fetch(`${serverUrl}/setup-message/${sessionId}`, {
-    headers,
+}: DownloadSetupMessageInput) =>
+  queryUrl<string>(`${serverUrl}/setup-message/${sessionId}`, {
+    headers: withoutUndefinedFields({
+      'Content-Type': 'application/json',
+      message_id: messageId,
+    }),
+    responseType: 'text',
   })
-
-  await assertFetchResponse(response)
-
-  return response.text()
-}
 
 export const waitForSetupMessage = async (
   input: DownloadSetupMessageInput
