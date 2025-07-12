@@ -1,5 +1,6 @@
 import { executeKeysign } from '@core/mpc/keysign/execute'
 import { ChildrenProp } from '@lib/ui/props'
+import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
@@ -14,13 +15,15 @@ import {
   KeysignActionProvider as BaseKeysignActionProvider,
 } from './state/keysignAction'
 
+const eddsaPlaceholderChainPath = 'm'
+
 export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
   const sessionId = useMpcSessionId()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const serverUrl = useMpcServerUrl()
-  const isInitiateDevice = useIsInitiatingDevice()
+  const isInitiatingDevice = useIsInitiatingDevice()
   const peers = useMpcPeers()
 
   const keysignAction: KeysignAction = useCallback(
@@ -31,18 +34,22 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
         keyShare,
         signatureAlgorithm,
         messages: msgs,
-        chainPath: walletCore.CoinTypeExt.derivationPath(coinType),
+        chainPath: match(signatureAlgorithm, {
+          ecdsa: () =>
+            walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
+          eddsa: () => eddsaPlaceholderChainPath,
+        }),
         localPartyId: vault.localPartyId,
         peers,
         serverUrl,
         sessionId,
         hexEncryptionKey: encryptionKeyHex,
-        isInitiateDevice,
+        isInitiatingDevice,
       })
     },
     [
       encryptionKeyHex,
-      isInitiateDevice,
+      isInitiatingDevice,
       peers,
       serverUrl,
       sessionId,

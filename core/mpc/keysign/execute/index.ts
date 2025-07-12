@@ -4,8 +4,17 @@ import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { retry } from '@lib/utils/query/retry'
 
 import { DKLSKeysign } from '../../dkls/dklsKeysign'
-import { initializeMpcLib } from '../../lib/initializeMpcLib'
+import { waitForSetupMessage } from '../../downloadSetupMessage'
+import {
+  decodeDecryptMessage,
+  encodeEncryptMessage,
+} from '../../encodingAndEncryption'
+import { getMessageHash } from '../../getMessageHash'
+import { initializeMpcLib } from '../../lib/initialize'
+import { Keyshare } from '../../lib/keyshare'
+import { SignSession } from '../../lib/signSession'
 import { SchnorrKeysign } from '../../schnorr/schnorrKeysign'
+import { uploadSetupMessage } from '../../uploadSetupMessage'
 
 type ExecuteKeysignInput = {
   keyShare: string
@@ -17,7 +26,7 @@ type ExecuteKeysignInput = {
   serverUrl: string
   sessionId: string
   hexEncryptionKey: string
-  isInitiateDevice: boolean
+  isInitiatingDevice: boolean
 }
 
 export const executeKeysign = async ({
@@ -30,7 +39,7 @@ export const executeKeysign = async ({
   serverUrl,
   sessionId,
   hexEncryptionKey,
-  isInitiateDevice,
+  isInitiatingDevice,
 }: ExecuteKeysignInput) => {
   await initializeMpcLib(signatureAlgorithm)
 
@@ -45,7 +54,7 @@ export const executeKeysign = async ({
           hexEncryptionKey,
           chainPath,
           [...peers, localPartyId],
-          isInitiateDevice,
+          isInitiatingDevice,
           keyShare
         ),
       eddsa: () =>
@@ -56,7 +65,7 @@ export const executeKeysign = async ({
           hexEncryptionKey,
           'm', // chainPath is only used for ECDSA right now , pass 'm' as a dummy value
           [...peers, localPartyId],
-          isInitiateDevice,
+          isInitiatingDevice,
           keyShare
         ),
     }
@@ -66,7 +75,46 @@ export const executeKeysign = async ({
     messages.map(
       message => () =>
         retry({
-          func: () => instance.KeysignOneMessage(message),
+          func: async () => {
+            const getSetupMessage = async () => {
+              const messageHash = getMessageHash(message)
+              if (isInitiatingDevice) {
+                const setupMessage = SignSession[signatureAlgorithm].setup(
+                  Keyshare[signatureAlgorithm]
+                    .fromBytes(Buffer.from(keyShare, 'base64'))
+                    .keyId(),
+                  chainPath,
+                  Buffer.from(message, 'hex'),
+                  [...peers, localPartyId]
+                )
+                const encryptedSetupMessage = await encodeEncryptMessage(
+                  setupMessage,
+                  hexEncryptionKey
+                )
+                await uploadSetupMessage({
+                  serverUrl,
+                  sessionId,
+                  message: encryptedSetupMessage,
+                  messageId: messageHash,
+                })
+
+                return setupMessage
+              }
+              const encodedEncryptedSetupMsg = await waitForSetupMessage({
+                serverURL: serverUrl,
+                sessionId,
+                messageId: messageHash,
+              })
+              return decodeDecryptMessage(
+                encodedEncryptedSetupMsg,
+                hexEncryptionKey
+              )
+            }
+
+            const setupMessage = await getSetupMessage()
+
+            return instance.KeysignOneMessage(message, setupMessage)
+          },
           attempts: 3,
         })
     )
