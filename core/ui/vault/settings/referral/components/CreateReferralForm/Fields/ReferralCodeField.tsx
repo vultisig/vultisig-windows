@@ -7,7 +7,8 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -20,10 +21,13 @@ import {
 import { ReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {
+  const [localInput, setLocalInput] = useState('')
+
   const { t } = useTranslation()
   const {
-    control,
     formState: { errors },
+    setValue,
+    clearErrors,
     getValues,
   } = useFormContext<ReferralFormData>()
   const name = getValues('referralName')
@@ -32,7 +36,11 @@ export const ReferralCodeField = () => {
     mutate: checkAvailability,
     error,
     status,
+    reset,
   } = useThorNameAvailabilityMutation()
+
+  const inputError =
+    localInput && localInput.length > 4 ? t('max_4_characters') : ''
 
   return (
     <VStack gap={14}>
@@ -41,21 +49,32 @@ export const ReferralCodeField = () => {
           {t('pick_referral_code')}
         </FormFieldLabel>
         <HStack gap={8}>
-          <Controller
-            name="referralName"
-            control={control}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                id="referral-name"
-                placeholder={t('enter_up_to_4_characters_placeholder')}
-              />
-            )}
+          <TextInput
+            id="referral-name"
+            value={localInput}
+            placeholder={t('enter_up_to_4_characters_placeholder')}
+            onValueChange={value => {
+              setLocalInput(value)
+              reset()
+              setValue('referralName', '', {
+                shouldValidate: true,
+              })
+            }}
           />
           <Button
             onClick={() => {
-              if (name) {
-                checkAvailability(name)
+              if (localInput) {
+                checkAvailability(name, {
+                  onSuccess: () => {
+                    setValue('referralName', localInput, {
+                      shouldValidate: true,
+                    })
+                    clearErrors('referralName')
+                  },
+                  onError: () => {
+                    setValue('referralName', '')
+                  },
+                })
               }
             }}
             style={{ maxWidth: 97, fontSize: 14 }}
@@ -63,8 +82,10 @@ export const ReferralCodeField = () => {
             {t('search')}
           </Button>
         </HStack>
-        {errors.referralName && (
-          <FormFieldErrorText>{errors.referralName.message}</FormFieldErrorText>
+        {(errors.referralName || inputError) && (
+          <FormFieldErrorText>
+            {errors?.referralName?.message || inputError}
+          </FormFieldErrorText>
         )}
       </FormField>
       <StatusWrapper justifyContent="space-between" alignItems="center">
