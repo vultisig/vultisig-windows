@@ -1,6 +1,6 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import __wbg_init, {
+import {
   KeygenSession,
   Keyshare,
   QcSession,
@@ -15,6 +15,7 @@ import {
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
+import { initializeMpcLib } from '../lib/initializeMpcLib'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
@@ -204,7 +205,7 @@ export class Schnorr {
   }
 
   public async startKeygenWithRetry() {
-    await __wbg_init()
+    await initializeMpcLib('eddsa')
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startKeygen(i)
@@ -307,7 +308,7 @@ export class Schnorr {
   }
 
   public async startReshareWithRetry(keyshare: string | undefined) {
-    await __wbg_init()
+    await initializeMpcLib('eddsa')
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startReshare(keyshare, i)
