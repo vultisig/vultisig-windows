@@ -51,9 +51,6 @@ export const executeKeysign = async ({
           localPartyId,
           sessionId,
           hexEncryptionKey,
-          chainPath,
-          [...peers, localPartyId],
-          isInitiatingDevice,
           keyShare
         ),
       eddsa: () =>
@@ -62,9 +59,6 @@ export const executeKeysign = async ({
           localPartyId,
           sessionId,
           hexEncryptionKey,
-          'm', // chainPath is only used for ECDSA right now , pass 'm' as a dummy value
-          [...peers, localPartyId],
-          isInitiatingDevice,
           keyShare
         ),
     }
