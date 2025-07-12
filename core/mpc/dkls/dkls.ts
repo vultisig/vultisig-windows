@@ -13,7 +13,7 @@ import { initializeMpcLib } from '../lib/initialize'
 import { deleteRelayMessage } from '../relayMessage/delete'
 import { getRelayMessages } from '../relayMessage/get'
 import { combineReshareCommittee } from '../reshareCommittee'
-import { sendRelayMessage } from '../sendRelayMessage'
+import { sendRelayMessage } from '../relayMessage/send'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
