@@ -1,9 +1,6 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import __wbg_init, {
-  Keyshare,
-  SignSession,
-} from '../../../lib/schnorr/vs_schnorr_wasm'
+import { Keyshare, SignSession } from '../../../lib/schnorr/vs_schnorr_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
 import { encodeDERSignature } from '../derSignature'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
@@ -15,6 +12,7 @@ import {
 import { getMessageHash } from '../getMessageHash'
 import { KeysignSignature } from '../keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '../keysignComplete'
+import { initializeMpcLib } from '../lib/initializeMpcLib'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
@@ -236,7 +234,7 @@ export class SchnorrKeysign {
     }
   }
   public async startKeysign(messsagesToSign: string[]) {
-    await __wbg_init()
+    await initializeMpcLib('eddsa')
     let results: KeysignSignature[] = []
     for (const message of messsagesToSign) {
       const signResult = await this.keysignWithRetry(message)
