@@ -25,14 +25,12 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType }) => {
-      const keysignPublicKey = vault.publicKeys[signatureAlgorithm]
       const keyShare = vault.keyShares[signatureAlgorithm]
 
       return executeKeysign({
         keyShare,
         signatureAlgorithm,
         messages: msgs,
-        publicKey: keysignPublicKey,
         chainPath: walletCore.CoinTypeExt.derivationPath(coinType),
         localPartyId: vault.localPartyId,
         peers,
@@ -50,7 +48,6 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
       sessionId,
       vault.keyShares,
       vault.localPartyId,
-      vault.publicKeys,
       walletCore.CoinTypeExt,
     ]
   )

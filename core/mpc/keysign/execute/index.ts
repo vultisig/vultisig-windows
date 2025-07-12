@@ -1,14 +1,15 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
+import { chainPromises } from '@lib/utils/promise/chainPromises'
 
 import { DKLSKeysign } from '../../dkls/dklsKeysign'
+import { initializeMpcLib } from '../../lib/initializeMpcLib'
 import { SchnorrKeysign } from '../../schnorr/schnorrKeysign'
 
 type ExecuteKeysignInput = {
   keyShare: string
   signatureAlgorithm: SignatureAlgorithm
   messages: string[]
-  publicKey: string
   chainPath: string
   localPartyId: string
   peers: string[]
@@ -22,7 +23,6 @@ export const executeKeysign = async ({
   keyShare,
   signatureAlgorithm,
   messages,
-  publicKey,
   chainPath,
   localPartyId,
   peers,
@@ -31,34 +31,37 @@ export const executeKeysign = async ({
   hexEncryptionKey,
   isInitiateDevice,
 }: ExecuteKeysignInput) => {
-  return match(signatureAlgorithm, {
-    ecdsa: () => {
-      const dklsKeysign = new DKLSKeysign(
-        serverUrl,
-        localPartyId,
-        sessionId,
-        hexEncryptionKey,
-        publicKey,
-        chainPath,
-        [...peers, localPartyId],
-        isInitiateDevice,
-        keyShare
-      )
-      return dklsKeysign.startKeysign(messages)
-    },
-    eddsa: () => {
-      const schnorrKeysign = new SchnorrKeysign(
-        serverUrl,
-        localPartyId,
-        sessionId,
-        hexEncryptionKey,
-        publicKey,
-        'm', // chainPath is only used for ECDSA right now , pass 'm' as a dummy value
-        [...peers, localPartyId],
-        isInitiateDevice,
-        keyShare
-      )
-      return schnorrKeysign.startKeysign(messages)
-    },
-  })
+  await initializeMpcLib(signatureAlgorithm)
+
+  const instance = match<SignatureAlgorithm, DKLSKeysign | SchnorrKeysign>(
+    signatureAlgorithm,
+    {
+      ecdsa: () =>
+        new DKLSKeysign(
+          serverUrl,
+          localPartyId,
+          sessionId,
+          hexEncryptionKey,
+          chainPath,
+          [...peers, localPartyId],
+          isInitiateDevice,
+          keyShare
+        ),
+      eddsa: () =>
+        new SchnorrKeysign(
+          serverUrl,
+          localPartyId,
+          sessionId,
+          hexEncryptionKey,
+          'm', // chainPath is only used for ECDSA right now , pass 'm' as a dummy value
+          [...peers, localPartyId],
+          isInitiateDevice,
+          keyShare
+        ),
+    }
+  )
+
+  return chainPromises(
+    messages.map(message => () => instance.keysignWithRetry(message))
+  )
 }

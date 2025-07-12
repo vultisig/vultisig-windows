@@ -12,7 +12,6 @@ import {
 import { getMessageHash } from '../getMessageHash'
 import { KeysignSignature } from '../keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '../keysignComplete'
-import { initializeMpcLib } from '../lib/initializeMpcLib'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
@@ -22,7 +21,6 @@ export class SchnorrKeysign {
   private readonly localPartyId: string
   private readonly sessionId: string
   private readonly hexEncryptionKey: string
-  private readonly publicKeyEdDSA: string
   private readonly chainPath: string
   private readonly keysignCommittee: string[]
   private readonly isInitiateDevice: boolean
@@ -35,7 +33,6 @@ export class SchnorrKeysign {
     localPartyId: string,
     sessionId: string,
     hexEncryptionKey: string,
-    publicKeyEdDSA: string,
     chainPath: string,
     keysignCommittee: string[],
     isInitiateDevice: boolean,
@@ -45,7 +42,6 @@ export class SchnorrKeysign {
     this.localPartyId = localPartyId
     this.sessionId = sessionId
     this.hexEncryptionKey = hexEncryptionKey
-    this.publicKeyEdDSA = publicKeyEdDSA
     this.chainPath = chainPath.replaceAll("'", '')
     this.keysignCommittee = keysignCommittee
     this.isInitiateDevice = isInitiateDevice
@@ -221,7 +217,7 @@ export class SchnorrKeysign {
       return keysignSig
     }
   }
-  private async keysignWithRetry(messageToSign: string) {
+  public async keysignWithRetry(messageToSign: string) {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.KeysignOneMessage(messageToSign, i)
@@ -232,17 +228,6 @@ export class SchnorrKeysign {
         console.error('Schnorr keysign error:', error)
       }
     }
-  }
-  public async startKeysign(messsagesToSign: string[]) {
-    await initializeMpcLib('eddsa')
-    let results: KeysignSignature[] = []
-    for (const message of messsagesToSign) {
-      const signResult = await this.keysignWithRetry(message)
-      if (signResult === undefined) {
-        throw new Error('failed to sign message')
-      }
-      results = [...results, signResult]
-    }
-    return results
+    throw new Error('failed to sign message')
   }
 }
