@@ -19,9 +19,6 @@ export class SchnorrKeysign {
   private readonly localPartyId: string
   private readonly sessionId: string
   private readonly hexEncryptionKey: string
-  private readonly chainPath: string
-  private readonly keysignCommittee: string[]
-  private readonly isInitiateDevice: boolean
   private isKeysignComplete: boolean = false
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
@@ -31,18 +28,12 @@ export class SchnorrKeysign {
     localPartyId: string,
     sessionId: string,
     hexEncryptionKey: string,
-    chainPath: string,
-    keysignCommittee: string[],
-    isInitiateDevice: boolean,
     keyshare: string
   ) {
     this.serverURL = serverURL
     this.localPartyId = localPartyId
     this.sessionId = sessionId
     this.hexEncryptionKey = hexEncryptionKey
-    this.chainPath = chainPath
-    this.keysignCommittee = keysignCommittee
-    this.isInitiateDevice = isInitiateDevice
     this.keyshare = keyshare
   }
 
