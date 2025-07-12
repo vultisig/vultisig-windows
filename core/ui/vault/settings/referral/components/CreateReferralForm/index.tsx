@@ -9,7 +9,6 @@ import { DecorationLine } from '../Referrals.styled'
 import { ReferralFormData, referralSchema } from './config'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
-import { PayoutAssetField } from './Fields/PayoutAssetField'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 
 export const CreateReferralForm = () => {
@@ -20,7 +19,12 @@ export const CreateReferralForm = () => {
     mode: 'onBlur',
   })
 
-  const onSubmit = methods.handleSubmit(data => console.log(data))
+  const {
+    handleSubmit,
+    formState: { isValid, isSubmitting },
+  } = methods
+
+  const onSubmit = handleSubmit(data => console.log(data))
 
   return (
     <FormProvider {...methods}>
@@ -38,10 +42,11 @@ export const CreateReferralForm = () => {
         >
           <ReferralCodeField />
           <ExpirationField />
-          <PayoutAssetField />
           <Fees />
         </StackSeparatedBy>
-        <Button type="submit">{t('create_referral_form')}</Button>
+        <Button disabled={!isValid || isSubmitting} type="submit">
+          {t('create_referral_form')}
+        </Button>
       </VStack>
     </FormProvider>
   )

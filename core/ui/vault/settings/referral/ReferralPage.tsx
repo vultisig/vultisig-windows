@@ -7,10 +7,15 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import {
+  useHasFinishedReferralsOnboardingQuery,
+  useSetHasFinishedReferralsOnboardingMutation,
+} from '../../../storage/referrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
 
@@ -20,6 +25,20 @@ export const ReferralPage = () => {
   const { t } = useTranslation()
   const { step, toNextStep } = useStepNavigation({ steps })
   const navigate = useCoreNavigate()
+  const { mutateAsync: setHasFinishedOnboarding } =
+    useSetHasFinishedReferralsOnboardingMutation()
+  const { data: isOnboarded, isLoading } =
+    useHasFinishedReferralsOnboardingQuery()
+
+  useEffect(() => {
+    if (isOnboarded) {
+      navigate({
+        id: 'manageReferral',
+      })
+    }
+  }, [isOnboarded, navigate])
+
+  if (isLoading) return null
 
   return (
     <>
@@ -52,11 +71,12 @@ export const ReferralPage = () => {
           landing={() => <ReferralLanding onFinish={toNextStep} />}
           summary={() => (
             <ReferralsSummary
-              onFinish={() =>
+              onFinish={() => {
+                setHasFinishedOnboarding(true)
                 navigate({
                   id: 'manageReferral',
                 })
-              }
+              }}
             />
           )}
         />
