@@ -137,14 +137,8 @@ export class DKLSKeysign {
       }
     }
   }
-  private async KeysignOneMessage(messageToSign: string, attempt: number) {
+  public async KeysignOneMessage(messageToSign: string) {
     this.isKeysignComplete = false
-    console.log(
-      'KeysignOneMessage attempt:',
-      attempt,
-      'message:',
-      messageToSign
-    )
     const messageHash = getMessageHash(messageToSign)
     console.log(
       'KeysignOneMessage:',
@@ -217,18 +211,7 @@ export class DKLSKeysign {
       })
       return keysignSig
     }
-  }
-  public async keysignWithRetry(messageToSign: string) {
-    for (let i = 0; i < 3; i++) {
-      try {
-        const result = await this.KeysignOneMessage(messageToSign, i)
-        if (result !== undefined) {
-          return result
-        }
-      } catch (error) {
-        console.error('dkls keysign error:', error)
-      }
-    }
+
     throw new Error('failed to sign message')
   }
 }
