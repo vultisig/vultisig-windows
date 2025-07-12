@@ -1,7 +1,7 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
 import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
-import { waitForSetupMessage } from '../downloadSetupMessage'
+import { waitForSetupMessage } from '../setupMessage/get'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -15,7 +15,7 @@ import { getRelayMessages } from '../relayMessage/get'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../relayMessage/send'
 import { sleep } from '../sleep'
-import { uploadSetupMessage } from '../uploadSetupMessage'
+import { uploadSetupMessage } from '../setupMessage/upload'
 
 export class DKLS {
   private readonly keygenOperation: KeygenOperation

@@ -2,17 +2,17 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { retry } from '@lib/utils/query/retry'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-type DownloadSetupMessageInput = {
+type GetSetupMessageInput = {
   serverUrl: string
   sessionId: string
   messageId?: string
 }
 
-const downloadSetupMessage = async ({
+const getSetupMessage = async ({
   serverUrl,
   sessionId,
   messageId,
-}: DownloadSetupMessageInput) =>
+}: GetSetupMessageInput) =>
   queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
     headers: withoutUndefinedFields({
       'Content-Type': 'application/json',
@@ -22,10 +22,10 @@ const downloadSetupMessage = async ({
   })
 
 export const waitForSetupMessage = async (
-  input: DownloadSetupMessageInput
+  input: GetSetupMessageInput
 ): Promise<string> =>
   retry({
-    func: () => downloadSetupMessage(input),
+    func: () => getSetupMessage(input),
     attempts: 10,
     delay: 1000,
   })

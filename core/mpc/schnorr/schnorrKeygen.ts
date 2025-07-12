@@ -5,7 +5,7 @@ import {
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
-import { waitForSetupMessage } from '../downloadSetupMessage'
+import { waitForSetupMessage } from '../setupMessage/get'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -19,7 +19,7 @@ import { getRelayMessages } from '../relayMessage/get'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../relayMessage/send'
 import { sleep } from '../sleep'
-import { uploadSetupMessage } from '../uploadSetupMessage'
+import { uploadSetupMessage } from '../setupMessage/upload'
 
 export class Schnorr {
   private readonly keygenOperation: KeygenOperation
