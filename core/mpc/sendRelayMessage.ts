@@ -1,7 +1,7 @@
 import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
 type SendMessageInput = {
-  serverURL: string
+  serverUrl: string
   localPartyId: string
   sessionId: string
   message: string
@@ -11,7 +11,7 @@ type SendMessageInput = {
   messageId?: string
 }
 export const sendRelayMessage = async ({
-  serverURL,
+  serverUrl,
   localPartyId,
   sessionId,
   message,
@@ -27,7 +27,7 @@ export const sendRelayMessage = async ({
     headers['message_id'] = messageId
   }
 
-  const response = await fetch(`${serverURL}/message/${sessionId}`, {
+  const response = await fetch(`${serverUrl}/message/${sessionId}`, {
     method: 'POST',
     headers,
     body: JSON.stringify({

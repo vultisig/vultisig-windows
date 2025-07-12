@@ -87,7 +87,7 @@ export class Schnorr {
         message?.receivers.forEach(receiver => {
           // send message to receiver
           sendRelayMessage({
-            serverURL: this.serverURL,
+            serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
             message: messageToSend,
@@ -108,7 +108,7 @@ export class Schnorr {
     while (true) {
       try {
         const downloadMsg = await downloadRelayMessage({
-          serverURL: this.serverURL,
+          serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
         })
@@ -139,7 +139,7 @@ export class Schnorr {
           }
           this.cache[cacheKey] = ''
           await deleteRelayMessage({
-            serverURL: this.serverURL,
+            serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
             messageHash: msg.hash,

@@ -8,13 +8,13 @@ export type RelayMessage = {
 }
 
 type DownloadRelayMessageInput = {
-  serverURL: string
+  serverUrl: string
   localPartyId: string
   sessionId: string
   messageId?: string
 }
 export const downloadRelayMessage = async ({
-  serverURL,
+  serverUrl,
   localPartyId,
   sessionId,
   messageId,
@@ -27,7 +27,7 @@ export const downloadRelayMessage = async ({
   }
 
   const response = await fetch(
-    `${serverURL}/message/${sessionId}/${localPartyId}`,
+    `${serverUrl}/message/${sessionId}/${localPartyId}`,
     {
       method: 'GET',
       headers,

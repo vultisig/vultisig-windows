@@ -1,12 +1,12 @@
 type DeleteRelayMessageInput = {
-  serverURL: string
+  serverUrl: string
   localPartyId: string
   sessionId: string
   messageHash: string
   messageId?: string
 }
 export const deleteRelayMessage = async ({
-  serverURL,
+  serverUrl,
   localPartyId,
   sessionId,
   messageHash,
@@ -20,7 +20,7 @@ export const deleteRelayMessage = async ({
   }
 
   await fetch(
-    `${serverURL}/message/${sessionId}/${localPartyId}/${messageHash}`,
+    `${serverUrl}/message/${sessionId}/${localPartyId}/${messageHash}`,
     {
       method: 'DELETE',
       headers,
