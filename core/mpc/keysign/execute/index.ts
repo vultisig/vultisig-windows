@@ -1,10 +1,11 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
+import { base64Encode } from '@lib/utils/base64Encode'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 
+import { deleteRelayMessage } from '../../deleteRelayMessage'
 import { encodeDERSignature } from '../../derSignature'
-import { DKLSKeysign } from '../../dkls/dklsKeysign'
+import { downloadRelayMessage, RelayMessage } from '../../downloadRelayMessage'
 import { waitForSetupMessage } from '../../downloadSetupMessage'
 import {
   decodeDecryptMessage,
@@ -15,7 +16,8 @@ import { markLocalPartyKeysignComplete } from '../../keysignComplete'
 import { initializeMpcLib } from '../../lib/initialize'
 import { Keyshare } from '../../lib/keyshare'
 import { SignSession } from '../../lib/signSession'
-import { SchnorrKeysign } from '../../schnorr/schnorrKeysign'
+import { sendRelayMessage } from '../../sendRelayMessage'
+import { sleep } from '../../sleep'
 import { uploadSetupMessage } from '../../uploadSetupMessage'
 import { KeysignSignature } from '../KeysignSignature'
 
@@ -45,21 +47,6 @@ export const executeKeysign = async ({
   isInitiatingDevice,
 }: ExecuteKeysignInput) => {
   await initializeMpcLib(signatureAlgorithm)
-
-  const instance = match<SignatureAlgorithm, DKLSKeysign | SchnorrKeysign>(
-    signatureAlgorithm,
-    {
-      ecdsa: () =>
-        new DKLSKeysign(serverUrl, localPartyId, sessionId, hexEncryptionKey),
-      eddsa: () =>
-        new SchnorrKeysign(
-          serverUrl,
-          localPartyId,
-          sessionId,
-          hexEncryptionKey
-        ),
-    }
-  )
 
   return chainPromises(
     messages.map(message => async () => {
@@ -115,9 +102,104 @@ export const executeKeysign = async ({
         localPartyId,
         mpcLibKeyshare
       )
-      const outbound = instance.processOutbound(session, messageHash)
-      const inbound = instance.processInbound(session, messageHash)
-      const [, inboundResult] = await Promise.all([outbound, inbound])
+
+      let isKeysignComplete = false
+      let sequenceNo = 0
+      const cache: Record<string, string> = {}
+
+      const processOutbound = async () => {
+        while (true) {
+          try {
+            const message = session.outputMessage()
+            if (message === undefined) {
+              if (isKeysignComplete) {
+                console.log('stop processOutbound')
+                return
+              } else {
+                await sleep(100) // backoff for 100ms
+              }
+              continue
+            }
+            console.log('outbound message:', message)
+            const messageToSend = await encodeEncryptMessage(
+              message.body,
+              hexEncryptionKey
+            )
+            message?.receivers.forEach(receiver => {
+              // send message to receiver
+              sendRelayMessage({
+                serverUrl,
+                localPartyId,
+                sessionId,
+                message: messageToSend,
+                to: receiver,
+                sequenceNo,
+                messageHash: getMessageHash(base64Encode(message.body)),
+                messageId: messageHash,
+              })
+              sequenceNo++
+            })
+          } catch (error) {
+            console.error('processOutbound error:', error)
+          }
+        }
+      }
+
+      const processInbound = async () => {
+        const start = Date.now()
+        while (true) {
+          try {
+            const downloadMsg = await downloadRelayMessage({
+              serverUrl,
+              localPartyId,
+              sessionId,
+              messageId: messageHash,
+            })
+            const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
+            for (const msg of parsedMessages) {
+              const cacheKey = `${msg.session_id}-${msg.from}-${messageHash}-${msg.hash}`
+              if (cache[cacheKey]) {
+                continue
+              }
+              console.log(
+                `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
+              )
+              const decryptedMessage = await decodeDecryptMessage(
+                msg.body,
+                hexEncryptionKey
+              )
+              const isFinish = session.inputMessage(decryptedMessage)
+              if (isFinish) {
+                isKeysignComplete = true
+                console.log('keysign complete')
+                return true
+              }
+              cache[cacheKey] = ''
+              await deleteRelayMessage({
+                serverUrl,
+                localPartyId,
+                sessionId,
+                messageHash: msg.hash,
+                messageId: messageHash,
+              })
+            }
+            const end = Date.now()
+            // timeout after 1 minute
+            if (end - start > 1000 * 60) {
+              console.log('timeout')
+              isKeysignComplete = true
+              return false
+            }
+          } catch (error) {
+            console.error('processInbound error:', error)
+          }
+        }
+      }
+
+      const [inboundResult] = await Promise.all([
+        processInbound(),
+        processOutbound(),
+      ])
       if (inboundResult) {
         const signature = session.finish()
         const r = signature.slice(0, 32)
