@@ -488,6 +488,7 @@ export const en = {
   create_referral: 'Create Referral',
   select: 'Select',
   pick_referral_code: 'Pick Referral Code',
+  max_4_characters: 'Max 4 characters',
   referral_status: 'Status',
   referral_costs: 'Costs',
   set_expiration: 'Set Expiration (in years)',
