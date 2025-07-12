@@ -1,7 +1,6 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
 import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
-import { waitForSetupMessage } from '../setupMessage/get'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -12,10 +11,11 @@ import { KeygenOperation } from '../keygen/KeygenOperation'
 import { initializeMpcLib } from '../lib/initialize'
 import { deleteRelayMessage } from '../relayMessage/delete'
 import { getRelayMessages } from '../relayMessage/get'
-import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../relayMessage/send'
-import { sleep } from '../sleep'
+import { combineReshareCommittee } from '../reshareCommittee'
+import { waitForSetupMessage } from '../setupMessage/get'
 import { uploadSetupMessage } from '../setupMessage/upload'
+import { sleep } from '../sleep'
 
 export class DKLS {
   private readonly keygenOperation: KeygenOperation
