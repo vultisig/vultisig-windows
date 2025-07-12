@@ -918,6 +918,8 @@ __metadata:
     "@bufbuild/protoc-gen-es": "npm:^2.4.0"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
+    "@lib/dkls": "workspace:*"
+    "@lib/schnorr": "workspace:*"
     "@lib/utils": "workspace:*"
     "@solana/web3.js": "npm:^2.0.0"
     vitest: "npm:^3.0.9"
@@ -2114,13 +2116,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lib/dkls@workspace:lib/dkls":
+"@lib/dkls@workspace:*, @lib/dkls@workspace:lib/dkls":
   version: 0.0.0-use.local
   resolution: "@lib/dkls@workspace:lib/dkls"
   languageName: unknown
   linkType: soft
 
-"@lib/schnorr@workspace:lib/schnorr":
+"@lib/schnorr@workspace:*, @lib/schnorr@workspace:lib/schnorr":
   version: 0.0.0-use.local
   resolution: "@lib/schnorr@workspace:lib/schnorr"
   languageName: unknown
