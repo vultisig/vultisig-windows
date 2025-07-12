@@ -1,4 +1,4 @@
-import { MPCKeysign } from '@core/mpc/mpcKeysign'
+import { executeKeysign } from '@core/mpc/keysign/execute'
 import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
@@ -25,24 +25,22 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType }) => {
-      const mpc = new MPCKeysign(
-        isInitiateDevice,
-        serverUrl,
-        sessionId,
-        vault.localPartyId,
-        [vault.localPartyId, ...peers],
-        encryptionKeyHex
-      )
       const keysignPublicKey = vault.publicKeys[signatureAlgorithm]
       const keyShare = vault.keyShares[signatureAlgorithm]
 
-      return mpc.startKeysign(
+      return executeKeysign({
         keyShare,
         signatureAlgorithm,
-        msgs,
-        keysignPublicKey,
-        walletCore.CoinTypeExt.derivationPath(coinType)
-      )
+        messages: msgs,
+        publicKey: keysignPublicKey,
+        chainPath: walletCore.CoinTypeExt.derivationPath(coinType),
+        localPartyId: vault.localPartyId,
+        peers,
+        serverUrl,
+        sessionId,
+        hexEncryptionKey: encryptionKeyHex,
+        isInitiateDevice,
+      })
     },
     [
       encryptionKeyHex,
