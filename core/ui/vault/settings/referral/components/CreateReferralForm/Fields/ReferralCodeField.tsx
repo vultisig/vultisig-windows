@@ -56,9 +56,7 @@ export const ReferralCodeField = () => {
             onValueChange={value => {
               setLocalInput(value)
               reset()
-              setValue('referralName', '', {
-                shouldValidate: true,
-              })
+              setValue('referralName', '')
             }}
           />
           <Button
