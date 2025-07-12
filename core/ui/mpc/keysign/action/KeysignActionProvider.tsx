@@ -1,6 +1,8 @@
-import { executeKeysign } from '@core/mpc/keysign/execute'
+import { keysign } from '@core/mpc/keysign'
+import { initializeMpcLib } from '@core/mpc/lib/initialize'
 import { ChildrenProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
+import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { useCallback } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
@@ -30,22 +32,32 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     async ({ msgs, signatureAlgorithm, coinType }) => {
       const keyShare = vault.keyShares[signatureAlgorithm]
 
-      return executeKeysign({
-        keyShare,
-        signatureAlgorithm,
-        messages: msgs,
-        chainPath: match(signatureAlgorithm, {
-          ecdsa: () =>
-            walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
-          eddsa: () => eddsaPlaceholderChainPath,
-        }),
-        localPartyId: vault.localPartyId,
-        peers,
-        serverUrl,
-        sessionId,
-        hexEncryptionKey: encryptionKeyHex,
-        isInitiatingDevice,
-      })
+      await initializeMpcLib(signatureAlgorithm)
+
+      return chainPromises(
+        msgs.map(
+          message => async () =>
+            keysign({
+              keyShare,
+              signatureAlgorithm,
+              message,
+              chainPath: match(signatureAlgorithm, {
+                ecdsa: () =>
+                  walletCore.CoinTypeExt.derivationPath(coinType).replaceAll(
+                    "'",
+                    ''
+                  ),
+                eddsa: () => eddsaPlaceholderChainPath,
+              }),
+              localPartyId: vault.localPartyId,
+              peers,
+              serverUrl,
+              sessionId,
+              hexEncryptionKey: encryptionKeyHex,
+              isInitiatingDevice,
+            })
+        )
+      )
     },
     [
       encryptionKeyHex,
