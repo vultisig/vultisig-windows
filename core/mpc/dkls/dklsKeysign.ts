@@ -1,16 +1,13 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import { Keyshare, SignSession } from '../../../lib/dkls/vs_wasm'
+import { SignSession } from '../../../lib/dkls/vs_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
-import { encodeDERSignature } from '../derSignature'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
 } from '../encodingAndEncryption'
 import { getMessageHash } from '../getMessageHash'
-import { KeysignSignature } from '../keysign/KeysignSignature'
-import { markLocalPartyKeysignComplete } from '../keysignComplete'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 
@@ -22,22 +19,19 @@ export class DKLSKeysign {
   private isKeysignComplete: boolean = false
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
-  private readonly keyshare: string
   constructor(
     serverURL: string,
     localPartyId: string,
     sessionId: string,
-    hexEncryptionKey: string,
-    keyshare: string
+    hexEncryptionKey: string
   ) {
     this.serverURL = serverURL
     this.localPartyId = localPartyId
     this.sessionId = sessionId
     this.hexEncryptionKey = hexEncryptionKey
-    this.keyshare = keyshare
   }
 
-  private async processOutbound(session: SignSession, messageId: string) {
+  public async processOutbound(session: SignSession, messageId: string) {
     console.log('processOutbound')
     while (true) {
       try {
@@ -76,7 +70,7 @@ export class DKLSKeysign {
     }
   }
 
-  private async processInbound(session: SignSession, messageId: string) {
+  public async processInbound(session: SignSession, messageId: string) {
     const start = Date.now()
     while (true) {
       try {
@@ -125,56 +119,5 @@ export class DKLSKeysign {
         console.error('processInbound error:', error)
       }
     }
-  }
-  public async KeysignOneMessage(
-    messageToSign: string,
-    setupMessage: Uint8Array<ArrayBufferLike>
-  ) {
-    this.isKeysignComplete = false
-    const messageHash = getMessageHash(messageToSign)
-    console.log(
-      'KeysignOneMessage:',
-      messageToSign,
-      ' message hash:',
-      messageHash
-    )
-    const keyshare = Keyshare.fromBytes(Buffer.from(this.keyshare, 'base64'))
-
-    const signMsgHash = SignSession.setupMessageHash(setupMessage)
-    if (signMsgHash === undefined) {
-      throw new Error('setup message hash is undefined')
-    }
-    const hexSignMsgHash = Buffer.from(signMsgHash).toString('hex')
-    if (messageToSign != hexSignMsgHash) {
-      throw new Error('message hash not match')
-    }
-    // good to sign
-    const session = new SignSession(setupMessage, this.localPartyId, keyshare)
-    const outbound = this.processOutbound(session, messageHash)
-    const inbound = this.processInbound(session, messageHash)
-    const [, inboundResult] = await Promise.all([outbound, inbound])
-    if (inboundResult) {
-      const signature = session.finish()
-      const r = signature.slice(0, 32)
-      const s = signature.slice(32, 64)
-      const recoveryId = signature[64]
-      const derSignature = encodeDERSignature(r, s)
-      const keysignSig: KeysignSignature = {
-        msg: Buffer.from(messageToSign, 'hex').toString('base64'),
-        r: Buffer.from(r).toString('hex'),
-        s: Buffer.from(s).toString('hex'),
-        recovery_id: recoveryId.toString(16).padStart(2, '0'),
-        der_signature: Buffer.from(derSignature).toString('hex'),
-      }
-      await markLocalPartyKeysignComplete({
-        serverURL: this.serverURL,
-        sessionId: this.sessionId,
-        messageId: messageHash,
-        jsonSignature: JSON.stringify(keysignSig),
-      })
-      return keysignSig
-    }
-
-    throw new Error('failed to sign message')
   }
 }
