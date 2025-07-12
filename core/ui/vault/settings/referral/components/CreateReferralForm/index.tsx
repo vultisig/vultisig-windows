@@ -21,7 +21,7 @@ export const CreateReferralForm = () => {
 
   const {
     handleSubmit,
-    formState: { isValid, isDirty, isSubmitting },
+    formState: { isValid, isSubmitting },
   } = methods
 
   const onSubmit = handleSubmit(data => console.log(data))
@@ -44,7 +44,7 @@ export const CreateReferralForm = () => {
           <ExpirationField />
           <Fees />
         </StackSeparatedBy>
-        <Button disabled={!isValid || !isDirty || isSubmitting} type="submit">
+        <Button disabled={!isValid || isSubmitting} type="submit">
           {t('create_referral_form')}
         </Button>
       </VStack>
