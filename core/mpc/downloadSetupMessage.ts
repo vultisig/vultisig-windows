@@ -13,7 +13,7 @@ const downloadSetupMessage = async ({
   sessionId,
   messageId,
 }: DownloadSetupMessageInput) =>
-  queryUrl<string>(`${serverUrl}/setup-message/${sessionId}`, {
+  queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
     headers: withoutUndefinedFields({
       'Content-Type': 'application/json',
       message_id: messageId,

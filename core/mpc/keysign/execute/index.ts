@@ -3,9 +3,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 
-import { deleteRelayMessage } from '../../relayMessage/delete'
 import { encodeDERSignature } from '../../derSignature'
-import { downloadRelayMessage, RelayMessage } from '../../downloadRelayMessage'
 import { waitForSetupMessage } from '../../downloadSetupMessage'
 import {
   decodeDecryptMessage,
@@ -16,6 +14,8 @@ import { markLocalPartyKeysignComplete } from '../../keysignComplete'
 import { initializeMpcLib } from '../../lib/initialize'
 import { Keyshare } from '../../lib/keyshare'
 import { SignSession } from '../../lib/signSession'
+import { deleteRelayMessage } from '../../relayMessage/delete'
+import { getRelayMessages } from '../../relayMessage/get'
 import { sendRelayMessage } from '../../sendRelayMessage'
 import { sleep } from '../../sleep'
 import { uploadSetupMessage } from '../../uploadSetupMessage'
@@ -149,13 +149,12 @@ export const executeKeysign = async ({
         const start = Date.now()
         while (true) {
           try {
-            const downloadMsg = await downloadRelayMessage({
+            const parsedMessages = await getRelayMessages({
               serverUrl,
               localPartyId,
               sessionId,
               messageId: messageHash,
             })
-            const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
             for (const msg of parsedMessages) {
               const cacheKey = `${msg.session_id}-${msg.from}-${messageHash}-${msg.hash}`
               if (cache[cacheKey]) {

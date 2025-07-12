@@ -1,8 +1,6 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
 import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
-import { deleteRelayMessage } from '../relayMessage/delete'
-import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import { waitForSetupMessage } from '../downloadSetupMessage'
 import {
   decodeDecryptMessage,
@@ -12,6 +10,8 @@ import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
 import { initializeMpcLib } from '../lib/initialize'
+import { deleteRelayMessage } from '../relayMessage/delete'
+import { getRelayMessages } from '../relayMessage/get'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
@@ -101,12 +101,11 @@ export class DKLS {
     const start = Date.now()
     while (true) {
       try {
-        const downloadMsg = await downloadRelayMessage({
+        const parsedMessages = await getRelayMessages({
           serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
         })
-        const parsedMessages: RelayMessage[] = JSON.parse(downloadMsg)
         if (parsedMessages.length === 0) {
           // no message to download, backoff for 100ms
           await sleep(100)
