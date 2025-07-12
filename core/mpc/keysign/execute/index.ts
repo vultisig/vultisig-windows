@@ -4,7 +4,6 @@ import { base64Encode } from '@lib/utils/base64Encode'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 
 import { encodeDERSignature } from '../../derSignature'
-import { waitForSetupMessage } from '../../setupMessage/get'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -17,8 +16,9 @@ import { SignSession } from '../../lib/signSession'
 import { deleteRelayMessage } from '../../relayMessage/delete'
 import { getRelayMessages } from '../../relayMessage/get'
 import { sendRelayMessage } from '../../relayMessage/send'
-import { sleep } from '../../sleep'
+import { waitForSetupMessage } from '../../setupMessage/get'
 import { uploadSetupMessage } from '../../setupMessage/upload'
+import { sleep } from '../../sleep'
 import { KeysignSignature } from '../KeysignSignature'
 
 type ExecuteKeysignInput = {
@@ -96,7 +96,6 @@ export const executeKeysign = async ({
       if (message != hexSignMsgHash) {
         throw new Error('message hash not match')
       }
-      // good to sign
       const session = new SignSession[signatureAlgorithm](
         setupMessage,
         localPartyId,
@@ -113,20 +112,17 @@ export const executeKeysign = async ({
             const message = session.outputMessage()
             if (message === undefined) {
               if (isKeysignComplete) {
-                console.log('stop processOutbound')
                 return
               } else {
-                await sleep(100) // backoff for 100ms
+                await sleep(100)
               }
               continue
             }
-            console.log('outbound message:', message)
             const messageToSend = await encodeEncryptMessage(
               message.body,
               hexEncryptionKey
             )
             message?.receivers.forEach(receiver => {
-              // send message to receiver
               sendRelayMessage({
                 serverUrl,
                 localPartyId,
@@ -160,9 +156,6 @@ export const executeKeysign = async ({
               if (cache[cacheKey]) {
                 continue
               }
-              console.log(
-                `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
-              )
               const decryptedMessage = await decodeDecryptMessage(
                 msg.body,
                 hexEncryptionKey
@@ -170,7 +163,6 @@ export const executeKeysign = async ({
               const isFinish = session.inputMessage(decryptedMessage)
               if (isFinish) {
                 isKeysignComplete = true
-                console.log('keysign complete')
                 return true
               }
               cache[cacheKey] = ''
@@ -183,9 +175,7 @@ export const executeKeysign = async ({
               })
             }
             const end = Date.now()
-            // timeout after 1 minute
             if (end - start > 1000 * 60) {
-              console.log('timeout')
               isKeysignComplete = true
               return false
             }
