@@ -4,7 +4,6 @@ import { Keyshare, SignSession } from '../../../lib/schnorr/vs_schnorr_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
 import { encodeDERSignature } from '../derSignature'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
-import { waitForSetupMessage } from '../downloadSetupMessage'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
@@ -14,7 +13,6 @@ import { KeysignSignature } from '../keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '../keysignComplete'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
-import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class SchnorrKeysign {
   private readonly serverURL: string
@@ -42,7 +40,7 @@ export class SchnorrKeysign {
     this.localPartyId = localPartyId
     this.sessionId = sessionId
     this.hexEncryptionKey = hexEncryptionKey
-    this.chainPath = chainPath.replaceAll("'", '')
+    this.chainPath = chainPath
     this.keysignCommittee = keysignCommittee
     this.isInitiateDevice = isInitiateDevice
     this.keyshare = keyshare
@@ -137,7 +135,10 @@ export class SchnorrKeysign {
       }
     }
   }
-  public async KeysignOneMessage(messageToSign: string) {
+  public async KeysignOneMessage(
+    messageToSign: string,
+    setupMessage: Uint8Array<ArrayBufferLike>
+  ) {
     this.isKeysignComplete = false
     const messageHash = getMessageHash(messageToSign)
     console.log(
@@ -147,36 +148,7 @@ export class SchnorrKeysign {
       messageHash
     )
     const keyshare = Keyshare.fromBytes(Buffer.from(this.keyshare, 'base64'))
-    let setupMessage: Uint8Array
-    if (this.isInitiateDevice) {
-      setupMessage = SignSession.setup(
-        keyshare.keyId(),
-        this.chainPath,
-        Buffer.from(messageToSign, 'hex'),
-        this.keysignCommittee
-      )
-      const encryptedSetupMessage = await encodeEncryptMessage(
-        setupMessage,
-        this.hexEncryptionKey
-      )
-      await uploadSetupMessage({
-        serverUrl: this.serverURL,
-        sessionId: this.sessionId,
-        message: encryptedSetupMessage,
-        messageId: messageHash,
-      })
-      console.log('upload setup message:', setupMessage)
-    } else {
-      const encodedEncryptedSetupMsg = await waitForSetupMessage({
-        serverURL: this.serverURL,
-        sessionId: this.sessionId,
-        messageId: messageHash,
-      })
-      setupMessage = await decodeDecryptMessage(
-        encodedEncryptedSetupMsg,
-        this.hexEncryptionKey
-      )
-    }
+
     const signMsgHash = SignSession.setupMessageHash(setupMessage)
     if (signMsgHash === undefined) {
       throw new Error('setup message hash is undefined')
