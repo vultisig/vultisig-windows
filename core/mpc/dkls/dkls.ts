@@ -1,7 +1,7 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
 import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
-import { deleteRelayMessage } from '../deleteRelayMessage'
+import { deleteRelayMessage } from '../relayMessage/delete'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import { waitForSetupMessage } from '../downloadSetupMessage'
 import {

@@ -5,7 +5,7 @@ import {
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
-import { deleteRelayMessage } from '../deleteRelayMessage'
+import { deleteRelayMessage } from '../relayMessage/delete'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import { waitForSetupMessage } from '../downloadSetupMessage'
 import {

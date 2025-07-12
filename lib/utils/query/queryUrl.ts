@@ -1,15 +1,25 @@
 import { assertFetchResponse } from '../fetch/assertFetchResponse'
 
-type ResponseType = 'json' | 'text'
+type ResponseType = 'json' | 'text' | 'none'
 
 type QueryUrlOptions = RequestInit & {
   responseType?: ResponseType
 }
 
-export const queryUrl = async <T>(
+export function queryUrl(
+  url: string | URL,
+  options: QueryUrlOptions & { responseType: 'none' }
+): Promise<void>
+
+export function queryUrl<T>(
+  url: string | URL,
+  options?: QueryUrlOptions & { responseType?: 'json' | 'text' }
+): Promise<T>
+
+export async function queryUrl<T>(
   url: string | URL,
   options: QueryUrlOptions = {}
-): Promise<T> => {
+): Promise<T | void> {
   const { responseType = 'json', ...rest } = options
   const response = await fetch(url, {
     method: 'GET',
@@ -18,5 +28,7 @@ export const queryUrl = async <T>(
 
   await assertFetchResponse(response)
 
-  return response[responseType]()
+  if (responseType !== 'none') {
+    return response[responseType]()
+  }
 }

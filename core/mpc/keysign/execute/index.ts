@@ -3,7 +3,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 
-import { deleteRelayMessage } from '../../deleteRelayMessage'
+import { deleteRelayMessage } from '../../relayMessage/delete'
 import { encodeDERSignature } from '../../derSignature'
 import { downloadRelayMessage, RelayMessage } from '../../downloadRelayMessage'
 import { waitForSetupMessage } from '../../downloadSetupMessage'
