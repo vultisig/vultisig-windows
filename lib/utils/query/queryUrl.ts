@@ -21,7 +21,6 @@ export function queryUrl<T>(
   options?: QueryUrlOptions & { responseType?: 'json' }
 ): Promise<T>
 
-// Implementation
 export async function queryUrl<T>(
   url: string | URL,
   options: QueryUrlOptions = {}
