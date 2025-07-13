@@ -7,7 +7,6 @@ import {
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '@core/mpc/keysignComplete'
-import { Keyshare } from '@core/mpc/lib/keyshare'
 import { SignSession } from '@core/mpc/lib/signSession'
 import { deleteRelayMessage } from '@core/mpc/relayMessage/delete'
 import { getRelayMessages } from '@core/mpc/relayMessage/get'
@@ -20,6 +19,9 @@ import { attempt } from '@lib/utils/attempt'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
+
+import { toMpcLibKeyshare } from '../lib/keyshare'
+import { makeSetupMessage } from './setupMessage/make'
 
 type KeysignInput = {
   keyShare: string
@@ -48,20 +50,17 @@ export const keysign = async ({
   hexEncryptionKey,
   isInitiatingDevice,
 }: KeysignInput) => {
-  const messageHash = getMessageHash(message)
-
-  const mpcLibKeyshare = Keyshare[signatureAlgorithm].fromBytes(
-    Buffer.from(keyShare, 'base64')
-  )
+  const messageId = getMessageHash(message)
 
   const getSetupMessage = async () => {
     if (isInitiatingDevice) {
-      const setupMessage = SignSession[signatureAlgorithm].setup(
-        mpcLibKeyshare.keyId(),
+      const setupMessage = makeSetupMessage({
+        keyShare,
         chainPath,
-        Buffer.from(message, 'hex'),
-        [...peers, localPartyId]
-      )
+        message,
+        devices: [...peers, localPartyId],
+        signatureAlgorithm,
+      })
       const encryptedSetupMessage = await encodeEncryptMessage(
         setupMessage,
         hexEncryptionKey
@@ -70,7 +69,7 @@ export const keysign = async ({
         serverUrl,
         sessionId,
         message: encryptedSetupMessage,
-        messageId: messageHash,
+        messageId,
       })
 
       return setupMessage
@@ -79,7 +78,7 @@ export const keysign = async ({
     const encodedEncryptedSetupMsg = await waitForSetupMessage({
       serverUrl,
       sessionId,
-      messageId: messageHash,
+      messageId,
     })
     return decodeDecryptMessage(encodedEncryptedSetupMsg, hexEncryptionKey)
   }
@@ -97,7 +96,10 @@ export const keysign = async ({
   const session = new SignSession[signatureAlgorithm](
     setupMessage,
     localPartyId,
-    mpcLibKeyshare
+    toMpcLibKeyshare({
+      keyShare,
+      signatureAlgorithm,
+    })
   )
 
   const { signal, abort } = new AbortController()
@@ -128,7 +130,7 @@ export const keysign = async ({
             to: receiver,
             sequenceNo: sequenceNo + index,
             messageHash: getMessageHash(base64Encode(body)),
-            messageId: messageHash,
+            messageId,
           })
         )
       )
@@ -148,7 +150,7 @@ export const keysign = async ({
       serverUrl,
       localPartyId,
       sessionId,
-      messageId: messageHash,
+      messageId,
     })
 
     for (const msg of relayMessages) {
@@ -165,7 +167,7 @@ export const keysign = async ({
           localPartyId,
           sessionId,
           messageHash: msg.hash,
-          messageId: messageHash,
+          messageId,
         })
       )
     }
@@ -201,7 +203,7 @@ export const keysign = async ({
   await markLocalPartyKeysignComplete({
     serverUrl,
     sessionId,
-    messageId: messageHash,
+    messageId,
     jsonSignature: JSON.stringify(keysignSig),
   })
   return keysignSig
