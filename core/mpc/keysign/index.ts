@@ -186,8 +186,8 @@ export const keysign = async ({
     .map(value => Buffer.from(value))
     .map(value =>
       match(signatureAlgorithm, {
-        ecdsa: () => value.reverse(),
-        eddsa: () => value,
+        ecdsa: () => value,
+        eddsa: () => value.reverse(),
       })
     )
     .map(value => value.toString('hex'))
