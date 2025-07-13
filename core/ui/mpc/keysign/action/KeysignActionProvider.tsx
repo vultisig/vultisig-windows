@@ -32,8 +32,7 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     async ({ msgs, signatureAlgorithm, coinType }) => {
       const keyShare = vault.keyShares[signatureAlgorithm]
 
-      const mpcLibOutput = await initializeMpcLib(signatureAlgorithm)
-      console.log('mpcLibOutput', mpcLibOutput)
+      await initializeMpcLib(signatureAlgorithm)
 
       return chainPromises(
         msgs.map(
