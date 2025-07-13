@@ -161,13 +161,13 @@ export const keysign = async ({
     () => abortController.abort(),
     convertDuration(maxInboundWaitTime, 'min', 's')
   )
-  const inboundResult = await attempt(processInbound())
+  const { error } = await attempt(processInbound())
 
   await attempt(outboundPromise)
   clearTimeout(timeout)
 
-  if ('error' in inboundResult) {
-    throw inboundResult.error
+  if (error) {
+    throw error
   }
 
   const signature = session.finish()
