@@ -59,7 +59,7 @@ export const keysign = async ({
     signatureAlgorithm,
     message,
     chainPath,
-    devices: [...peers, localPartyId],
+    devices: [localPartyId, ...peers],
     serverUrl,
     sessionId,
     hexEncryptionKey,
