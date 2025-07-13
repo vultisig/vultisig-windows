@@ -1,19 +1,18 @@
 import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { CreateReferralForm } from './components/CreateReferralForm'
+import { CreateReferralVerify } from './components/CreateReferralVerify'
 import { EditReferralForm } from './components/EditReferralForm'
 import { ManageReferralsForm } from './components/ManageReferralsForm'
-import { ReferralPageWrapper } from './components/Referrals.styled'
+import { CreateReferralFormProvider } from './provders/CreateReferralFormProvider'
+import { ReferralPayoutAssetProvider } from './provders/ReferralPayoutAssetProvider'
 
 export const ManageReferralsPage = () => {
-  const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
   const [uiState, setUiState] = useState<
@@ -21,14 +20,8 @@ export const ManageReferralsPage = () => {
   >('default')
 
   return (
-    <>
-      {uiState !== 'loading' && (
-        <PageHeader
-          primaryControls={<PageHeaderBackButton />}
-          title={t('title_1')}
-        />
-      )}
-      <ReferralPageWrapper>
+    <ReferralPayoutAssetProvider>
+      <CreateReferralFormProvider>
         <Match
           value={uiState}
           default={() => (
@@ -47,7 +40,14 @@ export const ManageReferralsPage = () => {
               onCreateReferral={() => setUiState('create')}
             />
           )}
-          create={() => <CreateReferralForm />}
+          create={() => (
+            <StepTransition
+              from={({ onFinish }) => (
+                <CreateReferralForm onFinish={onFinish} />
+              )}
+              to={({ onBack }) => <CreateReferralVerify onBack={onBack} />}
+            />
+          )}
           edit={() => <EditReferralForm />}
           loading={() => (
             <CenterAbsolutely>
@@ -55,7 +55,7 @@ export const ManageReferralsPage = () => {
             </CenterAbsolutely>
           )}
         />
-      </ReferralPageWrapper>
-    </>
+      </CreateReferralFormProvider>
+    </ReferralPayoutAssetProvider>
   )
 }
