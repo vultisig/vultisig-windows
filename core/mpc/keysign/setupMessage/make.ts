@@ -1,9 +1,10 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
-import { MpcLibKeyshare } from '@core/mpc/lib/keyshare'
 import { SignSession } from '@core/mpc/lib/signSession'
 
+import { toMpcLibKeyshare } from '../../lib/keyshare'
+
 type MakeSetupMessageInput = {
-  keyShare: MpcLibKeyshare
+  keyShare: string
   chainPath: string
   message: string
   devices: string[]
@@ -18,7 +19,10 @@ export const makeSetupMessage = ({
   signatureAlgorithm,
 }: MakeSetupMessageInput) =>
   SignSession[signatureAlgorithm].setup(
-    keyShare.keyId(),
+    toMpcLibKeyshare({
+      keyShare,
+      signatureAlgorithm,
+    }).keyId(),
     chainPath,
     Buffer.from(message, 'hex'),
     devices

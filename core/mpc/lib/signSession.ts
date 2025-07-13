@@ -2,7 +2,7 @@ import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { SignSession as DklsSignSession } from '@lib/dkls/vs_wasm'
 import { SignSession as SchnorrSignSession } from '@lib/schnorr/vs_schnorr_wasm'
 
-import { MpcLibKeyshare } from './keyshare'
+import { toMpcLibKeyshare } from './keyshare'
 
 export const SignSession: Record<
   SignatureAlgorithm,
@@ -15,7 +15,7 @@ export const SignSession: Record<
 type MakeSignSessionInput = {
   setupMessage: Uint8Array
   localPartyId: string
-  keyShare: MpcLibKeyshare
+  keyShare: string
   signatureAlgorithm: SignatureAlgorithm
 }
 
@@ -25,4 +25,11 @@ export const makeSignSession = ({
   keyShare,
   signatureAlgorithm,
 }: MakeSignSessionInput) =>
-  new SignSession[signatureAlgorithm](setupMessage, localPartyId, keyShare)
+  new SignSession[signatureAlgorithm](
+    setupMessage,
+    localPartyId,
+    toMpcLibKeyshare({
+      keyShare,
+      signatureAlgorithm,
+    })
+  )

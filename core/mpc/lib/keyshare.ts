@@ -10,8 +10,6 @@ const Keyshare: Record<
   eddsa: SchnorrKeyshare,
 }
 
-export type MpcLibKeyshare = DklsKeyshare | SchnorrKeyshare
-
 type ToMpcLibKeyshareInput = {
   keyShare: string
   signatureAlgorithm: SignatureAlgorithm

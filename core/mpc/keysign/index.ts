@@ -12,7 +12,6 @@ import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { toMpcLibKeyshare } from '../lib/keyshare'
 import { makeSignSession } from '../lib/signSession'
 import { deleteMpcRelayMessage } from '../message/relay/delete'
 import { getMpcRelayMessages } from '../message/relay/get'
@@ -36,7 +35,7 @@ type KeysignInput = {
 const maxInboundWaitTime: Minutes = 1
 
 export const keysign = async ({
-  keyShare: keyShareString,
+  keyShare,
   signatureAlgorithm,
   message,
   chainPath,
@@ -48,11 +47,6 @@ export const keysign = async ({
   isInitiatingDevice,
 }: KeysignInput) => {
   const messageId = getMessageHash(message)
-
-  const keyShare = toMpcLibKeyshare({
-    keyShare: keyShareString,
-    signatureAlgorithm,
-  })
 
   const setupMessage = await ensureSetupMessage({
     keyShare,
