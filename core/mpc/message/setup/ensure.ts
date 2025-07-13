@@ -4,12 +4,13 @@ import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
 import { transformError } from '@lib/utils/error/transformError'
 
 import { makeSetupMessage } from '../../keysign/setupMessage/make'
+import { MpcLibKeyshare } from '../../lib/keyshare'
 import { fromMpcServerMessage, toMpcServerMessage } from '../server'
 import { waitForSetupMessage } from './get'
 import { uploadMpcSetupMessage } from './upload'
 
 type EnsureSetupMessageInput = {
-  keyShare: string
+  keyShare: MpcLibKeyshare
   signatureAlgorithm: SignatureAlgorithm
   message: string
   chainPath: string
