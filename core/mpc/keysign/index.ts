@@ -12,6 +12,7 @@ import { transformError } from '@lib/utils/error/transformError'
 import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
@@ -180,19 +181,28 @@ export const keysign = async ({
   }
 
   const signature = session.finish()
-  const r = signature.slice(0, 32)
-  const s = signature.slice(32, 64)
-  const derSignature = encodeDERSignature(r, s)
-  const result: KeysignSignature = {
+  const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
+  const [r, s] = [rawR, rawS]
+    .map(value => Buffer.from(value))
+    .map(value =>
+      match(signatureAlgorithm, {
+        ecdsa: () => value.reverse(),
+        eddsa: () => value,
+      })
+    )
+    .map(value => value.toString('hex'))
+
+  const derSignature = encodeDERSignature(rawR, rawS)
+  const result: KeysignSignature = withoutUndefinedFields({
     msg: Buffer.from(message, 'hex').toString('base64'),
-    r: Buffer.from(r).toString('hex'),
-    s: Buffer.from(s).toString('hex'),
+    r,
+    s,
     recovery_id: match(signatureAlgorithm, {
       ecdsa: () => signature[64].toString(16).padStart(2, '0'),
       eddsa: () => undefined,
     }),
     der_signature: Buffer.from(derSignature).toString('hex'),
-  }
+  })
 
   ignorePromiseOutcome(
     transformError(
