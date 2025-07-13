@@ -9,7 +9,9 @@ import { attempt } from '@lib/utils/attempt'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
 import { transformError } from '@lib/utils/error/transformError'
+import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
+import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
@@ -142,28 +144,33 @@ export const keysign = async ({
       ) {
         return
       }
-      await transformError(
-        deleteMpcRelayMessage({
-          serverUrl,
-          localPartyId,
-          sessionId,
-          messageHash: msg.hash,
-          messageId,
-        }),
-        prefixErrorWith('Failed to delete MPC relay message')
+      await ignorePromiseOutcome(
+        transformError(
+          deleteMpcRelayMessage({
+            serverUrl,
+            localPartyId,
+            sessionId,
+            messageHash: msg.hash,
+            messageId,
+          }),
+          prefixErrorWith('Failed to delete MPC relay message')
+        )
       )
     }
 
-    return await processInbound()
+    return processInbound()
   }
 
   const outboundPromise = processOutbound()
 
   const timeout = setTimeout(
-    () => abortController.abort(),
+    () => {
+      abortController.abort()
+    },
     convertDuration(maxInboundWaitTime, 'min', 'ms')
   )
   const { error } = await attempt(processInbound())
+  abortController.abort()
 
   await attempt(outboundPromise)
   clearTimeout(timeout)
@@ -175,24 +182,28 @@ export const keysign = async ({
   const signature = session.finish()
   const r = signature.slice(0, 32)
   const s = signature.slice(32, 64)
-  const recoveryId = signature[64]
   const derSignature = encodeDERSignature(r, s)
   const result: KeysignSignature = {
     msg: Buffer.from(message, 'hex').toString('base64'),
     r: Buffer.from(r).toString('hex'),
     s: Buffer.from(s).toString('hex'),
-    recovery_id: recoveryId.toString(16).padStart(2, '0'),
+    recovery_id: match(signatureAlgorithm, {
+      ecdsa: () => signature[64].toString(16).padStart(2, '0'),
+      eddsa: () => undefined,
+    }),
     der_signature: Buffer.from(derSignature).toString('hex'),
   }
 
-  await transformError(
-    markLocalPartyKeysignComplete({
-      serverUrl,
-      sessionId,
-      messageId,
-      result,
-    }),
-    prefixErrorWith('Failed to mark local party keysign complete')
+  ignorePromiseOutcome(
+    transformError(
+      markLocalPartyKeysignComplete({
+        serverUrl,
+        sessionId,
+        messageId,
+        result,
+      }),
+      prefixErrorWith('Failed to mark local party keysign complete')
+    )
   )
 
   return result
