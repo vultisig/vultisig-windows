@@ -18,7 +18,7 @@ import {
   FormFieldErrorText,
   FormFieldLabel,
 } from '../../Referrals.styled'
-import { ReferralFormData } from '../config'
+import { CreateReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {
   const [localInput, setLocalInput] = useState('')
@@ -29,7 +29,7 @@ export const ReferralCodeField = () => {
     setValue,
     clearErrors,
     getValues,
-  } = useFormContext<ReferralFormData>()
+  } = useFormContext<CreateReferralFormData>()
   const name = getValues('referralName')
 
   const {
