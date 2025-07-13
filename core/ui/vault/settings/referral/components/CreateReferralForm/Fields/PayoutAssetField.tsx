@@ -9,7 +9,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMemo, useState } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -17,13 +17,13 @@ import { CoinIcon } from '../../../../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../../../../chain/coin/inputs/CoinOption'
 import { ChainOption } from '../../../../../send/components/ChainOption'
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
+import { useCreateReferralForm } from '../../../provders/CreateReferralFormProvider'
 import { useActivePoolsQuery } from '../../../queries/useActivePoolsQuery'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
 } from '../../Referrals.styled'
-import { ReferralFormData } from '../config'
 
 // Needed due to the nature of the API response
 const chainMap: Record<string, string> = {
@@ -77,7 +77,7 @@ export const PayoutAssetField = () => {
   const {
     control,
     formState: { errors },
-  } = useFormContext<ReferralFormData>()
+  } = useCreateReferralForm()
 
   return (
     <FormField>
