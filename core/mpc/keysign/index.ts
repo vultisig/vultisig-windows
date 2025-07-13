@@ -4,6 +4,7 @@ import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '@core/mpc/keysignComplete'
 import { sleep } from '@core/mpc/sleep'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
@@ -12,7 +13,7 @@ import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { makeSignSession } from '../lib/signSession'
+import { makeSignSession, SignSession } from '../lib/signSession'
 import { deleteMpcRelayMessage } from '../message/relay/delete'
 import { getMpcRelayMessages } from '../message/relay/get'
 import { sendMpcRelayMessage } from '../message/relay/send'
@@ -60,8 +61,6 @@ export const keysign = async ({
     isInitiatingDevice,
   })
 
-  console.log('setupMessage', setupMessage)
-
   const session = makeSignSession({
     setupMessage,
     localPartyId,
@@ -69,7 +68,14 @@ export const keysign = async ({
     signatureAlgorithm,
   })
 
-  console.log('session', session)
+  const setupMessageHash = shouldBePresent(
+    SignSession[signatureAlgorithm].setupMessageHash(setupMessage),
+    'Setup message hash'
+  )
+
+  if (message != Buffer.from(setupMessageHash).toString('hex')) {
+    throw new Error('Setup message hash does not match the original message')
+  }
 
   const abortController = new AbortController()
 
