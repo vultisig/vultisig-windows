@@ -153,6 +153,8 @@ export const keysign = async ({
         prefixErrorWith('Failed to delete MPC relay message')
       )
     }
+
+    processInbound()
   }
 
   const outboundPromise = processOutbound()
