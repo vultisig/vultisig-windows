@@ -8,6 +8,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ReferralPageWrapper } from './Referrals.styled'
+
 type Props = {
   onSaveReferral: () => void
   onCreateReferral: () => void
@@ -20,35 +22,37 @@ export const ManageReferralsForm = ({
   const { t } = useTranslation()
 
   return (
-    <AnimatedVisibility
-      animationConfig="bottomToTop"
-      config={{ duration: 1000 }}
-      delay={300}
-      overlayStyles={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <VStack fullWidth flexGrow gap={20}>
-        <DecorationImage src="/core/images/crypto-natives.png" alt="" />
-        <VStack gap={16}>
-          <VStack gap={8}>
-            <Text size={14}>{t('use_referral_code')}</Text>
-            <TextInput placeholder={t('enter_referral_code_placeholder')} />
+    <ReferralPageWrapper>
+      <AnimatedVisibility
+        animationConfig="bottomToTop"
+        config={{ duration: 1000 }}
+        delay={300}
+        overlayStyles={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <VStack fullWidth flexGrow gap={20}>
+          <DecorationImage src="/core/images/crypto-natives.png" alt="" />
+          <VStack gap={16}>
+            <VStack gap={8}>
+              <Text size={14}>{t('use_referral_code')}</Text>
+              <TextInput placeholder={t('enter_referral_code_placeholder')} />
+            </VStack>
+            <SaveReferralButton onClick={onSaveReferral}>
+              {t('save')}
+            </SaveReferralButton>
+            <HStack gap={16} alignItems="center">
+              <DecorationLine />
+              <Text size={12}>{t('or').toUpperCase()}</Text>
+              <DecorationLine />
+            </HStack>
+            <Button onClick={onCreateReferral}>{t('create_referral')}</Button>
           </VStack>
-          <SaveReferralButton onClick={onSaveReferral}>
-            {t('save')}
-          </SaveReferralButton>
-          <HStack gap={16} alignItems="center">
-            <DecorationLine />
-            <Text size={12}>{t('or').toUpperCase()}</Text>
-            <DecorationLine />
-          </HStack>
-          <Button onClick={onCreateReferral}>{t('create_referral')}</Button>
         </VStack>
-      </VStack>
-    </AnimatedVisibility>
+      </AnimatedVisibility>
+    </ReferralPageWrapper>
   )
 }
 
