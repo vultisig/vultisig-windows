@@ -86,7 +86,11 @@ export const ReferralCodeField = () => {
           </FormFieldErrorText>
         )}
       </FormField>
-      <StatusWrapper justifyContent="space-between" alignItems="center">
+      <StatusWrapper
+        isHidden={status === 'idle'}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Match
           value={status}
           pending={() => (
@@ -125,7 +129,10 @@ export const ReferralCodeField = () => {
   )
 }
 
-const StatusWrapper = styled(HStack)`
+const StatusWrapper = styled(HStack)<{
+  isHidden?: boolean
+}>`
+  ${({ isHidden }) => (isHidden ? 'display: none' : '')}
   height: 52px;
   position: relative;
 `
