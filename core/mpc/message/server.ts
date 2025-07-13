@@ -7,14 +7,12 @@ import {
 } from '@lib/utils/encryption/config'
 
 export const fromMpcServerMessage = (body: string, hexEncryptionKey: string) =>
-  new Uint8Array(
-    Buffer.from(
-      decryptWithAesGcm({
-        key: Buffer.from(hexEncryptionKey, 'hex'),
-        value: Buffer.from(body, encryptedEncoding),
-      }).toString(plainTextEncoding),
-      'base64'
-    )
+  Buffer.from(
+    decryptWithAesGcm({
+      key: Buffer.from(hexEncryptionKey, 'hex'),
+      value: Buffer.from(body, encryptedEncoding),
+    }).toString(plainTextEncoding),
+    'base64'
   )
 
 export const toMpcServerMessage = (
