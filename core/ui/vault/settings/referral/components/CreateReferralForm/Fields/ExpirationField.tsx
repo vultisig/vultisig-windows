@@ -1,15 +1,15 @@
 import { Stepper } from '@lib/ui/inputs/Stepper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useCreateReferralForm } from '../../../provders/CreateReferralFormProvider'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
 } from '../../Referrals.styled'
-import { ReferralFormData } from '../config'
 
 export const ExpirationField = () => {
   const { t } = useTranslation()
@@ -17,7 +17,7 @@ export const ExpirationField = () => {
     control,
     formState: { errors },
     watch,
-  } = useFormContext<ReferralFormData>()
+  } = useCreateReferralForm()
 
   const expiration = watch('expiration')
 
