@@ -161,7 +161,7 @@ export const keysign = async ({
 
   const timeout = setTimeout(
     () => abortController.abort(),
-    convertDuration(maxInboundWaitTime, 'min', 's')
+    convertDuration(maxInboundWaitTime, 'min', 'ms')
   )
   const { error } = await attempt(processInbound())
 
