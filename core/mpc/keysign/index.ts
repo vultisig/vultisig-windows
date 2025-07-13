@@ -60,12 +60,16 @@ export const keysign = async ({
     isInitiatingDevice,
   })
 
+  console.log('setupMessage', setupMessage)
+
   const session = makeSignSession({
     setupMessage,
     localPartyId,
     keyShare,
     signatureAlgorithm,
   })
+
+  console.log('session', session)
 
   const abortController = new AbortController()
 
