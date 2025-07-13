@@ -9,7 +9,6 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
@@ -27,17 +26,16 @@ import { useReferralSender } from '../hooks/useReferralSender'
 import { useCreateReferralForm } from '../provders/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../provders/ReferralPayoutAssetProvider'
 import { buildCreateReferralMemo } from '../utils/buildReferralMemos'
+import { ReferralPageWrapper } from './Referrals.styled'
 
 export type ReferralType = 'create' | 'edit'
 
 export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
-
   const [coin] = useReferralPayoutAsset()
   const sender = useReferralSender()
   const { name: vaultName } = useCurrentVault()
   const { watch } = useCreateReferralForm()
-
   const referralAmount = watch('referralFeeAmount')
   const name = watch('referralName')
 
@@ -67,8 +65,6 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
     )
   }
 
-  console.log('🚀 ~ CreateReferralVerify ~ keysignPayload:', keysignPayload)
-
   return (
     <>
       <PageHeader
@@ -76,7 +72,7 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
         title={t('send_overview')}
         hasBorder
       />
-      <PageContent gap={12}>
+      <ReferralPageWrapper gap={12}>
         <TxOverviewPanel>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
@@ -127,7 +123,7 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
         >
           <StartKeysignPrompt keysignPayload={{ keysign: keysignPayload }} />
         </VStack>
-      </PageContent>
+      </ReferralPageWrapper>
     </>
   )
 }
