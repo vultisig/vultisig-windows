@@ -1,6 +1,6 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getMessageHash } from '@core/mpc/getMessageHash'
-import { prefixError } from '@lib/utils/error/prefixError'
+import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
 import { transformError } from '@lib/utils/error/transformError'
 
 import { makeSetupMessage } from '../../keysign/setupMessage/make'
@@ -49,7 +49,7 @@ export const ensureSetupMessage = async ({
         message: toMpcServerMessage(setupMessage, hexEncryptionKey),
         messageId,
       }),
-      error => prefixError(error, 'Failed to upload setup message')
+      prefixErrorWith('Failed to upload setup message')
     )
 
     return setupMessage
@@ -61,7 +61,7 @@ export const ensureSetupMessage = async ({
       sessionId,
       messageId,
     }),
-    error => prefixError(error, 'Waiting setup message for too long')
+    prefixErrorWith('Timed out while waiting for setup message')
   )
 
   return fromMpcServerMessage(serverSetupMessage, hexEncryptionKey)

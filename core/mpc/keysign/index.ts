@@ -6,6 +6,9 @@ import { markLocalPartyKeysignComplete } from '@core/mpc/keysignComplete'
 import { sleep } from '@core/mpc/sleep'
 import { attempt } from '@lib/utils/attempt'
 import { base64Encode } from '@lib/utils/base64Encode'
+import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
+import { transformError } from '@lib/utils/error/transformError'
+import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
@@ -81,23 +84,25 @@ export const keysign = async ({
 
     const messageToSend = toMpcServerMessage(body, hexEncryptionKey)
 
-    await attempt(
-      Promise.all(
-        receivers.map((receiver, index) => {
-          return sendMpcRelayMessage({
-            serverUrl,
-            sessionId,
-            message: {
-              session_id: sessionId,
-              from: localPartyId,
-              to: [receiver],
-              body: messageToSend,
-              hash: getMessageHash(base64Encode(body)),
-              sequence_no: sequenceNo + index,
-            },
-            messageId,
-          })
-        })
+    await chainPromises(
+      receivers.map(
+        (receiver, index) => () =>
+          transformError(
+            sendMpcRelayMessage({
+              serverUrl,
+              sessionId,
+              message: {
+                session_id: sessionId,
+                from: localPartyId,
+                to: [receiver],
+                body: messageToSend,
+                hash: getMessageHash(base64Encode(body)),
+                sequence_no: sequenceNo + index,
+              },
+              messageId,
+            }),
+            prefixErrorWith('Failed to send MPC relay message')
+          )
       )
     )
 
@@ -111,12 +116,15 @@ export const keysign = async ({
       )
     }
 
-    const relayMessages = await getMpcRelayMessages({
-      serverUrl,
-      localPartyId,
-      sessionId,
-      messageId,
-    })
+    const relayMessages = await transformError(
+      getMpcRelayMessages({
+        serverUrl,
+        localPartyId,
+        sessionId,
+        messageId,
+      }),
+      prefixErrorWith('Failed to get MPC relay messages')
+    )
 
     for (const msg of relayMessages) {
       if (
@@ -124,14 +132,15 @@ export const keysign = async ({
       ) {
         return
       }
-      await attempt(
+      await transformError(
         deleteMpcRelayMessage({
           serverUrl,
           localPartyId,
           sessionId,
           messageHash: msg.hash,
           messageId,
-        })
+        }),
+        prefixErrorWith('Failed to delete MPC relay message')
       )
     }
   }
@@ -148,7 +157,7 @@ export const keysign = async ({
   clearTimeout(timeout)
 
   if ('error' in inboundResult) {
-    throw new Error('failed to sign message')
+    throw inboundResult.error
   }
 
   const signature = session.finish()
@@ -164,12 +173,15 @@ export const keysign = async ({
     der_signature: Buffer.from(derSignature).toString('hex'),
   }
 
-  await markLocalPartyKeysignComplete({
-    serverUrl,
-    sessionId,
-    messageId,
-    result,
-  })
+  await transformError(
+    markLocalPartyKeysignComplete({
+      serverUrl,
+      sessionId,
+      messageId,
+      result,
+    }),
+    prefixErrorWith('Failed to mark local party keysign complete')
+  )
 
   return result
 }
