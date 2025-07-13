@@ -154,7 +154,7 @@ export const keysign = async ({
       )
     }
 
-    processInbound()
+    return await processInbound()
   }
 
   const outboundPromise = processOutbound()
