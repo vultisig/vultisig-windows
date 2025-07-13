@@ -28,8 +28,7 @@ type ManageReferralUIState =
   | 'editFriendReferral'
 
 export const ManageReferralsPage = () => {
-  const [uiState, setUiState] =
-    useState<ManageReferralUIState>('existingReferral')
+  const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
 
   const navigate = useCoreNavigate()
   const { address } = shouldBePresent(

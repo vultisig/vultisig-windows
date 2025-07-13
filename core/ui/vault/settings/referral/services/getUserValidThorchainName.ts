@@ -13,13 +13,13 @@ export type ValidThorchainNameDetails = NameDetails & {
 
 export const fetchUserValidName = async (
   address: string
-): Promise<ValidThorchainNameDetails> => {
+): Promise<ValidThorchainNameDetails | undefined> => {
   const [currentHeight, names] = await Promise.all([
     getCurrentHeight(),
     getUserThorchainNames(address),
   ])
 
-  if (!names.length) throw new Error('User has no THORName')
+  if (!names.length) return undefined
 
   const details = await Promise.all(names.map(getUserThorchainNameDetails))
 
@@ -27,7 +27,7 @@ export const fetchUserValidName = async (
     .filter(d => d.expire_block_height > currentHeight)
     .sort((a, b) => b.expire_block_height - a.expire_block_height)[0]
 
-  if (!valid) throw new Error('All THORNames are expired')
+  if (!valid) return undefined
 
   const remainingBlocks = valid.expire_block_height - currentHeight
 

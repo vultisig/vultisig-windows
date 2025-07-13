@@ -6,4 +6,5 @@ export const useUserValidThorchainNameQuery = (address: string) =>
   useQuery({
     queryKey: ['user-valid-thorchain-name', address],
     queryFn: () => fetchUserValidName(address),
+    retry: false,
   })
