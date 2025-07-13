@@ -67,10 +67,10 @@ export const keysign = async ({
     signatureAlgorithm,
   })
 
-  const { signal, abort } = new AbortController()
+  const abortController = new AbortController()
 
   const processOutbound = async (sequenceNo = 0): Promise<void> => {
-    if (signal.aborted) {
+    if (abortController.signal.aborted) {
       return
     }
 
@@ -110,7 +110,7 @@ export const keysign = async ({
   }
 
   const processInbound = async (): Promise<void> => {
-    if (signal.aborted) {
+    if (abortController.signal.aborted) {
       throw new Error(
         `Exited inbound processing due to a timeout after ${maxInboundWaitTime} min`
       )
@@ -148,7 +148,7 @@ export const keysign = async ({
   const outboundPromise = processOutbound()
 
   const timeout = setTimeout(
-    abort,
+    () => abortController.abort(),
     convertDuration(maxInboundWaitTime, 'min', 's')
   )
   const inboundResult = await attempt(processInbound())
