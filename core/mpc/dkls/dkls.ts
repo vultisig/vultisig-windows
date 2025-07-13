@@ -5,11 +5,7 @@ import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
 import { initializeMpcLib } from '../lib/initialize'
-import {
-  fromRelayMessageBody,
-  MpcRelayMessage,
-  toRelayMessageBody,
-} from '../message/relay'
+import { MpcRelayMessage } from '../message/relay'
 import { deleteMpcRelayMessage } from '../message/relay/delete'
 import { getMpcRelayMessages } from '../message/relay/get'
 import { sendMpcRelayMessage } from '../message/relay/send'
@@ -76,10 +72,7 @@ export class DKLS {
           continue
         }
         console.log('outbound message:', message)
-        const body = await toRelayMessageBody({
-          body: message.body,
-          hexEncryptionKey: this.hexEncryptionKey,
-        })
+        const body = toMpcServerMessage(message.body, this.hexEncryptionKey)
 
         message?.receivers.forEach(receiver => {
           const relayMessage: MpcRelayMessage = {
@@ -126,10 +119,10 @@ export class DKLS {
           console.log(
             `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
           )
-          const decryptedMessage = fromRelayMessageBody({
-            body: msg.body,
-            hexEncryptionKey: this.hexEncryptionKey,
-          })
+          const decryptedMessage = fromMpcServerMessage(
+            msg.body,
+            this.hexEncryptionKey
+          )
           const isFinish = session.inputMessage(decryptedMessage)
           if (isFinish) {
             await sleep(1000) // wait for 1 second to make sure all messages are processed
@@ -171,10 +164,10 @@ export class DKLS {
           this.keygenCommittee
         )
         // upload setup message to server
-        const encryptedSetupMsg = toRelayMessageBody({
-          body: this.setupMessage,
-          hexEncryptionKey: this.hexEncryptionKey,
-        })
+        const encryptedSetupMsg = toMpcServerMessage(
+          this.setupMessage,
+          this.hexEncryptionKey
+        )
 
         await uploadMpcSetupMessage({
           serverUrl: this.serverURL,
