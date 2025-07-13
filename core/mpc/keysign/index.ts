@@ -3,22 +3,18 @@ import { encodeDERSignature } from '@core/mpc/derSignature'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '@core/mpc/keysignComplete'
-import { SignSession } from '@core/mpc/lib/signSession'
 import { sleep } from '@core/mpc/sleep'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { base64Encode } from '@lib/utils/base64Encode'
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { toMpcLibKeyshare } from '../lib/keyshare'
+import { makeSignSession } from '../lib/signSession'
 import { deleteMpcRelayMessage } from '../message/relay/delete'
 import { getMpcRelayMessages } from '../message/relay/get'
 import { sendMpcRelayMessage } from '../message/relay/send'
 import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
-import { waitForSetupMessage } from '../message/setup/get'
-import { uploadMpcSetupMessage } from '../message/setup/upload'
-import { makeSetupMessage } from './setupMessage/make'
+import { ensureSetupMessage } from '../message/setup/ensure'
 
 type KeysignInput = {
   keyShare: string
@@ -49,55 +45,24 @@ export const keysign = async ({
 }: KeysignInput) => {
   const messageId = getMessageHash(message)
 
-  const getSetupMessage = async () => {
-    if (isInitiatingDevice) {
-      const setupMessage = makeSetupMessage({
-        keyShare,
-        chainPath,
-        message,
-        devices: [...peers, localPartyId],
-        signatureAlgorithm,
-      })
-      const encryptedSetupMessage = toMpcServerMessage(
-        setupMessage,
-        hexEncryptionKey
-      )
-      await uploadMpcSetupMessage({
-        serverUrl,
-        sessionId,
-        message: encryptedSetupMessage,
-        messageId,
-      })
+  const setupMessage = await ensureSetupMessage({
+    keyShare,
+    signatureAlgorithm,
+    message,
+    chainPath,
+    devices: [...peers, localPartyId],
+    serverUrl,
+    sessionId,
+    hexEncryptionKey,
+    isInitiatingDevice,
+  })
 
-      return setupMessage
-    }
-
-    const encodedEncryptedSetupMsg = await waitForSetupMessage({
-      serverUrl,
-      sessionId,
-      messageId,
-    })
-    return fromMpcServerMessage(encodedEncryptedSetupMsg, hexEncryptionKey)
-  }
-
-  const setupMessage = await getSetupMessage()
-
-  const signMsgHash = shouldBePresent(
-    SignSession[signatureAlgorithm].setupMessageHash(setupMessage)
-  )
-
-  const hexSignMsgHash = Buffer.from(signMsgHash).toString('hex')
-  if (message != hexSignMsgHash) {
-    throw new Error('message hash not match')
-  }
-  const session = new SignSession[signatureAlgorithm](
+  const session = makeSignSession({
     setupMessage,
     localPartyId,
-    toMpcLibKeyshare({
-      keyShare,
-      signatureAlgorithm,
-    })
-  )
+    keyShare,
+    signatureAlgorithm,
+  })
 
   const { signal, abort } = new AbortController()
 
@@ -154,8 +119,9 @@ export const keysign = async ({
     })
 
     for (const msg of relayMessages) {
-      const decryptedMessage = fromMpcServerMessage(msg.body, hexEncryptionKey)
-      if (session.inputMessage(decryptedMessage)) {
+      if (
+        session.inputMessage(fromMpcServerMessage(msg.body, hexEncryptionKey))
+      ) {
         return
       }
       await attempt(
@@ -190,18 +156,20 @@ export const keysign = async ({
   const s = signature.slice(32, 64)
   const recoveryId = signature[64]
   const derSignature = encodeDERSignature(r, s)
-  const keysignSig: KeysignSignature = {
+  const result: KeysignSignature = {
     msg: Buffer.from(message, 'hex').toString('base64'),
     r: Buffer.from(r).toString('hex'),
     s: Buffer.from(s).toString('hex'),
     recovery_id: recoveryId.toString(16).padStart(2, '0'),
     der_signature: Buffer.from(derSignature).toString('hex'),
   }
+
   await markLocalPartyKeysignComplete({
     serverUrl,
     sessionId,
     messageId,
-    jsonSignature: JSON.stringify(keysignSig),
+    result,
   })
-  return keysignSig
+
+  return result
 }
