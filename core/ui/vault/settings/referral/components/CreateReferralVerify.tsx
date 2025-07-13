@@ -107,13 +107,16 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
               <Text size={14}>{chain}</Text>
             </HStack>
           </TxOverviewRow>
-          <TxOverviewMemo value={memo} />
+
           <TxOverviewRow>
-            <Text size={14}>{t('est_network_fee')}</Text>
-            <Text color="supporting">
+            <Text color="shy" size={14}>
+              {t('est_network_fee')}
+            </Text>
+            <Text size={14}>
               {formatFee({ chain, chainSpecific: chainSpecific.data })}
             </Text>
           </TxOverviewRow>
+          <TxOverviewMemo value={memo} />
         </TxOverviewPanel>
         <VStack
           style={{
