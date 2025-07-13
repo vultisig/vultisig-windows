@@ -1,53 +1,52 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
-import { FormProvider, useForm } from 'react-hook-form'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { DecorationLine } from '../Referrals.styled'
-import { ReferralFormData, referralSchema } from './config'
+import { useCreateReferralForm } from '../../provders/CreateReferralFormProvider'
+import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 
-export const CreateReferralForm = () => {
+export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
-  const methods = useForm<ReferralFormData>({
-    resolver: zodResolver(referralSchema),
-    defaultValues: { referralName: '', expiration: 1 },
-    mode: 'onBlur',
-  })
 
   const {
-    handleSubmit,
     formState: { isValid, isSubmitting },
-  } = methods
-
-  const onSubmit = handleSubmit(data => console.log(data))
+  } = useCreateReferralForm()
 
   return (
-    <FormProvider {...methods}>
-      <VStack
-        onSubmit={onSubmit}
+    <VStack flexGrow gap={40}>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={t('title_1')}
+      />
+      <ReferralPageWrapper
+        onSubmit={onFinish}
         as="form"
         data-testid="CreateReferralForm-Wrapper"
         flexGrow
         justifyContent="space-between"
       >
-        <StackSeparatedBy
-          direction="column"
-          separator={<DecorationLine />}
-          gap={14}
-        >
-          <ReferralCodeField />
-          <ExpirationField />
-          <Fees />
-        </StackSeparatedBy>
-        <Button disabled={!isValid || isSubmitting} type="submit">
-          {t('create_referral_form')}
-        </Button>
-      </VStack>
-    </FormProvider>
+        <VStack flexGrow justifyContent="space-between">
+          <StackSeparatedBy
+            direction="column"
+            separator={<DecorationLine />}
+            gap={14}
+          >
+            <ReferralCodeField />
+            <ExpirationField />
+            <Fees />
+          </StackSeparatedBy>
+          <Button disabled={!isValid || isSubmitting} type="submit">
+            {t('create_referral_form')}
+          </Button>
+        </VStack>
+      </ReferralPageWrapper>
+    </VStack>
   )
 }

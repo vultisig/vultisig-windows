@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -6,36 +5,29 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../../../../chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../../../../storage/fiatCurrency'
-import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
+import { useCreateReferralForm } from '../../../provders/CreateReferralFormProvider'
+import { useReferralPayoutAsset } from '../../../provders/ReferralPayoutAssetProvider'
 import { useTnsFeesQuery } from '../../../queries/useTnsFeesQuery'
-import { ReferralFormData } from '../config'
 
 const debounceDelayMs = 300
 
 export const Fees = () => {
   const { t } = useTranslation()
-  const { watch } = useFormContext<ReferralFormData>()
+  const { watch, setValue } = useCreateReferralForm()
+  const referralFeeAmount = watch('referralFeeAmount')
   const expiration = watch('expiration')
   const debouncedExpiration = useDebounce(expiration, debounceDelayMs)
   const tnsFees = useTnsFeesQuery(debouncedExpiration)
   const currency = useFiatCurrency()
-
-  const coin = shouldBePresent(
-    useCurrentVaultCoins().find(
-      coin => coin.ticker === chainFeeCoin.THORChain.ticker
-    )
-  )
-
+  const [coin] = useReferralPayoutAsset()
   const coinPrice = useCoinPriceQuery({
     coin,
   })
@@ -63,17 +55,26 @@ export const Fees = () => {
           </CenterAbsolutely>
         )}
         success={({ coinPrice, tnsFees: { registerFee, runeFee } }) => {
+          if (referralFeeAmount !== runeFee) {
+            setValue('referralFeeAmount', runeFee, {
+              shouldValidate: true,
+            })
+          }
+
+          const yearlyFee = (runeFee - registerFee) / debouncedExpiration
           const registerFeeFiat = formatAmount(
             registerFee * coinPrice,
             currency
           )
-          const renewalFeeFiat = formatAmount(
-            (runeFee - registerFee) * coinPrice,
+
+          const yearlyFeeFiat = formatAmount(
+            yearlyFee * debouncedExpiration * coinPrice,
             currency
           )
 
           return (
             <>
+              {/* Registration fee row */}
               <RowWrapper>
                 <Text size={13} color="supporting">
                   {t('referral_reg_fee')}
@@ -87,17 +88,19 @@ export const Fees = () => {
                   </Text>
                 </VStack>
               </RowWrapper>
+
+              {/* Costs row – now shows years × 1 RUNE */}
               <RowWrapper>
                 <Text size={13} color="supporting">
                   {t('referral_costs')}
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {debouncedExpiration} x{' '}
-                    {formatTokenAmount(registerFee, 'RUNE')}
+                    {debouncedExpiration} ×{' '}
+                    {formatTokenAmount(yearlyFee, 'RUNE')}
                   </Text>
                   <Text size={14} color="supporting">
-                    {renewalFeeFiat}
+                    {yearlyFeeFiat}
                   </Text>
                 </VStack>
               </RowWrapper>
