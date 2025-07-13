@@ -5,20 +5,17 @@ import {
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
-import {
-  decodeDecryptMessage,
-  encodeEncryptMessage,
-} from '../encodingAndEncryption'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
 import { initializeMpcLib } from '../lib/initialize'
-import { deleteRelayMessage } from '../relayMessage/delete'
-import { getRelayMessages } from '../relayMessage/get'
-import { sendRelayMessage } from '../relayMessage/send'
+import { deleteMpcRelayMessage } from '../message/relay/delete'
+import { getMpcRelayMessages } from '../message/relay/get'
+import { sendMpcRelayMessage } from '../message/relay/send'
+import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
+import { waitForSetupMessage } from '../message/setup/get'
+import { uploadMpcSetupMessage } from '../message/setup/upload'
 import { combineReshareCommittee } from '../reshareCommittee'
-import { waitForSetupMessage } from '../setupMessage/get'
-import { uploadSetupMessage } from '../setupMessage/upload'
 import { sleep } from '../sleep'
 
 export class Schnorr {
@@ -80,20 +77,23 @@ export class Schnorr {
           continue
         }
         console.log('outbound message:', message)
-        const messageToSend = await encodeEncryptMessage(
+        const messageToSend = toMpcServerMessage(
           message.body,
           this.hexEncryptionKey
         )
         message?.receivers.forEach(receiver => {
           // send message to receiver
-          sendRelayMessage({
+          sendMpcRelayMessage({
             serverUrl: this.serverURL,
-            localPartyId: this.localPartyId,
             sessionId: this.sessionId,
-            message: messageToSend,
-            to: receiver,
-            sequenceNo: this.sequenceNo,
-            messageHash: getMessageHash(base64Encode(message.body)),
+            message: {
+              session_id: this.sessionId,
+              from: this.localPartyId,
+              to: [receiver],
+              body: messageToSend,
+              hash: getMessageHash(base64Encode(message.body)),
+              sequence_no: this.sequenceNo,
+            },
           })
           this.sequenceNo++
         })
@@ -107,7 +107,7 @@ export class Schnorr {
     const start = Date.now()
     while (true) {
       try {
-        const parsedMessages = await getRelayMessages({
+        const parsedMessages = await getMpcRelayMessages({
           serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
@@ -125,7 +125,7 @@ export class Schnorr {
           console.log(
             `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
           )
-          const decryptedMessage = await decodeDecryptMessage(
+          const decryptedMessage = fromMpcServerMessage(
             msg.body,
             this.hexEncryptionKey
           )
@@ -137,7 +137,7 @@ export class Schnorr {
             return true
           }
           this.cache[cacheKey] = ''
-          await deleteRelayMessage({
+          await deleteMpcRelayMessage({
             serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
@@ -250,11 +250,11 @@ export class Schnorr {
           new Uint8Array(newCommitteeIdx)
         )
         // upload setup message to server
-        const encryptedSetupMsg = await encodeEncryptMessage(
+        const encryptedSetupMsg = toMpcServerMessage(
           setupMessage,
           this.hexEncryptionKey
         )
-        await uploadSetupMessage({
+        await uploadMpcSetupMessage({
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
@@ -267,7 +267,7 @@ export class Schnorr {
           sessionId: this.sessionId,
           messageId: 'eddsa',
         })
-        setupMessage = await decodeDecryptMessage(
+        setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
           this.hexEncryptionKey
         )

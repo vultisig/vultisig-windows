@@ -1,22 +1,22 @@
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { RelayMessage } from './RelayMessage'
+import { MpcRelayMessage } from '.'
 
-type GetRelayMessagesInput = {
+type GetMpcRelayMessagesInput = {
   serverUrl: string
   localPartyId: string
   sessionId: string
   messageId?: string
 }
 
-export const getRelayMessages = async ({
+export const getMpcRelayMessages = async ({
   serverUrl,
   localPartyId,
   sessionId,
   messageId,
-}: GetRelayMessagesInput) =>
-  queryUrl<RelayMessage[]>(
+}: GetMpcRelayMessagesInput) =>
+  queryUrl<MpcRelayMessage[]>(
     `${serverUrl}/message/${sessionId}/${localPartyId}`,
     {
       method: 'GET',

@@ -1,20 +1,22 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
 import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
-import {
-  decodeDecryptMessage,
-  encodeEncryptMessage,
-} from '../encodingAndEncryption'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
 import { initializeMpcLib } from '../lib/initialize'
-import { deleteRelayMessage } from '../relayMessage/delete'
-import { getRelayMessages } from '../relayMessage/get'
-import { sendRelayMessage } from '../relayMessage/send'
+import {
+  fromRelayMessageBody,
+  MpcRelayMessage,
+  toRelayMessageBody,
+} from '../message/relay'
+import { deleteMpcRelayMessage } from '../message/relay/delete'
+import { getMpcRelayMessages } from '../message/relay/get'
+import { sendMpcRelayMessage } from '../message/relay/send'
+import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
+import { waitForSetupMessage } from '../message/setup/get'
+import { uploadMpcSetupMessage } from '../message/setup/upload'
 import { combineReshareCommittee } from '../reshareCommittee'
-import { waitForSetupMessage } from '../setupMessage/get'
-import { uploadSetupMessage } from '../setupMessage/upload'
 import { sleep } from '../sleep'
 
 export class DKLS {
@@ -74,20 +76,25 @@ export class DKLS {
           continue
         }
         console.log('outbound message:', message)
-        const messageToSend = await encodeEncryptMessage(
-          message.body,
-          this.hexEncryptionKey
-        )
+        const body = await toRelayMessageBody({
+          body: message.body,
+          hexEncryptionKey: this.hexEncryptionKey,
+        })
+
         message?.receivers.forEach(receiver => {
+          const relayMessage: MpcRelayMessage = {
+            session_id: this.sessionId,
+            from: this.localPartyId,
+            to: [receiver],
+            body: body,
+            hash: getMessageHash(base64Encode(message.body)),
+            sequence_no: this.sequenceNo,
+          }
           // send message to receiver
-          sendRelayMessage({
+          sendMpcRelayMessage({
             serverUrl: this.serverURL,
-            localPartyId: this.localPartyId,
+            message: relayMessage,
             sessionId: this.sessionId,
-            message: messageToSend,
-            to: receiver,
-            sequenceNo: this.sequenceNo,
-            messageHash: getMessageHash(base64Encode(message.body)),
           })
           this.sequenceNo++
         })
@@ -101,7 +108,7 @@ export class DKLS {
     const start = Date.now()
     while (true) {
       try {
-        const parsedMessages = await getRelayMessages({
+        const parsedMessages = await getMpcRelayMessages({
           serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
@@ -119,10 +126,10 @@ export class DKLS {
           console.log(
             `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
           )
-          const decryptedMessage = await decodeDecryptMessage(
-            msg.body,
-            this.hexEncryptionKey
-          )
+          const decryptedMessage = fromRelayMessageBody({
+            body: msg.body,
+            hexEncryptionKey: this.hexEncryptionKey,
+          })
           const isFinish = session.inputMessage(decryptedMessage)
           if (isFinish) {
             await sleep(1000) // wait for 1 second to make sure all messages are processed
@@ -131,7 +138,7 @@ export class DKLS {
             return true
           }
           this.cache[cacheKey] = ''
-          await deleteRelayMessage({
+          await deleteMpcRelayMessage({
             serverUrl: this.serverURL,
             localPartyId: this.localPartyId,
             sessionId: this.sessionId,
@@ -164,12 +171,12 @@ export class DKLS {
           this.keygenCommittee
         )
         // upload setup message to server
-        const encryptedSetupMsg = await encodeEncryptMessage(
-          this.setupMessage,
-          this.hexEncryptionKey
-        )
+        const encryptedSetupMsg = toRelayMessageBody({
+          body: this.setupMessage,
+          hexEncryptionKey: this.hexEncryptionKey,
+        })
 
-        await uploadSetupMessage({
+        await uploadMpcSetupMessage({
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
@@ -180,7 +187,7 @@ export class DKLS {
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
         })
-        this.setupMessage = await decodeDecryptMessage(
+        this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
           this.hexEncryptionKey
         )
@@ -274,12 +281,12 @@ export class DKLS {
           newCommitteeIdxUint8
         )
         // upload setup message to server
-        const encryptedSetupMsg = await encodeEncryptMessage(
+        const encryptedSetupMsg = toMpcServerMessage(
           setupMessage,
           this.hexEncryptionKey
         )
         console.log('encrypted setup message:', encryptedSetupMsg)
-        await uploadSetupMessage({
+        await uploadMpcSetupMessage({
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
@@ -290,7 +297,7 @@ export class DKLS {
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
         })
-        setupMessage = await decodeDecryptMessage(
+        setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
           this.hexEncryptionKey
         )

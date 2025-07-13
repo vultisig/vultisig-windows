@@ -2,17 +2,17 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { retry } from '@lib/utils/query/retry'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-type GetSetupMessageInput = {
+type GetMpcSetupMessageInput = {
   serverUrl: string
   sessionId: string
   messageId?: string
 }
 
-const getSetupMessage = async ({
+const getMpcSetupMessage = async ({
   serverUrl,
   sessionId,
   messageId,
-}: GetSetupMessageInput) =>
+}: GetMpcSetupMessageInput) =>
   queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
     headers: withoutUndefinedFields({
       'Content-Type': 'application/json',
@@ -22,10 +22,10 @@ const getSetupMessage = async ({
   })
 
 export const waitForSetupMessage = async (
-  input: GetSetupMessageInput
+  input: GetMpcSetupMessageInput
 ): Promise<string> =>
   retry({
-    func: () => getSetupMessage(input),
+    func: () => getMpcSetupMessage(input),
     attempts: 10,
     delay: 1000,
   })

@@ -1,18 +1,9 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { encodeDERSignature } from '@core/mpc/derSignature'
-import {
-  decodeDecryptMessage,
-  encodeEncryptMessage,
-} from '@core/mpc/encodingAndEncryption'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { markLocalPartyKeysignComplete } from '@core/mpc/keysignComplete'
 import { SignSession } from '@core/mpc/lib/signSession'
-import { deleteRelayMessage } from '@core/mpc/relayMessage/delete'
-import { getRelayMessages } from '@core/mpc/relayMessage/get'
-import { sendRelayMessage } from '@core/mpc/relayMessage/send'
-import { waitForSetupMessage } from '@core/mpc/setupMessage/get'
-import { uploadSetupMessage } from '@core/mpc/setupMessage/upload'
 import { sleep } from '@core/mpc/sleep'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
@@ -21,6 +12,12 @@ import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
 import { toMpcLibKeyshare } from '../lib/keyshare'
+import { deleteMpcRelayMessage } from '../message/relay/delete'
+import { getMpcRelayMessages } from '../message/relay/get'
+import { sendMpcRelayMessage } from '../message/relay/send'
+import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
+import { waitForSetupMessage } from '../message/setup/get'
+import { uploadMpcSetupMessage } from '../message/setup/upload'
 import { makeSetupMessage } from './setupMessage/make'
 
 type KeysignInput = {
@@ -61,11 +58,11 @@ export const keysign = async ({
         devices: [...peers, localPartyId],
         signatureAlgorithm,
       })
-      const encryptedSetupMessage = await encodeEncryptMessage(
+      const encryptedSetupMessage = toMpcServerMessage(
         setupMessage,
         hexEncryptionKey
       )
-      await uploadSetupMessage({
+      await uploadMpcSetupMessage({
         serverUrl,
         sessionId,
         message: encryptedSetupMessage,
@@ -80,7 +77,7 @@ export const keysign = async ({
       sessionId,
       messageId,
     })
-    return decodeDecryptMessage(encodedEncryptedSetupMsg, hexEncryptionKey)
+    return fromMpcServerMessage(encodedEncryptedSetupMsg, hexEncryptionKey)
   }
 
   const setupMessage = await getSetupMessage()
@@ -117,22 +114,25 @@ export const keysign = async ({
 
     const { body, receivers } = message
 
-    const messageToSend = await encodeEncryptMessage(body, hexEncryptionKey)
+    const messageToSend = toMpcServerMessage(body, hexEncryptionKey)
 
     await attempt(
       Promise.all(
-        receivers.map((receiver, index) =>
-          sendRelayMessage({
+        receivers.map((receiver, index) => {
+          return sendMpcRelayMessage({
             serverUrl,
-            localPartyId,
             sessionId,
-            message: messageToSend,
-            to: receiver,
-            sequenceNo: sequenceNo + index,
-            messageHash: getMessageHash(base64Encode(body)),
+            message: {
+              session_id: sessionId,
+              from: localPartyId,
+              to: [receiver],
+              body: messageToSend,
+              hash: getMessageHash(base64Encode(body)),
+              sequence_no: sequenceNo + index,
+            },
             messageId,
           })
-        )
+        })
       )
     )
 
@@ -146,7 +146,7 @@ export const keysign = async ({
       )
     }
 
-    const relayMessages = await getRelayMessages({
+    const relayMessages = await getMpcRelayMessages({
       serverUrl,
       localPartyId,
       sessionId,
@@ -154,15 +154,12 @@ export const keysign = async ({
     })
 
     for (const msg of relayMessages) {
-      const decryptedMessage = await decodeDecryptMessage(
-        msg.body,
-        hexEncryptionKey
-      )
+      const decryptedMessage = fromMpcServerMessage(msg.body, hexEncryptionKey)
       if (session.inputMessage(decryptedMessage)) {
         return
       }
       await attempt(
-        deleteRelayMessage({
+        deleteMpcRelayMessage({
           serverUrl,
           localPartyId,
           sessionId,

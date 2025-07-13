@@ -1,25 +1,26 @@
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-type UploadSetupMessageInput = {
+type DeleteRelayMessageInput = {
   serverUrl: string
-  message: string
+  localPartyId: string
   sessionId: string
+  messageHash: string
   messageId?: string
 }
 
-export const uploadSetupMessage = async ({
+export const deleteMpcRelayMessage = async ({
   serverUrl,
-  message,
+  localPartyId,
   sessionId,
+  messageHash,
   messageId,
-}: UploadSetupMessageInput) =>
-  queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
-    method: 'POST',
+}: DeleteRelayMessageInput) =>
+  queryUrl(`${serverUrl}/message/${sessionId}/${localPartyId}/${messageHash}`, {
+    method: 'DELETE',
     headers: withoutUndefinedFields({
       'Content-Type': 'application/json',
       message_id: messageId,
     }),
-    body: message,
     responseType: 'none',
   })
