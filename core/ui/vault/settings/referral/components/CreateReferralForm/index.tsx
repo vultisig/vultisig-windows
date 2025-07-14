@@ -6,7 +6,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { useCreateReferralForm } from '../../provders/CreateReferralFormProvider'
+import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
 import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
