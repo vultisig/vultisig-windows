@@ -1,4 +1,4 @@
-import { thorchainNodeBaseUrl } from '../constants'
+import { thorchainNodeBaseUrl } from '../config'
 
 type LastBlockEntry = { chain: string; thorchain: string }
 
