@@ -1,5 +1,4 @@
 import { keysign } from '@core/mpc/keysign'
-import { initializeMpcLib } from '@core/mpc/lib/initialize'
 import { ChildrenProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
@@ -31,8 +30,6 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType }) => {
       const keyShare = vault.keyShares[signatureAlgorithm]
-
-      await initializeMpcLib(signatureAlgorithm)
 
       return chainPromises(
         msgs.map(

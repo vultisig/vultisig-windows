@@ -16,6 +16,7 @@ import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields
 import { Minutes } from '@lib/utils/time'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
+import { initializeMpcLib } from '../lib/initialize'
 import { makeSignSession, SignSession } from '../lib/signSession'
 import { deleteMpcRelayMessage } from '../message/relay/delete'
 import { getMpcRelayMessages } from '../message/relay/get'
@@ -50,6 +51,8 @@ export const keysign = async ({
   hexEncryptionKey,
   isInitiatingDevice,
 }: KeysignInput) => {
+  await initializeMpcLib(signatureAlgorithm)
+
   const messageId = getMessageHash(message)
 
   const setupMessage = await ensureSetupMessage({
