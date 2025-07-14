@@ -13,8 +13,8 @@ import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../../../../chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../../../../storage/fiatCurrency'
-import { useCreateReferralForm } from '../../../provders/CreateReferralFormProvider'
-import { useReferralPayoutAsset } from '../../../provders/ReferralPayoutAssetProvider'
+import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
+import { useReferralPayoutAsset } from '../../../providers/ReferralPayoutAssetProvider'
 import { useTnsFeesQuery } from '../../../queries/useTnsFeesQuery'
 
 const debounceDelayMs = 300
