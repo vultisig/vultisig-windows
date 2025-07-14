@@ -10,31 +10,25 @@ import { SendFormIconsWrapper } from '../addresses/components/SendFormIconsWrapp
 import { SendInputContainer } from '../components/SendInputContainer'
 import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
-import { useCurrentSendCoin } from '../state/sendCoin'
 
 export const ManageAmountInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [amount] = useSendAmount()
-  const coin = useCurrentSendCoin()
   const [
     {
       field,
-      fieldsChecked: { amount: isAmountFieldChecked },
+      errors: { amount: amountError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
 
-  const isOpen = field === 'address'
-
+  const isOpen = field === 'amount'
+  const isChecked = Boolean(amount) && !isOpen && !amountError
   return (
     <CollapsedCoinInputContainer
       onClick={() => {
         setFocusedSendField(state => ({
           ...state,
-          fieldsChecked: {
-            ...state.fieldsChecked,
-            coin: !!coin,
-          },
           field: 'amount',
         }))
       }}
@@ -46,7 +40,7 @@ export const ManageAmountInputFieldCollapsed = () => {
         </Text>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {isAmountFieldChecked && <CheckmarkIcon />}
+        {isChecked && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />

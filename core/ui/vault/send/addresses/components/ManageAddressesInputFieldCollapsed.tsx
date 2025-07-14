@@ -19,13 +19,13 @@ export const ManageAddressesInputFieldCollapsed = () => {
   const [
     {
       field,
-      fieldsChecked: { address: isAddressFieldChecked },
       errors: { address: addressError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
 
   const isOpen = field === 'address'
+  const isChecked = address && !isOpen && !addressError
 
   return (
     <CollapsedCoinInputContainer
@@ -45,7 +45,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
         </Text>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {!addressError && isAddressFieldChecked && <CheckmarkIcon />}
+        {isChecked && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />

@@ -95,7 +95,7 @@ export const getKeysignPayload = (
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: fromChainAmount(
-            Number(transaction.transactionDetails.amount?.amount),
+            Number(transaction.transactionDetails.amount?.amount) || 0,
             accountCoin.decimals
           ),
           isDeposit: transaction.isDeposit,
@@ -104,6 +104,9 @@ export const getKeysignPayload = (
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
           feeSettings: effectiveFeeSettings,
+          data: transaction.transactionDetails.data as
+            | `0x${string}`
+            | undefined,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {

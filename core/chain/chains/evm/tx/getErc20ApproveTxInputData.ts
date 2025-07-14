@@ -6,10 +6,9 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
 import { EvmChain } from '../../../Chain'
-import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields'
+import { getEvmTwFeeFields } from './fee/tw/getEvmTwFeeFields'
 import { getEvmTwChainId } from './tw/getEvmTwChainId'
 import { getEvmTwNonce } from './tw/getEvmTwNonce'
-
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
@@ -33,8 +32,9 @@ export const getErc20ApproveTxInputData = ({
 
   const { blockchainSpecific } = keysignPayload
 
-  const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
-    blockchainSpecific.value as EthereumSpecific
+  const evmSpecific = blockchainSpecific.value as EthereumSpecific
+
+  const { nonce, maxFeePerGasWei, priorityFee, gasLimit } = evmSpecific
 
   const signingInput = TW.Ethereum.Proto.SigningInput.create({
     transaction: {
@@ -49,10 +49,11 @@ export const getErc20ApproveTxInputData = ({
     }),
     nonce: getEvmTwNonce(nonce),
     toAddress: shouldBePresent(keysignPayload.coin).contractAddress,
-    ...getSigningInputEnvelopedTxFields({
-      maxFeePerGasWei,
-      priorityFee,
-      gasLimit,
+    ...getEvmTwFeeFields({
+      chain,
+      maxFeePerGasWei: BigInt(maxFeePerGasWei),
+      priorityFee: BigInt(priorityFee),
+      gasLimit: BigInt(gasLimit),
     }),
   })
 
