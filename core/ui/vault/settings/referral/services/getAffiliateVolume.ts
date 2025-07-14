@@ -1,6 +1,6 @@
-import { midgardBaseUrl } from '../constants'
+import { midgardBaseUrl } from '../config'
 
-export type AffiliateVolume = { meta: { volume: string } }
+type AffiliateVolume = { meta: { volume: string } }
 
 export const getAffiliateVolume = async (thorname: string) => {
   const res = await fetch(

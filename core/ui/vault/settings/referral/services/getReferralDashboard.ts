@@ -1,6 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
-import { blockTimeSec } from '../constants'
+import { blockTimeSec } from '../config'
 import { getAffiliateVolume } from './getAffiliateVolume'
 import {
   fetchUserValidName,
