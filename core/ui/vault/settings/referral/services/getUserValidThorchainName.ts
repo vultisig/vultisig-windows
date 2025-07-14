@@ -1,10 +1,10 @@
-import { blocksPerYear } from '../constants'
+import { blocksPerYear } from '../config'
 import { getCurrentHeight } from './getCurrentHeight'
-import { getUserThorchainNames } from './getUserThorchainNames'
 import {
   getUserThorchainNameDetails,
   NameDetails,
-} from './getUserThotchainNameDetails'
+} from './getUserThorchainNameDetails'
+import { getUserThorchainNames } from './getUserThorchainNames'
 
 export type ValidThorchainNameDetails = NameDetails & {
   remainingBlocks: number
