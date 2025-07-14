@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
@@ -8,7 +7,6 @@ import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
-import { normalizeTxHash } from '@core/ui/mpc/keysign/utils/normalizeTxHash'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -30,6 +28,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { KeysignTxFee } from '../components/KeysignTxFee'
 import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -43,11 +42,7 @@ export const SwapKeysignTxOverview = ({
   const { openUrl } = useCore()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
-  const txHashNormalized = normalizeTxHash(getLastItem(txHashes), {
-    memo: value.memo,
-    chain: value.coin?.chain as Chain,
-  })
-  const { coin: potentialFromCoin, blockchainSpecific } = value
+  const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
   const {
     fromAmount,
@@ -56,26 +51,17 @@ export const SwapKeysignTxOverview = ({
   } = getRecordUnionValue(swapPayload)
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
-  const { chain } = shouldBePresent(toCoin)
+  const { chain: sourceChain } = shouldBePresent(fromCoin)
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
   }, [fromAmount, fromCoin.decimals])
 
-  const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null
-
-    return formatFee({
-      chain: chain as Chain,
-      chainSpecific: blockchainSpecific,
-    })
-  }, [blockchainSpecific, chain])
-
   const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
     swapPayload,
     {
       native: ({ chain }) => chain,
-      general: () => chain,
+      general: () => sourceChain,
     }
   )
 
@@ -111,14 +97,14 @@ export const SwapKeysignTxOverview = ({
         <SwapInfoWrapper gap={16} fullWidth>
           <TrackTxPrompt
             title={t('transaction')}
-            value={txHashNormalized}
+            value={getLastItem(txHashes)}
             chain={blockExplorerChain}
           />
           {'erc20Approve' in value && (
             <TrackTxPrompt
               title={t('approval_tx')}
               value={txHashes[0]}
-              chain={chain}
+              chain={sourceChain}
             />
           )}
           <HStack fullWidth justifyContent="space-between" alignItems="center">
@@ -171,26 +157,12 @@ export const SwapKeysignTxOverview = ({
               </TrimmedText>
             </HStack>
           )}
-          {toCoin && (
-            <HStack
-              fullWidth
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text weight="500" size={14} color="shy">
-                {t('network_fee')}
-              </Text>
-
-              <Text cropped weight={500} size={14} color="contrast">
-                {networkFeesFormatted}
-              </Text>
-            </HStack>
-          )}
+          <KeysignTxFee />
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
             kind="secondary"
-            onClick={() => trackTransaction(txHashNormalized)}
+            onClick={() => trackTransaction(getLastItem(txHashes))}
           >
             {t('track')}
           </Button>

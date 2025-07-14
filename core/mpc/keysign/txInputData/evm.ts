@@ -1,13 +1,9 @@
 import { create } from '@bufbuild/protobuf'
+import {
+  getEvmTwFeeFields,
+  GetEvmTwFeeFieldsInput,
+} from '@core/chain/chains/evm/tx/fee/tw/getEvmTwFeeFields'
 import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
-import {
-  EnvelopedTxFeeFields,
-  getSigningInputEnvelopedTxFields,
-} from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
-import {
-  getSigningInputLegacyTxFields,
-  LegacyTxFeeFields,
-} from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
@@ -53,11 +49,12 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     return [approveTxInputData, ...restOfTxInputData]
   }
 
-  const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
-    getBlockchainSpecificValue(
-      keysignPayload.blockchainSpecific,
-      'ethereumSpecific'
-    )
+  const evmSpecific = getBlockchainSpecificValue(
+    keysignPayload.blockchainSpecific,
+    'ethereumSpecific'
+  )
+
+  const { nonce } = evmSpecific
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
 
@@ -165,21 +162,20 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     }
   }
 
-  const getFeeFields = (): LegacyTxFeeFields | EnvelopedTxFeeFields => {
+  const getFeeFields = () => {
+    const input: GetEvmTwFeeFieldsInput = {
+      chain,
+      maxFeePerGasWei: BigInt(evmSpecific.maxFeePerGasWei),
+      priorityFee: BigInt(evmSpecific.priorityFee),
+      gasLimit: BigInt(evmSpecific.gasLimit),
+    }
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-
-      return getSigningInputLegacyTxFields({
-        gasPrice: BigInt(gasPrice || 0),
-        gasLimit: BigInt(gas),
-      })
+      input.maxFeePerGasWei = BigInt(gasPrice)
+      input.gasLimit = BigInt(gas)
     }
 
-    return getSigningInputEnvelopedTxFields({
-      maxFeePerGasWei: maxFeePerGasWei,
-      priorityFee: priorityFee,
-      gasLimit: gasLimit,
-    })
+    return getEvmTwFeeFields(input)
   }
 
   const input = TW.Ethereum.Proto.SigningInput.create({

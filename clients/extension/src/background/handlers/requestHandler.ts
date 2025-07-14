@@ -2,6 +2,7 @@ import {
   handleFindAccounts,
   handleGetAccounts,
 } from '@clients/extension/src/background/handlers/accountsHandler'
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
@@ -11,6 +12,8 @@ import {
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
 import { storage } from '@clients/extension/src/storage'
+import { setCurrentCosmosChainId } from '@clients/extension/src/storage/currentCosmosChainId'
+import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -59,8 +62,6 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
-
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
@@ -108,7 +109,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (account && getChainKind(chain) === 'evm') {
+            if (!account) throw new EIP1193Error(4001)
+
+            if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
                 `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
                 account
@@ -134,8 +137,7 @@ export const handleRequest = (
               Chain.Solana,
             ] as Chain[]
 
-            const result = specialChains.includes(chain) ? account : [account]
-            resolve(result)
+            resolve(specialChains.includes(chain) ? account : [account])
           })
           .catch(reject)
 
@@ -473,17 +475,10 @@ export const handleRequest = (
           getCosmosChainByChainId(param.chainId) ||
             getEvmChainByChainId(param.chainId)
         )
-        console.log('chain:', chain)
-
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          console.log('safeVaultId:', safeVaultId)
-
           const host = getDappHostname(sender)
-          console.log('host:', host)
-
           const allSessions = await getVaultsAppSessions()
-
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
           if (previousSession) {
@@ -502,7 +497,11 @@ export const handleRequest = (
               },
             })
           } else {
-            await setCurrentEVMChainId(param.chainId)
+            if (getChainKind(chain) === 'evm') {
+              await setCurrentEVMChainId(param.chainId)
+            } else if (getChainKind(chain) === 'cosmos') {
+              await setCurrentCosmosChainId(param.chainId)
+            }
           }
           resolve(param.chainId)
         })
@@ -610,12 +609,19 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
         if (Array.isArray(params)) {
           try {
-            const [address, msgParamsString] = params
-            const msgParams = JSON.parse(String(msgParamsString))
+            const [address, rawMsgParams] = params
+            let msgParams: any
+            try {
+              msgParams = JSON.parse(String(rawMsgParams))
+            } catch {
+              msgParams = rawMsgParams
+            }
+
             const { domain, types, message } = msgParams
-            // "EIP712Domain" is removed (ethers handles it separately)
-            if (types['EIP712Domain']) {
-              delete types['EIP712Domain']
+
+            // Remove EIP712Domain if present — ethers handles it internally
+            if (types?.EIP712Domain) {
+              delete types.EIP712Domain
             }
 
             const hashMessage = TypedDataEncoder.encode(domain, types, message)
@@ -630,7 +636,6 @@ export const handleRequest = (
               status: 'default',
             })
               .then(result => {
-                // For eth_signTypedData_v4, return the signature directly
                 let sig = Signature.from(ensureHexPrefix(result.txHash))
                 if (sig.v < 27) {
                   sig = Signature.from({

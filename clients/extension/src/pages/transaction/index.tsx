@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
+import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
@@ -17,7 +18,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
+import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -51,6 +52,7 @@ export const TransactionPage = () => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const [updatedTxFee, setUpdatedTxFee] = useState<string | null>(null)
+  const [updatedGasLimit, setUpdatedGasLimit] = useState<number | null>(null)
   const handleClose = (): void => {
     window.close()
   }
@@ -70,7 +72,7 @@ export const TransactionPage = () => {
               {
                 evm: () => ({
                   priority: 'fast',
-                  gasLimit: defaultEvmSwapGasLimit,
+                  gasLimit: updatedGasLimit || defaultEvmSwapGasLimit,
                 }),
                 utxo: () => ({ priority: 'fast' }),
                 cosmos: () => null,
@@ -80,6 +82,7 @@ export const TransactionPage = () => {
                 ton: () => null,
                 ripple: () => null,
                 tron: () => null,
+                cardano: () => null,
               }
             )
 
@@ -232,7 +235,7 @@ export const TransactionPage = () => {
                                           ?.gasSettings?.gasLimit
                                       )}
                                       baseFee={Number(transactionPayload.txFee)}
-                                      onFeeChange={fee => {
+                                      onFeeChange={async (fee, gasLimit) => {
                                         if (
                                           'keysign' in keysignMessagePayload
                                         ) {
@@ -247,6 +250,36 @@ export const TransactionPage = () => {
                                             Number(transactionPayload.txFee) +
                                             Number(priorityFeeInBaseUnit)
                                           setUpdatedTxFee(totalFee.toString())
+                                          setUpdatedGasLimit(gasLimit)
+
+                                          // Update the stored transaction with new gas limit
+                                          const updatedTransaction = {
+                                            ...transaction,
+                                            transactionPayload: {
+                                              ...transaction.transactionPayload,
+                                              keysign: {
+                                                ...transactionPayload,
+                                                transactionDetails: {
+                                                  ...transactionPayload.transactionDetails,
+                                                  gasSettings: {
+                                                    ...transactionPayload
+                                                      .transactionDetails
+                                                      .gasSettings,
+                                                    gasLimit:
+                                                      gasLimit.toString(),
+                                                  },
+                                                },
+                                              },
+                                            },
+                                          }
+
+                                          await updateTransaction(
+                                            getVaultId(vault),
+                                            updatedTransaction
+                                          )
+
+                                          // Re-process transaction with updated gas settings
+                                          processTransaction()
                                         }
                                       }}
                                     />

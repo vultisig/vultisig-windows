@@ -18,6 +18,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "knip": "knip",
+    "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files"
   },
   "dependencies": {
@@ -31,7 +32,6 @@
     "@lifi/sdk": "^3.6.2",
     "@react-spring/web": "^9.7.5",
     "@rive-app/react-canvas": "^4.18.3",
-    "@tanstack/query-sync-storage-persister": "^5.68.0",
     "@tanstack/react-query": "^5.68.0",
     "@tanstack/react-query-persist-client": "^5.68.0",
     "@trustwallet/wallet-core": "^4.3.3",
@@ -83,7 +83,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.0.0",
     "knip": "^5.46.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "syncpack": "^13.0.3",
     "tailwindcss": "^4.0.14",
     "typescript": "^5.8.2",

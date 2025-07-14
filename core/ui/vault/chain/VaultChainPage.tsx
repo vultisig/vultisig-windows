@@ -1,5 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { extractCoinKey } from '@core/chain/coin/Coin'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
@@ -54,7 +55,7 @@ export const VaultChainPage = () => {
   const fiatCurrency = useFiatCurrency()
   const vaultCoins = useCurrentVaultChainCoins(chain)
   const address = useCurrentVaultAddress(chain)
-  const hasMultipleCoinsSupport = knownTokens[chain].length > 1
+  const hasMultipleCoinsSupport = knownTokens[chain].length > 0
   const copyAddress = useCopyAddress()
   const navigate = useCoreNavigate()
 
@@ -87,7 +88,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions chain={chain} />
+        <VaultPrimaryActions fromChain={chain} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -179,7 +180,7 @@ export const VaultChainPage = () => {
                   onClick={() =>
                     navigate({
                       id: 'vaultChainCoinDetail',
-                      state: { coin },
+                      state: { coin: extractCoinKey(coin) },
                     })
                   }
                 >

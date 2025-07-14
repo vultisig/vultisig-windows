@@ -61,8 +61,13 @@ export const SetPasscode = () => {
         )}
         renderContent={() => (
           <>
-            <PasscodeInput onChange={setPasscode} label={t('enter_passcode')} />
             <PasscodeInput
+              value={passcode}
+              onChange={setPasscode}
+              label={t('enter_passcode')}
+            />
+            <PasscodeInput
+              value={confirmPasscode}
               onChange={setConfirmPasscode}
               label={t('confirm_passcode')}
             />

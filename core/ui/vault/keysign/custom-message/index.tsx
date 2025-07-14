@@ -1,6 +1,5 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/StartKeysignPrompt'
 import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -9,6 +8,8 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 
 export const SignCustomMessagePage = () => {
   const { t } = useTranslation()

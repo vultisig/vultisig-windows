@@ -44,8 +44,8 @@ export const PillWrapper = styled.div`
     content: '';
     position: absolute;
     left: -2px;
-    bottom: -470px;
-    height: 470px;
+    bottom: -1780%;
+    height: 420px;
     width: 2px;
     background-color: ${getColor('foreground')};
   }

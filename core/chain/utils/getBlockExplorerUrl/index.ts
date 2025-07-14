@@ -44,6 +44,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
   [Chain.Tron]: 'https://tronscan.org/#',
   [Chain.Zcash]: 'https://blockchair.com/zcash',
+  [Chain.Cardano]: 'https://cardanoscan.io',
 }
 
 export const getBlockExplorerUrl = ({
@@ -87,6 +88,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Akash]: () => `${baseUrl}/address/${value}`,
         [Chain.Tron]: () => `${baseUrl}/address/${value}`,
         [Chain.Zcash]: () => `${baseUrl}/address/${value}`,
+        [Chain.Cardano]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -122,6 +124,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Akash]: () => `${baseUrl}/tx/${value}`,
         [Chain.Tron]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
+        [Chain.Cardano]: () => `${baseUrl}/transaction/${value}`,
       }),
   })
 }

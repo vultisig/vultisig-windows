@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import {
   UseFormGetValues,
+  UseFormRegister,
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
@@ -13,6 +14,7 @@ type DepositFormHandlers = {
   getValues: UseFormGetValues<FormData>
   watch: UseFormWatch<FormData>
   chain: Chain
+  register: UseFormRegister<FormData>
 }
 
 export const {

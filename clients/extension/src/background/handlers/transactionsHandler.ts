@@ -2,6 +2,7 @@ import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
+import { initializeMessenger } from '../../messengers/initializeMessenger'
 import { storage } from '../../storage'
 import {
   addTransactionToVault,
@@ -11,6 +12,8 @@ import {
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
 import { handleOpenPanel } from '../window/windowManager'
+
+const popupMessenger = initializeMessenger({ connect: 'popup' })
 
 export const handleSendTransaction = async (
   transaction: ITransaction
@@ -42,9 +45,22 @@ export const handleSendTransaction = async (
     })
 
     return await new Promise<TxResult>((resolve, reject) => {
+      let isResolved = false
+      const cleanUp = () => {
+        chrome.windows.onRemoved.removeListener(onRemoved)
+      }
+
+      popupMessenger.reply(`tx_result_${uuid}`, (txResult: TxResult) => {
+        if (isResolved) return
+        isResolved = true
+        cleanUp()
+        resolve({ ...txResult })
+      })
+
       const onRemoved = async (closedWindowId: number) => {
         if (closedWindowId !== createdWindowId) return
-
+        if (isResolved) return
+        isResolved = true
         try {
           const currentTransactions = await getVaultTransactions(currentVaultId)
           const matchedTransaction = currentTransactions.find(
@@ -77,7 +93,7 @@ export const handleSendTransaction = async (
         } catch (err) {
           reject(err)
         } finally {
-          chrome.windows.onRemoved.removeListener(onRemoved)
+          cleanUp()
         }
       }
 

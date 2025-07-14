@@ -32,7 +32,7 @@ import styled from 'styled-components'
 
 const ConnectedAppStatus = styled.span<{ connected: boolean }>`
   background-color: ${({ connected }) =>
-    getColor(connected ? 'alertSuccess' : 'alertInfo')};
+    getColor(connected ? 'primary' : 'primaryAlt')};
   border: solid 4px ${getColor('buttonBackgroundDisabled')};
   border-radius: 50%;
   height: 16px;
@@ -44,13 +44,13 @@ const ConnectedAppStatus = styled.span<{ connected: boolean }>`
 
 const ConnectedApp = styled(IconButton)`
   background-color: ${getColor('buttonBackgroundDisabled')};
-  border: solid 1px ${getColor('borderLight')};
+  border: solid 1px ${getColor('foregroundExtra')};
   border-radius: 50%;
-  color: ${getColor('textExtraLight')};
+  color: ${getColor('textShy')};
   position: initial;
 
   &:hover {
-    color: ${getColor('textPrimary')};
+    color: ${getColor('text')};
   }
 `
 

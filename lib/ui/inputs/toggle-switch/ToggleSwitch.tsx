@@ -12,12 +12,11 @@ const StyledToggleSwitch = styled(HStack)`
 `
 
 const StyledToggleButton = styled(Button)<{ active: boolean }>`
-  flex-shrink: 0;
   ${({ active, disabled }) =>
     active
       ? css`
-          background-color: ${getColor('backgroundPrimary')};
-          color: ${getColor('textPrimary')};
+          background-color: ${getColor('background')};
+          color: ${getColor('text')};
         `
       : disabled
         ? css`

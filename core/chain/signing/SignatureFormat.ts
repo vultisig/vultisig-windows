@@ -12,4 +12,5 @@ export const signatureFormats: Record<ChainKind, SignatureFormat> = {
   utxo: 'der',
   ripple: 'rawWithRecoveryId',
   tron: 'rawWithRecoveryId',
+  cardano: 'raw',
 }

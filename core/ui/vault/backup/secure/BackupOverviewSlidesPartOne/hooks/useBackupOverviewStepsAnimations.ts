@@ -1,6 +1,6 @@
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
@@ -13,8 +13,16 @@ export const useBackupOverviewStepsAnimations = (numberOfShares: number) => {
       steps: backupVaultAnimations,
     })
 
+  const animationName = useMemo(() => {
+    if (numberOfShares >= 5) {
+      return 'secure-vault-overview-5plus'
+    }
+
+    return `secure-vault-backup-${numberOfShares > 3 ? '3of4' : '2of3'}`
+  }, [numberOfShares])
+
   const { RiveComponent, rive } = useRive({
-    src: `/core/animations/secure-vault-backup-${numberOfShares === 2 || numberOfShares === 3 ? '2of3' : numberOfShares === 4 ? '3of4' : '5plus'}.riv`,
+    src: `/core/animations/${animationName}.riv`,
     autoplay: true,
     stateMachines: [stateMachineName],
   })

@@ -30,7 +30,6 @@ export const useDualCurrencyAmountInput = ({
 
       setFocusedSendField(s => ({
         ...s,
-        fieldsChecked: { ...s.fieldsChecked, amount: !!base },
       }))
     },
     [coinPrice, currencyInputMode, setFocusedSendField, setValue]
