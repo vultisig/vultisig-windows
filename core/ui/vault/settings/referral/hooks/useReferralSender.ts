@@ -1,4 +1,4 @@
-import { useReferralPayoutAsset } from '../provders/ReferralPayoutAssetProvider'
+import { useReferralPayoutAsset } from '../providers/ReferralPayoutAssetProvider'
 
 export const useReferralSender = () => {
   const [{ address }] = useReferralPayoutAsset()
