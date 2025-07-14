@@ -1,4 +1,6 @@
-import { blocksPerYear, thorchainNodeBaseUrl } from '../constants'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+
+import { blocksPerYear, thorchainNodeBaseUrl } from '../config'
 
 type NetworkRaw = {
   tns_register_fee_rune: string
@@ -17,7 +19,10 @@ export const getTnsFees = async (years: number) => {
   const perBlock = BigInt(tns_fee_per_block_rune)
   const amount = register + perBlock * BigInt(years) * BigInt(blocksPerYear)
 
-  const runeFee = Number(amount) / 1e8
+  const runeFee = Number(amount) / chainFeeCoin.THORChain.decimals
 
-  return { runeFee, registerFee: Number(register) / 1e8 }
+  return {
+    runeFee,
+    registerFee: Number(register) / chainFeeCoin.THORChain.decimals,
+  }
 }
