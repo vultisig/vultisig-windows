@@ -22,7 +22,7 @@ const baseFeeMultiplier = 1.5
 export const getEthereumSpecific: ChainSpecificResolver<
   EthereumSpecific,
   EvmFeeSettings
-> = async ({ coin, feeSettings, amount, receiver }) => {
+> = async ({ coin, feeSettings, amount, receiver, data }) => {
   const chain = coin.chain as EvmChain
 
   const nonce = BigInt(
@@ -41,6 +41,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
         account: coin.address as `0x${string}`,
         to: shouldBePresent(receiver) as `0x${string}`,
         value,
+        data,
       })
 
     return create(EthereumSpecificSchema, {
