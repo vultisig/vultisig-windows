@@ -62,7 +62,7 @@ export const ManageReferralsPage = () => {
             <ManageExistingReferral
               onEditFriendReferral={() => setUiState('editFriendReferral')}
               onEditReferral={() => setUiState('editReferral')}
-              referralDashboardData={shouldBePresent(referralDashboardData)}
+              referralDashboardData={referralDashboardData}
             />
           )}
           default={() => (
