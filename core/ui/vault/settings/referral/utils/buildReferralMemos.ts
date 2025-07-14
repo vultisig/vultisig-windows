@@ -8,5 +8,5 @@ export const buildCreateReferralMemo = ({
   ownerThorAddr: string
 }) => `~:${name.toUpperCase()}:THOR:${payoutAddress}:${ownerThorAddr}`
 
-export const buildRenewReferralMemo = (name: string, thorAliasAddr: string) =>
-  `~:${name.toUpperCase()}:THOR:${thorAliasAddr}`
+// export const buildRenewReferralMemo = (name: string, thorAliasAddr: string) =>
+//   `~:${name.toUpperCase()}:THOR:${thorAliasAddr}`
