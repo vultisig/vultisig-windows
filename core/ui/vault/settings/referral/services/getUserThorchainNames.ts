@@ -1,4 +1,4 @@
-import { midgardBaseUrl } from '../constants'
+import { midgardBaseUrl } from '../config'
 
 export const getUserThorchainNames = async (
   address: string
