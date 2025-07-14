@@ -1,6 +1,6 @@
-import { midgardBaseUrl } from '../constants'
+import { midgardBaseUrl } from '../config'
 
-export type Pool = {
+type Pool = {
   asset: string
   status: string
 }
