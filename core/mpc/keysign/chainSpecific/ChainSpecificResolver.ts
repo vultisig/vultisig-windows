@@ -10,6 +10,7 @@ export type ChainSpecificResolverInput<T = any> = {
   isDeposit?: boolean
   amount?: number
   transactionType?: TransactionType
+  data?: string
 }
 
 export type ChainSpecificResolver<R = KeysignChainSpecificValue, T = any> = (
