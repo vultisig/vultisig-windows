@@ -23,11 +23,15 @@ import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
 type Props = {
   onEditReferral: () => void
   onEditFriendReferral: () => void
-  referralDashboardData: ReferralDashboard
+  referralDashboardData?: ReferralDashboard
 }
 
 export const ManageExistingReferral = ({
-  referralDashboardData: { name, collectedRune, expiresOn },
+  referralDashboardData: {
+    name,
+    collectedRune,
+    expiresOn,
+  } = {} as ReferralDashboard,
   onEditFriendReferral,
   onEditReferral,
 }: Props) => {

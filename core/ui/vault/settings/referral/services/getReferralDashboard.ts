@@ -14,8 +14,10 @@ export type ReferralDashboard = ValidThorchainNameDetails & {
 
 export const getReferralDashboard = async (
   address: string
-): Promise<ReferralDashboard> => {
+): Promise<ReferralDashboard | undefined> => {
   const nameDetails = await fetchUserValidName(address)
+
+  if (!nameDetails) return undefined
 
   const [{ meta }] = await Promise.all([getAffiliateVolume(nameDetails.name)])
 
