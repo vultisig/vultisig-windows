@@ -14,8 +14,9 @@ import { EditFriendReferral } from './components/EditFriendReferral'
 import { EditReferralForm } from './components/EditReferralForm'
 import { ManageExistingReferral } from './components/ManageExistingReferral'
 import { ManageReferralsForm } from './components/ManageReferralsForm'
-import { CreateReferralFormProvider } from './provders/CreateReferralFormProvider'
-import { ReferralPayoutAssetProvider } from './provders/ReferralPayoutAssetProvider'
+import { CreateReferralFormProvider } from './providers/CreateReferralFormProvider'
+import { EditReferralFormProvider } from './providers/EditReferralFormProvider'
+import { ReferralPayoutAssetProvider } from './providers/ReferralPayoutAssetProvider'
 import { useReferralDashboard } from './queries/useReferralDashboard'
 import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainNameQuery'
 
@@ -45,12 +46,14 @@ export const ManageReferralsPage = () => {
 
   useEffect(() => {
     if (status === 'pending') return
-    if (validNameDetails) {
+    if (validNameDetails && referralDashboardData) {
+      setUiState('existingReferral')
+    } else if (validNameDetails) {
       setUiState('editReferral')
     } else {
       setUiState('default')
     }
-  }, [status, validNameDetails])
+  }, [status, validNameDetails, referralDashboardData])
 
   return (
     <ReferralPayoutAssetProvider>
@@ -58,13 +61,19 @@ export const ManageReferralsPage = () => {
         <Match
           value={uiState}
           editFriendReferral={() => <EditFriendReferral />}
-          existingReferral={() => (
-            <ManageExistingReferral
-              onEditFriendReferral={() => setUiState('editFriendReferral')}
-              onEditReferral={() => setUiState('editReferral')}
-              referralDashboardData={referralDashboardData}
-            />
-          )}
+          existingReferral={() =>
+            referralDashboardData ? (
+              <ManageExistingReferral
+                onEditFriendReferral={() => setUiState('editFriendReferral')}
+                onEditReferral={() => setUiState('editReferral')}
+                referralDashboardData={shouldBePresent(referralDashboardData)}
+              />
+            ) : (
+              <CenterAbsolutely>
+                <Spinner size="3em" />
+              </CenterAbsolutely>
+            )
+          }
           default={() => (
             <ManageReferralsForm
               onSaveReferral={() => {
@@ -89,7 +98,11 @@ export const ManageReferralsPage = () => {
               to={({ onBack }) => <CreateReferralVerify onBack={onBack} />}
             />
           )}
-          editReferral={() => <EditReferralForm />}
+          editReferral={() => (
+            <EditReferralFormProvider>
+              <EditReferralForm onFinish={() => {}} />§
+            </EditReferralFormProvider>
+          )}
           loading={() => (
             <CenterAbsolutely>
               <Spinner size="3em" />
