@@ -24,13 +24,15 @@ export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
     <>
       <VStack gap={4}>
         <Text color="shy">{t('function_signature')}</Text>
-        <Text color="primary" family="mono" size={13} weight="700">
+        <Text color="primary" family="mono" size={14} weight="700">
           {parsedMemo.functionSignature}
         </Text>
       </VStack>
       <VStack gap={4}>
-        <Text color="shy">{t('function_arguments')}</Text>
-        <Text color="primary" family="mono" size={13} weight="700">
+        <Text size={14} color="shy">
+          {t('function_arguments')}
+        </Text>
+        <Text color="primary" family="mono" size={14} weight="700">
           <pre style={{ width: '100%' }}>
             <code
               style={{ display: 'block', overflowX: 'auto', width: '100%' }}
@@ -43,8 +45,10 @@ export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
     </>
   ) : (
     <VStack gap={4}>
-      <Text color="shy">{t('memo')}</Text>
-      <Text color="primary" family="mono" size={13} weight="700">
+      <Text size={14} color="shy">
+        {t('memo')}
+      </Text>
+      <Text color="primary" size={14}>
         {value}
       </Text>
     </VStack>
