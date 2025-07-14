@@ -104,7 +104,9 @@ export const getKeysignPayload = (
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
           feeSettings: effectiveFeeSettings,
-          data: transaction.transactionDetails.data,
+          data: transaction.transactionDetails.data as
+            | `0x${string}`
+            | undefined,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {

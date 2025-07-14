@@ -41,7 +41,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
         account: coin.address as `0x${string}`,
         to: shouldBePresent(receiver) as `0x${string}`,
         value,
-        data: (data as `0x${string}`) || '0x',
+        data,
       })
 
     return create(EthereumSpecificSchema, {
