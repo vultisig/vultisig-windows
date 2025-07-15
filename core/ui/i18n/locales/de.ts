@@ -1004,4 +1004,6 @@ export const de = {
   failed_to_process_plugin_install:
     'Die Installation des Plugins konnte nicht durchgeführt werden.',
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
+  verify_password_periodic_message_description:
+    'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
 }
