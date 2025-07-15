@@ -68,7 +68,7 @@ export const CoreApp = ({
             return defaultShouldDehydrateQuery(query)
           },
         },
-        buster: 'v1',
+        buster: 'v2',
       }
     }, [queriesPersister])
 
