@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import { isUpdateAvailable } from './core/isUpdateAvailable'
 import { useLatestVersionQuery } from './queries/latestVersion'
 
-export const FixedWrapper = styled.div`
+const FixedWrapper = styled.div`
   position: fixed;
   inset: 0;
   width: 350px;
@@ -26,14 +26,14 @@ export const FixedWrapper = styled.div`
   gap: 12px;
 `
 
-export const Content = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 `
 
-export const CenteredText = styled(Text)`
+const CenteredText = styled(Text)`
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@ export const CenteredText = styled(Text)`
   gap: 4px;
 `
 
-export const DownloadButton = styled(UnstyledButton)`
+const DownloadButton = styled(UnstyledButton)`
   margin-left: 8px;
   display: inline-block;
   padding: 8px 16px;
