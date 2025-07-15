@@ -34,7 +34,6 @@ export const TxOverviewChainDataRow = styled(TxOverviewRow)`
 
   > *:last-child {
     ${text({
-      family: 'mono',
       color: 'primary',
       size: 13,
       weight: 700,

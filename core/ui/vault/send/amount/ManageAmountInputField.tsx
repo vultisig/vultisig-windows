@@ -18,7 +18,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { AnimatedSendFormInputError } from '../components/AnimatedSendFormInputError'
 import { HorizontalLine } from '../components/HorizontalLine'
@@ -45,8 +44,7 @@ export const ManageAmountInputField = () => {
   const [currencyInputMode, setCurrencyInputMode] =
     useState<CurrencyInputMode>('base')
 
-  const [{ coin: coinKey }] = useCurrentSendCoin()
-  const coin = useCurrentVaultCoin(coinKey)
+  const coin = useCurrentSendCoin()
   const { data: coinPrice } = useCoinPriceQuery({ coin })
   const { inputValue, handleUpdateAmount, value } = useDualCurrencyAmountInput({
     coinPrice,

@@ -2,6 +2,7 @@ import {
   handleFindAccounts,
   handleGetAccounts,
 } from '@clients/extension/src/background/handlers/accountsHandler'
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
@@ -11,6 +12,8 @@ import {
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
 import { storage } from '@clients/extension/src/storage'
+import { setCurrentCosmosChainId } from '@clients/extension/src/storage/currentCosmosChainId'
+import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -59,7 +62,7 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 
-import { setCurrentEVMChainId } from '../../storage/currentEvmChainId'
+import { safeJsonStringify } from '../utils/bigIntUtils'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
@@ -108,7 +111,9 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (account && getChainKind(chain) === 'evm') {
+            if (!account) throw new EIP1193Error(4001)
+
+            if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
                 `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
                 account
@@ -134,8 +139,7 @@ export const handleRequest = (
               Chain.Solana,
             ] as Chain[]
 
-            const result = specialChains.includes(chain) ? account : [account]
-            resolve(result)
+            resolve(specialChains.includes(chain) ? account : [account])
           })
           .catch(reject)
 
@@ -290,7 +294,7 @@ export const handleRequest = (
                   .then(client => {
                     client
                       .getTx(String(hash))
-                      .then(result => resolve(JSON.stringify(result)))
+                      .then(result => resolve(safeJsonStringify(result)))
                   })
                   .catch(error =>
                     reject(`Could not initialize Tendermint Client: ${error}`)
@@ -310,9 +314,7 @@ export const handleRequest = (
                 const client = getEvmClient(chain)
                 client
                   .getTransaction({ hash: String(hash) as `0x${string}` })
-                  .then(result => {
-                    resolve(JSON.stringify(result))
-                  })
+                  .then(result => resolve(safeJsonStringify(result)))
                   .catch(reject)
 
                 break
@@ -320,7 +322,7 @@ export const handleRequest = (
               default: {
                 api.utxo
                   .blockchairGetTx(chain, String(hash))
-                  .then(res => resolve(JSON.stringify(res)))
+                  .then(res => resolve(safeJsonStringify(res)))
                   .catch(reject)
 
                 break
@@ -473,17 +475,10 @@ export const handleRequest = (
           getCosmosChainByChainId(param.chainId) ||
             getEvmChainByChainId(param.chainId)
         )
-        console.log('chain:', chain)
-
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          console.log('safeVaultId:', safeVaultId)
-
           const host = getDappHostname(sender)
-          console.log('host:', host)
-
           const allSessions = await getVaultsAppSessions()
-
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
           if (previousSession) {
@@ -502,7 +497,11 @@ export const handleRequest = (
               },
             })
           } else {
-            await setCurrentEVMChainId(param.chainId)
+            if (getChainKind(chain) === 'evm') {
+              await setCurrentEVMChainId(param.chainId)
+            } else if (getChainKind(chain) === 'cosmos') {
+              await setCurrentCosmosChainId(param.chainId)
+            }
           }
           resolve(param.chainId)
         })
