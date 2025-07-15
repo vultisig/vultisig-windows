@@ -41,6 +41,12 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'rujira',
     },
+    'bch-bch': {
+      ticker: 'BCH',
+      logo: 'bch',
+      decimals: 8,
+      priceProviderId: 'rujira',
+    },
     ...kujiraCoinsOnThorChain,
   },
   [Chain.Cosmos]: {
