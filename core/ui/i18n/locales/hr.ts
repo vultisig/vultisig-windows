@@ -975,4 +975,6 @@ export const hr = {
   success: 'Uspjeh',
   failed_to_process_plugin_install: 'Nije uspjela obrada instalacije dodatka',
   hold_for_paired_sign: 'Držite za upareni znak',
+  verify_password_periodic_message_description:
+    'Povremeno ćemo vas tražiti da potvrdite svoju lozinku za brzo prijavljivanje kako biste je uvijek zapamtili',
 }

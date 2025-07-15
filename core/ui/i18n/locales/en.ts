@@ -168,6 +168,8 @@ export const en = {
   vault_name_description: 'You can always rename your vault later in settings',
   join: 'Join',
   verify_password_periodic_message: 'Verify your Server Share Password',
+  verify_password_periodic_message_description:
+    'We will periodically ask you to verify your fast sign password so you will always remember it',
   done: 'Done',
   and: 'and',
   approve: 'Approve',
