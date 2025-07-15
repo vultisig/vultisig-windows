@@ -5,10 +5,8 @@ type ResponseType = 'json' | 'text' | 'none'
 
 type QueryUrlOptions = {
   responseType?: ResponseType
-  headers?: Record<string, string>
   body?: any
-  method?: 'DELETE'
-}
+} & Pick<RequestInit, 'method' | 'headers'>
 
 const processBody = (body: any) => {
   if (body === undefined) {
