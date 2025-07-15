@@ -4,7 +4,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { StartKeysignPrompt } from '../../../mpc/keysign/StartKeysignPrompt'
+import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
 import { useSendTerms } from './state/sendTerms'
 

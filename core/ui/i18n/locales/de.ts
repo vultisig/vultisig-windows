@@ -17,7 +17,50 @@ export const de = {
   incorrect_passcode: 'Falscher Passcode',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
+  referral_reg_fee: 'Registrierungsgebühr',
+  select: 'Auswählen',
+  pick_referral_code: 'Referral-Code auswählen',
+  referral_status: 'Status',
+  referral_costs: 'Kosten',
+  set_expiration: 'Ablauf festlegen (in Jahren)',
+  expiration_date: 'Ablaufdatum',
+  choose_payout_asset: 'Auszahlungs-Asset wählen',
   tx_hash: 'Transaktions-Hash',
+  title_1: 'Empfehlung',
+  title_2: 'Vultisig - Empfehlungen',
+  header_tooltip_title: 'Empfehlungsprogramm',
+  header_tooltip_content:
+    'Das Empfehlungsprogramm gilt für THORChain-Swaps und basiert auf dem Best-Effort-Prinzip. Du musst einen THORName registrieren, um Vultisig-Empfehlungen zu nutzen. Die Registrierungsgebühr beträgt 10 RUNE und 1 RUNE pro Jahr, zahlbar an das THORChain-Netzwerk.',
+  invite_friends: 'Freunde einladen',
+  earn_rewards: 'Belohnungen verdienen',
+  save_on_fees: 'Gebühren sparen',
+  share_description:
+    'Teile deinen eindeutigen Empfehlungscode, um Freunde einzuladen. Sie erhalten einen Rabatt, und je mehr sie handeln, desto mehr verdienst du — direkt in deine Wallet.',
+  referrals_summary: {
+    item_1: {
+      title: 'Erstelle deinen Empfehlungscode',
+      description: 'Wähle einen kurzen Code und lege deine Auszahlung fest.',
+    },
+    item_2: {
+      title: 'Teile ihn mit Freunden',
+      description: 'Lade Freunde ein, deinen Code beim Swappen zu nutzen.',
+    },
+    item_3: {
+      title: 'Automatisch Belohnungen erhalten',
+      description:
+        'Erhalte jedes Mal eine Auszahlung in deinem bevorzugten Asset, wenn sie handeln.',
+    },
+    item_4: {
+      title: 'Empfehlungscode verwenden',
+      description: 'Nutze den Code eines Freundes und spare bei Gebühren.',
+    },
+  },
+  referral_program: 'Empfehlungsprogramm',
+  how_it_works: "So funktioniert's",
+  get_started: 'Loslegen',
+  use_referral_code: 'Empfehlungscode verwenden',
+  enter_referral_code_placeholder: 'Empfehlungscode eingeben',
+  create_referral: 'Empfehlung erstellen',
   send_overview: 'Übersicht senden',
   start_transaction: 'Transaktion starten',
   percentage_to_unstake: 'Prozentsatz zum Abziehen',
@@ -514,7 +557,6 @@ export const de = {
     passwordCannotBeRecovered:
       'Passwort kann nicht zurückgesetzt oder wiederhergestellt werden',
     confirmPasswordIsRequired: 'Passwortbestätigung ist erforderlich',
-    passwordDoNotMatch: 'Passwörter stimmen nicht überein',
     hintEmpty: 'Hinweis ist leer',
     addOptionalHint: 'Optionalen Hinweis hinzufügen',
     hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen',
@@ -651,6 +693,7 @@ export const de = {
   vote: 'Abstimmung',
   stake: 'Einsatz',
   unstake: 'Abstecken',
+  unmerge: 'Entflechten',
   advanced: 'Fortschrittlich',
   low: 'Niedrig',
   normal: 'Normal',
@@ -894,6 +937,7 @@ export const de = {
   find_custom_token: 'Finden Sie Ihr benutzerdefiniertes Token',
   enter_contract_address: 'Vertragsadresse eingeben',
   no_token_found: 'Kein Token gefunden',
+  no_mergeable_tokens_found: 'Keine zusammenführbaren Token gefunden',
   invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden',
@@ -937,4 +981,27 @@ export const de = {
   address_book_vault: 'Meine Tresore',
   paste: 'Paste',
   failed_to_generate_join_url: 'QR-Code konnte nicht generiert werden',
+  connecting_to_verifier: 'Verbindung zum Verifier herstellen',
+  connecting_to_plugin: 'Verbindung zum Plugin herstellen',
+  confirm: 'Bestätigen',
+  enter_your_password: 'Geben Sie Ihr Passwort ein',
+  go_to_wallet: 'Zur Brieftasche',
+  install_plugin: 'Plugin installieren',
+  installing_plugin: 'Plugin installieren',
+  plugin_info: 'Plugin-Informationen',
+  plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
+  plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
+  plugin_password_desc:
+    'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die Plugin-Installation zu starten',
+  plugin_policy: 'Richtlinienüberprüfung',
+  plugin_policy_desc:
+    'Der Prüfer prüft stets, ob nur diese Richtlinien ausgeführt werden. So haben Sie die Sicherheit, dass nur autorisierte Personen unterzeichnen.',
+  plugin_policy_heading: 'Dieses Plugin greift automatisch zu',
+  password_do_not_match: 'Passwörter stimmen nicht überein',
+  password_pattern_error:
+    'Das Passwort muss zwischen {{min}} und {{max}} Zeichen lang sein',
+  success: 'Erfolg',
+  failed_to_process_plugin_install:
+    'Die Installation des Plugins konnte nicht durchgeführt werden.',
+  hold_for_paired_sign: 'Halten für gepaartes Zeichen',
 }

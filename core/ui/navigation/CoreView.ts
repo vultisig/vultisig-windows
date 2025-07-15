@@ -19,6 +19,8 @@ export type CoreView =
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'deleteVault' }
   | { id: 'deposit'; state: { coin: CoinKey } }
+  | { id: 'referral' }
+  | { id: 'manageReferral' }
   | { id: 'importVault' }
   | {
       id: 'joinKeygen'
@@ -49,9 +51,7 @@ export type CoreView =
   | { id: 'reshareVaultSecure' }
   | {
       id: 'send'
-      state: {
-        coin?: CoinKey
-        chain?: Chain
+      state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
       }
     }
@@ -81,3 +81,6 @@ export type CoreViewId = CoreView['id']
 export const initialCoreView: CoreView = {
   id: 'vault',
 }
+
+export type CoreViewState<T extends CoreView['id']> =
+  Extract<CoreView, { id: T }> extends { state: infer S } ? S : never

@@ -4,46 +4,31 @@ export type ThemeColors = {
   text: HSLA
   textSupporting: HSLA
   textShy: HSLA
-  textDark: HSLA
+
   primary: HSLA
   primaryAlt: HSLA
+  danger: HSLA
   idle: HSLA
   idleDark: HSLA
+
   background: HSLA
   foreground: HSLA
   foregroundDark: HSLA
   foregroundExtra: HSLA
   foregroundSuper: HSLA
   foregroundSuperContrast: HSLA
+
   overlay: HSLA
   contrast: HSLA
-  success: HSLA
   mist: HSLA
   mistExtra: HSLA
-  transparent: HSLA
-  white: HSLA
-  danger: HSLA
-  // new design system
-  alertError: HSLA
-  alertInfo: HSLA
-  alertSuccess: HSLA
-  alertWarning: HSLA
-  backgroundPrimary: HSLA
-  backgroundsSecondary: HSLA
-  backgroundTertiary: HSLA
-  borderLight: HSLA
+
   buttonBackgroundDisabled: HSLA
   buttonLinkHover: HSLA
   buttonPrimary: HSLA
-  buttonPrimaryHover: HSLA
-  buttonSecondary: HSLA
-  buttonSecondaryHover: HSLA
+  buttonHover: HSLA
   buttonTextDisabled: HSLA
-  neutralOne: HSLA
-  neutralSix: HSLA
-  neutralSeven: HSLA
-  primaryAccentThree: HSLA
-  primaryAccentFour: HSLA
-  textExtraLight: HSLA
-  textPrimary: HSLA
+
+  transparent: HSLA
+  white: HSLA
 }

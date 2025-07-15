@@ -28,7 +28,7 @@ const StyledCheck = styled(CheckStatus)`
 `
 
 const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('alertError')};
+  color: ${getColor('danger')};
 `
 
 const terms = [

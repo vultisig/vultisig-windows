@@ -42,7 +42,6 @@ export const AmountTextInput = ({
   placeholder,
   labelPosition = 'right',
   type = 'number',
-  ref,
   ...props
 }: AmountTextInputProps) => {
   const valueAsString = value?.toString() ?? ''
@@ -71,7 +70,6 @@ export const AmountTextInput = ({
           ? inputValue
           : valueAsString
       }
-      ref={ref}
       inputOverlay={unit ? <UnitContainer>{unit}</UnitContainer> : undefined}
       onValueChange={(value: string) => {
         if (shouldBePositive) {

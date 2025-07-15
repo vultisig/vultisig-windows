@@ -17,6 +17,15 @@ export const it = {
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
   digit_input_loading_validation: 'Verifica del codice in corso, attendere',
+  referral_reg_fee: 'Quota di registrazione',
+  create_referral: 'Crea referral',
+  select: 'Seleziona',
+  pick_referral_code: 'Scegli il codice referral',
+  referral_status: 'Stato',
+  referral_costs: 'Costi',
+  set_expiration: 'Imposta scadenza (in anni)',
+  expiration_date: 'Data di scadenza',
+  choose_payout_asset: 'Scegli asset di pagamento',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
@@ -46,6 +55,40 @@ export const it = {
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
+  title_1: 'Referral',
+  title_2: 'Vultisig - Referral',
+  header_tooltip_title: 'Programma di Referral',
+  header_tooltip_content:
+    'Il programma di referral si applica agli swap su THORChain e si basa sul miglior sforzo. Devi registrare un THORName per utilizzare il referral Vultisig. Il costo di registrazione è di 10 RUNE più 1 RUNE all’anno, da pagare alla rete THORChain.',
+  invite_friends: 'Invita amici',
+  earn_rewards: 'Guadagna ricompense',
+  save_on_fees: 'Risparmia sulle commissioni',
+  share_description:
+    'Condividi il tuo codice referral unico per invitare amici. Ricevono uno sconto e più scambiano, più guadagni — direttamente nel tuo wallet.',
+  referrals_summary: {
+    item_1: {
+      title: 'Crea il tuo codice referral',
+      description: 'Scegli un codice breve e imposta la tua ricompensa.',
+    },
+    item_2: {
+      title: 'Condividilo con gli amici',
+      description: 'Invita gli amici a usare il tuo codice durante gli swap.',
+    },
+    item_3: {
+      title: 'Guadagna ricompense automaticamente',
+      description:
+        'Ricevi pagamenti nel tuo asset preferito ogni volta che loro scambiano.',
+    },
+    item_4: {
+      title: 'Usa codice referral',
+      description: 'Usa il codice di un amico e risparmia sulle commissioni.',
+    },
+  },
+  referral_program: 'Programma di Referral',
+  how_it_works: 'Come funziona',
+  get_started: 'Inizia ora',
+  use_referral_code: 'Usa Codice Referral',
+  enter_referral_code_placeholder: 'Inserisci Codice Referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
   destination_address: 'Indirizzo di destinazione',
@@ -519,7 +562,6 @@ export const it = {
     passwordCannotBeRecovered:
       'La password non può essere reimpostata o recuperata',
     confirmPasswordIsRequired: 'Conferma password richiesta',
-    passwordDoNotMatch: 'Le password non corrispondono',
     hintEmpty: 'Suggerimento vuoto',
     addOptionalHint: 'Aggiungi suggerimento opzionale',
     hintDescription:
@@ -652,6 +694,7 @@ export const it = {
   vote: 'Votare',
   stake: 'Palo',
   unstake: 'Ritirare',
+  unmerge: 'Separare',
   advanced: 'Avanzato',
   low: 'Basso',
   normal: 'Normale',
@@ -886,6 +929,7 @@ export const it = {
   find_custom_token: 'Trova il tuo token personalizzato',
   enter_contract_address: "Inserisci l'indirizzo del contratto",
   no_token_found: 'Nessun token trovato',
+  no_mergeable_tokens_found: 'Nessun token unificabile trovato',
   invalid_token_address: 'Inserisci un indirizzo token valido',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
@@ -931,4 +975,27 @@ export const it = {
   address_book_vault: 'I miei caveau',
   paste: 'Impasto',
   failed_to_generate_join_url: 'Impossibile generare il codice QR',
+  connecting_to_verifier: 'Connessione al verificatore',
+  connecting_to_plugin: 'Connessione al plugin',
+  confirm: 'Confermare',
+  enter_your_password: 'Inserisci la tua password',
+  go_to_wallet: 'Vai al portafoglio',
+  install_plugin: 'Installa il plugin',
+  installing_plugin: 'Installazione del plugin',
+  plugin_info: 'Informazioni sul plugin',
+  plugin_info_desc: 'Stai installando il plugin {{name}}',
+  plugin_success_desc: "L'installazione di {{name}} è completata",
+  plugin_password_desc:
+    "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione del plugin",
+  plugin_policy: 'Revisione delle politiche',
+  plugin_policy_desc:
+    'Il verificatore controllerà sempre che solo queste policy vengano eseguite, garantendoti la sicurezza che solo i dati autorizzati verranno firmati.',
+  plugin_policy_heading: 'Questo plugin accederà automaticamente',
+  password_do_not_match: 'Le password non corrispondono',
+  password_pattern_error:
+    'La password deve essere compresa tra {{min}} e {{max}} caratteri',
+  success: 'Successo',
+  failed_to_process_plugin_install:
+    "Impossibile elaborare l'installazione del plugin",
+  hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
 }

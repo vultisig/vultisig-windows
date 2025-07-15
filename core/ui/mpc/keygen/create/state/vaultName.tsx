@@ -1,6 +1,6 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,11 +20,12 @@ export const GeneratedVaultNameProvider = ({ children }: ChildrenProp) => {
     const prefix = `${t(vaultSecurityType)} ${t('vault')} #`
 
     const vaultNamePattern = new RegExp(`^${prefix}(\\d+)$`)
-    const vaultNumbers = withoutUndefined(
+    const vaultNumbers = without(
       existingNames.map(name => {
         const match = name.match(vaultNamePattern)
         return match ? parseInt(match[1], 10) : undefined
-      })
+      }),
+      undefined
     )
 
     const nextNumber = Math.max(...vaultNumbers, 0) + 1

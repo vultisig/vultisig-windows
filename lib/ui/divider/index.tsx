@@ -4,13 +4,13 @@ import styled, { css } from 'styled-components'
 type Placement = 'center' | 'left' | 'right'
 
 const lineCSS = css`
-  background-color: ${({ theme }) => theme.colors.borderLight.toHex()};
+  background-color: ${({ theme }) => theme.colors.foregroundExtra.toHex()};
   height: 1px;
   width: 100%;
 `
 
 const StyledText = styled.span`
-  color: ${({ theme }) => theme.colors.textPrimary.toHex()};
+  color: ${({ theme }) => theme.colors.text.toHex()};
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;

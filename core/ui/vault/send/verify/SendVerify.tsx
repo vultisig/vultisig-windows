@@ -18,7 +18,6 @@ import {
   SendTermsProvider,
 } from '@core/ui/vault/send/verify/state/sendTerms'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -36,10 +35,9 @@ import styled from 'styled-components'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
-  const [{ coin: coinKey }] = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const sender = useSender()
   const { name } = useCurrentVault()
-  const coin = useCurrentVaultCoin(coinKey)
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const cappedAmountQuery = useSendCappedAmountQuery()
