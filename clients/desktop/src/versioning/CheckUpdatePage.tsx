@@ -70,7 +70,7 @@ export const CheckUpdatePage = () => {
             value={latestVersionQuery}
             success={latestVersion => {
               if (
-                isUpdateAvailable({ local: version, remote: latestVersion })
+                isUpdateAvailable({ current: version, latest: latestVersion })
               ) {
                 return (
                   <CenteredText>

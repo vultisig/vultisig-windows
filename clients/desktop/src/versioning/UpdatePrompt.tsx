@@ -25,7 +25,7 @@ export const UpdatePrompt = () => {
     <MatchQuery
       value={latestVersionQuery}
       success={latestVersion =>
-        isUpdateAvailable({ local: localVersion, remote: latestVersion }) ? (
+        isUpdateAvailable({ current: localVersion, latest: latestVersion }) ? (
           <Modal
             title=""
             onClose={() => setIsDismissed(true)}

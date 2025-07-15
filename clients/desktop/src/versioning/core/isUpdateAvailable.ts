@@ -1,23 +1,23 @@
 type IsUpdateAvailableInput = {
-  local: string
-  remote: string
+  current: string
+  latest: string
 }
 
 export const isUpdateAvailable = ({
-  local,
-  remote,
+  current,
+  latest,
 }: IsUpdateAvailableInput) => {
-  const [localSubVersions, remoteSubVersions] = [local, remote].map(v =>
+  const [currentSubVersions, latestSubVersions] = [current, latest].map(v =>
     v.split('.').map(Number)
   )
 
-  const firstDifferentIndex = remoteSubVersions.findIndex(
-    (remote, i) => remote !== localSubVersions[i]
+  const firstDifferentIndex = latestSubVersions.findIndex(
+    (latest, i) => latest !== currentSubVersions[i]
   )
 
   return (
     firstDifferentIndex >= 0 &&
-    remoteSubVersions[firstDifferentIndex] >
-      localSubVersions[firstDifferentIndex]
+    latestSubVersions[firstDifferentIndex] >
+      currentSubVersions[firstDifferentIndex]
   )
 }
