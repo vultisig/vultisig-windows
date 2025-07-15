@@ -1,6 +1,7 @@
 import { UtxoBasedChain } from '@core/chain/Chain'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { getBlockchairBaseUrl } from './getBlockchairBaseUrl'
 
@@ -30,13 +31,9 @@ export const broadcastUtxoTransaction = async ({
 
   console.log('broadcastUtxoTransaction input ', tx)
 
-  const response: BlockchairBroadcastResponse = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data: tx }),
-  }).then(res => res.json())
+  const response = await queryUrl<BlockchairBroadcastResponse>(url, {
+    body: { data: tx },
+  })
 
   console.log('broadcastUtxoTransaction response', response)
 

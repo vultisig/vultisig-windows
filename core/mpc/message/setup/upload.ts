@@ -15,9 +15,7 @@ export const uploadMpcSetupMessage = async ({
   messageId,
 }: UploadMpcSetupMessageInput) =>
   queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
-    method: 'POST',
     headers: withoutUndefinedFields({
-      'Content-Type': 'application/json',
       message_id: messageId,
     }),
     body: message,

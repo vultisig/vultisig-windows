@@ -16,11 +16,9 @@ export const markLocalPartyKeysignComplete = async ({
   result,
 }: KeysignCompleteInput) =>
   queryUrl(`${serverUrl}/complete/${sessionId}/keysign`, {
-    method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       message_id: messageId,
     },
-    body: JSON.stringify(result),
+    body: result,
     responseType: 'none',
   })

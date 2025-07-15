@@ -1,5 +1,5 @@
 import { useCore } from '@core/ui/state/core'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
 import { productReleasesApiUrl } from '../../../versioning/config'
@@ -8,45 +8,27 @@ import { isValidVersion, isVersionNewer } from './utils'
 export const useVersionCheck = () => {
   const { version } = useCore()
 
-  const {
-    data: latestVersionData,
-    error: remoteError,
-    isFetching: isRemoteFetching,
-  } = useQuery({
+  return useQuery({
     queryKey: ['latestVersion'],
     queryFn: async () => {
-      const response = await fetch(productReleasesApiUrl)
-      if (!response.ok) {
-        throw new Error('Failed to fetch latest version data.')
-      }
+      const { tag_name } = await queryUrl<{ tag_name: string }>(
+        productReleasesApiUrl
+      )
 
-      const data = await response.json()
-      const tagName = data?.tag_name || ''
-      const version = tagName.startsWith('v') ? tagName.slice(1) : tagName
+      const latestVersion = tag_name.startsWith('v')
+        ? tag_name.slice(1)
+        : tag_name
 
       if (!isValidVersion(version)) {
         throw new Error(`Invalid latest version format: ${version}`)
       }
-      return { version }
-    },
-  })
 
-  const latestVersion = latestVersionData?.version
-
-  const updateAvailable = withFallback(
-    attempt(() => {
-      return isVersionNewer({
+      const updateAvailable = isVersionNewer({
         remoteVersion: latestVersion,
         localVersion: version,
       })
-    }),
-    false
-  )
 
-  return {
-    latestVersion,
-    updateAvailable,
-    remoteError,
-    isLoading: isRemoteFetching,
-  }
+      return { version, updateAvailable }
+    },
+  })
 }
