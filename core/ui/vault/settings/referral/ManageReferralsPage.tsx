@@ -42,10 +42,11 @@ export const ManageReferralsPage = () => {
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
 
-  const { data: referralDashboardData } = useReferralDashboard(address)
+  const { data: referralDashboardData, status: referralDashboardStatus } =
+    useReferralDashboard(address)
 
   useEffect(() => {
-    if (status === 'pending') return
+    if (status === 'pending' || referralDashboardStatus === 'pending') return
     if (validNameDetails && referralDashboardData) {
       setUiState('existingReferral')
     } else if (validNameDetails) {
@@ -53,7 +54,7 @@ export const ManageReferralsPage = () => {
     } else {
       setUiState('default')
     }
-  }, [status, validNameDetails, referralDashboardData])
+  }, [status, validNameDetails, referralDashboardData, referralDashboardStatus])
 
   return (
     <ReferralPayoutAssetProvider>
