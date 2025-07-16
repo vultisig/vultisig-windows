@@ -989,4 +989,6 @@ export const pt = {
   success: 'Sucesso',
   failed_to_process_plugin_install: 'Falha ao processar a instalação do plugin',
   hold_for_paired_sign: 'Segure para sinal de par',
+  verify_password_periodic_message_description:
+    'Pediremos periodicamente que você verifique sua senha de login rápido para que você sempre se lembre dela',
 }

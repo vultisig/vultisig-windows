@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 type StartMpcSessionInput = {
   serverUrl: string
@@ -10,16 +10,8 @@ export const startMpcSession = async ({
   serverUrl,
   sessionId,
   devices,
-}: StartMpcSessionInput) => {
-  const response = await fetch(`${serverUrl}/start/${sessionId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(devices),
+}: StartMpcSessionInput) =>
+  queryUrl(`${serverUrl}/start/${sessionId}`, {
+    body: devices,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
-
-  return response
-}

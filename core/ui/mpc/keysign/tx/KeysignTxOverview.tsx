@@ -52,7 +52,7 @@ export const KeysignTxOverview = () => {
 
   return (
     <>
-      {formattedToAmount && (
+      {formattedToAmount !== null && (
         <TxOverviewAmount amount={formattedToAmount} value={coin} />
       )}
       <Panel>

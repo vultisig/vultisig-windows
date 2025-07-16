@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import crypto from 'crypto'
 
 type UploadPayloadToServerInput = {
@@ -13,15 +13,10 @@ export async function uploadPayloadToServer({
   const hash = crypto.createHash('sha256').update(payload).digest('hex')
   const url = `${serverUrl}/payload/${hash}`
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  await queryUrl(url, {
     body: payload,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
 
   return hash
 }

@@ -38,6 +38,8 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { featureFlags } from '../config'
+
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
@@ -130,13 +132,15 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-            <ListItem
-              icon={<MegaphoneIcon fontSize={iconSize} />}
-              onClick={() => navigate({ id: 'referral' })}
-              title={t('referral_code')}
-              hoverable
-              showArrow
-            />
+            {featureFlags.referrals && (
+              <ListItem
+                icon={<MegaphoneIcon fontSize={iconSize} />}
+                onClick={() => navigate({ id: 'referral' })}
+                title={t('referral_code')}
+                hoverable
+                showArrow
+              />
+            )}
             {props.client === 'extension' && props.expandView}
           </SettingsSection>
           <SettingsSection title={t('security')}>

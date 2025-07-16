@@ -1,3 +1,4 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import base58 from 'bs58'
 
 import { isFeeCoin } from '../utils/isFeeCoin'
@@ -11,24 +12,17 @@ import { CoinBalanceResolver } from './CoinBalanceResolver'
 export const getTronCoinBalance: CoinBalanceResolver = async input => {
   if (isFeeCoin(input)) {
     // Native TRX balance
-    const body = {
-      address: input.address,
-      visible: true,
-    }
 
     try {
-      const response = await fetch(
-        'https://tron-rpc.publicnode.com/wallet/getaccount',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }
-      )
-
-      const data = await response.json()
+      const data = await queryUrl<{
+        result?: { balance?: string }
+        balance?: string
+      }>('https://tron-rpc.publicnode.com/wallet/getaccount', {
+        body: {
+          address: input.address,
+          visible: true,
+        },
+      })
 
       // Extract balance, handling different possible response formats
       const balance =
@@ -149,20 +143,22 @@ async function sendRPCRequest<T>(
   const rpcEndpoint = 'https://api.trongrid.io/jsonrpc'
 
   try {
-    const response = await fetch(rpcEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const { error, result } = await queryUrl<{
+      error?: { message: string }
+      result?: any
+    }>(rpcEndpoint, {
+      body: {
+        jsonrpc: '2.0',
+        method: method,
+        params: params,
+        id: 1,
       },
-      body: JSON.stringify(payload),
     })
 
-    const data = await response.json()
-
-    if (data.error) {
-      return decode(data.error.message)
-    } else if (data.result !== undefined) {
-      return decode(data.result)
+    if (error) {
+      return decode(error.message)
+    } else if (result !== undefined) {
+      return decode(result)
     } else {
       throw {
         code: 500,

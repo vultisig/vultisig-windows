@@ -1,3 +1,5 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
+
 import { rujiGraphQlEndpoint } from '../../../cosmos/thor/ruji-unmerge/config'
 
 type MergeAccount = {
@@ -27,10 +29,8 @@ type TokenBalance = {
 export const fetchMergeableTokenBalances = async (
   thorAddr: string
 ): Promise<TokenBalance[]> => {
-  const result = await fetch(rujiGraphQlEndpoint, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
+  const { data, errors } = await queryUrl<Gql>(rujiGraphQlEndpoint, {
+    body: {
       query: `
         query ($id: ID!) {
           node(id: $id) {
@@ -47,18 +47,14 @@ export const fetchMergeableTokenBalances = async (
             }
           }}`,
       variables: { id: btoa(`Account:${thorAddr}`) },
-    }),
+    },
   })
 
-  if (!result.ok) throw new Error(`Merge query failed: ${result.status}`)
-
-  const json = (await result.json()) as Gql
-
-  if (json.errors) {
-    throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`)
+  if (errors) {
+    throw new Error(`GraphQL errors: ${JSON.stringify(errors)}`)
   }
 
-  const accounts = json.data?.node?.merge?.accounts ?? []
+  const accounts = data?.node?.merge?.accounts ?? []
 
   return accounts.map(account => {
     const shares = Number(account.shares)

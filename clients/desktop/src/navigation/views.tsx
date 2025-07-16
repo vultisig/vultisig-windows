@@ -9,7 +9,6 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { CheckUpdate } from '../components/check-update'
 import { ManageMpcLib } from '../components/manage-mpc-lib'
-import VaultCheckUpdatePage from '../pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage'
 import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '../vault/components/VaultPage'
 import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
@@ -22,10 +21,11 @@ import { SecureReshareVaultPage } from '../vault/reshare/secure/SecureReshareVau
 import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
+import { CheckUpdatePage } from '../versioning/CheckUpdatePage'
 import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  checkUpdate: VaultCheckUpdatePage,
+  checkUpdate: CheckUpdatePage,
   faq: FaqVaultPage,
   importVault: ImportVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,

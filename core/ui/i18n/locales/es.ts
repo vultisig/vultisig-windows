@@ -1002,4 +1002,6 @@ export const es = {
   failed_to_process_plugin_install:
     'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
+  verify_password_periodic_message_description:
+    'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
 }
