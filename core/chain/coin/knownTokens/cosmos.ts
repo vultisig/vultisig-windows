@@ -55,7 +55,7 @@ export const knownCosmosTokens: Record<
     },
     'avax-sol-0xfe6b19286885a4f7f55adad09c3cd1f906d2478f': {
       ticker: 'SOL',
-      logo: 'sol',
+      logo: 'solana',
       decimals: 8,
       priceProviderId: 'solana',
     },
@@ -79,7 +79,7 @@ export const knownCosmosTokens: Record<
     },
     'bsc-bnb': {
       ticker: 'BNB',
-      logo: 'bnb',
+      logo: 'bsc',
       decimals: 8,
       priceProviderId: 'binancecoin',
     },
@@ -125,24 +125,6 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'ethereum',
     },
-    'eth-gusd-0x056fd409e1d7a124bd7017459dfea2f387b6d5cd': {
-      ticker: 'GUSD',
-      logo: 'gusd',
-      decimals: 8,
-      priceProviderId: 'gemini-dollar',
-    },
-    'eth-lusd-0x5f98805a4e8be255a32880fdec7f6728c6568ba0': {
-      ticker: 'LUSD',
-      logo: 'lusd',
-      decimals: 8,
-      priceProviderId: 'liquity-usd',
-    },
-    'eth-thor-0xa5f2211b9b8170f694421f2046281775e8468044': {
-      ticker: 'THOR',
-      logo: 'thor',
-      decimals: 8,
-      priceProviderId: 'thorswap',
-    },
     'eth-usdc-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': {
       ticker: 'USDC',
       logo: 'usdc',
@@ -160,12 +142,6 @@ export const knownCosmosTokens: Record<
       logo: 'wbtc',
       decimals: 8,
       priceProviderId: 'wrapped-bitcoin',
-    },
-    'eth-xrune-0x69fa0fee221ad11012bab0fdb45d444d3d2ce71c': {
-      ticker: 'XRUNE',
-      logo: 'xrune',
-      decimals: 8,
-      priceProviderId: 'thorstarter',
     },
     'gaia-atom': {
       ticker: 'ATOM',
