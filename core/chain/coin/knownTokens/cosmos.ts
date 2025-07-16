@@ -45,7 +45,7 @@ export const knownCosmosTokens: Record<
       ticker: 'BCH',
       logo: 'bch',
       decimals: 8,
-      priceProviderId: 'rujira',
+      priceProviderId: 'bitcoin-cash',
     },
     'avax-avax': {
       ticker: 'AVAX',
