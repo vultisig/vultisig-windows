@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { fastVaultServerUrl } from '../config'
 
@@ -10,18 +10,8 @@ type Input = {
   email: string
 }
 
-export const migrateWithServer = async (input: Input) => {
-  const url = `${fastVaultServerUrl}/migrate`
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(input),
+export const migrateWithServer = async (input: Input) =>
+  queryUrl(`${fastVaultServerUrl}/migrate`, {
+    body: input,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
-
-  return response
-}

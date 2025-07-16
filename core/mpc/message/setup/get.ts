@@ -15,7 +15,6 @@ const getMpcSetupMessage = async ({
 }: GetMpcSetupMessageInput) =>
   queryUrl(`${serverUrl}/setup-message/${sessionId}`, {
     headers: withoutUndefinedFields({
-      'Content-Type': 'application/json',
       message_id: messageId,
     }),
     responseType: 'text',
