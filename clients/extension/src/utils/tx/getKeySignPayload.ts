@@ -202,12 +202,11 @@ export const getKeysignPayload = (
             CosmosMsgType.MSG_EXECUTE_CONTRACT
           )
         ) {
-          const msg = 
-            transaction.transactionDetails.data.replace(
-              `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
-              ''
-            )
-          
+          const msg = transaction.transactionDetails.data.replace(
+            `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
+            ''
+          )
+
           console.log('msg', msg)
 
           contractPayload = create(WasmExecuteContractPayloadSchema, {
