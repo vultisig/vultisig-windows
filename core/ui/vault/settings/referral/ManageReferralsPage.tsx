@@ -17,7 +17,6 @@ import { ManageReferralsForm } from './components/ManageReferralsForm'
 import { CreateReferralFormProvider } from './providers/CreateReferralFormProvider'
 import { EditReferralFormProvider } from './providers/EditReferralFormProvider'
 import { ReferralPayoutAssetProvider } from './providers/ReferralPayoutAssetProvider'
-import { useReferralDashboard } from './queries/useReferralDashboard'
 import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainNameQuery'
 
 type ManageReferralUIState =
@@ -41,20 +40,16 @@ export const ManageReferralsPage = () => {
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
-
-  const { data: referralDashboardData, status: referralDashboardStatus } =
-    useReferralDashboard(address)
+  console.log('🚀 ~ ManageReferralsPage ~ validNameDetails:', validNameDetails)
 
   useEffect(() => {
-    if (status === 'pending' || referralDashboardStatus === 'pending') return
-    if (validNameDetails && referralDashboardData) {
+    if (status === 'pending') return
+    if (validNameDetails) {
       setUiState('existingReferral')
-    } else if (validNameDetails) {
-      setUiState('editReferral')
     } else {
       setUiState('default')
     }
-  }, [status, validNameDetails, referralDashboardData, referralDashboardStatus])
+  }, [status, validNameDetails])
 
   return (
     <ReferralPayoutAssetProvider>
@@ -63,11 +58,11 @@ export const ManageReferralsPage = () => {
           value={uiState}
           editFriendReferral={() => <EditFriendReferral />}
           existingReferral={() =>
-            referralDashboardData ? (
+            validNameDetails ? (
               <ManageExistingReferral
                 onEditFriendReferral={() => setUiState('editFriendReferral')}
                 onEditReferral={() => setUiState('editReferral')}
-                referralDashboardData={shouldBePresent(referralDashboardData)}
+                nameDetails={shouldBePresent(validNameDetails)}
               />
             ) : (
               <CenterAbsolutely>

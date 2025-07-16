@@ -1,4 +1,4 @@
-import { blocksPerYear } from '../config'
+import { blocksPerYear, blockTimeSec } from '../config'
 import { getCurrentHeight } from './getCurrentHeight'
 import {
   getUserThorchainNameDetails,
@@ -9,6 +9,8 @@ import { getUserThorchainNames } from './getUserThorchainNames'
 export type ValidThorchainNameDetails = NameDetails & {
   remainingBlocks: number
   remainingYears: number
+  collectedRune: number
+  expiresOn: Date
 }
 
 export const fetchUserValidName = async (
@@ -18,7 +20,6 @@ export const fetchUserValidName = async (
     getCurrentHeight(),
     getUserThorchainNames(address),
   ])
-
   if (!names.length) return undefined
 
   const details = await Promise.all(names.map(getUserThorchainNameDetails))
@@ -26,14 +27,20 @@ export const fetchUserValidName = async (
   const valid = details
     .filter(d => d.expire_block_height > currentHeight)
     .sort((a, b) => b.expire_block_height - a.expire_block_height)[0]
-
   if (!valid) return undefined
 
   const remainingBlocks = valid.expire_block_height - currentHeight
+  const remainingYears = remainingBlocks / blocksPerYear
+  const collectedRune = parseFloat(valid.affiliate_collector_rune)
+  const expiresOn = new Date(
+    Date.now() + remainingBlocks * blockTimeSec * 1_000
+  )
 
   return {
     ...valid,
     remainingBlocks,
-    remainingYears: remainingBlocks / blocksPerYear,
+    remainingYears,
+    collectedRune,
+    expiresOn,
   }
 }
