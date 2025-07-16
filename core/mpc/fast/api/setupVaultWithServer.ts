@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { fastVaultServerUrl } from '../config'
 
@@ -13,18 +13,8 @@ type Input = {
   lib_type: number
 }
 
-export const setupVaultWithServer = async (input: Input) => {
-  const url = `${fastVaultServerUrl}/create`
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(input),
+export const setupVaultWithServer = async (input: Input) =>
+  queryUrl(`${fastVaultServerUrl}/create`, {
+    body: input,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
-
-  return response
-}

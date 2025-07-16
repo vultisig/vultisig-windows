@@ -12,6 +12,7 @@ import { languageStorage } from './language'
 import { onboardingStorage } from './onboarding'
 import { passcodeAutoLockStorage } from './passcodeAutoLock'
 import { passcodeEncryptionStorage } from './passcodeEncryption'
+import { referralsStorage } from './referrals'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
 
@@ -30,4 +31,5 @@ export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
+  ...referralsStorage,
 }

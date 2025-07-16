@@ -1,19 +1,12 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 type UploadPayloadToServerInput = {
   serverUrl: string
   hash: string
 }
 
-export async function getPayloadFromServer({
+export const getPayloadFromServer = ({
   hash,
   serverUrl,
-}: UploadPayloadToServerInput): Promise<string> {
-  const url = `${serverUrl}/payload/${hash}`
-
-  const response = await fetch(url)
-
-  await assertFetchResponse(response)
-
-  return response.text()
-}
+}: UploadPayloadToServerInput) =>
+  queryUrl(`${serverUrl}/payload/${hash}`, { responseType: 'text' })

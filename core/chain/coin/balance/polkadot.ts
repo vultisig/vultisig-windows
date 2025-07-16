@@ -17,8 +17,7 @@ export const getPolkadotCoinBalance: CoinBalanceResolver = async input => {
   const { data } = await queryUrl<PolkadotAccountBalance>(
     'https://polkadot.api.subscan.io/api/v2/scan/search',
     {
-      method: 'POST',
-      body: JSON.stringify({ key: input.address }),
+      body: { key: input.address },
     }
   )
 

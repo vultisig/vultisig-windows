@@ -18,7 +18,7 @@ export const useBackupOverviewStepsAnimations = (numberOfShares: number) => {
       return 'secure-vault-overview-5plus'
     }
 
-    return `secure-vault-overview-${numberOfShares > 3 ? '3of4' : '2of3'}`
+    return `secure-vault-backup-${numberOfShares > 3 ? '3of4' : '2of3'}`
   }, [numberOfShares])
 
   const { RiveComponent, rive } = useRive({

@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { fastVaultServerUrl } from '../config'
 
@@ -10,12 +10,7 @@ type VerifyVaultEmailCodeInput = {
 export const verifyVaultEmailCode = async ({
   vaultId,
   code,
-}: VerifyVaultEmailCodeInput) => {
-  const url = `${fastVaultServerUrl}/verify/${vaultId}/${code}`
-
-  const response = await fetch(url)
-
-  await assertFetchResponse(response)
-
-  return response
-}
+}: VerifyVaultEmailCodeInput) =>
+  queryUrl(`${fastVaultServerUrl}/verify/${vaultId}/${code}`, {
+    responseType: 'none',
+  })

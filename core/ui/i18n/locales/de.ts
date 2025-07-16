@@ -17,6 +17,14 @@ export const de = {
   incorrect_passcode: 'Falscher Passcode',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
+  referral_reg_fee: 'Registrierungsgebühr',
+  select: 'Auswählen',
+  pick_referral_code: 'Referral-Code auswählen',
+  referral_status: 'Status',
+  referral_costs: 'Kosten',
+  set_expiration: 'Ablauf festlegen (in Jahren)',
+  expiration_date: 'Ablaufdatum',
+  choose_payout_asset: 'Auszahlungs-Asset wählen',
   tx_hash: 'Transaktions-Hash',
   title_1: 'Empfehlung',
   title_2: 'Vultisig - Empfehlungen',
@@ -685,6 +693,7 @@ export const de = {
   vote: 'Abstimmung',
   stake: 'Einsatz',
   unstake: 'Abstecken',
+  unmerge: 'Entflechten',
   advanced: 'Fortschrittlich',
   low: 'Niedrig',
   normal: 'Normal',
@@ -928,6 +937,7 @@ export const de = {
   find_custom_token: 'Finden Sie Ihr benutzerdefiniertes Token',
   enter_contract_address: 'Vertragsadresse eingeben',
   no_token_found: 'Kein Token gefunden',
+  no_mergeable_tokens_found: 'Keine zusammenführbaren Token gefunden',
   invalid_token_address: 'Geben Sie eine gültige Token-Adresse ein',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden',
@@ -994,4 +1004,6 @@ export const de = {
   failed_to_process_plugin_install:
     'Die Installation des Plugins konnte nicht durchgeführt werden.',
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
+  verify_password_periodic_message_description:
+    'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
 }

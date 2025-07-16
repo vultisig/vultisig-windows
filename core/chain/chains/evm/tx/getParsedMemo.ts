@@ -1,4 +1,5 @@
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { Interface } from 'ethers'
 
 export type ParsedMemoParams = {
@@ -32,15 +33,9 @@ export const getParsedMemo = async (
     const hexSignature = memo.slice(0, 10) // "0x" + 8 hex chars
 
     try {
-      const response = await fetch(
+      const data = await queryUrl<{ results: { text_signature: string }[] }>(
         `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${hexSignature}&ordering=created_at`
       )
-
-      if (!response.ok) {
-        return undefined
-      }
-
-      const data = await response.json()
 
       if (data.results?.length) {
         const [result] = data.results

@@ -17,6 +17,15 @@ export const it = {
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
   digit_input_loading_validation: 'Verifica del codice in corso, attendere',
+  referral_reg_fee: 'Quota di registrazione',
+  create_referral: 'Crea referral',
+  select: 'Seleziona',
+  pick_referral_code: 'Scegli il codice referral',
+  referral_status: 'Stato',
+  referral_costs: 'Costi',
+  set_expiration: 'Imposta scadenza (in anni)',
+  expiration_date: 'Data di scadenza',
+  choose_payout_asset: 'Scegli asset di pagamento',
   tx_hash: 'Hash della transazione',
   gas_limit_tooltip_content:
     'La quantità massima di gas che pagherai. Può essere aumentata se il limite di gas non è sufficiente per inviare transazioni.',
@@ -80,7 +89,6 @@ export const it = {
   get_started: 'Inizia ora',
   use_referral_code: 'Usa Codice Referral',
   enter_referral_code_placeholder: 'Inserisci Codice Referral',
-  create_referral: 'Crea referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
   destination_address: 'Indirizzo di destinazione',
@@ -686,6 +694,7 @@ export const it = {
   vote: 'Votare',
   stake: 'Palo',
   unstake: 'Ritirare',
+  unmerge: 'Separare',
   advanced: 'Avanzato',
   low: 'Basso',
   normal: 'Normale',
@@ -920,6 +929,7 @@ export const it = {
   find_custom_token: 'Trova il tuo token personalizzato',
   enter_contract_address: "Inserisci l'indirizzo del contratto",
   no_token_found: 'Nessun token trovato',
+  no_mergeable_tokens_found: 'Nessun token unificabile trovato',
   invalid_token_address: 'Inserisci un indirizzo token valido',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
@@ -988,4 +998,6 @@ export const it = {
   failed_to_process_plugin_install:
     "Impossibile elaborare l'installazione del plugin",
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
+  verify_password_periodic_message_description:
+    'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
 }

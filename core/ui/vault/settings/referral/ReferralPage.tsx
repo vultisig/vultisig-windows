@@ -7,28 +7,38 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { match } from '@lib/utils/match'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { CreateOrSaveReferral } from './components/CreateOrSaveReferral'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import {
+  useHasFinishedReferralsOnboardingQuery,
+  useSetHasFinishedReferralsOnboardingMutation,
+} from '../../../storage/referrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
 
-const steps = ['landing', 'summary', 'create-or-save-referral'] as const
-
-const getHeaderTitle = (step: (typeof steps)[number]) => {
-  return match(step, {
-    landing: () => 'title_1' as const,
-    summary: () => 'title_1' as const,
-    'create-or-save-referral': () => 'title_2' as const,
-  })
-}
+const steps = ['landing', 'summary'] as const
 
 export const ReferralPage = () => {
   const { t } = useTranslation()
   const { step, toNextStep } = useStepNavigation({ steps })
-  const headerTitle = getHeaderTitle(step)
+  const navigate = useCoreNavigate()
+  const { mutateAsync: setHasFinishedOnboarding } =
+    useSetHasFinishedReferralsOnboardingMutation()
+  const { data: isOnboarded, isLoading } =
+    useHasFinishedReferralsOnboardingQuery()
+
+  useEffect(() => {
+    if (isOnboarded) {
+      navigate({
+        id: 'manageReferral',
+      })
+    }
+  }, [isOnboarded, navigate])
+
+  if (isLoading) return null
 
   return (
     <>
@@ -53,20 +63,32 @@ export const ReferralPage = () => {
             }
           />
         }
-        title={t(headerTitle)}
+        title={t('title_1')}
       />
-      <PageContent>
+      <ContentWrapper>
         <Match
           value={step}
           landing={() => <ReferralLanding onFinish={toNextStep} />}
-          summary={() => <ReferralsSummary onFinish={toNextStep} />}
-          create-or-save-referral={() => <CreateOrSaveReferral />}
+          summary={() => (
+            <ReferralsSummary
+              onFinish={() => {
+                setHasFinishedOnboarding(true)
+                navigate({
+                  id: 'manageReferral',
+                })
+              }}
+            />
+          )}
         />
-      </PageContent>
+      </ContentWrapper>
     </>
   )
 }
 
 const TooltipContent = styled.div`
   min-width: 200px;
+`
+
+const ContentWrapper = styled(PageContent)`
+  overflow-y: hidden;
 `

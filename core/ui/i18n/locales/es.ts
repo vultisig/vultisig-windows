@@ -15,6 +15,15 @@ export const es = {
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
   incorrect_passcode: 'Código incorrecto',
+  referral_reg_fee: 'Cuota de registro',
+  create_referral: 'Crear referido',
+  select: 'Seleccionar',
+  pick_referral_code: 'Elegir código de referido',
+  referral_status: 'Estado',
+  referral_costs: 'Costos',
+  set_expiration: 'Establecer caducidad (en años)',
+  expiration_date: 'Fecha de vencimiento',
+  choose_payout_asset: 'Elegir activo de pago',
   moreInfo: 'Más información',
   gas_limit_tooltip_content:
     'La cantidad máxima de gas que pagarás. Puede aumentarse si el límite de gas no es suficiente para enviar transacciones.',
@@ -71,7 +80,6 @@ export const es = {
   get_started: 'Comenzar',
   use_referral_code: 'Usar Código de Referido',
   enter_referral_code_placeholder: 'Ingresa Código de Referido',
-  create_referral: 'Crear referido',
   unexpected_error: 'Error inesperado',
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',
@@ -691,6 +699,7 @@ export const es = {
   vote: 'Votar',
   stake: 'Apostar',
   unstake: 'Desbloquear',
+  unmerge: 'Desagrupar',
   advanced: 'Avanzado',
   low: 'Bajo',
   normal: 'Normal',
@@ -924,6 +933,7 @@ export const es = {
   find_custom_token: 'Encuentra tu token personalizado',
   enter_contract_address: 'Ingrese la dirección del contrato',
   no_token_found: 'No se encontró ningún token',
+  no_mergeable_tokens_found: 'No se encontraron tokens fusionables',
   invalid_token_address: 'Introduzca una dirección de token válida',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',
@@ -992,4 +1002,6 @@ export const es = {
   failed_to_process_plugin_install:
     'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
+  verify_password_periodic_message_description:
+    'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
 }

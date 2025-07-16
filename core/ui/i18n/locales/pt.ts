@@ -14,6 +14,15 @@ export const pt = {
   passcodes_do_not_match: 'Os códigos não correspondem',
   digit_input_success_validation: 'Verificação bem-sucedida',
   digit_input_error_validation: 'Erro ao verificar o código, tente novamente',
+  referral_reg_fee: 'Taxa de registro',
+  create_referral: 'Criar indicação',
+  select: 'Selecionar',
+  pick_referral_code: 'Escolher código de indicação',
+  referral_status: 'Status',
+  referral_costs: 'Custos',
+  set_expiration: 'Definir expiração (em anos)',
+  expiration_date: 'Data de expiração',
+  choose_payout_asset: 'Escolher ativo de pagamento',
   digit_input_loading_validation: 'Verificando o código, por favor aguarde',
   chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
@@ -77,7 +86,6 @@ export const pt = {
   get_started: 'Começar',
   use_referral_code: 'Usar Código de Indicação',
   enter_referral_code_placeholder: 'Digite o Código de Indicação',
-  create_referral: 'Criar indicação',
   selected_chain_missing_in_your_vault:
     'A blockchain selecionada está ausente no seu cofre',
   select_destination_chain: 'Selecionar blockchain de destino',
@@ -679,6 +687,7 @@ export const pt = {
   vote: 'Voto',
   stake: 'Estaca',
   unstake: 'Desfazer stake',
+  unmerge: 'Desfazer merge',
   advanced: 'Avançado',
   low: 'Baixo',
   normal: 'Normal',
@@ -912,6 +921,7 @@ export const pt = {
   find_custom_token: 'Encontre seu token personalizado',
   enter_contract_address: 'Insira o endereço do contrato',
   no_token_found: 'Nenhum token encontrado',
+  no_mergeable_tokens_found: 'Nenhum token mesclável encontrado',
   invalid_token_address: 'Insira um endereço de token válido',
   extension_vault_import_restriction:
     'Somente os cofres DKLS podem ser importados na extensão',
@@ -979,4 +989,6 @@ export const pt = {
   success: 'Sucesso',
   failed_to_process_plugin_install: 'Falha ao processar a instalação do plugin',
   hold_for_paired_sign: 'Segure para sinal de par',
+  verify_password_periodic_message_description:
+    'Pediremos periodicamente que você verifique sua senha de login rápido para que você sempre se lembre dela',
 }

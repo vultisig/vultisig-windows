@@ -25,7 +25,6 @@ export const darkTheme: DefaultTheme = {
     foregroundSuper: new HSLA(215, 62, 28),
     foregroundSuperContrast: new HSLA(207, 42, 40),
 
-    borderLight: new HSLA(216, 63, 18),
     overlay: new HSLA(217, 91, 1, 0.8),
     contrast: new HSLA(0, 0, 100),
     mist: new HSLA(0, 0, 100, 0.06),
