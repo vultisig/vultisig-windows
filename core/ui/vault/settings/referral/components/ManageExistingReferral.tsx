@@ -17,21 +17,21 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
-import { ReferralDashboard } from '../services/getReferralDashboard'
+import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
   onEditReferral: () => void
   onEditFriendReferral: () => void
-  referralDashboardData?: ReferralDashboard
+  nameDetails?: ValidThorchainNameDetails
 }
 
 export const ManageExistingReferral = ({
-  referralDashboardData: {
+  nameDetails: {
     name,
     collectedRune,
     expiresOn,
-  } = {} as ReferralDashboard,
+  } = {} as ValidThorchainNameDetails,
   onEditFriendReferral,
   onEditReferral,
 }: Props) => {
