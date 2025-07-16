@@ -227,7 +227,5 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     fee: getFee(),
   })
 
-  console.log('input', input)
-
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
