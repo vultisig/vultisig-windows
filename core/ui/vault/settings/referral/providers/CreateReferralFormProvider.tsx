@@ -5,7 +5,7 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import {
   CreateReferralFormData,
   referralSchema,
-} from '../components/CreateReferralForm/config'
+} from '../components/CreateReferral/CreateReferralForm/config'
 
 export const CreateReferralFormProvider = ({ children }: ChildrenProp) => {
   const methods = useForm<CreateReferralFormData>({

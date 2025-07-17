@@ -11,10 +11,11 @@ import {
   useSetFriendReferralMutation,
 } from '../../../storage/referrals'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
-import { CreateReferralForm } from './components/CreateReferralForm'
-import { CreateReferralVerify } from './components/CreateReferralVerify'
+import { CreateReferralForm } from './components/CreateReferral/CreateReferralForm'
+import { CreateReferralVerify } from './components/CreateReferral/CreateReferralVerify'
 import { EditFriendReferralForm } from './components/EditFriendReferralForm'
-import { EditReferralForm } from './components/EditReferralForm'
+import { EditReferralForm } from './components/EditReferral/EditReferralForm'
+import { EditReferralVerify } from './components/EditReferral/EditReferralVerify'
 import { ManageExistingReferral } from './components/ManageExistingReferral'
 import { ManageReferralsForm } from './components/ManageReferralsForm'
 import { CreateReferralFormProvider } from './providers/CreateReferralFormProvider'
@@ -63,7 +64,11 @@ export const ManageReferralsPage = () => {
           editFriendReferral={() => (
             <EditFriendReferralForm
               userReferralName={validNameDetails?.name}
-              onFinish={() => setUiState('default')}
+              onFinish={() =>
+                validNameDetails
+                  ? setUiState('existingReferral')
+                  : setUiState('default')
+              }
             />
           )}
           existingReferral={() =>
@@ -105,9 +110,14 @@ export const ManageReferralsPage = () => {
             />
           )}
           editReferral={() => (
-            <EditReferralFormProvider>
-              <EditReferralForm onFinish={() => {}} />§
-            </EditReferralFormProvider>
+            <StepTransition
+              from={({ onFinish }) => (
+                <EditReferralFormProvider>
+                  <EditReferralForm onFinish={onFinish} />§
+                </EditReferralFormProvider>
+              )}
+              to={({ onBack }) => <EditReferralVerify onBack={onBack} />}
+            />
           )}
           loading={() => (
             <CenterAbsolutely>

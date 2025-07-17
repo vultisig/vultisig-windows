@@ -19,14 +19,14 @@ import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useChainSpecificQuery } from '../../../../chain/coin/queries/useChainSpecificQuery'
-import { StartKeysignPrompt } from '../../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { useReferralKeysignPayload } from '../hooks/useReferralKeysignPayload'
-import { useReferralSender } from '../hooks/useReferralSender'
-import { useCreateReferralForm } from '../providers/CreateReferralFormProvider'
-import { useReferralPayoutAsset } from '../providers/ReferralPayoutAssetProvider'
-import { buildCreateReferralMemo } from '../utils/buildReferralMemos'
-import { ReferralPageWrapper } from './Referrals.styled'
+import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
+import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
+import { useReferralSender } from '../../hooks/useReferralSender'
+import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
+import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
+import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
+import { ReferralPageWrapper } from '../Referrals.styled'
 
 export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
