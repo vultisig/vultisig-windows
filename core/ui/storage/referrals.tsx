@@ -10,15 +10,31 @@ import { StorageKey } from './StorageKey'
 
 export const isHasFinishedReferralsOnboardingInitially = false
 
+type GetHasAddedFriendReferralFunction = () => Promise<string | null>
+type SetHasAddedFriendReferralFunction = (input: string) => Promise<void>
+
 type SetHasFinishedReferralsOnboardingFunction = (
   hasFinishedOnboarding: boolean
 ) => Promise<void>
 
 type GetHasFinishedReferralsOnboardingFunction = () => Promise<boolean>
 
-export type ReferralsOnboardingStorage = {
+export type ReferralsStorage = {
   getHasFinishedReferralsOnboarding: GetHasFinishedReferralsOnboardingFunction
   setHasFinishedReferralsOnboarding: SetHasFinishedReferralsOnboardingFunction
+  getFriendReferral: GetHasAddedFriendReferralFunction
+  setFriendReferral: SetHasAddedFriendReferralFunction
+}
+
+export const useFriendReferralQuery = () => {
+  const { getFriendReferral } = useCore()
+
+  return useQuery({
+    queryKey: [StorageKey.hasAddedFriendReferral],
+    queryFn: getFriendReferral,
+    ...noRefetchQueryOptions,
+    ...noPersistQueryOptions,
+  })
 }
 
 export const useHasFinishedReferralsOnboardingQuery = () => {
@@ -32,6 +48,19 @@ export const useHasFinishedReferralsOnboardingQuery = () => {
   })
 }
 
+export const useSetFriendReferralMutation = () => {
+  const { setFriendReferral } = useCore()
+  const invalidateQueries = useInvalidateQueries()
+
+  const mutationFn: SetHasAddedFriendReferralFunction = async input => {
+    await setFriendReferral(input)
+    await invalidateQueries([StorageKey.hasAddedFriendReferral])
+  }
+
+  return useMutation({
+    mutationFn,
+  })
+}
 export const useSetHasFinishedReferralsOnboardingMutation = () => {
   const { setHasFinishedReferralsOnboarding } = useCore()
   const invalidateQueries = useInvalidateQueries()
