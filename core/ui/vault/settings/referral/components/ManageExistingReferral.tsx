@@ -35,6 +35,7 @@ export const ManageExistingReferral = ({
   onEditFriendReferral,
   onEditReferral,
 }: Props) => {
+  console.log('🚀 ~ expiresOn:', expiresOn)
   const { colors } = useTheme()
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
