@@ -12,7 +12,6 @@ export const EditReferralFormProvider = ({ children }: ChildrenProp) => {
   const methods = useForm<EditReferralFormData>({
     resolver: zodResolver(editReferralSchema),
     defaultValues: {
-      referralName: '',
       expiration: 1,
       referralFeeAmount: 0,
     },
