@@ -12,6 +12,9 @@ export const en = {
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
+  current_expiry: 'Current expiry',
+  referral_annual_fee: 'Referral annual fee',
+  referral_extension_fee: 'Referral extension fee',
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
