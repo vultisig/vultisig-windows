@@ -6,8 +6,8 @@ type NonNullableSetStateAction<T> = T | null | ((prevState: T) => T)
 export const usePresentState = <T>([state, setState]: [
   T | null,
   Dispatch<SetStateAction<T | null>>,
-]): [T, Dispatch<NonNullableSetStateAction<T>>] => {
-  const presentState = useMemo(() => shouldBePresent(state), [state])
+]): [T | null, Dispatch<NonNullableSetStateAction<T>>] => {
+  const presentState = useMemo(() => state, [state])
 
   const setPresentState: Dispatch<NonNullableSetStateAction<T>> = useCallback(
     newStateOrUpdater => {

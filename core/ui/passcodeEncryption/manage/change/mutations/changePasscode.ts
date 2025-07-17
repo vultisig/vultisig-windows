@@ -1,20 +1,20 @@
+import { encryptSample } from '@core/ui/passcodeEncryption/core/sample'
+import {
+  decryptVaultKeyShares,
+  encryptVaultKeyShares,
+} from '@core/ui/passcodeEncryption/core/vaultKeyShares'
+import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
+import { useCore } from '@core/ui/state/core'
+import { StorageKey } from '@core/ui/storage/StorageKey'
+import { useVaults } from '@core/ui/storage/vaults'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { usePresentState } from '@lib/ui/state/usePresentState'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { useMutation } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
-
-import { useCore } from '../../../../state/core'
-import { StorageKey } from '../../../../storage/StorageKey'
-import { useVaults } from '../../../../storage/vaults'
-import { getVaultId } from '../../../../vault/Vault'
-import { encryptSample } from '../../../core/sample'
-import {
-  decryptVaultKeyShares,
-  encryptVaultKeyShares,
-} from '../../../core/vaultKeyShares'
-import { usePasscode } from '../../../state/passcode'
 
 export const useChangePasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
@@ -24,6 +24,7 @@ export const useChangePasscodeMutation = () => {
 
   return useMutation({
     mutationFn: async (newPasscode: string) => {
+      const key = shouldBePresent(oldPasscode, 'passcode')
       const sample = uuidv4()
 
       const encryptedSample = encryptSample({
@@ -35,7 +36,7 @@ export const useChangePasscodeMutation = () => {
         recordFromItems(vaults, getVaultId),
         ({ keyShares }) => {
           const decryptedKeyShares = decryptVaultKeyShares({
-            key: oldPasscode,
+            key,
             keyShares,
           })
           return encryptVaultKeyShares({
