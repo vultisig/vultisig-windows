@@ -1,12 +1,12 @@
 import {
   isHasFinishedReferralsOnboardingInitially,
-  ReferralsOnboardingStorage,
+  ReferralsStorage,
 } from '@core/ui/storage/referrals'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { persistentStorage } from '../state/persistentState'
 
-export const referralsStorage: ReferralsOnboardingStorage = {
+export const referralsStorage: ReferralsStorage = {
   getHasFinishedReferralsOnboarding: async () => {
     const value = persistentStorage.getItem<boolean>(
       StorageKey.hasFinishedReferralsOnboarding
@@ -22,6 +22,23 @@ export const referralsStorage: ReferralsOnboardingStorage = {
     persistentStorage.setItem(
       StorageKey.hasFinishedReferralsOnboarding,
       hasFinishedReferralsOnboarding
+    )
+  },
+  getFriendReferral: async () => {
+    const value = persistentStorage.getItem<string>(
+      StorageKey.hasAddedFriendReferral
+    )
+
+    if (value === undefined) {
+      return null
+    }
+
+    return value
+  },
+  setFriendReferral: async hasAddedFriendReferral => {
+    persistentStorage.setItem(
+      StorageKey.hasAddedFriendReferral,
+      hasAddedFriendReferral
     )
   },
 }
