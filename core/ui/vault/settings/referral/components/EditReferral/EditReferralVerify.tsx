@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -14,6 +15,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
@@ -21,11 +23,14 @@ import styled from 'styled-components'
 
 import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
-import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
+import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
+import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
+import { buildEditReferralMemo } from '../../utils/buildReferralMemos'
 import { ReferralPageWrapper } from '../Referrals.styled'
 
 export const EditReferralVerify = ({ onBack }: OnBackProp) => {
@@ -37,11 +42,40 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const referralAmount = watch('referralFeeAmount')
   const name = watch('referralName')
 
-  const memo = buildCreateReferralMemo({
+  const { address } = shouldBePresent(
+    useCurrentVaultCoin({
+      chain: chainFeeCoin.THORChain.chain,
+      id: 'RUNE',
+    })
+  )
+
+  const { data: allowedPools = [] } = useActivePoolsQuery()
+
+  const { data: validNameDetails } = useUserValidThorchainNameQuery(address)
+  const thorAliasAddress = validNameDetails?.aliases.find(
+    a => a.chain.toUpperCase() === 'THOR'
+  )?.address
+
+  if (!thorAliasAddress) {
+    throw new Error('Could not find your THOR‐chain alias address')
+  }
+
+  const preferredAsset = allowedPools.find(pool => {
+    const [chain, tail] = pool.asset.split('.')
+    const ticker = tail.split('-')[0]
+    return chain === coin.chain && ticker === coin.ticker
+  })?.asset
+
+  if (!preferredAsset) {
+    throw new Error(`No active pool found for ${coin.chain}.${coin.ticker}`)
+  }
+
+  const memo = buildEditReferralMemo({
     name,
-    payoutAddress: sender,
-    ownerThorAddr: sender,
+    thorAliasAddress,
+    preferredAsset,
   })
+
   const { chain, ticker } = coin
 
   const { keysignPayload } = useReferralKeysignPayload({
