@@ -7,14 +7,16 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
+import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
-  onSaveReferral: () => void
+  onSaveReferral: (friendReferral: string) => void
   onCreateReferral: () => void
 }
 
@@ -24,6 +26,14 @@ export const ManageReferralsForm = ({
 }: Props) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { data: friendReferral } = useFriendReferralQuery()
+  const [value, setValue] = useState('')
+
+  useEffect(() => {
+    if (friendReferral) {
+      setValue(friendReferral)
+    }
+  }, [friendReferral])
 
   return (
     <>
@@ -55,9 +65,16 @@ export const ManageReferralsForm = ({
             <VStack gap={16}>
               <VStack gap={8}>
                 <Text size={14}>{t('use_referral_code')}</Text>
-                <TextInput placeholder={t('enter_referral_code_placeholder')} />
+                <TextInput
+                  value={value}
+                  onValueChange={val => {
+                    if (friendReferral) return
+                    setValue(val)
+                  }}
+                  placeholder={t('enter_referral_code_placeholder')}
+                />
               </VStack>
-              <SaveReferralButton onClick={onSaveReferral}>
+              <SaveReferralButton onClick={() => onSaveReferral(value)}>
                 {t('save')}
               </SaveReferralButton>
               <HStack gap={16} alignItems="center">
