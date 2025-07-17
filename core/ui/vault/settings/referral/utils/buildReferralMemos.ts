@@ -15,5 +15,10 @@ export const buildEditReferralMemo = ({
 }: {
   name: string
   thorAliasAddress: string
-  preferredAsset: string
-}) => `~:${name.toUpperCase()}:THOR:${thorAliasAddress}::${preferredAsset}`
+  preferredAsset?: string
+}) => {
+  const upper = name.toUpperCase()
+  const base = `~:${upper}:THOR:${thorAliasAddress}`
+  // if they chose a new asset, add it; otherwise just renew
+  return preferredAsset ? `${base}::${preferredAsset}` : base
+}

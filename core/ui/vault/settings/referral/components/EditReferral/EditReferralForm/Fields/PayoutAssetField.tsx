@@ -46,7 +46,6 @@ export const PayoutAssetField = () => {
   const coins = useCurrentVaultCoins()
   const { t } = useTranslation()
   const { data: allowedPools = [] } = useActivePoolsQuery()
-  console.log('🚀 ~ PayoutAssetField ~ allowedPools:', allowedPools)
 
   const allowedAssets = useMemo(
     () =>
@@ -87,7 +86,9 @@ export const PayoutAssetField = () => {
         name="payoutAsset"
         control={control}
         render={({ field: { onChange, value: currentValue } }) => {
+          console.log('🚀 ~ PayoutAssetField ~ currentValue:', currentValue)
           const coin = getCoinFromCoinKey(currentValue || coins[0]!)
+          console.log('🚀 ~ PayoutAssetField ~ coins:', coins)
 
           return (
             <Opener

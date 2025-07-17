@@ -33,6 +33,7 @@ type ManageReferralUIState =
 
 export const ManageReferralsPage = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
+
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
     useFriendReferralQuery()
   const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
@@ -46,6 +47,7 @@ export const ManageReferralsPage = () => {
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
+  console.log('🚀 ~ ManageReferralsPage ~ validNameDetails:', validNameDetails)
 
   useEffect(() => {
     if (status === 'pending') return

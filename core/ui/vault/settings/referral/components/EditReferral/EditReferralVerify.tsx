@@ -40,7 +40,6 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { name: vaultName } = useCurrentVault()
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
-  const name = watch('referralName')
 
   const { address } = shouldBePresent(
     useCurrentVaultCoin({
@@ -66,12 +65,8 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
     return chain === coin.chain && ticker === coin.ticker
   })?.asset
 
-  if (!preferredAsset) {
-    throw new Error(`No active pool found for ${coin.chain}.${coin.ticker}`)
-  }
-
   const memo = buildEditReferralMemo({
-    name,
+    name: shouldBePresent(validNameDetails?.name),
     thorAliasAddress,
     preferredAsset,
   })
