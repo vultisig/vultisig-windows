@@ -9,7 +9,6 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { usePresentState } from '@lib/ui/state/usePresentState'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { recordMap } from '@lib/utils/record/recordMap'
@@ -20,7 +19,7 @@ export const useChangePasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const invalidateQueries = useInvalidateQueries()
   const vaults = useVaults()
-  const [oldPasscode, setPasscode] = usePresentState(usePasscode())
+  const [oldPasscode, setPasscode] = usePasscode()
 
   return useMutation({
     mutationFn: async (newPasscode: string) => {
