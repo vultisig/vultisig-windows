@@ -1,12 +1,11 @@
 import { OtherChain } from '@core/chain/Chain'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeTronTx: ExecuteTxResolver<OtherChain> = async ({
-  chain, // eslint-disable-line @typescript-eslint/no-unused-vars
-  walletCore, // eslint-disable-line @typescript-eslint/no-unused-vars
   compiledTx,
 }) => {
   const output = TW.Tron.Proto.SigningOutput.decode(compiledTx)
@@ -23,26 +22,9 @@ export const executeTronTx: ExecuteTxResolver<OtherChain> = async ({
 async function broadcastTransaction(jsonString: string): Promise<string> {
   const url = 'https://tron-rpc.publicnode.com/wallet/broadcasttransaction'
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const { txid } = await queryUrl<{ txid: string }>(url, {
     body: jsonString,
   })
 
-  if (!response.ok) {
-    const responseText = await response.text()
-    throw new Error(
-      `status code:${response.status}, ${responseText || 'Unknown error'}`
-    )
-  }
-
-  const data = await response.json()
-
-  if (data.txid) {
-    return data.txid
-  }
-
-  throw new Error(JSON.stringify(data) || 'Unknown error')
+  return txid
 }

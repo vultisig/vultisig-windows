@@ -18,11 +18,7 @@ export const executeTonTx: ExecuteTxResolver = async ({ compiledTx }) => {
 
   const response = await attempt(
     queryUrl<{ result: { hash: string } }>(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ boc: output.encoded }),
+      body: { boc: output.encoded },
     })
   )
 
