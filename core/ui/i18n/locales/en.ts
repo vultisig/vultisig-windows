@@ -408,8 +408,8 @@ export const en = {
   scan_with_device_index: 'Scan with {{index}} device',
   scan_with_device_name: 'Scan with {{name}}',
   localMode: "You're in local mode",
-  scanQrInstruction:
-    'Scan QR with other device. {{max}}-device setup recommended, {{min}} is sufficient.',
+  keygen_devices_requirements_info:
+    'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   devices: 'Devices',
   waitingOnDevices: 'Waiting on devices...',
   switchToInternet: 'Switch back to internet mode',

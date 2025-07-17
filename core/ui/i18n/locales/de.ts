@@ -111,8 +111,6 @@ export const de = {
     'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
   optionalDevice: 'Optionales Gerät',
   localMode: 'Sie sind im lokalen Modus',
-  scanQrInstruction:
-    'QR mit einem anderen Gerät scannen. {{max}}-Geräte-Setup empfohlen, {{min}} reichen aus.',
   devices: 'Geräte',
   waitingOnDevices: 'Warten auf Geräte...',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
@@ -1006,4 +1004,6 @@ export const de = {
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
   verify_password_periodic_message_description:
     'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
+  keygen_devices_requirements_info:
+    'QR mit einem anderen Gerät scannen. {{recommended}}-Geräteeinrichtung empfohlen, {{min}} ist ausreichend.',
 }
