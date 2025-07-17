@@ -6,11 +6,11 @@ import {
 } from '@core/ui/storage/vaultFolders'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 import { updateVaults, vaultsStorage } from './vaults'
 
 const getVaultFolders: GetVaultFoldersFunction = async () => {

@@ -7,9 +7,8 @@ import {
   RemoveFromCoinFinderIgnoreFunction,
 } from '@core/ui/storage/coinFinderIgnore'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 
 const getCoinFinderIgnore: GetCoinFinderIgnoreFunction = async () =>
   getPersistentState(StorageKey.coinFinderIgnore, coinFinderIgnoreInitialValue)

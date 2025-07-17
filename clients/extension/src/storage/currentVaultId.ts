@@ -4,9 +4,8 @@ import {
   initialCurrentVaultId,
 } from '@core/ui/storage/currentVaultId'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 
 export const currentVaultIdStorage: CurrentVaultIdStorage = {
   getCurrentVaultId: () =>
