@@ -12,12 +12,12 @@ import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useThorNameAvailabilityMutation } from '../../../mutations/useThorNameAvailabilityMutation'
+import { useThorNameAvailabilityMutation } from '../../../../mutations/useThorNameAvailabilityMutation'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
-} from '../../Referrals.styled'
+} from '../../../Referrals.styled'
 import { CreateReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {

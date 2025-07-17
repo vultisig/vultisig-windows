@@ -1,148 +1,53 @@
-import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/buttons/Button'
-import { TextInput } from '@lib/ui/inputs/TextInput'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
-import { useThorNameAvailabilityMutation } from '../../../mutations/useThorNameAvailabilityMutation'
-import {
-  FormField,
-  FormFieldErrorText,
-  FormFieldLabel,
-} from '../../Referrals.styled'
-import { EditReferralFormData } from '../config'
+import { useCurrentVaultCoin } from '../../../../../../state/currentVaultCoins'
+import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
 export const ReferralCodeField = () => {
-  const [localInput, setLocalInput] = useState('')
+  const { address } = shouldBePresent(
+    useCurrentVaultCoin({
+      chain: chainFeeCoin.THORChain.chain,
+      id: 'RUNE',
+    })
+  )
 
-  const { t } = useTranslation()
-  const {
-    formState: { errors },
-    setValue,
-    clearErrors,
-    getValues,
-  } = useFormContext<EditReferralFormData>()
-  const name = getValues('referralName')
-
-  const {
-    mutate: checkAvailability,
-    error,
-    status,
-    reset,
-  } = useThorNameAvailabilityMutation()
-
-  const inputError =
-    localInput && localInput.length > 4 ? t('max_4_characters') : ''
+  const { data: nameDetails } = useUserValidThorchainNameQuery(address)
+  const name = shouldBePresent(nameDetails?.name)
+  const [, copyToClipboard] = useCopyToClipboard()
 
   return (
-    <VStack gap={14}>
-      <FormField>
-        <FormFieldLabel htmlFor="referral-name">
-          {t('pick_referral_code')}
-        </FormFieldLabel>
-        <HStack gap={8}>
-          <TextInput
-            id="referral-name"
-            value={localInput}
-            placeholder={t('enter_up_to_4_characters_placeholder')}
-            onValueChange={value => {
-              setLocalInput(value)
-              reset()
-              setValue('referralName', '')
-            }}
-          />
-          <Button
-            onClick={() => {
-              if (localInput) {
-                checkAvailability(name, {
-                  onSuccess: () => {
-                    setValue('referralName', localInput, {
-                      shouldValidate: true,
-                    })
-                    clearErrors('referralName')
-                  },
-                  onError: () => {
-                    setValue('referralName', '')
-                  },
-                })
-              }
-            }}
-            style={{ maxWidth: 97, fontSize: 14 }}
-          >
-            {t('search')}
-          </Button>
-        </HStack>
-        {(errors.referralName || inputError) && (
-          <FormFieldErrorText>
-            {errors?.referralName?.message || inputError}
-          </FormFieldErrorText>
-        )}
-      </FormField>
-      <StatusWrapper
-        isHidden={status === 'idle'}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Match
-          value={status}
-          pending={() => (
-            <CenterAbsolutely>
-              <Spinner size="1.5em" />
-            </CenterAbsolutely>
-          )}
-          error={() => (
-            <>
-              <Text size={14} color="supporting">
-                {t('referral_status')}
-              </Text>
-              <StatusPill>
-                <Text size={13} color="danger">
-                  {extractErrorMsg(error)}
-                </Text>
-              </StatusPill>
-            </>
-          )}
-          success={() => (
-            <>
-              <Text size={14} color="supporting">
-                {t('referral_status')}
-              </Text>
-              <StatusPill>
-                <Text size={13} color="success">
-                  {t('available')}
-                </Text>
-              </StatusPill>
-            </>
-          )}
-          idle={() => null}
-        />
-      </StatusWrapper>
-    </VStack>
+    <FieldWrapper
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Text>{name}</Text>
+      <FieldIconWrapper>
+        <UnstyledButton onClick={() => copyToClipboard(name)}>
+          <CopyIcon />
+        </UnstyledButton>
+      </FieldIconWrapper>
+    </FieldWrapper>
   )
 }
 
-const StatusWrapper = styled(HStack)<{
-  isHidden?: boolean
-}>`
-  ${({ isHidden }) => (isHidden ? 'display: none' : '')}
-  height: 52px;
-  position: relative;
-`
-
-const StatusPill = styled.div`
-  display: flex;
-  padding: 8px 12px;
-  align-items: center;
-  gap: 4px;
-  border-radius: 99px;
-  border: 1.5px solid ${getColor('foregroundExtra')};
+const FieldWrapper = styled(VStack)`
+  border-radius: 12px;
+  border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
+  padding: 14px;
+`
+const FieldIconWrapper = styled(IconWrapper)`
+  font-size: 20px;
 `

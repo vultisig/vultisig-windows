@@ -6,8 +6,8 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
-import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
+import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
+import { DecorationLine, ReferralPageWrapper } from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { PayoutAssetField } from './Fields/PayoutAssetField'
@@ -45,7 +45,7 @@ export const EditReferralForm = ({ onFinish }: OnFinishProp) => {
             <Fees />
           </StackSeparatedBy>
           <Button disabled={!isValid || isSubmitting} type="submit">
-            {t('create_referral_form')}
+            Edit Referral
           </Button>
         </VStack>
       </ReferralPageWrapper>

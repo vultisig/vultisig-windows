@@ -13,17 +13,17 @@ import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { CoinIcon } from '../../../../../../chain/coin/icon/CoinIcon'
-import { CoinOption } from '../../../../../../chain/coin/inputs/CoinOption'
-import { ChainOption } from '../../../../../send/components/ChainOption'
-import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
-import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
-import { useActivePoolsQuery } from '../../../queries/useActivePoolsQuery'
+import { CoinIcon } from '../../../../../../../chain/coin/icon/CoinIcon'
+import { CoinOption } from '../../../../../../../chain/coin/inputs/CoinOption'
+import { ChainOption } from '../../../../../../send/components/ChainOption'
+import { useCurrentVaultCoins } from '../../../../../../state/currentVaultCoins'
+import { useEditReferralFormData } from '../../../../providers/EditReferralFormProvider'
+import { useActivePoolsQuery } from '../../../../queries/useActivePoolsQuery'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
-} from '../../Referrals.styled'
+} from '../../../Referrals.styled'
 
 const chainMap: Record<string, string> = {
   AVAX: 'Avalanche',
@@ -46,6 +46,7 @@ export const PayoutAssetField = () => {
   const coins = useCurrentVaultCoins()
   const { t } = useTranslation()
   const { data: allowedPools = [] } = useActivePoolsQuery()
+  console.log('🚀 ~ PayoutAssetField ~ allowedPools:', allowedPools)
 
   const allowedAssets = useMemo(
     () =>
