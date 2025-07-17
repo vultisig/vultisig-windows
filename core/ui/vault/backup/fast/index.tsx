@@ -45,7 +45,8 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
     if (
       input?.length === emailConfirmationCodeLength &&
       !isPending &&
-      !isSuccess
+      !isSuccess &&
+      !error
     ) {
       mutate(input)
     }
