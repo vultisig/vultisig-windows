@@ -14,4 +14,5 @@ export enum StorageKey {
   passcodeEncryption = 'passcodeEncryption',
   passcodeAutoLock = 'passcodeAutoLock',
   hasFinishedReferralsOnboarding = 'hasFinishedReferralsOnboarding',
+  hasAddedFriendReferral = 'hasAddedFriendReferral',
 }

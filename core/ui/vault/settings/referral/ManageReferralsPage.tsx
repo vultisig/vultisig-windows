@@ -6,11 +6,14 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useEffect, useState } from 'react'
 
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import {
+  useFriendReferralQuery,
+  useSetFriendReferralMutation,
+} from '../../../storage/referrals'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { CreateReferralForm } from './components/CreateReferralForm'
 import { CreateReferralVerify } from './components/CreateReferralVerify'
-import { EditFriendReferral } from './components/EditFriendReferral'
+import { EditFriendReferralForm } from './components/EditFriendReferralForm'
 import { EditReferralForm } from './components/EditReferralForm'
 import { ManageExistingReferral } from './components/ManageExistingReferral'
 import { ManageReferralsForm } from './components/ManageReferralsForm'
@@ -29,8 +32,10 @@ type ManageReferralUIState =
 
 export const ManageReferralsPage = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
+  const { data: friendReferral, isLoading: isFriendReferralLoading } =
+    useFriendReferralQuery()
+  const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
 
-  const navigate = useCoreNavigate()
   const { address } = shouldBePresent(
     useCurrentVaultCoin({
       chain: chainFeeCoin.THORChain.chain,
@@ -55,7 +60,12 @@ export const ManageReferralsPage = () => {
       <CreateReferralFormProvider>
         <Match
           value={uiState}
-          editFriendReferral={() => <EditFriendReferral />}
+          editFriendReferral={() => (
+            <EditFriendReferralForm
+              userReferralName={validNameDetails?.name}
+              onFinish={() => setUiState('default')}
+            />
+          )}
           existingReferral={() =>
             validNameDetails ? (
               <ManageExistingReferral
@@ -71,16 +81,17 @@ export const ManageReferralsPage = () => {
           }
           default={() => (
             <ManageReferralsForm
-              onSaveReferral={() => {
-                // TODO: save referral
-                setUiState('loading')
-                setTimeout(
-                  () =>
-                    navigate({
-                      id: 'vault',
-                    }),
-                  2000
-                )
+              onSaveReferral={newFriendReferral => {
+                if (isFriendReferralLoading) return
+
+                if (friendReferral) {
+                  setUiState('editFriendReferral')
+                  return
+                }
+
+                if (newFriendReferral) {
+                  setFriendReferral(newFriendReferral)
+                }
               }}
               onCreateReferral={() => setUiState('create')}
             />
