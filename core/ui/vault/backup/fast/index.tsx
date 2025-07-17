@@ -51,6 +51,12 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
     }
   }, [error, input, isPending, isSuccess, mutate])
 
+  useEffect(() => {
+    if (error) {
+      setInput('')
+    }
+  }, [error])
+
   const inputState = useMemo<MultiCharacterInputProps['validation']>(() => {
     if (isSuccess) return 'valid'
     if (isPending) return 'loading'
