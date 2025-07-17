@@ -40,7 +40,6 @@ export const ManageReferralsPage = () => {
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
-  console.log('🚀 ~ ManageReferralsPage ~ validNameDetails:', validNameDetails)
 
   useEffect(() => {
     if (status === 'pending') return
