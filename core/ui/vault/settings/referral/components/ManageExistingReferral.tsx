@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
+import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
 
@@ -38,9 +39,7 @@ export const ManageExistingReferral = ({
   const { colors } = useTheme()
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
-
-  // get somehow friends referral code from local storage
-  const friendsReferralCode = 'MMCK'
+  const { data: friendsReferralCode } = useFriendReferralQuery()
 
   return (
     <>
@@ -98,52 +97,49 @@ export const ManageExistingReferral = ({
           </FieldWrapper>
           <FieldWrapper>
             <Text size={14} color="shy">
-              Collected rewards
+              Expires on
             </Text>
             <Text>{formatDateWithOf(expiresOn)}</Text>
           </FieldWrapper>
           <Button onClick={onEditReferral}>Edit Referral</Button>
           <DecorationLine />
-          {friendsReferralCode && (
-            <VStack
+          <VStack gap={14}>
+            <VStack gap={8}>
+              <Text>Your friends referral code</Text>
+              <FriendsReferralCode>
+                <Text>{friendsReferralCode || '--'}</Text>
+              </FriendsReferralCode>
+            </VStack>
+            <DecorationLine />
+            <FieldWrapper
               style={{
                 cursor: 'ponter',
               }}
               tabIndex={0}
               role="button"
               onClick={onEditFriendReferral}
-              gap={14}
             >
-              <VStack gap={8}>
-                <Text>Your friends referral code</Text>
-                <FriendsReferralCode>
-                  <Text>{friendsReferralCode}</Text>
-                </FriendsReferralCode>
-              </VStack>
-              <DecorationLine />
-              <FieldWrapper>
-                <HStack justifyContent="space-between" alignItems="center">
-                  <VStack gap={12}>
-                    <FieldIconWrapper
-                      style={{
-                        color: colors.buttonPrimary.toCssValue(),
-                      }}
-                    >
-                      <ArrowUndoIcon />
-                    </FieldIconWrapper>
-                    <Text>Change friends Referral Code used for swaps</Text>
-                  </VStack>
-                  <IconWrapper
+              <HStack justifyContent="space-between" alignItems="center">
+                <VStack gap={12}>
+                  <FieldIconWrapper
                     style={{
-                      fontSize: 24,
+                      color: colors.buttonPrimary.toCssValue(),
                     }}
                   >
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                </HStack>
-              </FieldWrapper>
-            </VStack>
-          )}
+                    <ArrowUndoIcon />
+                  </FieldIconWrapper>
+                  <Text>Change friends Referral Code used for swaps</Text>
+                </VStack>
+                <IconWrapper
+                  style={{
+                    fontSize: 24,
+                  }}
+                >
+                  <ChevronRightIcon />
+                </IconWrapper>
+              </HStack>
+            </FieldWrapper>
+          </VStack>
         </AnimatedVisibility>
       </ReferralPageWrapper>
     </>
