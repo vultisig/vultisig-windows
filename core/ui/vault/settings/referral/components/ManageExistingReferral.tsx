@@ -35,7 +35,6 @@ export const ManageExistingReferral = ({
   onEditFriendReferral,
   onEditReferral,
 }: Props) => {
-  console.log('🚀 ~ expiresOn:', expiresOn)
   const { colors } = useTheme()
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
@@ -106,7 +105,15 @@ export const ManageExistingReferral = ({
           <Button onClick={onEditReferral}>Edit Referral</Button>
           <DecorationLine />
           {friendsReferralCode && (
-            <VStack gap={14}>
+            <VStack
+              style={{
+                cursor: 'ponter',
+              }}
+              tabIndex={0}
+              role="button"
+              onClick={onEditFriendReferral}
+              gap={14}
+            >
               <VStack gap={8}>
                 <Text>Your friends referral code</Text>
                 <FriendsReferralCode>
@@ -131,9 +138,7 @@ export const ManageExistingReferral = ({
                       fontSize: 24,
                     }}
                   >
-                    <UnstyledButton onClick={onEditFriendReferral}>
-                      <ChevronRightIcon />
-                    </UnstyledButton>
+                    <ChevronRightIcon />
                   </IconWrapper>
                 </HStack>
               </FieldWrapper>
