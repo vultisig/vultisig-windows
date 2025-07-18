@@ -1011,9 +1011,6 @@ export const pt = {
   search: 'Procurar',
   create_referral_form: 'Criar referência',
   continue_anyway: 'Continue assim mesmo',
-  blockaid_security_scan: 'Verificação de segurança Blockaid',
-  blockaid_security_scan_desc:
-    'Habilite ou desabilite a verificação de segurança de transações para proteção máxima.',
   security_alert: 'Alerta de segurança',
   security_alert_malicious_transaction:
     'Alerta de segurança - Transação maliciosa',
@@ -1024,4 +1021,5 @@ export const pt = {
     'Esta transação foi sinalizada como suspeita. Revise-a com atenção antes de prosseguir.',
   continue_with_risk: 'Continue com o Risco',
   tx_security_error_message: 'Aviso de segurança de {{provider}}',
+  tx_security: 'Verificação de segurança do {{provider}}',
 }

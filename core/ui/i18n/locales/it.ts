@@ -1020,9 +1020,6 @@ export const it = {
   search: 'Ricerca',
   create_referral_form: 'Crea referral',
   continue_anyway: 'Continua comunque',
-  blockaid_security_scan: 'Scansione di sicurezza Blockaid',
-  blockaid_security_scan_desc:
-    'Per la massima protezione, attiva o disattiva la scansione di sicurezza delle transazioni.',
   security_alert: 'Avviso di sicurezza',
   security_alert_malicious_transaction:
     'Avviso di sicurezza - Transazione dannosa',
@@ -1033,4 +1030,5 @@ export const it = {
     'Questa transazione è stata segnalata come sospetta. Si prega di verificarla attentamente prima di procedere.',
   continue_with_risk: 'Continua con il rischio',
   tx_security_error_message: 'Avviso di sicurezza da {{provider}}',
+  tx_security: 'Scansione di sicurezza {{provider}}',
 }

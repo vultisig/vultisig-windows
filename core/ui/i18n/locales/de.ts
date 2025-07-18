@@ -1026,9 +1026,6 @@ export const de = {
   search: 'Suchen',
   create_referral_form: 'Empfehlung erstellen',
   continue_anyway: 'Trotzdem fortfahren',
-  blockaid_security_scan: 'Blockaid-Sicherheitsscan',
-  blockaid_security_scan_desc:
-    'Aktivieren oder deaktivieren Sie die Transaktionssicherheitsüberprüfung für maximalen Schutz.',
   security_alert: 'Sicherheitswarnung',
   security_alert_malicious_transaction:
     'Sicherheitswarnung – Böswillige Transaktion',
@@ -1039,4 +1036,5 @@ export const de = {
     'Diese Transaktion wurde als verdächtig gekennzeichnet. Bitte überprüfen Sie sie sorgfältig, bevor Sie fortfahren.',
   continue_with_risk: 'Weiter mit Risiko',
   tx_security_error_message: 'Sicherheitswarnung von {{provider}}',
+  tx_security: '{{provider}} Sicherheitsscan',
 }
