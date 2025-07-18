@@ -1,5 +1,3 @@
-import './App.css'
-
 import { Buffer } from 'buffer'
 import { createRoot } from 'react-dom/client'
 
