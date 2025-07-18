@@ -47,7 +47,6 @@ export const ManageReferralsPage = () => {
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
-  console.log('🚀 ~ ManageReferralsPage ~ validNameDetails:', validNameDetails)
 
   useEffect(() => {
     if (status === 'pending') return
@@ -115,7 +114,11 @@ export const ManageReferralsPage = () => {
             <StepTransition
               from={({ onFinish }) => (
                 <EditReferralFormProvider>
-                  <EditReferralForm onFinish={onFinish} />§
+                  <EditReferralForm
+                    nameDetails={shouldBePresent(validNameDetails)}
+                    onFinish={onFinish}
+                  />
+                  §
                 </EditReferralFormProvider>
               )}
               to={({ onBack }) => <EditReferralVerify onBack={onBack} />}
