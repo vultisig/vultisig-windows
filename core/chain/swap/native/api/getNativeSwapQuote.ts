@@ -51,12 +51,10 @@ export const getNativeSwapQuote = async ({
     amount: chainAmount.toString(),
     destination,
     streaming_interval: nativeSwapStreamingInterval[swapChain],
-    ...(isAffiliate
-      ? {
-          affiliate: nativeSwapAffiliateConfig.affiliateFeeAddress,
-          affiliate_bps: nativeSwapAffiliateConfig.affiliateFeeRateBps,
-        }
-      : {}),
+    affiliate: nativeSwapAffiliateConfig.affiliateFeeAddress,
+    affiliate_bps: isAffiliate
+      ? nativeSwapAffiliateConfig.affiliateFeeRateBps
+      : 0,
   }
 
   const url = addQueryParams(swapBaseUrl, params)
