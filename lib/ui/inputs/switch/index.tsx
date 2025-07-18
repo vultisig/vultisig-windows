@@ -82,7 +82,7 @@ const StyledSwitch = styled.div<{
 
               ${StyledSlider} {
                 background-color: ${checked
-                  ? getColor('danger')
+                  ? 'hsl(224, 75, 50)'
                   : getColor('textSupporting')};
               }
             }
