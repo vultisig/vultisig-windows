@@ -17,11 +17,9 @@ export const sendMpcRelayMessage = async ({
   messageId,
 }: SendMpcRelayMessageInput) =>
   queryUrl(`${serverUrl}/message/${sessionId}`, {
-    method: 'POST',
     headers: withoutUndefinedFields({
-      'Content-Type': 'application/json',
       message_id: messageId,
     }),
-    body: JSON.stringify(message),
+    body: message,
     responseType: 'none',
   })

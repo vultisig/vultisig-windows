@@ -19,7 +19,6 @@ export const deleteMpcRelayMessage = async ({
   queryUrl(`${serverUrl}/message/${sessionId}/${localPartyId}/${messageHash}`, {
     method: 'DELETE',
     headers: withoutUndefinedFields({
-      'Content-Type': 'application/json',
       message_id: messageId,
     }),
     responseType: 'none',

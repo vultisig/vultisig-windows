@@ -1,3 +1,5 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
+
 import { thorchainNodeBaseUrl } from '../config'
 
 export type NameDetails = {
@@ -12,9 +14,5 @@ export type NameDetails = {
 
 export const getUserThorchainNameDetails = async (
   name: string
-): Promise<NameDetails> => {
-  const res = await fetch(`${thorchainNodeBaseUrl}/thorname/${name}`)
-
-  if (!res.ok) throw new Error(`Midgard ${res.status}`)
-  return res.json() as Promise<NameDetails>
-}
+): Promise<NameDetails> =>
+  queryUrl<NameDetails>(`${thorchainNodeBaseUrl}/thorname/${name}`)

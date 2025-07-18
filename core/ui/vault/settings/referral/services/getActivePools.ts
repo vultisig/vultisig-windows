@@ -1,3 +1,5 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
+
 import { midgardBaseUrl } from '../config'
 
 type Pool = {
@@ -5,8 +7,5 @@ type Pool = {
   status: string
 }
 
-export const getActivePools = async (): Promise<Pool[]> => {
-  const res = await fetch(`${midgardBaseUrl}/pools?status=available`)
-  if (!res.ok) throw new Error(`Failed to fetch pools: ${res.status}`)
-  return res.json()
-}
+export const getActivePools = async () =>
+  queryUrl<Pool[]>(`${midgardBaseUrl}/pools?status=available`)
