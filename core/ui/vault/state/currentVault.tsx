@@ -33,12 +33,16 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     const vault = vaults.find(vault => getVaultId(vault) === id)
 
     if (vault && passcode) {
-      return {
-        ...vault,
-        keyShares: decryptVaultKeyShares({
-          keyShares: vault.keyShares,
-          key: passcode,
-        }),
+      try {
+        return {
+          ...vault,
+          keyShares: decryptVaultKeyShares({
+            keyShares: vault.keyShares,
+            key: passcode,
+          }),
+        }
+      } catch {
+        return vault
       }
     }
 

@@ -11,11 +11,11 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCoinPriceQuery } from '../../../../../../chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '../../../../../../storage/fiatCurrency'
-import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
-import { useReferralPayoutAsset } from '../../../providers/ReferralPayoutAssetProvider'
-import { useTnsFeesQuery } from '../../../queries/useTnsFeesQuery'
+import { useCoinPriceQuery } from '../../../../../../../chain/coin/price/queries/useCoinPriceQuery'
+import { useFiatCurrency } from '../../../../../../../storage/fiatCurrency'
+import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
+import { useReferralPayoutAsset } from '../../../../providers/ReferralPayoutAssetProvider'
+import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 
 const debounceDelayMs = 300
 

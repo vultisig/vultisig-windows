@@ -112,8 +112,6 @@ export const it = {
   supported_file_types: 'Tipi di file supportati: .bak & .vult',
   optionalDevice: 'Dispositivo opzionale',
   localMode: 'Sei in modalità locale',
-  scanQrInstruction:
-    'Scansiona il QR con un altro dispositivo. Si consiglia un setup a {{max}} dispositivi, {{min}} sono sufficienti.',
   devices: 'Dispositivi',
   waitingOnDevices: 'In attesa dei dispositivi...',
   switchToInternet: 'Torna alla modalità Internet',
@@ -1000,4 +998,6 @@ export const it = {
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
   verify_password_periodic_message_description:
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
+  keygen_devices_requirements_info:
+    'Scansiona il QR con un altro dispositivo. Si consiglia la configurazione del dispositivo {{recommended}}, {{min}} è sufficiente.',
 }
