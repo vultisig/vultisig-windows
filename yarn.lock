@@ -14161,13 +14161,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^4.0.14":
-  version: 4.0.14
-  resolution: "tailwindcss@npm:4.0.14"
-  checksum: 10c0/6c04d1f68dc8382e974bb8704c4140dbff12cf1623e826b37a35726629402448c311ae6f5d70a3b490526ac427068430d5ddec48368f49e01799c4aa9c4159f9
-  languageName: node
-  linkType: hard
-
 "tapable@npm:^2.2.0":
   version: 2.2.1
   resolution: "tapable@npm:2.2.1"
@@ -15270,7 +15263,6 @@ __metadata:
     react-qr-code: "npm:^2.0.15"
     react-use: "npm:^17.6.0"
     syncpack: "npm:^13.0.3"
-    tailwindcss: "npm:^4.0.14"
     typescript: "npm:^5.8.2"
     uuid: "npm:^11.1.0"
     viem: "npm:^2.23.12"
