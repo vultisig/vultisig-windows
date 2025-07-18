@@ -1,7 +1,25 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoBasedChain } from '@core/chain/Chain'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
+import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
+import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
+import { useDualCurrencyAmountInput } from '@core/ui/vault/send/amount/hooks/useDualCurrencyAmountInput'
+import { baseToFiat } from '@core/ui/vault/send/amount/utils'
+import { SendCoinBalanceDependant } from '@core/ui/vault/send/coin/balance/SendCoinBalanceDependant'
+import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
+import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
+import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
+import { SendGasFeeWrapper } from '@core/ui/vault/send/fee/SendGasFeeWrapper'
+import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
+import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
+import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
+import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -17,34 +35,17 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
-import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
-import { AnimatedSendFormInputError } from '../components/AnimatedSendFormInputError'
-import { HorizontalLine } from '../components/HorizontalLine'
-import { SendInputContainer } from '../components/SendInputContainer'
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
-import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
-import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
-import { ManageMemo } from '../memo/ManageMemo'
-import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
-import { useSendFormFieldState } from '../state/formFields'
-import { useCurrentSendCoin } from '../state/sendCoin'
-import { AmountInReverseCurrencyDisplay } from './AmountInReverseCurrencyDisplay'
-import { AmountSuggestion } from './AmountSuggestion'
-import { CurrencySwitch } from './AmountSwitch'
-import { useDualCurrencyAmountInput } from './hooks/useDualCurrencyAmountInput'
-import { baseToFiat } from './utils'
-
 const suggestions = [0.25, 0.5, 0.75, 1]
-const maxSuggestion = 1
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
 export const ManageAmountInputField = () => {
+  const { t } = useTranslation()
   const [currencyInputMode, setCurrencyInputMode] =
     useState<CurrencyInputMode>('base')
-
+  const chainSpecificQuery = useSendChainSpecificQuery()
   const coin = useCurrentSendCoin()
+  const isNativeToken = isFeeCoin(coin)
   const { data: coinPrice } = useCoinPriceQuery({ coin })
   const { inputValue, handleUpdateAmount, value } = useDualCurrencyAmountInput({
     coinPrice,
@@ -56,10 +57,6 @@ export const ManageAmountInputField = () => {
       errors: { amount: amountError },
     },
   ] = useSendFormFieldState()
-
-  const { t } = useTranslation()
-  const { decimals, ticker } = coin
-  const chainSpecificQuery = useSendChainSpecificQuery()
 
   const error = !!amountError && value ? amountError : undefined
 
@@ -111,59 +108,65 @@ export const ManageAmountInputField = () => {
             <SendCoinBalanceDependant
               pending={() => null}
               error={() => null}
-              success={amount => (
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  gap={4}
-                >
-                  {suggestions.map(suggestion => {
-                    let suggestionBaseValue =
-                      fromChainAmount(amount, decimals) * suggestion
+              success={amount => {
+                let maxValue = fromChainAmount(amount, coin.decimals)
 
-                    if (
-                      suggestion === maxSuggestion &&
-                      !isOneOf(coin.chain, Object.values(UtxoBasedChain))
-                    ) {
-                      suggestionBaseValue = fromChainAmount(
-                        amount -
-                          (chainSpecificQuery.data
-                            ? getFeeAmount(chainSpecificQuery.data)
-                            : BigInt(0)),
-                        decimals
+                if (
+                  maxValue > 0 &&
+                  isNativeToken &&
+                  !isOneOf(coin.chain, Object.values(UtxoBasedChain))
+                ) {
+                  const limitedMaxValue = fromChainAmount(
+                    amount -
+                      (chainSpecificQuery.data
+                        ? getFeeAmount(chainSpecificQuery.data)
+                        : BigInt(0)),
+                    coin.decimals
+                  )
+
+                  maxValue = limitedMaxValue > 0 ? limitedMaxValue : 0
+                }
+
+                return (
+                  <HStack
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap={4}
+                  >
+                    {suggestions.map(suggestion => {
+                      const suggestionBaseValue = maxValue * suggestion
+
+                      const suggestionValue =
+                        currencyInputMode === 'base'
+                          ? suggestionBaseValue
+                          : baseToFiat(suggestionBaseValue, coinPrice) || 0
+
+                      const isActive =
+                        inputValue !== null &&
+                        toChainAmount(inputValue, coin.decimals) ===
+                          toChainAmount(suggestionValue, coin.decimals)
+
+                      return (
+                        <SuggestionOption
+                          isActive={isActive}
+                          onClick={() => {
+                            const rawValue =
+                              currencyInputMode === 'base'
+                                ? suggestionBaseValue
+                                : baseToFiat(suggestionBaseValue, coinPrice) ||
+                                  0
+                            handleUpdateAmount(
+                              clampDecimals(rawValue, coin.decimals)
+                            )
+                          }}
+                          key={suggestion}
+                          value={suggestion}
+                        />
                       )
-                    }
-
-                    const suggestionValue =
-                      currencyInputMode === 'base'
-                        ? suggestionBaseValue
-                        : (baseToFiat(suggestionBaseValue, coinPrice) ?? 0)
-
-                    const isActive =
-                      inputValue !== null &&
-                      toChainAmount(inputValue, coin.decimals) ===
-                        toChainAmount(suggestionValue, coin.decimals)
-
-                    return (
-                      <SuggestionOption
-                        isActive={isActive}
-                        onClick={() => {
-                          const rawValue =
-                            currencyInputMode === 'base'
-                              ? suggestionBaseValue
-                              : (baseToFiat(suggestionBaseValue, coinPrice) ??
-                                0)
-                          handleUpdateAmount(
-                            clampDecimals(rawValue, coin.decimals)
-                          )
-                        }}
-                        key={suggestion}
-                        value={suggestion}
-                      />
-                    )
-                  })}
-                </HStack>
-              )}
+                    })}
+                  </HStack>
+                )
+              }}
             />
             {error && <AnimatedSendFormInputError error={error} />}
             <SendCoinBalanceDependant
@@ -178,7 +181,7 @@ export const ManageAmountInputField = () => {
                     {t('balance_available')}:
                   </Text>{' '}
                   <Text size={14}>
-                    {`${fromChainAmount(amount, decimals)} ${ticker} `}
+                    {`${fromChainAmount(amount, coin.decimals)} ${coin.ticker} `}
                   </Text>
                 </TotalBalanceWrapper>
               )}
