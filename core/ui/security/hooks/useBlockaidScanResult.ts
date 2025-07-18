@@ -8,7 +8,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 import { useCore } from '@core/ui/state/core'
-import { useBlockaidEnabled } from '@core/ui/storage/blockaid'
+import { useIsTxSecurityValidationEnabled } from '@core/ui/storage/txSecurityValidation'
 import { useCallback } from 'react'
 
 type UseBlockaidScanResultType = {
@@ -21,7 +21,7 @@ type UseBlockaidScanResultType = {
 
 export const useBlockaidScanResult = (): UseBlockaidScanResultType => {
   const { client } = useCore()
-  const blockaidEnabled = useBlockaidEnabled()
+  const isTxSecurityValidationEnabled = useIsTxSecurityValidationEnabled()
 
   const scanTransactionForPayload = useCallback(
     async (
@@ -30,7 +30,7 @@ export const useBlockaidScanResult = (): UseBlockaidScanResultType => {
       scanUnavailable: boolean
       error?: TxSecurityValidationResult
     }> => {
-      if (client !== 'extension' || !blockaidEnabled) {
+      if (client !== 'extension' || !isTxSecurityValidationEnabled) {
         return { scanUnavailable: true }
       }
 
@@ -88,11 +88,11 @@ export const useBlockaidScanResult = (): UseBlockaidScanResultType => {
         return { scanUnavailable: true }
       }
     },
-    [client, blockaidEnabled]
+    [client, isTxSecurityValidationEnabled]
   )
 
   return {
     scanTransaction: scanTransactionForPayload,
-    isEnabled: blockaidEnabled,
+    isEnabled: isTxSecurityValidationEnabled,
   }
 }

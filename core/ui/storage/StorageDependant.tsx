@@ -12,7 +12,6 @@ import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
-import { useBlockaidEnabledQuery } from './blockaid'
 import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
   CurrentVaultIdProvider,
@@ -25,6 +24,7 @@ import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
+import { useIsTxSecurityValidationEnabledQuery } from './txSecurityValidation'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
@@ -42,7 +42,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
-  const blockaidEnabled = useBlockaidEnabledQuery()
+  const isTxSecurityValidationEnabled = useIsTxSecurityValidationEnabledQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -58,7 +58,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     coinFinderIgnore,
     passcodeEncryption,
     passcodeAutoLock,
-    blockaidEnabled,
+    isTxSecurityValidationEnabled,
   })
 
   return (
