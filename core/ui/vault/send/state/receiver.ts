@@ -1,4 +1,6 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { getPersistentStateProviderSetup } from '@lib/ui/state/getPersistentStateProviderSetup'
+
+const getKey = (vaultId?: string) => `send_receiver_${vaultId ?? 'unknown'}`
 
 export const { useState: useSendReceiver, provider: SendReceiverProvider } =
-  getStateProviderSetup<string>('SendReceiver')
+  getPersistentStateProviderSetup<string>('SendReceiver', getKey)

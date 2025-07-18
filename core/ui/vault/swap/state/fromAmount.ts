@@ -1,4 +1,6 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { getPersistentStateProviderSetup } from '@lib/ui/state/getPersistentStateProviderSetup'
+
+const getKey = (vaultId?: string) => `swap_from_amount_${vaultId ?? 'unknown'}`
 
 export const { useState: useFromAmount, provider: FromAmountProvider } =
-  getStateProviderSetup<number | null>('FromAmount')
+  getPersistentStateProviderSetup<number | null>('FromAmount', getKey)

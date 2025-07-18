@@ -1,5 +1,5 @@
-import { getPersistentState } from '@clients/extension/src/state/persistent/getPersistentState'
-import { setPersistentState } from '@clients/extension/src/state/persistent/setPersistentState'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 
 export const appSessionsQueryKey = ['appSessions']
 const [key] = appSessionsQueryKey

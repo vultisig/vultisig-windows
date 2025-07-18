@@ -1,6 +1,6 @@
-import { getPersistentState } from '@clients/extension/src/state/persistent/getPersistentState'
-import { setPersistentState } from '@clients/extension/src/state/persistent/setPersistentState'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 import {
   useMutation,
   UseMutationOptions,

@@ -1,17 +1,22 @@
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { getPersistentStateProviderSetup } from '@lib/ui/state/getPersistentStateProviderSetup'
 import { useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 
+const getKey = (vaultId?: string) => `swap_to_coin_${vaultId ?? 'unknown'}`
+
 const { useState: useToCoin, provider: ToCoinInternalProvider } =
-  getStateProviderSetup<CoinKey>('ToCoin')
+  getPersistentStateProviderSetup<CoinKey>('ToCoin', getKey)
 
 export { useToCoin }
 
-export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
+export const ToCoinProvider: React.FC<ChildrenProp & { vaultId?: string }> = ({
+  children,
+  vaultId,
+}) => {
   const [{ coin: fromCoin }] = useCoreViewState<'swap'>()
 
   const nativeCoins = useCurrentVaultNativeCoins()
@@ -23,7 +28,7 @@ export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
   }, [fromCoin, nativeCoins])
 
   return (
-    <ToCoinInternalProvider initialValue={initialValue}>
+    <ToCoinInternalProvider initialValue={initialValue} vaultId={vaultId}>
       {children}
     </ToCoinInternalProvider>
   )

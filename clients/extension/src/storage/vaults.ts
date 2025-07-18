@@ -1,11 +1,10 @@
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { vaultsInitialValue, VaultsStorage } from '@core/ui/storage/vaults'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { getPersistentState } from '@lib/ui/state/persistent/getPersistentState'
+import { setPersistentState } from '@lib/ui/state/persistent/setPersistentState'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 const getVaults = async () =>
   getPersistentState(StorageKey.vaults, vaultsInitialValue)
