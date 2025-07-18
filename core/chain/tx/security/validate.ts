@@ -27,6 +27,13 @@ export type BlockaidScanResult = {
   }
 }
 
+const chainSpecificScanPath: Record<BlockaidSupportedChainKind, string> = {
+  evm: '/evm/json-rpc',
+  utxo: '/bitcoin/transaction-raw',
+  solana: '/solana/message',
+  sui: '/sui/transaction',
+}
+
 export const validateTxSecurity = async ({
   chain,
   sender,
@@ -68,14 +75,7 @@ export const validateTxSecurity = async ({
     },
   }
 
-  const chainSpecificPath = match(chainKind, {
-    solana: () => `/solana/message`,
-    sui: () => `/sui/transaction`,
-    utxo: () => `/bitcoin/transaction-raw`,
-    evm: () => `/evm/json-rpc`,
-  })
-
-  const url = `${blockaidBaseUrl}${chainSpecificPath}/scan`
+  const url = `${blockaidBaseUrl}${chainSpecificScanPath[chainKind]}/scan`
 
   const {
     validation: { result_type },

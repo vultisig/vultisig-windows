@@ -1016,4 +1016,26 @@ export const es = {
     'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
   keygen_devices_requirements_info:
     'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
+  referral_landing_title:
+    'Invita a tus amigos. Gana recompensas. Ahorra en comisiones.',
+  unmerge_ruji: 'Separar',
+  max_4_characters: 'Máximo 4 caracteres',
+  enter_up_to_4_characters_placeholder: 'Introduzca hasta 4 caracteres',
+  search: 'Buscar',
+  create_referral_form: 'Crear referencia',
+  continue_anyway: 'Continuar de todos modos',
+  blockaid_security_scan: 'Análisis de seguridad de Blockaid',
+  blockaid_security_scan_desc:
+    'Habilite o deshabilite el escaneo de seguridad de transacciones para obtener la máxima protección.',
+  security_alert: 'Alerta de seguridad',
+  security_alert_malicious_transaction:
+    'Alerta de seguridad: Transacción maliciosa',
+  security_warning_transaction:
+    'Advertencia de seguridad: Transacción sospechosa',
+  malicious_transaction_warning:
+    'Esta transacción ha sido marcada como maliciosa. Continuar con ella podría resultar en la pérdida de fondos.',
+  suspicious_transaction_warning:
+    'Esta transacción ha sido marcada como sospechosa. Por favor, revísela cuidadosamente antes de continuar.',
+  continue_with_risk: 'Continuar con el riesgo',
+  tx_security_error_message: 'Advertencia de seguridad de {{provider}}',
 }

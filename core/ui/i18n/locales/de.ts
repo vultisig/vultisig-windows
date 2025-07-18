@@ -1018,4 +1018,25 @@ export const de = {
     'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
   keygen_devices_requirements_info:
     'QR mit einem anderen Gerät scannen. {{recommended}}-Geräteeinrichtung empfohlen, {{min}} ist ausreichend.',
+  referral_landing_title:
+    '<0>Freunde einladen</0>. <1>Prämien verdienen</1>. Gebühren sparen.',
+  unmerge_ruji: 'Zusammenführung aufheben',
+  max_4_characters: 'Maximal 4 Zeichen',
+  enter_up_to_4_characters_placeholder: 'Geben Sie bis zu 4 Zeichen ein',
+  search: 'Suchen',
+  create_referral_form: 'Empfehlung erstellen',
+  continue_anyway: 'Trotzdem fortfahren',
+  blockaid_security_scan: 'Blockaid-Sicherheitsscan',
+  blockaid_security_scan_desc:
+    'Aktivieren oder deaktivieren Sie die Transaktionssicherheitsüberprüfung für maximalen Schutz.',
+  security_alert: 'Sicherheitswarnung',
+  security_alert_malicious_transaction:
+    'Sicherheitswarnung – Böswillige Transaktion',
+  security_warning_transaction: 'Sicherheitswarnung – Verdächtige Transaktion',
+  malicious_transaction_warning:
+    'Diese Transaktion wurde als böswillig gekennzeichnet. Die Fortsetzung kann zum Verlust von Geldern führen.',
+  suspicious_transaction_warning:
+    'Diese Transaktion wurde als verdächtig gekennzeichnet. Bitte überprüfen Sie sie sorgfältig, bevor Sie fortfahren.',
+  continue_with_risk: 'Weiter mit Risiko',
+  tx_security_error_message: 'Sicherheitswarnung von {{provider}}',
 }
