@@ -44,6 +44,7 @@ const StyledListItem = styled.div<{
   gap: 8px;
   min-height: 58px;
   padding: 12px 16px;
+
   ${({ status }) => {
     switch (status) {
       case 'error':

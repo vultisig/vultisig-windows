@@ -15,4 +15,5 @@ export enum StorageKey {
   passcodeAutoLock = 'passcodeAutoLock',
   blockaidEnabled = 'blockaidEnabled',
   hasFinishedReferralsOnboarding = 'hasFinishedReferralsOnboarding',
+  isTxSecurityValidationEnabled = 'isTxSecurityValidationEnabled',
 }

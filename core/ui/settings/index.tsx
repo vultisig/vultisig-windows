@@ -2,10 +2,6 @@ import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { Client, useCore } from '@core/ui/state/core'
-import {
-  useBlockaidEnabled,
-  useSetBlockaidEnabledMutation,
-} from '@core/ui/storage/blockaid'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
@@ -30,7 +26,6 @@ import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
-import { Switch } from '@lib/ui/inputs/switch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Modal } from '@lib/ui/modal'
@@ -43,6 +38,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ManageTxSecurityValidation } from '../chain/tx/security/manage'
 import { featureFlags } from '../config'
 
 type ExtensionSettings = {
@@ -84,8 +80,6 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
-  const blockaidEnabled = useBlockaidEnabled()
-  const setBlockaidEnabledMutation = useSetBlockaidEnabledMutation()
 
   return (
     <>
@@ -167,22 +161,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
               />
             )}
-            <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
-              title={t('blockaid_security_scan')}
-              extra={
-                <Switch
-                  checked={blockaidEnabled}
-                  onChange={enabled => {
-                    setBlockaidEnabledMutation.mutate(enabled)
-                  }}
-                />
-              }
-              onClick={() => {
-                setBlockaidEnabledMutation.mutate(!blockaidEnabled)
-              }}
-              hoverable
-            />
+            <ManageTxSecurityValidation />
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem

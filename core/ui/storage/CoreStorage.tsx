@@ -1,6 +1,5 @@
 import { AddressBookStorage } from './addressBook'
 import { BalanceVisibilityStorage } from './balanceVisibility'
-import { BlockaidStorage } from './blockaid'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
@@ -12,10 +11,11 @@ import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { ReferralsOnboardingStorage } from './referrals'
+import { TxSecurityValidationStorage } from './txSecurityValidation'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
-export type CoreStorage = BlockaidStorage &
+export type CoreStorage = TxSecurityValidationStorage &
   CoinFinderIgnoreStorage &
   FiatCurrencyStorage &
   CurrentVaultIdStorage &
