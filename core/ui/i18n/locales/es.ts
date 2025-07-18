@@ -947,6 +947,7 @@ export const es = {
   try_in_expanded_mode: 'Pruébelo en modo expandido',
   est_network_fee: 'Tarifa de red estimada',
   security: 'Seguridad',
+  security_scan_passed: 'Escaneo de seguridad aprobado',
   app_lock_passcode: 'Código de acceso de bloqueo de aplicaciones',
   app_lock_passcode_description:
     'Agregue una capa adicional de seguridad al solicitar un código de acceso para desbloquear la aplicación.',
@@ -977,6 +978,7 @@ export const es = {
   address_book_vault: 'Mis bóvedas',
   paste: 'Pasta',
   failed_to_generate_join_url: 'No se pudo generar el código QR',
+  security_scan_unavailable: 'Escaneo de seguridad no disponible',
   connecting_to_verifier: 'Conexión al verificador',
   connecting_to_plugin: 'Conexión al complemento',
   confirm: 'Confirmar',
@@ -1000,6 +1002,16 @@ export const es = {
   failed_to_process_plugin_install:
     'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
+  warning: 'Advertencia',
+  malicious_address_detected: 'Dirección maliciosa detectada',
+  security_warning: 'Advertencia de seguridad',
+  security_malicious: 'Malicioso',
+  security_safe: 'Seguro',
+  transaction_flagged_risky:
+    'Esta transacción ha sido marcada como potencialmente riesgosa por nuestro escáner de seguridad.',
+  transaction_flagged_malicious:
+    'Esta transacción ha sido marcada como maliciosa por nuestro escáner de seguridad.',
+  proceed_at_own_risk: 'Proceder bajo su propio riesgo',
   verify_password_periodic_message_description:
     'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
   keygen_devices_requirements_info:

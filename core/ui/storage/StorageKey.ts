@@ -13,5 +13,6 @@ export enum StorageKey {
   coinFinderIgnore = 'coinFinderIgnore',
   passcodeEncryption = 'passcodeEncryption',
   passcodeAutoLock = 'passcodeAutoLock',
+  blockaidEnabled = 'blockaidEnabled',
   hasFinishedReferralsOnboarding = 'hasFinishedReferralsOnboarding',
 }
