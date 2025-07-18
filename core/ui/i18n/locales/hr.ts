@@ -253,7 +253,7 @@ export const hr = {
     ' kako bi osigurao da su vaša sredstva zaštićena od bilo kakvih prijetnji.',
   join_keygen_slider6_title: 'Kutak zajednice',
   join_keygen_slider6_note1:
-    'Pridružite se tisućama. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
+    'Pridružite se tisućuma. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
   join_keygen_slider6_note2: 'sigurne i rastuće zajednice',
   join_keygen_slider7_title: 'Istaknuta značajka',
   join_keygen_slider7_note1:
@@ -924,6 +924,7 @@ export const hr = {
   try_in_expanded_mode: 'Pokušajte u proširenom načinu rada',
   est_network_fee: 'Procijenjena mrežna naknada',
   security: 'Sigurnost',
+  security_scan_passed: 'Sigurnosna provjera uspješna',
   app_lock_passcode: 'Lozinka za zaključavanje aplikacije',
   app_lock_passcode_description:
     'Dodajte dodatni sloj sigurnosti tako što ćete zahtijevati lozinku za otključavanje aplikacije.',
@@ -952,6 +953,7 @@ export const hr = {
   address_book_vault: 'Moji trezori',
   paste: 'Zalijepiti',
   failed_to_generate_join_url: 'Nije uspjelo generiranje QR koda',
+  security_scan_unavailable: 'Sigurnosna provjera nije dostupna',
   connecting_to_verifier: 'Povezivanje s Verifikatorom',
   connecting_to_plugin: 'Povezivanje s dodatkom',
   confirm: 'Potvrdi',
@@ -973,6 +975,16 @@ export const hr = {
   success: 'Uspjeh',
   failed_to_process_plugin_install: 'Nije uspjela obrada instalacije dodatka',
   hold_for_paired_sign: 'Držite za upareni znak',
+  warning: 'Upozorenje',
+  malicious_address_detected: 'Otkrivena zlonamjerna adresa',
+  security_warning: 'Sigurnosno upozorenje',
+  security_malicious: 'Zlonamjerno',
+  security_safe: 'Sigurno',
+  transaction_flagged_risky:
+    'Ova transakcija je označena kao potencijalno rizična od strane našeg sigurnosnog skenera.',
+  transaction_flagged_malicious:
+    'Ova transakcija je označena kao zlonamjerna od strane našeg sigurnosnog skenera.',
+  proceed_at_own_risk: 'Nastavite na vlastitu odgovornost',
   verify_password_periodic_message_description:
     'Povremeno ćemo vas tražiti da potvrdite svoju lozinku za brzo prijavljivanje kako biste je uvijek zapamtili',
   keygen_devices_requirements_info:

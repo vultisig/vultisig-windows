@@ -4,6 +4,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -35,12 +36,14 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 type ServerPasswordStepProps = Partial<OnBackProp> &
   OnFinishProp<{ password: string }> & {
     description?: string
+    scanUnavailable?: boolean
   }
 
 export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
   description,
   onBack,
   onFinish,
+  scanUnavailable,
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
@@ -89,6 +92,25 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
             <Text color="shy" size={14} weight={500} centerHorizontally>
               {description}
             </Text>
+          ) : null}
+          {scanUnavailable ? (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                padding: '8px 12px',
+                backgroundColor: 'var(--color-alertWarning)',
+                borderRadius: '16px',
+                marginBottom: 4,
+              }}
+            >
+              <TriangleAlertIcon color="danger" fontSize={14} />
+              <Text color="contrast" size={12} weight="500">
+                {t('security_scan_unavailable')}
+              </Text>
+            </div>
           ) : null}
         </VStack>
         <PasswordInput

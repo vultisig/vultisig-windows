@@ -12,6 +12,7 @@ import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
+import { useBlockaidEnabledQuery } from './blockaid'
 import { useCoinFinderIgnoreQuery } from './coinFinderIgnore'
 import {
   CurrentVaultIdProvider,
@@ -41,6 +42,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
+  const blockaidEnabled = useBlockaidEnabledQuery()
 
   const query = useMergeQueries({
     vaults,
@@ -56,6 +58,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     coinFinderIgnore,
     passcodeEncryption,
     passcodeAutoLock,
+    blockaidEnabled,
   })
 
   return (

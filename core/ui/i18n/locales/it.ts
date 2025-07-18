@@ -943,6 +943,7 @@ export const it = {
   try_in_expanded_mode: 'Prova in modalità espansa',
   est_network_fee: 'Commissione di rete stimata',
   security: 'Sicurezza',
+  security_scan_passed: 'Scansione di sicurezza superata',
   app_lock_passcode: 'Codice di accesso al blocco app',
   app_lock_passcode_description:
     "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
@@ -973,6 +974,7 @@ export const it = {
   address_book_vault: 'I miei caveau',
   paste: 'Impasto',
   failed_to_generate_join_url: 'Impossibile generare il codice QR',
+  security_scan_unavailable: 'Scansione di sicurezza non disponibile',
   connecting_to_verifier: 'Connessione al verificatore',
   connecting_to_plugin: 'Connessione al plugin',
   confirm: 'Confermare',
@@ -996,6 +998,16 @@ export const it = {
   failed_to_process_plugin_install:
     "Impossibile elaborare l'installazione del plugin",
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
+  warning: 'Avviso',
+  malicious_address_detected: 'Indirizzo dannoso rilevato',
+  security_warning: 'Avviso di sicurezza',
+  security_malicious: 'Dannoso',
+  security_safe: 'Sicuro',
+  transaction_flagged_risky:
+    'Questa transazione è stata contrassegnata come potenzialmente rischiosa dal nostro scanner di sicurezza.',
+  transaction_flagged_malicious:
+    'Questa transazione è stata contrassegnata come dannosa dal nostro scanner di sicurezza.',
+  proceed_at_own_risk: 'Procedi a tuo rischio',
   verify_password_periodic_message_description:
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
   keygen_devices_requirements_info:

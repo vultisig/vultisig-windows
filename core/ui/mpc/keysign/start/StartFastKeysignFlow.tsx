@@ -18,7 +18,7 @@ const keysignSteps = ['server', 'keysign'] as const
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload, scanUnavailable }] = useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: useNavigateBack(),
@@ -29,7 +29,12 @@ export const StartFastKeysignFlow = ({
       value={step}
       server={() => (
         <ValueTransfer<{ password: string }>
-          from={({ onFinish }) => <ServerPasswordStep onFinish={onFinish} />}
+          from={({ onFinish }) => (
+            <ServerPasswordStep
+              onFinish={onFinish}
+              scanUnavailable={scanUnavailable}
+            />
+          )}
           key="password"
           to={({ value: { password } }) => (
             <FastKeysignServerStep onFinish={toNextStep} password={password} />

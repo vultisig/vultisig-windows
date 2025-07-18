@@ -941,6 +941,7 @@ export const en = {
   no_token_found: 'No token found',
   invalid_token_address: 'Enter a valid token address',
   security: 'Security',
+  security_scan_passed: 'Security scan passed',
   app_lock_passcode: 'App Lock Passcode',
   app_lock_passcode_description:
     'Add an extra layer of security by requiring a passcode to unlock the app.',
@@ -967,5 +968,30 @@ export const en = {
   new_passcode: 'New Passcode',
   confirm_new_passcode: 'Confirm New Passcode',
   enter_new_passcode: 'Enter new passcode',
+  continue_anyway: 'Continue anyway',
+  security_scan_unavailable: 'Security scan unavailable',
+  blockaid_security_scan: 'Blockaid security scan',
+  blockaid_security_scan_desc:
+    'Enable or disable transaction security scanning for maximum protection.',
   hold_for_paired_sign: 'Hold for paired sign',
+  warning: 'Warning',
+  malicious_address_detected: 'Malicious address detected',
+  security_warning: 'Security Warning',
+  security_malicious: 'Malicious',
+  security_safe: 'Safe',
+  security_alert: 'Security Alert',
+  transaction_flagged_risky:
+    'This transaction has been flagged as potentially risky by our security scanner.',
+  transaction_flagged_malicious:
+    'This transaction has been flagged as malicious by our security scanner.',
+  proceed_at_own_risk: 'Proceed at Own Risk',
+  security_alert_malicious_transaction:
+    'Security Alert - Malicious Transaction',
+  security_warning_transaction: 'Security Warning - Suspicious Transaction',
+  malicious_transaction_warning:
+    'This transaction has been flagged as malicious. Proceeding may result in loss of funds.',
+  suspicious_transaction_warning:
+    'This transaction has been flagged as suspicious. Please review carefully before proceeding.',
+  continue_with_risk: 'Continue with Risk',
+  tx_security_error_message: 'Security warning from {{provider}}',
 }
