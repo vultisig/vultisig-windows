@@ -39,7 +39,6 @@ export type CoreView =
         securityType: VaultSecurityType
         keysignPayload: KeysignMessagePayload
         isDAppSigning?: boolean
-        scanUnavailable?: boolean
       }
     }
   | { id: 'languageSettings' }

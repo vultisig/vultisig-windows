@@ -1,6 +1,3 @@
-import { TxSecurityValidationResult } from '@core/chain/tx/security/validate'
-import { TransactionSecurityWarningModal } from '@core/ui/security/components/TransactionSecurityWarningModal'
-import { useBlockaidScanResult } from '@core/ui/security/hooks/useBlockaidScanResult'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -46,78 +43,24 @@ const Fill = styled.div`
 
 export const FastVaultStartKeysignPrompt = ({
   isDisabled,
-  keysignPayload,
   ...coreViewState
 }: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { scanTransaction } = useBlockaidScanResult()
   const [startPressingAt, setStartPressingAt] = useState<null | number>(null)
-  const [isScanning, setIsScanning] = useState(false)
-  const [securityError, setSecurityError] =
-    useState<TxSecurityValidationResult | null>(null)
-  const [showWarningModal, setShowWarningModal] = useState(false)
-  const [pendingSecurityType, setPendingSecurityType] =
-    useState<VaultSecurityType | null>(null)
 
   const executeNavigation = useCallback(
-    async (securityType: VaultSecurityType) => {
-      if (isDisabled || isScanning) return
-
-      setIsScanning(true)
-      setSecurityError(null)
-
-      const { error, scanUnavailable } = await scanTransaction(keysignPayload)
-
-      if (error) {
-        setSecurityError(error)
-        setShowWarningModal(true)
-        setPendingSecurityType(securityType)
-        return
-      }
-
+    (securityType: VaultSecurityType) => {
       navigate({
         id: 'keysign',
         state: {
           securityType,
-          keysignPayload,
-          scanUnavailable,
           ...coreViewState,
         },
       })
     },
-    [
-      isDisabled,
-      isScanning,
-      scanTransaction,
-      keysignPayload,
-      navigate,
-      coreViewState,
-    ]
+    [coreViewState, navigate]
   )
-
-  const handleContinueWithRisk = useCallback(() => {
-    if (!pendingSecurityType) return
-
-    setShowWarningModal(false)
-    setSecurityError(null)
-
-    navigate({
-      id: 'keysign',
-      state: {
-        securityType: pendingSecurityType,
-        keysignPayload,
-        ...coreViewState,
-      },
-    })
-    setPendingSecurityType(null)
-  }, [navigate, keysignPayload, coreViewState, pendingSecurityType])
-
-  const handleCancel = useCallback(() => {
-    setShowWarningModal(false)
-    setSecurityError(null)
-    setPendingSecurityType(null)
-  }, [])
 
   useEffect(() => {
     if (!startPressingAt) return
@@ -130,52 +73,41 @@ export const FastVaultStartKeysignPrompt = ({
   }, [executeNavigation, startPressingAt])
 
   return (
-    <>
-      <VStack gap={12}>
-        <Text
-          size={14}
-          color="shy"
-          style={{ textAlign: 'center', width: '100%' }}
-        >
-          {t('hold_for_paired_sign')}
-        </Text>
-        <Container
-          disabled={isDisabled || isScanning}
-          onPointerDown={() => {
-            if (isDisabled || isScanning) return
+    <VStack gap={12}>
+      <Text
+        size={14}
+        color="shy"
+        style={{ textAlign: 'center', width: '100%' }}
+      >
+        {t('hold_for_paired_sign')}
+      </Text>
+      <Container
+        disabled={isDisabled}
+        onPointerDown={() => {
+          if (isDisabled) return
 
-            setStartPressingAt(Date.now())
-          }}
-          onPointerUp={() => {
-            if (isDisabled || isScanning) return
+          setStartPressingAt(Date.now())
+        }}
+        onPointerUp={() => {
+          if (isDisabled) return
 
-            if (!startPressingAt) return
+          if (!startPressingAt) return
 
-            const durationSincePress = Date.now() - startPressingAt
+          const durationSincePress = Date.now() - startPressingAt
 
-            if (durationSincePress < clickDurationThreshold) {
-              executeNavigation('fast')
-            } else {
-              setStartPressingAt(null)
-            }
-          }}
-          onPointerLeave={() => {
+          if (durationSincePress < clickDurationThreshold) {
+            executeNavigation('fast')
+          } else {
             setStartPressingAt(null)
-          }}
-        >
-          {isScanning ? t('signing_transaction') : t('fast_sign')}
-          {startPressingAt && <Fill />}
-        </Container>
-      </VStack>
-
-      {securityError && (
-        <TransactionSecurityWarningModal
-          error={securityError}
-          isVisible={showWarningModal}
-          onContinue={handleContinueWithRisk}
-          onCancel={handleCancel}
-        />
-      )}
-    </>
+          }
+        }}
+        onPointerLeave={() => {
+          setStartPressingAt(null)
+        }}
+      >
+        {t('fast_sign')}
+        {startPressingAt && <Fill />}
+      </Container>
+    </VStack>
   )
 }

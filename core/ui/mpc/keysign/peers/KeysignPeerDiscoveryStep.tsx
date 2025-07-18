@@ -15,19 +15,16 @@ import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeys
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text } from '@lib/ui/text'
 import { range } from '@lib/utils/array/range'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useMpcPeers } from '../../state/mpcPeers'
 
 type KeysignPeerDiscoveryStepProps = {
@@ -43,7 +40,6 @@ export const KeysignPeerDiscoveryStep = ({
 
   const peers = useMpcPeers()
   const { signers } = useCurrentVault()
-  const [{ scanUnavailable }] = useCoreViewState<'keysign'>()
 
   const isDisabled = useMemo(() => {
     const requiredDevicesNumber = getKeygenThreshold(signers.length)
@@ -82,25 +78,6 @@ export const KeysignPeerDiscoveryStep = ({
         <PageFormFrame>
           <PeersPageContentFrame>
             <QueryBasedQrCode value={joinUrlQuery} />
-            {scanUnavailable ? (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 6,
-                  padding: '8px 12px',
-                  backgroundColor: 'var(--color-alertWarning)',
-                  borderRadius: '16px',
-                  marginBottom: 4,
-                }}
-              >
-                <TriangleAlertIcon color="danger" fontSize={14} />
-                <Text color="contrast" size={12} weight="500">
-                  {t('security_scan_unavailable')}
-                </Text>
-              </div>
-            ) : null}
             <PeersManagerFrame>
               {serverType === 'local' && <MpcLocalServerIndicator />}
               <PeersManagerTitle target={requiredSigners} />
