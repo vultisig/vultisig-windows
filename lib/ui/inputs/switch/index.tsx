@@ -36,7 +36,7 @@ const StyledSlider = styled.span<{ checked?: boolean }>`
   ${({ checked }) => {
     return checked
       ? css`
-          background-color: hsl(224, 98, 64);
+          background-color: ${getColor('buttonPrimary')};
 
           ${StyledSpinner} {
             transform: translateX(16px);
@@ -82,7 +82,7 @@ const StyledSwitch = styled.div<{
 
               ${StyledSlider} {
                 background-color: ${checked
-                  ? 'hsl(224, 75, 50)'
+                  ? getColor('danger')
                   : getColor('textSupporting')};
               }
             }
