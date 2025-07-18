@@ -17,7 +17,6 @@ export const ManageTxSecurityValidation = () => {
       icon={<ShieldCheckIcon fontSize={20} />}
       title={t('blockaid_security_scan')}
       extra={<Switch checked={value} onChange={setValue} />}
-      hoverable
     />
   )
 }
