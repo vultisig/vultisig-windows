@@ -989,4 +989,25 @@ export const hr = {
     'Povremeno ćemo vas tražiti da potvrdite svoju lozinku za brzo prijavljivanje kako biste je uvijek zapamtili',
   keygen_devices_requirements_info:
     'Skenirajte QR s drugim uređajem. {{recommended}}-preporučuje se postavljanje uređaja, {{min}} je dovoljno.',
+  referral_landing_title:
+    '<0>Pozovite prijatelje</0>. <1>Osvojite nagrade</1>. Uštedite na naknadama.',
+  unmerge_ruji: 'Razdvoji',
+  max_4_characters: 'Maks. 4 znaka',
+  enter_up_to_4_characters_placeholder: 'Unesite do 4 znaka',
+  search: 'Pretraživanje',
+  create_referral_form: 'Izradi preporuku',
+  continue_anyway: 'Nastavi svejedno',
+  blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
+  blockaid_security_scan_desc:
+    'Omogućite ili onemogućite skeniranje sigurnosti transakcija za maksimalnu zaštitu.',
+  security_alert: 'Sigurnosno upozorenje',
+  security_alert_malicious_transaction:
+    'Sigurnosno upozorenje - Zlonamjerna transakcija',
+  security_warning_transaction: 'Sigurnosno upozorenje - Sumnjiva transakcija',
+  malicious_transaction_warning:
+    'Ova je transakcija označena kao zlonamjerna. Nastavak može rezultirati gubitkom sredstava.',
+  suspicious_transaction_warning:
+    'Ova je transakcija označena kao sumnjiva. Molimo vas da je pažljivo pregledate prije nego što nastavite.',
+  continue_with_risk: 'Nastavite s rizikom',
+  tx_security_error_message: 'Sigurnosno upozorenje od {{provider}}',
 }

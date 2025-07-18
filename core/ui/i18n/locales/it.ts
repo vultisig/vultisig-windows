@@ -1012,4 +1012,25 @@ export const it = {
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
   keygen_devices_requirements_info:
     'Scansiona il QR con un altro dispositivo. Si consiglia la configurazione del dispositivo {{recommended}}, {{min}} è sufficiente.',
+  referral_landing_title:
+    '<0>Invita amici</0>. <1>Guadagna premi</1>. Risparmia sulle commissioni.',
+  unmerge_ruji: 'Separare',
+  max_4_characters: 'Massimo 4 caratteri',
+  enter_up_to_4_characters_placeholder: 'Inserisci fino a 4 caratteri',
+  search: 'Ricerca',
+  create_referral_form: 'Crea referral',
+  continue_anyway: 'Continua comunque',
+  blockaid_security_scan: 'Scansione di sicurezza Blockaid',
+  blockaid_security_scan_desc:
+    'Per la massima protezione, attiva o disattiva la scansione di sicurezza delle transazioni.',
+  security_alert: 'Avviso di sicurezza',
+  security_alert_malicious_transaction:
+    'Avviso di sicurezza - Transazione dannosa',
+  security_warning_transaction: 'Avviso di sicurezza - Transazione sospetta',
+  malicious_transaction_warning:
+    'Questa transazione è stata segnalata come dannosa. Procedere potrebbe comportare la perdita di fondi.',
+  suspicious_transaction_warning:
+    'Questa transazione è stata segnalata come sospetta. Si prega di verificarla attentamente prima di procedere.',
+  continue_with_risk: 'Continua con il rischio',
+  tx_security_error_message: 'Avviso di sicurezza da {{provider}}',
 }
