@@ -1,17 +1,21 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { EthereumSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { KeysignChainSpecificValue } from './KeysignChainSpecific'
 
-export type ChainSpecificResolverInput<T = any> = {
+export type ChainSpecificResolverInput<
+  T = any,
+  R = KeysignChainSpecificValue,
+> = {
   coin: AccountCoin
   receiver?: string
   feeSettings?: T
   isDeposit?: boolean
   amount?: number
   transactionType?: TransactionType
-}
+} & (R extends EthereumSpecific ? { data?: `0x${string}` } : {})
 
 export type ChainSpecificResolver<R = KeysignChainSpecificValue, T = any> = (
-  input: ChainSpecificResolverInput<T>
+  input: ChainSpecificResolverInput<T, R>
 ) => Promise<R>

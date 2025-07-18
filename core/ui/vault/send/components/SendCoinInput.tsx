@@ -37,10 +37,6 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
     setFormFieldState(state => ({
       ...state,
       field: 'address',
-      fieldsChecked: {
-        ...state.fieldsChecked,
-        coin: true,
-      },
     }))
   }
 

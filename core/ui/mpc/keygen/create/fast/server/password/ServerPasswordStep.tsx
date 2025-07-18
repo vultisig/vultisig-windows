@@ -65,6 +65,14 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
     mutate({ vaultId: getVaultId(vault), password })
   }
 
+  const passwordErrorMessage = useMemo(() => {
+    if (error) {
+      return t('incorrect_password')
+    }
+
+    return errors.password?.message
+  }, [error, errors.password, t])
+
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
       <PageHeader
@@ -85,11 +93,9 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
         </VStack>
         <PasswordInput
           {...register('password')}
-          error={errors.password?.message || error?.message}
+          error={passwordErrorMessage}
           placeholder={t('enter_password')}
-          validation={
-            isValid ? 'valid' : errors.password ? 'invalid' : undefined
-          }
+          validation={passwordErrorMessage ? 'invalid' : undefined}
         />
       </PageContent>
       <PageFooter>

@@ -1,3 +1,4 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { retry } from '@lib/utils/query/retry'
 
 type SetKeygenCompleteInput = {
@@ -10,14 +11,9 @@ export const setKeygenComplete = async ({
   sessionId,
   localPartyId,
 }: SetKeygenCompleteInput): Promise<void> => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  }
-
-  await fetch(`${serverURL}/complete/${sessionId}`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify([localPartyId]),
+  await queryUrl(`${serverURL}/complete/${sessionId}`, {
+    body: [localPartyId],
+    responseType: 'none',
   })
 }
 
@@ -32,20 +28,10 @@ const verifyKeygenComplete = async ({
   sessionId,
   peers,
 }: WaitKeygenCompleteInput) => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  }
+  const completePeers = await queryUrl<string[]>(
+    `${serverURL}/complete/${sessionId}`
+  )
 
-  const resp = await fetch(`${serverURL}/complete/${sessionId}`, {
-    method: 'GET',
-    headers,
-  })
-  if (resp.status < 200 || resp.status > 299) {
-    throw new Error(
-      `failed to wait for keygen complete, status: ${resp.status}`
-    )
-  }
-  const completePeers: string[] = JSON.parse(await resp.text())
   // Check whether all items in peers exist in completePeers
   const allPeersComplete = peers.every(peer => completePeers.includes(peer))
   if (!allPeersComplete) {

@@ -2,7 +2,6 @@ import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -17,13 +16,11 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   const { t } = useTranslation()
 
-  const currentVaultId = useCurrentVaultId()
-
   const navigate = useCoreNavigate()
 
   const vault = vaults.find(vault => getVaultId(vault) === vaultId)
 
-  if (!vault || vaultId !== currentVaultId) {
+  if (!vault) {
     return (
       <FullPageFlowErrorState
         message={t('wrong_vault_try_again')}

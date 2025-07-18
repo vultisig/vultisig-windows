@@ -8,11 +8,6 @@ type FocusedSendField = 'coin' | 'amount' | 'address' | null
 
 type FocusedSendFieldContext = {
   field: FocusedSendField
-  fieldsChecked: {
-    coin: boolean
-    amount: boolean
-    address: boolean
-  }
   errors: ValidationResult<SendFormShape>
 }
 
@@ -26,7 +21,7 @@ export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
 
   const initialSendFormFieldState: FocusedSendFieldContext = {
     field: 'coin' in state ? 'address' : 'coin',
-    fieldsChecked: { coin: 'coin' in state, amount: false, address: false },
+
     errors: {},
   }
 

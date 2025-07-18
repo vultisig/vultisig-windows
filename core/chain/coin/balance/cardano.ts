@@ -13,17 +13,11 @@ export const getCardanoCoinBalance: CoinBalanceResolver<
 > = async input => {
   const url = `${cardanoApiUrl}/address_info`
 
-  const requestBody = {
-    _addresses: [input.address],
-  }
-
   const [{ balance } = { balance: '0' }] =
     await queryUrl<CardanoAddressInfoResponse>(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+      body: {
+        _addresses: [input.address],
       },
-      body: JSON.stringify(requestBody),
     })
 
   return BigInt(balance)

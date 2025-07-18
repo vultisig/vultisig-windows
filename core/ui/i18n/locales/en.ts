@@ -12,6 +12,9 @@ export const en = {
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
+  current_expiry: 'Current expiry',
+  referral_annual_fee: 'Referral annual fee',
+  referral_extension_fee: 'Referral extension fee',
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
@@ -168,6 +171,8 @@ export const en = {
   vault_name_description: 'You can always rename your vault later in settings',
   join: 'Join',
   verify_password_periodic_message: 'Verify your Server Share Password',
+  verify_password_periodic_message_description:
+    'We will periodically ask you to verify your fast sign password so you will always remember it',
   done: 'Done',
   and: 'and',
   approve: 'Approve',
@@ -406,8 +411,8 @@ export const en = {
   scan_with_device_index: 'Scan with {{index}} device',
   scan_with_device_name: 'Scan with {{name}}',
   localMode: "You're in local mode",
-  scanQrInstruction:
-    'Scan QR with other device. {{max}}-device setup recommended, {{min}} is sufficient.',
+  keygen_devices_requirements_info:
+    'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   devices: 'Devices',
   waitingOnDevices: 'Waiting on devices...',
   switchToInternet: 'Switch back to internet mode',
@@ -488,6 +493,7 @@ export const en = {
   create_referral: 'Create Referral',
   select: 'Select',
   pick_referral_code: 'Pick Referral Code',
+  max_4_characters: 'Max 4 characters',
   referral_status: 'Status',
   referral_costs: 'Costs',
   set_expiration: 'Set Expiration (in years)',

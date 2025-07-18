@@ -1,4 +1,4 @@
 export const lifiConfig = {
-  integratorName: 'vultisig-iOS',
+  integratorName: 'vultisig-ios',
   afffiliateFee: 0.005,
 }

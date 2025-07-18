@@ -4,7 +4,6 @@ import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
 import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
 import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormValidation'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
-import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { Button } from '@lib/ui/buttons/Button'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -13,26 +12,13 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
-import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
-import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   useSendChainSpecificQuery()
   const { t } = useTranslation()
-  const [{ fieldsChecked }, setFormState] = useSendFormFieldState()
-  const { errors, isPending } = useSendFormValidation()
-  const isDisabled =
-    isPending ||
-    Object.keys(errors).length > 0 ||
-    Object.values(fieldsChecked).some(v => !v)
-
-  useLayoutEffect(() => {
-    setFormState(prev =>
-      areEqualRecords(prev.errors, errors) ? prev : { ...prev, errors }
-    )
-  }, [errors, setFormState])
+  const { isDisabled, isPending } = useSendFormValidation()
 
   return (
     <>

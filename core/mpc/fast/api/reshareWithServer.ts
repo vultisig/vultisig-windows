@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { fastVaultServerUrl } from '../config'
 
@@ -17,18 +17,8 @@ type Input = {
   lib_type?: number
 }
 
-export const reshareWithServer = async (input: Input) => {
-  const url = `${fastVaultServerUrl}/reshare`
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(input),
+export const reshareWithServer = async (input: Input) =>
+  queryUrl(`${fastVaultServerUrl}/reshare`, {
+    body: input,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
-
-  return response
-}
