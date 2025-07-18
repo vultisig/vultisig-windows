@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { getColor } from '@lib/ui/theme/getters'
+import { getColor, matchColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -45,26 +45,13 @@ const StyledListItem = styled.div<{
   min-height: 58px;
   padding: 12px 16px;
 
-  ${({ status }) => {
-    switch (status) {
-      case 'error':
-        return css`
-          color: ${getColor('danger')};
-        `
-      case 'success':
-        return css`
-          color: ${getColor('primary')};
-        `
-      case 'warning':
-        return css`
-          color: ${getColor('idle')};
-        `
-      default:
-        return css`
-          color: ${getColor('text')};
-        `
-    }
-  }}
+  ${matchColor('status', {
+    default: 'text',
+    error: 'danger',
+    success: 'primary',
+    warning: 'idle',
+  })}
+
   ${({ hoverable }) => {
     return (
       hoverable &&
