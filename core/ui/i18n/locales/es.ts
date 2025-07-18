@@ -114,8 +114,6 @@ export const es = {
   optionalDevice: 'Dispositivo opcional',
   localMode: 'Estás en modo local',
   fastVault: 'Fast Vault',
-  scanQrInstruction:
-    'Escanea el QR con otro dispositivo. Se recomienda configuración de {{max}} dispositivos, {{min}} son suficientes.',
   devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',
@@ -1004,4 +1002,6 @@ export const es = {
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   verify_password_periodic_message_description:
     'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
+  keygen_devices_requirements_info:
+    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
 }

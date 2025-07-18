@@ -3,11 +3,13 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useTxHash } from '@core/ui/chain/state/txHash'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
+import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
+import { KeysignTxFee } from '@core/ui/mpc/keysign/tx/components/KeysignTxFee'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
@@ -19,10 +21,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useTxHash } from '../../../chain/state/txHash'
-import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
-import { KeysignTxFee } from './components/KeysignTxFee'
 
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
@@ -36,8 +34,7 @@ export const KeysignTxOverview = () => {
     coin: potentialCoin,
   } = getRecordUnionValue(payload, 'keysign')
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const vaultCoin = useCurrentVaultCoin(coin)
-  const { chain, decimals } = shouldBePresent(coin)
+  const { address, chain, decimals } = shouldBePresent(coin)
 
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null
@@ -80,7 +77,7 @@ export const KeysignTxOverview = () => {
             <HStack alignItems="center" gap={4}>
               <Text>{name}</Text>
               <Text color="shy" weight="500">
-                <MiddleTruncate text={`(${vaultCoin.address})`} width={80} />
+                <MiddleTruncate text={`(${address})`} width={80} />
               </Text>
             </HStack>
           </HStack>
