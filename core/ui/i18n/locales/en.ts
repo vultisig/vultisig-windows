@@ -970,9 +970,7 @@ export const en = {
   enter_new_passcode: 'Enter new passcode',
   continue_anyway: 'Continue anyway',
   security_scan_unavailable: 'Security scan unavailable',
-  blockaid_security_scan: 'Blockaid security scan',
-  blockaid_security_scan_desc:
-    'Enable or disable transaction security scanning for maximum protection.',
+  tx_security: '{{provider}} security scan',
   hold_for_paired_sign: 'Hold for paired sign',
   warning: 'Warning',
   malicious_address_detected: 'Malicious address detected',

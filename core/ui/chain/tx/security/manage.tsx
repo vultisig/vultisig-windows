@@ -1,3 +1,4 @@
+import { txSecurityProviderName } from '@core/chain/tx/security/config'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { ListItem } from '@lib/ui/list/item'
@@ -15,7 +16,9 @@ export const ManageTxSecurityValidation = () => {
   return (
     <ListItem
       icon={<ShieldCheckIcon fontSize={20} />}
-      title={t('blockaid_security_scan')}
+      title={t('tx_security', {
+        provider: txSecurityProviderName,
+      })}
       extra={<Switch checked={value} onChange={setValue} />}
     />
   )

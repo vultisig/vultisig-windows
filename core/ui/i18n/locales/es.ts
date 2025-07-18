@@ -1024,9 +1024,6 @@ export const es = {
   search: 'Buscar',
   create_referral_form: 'Crear referencia',
   continue_anyway: 'Continuar de todos modos',
-  blockaid_security_scan: 'Análisis de seguridad de Blockaid',
-  blockaid_security_scan_desc:
-    'Habilite o deshabilite el escaneo de seguridad de transacciones para obtener la máxima protección.',
   security_alert: 'Alerta de seguridad',
   security_alert_malicious_transaction:
     'Alerta de seguridad: Transacción maliciosa',
@@ -1038,4 +1035,5 @@ export const es = {
     'Esta transacción ha sido marcada como sospechosa. Por favor, revísela cuidadosamente antes de continuar.',
   continue_with_risk: 'Continuar con el riesgo',
   tx_security_error_message: 'Advertencia de seguridad de {{provider}}',
+  tx_security: 'Análisis de seguridad de {{provider}}',
 }

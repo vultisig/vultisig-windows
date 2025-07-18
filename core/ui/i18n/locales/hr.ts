@@ -997,9 +997,6 @@ export const hr = {
   search: 'Pretraživanje',
   create_referral_form: 'Izradi preporuku',
   continue_anyway: 'Nastavi svejedno',
-  blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
-  blockaid_security_scan_desc:
-    'Omogućite ili onemogućite skeniranje sigurnosti transakcija za maksimalnu zaštitu.',
   security_alert: 'Sigurnosno upozorenje',
   security_alert_malicious_transaction:
     'Sigurnosno upozorenje - Zlonamjerna transakcija',
@@ -1010,4 +1007,5 @@ export const hr = {
     'Ova je transakcija označena kao sumnjiva. Molimo vas da je pažljivo pregledate prije nego što nastavite.',
   continue_with_risk: 'Nastavite s rizikom',
   tx_security_error_message: 'Sigurnosno upozorenje od {{provider}}',
+  tx_security: 'Sigurnosno skeniranje {{provider}}',
 }
