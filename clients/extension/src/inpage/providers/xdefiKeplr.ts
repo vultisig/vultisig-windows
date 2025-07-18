@@ -190,7 +190,7 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
-    return new Promise<AminoSignResponse>(resolve => {
+    return new Promise<AminoSignResponse>((resolve, reject) => {
       const txDetails = signDoc.msgs.map(msg => {
         if (msg.type === CosmosMsgType.MSG_SEND) {
           return { txType: 'Keplr', ...msg.value } as TransactionType.Keplr
@@ -205,6 +205,7 @@ export class XDEFIKeplrProvider extends Keplr {
         .then(result => {
           resolve(result as any)
         })
+        .catch(reject)
     })
   }
   async signDirect(
