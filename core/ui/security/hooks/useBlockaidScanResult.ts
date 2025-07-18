@@ -1,6 +1,5 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { BlockaidSupportedChain } from '@core/chain/tx/security/chains'
-import { BlockaidScanResult } from '@core/chain/tx/security/types'
 import {
   TxSecurityValidationResult,
   validateTxSecurity,
@@ -14,7 +13,6 @@ import { useCallback } from 'react'
 
 type UseBlockaidScanResultType = {
   scanTransaction: (payload: KeysignMessagePayload) => Promise<{
-    scanResult?: BlockaidScanResult
     scanUnavailable: boolean
     error?: TxSecurityValidationResult
   }>
@@ -29,7 +27,6 @@ export const useBlockaidScanResult = (): UseBlockaidScanResultType => {
     async (
       payload: KeysignMessagePayload
     ): Promise<{
-      scanResult?: BlockaidScanResult
       scanUnavailable: boolean
       error?: TxSecurityValidationResult
     }> => {
