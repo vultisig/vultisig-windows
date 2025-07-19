@@ -53,9 +53,10 @@ export const ManageReferrals = () => {
 
     if (validNameDetails) {
       setUiState('existingReferral')
-    } else {
-      setUiState('default')
+      return
     }
+
+    setUiState('default')
   }, [status, validNameDetails])
 
   return (

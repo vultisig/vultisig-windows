@@ -70,7 +70,7 @@ export const ManageExistingReferral = ({
           }}
         >
           <VStack gap={8}>
-            <Text size={14}>Your Referral Code</Text>
+            <Text size={14}>{t('your_referral_code')}</Text>
             <FieldWrapper
               style={{
                 flexDirection: 'row',
@@ -100,22 +100,22 @@ export const ManageExistingReferral = ({
             </FieldIconWrapper>
             <VStack>
               <Text size={14} color="shy">
-                Collected rewards
+                {t('collected_rewards')}
               </Text>
               <Text>{formatTokenAmount(collectedRune, 'RUNE')}</Text>
             </VStack>
           </FieldWrapper>
-          <FieldWrapper>
+          <FieldWrapper gap={10}>
             <Text size={14} color="shy">
-              Expires on
+              {t('expires_on')}
             </Text>
-            <Text>{formatDateWithOf(expiresOn)}</Text>
+            <Text size={18}>{formatDateWithOf(expiresOn)}</Text>
           </FieldWrapper>
-          <Button onClick={onEditReferral}>Edit Referral</Button>
+          <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
           <DecorationLine />
           <VStack gap={14}>
             <VStack gap={8}>
-              <Text>Your friends referral code</Text>
+              <Text>{t('your_friends_referral_code')}</Text>
               <FriendsReferralCode>
                 <Text>{friendsReferralCode || '--'}</Text>
               </FriendsReferralCode>
@@ -130,7 +130,12 @@ export const ManageExistingReferral = ({
               onClick={onEditFriendReferral}
             >
               <HStack justifyContent="space-between" alignItems="center">
-                <VStack gap={12}>
+                <VStack
+                  gap={12}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                >
                   <FieldIconWrapper
                     style={{
                       color: colors.buttonPrimary.toCssValue(),
@@ -138,7 +143,7 @@ export const ManageExistingReferral = ({
                   >
                     <ArrowUndoIcon />
                   </FieldIconWrapper>
-                  <Text>Change friends Referral Code used for swaps</Text>
+                  <Text>{t('change_your_friends_referral')}</Text>
                 </VStack>
                 <IconWrapper
                   style={{
