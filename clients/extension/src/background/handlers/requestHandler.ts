@@ -109,7 +109,7 @@ export const handleRequest = (
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
-            if (!account) throw new EIP1193Error(4001)
+            if (!account) throw new EIP1193Error('UserRejectedRequest')
 
             if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(

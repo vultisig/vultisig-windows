@@ -1,22 +1,58 @@
-type Code = 4001 | 4100 | 4200 | 4900 | 4901 | -32600 | -32601 | -32602 | -32603
+type Type =
+  | 'UserRejectedRequest'
+  | 'Unauthorized'
+  | 'UnsupportedMethod'
+  | 'ProviderDisconnected'
+  | 'ChainDisconnected'
+  | 'InvalidRequest'
+  | 'MethodNotFound'
+  | 'InvalidParams'
+  | 'InternalError'
 
-const errors: Record<Code, string> = {
-  4001: 'User rejected the request',
-  4100: 'Unauthorized',
-  4200: 'Unsupported method',
-  4900: 'Provider disconnected',
-  4901: 'Chain disconnected',
-  [-32600]: 'Invalid Request',
-  [-32601]: 'Method not found',
-  [-32602]: 'Invalid params',
-  [-32603]: 'Internal error',
+const errors: Record<Type, { code: number; message: string }> = {
+  UserRejectedRequest: {
+    code: 4001,
+    message: 'User rejected the request',
+  },
+  Unauthorized: {
+    code: 4100,
+    message: 'Unauthorized',
+  },
+  UnsupportedMethod: {
+    code: 4200,
+    message: 'Unsupported method',
+  },
+  ProviderDisconnected: {
+    code: 4900,
+    message: 'Provider disconnected',
+  },
+  ChainDisconnected: {
+    code: 4901,
+    message: 'Chain disconnected',
+  },
+  InvalidRequest: {
+    code: -32600,
+    message: 'Invalid Request',
+  },
+  MethodNotFound: {
+    code: -32601,
+    message: 'Method not found',
+  },
+  InvalidParams: {
+    code: -32602,
+    message: 'Invalid params',
+  },
+  InternalError: {
+    code: -32603,
+    message: 'Internal error',
+  },
 } as const
 
 export class EIP1193Error extends Error {
   code: number
 
-  constructor(code: Code) {
-    super(errors[code])
-    this.code = code
+  constructor(type: Type) {
+    super(errors[type].message)
+    this.code = errors[type].code
   }
 }
