@@ -1,3 +1,4 @@
+import { TxRiskLevel } from '@core/chain/security/blockaid/tx/scan'
 import { Match } from '@lib/ui/base/Match'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
@@ -6,7 +7,6 @@ import { matchColor } from '@lib/ui/theme/getters'
 import { Trans } from 'react-i18next'
 import { styled } from 'styled-components'
 
-import { TxRiskLevel } from './query'
 import { BlockaidTxStatusContainer } from './statusContainer'
 
 type BlockaidTxScanResultProps = {

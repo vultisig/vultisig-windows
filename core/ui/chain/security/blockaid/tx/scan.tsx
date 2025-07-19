@@ -1,8 +1,9 @@
+import { BlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
 import { BlockaidNoTxScanStatus } from './noScanStatus'
-import { BlockaidTxScanInput, useBlockaidTxScanQuery } from './query'
+import { useBlockaidTxScanQuery } from './query'
 import { BlockaidTxScanResult } from './result'
 import { BlockaidTxScanning } from './scanning'
 
