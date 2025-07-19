@@ -3,19 +3,19 @@ import { productRootDomain, rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-type BlockaidRiskLevel = 'benign' | 'warning' | 'malicious' | 'spam'
+type BlockaidRiskLevel = 'Benign' | 'Warning' | 'Malicious' | 'Spam'
 
 type BlockaidScanResponse = {
   validation: {
-    classification: BlockaidRiskLevel
+    result_type: BlockaidRiskLevel
   }
 }
 
 const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
-  benign: 'low',
-  warning: 'medium',
-  malicious: 'high',
-  spam: 'high',
+  Benign: 'low',
+  Warning: 'medium',
+  Malicious: 'high',
+  Spam: 'high',
 }
 
 export type TxRiskLevel = 'low' | 'medium' | 'high'
@@ -50,7 +50,7 @@ export const useBlockaidTxScanQuery = (input: BlockaidTxScanInput) => {
         }
       )
 
-      return blockaidRiskLevelToTxRiskLevel[validation.classification]
+      return blockaidRiskLevelToTxRiskLevel[validation.result_type]
     },
     retry: false,
   })
