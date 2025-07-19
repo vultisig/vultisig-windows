@@ -7,6 +7,7 @@ import { matchColor } from '@lib/ui/theme/getters'
 import { Trans } from 'react-i18next'
 import { styled } from 'styled-components'
 
+import { BlockaidLogo } from '../logo'
 import { BlockaidTxStatusContainer } from './statusContainer'
 
 type BlockaidTxScanResultProps = {
@@ -45,19 +46,27 @@ export const BlockaidTxScanResult = ({
         low={() => (
           <Trans
             i18nKey="transaction_scanned"
-            values={{ provider: 'Blockaid' }}
+            components={{
+              provider: <BlockaidLogo />,
+            }}
           />
         )}
         medium={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            values={{ riskLevel, provider: 'Blockaid' }}
+            components={{
+              provider: <BlockaidLogo />,
+            }}
+            values={{ riskLevel }}
           />
         )}
         high={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            values={{ riskLevel, provider: 'Blockaid' }}
+            components={{
+              provider: <BlockaidLogo />,
+            }}
+            values={{ riskLevel }}
           />
         )}
       />
