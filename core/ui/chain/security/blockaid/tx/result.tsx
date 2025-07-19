@@ -18,14 +18,14 @@ const Container = styled(BlockaidTxStatusContainer)<BlockaidTxScanResultProps>`
   &:first-child {
     color: ${matchColor('riskLevel', {
       low: 'success',
-      medium: 'warning',
-      high: 'error',
+      medium: 'idle',
+      high: 'danger',
     })};
   }
   color: ${matchColor('riskLevel', {
     low: 'regular',
-    medium: 'warning',
-    high: 'error',
+    medium: 'idle',
+    high: 'danger',
   })};
 `
 
@@ -46,27 +46,19 @@ export const BlockaidTxScanResult = ({
         low={() => (
           <Trans
             i18nKey="transaction_scanned"
-            components={{
-              provider: <BlockaidLogo />,
-            }}
+            values={{ provider: <BlockaidLogo /> }}
           />
         )}
         medium={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            components={{
-              provider: <BlockaidLogo />,
-            }}
-            values={{ riskLevel }}
+            values={{ riskLevel, provider: <BlockaidLogo /> }}
           />
         )}
         high={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            components={{
-              provider: <BlockaidLogo />,
-            }}
-            values={{ riskLevel }}
+            values={{ riskLevel, provider: <BlockaidLogo /> }}
           />
         )}
       />
