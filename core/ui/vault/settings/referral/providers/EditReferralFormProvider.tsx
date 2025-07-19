@@ -6,7 +6,6 @@ import {
   EditReferralFormData,
   editReferralSchema,
 } from '../components/EditReferral/EditReferralForm/config'
-import { useActivePoolsQuery } from '../queries/useActivePoolsQuery'
 
 export const EditReferralFormProvider = ({ children }: ChildrenProp) => {
   const methods = useForm<EditReferralFormData>({
@@ -17,8 +16,6 @@ export const EditReferralFormProvider = ({ children }: ChildrenProp) => {
     },
     mode: 'onBlur',
   })
-
-  useActivePoolsQuery()
 
   return <FormProvider {...methods}>{children}</FormProvider>
 }

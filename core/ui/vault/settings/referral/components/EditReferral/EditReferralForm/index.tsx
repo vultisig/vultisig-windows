@@ -6,7 +6,7 @@ import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
@@ -28,10 +28,17 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
 
   const {
     setValue,
+    watch,
     formState: { isValid, isSubmitting },
   } = useEditReferralFormData()
 
   const [referralPayoutAsset, setReferralPayoutAsset] = useReferralPayoutAsset()
+  const initialReferralPayoutAsset = useRef(referralPayoutAsset)
+
+  const initialExpiration = useMemo(
+    () => Math.ceil(nameDetails.remainingYears),
+    [nameDetails.remainingYears]
+  )
 
   const coins = useCurrentVaultCoins()
   const prefCoin = coins.find(coin =>
@@ -39,23 +46,31 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
       chain: nameDetails?.preferred_asset?.split(
         '.'
       )[0] as (typeof chainFeeCoin)[keyof typeof chainFeeCoin]['chain'],
-      id: nameDetails?.preferred_asset?.split('.')[1].split('-')[0] || '', //то  drop any pool-tail
+      id: nameDetails?.preferred_asset?.split('.')[1].split('-')[0] || '',
     })
   )
 
-  useEffect(() => {
-    setValue('expiration', Math.ceil(nameDetails.remainingYears))
+  const currentExpiration = watch('expiration')
+  const expirationChanged =
+    currentExpiration !== initialExpiration &&
+    currentExpiration > initialExpiration
+  const assetChanged = prefCoin
+    ? referralPayoutAsset !== prefCoin
+    : referralPayoutAsset !== initialReferralPayoutAsset.current
+  const hasChanges = expirationChanged || assetChanged
 
-    if (prefCoin) {
-      setReferralPayoutAsset(referralPayoutAsset)
+  useEffect(() => {
+    setValue('expiration', initialExpiration)
+    if (prefCoin) setReferralPayoutAsset(prefCoin)
+  }, [initialExpiration, prefCoin, setValue, setReferralPayoutAsset])
+
+  const isDisabled = useMemo(() => {
+    if (currentExpiration <= initialExpiration) {
+      return `Expiration must be greater than ${initialExpiration}`
+    } else if (!isValid || isSubmitting || !hasChanges) {
+      return true
     }
-  }, [
-    nameDetails.remainingYears,
-    prefCoin,
-    referralPayoutAsset,
-    setReferralPayoutAsset,
-    setValue,
-  ])
+  }, [currentExpiration, hasChanges, initialExpiration, isSubmitting, isValid])
 
   return (
     <VStack flexGrow gap={40}>
@@ -78,10 +93,10 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
           >
             <ReferralCodeField />
             <PayoutAssetField />
-            <ExpirationField />
+            <ExpirationField initialExpiration={initialExpiration} />
             <Fees />
           </StackSeparatedBy>
-          <Button disabled={!isValid || isSubmitting} type="submit">
+          <Button disabled={isDisabled} type="submit">
             Edit Referral
           </Button>
         </VStack>

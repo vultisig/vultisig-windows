@@ -55,9 +55,11 @@ export const Fees = () => {
         }) => {
           // only block-fees = runeFee - registerFee
           const extensionCost = runeFee - registerFee
+          const currentValue = watch('referralFeeAmount')
+
           const perYearFee = extensionCost / debouncedYears
 
-          if (watch('referralFeeAmount') !== extensionCost) {
+          if (currentValue !== extensionCost) {
             setValue('referralFeeAmount', extensionCost, {
               shouldValidate: true,
             })
