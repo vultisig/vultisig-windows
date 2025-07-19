@@ -971,4 +971,5 @@ export const en = {
   confirm_new_passcode: 'Confirm New Passcode',
   enter_new_passcode: 'Enter new passcode',
   hold_for_paired_sign: 'Hold for paired sign',
+  blockaid_security_scan: 'Blockaid Security Scan',
 }
