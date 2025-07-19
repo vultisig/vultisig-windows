@@ -33,7 +33,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BlockaidTxScan } from '../../../chain/security/blockaid/tx/scan'
+import { BlockaidKeysignPayloadScan } from '../../../chain/security/blockaid/keysignPayload'
 import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/statusContainer'
 import { useIsBlockaidEnabled } from '../../../storage/blockaid'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
@@ -64,7 +64,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           <MatchQuery
             value={keysignPayloadQuery}
             success={keysignPayload => (
-              <BlockaidTxScan keysignPayload={keysignPayload} />
+              <BlockaidKeysignPayloadScan value={keysignPayload} />
             )}
             pending={() => <BlockaidTxStatusContainer />}
             error={() => <BlockaidTxStatusContainer />}

@@ -1,16 +1,13 @@
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
 import { BlockaidNoTxScanStatus } from './noScanStatus'
-import { useBlockaidTxScanQuery } from './query'
+import { BlockaidTxScanInput, useBlockaidTxScanQuery } from './query'
 import { BlockaidTxScanResult } from './result'
 import { BlockaidTxScanning } from './scanning'
-type BlockaidTxScanProps = {
-  keysignPayload: KeysignPayload
-}
 
-export const BlockaidTxScan = ({ keysignPayload }: BlockaidTxScanProps) => {
-  const query = useBlockaidTxScanQuery(keysignPayload)
+export const BlockaidTxScan = ({ value }: ValueProp<BlockaidTxScanInput>) => {
+  const query = useBlockaidTxScanQuery(value)
 
   return (
     <MatchQuery

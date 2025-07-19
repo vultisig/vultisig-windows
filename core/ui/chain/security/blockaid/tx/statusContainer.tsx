@@ -7,7 +7,9 @@ export const BlockaidTxStatusContainer = styled.p`
       gap: 2,
     },
     size: 13,
-    color: 'supporting',
+    color: 'regular',
   })}
+  width: 100%;
+  justify-content: center;
   min-height: 16px;
 `

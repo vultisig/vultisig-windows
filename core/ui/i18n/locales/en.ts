@@ -972,7 +972,7 @@ export const en = {
   enter_new_passcode: 'Enter new passcode',
   hold_for_paired_sign: 'Hold for paired sign',
   blockaid_security_scan: 'Blockaid Security Scan',
-  transaction_not_scanned: 'Transaction not scanned by {{provider}}',
+  transaction_not_scanned: 'Transaction not scanned by <provider>',
   transaction_scanned: 'Transaction scanned by {{provider}}',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by {{provider}}',

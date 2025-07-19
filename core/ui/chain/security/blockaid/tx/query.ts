@@ -1,13 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { productRootDomain } from '@core/config'
-import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
@@ -28,40 +20,20 @@ const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
 
 export type TxRiskLevel = 'low' | 'medium' | 'high'
 
-export const useBlockaidTxScanQuery = (keysignPayload: KeysignPayload) => {
+export type BlockaidTxScanInput = {
+  chain: EvmChain
+  data: unknown
+}
+
+export const useBlockaidTxScanQuery = (input: BlockaidTxScanInput) => {
   return useQuery({
-    queryKey: ['blockaidTxScan', keysignPayload],
+    queryKey: ['blockaidTxScan', input],
     queryFn: async (): Promise<TxRiskLevel> => {
-      const coin = getKeysignCoin(keysignPayload)
-      const chain = getKeysignChain(keysignPayload)
-
-      if (!isOneOf(chain, Object.values(EvmChain))) {
-        throw new NotImplementedError('non-EVM chains Blockaid tx scan')
-      }
-
-      const swapPayload = getKeysignSwapPayload(keysignPayload)
-
-      if (swapPayload) {
-        throw new NotImplementedError('Blockaid swap tx scan')
-      }
-
-      if (!isFeeCoin(coin)) {
-        throw new NotImplementedError('ERC20 send tx scan')
-      }
+      const { chain, data } = input
 
       const body = {
         chain: chain.toLowerCase(),
-        data: {
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: coin.address,
-              to: keysignPayload.toAddress,
-              value: bigIntToHex(BigInt(keysignPayload.toAmount)),
-              data: keysignPayload.memo || '0x',
-            },
-          ],
-        },
+        data,
         metadata: {
           domain: productRootDomain,
         },
