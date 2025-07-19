@@ -202,6 +202,7 @@ export const getKeysignPayload = (
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,
+          skipBroadcast: transaction.transactionDetails.skipBroadcast,
         })
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))

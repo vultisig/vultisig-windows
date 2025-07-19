@@ -114,6 +114,7 @@ export namespace TransactionType {
     amount: { amount: string; denom: string }[]
     from_address: string
     to_address: string
+    skip_broadcast?: boolean
   } & BaseTransaction<'Keplr'>
 
   export type Phantom = {
@@ -166,6 +167,7 @@ export type TransactionDetails = {
     maxPriorityFeePerGas?: string
   }
   ibcTransaction?: IMsgTransfer
+  skipBroadcast?: boolean
 }
 
 export type IKeysignTransactionPayload = {

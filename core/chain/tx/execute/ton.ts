@@ -7,11 +7,14 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeTonTx: ExecuteTxResolver = async ({ compiledTx }) => {
+export const executeTonTx: ExecuteTxResolver = async ({
+  compiledTx,
+  skipBroadcast,
+}) => {
   const output = TW.TheOpenNetwork.Proto.SigningOutput.decode(compiledTx)
 
   const txHash = Buffer.from(output.hash).toString('hex')
-
+  if (skipBroadcast) return { txHash }
   assertErrorMessage(output.errorMessage)
 
   const url = `${rootApiUrl}/ton/v2/sendBocReturnHash`

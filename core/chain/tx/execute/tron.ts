@@ -2,18 +2,19 @@ import { OtherChain } from '@core/chain/Chain'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TW } from '@trustwallet/wallet-core'
+import { bytesToHex } from 'viem'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeTronTx: ExecuteTxResolver<OtherChain> = async ({
   compiledTx,
+  skipBroadcast,
 }) => {
   const output = TW.Tron.Proto.SigningOutput.decode(compiledTx)
 
   assertErrorMessage(output.errorMessage)
-
+  if (skipBroadcast) return { txHash: bytesToHex(output.id) }
   const rawTx = output.json
-
   const txid = await broadcastTransaction(rawTx)
 
   return { txHash: txid }

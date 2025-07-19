@@ -184,29 +184,54 @@ export class XDEFIKeplrProvider extends Keplr {
   }
   async sendMessage() {}
 
-  signAmino(
-    _chainId: string,
-    _signer: string,
+  async signAmino(
+    chainId: string,
+    signer: string,
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
-    return new Promise<AminoSignResponse>((resolve, reject) => {
-      const txDetails = signDoc.msgs.map(msg => {
-        if (msg.type === CosmosMsgType.MSG_SEND) {
-          return { txType: 'Keplr', ...msg.value } as TransactionType.Keplr
-        }
-      })
-
-      this.cosmosProvider
-        .request({
-          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [{ ...txDetails[0]!, txType: 'Keplr' }],
-        })
-        .then(result => {
-          resolve(result as any)
-        })
-        .catch(reject)
+    const txDetails = signDoc.msgs.map(msg => {
+      if (msg.type === CosmosMsgType.MSG_SEND) {
+        return {
+          txType: 'Keplr',
+          skip_broadcast: true,
+          ...msg.value,
+        } as TransactionType.Keplr
+      }
     })
+
+    const result = (await this.cosmosProvider.request({
+      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+      params: [{ ...txDetails[0]!, txType: 'Keplr' }],
+    })) as TxResult
+
+    const txChain =
+      getCosmosChainByChainId(chainId) || getEvmChainByChainId(chainId)
+
+    if (!txChain) {
+      throw new Error(`Chain not supported: ${chainId}`)
+    }
+
+    const accountInfo = await getCosmosAccountInfo({
+      chain: txChain as CosmosChain,
+      address: signer,
+    })
+
+    if (!accountInfo || !accountInfo.pubkey) {
+      throw new Error('No account info or pubkey')
+    }
+
+    const decoded = base58.decode(shouldBePresent(result.encoded))
+    if (!decoded) {
+      throw new Error('Invalid signature')
+    }
+    return {
+      signed: signDoc,
+      signature: {
+        pub_key: accountInfo.pubkey,
+        signature: decoded.toString(),
+      },
+    }
   }
   async signDirect(
     chainId: string,

@@ -91,6 +91,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                   compiledTx,
                   walletCore,
                   chain,
+                  skipBroadcast: payload.skipBroadcast,
                 })
               })
             )

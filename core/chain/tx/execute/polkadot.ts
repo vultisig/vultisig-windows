@@ -1,13 +1,16 @@
 import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
+import { blake2b } from '@noble/hashes/blake2'
 import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 
 export const executePolkadotTx: ExecuteTxResolver = async ({
   walletCore,
   compiledTx,
+  skipBroadcast,
 }) => {
   const { errorMessage: polkadotErrorMessage, encoded } =
     TW.Polkadot.Proto.SigningOutput.decode(compiledTx)
@@ -15,6 +18,9 @@ export const executePolkadotTx: ExecuteTxResolver = async ({
   assertErrorMessage(polkadotErrorMessage)
 
   const rawTx = walletCore.HexCoding.encode(encoded)
+  const hashBytes = blake2b(encoded, { dkLen: 32 })
+  const txHash = ensureHexPrefix(Buffer.from(hashBytes).toString('hex'))
+  if (skipBroadcast) return { txHash }
 
   const rpcClient = await getPolkadotClient()
 

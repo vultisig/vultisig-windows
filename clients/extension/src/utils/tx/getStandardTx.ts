@@ -26,6 +26,7 @@ const transactionHandlers: TransactionHandlers = {
     },
     from: tx.from_address,
     to: tx.to_address,
+    skipBroadcast: tx.skip_broadcast || undefined,
   }),
 
   Phantom: async (tx, chain) => {

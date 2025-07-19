@@ -5,12 +5,15 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeSolanaTx: ExecuteTxResolver = async ({ compiledTx }) => {
+export const executeSolanaTx: ExecuteTxResolver = async ({
+  compiledTx,
+  skipBroadcast,
+}) => {
   const { encoded, errorMessage: solanaErrorMessage } =
     TW.Solana.Proto.SigningOutput.decode(compiledTx)
 
   assertErrorMessage(solanaErrorMessage)
-
+  if (skipBroadcast) return { txHash: '', encoded }
   const client = getSolanaClient()
 
   const result = await client
