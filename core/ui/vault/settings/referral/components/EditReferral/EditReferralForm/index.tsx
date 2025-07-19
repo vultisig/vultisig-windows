@@ -97,7 +97,7 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
             <Fees />
           </StackSeparatedBy>
           <Button disabled={isDisabled} type="submit">
-            Edit Referral
+            {t('edit_referral')}
           </Button>
         </VStack>
       </ReferralPageWrapper>

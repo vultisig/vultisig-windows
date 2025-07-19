@@ -32,7 +32,7 @@ export const EditFriendReferralForm = ({
 
   const error =
     referralName.toLowerCase() === userReferralName?.toLocaleLowerCase()
-      ? 'Used referral code can not be the same as your referral code'
+      ? t('used_referral_error')
       : undefined
 
   useEffect(() => {
@@ -52,7 +52,9 @@ export const EditFriendReferralForm = ({
       success={() => (
         <VStack flexGrow gap={40}>
           <PageHeader
-            primaryControls={<PageHeaderBackButton />}
+            primaryControls={
+              <PageHeaderBackButton onClick={() => onFinish()} />
+            }
             title={t('title_1')}
           />
           <ReferralPageWrapper flexGrow justifyContent="space-between">
@@ -76,7 +78,7 @@ export const EditFriendReferralForm = ({
                 disabled={Boolean(error)}
                 type="submit"
               >
-                Save code
+                {t('save_code')}
               </Button>
             </VStack>
           </ReferralPageWrapper>
