@@ -11,11 +11,15 @@ import {
   FormFieldLabel,
 } from '../../../Referrals.styled'
 
-export const ExpirationField = () => {
+type Props = {
+  initialExpiration: number
+}
+
+export const ExpirationField = ({ initialExpiration }: Props) => {
   const { t } = useTranslation()
   const {
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
     watch,
   } = useCreateReferralForm()
 
@@ -28,6 +32,11 @@ export const ExpirationField = () => {
     month: 'long',
     year: 'numeric',
   })
+
+  const error =
+    initialExpiration >= expiration
+      ? `Expiration must be greater than ${initialExpiration}`
+      : errors.expiration?.message || undefined
 
   return (
     <VStack gap={14}>
@@ -50,9 +59,7 @@ export const ExpirationField = () => {
             />
           )}
         />
-        {errors.expiration && (
-          <FormFieldErrorText>{errors.expiration.message}</FormFieldErrorText>
-        )}
+        {error && isDirty && <FormFieldErrorText>{error}</FormFieldErrorText>}
       </FormField>
       <HStack justifyContent="space-between" alignItems="center">
         <Text size={14} color="supporting">
