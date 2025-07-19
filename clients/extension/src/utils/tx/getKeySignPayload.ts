@@ -26,11 +26,14 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
+
+import { CosmosMsgType } from '../constants'
 
 export const getKeysignPayload = (
   transaction: IKeysignTransactionPayload,
@@ -191,18 +194,41 @@ export const getKeysignPayload = (
             modifiedMemo = transaction.transactionDetails.data!
           }
         }
+        let contractPayload = null
+        if (
+          transaction.transactionDetails.data?.startsWith(
+            CosmosMsgType.MSG_EXECUTE_CONTRACT
+          )
+        ) {
+          const msg = transaction.transactionDetails.data.replace(
+            `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
+            ''
+          )
 
+          contractPayload = create(WasmExecuteContractPayloadSchema, {
+            contractAddress: transaction.transactionDetails.to,
+            executeMsg: msg,
+            senderAddress: transaction.transactionDetails.from,
+            coins: [coin],
+          })
+        }
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
           toAmount: BigInt(
             parseInt(transaction.transactionDetails.amount?.amount ?? '0')
           ).toString(),
-          memo: modifiedMemo ?? transaction.transactionDetails.data,
+          memo: contractPayload
+            ? undefined
+            : (modifiedMemo ?? transaction.transactionDetails.data),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: chainSpecific,
+          contractPayload: contractPayload
+            ? { case: 'wasmExecuteContractPayload', value: contractPayload }
+            : undefined,
         })
+
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
         } else if (transaction.chain === OtherChain.Cardano) {

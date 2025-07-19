@@ -13,8 +13,6 @@ const main = () => {
 
   const output = JSON.stringify(sorted, null, 2)
 
-  console.log(output)
-
   execSync('pbcopy', { input: output })
 }
 

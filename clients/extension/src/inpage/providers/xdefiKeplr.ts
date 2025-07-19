@@ -1,12 +1,8 @@
-import {
-  CosmosMsgType,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
 import {
   Messaging,
   TransactionDetails,
-  TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
@@ -191,16 +187,10 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     return new Promise<AminoSignResponse>((resolve, reject) => {
-      const txDetails = signDoc.msgs.map(msg => {
-        if (msg.type === CosmosMsgType.MSG_SEND) {
-          return { txType: 'Keplr', ...msg.value } as TransactionType.Keplr
-        }
-      })
-
       this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [{ ...txDetails[0]!, txType: 'Keplr' }],
+          params: [{ ...signDoc, txType: 'Keplr' }],
         })
         .then(result => {
           resolve(result as any)
