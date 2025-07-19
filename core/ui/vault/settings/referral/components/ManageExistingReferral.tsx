@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
+import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
@@ -40,11 +41,20 @@ export const ManageExistingReferral = ({
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
   const { data: friendsReferralCode } = useFriendReferralQuery()
+  const navigate = useCoreNavigate()
 
   return (
     <>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={() =>
+              navigate({
+                id: 'settings',
+              })
+            }
+          />
+        }
         title={t('title_1')}
       />
       <ReferralPageWrapper>

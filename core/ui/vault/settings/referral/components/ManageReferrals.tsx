@@ -9,19 +9,19 @@ import { useEffect, useState } from 'react'
 import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
-} from '../../../storage/referrals'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
-import { CreateReferralForm } from './components/CreateReferral/CreateReferralForm'
-import { CreateReferralVerify } from './components/CreateReferral/CreateReferralVerify'
-import { EditFriendReferralForm } from './components/EditFriendReferralForm'
-import { EditReferralForm } from './components/EditReferral/EditReferralForm'
-import { EditReferralVerify } from './components/EditReferral/EditReferralVerify'
-import { ManageExistingReferral } from './components/ManageExistingReferral'
-import { ManageReferralsForm } from './components/ManageReferralsForm'
-import { CreateReferralFormProvider } from './providers/CreateReferralFormProvider'
-import { EditReferralFormProvider } from './providers/EditReferralFormProvider'
-import { ReferralPayoutAssetProvider } from './providers/ReferralPayoutAssetProvider'
-import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainNameQuery'
+} from '../../../../storage/referrals'
+import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { CreateReferralFormProvider } from '../providers/CreateReferralFormProvider'
+import { EditReferralFormProvider } from '../providers/EditReferralFormProvider'
+import { ReferralPayoutAssetProvider } from '../providers/ReferralPayoutAssetProvider'
+import { useUserValidThorchainNameQuery } from '../queries/useUserValidThorchainNameQuery'
+import { CreateReferralForm } from './CreateReferral/CreateReferralForm'
+import { CreateReferralVerify } from './CreateReferral/CreateReferralVerify'
+import { EditFriendReferralForm } from './EditFriendReferralForm'
+import { EditReferralForm } from './EditReferral/EditReferralForm'
+import { EditReferralVerify } from './EditReferral/EditReferralVerify'
+import { ManageExistingReferral } from './ManageExistingReferral'
+import { ManageReferralsForm } from './ManageReferralsForm'
 
 type ManageReferralUIState =
   | 'default'
@@ -31,7 +31,7 @@ type ManageReferralUIState =
   | 'existingReferral'
   | 'editFriendReferral'
 
-export const ManageReferralsPage = () => {
+export const ManageReferrals = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
 
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
@@ -50,6 +50,7 @@ export const ManageReferralsPage = () => {
 
   useEffect(() => {
     if (status === 'pending') return
+
     if (validNameDetails) {
       setUiState('existingReferral')
     } else {

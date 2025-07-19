@@ -11,31 +11,35 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import {
   useHasFinishedReferralsOnboardingQuery,
   useSetHasFinishedReferralsOnboardingMutation,
 } from '../../../storage/referrals'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { ManageReferrals } from './components/ManageReferrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
 import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainNameQuery'
 
-const steps = ['landing', 'summary'] as const
+const steps = ['landing', 'summary', 'manage'] as const
 
 export const ReferralPage = () => {
   const { t } = useTranslation()
-  const { step, toNextStep } = useStepNavigation({ steps })
-  const navigate = useCoreNavigate()
+
   const { mutateAsync: setHasFinishedOnboarding } =
     useSetHasFinishedReferralsOnboardingMutation()
 
   const { data: isOnboarded, isLoading } =
     useHasFinishedReferralsOnboardingQuery()
+
+  const { step, toNextStep } = useStepNavigation({
+    steps,
+    initialStep: isOnboarded ? 'manage' : 'landing',
+  })
 
   const { address } = shouldBePresent(
     useCurrentVaultCoin({
@@ -44,16 +48,14 @@ export const ReferralPage = () => {
     })
   )
 
+  // Hard refetch in case the user just created/edited a referral and is coming back from Keysign
   const { refetch } = useUserValidThorchainNameQuery(address)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isOnboarded) {
       refetch()
-      navigate({
-        id: 'manageReferral',
-      })
     }
-  }, [isOnboarded, navigate, refetch])
+  }, [isOnboarded, refetch])
 
   return (
     <Match
@@ -63,49 +65,53 @@ export const ReferralPage = () => {
           <Spinner size="3em" />
         </CenterAbsolutely>
       )}
-      success={() => (
-        <>
-          <PageHeader
-            primaryControls={<PageHeaderBackButton />}
-            secondaryControls={
-              <Tooltip
-                renderOpener={({ ref }) => (
-                  <div ref={ref}>
-                    <IconButton size="sm">
-                      <InfoIcon />
-                    </IconButton>
-                  </div>
-                )}
-                content={
-                  <TooltipContent>
-                    <Text size={16}>{t('header_tooltip_title')}</Text>
-                    <Text color="supporting" size={13}>
-                      {t('header_tooltip_content')}
-                    </Text>
-                  </TooltipContent>
+      success={() => {
+        if (step === 'landing' || step === 'summary') {
+          return (
+            <>
+              <PageHeader
+                primaryControls={<PageHeaderBackButton />}
+                secondaryControls={
+                  <Tooltip
+                    renderOpener={({ ref }) => (
+                      <div ref={ref}>
+                        <IconButton size="sm">
+                          <InfoIcon />
+                        </IconButton>
+                      </div>
+                    )}
+                    content={
+                      <TooltipContent>
+                        <Text size={16}>{t('header_tooltip_title')}</Text>
+                        <Text color="supporting" size={13}>
+                          {t('header_tooltip_content')}
+                        </Text>
+                      </TooltipContent>
+                    }
+                  />
                 }
+                title={t('title_1')}
               />
-            }
-            title={t('title_1')}
-          />
-          <ContentWrapper>
-            <Match
-              value={step}
-              landing={() => <ReferralLanding onFinish={toNextStep} />}
-              summary={() => (
-                <ReferralsSummary
-                  onFinish={() => {
-                    setHasFinishedOnboarding(true)
-                    navigate({
-                      id: 'manageReferral',
-                    })
-                  }}
+              <ContentWrapper>
+                <Match
+                  value={step}
+                  landing={() => <ReferralLanding onFinish={toNextStep} />}
+                  summary={() => (
+                    <ReferralsSummary
+                      onFinish={() => {
+                        setHasFinishedOnboarding(true)
+                        toNextStep()
+                      }}
+                    />
+                  )}
                 />
-              )}
-            />
-          </ContentWrapper>
-        </>
-      )}
+              </ContentWrapper>
+            </>
+          )
+        }
+
+        return <ManageReferrals />
+      }}
     />
   )
 }
