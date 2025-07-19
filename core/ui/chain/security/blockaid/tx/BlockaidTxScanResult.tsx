@@ -4,6 +4,7 @@ import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { matchColor } from '@lib/ui/theme/getters'
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { Trans } from 'react-i18next'
 import { styled, useTheme } from 'styled-components'
 
@@ -34,29 +35,18 @@ export const BlockaidTxScanResult = ({
         medium={() => <CircleAlertIcon color={colors.idle.toCssValue()} />}
         high={() => <TriangleAlertIcon color={colors.danger.toCssValue()} />}
       />
-      <Match
-        value={riskLevel}
-        low={() => (
-          <Trans
-            i18nKey="transaction_scanned"
-            components={{ provider: <BlockaidLogo /> }}
-          />
-        )}
-        medium={() => (
-          <Trans
-            i18nKey="transaction_has_risk"
-            components={{ provider: <BlockaidLogo /> }}
-            values={{ riskLevel }}
-          />
-        )}
-        high={() => (
-          <Trans
-            i18nKey="transaction_has_risk"
-            components={{ provider: <BlockaidLogo /> }}
-            values={{ riskLevel }}
-          />
-        )}
-      />
+      {riskLevel === 'low' ? (
+        <Trans
+          i18nKey="transaction_scanned"
+          components={{ provider: <BlockaidLogo /> }}
+        />
+      ) : (
+        <Trans
+          i18nKey="transaction_has_risk"
+          components={{ provider: <BlockaidLogo /> }}
+          values={{ riskLevel: capitalizeFirstLetter(riskLevel) }}
+        />
+      )}
     </Container>
   )
 }
