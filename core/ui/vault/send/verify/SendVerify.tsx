@@ -33,6 +33,11 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { BlockaidTxScan } from '../../../chain/security/blockaid/tx/scan'
+import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/statusContainer'
+import { useIsBlockaidEnabled } from '../../../storage/blockaid'
+import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
+
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
   const coin = useCurrentSendCoin()
@@ -43,6 +48,10 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const cappedAmountQuery = useSendCappedAmountQuery()
   const { chain, ticker } = coin
 
+  const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
+
+  const isBlockaidEnabled = useIsBlockaidEnabled()
+
   return (
     <>
       <PageHeader
@@ -51,6 +60,16 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         hasBorder
       />
       <PageContent gap={12}>
+        {isBlockaidEnabled && (
+          <MatchQuery
+            value={keysignPayloadQuery}
+            success={keysignPayload => (
+              <BlockaidTxScan keysignPayload={keysignPayload} />
+            )}
+            pending={() => <BlockaidTxStatusContainer />}
+            error={() => <BlockaidTxStatusContainer />}
+          />
+        )}
         <TxOverviewPanel>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
