@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -9,6 +10,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,8 +20,10 @@ import {
   useHasFinishedReferralsOnboardingQuery,
   useSetHasFinishedReferralsOnboardingMutation,
 } from '../../../storage/referrals'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
+import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainNameQuery'
 
 const steps = ['landing', 'summary'] as const
 
@@ -29,16 +33,27 @@ export const ReferralPage = () => {
   const navigate = useCoreNavigate()
   const { mutateAsync: setHasFinishedOnboarding } =
     useSetHasFinishedReferralsOnboardingMutation()
+
   const { data: isOnboarded, isLoading } =
     useHasFinishedReferralsOnboardingQuery()
 
+  const { address } = shouldBePresent(
+    useCurrentVaultCoin({
+      chain: chainFeeCoin.THORChain.chain,
+      id: 'RUNE',
+    })
+  )
+
+  const { refetch } = useUserValidThorchainNameQuery(address)
+
   useLayoutEffect(() => {
     if (isOnboarded) {
+      refetch()
       navigate({
         id: 'manageReferral',
       })
     }
-  }, [isOnboarded, navigate])
+  }, [isOnboarded, navigate, refetch])
 
   return (
     <Match

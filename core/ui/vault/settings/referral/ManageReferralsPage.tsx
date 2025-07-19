@@ -118,7 +118,6 @@ export const ManageReferralsPage = () => {
                     nameDetails={shouldBePresent(validNameDetails)}
                     onFinish={onFinish}
                   />
-                  §
                 </EditReferralFormProvider>
               )}
               to={({ onBack }) => <EditReferralVerify onBack={onBack} />}

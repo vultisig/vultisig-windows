@@ -73,7 +73,7 @@ export const Fees = () => {
                 <Text size={13} color="supporting">
                   {t('current_expiry')}
                 </Text>
-                <Text size={14}>{valid?.remainingYears.toFixed(2)} yrs</Text>
+                <Text size={14}>{Math.ceil(valid?.remainingYears)} yrs</Text>
               </RowWrapper>
 
               <RowWrapper>
