@@ -38,18 +38,17 @@ const transactionHandlers: TransactionHandlers = {
         }
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
-        // const formattedMessage = JSON.stringify(message.value.msg)
-        //   .replace(/^({)/, '$1 ')
-        //   .replace(/(})$/, ' $1')
-        //   .replace(/:/g, ': ')
-
         return {
           asset: {
             chain: chain,
-            ticker: message.value!.funds[0].denom,
+            ticker: message.value.funds.length
+              ? message.value!.funds[0].denom
+              : chainFeeCoin[chain].ticker,
           },
           amount: {
-            amount: message.value.funds[0].amount,
+            amount: message.value.funds.length
+              ? message.value.funds[0].amount
+              : 0,
             decimals: chainFeeCoin[chain].decimals,
           },
           from: message.value.sender,
