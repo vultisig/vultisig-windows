@@ -3,14 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import { fetchUserValidName } from '../services/getUserValidThorchainName'
 
-const getUserValidThorchainNameQueryKey = (address: string) => [
-  'user-valid-thorchain-name',
-  address,
-]
-
 export const useUserValidThorchainNameQuery = (address: string) =>
   useQuery({
-    queryKey: getUserValidThorchainNameQueryKey(address),
+    queryKey: ['user-valid-thorchain-name'],
     queryFn: () => fetchUserValidName(address),
     retry: false,
     staleTime: Infinity,
