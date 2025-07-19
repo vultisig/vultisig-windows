@@ -85,7 +85,15 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
     <>
       <VStack fullHeight>
         <PageHeader
-          primaryControls={<PageHeaderBackButton />}
+          primaryControls={
+            <PageHeaderBackButton
+              onClick={() =>
+                navigate({
+                  id: 'vault',
+                })
+              }
+            />
+          }
           title={t('settings')}
           hasBorder
         />
