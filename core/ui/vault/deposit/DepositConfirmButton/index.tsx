@@ -18,11 +18,14 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
@@ -59,10 +62,7 @@ export const DepositConfirmButton = ({
         ? TransactionType.UNSPECIFIED // Using UNSPECIFIED instead of THOR_UNMERGE due to DKLS library bug that causes signing to fail
         : undefined
 
-  const chainSpecificQuery = useDepositChainSpecificQuery(
-    transactionType,
-    selectedCoin
-  )
+  const chainSpecificQuery = useDepositChainSpecificQuery(transactionType, coin)
   const config = transactionConfig(coinKey.chain)[action] || {}
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
@@ -76,100 +76,102 @@ export const DepositConfirmButton = ({
 
   const walletCore = useAssertWalletCore()
 
-  const keysignPayload = useMemo(() => {
-    if (chainSpecificQuery.isLoading) return
-
-    // TODO: handle affiliate fee and percentage
-    const publicKey = getPublicKey({
-      chain: coin.chain,
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-    })
-
-    const basePayload: any = {
-      coin: toCommCoin({
-        ...coin,
-        hexPublicKey: toHexPublicKey({
-          publicKey,
+  const keysignPayloadQuery = useTransformQueryData(
+    chainSpecificQuery,
+    useCallback(
+      chainSpecific => {
+        // TODO: handle affiliate fee and percentage
+        const publicKey = getPublicKey({
+          chain: coin.chain,
           walletCore,
-        }),
-      }),
-      memo,
-      blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
-      vaultLocalPartyId: vault.localPartyId,
-      vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-      libType: vault.libType,
-    }
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
 
-    // Build the payload dynamically based on action
-    if (
-      isOneOf(action, [
-        'unstake',
-        'leave',
-        'unbound',
-        'stake',
-        'bond',
-        'ibc_transfer',
-        'switch',
-        'merge',
-        'unmerge_ruji',
-      ])
-    ) {
-      basePayload.toAddress = shouldBePresent(
-        isTonFunction ? validatorAddress : receiver
-      )
-      basePayload.toAmount = toChainAmount(
-        shouldBePresent(amount),
-        coin.decimals
-      ).toString()
-    } else if (isUnmerge) {
-      let contractAddress: string
+        const basePayload: any = {
+          coin: toCommCoin({
+            ...coin,
+            hexPublicKey: toHexPublicKey({
+              publicKey,
+              walletCore,
+            }),
+          }),
+          memo,
+          blockchainSpecific: chainSpecific,
+          vaultLocalPartyId: vault.localPartyId,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+          libType: vault.libType,
+        }
 
-      const reverseLookup = mirrorRecord(
-        kujiraCoinMigratedToThorChainDestinationId
-      )
-      const tokenKey = reverseLookup[coin.id]
-      if (tokenKey) {
-        contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
-      } else {
-        throw new Error(`Unknown unmerge contract for token: ${coin.ticker}`)
-      }
-      // For unmerge, set toAddress and toAmount with the selected coin amount
-      basePayload.toAddress = contractAddress
-      basePayload.toAmount = toChainAmount(
-        shouldBePresent(amount),
-        coin.decimals
-      ).toString()
-    } else if (!isOneOf(action, ['vote'])) {
-      // For other actions that need amount
-      basePayload.toAmount = toChainAmount(
-        shouldBePresent(amount),
-        coin.decimals
-      ).toString()
-    }
+        // Build the payload dynamically based on action
+        if (
+          isOneOf(action, [
+            'unstake',
+            'leave',
+            'unbound',
+            'stake',
+            'bond',
+            'ibc_transfer',
+            'switch',
+            'merge',
+            'unmerge_ruji',
+          ])
+        ) {
+          basePayload.toAddress = shouldBePresent(
+            isTonFunction ? validatorAddress : receiver
+          )
+          basePayload.toAmount = toChainAmount(
+            shouldBePresent(amount),
+            coin.decimals
+          ).toString()
+        } else if (isUnmerge) {
+          let contractAddress: string
 
-    // Create the final payload with all the fields set
-    const finalKeysignPayload = create(KeysignPayloadSchema, basePayload)
+          const reverseLookup = mirrorRecord(
+            kujiraCoinMigratedToThorChainDestinationId
+          )
+          const tokenKey = reverseLookup[coin.id]
+          if (tokenKey) {
+            contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
+          } else {
+            throw new Error(
+              `Unknown unmerge contract for token: ${coin.ticker}`
+            )
+          }
+          // For unmerge, set toAddress and toAmount with the selected coin amount
+          basePayload.toAddress = contractAddress
+          basePayload.toAmount = toChainAmount(
+            shouldBePresent(amount),
+            coin.decimals
+          ).toString()
+        } else if (!isOneOf(action, ['vote'])) {
+          // For other actions that need amount
+          basePayload.toAmount = toChainAmount(
+            shouldBePresent(amount),
+            coin.decimals
+          ).toString()
+        }
 
-    return { keysign: finalKeysignPayload }
-  }, [
-    action,
-    amount,
-    chainSpecificQuery.data,
-    chainSpecificQuery.isLoading,
-    coin,
-    isUnmerge,
-    isTonFunction,
-    memo,
-    receiver,
-    validatorAddress,
-    vault.hexChainCode,
-    vault.libType,
-    vault.localPartyId,
-    vault.publicKeys,
-    walletCore,
-  ])
+        // Create the final payload with all the fields set
+        return { keysign: create(KeysignPayloadSchema, basePayload) }
+      },
+      [
+        action,
+        amount,
+        coin,
+        isTonFunction,
+        isUnmerge,
+        memo,
+        receiver,
+        validatorAddress,
+        vault.hexChainCode,
+        vault.libType,
+        vault.localPartyId,
+        vault.publicKeys,
+        walletCore,
+      ]
+    )
+  )
 
   if (
     (config.requiresAmount && !Number.isFinite(amount)) ||
@@ -179,13 +181,18 @@ export const DepositConfirmButton = ({
     return <Text color="danger">{t('required_field_missing')}</Text>
   }
 
-  if (chainSpecificQuery.error) {
-    return <Text color="danger">{t('failed_to_load')}</Text>
-  }
-
-  if (chainSpecificQuery.isLoading || !keysignPayload) {
-    return <Text>{t('loading')}</Text>
-  }
-
-  return <StartKeysignPrompt keysignPayload={keysignPayload} />
+  return (
+    <MatchQuery
+      value={keysignPayloadQuery}
+      pending={() => <Text>{t('loading')}</Text>}
+      error={error => (
+        <Text>
+          {t('failed_to_load')}: {extractErrorMsg(error)}
+        </Text>
+      )}
+      success={keysignPayload => (
+        <StartKeysignPrompt keysignPayload={keysignPayload} />
+      )}
+    />
+  )
 }

@@ -35,7 +35,7 @@ import { Views } from '@lib/ui/navigation/Views'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 import { ManageReferralsPage } from '../vault/settings/referral/ManageReferralsPage'
-import { ReferralPage } from '../vault/settings/referral/ReferralPage'
+import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 
 export type SharedViewId = Extract<
   CoreViewId,

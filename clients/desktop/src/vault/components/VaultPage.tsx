@@ -1,4 +1,3 @@
-import { UpdateAvailablePopup } from '@clients/desktop/src/components/update-available-popup'
 import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { RefreshVaultBalance } from '@clients/desktop/src/vault/balance/RefreshVaultBalance'
 import { UploadQrPrompt } from '@clients/desktop/src/vault/components/UploadQrPrompt'
@@ -13,6 +12,8 @@ import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderToggleTitle } from '@lib/ui/page/PageHeaderToggleTitle'
+
+import { UpdatePrompt } from '../../versioning/UpdatePrompt'
 
 export const VaultPage = () => {
   const vault = useCurrentVault()
@@ -54,7 +55,7 @@ export const VaultPage = () => {
         <UploadQrPrompt />
         <VaultOverview />
       </VStack>
-      <UpdateAvailablePopup />
+      <UpdatePrompt />
       {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
     </>
   )

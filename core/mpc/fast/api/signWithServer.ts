@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { fastVaultServerUrl } from '../config'
 
@@ -12,18 +12,8 @@ type Input = {
   vault_password: string
 }
 
-export const signWithServer = async (input: Input) => {
-  const url = `${fastVaultServerUrl}/sign`
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(input),
+export const signWithServer = async (input: Input) =>
+  queryUrl(`${fastVaultServerUrl}/sign`, {
+    body: input,
+    responseType: 'none',
   })
-
-  await assertFetchResponse(response)
-
-  return response
-}

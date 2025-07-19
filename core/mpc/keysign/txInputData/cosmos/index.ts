@@ -140,7 +140,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         }
       }
 
-      if (isDeposit || getKeysignSwapPayload(keysignPayload)) {
+      const swapPayload = getKeysignSwapPayload(keysignPayload)
+      if (isDeposit || swapPayload) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
             chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
@@ -166,6 +167,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
+          txMemo: swapPayload ? '' : memo, // both IOS and Android specify memo in the txInputData as well when deposit
         }
       }
 

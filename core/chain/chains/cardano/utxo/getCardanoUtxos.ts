@@ -13,16 +13,10 @@ type CardanoUtxoResponse = Array<{
 export const getCardanoUtxos = async (address: string) => {
   const url = `${cardanoApiUrl}/address_utxos`
 
-  const requestBody = {
-    _addresses: [address],
-  }
-
   const utxos = await queryUrl<CardanoUtxoResponse>(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+    body: {
+      _addresses: [address],
     },
-    body: JSON.stringify(requestBody),
   })
 
   return utxos.map(({ tx_hash, tx_index, value }) =>

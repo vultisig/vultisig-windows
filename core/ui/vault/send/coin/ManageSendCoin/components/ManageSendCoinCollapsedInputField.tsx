@@ -19,13 +19,13 @@ export const ManageSendCoinCollapsedInputField = () => {
   const [
     {
       field,
-      fieldsChecked: { coin: isCoinFieldChecked },
       errors: { coin: coinError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
 
   const isOpen = field === 'coin'
+  const isChecked = coin && !isOpen && !coinError
 
   return (
     <CollapsedCoinInputContainer
@@ -46,7 +46,7 @@ export const ManageSendCoinCollapsedInputField = () => {
         </HStack>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {!coinError && isCoinFieldChecked && !isOpen && <CheckmarkIcon />}
+        {isChecked && <CheckmarkIcon />}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
