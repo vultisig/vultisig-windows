@@ -1000,4 +1000,21 @@ export const it = {
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
   keygen_devices_requirements_info:
     'Scansiona il QR con un altro dispositivo. Si consiglia la configurazione del dispositivo {{recommended}}, {{min}} è sufficiente.',
+  current_expiry: 'Scadenza corrente',
+  referral_annual_fee: 'Quota annuale di riferimento',
+  referral_extension_fee: 'Commissione di estensione del referral',
+  referral_landing_title:
+    '<0>Invita amici</0>. <1>Guadagna premi</1>. Risparmia sulle commissioni.',
+  unmerge_ruji: 'Separare',
+  max_4_characters: 'Massimo 4 caratteri',
+  enter_up_to_4_characters_placeholder: 'Inserisci fino a 4 caratteri',
+  search: 'Ricerca',
+  create_referral_form: 'Crea referral',
+  blockaid_security_scan: 'Scansione di sicurezza Blockaid',
+  transaction_not_scanned:
+    'Transazione non scansionata da <provider></provider>',
+  transaction_scanned: 'Transazione scansionata da <provider></provider>',
+  transaction_has_risk:
+    'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
+  scanning: 'scansione...',
 }

@@ -39,19 +39,21 @@ export const BlockaidTxScanResult = ({
         low={() => (
           <Trans
             i18nKey="transaction_scanned"
-            values={{ provider: <BlockaidLogo /> }}
+            components={{ provider: <BlockaidLogo /> }}
           />
         )}
         medium={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            values={{ riskLevel, provider: <BlockaidLogo /> }}
+            components={{ provider: <BlockaidLogo /> }}
+            values={{ riskLevel }}
           />
         )}
         high={() => (
           <Trans
             i18nKey="transaction_has_risk"
-            values={{ riskLevel, provider: <BlockaidLogo /> }}
+            components={{ provider: <BlockaidLogo /> }}
+            values={{ riskLevel }}
           />
         )}
       />

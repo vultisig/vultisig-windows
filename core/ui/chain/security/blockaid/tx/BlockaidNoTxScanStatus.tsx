@@ -10,7 +10,7 @@ export const BlockaidNoTxScanStatus = () => {
       <TriangleAlertIcon />
       <Trans
         i18nKey="transaction_not_scanned"
-        values={{
+        components={{
           provider: <BlockaidLogo />,
         }}
       />
