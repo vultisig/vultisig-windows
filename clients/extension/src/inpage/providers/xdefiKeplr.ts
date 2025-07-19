@@ -186,7 +186,7 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
-    return new Promise<AminoSignResponse>((resolve,reject) => {
+    return new Promise<AminoSignResponse>((resolve, reject) => {
       this.cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
