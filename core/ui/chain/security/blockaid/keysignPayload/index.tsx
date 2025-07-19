@@ -42,7 +42,7 @@ export const BlockaidKeysignPayloadScan = ({
           {
             from: coin.address,
             to: value.toAddress,
-            value: bigIntToHex(BigInt(value.toAmount)),
+            value: `0x${bigIntToHex(BigInt(value.toAmount))}`,
             data: value.memo || '0x',
           },
         ],
