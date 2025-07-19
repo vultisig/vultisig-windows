@@ -1,11 +1,11 @@
 import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { blake2b } from '@noble/hashes/blake2'
 import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
-import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 
 export const executePolkadotTx: ExecuteTxResolver = async ({
   walletCore,
