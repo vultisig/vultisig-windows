@@ -1,5 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
-import { productRootDomain } from '@core/config'
+import { productRootDomain, rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
@@ -40,9 +40,13 @@ export const useBlockaidTxScanQuery = (input: BlockaidTxScanInput) => {
       }
 
       const { validation } = await queryUrl<BlockaidScanResponse>(
-        'https://api.blockaid.io/v1/ethereum/scan/transaction',
+        `${rootApiUrl}/blockaid/v0/evm/json-rpc/scan`,
         {
           body,
+          headers: {
+            origin: rootApiUrl,
+            'client-id': 'vultisig-desktop-extension',
+          },
         }
       )
 
