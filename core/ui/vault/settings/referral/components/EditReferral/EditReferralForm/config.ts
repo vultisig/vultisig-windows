@@ -8,7 +8,10 @@ const accountCoinSchema = z.object({
 })
 
 export const editReferralSchema = z.object({
-  expiration: z.number().min(1, 'Minimum 1 year').max(10, 'Maximum 10 years'),
+  expiration: z
+    .number()
+    .min(1, 'Minimum 1 year')
+    .max(1000, 'Maximum 1000 years'),
   referralFeeAmount: z.number().min(0.1, 'Minimum 0.1 RUNE'),
   payoutAsset: accountCoinSchema.optional(),
 })

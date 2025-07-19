@@ -41,14 +41,25 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   )
 
   const coins = useCurrentVaultCoins()
-  const prefCoin = coins.find(coin =>
-    areEqualCoins(coin, {
-      chain: nameDetails?.preferred_asset?.split(
-        '.'
-      )[0] as (typeof chainFeeCoin)[keyof typeof chainFeeCoin]['chain'],
-      id: nameDetails?.preferred_asset?.split('.')[1].split('-')[0] || '',
-    })
-  )
+  const prefCoin = useMemo(() => {
+    if (!nameDetails?.preferred_asset) return undefined
+
+    const parts = nameDetails.preferred_asset.split('.')
+    if (parts.length < 2) return undefined
+
+    const [chain, assetPart] = parts
+    const id = assetPart.split('-')[0]
+
+    if (!chain || !id) return undefined
+
+    return coins.find(coin =>
+      areEqualCoins(coin, {
+        chain:
+          chain as (typeof chainFeeCoin)[keyof typeof chainFeeCoin]['chain'],
+        id,
+      })
+    )
+  }, [coins, nameDetails?.preferred_asset])
 
   const currentExpiration = watch('expiration')
   const expirationChanged =
