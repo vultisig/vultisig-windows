@@ -1,5 +1,6 @@
 import { AddressBookStorage } from './addressBook'
 import { BalanceVisibilityStorage } from './balanceVisibility'
+import { BlockaidStorage } from './blockaid'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
@@ -24,6 +25,7 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   AddressBookStorage &
   LanguageStorage &
   BalanceVisibilityStorage &
+  BlockaidStorage &
   OnboardingStorage &
   ReferralsStorage &
   InitialViewStorage &

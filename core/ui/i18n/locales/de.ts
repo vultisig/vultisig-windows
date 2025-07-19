@@ -1006,4 +1006,21 @@ export const de = {
     'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
   keygen_devices_requirements_info:
     'QR mit einem anderen Gerät scannen. {{recommended}}-Geräteeinrichtung empfohlen, {{min}} ist ausreichend.',
+  current_expiry: 'Aktuelles Ablaufdatum',
+  referral_annual_fee: 'Jährliche Empfehlungsgebühr',
+  referral_extension_fee: 'Empfehlungsverlängerungsgebühr',
+  referral_landing_title:
+    '<0>Freunde einladen</0>. <1>Prämien verdienen</1>. Gebühren sparen.',
+  unmerge_ruji: 'Zusammenführung aufheben',
+  max_4_characters: 'Maximal 4 Zeichen',
+  enter_up_to_4_characters_placeholder: 'Geben Sie bis zu 4 Zeichen ein',
+  search: 'Suchen',
+  create_referral_form: 'Empfehlung erstellen',
+  blockaid_security_scan: 'Blockaid-Sicherheitsscan',
+  transaction_not_scanned:
+    'Transaktion nicht von <provider></provider> gescannt',
+  transaction_scanned: 'Transaktion gescannt von <provider></provider>',
+  transaction_has_risk:
+    '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
+  scanning: 'Scannen...',
 }

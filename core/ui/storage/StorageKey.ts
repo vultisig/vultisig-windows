@@ -8,6 +8,7 @@ export enum StorageKey {
   addressBookItems = 'addressBookItems',
   language = 'language',
   isBalanceVisible = 'isVaultBalanceVisible',
+  isBlockaidEnabled = 'isBlockaidEnabled',
   hasFinishedOnboarding = 'hasFinishedOnboarding',
   initialView = 'initialView',
   coinFinderIgnore = 'coinFinderIgnore',

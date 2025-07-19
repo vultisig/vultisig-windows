@@ -1,7 +1,5 @@
 import { ElementType, ReactNode, SVGProps } from 'react'
 
-import { ColorName } from '../theme/getters'
-
 export type OnCloseProp = {
   onClose: () => void
 }
@@ -94,10 +92,7 @@ export type StatusProp<T> = {
   status: T
 }
 
-export type SvgProps = SVGProps<SVGSVGElement> & {
-  color?: ColorName
-  gradient?: boolean
-}
+export type SvgProps = SVGProps<SVGSVGElement>
 
 export type MessageProp = {
   message: ReactNode

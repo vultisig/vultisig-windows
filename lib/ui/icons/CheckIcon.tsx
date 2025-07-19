@@ -1,10 +1,12 @@
 import { LinearGradient } from '@lib/ui/icons/LinearGradient'
 import { SvgProps } from '@lib/ui/props'
-import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
-import styled, { css } from 'styled-components'
 
-const Icon: FC<SvgProps> = ({ gradient, ...props }) => (
+type CheckIconProps = SvgProps & {
+  gradient?: boolean
+}
+
+export const CheckIcon: FC<CheckIconProps> = ({ gradient, ...props }) => (
   <svg
     fill="none"
     height="1em"
@@ -20,12 +22,3 @@ const Icon: FC<SvgProps> = ({ gradient, ...props }) => (
     <path d="M20 6L9 17L4 12" />
   </svg>
 )
-
-export const CheckIcon = styled(Icon)`
-  ${({ color }) =>
-    color
-      ? css`
-          color: ${getColor(color)};
-        `
-      : css``}
-`

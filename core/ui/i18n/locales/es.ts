@@ -1004,4 +1004,20 @@ export const es = {
     'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
   keygen_devices_requirements_info:
     'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
+  current_expiry: 'Vencimiento actual',
+  referral_annual_fee: 'Tarifa anual por referencia',
+  referral_extension_fee: 'Tarifa de extensión de referencia',
+  referral_landing_title:
+    'Invita a tus amigos. Gana recompensas. Ahorra en comisiones.',
+  unmerge_ruji: 'Separar',
+  max_4_characters: 'Máximo 4 caracteres',
+  enter_up_to_4_characters_placeholder: 'Introduzca hasta 4 caracteres',
+  search: 'Buscar',
+  create_referral_form: 'Crear referencia',
+  blockaid_security_scan: 'Análisis de seguridad de Blockaid',
+  transaction_not_scanned: 'Transacción no escaneada por <provider></provider>',
+  transaction_scanned: 'Transacción escaneada por <provider></provider>',
+  transaction_has_risk:
+    'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
+  scanning: 'exploración...',
 }

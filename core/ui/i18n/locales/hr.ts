@@ -977,4 +977,20 @@ export const hr = {
     'Povremeno ćemo vas tražiti da potvrdite svoju lozinku za brzo prijavljivanje kako biste je uvijek zapamtili',
   keygen_devices_requirements_info:
     'Skenirajte QR s drugim uređajem. {{recommended}}-preporučuje se postavljanje uređaja, {{min}} je dovoljno.',
+  current_expiry: 'Trenutni istek',
+  referral_annual_fee: 'Godišnja naknada za preporuku',
+  referral_extension_fee: 'Naknada za produljenje preporuke',
+  referral_landing_title:
+    '<0>Pozovite prijatelje</0>. <1>Osvojite nagrade</1>. Uštedite na naknadama.',
+  unmerge_ruji: 'Razdvoji',
+  max_4_characters: 'Maks. 4 znaka',
+  enter_up_to_4_characters_placeholder: 'Unesite do 4 znaka',
+  search: 'Pretraživanje',
+  create_referral_form: 'Izradi preporuku',
+  blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
+  transaction_not_scanned: 'Transakciju nije skenirao <provider></provider>',
+  transaction_scanned: 'Transakciju skenira <provider></provider>',
+  transaction_has_risk:
+    '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
+  scanning: 'skeniranje...',
 }
