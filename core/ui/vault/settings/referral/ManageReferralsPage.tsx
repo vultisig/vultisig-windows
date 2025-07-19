@@ -59,77 +59,77 @@ export const ManageReferralsPage = () => {
 
   return (
     <ReferralPayoutAssetProvider>
-      <CreateReferralFormProvider>
-        <Match
-          value={uiState}
-          editFriendReferral={() => (
-            <EditFriendReferralForm
-              userReferralName={validNameDetails?.name}
-              onFinish={() =>
-                validNameDetails
-                  ? setUiState('existingReferral')
-                  : setUiState('default')
+      <Match
+        value={uiState}
+        editFriendReferral={() => (
+          <EditFriendReferralForm
+            userReferralName={validNameDetails?.name}
+            onFinish={() =>
+              validNameDetails
+                ? setUiState('existingReferral')
+                : setUiState('default')
+            }
+          />
+        )}
+        existingReferral={() =>
+          validNameDetails ? (
+            <ManageExistingReferral
+              onEditFriendReferral={() => setUiState('editFriendReferral')}
+              onEditReferral={() => setUiState('editReferral')}
+              nameDetails={shouldBePresent(validNameDetails)}
+            />
+          ) : (
+            <CenterAbsolutely>
+              <Spinner size="3em" />
+            </CenterAbsolutely>
+          )
+        }
+        default={() => (
+          <ManageReferralsForm
+            onSaveReferral={newFriendReferral => {
+              if (isFriendReferralLoading) return
+
+              if (friendReferral) {
+                setUiState('editFriendReferral')
+                return
               }
-            />
-          )}
-          existingReferral={() =>
-            validNameDetails ? (
-              <ManageExistingReferral
-                onEditFriendReferral={() => setUiState('editFriendReferral')}
-                onEditReferral={() => setUiState('editReferral')}
-                nameDetails={shouldBePresent(validNameDetails)}
-              />
-            ) : (
-              <CenterAbsolutely>
-                <Spinner size="3em" />
-              </CenterAbsolutely>
-            )
-          }
-          default={() => (
-            <ManageReferralsForm
-              onSaveReferral={newFriendReferral => {
-                if (isFriendReferralLoading) return
 
-                if (friendReferral) {
-                  setUiState('editFriendReferral')
-                  return
-                }
-
-                if (newFriendReferral) {
-                  setFriendReferral(newFriendReferral)
-                }
-              }}
-              onCreateReferral={() => setUiState('create')}
-            />
-          )}
-          create={() => (
+              if (newFriendReferral) {
+                setFriendReferral(newFriendReferral)
+              }
+            }}
+            onCreateReferral={() => setUiState('create')}
+          />
+        )}
+        create={() => (
+          <CreateReferralFormProvider>
             <StepTransition
               from={({ onFinish }) => (
                 <CreateReferralForm onFinish={onFinish} />
               )}
               to={({ onBack }) => <CreateReferralVerify onBack={onBack} />}
             />
-          )}
-          editReferral={() => (
+          </CreateReferralFormProvider>
+        )}
+        editReferral={() => (
+          <EditReferralFormProvider>
             <StepTransition
               from={({ onFinish }) => (
-                <EditReferralFormProvider>
-                  <EditReferralForm
-                    nameDetails={shouldBePresent(validNameDetails)}
-                    onFinish={onFinish}
-                  />
-                </EditReferralFormProvider>
+                <EditReferralForm
+                  nameDetails={shouldBePresent(validNameDetails)}
+                  onFinish={onFinish}
+                />
               )}
               to={({ onBack }) => <EditReferralVerify onBack={onBack} />}
             />
-          )}
-          loading={() => (
-            <CenterAbsolutely>
-              <Spinner size="3em" />
-            </CenterAbsolutely>
-          )}
-        />
-      </CreateReferralFormProvider>
+          </EditReferralFormProvider>
+        )}
+        loading={() => (
+          <CenterAbsolutely>
+            <Spinner size="3em" />
+          </CenterAbsolutely>
+        )}
+      />
     </ReferralPayoutAssetProvider>
   )
 }
