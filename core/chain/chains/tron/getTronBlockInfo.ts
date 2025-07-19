@@ -31,17 +31,10 @@ type BlockChainSpecificTron = {
 export async function getTronBlockInfo(
   coin: Coin
 ): Promise<BlockChainSpecificTron> {
-  const body = {}
-  const dataPayload = JSON.stringify(body)
-
   const url = 'https://tron-rpc.publicnode.com/wallet/getnowblock'
 
   const responseData = await queryUrl<TronBlock>(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: dataPayload,
+    body: {},
   })
 
   const currentTimestampMillis = Math.floor(Date.now())
@@ -113,22 +106,10 @@ async function getTriggerConstantContractFee(
   recipientAddressHex: string,
   amount: bigint
 ): Promise<string> {
-  // 1. Build the function selector
   const functionSelector = 'transfer(address,uint256)'
 
-  // 2. Build the 64-byte parameter from recipient + amount
   const parameter = buildTrc20TransferParameter(recipientAddressHex, amount)
 
-  // 3. Create request body
-  const body = {
-    owner_address: ownerAddressBase58,
-    contract_address: contractAddressBase58,
-    function_selector: functionSelector,
-    parameter: parameter,
-    visible: true,
-  }
-
-  // 4. Make the POST request
   const url = 'https://api.trongrid.io/walletsolidity/triggerconstantcontract'
 
   type TriggerContractResponse = {
@@ -137,15 +118,18 @@ async function getTriggerConstantContractFee(
   }
 
   const responseData = await queryUrl<TriggerContractResponse>(url, {
-    method: 'POST',
     headers: {
       accept: 'application/json',
-      'content-type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: {
+      owner_address: ownerAddressBase58,
+      contract_address: contractAddressBase58,
+      function_selector: functionSelector,
+      parameter: parameter,
+      visible: true,
+    },
   })
 
-  // 5. Calculate fee
   const energyUsed = responseData.energy_used ?? 0
   const energyPenalty = responseData.energy_penalty ?? 0
   const totalEnergy = energyUsed + energyPenalty

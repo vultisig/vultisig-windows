@@ -77,12 +77,10 @@ export const getKyberSwapTx = async ({
   const buildResponse = await queryUrl<KyberSwapBuildResponse>(
     `${getKyberSwapBaseUrl(from.chain)}/route/build`,
     {
-      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'X-Client-Id': kyberSwapAffiliateConfig.source,
       },
-      body: JSON.stringify(buildPayload),
+      body: buildPayload,
     }
   )
 

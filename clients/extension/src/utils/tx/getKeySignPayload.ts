@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
@@ -85,15 +86,32 @@ export const getKeysignPayload = (
           address: transaction.transactionDetails.from,
         } as AccountCoin
 
+        // Create fee settings with gas limit from transaction details if available
+        const effectiveFeeSettings = transaction.transactionDetails.gasSettings
+          ?.gasLimit
+          ? {
+              ...feeSettings,
+              gasLimit: Number(
+                transaction.transactionDetails.gasSettings.gasLimit
+              ),
+            }
+          : feeSettings
+
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: Number(transaction.transactionDetails.amount?.amount),
+          amount: fromChainAmount(
+            Number(transaction.transactionDetails.amount?.amount) || 0,
+            accountCoin.decimals
+          ),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
           transactionType: transaction.transactionDetails.ibcTransaction
             ? TransactionType.IBC_TRANSFER
             : TransactionType.UNSPECIFIED,
-          feeSettings,
+          feeSettings: effectiveFeeSettings,
+          data: transaction.transactionDetails.data as
+            | `0x${string}`
+            | undefined,
         })
         switch (chainSpecific.case) {
           case 'ethereumSpecific': {
@@ -103,9 +121,6 @@ export const getKeysignPayload = (
             chainSpecific.value.priorityFee =
               transaction.transactionDetails.gasSettings
                 ?.maxPriorityFeePerGas ?? chainSpecific.value.priorityFee
-            chainSpecific.value.gasLimit =
-              transaction.transactionDetails.gasSettings?.gasLimit ??
-              chainSpecific.value.gasLimit
             break
           }
           case 'cosmosSpecific': {

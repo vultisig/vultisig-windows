@@ -12,10 +12,8 @@ import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { views } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
-import { getQueryClient } from './query/queryClient'
 import { storage } from './storage'
-
-const queryClient = getQueryClient()
+import { queriesPersister } from './storage/queriesPersister'
 
 const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
   ...storage,
@@ -54,8 +52,9 @@ const App = () => {
     }),
     [vaultCreationMpcLib]
   )
+
   return (
-    <CoreApp coreState={coreState} queryClient={queryClient}>
+    <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />

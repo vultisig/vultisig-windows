@@ -55,10 +55,6 @@ export const ManageReceiverAddressInputField = () => {
       setValue(value)
       setFocusedSendField(state => ({
         ...state,
-        fieldsChecked: {
-          ...state.fieldsChecked,
-          address: !!value,
-        },
         field: isValidAddress({
           address: value,
           walletCore,

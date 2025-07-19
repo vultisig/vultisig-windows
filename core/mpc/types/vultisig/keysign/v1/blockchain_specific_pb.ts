@@ -2,9 +2,9 @@
 // @generated from file vultisig/keysign/v1/blockchain_specific.proto (package vultisig.keysign.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
-import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
-import type { Message } from "@bufbuild/protobuf";
+import type { GenEnum, GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
+import { enumDesc, fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
+import type { Message } from '@bufbuild/protobuf'
 
 /**
  * Describes the file vultisig/keysign/v1/blockchain_specific.proto.
@@ -15,104 +15,110 @@ export const file_vultisig_keysign_v1_blockchain_specific: GenFile = /*@__PURE__
 /**
  * @generated from message vultisig.keysign.v1.UTXOSpecific
  */
-export type UTXOSpecific = Message<"vultisig.keysign.v1.UTXOSpecific"> & {
+export type UTXOSpecific = Message<'vultisig.keysign.v1.UTXOSpecific'> & {
   /**
    * @generated from field: string byte_fee = 1;
    */
-  byteFee: string;
+  byteFee: string
 
   /**
    * @generated from field: bool send_max_amount = 2;
    */
-  sendMaxAmount: boolean;
-};
+  sendMaxAmount: boolean
+}
 
 /**
  * Describes the message vultisig.keysign.v1.UTXOSpecific.
  * Use `create(UTXOSpecificSchema)` to create a new message.
  */
-export const UTXOSpecificSchema: GenMessage<UTXOSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 0);
+export const UTXOSpecificSchema: GenMessage<UTXOSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 0)
 
 /**
  * @generated from message vultisig.keysign.v1.CardanoChainSpecific
  */
-export type CardanoChainSpecific = Message<"vultisig.keysign.v1.CardanoChainSpecific"> & {
-  /**
-   * @generated from field: int64 byte_fee = 1;
-   */
-  byteFee: bigint;
+export type CardanoChainSpecific =
+  Message<'vultisig.keysign.v1.CardanoChainSpecific'> & {
+    /**
+     * @generated from field: int64 byte_fee = 1;
+     */
+    byteFee: bigint
 
-  /**
-   * @generated from field: bool send_max_amount = 2;
-   */
-  sendMaxAmount: boolean;
+    /**
+     * @generated from field: bool send_max_amount = 2;
+     */
+    sendMaxAmount: boolean
 
-  /**
-   * Add TTL parameter
-   *
-   * @generated from field: uint64 ttl = 3;
-   */
-  ttl: bigint;
-};
+    /**
+     * Add TTL parameter
+     *
+     * @generated from field: uint64 ttl = 3;
+     */
+    ttl: bigint
+  }
 
 /**
  * Describes the message vultisig.keysign.v1.CardanoChainSpecific.
  * Use `create(CardanoChainSpecificSchema)` to create a new message.
  */
-export const CardanoChainSpecificSchema: GenMessage<CardanoChainSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 1);
+export const CardanoChainSpecificSchema: GenMessage<CardanoChainSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 1)
 
 /**
  * @generated from message vultisig.keysign.v1.EthereumSpecific
  */
-export type EthereumSpecific = Message<"vultisig.keysign.v1.EthereumSpecific"> & {
-  /**
-   * @generated from field: string max_fee_per_gas_wei = 1;
-   */
-  maxFeePerGasWei: string;
+export type EthereumSpecific =
+  Message<'vultisig.keysign.v1.EthereumSpecific'> & {
+    /**
+     * @generated from field: string max_fee_per_gas_wei = 1;
+     */
+    maxFeePerGasWei: string
 
-  /**
-   * @generated from field: string priority_fee = 2;
-   */
-  priorityFee: string;
+    /**
+     * @generated from field: string priority_fee = 2;
+     */
+    priorityFee: string
 
-  /**
-   * @generated from field: int64 nonce = 3;
-   */
-  nonce: bigint;
+    /**
+     * @generated from field: int64 nonce = 3;
+     */
+    nonce: bigint
 
-  /**
-   * @generated from field: string gas_limit = 4;
-   */
-  gasLimit: string;
-};
+    /**
+     * @generated from field: string gas_limit = 4;
+     */
+    gasLimit: string
+  }
 
 /**
  * Describes the message vultisig.keysign.v1.EthereumSpecific.
  * Use `create(EthereumSpecificSchema)` to create a new message.
  */
-export const EthereumSpecificSchema: GenMessage<EthereumSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 2);
+export const EthereumSpecificSchema: GenMessage<EthereumSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 2)
 
 /**
  * @generated from message vultisig.keysign.v1.THORChainSpecific
  */
-export type THORChainSpecific = Message<"vultisig.keysign.v1.THORChainSpecific"> & {
-  /**
-   * @generated from field: uint64 account_number = 1;
-   */
-  accountNumber: bigint;
+export type THORChainSpecific =
+  Message<'vultisig.keysign.v1.THORChainSpecific'> & {
+    /**
+     * @generated from field: uint64 account_number = 1;
+     */
+    accountNumber: bigint
 
-  /**
-   * @generated from field: uint64 sequence = 2;
-   */
-  sequence: bigint;
+    /**
+     * @generated from field: uint64 sequence = 2;
+     */
+    sequence: bigint
 
-  /**
-   * @generated from field: uint64 fee = 3;
-   */
-  fee: bigint;
+    /**
+     * @generated from field: uint64 fee = 3;
+     */
+    fee: bigint
 
   /**
    * @generated from field: bool is_deposit = 4;
@@ -129,395 +135,410 @@ export type THORChainSpecific = Message<"vultisig.keysign.v1.THORChainSpecific">
  * Describes the message vultisig.keysign.v1.THORChainSpecific.
  * Use `create(THORChainSpecificSchema)` to create a new message.
  */
-export const THORChainSpecificSchema: GenMessage<THORChainSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 3);
+export const THORChainSpecificSchema: GenMessage<THORChainSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 3)
 
 /**
  * @generated from message vultisig.keysign.v1.MAYAChainSpecific
  */
-export type MAYAChainSpecific = Message<"vultisig.keysign.v1.MAYAChainSpecific"> & {
-  /**
-   * @generated from field: uint64 account_number = 1;
-   */
-  accountNumber: bigint;
+export type MAYAChainSpecific =
+  Message<'vultisig.keysign.v1.MAYAChainSpecific'> & {
+    /**
+     * @generated from field: uint64 account_number = 1;
+     */
+    accountNumber: bigint
 
-  /**
-   * @generated from field: uint64 sequence = 2;
-   */
-  sequence: bigint;
+    /**
+     * @generated from field: uint64 sequence = 2;
+     */
+    sequence: bigint
 
-  /**
-   * @generated from field: bool is_deposit = 3;
-   */
-  isDeposit: boolean;
-};
+    /**
+     * @generated from field: bool is_deposit = 3;
+     */
+    isDeposit: boolean
+  }
 
 /**
  * Describes the message vultisig.keysign.v1.MAYAChainSpecific.
  * Use `create(MAYAChainSpecificSchema)` to create a new message.
  */
-export const MAYAChainSpecificSchema: GenMessage<MAYAChainSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 4);
+export const MAYAChainSpecificSchema: GenMessage<MAYAChainSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 4)
 
 /**
  * @generated from message vultisig.keysign.v1.CosmosSpecific
  */
-export type CosmosSpecific = Message<"vultisig.keysign.v1.CosmosSpecific"> & {
+export type CosmosSpecific = Message<'vultisig.keysign.v1.CosmosSpecific'> & {
   /**
    * @generated from field: uint64 account_number = 1;
    */
-  accountNumber: bigint;
+  accountNumber: bigint
 
   /**
    * @generated from field: uint64 sequence = 2;
    */
-  sequence: bigint;
+  sequence: bigint
 
   /**
    * @generated from field: uint64 gas = 3;
    */
-  gas: bigint;
+  gas: bigint
 
   /**
    * @generated from field: vultisig.keysign.v1.TransactionType transaction_type = 4;
    */
-  transactionType: TransactionType;
+  transactionType: TransactionType
 
   /**
    * @generated from field: optional vultisig.keysign.v1.CosmosIbcDenomTrace ibc_denom_traces = 5;
    */
-  ibcDenomTraces?: CosmosIbcDenomTrace;
+  ibcDenomTraces?: CosmosIbcDenomTrace
 
   /**
    * @generated from field: optional vultisig.keysign.v1.CosmosIbcInfo ibc_info = 6;
    */
-  ibcInfo?: CosmosIbcInfo;
-};
+  ibcInfo?: CosmosIbcInfo
+}
 
 /**
  * Describes the message vultisig.keysign.v1.CosmosSpecific.
  * Use `create(CosmosSpecificSchema)` to create a new message.
  */
-export const CosmosSpecificSchema: GenMessage<CosmosSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 5);
+export const CosmosSpecificSchema: GenMessage<CosmosSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 5)
 
 /**
  * @generated from message vultisig.keysign.v1.CosmosIbcDenomTrace
  */
-export type CosmosIbcDenomTrace = Message<"vultisig.keysign.v1.CosmosIbcDenomTrace"> & {
-  /**
-   * @generated from field: string path = 1;
-   */
-  path: string;
+export type CosmosIbcDenomTrace =
+  Message<'vultisig.keysign.v1.CosmosIbcDenomTrace'> & {
+    /**
+     * @generated from field: string path = 1;
+     */
+    path: string
 
-  /**
-   * @generated from field: string base_denom = 2;
-   */
-  baseDenom: string;
+    /**
+     * @generated from field: string base_denom = 2;
+     */
+    baseDenom: string
 
-  /**
-   * @generated from field: string latest_block = 3;
-   */
-  latestBlock: string;
-};
+    /**
+     * @generated from field: string latest_block = 3;
+     */
+    latestBlock: string
+  }
 
 /**
  * Describes the message vultisig.keysign.v1.CosmosIbcDenomTrace.
  * Use `create(CosmosIbcDenomTraceSchema)` to create a new message.
  */
-export const CosmosIbcDenomTraceSchema: GenMessage<CosmosIbcDenomTrace> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 6);
+export const CosmosIbcDenomTraceSchema: GenMessage<CosmosIbcDenomTrace> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 6)
 
 /**
  * @generated from message vultisig.keysign.v1.CosmosIbcInfo
  */
-export type CosmosIbcInfo = Message<"vultisig.keysign.v1.CosmosIbcInfo"> & {
+export type CosmosIbcInfo = Message<'vultisig.keysign.v1.CosmosIbcInfo'> & {
   /**
    * @generated from field: string source_port = 1;
    */
-  sourcePort: string;
+  sourcePort: string
 
   /**
    * @generated from field: string source_channel = 2;
    */
-  sourceChannel: string;
+  sourceChannel: string
 
   /**
    * @generated from field: uint64 revision_number = 3;
    */
-  revisionNumber: bigint;
+  revisionNumber: bigint
 
   /**
    * @generated from field: uint64 revision_height = 4;
    */
-  revisionHeight: bigint;
-};
+  revisionHeight: bigint
+}
 
 /**
  * Describes the message vultisig.keysign.v1.CosmosIbcInfo.
  * Use `create(CosmosIbcInfoSchema)` to create a new message.
  */
-export const CosmosIbcInfoSchema: GenMessage<CosmosIbcInfo> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 7);
+export const CosmosIbcInfoSchema: GenMessage<CosmosIbcInfo> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 7)
 
 /**
  * @generated from message vultisig.keysign.v1.SolanaSpecific
  */
-export type SolanaSpecific = Message<"vultisig.keysign.v1.SolanaSpecific"> & {
+export type SolanaSpecific = Message<'vultisig.keysign.v1.SolanaSpecific'> & {
   /**
    * @generated from field: string recent_block_hash = 1;
    */
-  recentBlockHash: string;
+  recentBlockHash: string
 
   /**
    * @generated from field: string priority_fee = 2;
    */
-  priorityFee: string;
+  priorityFee: string
 
   /**
    * @generated from field: optional string from_token_associated_address = 3;
    */
-  fromTokenAssociatedAddress?: string;
+  fromTokenAssociatedAddress?: string
 
   /**
    * @generated from field: optional string to_token_associated_address = 4;
    */
-  toTokenAssociatedAddress?: string;
+  toTokenAssociatedAddress?: string
 
   /**
    * @generated from field: optional bool program_id = 5;
    */
-  programId?: boolean;
-};
+  programId?: boolean
+}
 
 /**
  * Describes the message vultisig.keysign.v1.SolanaSpecific.
  * Use `create(SolanaSpecificSchema)` to create a new message.
  */
-export const SolanaSpecificSchema: GenMessage<SolanaSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 8);
+export const SolanaSpecificSchema: GenMessage<SolanaSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 8)
 
 /**
  * @generated from message vultisig.keysign.v1.PolkadotSpecific
  */
-export type PolkadotSpecific = Message<"vultisig.keysign.v1.PolkadotSpecific"> & {
-  /**
-   * @generated from field: string recent_block_hash = 1;
-   */
-  recentBlockHash: string;
+export type PolkadotSpecific =
+  Message<'vultisig.keysign.v1.PolkadotSpecific'> & {
+    /**
+     * @generated from field: string recent_block_hash = 1;
+     */
+    recentBlockHash: string
 
-  /**
-   * @generated from field: uint64 nonce = 2;
-   */
-  nonce: bigint;
+    /**
+     * @generated from field: uint64 nonce = 2;
+     */
+    nonce: bigint
 
-  /**
-   * @generated from field: string current_block_number = 3;
-   */
-  currentBlockNumber: string;
+    /**
+     * @generated from field: string current_block_number = 3;
+     */
+    currentBlockNumber: string
 
-  /**
-   * @generated from field: uint32 spec_version = 4;
-   */
-  specVersion: number;
+    /**
+     * @generated from field: uint32 spec_version = 4;
+     */
+    specVersion: number
 
-  /**
-   * @generated from field: uint32 transaction_version = 5;
-   */
-  transactionVersion: number;
+    /**
+     * @generated from field: uint32 transaction_version = 5;
+     */
+    transactionVersion: number
 
-  /**
-   * @generated from field: string genesis_hash = 6;
-   */
-  genesisHash: string;
-};
+    /**
+     * @generated from field: string genesis_hash = 6;
+     */
+    genesisHash: string
+  }
 
 /**
  * Describes the message vultisig.keysign.v1.PolkadotSpecific.
  * Use `create(PolkadotSpecificSchema)` to create a new message.
  */
-export const PolkadotSpecificSchema: GenMessage<PolkadotSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 9);
+export const PolkadotSpecificSchema: GenMessage<PolkadotSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 9)
 
 /**
  * @generated from message vultisig.keysign.v1.SuiCoin
  */
-export type SuiCoin = Message<"vultisig.keysign.v1.SuiCoin"> & {
+export type SuiCoin = Message<'vultisig.keysign.v1.SuiCoin'> & {
   /**
    * @generated from field: string coin_type = 1;
    */
-  coinType: string;
+  coinType: string
 
   /**
    * @generated from field: string coin_object_id = 2;
    */
-  coinObjectId: string;
+  coinObjectId: string
 
   /**
    * @generated from field: string version = 3;
    */
-  version: string;
+  version: string
 
   /**
    * @generated from field: string digest = 4;
    */
-  digest: string;
+  digest: string
 
   /**
    * @generated from field: string balance = 5;
    */
-  balance: string;
+  balance: string
 
   /**
    * @generated from field: string previous_transaction = 6;
    */
-  previousTransaction: string;
-};
+  previousTransaction: string
+}
 
 /**
  * Describes the message vultisig.keysign.v1.SuiCoin.
  * Use `create(SuiCoinSchema)` to create a new message.
  */
-export const SuiCoinSchema: GenMessage<SuiCoin> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 10);
+export const SuiCoinSchema: GenMessage<SuiCoin> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 10)
 
 /**
  * @generated from message vultisig.keysign.v1.SuiSpecific
  */
-export type SuiSpecific = Message<"vultisig.keysign.v1.SuiSpecific"> & {
+export type SuiSpecific = Message<'vultisig.keysign.v1.SuiSpecific'> & {
   /**
    * @generated from field: string reference_gas_price = 1;
    */
-  referenceGasPrice: string;
+  referenceGasPrice: string
 
   /**
    * @generated from field: repeated vultisig.keysign.v1.SuiCoin coins = 2;
    */
-  coins: SuiCoin[];
-};
+  coins: SuiCoin[]
+}
 
 /**
  * Describes the message vultisig.keysign.v1.SuiSpecific.
  * Use `create(SuiSpecificSchema)` to create a new message.
  */
-export const SuiSpecificSchema: GenMessage<SuiSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 11);
+export const SuiSpecificSchema: GenMessage<SuiSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 11)
 
 /**
  * @generated from message vultisig.keysign.v1.TonSpecific
  */
-export type TonSpecific = Message<"vultisig.keysign.v1.TonSpecific"> & {
+export type TonSpecific = Message<'vultisig.keysign.v1.TonSpecific'> & {
   /**
    * @generated from field: uint64 sequence_number = 1;
    */
-  sequenceNumber: bigint;
+  sequenceNumber: bigint
 
   /**
    * @generated from field: uint64 expire_at = 2;
    */
-  expireAt: bigint;
+  expireAt: bigint
 
   /**
    * @generated from field: bool bounceable = 3;
    */
-  bounceable: boolean;
+  bounceable: boolean
 
   /**
    * @generated from field: bool send_max_amount = 4;
    */
-  sendMaxAmount: boolean;
-};
+  sendMaxAmount: boolean
+}
 
 /**
  * Describes the message vultisig.keysign.v1.TonSpecific.
  * Use `create(TonSpecificSchema)` to create a new message.
  */
-export const TonSpecificSchema: GenMessage<TonSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 12);
+export const TonSpecificSchema: GenMessage<TonSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 12)
 
 /**
  * @generated from message vultisig.keysign.v1.RippleSpecific
  */
-export type RippleSpecific = Message<"vultisig.keysign.v1.RippleSpecific"> & {
+export type RippleSpecific = Message<'vultisig.keysign.v1.RippleSpecific'> & {
   /**
    * @generated from field: uint64 sequence = 1;
    */
-  sequence: bigint;
+  sequence: bigint
 
   /**
    * @generated from field: uint64 gas = 2;
    */
-  gas: bigint;
+  gas: bigint
 
   /**
    * @generated from field: uint64 last_ledger_sequence = 3;
    */
-  lastLedgerSequence: bigint;
-};
+  lastLedgerSequence: bigint
+}
 
 /**
  * Describes the message vultisig.keysign.v1.RippleSpecific.
  * Use `create(RippleSpecificSchema)` to create a new message.
  */
-export const RippleSpecificSchema: GenMessage<RippleSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 13);
+export const RippleSpecificSchema: GenMessage<RippleSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 13)
 
 /**
  * @generated from message vultisig.keysign.v1.TronSpecific
  */
-export type TronSpecific = Message<"vultisig.keysign.v1.TronSpecific"> & {
+export type TronSpecific = Message<'vultisig.keysign.v1.TronSpecific'> & {
   /**
    * @generated from field: uint64 timestamp = 1;
    */
-  timestamp: bigint;
+  timestamp: bigint
 
   /**
    * @generated from field: uint64 expiration = 2;
    */
-  expiration: bigint;
+  expiration: bigint
 
   /**
    * @generated from field: uint64 block_header_timestamp = 3;
    */
-  blockHeaderTimestamp: bigint;
+  blockHeaderTimestamp: bigint
 
   /**
    * @generated from field: uint64 block_header_number = 4;
    */
-  blockHeaderNumber: bigint;
+  blockHeaderNumber: bigint
 
   /**
    * @generated from field: uint64 block_header_version = 5;
    */
-  blockHeaderVersion: bigint;
+  blockHeaderVersion: bigint
 
   /**
    * @generated from field: string block_header_tx_trie_root = 6;
    */
-  blockHeaderTxTrieRoot: string;
+  blockHeaderTxTrieRoot: string
 
   /**
    * @generated from field: string block_header_parent_hash = 7;
    */
-  blockHeaderParentHash: string;
+  blockHeaderParentHash: string
 
   /**
    * @generated from field: string block_header_witness_address = 8;
    */
-  blockHeaderWitnessAddress: string;
+  blockHeaderWitnessAddress: string
 
   /**
    * @generated from field: uint64 gas_estimation = 9;
    */
-  gasEstimation: bigint;
-};
+  gasEstimation: bigint
+}
 
 /**
  * Describes the message vultisig.keysign.v1.TronSpecific.
  * Use `create(TronSpecificSchema)` to create a new message.
  */
-export const TronSpecificSchema: GenMessage<TronSpecific> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 14);
+export const TronSpecificSchema: GenMessage<TronSpecific> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_blockchain_specific, 14)
 
 /**
  * @generated from enum vultisig.keysign.v1.TransactionType
@@ -572,6 +593,6 @@ export enum TransactionType {
 /**
  * Describes the enum vultisig.keysign.v1.TransactionType.
  */
-export const TransactionTypeSchema: GenEnum<TransactionType> = /*@__PURE__*/
-  enumDesc(file_vultisig_keysign_v1_blockchain_specific, 0);
-
+export const TransactionTypeSchema: GenEnum<TransactionType> =
+  /*@__PURE__*/
+  enumDesc(file_vultisig_keysign_v1_blockchain_specific, 0)

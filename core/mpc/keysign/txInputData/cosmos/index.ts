@@ -146,9 +146,33 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             }),
           ],
         }
+      } else if (memo?.startsWith('unmerge:')) {
+        const memoParts = memo.toLowerCase().split(':')
+        if (memoParts.length !== 3 || !memoParts[2]) {
+          throw new Error(
+            'Invalid unmerge memo format. Expected: unmerge:<denom>:<rawShares>'
+          )
+        }
+
+        const [, , rawShares] = memoParts
+
+        return {
+          messages: [
+            TW.Cosmos.Proto.Message.create({
+              wasmExecuteContractGeneric:
+                TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
+                  senderAddress: coin.address,
+                  contractAddress: toAddress,
+                  executeMsg: `{"withdraw":{"share_amount":"${rawShares}"}}`,
+                  coins: [],
+                }),
+            }),
+          ],
+        }
       }
 
-      if (isDeposit || getKeysignSwapPayload(keysignPayload)) {
+      const swapPayload = getKeysignSwapPayload(keysignPayload)
+      if (isDeposit || swapPayload) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
             chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
@@ -174,6 +198,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
+          txMemo: swapPayload ? '' : memo, // both IOS and Android specify memo in the txInputData as well when deposit
         }
       }
 

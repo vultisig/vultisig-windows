@@ -12,6 +12,9 @@ export const en = {
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
+  current_expiry: 'Current expiry',
+  referral_annual_fee: 'Referral annual fee',
+  referral_extension_fee: 'Referral extension fee',
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
@@ -168,6 +171,8 @@ export const en = {
   vault_name_description: 'You can always rename your vault later in settings',
   join: 'Join',
   verify_password_periodic_message: 'Verify your Server Share Password',
+  verify_password_periodic_message_description:
+    'We will periodically ask you to verify your fast sign password so you will always remember it',
   done: 'Done',
   and: 'and',
   approve: 'Approve',
@@ -406,8 +411,8 @@ export const en = {
   scan_with_device_index: 'Scan with {{index}} device',
   scan_with_device_name: 'Scan with {{name}}',
   localMode: "You're in local mode",
-  scanQrInstruction:
-    'Scan QR with other device. {{max}}-device setup recommended, {{min}} is sufficient.',
+  keygen_devices_requirements_info:
+    'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   devices: 'Devices',
   waitingOnDevices: 'Waiting on devices...',
   switchToInternet: 'Switch back to internet mode',
@@ -446,6 +451,7 @@ export const en = {
   chain: 'Chain',
   overview: 'Overview',
   no_tokens_found: 'No tokens found. Add tokens under the desired Chain.',
+  no_mergeable_tokens_found: 'No mergeable tokens found',
   signing_transaction: 'Signing Transaction',
   select_asset: 'Select asset',
   optional: 'optional',
@@ -472,7 +478,6 @@ export const en = {
   vault_missing_public_key: 'Vault missing public key',
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
-  // Referrals
   title_1: 'Referral',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
@@ -483,6 +488,19 @@ export const en = {
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
+  unmerge_ruji: 'Unmerge',
+  referral_reg_fee: 'Registration Fee',
+  create_referral: 'Create Referral',
+  select: 'Select',
+  pick_referral_code: 'Pick Referral Code',
+  max_4_characters: 'Max 4 characters',
+  referral_status: 'Status',
+  referral_costs: 'Costs',
+  set_expiration: 'Set Expiration (in years)',
+  expiration_date: 'Expiration Date',
+  choose_payout_asset: 'Choose payout asset',
+  enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
+  search: 'Search',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
   referrals_summary: {
@@ -508,8 +526,7 @@ export const en = {
   get_started: 'Get Started',
   use_referral_code: 'Use Referral Code',
   enter_referral_code_placeholder: 'Enter Referral Code',
-  create_referral: 'Create referral',
-  // Referrals end
+  create_referral_form: 'Create referral',
   secureVault: 'Secure Vault',
   active: 'Active',
   sayGoodbyeTo: 'Say goodbye to',
@@ -761,6 +778,7 @@ export const en = {
   thorchain_address: 'THORChain Address',
   unstake: 'Unstake',
   merge: 'Merge',
+  unmerge: 'Unmerge',
   switch: 'Switch',
   method: 'Method',
   message: 'Message',

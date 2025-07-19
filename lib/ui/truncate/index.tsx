@@ -9,6 +9,7 @@ const StyledTruncate = styled.span`
 const StyledMiddleTruncate = styled.span<{ width?: number }>`
   display: block;
   position: relative;
+  white-space: nowrap;
   ${({ width }) => {
     return width
       ? css`
