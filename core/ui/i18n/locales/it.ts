@@ -11,6 +11,20 @@ export const it = {
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
   incorrect_passcode: 'Codice errato',
+  create_referral_title: 'Crea referral',
+  use_referral_code: 'Usa codice referral',
+  save_code: 'Salva codice',
+  used_referral_error:
+    'Il codice referral utilizzato non può essere lo stesso del tuo codice referral',
+  your_referral_code: 'Il tuo codice referral',
+  collected_rewards: 'Ricompense raccolte',
+  expires_on: 'Scade il',
+  edit_referral: 'Modifica referral',
+  edit_friends_referral: "Modifica referral dell'amico",
+  add_referral_code: 'Aggiungi codice referral',
+  your_friends_referral_code: 'Codice referral del tuo amico',
+  change_your_friends_referral:
+    'Cambia il codice referral del tuo amico usato per gli scambi',
   passcodes_do_not_match: 'I codici non corrispondono',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
@@ -87,7 +101,6 @@ export const it = {
   referral_program: 'Programma di Referral',
   how_it_works: 'Come funziona',
   get_started: 'Inizia ora',
-  use_referral_code: 'Usa Codice Referral',
   enter_referral_code_placeholder: 'Inserisci Codice Referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',

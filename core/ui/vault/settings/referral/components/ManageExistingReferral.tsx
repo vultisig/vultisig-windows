@@ -1,9 +1,11 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -54,6 +56,11 @@ export const ManageExistingReferral = ({
               })
             }
           />
+        }
+        secondaryControls={
+          <IconButton size="sm" onClick={onEditReferral}>
+            <PencilIcon />
+          </IconButton>
         }
         title={t('title_1')}
       />
