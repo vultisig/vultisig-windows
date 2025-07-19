@@ -100,8 +100,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         keysignPayload.contractPayload.case === 'wasmExecuteContractPayload'
       ) {
         const contractPayload = keysignPayload.contractPayload.value
-        console.log("contractPayload", contractPayload);
-        
         const formattedMessage = contractPayload.executeMsg
           .replace(/^({)/, '$1 ')
           .replace(/(})$/, ' $1')
@@ -257,7 +255,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     messages,
     fee: getFee(),
   })
-  console.log("input:", input);
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }

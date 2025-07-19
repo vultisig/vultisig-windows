@@ -44,8 +44,6 @@ export const getKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
-        console.log('getting keysign payload for transaction:', transaction)
-
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
@@ -202,13 +200,10 @@ export const getKeysignPayload = (
             CosmosMsgType.MSG_EXECUTE_CONTRACT
           )
         ) {
-          const msg = 
-            transaction.transactionDetails.data.replace(
-              `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
-              ''
-            )
-          
-          console.log('msg', msg)
+          const msg = transaction.transactionDetails.data.replace(
+            `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
+            ''
+          )
 
           contractPayload = create(WasmExecuteContractPayloadSchema, {
             contractAddress: transaction.transactionDetails.to,
@@ -216,7 +211,6 @@ export const getKeysignPayload = (
             senderAddress: transaction.transactionDetails.from,
             coins: [coin],
           })
-          console.log('contractPayload', contractPayload)
         }
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
@@ -234,7 +228,6 @@ export const getKeysignPayload = (
             ? { case: 'wasmExecuteContractPayload', value: contractPayload }
             : undefined,
         })
-        console.log('keysignPayload', keysignPayload)
 
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
           keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
