@@ -23,7 +23,7 @@ const Container = styled(BlockaidTxStatusContainer)<BlockaidTxScanResultProps>`
     })};
   }
   color: ${matchColor('riskLevel', {
-    low: 'regular',
+    low: 'text',
     medium: 'idle',
     high: 'danger',
   })};
