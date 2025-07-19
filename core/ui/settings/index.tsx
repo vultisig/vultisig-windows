@@ -38,7 +38,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ManageBlockaid } from '../chain/security/blockaid/manage'
+import { ManageBlockaid } from '../chain/security/blockaid/ManageBlockaid'
 import { featureFlags } from '../config'
 
 type ExtensionSettings = {

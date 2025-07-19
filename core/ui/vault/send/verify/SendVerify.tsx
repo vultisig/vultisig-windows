@@ -33,8 +33,8 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BlockaidKeysignPayloadScan } from '../../../chain/security/blockaid/keysignPayload/scan'
-import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/statusContainer'
+import { BlockaidKeysignPayloadScan } from '../../../chain/security/blockaid/keysignPayload/BlockaidKeysignPayloadScan'
+import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/BlockaidTxStatusContainer'
 import { useIsBlockaidEnabled } from '../../../storage/blockaid'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
 

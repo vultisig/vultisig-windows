@@ -5,23 +5,16 @@ import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { matchColor } from '@lib/ui/theme/getters'
 import { Trans } from 'react-i18next'
-import { styled } from 'styled-components'
+import { styled, useTheme } from 'styled-components'
 
-import { BlockaidLogo } from '../logo'
-import { BlockaidTxStatusContainer } from './statusContainer'
+import { BlockaidLogo } from '../BlockaidLogo'
+import { BlockaidTxStatusContainer } from './BlockaidTxStatusContainer'
 
 type BlockaidTxScanResultProps = {
   riskLevel: TxRiskLevel
 }
 
 const Container = styled(BlockaidTxStatusContainer)<BlockaidTxScanResultProps>`
-  &:first-child {
-    color: ${matchColor('riskLevel', {
-      low: 'success',
-      medium: 'idle',
-      high: 'danger',
-    })};
-  }
   color: ${matchColor('riskLevel', {
     low: 'text',
     medium: 'idle',
@@ -29,18 +22,18 @@ const Container = styled(BlockaidTxStatusContainer)<BlockaidTxScanResultProps>`
   })};
 `
 
-const riskLevelIcon: Record<TxRiskLevel, React.ReactNode> = {
-  low: <CheckIcon />,
-  medium: <CircleAlertIcon />,
-  high: <TriangleAlertIcon />,
-}
-
 export const BlockaidTxScanResult = ({
   riskLevel,
 }: BlockaidTxScanResultProps) => {
+  const { colors } = useTheme()
   return (
     <Container riskLevel={riskLevel}>
-      {riskLevelIcon[riskLevel]}
+      <Match
+        value={riskLevel}
+        low={() => <CheckIcon color={colors.success.toCssValue()} />}
+        medium={() => <CircleAlertIcon color={colors.idle.toCssValue()} />}
+        high={() => <TriangleAlertIcon color={colors.danger.toCssValue()} />}
+      />
       <Match
         value={riskLevel}
         low={() => (

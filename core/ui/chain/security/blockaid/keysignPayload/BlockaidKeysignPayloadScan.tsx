@@ -2,9 +2,9 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
-import { BlockaidNoTxScanStatus } from '../tx/noScanStatus'
-import { BlockaidTxScan } from '../tx/scan'
-import { keysignPayloadToBlockaidTxScanInput } from './core/toBlockaidTxScanInput'
+import { BlockaidNoTxScanStatus } from '../tx/BlockaidNoTxScanStatus'
+import { BlockaidTxScan } from '../tx/BlockaidTxScan'
+import { keysignPayloadToBlockaidTxScanInput } from './core/keysignPayloadToBlockaidTxScanInput'
 
 export const BlockaidKeysignPayloadScan = ({
   value,
