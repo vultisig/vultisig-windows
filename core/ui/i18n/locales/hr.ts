@@ -10,6 +10,20 @@ export const hr = {
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
+  create_referral_title: 'Stvori preporuku',
+  use_referral_code: 'Upotrijebi kod preporuke',
+  save_code: 'Spremi kod',
+  used_referral_error:
+    'Iskorišteni kod preporuke ne može biti isti kao vaš kod preporuke',
+  your_referral_code: 'Vaš kod preporuke',
+  collected_rewards: 'Prikupljene nagrade',
+  expires_on: 'Istječe',
+  edit_referral: 'Uredi preporuku',
+  edit_friends_referral: 'Uredi prijateljevu preporuku',
+  add_referral_code: 'Dodaj kod preporuke',
+  your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
+  change_your_friends_referral:
+    'Promijeni kod preporuke vašeg prijatelja korišten za zamjene',
   incorrect_passcode: 'Netočan pristupni kod',
   passcodes_do_not_match: 'Kodovi se ne podudaraju',
   tx_hash: 'Hash transakcije',
@@ -63,7 +77,6 @@ export const hr = {
   referral_program: 'Program Preporuka',
   how_it_works: 'Kako funkcionira',
   get_started: 'Započni',
-  use_referral_code: 'Iskoristi Kod Preporuke',
   enter_referral_code_placeholder: 'Unesi Kod Preporuke',
   start_transaction: 'Pokreni transakciju',
   percentage_limit: 'Postotak mora biti između 0 i 100',

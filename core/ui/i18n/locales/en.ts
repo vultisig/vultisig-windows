@@ -18,7 +18,7 @@ export const en = {
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
-  // NEW REFERRALS TRANSLATIONS START
+  create_referral_title: 'Create Referral',
   use_referral_code: 'Use referral Code',
   save_code: 'Save code',
   used_referral_error:
@@ -31,7 +31,6 @@ export const en = {
   add_referral_code: 'Add Referral Code',
   your_friends_referral_code: 'Your friends referral code',
   change_your_friends_referral: 'Change friends Referral Code used for swaps',
-  // NEW REFERRALS TRANSLATIONS END
   plugin_policy_desc:
     'The verifier will always check that only these policies get executed. Giving you the security that only the authorized will get signed.',
   plugin_policy_heading: 'This plugin will automatically access',
