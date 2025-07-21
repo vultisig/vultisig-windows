@@ -1,3 +1,4 @@
-export const rootApiUrl = 'https://api.vultisig.com'
-export const deepLinkBaseUrl = 'vultisig://vultisig.com'
+export const productRootDomain = 'vultisig.com'
+export const rootApiUrl = `https://api.${productRootDomain}`
+export const deepLinkBaseUrl = `vultisig://${productRootDomain}`
 export const productName = 'Vultisig'
