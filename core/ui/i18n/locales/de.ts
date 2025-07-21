@@ -14,6 +14,20 @@ export const de = {
   onboarding_description_4:
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   moreInfo: 'Mehr Info',
+  create_referral_title: 'Empfehlung erstellen',
+  use_referral_code: 'Empfehlungscode verwenden',
+  save_code: 'Code speichern',
+  used_referral_error:
+    'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
+  your_referral_code: 'Dein Empfehlungscode',
+  collected_rewards: 'Gesammelte Belohnungen',
+  expires_on: 'Läuft ab am',
+  edit_referral: 'Empfehlung bearbeiten',
+  edit_friends_referral: 'Empfehlung eines Freundes bearbeiten',
+  add_referral_code: 'Empfehlungscode hinzufügen',
+  your_friends_referral_code: 'Empfehlungscode deines Freundes',
+  change_your_friends_referral:
+    'Ändere den Empfehlungs­code deines Freundes für Swaps',
   incorrect_passcode: 'Falscher Passcode',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
@@ -58,7 +72,6 @@ export const de = {
   referral_program: 'Empfehlungsprogramm',
   how_it_works: "So funktioniert's",
   get_started: 'Loslegen',
-  use_referral_code: 'Empfehlungscode verwenden',
   enter_referral_code_placeholder: 'Empfehlungscode eingeben',
   create_referral: 'Empfehlung erstellen',
   send_overview: 'Übersicht senden',
@@ -1006,4 +1019,21 @@ export const de = {
     'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
   keygen_devices_requirements_info:
     'QR mit einem anderen Gerät scannen. {{recommended}}-Geräteeinrichtung empfohlen, {{min}} ist ausreichend.',
+  current_expiry: 'Aktuelles Ablaufdatum',
+  referral_annual_fee: 'Jährliche Empfehlungsgebühr',
+  referral_extension_fee: 'Empfehlungsverlängerungsgebühr',
+  referral_landing_title:
+    '<0>Freunde einladen</0>. <1>Prämien verdienen</1>. Gebühren sparen.',
+  unmerge_ruji: 'Zusammenführung aufheben',
+  max_4_characters: 'Maximal 4 Zeichen',
+  enter_up_to_4_characters_placeholder: 'Geben Sie bis zu 4 Zeichen ein',
+  search: 'Suchen',
+  create_referral_form: 'Empfehlung erstellen',
+  blockaid_security_scan: 'Blockaid-Sicherheitsscan',
+  transaction_not_scanned:
+    'Transaktion nicht von <provider></provider> gescannt',
+  transaction_scanned: 'Transaktion gescannt von <provider></provider>',
+  transaction_has_risk:
+    '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
+  scanning: 'Scannen...',
 }

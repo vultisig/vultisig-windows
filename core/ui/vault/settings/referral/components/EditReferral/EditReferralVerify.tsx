@@ -32,6 +32,7 @@ import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
 import { buildEditReferralMemo } from '../../utils/buildReferralMemos'
 import { ReferralPageWrapper } from '../Referrals.styled'
+import { normaliseChainToMatchPoolChain } from './EditReferralForm/config'
 
 export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
@@ -41,12 +42,10 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
 
-  const { address } = shouldBePresent(
-    useCurrentVaultCoin({
-      chain: chainFeeCoin.THORChain.chain,
-      id: 'RUNE',
-    })
-  )
+  const { address } = useCurrentVaultCoin({
+    chain: chainFeeCoin.THORChain.chain,
+    id: 'RUNE',
+  })
 
   const { data: allowedPools = [] } = useActivePoolsQuery()
 
@@ -60,9 +59,14 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   }
 
   const preferredAsset = allowedPools.find(pool => {
-    const [chain, tail] = pool.asset.split('.')
-    const ticker = tail.split('-')[0]
-    return chain === coin.chain && ticker === coin.ticker
+    const [poolChain, tail] = pool.asset.split('.')
+    const poolTicker = tail.split('-')[0]
+
+    return (
+      normaliseChainToMatchPoolChain(poolChain) ===
+        normaliseChainToMatchPoolChain(coin.chain) &&
+      poolTicker.toUpperCase() === coin.ticker.toUpperCase()
+    )
   })?.asset
 
   const memo = buildEditReferralMemo({

@@ -38,6 +38,7 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ManageBlockaid } from '../chain/security/blockaid/ManageBlockaid'
 import { featureFlags } from '../config'
 
 type ExtensionSettings = {
@@ -84,7 +85,15 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
     <>
       <VStack fullHeight>
         <PageHeader
-          primaryControls={<PageHeaderBackButton />}
+          primaryControls={
+            <PageHeaderBackButton
+              onClick={() =>
+                navigate({
+                  id: 'vault',
+                })
+              }
+            />
+          }
           title={t('settings')}
           hasBorder
         />
@@ -160,6 +169,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 showArrow
               />
             )}
+            <ManageBlockaid />
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem

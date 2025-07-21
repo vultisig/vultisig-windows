@@ -22,7 +22,7 @@ export const ReferralCodeField = ({
     <VStack gap={14}>
       <FormField>
         <FormFieldLabel htmlFor="referral-name">
-          Use referral Code
+          {t('use_referral_code')}
         </FormFieldLabel>
         <HStack gap={8}>
           <TextInput
