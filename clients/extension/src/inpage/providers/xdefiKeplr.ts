@@ -33,9 +33,11 @@ import {
   StdTx,
 } from '@keplr-wallet/types'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { AminoMsg, StdFee } from '@cosmjs/amino'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
+import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 
 import { Cosmos } from './cosmos'
 
@@ -169,10 +171,9 @@ export class XDEFIKeplrProvider extends Keplr {
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ..._tx, txType: 'Keplr' }],
     })) as TxResult
+    const parsed = JSON.parse(shouldBePresent(result.encoded))
 
-    return new Uint8Array(
-      Buffer.from(shouldBePresent(result.encoded), 'base64')
-    )
+    return new Uint8Array(Buffer.from(parsed.tx_bytes, 'base64'))
   }
 
   async sendMessage() {}
@@ -203,21 +204,56 @@ export class XDEFIKeplrProvider extends Keplr {
     if (!txChain) {
       throw new Error(`Chain not supported: ${chainId}`)
     }
+    const parsed = JSON.parse(shouldBePresent(result.encoded))
+    const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
+    const txBody = TxBody.decode(txRaw.bodyBytes)
+    const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
+    const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
+      return {
+        type: msg.typeUrl,
+        value: JSON.parse(Buffer.from(msg.value).toString()),
+      }
+    })
+    const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
+    const feeAmount =
+      authInfo.fee?.amount.map(coin => ({
+        denom: coin.denom,
+        amount: coin.amount,
+      })) ?? []
+
+    const fee: StdFee = {
+      gas: gasLimit,
+      amount: feeAmount,
+    }
+
+    const memo = txBody.memo ?? ''
+
+    const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,
       address: signer,
     })
 
-    if (!accountInfo || !accountInfo.pubkey) {
-      throw new Error('No account info or pubkey')
+    if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
+      throw new Error('Missing account info or pubkey/accountNumber')
+    }
+    const stdSignDoc: StdSignDoc = {
+      chain_id: chainId,
+      account_number: accountInfo.accountNumber.toString(),
+      sequence: sequence,
+      fee,
+      msgs,
+      memo,
     }
 
     return {
-      signed: signDoc,
+      signed: stdSignDoc,
       signature: {
         pub_key: accountInfo.pubkey,
-        signature: shouldBePresent(result.encoded),
+        signature: shouldBePresent(
+          Buffer.from(txRaw.signatures[0]).toString('base64')
+        ),
       },
     }
   }
@@ -282,21 +318,31 @@ export class XDEFIKeplrProvider extends Keplr {
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
       params: [{ ...standardTx, txType: 'Vultisig' }],
     })) as TxResult
+    const parsed = JSON.parse(shouldBePresent(result.encoded))
+    const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,
       address: signer,
     })
 
-    if (!accountInfo || !accountInfo.pubkey) {
-      throw new Error('No account info or pubkey')
+    if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
+      throw new Error('Missing account info or pubkey/accountNumber')
+    }
+    const generatedSignDoc: KeplrSignDoc = {
+      bodyBytes: txRaw.bodyBytes,
+      authInfoBytes: txRaw.authInfoBytes,
+      chainId: chainId,
+      accountNumber: Long.fromString(accountInfo.accountNumber.toString()),
     }
 
     return {
-      signed: signDoc,
+      signed: generatedSignDoc,
       signature: {
         pub_key: accountInfo.pubkey,
-        signature: shouldBePresent(result.encoded),
+        signature: shouldBePresent(
+          Buffer.from(txRaw.signatures[0]).toString('base64')
+        ),
       },
     }
   }

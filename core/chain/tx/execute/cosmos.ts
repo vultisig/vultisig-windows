@@ -24,8 +24,7 @@ export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
   const decodedTxBytes = Buffer.from(txBytes, 'base64')
 
   const txHash = stripHexPrefix(sha256(decodedTxBytes).toUpperCase())
-  if (skipBroadcast)
-    return { txHash, encoded: Buffer.from(output.signature).toString('base64') }
+  if (skipBroadcast) return { txHash, encoded: output.serialized }
   const client = await getCosmosClient(chain)
   const result = attempt(client.broadcastTx(decodedTxBytes))
 
@@ -36,5 +35,5 @@ export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
     throw result.error
   }
 
-  return { txHash, encoded: Buffer.from(output.signature).toString('base64') }
+  return { txHash, encoded: output.serialized }
 }
