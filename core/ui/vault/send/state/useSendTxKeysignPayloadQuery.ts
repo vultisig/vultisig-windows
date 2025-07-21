@@ -1,13 +1,15 @@
 import { create } from '@bufbuild/protobuf'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
-import { processKeysignPayload } from '@core/mpc/keysign/keysignPayload/processKeysignPayload'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { pick } from '@lib/utils/record/pick'
+import { useCallback } from 'react'
 
+import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendMemo } from './memo'
@@ -21,20 +23,22 @@ export const useSendTxKeysignPayloadQuery = () => {
 
   const vault = useCurrentVault()
 
-  const chainSpecificQuery = useSendChainSpecificQuery()
+  const chainSpecific = useSendChainSpecificQuery()
 
-  const cappedAmountQuery = useSendCappedAmountQuery()
+  const utxoInfo = useKeysignUtxoInfo(pick(coin, ['chain', 'address']))
+
+  const cappedAmount = useSendCappedAmountQuery()
 
   const walletCore = useAssertWalletCore()
 
-  return useStateDependentQuery({
-    state: {
-      chainSpecific: chainSpecificQuery.data,
-      cappedAmount: cappedAmountQuery.data,
+  return useTransformQueriesData(
+    {
+      chainSpecific,
+      cappedAmount,
+      utxoInfo,
     },
-    getQuery: ({ chainSpecific, cappedAmount }) => ({
-      queryKey: ['sendKeysignPayload'],
-      queryFn: async () => {
+    useCallback(
+      ({ chainSpecific, cappedAmount, utxoInfo }) => {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,
@@ -42,25 +46,34 @@ export const useSendTxKeysignPayloadQuery = () => {
           publicKeys: vault.publicKeys,
         })
 
-        return processKeysignPayload(
-          create(KeysignPayloadSchema, {
-            coin: toCommCoin({
-              ...coin,
-              hexPublicKey: toHexPublicKey({
-                publicKey,
-                walletCore,
-              }),
+        return create(KeysignPayloadSchema, {
+          coin: toCommCoin({
+            ...coin,
+            hexPublicKey: toHexPublicKey({
+              publicKey,
+              walletCore,
             }),
-            toAddress: receiver,
-            toAmount: cappedAmount.amount.toString(),
-            blockchainSpecific: chainSpecific,
-            memo,
-            vaultLocalPartyId: vault.localPartyId,
-            vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-            libType: vault.libType,
-          })
-        )
+          }),
+          toAddress: receiver,
+          toAmount: cappedAmount.amount.toString(),
+          blockchainSpecific: chainSpecific,
+          memo,
+          vaultLocalPartyId: vault.localPartyId,
+          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+          libType: vault.libType,
+          utxoInfo: utxoInfo ?? undefined,
+        })
       },
-    }),
-  })
+      [
+        coin,
+        memo,
+        receiver,
+        vault.hexChainCode,
+        vault.libType,
+        vault.localPartyId,
+        vault.publicKeys,
+        walletCore,
+      ]
+    )
+  )
 }
