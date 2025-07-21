@@ -8,7 +8,7 @@ import { useEffect, useMemo } from 'react'
 import { useCoreViewState } from '../../../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../../../../state/currentVaultCoins'
 import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
-import { makePlaceholderCoin } from '../utils'
+import { makeUnmergeSpecificPlaceholderCoin } from '../utils'
 
 /**
   @tony: 
@@ -41,7 +41,7 @@ export const useUnmergeOptions = ({
       .map(
         tb =>
           coins.find(c => c.ticker.toUpperCase() === tb.symbol.toUpperCase()) ??
-          makePlaceholderCoin(tb.symbol)
+          makeUnmergeSpecificPlaceholderCoin(tb.symbol)
       )
       .filter(
         (c, i, self) =>
