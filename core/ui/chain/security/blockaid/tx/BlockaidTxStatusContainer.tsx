@@ -11,5 +11,6 @@ export const BlockaidTxStatusContainer = styled.p`
   })}
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
   min-height: 16px;
 `
