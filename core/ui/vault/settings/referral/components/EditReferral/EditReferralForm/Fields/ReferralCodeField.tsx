@@ -13,12 +13,10 @@ import { useCurrentVaultCoin } from '../../../../../../state/currentVaultCoins'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
 export const ReferralCodeField = () => {
-  const { address } = shouldBePresent(
-    useCurrentVaultCoin({
-      chain: chainFeeCoin.THORChain.chain,
-      id: 'RUNE',
-    })
-  )
+  const { address } = useCurrentVaultCoin({
+    chain: chainFeeCoin.THORChain.chain,
+    id: 'RUNE',
+  })
 
   const { data: nameDetails } = useUserValidThorchainNameQuery(address)
   const name = shouldBePresent(nameDetails?.name)
