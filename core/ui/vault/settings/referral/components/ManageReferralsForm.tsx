@@ -67,15 +67,15 @@ export const ManageReferralsForm = ({
                 <Text size={14}>{t('use_referral_code')}</Text>
                 <TextInput
                   value={value}
-                  onValueChange={val => {
-                    if (friendReferral) return
-                    setValue(val)
-                  }}
+                  disabled={Boolean(friendReferral)}
+                  onValueChange={val => setValue(val)}
                   placeholder={t('enter_referral_code_placeholder')}
                 />
               </VStack>
               <SaveReferralButton onClick={() => onSaveReferral(value)}>
-                {t('save')}
+                {friendReferral
+                  ? t('edit_friends_referral')
+                  : t('add_referral_code')}
               </SaveReferralButton>
               <HStack gap={16} alignItems="center">
                 <DecorationLine />

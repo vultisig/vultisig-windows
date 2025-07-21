@@ -51,8 +51,12 @@ VultiConnect currently supports the following chains:
 | LiteCoin    | `Litecoin_litecoin`   |
 | MayaChain   | `MayaChain-1`         |
 | Osmosis     | `osmosis-1`           |
+| Polkadot    | `Polkadot_polkadot`   |
+| Ripple      | `Ripple_ripple`       |
 | Solana      | `Solana_mainnet-beta` |
-| THORChain   | `Thorchain_1`         |
+| THORChain   | `Thorchain_thorchain` |
+| Zcash       | `Zcash_zcash`         |
+
 
 ## How VultiConnect Works
 
@@ -123,7 +127,7 @@ VultiConnect currently supports the following chains:
   - `get_transaction_by_hash`
 - **Notes**: Accessing a specific Cosmos-based chain (such as Kujira or Osmosis) requires calling `chain_id` to retrieve the active chain's ID or using `wallet_add_chain` and `wallet_switch_chain` to add or switch to the desired chain.
 
-### Other Chains (`window.vultisig[chain]` and `window[chain]`)
+### Other Chains (`window.vultisig[chain]`)
 
 - **Account Management**:
   - `request_accounts`
@@ -192,7 +196,7 @@ const connectEthereum = async () => {
 
 ```javascript
 const connectChain = async (chain) => {
-  const provider = window.vultisig?.[chain] || window[chain];
+  const provider = window.vultisig?.[chain];
 
   if (provider) {
     try {
@@ -376,6 +380,60 @@ const txDetails = {
   data: "0x", // Optional data
   value: "0x0", // Sending 0 ETH/wei
 };
+```
+
+Example of non-native tokens of THORChain and other Cosmos chains :
+
+```javascript
+// sending RUJI on THORChain
+
+const txDetails = {
+  from: "thor1249rpf9u2ulwuezxkh6uas4au7xnde8umdua5z",
+  to: "thor1ch4rpf9u2ulwuezxkh6uas4au7xnde8umdua91",
+  assset:{
+    chain: "THORChain",
+    ticker: "x/ruji"
+  },
+  amount:{
+    amount: 100000,
+    deciamls: 8
+  }،
+  data: "0x", // Optional memo data
+};
+
+
+// sending KUJI on Cosmos
+
+const txDetails = {
+  from: "cosmos1ditx650chvyn8vs70v8camcj3q7h7hxlsavo9z",
+  to: "cosmos1ditx650chvyn8vs70v8camcj3q7h7hxlsavo9z",
+  assset:{
+    chain: "Cosmos",
+    ticker: "ibc/4CC44260793F84006656DD868E017578F827A492978161DA31D7572BCB3F4289"
+  },
+  amount:{
+    amount: 100000,
+    deciamls: 6
+  }،
+  data: "0x", // Optional memo data
+};
+
+// sending ION on Osmosis
+
+const txDetails = {
+  from: "osmo5iosp650chvyn8vs70v8camcj3q7h7hyucxl0op",
+  to: "osmo5iosp650chvyn8vs70v8camcj3q7h7hyucxl0op",
+  assset:{
+    chain: "Osmosis",
+    ticker: "uion"
+  },
+  amount:{
+    amount: 100000,
+    deciamls: 6
+  }،
+  data: "0x", // Optional memo data
+};
+
 ```
 
 #### Ethereum

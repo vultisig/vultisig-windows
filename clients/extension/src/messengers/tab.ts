@@ -56,7 +56,7 @@ export const tabMessenger = createMessenger({
         chrome.runtime.onMessage?.removeListener(listener)
 
         const { response: response_, error } = message.payload
-        if (error) reject(new Error(error.message))
+        if (error) reject(error as Error)
         resolve(response_)
         sendResponse({})
         return true

@@ -11,6 +11,20 @@ export const pt = {
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
   incorrect_passcode: 'Código incorreto',
+  create_referral_title: 'Criar indicação',
+  use_referral_code: 'Usar código de indicação',
+  save_code: 'Salvar código',
+  used_referral_error:
+    'O código de indicação usado não pode ser o mesmo que o seu código de indicação',
+  your_referral_code: 'Seu código de indicação',
+  collected_rewards: 'Recompensas coletadas',
+  expires_on: 'Expira em',
+  edit_referral: 'Editar indicação',
+  edit_friends_referral: 'Editar indicação de amigo',
+  add_referral_code: 'Adicionar código de indicação',
+  your_friends_referral_code: 'Código de indicação do seu amigo',
+  change_your_friends_referral:
+    'Alterar o código de indicação do seu amigo usado para trocas',
   passcodes_do_not_match: 'Os códigos não correspondem',
   digit_input_success_validation: 'Verificação bem-sucedida',
   digit_input_error_validation: 'Erro ao verificar o código, tente novamente',
@@ -84,7 +98,6 @@ export const pt = {
   referral_program: 'Programa de Indicações',
   how_it_works: 'Como funciona',
   get_started: 'Começar',
-  use_referral_code: 'Usar Código de Indicação',
   enter_referral_code_placeholder: 'Digite o Código de Indicação',
   selected_chain_missing_in_your_vault:
     'A blockchain selecionada está ausente no seu cofre',
@@ -991,4 +1004,20 @@ export const pt = {
     'Pediremos periodicamente que você verifique sua senha de login rápido para que você sempre se lembre dela',
   keygen_devices_requirements_info:
     'Escaneie o QR com outro dispositivo. {{recommended}} - configuração do dispositivo recomendada, {{min}} é suficiente.',
+  current_expiry: 'Vencimento atual',
+  referral_annual_fee: 'Taxa anual de referência',
+  referral_extension_fee: 'Taxa de extensão de referência',
+  referral_landing_title:
+    '<0>Convide amigos</0>. <1>Ganhe recompensas</1>. Economize em taxas.',
+  unmerge_ruji: 'Desfazer mesclagem',
+  max_4_characters: 'Máximo de 4 caracteres',
+  enter_up_to_4_characters_placeholder: 'Insira até 4 caracteres',
+  search: 'Procurar',
+  create_referral_form: 'Criar referência',
+  blockaid_security_scan: 'Verificação de segurança Blockaid',
+  transaction_not_scanned: 'Transação não escaneada por <provider></provider>',
+  transaction_scanned: 'Transação escaneada por <provider></provider>',
+  transaction_has_risk:
+    'Transação de risco {{riskLevel}} detectada por <provider></provider>',
+  scanning: 'escaneando...',
 }

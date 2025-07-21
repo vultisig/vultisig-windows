@@ -11,6 +11,20 @@ export const it = {
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
   incorrect_passcode: 'Codice errato',
+  create_referral_title: 'Crea referral',
+  use_referral_code: 'Usa codice referral',
+  save_code: 'Salva codice',
+  used_referral_error:
+    'Il codice referral utilizzato non può essere lo stesso del tuo codice referral',
+  your_referral_code: 'Il tuo codice referral',
+  collected_rewards: 'Ricompense raccolte',
+  expires_on: 'Scade il',
+  edit_referral: 'Modifica referral',
+  edit_friends_referral: "Modifica referral dell'amico",
+  add_referral_code: 'Aggiungi codice referral',
+  your_friends_referral_code: 'Codice referral del tuo amico',
+  change_your_friends_referral:
+    'Cambia il codice referral del tuo amico usato per gli scambi',
   passcodes_do_not_match: 'I codici non corrispondono',
   search_field_placeholder: 'Cerca..',
   start_transaction: 'Avvia transazione',
@@ -87,7 +101,6 @@ export const it = {
   referral_program: 'Programma di Referral',
   how_it_works: 'Come funziona',
   get_started: 'Inizia ora',
-  use_referral_code: 'Usa Codice Referral',
   enter_referral_code_placeholder: 'Inserisci Codice Referral',
   no_tokens_found:
     'Nessun token trovato. Aggiungi token sotto la catena desiderata.',
@@ -1000,4 +1013,21 @@ export const it = {
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
   keygen_devices_requirements_info:
     'Scansiona il QR con un altro dispositivo. Si consiglia la configurazione del dispositivo {{recommended}}, {{min}} è sufficiente.',
+  current_expiry: 'Scadenza corrente',
+  referral_annual_fee: 'Quota annuale di riferimento',
+  referral_extension_fee: 'Commissione di estensione del referral',
+  referral_landing_title:
+    '<0>Invita amici</0>. <1>Guadagna premi</1>. Risparmia sulle commissioni.',
+  unmerge_ruji: 'Separare',
+  max_4_characters: 'Massimo 4 caratteri',
+  enter_up_to_4_characters_placeholder: 'Inserisci fino a 4 caratteri',
+  search: 'Ricerca',
+  create_referral_form: 'Crea referral',
+  blockaid_security_scan: 'Scansione di sicurezza Blockaid',
+  transaction_not_scanned:
+    'Transazione non scansionata da <provider></provider>',
+  transaction_scanned: 'Transazione scansionata da <provider></provider>',
+  transaction_has_risk:
+    'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
+  scanning: 'scansione...',
 }

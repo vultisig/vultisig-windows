@@ -18,6 +18,19 @@ export const en = {
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
+  create_referral_title: 'Create Referral',
+  use_referral_code: 'Use referral Code',
+  save_code: 'Save code',
+  used_referral_error:
+    'Used referral code can not be the same as your referral code',
+  your_referral_code: 'Your Referral Code',
+  collected_rewards: 'Collected rewards',
+  expires_on: 'Expires on',
+  edit_referral: 'Edit Referral',
+  edit_friends_referral: 'Edit Friend Referral',
+  add_referral_code: 'Add Referral Code',
+  your_friends_referral_code: 'Your friends referral code',
+  change_your_friends_referral: 'Change friends Referral Code used for swaps',
   plugin_policy_desc:
     'The verifier will always check that only these policies get executed. Giving you the security that only the authorized will get signed.',
   plugin_policy_heading: 'This plugin will automatically access',
@@ -524,7 +537,6 @@ export const en = {
   referral_program: 'Referral Program',
   how_it_works: 'How it works',
   get_started: 'Get Started',
-  use_referral_code: 'Use Referral Code',
   enter_referral_code_placeholder: 'Enter Referral Code',
   create_referral_form: 'Create referral',
   secureVault: 'Secure Vault',
@@ -971,4 +983,10 @@ export const en = {
   confirm_new_passcode: 'Confirm New Passcode',
   enter_new_passcode: 'Enter new passcode',
   hold_for_paired_sign: 'Hold for paired sign',
+  blockaid_security_scan: 'Blockaid Security Scan',
+  transaction_not_scanned: 'Transaction not scanned by <provider></provider>',
+  transaction_scanned: 'Transaction scanned by <provider></provider>',
+  transaction_has_risk:
+    '{{riskLevel}} risk transaction detected by <provider></provider>',
+  scanning: 'scanning...',
 }
