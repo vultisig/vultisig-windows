@@ -6,7 +6,7 @@ type ThemeGetterParams = {
   theme: DefaultTheme
 }
 
-export type ColorName = keyof Omit<ThemeColors, 'getLabelColor'>
+type ColorName = keyof Omit<ThemeColors, 'getLabelColor'>
 
 export const getColor =
   (color: ColorName) =>
