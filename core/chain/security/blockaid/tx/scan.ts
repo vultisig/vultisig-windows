@@ -2,7 +2,7 @@ import { productRootDomain, rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { EvmChain } from '../../../Chain'
-import { blockaidBaseUrl, blockaidClientId } from '../config'
+import { blockaidBaseUrl } from '../config'
 
 type BlockaidRiskLevel = 'Benign' | 'Warning' | 'Malicious' | 'Spam'
 
@@ -43,7 +43,6 @@ export const scanTxWithBlockaid = async (input: BlockaidTxScanInput) => {
       body,
       headers: {
         origin: rootApiUrl,
-        'client-id': blockaidClientId,
       },
     }
   )
