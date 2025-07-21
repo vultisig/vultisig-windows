@@ -15,6 +15,7 @@ export type CoinMetadata = {
   decimals: number
   ticker: string
   logo?: string
+  hiddenFromUI?: boolean
 }
 
 export type Coin = CoinKey & CoinMetadata
