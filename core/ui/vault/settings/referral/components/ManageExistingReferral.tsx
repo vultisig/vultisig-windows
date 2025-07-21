@@ -1,9 +1,11 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -11,14 +13,15 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatDateWithOf } from '@lib/utils/date/formatDateWithOf'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
+import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
+import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
 import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
@@ -40,11 +43,25 @@ export const ManageExistingReferral = ({
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
   const { data: friendsReferralCode } = useFriendReferralQuery()
+  const navigate = useCoreNavigate()
 
   return (
     <>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={() =>
+              navigate({
+                id: 'settings',
+              })
+            }
+          />
+        }
+        secondaryControls={
+          <IconButton size="sm" onClick={onEditReferral}>
+            <PencilIcon />
+          </IconButton>
+        }
         title={t('title_1')}
       />
       <ReferralPageWrapper>
@@ -60,7 +77,7 @@ export const ManageExistingReferral = ({
           }}
         >
           <VStack gap={8}>
-            <Text size={14}>Your Referral Code</Text>
+            <Text size={14}>{t('your_referral_code')}</Text>
             <FieldWrapper
               style={{
                 flexDirection: 'row',
@@ -90,22 +107,22 @@ export const ManageExistingReferral = ({
             </FieldIconWrapper>
             <VStack>
               <Text size={14} color="shy">
-                Collected rewards
+                {t('collected_rewards')}
               </Text>
               <Text>{formatTokenAmount(collectedRune, 'RUNE')}</Text>
             </VStack>
           </FieldWrapper>
-          <FieldWrapper>
+          <FieldWrapper gap={10}>
             <Text size={14} color="shy">
-              Expires on
+              {t('expires_on')}
             </Text>
-            <Text>{formatDateWithOf(expiresOn)}</Text>
+            <Text size={18}>{formatReferralDateExpiration(expiresOn)}</Text>
           </FieldWrapper>
-          <Button onClick={onEditReferral}>Edit Referral</Button>
+          <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
           <DecorationLine />
           <VStack gap={14}>
             <VStack gap={8}>
-              <Text>Your friends referral code</Text>
+              <Text>{t('your_friends_referral_code')}</Text>
               <FriendsReferralCode>
                 <Text>{friendsReferralCode || '--'}</Text>
               </FriendsReferralCode>
@@ -120,7 +137,12 @@ export const ManageExistingReferral = ({
               onClick={onEditFriendReferral}
             >
               <HStack justifyContent="space-between" alignItems="center">
-                <VStack gap={12}>
+                <VStack
+                  gap={12}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                >
                   <FieldIconWrapper
                     style={{
                       color: colors.buttonPrimary.toCssValue(),
@@ -128,7 +150,7 @@ export const ManageExistingReferral = ({
                   >
                     <ArrowUndoIcon />
                   </FieldIconWrapper>
-                  <Text>Change friends Referral Code used for swaps</Text>
+                  <Text>{t('change_your_friends_referral')}</Text>
                 </VStack>
                 <IconWrapper
                   style={{
