@@ -33,7 +33,6 @@ import {
   StdTx,
 } from '@keplr-wallet/types'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import base58 from 'bs58'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
@@ -161,27 +160,21 @@ export class XDEFIKeplrProvider extends Keplr {
     return cosmSigner as OfflineAminoSigner
   }
 
-  sendTx(
+  async sendTx(
     _chainId: string,
     _tx: StdTx | Uint8Array,
     _mode: BroadcastMode
   ): Promise<Uint8Array> {
-    return new Promise<Uint8Array>((resolve, reject) => {
-      this.cosmosProvider
-        .request({
-          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [{ ..._tx, txType: 'Keplr' }],
-        })
-        .then(result => {
-          const decoded = base58.decode(
-            shouldBePresent((result as TxResult).encoded)
-          )
-          if (decoded) resolve(decoded)
-          else reject()
-        })
-        .catch(reject)
-    })
+    const result = (await this.cosmosProvider.request({
+      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+      params: [{ ..._tx, txType: 'Keplr' }],
+    })) as TxResult
+
+    return new Uint8Array(
+      Buffer.from(shouldBePresent(result.encoded), 'base64')
+    )
   }
+
   async sendMessage() {}
 
   async signAmino(
@@ -221,15 +214,11 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('No account info or pubkey')
     }
 
-    const decoded = base58.decode(shouldBePresent(result.encoded))
-    if (!decoded) {
-      throw new Error('Invalid signature')
-    }
     return {
       signed: signDoc,
       signature: {
         pub_key: accountInfo.pubkey,
-        signature: decoded.toString(),
+        signature: shouldBePresent(result.encoded),
       },
     }
   }
@@ -287,6 +276,7 @@ export class XDEFIKeplrProvider extends Keplr {
         },
         timeoutTimestamp: msg.timeoutTimestamp.toString(),
       },
+      skipBroadcast: true,
     }
 
     const result = (await this.cosmosProvider.request({
@@ -303,16 +293,11 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('No account info or pubkey')
     }
 
-    const decoded = base58.decode(shouldBePresent(result.encoded))
-    if (!decoded) {
-      throw new Error('Invalid signature')
-    }
-
     return {
       signed: signDoc,
       signature: {
         pub_key: accountInfo.pubkey,
-        signature: decoded.toString(),
+        signature: shouldBePresent(result.encoded),
       },
     }
   }
