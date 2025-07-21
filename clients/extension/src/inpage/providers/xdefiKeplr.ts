@@ -198,8 +198,7 @@ export class XDEFIKeplrProvider extends Keplr {
       params: [{ ...txDetails[0]!, txType: 'Keplr' }],
     })) as TxResult
 
-    const txChain =
-      getCosmosChainByChainId(chainId) || getEvmChainByChainId(chainId)
+    const txChain = getCosmosChainByChainId(chainId)
 
     if (!txChain) {
       throw new Error(`Chain not supported: ${chainId}`)
