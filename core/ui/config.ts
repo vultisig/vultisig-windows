@@ -1,3 +1,3 @@
 export const featureFlags = {
-  referrals: true,
+  referrals: false,
 } as const
