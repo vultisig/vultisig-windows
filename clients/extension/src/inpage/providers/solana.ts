@@ -25,7 +25,6 @@ import {
 import { Messaging, TransactionType } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
-
 export class Solana extends EventEmitter {
   public chainId: string
   public isConnected: boolean

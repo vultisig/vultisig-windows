@@ -11,6 +11,9 @@ import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { MessageKey } from '@clients/extension/src/utils/constants'
 
+import { VultisigWalletAdapter } from '@clients/extension/src/inpage/walletStandard/vultisigWalletAdapter'
+import { initialize } from '../walletStandard/vultisig/src'
+
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
   const cosmosProvider = Cosmos.getInstance()
@@ -36,3 +39,5 @@ export const createProviders = () => {
     zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
   }
 }
+
+initialize(new VultisigWalletAdapter())
