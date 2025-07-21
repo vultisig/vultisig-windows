@@ -6,19 +6,18 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
-import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
+import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
+import { DecorationLine, ReferralPageWrapper } from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
-import { PayoutAssetField } from './Fields/PayoutAssetField'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 
-export const EditReferralForm = ({ onFinish }: OnFinishProp) => {
+export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
   const {
     formState: { isValid, isSubmitting },
-  } = useEditReferralFormData()
+  } = useCreateReferralForm()
 
   return (
     <VStack flexGrow gap={40}>
@@ -40,7 +39,6 @@ export const EditReferralForm = ({ onFinish }: OnFinishProp) => {
             gap={14}
           >
             <ReferralCodeField />
-            <PayoutAssetField />
             <ExpirationField />
             <Fees />
           </StackSeparatedBy>

@@ -24,7 +24,7 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
 
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { isPending, mutate, error, isSuccess } = useMutation({
+  const { isPending, mutate, error, isSuccess, reset } = useMutation({
     mutationFn: (code: string) =>
       verifyVaultEmailCode({
         vaultId: getVaultId(vault),
@@ -45,7 +45,8 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
     if (
       input?.length === emailConfirmationCodeLength &&
       !isPending &&
-      !isSuccess
+      !isSuccess &&
+      !error
     ) {
       mutate(input)
     }
@@ -80,7 +81,10 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
         <VStack gap={4}>
           <MultiCharacterInput
             value={input}
-            onChange={value => setInput(value)}
+            onChange={value => {
+              setInput(value)
+              reset()
+            }}
             validation={inputState}
             length={emailConfirmationCodeLength}
           />

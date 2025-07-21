@@ -4,12 +4,12 @@ import { Text } from '@lib/ui/text'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
+import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
-} from '../../Referrals.styled'
+} from '../../../Referrals.styled'
 
 export const ExpirationField = () => {
   const { t } = useTranslation()
