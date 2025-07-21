@@ -106,7 +106,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     onSubmit(data, selectedChainAction as ChainAction)
   }
 
-  // This duplication is needed because we can only derive the selectedCoin from the form data and for the form data, we need to first pass the schema
+  // @tony: This duplication is needed because we can only derive the selectedCoin from the form data and for the form data, we need to first pass the schema
   useEffect(() => {
     if (selectedCoin) {
       setLocalSelectedCoin(selectedCoin)
