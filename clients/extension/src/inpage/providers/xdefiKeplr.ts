@@ -219,8 +219,7 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('Unsupported message type')
     }
 
-    const txChain =
-      getCosmosChainByChainId(chainId) || getEvmChainByChainId(chainId)
+    const txChain = getCosmosChainByChainId(chainId)
 
     if (!txChain) {
       throw new Error(`Chain not supported: ${chainId}`)
