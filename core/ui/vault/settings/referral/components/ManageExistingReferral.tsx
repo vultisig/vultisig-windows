@@ -13,7 +13,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatDateWithOf } from '@lib/utils/date/formatDateWithOf'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -22,6 +21,7 @@ import styled, { useTheme } from 'styled-components'
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
+import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
 import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
@@ -116,7 +116,7 @@ export const ManageExistingReferral = ({
             <Text size={14} color="shy">
               {t('expires_on')}
             </Text>
-            <Text size={18}>{formatDateWithOf(expiresOn)}</Text>
+            <Text size={18}>{formatReferralDateExpiration(expiresOn)}</Text>
           </FieldWrapper>
           <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
           <DecorationLine />
