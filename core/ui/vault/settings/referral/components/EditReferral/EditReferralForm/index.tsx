@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Chain } from '@core/chain/Chain'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -54,8 +54,7 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
 
     return coins.find(coin =>
       areEqualCoins(coin, {
-        chain:
-          chain as (typeof chainFeeCoin)[keyof typeof chainFeeCoin]['chain'],
+        chain: chain as Chain,
         id,
       })
     )

@@ -38,12 +38,10 @@ export const ManageReferrals = () => {
     useFriendReferralQuery()
   const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
 
-  const { address } = shouldBePresent(
-    useCurrentVaultCoin({
-      chain: chainFeeCoin.THORChain.chain,
-      id: 'RUNE',
-    })
-  )
+  const { address } = useCurrentVaultCoin({
+    chain: chainFeeCoin.THORChain.chain,
+    id: 'RUNE',
+  })
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)

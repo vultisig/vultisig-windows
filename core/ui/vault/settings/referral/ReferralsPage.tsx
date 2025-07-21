@@ -6,7 +6,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -37,12 +36,10 @@ export const ReferralPage = () => {
     initialStep: isOnboarded ? 'manage' : 'landing',
   })
 
-  const { address } = shouldBePresent(
-    useCurrentVaultCoin({
-      chain: chainFeeCoin.THORChain.chain,
-      id: 'RUNE',
-    })
-  )
+  const { address } = useCurrentVaultCoin({
+    chain: chainFeeCoin.THORChain.chain,
+    id: 'RUNE',
+  })
 
   // Hard refetch in case the user just created/edited a referral and is coming back from Keysign
   const { refetch } = useUserValidThorchainNameQuery(address)

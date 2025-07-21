@@ -42,12 +42,10 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
 
-  const { address } = shouldBePresent(
-    useCurrentVaultCoin({
-      chain: chainFeeCoin.THORChain.chain,
-      id: 'RUNE',
-    })
-  )
+  const { address } = useCurrentVaultCoin({
+    chain: chainFeeCoin.THORChain.chain,
+    id: 'RUNE',
+  })
 
   const { data: allowedPools = [] } = useActivePoolsQuery()
 
