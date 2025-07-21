@@ -11,7 +11,6 @@ import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
-import { SendConfirm } from '@core/ui/vault/send/verify/SendConfirm'
 import { SendTerms } from '@core/ui/vault/send/verify/SendTerms'
 import {
   sendTerms,
@@ -27,16 +26,22 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BlockaidKeysignPayloadScan } from '../../../chain/security/blockaid/keysignPayload/BlockaidKeysignPayloadScan'
+import { MatchBlockaidKeysignPayloadScanQuery } from '../../../chain/security/blockaid/keysignPayload/MatchBlockaidKeysignPayloadScanQuery'
+import { BlockaidNoTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidNoTxScanStatus'
+import { BlockaidTxScanning } from '../../../chain/security/blockaid/tx/BlockaidTxScanning'
+import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/BlockaidTxScanResult'
 import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/BlockaidTxStatusContainer'
 import { useIsBlockaidEnabled } from '../../../storage/blockaid'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
+import { SendConfirm } from './SendConfirm'
+import { SendConfirmLoadingState } from './SendConfirmLoadingState'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
@@ -64,7 +69,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           <MatchQuery
             value={keysignPayloadQuery}
             success={keysignPayload => (
-              <BlockaidKeysignPayloadScan value={keysignPayload} />
+              <MatchBlockaidKeysignPayloadScanQuery
+                value={keysignPayload}
+                error={() => <BlockaidNoTxScanStatus />}
+                pending={() => <BlockaidTxScanning />}
+                success={value => <BlockaidTxScanResult value={value} />}
+              />
             )}
             pending={() => <BlockaidTxStatusContainer />}
             error={() => <BlockaidTxStatusContainer />}
@@ -128,7 +138,27 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             }}
             gap={20}
           >
-            <SendConfirm />
+            <MatchQuery
+              value={keysignPayloadQuery}
+              error={err => <Text>{extractErrorMsg(err)}</Text>}
+              pending={() => <SendConfirmLoadingState />}
+              success={keysign => {
+                const result = <SendConfirm value={keysign} />
+
+                if (isBlockaidEnabled) {
+                  return (
+                    <MatchBlockaidKeysignPayloadScanQuery
+                      value={keysign}
+                      error={() => result}
+                      pending={() => <SendConfirmLoadingState />}
+                      success={() => result}
+                    />
+                  )
+                }
+
+                return result
+              }}
+            />
           </VStack>
         </SendTermsProvider>
       </PageContent>

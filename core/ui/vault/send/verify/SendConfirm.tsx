@@ -1,17 +1,13 @@
-import { Button } from '@lib/ui/buttons/Button'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text } from '@lib/ui/text'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
 import { useSendTerms } from './state/sendTerms'
 
-export const SendConfirm = () => {
+export const SendConfirm = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
-  const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
   const [terms] = useSendTerms()
 
   const isDisabled = useMemo(() => {
@@ -21,20 +17,9 @@ export const SendConfirm = () => {
   }, [t, terms])
 
   return (
-    <MatchQuery
-      value={keysignPayloadQuery}
-      error={err => <Text>{extractErrorMsg(err)}</Text>}
-      pending={() => (
-        <Button loading disabled={true}>
-          {t('loading')}
-        </Button>
-      )}
-      success={keysign => (
-        <StartKeysignPrompt
-          keysignPayload={{ keysign }}
-          isDisabled={isDisabled}
-        />
-      )}
+    <StartKeysignPrompt
+      keysignPayload={{ keysign: value }}
+      isDisabled={isDisabled}
     />
   )
 }

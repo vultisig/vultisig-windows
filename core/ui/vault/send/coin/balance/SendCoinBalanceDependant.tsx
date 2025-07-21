@@ -2,14 +2,15 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import {
   MatchQuery,
-  MatchQueryWrapperProps,
+  MatchQueryProps,
 } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../chain/coin/queries/useBalanceQuery'
 import { useCurrentSendCoin } from '../../state/sendCoin'
+
 export const SendCoinBalanceDependant: React.FC<
-  MatchQueryWrapperProps<bigint>
+  Omit<MatchQueryProps<bigint>, 'value'>
 > = props => {
   const coin = useCurrentSendCoin()
 
