@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 globs: *.tsx,*.ts
 alwaysApply: false
@@ -65,6 +66,8 @@ return {
 - Prefer clear code structure over explanatory comments
 - Use TypeScript types to document interfaces and contracts
 
+=======
+>>>>>>> d4896a4f3 (refactor: remove outdated typecheck rule and add new rules for TypeScript codebase)
 # Readable Code Over Comments
 
 ## Principle
