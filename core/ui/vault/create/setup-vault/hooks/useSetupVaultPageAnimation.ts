@@ -8,7 +8,7 @@ export const useSetupVaultPageAnimation = () => {
   const [isPlaying, setIsPlaying] = useState(false)
 
   const { RiveComponent, rive } = useRive({
-    src: '/core/animations/choose-vault-1.riv',
+    src: '/core/animations/choose-vault.riv',
     autoplay: true,
     stateMachines: [stateMachineName],
   })
