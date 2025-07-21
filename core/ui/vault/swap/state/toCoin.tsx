@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 
-const getKey = (vaultId?: string) => `swap_to_coin_${vaultId ?? 'unknown'}`
+const getKey = (vaultId?: string) => `swap_to_coin_${vaultId}`
 
 const { useState: useToCoin, provider: ToCoinInternalProvider } =
   getPersistentStateProviderSetup<CoinKey>('ToCoin', getKey)

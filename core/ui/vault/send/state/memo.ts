@@ -1,6 +1,6 @@
 import { getPersistentStateProviderSetup } from '@lib/ui/state/getPersistentStateProviderSetup'
 
-const getKey = (vaultId?: string) => `send_memo_${vaultId ?? 'unknown'}`
+const getKey = (vaultId?: string) => `send_memo_${vaultId}`
 
 export const { useState: useSendMemo, provider: SendMemoProvider } =
   getPersistentStateProviderSetup<string>('SendMemo', getKey)

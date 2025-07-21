@@ -1,10 +1,11 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import React, {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
+  useRef,
 } from 'react'
 
 import { usePersistentState } from './usePersistentState'
@@ -29,6 +30,14 @@ export const getPersistentStateProviderSetup: GetPersistentStateProviderSetup =
     }: ChildrenProp & { initialValue: any; vaultId?: string }) => {
       const key = getStorageKey(vaultId)
       const [value, setValue] = usePersistentState({ key, initialValue })
+      const previousVaultId = useRef<string | undefined>(vaultId)
+      useEffect(() => {
+        if (previousVaultId.current && previousVaultId.current !== vaultId) {
+          setValue(initialValue)
+        }
+        previousVaultId.current = vaultId
+      }, [vaultId, setValue, initialValue])
+
       return (
         <Context.Provider value={{ value, setValue }}>
           {children}
@@ -41,7 +50,7 @@ export const getPersistentStateProviderSetup: GetPersistentStateProviderSetup =
       useState: () => {
         const context = useContext(Context)
         if (!context) {
-          throw new Error(`${capitalizeFirstLetter(name)} is not provided`)
+          throw new Error(`${name} is not provided`)
         }
         return [context.value, context.setValue]
       },
