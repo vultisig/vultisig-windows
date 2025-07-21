@@ -22,7 +22,7 @@ const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
   Spam: 'high',
 }
 
-export type TxRiskLevel = 'medium' | 'high'
+type TxRiskLevel = 'medium' | 'high'
 
 type RiskyTxInfo = {
   level: TxRiskLevel
