@@ -14,20 +14,22 @@ type GetPersistentStateProviderSetup = <T>(
   name: string,
   getStorageKey: (vaultId?: string) => string
 ) => {
-  provider: React.FC<ChildrenProp & { initialValue: T; vaultId?: string }>
+  provider: React.FC<ProviderProps<T>>
   useState: () => [T, Dispatch<SetStateAction<T>>]
 }
 
+type ProviderProps<T> = ChildrenProp & { initialValue: T; vaultId?: string }
+
 export const getPersistentStateProviderSetup: GetPersistentStateProviderSetup =
-  (name, getStorageKey) => {
+  <T,>(name: string, getStorageKey: (vaultId?: string) => string) => {
     type ContextState = { value: any; setValue: Dispatch<SetStateAction<any>> }
     const Context = createContext<ContextState | undefined>(undefined)
 
-    const Provider = ({
+    const Provider: React.FC<ProviderProps<T>> = ({
       children,
       initialValue,
       vaultId,
-    }: ChildrenProp & { initialValue: any; vaultId?: string }) => {
+    }) => {
       const key = getStorageKey(vaultId)
       const [value, setValue] = usePersistentState({ key, initialValue })
       const previousVaultId = useRef<string | undefined>(vaultId)
