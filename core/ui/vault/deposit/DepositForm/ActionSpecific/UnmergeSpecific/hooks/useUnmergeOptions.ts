@@ -53,7 +53,7 @@ export const useUnmergeOptions = ({
   }, [coins, balances])
 
   useEffect(() => {
-    if (!tokens.some(token => token.ticker === ticker)) {
+    if (!tokens.some(({ ticker: currentTicker }) => currentTicker === ticker)) {
       setValue('selectedCoin', tokens[0], {
         shouldValidate: true,
       })

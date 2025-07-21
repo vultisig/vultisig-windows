@@ -27,6 +27,7 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const { address } = useCurrentVaultCoin(coinKey)
   const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
+
   const tokens = useUnmergeOptions({
     coins,
     balances,
