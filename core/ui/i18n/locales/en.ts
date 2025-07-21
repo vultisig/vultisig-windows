@@ -989,4 +989,6 @@ export const en = {
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   scanning: 'scanning...',
+  please_deposit_funds_to_use_this_function:
+    'Please deposit funds to use this function',
 }

@@ -266,7 +266,7 @@ export const hr = {
     ' kako bi osigurao da su vaša sredstva zaštićena od bilo kakvih prijetnji.',
   join_keygen_slider6_title: 'Kutak zajednice',
   join_keygen_slider6_note1:
-    'Pridružite se tisućama. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
+    'Pridružite se tisućuma. Tisuće korisnika vjeruje Vultisigu sa svojim digitalnim sredstvima. Postanite dio naše ',
   join_keygen_slider6_note2: 'sigurne i rastuće zajednice',
   join_keygen_slider7_title: 'Istaknuta značajka',
   join_keygen_slider7_note1:
@@ -1006,4 +1006,6 @@ export const hr = {
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
   scanning: 'skeniranje...',
+  please_deposit_funds_to_use_this_function:
+    'Molimo uplatite sredstva za korištenje ove funkcije',
 }

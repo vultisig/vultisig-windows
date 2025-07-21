@@ -1030,4 +1030,6 @@ export const it = {
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
   scanning: 'scansione...',
+  please_deposit_funds_to_use_this_function:
+    'Per favore, deposita fondi per utilizzare questa funzione',
 }

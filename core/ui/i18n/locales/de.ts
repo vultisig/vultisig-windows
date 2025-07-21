@@ -1036,4 +1036,6 @@ export const de = {
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
   scanning: 'Scannen...',
+  please_deposit_funds_to_use_this_function:
+    'Bitte zahlen Sie Guthaben ein, um diese Funktion zu nutzen',
 }
