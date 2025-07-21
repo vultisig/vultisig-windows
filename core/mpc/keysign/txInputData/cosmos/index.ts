@@ -113,12 +113,14 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                   senderAddress: contractPayload.senderAddress,
                   contractAddress: contractPayload.contractAddress,
                   executeMsg: formattedMessage,
-                  coins: contractPayload.coins.map(c => {
-                    return TW.Cosmos.Proto.Amount.create({
-                      denom: c.contractAddress.toLowerCase(),
-                      amount: keysignPayload.toAmount,
-                    })
-                  }),
+                  coins: contractPayload.coins.length
+                    ? contractPayload.coins.map(c => {
+                        return TW.Cosmos.Proto.Amount.create({
+                          denom: c.contractAddress.toLowerCase(),
+                          amount: keysignPayload.toAmount,
+                        })
+                      })
+                    : [],
                 }),
             }),
           ],
