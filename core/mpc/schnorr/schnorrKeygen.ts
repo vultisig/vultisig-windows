@@ -243,8 +243,13 @@ export class Schnorr {
         if (localKeyshare === null) {
           throw new Error('local keyshare is null')
         }
+        const isPlugin =
+          'reshare' in this.keygenOperation &&
+          this.keygenOperation.reshare === 'plugin'
         // keygenCommittee only has new committee members
-        const threshold = getKeygenThreshold(this.keygenCommittee.length)
+        const threshold = isPlugin
+          ? 2
+          : getKeygenThreshold(this.keygenCommittee.length)
         const { allCommittee, newCommitteeIdx, oldCommitteeIdx } =
           combineReshareCommittee({
             keygenCommittee: this.keygenCommittee,
