@@ -1,3 +1,4 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -23,7 +24,11 @@ export const SendConfirm = () => {
     <MatchQuery
       value={keysignPayloadQuery}
       error={err => <Text>{extractErrorMsg(err)}</Text>}
-      pending={() => <Text>{t('loading')}</Text>}
+      pending={() => (
+        <Button loading disabled={true}>
+          {t('loading')}
+        </Button>
+      )}
       success={keysign => (
         <StartKeysignPrompt
           keysignPayload={{ keysign }}
