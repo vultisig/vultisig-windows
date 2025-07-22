@@ -87,8 +87,8 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
   },
 
   [Chain.Polygon]: {
-    ticker: 'MATIC',
-    logo: 'matic',
+    ticker: 'POL',
+    logo: 'polygon',
     decimals: 18,
     priceProviderId: 'matic-network',
   },
