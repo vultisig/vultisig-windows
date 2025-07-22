@@ -15,7 +15,7 @@ export const BlockaidTxScan = ({ value }: ValueProp<BlockaidTxScanInput>) => {
       value={query}
       error={() => <BlockaidNoTxScanStatus />}
       pending={() => <BlockaidTxScanning />}
-      success={riskLevel => <BlockaidTxScanResult riskLevel={riskLevel} />}
+      success={value => <BlockaidTxScanResult value={value} />}
     />
   )
 }
