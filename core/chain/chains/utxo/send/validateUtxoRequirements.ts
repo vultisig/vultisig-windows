@@ -23,7 +23,7 @@ export const validateUtxoRequirements = ({
       fromChainAmount(minUtxo[chain], decimals),
       ticker
     )
-    return `Minimum send amount is ${formattedAmount}. Cardano requires this to prevent spam.`
+    return `Minimum send amount is ${formattedAmount}. ${chain} requires this to prevent spam.`
   }
 
   const remainingBalance = balance - amount
