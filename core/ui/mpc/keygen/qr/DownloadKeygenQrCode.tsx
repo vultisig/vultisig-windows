@@ -8,7 +8,7 @@ import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const prefix = 'VayltKeygenQR'
+const prefix = 'VaultKeygenQR'
 
 export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
   const { t } = useTranslation()
