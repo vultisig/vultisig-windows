@@ -19,7 +19,7 @@ type Gql = {
   errors?: unknown[]
 }
 
-type TokenBalance = {
+export type TokenBalance = {
   symbol: string
   shares: number
   amount: number

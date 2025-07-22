@@ -1,18 +1,20 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Coin, getCoinFromCoinKey } from '@core/chain/coin/Coin'
+import { Chain } from '@core/chain/Chain'
+import { Coin } from '@core/chain/coin/Coin'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
-import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
+import {
+  useCurrentVaultChainCoins,
+  useCurrentVaultCoin,
+} from '../../../../state/currentVaultCoins'
 import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
-import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
 import { Container } from '../../DepositForm.styled'
+import { useUnmergeOptions } from './hooks/useUnmergeOptions'
 import { UnmergeTokenExplorer } from './UnmergeTokenExplorer'
 
 type Props = {
@@ -21,24 +23,15 @@ type Props = {
 
 export const UnmergeSpecific = ({ selectedCoin }: Props) => {
   const { t } = useTranslation()
-  const [{ setValue, watch }] = useDepositFormHandlers()
+  const coins = useCurrentVaultChainCoins(Chain.THORChain)
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const defaultCoin = shouldBePresent(getCoinFromCoinKey(coinKey))
-  const coin = selectedCoin || defaultCoin
-  const coinAddress = shouldBePresent(useCurrentVaultCoin(coinKey)?.address)
+  const { address } = useCurrentVaultCoin(coinKey)
+  const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
 
-  // Fetch all mergeable token balances
-  const { data: tokenBalances = [] } =
-    useMergeableTokenBalancesQuery(coinAddress)
-
-  const selectedTokenBalance = selectedCoin
-    ? tokenBalances.find(tb => tb.symbol === selectedCoin.ticker)
-    : null
-
-  const sharesInDecimal = selectedTokenBalance
-    ? fromChainAmount(selectedTokenBalance.shares, selectedCoin?.decimals || 8)
-    : 0
-  console.log('🚀 ~ UnmergeSpecific ~ sharesInDecimal:', sharesInDecimal)
+  const tokens = useUnmergeOptions({
+    coins,
+    balances,
+  })
 
   return (
     <VStack gap={12}>
@@ -47,7 +40,7 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
           <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
-                {coin.ticker || t('select_token')}
+                {selectedCoin?.ticker || t('select_token')}
               </Text>
               {!selectedCoin && (
                 <Text as="span" color="danger" size={14}>
@@ -61,17 +54,7 @@ export const UnmergeSpecific = ({ selectedCoin }: Props) => {
           </Container>
         )}
         renderContent={({ onClose }) => (
-          <UnmergeTokenExplorer
-            setValue={setValue}
-            activeOption={watch('selectedCoin')}
-            onOptionClick={(token: Coin) => {
-              setValue('selectedCoin', token, {
-                shouldValidate: true,
-              })
-              onClose()
-            }}
-            onClose={onClose}
-          />
+          <UnmergeTokenExplorer value={tokens} onClose={onClose} />
         )}
       />
     </VStack>
