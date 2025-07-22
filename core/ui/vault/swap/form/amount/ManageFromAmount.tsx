@@ -88,6 +88,8 @@ const PositionedAmountInput = styled(AmountTextInput)`
   text-align: right;
   border: none;
   font-family: inherit;
+  font-size: 22px;
+  font-weight: 500;
   &:hover {
     outline: none;
   }
