@@ -39,19 +39,17 @@ const isPopup = isPopupView()
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
+    min-height: 600px;
     min-width: 400px;
     overflow: hidden;
 
     ${
-      isPopup
-        ? css`
-            min-height: 600px;
-          `
-        : css`
-            margin: 0 auto;
-            max-width: 1024px;
-            width: 100%;
-          `
+      !isPopup &&
+      css`
+        margin: 0 auto;
+        max-width: 1024px;
+        width: 100%;
+      `
     }
   }
 `
