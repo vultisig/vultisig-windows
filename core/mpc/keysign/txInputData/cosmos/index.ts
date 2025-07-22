@@ -68,6 +68,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
               }),
             }),
           ],
+          txMemo: memo,
         }
       }
 
