@@ -13,7 +13,7 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     renderListHeader?: () => ReactNode
   }
 
-export const SelectItemModal = <T extends { id: string; chain?: string }>({
+export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   onFinish,
   options,
   title,

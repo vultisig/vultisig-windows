@@ -4,6 +4,7 @@ import {
   accountCoinKeyToString,
 } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { storage } from '../../wailsjs/go/models'
 
@@ -27,7 +28,7 @@ export const toStorageCoin = (coin: AccountCoin): storage.Coin => {
     chain: coin.chain,
     address: coin.address,
     ticker: coin.ticker,
-    contract_address: isNativeToken ? '' : coin.id,
+    contract_address: isNativeToken ? '' : shouldBePresent(coin.id),
     is_native_token: isNativeToken,
     logo: coin.logo ?? '',
     price_provider_id: coin.priceProviderId ?? '',

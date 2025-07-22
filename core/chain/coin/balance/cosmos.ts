@@ -1,4 +1,5 @@
 import { CosmosChain } from '@core/chain/Chain'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { getCosmosClient } from '../../chains/cosmos/client'
@@ -20,7 +21,7 @@ const isWasmToken = (id: string): boolean => {
 export const getCosmosCoinBalance: CoinBalanceResolver<
   CosmosChain
 > = async input => {
-  if (isWasmToken(input.id)) {
+  if (input.id && isWasmToken(input.id)) {
     const url = getCosmosWasmTokenBalanceUrl(input)
     const { data } = await queryUrl<WasmQueryResponse>(url)
     return BigInt(data.balance ?? 0)
@@ -28,7 +29,9 @@ export const getCosmosCoinBalance: CoinBalanceResolver<
 
   const client = await getCosmosClient(input.chain)
 
-  const denom = isFeeCoin(input) ? cosmosFeeCoinDenom[input.chain] : input.id
+  const denom = isFeeCoin(input)
+    ? cosmosFeeCoinDenom[input.chain]
+    : shouldBePresent(input.id)
 
   const balance = await client.getBalance(input.address, denom)
 
