@@ -45,7 +45,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
       if (transactionType === TransactionType.IBC_TRANSFER) {
         const memo = shouldBePresent(keysignPayload.memo)
-        const [, channel, , innerMemo] = memo.split(':')
+        const [, channel, , ...rest] = memo.split(':')
+        const innerMemo = rest.join(':')
         const timeoutTimestamp = Long.fromString(
           ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
         )
