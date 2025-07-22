@@ -17,10 +17,7 @@ import { useTranslation } from 'react-i18next'
 export const StartMpcSessionStep = ({
   onFinish,
   value,
-  isPluginReshare,
-}: OnFinishProp &
-  ValueProp<MpcSession> &
-  Partial<{ isPluginReshare: boolean }>) => {
+}: OnFinishProp & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
@@ -30,7 +27,7 @@ export const StartMpcSessionStep = ({
       return startMpcSession({
         serverUrl,
         sessionId,
-        devices: isPluginReshare ? devices : devices,
+        devices,
       })
     },
     onSuccess: () => onFinish(),
