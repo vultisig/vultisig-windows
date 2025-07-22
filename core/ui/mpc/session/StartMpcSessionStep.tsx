@@ -1,4 +1,3 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
 import { MpcSession } from '@core/ui/mpc/session/MpcSession'
 import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
@@ -31,9 +30,7 @@ export const StartMpcSessionStep = ({
       return startMpcSession({
         serverUrl,
         sessionId,
-        devices: isPluginReshare
-          ? devices.filter(device => !isServer(device))
-          : devices,
+        devices: isPluginReshare ? devices : devices,
       })
     },
     onSuccess: () => onFinish(),
