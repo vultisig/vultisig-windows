@@ -1,10 +1,24 @@
+import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 
 type DepositPromptProps = { coin: CoinKey; totalAmountAvailable: number }
+
+const cosmosChains = [
+  Chain.Cosmos,
+  Chain.Osmosis,
+  Chain.Kujira,
+  Chain.Terra,
+  Chain.Dydx,
+  Chain.TerraClassic,
+  Chain.Noble,
+  Chain.Akash,
+  Chain.MayaChain,
+]
 
 export const DepositPrompt = ({
   coin,
@@ -13,7 +27,8 @@ export const DepositPrompt = ({
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
 
-  const isDisabled = totalAmountAvailable === 0
+  const isDisabled =
+    isOneOf(coin.chain, cosmosChains) && totalAmountAvailable === 0
 
   const button = (
     <Button
