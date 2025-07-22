@@ -66,6 +66,9 @@ export const en = {
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
+  no_vaults: 'No vaults yet',
+  no_vaults_desc:
+    'Your vaults will appear here Start by creating one or importing an existing vault',
   open_desktop: 'Open Desktop',
   percentage: 'Percentage',
   add_memo: 'Add MEMO',
