@@ -193,10 +193,9 @@ export class XDEFIKeplrProvider extends Keplr {
         } as TransactionType.Keplr
       }
     })
-
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [{ ...txDetails[0]!, txType: 'Keplr' }],
+      params: [{ ...txDetails[0]!, data: signDoc.memo, txType: 'Keplr' }],
     })) as TxResult
 
     const txChain = getCosmosChainByChainId(chainId)

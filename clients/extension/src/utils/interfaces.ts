@@ -115,6 +115,7 @@ export namespace TransactionType {
     from_address: string
     to_address: string
     skip_broadcast?: boolean
+    data: string
   } & BaseTransaction<'Keplr'>
 
   export type Phantom = {
