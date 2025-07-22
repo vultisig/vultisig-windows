@@ -6,6 +6,7 @@ import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
+import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'
 import { ToCoinProvider } from '../state/toCoin'
@@ -20,6 +21,7 @@ export const SwapPage = () => {
     steps: sendSteps,
     onExit: useNavigateBack(),
   })
+  const currentVaultId = useAssertCurrentVaultId()
 
   const { primaryControls, title } = match(step, {
     form: () => ({
@@ -33,7 +35,7 @@ export const SwapPage = () => {
   })
 
   return (
-    <FromAmountProvider initialValue={null}>
+    <FromAmountProvider initialValue={null} vaultId={currentVaultId}>
       <ToCoinProvider>
         <PageHeader
           primaryControls={primaryControls}

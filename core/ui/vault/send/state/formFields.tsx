@@ -1,3 +1,5 @@
+import { isExtensionEnv } from '@core/ui/utils/isExtensionEnv'
+import { getPersistentStateProviderSetup } from '@core/ui/vault/persistent/getPersistentStateProviderSetup'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 
@@ -11,17 +13,23 @@ type FocusedSendFieldContext = {
   errors: ValidationResult<SendFormShape>
 }
 
+const providerSetup = isExtensionEnv()
+  ? getPersistentStateProviderSetup<FocusedSendFieldContext>(
+      'SendFormFieldStateProvider',
+      (vaultId?: string) => `send_form_fields_${vaultId}`
+    )
+  : getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')
+
 export const {
   useState: useSendFormFieldState,
   provider: InternalSendFormFieldsStateProvider,
-} = getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')
+} = providerSetup
 
 export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
   const [state] = useCoreViewState<'send'>()
 
   const initialSendFormFieldState: FocusedSendFieldContext = {
     field: 'coin' in state ? 'address' : 'coin',
-
     errors: {},
   }
 

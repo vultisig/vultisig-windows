@@ -3,6 +3,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
+import { useAssertCurrentVaultId } from '../../storage/currentVaultId'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
@@ -20,14 +21,18 @@ export const SendPage = () => {
     onExit: useNavigateBack(),
   })
   const [{ address }] = useCoreViewState<'send'>()
+  const currentVaultId = useAssertCurrentVaultId()
 
   return (
     <SendFormFieldsStateProvider>
-      <SendFeesProvider initialValue={null}>
+      <SendFeesProvider initialValue={null} vaultId={currentVaultId}>
         <FeeSettingsProvider>
-          <SendAmountProvider initialValue={null}>
-            <SendReceiverProvider initialValue={address ?? ''}>
-              <SendMemoProvider initialValue="">
+          <SendAmountProvider initialValue={null} vaultId={currentVaultId}>
+            <SendReceiverProvider
+              initialValue={address ?? ''}
+              vaultId={currentVaultId}
+            >
+              <SendMemoProvider initialValue="" vaultId={currentVaultId}>
                 <Match
                   value={step}
                   form={() => <SendForm onFinish={toNextStep} />}
