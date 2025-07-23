@@ -174,7 +174,6 @@ export const DepositConfirmButton = ({
       ]
     )
   )
-  console.log('🚀 ~ keysignPayloadQuery:', keysignPayloadQuery.data)
 
   if (
     (config.requiresAmount && !Number.isFinite(amount)) ||
