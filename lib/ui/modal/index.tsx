@@ -28,6 +28,8 @@ export type ModalProps = AsProp &
 const contentVerticalPadding = 8
 
 const Container = styled(ModalContainer)`
+  margin-left: 16px;
+  margin-right: 16px;
   > * {
     padding: ${toSizeUnit(modalConfig.padding)};
   }
