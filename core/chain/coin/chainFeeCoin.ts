@@ -90,7 +90,7 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     ticker: 'POL',
     logo: 'polygon',
     decimals: 18,
-    priceProviderId: 'matic-network',
+    priceProviderId: 'polygon-ecosystem-token',
   },
 
   [Chain.CronosChain]: {
