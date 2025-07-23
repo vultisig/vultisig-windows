@@ -117,7 +117,7 @@ export const generateMemo = ({
     },
     merge: () => {
       const token = shouldBePresent(selectedCoin, 'Token to merge')
-      return `merge:THOR.${getDenom(token)}`
+      return `merge:thor.${getDenom(token).toLowerCase()}`
     },
     switch: () => {
       return `switch:${thorchainAddress}`
@@ -133,7 +133,7 @@ export const generateMemo = ({
       const sharesRaw = toChainAmount(amount, selectedCoin.decimals)
       // For unmerge, use the full coin ID (e.g., "thor.kuji")
       const denom = selectedCoin.id
-      const memo = `unmerge:${denom}:${sharesRaw}`
+      const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
 
       return memo
     },
