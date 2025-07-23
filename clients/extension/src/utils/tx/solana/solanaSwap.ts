@@ -1,4 +1,4 @@
-import { getSolanaClient, solanaRpcUrl } from '@core/chain/chains/solana/client'
+import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { getAccount, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token'
