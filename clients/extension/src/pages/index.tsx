@@ -1,7 +1,7 @@
 import { views } from '@clients/extension/src/navigation/views'
-import { StorageMigrationsManager } from '@clients/extension/src/providers/StorageMigrationManager'
 import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
 import { storage } from '@clients/extension/src/storage'
+import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
