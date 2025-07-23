@@ -68,7 +68,7 @@ export const en = {
     'dApps will appear here whenever you interact with them',
   no_vaults: 'No vaults yet',
   no_vaults_desc:
-    'Your vaults will appear here Start by creating one or importing an existing vault',
+    'Your vaults will appear here. Start by creating one or importing an existing vault',
   open_desktop: 'Open Desktop',
   percentage: 'Percentage',
   add_memo: 'Add MEMO',
