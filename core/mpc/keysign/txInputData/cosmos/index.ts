@@ -115,6 +115,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
+          txMemo: memo,
         }
       } else if (memo?.startsWith('unmerge:')) {
         const memoParts = memo.toLowerCase().split(':')
@@ -133,11 +134,12 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: coin.address,
                   contractAddress: toAddress,
-                  executeMsg: `{"withdraw":{"share_amount":"${rawShares}"}}`,
+                  executeMsg: `{ "withdraw": { "share_amount": "${rawShares}" } }`,
                   coins: [],
                 }),
             }),
           ],
+          txMemo: memo,
         }
       }
 
@@ -213,6 +215,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
     return result
   }
+  console.log('🚀 ~ txMemo:', txMemo)
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
@@ -227,6 +230,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     messages,
     fee: getFee(),
   })
+  console.log('🚀 ~ input:', input)
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
