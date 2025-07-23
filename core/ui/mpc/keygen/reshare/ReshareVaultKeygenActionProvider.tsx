@@ -15,6 +15,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
+import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import {
   assertKeygenReshareFields,
@@ -32,6 +33,7 @@ export const ReshareVaultKeygenActionProvider = ({
   const localPartyId = useMpcLocalPartyId()
   const isInitiatingDevice = useIsInitiatingDevice()
   const keygenVault = useKeygenVault()
+  const operation = useKeygenOperation()
 
   const vaultOrders = useVaultOrders()
 
@@ -48,7 +50,7 @@ export const ReshareVaultKeygenActionProvider = ({
       const { oldParties } = assertKeygenReshareFields(keygenVault)
       const oldCommittee = oldParties.filter(party => signers.includes(party))
       const dklsKeygen = new DKLS(
-        { reshare: 'regular' },
+        operation,
         isInitiatingDevice,
         serverUrl,
         sessionId,
@@ -67,7 +69,7 @@ export const ReshareVaultKeygenActionProvider = ({
       onStepChange('eddsa')
 
       const schnorrKeygen = new Schnorr(
-        { reshare: 'regular' },
+        operation,
         isInitiatingDevice,
         serverUrl,
         sessionId,
@@ -137,6 +139,7 @@ export const ReshareVaultKeygenActionProvider = ({
       sessionId,
       vaultName,
       vaultOrders,
+      operation,
     ]
   )
 
