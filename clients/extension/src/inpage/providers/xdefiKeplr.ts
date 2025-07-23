@@ -11,7 +11,6 @@ import {
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
@@ -269,6 +268,7 @@ export class XDEFIKeplrProvider extends Keplr {
   ): Promise<DirectSignResponse> {
     const txBody = TxBody.decode(signDoc.bodyBytes)
 
+    // currently we only support simple IBC transfer transaction and it should a single message
     const [firstMessage] = txBody.messages
     if (
       !firstMessage ||
@@ -277,14 +277,14 @@ export class XDEFIKeplrProvider extends Keplr {
       throw new Error('Unsupported message type')
     }
 
-    const txChain =
-      getCosmosChainByChainId(chainId) || getEvmChainByChainId(chainId)
+    const txChain = getCosmosChainByChainId(chainId)
 
     if (!txChain) {
       throw new Error(`Chain not supported: ${chainId}`)
     }
 
     const msg = MsgTransfer.decode(firstMessage.value)
+
     const receiverChain = getCosmosChainFromAddress(msg.receiver)
     if (!receiverChain) {
       throw new Error(`Receiver chain not supported: ${msg.receiver}`)
