@@ -135,7 +135,7 @@ export class Solana extends EventEmitter {
             shouldBePresent((result as TxResult).encoded),
             'base64'
           )
-          return VersionedTransaction.deserialize(rawData)
+          return Transaction.from(rawData)
         })
       }
     }
@@ -199,7 +199,7 @@ export class Solana extends EventEmitter {
       })
     }
 
-    const results: VersionedTransaction[] = []
+    const results: (Transaction | VersionedTransaction)[] = []
 
     for (const transaction of transactions) {
       const result = await this.signTransaction(transaction)
