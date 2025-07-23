@@ -75,6 +75,11 @@ export const VaultChainPage = () => {
     invalidateQueries(keys)
   }, [address, chain, invalidateQueries, vaultCoins])
 
+  const viewState =
+    vaultCoins.length > 0
+      ? { coin: vaultCoins[0], address }
+      : { fromChain: chain, address }
+
   return (
     <VStack flexGrow>
       <PageHeader
@@ -88,7 +93,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions fromChain={chain} />
+        <VaultPrimaryActions {...viewState} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
