@@ -1,11 +1,9 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { getCosmosClient } from '../../chains/cosmos/client'
-import { cosmosFeeCoinDenom } from '../../chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosWasmTokenBalanceUrl } from '../../chains/cosmos/cosmosRpcUrl'
-import { isFeeCoin } from '../utils/isFeeCoin'
+import { getDenom } from '../utils/getDenom'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 const isWasmToken = (id: string): boolean => {
@@ -29,9 +27,7 @@ export const getCosmosCoinBalance: CoinBalanceResolver<
 
   const client = await getCosmosClient(input.chain)
 
-  const denom = isFeeCoin(input)
-    ? cosmosFeeCoinDenom[input.chain]
-    : shouldBePresent(input.id)
+  const denom = getDenom(input)
 
   const balance = await client.getBalance(input.address, denom)
 
