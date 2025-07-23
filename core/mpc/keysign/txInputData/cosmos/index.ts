@@ -215,7 +215,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
     return result
   }
-  console.log('🚀 ~ txMemo:', txMemo)
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
@@ -230,7 +229,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     messages,
     fee: getFee(),
   })
-  console.log('🚀 ~ input:', input)
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
