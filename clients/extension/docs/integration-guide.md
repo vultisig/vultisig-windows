@@ -4,15 +4,15 @@
 
 1. [Introduction](#introduction)
 2. [Supported Chains](#supported-chains)
-3. [How VultiConnect Works](#how-vulticonnect-works)
+3. [How Vultisig Extension Works](#how-Vultisig-extension-works)
 4. [Supported Methods](#supported-methods)
    - [Ethereum](#ethereum-windowvultisigethereum)
    - [THORChain](#thorchain-windowthorchain-and-windowvultisigthorchain)
    - [Cosmos-Based Chains](#cosmos-based-chains-gaiachain-osmosis-kujira-dydx)
    - [Other Chains](#other-chains-windowchain-and-windowvultisigchain)
-5. [Steps to Integrate with VultiConnect](#steps-to-integrate-with-vulticonnect)
-   - [1. Detect VultiConnect Support](#1-detect-vulticonnect-support)
-   - [2. Connecting to VultiConnect](#2-connecting-to-vulticonnect)
+5. [Steps to Integrate with Vultisig Extension](#steps-to-integrate-with-Vultisig-extension)
+   - [1. Detect Vultisig Extension Support](#1-detect-Vultisig-extension-support)
+   - [2. Connecting to Vultisig Extension](#2-connecting-to-Vultisig-extension)
    - [3. Connected Accounts](#3-connected-accounts)
    - [4. Managing Active Chain](#4-managing-active-chain)
    - [5. Handling Transactions](#5-handling-transactions)
@@ -27,7 +27,7 @@
 
 ## Introduction
 
-VultiConnect is a Chrome extension that enhances the experience of interacting with decentralized finance (DeFi) applications. It offers a secure way for users to connect with decentralized applications without storing private keys in their browsers. VultiConnect introduces:
+Vultisig Extension is a Chrome extension that enhances the experience of interacting with decentralized finance (DeFi) applications. It offers a secure way for users to connect with decentralized applications without storing private keys in their browsers. Vultisig Extension introduces:
 
 - **`window.vultisig.ethereum`** for Ethereum integrations (previously `window.vultisig`).
 - **`window.vultisig.thorchain` and `window.thorchain`** for THORChain support.
@@ -36,7 +36,7 @@ VultiConnect is a Chrome extension that enhances the experience of interacting w
 
 ## Supported Chains
 
-VultiConnect currently supports the following chains:
+Vultisig Extension currently supports the following chains:
 
 | Chain       | Identifier            |
 | ----------- | --------------------- |
@@ -58,12 +58,12 @@ VultiConnect currently supports the following chains:
 | Zcash       | `Zcash_zcash`         |
 
 
-## How VultiConnect Works
+## How Vultisig Extension Works
 
-- **Private Key Security**: VultiConnect does not store private keys. Instead, transactions are converted to QR codes that users can scan and sign using VultiSig peer devices.
+- **Private Key Security**: Vultisig Extension does not store private keys. Instead, transactions are converted to QR codes that users can scan and sign using VultiSig peer devices.
 - **Compatibility**: The extension provides:
   - `window.ethereum` for MetaMask-compatible Ethereum integration.
-  - `window.vultisig.ethereum` for VultiConnect-enhanced Ethereum features.
+  - `window.vultisig.ethereum` for Vultisig Extension-enhanced Ethereum features.
   - `window.vultisig.thorchain` and `window.thorchain` for THORChain functionality.
   - Additional chain support for other chains using `window.vultisig.chain` and `window.chain`.
 
@@ -147,28 +147,28 @@ The following chains are fully supported through their respective interfaces:
 - LiteCoin
 - MayaChain
 
-## Steps to Integrate with VultiConnect
+## Steps to Integrate with Vultisig Extension
 
-### 1. Detect VultiConnect Support
+### 1. Detect Vultisig Extension Support
 
 ```javascript
 if (window.vultisig?.ethereum) {
-  console.log("VultiConnect Ethereum provider is available!");
+  console.log("Vultisig Extension Ethereum provider is available!");
   // Integration logic for Ethereum
 } else if (window.ethereum) {
-  console.log("Ethereum provider available (MetaMask or VultiConnect)");
+  console.log("Ethereum provider available (MetaMask or Vultisig Extension)");
   // Fallback to MetaMask-compatible logic
 }
 
 if (window.vultisig?.[chain] || window[chain]) {
-  console.log(`VultiConnect [${chain}] provider is available!`);
+  console.log(`Vultisig Extension [${chain}] provider is available!`);
   // Integration logic for the chain
 } else {
   console.log(`No compatible [${chain}] provider found.`);
 }
 ```
 
-### 2. Connecting to VultiConnect
+### 2. Connecting to Vultisig Extension
 
 #### Ethereum
 
@@ -186,7 +186,7 @@ const connectEthereum = async () => {
     }
   } else {
     alert(
-      "No Ethereum provider found. Please install VultiConnect or MetaMask.",
+      "No Ethereum provider found. Please install Vultisig Extension or MetaMask.",
     );
   }
 };
@@ -207,7 +207,7 @@ const connectChain = async (chain) => {
       console.error(`${chain} connection failed`, error);
     }
   } else {
-    alert(`No ${chain} provider found. Please install VultiConnect.`);
+    alert(`No ${chain} provider found. Please install Vultisig Extension.`);
   }
 };
 ```
@@ -218,7 +218,7 @@ Each chain uses a unified interface accessible via `window.vultisig?.[chain]` an
 
 ### 3. Connected Accounts
 
-To get connected accounts to the current dapp, use `eth_accounts` for EVM chains and `get_accounts` for other VultiConnect supported chains.
+To get connected accounts to the current dapp, use `eth_accounts` for EVM chains and `get_accounts` for other Vultisig Extension supported chains.
 
 #### Ethereum
 
@@ -242,7 +242,7 @@ const getConnectedEthereum = async () => {
     }
   } else {
     alert(
-      "No Ethereum provider found. Please install VultiConnect or MetaMask.",
+      "No Ethereum provider found. Please install Vultisig Extension or MetaMask.",
     );
   }
 };
@@ -271,7 +271,7 @@ const getConnectedAccountsChain = async (chain) => {
       console.error(`${chain} getting connected accounts failed`, error);
     }
   } else {
-    alert(`No ${chain} provider found. Please install VultiConnect.`);
+    alert(`No ${chain} provider found. Please install Vultisig Extension.`);
   }
 };
 ```
@@ -280,7 +280,7 @@ const getConnectedAccountsChain = async (chain) => {
 
 #### Ethereum
 
-To get the current active chain ID of VultiConnect:
+To get the current active chain ID of Vultisig Extension:
 
 ```javascript
 const getEthereumChainId = async () => {
@@ -501,7 +501,7 @@ const THORChainDepositTransaction = async (txDetails) => {
 
 ### Ethereum
 
-VultiConnect currently supports the `personal_sign` method.
+Vultisig Extension currently supports the `personal_sign` method.
 
 ```javascript
 const signCustomMessage = async (hexMessage, walletAddress) => {
@@ -545,7 +545,7 @@ const getEthereumTransaction = async (txHash) => {
 
 ### Other Supported Chains
 
-Retrieve transaction details of other VultiConnect supported chains using `get_transaction_by_hash`.
+Retrieve transaction details of other Vultisig Extension supported chains using `get_transaction_by_hash`.
 
 ```javascript
 const getChainTransaction = async (chain, txHash) => {
@@ -567,7 +567,7 @@ const getChainTransaction = async (chain, txHash) => {
 
 ## 8. Event Handling
 
-VultiConnect supports the CONNECT and DISCONNECT events for all supported chains.
+Vultisig Extension supports the CONNECT and DISCONNECT events for all supported chains.
 
 ```javascript
 const provider = window.vultisig?.[chain] || window[chain];
@@ -585,7 +585,7 @@ if (provider) {
 
 ## 9. Get Vault
 
-VultiConnect provides a function to get vault properties.
+Vultisig Extension provides a function to get vault properties.
 
 ```javascript
 const provider = window.vultisig;
@@ -621,8 +621,8 @@ interface Transaction {
 ### Ethereum Account Management Examples
 
 ```typescript
-// Connect to VultiConnect
-const connectToVultiConnect = async () => {
+// Connect to Vultisig Extension
+const connectToVultisig Extension = async () => {
   try {
     const accounts = await window.vultisig.ethereum.request({ 
       method: "eth_requestAccounts"
@@ -813,4 +813,4 @@ Common error codes include:
 
 ## Summary
 
-VultiConnect ensures secure and **multi-chain integration** with DeFi applications, providing seamless support across popular chains. Its adherence to [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) guarantees compatibility with existing applications while delivering a secure and user-friendly experience.
+Vultisig Extension ensures secure and **multi-chain integration** with DeFi applications, providing seamless support across popular chains. Its adherence to [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) guarantees compatibility with existing applications while delivering a secure and user-friendly experience.
