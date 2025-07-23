@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 import { Query } from '../Query'
 
-type MatchQueryProps<T, E = unknown> = ValueProp<Query<T, E>> & {
+export type MatchQueryProps<T, E = unknown> = ValueProp<Query<T, E>> & {
   error?: (error: E) => ReactNode
   pending?: () => ReactNode
   success?: (data: T) => ReactNode
@@ -31,9 +31,3 @@ export function MatchQuery<T, E = unknown>({
 
   return <>{inactive()}</>
 }
-
-export type MatchQueryWrapperProps<T, E = unknown> = Pick<
-  MatchQueryProps<T>,
-  'success'
-> &
-  Partial<Pick<MatchQueryProps<T, E>, 'error' | 'pending' | 'inactive'>>
