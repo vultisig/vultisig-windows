@@ -27,6 +27,12 @@ export const knownCosmosTokens: Record<
       decimals: 6,
       priceProviderId: 'astroport',
     },
+        terra1vhgq25vwuhdhn9xjll0rhl2s67jzw78a4g2t78y5kz89q9lsdskq2pxcj2: {
+      ticker: 'JURIS',
+      logo: 'juris.png',
+      decimals: 6,
+      priceProviderId: 'juris-protocol',
+    },
   },
   [Chain.THORChain]: {
     tcy: {
