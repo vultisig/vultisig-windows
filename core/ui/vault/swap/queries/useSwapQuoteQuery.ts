@@ -36,12 +36,12 @@ export const useSwapQuoteQuery = () => {
     fiatCurrency: 'usd',
   })
 
-  return useStateDependentQuery({
-    state: {
+  return useStateDependentQuery(
+    {
       fromAmount: fromAmount || undefined,
       fromCoinUsdPrice: fromCoinUsdPrice.data,
     },
-    getQuery: ({ fromAmount, fromCoinUsdPrice }) => ({
+    ({ fromAmount, fromCoinUsdPrice }) => ({
       queryKey: getSwapQuoteQueryKey({
         fromCoinKey,
         toCoinKey,
@@ -60,6 +60,6 @@ export const useSwapQuoteQuery = () => {
         })
       },
       retry: false,
-    }),
-  })
+    })
+  )
 }

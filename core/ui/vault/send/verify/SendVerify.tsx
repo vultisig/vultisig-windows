@@ -11,12 +11,8 @@ import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
-import { SendConfirm } from '@core/ui/vault/send/verify/SendConfirm'
 import { SendTerms } from '@core/ui/vault/send/verify/SendTerms'
-import {
-  sendTerms,
-  SendTermsProvider,
-} from '@core/ui/vault/send/verify/state/sendTerms'
+import { useSendTerms } from '@core/ui/vault/send/verify/state/sendTerms'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -25,16 +21,23 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { FC } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { BlockaidKeysignPayloadScan } from '../../../chain/security/blockaid/keysignPayload/BlockaidKeysignPayloadScan'
-import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/BlockaidTxStatusContainer'
+import { keysignPayloadToBlockaidTxScanInput } from '../../../chain/security/blockaid/keysignPayload/core/keysignPayloadToBlockaidTxScanInput'
+import { BlockaidNoTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidNoTxScanStatus'
+import { BlockaidTxScanning } from '../../../chain/security/blockaid/tx/BlockaidTxScanning'
+import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/BlockaidTxScanResult'
+import { getBlockaidTxScanQuery } from '../../../chain/security/blockaid/tx/queries/blockaidTxScan'
+import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
 import { useIsBlockaidEnabled } from '../../../storage/blockaid'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
 
@@ -52,6 +55,53 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
 
   const isBlockaidEnabled = useIsBlockaidEnabled()
 
+  const txScanInput = useTransformQueryData(
+    keysignPayloadQuery,
+    useCallback(
+      payload => {
+        if (!isBlockaidEnabled) {
+          return null
+        }
+
+        return keysignPayloadToBlockaidTxScanInput(payload)
+      },
+      [isBlockaidEnabled]
+    )
+  )
+
+  const txScanQuery = useStateDependentQuery(
+    {
+      txScanInput: txScanInput.data || undefined,
+    },
+    ({ txScanInput }) => getBlockaidTxScanQuery(txScanInput)
+  )
+
+  const [terms] = useSendTerms()
+
+  const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
+    if (terms.some(term => !term)) {
+      return {
+        disabledMessage: t('terms_required'),
+      }
+    }
+
+    if (txScanQuery.isPending) {
+      return {
+        disabledMessage: t('scanning'),
+      }
+    }
+
+    const keysign = keysignPayloadQuery.data
+
+    if (!keysign) {
+      return {}
+    }
+
+    return {
+      keysignPayload: { keysign },
+    }
+  }, [keysignPayloadQuery.data, t, terms, txScanQuery.isPending])
+
   return (
     <>
       <PageHeader
@@ -60,16 +110,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         hasBorder
       />
       <PageContent gap={12}>
-        {isBlockaidEnabled && (
-          <MatchQuery
-            value={keysignPayloadQuery}
-            success={keysignPayload => (
-              <BlockaidKeysignPayloadScan value={keysignPayload} />
-            )}
-            pending={() => <BlockaidTxStatusContainer />}
-            error={() => <BlockaidTxStatusContainer />}
-          />
-        )}
+        <MatchQuery
+          value={txScanQuery}
+          success={value => <BlockaidTxScanResult value={value} />}
+          pending={() => <BlockaidTxScanning />}
+          error={() => <BlockaidNoTxScanStatus />}
+        />
         <TxOverviewPanel>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
@@ -120,17 +166,15 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             <SendFiatFee />
           </TxOverviewRow>
         </TxOverviewPanel>
-        <SendTermsProvider initialValue={sendTerms.map(() => false)}>
-          <SendTerms />
-          <VStack
-            style={{
-              marginTop: 'auto',
-            }}
-            gap={20}
-          >
-            <SendConfirm />
-          </VStack>
-        </SendTermsProvider>
+        <SendTerms />
+        <VStack
+          style={{
+            marginTop: 'auto',
+          }}
+          gap={20}
+        >
+          <StartKeysignPrompt {...startKeysignPromptProps} />
+        </VStack>
       </PageContent>
     </>
   )
