@@ -1,5 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { rootApiUrl } from '@core/config'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
@@ -13,7 +15,6 @@ import {
   Transaction,
   VersionedTransaction,
 } from '@solana/web3.js'
-import base58 from 'bs58'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -52,17 +53,16 @@ export class Solana extends EventEmitter {
 
   async signTransaction(transaction: Transaction | VersionedTransaction) {
     if (isVersionedTransaction(transaction)) {
-      return await this.request({
+      const result = (await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [
           {
             serializedTx: transaction.serialize(),
           },
         ],
-      }).then(result => {
-        const rawData = base58.decode(result as string)
-        return VersionedTransaction.deserialize(rawData)
-      })
+      })) as TxResult
+      const rawData = Buffer.from(shouldBePresent(result.encoded), 'base64')
+      return VersionedTransaction.deserialize(rawData)
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
       for (const instruction of transaction.instructions) {
@@ -131,7 +131,10 @@ export class Solana extends EventEmitter {
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [modifiedTransfer],
         }).then(result => {
-          const rawData = base58.decode(result as string)
+          const rawData = Buffer.from(
+            shouldBePresent((result as TxResult).encoded),
+            'base64'
+          )
           return VersionedTransaction.deserialize(rawData)
         })
       }
