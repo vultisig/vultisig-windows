@@ -1,7 +1,7 @@
-import { solanaRpcUrl } from '@core/chain/chains/solana/client'
+import { getSolanaClient, solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
-import { NATIVE_MINT } from '@solana/spl-token'
+import { getAccount, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -9,17 +9,20 @@ import api from '../../api'
 import { jupiterV6ProgramId, raydiumAmmRouting } from './config'
 import { JupiterInstructionParser } from './jupiter-instruction-parser'
 import { RaydiumInstructionParser } from './raydium-instruction-parser'
-import { ParsedSolanaSwapParams, PartialInstruction } from './types/types'
+import {
+  ParsedSolanaTransactionParams,
+  PartialInstruction,
+} from './types/types'
 
 export type AddressTableLookup = {
   accountKey: string
   writableIndexes: number[]
   readonlyIndexes: number[]
 }
-export async function getParsedSolanaSwap(
+export async function getParsedSolanaTransaction(
   walletCore: WalletCore,
   inputTx: Uint8Array
-): Promise<ParsedSolanaSwapParams> {
+): Promise<ParsedSolanaTransactionParams> {
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
 
@@ -96,6 +99,42 @@ export async function getParsedSolanaSwap(
     return { authority, inputToken, outputToken, inAmount, outAmount }
   }
 
+  if (staticAccountsPubkey.some(key => key.equals(TOKEN_PROGRAM_ID))) {
+    if (!tx.accountKeys) throw Error('invalid tx')
+    for (const instruction of tx.instructions as PartialInstruction[]) {
+      const programIdKey = tx.accountKeys[instruction.programId]
+      if (!programIdKey || programIdKey != TOKEN_PROGRAM_ID.toString()) continue
+      const mintIndex = instruction.accounts[1]
+      const authorityIndex = instruction.accounts[3]
+      const inputMint = tx.accountKeys[mintIndex]
+      const receiverIndex = instruction.accounts[2]
+      const receiverATA = tx.accountKeys[receiverIndex]
+      const rawData = Buffer.from(instruction.programData)
+
+      const tokenAccountInfo = await getAccount(
+        new Connection(solanaRpcUrl),
+        new PublicKey(receiverATA)
+      )
+      const receiverAuthority = tokenAccountInfo.owner.toBase58()
+
+      if (rawData[0] === 12 && rawData.length >= 10) {
+        const rawAmount = rawData.subarray(1, 9)
+        const amount = Number(rawAmount.readBigUInt64LE())
+        return {
+          authority: tx.accountKeys[authorityIndex],
+          inputToken: await buildToken(inputMint),
+          inAmount: amount,
+          receiverAddress: receiverAuthority,
+        }
+      }
+      return {
+        authority: tx.accountKeys[authorityIndex],
+        inputToken: await buildToken(inputMint),
+        inAmount: 0,
+        receiverAddress: receiverAuthority,
+      }
+    }
+  }
   // Default fallback if neither Jupiter nor Raydium
   const fallbackToken: SolanaJupiterToken = {
     address: NATIVE_MINT.toString(),
