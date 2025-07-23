@@ -2,7 +2,6 @@
 import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { TokenBalance } from '@core/chain/chains/thorchain/ruji/services/fetchMergeableTokenBalances'
 import { Coin } from '@core/chain/coin/Coin'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { useEffect, useMemo } from 'react'
 
 import { useCoreViewState } from '../../../../../../navigation/hooks/useCoreViewState'
@@ -31,13 +30,7 @@ export const useUnmergeOptions = ({
   const tokens = useMemo(() => {
     const kujiraTokens = coins.filter(c => c.id in kujiraCoinsOnThorChain)
 
-    const rujiToken = coins.find(
-      c => c.ticker === knownCosmosTokens.THORChain['x/ruji'].ticker
-    )
-
-    const base = rujiToken ? [...kujiraTokens, rujiToken] : kujiraTokens
-
-    const extra = balances
+    const extraTokens = balances
       .map(
         tb =>
           coins.find(c => c.ticker.toUpperCase() === tb.symbol.toUpperCase()) ??
@@ -45,11 +38,11 @@ export const useUnmergeOptions = ({
       )
       .filter(
         (c, i, self) =>
-          !base.some(b => b.ticker === c.ticker) &&
+          !kujiraTokens.some(b => b.ticker === c.ticker) &&
           self.findIndex(x => x.ticker === c.ticker) === i
       )
 
-    return [...base, ...extra]
+    return [...kujiraTokens, ...extraTokens]
   }, [coins, balances])
 
   useEffect(() => {

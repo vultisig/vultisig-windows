@@ -216,6 +216,7 @@ export const en = {
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
   add_new_vault: 'Add New Vault',
+  shares: 'Shares',
   backupnow_note:
     'Note: Never store Vault Shares from different devices in the same location.',
   backup: 'Backup',
