@@ -18,7 +18,6 @@ export const {
 
 export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
   const [state] = useCoreViewState<'send'>()
-  console.log('🚀 ~ SendFormFieldsStateProvider ~ state:', state)
 
   const initialSendFormFieldState: FocusedSendFieldContext = {
     field: 'coin' in state ? 'address' : 'coin',
