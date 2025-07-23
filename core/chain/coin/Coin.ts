@@ -8,6 +8,7 @@ import { chainFeeCoin } from './chainFeeCoin'
 import { knownTokens } from './knownTokens'
 
 export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
+  // The ID should only be present in tokens. Coins that are classified as fee coins in chainFeeCoin should not have an ID.
   id?: string
 }
 

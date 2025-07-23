@@ -183,6 +183,5 @@ export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(
   (coin, chain) => ({
     ...coin,
     chain,
-    id: coin.ticker,
   })
 )
