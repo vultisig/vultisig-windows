@@ -10,7 +10,7 @@ import { storage } from '../../wailsjs/go/models'
 
 export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
   return {
-    id: coin.contract_address || coin.ticker,
+    id: coin.contract_address || undefined,
     chain: coin.chain as Chain,
     address: coin.address,
     ticker: coin.ticker,
