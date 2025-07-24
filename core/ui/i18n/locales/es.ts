@@ -96,6 +96,7 @@ export const es = {
   unexpected_error: 'Error inesperado',
   select_destination_chain: 'Seleccionar cadena de destino',
   percentage_limit: 'El porcentaje debe estar entre 0 y 100',
+  shares: 'Acciones',
   approval_tx: 'Transacción de aprobación',
   verify_password_periodic_message:
     'Verifique su contraseña de compartición del servidor',
