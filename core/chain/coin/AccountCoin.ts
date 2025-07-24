@@ -1,4 +1,5 @@
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { without } from '@lib/utils/array/without'
 import { pick } from '@lib/utils/record/pick'
 
 import { Chain } from '../Chain'
@@ -17,4 +18,4 @@ export const accountCoinKeyToString = ({
   chain,
   id,
   address,
-}: AccountCoinKey): string => [chain, id, address].join(':')
+}: AccountCoinKey): string => without([chain, id, address], undefined).join(':')

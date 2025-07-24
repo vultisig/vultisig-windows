@@ -13,7 +13,7 @@ import { setPersistentState } from '../state/persistent/setPersistentState'
 const getCoins = async () =>
   getPersistentState(StorageKey.vaultsCoins, initialCoinsRecord)
 
-const updateCoins = async (coins: CoinsRecord) => {
+export const updateCoins = async (coins: CoinsRecord) => {
   await setPersistentState(StorageKey.vaultsCoins, coins)
 }
 
