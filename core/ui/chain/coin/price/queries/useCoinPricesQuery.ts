@@ -54,7 +54,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
         }),
         queryFn: async () => {
           const prices = await getErc20Prices({
-            ids: coins.map(coin => coin.id),
+            ids: coins.map(coin => shouldBePresent(coin.id)),
             chain: chain as EvmChain,
             fiatCurrency,
           })
@@ -63,7 +63,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
           Object.entries(prices).forEach(([id, price]) => {
             const coin = shouldBePresent(
-              coins.find(coin => areLowerCaseEqual(coin.id, id))
+              coins.find(coin =>
+                areLowerCaseEqual(shouldBePresent(coin.id), id)
+              )
             )
 
             result[coinKeyToString(coin)] = price

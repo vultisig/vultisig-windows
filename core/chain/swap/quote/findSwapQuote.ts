@@ -89,8 +89,8 @@ export const findSwapQuote = ({
     fetchers.push(async (): Promise<SwapQuote> => {
       const general = await getOneInchSwapQuote({
         account: pick(from, ['address', 'chain']),
-        fromCoinId: from.id,
-        toCoinId: to.id,
+        fromCoinId: from.id ?? from.ticker,
+        toCoinId: to.id ?? to.ticker,
         amount: chainAmount,
         isAffiliate,
       })

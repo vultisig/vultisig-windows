@@ -62,98 +62,105 @@ export class Schnorr {
     this.chainCode = chainCode
   }
 
-  private async processOutbound(session: KeygenSession | QcSession) {
-    console.log('processOutbound')
-    while (true) {
-      try {
-        const message = session.outputMessage()
-        if (message === undefined) {
-          if (this.isKeygenComplete) {
-            console.log('stop processOutbound')
-            return
-          } else {
-            await sleep(100) // backoff for 100ms
-          }
-          continue
+  private async processOutbound(
+    session: KeygenSession | QcSession
+  ): Promise<boolean> {
+    try {
+      const message = session.outputMessage()
+      if (message === undefined) {
+        if (this.isKeygenComplete) {
+          console.log('stop processOutbound')
+          return true
+        } else {
+          await sleep(100) // backoff for 100ms
+          return await this.processOutbound(session)
         }
-        console.log('outbound message:', message)
-        const messageToSend = toMpcServerMessage(
-          message.body,
-          this.hexEncryptionKey
-        )
-        message?.receivers.forEach(receiver => {
-          // send message to receiver
-          sendMpcRelayMessage({
-            serverUrl: this.serverURL,
-            sessionId: this.sessionId,
-            message: {
-              session_id: this.sessionId,
-              from: this.localPartyId,
-              to: [receiver],
-              body: messageToSend,
-              hash: getMessageHash(base64Encode(message.body)),
-              sequence_no: this.sequenceNo,
-            },
-          })
-          this.sequenceNo++
-        })
-      } catch (error) {
-        console.error('processOutbound error:', error)
       }
+      console.log('outbound message:', message)
+      const messageToSend = toMpcServerMessage(
+        message.body,
+        this.hexEncryptionKey
+      )
+      message?.receivers.forEach(receiver => {
+        // send message to receiver
+        sendMpcRelayMessage({
+          serverUrl: this.serverURL,
+          sessionId: this.sessionId,
+          message: {
+            session_id: this.sessionId,
+            from: this.localPartyId,
+            to: [receiver],
+            body: messageToSend,
+            hash: getMessageHash(base64Encode(message.body)),
+            sequence_no: this.sequenceNo,
+          },
+        })
+        this.sequenceNo++
+      })
+      await sleep(100)
+      return await this.processOutbound(session)
+    } catch (error) {
+      console.error('processOutbound error:', error)
+      await sleep(100)
+      return await this.processOutbound(session)
     }
   }
 
-  private async processInbound(session: KeygenSession | QcSession) {
-    const start = Date.now()
-    while (true) {
-      try {
-        const parsedMessages = await getMpcRelayMessages({
+  private async processInbound(
+    session: KeygenSession | QcSession,
+    start: number
+  ): Promise<boolean> {
+    try {
+      const parsedMessages = await getMpcRelayMessages({
+        serverUrl: this.serverURL,
+        localPartyId: this.localPartyId,
+        sessionId: this.sessionId,
+      })
+      if (parsedMessages.length === 0) {
+        // no message to download, backoff for 100ms
+        await sleep(100)
+        return await this.processInbound(session, start)
+      }
+      for (const msg of parsedMessages) {
+        const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
+        if (this.cache[cacheKey]) {
+          continue
+        }
+        console.log(
+          `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
+        )
+        const decryptedMessage = fromMpcServerMessage(
+          msg.body,
+          this.hexEncryptionKey
+        )
+        const isFinish = session.inputMessage(decryptedMessage)
+        if (isFinish) {
+          await sleep(1000) // wait for 1 second to make sure all messages are processed
+          this.isKeygenComplete = true
+          console.log('keygen complete')
+          return true
+        }
+        this.cache[cacheKey] = ''
+        await deleteMpcRelayMessage({
           serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
+          messageHash: msg.hash,
         })
-        if (parsedMessages.length === 0) {
-          // no message to download, backoff for 100ms
-          await sleep(100)
-          continue
-        }
-        for (const msg of parsedMessages) {
-          const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
-          if (this.cache[cacheKey]) {
-            continue
-          }
-          console.log(
-            `got message from: ${msg.from},to: ${msg.to},key:${cacheKey}`
-          )
-          const decryptedMessage = fromMpcServerMessage(
-            msg.body,
-            this.hexEncryptionKey
-          )
-          const isFinish = session.inputMessage(decryptedMessage)
-          if (isFinish) {
-            await sleep(1000) // wait for 1 second to make sure all messages are processed
-            this.isKeygenComplete = true
-            console.log('keygen complete')
-            return true
-          }
-          this.cache[cacheKey] = ''
-          await deleteMpcRelayMessage({
-            serverUrl: this.serverURL,
-            localPartyId: this.localPartyId,
-            sessionId: this.sessionId,
-            messageHash: msg.hash,
-          })
-        }
-        const end = Date.now()
-        // timeout after 1 minute
-        if (end - start > 1000 * 60) {
-          console.log('timeout')
-          this.isKeygenComplete = true
-          return false
-        }
-      } catch (error) {
-        console.error('processInbound error:', error)
       }
+      const end = Date.now()
+      // timeout after 1 minute
+      if (end - start > 1000 * 60) {
+        console.log('timeout')
+        this.isKeygenComplete = true
+        return false
+      }
+      await sleep(100)
+      return await this.processInbound(session, start)
+    } catch (error) {
+      console.error('processInbound error:', error)
+      await sleep(100)
+      return await this.processInbound(session, start)
     }
   }
 
@@ -182,8 +189,9 @@ export class Schnorr {
       } else {
         throw new Error('invalid keygen type')
       }
+      const start = Date.now()
       const outbound = this.processOutbound(session)
-      const inbound = this.processInbound(session)
+      const inbound = this.processInbound(session, start)
       const [, inboundResult] = await Promise.all([outbound, inbound])
       if (inboundResult) {
         const keyShare = session.finish()
@@ -235,8 +243,13 @@ export class Schnorr {
         if (localKeyshare === null) {
           throw new Error('local keyshare is null')
         }
+        const isPlugin =
+          'reshare' in this.keygenOperation &&
+          this.keygenOperation.reshare === 'plugin'
         // keygenCommittee only has new committee members
-        const threshold = getKeygenThreshold(this.keygenCommittee.length)
+        const threshold = isPlugin
+          ? 2
+          : getKeygenThreshold(this.keygenCommittee.length)
         const { allCommittee, newCommitteeIdx, oldCommitteeIdx } =
           combineReshareCommittee({
             keygenCommittee: this.keygenCommittee,
@@ -279,8 +292,9 @@ export class Schnorr {
       )
 
       try {
+        const start = Date.now()
         const outbound = this.processOutbound(session)
-        const inbound = this.processInbound(session)
+        const inbound = this.processInbound(session, start)
         const [, inboundResult] = await Promise.all([outbound, inbound])
         if (inboundResult) {
           const finalKeyShare = session.finish()

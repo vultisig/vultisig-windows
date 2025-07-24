@@ -19,8 +19,7 @@ export const pendingQuery = {
 export const inactiveQuery = {
   data: undefined,
   error: null,
-  isPending: true,
-  isLoading: false,
+  isPending: false,
 }
 
 export const getResolvedQuery = <T>(data: T): Query<T> => ({
