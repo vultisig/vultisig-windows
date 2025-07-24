@@ -9,9 +9,11 @@ type ThemeGetterParams = {
 type ColorName = keyof Omit<ThemeColors, 'getLabelColor'>
 
 export const getColor =
-  (color: ColorName) =>
+  (color: ColorName, alpha: number = 1) =>
   ({ theme }: ThemeGetterParams): string =>
-    theme.colors[color].toCssValue()
+    alpha < 1
+      ? theme.colors[color].toRgba(alpha)
+      : theme.colors[color].toCssValue()
 
 type BooleanMatcher = { true: ColorName; false: ColorName }
 type Matcher<T extends string | number | symbol> = { [key in T]: ColorName }

@@ -1,56 +1,59 @@
 import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
+import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
+import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { VStack } from '@lib/ui/layout/Stack'
-import { pageConfig } from '@lib/ui/page/config'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-type OnboardingStepsProps = {
-  onCompleted: () => void
-}
-
-export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
-  onCompleted,
-}) => {
+export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
   const {
     animations,
     handleNextAnimation,
+    handlePrevAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
   } = useBackupOverviewStepsAnimations()
-  const isLargeDevice = useIsTabletDeviceAndUp()
-  const fontSize = isLargeDevice ? 32 : 24
+  const fontSize = 28
 
   return (
-    <VStack fullHeight>
-      <VStack
-        alignItems="center"
-        gap={16}
-        style={{ padding: pageConfig.verticalPadding }}
-      >
-        <Text size={18}>{t('vault_overview')}</Text>
+    <StyledLayout maxWidth={400} fullSize>
+      <StyledHeader gap={16}>
+        <HStack justifyContent="space-between">
+          <StyledButton
+            icon={
+              currentAnimation > 1 ? (
+                <ChevronLeftIcon fontSize={18} />
+              ) : undefined
+            }
+            kind="link"
+            onClick={currentAnimation > 1 ? handlePrevAnimation : undefined}
+            size="sm"
+          >
+            {t('back')}
+          </StyledButton>
+        </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={animations.length}
-          stepWidth={`100px`}
           value={animations.indexOf(currentAnimation) + 1}
           variant="bars"
         />
-      </VStack>
-      <PageContent alignItems="center" flexGrow>
+      </StyledHeader>
+      <StyledContent alignItems="center">
         <AnimationComponent />
-      </PageContent>
-      <PageFooter alignItems="center" gap={32}>
+      </StyledContent>
+      <StyledFooter alignItems="center" gap={32}>
         <AnimatedVisibility>
           {match(currentAnimation, {
             1: () => (
@@ -85,13 +88,41 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           onClick={
             currentAnimation !== animations[animations.length - 1]
               ? handleNextAnimation
-              : onCompleted
+              : onFinish
           }
           size="xl"
         >
           <ChevronRightIcon />
         </IconButton>
-      </PageFooter>
-    </VStack>
+      </StyledFooter>
+    </StyledLayout>
   )
 }
+
+const StyledButton = styled(Button)`
+  padding: 0;
+  width: auto;
+`
+
+const StyledContent = styled(VStack)`
+  background-color: ${getColor('info', 0.03)};
+  border-bottom: dashed 1px ${getColor('foregroundExtra')};
+  border-top: dashed 1px ${getColor('foregroundExtra')};
+  height: 400px;
+  padding: 0;
+`
+
+const StyledFooter = styled(VStack)`
+  bottom: 0px;
+  padding: 0 24px 36px;
+  position: absolute;
+`
+
+const StyledHeader = styled(VStack)`
+  padding: 36px 24px 0;
+`
+
+const StyledLayout = styled(VStack)`
+  margin: 0 auto;
+  position: relative;
+`

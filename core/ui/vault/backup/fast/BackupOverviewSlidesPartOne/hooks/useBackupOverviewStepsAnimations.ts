@@ -8,10 +8,13 @@ const inputName = 'Index'
 const backupVaultAnimations = [1, 2, 3] as const
 
 export const useBackupOverviewStepsAnimations = () => {
-  const { step: currentAnimation, toNextStep: toNextAnimation } =
-    useStepNavigation({
-      steps: backupVaultAnimations,
-    })
+  const {
+    step: currentAnimation,
+    toNextStep: toNextAnimation,
+    toFirstStep: toFirstAnimation,
+  } = useStepNavigation({
+    steps: backupVaultAnimations,
+  })
 
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/fast-vault-backup-overview.riv',
@@ -32,10 +35,23 @@ export const useBackupOverviewStepsAnimations = () => {
     }
   }, [stateMachineInput, toNextAnimation])
 
+  // TODO: tony to refactor when the designer gives us the animations that work backwards
+  const handlePrevAnimation = useCallback(() => {
+    if (
+      stateMachineInput &&
+      typeof stateMachineInput.value === 'number' &&
+      stateMachineInput.value - 1 >= 0
+    ) {
+      stateMachineInput.value -= 1
+      toFirstAnimation()
+    }
+  }, [stateMachineInput, toFirstAnimation])
+
   return {
     animations: backupVaultAnimations,
     animationComponent: RiveComponent,
     currentAnimation,
+    handlePrevAnimation,
     handleNextAnimation,
     isLoading: !rive,
   }
