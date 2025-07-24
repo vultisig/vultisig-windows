@@ -1,7 +1,7 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -120,7 +120,7 @@ export const generateMemo = ({
       const denom =
         token.chain === Chain.THORChain
           ? token.ticker.toLowerCase()
-          : getDenom(token)
+          : getDenom(token as CoinKey<CosmosChain>)
 
       return `merge:THOR.${denom}`
     },
@@ -137,7 +137,7 @@ export const generateMemo = ({
 
       const sharesRaw = toChainAmount(amount, selectedCoin.decimals)
       // For unmerge, use the full coin ID (e.g., "thor.kuji")
-      const denom = selectedCoin.id
+      const denom = shouldBePresent(selectedCoin.id)
       const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
 
       return memo

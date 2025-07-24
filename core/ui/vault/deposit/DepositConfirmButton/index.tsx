@@ -132,7 +132,7 @@ export const DepositConfirmButton = ({
           const reverseLookup = mirrorRecord(
             kujiraCoinMigratedToThorChainDestinationId
           )
-          const tokenKey = reverseLookup[coin.id]
+          const tokenKey = reverseLookup[shouldBePresent(coin.id)]
           if (tokenKey) {
             contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
           } else {
