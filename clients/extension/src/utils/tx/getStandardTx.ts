@@ -39,7 +39,8 @@ const transactionHandlers: TransactionHandlers = {
     const [message] = tx.msgs
     return match(message.type, {
       [CosmosMsgType.MSG_SEND]: () => handleMsgSend(chain, message),
-      [CosmosMsgType.MSG_SEND_THORCHAIN]: () => handleMsgSend(chain, message, tx.memo),
+      [CosmosMsgType.MSG_SEND_THORCHAIN]: () =>
+        handleMsgSend(chain, message, tx.memo),
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
         return {
           asset: {
