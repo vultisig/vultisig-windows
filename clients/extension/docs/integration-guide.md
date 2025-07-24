@@ -4,15 +4,15 @@
 
 1. [Introduction](#introduction)
 2. [Supported Chains](#supported-chains)
-3. [How Vultisig Extension Works](#how-Vultisig-extension-works)
+3. [How Vultisig Extension Works](#how-vultisig-extension-works)
 4. [Supported Methods](#supported-methods)
    - [Ethereum](#ethereum-windowvultisigethereum)
    - [THORChain](#thorchain-windowthorchain-and-windowvultisigthorchain)
    - [Cosmos-Based Chains](#cosmos-based-chains-gaiachain-osmosis-kujira-dydx)
    - [Other Chains](#other-chains-windowchain-and-windowvultisigchain)
-5. [Steps to Integrate with Vultisig Extension](#steps-to-integrate-with-Vultisig-extension)
-   - [1. Detect Vultisig Extension Support](#1-detect-Vultisig-extension-support)
-   - [2. Connecting to Vultisig Extension](#2-connecting-to-Vultisig-extension)
+5. [Steps to Integrate with Vultisig Extension](#steps-to-integrate-with-vultisig-extension)
+   - [1. Detect Vultisig Extension Support](#1-detect-vultisig-extension-support)
+   - [2. Connecting to Vultisig Extension](#2-connecting-to-vultisig-extension)
    - [3. Connected Accounts](#3-connected-accounts)
    - [4. Managing Active Chain](#4-managing-active-chain)
    - [5. Handling Transactions](#5-handling-transactions)
@@ -622,7 +622,7 @@ interface Transaction {
 
 ```typescript
 // Connect to Vultisig Extension
-const connectToVultisig Extension = async () => {
+const connectToVultisigExtension = async () => {
   try {
     const accounts = await window.vultisig.ethereum.request({ 
       method: "eth_requestAccounts"
