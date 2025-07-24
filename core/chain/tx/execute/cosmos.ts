@@ -12,6 +12,7 @@ import { ExecuteTxResolver } from './ExecuteTxResolver'
 export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
   chain,
   compiledTx,
+  skipBroadcast,
 }) => {
   const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx)
 
@@ -23,7 +24,7 @@ export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
   const decodedTxBytes = Buffer.from(txBytes, 'base64')
 
   const txHash = stripHexPrefix(sha256(decodedTxBytes).toUpperCase())
-
+  if (skipBroadcast) return { txHash, encoded: output.serialized }
   const client = await getCosmosClient(chain)
   const result = attempt(client.broadcastTx(decodedTxBytes))
 

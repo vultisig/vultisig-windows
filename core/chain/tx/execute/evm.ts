@@ -11,6 +11,7 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
   walletCore,
   chain,
   compiledTx,
+  skipBroadcast,
 }) => {
   const { errorMessage, encoded } =
     TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
@@ -19,6 +20,10 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
 
   const rawTx = walletCore.HexCoding.encode(encoded)
   const txHash = keccak256(encoded)
+  if (skipBroadcast)
+    return {
+      txHash,
+    }
 
   const publicClient = getEvmClient(chain)
 

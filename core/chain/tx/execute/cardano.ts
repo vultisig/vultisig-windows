@@ -8,11 +8,12 @@ import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeCardanoTx: ExecuteTxResolver<OtherChain.Cardano> = async ({
   compiledTx,
+  skipBroadcast,
 }) => {
   const output = TW.Cardano.Proto.SigningOutput.decode(compiledTx)
 
   assertErrorMessage(output.errorMessage)
-
+  if (skipBroadcast) return { txHash: output.txId }
   const rawTx = Buffer.from(output.encoded).toString('hex')
 
   await broadcastUtxoTransaction({ chain: Chain.Cardano, tx: rawTx })

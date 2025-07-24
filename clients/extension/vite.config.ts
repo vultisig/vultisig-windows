@@ -19,6 +19,12 @@ export default async () => {
         break
       case 'inpage':
         format = 'iife'
+        plugins = [
+          nodePolyfills({
+            exclude: ['fs'],
+            protocolImports: true,
+          }),
+        ]
         break
       default:
         break
