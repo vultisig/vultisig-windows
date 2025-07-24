@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -12,13 +13,12 @@ import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
-const suggestions = [0.25, 0.5, 1]
-
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
+  const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
   const swapCoin = useCurrentVaultCoin(fromCoinKey)
   const { decimals } = swapCoin
@@ -45,6 +45,8 @@ export const ManageFromAmount = () => {
     },
     [inputValue, setValue]
   )
+
+  const suggestions = [0.25, 0.5, isFeeCoinSelected ? 0.75 : 1]
 
   return (
     <VStack gap={4} alignItems="flex-end">
