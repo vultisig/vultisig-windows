@@ -9,6 +9,7 @@ import { match } from '@lib/utils/match'
 import { ethers } from 'ethers'
 
 import { CosmosMsgType } from '../constants'
+import { Msg } from '@keplr-wallet/types'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
@@ -17,24 +18,28 @@ type TransactionHandlers = {
   ) => Promise<TransactionDetails> | TransactionDetails
 }
 
+const handleMsgSend = (chain: Chain, message: Msg, memo?: string) => {
+  return {
+    asset: {
+      chain: chain,
+      ticker: message.value!.amount[0].denom,
+    },
+    amount: {
+      amount: message.value.amount[0].amount,
+      decimals: chainFeeCoin[chain].decimals,
+    },
+    from: message.value.from_address,
+    to: message.value.to_address,
+    data: memo,
+  }
+}
+
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => {
     const [message] = tx.msgs
     return match(message.type, {
-      [CosmosMsgType.MSG_SEND]: () => {
-        return {
-          asset: {
-            chain: chain,
-            ticker: message.value!.amount[0].denom,
-          },
-          amount: {
-            amount: message.value.amount[0].amount,
-            decimals: chainFeeCoin[chain].decimals,
-          },
-          from: message.value.from_address,
-          to: message.value.to_address,
-        }
-      },
+      [CosmosMsgType.MSG_SEND]: () => handleMsgSend(chain, message),
+      [CosmosMsgType.MSG_SEND_THORCHAIN]: () => handleMsgSend(chain, message, tx.memo),
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
         return {
           asset: {
