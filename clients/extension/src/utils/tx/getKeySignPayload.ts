@@ -44,6 +44,10 @@ export const getKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
+        const isExecuteContract =
+          transaction.transactionDetails.data?.startsWith(
+            CosmosMsgType.MSG_EXECUTE_CONTRACT
+          )
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
@@ -95,6 +99,12 @@ export const getKeysignPayload = (
             }
           : feeSettings
 
+        const txType = transaction.transactionDetails.ibcTransaction
+          ? TransactionType.IBC_TRANSFER
+          : isExecuteContract
+            ? TransactionType.GENERIC_CONTRACT
+            : TransactionType.UNSPECIFIED
+
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: fromChainAmount(
@@ -103,9 +113,7 @@ export const getKeysignPayload = (
           ),
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
-          transactionType: transaction.transactionDetails.ibcTransaction
-            ? TransactionType.IBC_TRANSFER
-            : TransactionType.UNSPECIFIED,
+          transactionType: txType,
           feeSettings: effectiveFeeSettings,
           data: transaction.transactionDetails.data as
             | `0x${string}`
