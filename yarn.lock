@@ -6689,12 +6689,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cjs-08e52b@workspace:clients/extension/src/inpage/walletStandard/vultisig/lib/cjs":
-  version: 0.0.0-use.local
-  resolution: "cjs-08e52b@workspace:clients/extension/src/inpage/walletStandard/vultisig/lib/cjs"
-  languageName: unknown
-  linkType: soft
-
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"

@@ -1,23 +1,64 @@
 // This is copied from @wallet-standard/wallet
 
+import { SolanaSignInInput } from '@solana/wallet-standard-features'
+
 export function bytesEqual(a: Uint8Array, b: Uint8Array): boolean {
-    return arraysEqual(a, b);
+  return arraysEqual(a, b)
 }
 
 interface Indexed<T> {
-    length: number;
-    [index: number]: T;
+  length: number
+  [index: number]: T
 }
 
 export function arraysEqual<T>(a: Indexed<T>, b: Indexed<T>): boolean {
-    if (a === b) return true;
+  if (a === b) return true
 
-    const length = a.length;
-    if (length !== b.length) return false;
+  const length = a.length
+  if (length !== b.length) return false
 
-    for (let i = 0; i < length; i++) {
-        if (a[i] !== b[i]) return false;
+  for (let i = 0; i < length; i++) {
+    if (a[i] !== b[i]) return false
+  }
+
+  return true
+}
+
+export function createSolanaSignInMessage({
+  domain,
+  address,
+  statement,
+  uri,
+  version,
+  chainId,
+  nonce,
+  issuedAt,
+  expirationTime,
+  notBefore,
+  requestId,
+  resources,
+}: SolanaSignInInput): string {
+  let message = `${domain} wants you to sign in with your Solana account:\n${address}`
+
+  if (statement) {
+    message += `\n\n${statement}`
+  }
+
+  if (uri) message += `\n\nURI: ${uri}`
+  if (version) message += `\nVersion: ${version}`
+  if (chainId) message += `\nChain ID: ${chainId}`
+  if (nonce) message += `\nNonce: ${nonce}`
+  if (issuedAt) message += `\nIssued At: ${issuedAt}`
+  if (expirationTime) message += `\nExpiration Time: ${expirationTime}`
+  if (notBefore) message += `\nNot Before: ${notBefore}`
+  if (requestId) message += `\nRequest ID: ${requestId}`
+
+  if (resources && resources.length > 0) {
+    message += `\nResources:`
+    for (const resource of resources) {
+      message += `\n- ${resource}`
     }
+  }
 
-    return true;
+  return message
 }

@@ -700,6 +700,51 @@ export const handleRequest = (
 
         break
       }
+      case RequestMethod.CTRL.SIGN_MESSAGE: {
+        console.log('sign Message params ', params)
+
+        if (Array.isArray(params)) {
+          const [message, address] = params
+          console.log('message:', message)
+          console.log('address:', address)
+
+          let messageBytes: Uint8Array
+          if (typeof message === 'string' && isHexString(message)) {
+            messageBytes = getBytes(message)
+          } else {
+            messageBytes = new TextEncoder().encode(String(message))
+          }
+
+          const fullMessage = new TextDecoder().decode(messageBytes)
+
+          handleSendTransaction({
+            transactionPayload: {
+              custom: {
+                method,
+                address: String(address),
+                message: fullMessage,
+              },
+            },
+            status: 'default',
+          })
+            .then(result => {
+              let sig = Signature.from(ensureHexPrefix(result.txHash))
+              if (sig.v < 27) {
+                sig = Signature.from({
+                  r: sig.r,
+                  s: sig.s,
+                  v: sig.v + 27,
+                })
+              }
+              resolve(ensureHexPrefix(sig.serialized))
+            })
+            .catch(reject)
+        } else {
+          reject()
+        }
+
+        break
+      }
       case RequestMethod.METAMASK.NET_VERSION: {
         let chainId: string | undefined = undefined
 

@@ -25,7 +25,32 @@ import {
 import { Messaging, TransactionType } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
+import {
+  SolanaSignAndSendTransaction,
+  type SolanaSignAndSendTransactionFeature,
+  type SolanaSignAndSendTransactionMethod,
+  type SolanaSignAndSendTransactionOutput,
+  SolanaSignIn,
+  type SolanaSignInFeature,
+  SolanaSignInInput,
+  type SolanaSignInMethod,
+  type SolanaSignInOutput,
+  SolanaSignMessage,
+  type SolanaSignMessageFeature,
+  type SolanaSignMessageMethod,
+  type SolanaSignMessageOutput,
+  SolanaSignTransaction,
+  type SolanaSignTransactionFeature,
+  type SolanaSignTransactionMethod,
+  type SolanaSignTransactionOutput,
+} from '@solana/wallet-standard-features'
+import {
+  bytesEqual,
+  createSolanaSignInMessage,
+} from '../walletStandard/vultisig/src/util'
+import { VultisigWalletAccount } from '../walletStandard/vultisig/src/account'
 export class Solana extends EventEmitter {
+  public account: VultisigWalletAccount | null = null
   public chainId: string
   public isConnected: boolean
   public isPhantom: boolean
@@ -225,18 +250,51 @@ export class Solana extends EventEmitter {
     })
   }
 
-  async signMessage() {
-    return Promise.reject({
-      code: -32603,
-      message: 'This function is not supported by Vultisig',
-    })
+  async signMessage(message: Uint8Array) {
+    console.log('message:', message)
+    console.log('Buffer:', Buffer.from(message))
+    const readable = new TextDecoder().decode(message)
+    console.log('Readable message:', readable)
+    return Promise.reject()
   }
 
-  async signIn() {
-    return Promise.reject({
-      code: -32603,
-      message: 'This function is not supported by Vultisig',
+  async signIn(input: SolanaSignInInput): Promise<SolanaSignInOutput> {
+    const address = await this.request({
+      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+      params: [],
     })
+    this.isConnected = true
+
+    if (
+      !this.account ||
+      this.account.address !== address ||
+      !bytesEqual(
+        this.account.publicKey,
+        new PublicKey(String(address)).toBuffer()
+      )
+    ) {
+      this.account = new VultisigWalletAccount({
+        address: String(address),
+        publicKey: new PublicKey(String(address)).toBuffer(),
+      })
+    }
+
+    const messageToSign = createSolanaSignInMessage(input)
+
+    const signature = await this.request({
+      method: RequestMethod.CTRL.SIGN_MESSAGE,
+      params: [
+        messageToSign as unknown as Record<string, any>,
+        address as unknown as Record<string, any>,
+      ],
+    })
+
+    return {
+      account: this.account,
+      signature: Buffer.from(String(signature)),
+      signedMessage: Buffer.from(messageToSign),
+      signatureType: 'ed25519',
+    }
   }
 
   async handleNotification() {

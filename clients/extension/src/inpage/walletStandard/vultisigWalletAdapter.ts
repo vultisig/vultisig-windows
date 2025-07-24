@@ -4,6 +4,25 @@ import {
   SendOptions,
   PublicKey,
 } from '@solana/web3.js'
+import {
+  SolanaSignAndSendTransaction,
+  type SolanaSignAndSendTransactionFeature,
+  type SolanaSignAndSendTransactionMethod,
+  type SolanaSignAndSendTransactionOutput,
+  SolanaSignIn,
+  type SolanaSignInFeature,
+  SolanaSignInInput,
+  type SolanaSignInMethod,
+  type SolanaSignInOutput,
+  SolanaSignMessage,
+  type SolanaSignMessageFeature,
+  type SolanaSignMessageMethod,
+  type SolanaSignMessageOutput,
+  SolanaSignTransaction,
+  type SolanaSignTransactionFeature,
+  type SolanaSignTransactionMethod,
+  type SolanaSignTransactionOutput,
+} from '@solana/wallet-standard-features'
 
 import { Solana } from '@clients/extension/src/inpage/providers/solana'
 import { Vultisig } from './vultisig/src/window'
@@ -62,10 +81,10 @@ export class VultisigWalletAdapter implements Vultisig {
   }
 
   async signMessage(message: Uint8Array): Promise<{ signature: Uint8Array }> {
-    return this.solana.signMessage()
+    return this.solana.signMessage(message)
   }
 
-  async signIn(): Promise<any> {
-    return this.solana.signIn()
+  async signIn(input: SolanaSignInInput): Promise<SolanaSignInOutput> {
+    return this.solana.signIn(input)
   }
 }
