@@ -3,8 +3,8 @@ import { getVaultTransactions } from '@clients/extension/src/transactions/state/
 import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
-import { getSolanaSwapKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
-import { getParsedSolanaSwap } from '@clients/extension/src/utils/tx/solana/solanaSwap'
+import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
+import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/solanaSwap'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -46,6 +46,7 @@ import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
+import { CosmosMsgType } from '../../utils/constants'
 import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
@@ -132,8 +133,12 @@ export const TransactionPage = () => {
             }
           },
           serialized: async serialized => {
-            const parsed = await getParsedSolanaSwap(walletCore, serialized)
-            const keysignPayload = await getSolanaSwapKeysignPayload(
+            const parsed = await getParsedSolanaTransaction(
+              walletCore,
+              serialized
+            )
+
+            const keysignPayload = await getSolanaKeysignPayload(
               parsed,
               serialized,
               vault,
@@ -330,6 +335,17 @@ export const TransactionPage = () => {
                                       ))}
                                     />
                                   )
+                                )}
+                                {transactionPayload.transactionDetails
+                                  .cosmosMsgPayload?.case ===
+                                  CosmosMsgType.MSG_EXECUTE_CONTRACT && (
+                                  <ListItem
+                                    title={t('message')}
+                                    description={
+                                      transactionPayload.transactionDetails
+                                        .cosmosMsgPayload.value.msg
+                                    }
+                                  />
                                 )}
                               </>
                             ),

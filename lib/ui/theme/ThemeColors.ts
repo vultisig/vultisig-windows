@@ -11,6 +11,7 @@ export type ThemeColors = {
   danger: HSLA
   idle: HSLA
   idleDark: HSLA
+  info: HSLA
 
   background: HSLA
   foreground: HSLA

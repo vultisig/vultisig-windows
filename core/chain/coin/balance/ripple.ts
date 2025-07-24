@@ -1,21 +1,42 @@
-import { getRippleAccountInfo } from '@core/chain/chains/ripple/account/getRippleAccountInfo'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { isInError } from '@lib/utils/error/isInError'
 
+import { getRippleAccountInfo } from '../../chains/ripple/account/info'
+import { getRippleNetworkInfo } from '../../chains/ripple/network/info'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
 export const getRippleCoinBalance: CoinBalanceResolver = async input => {
-  const result = await attempt(getRippleAccountInfo(input.address))
+  const [accountResult, networkResult] = await Promise.all([
+    attempt(getRippleAccountInfo(input.address)),
+    attempt(getRippleNetworkInfo()),
+  ])
 
-  if ('error' in result) {
-    if (isInError(result.error, 'Account not found')) {
+  if ('error' in accountResult) {
+    if (isInError(accountResult.error, 'Account not found')) {
       return BigInt(0)
     }
 
-    throw result.error
+    throw accountResult.error
   }
 
-  const { account_data } = result.data
+  if ('error' in networkResult) {
+    throw networkResult.error
+  }
 
-  return BigInt(account_data.Balance)
+  const { account_data } = accountResult.data
+  const { validated_ledger } = networkResult.data
+
+  if (!validated_ledger) {
+    throw new Error('No validated ledger available')
+  }
+
+  const totalBalance = BigInt(account_data.Balance)
+  const { reserve_base, reserve_inc } = shouldBePresent(validated_ledger)
+
+  const totalReserve =
+    BigInt(reserve_base) + BigInt(account_data.OwnerCount) * BigInt(reserve_inc)
+  const spendableBalance = totalBalance - totalReserve
+
+  return spendableBalance > 0 ? spendableBalance : BigInt(0)
 }
