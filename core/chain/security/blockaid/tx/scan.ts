@@ -1,30 +1,40 @@
 import { productRootDomain, rootApiUrl } from '@core/config'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { EvmChain } from '../../../Chain'
 import { blockaidBaseUrl } from '../config'
 
-type BlockaidRiskLevel = 'Benign' | 'Warning' | 'Malicious' | 'Spam'
+const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
+
+type BlockaidRiskLevel = (typeof blockaidRiskyTxLevels)[number]
 
 type BlockaidScanResponse = {
   validation: {
-    result_type: BlockaidRiskLevel
+    result_type: BlockaidRiskLevel | string
+    description: string
   }
 }
 
 const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
-  Benign: 'low',
   Warning: 'medium',
   Malicious: 'high',
   Spam: 'high',
 }
 
-export type TxRiskLevel = 'low' | 'medium' | 'high'
+type TxRiskLevel = 'medium' | 'high'
+
+type RiskyTxInfo = {
+  level: TxRiskLevel
+  description: string
+}
 
 export type BlockaidTxScanInput = {
   chain: EvmChain
   data: unknown
 }
+
+export type BlockaidTxScanResult = RiskyTxInfo | null
 
 export const scanTxWithBlockaid = async (input: BlockaidTxScanInput) => {
   const { chain, data } = input
@@ -47,5 +57,14 @@ export const scanTxWithBlockaid = async (input: BlockaidTxScanInput) => {
     }
   )
 
-  return blockaidRiskLevelToTxRiskLevel[validation.result_type]
+  const { result_type, description } = validation
+
+  if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
+    return null
+  }
+
+  return {
+    level: blockaidRiskLevelToTxRiskLevel[result_type],
+    description,
+  }
 }

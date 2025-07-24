@@ -88,7 +88,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} flexGrow>
-        <VaultPrimaryActions fromChain={chain} />
+        <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack

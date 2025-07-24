@@ -1,7 +1,7 @@
 import { views } from '@clients/extension/src/navigation/views'
-import { StorageMigrationsManager } from '@clients/extension/src/providers/StorageMigrationManager'
 import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
 import { storage } from '@clients/extension/src/storage'
+import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
@@ -39,19 +39,17 @@ const isPopup = isPopupView()
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
+    min-height: 600px;
     min-width: 400px;
     overflow: hidden;
 
     ${
-      isPopup
-        ? css`
-            min-height: 600px;
-          `
-        : css`
-            margin: 0 auto;
-            max-width: 1024px;
-            width: 100%;
-          `
+      !isPopup &&
+      css`
+        margin: 0 auto;
+        max-width: 1024px;
+        width: 100%;
+      `
     }
   }
 `

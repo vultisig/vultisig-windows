@@ -1,3 +1,4 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import base58 from 'bs58'
 
@@ -41,7 +42,7 @@ export const getTronCoinBalance: CoinBalanceResolver = async input => {
     try {
       // Decode Base58 addresses to hex
       const hexAddress = base58TronDecode(input.address)
-      const hexContractAddress = base58TronDecode(input.id)
+      const hexContractAddress = base58TronDecode(shouldBePresent(input.id))
 
       // Fetch TRC20 token balance using EVM service
       const balance = await fetchTRC20TokenBalance(

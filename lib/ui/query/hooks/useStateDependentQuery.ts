@@ -9,29 +9,18 @@ import {
 
 import { inactiveQuery, Query } from '../Query'
 
-type Input<
-  T extends Record<string, any>,
-  TQueryFnData,
-  TError,
-  TData = TQueryFnData,
-  TQueryKey extends readonly unknown[] = readonly unknown[],
-> = {
-  state: T
-  getQuery: (
-    state: WithoutUndefinedFields<T>
-  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-}
-
 export const useStateDependentQuery = <
   T extends Record<string, any>,
   TQueryFnData,
   TError,
   TData = TQueryFnData,
   TQueryKey extends readonly unknown[] = readonly unknown[],
->({
-  state,
-  getQuery,
-}: Input<T, TQueryFnData, TError, TData, TQueryKey>): Query<TData, TError> => {
+>(
+  state: T,
+  getQuery: (
+    state: WithoutUndefinedFields<T>
+  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+): Query<TData, TError> => {
   const presentState = withoutUndefinedFields(state)
 
   const [query] = useQueries({

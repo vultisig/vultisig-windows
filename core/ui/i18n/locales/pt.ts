@@ -109,6 +109,7 @@ export const pt = {
   destination_address: 'Endereço de destino',
   thorchain_address: 'Endereço THORChain',
   merge: 'Mesclar',
+  shares: 'Ações',
   switch: 'Trocar',
   ibc_transfer: 'Transferência IBC',
   price_impact_good: 'Bom',

@@ -59,8 +59,10 @@ export const DepositConfirmButton = ({
     action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
-        ? TransactionType.UNSPECIFIED // Using UNSPECIFIED instead of THOR_UNMERGE due to DKLS library bug that causes signing to fail
-        : undefined
+        ? TransactionType.THOR_UNMERGE
+        : action === 'merge'
+          ? TransactionType.THOR_MERGE
+          : undefined
 
   const chainSpecificQuery = useDepositChainSpecificQuery(transactionType, coin)
   const config = transactionConfig(coinKey.chain)[action] || {}
@@ -130,7 +132,7 @@ export const DepositConfirmButton = ({
           const reverseLookup = mirrorRecord(
             kujiraCoinMigratedToThorChainDestinationId
           )
-          const tokenKey = reverseLookup[coin.id]
+          const tokenKey = reverseLookup[shouldBePresent(coin.id)]
           if (tokenKey) {
             contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
           } else {
