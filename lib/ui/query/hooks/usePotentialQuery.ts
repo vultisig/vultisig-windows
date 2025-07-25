@@ -16,15 +16,16 @@ export const usePotentialQuery = <
   input: T | undefined,
   getQuery: (
     input: T
-  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-): Query<TData | null, TError> => {
+  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  defaultData?: TData
+): Query<TData | undefined, TError> => {
   const [query] = useQueries({
     queries: [...(input === undefined ? [] : [getQuery(input)])],
   }) as UseQueryResult<TData, TError>[]
 
   if (input === undefined) {
     return {
-      data: null,
+      data: defaultData,
       error: null,
       isPending: false,
     }

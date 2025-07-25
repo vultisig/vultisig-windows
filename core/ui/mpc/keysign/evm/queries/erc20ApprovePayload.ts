@@ -25,6 +25,7 @@ export const useErc20ApprovePayloadQuery = (input: Input) => {
         }
       }
     }, [chain, address, id, spender]),
-    getErc20AllowanceQuery
+    getErc20AllowanceQuery,
+    null
   )
 }

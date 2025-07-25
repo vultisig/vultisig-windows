@@ -41,7 +41,7 @@ export const useSwapKeysignPayloadQuery = () => {
     chain: fromCoin.chain,
     address: fromCoin.address,
     id: fromCoin.id,
-    receiver: toCoin.address,
+    spender: toCoin.address,
     amount,
   })
 
