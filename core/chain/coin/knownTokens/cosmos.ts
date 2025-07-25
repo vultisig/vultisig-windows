@@ -198,7 +198,7 @@ export const knownCosmosTokens: Record<
     'x/nami-index-fixed-thor1yqf5spdv8c4088zmvqsg32eq63fzepsjvntahdk0ek0yjnkt3qdqftp3lc-rcpt':
       {
         ticker: 'NAMI',
-        logo: 'nami', // TODO: Add real logo
+        logo: 'nami.png', // TODO: Add real logo
         decimals: 8,
         priceProviderId: 'nami-protocol', // TODO: Add real price provider id
         hiddenFromUI: true,
