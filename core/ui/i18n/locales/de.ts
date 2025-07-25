@@ -70,6 +70,7 @@ export const de = {
     },
   },
   referral_program: 'Empfehlungsprogramm',
+  shares: 'Aktien',
   how_it_works: "So funktioniert's",
   get_started: 'Loslegen',
   enter_referral_code_placeholder: 'Empfehlungscode eingeben',

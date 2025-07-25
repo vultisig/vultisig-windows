@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
 
 export const SignCustomMessagePage = () => {
   const { t } = useTranslation()
@@ -29,6 +30,18 @@ export const SignCustomMessagePage = () => {
       }),
     }
   }, [method, message])
+
+  const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
+    if (isDisabled) {
+      return {
+        disabledMessage: isDisabled,
+      }
+    }
+
+    return {
+      keysignPayload,
+    }
+  }, [keysignPayload, isDisabled])
 
   return (
     <VStack fullHeight>
@@ -51,10 +64,7 @@ export const SignCustomMessagePage = () => {
         </VStack>
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt
-          keysignPayload={keysignPayload}
-          isDisabled={isDisabled}
-        />
+        <StartKeysignPrompt {...startKeysignPromptProps} />
       </PageFooter>
     </VStack>
   )

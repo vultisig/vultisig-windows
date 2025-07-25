@@ -35,12 +35,12 @@ export const useSwapChainSpecificQuery = () => {
 
   const vault = useCurrentVault()
 
-  return useStateDependentQuery({
-    state: {
+  return useStateDependentQuery(
+    {
       swapQuote: swapQuoteQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
-    getQuery: ({ swapQuote, fromAmount }) => {
+    ({ swapQuote, fromAmount }) => {
       const fromPublicKey = getPublicKey({
         chain: fromCoin.chain,
         walletCore,
@@ -103,6 +103,6 @@ export const useSwapChainSpecificQuery = () => {
         queryKey: getChainSpecificQueryKey(input),
         queryFn: () => getChainSpecific(input),
       }
-    },
-  })
+    }
+  )
 }

@@ -97,7 +97,7 @@ export const getRequiredFieldsPerChainAction = (
         amount: z
           .string()
           .transform(val => Number(val))
-          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
       })
     },
   },

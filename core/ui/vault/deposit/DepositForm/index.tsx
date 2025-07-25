@@ -192,8 +192,17 @@ export const DepositForm: FC<DepositFormProps> = ({
                       {field.label}{' '}
                       {showBalance && (
                         <>
-                          (Balance: {balance}
-                          {ticker && ` ${ticker}`})
+                          (
+                          {selectedChainAction === 'unmerge' ? (
+                            <>
+                              {t('shares')}: {balance}
+                            </>
+                          ) : (
+                            <>
+                              {t('balance')}: {balance} {ticker && ` ${ticker}`}
+                            </>
+                          )}
+                          )
                         </>
                       )}
                       {field.required ? (

@@ -8,21 +8,23 @@ import { TxInputDataResolver } from './TxInputDataResolver'
 export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   keysignPayload,
 }) => {
-  const { expireAt, sequenceNumber } = getBlockchainSpecificValue(
-    keysignPayload.blockchainSpecific,
-    'tonSpecific'
-  )
+  const { expireAt, sequenceNumber, bounceable, sendMaxAmount } =
+    getBlockchainSpecificValue(keysignPayload.blockchainSpecific, 'tonSpecific')
 
+  const isMax = Boolean(sendMaxAmount)
   const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
-    amount: new Long(Number(keysignPayload.toAmount)),
+    amount: isMax ? Long.UZERO : new Long(Number(keysignPayload.toAmount)),
     bounceable:
-      (keysignPayload.memo &&
+      bounceable ??
+      ((keysignPayload.memo &&
         ['d', 'w'].includes(keysignPayload.memo.trim())) ||
-      false,
-    comment: keysignPayload.memo,
+        false),
+    comment: keysignPayload.memo ?? undefined,
     mode:
-      TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY |
+      (isMax
+        ? TW.TheOpenNetwork.Proto.SendMode.ATTACH_ALL_CONTRACT_BALANCE
+        : TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY) |
       TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS,
   })
 

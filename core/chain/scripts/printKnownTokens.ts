@@ -7,13 +7,11 @@ import { knownTokens } from '../coin/knownTokens'
 const main = () => {
   const sorted = sortRecordKeysAlphabetically(
     recordMap(knownTokens, tokens =>
-      [...tokens].sort((a, b) => a.id.localeCompare(b.id))
+      [...tokens].sort((a, b) => a.ticker.localeCompare(b.ticker))
     )
   )
 
   const output = JSON.stringify(sorted, null, 2)
-
-  console.log(output)
 
   execSync('pbcopy', { input: output })
 }

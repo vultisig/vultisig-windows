@@ -83,7 +83,6 @@ export const PluginReshareFlow = ({
                         />
                       )}
                       value="keygen"
-                      isPluginReshare
                     />
                   </MpcPeersProvider>
                 )}

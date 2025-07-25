@@ -14,11 +14,11 @@ export const useSendChainSpecificQuery = () => {
   const [receiver] = useSendReceiver()
   const [amount] = useSendAmount()
 
-  return useStateDependentQuery({
-    state: {
+  return useStateDependentQuery(
+    {
       amount: amount ?? 0,
     },
-    getQuery: ({ amount }) => {
+    ({ amount }) => {
       const input: ChainSpecificResolverInput = {
         coin,
         receiver,
@@ -30,6 +30,6 @@ export const useSendChainSpecificQuery = () => {
         queryKey: getChainSpecificQueryKey(input),
         queryFn: () => getChainSpecific(input),
       }
-    },
-  })
+    }
+  )
 }

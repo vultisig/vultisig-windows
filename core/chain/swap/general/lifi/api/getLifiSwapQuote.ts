@@ -35,7 +35,9 @@ export const getLifiSwapQuote = async ({
     ({ chain }) => lifiSwapChainId[chain]
   )
 
-  const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id)
+  const [fromToken, toToken] = [transfer.from, transfer.to].map(
+    ({ id, chain }) => id ?? chainFeeCoin[chain].ticker
+  )
   const [fromAddress, toAddress] = [transfer.from, transfer.to].map(
     ({ address }) => address
   )

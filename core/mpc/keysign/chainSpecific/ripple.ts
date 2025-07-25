@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import { getRippleAccountInfo } from '@core/chain/chains/ripple/account/getRippleAccountInfo'
+import { getRippleAccountInfo } from '@core/chain/chains/ripple/account/info'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import {
   RippleSpecific,

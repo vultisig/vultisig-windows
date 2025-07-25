@@ -72,10 +72,6 @@ export type IsDisabledProp = {
   isDisabled?: boolean | string
 }
 
-export type IndexProp = {
-  index: number
-}
-
 export type OnRemoveProp = {
   onRemove: () => void
 }

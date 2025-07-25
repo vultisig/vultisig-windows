@@ -1,9 +1,14 @@
-import { IsDisabledProp } from '@lib/ui/props'
-
 import { CoreViewState } from '../../../navigation/CoreView'
 
-export type StartKeysignPromptProps = Omit<
+type BaseStartKeysignPromptProps = Omit<
   CoreViewState<'keysign'>,
-  'securityType'
-> &
-  IsDisabledProp
+  'securityType' | 'keysignPayload'
+>
+
+export type StartKeysignPromptProps =
+  | BaseStartKeysignPromptProps
+  | (
+      | { disabledMessage: string }
+      | Pick<CoreViewState<'keysign'>, 'keysignPayload'>
+      | {}
+    )

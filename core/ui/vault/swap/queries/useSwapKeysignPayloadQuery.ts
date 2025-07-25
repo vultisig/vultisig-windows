@@ -34,13 +34,13 @@ export const useSwapKeysignPayloadQuery = () => {
 
   const walletCore = useAssertWalletCore()
 
-  return useStateDependentQuery({
-    state: {
+  return useStateDependentQuery(
+    {
       swapQuote: swapQuoteQuery.data,
       chainSpecific: chainSpecificQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
-    getQuery: ({ swapQuote, chainSpecific, fromAmount }) => ({
+    ({ swapQuote, chainSpecific, fromAmount }) => ({
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
         const fromPublicKey = getPublicKey({
@@ -97,6 +97,6 @@ export const useSwapKeysignPayloadQuery = () => {
 
         return processKeysignPayload(result)
       },
-    }),
-  })
+    })
+  )
 }

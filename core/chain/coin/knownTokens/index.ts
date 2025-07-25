@@ -47,12 +47,6 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       decimals: 18,
       priceProviderId: 'uniswap',
     },
-    '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0': {
-      ticker: 'MATIC',
-      logo: 'matic',
-      decimals: 18,
-      priceProviderId: 'matic-network',
-    },
     '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': {
       ticker: 'WBTC',
       logo: 'wbtc',

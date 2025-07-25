@@ -18,7 +18,7 @@ export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
     }
 
     const ibcTokens = Object.values(IbcEnabledCosmosChain).flatMap(chain =>
-      knownTokens[chain].filter(coin => coin.id.startsWith('ibc/'))
+      knownTokens[chain].filter(coin => coin.id?.startsWith('ibc/'))
     )
 
     return sourceCoins.filter(coin =>

@@ -45,12 +45,22 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
           }),
           Buffer.from(data, 'base64')
         )
-        const decodedOutput =
+        const { transaction } =
           TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+
+        if (!transaction) {
+          throw new Error("Can't decode swap transaction")
+        }
+
+        if (transaction.legacy) {
+          transaction.legacy.recentBlockhash = recentBlockHash
+        } else if (transaction.v0) {
+          transaction.v0.recentBlockhash = recentBlockHash
+        }
 
         const signingInput = TW.Solana.Proto.SigningInput.create({
           recentBlockhash: recentBlockHash,
-          rawMessage: decodedOutput.transaction,
+          rawMessage: transaction,
         })
 
         return [TW.Solana.Proto.SigningInput.encode(signingInput).finish()]

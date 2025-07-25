@@ -6,12 +6,12 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import {
   MatchQuery,
-  MatchQueryWrapperProps,
+  MatchQueryProps,
 } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
 export const SwapCoinBalanceDependant: React.FC<
-  MatchQueryWrapperProps<bigint> & { coin: AccountCoin }
+  Omit<MatchQueryProps<bigint>, 'value'> & { coin: AccountCoin }
 > = props => {
   const query = useBalanceQuery(extractAccountCoinKey(props.coin))
 

@@ -1,4 +1,3 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
 import { MpcSession } from '@core/ui/mpc/session/MpcSession'
 import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
@@ -18,10 +17,7 @@ import { useTranslation } from 'react-i18next'
 export const StartMpcSessionStep = ({
   onFinish,
   value,
-  isPluginReshare,
-}: OnFinishProp &
-  ValueProp<MpcSession> &
-  Partial<{ isPluginReshare: boolean }>) => {
+}: OnFinishProp & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
@@ -31,9 +27,7 @@ export const StartMpcSessionStep = ({
       return startMpcSession({
         serverUrl,
         sessionId,
-        devices: isPluginReshare
-          ? devices.filter(device => !isServer(device))
-          : devices,
+        devices,
       })
     },
     onSuccess: () => onFinish(),

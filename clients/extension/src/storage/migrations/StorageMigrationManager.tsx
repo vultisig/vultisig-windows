@@ -5,10 +5,15 @@ import { useCore } from '@core/ui/state/core'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { storageMigrationKeys } from '.'
+import { setLatestMigration } from './latestMigration'
+import { runStorageMigrations } from './run'
 
 const latestInstalledVersionQueryKey = ['latestInstalledVersion']
 const [key] = latestInstalledVersionQueryKey
@@ -32,9 +37,13 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
       if (!storedVersion) {
         console.warn('Version missing. Clearing storage for migration.')
         await chrome.storage.local.clear()
+        await setLatestMigration(getLastItem(storageMigrationKeys))
       }
 
       await setExtensionVersion(version)
+
+      await runStorageMigrations()
+
       return true
     },
   })

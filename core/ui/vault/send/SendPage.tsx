@@ -11,6 +11,7 @@ import { SendMemoProvider } from './state/memo'
 import { SendReceiverProvider } from './state/receiver'
 import { SendFeesProvider } from './state/sendFees'
 import { SendVerify } from './verify/SendVerify'
+import { sendTerms, SendTermsProvider } from './verify/state/sendTerms'
 
 const sendSteps = ['form', 'verify'] as const
 
@@ -31,7 +32,13 @@ export const SendPage = () => {
                 <Match
                   value={step}
                   form={() => <SendForm onFinish={toNextStep} />}
-                  verify={() => <SendVerify onBack={toPreviousStep} />}
+                  verify={() => (
+                    <SendTermsProvider
+                      initialValue={sendTerms.map(() => false)}
+                    >
+                      <SendVerify onBack={toPreviousStep} />
+                    </SendTermsProvider>
+                  )}
                 />
               </SendMemoProvider>
             </SendReceiverProvider>

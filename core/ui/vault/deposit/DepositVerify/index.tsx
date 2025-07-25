@@ -112,6 +112,16 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 </TxOverviewColumn>
               )
             })}
+            {selectedChainAction === 'merge' && (
+              <TxOverviewColumn>
+                <Text size={18} weight={700}>
+                  {t('to')}
+                </Text>
+                <StrictTextContrast>
+                  {String(formattedDepositFormData.nodeAddress)}
+                </StrictTextContrast>
+              </TxOverviewColumn>
+            )}
             {selectedChainAction === 'leave' && (
               <TxOverviewRowDepositsFlow>
                 <Text size={18} weight={700}>

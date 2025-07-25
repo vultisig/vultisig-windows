@@ -24,12 +24,13 @@ export const SwapConfirm = () => {
       value={keysignPayloadQuery}
       pending={() => <StrictText>{t('loading')}</StrictText>}
       error={error => <StrictText>{extractErrorMsg(error)}</StrictText>}
-      success={keysign => (
-        <StartKeysignPrompt
-          keysignPayload={{ keysign }}
-          isDisabled={isDisabled}
-        />
-      )}
+      success={keysign => {
+        const props = isDisabled
+          ? { disabledMessage: isDisabled }
+          : { keysignPayload: { keysign } }
+
+        return <StartKeysignPrompt {...props} />
+      }}
     />
   )
 }

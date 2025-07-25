@@ -82,6 +82,7 @@ export const hr = {
   percentage_limit: 'Postotak mora biti između 0 i 100',
   unexpected_error: 'Neočekivana pogreška',
   asset_selection: 'Odabir imovine',
+  shares: 'Dionice',
   send_to: 'Pošalji na',
   priority_fee_tooltip_content:
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',

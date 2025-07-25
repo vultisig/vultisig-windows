@@ -9,6 +9,7 @@ import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoin
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { FC, useMemo } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
@@ -33,7 +34,10 @@ export const MergeTokenExplorer: FC<Props> = ({
   const thorChainCoins = useCurrentVaultChainCoins(Chain.THORChain)
 
   const tokens = useMemo(
-    () => thorChainCoins.filter(coin => coin.id in kujiraCoinsOnThorChain),
+    () =>
+      thorChainCoins.filter(
+        coin => coin.id && coin.id in kujiraCoinsOnThorChain
+      ),
     [thorChainCoins]
   )
   const { t } = useTranslation()
@@ -58,7 +62,7 @@ export const MergeTokenExplorer: FC<Props> = ({
                   const selectedMergeAddress =
                     kujiraCoinThorChainMergeContracts[
                       mirrorRecord(kujiraCoinMigratedToThorChainDestinationId)[
-                        token.id
+                        shouldBePresent(token.id)
                       ]
                     ]
 
