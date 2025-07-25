@@ -188,9 +188,7 @@ export class XDEFIKeplrProvider extends Keplr {
     const [firstMessage] = signDoc.msgs
     if (
       firstMessage &&
-      firstMessage.type == '/ibc.applications.transfer.v1.MsgTransfer' &&
-      firstMessage.value.memo
-      // Block multi asset interaction (not supported with memo yet)
+      firstMessage.type == 'cosmos-sdk/MsgTransfer' // cosmos-sdk/MsgTransfer
     ) {
       throw new Error('Not supported')
     }
