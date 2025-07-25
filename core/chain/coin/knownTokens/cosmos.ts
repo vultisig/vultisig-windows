@@ -42,7 +42,7 @@ export const knownCosmosTokens: Record<
       priceProviderId: 'rujira',
     },
     'x/staking-x/ruji': {
-      ticker: 'RUJI',
+      ticker: 'sRUJI',
       logo: 'ruji',
       decimals: 8,
       priceProviderId: 'rujira',
@@ -197,12 +197,19 @@ export const knownCosmosTokens: Record<
     },
     'x/nami-index-fixed-thor1yqf5spdv8c4088zmvqsg32eq63fzepsjvntahdk0ek0yjnkt3qdqftp3lc-rcpt':
       {
-        ticker: 'NAMI',
+        ticker: 'RJI',
         logo: 'nami.png', // TODO: Add real logo
         decimals: 8,
         priceProviderId: 'nami-protocol', // TODO: Add real price provider id
         hiddenFromUI: true,
       },
+    'x/staking-thor.nami': {
+      ticker: 'sNAME',
+      logo: 'nami.png', // TODO: Add real logo
+      decimals: 8,
+      priceProviderId: 'nami-protocol', // TODO: Add real price provider id
+      hiddenFromUI: true,
+    },
     ...kujiraCoinsOnThorChain,
   },
   [Chain.Cosmos]: {
