@@ -21,7 +21,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -69,11 +69,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     )
   )
 
-  const txScanQuery = useStateDependentQuery(
-    {
-      txScanInput: txScanInput.data || undefined,
-    },
-    ({ txScanInput }) => getBlockaidTxScanQuery(txScanInput)
+  const txScanQuery = usePotentialQuery(
+    txScanInput.data || undefined,
+    getBlockaidTxScanQuery
   )
 
   const [terms] = useSendTerms()
