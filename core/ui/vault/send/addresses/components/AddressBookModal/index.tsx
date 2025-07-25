@@ -33,13 +33,16 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
 
   const vaultsAndAddressForSelectedCoin = useMemo(() => {
     return vaults.reduce<VaultAddressBookItem[]>((acc, vault) => {
-      const coinAddress = vault.coins.find(c => c.id === coin.id)?.address
-      if (coinAddress) {
-        acc.push({ name: vault.name, address: coinAddress })
+      const match = vault.coins.find(
+        c => c.chain === coin.chain && (coin.id ? c.id === coin.id : !c.id)
+      )
+
+      if (match?.address) {
+        acc.push({ name: vault.name, address: match.address })
       }
       return acc
     }, [])
-  }, [coin.id, vaults])
+  }, [coin.chain, coin.id, vaults])
 
   return (
     <Modal onClose={onClose} title={t('address_book')}>
