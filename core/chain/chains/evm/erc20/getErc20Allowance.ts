@@ -2,10 +2,10 @@ import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { erc20Abi } from 'viem'
 
-export type GetErc20AllowanceInput = {
-  chain: EvmChain
-  id: string
-  address: string
+import { AccountCoinKey } from '../../../coin/AccountCoin'
+import { Token } from '../../../coin/Coin'
+
+export type GetErc20AllowanceInput = Token<AccountCoinKey<EvmChain>> & {
   spender: string
 }
 
