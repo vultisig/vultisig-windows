@@ -35,6 +35,7 @@ import { keysignPayloadToBlockaidTxScanInput } from '../../../chain/security/blo
 import { BlockaidNoTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidNoTxScanStatus'
 import { BlockaidTxScanning } from '../../../chain/security/blockaid/tx/BlockaidTxScanning'
 import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/BlockaidTxScanResult'
+import { BlockaidTxStatusContainer } from '../../../chain/security/blockaid/tx/BlockaidTxStatusContainer'
 import { getBlockaidTxScanQuery } from '../../../chain/security/blockaid/tx/queries/blockaidTxScan'
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
@@ -108,12 +109,15 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         hasBorder
       />
       <PageContent gap={12}>
-        <MatchQuery
-          value={txScanQuery}
-          success={value => <BlockaidTxScanResult value={value} />}
-          pending={() => <BlockaidTxScanning />}
-          error={() => <BlockaidNoTxScanStatus />}
-        />
+        {isBlockaidEnabled && (
+          <MatchQuery
+            value={txScanQuery}
+            success={value => <BlockaidTxScanResult value={value} />}
+            pending={() => <BlockaidTxScanning />}
+            error={() => <BlockaidNoTxScanStatus />}
+            inactive={() => <BlockaidTxStatusContainer />}
+          />
+        )}
         <TxOverviewPanel>
           <AmountWrapper gap={24}>
             <Text size={15} color="supporting">
