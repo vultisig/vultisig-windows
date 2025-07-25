@@ -190,7 +190,7 @@ export const knownCosmosTokens: Record<
     },
     'thor.nami': {
       ticker: 'NAMI',
-      logo: 'nami',
+      logo: 'nami.png',
       decimals: 8,
       priceProviderId: 'nami-protocol',
       hiddenFromUI: true,
