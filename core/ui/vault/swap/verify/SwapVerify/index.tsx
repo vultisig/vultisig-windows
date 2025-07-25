@@ -14,7 +14,6 @@ import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery
 import { useFromAmount } from '../../state/fromAmount'
 import { useToCoin } from '../../state/toCoin'
 import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
-import { SwapAllowance } from '../SwapAllowance'
 import { SwapConfirm } from '../SwapConfirm'
 import { SwapTerms } from '../SwapTerms'
 import {
@@ -72,7 +71,6 @@ export const SwapVerify = () => {
             />
           </HStack>
         </VStack>
-        <SwapAllowance />
         <VerifySwapFees RowComponent={SwapTxFeesOverviewRow} />
       </ContentWrapper>
       <SwapTermsProvider initialValue={swapTerms.map(() => false)}>

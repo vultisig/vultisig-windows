@@ -3,14 +3,17 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
-import { processKeysignPayload } from '@core/mpc/keysign/keysignPayload/processKeysignPayload'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { pick } from '@lib/utils/record/pick'
 
+import { useErc20ApprovePayloadQuery } from '../../../mpc/keysign/evm/queries/erc20ApprovePayload'
+import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../state/fromAmount'
 import { useToCoin } from '../state/toCoin'
@@ -32,71 +35,79 @@ export const useSwapKeysignPayloadQuery = () => {
 
   const chainSpecificQuery = useSwapChainSpecificQuery()
 
+  const amount = toChainAmount(shouldBePresent(fromAmount), fromCoin.decimals)
+
+  const erc20ApprovePayloadQuery = useErc20ApprovePayloadQuery({
+    chain: fromCoin.chain,
+    address: fromCoin.address,
+    id: fromCoin.id,
+    spender: toCoin.address,
+    amount,
+  })
+
+  const utxoInfo = useKeysignUtxoInfo(pick(fromCoin, ['chain', 'address']))
+
   const walletCore = useAssertWalletCore()
 
-  return useStateDependentQuery(
+  return useTransformQueriesData(
     {
-      swapQuote: swapQuoteQuery.data,
-      chainSpecific: chainSpecificQuery.data,
-      fromAmount: fromAmount ?? undefined,
+      swapQuote: swapQuoteQuery,
+      chainSpecific: chainSpecificQuery,
+      erc20ApprovePayload: erc20ApprovePayloadQuery,
+      utxoInfo,
     },
-    ({ swapQuote, chainSpecific, fromAmount }) => ({
-      queryKey: ['swapKeysignPayload'],
-      queryFn: async () => {
-        const fromPublicKey = getPublicKey({
-          chain: fromCoin.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
+    ({ swapQuote, chainSpecific, utxoInfo, erc20ApprovePayload }) => {
+      const fromPublicKey = getPublicKey({
+        chain: fromCoin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
 
-        const toPublicKey = getPublicKey({
-          chain: toCoin.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
+      const toPublicKey = getPublicKey({
+        chain: toCoin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
 
-        const amount = toChainAmount(fromAmount, fromCoin.decimals)
+      const fromCoinHexPublicKey = toHexPublicKey({
+        publicKey: fromPublicKey,
+        walletCore,
+      })
 
-        const fromCoinHexPublicKey = toHexPublicKey({
-          publicKey: fromPublicKey,
-          walletCore,
-        })
+      const toCoinHexPublicKey = toHexPublicKey({
+        publicKey: toPublicKey,
+        walletCore,
+      })
 
-        const toCoinHexPublicKey = toHexPublicKey({
-          publicKey: toPublicKey,
-          walletCore,
-        })
+      const swapSpecificFields = getSwapKeysignPayloadFields({
+        amount,
+        quote: swapQuote,
+        fromCoin: {
+          ...fromCoin,
+          hexPublicKey: fromCoinHexPublicKey,
+        },
+        toCoin: {
+          ...toCoin,
+          hexPublicKey: toCoinHexPublicKey,
+        },
+      })
 
-        const swapSpecificFields = getSwapKeysignPayloadFields({
-          amount,
-          quote: swapQuote,
-          fromCoin: {
-            ...fromCoin,
-            hexPublicKey: fromCoinHexPublicKey,
-          },
-          toCoin: {
-            ...toCoin,
-            hexPublicKey: toCoinHexPublicKey,
-          },
-        })
-
-        const result = create(KeysignPayloadSchema, {
-          coin: toCommCoin({
-            ...fromCoin,
-            hexPublicKey: fromCoinHexPublicKey,
-          }),
-          toAmount: amount.toString(),
-          blockchainSpecific: chainSpecific,
-          vaultLocalPartyId: vault.localPartyId,
-          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-          libType: vault.libType,
-          ...swapSpecificFields,
-        })
-
-        return processKeysignPayload(result)
-      },
-    })
+      return create(KeysignPayloadSchema, {
+        coin: toCommCoin({
+          ...fromCoin,
+          hexPublicKey: fromCoinHexPublicKey,
+        }),
+        toAmount: amount.toString(),
+        blockchainSpecific: chainSpecific,
+        vaultLocalPartyId: vault.localPartyId,
+        vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+        libType: vault.libType,
+        erc20ApprovePayload: erc20ApprovePayload ?? undefined,
+        utxoInfo: utxoInfo ?? undefined,
+        ...swapSpecificFields,
+      })
+    }
   )
 }
