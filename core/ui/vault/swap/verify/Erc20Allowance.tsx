@@ -1,14 +1,22 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { GetErc20AllowanceInput } from '@core/chain/chains/evm/erc20/getErc20Allowance'
+import { Coin } from '@core/chain/coin/Coin'
 import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
-import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery'
+import { useErc20Allowance } from '../../../chain/evm/queries/erc20Allowance'
 
-export const SwapAllowance = () => {
-  const query = useSwapKeysignPayloadQuery()
+type Erc20AllowanceProps = GetErc20AllowanceInput &
+  Pick<Coin, 'decimals' | 'ticker'>
+
+export const Erc20Allowance = ({
+  decimals,
+  ticker,
+  ...input
+}: Erc20AllowanceProps) => {
+  const query = useErc20Allowance(input)
 
   const { t } = useTranslation()
 
@@ -17,21 +25,12 @@ export const SwapAllowance = () => {
       value={query}
       error={() => null}
       pending={() => null}
-      success={({ erc20ApprovePayload, coin }) => {
-        if (!erc20ApprovePayload) {
-          return null
-        }
-
-        const { decimals, ticker } = shouldBePresent(coin)
-
+      success={value => {
         return (
           <TxOverviewChainDataRow>
             <span>{t('allowance')}</span>
             <span>
-              {formatTokenAmount(
-                fromChainAmount(erc20ApprovePayload.amount, decimals),
-                ticker
-              )}
+              {formatTokenAmount(fromChainAmount(value, decimals), ticker)}
             </span>
           </TxOverviewChainDataRow>
         )
