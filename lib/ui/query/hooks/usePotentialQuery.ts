@@ -10,6 +10,7 @@ export const usePotentialQuery = <
   T,
   TQueryFnData,
   TError,
+  TDefaultData,
   TData = TQueryFnData,
   TQueryKey extends readonly unknown[] = readonly unknown[],
 >(
@@ -17,8 +18,8 @@ export const usePotentialQuery = <
   getQuery: (
     input: T
   ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-  defaultData?: TData
-): Query<TData | undefined, TError> => {
+  defaultData?: TDefaultData
+): Query<TData | TDefaultData | undefined, TError> => {
   const [query] = useQueries({
     queries: [...(input === undefined ? [] : [getQuery(input)])],
   }) as UseQueryResult<TData, TError>[]
