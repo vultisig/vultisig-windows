@@ -188,6 +188,13 @@ export const knownCosmosTokens: Record<
       priceProviderId: 'ripple',
       hiddenFromUI: true,
     },
+    'thor.nami': {
+      ticker: 'NAMI',
+      logo: 'nami',
+      decimals: 8,
+      priceProviderId: 'nami-protocol',
+      hiddenFromUI: true,
+    },
     ...kujiraCoinsOnThorChain,
   },
   [Chain.Cosmos]: {
