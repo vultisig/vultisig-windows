@@ -1,27 +1,29 @@
-import { Chain } from '@core/chain/Chain'
+import { UtxoBasedChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 import { fromChainAmount } from '../../../amount/fromChainAmount'
-import { cardanoMinSendAmount } from '../config'
+import { minUtxo } from '../minUtxo'
 
 type Input = {
   amount: bigint
   balance: bigint
+  chain: UtxoBasedChain
 }
 
-export const validateCardanoUtxoRequirements = ({
+export const validateUtxoRequirements = ({
   amount,
   balance,
+  chain,
 }: Input): string | undefined => {
-  const { decimals, ticker } = chainFeeCoin[Chain.Cardano]
+  const { decimals, ticker } = chainFeeCoin[chain]
 
-  if (amount < cardanoMinSendAmount) {
+  if (amount < minUtxo[chain]) {
     const formattedAmount = formatTokenAmount(
-      fromChainAmount(cardanoMinSendAmount, decimals),
+      fromChainAmount(minUtxo[chain], decimals),
       ticker
     )
-    return `Minimum send amount is ${formattedAmount}. Cardano requires this to prevent spam.`
+    return `Minimum send amount is ${formattedAmount}. ${chain} requires this to prevent spam.`
   }
 
   const remainingBalance = balance - amount
@@ -30,7 +32,7 @@ export const validateCardanoUtxoRequirements = ({
     return
   }
 
-  if (remainingBalance < cardanoMinSendAmount) {
+  if (remainingBalance < minUtxo[chain]) {
     return `This amount would leave too little change. 💡 Try 'Max' to avoid this issue.`
   }
 }
