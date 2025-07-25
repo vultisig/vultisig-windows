@@ -204,7 +204,7 @@ export const knownCosmosTokens: Record<
         hiddenFromUI: true,
       },
     'x/staking-thor.nami': {
-      ticker: 'sNAME',
+      ticker: 'sNAMI',
       logo: 'nami.png', // TODO: Add real logo
       decimals: 8,
       priceProviderId: 'nami-protocol', // TODO: Add real price provider id

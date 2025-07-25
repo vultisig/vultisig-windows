@@ -185,6 +185,22 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
+    const [firstMessage] = signDoc.msgs
+    if (
+      firstMessage &&
+      firstMessage.type == '/ibc.applications.transfer.v1.MsgTransfer' &&
+      firstMessage.value.memo
+      // Block multi asset interaction (not supported with memo yet)
+    ) {
+      throw new Error('Not supported')
+    }
+    if (firstMessage && firstMessage.value?.funds?.length > 1) {
+      // Block contract interaction with multiple funds (not supported yet)
+      throw new Error('Not supported')
+    }
+    if (signDoc.msgs.length > 1) {
+      throw Error('Not supported')
+    }
     return new Promise<AminoSignResponse>((resolve, reject) => {
       this.cosmosProvider
         .request({
