@@ -1,3 +1,4 @@
+import { EvmChain } from '@core/chain/Chain'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
@@ -5,7 +6,9 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { pick } from '@lib/utils/record/pick'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
@@ -13,8 +16,8 @@ import { VerifySwapFees } from '../../form/info/VerifySwapFees'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
 import { useToCoin } from '../../state/toCoin'
+import { Erc20Allowance } from '../Erc20Allowance'
 import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
-import { SwapAllowance } from '../SwapAllowance'
 import { SwapConfirm } from '../SwapConfirm'
 import { SwapTerms } from '../SwapTerms'
 import {
@@ -72,7 +75,14 @@ export const SwapVerify = () => {
             />
           </HStack>
         </VStack>
-        <SwapAllowance />
+        {isOneOf(fromCoin.chain, Object.values(EvmChain)) && fromCoin.id && (
+          <Erc20Allowance
+            chain={fromCoin.chain}
+            id={fromCoin.id}
+            {...pick(fromCoin, ['decimals', 'ticker', 'address'])}
+            spender={toCoin.address}
+          />
+        )}
         <VerifySwapFees RowComponent={SwapTxFeesOverviewRow} />
       </ContentWrapper>
       <SwapTermsProvider initialValue={swapTerms.map(() => false)}>
