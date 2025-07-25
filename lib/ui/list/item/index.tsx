@@ -22,6 +22,7 @@ const StyledMeta = styled.span`
   flex-direction: column;
   gap: 4px;
   max-width: 100%;
+  overflow: auto;
 `
 
 const StyledTitle = styled.span`
