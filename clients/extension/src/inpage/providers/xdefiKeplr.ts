@@ -1,13 +1,8 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
-import { getCosmosChainFromAddress } from '@clients/extension/src/utils/cosmos/getCosmosChainFromAddress'
-import {
-  Messaging,
-  TransactionDetails,
-} from '@clients/extension/src/utils/interfaces'
+import { Messaging } from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import {
   CosmJSOfflineSigner,
@@ -29,8 +24,6 @@ import {
 } from '@keplr-wallet/types'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import base58 from 'bs58'
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
 
 import { Cosmos } from './cosmos'
@@ -208,54 +201,19 @@ export class XDEFIKeplrProvider extends Keplr {
     },
     _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
-    const txBody = TxBody.decode(signDoc.bodyBytes)
-
-    const [firstMessage] = txBody.messages
-    if (
-      !firstMessage ||
-      firstMessage.typeUrl !== '/ibc.applications.transfer.v1.MsgTransfer'
-    ) {
-      throw new Error('Unsupported message type')
-    }
-
-    const txChain = getCosmosChainByChainId(chainId)
-
-    if (!txChain) {
-      throw new Error(`Chain not supported: ${chainId}`)
-    }
-
-    const msg = MsgTransfer.decode(firstMessage.value)
-    const receiverChain = getCosmosChainFromAddress(msg.receiver)
-    if (!receiverChain) {
-      throw new Error(`Receiver chain not supported: ${msg.receiver}`)
-    }
-
-    const standardTx: TransactionDetails = {
-      asset: {
-        chain: txChain,
-        ticker: msg.token.denom,
-      },
-      amount: {
-        amount: msg.token.amount,
-        decimals: chainFeeCoin[txChain].decimals,
-      },
-      from: msg.sender,
-      to: msg.receiver,
-      data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-      ibcTransaction: {
-        ...msg,
-        timeoutHeight: {
-          revisionHeight: msg.timeoutHeight.revisionHeight.toString(),
-          revisionNumber: msg.timeoutHeight.revisionNumber.toString(),
-        },
-        timeoutTimestamp: msg.timeoutTimestamp.toString(),
-      },
-    }
-
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [{ ...standardTx, txType: 'Vultisig' }],
+      params: [
+        {
+          bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
+          authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
+          chainId: signDoc.chainId,
+          accountNumber: signDoc.accountNumber.toString(),
+          txType: 'Keplr',
+        },
+      ],
     })) as TxResult
+    const txChain = getCosmosChainByChainId(chainId)
 
     const accountInfo = await getCosmosAccountInfo({
       chain: txChain as CosmosChain,

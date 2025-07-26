@@ -30,6 +30,7 @@ import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysi
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
@@ -94,14 +95,7 @@ export const getKeysignPayload = (
               ),
             }
           : feeSettings
-
-        const txType = transaction.transactionDetails.ibcTransaction
-          ? TransactionType.IBC_TRANSFER
-          : transaction.transactionDetails.cosmosMsgPayload?.case ===
-              CosmosMsgType.MSG_EXECUTE_CONTRACT
-            ? TransactionType.GENERIC_CONTRACT
-            : TransactionType.UNSPECIFIED
-
+        const txType = getTxType(transaction)
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: fromChainAmount(
@@ -127,14 +121,10 @@ export const getKeysignPayload = (
             break
           }
           case 'cosmosSpecific': {
-            const isIbcTransfer =
-              chainSpecific.value.transactionType ===
-              TransactionType.IBC_TRANSFER
-
             const hasTimeout =
               !!transaction.transactionDetails.ibcTransaction?.timeoutTimestamp
 
-            if (isIbcTransfer && hasTimeout) {
+            if (txType === TransactionType.IBC_TRANSFER && hasTimeout) {
               try {
                 const client = await getCosmosClient(
                   accountCoin.chain as CosmosChain
@@ -242,4 +232,30 @@ export const getKeysignPayload = (
       }
     })()
   })
+}
+
+const getTxType = (
+  transaction: IKeysignTransactionPayload
+): TransactionType => {
+  if (transaction.transactionDetails.cosmosMsgPayload) {
+    const msg = transaction.transactionDetails.cosmosMsgPayload
+    match(msg.case, {
+      [CosmosMsgType.MSG_SEND]: () => {
+        return TransactionType.UNSPECIFIED
+      },
+      [CosmosMsgType.THORHCAIN_MSG_SEND]: () => {
+        return TransactionType.UNSPECIFIED
+      },
+      [CosmosMsgType.MSG_SEND_URL]: () => {
+        return TransactionType.UNSPECIFIED
+      },
+      [CosmosMsgType.MSG_TRANSFER_URL]: () => {
+        return TransactionType.IBC_TRANSFER
+      },
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
+        return TransactionType.GENERIC_CONTRACT
+      },
+    })
+  }
+  return TransactionType.UNSPECIFIED
 }

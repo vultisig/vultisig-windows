@@ -5,6 +5,7 @@ import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
+
 import { CosmosMsgType } from './constants'
 
 export namespace Messaging {
@@ -112,7 +113,16 @@ export namespace TransactionType {
     gasLimit?: string
   } & BaseTransaction<'Vultisig'>
 
-  export type Keplr = StdSignDoc & BaseTransaction<'Keplr'>
+  export type Keplr = (
+    | StdSignDoc
+    | {
+        bodyBytes: string // base64 encoded
+        authInfoBytes: string // base64 encoded
+        chainId: string
+        accountNumber: string // stringified Long
+      }
+  ) &
+    BaseTransaction<'Keplr'>
 
   export type Phantom = {
     asset: {
@@ -148,7 +158,10 @@ type IMsgTransfer = {
 
 export type CosmosMsgPayload =
   | {
-      case: CosmosMsgType.MSG_SEND
+      case:
+        | CosmosMsgType.MSG_SEND
+        | CosmosMsgType.THORHCAIN_MSG_SEND
+        | CosmosMsgType.MSG_SEND_URL
       value: {
         amount: { denom: string; amount: string }[]
         from_address: string
@@ -163,6 +176,10 @@ export type CosmosMsgPayload =
         funds: { denom: string; amount: string }[]
         msg: string
       }
+    }
+  | {
+      case: CosmosMsgType.MSG_TRANSFER_URL
+      value: IMsgTransfer
     }
 
 export type TransactionDetails = {
