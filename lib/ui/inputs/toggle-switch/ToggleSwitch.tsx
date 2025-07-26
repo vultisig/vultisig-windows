@@ -22,11 +22,9 @@ export type ContainerProps = Partial<StackProps> & {
 
 export type OptionRenderState<T extends string | number> = ChildrenProp &
   Partial<ButtonProps> & {
-    option: Option<T>
     active: boolean
     disabled: boolean
-    index: number
-    total: number
+    icon: ReactNode
   }
 
 export type OptionButtonProps<T extends string | number> =
