@@ -3,6 +3,7 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
 
 export namespace Messaging {
@@ -110,11 +111,7 @@ export namespace TransactionType {
     gasLimit?: string
   } & BaseTransaction<'Vultisig'>
 
-  export type Keplr = {
-    amount: { amount: string; denom: string }[]
-    from_address: string
-    to_address: string
-  } & BaseTransaction<'Keplr'>
+  export type Keplr = StdSignDoc & BaseTransaction<'Keplr'>
 
   export type Phantom = {
     asset: {

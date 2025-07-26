@@ -9,7 +9,7 @@ import {
 
 export const fromCommCoin = (coin: CommCoin): AccountCoin => {
   return {
-    id: coin.contractAddress || coin.ticker,
+    id: coin.contractAddress || undefined,
     chain: coin.chain as Chain,
     address: coin.address,
     ticker: coin.ticker,
