@@ -5,6 +5,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentType, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { ButtonProps } from '../../buttons/ButtonProps'
 import { ChildrenProp } from '../../props'
 
 export type Option<T extends string | number> = {
@@ -19,13 +20,14 @@ export type ContainerProps = Partial<StackProps> & {
   className?: string
 }
 
-export type OptionRenderState<T extends string | number> = ChildrenProp & {
-  option: Option<T>
-  active: boolean
-  disabled: boolean
-  index: number
-  total: number
-}
+export type OptionRenderState<T extends string | number> = ChildrenProp &
+  Partial<ButtonProps> & {
+    option: Option<T>
+    active: boolean
+    disabled: boolean
+    index: number
+    total: number
+  }
 
 export type OptionButtonProps<T extends string | number> =
   OptionRenderState<T> & {
