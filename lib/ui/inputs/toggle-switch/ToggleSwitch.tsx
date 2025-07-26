@@ -31,9 +31,9 @@ export type OptionButtonProps = OptionRenderState & {
   className?: string
 }
 
-export type Slots<T extends string | number> = {
+export type Slots = {
   Container?: ComponentType<ContainerProps>
-  OptionButton?: ComponentType<OptionButtonProps<T>>
+  OptionButton?: ComponentType<OptionButtonProps>
 }
 
 export type ToggleSwitchProps<T extends string | number> = {
