@@ -16,7 +16,7 @@ type FixedDirectionStackProps = {
   scrollable?: boolean
 }
 
-type StackProps = FixedDirectionStackProps & {
+export type StackProps = FixedDirectionStackProps & {
   direction: React.CSSProperties['flexDirection']
 }
 

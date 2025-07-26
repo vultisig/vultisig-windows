@@ -54,11 +54,12 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
         color: 'hsl(215, 40%, 85%)',
       }}
     >
-      <VStack gap={8}>
+      <VStack gap={16}>
+        <Divider />
         <ToggleSwitch
+          value={addressBookSelectedOption}
           options={options}
-          selected={addressBookSelectedOption}
-          onChange={setAddressBookSelectedOption}
+          onChange={value => setAddressBookSelectedOption(value)}
         />
         <List>
           <Match
@@ -93,4 +94,9 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
 const Title = styled(Text)`
   // @tony: one off color, not added to the theme
   color: hsl(215, 40%, 85%);
+`
+
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
 `
