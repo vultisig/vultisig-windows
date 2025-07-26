@@ -169,7 +169,9 @@ export type CosmosMsgPayload =
       }
     }
   | {
-      case: CosmosMsgType.MSG_EXECUTE_CONTRACT
+      case:
+        | CosmosMsgType.MSG_EXECUTE_CONTRACT
+        | CosmosMsgType.MSG_EXECUTE_CONTRACT_URL
       value: {
         sender: string
         contract: string

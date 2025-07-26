@@ -255,6 +255,9 @@ const getTxType = (
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
         return TransactionType.GENERIC_CONTRACT
       },
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
+        return TransactionType.GENERIC_CONTRACT
+      },
     })
   }
   return TransactionType.UNSPECIFIED

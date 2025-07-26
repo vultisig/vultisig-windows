@@ -13,7 +13,7 @@ import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { ethers } from 'ethers'
-
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { CosmosMsgType } from '../constants'
 import { getCosmosChainFromAddress } from '../cosmos/getCosmosChainFromAddress'
 
@@ -106,6 +106,39 @@ const transactionHandlers: TransactionHandlers = {
               sender: message.value.sender,
               contract: message.value.contract,
               funds: message.value.funds,
+              msg: formattedMessage,
+            },
+          } as CosmosMsgPayload,
+        }
+      },
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
+        const decodedMessage = MsgExecuteContract.decode(message.value)
+        const formattedMessage = JSON.stringify(decodedMessage.msg)
+          .replace(/^({)/, '$1 ')
+          .replace(/(})$/, ' $1')
+          .replace(/:/g, ': ')
+
+        return {
+          asset: {
+            chain: chain,
+            ticker: decodedMessage.funds.length
+              ? decodedMessage.funds[0].denom
+              : chainFeeCoin[chain].ticker,
+          },
+          amount: {
+            amount: decodedMessage.funds.length
+              ? decodedMessage.funds[0].amount
+              : 0,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: decodedMessage.sender,
+          to: decodedMessage.contract,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
+            value: {
+              sender: decodedMessage.sender,
+              contract: decodedMessage.contract,
+              funds: decodedMessage.funds,
               msg: formattedMessage,
             },
           } as CosmosMsgPayload,
