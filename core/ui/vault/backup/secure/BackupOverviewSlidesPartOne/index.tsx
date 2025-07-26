@@ -109,7 +109,8 @@ const StyledButton = styled(Button)`
 `
 
 const StyledContent = styled(VStack)`
-  background-color: ${getColor('info', 0.03)};
+  background-color: ${({ theme }) =>
+    theme.colors.info.getVariant({ a: () => 0.03 }).toCssValue()};
   border-bottom: dashed 1px ${getColor('foregroundExtra')};
   border-top: dashed 1px ${getColor('foregroundExtra')};
   height: 400px;
