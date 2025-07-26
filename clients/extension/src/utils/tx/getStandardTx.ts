@@ -113,7 +113,11 @@ const transactionHandlers: TransactionHandlers = {
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
         const decodedMessage = MsgExecuteContract.decode(message.value)
-        const formattedMessage = JSON.stringify(decodedMessage.msg)
+
+        const msgString = new TextDecoder().decode(
+          Buffer.from(decodedMessage.msg)
+        )
+        const formattedMessage = msgString
           .replace(/^({)/, '$1 ')
           .replace(/(})$/, ' $1')
           .replace(/:/g, ': ')
