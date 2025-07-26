@@ -44,10 +44,6 @@ export const getKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
-        const isExecuteContract =
-          transaction.transactionDetails.data?.startsWith(
-            CosmosMsgType.MSG_EXECUTE_CONTRACT
-          )
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
@@ -101,7 +97,8 @@ export const getKeysignPayload = (
 
         const txType = transaction.transactionDetails.ibcTransaction
           ? TransactionType.IBC_TRANSFER
-          : isExecuteContract
+          : transaction.transactionDetails.cosmosMsgPayload?.case ===
+              CosmosMsgType.MSG_EXECUTE_CONTRACT
             ? TransactionType.GENERIC_CONTRACT
             : TransactionType.UNSPECIFIED
 
@@ -204,19 +201,16 @@ export const getKeysignPayload = (
         }
         let contractPayload = null
         if (
-          transaction.transactionDetails.data?.startsWith(
-            CosmosMsgType.MSG_EXECUTE_CONTRACT
-          )
+          transaction.transactionDetails.cosmosMsgPayload?.case ===
+          CosmosMsgType.MSG_EXECUTE_CONTRACT
         ) {
-          const msg = transaction.transactionDetails.data.replace(
-            `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
-            ''
-          )
+          const msgPayload =
+            transaction.transactionDetails.cosmosMsgPayload.value
 
           contractPayload = create(WasmExecuteContractPayloadSchema, {
-            contractAddress: transaction.transactionDetails.to,
-            executeMsg: msg,
-            senderAddress: transaction.transactionDetails.from,
+            contractAddress: msgPayload.contract,
+            executeMsg: msgPayload.msg,
+            senderAddress: msgPayload.sender,
             coins: transaction.transactionDetails.amount?.amount ? [coin] : [],
           })
         }

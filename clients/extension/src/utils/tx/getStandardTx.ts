@@ -1,5 +1,6 @@
 import api from '@clients/extension/src/utils/api'
 import {
+  CosmosMsgPayload,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
@@ -20,22 +21,38 @@ type TransactionHandlers = {
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => {
     const [message] = tx.msgs
-    return match(message.type, {
-      [CosmosMsgType.MSG_SEND]: () => {
-        return {
-          asset: {
-            chain: chain,
-            ticker: message.value!.amount[0].denom,
-          },
-          amount: {
-            amount: message.value.amount[0].amount,
-            decimals: chainFeeCoin[chain].decimals,
-          },
-          from: message.value.from_address,
-          to: message.value.to_address,
-        }
+
+    const handleMsgSend = () => ({
+      asset: {
+        chain: chain,
+        ticker: message.value!.amount[0].denom,
       },
+      amount: {
+        amount: message.value.amount[0].amount,
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: message.value.from_address,
+      to: message.value.to_address,
+      data: tx.memo,
+      cosmosMsgPayload: {
+        case: CosmosMsgType.MSG_SEND,
+        value: {
+          amount: message.value.amount,
+          from_address: message.value.from_address,
+          to_address: message.value.to_address,
+        },
+      } as CosmosMsgPayload,
+    })
+
+    return match(message.type, {
+      [CosmosMsgType.MSG_SEND]: handleMsgSend,
+      [CosmosMsgType.THORHCAIN_MSG_SEND]: handleMsgSend,
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
+        const formattedMessage = JSON.stringify(message.value.msg)
+          .replace(/^({)/, '$1 ')
+          .replace(/(})$/, ' $1')
+          .replace(/:/g, ': ')
+
         return {
           asset: {
             chain: chain,
@@ -51,7 +68,15 @@ const transactionHandlers: TransactionHandlers = {
           },
           from: message.value.sender,
           to: message.value.contract,
-          data: `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-${JSON.stringify(message.value.msg)}`,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
+            value: {
+              sender: message.value.sender,
+              contract: message.value.contract,
+              funds: message.value.funds,
+              msg: formattedMessage,
+            },
+          } as CosmosMsgPayload,
         }
       },
     })

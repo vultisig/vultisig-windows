@@ -5,6 +5,7 @@ import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
+import { CosmosMsgType } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -145,6 +146,25 @@ type IMsgTransfer = {
   memo: string
 }
 
+export type CosmosMsgPayload =
+  | {
+      case: CosmosMsgType.MSG_SEND
+      value: {
+        amount: { denom: string; amount: string }[]
+        from_address: string
+        to_address: string
+      }
+    }
+  | {
+      case: CosmosMsgType.MSG_EXECUTE_CONTRACT
+      value: {
+        sender: string
+        contract: string
+        funds: { denom: string; amount: string }[]
+        msg: string
+      }
+    }
+
 export type TransactionDetails = {
   asset: {
     chain: Chain
@@ -162,6 +182,7 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
+  cosmosMsgPayload?: CosmosMsgPayload
   ibcTransaction?: IMsgTransfer
 }
 

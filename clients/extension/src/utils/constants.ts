@@ -1,5 +1,6 @@
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
+  THORHCAIN_MSG_SEND = 'thorchain/MsgSend',
   MSG_EXECUTE_CONTRACT = 'wasm/MsgExecuteContract',
 }
 
