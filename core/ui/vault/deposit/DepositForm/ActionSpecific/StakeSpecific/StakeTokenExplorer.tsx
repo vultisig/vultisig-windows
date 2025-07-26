@@ -1,4 +1,10 @@
 import { Coin } from '@core/chain/coin/Coin'
+import {
+  stakeableAssetsTickers,
+  StakeableAssetTicker,
+} from '@core/ui/vault/deposit/config'
+import { FormData } from '@core/ui/vault/deposit/DepositForm'
+import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -6,10 +12,6 @@ import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-
-import { stakeableAssetsTickers, StakeableAssetTicker } from '../../../config'
-import { FormData } from '../..'
-import { DepositActionOption } from '../../DepositActionOption'
 
 type Props = {
   activeOption?: Coin
@@ -29,12 +31,7 @@ export const StakeTokenExplorer: FC<Props> = ({
   const { t } = useTranslation()
 
   return (
-    <Modal
-      width={480}
-      placement="top"
-      title={t('select_token')}
-      onClose={onClose}
-    >
+    <Modal onClose={onClose} title={t('select_token')}>
       <VStack gap={20}>
         {coins.length > 0 ? (
           coins.map((token, index) => {

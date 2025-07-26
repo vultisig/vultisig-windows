@@ -1,10 +1,9 @@
+import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { ChainAction } from '../ChainAction'
-import { DepositActionOption } from './DepositActionOption'
 
 type DepositActionItemExplorerProps = {
   options: ChainAction[]
@@ -22,7 +21,7 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
   const { t } = useTranslation()
 
   return (
-    <Modal width={480} placement="top" title="" onClose={onClose}>
+    <Modal onClose={onClose} title="">
       <VStack gap={20}>
         {options.map((option, index) => {
           return (
