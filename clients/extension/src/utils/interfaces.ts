@@ -202,7 +202,6 @@ export type TransactionDetails = {
     maxPriorityFeePerGas?: string
   }
   cosmosMsgPayload?: CosmosMsgPayload
-  ibcTransaction?: IMsgTransfer
 }
 
 export type IKeysignTransactionPayload = {

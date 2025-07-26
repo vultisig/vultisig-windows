@@ -121,32 +121,38 @@ export const getKeysignPayload = (
             break
           }
           case 'cosmosSpecific': {
-            const hasTimeout =
-              !!transaction.transactionDetails.ibcTransaction?.timeoutTimestamp
+            if (
+              transaction.transactionDetails.cosmosMsgPayload?.case ===
+              CosmosMsgType.MSG_TRANSFER_URL
+            ) {
+              const hasTimeout =
+                !!transaction.transactionDetails.cosmosMsgPayload?.value
+                  .timeoutTimestamp
 
-            if (txType === TransactionType.IBC_TRANSFER && hasTimeout) {
-              try {
-                const client = await getCosmosClient(
-                  accountCoin.chain as CosmosChain
-                )
-                const latestBlock = await client.getBlock()
+              if (hasTimeout) {
+                try {
+                  const client = await getCosmosClient(
+                    accountCoin.chain as CosmosChain
+                  )
+                  const latestBlock = await client.getBlock()
 
-                const latestBlockHeight = latestBlock.header.height
-                const timeoutTimestamp =
-                  transaction.transactionDetails.ibcTransaction!
-                    .timeoutTimestamp
+                  const latestBlockHeight = latestBlock.header.height
+                  const timeoutTimestamp =
+                    transaction.transactionDetails.cosmosMsgPayload?.value
+                      .timeoutTimestamp
 
-                chainSpecific.value.ibcDenomTraces = create(
-                  CosmosIbcDenomTraceSchema,
-                  {
-                    latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
-                  }
-                )
-              } catch (error) {
-                console.error(
-                  'Failed to fetch Cosmos block or build denom trace:',
-                  error
-                )
+                  chainSpecific.value.ibcDenomTraces = create(
+                    CosmosIbcDenomTraceSchema,
+                    {
+                      latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
+                    }
+                  )
+                } catch (error) {
+                  console.error(
+                    'Failed to fetch Cosmos block or build denom trace:',
+                    error
+                  )
+                }
               }
             }
             break

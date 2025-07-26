@@ -11,9 +11,10 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { match } from '@lib/utils/match'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { ethers } from 'ethers'
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
+
 import { CosmosMsgType } from '../constants'
 import { getCosmosChainFromAddress } from '../cosmos/getCosmosChainFromAddress'
 
@@ -113,7 +114,6 @@ const transactionHandlers: TransactionHandlers = {
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
         const decodedMessage = MsgExecuteContract.decode(message.value)
-
         const msgString = new TextDecoder().decode(
           Buffer.from(decodedMessage.msg)
         )
@@ -171,15 +171,6 @@ const transactionHandlers: TransactionHandlers = {
           from: msg.sender,
           to: msg.receiver,
           data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-          // TODO: remove ibcTransaction in future in favor of cosmosMsgPayload
-          ibcTransaction: {
-            ...msg,
-            timeoutHeight: {
-              revisionHeight: msg.timeoutHeight.revisionHeight.toString(),
-              revisionNumber: msg.timeoutHeight.revisionNumber.toString(),
-            },
-            timeoutTimestamp: msg.timeoutTimestamp.toString(),
-          },
           cosmosMsgPayload: {
             case: CosmosMsgType.MSG_TRANSFER_URL,
             value: {
