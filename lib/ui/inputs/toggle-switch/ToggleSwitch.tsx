@@ -20,18 +20,16 @@ export type ContainerProps = Partial<StackProps> & {
   className?: string
 }
 
-export type OptionRenderState<T extends string | number> = ChildrenProp &
+export type OptionRenderState = ChildrenProp &
   Partial<ButtonProps> & {
     active: boolean
     disabled: boolean
     icon: ReactNode
   }
 
-export type OptionButtonProps<T extends string | number> =
-  OptionRenderState<T> & {
-    onSelect: () => void
-    className?: string
-  }
+export type OptionButtonProps = OptionRenderState & {
+  className?: string
+}
 
 export type Slots<T extends string | number> = {
   Container?: ComponentType<ContainerProps>
