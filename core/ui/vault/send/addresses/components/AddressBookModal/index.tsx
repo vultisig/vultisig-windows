@@ -57,6 +57,9 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
       <VStack gap={16}>
         <Divider />
         <ToggleSwitch
+          slots={{
+            OptionButton: () => <></>,
+          }}
           value={addressBookSelectedOption}
           options={options}
           onChange={value => setAddressBookSelectedOption(value)}
