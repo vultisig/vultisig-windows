@@ -2,7 +2,7 @@ import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { AsProp, TitleProp } from '@lib/ui/props'
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, CSSProperties, ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { Backdrop } from './Backdrop'
@@ -23,6 +23,7 @@ export type ModalProps = AsProp &
     targetWidth?: number
     titleAlign?: 'left' | 'center' | 'right'
     withDefaultStructure?: boolean
+    closeButtonStyle?: CSSProperties
   }
 
 const contentVerticalPadding = 8
@@ -50,6 +51,7 @@ export const Modal = ({
   as,
   titleAlign,
   withDefaultStructure = true,
+  closeButtonStyle,
   ...rest
 }: ModalProps) => {
   return (
@@ -64,7 +66,12 @@ export const Modal = ({
                 gap={16}
               >
                 <ModalTitleText align={titleAlign}>{title}</ModalTitleText>
-                {onClose && <ModalCloseButton onClick={onClose} />}
+                {onClose && (
+                  <ModalCloseButton
+                    style={closeButtonStyle}
+                    onClick={onClose}
+                  />
+                )}
               </HStack>
               {subTitle && <ModalSubTitleText>{subTitle}</ModalSubTitleText>}
             </VStack>

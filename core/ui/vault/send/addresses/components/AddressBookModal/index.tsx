@@ -4,8 +4,10 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { AddressBookListItem } from '../../../../../address-book/item'
 import { useAddressBookItems } from '../../../../../storage/addressBook'
@@ -45,7 +47,13 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   }, [coin.chain, coin.id, vaults])
 
   return (
-    <Modal onClose={onClose} title={t('address_book')}>
+    <Modal
+      onClose={onClose}
+      title={<Title size={15}>{t('address_book')}</Title>}
+      closeButtonStyle={{
+        color: 'hsl(215, 40%, 85%)',
+      }}
+    >
       <VStack gap={8}>
         <ToggleSwitch
           options={options}
@@ -81,3 +89,8 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
     </Modal>
   )
 }
+
+const Title = styled(Text)`
+  // @tony: one off color, not added to the theme
+  color: hsl(215, 40%, 85%);
+`
