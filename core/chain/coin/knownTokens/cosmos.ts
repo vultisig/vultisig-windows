@@ -41,6 +41,13 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'rujira',
     },
+    'x/staking-x/ruji': {
+      ticker: 'sRUJI',
+      logo: 'ruji',
+      decimals: 8,
+      priceProviderId: 'rujira',
+      hiddenFromUI: true,
+    },
     'bch-bch': {
       ticker: 'BCH',
       logo: 'bch',
@@ -179,6 +186,28 @@ export const knownCosmosTokens: Record<
       logo: 'xrp',
       decimals: 8,
       priceProviderId: 'ripple',
+      hiddenFromUI: true,
+    },
+    'thor.nami': {
+      ticker: 'NAMI',
+      logo: 'nami.png',
+      decimals: 8,
+      priceProviderId: 'nami-protocol',
+      hiddenFromUI: true,
+    },
+    'x/nami-index-fixed-thor1yqf5spdv8c4088zmvqsg32eq63fzepsjvntahdk0ek0yjnkt3qdqftp3lc-rcpt':
+      {
+        ticker: 'RJI',
+        logo: 'nami.png', // TODO: Add real logo
+        decimals: 8,
+        priceProviderId: 'nami-protocol', // TODO: Add real price provider id
+        hiddenFromUI: true,
+      },
+    'x/staking-thor.nami': {
+      ticker: 'sNAMI',
+      logo: 'nami.png', // TODO: Add real logo
+      decimals: 8,
+      priceProviderId: 'nami-protocol', // TODO: Add real price provider id
       hiddenFromUI: true,
     },
     ...kujiraCoinsOnThorChain,

@@ -128,7 +128,7 @@ export class XDEFIKeplrProvider extends Keplr {
   ): OfflineAminoSigner {
     const cosmSigner = new CosmJSOfflineSignerOnlyAmino(
       chainId,
-      window.xfi.keplr,
+      this,
       signOptions
     )
 
@@ -185,6 +185,20 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
+    const [firstMessage] = signDoc.msgs
+    if (
+      firstMessage &&
+      firstMessage.type == 'cosmos-sdk/MsgTransfer' // cosmos-sdk/MsgTransfer
+    ) {
+      throw new Error('Not supported')
+    }
+    if (firstMessage && firstMessage.value?.funds?.length > 1) {
+      // Block contract interaction with multiple funds (not supported yet)
+      throw new Error('Not supported')
+    }
+    if (signDoc.msgs.length > 1) {
+      throw Error('Not supported')
+    }
     return new Promise<AminoSignResponse>((resolve, reject) => {
       this.cosmosProvider
         .request({
