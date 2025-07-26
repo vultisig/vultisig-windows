@@ -32,9 +32,9 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       value={step}
       backupSlideshowPartOne={() =>
         isInitiatingDevice ? (
-          <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
+          <BackupOverviewSlidesPartOne onFinish={toNextStep} />
         ) : (
-          <PairingDeviceBackupOverviewSlidesPartOne onCompleted={toNextStep} />
+          <PairingDeviceBackupOverviewSlidesPartOne onFinish={toNextStep} />
         )
       }
       backupConfirmation={() => (

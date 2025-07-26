@@ -18,6 +18,7 @@ export const darkTheme: DefaultTheme = {
     danger: new HSLA(0, 100, 68),
     idle: new HSLA(38, 100, 68),
     idleDark: new HSLA(39, 40, 15),
+    info: new HSLA(212, 100, 68),
 
     background: new HSLA(217, 91, 9),
     foreground: new HSLA(216, 81, 13),

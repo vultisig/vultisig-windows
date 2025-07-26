@@ -12,8 +12,8 @@ export const OnboardingController = () => {
   return (
     <Match
       value={step}
-      greeting={() => <OnboardingGreeting onCompleteGreeting={toNextStep} />}
-      steps={() => <OnboardingSteps onCompleteSteps={toNextStep} />}
+      greeting={() => <OnboardingGreeting onFinish={toNextStep} />}
+      steps={() => <OnboardingSteps onFinish={toNextStep} />}
       summary={() => <OnboardingSummary />}
     />
   )

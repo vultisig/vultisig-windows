@@ -44,7 +44,7 @@ export const BackupFastVault = ({
     <Match
       value={step}
       backupSlideshowPartOne={() => (
-        <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
+        <BackupOverviewSlidesPartOne onFinish={toNextStep} />
       )}
       saveVault={() => (
         <SaveVaultStep
