@@ -28,7 +28,7 @@ export const DepositActionOption = ({
     <Container isActive={isActive} onClick={onClick}>
       <HStack fullWidth alignItems="center" gap={12}>
         <VStack alignItems="start">
-          <Text color="contrast" size={20} weight="700">
+          <Text color="contrast" size={16} weight="500">
             {value}
           </Text>
         </VStack>

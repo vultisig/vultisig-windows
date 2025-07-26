@@ -37,7 +37,9 @@ export const AmountSuggestion: FC<
 
   return (
     <Container className={className} isActive={isActive} onClick={onClick}>
-      <Text>{value === 1 ? t('max') : formattedValue}</Text>
+      <Text size={14} weight="500">
+        {value === 1 ? t('max') : formattedValue}
+      </Text>
     </Container>
   )
 }
