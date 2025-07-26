@@ -43,7 +43,7 @@ export type ToggleSwitchProps<T extends string | number> = {
   disabled?: boolean
   className?: string
   optionClassName?: string
-  slots?: Slots<T>
+  slots?: Slots
 }
 
 export const ToggleSwitch = <T extends string | number>({
