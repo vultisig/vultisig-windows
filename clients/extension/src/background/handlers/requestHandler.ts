@@ -161,8 +161,6 @@ export const handleRequest = (
         break
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
-        console.log('SEND TRANSACTION', params)
-
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
           handleSendTransaction({

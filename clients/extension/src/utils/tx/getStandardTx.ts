@@ -30,27 +30,36 @@ const transactionHandlers: TransactionHandlers = {
     const { messages, memo, chainId } = extractKeplrMessages(tx)
     const [message] = messages
 
-    const handleMsgSend = () => ({
-      asset: {
-        chain: chain,
-        ticker: message.value!.amount[0].denom,
-      },
-      amount: {
-        amount: message.value.amount[0].amount,
-        decimals: chainFeeCoin[chain].decimals,
-      },
-      from: message.value.from_address,
-      to: message.value.to_address,
-      data: memo,
-      cosmosMsgPayload: {
-        case: message.type,
-        value: {
-          amount: message.value.amount,
-          from_address: message.value.from_address,
-          to_address: message.value.to_address,
+    const handleMsgSend = () => {
+      if (
+        !message.value ||
+        !message.value.amount ||
+        message.value.amount.length === 0
+      ) {
+        throw new Error('Invalid message structure: missing or empty amount')
+      }
+      return {
+        asset: {
+          chain: chain,
+          ticker: message.value.amount[0].denom,
         },
-      } as CosmosMsgPayload,
-    })
+        amount: {
+          amount: message.value.amount[0].amount,
+          decimals: chainFeeCoin[chain].decimals,
+        },
+        from: message.value.from_address,
+        to: message.value.to_address,
+        data: memo,
+        cosmosMsgPayload: {
+          case: message.type,
+          value: {
+            amount: message.value.amount,
+            from_address: message.value.from_address,
+            to_address: message.value.to_address,
+          },
+        } as CosmosMsgPayload,
+      }
+    }
 
     const handleMsgSendUrl = () => {
       const decodedMessage = MsgSend.decode(message.value)
@@ -78,13 +87,12 @@ const transactionHandlers: TransactionHandlers = {
     }
     return match(message.type ?? message.typeUrl, {
       [CosmosMsgType.MSG_SEND]: handleMsgSend,
-      [CosmosMsgType.THORHCAIN_MSG_SEND]: handleMsgSend,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSend,
       [CosmosMsgType.MSG_SEND_URL]: handleMsgSendUrl,
       [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
-        const formattedMessage = JSON.stringify(message.value.msg)
-          .replace(/^({)/, '$1 ')
-          .replace(/(})$/, ' $1')
-          .replace(/:/g, ': ')
+        const formattedMessage = formatContractMessage(
+          JSON.stringify(message.value.msg)
+        )
 
         return {
           asset: {
@@ -117,11 +125,7 @@ const transactionHandlers: TransactionHandlers = {
         const msgString = new TextDecoder().decode(
           Buffer.from(decodedMessage.msg)
         )
-        const formattedMessage = msgString
-          .replace(/^({)/, '$1 ')
-          .replace(/(})$/, ' $1')
-          .replace(/:/g, ': ')
-
+        const formattedMessage = formatContractMessage(msgString)
         return {
           asset: {
             chain: chain,
@@ -299,8 +303,6 @@ const extractKeplrMessages = (
     }
   } else {
     const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
-    console.log('txBody', txBody)
-
     return {
       chainId: tx.chainId,
       messages: txBody.messages,
@@ -308,3 +310,6 @@ const extractKeplrMessages = (
     }
   }
 }
+
+const formatContractMessage = (msgString: string): string =>
+  msgString.replace(/^({)/, '$1 ').replace(/(})$/, ' $1').replace(/:/g, ': ')

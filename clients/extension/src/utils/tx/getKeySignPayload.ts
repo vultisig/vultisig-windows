@@ -245,25 +245,15 @@ const getTxType = (
 ): TransactionType => {
   if (transaction.transactionDetails.cosmosMsgPayload) {
     const msg = transaction.transactionDetails.cosmosMsgPayload
-    match(msg.case, {
-      [CosmosMsgType.MSG_SEND]: () => {
-        return TransactionType.UNSPECIFIED
-      },
-      [CosmosMsgType.THORHCAIN_MSG_SEND]: () => {
-        return TransactionType.UNSPECIFIED
-      },
-      [CosmosMsgType.MSG_SEND_URL]: () => {
-        return TransactionType.UNSPECIFIED
-      },
-      [CosmosMsgType.MSG_TRANSFER_URL]: () => {
-        return TransactionType.IBC_TRANSFER
-      },
-      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
-        return TransactionType.GENERIC_CONTRACT
-      },
-      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
-        return TransactionType.GENERIC_CONTRACT
-      },
+    return match(msg.case, {
+      [CosmosMsgType.MSG_SEND]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.MSG_SEND_URL]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.MSG_TRANSFER_URL]: () => TransactionType.IBC_TRANSFER,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () =>
+        TransactionType.GENERIC_CONTRACT,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () =>
+        TransactionType.GENERIC_CONTRACT,
     })
   }
   return TransactionType.UNSPECIFIED

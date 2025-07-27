@@ -160,7 +160,7 @@ export type CosmosMsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
-        | CosmosMsgType.THORHCAIN_MSG_SEND
+        | CosmosMsgType.THORCHAIN_MSG_SEND
         | CosmosMsgType.MSG_SEND_URL
       value: {
         amount: { denom: string; amount: string }[]

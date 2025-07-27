@@ -186,9 +186,15 @@ export class XDEFIKeplrProvider extends Keplr {
     const txBody = TxBody.decode(txRaw.bodyBytes)
     const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
     const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
-      return {
-        type: msg.typeUrl,
-        value: JSON.parse(Buffer.from(msg.value).toString()),
+      try {
+        return {
+          type: msg.typeUrl,
+          value: JSON.parse(Buffer.from(msg.value).toString()),
+        }
+      } catch (error) {
+        throw new Error(
+          `Failed to parse message value for ${msg.typeUrl}: ${error}`
+        )
       }
     })
     const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
