@@ -704,7 +704,7 @@ export const en = {
   oneVaultShare: 'one vault share',
   theyRe: "They're",
   splitIntoParts: 'split into parts',
-  toIncreaseSecurity: 'to increase security and',
+  toIncreaseSecurity: 'to increase security',
   removeSinglePointOfFailure: 'remove single point-of-failure',
   theseSharesCollaborate: 'These shares collaborate to',
   unlockYourVault: 'unlock your vault',
