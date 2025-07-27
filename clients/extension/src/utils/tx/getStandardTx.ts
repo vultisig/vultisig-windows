@@ -109,6 +109,7 @@ const transactionHandlers: TransactionHandlers = {
           },
           from: message.value.sender,
           to: message.value.contract,
+          data: memo,
           cosmosMsgPayload: {
             case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
             value: {
@@ -141,6 +142,7 @@ const transactionHandlers: TransactionHandlers = {
           },
           from: decodedMessage.sender,
           to: decodedMessage.contract,
+          data: memo,
           cosmosMsgPayload: {
             case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
             value: {

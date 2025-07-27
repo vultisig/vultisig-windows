@@ -216,7 +216,7 @@ export const getKeysignPayload = (
             parseInt(transaction.transactionDetails.amount?.amount ?? '0')
           ).toString(),
           memo: contractPayload
-            ? undefined
+            ? transaction.transactionDetails.data
             : (modifiedMemo ?? transaction.transactionDetails.data),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
