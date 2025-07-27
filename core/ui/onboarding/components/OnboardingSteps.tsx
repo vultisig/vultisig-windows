@@ -1,5 +1,4 @@
 import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
-import { useResponsiveness } from '@core/ui/providers/ResponsivenessProivder'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
@@ -8,27 +7,15 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { pageConfig } from '@lib/ui/page/config'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
+import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const StyledButton = styled(Button)`
-  padding: 0;
-  width: auto;
-`
-
-type OnboardingStepsProps = {
-  onCompleteSteps: () => void
-}
-
-export const OnboardingSteps: FC<OnboardingStepsProps> = ({
-  onCompleteSteps,
-}) => {
+export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
   const {
     animations,
@@ -38,58 +25,52 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations()
-  const { isSmall } = useResponsiveness()
   const navigateBack = useNavigateBack()
+  const fontSize = 28
 
   return (
-    <>
-      <VStack
-        alignItems="center"
-        style={{ padding: pageConfig.verticalPadding }}
-      >
-        <VStack gap={16}>
-          <HStack justifyContent="space-between">
-            <StyledButton
-              icon={<ChevronLeftIcon fontSize={18} />}
-              kind="link"
-              onClick={!currentAnimation ? navigateBack : handlePrevAnimation}
-              size="sm"
-            >
-              {t('back')}
-            </StyledButton>
-            <StyledButton kind="link" onClick={onCompleteSteps} size="sm">
-              {t('skip')}
-            </StyledButton>
-          </HStack>
-          <MultistepProgressIndicator
-            markPreviousStepsAsCompleted
-            steps={animations.length}
-            stepWidth="35px"
-            value={animations.indexOf(currentAnimation) + 1}
-            variant="bars"
-          />
-        </VStack>
-      </VStack>
-      <PageContent alignItems="center" flexGrow>
+    <StyledLayout maxWidth={400} fullSize>
+      <StyledHeader gap={16}>
+        <HStack justifyContent="space-between">
+          <StyledButton
+            icon={<ChevronLeftIcon fontSize={18} />}
+            kind="link"
+            onClick={!currentAnimation ? navigateBack : handlePrevAnimation}
+            size="sm"
+          >
+            {t('back')}
+          </StyledButton>
+          <StyledButton kind="link" onClick={onFinish} size="sm">
+            {t('skip')}
+          </StyledButton>
+        </HStack>
+        <MultistepProgressIndicator
+          markPreviousStepsAsCompleted
+          steps={animations.length}
+          value={animations.indexOf(currentAnimation) + 1}
+          variant="bars"
+        />
+      </StyledHeader>
+      <StyledContent alignItems="center">
         <AnimationComponent />
-      </PageContent>
-      <PageFooter alignItems="center" gap={32}>
+      </StyledContent>
+      <StyledFooter alignItems="center" gap={32}>
         {match(currentAnimation, {
           0: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={fontSize} centerHorizontally>
                 {t('sayHelloTo')}{' '}
-                <GradientText as="span">{t('vaultShares')},</GradientText>{' '}
+                <GradientText as="span">{`${t('vaultShares')},`}</GradientText>{' '}
                 {t('yourNewRecoveryMethod')}
               </Text>
             </AnimatedVisibility>
           ),
           1: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={fontSize} centerHorizontally>
                 {t('theyRe')}{' '}
                 <GradientText as="span">{t('splitIntoParts')}</GradientText>{' '}
-                {t('toIncreaseSecurity')}{' '}
+                {`${t('toIncreaseSecurity')},`}{' '}
                 <GradientText as="span">
                   {t('removeSinglePointOfFailure')}
                 </GradientText>
@@ -98,7 +79,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           ),
           2: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={fontSize} centerHorizontally>
                 <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
                 {t('inYourVaultHolds')}{' '}
                 <GradientText as="span">{t('oneVaultShare')}</GradientText>
@@ -107,7 +88,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           ),
           3: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={fontSize} centerHorizontally>
                 {t('recoverYourVault')}{' '}
                 <GradientText as="span">
                   {t('deviceLostOrDamaged')}
@@ -117,7 +98,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           ),
           4: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={28} centerHorizontally>
                 <GradientText as="span">
                   {t('alwaysBackUpEachVaultShare')}
                 </GradientText>{' '}
@@ -128,7 +109,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           ),
           5: () => (
             <AnimatedVisibility>
-              <Text as="div" size={isSmall ? 24 : 32} centerHorizontally>
+              <Text as="div" size={28} centerHorizontally>
                 {t('theseSharesCollaborate')}{' '}
                 <GradientText as="span">{t('unlockYourVault')}</GradientText>
               </Text>
@@ -141,13 +122,42 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           onClick={
             currentAnimation < animations.length - 1
               ? handleNextAnimation
-              : onCompleteSteps
+              : onFinish
           }
           size="xl"
         >
           <ChevronRightIcon />
         </IconButton>
-      </PageFooter>
-    </>
+      </StyledFooter>
+    </StyledLayout>
   )
 }
+
+const StyledButton = styled(Button)`
+  padding: 0;
+  width: auto;
+`
+
+const StyledContent = styled(VStack)`
+  background-color: ${({ theme }) =>
+    theme.colors.info.getVariant({ a: () => 0.03 }).toCssValue()};
+  border-bottom: dashed 1px ${getColor('foregroundExtra')};
+  border-top: dashed 1px ${getColor('foregroundExtra')};
+  height: 400px;
+  padding: 0;
+`
+
+const StyledFooter = styled(VStack)`
+  bottom: 0px;
+  padding: 0 24px 36px;
+  position: absolute;
+`
+
+const StyledHeader = styled(VStack)`
+  padding: 36px 24px 0;
+`
+
+const StyledLayout = styled(VStack)`
+  margin: 0 auto;
+  position: relative;
+`
