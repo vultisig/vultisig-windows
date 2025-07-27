@@ -36,7 +36,6 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={3}
-          stepWidth={`100px`}
           value={3}
           variant="bars"
         />

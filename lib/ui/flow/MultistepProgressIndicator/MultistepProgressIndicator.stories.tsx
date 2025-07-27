@@ -20,17 +20,12 @@ const meta: Meta<typeof MultistepProgressIndicator> = {
       description: 'Current (0-based) step',
     },
     variant: { control: 'radio', options: VARIANTS },
-    stepWidth: {
-      control: { type: 'number', min: 20, max: 120, step: 4 },
-      if: { arg: 'variant', eq: 'bars' },
-    },
     markPreviousStepsAsCompleted: { control: 'boolean' },
   },
   args: {
     steps: 5,
     value: 2,
     variant: 'dots',
-    stepWidth: 60,
     markPreviousStepsAsCompleted: false,
   },
 }
