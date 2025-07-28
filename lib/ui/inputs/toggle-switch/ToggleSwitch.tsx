@@ -41,7 +41,6 @@ type ToggleSwitchProps<T extends string | number> = {
   value: T
   onChange: (value: T) => void
   disabled?: boolean
-  optionClassName?: string
   slots?: Slots
 } & UiProps
 
