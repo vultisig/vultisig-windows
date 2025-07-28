@@ -11,6 +11,7 @@ import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -98,7 +99,11 @@ export const KeygenFlow = ({
       }}
       error={error => (
         <>
-          <PageHeader title={title} hasBorder />
+          <PageHeader
+            title={title}
+            hasBorder
+            primaryControls={<PageHeaderBackButton />}
+          />
           <FlowErrorPageContent
             title={t('keygen_failed')}
             message={extractErrorMsg(error)}
@@ -113,7 +118,11 @@ export const KeygenFlow = ({
             />
           ) : (
             <>
-              <PageHeader title={title} hasBorder />
+              <PageHeader
+                title={title}
+                hasBorder
+                primaryControls={<PageHeaderBackButton />}
+              />
               <KeygenPendingState value={step} />
             </>
           )}
