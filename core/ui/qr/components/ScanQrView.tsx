@@ -11,7 +11,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 
 type ScanQrViewProps = OnFinishProp<string> & {
@@ -47,7 +46,7 @@ export const ScanQrView = ({
             <Center>
               <ErrorFallbackContent
                 title={t('failed_to_get_camera_permission')}
-                message={extractErrorMsg(error)}
+                error={error}
               />
             </Center>
           )}

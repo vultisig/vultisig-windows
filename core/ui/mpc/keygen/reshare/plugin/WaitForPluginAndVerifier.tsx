@@ -5,7 +5,6 @@ import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -52,7 +51,7 @@ export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
       error={error => (
         <FlowErrorPageContent
           title={t('failed_to_connect_with_server')}
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
       pending={() => (

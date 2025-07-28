@@ -134,7 +134,12 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             <WaitForServerLoader />
           </>
         )}
-        error={error => <FullPageFlowErrorState message={error.message} />}
+        error={error => (
+          <FullPageFlowErrorState
+            title={t('failed_to_connect_with_server')}
+            error={error}
+          />
+        )}
       />
     </>
   )

@@ -12,7 +12,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { attempt, withFallback } from '@lib/utils/attempt'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -117,7 +116,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       error={error => (
         <FlowErrorPageContent
           title={t('failed_to_get_video_permission')}
-          message={extractErrorMsg(error)}
+          error={error}
           action={
             <Button
               onClick={() => {

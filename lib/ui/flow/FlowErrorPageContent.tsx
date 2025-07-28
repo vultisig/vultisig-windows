@@ -1,18 +1,23 @@
 import { PageContent } from '@lib/ui/page/PageContent'
-import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
+import { ActionProp } from '@lib/ui/props'
 
 import { PageFooter } from '../page/PageFooter'
-import { ErrorFallbackContent } from './ErrorFallbackContent'
+import {
+  ErrorFallbackContent,
+  ErrorFallbackContentProps,
+} from './ErrorFallbackContent'
+
+export type FlowErrorPageContentProps = ErrorFallbackContentProps &
+  Partial<ActionProp>
 
 export const FlowErrorPageContent = ({
   action,
-  message,
-  title,
-}: Partial<ActionProp> & Partial<MessageProp> & TitleProp) => {
+  ...props
+}: FlowErrorPageContentProps) => {
   return (
     <>
       <PageContent>
-        <ErrorFallbackContent message={message} title={title} />
+        <ErrorFallbackContent {...props} />
       </PageContent>
       <PageFooter>{action}</PageFooter>
     </>

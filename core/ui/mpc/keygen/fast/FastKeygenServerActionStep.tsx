@@ -4,7 +4,6 @@ import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,7 +23,7 @@ export const FastKeygenServerActionStep: FC<OnFinishProp> = ({ onFinish }) => {
         error={error => (
           <FlowErrorPageContent
             title={t('failed_to_connect_with_server')}
-            message={extractErrorMsg(error)}
+            error={error}
           />
         )}
         pending={() => (
