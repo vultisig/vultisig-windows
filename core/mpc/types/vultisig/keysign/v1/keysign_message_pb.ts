@@ -2,33 +2,60 @@
 // @generated from file vultisig/keysign/v1/keysign_message.proto (package vultisig.keysign.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
-import type { OneInchSwapPayload } from "./1inch_swap_payload_pb";
-import { file_vultisig_keysign_v1_1inch_swap_payload } from "./1inch_swap_payload_pb";
-import type { CardanoChainSpecific, CosmosSpecific, EthereumSpecific, MAYAChainSpecific, PolkadotSpecific, RippleSpecific, SolanaSpecific, SuiSpecific, THORChainSpecific, TonSpecific, TronSpecific, UTXOSpecific } from "./blockchain_specific_pb";
-import { file_vultisig_keysign_v1_blockchain_specific } from "./blockchain_specific_pb";
-import type { Coin } from "./coin_pb";
-import { file_vultisig_keysign_v1_coin } from "./coin_pb";
-import type { CustomMessagePayload } from "./custom_message_payload_pb";
-import { file_vultisig_keysign_v1_custom_message_payload } from "./custom_message_payload_pb";
-import type { Erc20ApprovePayload } from "./erc20_approve_payload_pb";
-import { file_vultisig_keysign_v1_erc20_approve_payload } from "./erc20_approve_payload_pb";
-import type { KyberSwapPayload } from "./kyberswap_swap_payload_pb";
-import { file_vultisig_keysign_v1_kyberswap_swap_payload } from "./kyberswap_swap_payload_pb";
-import type { THORChainSwapPayload } from "./thorchain_swap_payload_pb";
-import { file_vultisig_keysign_v1_thorchain_swap_payload } from "./thorchain_swap_payload_pb";
-import type { UtxoInfo } from "./utxo_info_pb";
-import { file_vultisig_keysign_v1_utxo_info } from "./utxo_info_pb";
-import type { WasmExecuteContractPayload } from "./wasm_execute_contract_payload_pb";
-import { file_vultisig_keysign_v1_wasm_execute_contract_payload } from "./wasm_execute_contract_payload_pb";
-import type { Message } from "@bufbuild/protobuf";
+import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
+import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
+import type { OneInchSwapPayload } from './1inch_swap_payload_pb'
+import { file_vultisig_keysign_v1_1inch_swap_payload } from './1inch_swap_payload_pb'
+import type {
+  CardanoChainSpecific,
+  CosmosSpecific,
+  EthereumSpecific,
+  MAYAChainSpecific,
+  PolkadotSpecific,
+  RippleSpecific,
+  SolanaSpecific,
+  SuiSpecific,
+  THORChainSpecific,
+  TonSpecific,
+  TronSpecific,
+  UTXOSpecific,
+} from './blockchain_specific_pb'
+import { file_vultisig_keysign_v1_blockchain_specific } from './blockchain_specific_pb'
+import type { Coin } from './coin_pb'
+import { file_vultisig_keysign_v1_coin } from './coin_pb'
+import type { CustomMessagePayload } from './custom_message_payload_pb'
+import { file_vultisig_keysign_v1_custom_message_payload } from './custom_message_payload_pb'
+import type { Erc20ApprovePayload } from './erc20_approve_payload_pb'
+import { file_vultisig_keysign_v1_erc20_approve_payload } from './erc20_approve_payload_pb'
+import type { KyberSwapPayload } from './kyberswap_swap_payload_pb'
+import { file_vultisig_keysign_v1_kyberswap_swap_payload } from './kyberswap_swap_payload_pb'
+import type { THORChainSwapPayload } from './thorchain_swap_payload_pb'
+import { file_vultisig_keysign_v1_thorchain_swap_payload } from './thorchain_swap_payload_pb'
+import type { UtxoInfo } from './utxo_info_pb'
+import { file_vultisig_keysign_v1_utxo_info } from './utxo_info_pb'
+import type { WasmExecuteContractPayload } from './wasm_execute_contract_payload_pb'
+import { file_vultisig_keysign_v1_wasm_execute_contract_payload } from './wasm_execute_contract_payload_pb'
+import type { Message } from '@bufbuild/protobuf'
 
 /**
  * Describes the file vultisig/keysign/v1/keysign_message.proto.
  */
-export const file_vultisig_keysign_v1_keysign_message: GenFile = /*@__PURE__*/
-  fileDesc("Cil2dWx0aXNpZy9rZXlzaWduL3YxL2tleXNpZ25fbWVzc2FnZS5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSKvAgoOS2V5c2lnbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIUCgxzZXJ2aWNlX25hbWUYAiABKAkSGgoSZW5jcnlwdGlvbl9rZXlfaGV4GAQgASgJEjwKD2tleXNpZ25fcGF5bG9hZBgFIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuS2V5c2lnblBheWxvYWQSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAYgASgIEhIKCnBheWxvYWRfaWQYByABKAkSTgoWY3VzdG9tX21lc3NhZ2VfcGF5bG9hZBgIIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuQ3VzdG9tTWVzc2FnZVBheWxvYWRIAIgBAUIZChdfY3VzdG9tX21lc3NhZ2VfcGF5bG9hZCKjDAoOS2V5c2lnblBheWxvYWQSJwoEY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhISCgp0b19hZGRyZXNzGAIgASgJEhEKCXRvX2Ftb3VudBgDIAEoCRI6Cg11dHhvX3NwZWNpZmljGAQgASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5VVFhPU3BlY2lmaWNIABJCChFldGhlcmV1bV9zcGVjaWZpYxgFIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuRXRoZXJldW1TcGVjaWZpY0gAEkQKEnRob3JjaGFpbl9zcGVjaWZpYxgGIAEoCzImLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3BlY2lmaWNIABI/Cg1tYXlhX3NwZWNpZmljGAcgASgLMiYudnVsdGlzaWcua2V5c2lnbi52MS5NQVlBQ2hhaW5TcGVjaWZpY0gAEj4KD2Nvc21vc19zcGVjaWZpYxgIIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zU3BlY2lmaWNIABI+Cg9zb2xhbmFfc3BlY2lmaWMYCSABKAsyIy52dWx0aXNpZy5rZXlzaWduLnYxLlNvbGFuYVNwZWNpZmljSAASQgoRcG9sa2Fkb3Rfc3BlY2lmaWMYCiABKAsyJS52dWx0aXNpZy5rZXlzaWduLnYxLlBvbGthZG90U3BlY2lmaWNIABI7Cg9zdWljaGVfc3BlY2lmaWMYCyABKAsyIC52dWx0aXNpZy5rZXlzaWduLnYxLlN1aVNwZWNpZmljSAASOAoMdG9uX3NwZWNpZmljGAwgASgLMiAudnVsdGlzaWcua2V5c2lnbi52MS5Ub25TcGVjaWZpY0gAEj4KD3JpcHBsZV9zcGVjaWZpYxgNIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuUmlwcGxlU3BlY2lmaWNIABI6Cg10cm9uX3NwZWNpZmljGA4gASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5Ucm9uU3BlY2lmaWNIABI8CgdjYXJkYW5vGA8gASgLMikudnVsdGlzaWcua2V5c2lnbi52MS5DYXJkYW5vQ2hhaW5TcGVjaWZpY0gAEjAKCXV0eG9faW5mbxgUIAMoCzIdLnZ1bHRpc2lnLmtleXNpZ24udjEuVXR4b0luZm8SEQoEbWVtbxgVIAEoCUgDiAEBEksKFnRob3JjaGFpbl9zd2FwX3BheWxvYWQYFiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLlRIT1JDaGFpblN3YXBQYXlsb2FkSAESSwoWbWF5YWNoYWluX3N3YXBfcGF5bG9hZBgXIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3dhcFBheWxvYWRIARJHChRvbmVpbmNoX3N3YXBfcGF5bG9hZBgYIAEoCzInLnZ1bHRpc2lnLmtleXNpZ24udjEuT25lSW5jaFN3YXBQYXlsb2FkSAESRwoWa3liZXJzd2FwX3N3YXBfcGF5bG9hZBgZIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuS3liZXJTd2FwUGF5bG9hZEgBElgKHXdhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkGCggASgLMi8udnVsdGlzaWcua2V5c2lnbi52MS5XYXNtRXhlY3V0ZUNvbnRyYWN0UGF5bG9hZEgCEkwKFWVyYzIwX2FwcHJvdmVfcGF5bG9hZBgeIAEoCzIoLnZ1bHRpc2lnLmtleXNpZ24udjEuRXJjMjBBcHByb3ZlUGF5bG9hZEgEiAEBEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYHyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYICABKAkSEAoIbGliX3R5cGUYISABKAlCFQoTYmxvY2tjaGFpbl9zcGVjaWZpY0IOCgxzd2FwX3BheWxvYWRCEgoQY29udHJhY3RfcGF5bG9hZEIHCgVfbWVtb0IYChZfZXJjMjBfYXBwcm92ZV9wYXlsb2FkQlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw", [file_vultisig_keysign_v1_1inch_swap_payload, file_vultisig_keysign_v1_blockchain_specific, file_vultisig_keysign_v1_coin, file_vultisig_keysign_v1_custom_message_payload, file_vultisig_keysign_v1_erc20_approve_payload, file_vultisig_keysign_v1_kyberswap_swap_payload, file_vultisig_keysign_v1_thorchain_swap_payload, file_vultisig_keysign_v1_utxo_info, file_vultisig_keysign_v1_wasm_execute_contract_payload]);
+export const file_vultisig_keysign_v1_keysign_message: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Cil2dWx0aXNpZy9rZXlzaWduL3YxL2tleXNpZ25fbWVzc2FnZS5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSKvAgoOS2V5c2lnbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIUCgxzZXJ2aWNlX25hbWUYAiABKAkSGgoSZW5jcnlwdGlvbl9rZXlfaGV4GAQgASgJEjwKD2tleXNpZ25fcGF5bG9hZBgFIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuS2V5c2lnblBheWxvYWQSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAYgASgIEhIKCnBheWxvYWRfaWQYByABKAkSTgoWY3VzdG9tX21lc3NhZ2VfcGF5bG9hZBgIIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuQ3VzdG9tTWVzc2FnZVBheWxvYWRIAIgBAUIZChdfY3VzdG9tX21lc3NhZ2VfcGF5bG9hZCLTDAoOS2V5c2lnblBheWxvYWQSJwoEY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhISCgp0b19hZGRyZXNzGAIgASgJEhEKCXRvX2Ftb3VudBgDIAEoCRI6Cg11dHhvX3NwZWNpZmljGAQgASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5VVFhPU3BlY2lmaWNIABJCChFldGhlcmV1bV9zcGVjaWZpYxgFIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuRXRoZXJldW1TcGVjaWZpY0gAEkQKEnRob3JjaGFpbl9zcGVjaWZpYxgGIAEoCzImLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3BlY2lmaWNIABI/Cg1tYXlhX3NwZWNpZmljGAcgASgLMiYudnVsdGlzaWcua2V5c2lnbi52MS5NQVlBQ2hhaW5TcGVjaWZpY0gAEj4KD2Nvc21vc19zcGVjaWZpYxgIIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zU3BlY2lmaWNIABI+Cg9zb2xhbmFfc3BlY2lmaWMYCSABKAsyIy52dWx0aXNpZy5rZXlzaWduLnYxLlNvbGFuYVNwZWNpZmljSAASQgoRcG9sa2Fkb3Rfc3BlY2lmaWMYCiABKAsyJS52dWx0aXNpZy5rZXlzaWduLnYxLlBvbGthZG90U3BlY2lmaWNIABI7Cg9zdWljaGVfc3BlY2lmaWMYCyABKAsyIC52dWx0aXNpZy5rZXlzaWduLnYxLlN1aVNwZWNpZmljSAASOAoMdG9uX3NwZWNpZmljGAwgASgLMiAudnVsdGlzaWcua2V5c2lnbi52MS5Ub25TcGVjaWZpY0gAEj4KD3JpcHBsZV9zcGVjaWZpYxgNIAEoCzIjLnZ1bHRpc2lnLmtleXNpZ24udjEuUmlwcGxlU3BlY2lmaWNIABI6Cg10cm9uX3NwZWNpZmljGA4gASgLMiEudnVsdGlzaWcua2V5c2lnbi52MS5Ucm9uU3BlY2lmaWNIABI8CgdjYXJkYW5vGA8gASgLMikudnVsdGlzaWcua2V5c2lnbi52MS5DYXJkYW5vQ2hhaW5TcGVjaWZpY0gAEjAKCXV0eG9faW5mbxgUIAMoCzIdLnZ1bHRpc2lnLmtleXNpZ24udjEuVXR4b0luZm8SEQoEbWVtbxgVIAEoCUgDiAEBEksKFnRob3JjaGFpbl9zd2FwX3BheWxvYWQYFiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLlRIT1JDaGFpblN3YXBQYXlsb2FkSAESSwoWbWF5YWNoYWluX3N3YXBfcGF5bG9hZBgXIAEoCzIpLnZ1bHRpc2lnLmtleXNpZ24udjEuVEhPUkNoYWluU3dhcFBheWxvYWRIARJHChRvbmVpbmNoX3N3YXBfcGF5bG9hZBgYIAEoCzInLnZ1bHRpc2lnLmtleXNpZ24udjEuT25lSW5jaFN3YXBQYXlsb2FkSAESRwoWa3liZXJzd2FwX3N3YXBfcGF5bG9hZBgZIAEoCzIlLnZ1bHRpc2lnLmtleXNpZ24udjEuS3liZXJTd2FwUGF5bG9hZEgBEkwKFWVyYzIwX2FwcHJvdmVfcGF5bG9hZBgeIAEoCzIoLnZ1bHRpc2lnLmtleXNpZ24udjEuRXJjMjBBcHByb3ZlUGF5bG9hZEgEiAEBEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYHyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYICABKAkSEAoIbGliX3R5cGUYISABKAkSGwoOc2tpcF9icm9hZGNhc3QYIiABKAhIBYgBARJYCh13YXNtX2V4ZWN1dGVfY29udHJhY3RfcGF5bG9hZBgjIAEoCzIvLnZ1bHRpc2lnLmtleXNpZ24udjEuV2FzbUV4ZWN1dGVDb250cmFjdFBheWxvYWRIAkIVChNibG9ja2NoYWluX3NwZWNpZmljQg4KDHN3YXBfcGF5bG9hZEISChBjb250cmFjdF9wYXlsb2FkQgcKBV9tZW1vQhgKFl9lcmMyMF9hcHByb3ZlX3BheWxvYWRCEQoPX3NraXBfYnJvYWRjYXN0QlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw',
+    [
+      file_vultisig_keysign_v1_1inch_swap_payload,
+      file_vultisig_keysign_v1_blockchain_specific,
+      file_vultisig_keysign_v1_coin,
+      file_vultisig_keysign_v1_custom_message_payload,
+      file_vultisig_keysign_v1_erc20_approve_payload,
+      file_vultisig_keysign_v1_kyberswap_swap_payload,
+      file_vultisig_keysign_v1_thorchain_swap_payload,
+      file_vultisig_keysign_v1_utxo_info,
+      file_vultisig_keysign_v1_wasm_execute_contract_payload,
+    ]
+  )
 
 /**
  * @generated from message vultisig.keysign.v1.KeysignMessage
@@ -232,17 +259,6 @@ export type KeysignPayload = Message<'vultisig.keysign.v1.KeysignPayload'> & {
     | { case: undefined; value?: undefined }
 
   /**
-   * @generated from oneof vultisig.keysign.v1.KeysignPayload.contract_payload
-   */
-  contractPayload: {
-    /**
-     * @generated from field: vultisig.keysign.v1.WasmExecuteContractPayload wasm_execute_contract_payload = 40;
-     */
-    value: WasmExecuteContractPayload;
-    case: "wasmExecuteContractPayload";
-  } | { case: undefined; value?: undefined };
-
-  /**
    * @generated from field: optional vultisig.keysign.v1.Erc20ApprovePayload erc20_approve_payload = 30;
    */
   erc20ApprovePayload?: Erc20ApprovePayload
@@ -261,6 +277,24 @@ export type KeysignPayload = Message<'vultisig.keysign.v1.KeysignPayload'> & {
    * @generated from field: string lib_type = 33;
    */
   libType: string
+
+  /**
+   * @generated from field: optional bool skip_broadcast = 34;
+   */
+  skipBroadcast?: boolean
+
+  /**
+   * @generated from oneof vultisig.keysign.v1.KeysignPayload.contract_payload
+   */
+  contractPayload:
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.WasmExecuteContractPayload wasm_execute_contract_payload = 35;
+         */
+        value: WasmExecuteContractPayload
+        case: 'wasmExecuteContractPayload'
+      }
+    | { case: undefined; value?: undefined }
 }
 
 /**

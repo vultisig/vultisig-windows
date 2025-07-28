@@ -174,7 +174,7 @@ export class XDEFIKeplrProvider extends Keplr {
   ): Promise<AminoSignResponse> {
     const result = (await this.cosmosProvider.request({
       method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [{ ...signDoc, txType: 'Keplr' }],
+      params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
     })) as TxResult
     const txChain = getCosmosChainByChainId(chainId)
 
@@ -259,6 +259,7 @@ export class XDEFIKeplrProvider extends Keplr {
           authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
+          skipBroadcast: true,
           txType: 'Keplr',
         },
       ],

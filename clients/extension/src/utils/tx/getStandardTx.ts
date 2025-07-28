@@ -27,7 +27,7 @@ type TransactionHandlers = {
 
 const transactionHandlers: TransactionHandlers = {
   Keplr: (tx, chain) => {
-    const { messages, memo, chainId } = extractKeplrMessages(tx)
+    const { messages, memo, chainId, skipBroadcast } = extractKeplrMessages(tx)
     const [message] = messages
 
     const handleMsgSend = () => {
@@ -58,6 +58,7 @@ const transactionHandlers: TransactionHandlers = {
             to_address: message.value.to_address,
           },
         } as CosmosMsgPayload,
+        skipBroadcast,
       }
     }
 
@@ -83,6 +84,7 @@ const transactionHandlers: TransactionHandlers = {
             to_address: decodedMessage.toAddress,
           },
         } as CosmosMsgPayload,
+        skipBroadcast,
       }
     }
     return match(message.type ?? message.typeUrl, {
@@ -119,6 +121,7 @@ const transactionHandlers: TransactionHandlers = {
               msg: formattedMessage,
             },
           } as CosmosMsgPayload,
+          skipBroadcast,
         }
       },
       [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
@@ -152,6 +155,7 @@ const transactionHandlers: TransactionHandlers = {
               msg: formattedMessage,
             },
           } as CosmosMsgPayload,
+          skipBroadcast,
         }
       },
       [CosmosMsgType.MSG_TRANSFER_URL]: () => {
@@ -188,6 +192,7 @@ const transactionHandlers: TransactionHandlers = {
               timeoutTimestamp: msg.timeoutTimestamp.toString(),
             },
           } as CosmosMsgPayload,
+          skipBroadcast,
         }
       },
     })
@@ -203,6 +208,7 @@ const transactionHandlers: TransactionHandlers = {
         amount: { amount: tx.amount, decimals: chainFeeCoin[chain].decimals },
         from: tx.from,
         to: tx.to,
+        skipBroadcast: tx.skipBroadcast,
       }
     } else {
       if (!tx.asset.mint) {
@@ -221,6 +227,7 @@ const transactionHandlers: TransactionHandlers = {
           amount: { amount: tx.amount, decimals: token.decimals },
           from: tx.from,
           to: tx.to,
+          skipBroadcast: tx.skipBroadcast,
         }
       } catch (err) {
         throw new Error(`Could not fetch Solana token info: ${err}`)
@@ -296,12 +303,18 @@ export const isBasicTransaction = (
 
 const extractKeplrMessages = (
   tx: TransactionType.Keplr
-): { messages: any[]; memo: string; chainId: string } => {
+): {
+  messages: any[]
+  memo: string
+  chainId: string
+  skipBroadcast?: boolean
+} => {
   if ('msgs' in tx) {
     return {
       chainId: tx.chain_id,
       messages: [...tx.msgs],
       memo: tx.memo,
+      skipBroadcast: tx.skipBroadcast,
     }
   } else {
     const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
@@ -309,6 +322,7 @@ const extractKeplrMessages = (
       chainId: tx.chainId,
       messages: txBody.messages,
       memo: txBody.memo,
+      skipBroadcast: tx.skipBroadcast,
     }
   }
 }

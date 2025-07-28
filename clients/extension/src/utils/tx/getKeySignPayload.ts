@@ -225,6 +225,7 @@ export const getKeysignPayload = (
           contractPayload: contractPayload
             ? { case: 'wasmExecuteContractPayload', value: contractPayload }
             : undefined,
+          skipBroadcast: transaction.transactionDetails.skipBroadcast,
         })
 
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
