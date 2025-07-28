@@ -24,6 +24,7 @@ const Container = styled(FocusLock)<ContainerProps>`
 
   max-height: 100%;
   background: ${getColor('background')};
+  border: 1px solid ${getColor('mistExtra')};
 
   ${({ width, placement }) =>
     width
@@ -39,7 +40,6 @@ const Container = styled(FocusLock)<ContainerProps>`
         `
       : takeWholeSpace};
 
-  border: 1px solid ${getColor('mistExtra')};
   overflow: hidden;
 `
 
