@@ -6,6 +6,7 @@ export const fiatCurrencies = [
   'jpy',
   'cny',
   'cad',
+  'aud',
   'sgd',
   'sek',
 ] as const
@@ -21,6 +22,7 @@ export const fiatCurrencySymbolRecord: Record<FiatCurrency, string> = {
   jpy: 'JP¥',
   cny: 'CN¥',
   cad: 'CA$',
+  aud: 'AU$',
   sgd: 'SGD',
   sek: 'SEK',
 }
