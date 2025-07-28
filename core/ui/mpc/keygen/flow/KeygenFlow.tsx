@@ -14,7 +14,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
@@ -104,10 +103,7 @@ export const KeygenFlow = ({
             hasBorder
             primaryControls={<PageHeaderBackButton />}
           />
-          <FlowErrorPageContent
-            title={t('keygen_failed')}
-            message={extractErrorMsg(error)}
-          />
+          <FlowErrorPageContent title={t('keygen_failed')} error={error} />
         </>
       )}
       pending={() => (

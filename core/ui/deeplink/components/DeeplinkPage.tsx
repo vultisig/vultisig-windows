@@ -6,7 +6,6 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -29,7 +28,7 @@ export const DeeplinkPage = () => {
           <FlowErrorPageContent
             action={<Button onClick={navigateBack}>{t('back')}</Button>}
             title={t('failed_to_process_url')}
-            message={extractErrorMsg(error)}
+            error={error}
           />
         )}
       />

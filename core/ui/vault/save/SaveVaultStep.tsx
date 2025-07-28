@@ -6,7 +6,6 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnBackProp, OnFinishProp, TitleProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -33,7 +32,7 @@ export const SaveVaultStep: React.FC<
         error={error => (
           <FlowErrorPageContent
             title={t('failed_to_save_vault')}
-            message={extractErrorMsg(error)}
+            error={error}
             action={<Button onClick={onBack}>{t('back')}</Button>}
           />
         )}

@@ -4,7 +4,6 @@ import { NavigationProvider } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { RootErrorBoundary } from '../errors/RootErrorBoundary'
 import { I18nProvider } from '../i18n/I18nProvider'
@@ -84,7 +83,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       error={error => (
         <FlowErrorPageContent
           title="Failed to load essential data from the storage"
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
       pending={() => <ProductLogoBlock />}

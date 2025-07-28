@@ -6,7 +6,6 @@ import {
   noRefetchQueryOptions,
 } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useQuery } from '@tanstack/react-query'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { createContext, useContext } from 'react'
@@ -38,7 +37,7 @@ export const WalletCoreProvider = ({ children }: ChildrenProp) => {
       error={error => (
         <FlowErrorPageContent
           title="Failed to load wallet core"
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
     />

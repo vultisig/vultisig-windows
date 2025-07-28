@@ -40,7 +40,6 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
@@ -181,7 +180,7 @@ export const TransactionPage = () => {
       error={error => (
         <FlowErrorPageContent
           title="Failed to process transaction"
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
       success={({ transaction, keysignMessagePayload }) => {

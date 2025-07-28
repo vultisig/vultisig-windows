@@ -44,7 +44,7 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
     return (
       <FlowErrorPageContent
         title={t('failed_to_save_vault')}
-        message={error}
+        error={error}
         action={<Button onClick={navigateBack}>{t('back')}</Button>}
       />
     )

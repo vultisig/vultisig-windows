@@ -6,7 +6,6 @@ import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getLastItem } from '@lib/utils/array/getLastItem'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -59,7 +58,7 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
       error={error => (
         <FlowErrorPageContent
           title={t('failed_to_migrate_storage')}
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
       success={() => <>{children}</>}
