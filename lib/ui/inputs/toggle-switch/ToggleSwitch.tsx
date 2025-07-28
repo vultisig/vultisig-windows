@@ -6,45 +6,44 @@ import { ComponentType, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { ButtonProps } from '../../buttons/ButtonProps'
-import { ChildrenProp } from '../../props'
+import { ChildrenProp, UiProps } from '../../props'
 
-export type Option<T extends string | number> = {
+export type ToggleSwitchOption<T extends string | number> = {
   icon?: ReactNode
   label: string
   value: T
 }
 
-export type ContainerProps = Partial<StackProps> & {
+type ContainerProps = Partial<StackProps> & {
   children: ReactNode
   disabled?: boolean
   className?: string
 }
 
-export type OptionRenderState = ChildrenProp &
+type OptionRenderState = ChildrenProp &
   Partial<ButtonProps> & {
     active: boolean
     disabled: boolean
     icon: ReactNode
   }
 
-export type OptionButtonProps = OptionRenderState & {
+type OptionButtonProps = OptionRenderState & {
   className?: string
 }
 
-export type Slots = {
+type Slots = {
   Container?: ComponentType<ContainerProps>
   OptionButton?: ComponentType<OptionButtonProps>
 }
 
-export type ToggleSwitchProps<T extends string | number> = {
-  options: Readonly<Option<T>[]>
+type ToggleSwitchProps<T extends string | number> = {
+  options: Readonly<ToggleSwitchOption<T>[]>
   value: T
   onChange: (value: T) => void
   disabled?: boolean
-  className?: string
   optionClassName?: string
   slots?: Slots
-}
+} & UiProps
 
 export const ToggleSwitch = <T extends string | number>({
   options,
