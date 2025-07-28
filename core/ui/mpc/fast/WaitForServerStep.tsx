@@ -1,5 +1,5 @@
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'

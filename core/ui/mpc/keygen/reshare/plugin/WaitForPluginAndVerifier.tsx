@@ -1,13 +1,13 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { FlowErrorPageContent } from '../../../../flow/FlowErrorPageContent'
 import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { InstallPluginStep } from './InstallPluginStep'
 

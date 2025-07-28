@@ -4,19 +4,17 @@ import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
-import { Button } from '@lib/ui/buttons/Button'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
+
 export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
   const { t } = useTranslation()
   const { client } = useCore()
   const navigate = useCoreNavigate()
-  const navigateBack = useNavigateBack()
   const override = useVaultBackupOverride()
 
   const vaults = useVaults()
@@ -42,11 +40,7 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
 
   if (error) {
     return (
-      <FlowErrorPageContent
-        title={t('failed_to_save_vault')}
-        error={error}
-        action={<Button onClick={navigateBack}>{t('back')}</Button>}
-      />
+      <FlowErrorPageContent title={t('failed_to_save_vault')} error={error} />
     )
   }
 
