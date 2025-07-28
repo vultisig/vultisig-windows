@@ -1,7 +1,7 @@
 import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
-import { NonUndefined } from '@lib/utils/types/NonUndefined'
+import { Defined } from '@lib/utils/types/Defined'
 import { useMemo } from 'react'
 
 import { Query } from '../Query'
@@ -12,7 +12,7 @@ export function useTransformQueriesData<
   R = unknown,
 >(
   queriesRecord: T,
-  transform: (data: { [K in keyof T]: NonUndefined<T[K]['data']> }) => R
+  transform: (data: { [K in keyof T]: Defined<T[K]['data']> }) => R
 ): Query<R, E> {
   return useMemo(() => {
     const dataRecord = withoutUndefinedFields(
@@ -29,7 +29,7 @@ export function useTransformQueriesData<
       try {
         return {
           data: transform(
-            dataRecord as { [K in keyof T]: NonUndefined<T[K]['data']> }
+            dataRecord as { [K in keyof T]: Defined<T[K]['data']> }
           ),
           isPending,
           error,

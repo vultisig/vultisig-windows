@@ -30,6 +30,7 @@ import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysi
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
@@ -44,10 +45,6 @@ export const getKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
-        const isExecuteContract =
-          transaction.transactionDetails.data?.startsWith(
-            CosmosMsgType.MSG_EXECUTE_CONTRACT
-          )
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
           id: transaction.transactionDetails.asset.ticker,
@@ -98,13 +95,7 @@ export const getKeysignPayload = (
               ),
             }
           : feeSettings
-
-        const txType = transaction.transactionDetails.ibcTransaction
-          ? TransactionType.IBC_TRANSFER
-          : isExecuteContract
-            ? TransactionType.GENERIC_CONTRACT
-            : TransactionType.UNSPECIFIED
-
+        const txType = getTxType(transaction)
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
           amount: fromChainAmount(
@@ -130,36 +121,38 @@ export const getKeysignPayload = (
             break
           }
           case 'cosmosSpecific': {
-            const isIbcTransfer =
-              chainSpecific.value.transactionType ===
-              TransactionType.IBC_TRANSFER
+            if (
+              transaction.transactionDetails.cosmosMsgPayload?.case ===
+              CosmosMsgType.MSG_TRANSFER_URL
+            ) {
+              const hasTimeout =
+                !!transaction.transactionDetails.cosmosMsgPayload?.value
+                  .timeoutTimestamp
 
-            const hasTimeout =
-              !!transaction.transactionDetails.ibcTransaction?.timeoutTimestamp
+              if (hasTimeout) {
+                try {
+                  const client = await getCosmosClient(
+                    accountCoin.chain as CosmosChain
+                  )
+                  const latestBlock = await client.getBlock()
 
-            if (isIbcTransfer && hasTimeout) {
-              try {
-                const client = await getCosmosClient(
-                  accountCoin.chain as CosmosChain
-                )
-                const latestBlock = await client.getBlock()
+                  const latestBlockHeight = latestBlock.header.height
+                  const timeoutTimestamp =
+                    transaction.transactionDetails.cosmosMsgPayload?.value
+                      .timeoutTimestamp
 
-                const latestBlockHeight = latestBlock.header.height
-                const timeoutTimestamp =
-                  transaction.transactionDetails.ibcTransaction!
-                    .timeoutTimestamp
-
-                chainSpecific.value.ibcDenomTraces = create(
-                  CosmosIbcDenomTraceSchema,
-                  {
-                    latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
-                  }
-                )
-              } catch (error) {
-                console.error(
-                  'Failed to fetch Cosmos block or build denom trace:',
-                  error
-                )
+                  chainSpecific.value.ibcDenomTraces = create(
+                    CosmosIbcDenomTraceSchema,
+                    {
+                      latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
+                    }
+                  )
+                } catch (error) {
+                  console.error(
+                    'Failed to fetch Cosmos block or build denom trace:',
+                    error
+                  )
+                }
               }
             }
             break
@@ -204,19 +197,16 @@ export const getKeysignPayload = (
         }
         let contractPayload = null
         if (
-          transaction.transactionDetails.data?.startsWith(
-            CosmosMsgType.MSG_EXECUTE_CONTRACT
-          )
+          transaction.transactionDetails.cosmosMsgPayload?.case ===
+          CosmosMsgType.MSG_EXECUTE_CONTRACT
         ) {
-          const msg = transaction.transactionDetails.data.replace(
-            `${CosmosMsgType.MSG_EXECUTE_CONTRACT}-`,
-            ''
-          )
+          const msgPayload =
+            transaction.transactionDetails.cosmosMsgPayload.value
 
           contractPayload = create(WasmExecuteContractPayloadSchema, {
-            contractAddress: transaction.transactionDetails.to,
-            executeMsg: msg,
-            senderAddress: transaction.transactionDetails.from,
+            contractAddress: msgPayload.contract,
+            executeMsg: msgPayload.msg,
+            senderAddress: msgPayload.sender,
             coins: transaction.transactionDetails.amount?.amount ? [coin] : [],
           })
         }
@@ -226,7 +216,7 @@ export const getKeysignPayload = (
             parseInt(transaction.transactionDetails.amount?.amount ?? '0')
           ).toString(),
           memo: contractPayload
-            ? undefined
+            ? transaction.transactionDetails.data
             : (modifiedMemo ?? transaction.transactionDetails.data),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
@@ -248,4 +238,23 @@ export const getKeysignPayload = (
       }
     })()
   })
+}
+
+const getTxType = (
+  transaction: IKeysignTransactionPayload
+): TransactionType => {
+  if (transaction.transactionDetails.cosmosMsgPayload) {
+    const msg = transaction.transactionDetails.cosmosMsgPayload
+    return match(msg.case, {
+      [CosmosMsgType.MSG_SEND]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.MSG_SEND_URL]: () => TransactionType.UNSPECIFIED,
+      [CosmosMsgType.MSG_TRANSFER_URL]: () => TransactionType.IBC_TRANSFER,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () =>
+        TransactionType.GENERIC_CONTRACT,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () =>
+        TransactionType.GENERIC_CONTRACT,
+    })
+  }
+  return TransactionType.UNSPECIFIED
 }

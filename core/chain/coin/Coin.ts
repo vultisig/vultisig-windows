@@ -12,6 +12,8 @@ export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id?: string
 }
 
+export type Token<T extends CoinKey> = RequiredFields<T, 'id'>
+
 export type CoinMetadata = {
   priceProviderId?: string
   decimals: number

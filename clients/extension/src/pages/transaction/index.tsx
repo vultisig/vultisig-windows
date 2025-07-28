@@ -46,6 +46,7 @@ import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
+import { CosmosMsgType } from '../../utils/constants'
 import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
@@ -334,6 +335,17 @@ export const TransactionPage = () => {
                                       ))}
                                     />
                                   )
+                                )}
+                                {transactionPayload.transactionDetails
+                                  .cosmosMsgPayload?.case ===
+                                  CosmosMsgType.MSG_EXECUTE_CONTRACT && (
+                                  <ListItem
+                                    title={t('message')}
+                                    description={
+                                      transactionPayload.transactionDetails
+                                        .cosmosMsgPayload.value.msg
+                                    }
+                                  />
                                 )}
                               </>
                             ),
