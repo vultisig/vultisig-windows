@@ -14,6 +14,7 @@
     "@cosmjs/stargate": "^0.33.1",
     "@lib/utils": "workspace:*",
     "@mysten/sui": "^1.24.0",
+    "@noble/hashes": "^1.8.0",
     "@polkadot/api": "^15.8.1",
     "@solana/web3.js": "^2.0.0",
     "@trustwallet/wallet-core": "^4.3.3",
@@ -21,8 +22,5 @@
     "tiny-secp256k1": "^2.2.3",
     "viem": "^2.23.12",
     "xrpl": "^4.2.0"
-  },
-  "devDependencies": {
-    "@noble/hashes": "^1.8.0"
   }
 }
