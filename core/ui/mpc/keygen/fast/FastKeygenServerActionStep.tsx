@@ -1,5 +1,5 @@
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useFastKeygenServerActionMutation } from '@core/ui/mpc/keygen/fast/mutations/useFastKeygenServerActionMutation'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'

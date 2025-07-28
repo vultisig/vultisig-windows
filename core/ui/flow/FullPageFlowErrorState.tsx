@@ -1,13 +1,14 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import {
-  FlowErrorPageContent,
-  FlowErrorPageContentProps,
-} from '@lib/ui/flow/FlowErrorPageContent'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import styled from 'styled-components'
+
+import {
+  FlowErrorPageContent,
+  FlowErrorPageContentProps,
+} from './FlowErrorPageContent'
 
 export const FullPageFlowErrorState = (props: FlowErrorPageContentProps) => {
   const navigate = useCoreNavigate()

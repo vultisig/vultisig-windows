@@ -5,7 +5,6 @@ import {
 } from '@core/ui/qr/components/styles'
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { Image } from '@lib/ui/image/Image'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -15,6 +14,8 @@ import { attempt, withFallback } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
 export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   const { t } = useTranslation()

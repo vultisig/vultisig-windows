@@ -1,4 +1,4 @@
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import {
