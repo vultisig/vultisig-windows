@@ -31,7 +31,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
   const navigate = useCoreNavigate()
 
   return isEditMode ? (
-    <AddressBookListItem
+    <StyledListItem
       description={<MiddleTruncate text={address} width={80} />}
       extra={
         <>
