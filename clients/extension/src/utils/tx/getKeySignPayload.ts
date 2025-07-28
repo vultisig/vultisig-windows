@@ -207,7 +207,7 @@ export const getKeysignPayload = (
             contractAddress: msgPayload.contract,
             executeMsg: msgPayload.msg,
             senderAddress: msgPayload.sender,
-            coins: transaction.transactionDetails.amount?.amount ? [coin] : [],
+            coins: msgPayload.funds,
           })
         }
         const keysignPayload = create(KeysignPayloadSchema, {
