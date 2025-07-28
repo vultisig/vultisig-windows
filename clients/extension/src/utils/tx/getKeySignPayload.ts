@@ -73,7 +73,7 @@ export const getKeysignPayload = (
           ) {
             if (
               cosmosFeeCoinDenom[transaction.chain as CosmosChain] ===
-              transaction.transactionDetails.asset.ticker
+              transaction.transactionDetails.asset.ticker.toLowerCase()
             ) {
               localCoin = { ...chainFeeCoin[transaction.chain] }
             }
