@@ -15,7 +15,7 @@ import { ModalTitleText } from './ModalTitleText'
 
 export type ModalProps = AsProp &
   Omit<ComponentProps<typeof Container>, 'title'> &
-  TitleProp & {
+  Partial<TitleProp> & {
     onClose?: () => void
     subTitle?: ReactNode
     placement?: ModalPlacement
