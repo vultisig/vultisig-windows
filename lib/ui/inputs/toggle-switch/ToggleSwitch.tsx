@@ -55,6 +55,7 @@ export const ToggleSwitch = <T extends string | number>({
     Container = DefaultContainer,
     OptionButton = DefaultToggleButton,
   } = {},
+  ...rest
 }: ToggleSwitchProps<T>) => {
   const handleClick = (newValue: T) => {
     if (disabled) return
@@ -62,7 +63,7 @@ export const ToggleSwitch = <T extends string | number>({
   }
 
   return (
-    <Container gap={8}>
+    <Container {...rest} gap={8}>
       {options.map(({ value: currValue, icon, label }) => {
         const isActive = currValue === value
 
