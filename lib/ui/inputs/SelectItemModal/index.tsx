@@ -24,12 +24,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   const [searchQuery, setSearchQuery] = useState('')
 
   return (
-    <Modal
-      targetWidth={480}
-      placement="center"
-      title={title}
-      onClose={() => onFinish()}
-    >
+    <Modal onClose={() => onFinish()} title={title}>
       <VStack gap={20}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         <VStack gap={16}>

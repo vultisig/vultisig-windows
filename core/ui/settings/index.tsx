@@ -1,3 +1,5 @@
+import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
+import { featureFlags } from '@core/ui/config'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
@@ -37,9 +39,6 @@ import { Text } from '@lib/ui/text'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { ManageBlockaid } from '../chain/security/blockaid/ManageBlockaid'
-import { featureFlags } from '../config'
 
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
@@ -240,12 +239,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
         </PageFooter>
       </VStack>
       {visible && (
-        <Modal
-          onClose={() => setVisible(false)}
-          placement="center"
-          title="Vultisig"
-          width={368}
-        >
+        <Modal onClose={() => setVisible(false)} title="Vultisig">
           <VStack gap={24}>
             <VStack gap={14}>
               <Text color="light" size={13} weight={500}>
