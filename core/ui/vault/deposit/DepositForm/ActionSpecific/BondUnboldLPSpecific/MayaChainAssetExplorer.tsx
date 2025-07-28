@@ -1,10 +1,9 @@
+import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
+import { MayaChainPool } from '@core/ui/vault/deposit/types/mayaChain'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { MayaChainPool } from '../../../types/mayaChain'
-import { DepositActionOption } from '../../DepositActionOption'
 
 type MayaChainAssetExplorerProps = {
   options: MayaChainPool[]
@@ -22,12 +21,7 @@ export const MayaChainAssetExplorer: FC<MayaChainAssetExplorerProps> = ({
   const { t } = useTranslation()
 
   return (
-    <Modal
-      width={480}
-      placement="top"
-      title={t('choose_tokens')}
-      onClose={onClose}
-    >
+    <Modal onClose={onClose} title={t('choose_tokens')}>
       <VStack gap={20}>
         {options.map((option, index) => {
           const assetName = option.asset
