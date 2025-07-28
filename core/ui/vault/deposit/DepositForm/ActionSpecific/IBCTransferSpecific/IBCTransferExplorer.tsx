@@ -1,9 +1,8 @@
+import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { DepositActionOption } from '../../DepositActionOption'
 
 type IBCDesitinationChainOption = {
   label: string
@@ -26,7 +25,7 @@ export const IBCTransferExplorer: FC<IBCTransferExplorerProps> = ({
   const { t } = useTranslation()
 
   return (
-    <Modal width={480} placement="top" title={t('chain')} onClose={onClose}>
+    <Modal onClose={onClose} title={t('chain')}>
       <VStack gap={20}>
         {options.map(option => (
           <DepositActionOption

@@ -807,6 +807,7 @@ __metadata:
     "@core/config": "workspace:*"
     "@core/mpc": "workspace:*"
     "@core/ui": "workspace:*"
+    "@cosmjs/amino": "npm:^0.33.1"
     "@fontsource/montserrat": "npm:^5.2.5"
     "@fontsource/roboto-mono": "npm:^5.2.5"
     "@keplr-wallet/provider": "npm:^0.12.202"

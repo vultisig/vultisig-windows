@@ -1,4 +1,6 @@
 import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
+import { isUpdateAvailable } from '@clients/desktop/src/versioning/core/isUpdateAvailable'
+import { useLatestVersionQuery } from '@clients/desktop/src/versioning/queries/latestVersion'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
@@ -8,9 +10,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { isUpdateAvailable } from './core/isUpdateAvailable'
-import { useLatestVersionQuery } from './queries/latestVersion'
 
 export const UpdatePrompt = () => {
   const { t } = useTranslation()
@@ -29,8 +28,6 @@ export const UpdatePrompt = () => {
           <Modal
             title=""
             onClose={() => setIsDismissed(true)}
-            placement="center"
-            width={368}
             footer={
               <Button onClick={() => navigate({ id: 'checkUpdate' })}>
                 {t('updatePopup.updateButton')}
