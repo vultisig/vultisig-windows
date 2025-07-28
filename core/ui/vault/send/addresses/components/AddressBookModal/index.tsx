@@ -1,7 +1,10 @@
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
+import {
+  ToggleSwitch,
+  ToggleSwitchOption,
+} from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
@@ -23,19 +26,21 @@ type Props = {
   onSelect: (address: string) => void
 } & OnCloseProp
 
+type AddressBookOption = 'saved' | 'all'
+
 export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   const { t } = useTranslation()
   const coin = useCurrentSendCoin()
   const addressBookItems = useAddressBookItems()
   const vaults = useVaults()
 
-  const options = [
+  const options: Readonly<ToggleSwitchOption<AddressBookOption>[]> = [
     { label: t('address_book_saved'), value: 'saved' },
     { label: t('address_book_vault'), value: 'all' },
   ] as const
 
   const [addressBookSelectedOption, setAddressBookSelectedOption] =
-    useState<(typeof options)[number]['value']>('saved')
+    useState<AddressBookOption>('saved')
 
   const vaultsAndAddressForSelectedCoin = useMemo(() => {
     return vaults.reduce<VaultAddressBookItem[]>((acc, vault) => {
@@ -65,7 +70,8 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
         </HStack>
         <VStack flexGrow gap={16}>
           <Divider />
-          <StyledToggleSwitch
+          <ToggleSwitch
+            style={{ backgroundColor: 'transparent' }}
             slots={{
               Container: OptionsContainer,
               OptionButton: ({ children, active, ...rest }) => (
@@ -80,7 +86,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
             }}
             value={addressBookSelectedOption}
             options={options}
-            onChange={value => setAddressBookSelectedOption(value as any)}
+            onChange={value => setAddressBookSelectedOption(value)}
           />
           <StyledList>
             <Match
@@ -130,10 +136,6 @@ const ModalWrapper = styled(VStack)`
   border: 1px solid ${getColor('mistExtra')};
   ${borderRadius.m};
   padding: 24px 20px;
-`
-
-const StyledToggleSwitch = styled(ToggleSwitch)`
-  background-color: transparent;
 `
 
 const OptionsContainer = styled(HStack)`
