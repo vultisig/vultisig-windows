@@ -48,12 +48,13 @@ export const getKeysignPayload = (
           transaction.transactionDetails.data?.startsWith(
             CosmosMsgType.MSG_EXECUTE_CONTRACT
           )
+        const isNative =
+          transaction.transactionDetails.asset.ticker.toLowerCase() ===
+          chainFeeCoin[transaction.chain].ticker.toLowerCase()
+
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
-          id: isFeeCoin({
-            chain: transaction.chain,
-            id: transaction.transactionDetails.asset.ticker,
-          })
+          id: isNative
             ? transaction.transactionDetails.asset.ticker
             : undefined,
         })
