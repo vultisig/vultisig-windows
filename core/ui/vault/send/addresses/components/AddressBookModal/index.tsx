@@ -1,10 +1,14 @@
 import { Match } from '@lib/ui/base/Match'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Modal } from '@lib/ui/modal'
+import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -47,49 +51,64 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   }, [coin.chain, coin.id, vaults])
 
   return (
-    <Modal
-      onClose={onClose}
-      title={<Title size={15}>{t('address_book')}</Title>}
-      closeButtonStyle={{
-        color: 'hsl(215, 40%, 85%)',
-      }}
-    >
-      <VStack gap={16}>
-        <Divider />
-        <ToggleSwitch
-          slots={{
-            OptionButton: () => <></>,
-          }}
-          value={addressBookSelectedOption}
-          options={options}
-          onChange={value => setAddressBookSelectedOption(value)}
-        />
-        <List>
-          <Match
+    <Modal withDefaultStructure={false} onClose={onClose}>
+      <ModalWrapper gap={16}>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Title size={15}>{t('address_book')}</Title>
+          <ModalCloseButton
+            style={{
+              color: 'hsl(215, 40%, 85%)',
+              fontSize: 16,
+            }}
+            onClick={onClose}
+          />
+        </HStack>
+        <VStack flexGrow gap={16}>
+          <Divider />
+          <StyledToggleSwitch
+            slots={{
+              Container: OptionsContainer,
+              OptionButton: ({ children, active, ...rest }) => (
+                <OptionButton
+                  {...rest}
+                  disabled={false}
+                  kind={active ? 'primary' : 'secondary'}
+                >
+                  {children}
+                </OptionButton>
+              ),
+            }}
             value={addressBookSelectedOption}
-            saved={() =>
-              addressBookItems
-                .filter(item => item.chain === coin.chain)
-                .map(item => (
-                  <AddressBookListItem
-                    key={item.id}
+            options={options}
+            onChange={value => setAddressBookSelectedOption(value as any)}
+          />
+          <StyledList>
+            <Match
+              value={addressBookSelectedOption}
+              saved={() =>
+                addressBookItems
+                  .filter(item => item.chain === coin.chain)
+                  .map(item => (
+                    <AddressBookListItem
+                      key={item.id}
+                      onSelect={onSelect}
+                      {...item}
+                    />
+                  ))
+              }
+              all={() =>
+                vaultsAndAddressForSelectedCoin.map((value, idx) => (
+                  <VaultAddressBookItem
+                    value={value}
+                    key={idx}
                     onSelect={onSelect}
-                    {...item}
                   />
                 ))
-            }
-            all={() =>
-              vaultsAndAddressForSelectedCoin.map((value, idx) => (
-                <VaultAddressBookItem
-                  value={value}
-                  key={idx}
-                  onSelect={onSelect}
-                />
-              ))
-            }
-          />
-        </List>
-      </VStack>
+              }
+            />
+          </StyledList>
+        </VStack>
+      </ModalWrapper>
     </Modal>
   )
 }
@@ -102,4 +121,38 @@ const Title = styled(Text)`
 const Divider = styled.div`
   height: 1px;
   background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+`
+
+const ModalWrapper = styled(VStack)`
+  height: 500px;
+  width: min(368px, 100% - 32px);
+  background: ${getColor('background')};
+  border: 1px solid ${getColor('mistExtra')};
+  ${borderRadius.m};
+  padding: 24px 20px;
+`
+
+const StyledToggleSwitch = styled(ToggleSwitch)`
+  background-color: transparent;
+`
+
+const OptionsContainer = styled(HStack)`
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 100%;
+`
+
+const StyledList = styled(List)`
+  background-color: transparent;
+  gap: 16px;
+  flex: 1;
+  flex-basis: 0;
+  overflow: auto;
+`
+
+const OptionButton = styled(Button)`
+  white-space: nowrap;
+  flex: 1;
+  height: 42px;
+  padding: 12px 20px;
+  font-size: 13px;
 `
