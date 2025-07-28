@@ -50,7 +50,12 @@ export const getKeysignPayload = (
           )
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
-          id: transaction.transactionDetails.asset.ticker,
+          id: isFeeCoin({
+            chain: transaction.chain,
+            id: transaction.transactionDetails.asset.ticker,
+          })
+            ? transaction.transactionDetails.asset.ticker
+            : undefined,
         })
 
         if (!localCoin) {
