@@ -99,12 +99,6 @@ export const ManageAmountInputField = () => {
 
   const error = !!amountError && value ? amountError : undefined
 
-  const inputValue = match(currencyInputMode, {
-    base: () => value,
-    fiat: () =>
-      value === null ? value : value * shouldBePresent(coinPriceQuery.data),
-  })
-
   return (
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
@@ -129,7 +123,13 @@ export const ManageAmountInputField = () => {
                       <AmountTextInput
                         validation={error ? 'warning' : undefined}
                         placeholder={t('enter_amount')}
-                        value={inputValue}
+                        value={match(currencyInputMode, {
+                          base: () => value,
+                          fiat: () =>
+                            value === null
+                              ? value
+                              : value * shouldBePresent(coinPriceQuery.data),
+                        })}
                         shouldBePositive
                         onValueChange={value => {
                           setValue(
@@ -179,8 +179,8 @@ export const ManageAmountInputField = () => {
                     const suggestionValue = maxValue * suggestion
 
                     const isActive =
-                      inputValue !== null &&
-                      toChainAmount(inputValue, coin.decimals) ===
+                      value !== null &&
+                      toChainAmount(value, coin.decimals) ===
                         toChainAmount(suggestionValue, coin.decimals)
 
                     return (
