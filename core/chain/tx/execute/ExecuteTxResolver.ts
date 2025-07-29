@@ -6,6 +6,7 @@ type ExecuteTxInput<T extends Chain = Chain> = {
   chain: T
   walletCore: WalletCore
   compiledTx: Uint8Array<ArrayBufferLike>
+  skipBroadcast?: boolean
 }
 
 export type TxResult = { txHash: string; encoded?: string }
