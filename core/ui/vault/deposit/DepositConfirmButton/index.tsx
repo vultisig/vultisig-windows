@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { ChainAction } from '../ChainAction'
-import { useDepositConfirmLogic } from './hooks/useGenerateKeysignPayload'
+import { useDepositKeysignPayload } from './hooks/useDepositKeysignPayload'
 
 type DepositConfirmButtonProps = {
   depositFormData: Record<string, unknown>
@@ -18,7 +18,7 @@ export const DepositConfirmButton = ({
 }: DepositConfirmButtonProps) => {
   const { t } = useTranslation()
   const { invalid, invalidMessage, keysignPayloadQuery } =
-    useDepositConfirmLogic(depositFormData, action)
+    useDepositKeysignPayload(depositFormData, action)
 
   if (invalid) {
     return <Text color="danger">{invalidMessage}</Text>

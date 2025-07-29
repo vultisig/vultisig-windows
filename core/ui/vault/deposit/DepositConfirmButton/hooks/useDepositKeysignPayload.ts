@@ -29,7 +29,7 @@ import { ChainAction } from '../../ChainAction'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { transactionConfig } from '../config'
 
-export function useDepositConfirmLogic(
+export function useDepositKeysignPayload(
   depositFormData: Record<string, unknown>,
   action: ChainAction
 ) {
