@@ -142,7 +142,7 @@ export const getSolanaKeysignPayload = (
 
         const keysignPayload = create(KeysignPayloadSchema, {
           toAmount: swapPayload
-            ? swapPayload.toAmountDecimal
+            ? swapPayload.quote?.dstAmount
             : String(parsedTransactionParams?.inAmount ?? 0),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
