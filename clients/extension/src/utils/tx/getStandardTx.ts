@@ -195,6 +195,29 @@ const transactionHandlers: TransactionHandlers = {
           skipBroadcast,
         }
       },
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => {
+        return {
+          asset: {
+            chain: chain,
+            ticker: message.value.coins[0].asset.split('.')[1],
+          },
+          amount: {
+            amount: message.value.coins[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: message.value.signer,
+          data: memo,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+            value: {
+              coins: message.value.coins,
+              memo: message.value.memo,
+              signer: message.value.signer,
+            },
+          } as CosmosMsgPayload,
+          skipBroadcast,
+        }
+      },
     })
   },
 
