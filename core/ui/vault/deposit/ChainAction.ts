@@ -15,6 +15,10 @@ export type ChainAction =
   | 'merge'
   | 'switch'
   | 'unmerge'
+  | 'deposit_yRune'
+  | 'deposit_yTcy'
+  | 'withdraw_yRune'
+  | 'withdraw_yTcy'
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -26,6 +30,10 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'stake',
     'unstake',
     'unmerge',
+    'deposit_yRune',
+    'deposit_yTcy',
+    'withdraw_yRune',
+    'withdraw_yTcy',
   ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],
