@@ -1,3 +1,4 @@
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -5,6 +6,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
@@ -23,11 +25,7 @@ import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
-  keysignPayloadQuery: {
-    data?: any
-    isPending?: boolean
-    error?: any
-  }
+  keysignPayloadQuery: Query<KeysignPayload>
   terms: string[]
 }
 
@@ -50,14 +48,14 @@ export const VerifyKeysignStart = ({
   )
 
   const txScanInput = useTransformQueryData(
-    keysignPayloadQuery as any,
+    keysignPayloadQuery,
     useCallback(
-      (payload: unknown) => {
+      payload => {
         if (!isBlockaidEnabled) {
           return null
         }
 
-        return keysignPayloadToBlockaidTxScanInput(payload as any)
+        return keysignPayloadToBlockaidTxScanInput(payload)
       },
       [isBlockaidEnabled]
     )
