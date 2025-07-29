@@ -123,7 +123,7 @@ export class XDEFIKeplrProvider extends Keplr {
   ): OfflineAminoSigner {
     const cosmSigner = new CosmJSOfflineSignerOnlyAmino(
       chainId,
-      window.xfi.keplr,
+      this,
       signOptions
     )
 
