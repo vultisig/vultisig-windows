@@ -58,7 +58,7 @@ export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
   }
 
   const feeCoin = chainFeeCoin[coinKey.chain]
-  if (feeCoin && feeCoin.id === coinKey.id) {
+  if (feeCoin && feeCoin.id?.toLowerCase() === coinKey.id?.toLowerCase()) {
     return feeCoin
   }
 

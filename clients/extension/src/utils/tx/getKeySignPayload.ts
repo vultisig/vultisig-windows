@@ -45,9 +45,15 @@ export const getKeysignPayload = (
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
+        const isNative =
+          transaction.transactionDetails.asset.ticker.toLowerCase() ===
+          chainFeeCoin[transaction.chain].ticker.toLowerCase()
+
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
-          id: transaction.transactionDetails.asset.ticker,
+          id: !isNative
+            ? transaction.transactionDetails.asset.ticker
+            : undefined,
         })
 
         if (!localCoin) {
