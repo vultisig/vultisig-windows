@@ -314,7 +314,14 @@ export const handleRequest = (
                 const client = getEvmClient(chain)
                 client
                   .getTransaction({ hash: String(hash) as `0x${string}` })
-                  .then(result => resolve(safeJsonStringify(result)))
+                  .then(result => {
+                    // https://github.com/vultisig/vultisig-windows/issues/2130
+                    const ethStandardTx = {
+                      ...result,
+                      type: result.typeHex,
+                    }
+                    return resolve(safeJsonStringify(ethStandardTx))
+                  })
                   .catch(reject)
 
                 break

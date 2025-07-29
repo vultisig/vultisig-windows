@@ -4,13 +4,16 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 type AddressBookListItemProps = {
   isEditMode?: boolean
@@ -28,7 +31,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
   const navigate = useCoreNavigate()
 
   return isEditMode ? (
-    <ListItem
+    <StyledListItem
       description={<MiddleTruncate text={address} width={80} />}
       extra={
         <>
@@ -52,7 +55,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
       hoverable
     />
   ) : (
-    <ListItem
+    <StyledListItem
       description={<MiddleTruncate text={address} width={80} />}
       extra={<Text color="shy">{`${chain} ${t('network')}`}</Text>}
       icon={
@@ -72,3 +75,11 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
     />
   )
 }
+
+const StyledListItem = styled(ListItem)`
+  background-color: transparent;
+  border: 1px solid ${getColor('foregroundExtra')};
+  ${borderRadius.m};
+  padding: 16px 20px;
+  max-height: 68px;
+`
