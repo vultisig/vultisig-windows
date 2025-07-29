@@ -40,7 +40,7 @@ import styled from 'styled-components'
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useSendAmount } from '../state/amount'
 
-const suggestions = [0.25, 0.5, 0.75, 1]
+const suggestions = [25n, 50n, 75n, 100n]
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
@@ -87,13 +87,11 @@ export const ManageAmountInputField = () => {
         isFeeCoin(coin) &&
         !isOneOf(coin.chain, Object.values(UtxoBasedChain))
       ) {
-        return Math.min(
-          fromChainAmount(balance - getFeeAmount(chainSpecific), coin.decimals),
-          0
-        )
+        const feeAmount = getFeeAmount(chainSpecific)
+        return feeAmount > balance ? 0n : balance - feeAmount
       }
 
-      return fromChainAmount(balance, coin.decimals)
+      return balance
     }
   )
 
@@ -123,24 +121,32 @@ export const ManageAmountInputField = () => {
                       <AmountTextInput
                         validation={error ? 'warning' : undefined}
                         placeholder={t('enter_amount')}
-                        value={match(currencyInputMode, {
-                          base: () => value,
-                          fiat: () =>
-                            value === null
-                              ? value
-                              : value * shouldBePresent(coinPriceQuery.data),
-                        })}
+                        value={
+                          value === null
+                            ? value
+                            : match(currencyInputMode, {
+                                base: () =>
+                                  fromChainAmount(value, coin.decimals),
+                                fiat: () =>
+                                  fromChainAmount(value, coin.decimals) *
+                                  shouldBePresent(coinPriceQuery.data),
+                              })
+                        }
                         shouldBePositive
                         onValueChange={value => {
                           setValue(
-                            match(currencyInputMode, {
-                              base: () => value,
-                              fiat: () =>
-                                value === null
-                                  ? value
-                                  : value /
-                                    shouldBePresent(coinPriceQuery.data),
-                            })
+                            value === null
+                              ? value
+                              : match(currencyInputMode, {
+                                  base: () =>
+                                    toChainAmount(value, coin.decimals),
+                                  fiat: () =>
+                                    toChainAmount(
+                                      value /
+                                        shouldBePresent(coinPriceQuery.data),
+                                      coin.decimals
+                                    ),
+                                })
                           )
                         }}
                       />
@@ -178,10 +184,7 @@ export const ManageAmountInputField = () => {
                   {suggestions.map(suggestion => {
                     const suggestionValue = maxValue * suggestion
 
-                    const isActive =
-                      value !== null &&
-                      toChainAmount(value, coin.decimals) ===
-                        toChainAmount(suggestionValue, coin.decimals)
+                    const isActive = value === suggestionValue
 
                     return (
                       <SuggestionOption
@@ -190,7 +193,7 @@ export const ManageAmountInputField = () => {
                           setValue(suggestionValue)
                         }}
                         key={suggestion}
-                        value={suggestion}
+                        value={Number(suggestion) / 100}
                       />
                     )
                   })}
