@@ -36,6 +36,10 @@ export function useDepositKeysignPayload(
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const isTonFunction = coinKey.chain === Chain.Ton
   const isUnmerge = action === 'unmerge'
+  const isDepositRune = action === 'receive_yRune'
+  const isDepositTcy = action === 'receive_yTcy'
+  const isSellRune = action === 'sell_yRune'
+  const isSellTcy = action === 'sell_yTcy'
   const { t } = useTranslation()
 
   // Resolve coin and vault
