@@ -74,6 +74,18 @@ export const getRequiredFieldsPerChainAction = (
           .pipe(z.number().positive().max(totalAmountAvailable)),
       }),
   },
+  deposit_yTcy: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(totalAmountAvailable)),
+      }),
+  },
   unmerge: {
     fields: [
       {
