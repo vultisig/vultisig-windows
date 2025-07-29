@@ -4,8 +4,6 @@
 
 import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
 import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
-import type { Coin } from './coin_pb'
-import { file_vultisig_keysign_v1_coin } from './coin_pb'
 import type { Message } from '@bufbuild/protobuf'
 
 /**
@@ -14,9 +12,31 @@ import type { Message } from '@bufbuild/protobuf'
 export const file_vultisig_keysign_v1_wasm_execute_contract_payload: GenFile =
   /*@__PURE__*/
   fileDesc(
-    'Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIo0BChpXYXNtRXhlY3V0ZUNvbnRyYWN0UGF5bG9hZBIWCg5zZW5kZXJfYWRkcmVzcxgBIAEoCRIYChBjb250cmFjdF9hZGRyZXNzGAIgASgJEhMKC2V4ZWN1dGVfbXNnGAMgASgJEigKBWNvaW5zGAQgAygLMhkudnVsdGlzaWcua2V5c2lnbi52MS5Db2luQlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw',
-    [file_vultisig_keysign_v1_coin]
+    'Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIisKCkNvc21vc0NvaW4SDQoFZGVub20YASABKAkSDgoGYW1vdW50GAIgASgJIpMBChpXYXNtRXhlY3V0ZUNvbnRyYWN0UGF5bG9hZBIWCg5zZW5kZXJfYWRkcmVzcxgBIAEoCRIYChBjb250cmFjdF9hZGRyZXNzGAIgASgJEhMKC2V4ZWN1dGVfbXNnGAMgASgJEi4KBWNvaW5zGAQgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luQlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw'
   )
+
+/**
+ * @generated from message vultisig.keysign.v1.CosmosCoin
+ */
+export type CosmosCoin = Message<'vultisig.keysign.v1.CosmosCoin'> & {
+  /**
+   * @generated from field: string denom = 1;
+   */
+  denom: string
+
+  /**
+   * @generated from field: string amount = 2;
+   */
+  amount: string
+}
+
+/**
+ * Describes the message vultisig.keysign.v1.CosmosCoin.
+ * Use `create(CosmosCoinSchema)` to create a new message.
+ */
+export const CosmosCoinSchema: GenMessage<CosmosCoin> =
+  /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 0)
 
 /**
  * @generated from message vultisig.keysign.v1.WasmExecuteContractPayload
@@ -39,9 +59,9 @@ export type WasmExecuteContractPayload =
     executeMsg: string
 
     /**
-     * @generated from field: repeated vultisig.keysign.v1.Coin coins = 4;
+     * @generated from field: repeated vultisig.keysign.v1.CosmosCoin coins = 4;
      */
-    coins: Coin[]
+    coins: CosmosCoin[]
   }
 
 /**
@@ -50,4 +70,4 @@ export type WasmExecuteContractPayload =
  */
 export const WasmExecuteContractPayloadSchema: GenMessage<WasmExecuteContractPayload> =
   /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 0)
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 1)
