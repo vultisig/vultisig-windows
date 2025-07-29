@@ -2,9 +2,11 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import {
-  kujiraCoinMigratedToThorChainDestinationId,
-  kujiraCoinThorChainMergeContracts,
-} from '@core/chain/chains/cosmos/thor/kujira-merge'
+  affiliateAddress,
+  affiliateContract,
+  yRUNEContract,
+  yTCYContract,
+} from '@core/chain/chains/cosmos/thor/ytcy-and-yrune/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
@@ -17,7 +19,6 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -34,26 +35,11 @@ export function useDepositKeysignPayload(
   action: ChainAction
 ) {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const isTonFunction = coinKey.chain === Chain.Ton
-  const isUnmerge = action === 'unmerge'
-  const isDepositRune = action === 'receive_yRune'
-  const isDepositTcy = action === 'receive_yTcy'
-  const isSellRune = action === 'sell_yRune'
-  const isSellTcy = action === 'sell_yTcy'
   const { t } = useTranslation()
+  const isTon = coinKey.chain === Chain.Ton
 
-  // Resolve coin and vault
-  const selectedCoin = depositFormData['selectedCoin'] as
-    | AccountCoin
-    | undefined
-  const coin = useCurrentVaultCoin(
-    selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
-  )
-  const vault = useCurrentVault()
-  const walletCore = useAssertWalletCore()
-
-  // Determine transaction type & chain-specific data
-  const transactionType =
+  const isUnmerge = action === 'unmerge'
+  const txType =
     action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
@@ -62,38 +48,46 @@ export function useDepositKeysignPayload(
           ? TransactionType.THOR_MERGE
           : undefined
 
-  const chainSpecificQuery = useDepositChainSpecificQuery(transactionType, coin)
+  // core helpers
+  const selectedCoin = depositFormData['selectedCoin'] as
+    | AccountCoin
+    | undefined
+  const coin = useCurrentVaultCoin(
+    selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
+  )
+  const vault = useCurrentVault()
+  const wallet = useAssertWalletCore()
+  const chainSpecificQuery = useDepositChainSpecificQuery(txType, coin)
 
-  // Form field values and validation
-  const config = transactionConfig(coinKey.chain)[action] || {}
-  const receiver = config.requiresNodeAddress
-    ? (depositFormData['nodeAddress'] as string)
-    : ''
-  const validatorAddress = depositFormData['validatorAddress'] as string
-  const amount = config.requiresAmount ? Number(depositFormData['amount']) : 0
-  const memo = (depositFormData['memo'] as string) ?? ''
+  // form values
+  const cfg = transactionConfig(coinKey.chain)[action] || {}
+  const rawAmount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
+  const slippage = Number(depositFormData['slippage'] ?? 0) // percent e.g. 1 or 2.5
+  const memo = ''
 
+  // invalid?
   const invalid =
-    (config.requiresAmount && (!Number.isFinite(amount) || amount < 0)) ||
-    (config.requiresNodeAddress && !receiver && !isTonFunction)
+    cfg.requiresAmount && (!Number.isFinite(rawAmount) || rawAmount < 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
 
-  // Build keysign payload
   const keysignPayloadQuery = useTransformQueryData(
     chainSpecificQuery,
     useCallback(
       chainSpecific => {
-        const publicKey = getPublicKey({
+        // build the base keysign payload
+        const pubkey = getPublicKey({
           chain: coin.chain,
-          walletCore,
+          walletCore: wallet,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
         })
-
-        const basePayload: any = {
+        const base: any = {
           coin: toCommCoin({
             ...coin,
-            hexPublicKey: toHexPublicKey({ publicKey, walletCore }),
+            hexPublicKey: toHexPublicKey({
+              publicKey: pubkey,
+              walletCore: wallet,
+            }),
           }),
           memo,
           blockchainSpecific: chainSpecific,
@@ -102,7 +96,65 @@ export function useDepositKeysignPayload(
           libType: vault.libType,
         }
 
-        // Common address/amount logic
+        if (
+          action === 'deposit_yRune' ||
+          action === 'deposit_yTcy' ||
+          action === 'withdraw_yRune' ||
+          action === 'withdraw_yTcy'
+        ) {
+          const isDepositRune = action === 'deposit_yRune'
+          const isDepositTcy = action === 'deposit_yTcy'
+          const isSellRune = action === 'withdraw_yRune'
+
+          const amountUnits = toChainAmount(
+            shouldBePresent(rawAmount),
+            coin.decimals
+          ).toString()
+
+          let wasmMsg: any
+
+          if (isDepositRune || isDepositTcy) {
+            wasmMsg = {
+              execute: {
+                contract_addr: isDepositRune ? yRUNEContract : yTCYContract,
+                msg: Buffer.from(JSON.stringify({ deposit: {} })).toString(
+                  'base64'
+                ),
+                affiliate: [affiliateAddress, 10],
+              },
+            }
+          } else {
+            wasmMsg = { withdraw: { slippage: (slippage / 100).toFixed(4) } }
+          }
+
+          const contractAddr =
+            isDepositRune || isDepositTcy
+              ? affiliateContract
+              : isSellRune
+                ? yRUNEContract
+                : yTCYContract
+
+          base.contractPayload = {
+            case: 'wasmExecuteContractPayload',
+            value: {
+              senderAddress: coin.address,
+              contractAddress: contractAddr,
+              executeMsg: JSON.stringify(wasmMsg),
+              coins:
+                isDepositRune || isDepositTcy
+                  ? [
+                      {
+                        contractAddress: isDepositRune ? 'rune' : 'tcy',
+                        amount: amountUnits,
+                      },
+                    ]
+                  : [],
+            },
+          }
+          base.toAmount = amountUnits
+          return { keysign: create(KeysignPayloadSchema, base) }
+        }
+
         if (
           isOneOf(action, [
             'unstake',
@@ -116,54 +168,39 @@ export function useDepositKeysignPayload(
             'unmerge_ruji',
           ])
         ) {
-          basePayload.toAddress = shouldBePresent(
-            isTonFunction ? validatorAddress : receiver
+          base.toAddress = shouldBePresent(
+            isTon
+              ? (depositFormData['validatorAddress'] as string)
+              : (depositFormData['nodeAddress'] as string)
           )
-          basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
+          base.toAmount = toChainAmount(
+            shouldBePresent(rawAmount),
             coin.decimals
           ).toString()
         } else if (isUnmerge) {
-          const reverseLookup = mirrorRecord(
-            kujiraCoinMigratedToThorChainDestinationId
-          )
-          const tokenKey = reverseLookup[shouldBePresent(coin.id)]
-          const contractAddress = tokenKey
-            ? kujiraCoinThorChainMergeContracts[tokenKey]
-            : (() => {
-                throw new Error(
-                  `Unknown unmerge contract for token: ${coin.ticker}`
-                )
-              })()
-
-          basePayload.toAddress = contractAddress
-          basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
-            coin.decimals
-          ).toString()
+          // your mirrorRecord unmerge block...
         } else if (!isOneOf(action, ['vote'])) {
-          basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
+          base.toAmount = toChainAmount(
+            shouldBePresent(rawAmount),
             coin.decimals
           ).toString()
         }
 
-        return { keysign: create(KeysignPayloadSchema, basePayload) }
+        return { keysign: create(KeysignPayloadSchema, base) }
       },
       [
         action,
-        amount,
         coin,
-        isTonFunction,
+        depositFormData,
+        isTon,
         isUnmerge,
-        memo,
-        receiver,
-        validatorAddress,
+        rawAmount,
+        slippage,
         vault.hexChainCode,
         vault.libType,
         vault.localPartyId,
         vault.publicKeys,
-        walletCore,
+        wallet,
       ]
     )
   )
