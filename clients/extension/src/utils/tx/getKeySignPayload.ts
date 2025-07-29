@@ -73,7 +73,7 @@ export const getKeysignPayload = (
           ) {
             if (
               cosmosFeeCoinDenom[transaction.chain as CosmosChain] ===
-              transaction.transactionDetails.asset.ticker
+              transaction.transactionDetails.asset.ticker.toLowerCase()
             ) {
               localCoin = { ...chainFeeCoin[transaction.chain] }
             }
@@ -225,6 +225,7 @@ export const getKeysignPayload = (
           contractPayload: contractPayload
             ? { case: 'wasmExecuteContractPayload', value: contractPayload }
             : undefined,
+          skipBroadcast: transaction.transactionDetails.skipBroadcast,
         })
 
         if (isOneOf(transaction.chain, Object.values(UtxoChain))) {

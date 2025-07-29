@@ -2,26 +2,26 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
+import { VerifyKeysignStart } from '../../../../mpc/keysign/start/VerifyKeysignStart'
 import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
+import { useSwapKeysignPayloadQuery } from '../../queries/useSwapKeysignPayloadQuery'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
 import { useToCoin } from '../../state/toCoin'
-import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
-import { SwapConfirm } from '../SwapConfirm'
-import { SwapTerms } from '../SwapTerms'
 import {
   ContentWrapper,
   HorizontalLine,
   IconWrapper,
   SwapTxFeesOverviewRow,
 } from './SwapVerify.styled'
+
+const swapTerms = ['input', 'output'] as const
 
 export const SwapVerify = () => {
   const { t } = useTranslation()
@@ -31,9 +31,15 @@ export const SwapVerify = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [fromAmount] = useFromAmount()
   const outAmountQuery = useSwapOutputAmountQuery()
+  const keysignPayloadQuery = useSwapKeysignPayloadQuery()
+
+  const translatedTerms = swapTerms.map(term => t(`swap_terms.${term}`))
 
   return (
-    <PageContent gap={40} justifyContent="space-between">
+    <VerifyKeysignStart
+      keysignPayloadQuery={keysignPayloadQuery}
+      terms={translatedTerms}
+    >
       <ContentWrapper gap={24}>
         <Text color="supporting" size={15}>
           {t('youre_swapping')}
@@ -73,12 +79,6 @@ export const SwapVerify = () => {
         </VStack>
         <VerifySwapFees RowComponent={SwapTxFeesOverviewRow} />
       </ContentWrapper>
-      <SwapTermsProvider initialValue={swapTerms.map(() => false)}>
-        <VStack gap={20}>
-          <SwapTerms />
-          <SwapConfirm />
-        </VStack>
-      </SwapTermsProvider>
-    </PageContent>
+    </VerifyKeysignStart>
   )
 }

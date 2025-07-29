@@ -68,6 +68,7 @@ export namespace TransactionType {
 
   type BaseTransaction<T extends TxType> = {
     txType: T
+    skipBroadcast?: boolean
   }
 
   export type MetaMask = {
@@ -202,6 +203,7 @@ export type TransactionDetails = {
     maxPriorityFeePerGas?: string
   }
   cosmosMsgPayload?: CosmosMsgPayload
+  skipBroadcast?: boolean
 }
 
 export type IKeysignTransactionPayload = {

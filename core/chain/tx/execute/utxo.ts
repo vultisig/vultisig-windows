@@ -9,13 +9,14 @@ export const executeUtxoTx: ExecuteTxResolver<UtxoChain> = async ({
   compiledTx,
   walletCore,
   chain,
+  skipBroadcast,
 }) => {
   const output = TW.Bitcoin.Proto.SigningOutput.decode(compiledTx)
-
-  await broadcastUtxoTransaction({
-    chain,
-    tx: stripHexPrefix(walletCore.HexCoding.encode(output.encoded)),
-  })
-
+  if (!skipBroadcast) {
+    await broadcastUtxoTransaction({
+      chain,
+      tx: stripHexPrefix(walletCore.HexCoding.encode(output.encoded)),
+    })
+  }
   return { txHash: output.transactionId }
 }
