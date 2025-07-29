@@ -86,6 +86,50 @@ export const getRequiredFieldsPerChainAction = (
           .pipe(z.number().positive().max(totalAmountAvailable)),
       }),
   },
+  withdraw_yRune: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+      {
+        name: 'slippage',
+        type: 'percentage',
+        label: t('slippage'),
+        required: true,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(totalAmountAvailable)),
+        slippage: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().min(0.001).max(0.1)),
+      }),
+  },
+  withdraw_yTcy: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+      {
+        name: 'slippage',
+        type: 'percentage',
+        label: t('slippage'),
+        required: true,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(totalAmountAvailable)),
+        slippage: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().min(0.001).max(0.1)),
+      }),
+  },
   unmerge: {
     fields: [
       {
