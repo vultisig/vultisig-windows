@@ -220,7 +220,7 @@ const transactionHandlers: TransactionHandlers = {
         return {
           asset: {
             chain: chain,
-            ticker: token.id,
+            ticker: token.ticker,
             symbol: token.ticker,
             mint: tx.asset.mint,
           },
