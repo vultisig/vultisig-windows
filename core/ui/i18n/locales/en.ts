@@ -9,6 +9,10 @@ export const en = {
   plugin_info: 'Plugin Info',
   plugin_info_desc: 'You are installing {{name}} Plugin',
   plugin_success_desc: 'Installation of {{name}} is completed',
+  deposit_yRune: 'Receive yRUNE',
+  deposit_yTcy: 'Receive yTCY',
+  withdraw_yRune: 'Sell yRUNE',
+  withdraw_yTcy: 'Sell yTCY',
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
