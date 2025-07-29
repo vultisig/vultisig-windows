@@ -34,12 +34,7 @@ export const ManageMpcLib = () => {
       >{`(BUILD ${__APP_BUILD__})`}</UnstyledButton>
 
       {visible && (
-        <Modal
-          onClose={() => setVisible(false)}
-          placement="center"
-          title={t('advanced')}
-          width={368}
-        >
+        <Modal onClose={() => setVisible(false)} title={t('advanced')}>
           <Switch
             checked={isDKLS}
             label={t('enable_dkls')}

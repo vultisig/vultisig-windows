@@ -75,7 +75,7 @@ export const SetupVaultPage = () => {
               },
             ]}
             disabled={isPlaying}
-            selected={value}
+            value={value}
             onChange={newValue => {
               if (isPlaying) return
               onPlay()

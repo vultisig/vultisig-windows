@@ -3,7 +3,10 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
+
+import { CosmosMsgType } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -65,6 +68,7 @@ export namespace TransactionType {
 
   type BaseTransaction<T extends TxType> = {
     txType: T
+    skipBroadcast?: boolean
   }
 
   export type MetaMask = {
@@ -110,11 +114,16 @@ export namespace TransactionType {
     gasLimit?: string
   } & BaseTransaction<'Vultisig'>
 
-  export type Keplr = {
-    amount: { amount: string; denom: string }[]
-    from_address: string
-    to_address: string
-  } & BaseTransaction<'Keplr'>
+  export type Keplr = (
+    | StdSignDoc
+    | {
+        bodyBytes: string // base64 encoded
+        authInfoBytes: string // base64 encoded
+        chainId: string
+        accountNumber: string // stringified Long
+      }
+  ) &
+    BaseTransaction<'Keplr'>
 
   export type Phantom = {
     asset: {
@@ -148,6 +157,34 @@ type IMsgTransfer = {
   memo: string
 }
 
+export type CosmosMsgPayload =
+  | {
+      case:
+        | CosmosMsgType.MSG_SEND
+        | CosmosMsgType.THORCHAIN_MSG_SEND
+        | CosmosMsgType.MSG_SEND_URL
+      value: {
+        amount: { denom: string; amount: string }[]
+        from_address: string
+        to_address: string
+      }
+    }
+  | {
+      case:
+        | CosmosMsgType.MSG_EXECUTE_CONTRACT
+        | CosmosMsgType.MSG_EXECUTE_CONTRACT_URL
+      value: {
+        sender: string
+        contract: string
+        funds: { denom: string; amount: string }[]
+        msg: string
+      }
+    }
+  | {
+      case: CosmosMsgType.MSG_TRANSFER_URL
+      value: IMsgTransfer
+    }
+
 export type TransactionDetails = {
   asset: {
     chain: Chain
@@ -165,7 +202,8 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  ibcTransaction?: IMsgTransfer
+  cosmosMsgPayload?: CosmosMsgPayload
+  skipBroadcast?: boolean
 }
 
 export type IKeysignTransactionPayload = {

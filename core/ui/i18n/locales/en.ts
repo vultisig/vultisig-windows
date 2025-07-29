@@ -66,6 +66,9 @@ export const en = {
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
+  no_vaults: 'No vaults yet',
+  no_vaults_desc:
+    'Your vaults will appear here. Start by creating one or importing an existing vault',
   open_desktop: 'Open Desktop',
   percentage: 'Percentage',
   add_memo: 'Add MEMO',
@@ -701,7 +704,7 @@ export const en = {
   oneVaultShare: 'one vault share',
   theyRe: "They're",
   splitIntoParts: 'split into parts',
-  toIncreaseSecurity: 'to increase security and',
+  toIncreaseSecurity: 'to increase security',
   removeSinglePointOfFailure: 'remove single point-of-failure',
   theseSharesCollaborate: 'These shares collaborate to',
   unlockYourVault: 'unlock your vault',

@@ -28,7 +28,9 @@ export const useUnmergeOptions = ({
   const [{ setValue }] = useDepositFormHandlers()
 
   const tokens = useMemo(() => {
-    const kujiraTokens = coins.filter(c => c.id in kujiraCoinsOnThorChain)
+    const kujiraTokens = coins.filter(
+      c => c.id && c.id in kujiraCoinsOnThorChain
+    )
 
     const extraTokens = balances
       .map(

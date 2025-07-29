@@ -6,12 +6,13 @@ export type PartialInstruction = {
   accounts: any
 }
 
-export type ParsedSolanaSwapParams = {
+export type ParsedSolanaTransactionParams = {
   authority: string | undefined
   inputToken: SolanaJupiterToken
-  outputToken: SolanaJupiterToken
+  outputToken?: SolanaJupiterToken
   inAmount: number
-  outAmount: number
+  outAmount?: number
+  receiverAddress?: string
 }
 
 export type ParsedInstructionsSolanaSwapParams = {
