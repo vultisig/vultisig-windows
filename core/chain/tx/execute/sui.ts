@@ -14,7 +14,13 @@ export const executeSuiTx: ExecuteTxResolver = async ({
     signature: compiledSignature,
   } = TW.Sui.Proto.SigningOutput.decode(compiledTx)
   if (skipBroadcast) {
-    throw 'Sui transactions cannot be executed without broadcasting'
+    const rpcClient = getSuiClient()
+
+    const dryRunResult = await rpcClient.dryRunTransactionBlock({
+      transactionBlock: unsignedTx,
+    })
+
+    return { txHash: dryRunResult.effects.transactionDigest }
   }
   assertErrorMessage(suiErrorMessage)
 
