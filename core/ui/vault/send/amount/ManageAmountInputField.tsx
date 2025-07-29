@@ -19,8 +19,12 @@ import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendCh
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import {
+  AmountTextInput,
+  AmountTextInputProps,
+} from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
@@ -31,16 +35,16 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useSendAmount } from '../state/amount'
+import { FiatSendAmountInput } from './FiatSendAmountInput'
 
-const suggestions = [25n, 50n, 75n, 100n]
+const suggestions = [0.25, 0.5, 0.75, 1]
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
@@ -97,6 +101,18 @@ export const ManageAmountInputField = () => {
 
   const error = !!amountError && value ? amountError : undefined
 
+  const sharedInputProps: Pick<
+    AmountTextInputProps,
+    'validation' | 'placeholder' | 'shouldBePositive'
+  > = useMemo(
+    () => ({
+      validation: error ? 'warning' : undefined,
+      placeholder: t('enter_amount'),
+      shouldBePositive: true,
+    }),
+    [error, t]
+  )
+
   return (
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
@@ -118,37 +134,34 @@ export const ManageAmountInputField = () => {
                       exit={{ y: -20, opacity: 0 }}
                       transition={{ duration: 0.18 }}
                     >
-                      <AmountTextInput
-                        validation={error ? 'warning' : undefined}
-                        placeholder={t('enter_amount')}
-                        value={
-                          value === null
-                            ? value
-                            : match(currencyInputMode, {
-                                base: () =>
-                                  fromChainAmount(value, coin.decimals),
-                                fiat: () =>
-                                  fromChainAmount(value, coin.decimals) *
-                                  shouldBePresent(coinPriceQuery.data),
-                              })
-                        }
-                        shouldBePositive
-                        onValueChange={value => {
-                          setValue(
-                            value === null
-                              ? value
-                              : match(currencyInputMode, {
-                                  base: () =>
-                                    toChainAmount(value, coin.decimals),
-                                  fiat: () =>
-                                    toChainAmount(
-                                      value /
-                                        shouldBePresent(coinPriceQuery.data),
-                                      coin.decimals
-                                    ),
-                                })
-                          )
-                        }}
+                      <Match
+                        value={currencyInputMode}
+                        fiat={() => (
+                          <FiatSendAmountInput
+                            {...sharedInputProps}
+                            value={value}
+                            onChange={setValue}
+                            decimals={coin.decimals}
+                            price={shouldBePresent(coinPriceQuery.data)}
+                          />
+                        )}
+                        base={() => (
+                          <AmountTextInput
+                            {...sharedInputProps}
+                            value={
+                              value === null
+                                ? value
+                                : fromChainAmount(value, coin.decimals)
+                            }
+                            onValueChange={value => {
+                              setValue(
+                                value === null
+                                  ? value
+                                  : toChainAmount(value, coin.decimals)
+                              )
+                            }}
+                          />
+                        )}
                       />
                     </motion.div>
                   </AnimatePresence>
@@ -173,33 +186,34 @@ export const ManageAmountInputField = () => {
                 bottom: 55,
               }}
             />
-            <MatchQuery
-              value={maxAmountQuery}
-              success={maxValue => (
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  gap={4}
-                >
-                  {suggestions.map(suggestion => {
-                    const suggestionValue = maxValue * suggestion
+            <HStack justifyContent="space-between" alignItems="center" gap={4}>
+              {suggestions.map(suggestion => {
+                const getProps = () => {
+                  const { data } = maxAmountQuery
+                  if (!data) {
+                    return {}
+                  }
+                  const suggestionValue = BigInt(
+                    Math.round(Number(data) * suggestion)
+                  )
 
-                    const isActive = value === suggestionValue
+                  return {
+                    onClick: () => {
+                      setValue(suggestionValue)
+                    },
+                    isActive: value === suggestionValue,
+                  }
+                }
 
-                    return (
-                      <SuggestionOption
-                        isActive={isActive}
-                        onClick={() => {
-                          setValue(suggestionValue)
-                        }}
-                        key={suggestion}
-                        value={Number(suggestion) / 100}
-                      />
-                    )
-                  })}
-                </HStack>
-              )}
-            />
+                return (
+                  <SuggestionOption
+                    {...getProps()}
+                    key={suggestion}
+                    value={suggestion}
+                  />
+                )
+              })}
+            </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
             <MatchQuery
               value={balanceQuery}
