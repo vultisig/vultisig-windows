@@ -101,10 +101,6 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         keysignPayload.contractPayload.case === 'wasmExecuteContractPayload'
       ) {
         const contractPayload = keysignPayload.contractPayload.value
-        const formattedMessage = contractPayload.executeMsg
-          .replace(/^({)/, '$1 ')
-          .replace(/(})$/, ' $1')
-          .replace(/:/g, ': ')
 
         return {
           messages: [
@@ -113,7 +109,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
                   senderAddress: contractPayload.senderAddress,
                   contractAddress: contractPayload.contractAddress,
-                  executeMsg: formattedMessage,
+                  executeMsg: contractPayload.executeMsg,
                   coins: contractPayload.coins.length
                     ? contractPayload.coins.map(c => {
                         return TW.Cosmos.Proto.Amount.create({
@@ -125,6 +121,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
+          txMemo: memo,
         }
       } else if (memo && memo.startsWith('merge:')) {
         const fullDenom = memo.toLowerCase().replace('merge:', '')

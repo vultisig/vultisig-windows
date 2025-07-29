@@ -1,16 +1,15 @@
 import { Coin } from '@core/chain/coin/Coin'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { UnmergeExplorerOption } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/components/UnmergeExplorerOption'
+import { formatUnmergeShares } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/utils'
+import { useMergeableTokenBalancesQuery } from '@core/ui/vault/deposit/hooks/useMergeableTokenBalancesQuery'
+import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { useCoreViewState } from '../../../../../navigation/hooks/useCoreViewState'
-import { useMergeableTokenBalancesQuery } from '../../../hooks/useMergeableTokenBalancesQuery'
-import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { UnmergeExplorerOption } from './components/UnmergeExplorerOption'
-import { formatUnmergeShares } from './utils'
 
 export const UnmergeTokenExplorer = ({
   value: tokens,
@@ -24,12 +23,7 @@ export const UnmergeTokenExplorer = ({
   const { t } = useTranslation()
 
   return (
-    <Modal
-      width={480}
-      placement="top"
-      title={t('select_token')}
-      onClose={onClose}
-    >
+    <Modal onClose={onClose} title={t('select_token')}>
       <VStack gap={20}>
         {tokens.length > 0 ? (
           tokens.map((token, index) => {
