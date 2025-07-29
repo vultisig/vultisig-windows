@@ -33,7 +33,7 @@ export const VaultChainCoinItem = ({
           <Text color="contrast" size={20} weight="500">
             {ticker}
           </Text>
-          <Text color="contrast" size={18} weight="700" centerVertically>
+          <Text color="contrast" size={18} weight="500" centerVertically>
             <BalanceVisibilityAware>
               {formatAmount(balance * (price || 0), fiatCurrency)}
             </BalanceVisibilityAware>
