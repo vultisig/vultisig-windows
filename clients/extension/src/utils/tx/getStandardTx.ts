@@ -196,10 +196,20 @@ const transactionHandlers: TransactionHandlers = {
         }
       },
       [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => {
+        if (!message.value.coins || message.value.coins.length === 0) {
+          throw new Error(' coins array is required and cannot be empty')
+        }
+
+        const assetParts = message.value.coins[0].asset.split('.')
+        if (assetParts.length < 2) {
+          throw new Error(
+            `invalid asset format: ${message.value.coins[0].asset}`
+          )
+        }
         return {
           asset: {
             chain: chain,
-            ticker: message.value.coins[0].asset.split('.')[1],
+            ticker: assetParts[1],
           },
           amount: {
             amount: message.value.coins[0].amount,
