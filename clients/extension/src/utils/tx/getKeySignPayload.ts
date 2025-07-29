@@ -51,7 +51,7 @@ export const getKeysignPayload = (
 
         let localCoin = getCoinFromCoinKey({
           chain: transaction.chain,
-          id: isNative
+          id: !isNative
             ? transaction.transactionDetails.asset.ticker
             : undefined,
         })
