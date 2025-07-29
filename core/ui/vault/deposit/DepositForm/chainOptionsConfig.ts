@@ -62,6 +62,18 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
+  deposit_yRune: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(totalAmountAvailable)),
+      }),
+  },
   unmerge: {
     fields: [
       {
