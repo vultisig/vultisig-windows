@@ -35,7 +35,7 @@ export const FiatSendAmountInput = ({
       return null
     }
 
-    const chainInputValue = toChainAmount(inputValue * price, decimals)
+    const chainInputValue = toChainAmount(inputValue / price, decimals)
     if (chainInputValue === value) {
       return inputValue
     }
@@ -49,7 +49,7 @@ export const FiatSendAmountInput = ({
       value={preservedInputValue}
       onValueChange={value => {
         setInputValue(value)
-        onChange(value === null ? null : toChainAmount(value * price, decimals))
+        onChange(value === null ? null : toChainAmount(value / price, decimals))
       }}
     />
   )
