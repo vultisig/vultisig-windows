@@ -34,10 +34,9 @@ type BroadcastTxInput = {
 }
 
 export const broadcastTx = (input: BroadcastTxInput) => {
-  const { chain, ...rest } = input
-  const chainKind = getChainKind(chain)
+  const chainKind = getChainKind(input.chain)
 
   const handler = handlers[chainKind]
 
-  return handler({ chain, ...rest })
+  return handler(input)
 }
