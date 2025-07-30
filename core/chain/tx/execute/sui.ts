@@ -1,18 +1,13 @@
+import { OtherChain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
-import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeSuiTx: ExecuteTxResolver = async ({
-  compiledTx,
+export const executeSuiTx: ExecuteTxResolver<OtherChain.Sui> = async ({
+  tx,
   skipBroadcast,
 }) => {
-  const {
-    unsignedTx,
-    errorMessage: suiErrorMessage,
-    signature: compiledSignature,
-  } = TW.Sui.Proto.SigningOutput.decode(compiledTx)
+  const { unsignedTx, signature: compiledSignature } = tx
   if (skipBroadcast) {
     const rpcClient = getSuiClient()
 
@@ -22,7 +17,6 @@ export const executeSuiTx: ExecuteTxResolver = async ({
 
     return { txHash: dryRunResult.effects.transactionDigest }
   }
-  assertErrorMessage(suiErrorMessage)
 
   const rpcClient = getSuiClient()
 

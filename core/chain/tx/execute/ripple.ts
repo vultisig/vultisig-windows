@@ -1,25 +1,19 @@
+import { OtherChain } from '@core/chain/Chain'
 import { getRippleClient } from '@core/chain/chains/ripple/client'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
-import { TW } from '@trustwallet/wallet-core'
 import { sha512 } from 'ethers'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeRippleTx: ExecuteTxResolver = async ({
+export const executeRippleTx: ExecuteTxResolver<OtherChain.Ripple> = async ({
   walletCore,
-  compiledTx,
+  tx,
   skipBroadcast,
 }) => {
-  const { encoded, errorMessage } =
-    TW.Ripple.Proto.SigningOutput.decode(compiledTx)
-
-  assertErrorMessage(errorMessage)
-
-  const rawTx = stripHexPrefix(walletCore.HexCoding.encode(encoded))
+  const rawTx = stripHexPrefix(walletCore.HexCoding.encode(tx.encoded))
   if (skipBroadcast) {
-    const fullHash = sha512(encoded)
+    const fullHash = sha512(tx.encoded)
     const first256 = fullHash.slice(0, 32) // first 256 bits (32 bytes)
     return { txHash: Buffer.from(first256).toString('hex').toUpperCase() }
   }

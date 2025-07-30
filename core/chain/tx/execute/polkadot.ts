@@ -1,22 +1,14 @@
+import { OtherChain } from '@core/chain/Chain'
 import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { attempt } from '@lib/utils/attempt'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
-import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executePolkadotTx: ExecuteTxResolver = async ({
-  walletCore,
-  compiledTx,
-  skipBroadcast,
-}) => {
-  const { errorMessage: polkadotErrorMessage, encoded } =
-    TW.Polkadot.Proto.SigningOutput.decode(compiledTx)
-
-  assertErrorMessage(polkadotErrorMessage)
-
-  const rawTx = walletCore.HexCoding.encode(encoded)
+export const executePolkadotTx: ExecuteTxResolver<
+  OtherChain.Polkadot
+> = async ({ walletCore, tx, skipBroadcast }) => {
+  const rawTx = walletCore.HexCoding.encode(tx.encoded)
   const client = await getPolkadotClient()
   const txHash = client
     .createType('Extrinsic', rawTx, {

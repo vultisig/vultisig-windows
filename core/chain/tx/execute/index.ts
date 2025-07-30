@@ -1,5 +1,8 @@
+import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { WalletCore } from '@trustwallet/wallet-core'
 
+import { decodeTx } from '../decode'
 import { executeCardanoTx } from './cardano'
 import { executeCosmosTx } from './cosmos'
 import { executeEvmTx } from './evm'
@@ -25,10 +28,19 @@ const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
   tron: executeTronTx,
 }
 
-export const executeTx: ExecuteTxResolver = input => {
-  const chainKind = getChainKind(input.chain)
+type ExecuteTxInput = {
+  chain: Chain
+  walletCore: WalletCore
+  compiledTx: Uint8Array<ArrayBufferLike>
+  skipBroadcast?: boolean
+}
 
+export const executeTx = (input: ExecuteTxInput) => {
+  const { chain, compiledTx, ...rest } = input
+  const chainKind = getChainKind(chain)
+
+  const tx = decodeTx({ chain, compiledTx })
   const handler = handlers[chainKind]
 
-  return handler(input)
+  return handler({ chain, tx, ...rest })
 }

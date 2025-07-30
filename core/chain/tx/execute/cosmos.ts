@@ -1,30 +1,26 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { attempt } from '@lib/utils/attempt'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { isInError } from '@lib/utils/error/isInError'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
-import { TW } from '@trustwallet/wallet-core'
 import { sha256 } from 'viem'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
   chain,
-  compiledTx,
+  tx,
   skipBroadcast,
 }) => {
-  const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx)
+  const { serialized } = tx
 
-  assertErrorMessage(output.errorMessage)
-
-  const rawTx = output.serialized
+  const rawTx = serialized
   const parsedData = JSON.parse(rawTx)
   const txBytes = parsedData.tx_bytes
   const decodedTxBytes = Buffer.from(txBytes, 'base64')
 
   const txHash = stripHexPrefix(sha256(decodedTxBytes).toUpperCase())
-  if (skipBroadcast) return { txHash, encoded: output.serialized }
+  if (skipBroadcast) return { txHash, encoded: serialized }
   const client = await getCosmosClient(chain)
   const result = attempt(client.broadcastTx(decodedTxBytes))
 
@@ -35,5 +31,5 @@ export const executeCosmosTx: ExecuteTxResolver<CosmosChain> = async ({
     throw result.error
   }
 
-  return { txHash, encoded: output.serialized }
+  return { txHash, encoded: serialized }
 }

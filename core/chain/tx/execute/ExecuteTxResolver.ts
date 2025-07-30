@@ -1,11 +1,12 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { Chain } from '../../Chain'
+import { DecodedTx } from '../decode'
 
 type ExecuteTxInput<T extends Chain = Chain> = {
   chain: T
   walletCore: WalletCore
-  compiledTx: Uint8Array<ArrayBufferLike>
+  tx: DecodedTx<T>
   skipBroadcast?: boolean
 }
 

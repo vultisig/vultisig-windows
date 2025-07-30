@@ -1,19 +1,16 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
+import { OtherChain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { Base64EncodedWireTransaction } from '@solana/web3.js'
-import { TW } from '@trustwallet/wallet-core'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeSolanaTx: ExecuteTxResolver = async ({
-  compiledTx,
+export const executeSolanaTx: ExecuteTxResolver<OtherChain.Solana> = async ({
+  chain,
+  tx,
   skipBroadcast,
 }) => {
-  const { encoded, errorMessage: solanaErrorMessage } =
-    TW.Solana.Proto.SigningOutput.decode(compiledTx)
-
-  assertErrorMessage(solanaErrorMessage)
+  const { encoded } = tx
   if (skipBroadcast) {
     const rawTx = Buffer.from(encoded, 'base64')
     const txHash = bs58.encode(Uint8Array.prototype.slice.call(rawTx, 1, 65))
