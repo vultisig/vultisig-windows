@@ -1,6 +1,8 @@
 import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { tronRpcUrl } from './config'
+
 type TronBlockHeader = {
   raw_data?: {
     timestamp?: number
@@ -31,7 +33,7 @@ type BlockChainSpecificTron = {
 export async function getTronBlockInfo(
   coin: Coin
 ): Promise<BlockChainSpecificTron> {
-  const url = 'https://tron-rpc.publicnode.com/wallet/getnowblock'
+  const url = `${tronRpcUrl}/wallet/getnowblock`
 
   const responseData = await queryUrl<TronBlock>(url, {
     body: {},

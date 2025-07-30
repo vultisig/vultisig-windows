@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { WalletCore } from '@trustwallet/wallet-core'
 
+import { broadcastTx } from '../broadcast'
 import { decodeTx } from '../decode'
 import { executeCardanoTx } from './cardano'
 import { executeCosmosTx } from './cosmos'
@@ -35,12 +36,18 @@ type ExecuteTxInput = {
   skipBroadcast?: boolean
 }
 
-export const executeTx = (input: ExecuteTxInput) => {
-  const { chain, compiledTx, ...rest } = input
+export const executeTx = async (input: ExecuteTxInput) => {
+  const { chain, compiledTx, walletCore, skipBroadcast } = input
   const chainKind = getChainKind(chain)
 
   const tx = decodeTx({ chain, compiledTx })
   const handler = handlers[chainKind]
 
-  return handler({ chain, tx, ...rest })
+  const result = await handler({ chain, tx, walletCore })
+
+  if (!skipBroadcast) {
+    await broadcastTx({ chain, walletCore, tx })
+  }
+
+  return result
 }

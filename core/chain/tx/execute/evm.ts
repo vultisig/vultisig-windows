@@ -1,46 +1,9 @@
 import { EvmChain } from '@core/chain/Chain'
-import { getEvmClient } from '@core/chain/chains/evm/client'
-import { isInError } from '@lib/utils/error/isInError'
 import { keccak256 } from 'viem'
 
 import { ExecuteTxResolver } from './ExecuteTxResolver'
 
-export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
-  walletCore,
-  chain,
-  tx,
-  skipBroadcast,
-}) => {
-  const { encoded } = tx
-
-  const rawTx = walletCore.HexCoding.encode(encoded)
-  const txHash = keccak256(encoded)
-  if (skipBroadcast)
-    return {
-      txHash,
-    }
-  const publicClient = getEvmClient(chain)
-
-  try {
-    const hash = await publicClient.sendRawTransaction({
-      serializedTransaction: rawTx as `0x${string}`,
-    })
-    return { txHash: hash }
-  } catch (error) {
-    const isAlreadyBroadcast = isInError(
-      error,
-      'already known',
-      'transaction is temporarily banned',
-      'nonce too low',
-      'transaction already exists',
-      'future transaction tries to replace pending',
-      'could not replace existing tx'
-    )
-
-    if (isAlreadyBroadcast) {
-      return { txHash }
-    }
-
-    throw error
-  }
+export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({ tx }) => {
+  const txHash = keccak256(tx.encoded)
+  return { txHash }
 }
