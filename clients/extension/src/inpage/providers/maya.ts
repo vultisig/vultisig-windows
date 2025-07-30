@@ -1,3 +1,4 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
@@ -41,7 +42,7 @@ export class MAYAChain extends BaseCosmosChain {
       const result = processBackgroundResponse(data, this.messageKey, response)
 
       if (callback) callback(null, result)
-      return result
+      return shouldBePresent(result)
     } catch (error) {
       if (callback) callback(error as Error)
       throw error

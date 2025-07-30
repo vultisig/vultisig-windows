@@ -1,5 +1,4 @@
-import { Chain } from '@core/chain/Chain'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
@@ -23,7 +22,11 @@ import {
   isVersionedTransaction,
   processBackgroundResponse,
 } from '../../utils/functions'
-import { Messaging, TransactionType } from '../../utils/interfaces'
+import {
+  ITransaction,
+  Messaging,
+  TransactionType,
+} from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 
@@ -60,8 +63,8 @@ export class Solana extends EventEmitter {
             serializedTx: transaction.serialize(),
           },
         ],
-      })) as TxResult
-      const rawData = Buffer.from(shouldBePresent(result.encoded), 'base64')
+      })) as ITransaction<OtherChain.Solana>
+      const rawData = Buffer.from(result.encoded, 'base64')
       return VersionedTransaction.deserialize(rawData)
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
@@ -132,7 +135,9 @@ export class Solana extends EventEmitter {
           params: [modifiedTransfer],
         }).then(result => {
           const rawData = Buffer.from(
-            shouldBePresent((result as TxResult).encoded),
+            shouldBePresent(
+              (result as ITransaction<OtherChain.Solana>).encoded
+            ),
             'base64'
           )
           return Transaction.from(rawData)
@@ -147,7 +152,7 @@ export class Solana extends EventEmitter {
       params: [],
     }).then(account => {
       this.isConnected = true
-      this.publicKey = new PublicKey(account)
+      this.publicKey = new PublicKey(shouldBePresent(account))
       this.emit(EventMethod.CONNECT, this.publicKey)
 
       return { publicKey: this.publicKey }

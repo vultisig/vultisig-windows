@@ -6,11 +6,10 @@ import { isInError } from '@lib/utils/error/isInError'
 import { BroadcastTxResolver } from './BroadcastTxResolver'
 
 export const broadcastEvmTx: BroadcastTxResolver<EvmChain> = async ({
-  walletCore,
   chain,
   tx,
 }) => {
-  const rawTx = walletCore.HexCoding.encode(tx.encoded)
+  const rawTx = Buffer.from(tx.encoded).toString('hex')
   const client = getEvmClient(chain)
 
   const { error } = await attempt(

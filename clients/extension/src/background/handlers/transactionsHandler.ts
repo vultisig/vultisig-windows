@@ -1,4 +1,3 @@
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -16,8 +15,8 @@ import { handleOpenPanel } from '../window/windowManager'
 const popupMessenger = initializeMessenger({ connect: 'popup' })
 
 export const handleSendTransaction = async (
-  transaction: ITransaction
-): Promise<TxResult> => {
+  transaction: Pick<ITransaction, 'transactionPayload' | 'status'>
+): Promise<ITransaction> => {
   const uuid = uuidv4()
 
   try {
@@ -44,13 +43,13 @@ export const handleSendTransaction = async (
       windowId: createdWindowId,
     })
 
-    return await new Promise<TxResult>((resolve, reject) => {
+    return await new Promise<ITransaction>((resolve, reject) => {
       let isResolved = false
       const cleanUp = () => {
         chrome.windows.onRemoved.removeListener(onRemoved)
       }
 
-      popupMessenger.reply(`tx_result_${uuid}`, (txResult: TxResult) => {
+      popupMessenger.reply(`tx_result_${uuid}`, (txResult: ITransaction) => {
         if (isResolved) return
         isResolved = true
         cleanUp()
@@ -81,14 +80,7 @@ export const handleSendTransaction = async (
             )
             reject(new Error('Transaction was not completed'))
           } else {
-            if (matchedTransaction.txHash) {
-              resolve({
-                txHash: matchedTransaction.txHash,
-                encoded: matchedTransaction.encoded ?? undefined,
-              })
-            } else {
-              reject(new Error('Transaction has no signature or hash'))
-            }
+            return matchedTransaction
           }
         } catch (err) {
           reject(err)

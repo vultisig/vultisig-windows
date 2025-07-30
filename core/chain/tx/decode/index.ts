@@ -21,9 +21,9 @@ export type ChainKindToDecodedOutput = {
   cardano: Omit<TW.Cardano.Proto.SigningOutput, 'errorMessage'>
 }
 
-export type DecodedTx<T extends Chain> = Omit<
+export type DecodedTx<T extends Chain = Chain> = Omit<
   ChainKindToDecodedOutput[DeriveChainKind<T>],
-  'errorMessage'
+  'errorMessage' | 'error' | 'toJSON'
 >
 
 type DecodedOutput<T extends Chain> = DecodedTx<T>

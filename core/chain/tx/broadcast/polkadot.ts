@@ -7,8 +7,8 @@ import { BroadcastTxResolver } from './BroadcastTxResolver'
 
 export const broadcastPolkadotTx: BroadcastTxResolver<
   OtherChain.Polkadot
-> = async ({ walletCore, tx }) => {
-  const rawTx = walletCore.HexCoding.encode(tx.encoded)
+> = async ({ tx }) => {
+  const rawTx = Buffer.from(tx.encoded).toString('hex')
   const client = await getPolkadotClient()
 
   const { error } = await attempt(client.rpc.author.submitExtrinsic(rawTx))
