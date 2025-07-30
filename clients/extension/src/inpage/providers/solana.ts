@@ -135,9 +135,7 @@ export class Solana extends EventEmitter {
           params: [modifiedTransfer],
         }).then(result => {
           const rawData = Buffer.from(
-            shouldBePresent(
-              (result as ITransaction<OtherChain.Solana>).encoded
-            ),
+            (result as ITransaction<OtherChain.Solana>).encoded,
             'base64'
           )
           return Transaction.from(rawData)
