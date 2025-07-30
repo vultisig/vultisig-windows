@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -10,6 +11,7 @@ import { SendFormIconsWrapper } from '../addresses/components/SendFormIconsWrapp
 import { SendInputContainer } from '../components/SendInputContainer'
 import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
+import { useCurrentSendCoin } from '../state/sendCoin'
 
 export const ManageAmountInputFieldCollapsed = () => {
   const { t } = useTranslation()
@@ -22,8 +24,10 @@ export const ManageAmountInputFieldCollapsed = () => {
     setFocusedSendField,
   ] = useSendFormFieldState()
 
+  const coin = useCurrentSendCoin()
+
   const isOpen = field === 'amount'
-  const isChecked = Boolean(amount) && !isOpen && !amountError
+  const isChecked = amount !== null && amount > 0n && !isOpen && !amountError
   return (
     <CollapsedCoinInputContainer
       onClick={() => {
@@ -36,7 +40,7 @@ export const ManageAmountInputFieldCollapsed = () => {
       <HStack gap={12} alignItems="center">
         <Text size={14}>{t('amount')}</Text>
         <Text size={12} color="shy">
-          {amount}
+          {amount === null ? null : fromChainAmount(amount, coin.decimals)}
         </Text>
       </HStack>
       <SendFormIconsWrapper gap={12}>

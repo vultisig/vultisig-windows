@@ -1,22 +1,19 @@
-import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
 import { ChainAction, chainActionsRecord } from './ChainAction'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
+import { useDepositCoin } from './state/coin'
 
 const depositSteps = ['form', 'verify'] as const
 
 export const DepositPage = () => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coin = shouldBePresent(getCoinFromCoinKey(coinKey))
+  const coin = useDepositCoin()
   const chainActionOptions =
     chainActionsRecord[coin.chain as DepositEnabledChain]
 
@@ -57,7 +54,7 @@ export const DepositPage = () => {
           }
           onSubmit={handleDepositFormSubmit}
           chainActionOptions={filteredChainActionOptions}
-          chain={coinKey.chain}
+          chain={coin.chain}
         />
       )}
       verify={() => (

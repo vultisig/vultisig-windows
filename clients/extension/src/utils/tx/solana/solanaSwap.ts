@@ -1,11 +1,11 @@
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { getAccount, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
-import api from '../../api'
 import { jupiterV6ProgramId, raydiumAmmRouting } from './config'
 import { JupiterInstructionParser } from './jupiter-instruction-parser'
 import { RaydiumInstructionParser } from './raydium-instruction-parser'
@@ -53,7 +53,14 @@ export async function getParsedSolanaTransaction(
     }
 
     try {
-      return await api.solana.fetchSolanaTokenInfo(mint)
+      const coin = await getSolanaToken(mint)
+      return {
+        address: coin.id,
+        name: coin.ticker,
+        symbol: coin.ticker,
+        decimals: coin.decimals,
+        logoURI: coin.logo,
+      }
     } catch (err) {
       console.warn(
         `Failed to fetch token info for ${mint}. Falling back to native SOL:`,

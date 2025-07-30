@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
@@ -16,14 +17,14 @@ export const useSendChainSpecificQuery = () => {
 
   return useStateDependentQuery(
     {
-      amount: amount ?? 0,
+      amount: amount ?? 0n,
     },
     ({ amount }) => {
       const input: ChainSpecificResolverInput = {
         coin,
         receiver,
         feeSettings,
-        amount,
+        amount: fromChainAmount(amount, coin.decimals),
       }
 
       return {
