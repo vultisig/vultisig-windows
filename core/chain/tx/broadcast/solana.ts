@@ -6,11 +6,11 @@ import { BroadcastTxResolver } from './BroadcastTxResolver'
 
 export const broadcastSolanaTx: BroadcastTxResolver<
   OtherChain.Solana
-> = async ({ tx }) => {
+> = async ({ tx: { encoded } }) => {
   const client = getSolanaClient()
 
   await client
-    .sendTransaction(tx.encoded as Base64EncodedWireTransaction, {
+    .sendTransaction(encoded as Base64EncodedWireTransaction, {
       skipPreflight: false,
       preflightCommitment: 'confirmed',
       maxRetries: BigInt(3),
