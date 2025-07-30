@@ -1,5 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { validateCardanoUtxoRequirements } from '@core/chain/chains/cardano/utxo/validation'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
@@ -12,15 +10,13 @@ export const validateSendForm = (
   values: SendFormShape,
   helpers: {
     balance: bigint | undefined
-    balanceReady: boolean
-    coinDecimals: number
     chain: Chain
     walletCore: WalletCore
     t: TFunction
   }
 ): ValidationResult<SendFormShape> => {
   const { coin, amount, address } = values
-  const { balance, balanceReady, coinDecimals, chain, walletCore, t } = helpers
+  const { balance, chain, walletCore, t } = helpers
 
   const errors: ValidationResult<SendFormShape> = {}
 
@@ -28,13 +24,12 @@ export const validateSendForm = (
 
   if (!amount) {
     errors.amount = t('amount_required')
-  } else if (balanceReady) {
-    const max = fromChainAmount(balance!, coinDecimals)
-    if (amount > max) errors.amount = t('not_enough_for_gas')
+  } else if (balance !== undefined) {
+    if (amount > balance) errors.amount = t('not_enough_for_gas')
 
-    if (chain === Chain.Cardano && amount && balance !== undefined) {
+    if (chain === Chain.Cardano && amount) {
       const errorMsg = validateCardanoUtxoRequirements({
-        amount: toChainAmount(amount, coinDecimals),
+        amount: amount,
         balance,
       })
 

@@ -1,4 +1,3 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -25,17 +24,12 @@ export const useSendCappedAmountQuery = () => {
     },
     useCallback(
       ({ chainSpecific, balance }) => {
-        const chainAmount = toChainAmount(
-          shouldBePresent(amount),
-          coin.decimals
-        )
-
         const feeAmount = getFeeAmount(chainSpecific)
 
         return {
           decimals: coin.decimals,
           amount: capSendAmountToMax({
-            amount: chainAmount,
+            amount: shouldBePresent(amount),
             coin: coin,
             fee: feeAmount,
             balance,
