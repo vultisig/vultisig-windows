@@ -30,17 +30,15 @@ export type DecodedTx<T extends Chain = Chain> = Omit<
   'errorMessage' | 'error' | 'toJSON'
 >
 
-type DecodedOutput<T extends Chain> = DecodedTx<T>
-
 export const decodeTx = <T extends Chain>({
   chain,
   compiledTx,
-}: DecodeTxInput<T>): DecodedOutput<T> => {
+}: DecodeTxInput<T>): DecodedTx<T> => {
   const chainKind = getChainKind(chain)
   const decoder = decoders[chainKind]
   const { errorMessage, ...output } = decoder(compiledTx)
 
   assertErrorMessage(errorMessage)
 
-  return output as unknown as DecodedOutput<T>
+  return output as unknown as DecodedTx<T>
 }
