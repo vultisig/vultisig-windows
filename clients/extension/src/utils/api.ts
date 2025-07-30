@@ -7,7 +7,6 @@ import {
   toSnakeCase,
 } from '@clients/extension/src/utils/functions'
 import { Chain } from '@core/chain/Chain'
-import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import axios from 'axios'
@@ -108,13 +107,6 @@ export default {
           params: [hash],
         })
         .then(({ data }) => data.result)
-    },
-  },
-  solana: {
-    async fetchSolanaTokenInfo(address: string) {
-      return (
-        await api.get<SolanaJupiterToken>(`${apiRef.jupiter.token}/${address}`)
-      ).data
     },
   },
   thorchain: {
