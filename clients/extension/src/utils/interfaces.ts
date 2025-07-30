@@ -198,13 +198,15 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
+export type TransactionDetailsAsset = {
+  chain: Chain
+  ticker: string
+  symbol?: string
+  mint?: string
+}
+
 export type TransactionDetails = {
-  asset: {
-    chain: Chain
-    ticker: string
-    symbol?: string
-    mint?: string
-  }
+  asset: TransactionDetailsAsset
   from: string
   to?: string
   amount?: { amount: string; decimals: number }

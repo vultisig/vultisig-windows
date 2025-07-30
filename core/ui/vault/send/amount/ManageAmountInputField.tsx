@@ -1,15 +1,13 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoBasedChain } from '@core/chain/Chain'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
-import { useDualCurrencyAmountInput } from '@core/ui/vault/send/amount/hooks/useDualCurrencyAmountInput'
-import { baseToFiat } from '@core/ui/vault/send/amount/utils'
-import { SendCoinBalanceDependant } from '@core/ui/vault/send/coin/balance/SendCoinBalanceDependant'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
@@ -21,19 +19,30 @@ import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendCh
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import {
+  AmountTextInput,
+  AmountTextInputProps,
+} from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { clampDecimals } from '@lib/utils/number/clampDecimals'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { useSendAmount } from '../state/amount'
+import { FiatSendAmountInput } from './FiatSendAmountInput'
 
 const suggestions = [0.25, 0.5, 0.75, 1]
 
@@ -41,16 +50,25 @@ export type CurrencyInputMode = 'base' | 'fiat'
 
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()
-  const [currencyInputMode, setCurrencyInputMode] =
-    useState<CurrencyInputMode>('base')
-  const chainSpecificQuery = useSendChainSpecificQuery()
+
+  const [value, setValue] = useSendAmount()
+
   const coin = useCurrentSendCoin()
-  const isNativeToken = isFeeCoin(coin)
-  const { data: coinPrice } = useCoinPriceQuery({ coin })
-  const { inputValue, handleUpdateAmount, value } = useDualCurrencyAmountInput({
-    coinPrice,
-    currencyInputMode,
-  })
+  const coinPriceQuery = useCoinPriceQuery({ coin })
+
+  const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
+    useState<CurrencyInputMode>('base'),
+    useCallback(
+      value => {
+        if (!coinPriceQuery.data) {
+          return 'base'
+        }
+
+        return value
+      },
+      [coinPriceQuery.data]
+    )
+  )
 
   const [
     {
@@ -58,7 +76,42 @@ export const ManageAmountInputField = () => {
     },
   ] = useSendFormFieldState()
 
+  const chainSpecificQuery = useSendChainSpecificQuery()
+
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+
+  const maxAmountQuery = useTransformQueriesData(
+    {
+      chainSpecific: chainSpecificQuery,
+      balance: balanceQuery,
+    },
+    ({ balance, chainSpecific }) => {
+      if (
+        balance > 0n &&
+        isFeeCoin(coin) &&
+        !isOneOf(coin.chain, Object.values(UtxoBasedChain))
+      ) {
+        const feeAmount = getFeeAmount(chainSpecific)
+        return feeAmount > balance ? 0n : balance - feeAmount
+      }
+
+      return balance
+    }
+  )
+
   const error = !!amountError && value ? amountError : undefined
+
+  const sharedInputProps: Pick<
+    AmountTextInputProps,
+    'validation' | 'placeholder' | 'shouldBePositive'
+  > = useMemo(
+    () => ({
+      validation: error ? 'warning' : undefined,
+      placeholder: t('enter_amount'),
+      shouldBePositive: true,
+    }),
+    [error, t]
+  )
 
   return (
     <SendInputContainer flexGrow>
@@ -81,11 +134,34 @@ export const ManageAmountInputField = () => {
                       exit={{ y: -20, opacity: 0 }}
                       transition={{ duration: 0.18 }}
                     >
-                      <AmountTextInput
-                        validation={error ? 'warning' : undefined}
-                        placeholder={t('enter_amount')}
-                        value={inputValue}
-                        onValueChange={handleUpdateAmount}
+                      <Match
+                        value={currencyInputMode}
+                        fiat={() => (
+                          <FiatSendAmountInput
+                            {...sharedInputProps}
+                            value={value}
+                            onChange={setValue}
+                            decimals={coin.decimals}
+                            price={shouldBePresent(coinPriceQuery.data)}
+                          />
+                        )}
+                        base={() => (
+                          <AmountTextInput
+                            {...sharedInputProps}
+                            value={
+                              value === null
+                                ? value
+                                : fromChainAmount(value, coin.decimals)
+                            }
+                            onValueChange={value => {
+                              setValue(
+                                value === null
+                                  ? value
+                                  : toChainAmount(value, coin.decimals)
+                              )
+                            }}
+                          />
+                        )}
                       />
                     </motion.div>
                   </AnimatePresence>
@@ -93,85 +169,54 @@ export const ManageAmountInputField = () => {
                 </InputWrapper>
               )}
               action={
-                <HStack gap={8}>
-                  <CurrencySwitch
-                    value={currencyInputMode}
-                    onClick={value => setCurrencyInputMode(value)}
-                  />
-                </HStack>
+                <MatchQuery
+                  value={coinPriceQuery}
+                  success={() => (
+                    <HStack gap={8}>
+                      <CurrencySwitch
+                        value={currencyInputMode}
+                        onClick={value => setCurrencyInputMode(value)}
+                      />
+                    </HStack>
+                  )}
+                />
               }
               actionPlacerStyles={{
                 right: 0,
                 bottom: 55,
               }}
             />
-            <SendCoinBalanceDependant
-              pending={() => null}
-              error={() => null}
-              success={amount => {
-                let maxValue = fromChainAmount(amount, coin.decimals)
-
-                if (
-                  maxValue > 0 &&
-                  isNativeToken &&
-                  !isOneOf(coin.chain, Object.values(UtxoBasedChain))
-                ) {
-                  const limitedMaxValue = fromChainAmount(
-                    amount -
-                      (chainSpecificQuery.data
-                        ? getFeeAmount(chainSpecificQuery.data)
-                        : BigInt(0)),
-                    coin.decimals
+            <HStack justifyContent="space-between" alignItems="center" gap={4}>
+              {suggestions.map(suggestion => {
+                const getProps = () => {
+                  const { data } = maxAmountQuery
+                  if (!data) {
+                    return {}
+                  }
+                  const suggestionValue = BigInt(
+                    Math.round(Number(data) * suggestion)
                   )
 
-                  maxValue = limitedMaxValue > 0 ? limitedMaxValue : 0
+                  return {
+                    onClick: () => {
+                      setValue(suggestionValue)
+                    },
+                    isActive: value === suggestionValue,
+                  }
                 }
 
                 return (
-                  <HStack
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={4}
-                  >
-                    {suggestions.map(suggestion => {
-                      const suggestionBaseValue = maxValue * suggestion
-
-                      const suggestionValue =
-                        currencyInputMode === 'base'
-                          ? suggestionBaseValue
-                          : baseToFiat(suggestionBaseValue, coinPrice) || 0
-
-                      const isActive =
-                        inputValue !== null &&
-                        toChainAmount(inputValue, coin.decimals) ===
-                          toChainAmount(suggestionValue, coin.decimals)
-
-                      return (
-                        <SuggestionOption
-                          isActive={isActive}
-                          onClick={() => {
-                            const rawValue =
-                              currencyInputMode === 'base'
-                                ? suggestionBaseValue
-                                : baseToFiat(suggestionBaseValue, coinPrice) ||
-                                  0
-                            handleUpdateAmount(
-                              clampDecimals(rawValue, coin.decimals)
-                            )
-                          }}
-                          key={suggestion}
-                          value={suggestion}
-                        />
-                      )
-                    })}
-                  </HStack>
+                  <SuggestionOption
+                    {...getProps()}
+                    key={suggestion}
+                    value={suggestion}
+                  />
                 )
-              }}
-            />
+              })}
+            </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            <SendCoinBalanceDependant
-              pending={() => null}
-              error={() => null}
+            <MatchQuery
+              value={balanceQuery}
               success={amount => (
                 <TotalBalanceWrapper
                   justifyContent="space-between"

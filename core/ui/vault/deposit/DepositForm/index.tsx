@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { Coin, getCoinFromCoinKey } from '@core/chain/coin/Coin'
+import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
@@ -34,6 +33,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBance'
+import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -76,8 +76,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coin = getCoinFromCoinKey(coinKey)
+  const coin = useDepositCoin()
 
   const schemaForChainAction = resolveSchema(
     chainActionSchema,

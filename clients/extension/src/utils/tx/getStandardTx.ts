@@ -1,4 +1,3 @@
-import api from '@clients/extension/src/utils/api'
 import {
   CosmosMsgPayload,
   TransactionDetails,
@@ -8,16 +7,18 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { match } from '@lib/utils/match'
+import { TW } from '@trustwallet/wallet-core'
+import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { ethers } from 'ethers'
-import { bech32 } from 'bech32'
+
 import { CosmosMsgType } from '../constants'
 import { getCosmosChainFromAddress } from '../cosmos/getCosmosChainFromAddress'
-import { TW } from '@trustwallet/wallet-core'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
@@ -290,13 +291,13 @@ const transactionHandlers: TransactionHandlers = {
         throw new Error('No mint address provided')
       }
       try {
-        const token = await api.solana.fetchSolanaTokenInfo(tx.asset.mint)
+        const token = await getSolanaToken(tx.asset.mint)
 
         return {
           asset: {
             chain: chain,
-            ticker: token.symbol,
-            symbol: token.name,
+            ticker: token.ticker,
+            symbol: token.ticker,
             mint: tx.asset.mint,
           },
           amount: { amount: tx.amount, decimals: token.decimals },
@@ -393,7 +394,6 @@ const extractKeplrMessages = (
     }
   } else {
     const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
-    console.log('tx:', tx)
 
     return {
       chainId: tx.chainId,

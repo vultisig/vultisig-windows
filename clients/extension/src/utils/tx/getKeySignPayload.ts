@@ -1,17 +1,19 @@
 import { create } from '@bufbuild/protobuf'
-import api from '@clients/extension/src/utils/api'
 import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
+import {
+  IKeysignTransactionPayload,
+  TransactionDetailsAsset,
+} from '@clients/extension/src/utils/interfaces'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
+import { Coin } from '@core/chain/coin/Coin'
+import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
@@ -30,227 +32,194 @@ import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysi
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
 import { CosmosMsgType } from '../constants'
 
-export const getKeysignPayload = (
+const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
+  const { chain, ticker, mint } = asset
+
+  const feeCoin = chainFeeCoin[chain]
+
+  if (areLowerCaseEqual(ticker, feeCoin.ticker)) {
+    return feeCoin
+  }
+
+  const knownToken = knownTokens[chain].find(token =>
+    areLowerCaseEqual(shouldBePresent(token.id), ticker)
+  )
+
+  if (knownToken) {
+    return knownToken
+  }
+
+  if (chain === Chain.Solana && mint) {
+    return getSolanaToken(mint)
+  }
+
+  throw new Error(`Failed to get coin info for asset: ${JSON.stringify(asset)}`)
+}
+
+export const getKeysignPayload = async (
   transaction: IKeysignTransactionPayload,
   vault: Vault,
   walletCore: WalletCore,
   feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
-  return new Promise((resolve, reject) => {
-    ;(async () => {
-      try {
-        const isNative =
-          transaction.transactionDetails.asset.ticker.toLowerCase() ===
-          chainFeeCoin[transaction.chain].ticker.toLowerCase()
+  const accountCoin = {
+    ...(await getCoin(transaction.transactionDetails.asset)),
+    address: transaction.transactionDetails.from,
+  }
 
-        let localCoin = getCoinFromCoinKey({
-          chain: transaction.chain,
-          id: !isNative
-            ? transaction.transactionDetails.asset.ticker
-            : undefined,
-        })
-
-        if (!localCoin) {
-          if (transaction.chain === Chain.Solana) {
-            if (!transaction.transactionDetails.asset.mint) {
-              throw new Error('Mint address not provided')
-            }
-            const splToken = await api.solana.fetchSolanaTokenInfo(
-              transaction.transactionDetails.asset.mint
-            )
-            localCoin = {
-              chain: transaction.chain,
-              decimals: splToken.decimals,
-              id: transaction.transactionDetails.asset.mint,
-              logo: splToken.logoURI || '',
-              ticker: splToken.symbol,
-              priceProviderId: splToken.extensions?.coingeckoId,
-            }
-          } else if (
-            Object.values(CosmosChain).includes(
-              transaction.chain as CosmosChain
-            )
-          ) {
-            if (
-              cosmosFeeCoinDenom[transaction.chain as CosmosChain] ===
-              transaction.transactionDetails.asset.ticker.toLowerCase()
-            ) {
-              localCoin = { ...chainFeeCoin[transaction.chain] }
-            }
-          }
-        }
-
-        const accountCoin = {
-          ...localCoin,
-          address: transaction.transactionDetails.from,
-        } as AccountCoin
-
-        // Create fee settings with gas limit from transaction details if available
-        const effectiveFeeSettings = transaction.transactionDetails.gasSettings
-          ?.gasLimit
-          ? {
-              ...feeSettings,
-              gasLimit: Number(
-                transaction.transactionDetails.gasSettings.gasLimit
-              ),
-            }
-          : feeSettings
-        const txType = getTxType(transaction)
-
-        const isDeposit =
-          transaction.isDeposit ||
-          transaction.transactionDetails.cosmosMsgPayload?.case ===
-            CosmosMsgType.THORCHAIN_MSG_DEPOSIT
-
-        const chainSpecific = await getChainSpecific({
-          coin: accountCoin,
-          amount: fromChainAmount(
-            Number(transaction.transactionDetails.amount?.amount) || 0,
-            accountCoin.decimals
-          ),
-          isDeposit,
-          receiver: transaction.transactionDetails.to,
-          transactionType: txType,
-          feeSettings: effectiveFeeSettings,
-          data: transaction.transactionDetails.data as
-            | `0x${string}`
-            | undefined,
-        })
-        switch (chainSpecific.case) {
-          case 'ethereumSpecific': {
-            chainSpecific.value.maxFeePerGasWei =
-              transaction.transactionDetails.gasSettings?.maxFeePerGas ??
-              chainSpecific.value.maxFeePerGasWei
-            chainSpecific.value.priorityFee =
-              transaction.transactionDetails.gasSettings
-                ?.maxPriorityFeePerGas ?? chainSpecific.value.priorityFee
-            break
-          }
-          case 'cosmosSpecific': {
-            if (
-              transaction.transactionDetails.cosmosMsgPayload?.case ===
-              CosmosMsgType.MSG_TRANSFER_URL
-            ) {
-              const hasTimeout =
-                !!transaction.transactionDetails.cosmosMsgPayload?.value
-                  .timeoutTimestamp
-
-              if (hasTimeout) {
-                try {
-                  const client = await getCosmosClient(
-                    accountCoin.chain as CosmosChain
-                  )
-                  const latestBlock = await client.getBlock()
-
-                  const latestBlockHeight = latestBlock.header.height
-                  const timeoutTimestamp =
-                    transaction.transactionDetails.cosmosMsgPayload?.value
-                      .timeoutTimestamp
-
-                  chainSpecific.value.ibcDenomTraces = create(
-                    CosmosIbcDenomTraceSchema,
-                    {
-                      latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
-                    }
-                  )
-                } catch (error) {
-                  console.error(
-                    'Failed to fetch Cosmos block or build denom trace:',
-                    error
-                  )
-                }
-              }
-            }
-            break
-          }
-        }
-
-        const publicKey = getPublicKey({
-          chain: transaction.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
-
-        const coin = create(CoinSchema, {
-          chain: transaction.chain,
-          ticker: accountCoin.ticker,
-          address: transaction.transactionDetails.from,
-          decimals: accountCoin.decimals,
-          hexPublicKey: toHexPublicKey({
-            publicKey,
-            walletCore,
-          }),
-          isNativeToken: isFeeCoin(accountCoin),
-          logo: accountCoin.logo,
-          priceProviderId: localCoin?.priceProviderId ?? '',
-          contractAddress: localCoin?.id,
-        })
-
-        let modifiedMemo = null
-        if (getChainKind(transaction.chain) === 'evm') {
-          try {
-            const isMemoFunction = await checkERC20Function(
-              transaction.transactionDetails.data!
-            )
-            modifiedMemo =
-              isMemoFunction || transaction.transactionDetails.data === '0x'
-                ? (transaction.transactionDetails.data ?? '')
-                : toUtf8String(transaction.transactionDetails.data!)
-          } catch {
-            modifiedMemo = transaction.transactionDetails.data!
-          }
-        }
-        let contractPayload = null
-        if (
-          transaction.transactionDetails.cosmosMsgPayload?.case ===
-          CosmosMsgType.MSG_EXECUTE_CONTRACT
-        ) {
-          const msgPayload =
-            transaction.transactionDetails.cosmosMsgPayload.value
-
-          contractPayload = create(WasmExecuteContractPayloadSchema, {
-            contractAddress: msgPayload.contract,
-            executeMsg: msgPayload.msg,
-            senderAddress: msgPayload.sender,
-            coins: msgPayload.funds,
-          })
-        }
-        const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.transactionDetails.to,
-          toAmount: BigInt(
-            parseInt(transaction.transactionDetails.amount?.amount ?? '0')
-          ).toString(),
-          memo: contractPayload
-            ? transaction.transactionDetails.data
-            : (modifiedMemo ?? transaction.transactionDetails.data),
-          vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-          vaultLocalPartyId: 'VultiConnect',
-          coin,
-          blockchainSpecific: chainSpecific,
-          contractPayload: contractPayload
-            ? { case: 'wasmExecuteContractPayload', value: contractPayload }
-            : undefined,
-          skipBroadcast: transaction.transactionDetails.skipBroadcast,
-        })
-
-        if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
-          keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
-        } else if (transaction.chain === OtherChain.Cardano) {
-          keysignPayload.utxoInfo = await getCardanoUtxos(coin.address)
-        }
-        resolve(keysignPayload)
-      } catch (error) {
-        reject(error)
+  // Create fee settings with gas limit from transaction details if available
+  const effectiveFeeSettings = transaction.transactionDetails.gasSettings
+    ?.gasLimit
+    ? {
+        ...feeSettings,
+        gasLimit: Number(transaction.transactionDetails.gasSettings.gasLimit),
       }
-    })()
+    : feeSettings
+  const txType = getTxType(transaction)
+  const chainSpecific = await getChainSpecific({
+    coin: accountCoin,
+    amount: fromChainAmount(
+      Number(transaction.transactionDetails.amount?.amount) || 0,
+      accountCoin.decimals
+    ),
+    isDeposit: transaction.isDeposit,
+    receiver: transaction.transactionDetails.to,
+    transactionType: txType,
+    feeSettings: effectiveFeeSettings,
+    data: transaction.transactionDetails.data as `0x${string}` | undefined,
   })
+  switch (chainSpecific.case) {
+    case 'ethereumSpecific': {
+      chainSpecific.value.maxFeePerGasWei =
+        transaction.transactionDetails.gasSettings?.maxFeePerGas ??
+        chainSpecific.value.maxFeePerGasWei
+      chainSpecific.value.priorityFee =
+        transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas ??
+        chainSpecific.value.priorityFee
+      break
+    }
+    case 'cosmosSpecific': {
+      if (
+        transaction.transactionDetails.cosmosMsgPayload?.case ===
+        CosmosMsgType.MSG_TRANSFER_URL
+      ) {
+        const hasTimeout =
+          !!transaction.transactionDetails.cosmosMsgPayload?.value
+            .timeoutTimestamp
+
+        if (hasTimeout) {
+          try {
+            const client = await getCosmosClient(
+              accountCoin.chain as CosmosChain
+            )
+            const latestBlock = await client.getBlock()
+
+            const latestBlockHeight = latestBlock.header.height
+            const timeoutTimestamp =
+              transaction.transactionDetails.cosmosMsgPayload?.value
+                .timeoutTimestamp
+
+            chainSpecific.value.ibcDenomTraces = create(
+              CosmosIbcDenomTraceSchema,
+              {
+                latestBlock: `${latestBlockHeight}_${timeoutTimestamp}`,
+              }
+            )
+          } catch (error) {
+            console.error(
+              'Failed to fetch Cosmos block or build denom trace:',
+              error
+            )
+          }
+        }
+      }
+      break
+    }
+  }
+
+  const publicKey = getPublicKey({
+    chain: transaction.chain,
+    walletCore,
+    hexChainCode: vault.hexChainCode,
+    publicKeys: vault.publicKeys,
+  })
+
+  const coin = create(CoinSchema, {
+    chain: transaction.chain,
+    ticker: accountCoin.ticker,
+    address: transaction.transactionDetails.from,
+    decimals: accountCoin.decimals,
+    hexPublicKey: toHexPublicKey({
+      publicKey,
+      walletCore,
+    }),
+    isNativeToken: isFeeCoin(accountCoin),
+    logo: accountCoin.logo,
+    priceProviderId: accountCoin.priceProviderId ?? '',
+    contractAddress: accountCoin.id,
+  })
+
+  let modifiedMemo = null
+  if (getChainKind(transaction.chain) === 'evm') {
+    try {
+      const isMemoFunction = await checkERC20Function(
+        transaction.transactionDetails.data!
+      )
+      modifiedMemo =
+        isMemoFunction || transaction.transactionDetails.data === '0x'
+          ? (transaction.transactionDetails.data ?? '')
+          : toUtf8String(transaction.transactionDetails.data!)
+    } catch {
+      modifiedMemo = transaction.transactionDetails.data!
+    }
+  }
+  let contractPayload = null
+  if (
+    transaction.transactionDetails.cosmosMsgPayload?.case ===
+    CosmosMsgType.MSG_EXECUTE_CONTRACT
+  ) {
+    const msgPayload = transaction.transactionDetails.cosmosMsgPayload.value
+
+    contractPayload = create(WasmExecuteContractPayloadSchema, {
+      contractAddress: msgPayload.contract,
+      executeMsg: msgPayload.msg,
+      senderAddress: msgPayload.sender,
+      coins: msgPayload.funds,
+    })
+  }
+  const keysignPayload = create(KeysignPayloadSchema, {
+    toAddress: transaction.transactionDetails.to,
+    toAmount: BigInt(
+      parseInt(transaction.transactionDetails.amount?.amount ?? '0')
+    ).toString(),
+    memo: contractPayload
+      ? transaction.transactionDetails.data
+      : (modifiedMemo ?? transaction.transactionDetails.data),
+    vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+    vaultLocalPartyId: 'VultiConnect',
+    coin,
+    blockchainSpecific: chainSpecific,
+    contractPayload: contractPayload
+      ? { case: 'wasmExecuteContractPayload', value: contractPayload }
+      : undefined,
+    skipBroadcast: transaction.transactionDetails.skipBroadcast,
+  })
+
+  if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
+    keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
+  } else if (transaction.chain === OtherChain.Cardano) {
+    keysignPayload.utxoInfo = await getCardanoUtxos(coin.address)
+  }
+
+  return keysignPayload
 }
 
 const getTxType = (
