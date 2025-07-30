@@ -2,6 +2,7 @@ import api from '@clients/extension/src/utils/api'
 import { OtherChain } from '@core/chain/Chain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
@@ -111,7 +112,7 @@ export const processBackgroundResponse = (
   data: Messaging.Chain.Request,
   messageKey: MessageKey,
   result: Messaging.Chain.Response
-) => {
+): Messaging.Chain.Response => {
   const handledMethods = [
     RequestMethod.CTRL.TRANSFER,
     RequestMethod.METAMASK.ETH_SEND_TRANSACTION,
@@ -132,7 +133,7 @@ export const processBackgroundResponse = (
     ) {
       return result
     }
-    return (result as ITransaction<OtherChain.Solana>).hash
+    return shouldBePresent((result as ITransaction<OtherChain.Solana>).hash)
   }
 
   return result
