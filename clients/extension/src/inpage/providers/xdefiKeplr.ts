@@ -76,15 +76,24 @@ export class XDEFIKeplrProvider extends Keplr {
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
     this.cosmosProvider = cosmosProvider
   }
-  enable(_chainIds: string | string[]): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.cosmosProvider
-        .request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-          params: [],
-        })
-        .then(() => resolve())
-        .catch(reject)
+  async enable(chainId: string | string[]): Promise<void> {
+    const targetChainId = Array.isArray(chainId) ? chainId[0] : chainId
+
+    const currentChainID = await this.cosmosProvider.request({
+      method: RequestMethod.VULTISIG.CHAIN_ID,
+      params: [],
+    })
+
+    if (currentChainID !== targetChainId) {
+      await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+        params: [{ chainId: targetChainId }],
+      })
+    }
+
+    await this.cosmosProvider.request({
+      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+      params: [],
     })
   }
   getOfflineSigner(
