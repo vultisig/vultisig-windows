@@ -2,6 +2,7 @@ import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { attempt } from '@lib/utils/attempt'
 import { isInError } from '@lib/utils/error/isInError'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 
 import { BroadcastTxResolver } from './BroadcastTxResolver'
 
@@ -9,12 +10,13 @@ export const broadcastEvmTx: BroadcastTxResolver<EvmChain> = async ({
   chain,
   tx,
 }) => {
-  const rawTx = Buffer.from(tx.encoded).toString('hex')
   const client = getEvmClient(chain)
 
   const { error } = await attempt(
     client.sendRawTransaction({
-      serializedTransaction: rawTx as `0x${string}`,
+      serializedTransaction: ensureHexPrefix(
+        Buffer.from(tx.encoded).toString('hex')
+      ),
     })
   )
 
