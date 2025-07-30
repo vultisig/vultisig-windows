@@ -7,17 +7,12 @@ import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
-import { useRefreshedKeysignPayload } from '../hooks/useRefreshedKeysignPayload'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const [{ keysignPayload: potentiallyStaleKeysignPayload }] =
-    useCoreViewState<'keysign'>()
-  const keysignPayload = useRefreshedKeysignPayload(
-    potentiallyStaleKeysignPayload
-  )
+  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   return (
     <ValueTransfer<string[]>
