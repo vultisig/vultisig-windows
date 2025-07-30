@@ -10,9 +10,7 @@ export const broadcastPolkadotTx: BroadcastTxResolver<
 > = async ({ tx: { encoded } }) => {
   const client = await getPolkadotClient()
 
-  const { error } = await attempt(
-    client.rpc.author.submitExtrinsic(Buffer.from(encoded).toString('hex'))
-  )
+  const { error } = await attempt(client.rpc.author.submitExtrinsic(encoded))
 
   if (error && !isInError(error, 'Transaction is temporarily banned')) {
     throw error
