@@ -7,20 +7,15 @@ import { BroadcastTxResolver } from './BroadcastTxResolver'
 
 export const broadcastCosmosTx: BroadcastTxResolver<CosmosChain> = async ({
   chain,
-  tx,
+  tx: { serialized },
 }) => {
-  const rawTx = tx.serialized
-  const parsedData = JSON.parse(rawTx)
-  const txBytes = parsedData.tx_bytes
-  const decodedTxBytes = Buffer.from(txBytes, 'base64')
+  const { tx_bytes } = JSON.parse(serialized)
+  const decodedTxBytes = Buffer.from(tx_bytes, 'base64')
 
   const client = await getCosmosClient(chain)
-  const result = attempt(client.broadcastTx(decodedTxBytes))
+  const { error } = await attempt(client.broadcastTx(decodedTxBytes))
 
-  if (
-    'error' in result &&
-    !isInError(result.error, 'tx already exists in cache')
-  ) {
-    throw result.error
+  if (error && !isInError(error, 'tx already exists in cache')) {
+    throw error
   }
 }
