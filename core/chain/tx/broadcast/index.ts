@@ -4,7 +4,6 @@ import { WalletCore } from '@trustwallet/wallet-core'
 
 import { DecodedTx } from '../decode'
 import { BroadcastTxResolver } from './BroadcastTxResolver'
-import { broadcastCardanoTx } from './cardano'
 import { broadcastCosmosTx } from './cosmos'
 import { broadcastEvmTx } from './evm'
 import { broadcastPolkadotTx } from './polkadot'
@@ -16,7 +15,7 @@ import { broadcastTronTx } from './tron'
 import { broadcastUtxoTx } from './utxo'
 
 const handlers: Record<ChainKind, BroadcastTxResolver<any>> = {
-  cardano: broadcastCardanoTx,
+  cardano: broadcastUtxoTx,
   cosmos: broadcastCosmosTx,
   evm: broadcastEvmTx,
   polkadot: broadcastPolkadotTx,
