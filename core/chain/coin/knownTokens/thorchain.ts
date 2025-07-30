@@ -1,7 +1,7 @@
-import { Chain } from '../../../Chain'
-import { Coin } from '../../Coin'
+import { Chain } from '../../Chain'
+import { Coin } from '../Coin'
 
-const thorchainTokens: Record<string, Coin> = {
+export const thorchainNativeTokens: Record<string, Coin> = {
   'x/staking-x/ruji': {
     ticker: 'sRUJI',
     logo: 'ruji',
@@ -143,21 +143,4 @@ const thorchainTokens: Record<string, Coin> = {
     priceProviderId: 'avalanche-2',
     chain: Chain.THORChain,
   },
-}
-
-export const getThorchainToken = async (
-  tricker: string
-): Promise<Coin | null> => {
-  const token = thorchainTokens[tricker]
-
-  if (!token) {
-    return null
-  }
-
-  return {
-    decimals: token.decimals,
-    logo: token.logo,
-    ticker: token.ticker,
-    chain: token.chain,
-  }
 }

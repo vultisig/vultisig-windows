@@ -13,8 +13,8 @@ import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
-import { getThorchainToken } from '@core/chain/coin/find/thorchain/getThorchainToken'
 import { knownTokens } from '@core/chain/coin/knownTokens'
+import { thorchainNativeTokens } from '@core/chain/coin/knownTokens/thorchain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
@@ -63,7 +63,7 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
   }
 
   if (chain === Chain.THORChain) {
-    const token = await getThorchainToken(asset.ticker)
+    const token = thorchainNativeTokens[asset.ticker]
     if (token) {
       return token
     }
