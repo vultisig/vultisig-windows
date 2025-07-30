@@ -90,14 +90,17 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               })
             )
 
-            const txs: Tx[] = compiledTxs.map(compiledTx => {
-              const tx = decodeTx({ chain, compiledTx })
+            const txs: Tx[] = await Promise.all(
+              compiledTxs.map(async compiledTx => {
+                const tx = decodeTx({ chain, compiledTx })
+                const hash = await getTxHash({ chain, tx })
 
-              return {
-                ...tx,
-                hash: getTxHash({ chain, tx }),
-              }
-            })
+                return {
+                  ...tx,
+                  hash,
+                }
+              })
+            )
 
             if (!payload.skipBroadcast) {
               await chainPromises(
