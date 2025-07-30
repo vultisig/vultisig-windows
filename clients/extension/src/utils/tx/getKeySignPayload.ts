@@ -13,6 +13,7 @@ import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { getThorchainToken } from '@core/chain/coin/find/thorchain/getThorchainToken'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -59,6 +60,13 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
 
   if (chain === Chain.Solana && mint) {
     return getSolanaToken(mint)
+  }
+
+  if (chain === Chain.THORChain) {
+    const token = await getThorchainToken(asset.ticker)
+    if (token) {
+      return token
+    }
   }
 
   throw new Error(`Failed to get coin info for asset: ${JSON.stringify(asset)}`)
