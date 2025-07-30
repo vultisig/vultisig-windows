@@ -1,7 +1,6 @@
 import { UtxoChain } from '@core/chain/Chain'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getUtxoTxHash: GetTxHashResolver<UtxoChain> = ({
-  transactionId,
-}) => transactionId
+export const getUtxoTxHash: TxHashResolver<UtxoChain> = ({ transactionId }) =>
+  transactionId

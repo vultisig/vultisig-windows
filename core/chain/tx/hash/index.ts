@@ -5,7 +5,7 @@ import { DecodedTx } from '../decode'
 import { getCardanoTxHash } from './cardano'
 import { getCosmosTxHash } from './cosmos'
 import { getEvmTxHash } from './evm'
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 import { getPolkadotTxHash } from './polkadot'
 import { getRippleTxHash } from './ripple'
 import { getSolanaTxHash } from './solana'
@@ -14,7 +14,7 @@ import { getTonTxHash } from './ton'
 import { getTronTxHash } from './tron'
 import { getUtxoTxHash } from './utxo'
 
-const hashHandlers: Record<ChainKind, GetTxHashResolver<any>> = {
+const hashHandlers: Record<ChainKind, TxHashResolver<any>> = {
   cardano: getCardanoTxHash,
   cosmos: getCosmosTxHash,
   evm: getEvmTxHash,

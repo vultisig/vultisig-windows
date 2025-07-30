@@ -1,9 +1,9 @@
 import { OtherChain } from '@core/chain/Chain'
 import { TypeRegistry } from '@polkadot/types'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getPolkadotTxHash: GetTxHashResolver<OtherChain.Polkadot> = ({
+export const getPolkadotTxHash: TxHashResolver<OtherChain.Polkadot> = ({
   encoded,
 }) =>
   new TypeRegistry()

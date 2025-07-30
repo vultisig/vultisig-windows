@@ -1,9 +1,9 @@
 import { Serialization } from '@cardano-sdk/core'
 import { OtherChain } from '@core/chain/Chain'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getCardanoTxHash: GetTxHashResolver<OtherChain.Cardano> = ({
+export const getCardanoTxHash: TxHashResolver<OtherChain.Cardano> = ({
   encoded,
 }) =>
   Serialization.Transaction.fromCbor(

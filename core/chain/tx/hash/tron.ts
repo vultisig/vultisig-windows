@@ -1,8 +1,8 @@
 import { OtherChain } from '@core/chain/Chain'
 import { bytesToHex } from 'viem'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getTronTxHash: GetTxHashResolver<OtherChain.Tron> = ({ id }) => {
+export const getTronTxHash: TxHashResolver<OtherChain.Tron> = ({ id }) => {
   return bytesToHex(id)
 }

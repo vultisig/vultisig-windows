@@ -1,9 +1,9 @@
 import { OtherChain } from '@core/chain/Chain'
 import { sha512 } from 'ethers'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getRippleTxHash: GetTxHashResolver<OtherChain.Ripple> = ({
+export const getRippleTxHash: TxHashResolver<OtherChain.Ripple> = ({
   encoded,
 }) => {
   const fullHash = sha512(encoded)

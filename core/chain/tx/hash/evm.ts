@@ -1,7 +1,7 @@
 import { EvmChain } from '@core/chain/Chain'
 import { keccak256 } from 'viem'
 
-import { GetTxHashResolver } from './GetTxHashResolver'
+import { TxHashResolver } from './TxHashResolver'
 
-export const getEvmTxHash: GetTxHashResolver<EvmChain> = ({ encoded }) =>
+export const getEvmTxHash: TxHashResolver<EvmChain> = ({ encoded }) =>
   keccak256(encoded)
