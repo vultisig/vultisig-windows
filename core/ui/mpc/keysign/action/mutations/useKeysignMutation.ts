@@ -101,7 +101,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             if (!payload.skipBroadcast) {
               await chainPromises(
-                txs.map(tx => () => broadcastTx({ chain, tx, walletCore }))
+                txs.map(tx => () => broadcastTx({ chain, tx }))
               )
             }
 
