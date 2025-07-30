@@ -1,11 +1,12 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { match } from '@lib/utils/match'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
 
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -14,7 +15,6 @@ import { CurrencyInputMode } from './ManageAmountInputField'
 export const AmountInReverseCurrencyDisplay = ({
   value,
 }: ValueProp<CurrencyInputMode>) => {
-  const { t } = useTranslation()
   const [sendAmount] = useSendAmount()
   const coin = useCurrentSendCoin()
   const fiatCurrency = useFiatCurrency()
@@ -23,13 +23,7 @@ export const AmountInReverseCurrencyDisplay = ({
     coin,
   })
 
-  const renderConverted = (price: number) => {
-    if (!sendAmount) return null
-
-    return value === 'base'
-      ? formatAmount(price * sendAmount, fiatCurrency)
-      : formatAmount(sendAmount, coin.ticker)
-  }
+  const price = shouldBePresent(priceQuery.data)
 
   return (
     <AnimatePresence mode="wait">
@@ -40,16 +34,22 @@ export const AmountInReverseCurrencyDisplay = ({
         exit={{ y: 20, opacity: 0 }}
         transition={{ duration: 0.18 }}
       >
-        <Text color="shy" size={14}>
-          {!sendAmount ? null : (
-            <MatchQuery
-              value={priceQuery}
-              success={renderConverted}
-              pending={() => t('loading')}
-              error={() => t('failed_to_load')}
-            />
-          )}
-        </Text>
+        {!sendAmount ? null : (
+          <Text color="shy" size={14}>
+            {match(value, {
+              base: () =>
+                formatAmount(
+                  price * fromChainAmount(sendAmount, coin.decimals),
+                  fiatCurrency
+                ),
+              fiat: () =>
+                formatAmount(
+                  fromChainAmount(sendAmount, coin.decimals),
+                  coin.ticker
+                ),
+            })}
+          </Text>
+        )}
       </motion.span>
     </AnimatePresence>
   )

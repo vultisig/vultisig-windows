@@ -6,7 +6,10 @@ import { text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-type AmountTextInputProps = Omit<TextInputProps, 'value' | 'onValueChange'> & {
+export type AmountTextInputProps = Omit<
+  TextInputProps,
+  'value' | 'onValueChange'
+> & {
   value: number | null
   onValueChange?: (value: number | null) => void
   unit?: ReactNode
