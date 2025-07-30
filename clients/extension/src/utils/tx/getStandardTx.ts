@@ -14,9 +14,10 @@ import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { ethers } from 'ethers'
-
+import { bech32 } from 'bech32'
 import { CosmosMsgType } from '../constants'
 import { getCosmosChainFromAddress } from '../cosmos/getCosmosChainFromAddress'
+import { TW } from '@trustwallet/wallet-core'
 
 type TransactionHandlers = {
   [K in TransactionType.WalletTransaction['txType']]: (
@@ -228,6 +229,47 @@ const transactionHandlers: TransactionHandlers = {
           skipBroadcast,
         }
       },
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: () => {
+        const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
+          message.value
+        )
+        if (
+          !decodedMessage.coins ||
+          decodedMessage.coins.length === 0 ||
+          !decodedMessage.coins[0].asset
+        ) {
+          throw new Error(' coins array is required and cannot be empty')
+        }
+        const thorAddress = bech32.encode(
+          'thor',
+          bech32.toWords(decodedMessage.signer)
+        )
+
+        return {
+          asset: {
+            chain: chain,
+            ticker: decodedMessage.coins[0].asset.ticker,
+          },
+          amount: {
+            amount: decodedMessage.coins[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: thorAddress,
+          data: memo,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+            value: {
+              coins: decodedMessage.coins.map(coin => ({
+                amount: coin.amount,
+                asset: coin.asset?.ticker,
+              })),
+              memo: decodedMessage.memo,
+              signer: thorAddress,
+            },
+          } as CosmosMsgPayload,
+          skipBroadcast,
+        }
+      },
     })
   },
 
@@ -351,6 +393,8 @@ const extractKeplrMessages = (
     }
   } else {
     const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
+    console.log('tx:', tx)
+
     return {
       chainId: tx.chainId,
       messages: txBody.messages,
