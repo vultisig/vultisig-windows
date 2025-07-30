@@ -5,12 +5,11 @@ import { BroadcastTxResolver } from './BroadcastTxResolver'
 
 export const broadcastRippleTx: BroadcastTxResolver<
   OtherChain.Ripple
-> = async ({ tx }) => {
-  const rawTx = Buffer.from(tx.encoded).toString('hex')
+> = async ({ tx: { encoded } }) => {
   const client = await getRippleClient()
 
   await client.request({
     command: 'submit',
-    tx_blob: rawTx,
+    tx_blob: Buffer.from(encoded).toString('hex'),
   })
 }
