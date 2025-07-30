@@ -9,6 +9,7 @@ import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
@@ -47,6 +48,13 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
 
   if (areLowerCaseEqual(ticker, feeCoin.ticker)) {
     return feeCoin
+  }
+
+  if (getChainKind(chain) === 'cosmos') {
+    const expectedDenom = cosmosFeeCoinDenom[chain as CosmosChain]
+    if (areLowerCaseEqual(ticker, expectedDenom)) {
+      return chainFeeCoin[chain]
+    }
   }
 
   const knownToken = knownTokens[chain].find(token =>

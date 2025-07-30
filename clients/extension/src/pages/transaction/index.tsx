@@ -26,6 +26,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -34,6 +35,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
@@ -47,6 +49,7 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { CosmosMsgType } from '../../utils/constants'
+import { ITransaction } from '../../utils/interfaces'
 import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
@@ -56,6 +59,20 @@ export const TransactionPage = () => {
   const [updatedGasLimit, setUpdatedGasLimit] = useState<number | null>(null)
   const handleClose = (): void => {
     window.close()
+  }
+
+  const shouldDisplayIBCWarning = (transaction: ITransaction): boolean => {
+    return matchRecordUnion(transaction.transactionPayload, {
+      keysign: (payload): boolean => {
+        const msgCase = payload.transactionDetails?.cosmosMsgPayload?.case
+        return (
+          msgCase === CosmosMsgType.MSG_TRANSFER_URL &&
+          !!payload.transactionDetails?.cosmosMsgPayload?.value.memo
+        )
+      },
+      custom: () => false,
+      serialized: () => false,
+    })
   }
 
   const { mutate: processTransaction, ...mutationStatus } = useMutation({
@@ -179,6 +196,13 @@ export const TransactionPage = () => {
               hasBorder
             />
             <PageContent flexGrow scrollable>
+              {/* Warning for ibc transcation memo */}
+              {shouldDisplayIBCWarning(transaction) && (
+                <WarningBlock icon={CircleInfoIcon}>
+                  {t('ibc_transaction_not_supporting_memo')}
+                </WarningBlock>
+              )}
+
               <List>
                 <MatchRecordUnion
                   value={keysignMessagePayload}

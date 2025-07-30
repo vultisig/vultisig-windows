@@ -992,5 +992,7 @@ export const en = {
   transaction_scanned: 'Transaction scanned by <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
+  ibc_transaction_not_supporting_memo:
+    'Be aware that your IBC transaction has a memo but currently IBC transfers does not support memos in Vultisig. This may result in loss of funds.',
   scanning: 'scanning...',
 }
