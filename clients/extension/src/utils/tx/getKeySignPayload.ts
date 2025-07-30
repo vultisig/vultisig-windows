@@ -84,13 +84,19 @@ export const getKeysignPayload = async (
       }
     : feeSettings
   const txType = getTxType(transaction)
+
+  const isDeposit =
+    transaction.isDeposit ||
+    transaction.transactionDetails.cosmosMsgPayload?.case ===
+      CosmosMsgType.THORCHAIN_MSG_DEPOSIT
+
   const chainSpecific = await getChainSpecific({
     coin: accountCoin,
     amount: fromChainAmount(
       Number(transaction.transactionDetails.amount?.amount) || 0,
       accountCoin.decimals
     ),
-    isDeposit: transaction.isDeposit,
+    isDeposit,
     receiver: transaction.transactionDetails.to,
     transactionType: txType,
     feeSettings: effectiveFeeSettings,
@@ -236,6 +242,7 @@ const getTxType = (
         TransactionType.GENERIC_CONTRACT,
       [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () =>
         TransactionType.GENERIC_CONTRACT,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => TransactionType.UNSPECIFIED,
     })
   }
   return TransactionType.UNSPECIFIED
