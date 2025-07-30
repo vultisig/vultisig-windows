@@ -8,10 +8,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled(UnstyledButton)<{
   isActive?: boolean
+  isInteractive?: boolean
 }>`
   width: 56px;
   height: 30px;
@@ -20,14 +21,21 @@ const Container = styled(UnstyledButton)<{
   background-color: ${({ isActive }) =>
     isActive ? getColor('buttonPrimary') : getColor('foreground')};
 
-  &:hover {
-    background: ${getHoverVariant('foreground')};
-  }
+  ${({ isInteractive }) =>
+    isInteractive
+      ? css`
+          &:hover {
+            background: ${() => getHoverVariant('foreground')};
+          }
+        `
+      : css`
+          cursor: default;
+        `}
 `
 
 export const AmountSuggestion: FC<
   ValueProp<number> &
-    OnClickProp & {
+    Partial<OnClickProp> & {
       isActive?: boolean
       className?: string
     }
@@ -36,7 +44,12 @@ export const AmountSuggestion: FC<
   const { t } = useTranslation()
 
   return (
-    <Container className={className} isActive={isActive} onClick={onClick}>
+    <Container
+      className={className}
+      isActive={isActive}
+      isInteractive={!!onClick}
+      onClick={onClick ? () => onClick() : undefined}
+    >
       <Text size={14} weight="500">
         {value === 1 ? t('max') : formattedValue}
       </Text>

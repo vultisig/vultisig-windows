@@ -28,22 +28,12 @@ export const useSendFormValidation = () => {
         { coin, amount, address },
         {
           balance: balanceQuery.data,
-          balanceReady: !balanceQuery.isPending,
-          coinDecimals: coin.decimals,
           chain: coin.chain,
           walletCore,
           t,
         }
       ),
-    [
-      address,
-      amount,
-      balanceQuery.data,
-      balanceQuery.isPending,
-      coin,
-      t,
-      walletCore,
-    ]
+    [address, amount, balanceQuery.data, coin, t, walletCore]
   )
 
   useLayoutEffect(() => {
