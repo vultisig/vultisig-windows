@@ -1,8 +1,5 @@
-import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-import { WalletCore } from '@trustwallet/wallet-core'
 
-import { DecodedTx } from '../decode'
 import { BroadcastTxResolver } from './BroadcastTxResolver'
 import { broadcastCosmosTx } from './cosmos'
 import { broadcastEvmTx } from './evm'
@@ -27,16 +24,5 @@ const handlers: Record<ChainKind, BroadcastTxResolver<any>> = {
   tron: broadcastTronTx,
 }
 
-type BroadcastTxInput = {
-  chain: Chain
-  walletCore: WalletCore
-  tx: DecodedTx<Chain>
-}
-
-export const broadcastTx = (input: BroadcastTxInput) => {
-  const chainKind = getChainKind(input.chain)
-
-  const handler = handlers[chainKind]
-
-  return handler(input)
-}
+export const broadcastTx: BroadcastTxResolver = input =>
+  handlers[getChainKind(input.chain)](input)
