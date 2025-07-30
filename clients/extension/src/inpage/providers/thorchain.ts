@@ -1,4 +1,3 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
@@ -42,7 +41,7 @@ export class THORChain extends BaseCosmosChain {
       const result = processBackgroundResponse(data, this.messageKey, response)
 
       if (callback) callback(null, result)
-      return shouldBePresent(result)
+      return result
     } catch (error) {
       if (callback) callback(error as Error)
       throw error
