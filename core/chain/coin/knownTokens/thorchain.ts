@@ -143,4 +143,11 @@ export const thorchainNativeTokens: Record<string, Coin> = {
     priceProviderId: 'avalanche-2',
     chain: Chain.THORChain,
   },
+  ruji: {
+    ticker: 'RUJI',
+    logo: 'ruji',
+    decimals: 8,
+    priceProviderId: 'rujira',
+    chain: Chain.THORChain,
+  },
 }
