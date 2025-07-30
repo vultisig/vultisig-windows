@@ -8,7 +8,7 @@ type DecodeTxInput<T extends Chain = Chain> = {
   compiledTx: Uint8Array<ArrayBufferLike>
 }
 
-export type ChainKindToDecodedOutput = {
+type ChainKindToDecodedOutput = {
   evm: Omit<TW.Ethereum.Proto.SigningOutput, 'errorMessage'>
   utxo: Omit<TW.Bitcoin.Proto.SigningOutput, 'errorMessage'>
   solana: Omit<TW.Solana.Proto.SigningOutput, 'errorMessage'>
