@@ -1,5 +1,4 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
-import { Messaging } from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
@@ -30,6 +29,15 @@ import Long from 'long'
 
 import { Cosmos } from './cosmos'
 
+class SimpleMutex {
+  private queue = Promise.resolve()
+
+  async runExclusive<T>(fn: () => Promise<T>): Promise<T> {
+    const result = this.queue.then(fn, fn)
+    this.queue = result.catch(() => {}) as Promise<void>
+    return result
+  }
+}
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
@@ -47,6 +55,7 @@ export class XDEFIKeplrProvider extends Keplr {
   isXDEFI: boolean
   isVulticonnect: boolean
   cosmosProvider: Cosmos
+  mutex = new SimpleMutex()
   public static getInstance(cosmosProvider: Cosmos): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
@@ -76,24 +85,12 @@ export class XDEFIKeplrProvider extends Keplr {
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
     this.cosmosProvider = cosmosProvider
   }
-  enable(_chainIds: string | string[]): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.cosmosProvider
-        .request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-          params: [],
-        })
-        .then(() => resolve())
-        .catch(reject)
-    })
-  }
-  getOfflineSigner(
-    chainId: string,
-    _signOptions?: KeplrSignOptions
-  ): OfflineAminoSigner & OfflineDirectSigner {
-    const cosmSigner = new CosmJSOfflineSigner(chainId, this, _signOptions)
 
-    cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
+  private async runWithChain<T>(
+    chainId: string,
+    fn: () => Promise<T>
+  ): Promise<T> {
+    return this.mutex.runExclusive(async () => {
       const currentChainID = await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.CHAIN_ID,
         params: [],
@@ -106,12 +103,37 @@ export class XDEFIKeplrProvider extends Keplr {
         })
       }
 
-      const accounts = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
-      })
+      return fn()
+    })
+  }
 
-      return accounts as unknown as AccountData[]
+  enable(_chainIds: string | string[]): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.cosmosProvider
+        .request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
+        })
+        .then(() => resolve())
+        .catch(reject)
+    })
+  }
+
+  getOfflineSigner(
+    chainId: string,
+    _signOptions?: KeplrSignOptions
+  ): OfflineAminoSigner & OfflineDirectSigner {
+    const cosmSigner = new CosmJSOfflineSigner(chainId, this, _signOptions)
+
+    cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
+      return this.runWithChain(chainId, async () => {
+        const accounts = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
+        })
+
+        return accounts as unknown as AccountData[]
+      })
     }
 
     return cosmSigner as OfflineAminoSigner & OfflineDirectSigner
@@ -128,41 +150,33 @@ export class XDEFIKeplrProvider extends Keplr {
     )
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
-      const currentChainID = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.CHAIN_ID,
-        params: [],
-      })
-
-      if (currentChainID !== chainId) {
-        await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-          params: [{ chainId }],
+      return this.runWithChain(chainId, async () => {
+        const accounts = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
         })
-      }
 
-      const accounts = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
+        return accounts as unknown as AccountData[]
       })
-
-      return accounts as unknown as AccountData[]
     }
 
     return cosmSigner as OfflineAminoSigner
   }
 
   async sendTx(
-    _chainId: string,
-    _tx: StdTx | Uint8Array,
+    chainId: string,
+    tx: StdTx | Uint8Array,
     _mode: BroadcastMode
   ): Promise<Uint8Array> {
-    const result = (await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [{ ..._tx, txType: 'Keplr' }],
-    })) as TxResult
-    const parsed = JSON.parse(shouldBePresent(result.encoded))
+    return this.runWithChain(chainId, async () => {
+      const result = (await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        params: [{ ...tx, txType: 'Keplr' }],
+      })) as TxResult
+      const parsed = JSON.parse(shouldBePresent(result.encoded))
 
-    return new Uint8Array(Buffer.from(parsed.tx_bytes, 'base64'))
+      return new Uint8Array(Buffer.from(parsed.tx_bytes, 'base64'))
+    })
   }
   async sendMessage() {}
 
@@ -172,73 +186,75 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
-    const result = (await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
-    })) as TxResult
-    const txChain = getCosmosChainByChainId(chainId)
+    return this.runWithChain(chainId, async () => {
+      const result = (await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
+      })) as TxResult
+      const txChain = getCosmosChainByChainId(chainId)
 
-    if (!txChain) {
-      throw new Error(`Chain not supported: ${chainId}`)
-    }
-    const parsed = JSON.parse(shouldBePresent(result.encoded))
-    const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
-    const txBody = TxBody.decode(txRaw.bodyBytes)
-    const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
-    const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
-      try {
-        return {
-          type: msg.typeUrl,
-          value: JSON.parse(Buffer.from(msg.value).toString()),
+      if (!txChain) {
+        throw new Error(`Chain not supported: ${chainId}`)
+      }
+      const parsed = JSON.parse(shouldBePresent(result.encoded))
+      const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
+      const txBody = TxBody.decode(txRaw.bodyBytes)
+      const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
+      const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
+        try {
+          return {
+            type: msg.typeUrl,
+            value: JSON.parse(Buffer.from(msg.value).toString()),
+          }
+        } catch (error) {
+          throw new Error(
+            `Failed to parse message value for ${msg.typeUrl}: ${error}`
+          )
         }
-      } catch (error) {
-        throw new Error(
-          `Failed to parse message value for ${msg.typeUrl}: ${error}`
-        )
+      })
+      const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
+      const feeAmount =
+        authInfo.fee?.amount.map(coin => ({
+          denom: coin.denom,
+          amount: coin.amount,
+        })) ?? []
+
+      const fee: StdFee = {
+        gas: gasLimit,
+        amount: feeAmount,
+      }
+
+      const memo = txBody.memo ?? ''
+
+      const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
+
+      const accountInfo = await getCosmosAccountInfo({
+        chain: txChain as CosmosChain,
+        address: signer,
+      })
+
+      if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
+        throw new Error('Missing account info or pubkey/accountNumber')
+      }
+      const stdSignDoc: StdSignDoc = {
+        chain_id: chainId,
+        account_number: accountInfo.accountNumber.toString(),
+        sequence: sequence,
+        fee,
+        msgs,
+        memo,
+      }
+
+      return {
+        signed: stdSignDoc,
+        signature: {
+          pub_key: accountInfo.pubkey,
+          signature: shouldBePresent(
+            Buffer.from(txRaw.signatures[0]).toString('base64')
+          ),
+        },
       }
     })
-    const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
-    const feeAmount =
-      authInfo.fee?.amount.map(coin => ({
-        denom: coin.denom,
-        amount: coin.amount,
-      })) ?? []
-
-    const fee: StdFee = {
-      gas: gasLimit,
-      amount: feeAmount,
-    }
-
-    const memo = txBody.memo ?? ''
-
-    const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
-
-    const accountInfo = await getCosmosAccountInfo({
-      chain: txChain as CosmosChain,
-      address: signer,
-    })
-
-    if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
-      throw new Error('Missing account info or pubkey/accountNumber')
-    }
-    const stdSignDoc: StdSignDoc = {
-      chain_id: chainId,
-      account_number: accountInfo.accountNumber.toString(),
-      sequence: sequence,
-      fee,
-      msgs,
-      memo,
-    }
-
-    return {
-      signed: stdSignDoc,
-      signature: {
-        pub_key: accountInfo.pubkey,
-        signature: shouldBePresent(
-          Buffer.from(txRaw.signatures[0]).toString('base64')
-        ),
-      },
-    }
   }
   async signDirect(
     chainId: string,
@@ -251,47 +267,51 @@ export class XDEFIKeplrProvider extends Keplr {
     },
     _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
-    const result = (await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-      params: [
-        {
-          bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
-          authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
-          chainId: signDoc.chainId,
-          accountNumber: signDoc.accountNumber.toString(),
-          skipBroadcast: true,
-          txType: 'Keplr',
+    return this.runWithChain(chainId, async () => {
+      const result = (await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        params: [
+          {
+            bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
+            authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString(
+              'base64'
+            ),
+            chainId: signDoc.chainId,
+            accountNumber: signDoc.accountNumber.toString(),
+            skipBroadcast: true,
+            txType: 'Keplr',
+          },
+        ],
+      })) as TxResult
+      const txChain = getCosmosChainByChainId(chainId)
+      const parsed = JSON.parse(shouldBePresent(result.encoded))
+      const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
+
+      const accountInfo = await getCosmosAccountInfo({
+        chain: txChain as CosmosChain,
+        address: signer,
+      })
+
+      if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
+        throw new Error('Missing account info or pubkey/accountNumber')
+      }
+      const generatedSignDoc: KeplrSignDoc = {
+        bodyBytes: txRaw.bodyBytes,
+        authInfoBytes: txRaw.authInfoBytes,
+        chainId: chainId,
+        accountNumber: Long.fromString(accountInfo.accountNumber.toString()),
+      }
+
+      return {
+        signed: generatedSignDoc,
+        signature: {
+          pub_key: accountInfo.pubkey,
+          signature: shouldBePresent(
+            Buffer.from(txRaw.signatures[0]).toString('base64')
+          ),
         },
-      ],
-    })) as TxResult
-    const txChain = getCosmosChainByChainId(chainId)
-    const parsed = JSON.parse(shouldBePresent(result.encoded))
-    const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
-
-    const accountInfo = await getCosmosAccountInfo({
-      chain: txChain as CosmosChain,
-      address: signer,
+      }
     })
-
-    if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
-      throw new Error('Missing account info or pubkey/accountNumber')
-    }
-    const generatedSignDoc: KeplrSignDoc = {
-      bodyBytes: txRaw.bodyBytes,
-      authInfoBytes: txRaw.authInfoBytes,
-      chainId: chainId,
-      accountNumber: Long.fromString(accountInfo.accountNumber.toString()),
-    }
-
-    return {
-      signed: generatedSignDoc,
-      signature: {
-        pub_key: accountInfo.pubkey,
-        signature: shouldBePresent(
-          Buffer.from(txRaw.signatures[0]).toString('base64')
-        ),
-      },
-    }
   }
   async experimentalSuggestChain(_chainInfo: any) {
     return
@@ -305,33 +325,18 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async getKey(chainId: string): Promise<Key> {
-    const accounts = (await this.ensureChainAndGetAccounts(chainId)) as any[]
+    const accounts = await this.runWithChain(chainId, async () => {
+      return this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        params: [],
+      })
+    })
 
-    const transformedAccounts = accounts.map((account: any) => ({
+    const transformedAccounts = (accounts as any[]).map((account: any) => ({
       ...account,
       pubKey: account.pubkey,
     }))
 
     return transformedAccounts[0]
-  }
-  private async ensureChainAndGetAccounts(
-    chainId: string
-  ): Promise<Messaging.Chain.Response> {
-    const currentChainID = await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.CHAIN_ID,
-      params: [],
-    })
-
-    if (currentChainID !== chainId) {
-      await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-        params: [{ chainId }],
-      })
-    }
-
-    return this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
-    })
   }
 }
