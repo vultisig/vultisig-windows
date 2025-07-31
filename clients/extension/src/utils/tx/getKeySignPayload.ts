@@ -42,8 +42,11 @@ import { toUtf8String } from 'ethers'
 
 import { CosmosMsgType } from '../constants'
 
-const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
-  const { chain, ticker, mint } = asset
+const getCoin = async (
+  asset: TransactionDetailsAsset,
+  chain: Chain
+): Promise<Coin> => {
+  const { ticker, mint } = asset
 
   const feeCoin = chainFeeCoin[chain]
 
@@ -91,7 +94,7 @@ export const getKeysignPayload = async (
   feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
   const accountCoin = {
-    ...(await getCoin(transaction.transactionDetails.asset)),
+    ...(await getCoin(transaction.transactionDetails.asset, transaction.chain)), // TODO: Why asset.chain (BTC) and transaction.chain (Chain.Bitcoin) are not equal dispite of they have same type ?
     address: transaction.transactionDetails.from,
   }
 
