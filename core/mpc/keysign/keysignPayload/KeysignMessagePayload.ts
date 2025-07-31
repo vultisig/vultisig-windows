@@ -29,9 +29,3 @@ export const getKeysignMessagePayload = ({
 
   throw new Error('No keysign message payload found')
 }
-
-export const isKeysignPayload = (
-  payload: KeysignMessagePayload
-): payload is { keysign: KeysignPayload } => {
-  return 'keysign' in payload
-}

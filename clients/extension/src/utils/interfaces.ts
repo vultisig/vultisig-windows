@@ -157,6 +157,15 @@ type IMsgTransfer = {
   memo: string
 }
 
+type IMsgDeposit = {
+  coins: {
+    amount: string
+    asset: string
+  }[]
+  signer: string
+  memo: string
+}
+
 export type CosmosMsgPayload =
   | {
       case:
@@ -184,14 +193,20 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.MSG_TRANSFER_URL
       value: IMsgTransfer
     }
+  | {
+      case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
+      value: IMsgDeposit
+    }
+
+export type TransactionDetailsAsset = {
+  chain: Chain
+  ticker: string
+  symbol?: string
+  mint?: string
+}
 
 export type TransactionDetails = {
-  asset: {
-    chain: Chain
-    ticker: string
-    symbol?: string
-    mint?: string
-  }
+  asset: TransactionDetailsAsset
   from: string
   to?: string
   amount?: { amount: string; decimals: number }

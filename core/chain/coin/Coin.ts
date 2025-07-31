@@ -4,8 +4,6 @@ import { RequiredFields } from '@lib/utils/types/RequiredFields'
 
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
-import { chainFeeCoin } from './chainFeeCoin'
-import { knownTokens } from './knownTokens'
 
 export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   // The ID should only be present in tokens. Coins that are classified as fee coins in chainFeeCoin should not have an ID.
@@ -47,23 +45,6 @@ export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
 
 export const coinKeyToString = ({ chain, id }: CoinKey): string =>
   without([chain, id], undefined).join(':')
-
-export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
-  const tokens = knownTokens[coinKey.chain]
-  if (tokens.length > 0) {
-    const foundToken = tokens.find(
-      token => token.id?.toLowerCase() === coinKey.id?.toLowerCase()
-    )
-    if (foundToken) return foundToken
-  }
-
-  const feeCoin = chainFeeCoin[coinKey.chain]
-  if (feeCoin && feeCoin.id?.toLowerCase() === coinKey.id?.toLowerCase()) {
-    return feeCoin
-  }
-
-  return undefined
-}
 
 export const extractCoinKey = <T extends CoinKey>(coin: T): CoinKey =>
   pick(coin, ['chain', 'id'])

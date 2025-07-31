@@ -1,4 +1,3 @@
-import api from '@clients/extension/src/utils/api'
 import {
   CosmosMsgPayload,
   TransactionDetails,
@@ -8,7 +7,10 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { match } from '@lib/utils/match'
+import { TW } from '@trustwallet/wallet-core'
+import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
@@ -195,6 +197,80 @@ const transactionHandlers: TransactionHandlers = {
           skipBroadcast,
         }
       },
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => {
+        if (!message.value.coins || message.value.coins.length === 0) {
+          throw new Error(' coins array is required and cannot be empty')
+        }
+
+        const assetParts = message.value.coins[0].asset.split('.')
+        if (assetParts.length < 2) {
+          throw new Error(
+            `invalid asset format: ${message.value.coins[0].asset}`
+          )
+        }
+        return {
+          asset: {
+            chain: chain,
+            ticker: assetParts[1],
+          },
+          amount: {
+            amount: message.value.coins[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: message.value.signer,
+          data: memo,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+            value: {
+              coins: message.value.coins,
+              memo: message.value.memo,
+              signer: message.value.signer,
+            },
+          } as CosmosMsgPayload,
+          skipBroadcast,
+        }
+      },
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: () => {
+        const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
+          message.value
+        )
+        if (
+          !decodedMessage.coins ||
+          decodedMessage.coins.length === 0 ||
+          !decodedMessage.coins[0].asset
+        ) {
+          throw new Error(' coins array is required and cannot be empty')
+        }
+        const thorAddress = bech32.encode(
+          'thor',
+          bech32.toWords(decodedMessage.signer)
+        )
+
+        return {
+          asset: {
+            chain: chain,
+            ticker: decodedMessage.coins[0].asset.ticker,
+          },
+          amount: {
+            amount: decodedMessage.coins[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: thorAddress,
+          data: memo,
+          cosmosMsgPayload: {
+            case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+            value: {
+              coins: decodedMessage.coins.map(coin => ({
+                amount: coin.amount,
+                asset: coin.asset?.ticker,
+              })),
+              memo: decodedMessage.memo,
+              signer: thorAddress,
+            },
+          } as CosmosMsgPayload,
+          skipBroadcast,
+        }
+      },
     })
   },
 
@@ -215,13 +291,13 @@ const transactionHandlers: TransactionHandlers = {
         throw new Error('No mint address provided')
       }
       try {
-        const token = await api.solana.fetchSolanaTokenInfo(tx.asset.mint)
+        const token = await getSolanaToken(tx.asset.mint)
 
         return {
           asset: {
             chain: chain,
-            ticker: token.symbol,
-            symbol: token.name,
+            ticker: token.ticker,
+            symbol: token.ticker,
             mint: tx.asset.mint,
           },
           amount: { amount: tx.amount, decimals: token.decimals },
@@ -318,6 +394,7 @@ const extractKeplrMessages = (
     }
   } else {
     const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
+
     return {
       chainId: tx.chainId,
       messages: txBody.messages,
