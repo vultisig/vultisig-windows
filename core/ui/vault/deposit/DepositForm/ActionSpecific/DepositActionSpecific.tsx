@@ -5,6 +5,7 @@ import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
+import { useSelectedCoinCorrector } from './hooks/useSelectedCoinCorrector'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
@@ -17,6 +18,7 @@ type Props = {
 }
 
 export const DepositActionSpecific = ({ action }: Props) => {
+  useSelectedCoinCorrector(action)
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
