@@ -63,7 +63,7 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
   }
 
   if (chain === Chain.THORChain) {
-    const token = thorchainNativeTokensMetadata[asset.ticker]
+    const token = thorchainNativeTokensMetadata[asset.ticker.toLowerCase()]
     if (token) {
       return {
         ...token,
