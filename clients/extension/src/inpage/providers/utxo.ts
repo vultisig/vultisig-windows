@@ -29,7 +29,7 @@ export class UTXO extends EventEmitter {
     }
     return UTXO.instances.get(providerType)!
   }
-  
+
   async requestAccounts() {
     return await this.request({
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
