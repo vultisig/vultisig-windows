@@ -10,7 +10,6 @@ import { messengers } from '../messenger'
 export class UTXO extends EventEmitter {
   public chainId: string
   public network: Network
-  public requestAccounts
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
   constructor(providerType: string, chainId: string) {
@@ -18,7 +17,6 @@ export class UTXO extends EventEmitter {
     this.providerType = providerType as MessageKey
     this.chainId = chainId
     this.network = 'mainnet'
-    this.requestAccounts = this.getAccounts
   }
 
   static getInstance(providerType: string, chainId: string): UTXO {
@@ -30,6 +28,13 @@ export class UTXO extends EventEmitter {
       UTXO.instances.set(providerType, new UTXO(providerType, chainId))
     }
     return UTXO.instances.get(providerType)!
+  }
+  
+  async requestAccounts() {
+    return await this.request({
+      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+      params: [],
+    })
   }
 
   async getAccounts() {
