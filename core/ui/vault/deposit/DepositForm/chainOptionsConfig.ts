@@ -71,7 +71,7 @@ export const getRequiredFieldsPerChainAction = (
         amount: z
           .string()
           .transform(Number)
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+          .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
       }),
   },
   deposit_yTcy: {
@@ -83,7 +83,7 @@ export const getRequiredFieldsPerChainAction = (
         amount: z
           .string()
           .transform(Number)
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+          .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
       }),
   },
   withdraw_yRune: {
@@ -94,6 +94,7 @@ export const getRequiredFieldsPerChainAction = (
         type: 'percentage',
         label: t('slippage'),
         required: true,
+        default: 1,
       },
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
@@ -116,6 +117,7 @@ export const getRequiredFieldsPerChainAction = (
         type: 'percentage',
         label: t('slippage'),
         required: true,
+        default: 1,
       },
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
