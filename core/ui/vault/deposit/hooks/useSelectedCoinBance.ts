@@ -1,9 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
+import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import {
   useVaultChainCoinsQuery,
@@ -24,32 +24,42 @@ export const useSelectedCoinBalance = ({
   selectedCoin,
   chain,
 }: Params) => {
-  const { data: coinsWithAmount = [] } = useVaultChainCoinsQuery(chain)
-  const { amount: selectedCoinAmount = 0, decimals: selectedCoinDecimals = 0 } =
-    coinsWithAmount.find(c => c.id === selectedCoin?.id) ||
-    ({} as VaultChainCoin)
+  const { data: vaultCoins = [] } = useVaultChainCoinsQuery(chain)
 
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coinAddress = shouldBePresent(useCurrentVaultCoin(coinKey)?.address)
-  const { data: mergableTokenBalances = [] } =
-    useMergeableTokenBalancesQuery(coinAddress)
+  const vaultEntry: VaultChainCoin | undefined = vaultCoins.find(
+    c => c.id === selectedCoin?.id
+  )
+
+  const [{ coin: feeCoinKey }] = useCoreViewState<'deposit'>()
+  const thorAddr = useCurrentVaultCoin(feeCoinKey)?.address
+
+  const { data: yTokenRawBalance = 0n } = useBalanceQuery(
+    selectedCoin && !vaultEntry && thorAddr
+      ? {
+          chain: Chain.THORChain,
+          address: thorAddr,
+          id: selectedCoin.id,
+        }
+      : (undefined as any)
+  )
+
+  const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(
+    thorAddr ?? ''
+  )
 
   return useMemo(() => {
     if (!selectedCoin) return 0
 
     if (action === 'unmerge') {
       const shares =
-        mergableTokenBalances.find(b => b.symbol === selectedCoin.ticker)
-          ?.shares ?? 0
+        mergeBalances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
       return fromChainAmount(shares, 8)
     }
 
-    return fromChainAmount(selectedCoinAmount, selectedCoinDecimals)
-  }, [
-    action,
-    mergableTokenBalances,
-    selectedCoin,
-    selectedCoinAmount,
-    selectedCoinDecimals,
-  ])
+    if (!vaultEntry) {
+      return fromChainAmount(yTokenRawBalance, selectedCoin.decimals)
+    }
+
+    return fromChainAmount(vaultEntry.amount, vaultEntry.decimals)
+  }, [action, mergeBalances, selectedCoin, vaultEntry, yTokenRawBalance])
 }
