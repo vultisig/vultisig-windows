@@ -38,14 +38,12 @@ export const knownCosmosTokens: Record<
       logo: 'ruji',
       decimals: 8,
       priceProviderId: 'thorchain',
-      hiddenFromUI: true,
     },
     [yTCYReceiptDenom]: {
       ticker: 'yTCY',
-      logo: 'tcy',
+      logo: 'tcy.png',
       decimals: 8,
       priceProviderId: 'tcy',
-      hiddenFromUI: true,
     },
     tcy: {
       ticker: 'TCY',
