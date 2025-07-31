@@ -83,6 +83,9 @@ export const Chain = {
 
 export type Chain = (typeof Chain)[keyof typeof Chain]
 
-export const UtxoBasedChain = [...Object.values(UtxoChain), OtherChain.Cardano]
+export const UtxoBasedChain = [
+  ...Object.values(UtxoChain),
+  OtherChain.Cardano,
+] as const
 
 export type UtxoBasedChain = (typeof UtxoBasedChain)[number]
