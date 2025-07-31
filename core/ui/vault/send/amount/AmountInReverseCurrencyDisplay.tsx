@@ -22,9 +22,6 @@ export const AmountInReverseCurrencyDisplay = ({
   const priceQuery = useCoinPriceQuery({
     coin,
   })
-
-  const price = shouldBePresent(priceQuery.data)
-
   return (
     <AnimatePresence mode="wait">
       <motion.span
@@ -39,7 +36,8 @@ export const AmountInReverseCurrencyDisplay = ({
             {match(value, {
               base: () =>
                 formatAmount(
-                  price * fromChainAmount(sendAmount, coin.decimals),
+                  shouldBePresent(priceQuery.data) *
+                    fromChainAmount(sendAmount, coin.decimals),
                   fiatCurrency
                 ),
               fiat: () =>
