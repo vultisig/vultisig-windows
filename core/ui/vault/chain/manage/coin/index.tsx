@@ -26,9 +26,7 @@ export const ManageVaultChainCoinsPage = () => {
   const whitelistedQuery = useWhitelistedCoinsQuery(currentchain)
 
   const coins = useMemo(() => {
-    const currentChainCoins = sortCoinsAlphabetically(
-      knownTokens[currentchain]
-    ).filter(coin => !coin.hiddenFromUI)
+    const currentChainCoins = sortCoinsAlphabetically(knownTokens[currentchain])
     const whitelistedCoins = sortCoinsAlphabetically(
       whitelistedQuery.data || []
     )

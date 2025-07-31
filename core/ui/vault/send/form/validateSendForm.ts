@@ -1,6 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { validateCardanoUtxoRequirements } from '@core/chain/chains/cardano/utxo/validation'
+import { Chain, UtxoBasedChain } from '@core/chain/Chain'
+import { validateUtxoRequirements } from '@core/chain/chains/utxo/send/validateUtxoRequirements'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TFunction } from 'i18next'
 
@@ -27,10 +28,15 @@ export const validateSendForm = (
   } else if (balance !== undefined) {
     if (amount > balance) errors.amount = t('not_enough_for_gas')
 
-    if (chain === Chain.Cardano && amount) {
-      const errorMsg = validateCardanoUtxoRequirements({
-        amount: amount,
+    if (
+      isOneOf(chain, Object.values(UtxoBasedChain)) &&
+      amount &&
+      balance !== undefined
+    ) {
+      const errorMsg = validateUtxoRequirements({
+        amount,
         balance,
+        chain,
       })
 
       if (errorMsg) {
