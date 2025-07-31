@@ -5,6 +5,10 @@ export const es = {
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',
+  deposit_yRune: 'Recibir yRUNE',
+  deposit_yTcy: 'Recibir yTCY',
+  withdraw_yRune: 'Vender yRUNE',
+  withdraw_yTcy: 'Vender yTCY',
   onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
   onboarding_description_2:
