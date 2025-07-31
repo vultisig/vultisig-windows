@@ -75,6 +75,7 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
     if (token) {
       return {
         ...token,
+        id: asset.ticker.toLowerCase(),
         chain: Chain.THORChain,
       }
     }
