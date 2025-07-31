@@ -25,6 +25,7 @@ import {
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { Mutex } from 'async-mutex'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
@@ -47,6 +48,7 @@ export class XDEFIKeplrProvider extends Keplr {
   isXDEFI: boolean
   isVulticonnect: boolean
   cosmosProvider: Cosmos
+  mutex = new Mutex()
   public static getInstance(cosmosProvider: Cosmos): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
@@ -76,24 +78,15 @@ export class XDEFIKeplrProvider extends Keplr {
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
     this.cosmosProvider = cosmosProvider
   }
-  async enable(chainId: string | string[]): Promise<void> {
-    const targetChainId = Array.isArray(chainId) ? chainId[0] : chainId
-
-    const currentChainID = await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.CHAIN_ID,
-      params: [],
-    })
-
-    if (currentChainID !== targetChainId) {
-      await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-        params: [{ chainId: targetChainId }],
-      })
-    }
-
-    await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
+  enable(_chainIds: string | string[]): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.cosmosProvider
+        .request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
+        })
+        .then(() => resolve())
+        .catch(reject)
     })
   }
   getOfflineSigner(
@@ -103,24 +96,26 @@ export class XDEFIKeplrProvider extends Keplr {
     const cosmSigner = new CosmJSOfflineSigner(chainId, this, _signOptions)
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
-      const currentChainID = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.CHAIN_ID,
-        params: [],
-      })
-
-      if (currentChainID !== chainId) {
-        await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-          params: [{ chainId }],
+      return this.mutex.runExclusive(async () => {
+        const currentChainID = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.CHAIN_ID,
+          params: [],
         })
-      }
 
-      const accounts = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
+        if (currentChainID !== chainId) {
+          await this.cosmosProvider.request({
+            method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+            params: [{ chainId }],
+          })
+        }
+
+        const accounts = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
+        })
+
+        return accounts as unknown as AccountData[]
       })
-
-      return accounts as unknown as AccountData[]
     }
 
     return cosmSigner as OfflineAminoSigner & OfflineDirectSigner
@@ -326,21 +321,23 @@ export class XDEFIKeplrProvider extends Keplr {
   private async ensureChainAndGetAccounts(
     chainId: string
   ): Promise<Messaging.Chain.Response> {
-    const currentChainID = await this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.CHAIN_ID,
-      params: [],
-    })
-
-    if (currentChainID !== chainId) {
-      await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-        params: [{ chainId }],
+    return this.mutex.runExclusive(async () => {
+      const currentChainID = await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.CHAIN_ID,
+        params: [],
       })
-    }
 
-    return this.cosmosProvider.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
+      if (currentChainID !== chainId) {
+        await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+          params: [{ chainId }],
+        })
+      }
+
+      return this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        params: [],
+      })
     })
   }
 }

@@ -35,6 +35,7 @@
     "@tanstack/react-query": "^5.68.0",
     "@tanstack/react-query-persist-client": "^5.68.0",
     "@trustwallet/wallet-core": "^4.3.3",
+    "async-mutex": "^0.5.0",
     "bs58": "^6.0.0",
     "cosmjs-types": "^0.9.0",
     "date-fns": "^4.1.0",
