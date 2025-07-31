@@ -1,14 +1,19 @@
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { MessageProp, TitleProp } from '@lib/ui/props'
+import { TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import styled from 'styled-components'
 
+export type ErrorFallbackContentProps = TitleProp & {
+  error?: unknown
+}
+
 export const ErrorFallbackContent = ({
-  message,
+  error,
   title,
-}: Partial<MessageProp> & TitleProp) => {
+}: ErrorFallbackContentProps) => {
   return (
     <VStack flexGrow gap={24} alignItems="center" justifyContent="center">
       <IconWrapper justifyContent="center" alignItems="center">
@@ -18,15 +23,15 @@ export const ErrorFallbackContent = ({
         <Text size={22} color="danger" centerHorizontally>
           {title}
         </Text>
-        {message && (
+        {error ? (
           <Text
             style={{ wordBreak: 'break-word', maxWidth: '100%' }}
             centerHorizontally
             color="supporting"
           >
-            {message}
+            {extractErrorMsg(error)}
           </Text>
-        )}
+        ) : null}
       </VStack>
     </VStack>
   )

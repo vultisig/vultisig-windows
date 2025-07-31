@@ -5,7 +5,6 @@ import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -33,8 +32,8 @@ export const WaitMpcSessionStart = ({
     <MatchQuery
       error={error => (
         <FullPageFlowErrorState
-          message={t(`failed_to_join_${value}`)}
-          errorMessage={extractErrorMsg(error)}
+          title={t(`failed_to_join_${value}`)}
+          error={error}
         />
       )}
       value={peersQuery}

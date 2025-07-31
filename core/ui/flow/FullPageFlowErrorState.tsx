@@ -1,22 +1,16 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { ActionProp, MessageProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
-type FullPageFlowErrorStateProps = Partial<ActionProp> &
-  MessageProp & {
-    errorMessage?: string
-  }
+import {
+  FlowErrorPageContent,
+  FlowErrorPageContentProps,
+} from './FlowErrorPageContent'
 
-export const FullPageFlowErrorState = ({
-  action,
-  errorMessage,
-  message,
-}: FullPageFlowErrorStateProps) => {
+export const FullPageFlowErrorState = (props: FlowErrorPageContentProps) => {
   const navigate = useCoreNavigate()
 
   return (
@@ -30,11 +24,7 @@ export const FullPageFlowErrorState = ({
         }
         hasBorder
       />
-      <FlowErrorPageContent
-        action={action}
-        message={errorMessage}
-        title={message}
-      />
+      <FlowErrorPageContent {...props} />
     </>
   )
 }
