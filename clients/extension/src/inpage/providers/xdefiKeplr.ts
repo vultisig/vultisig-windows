@@ -24,12 +24,20 @@ import {
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { Mutex } from 'async-mutex'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
 import { Cosmos } from './cosmos'
 
+class SimpleMutex {
+  private queue = Promise.resolve()
+
+  async runExclusive<T>(fn: () => Promise<T>): Promise<T> {
+    const result = this.queue.then(fn, fn)
+    this.queue = result.catch(() => {}) as Promise<void>
+    return result
+  }
+}
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
@@ -47,7 +55,7 @@ export class XDEFIKeplrProvider extends Keplr {
   isXDEFI: boolean
   isVulticonnect: boolean
   cosmosProvider: Cosmos
-  mutex = new Mutex()
+  mutex = new SimpleMutex()
   public static getInstance(cosmosProvider: Cosmos): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
