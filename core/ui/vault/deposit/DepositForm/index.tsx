@@ -170,6 +170,10 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'merge',
                     'stake',
                     'unmerge',
+                    'deposit_yRune',
+                    'deposit_yTcy',
+                    'withdraw_yRune',
+                    'withdraw_yTcy',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin
