@@ -1,6 +1,10 @@
 import { Chain, CosmosChain } from '../../Chain'
 import { kujiraCoinsMigratedToThorChainMetadata } from '../../chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '../../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
+import {
+  yRUNEReceiptDenom,
+  yTCYReceiptDenom,
+} from '../../chains/cosmos/thor/ytcy-and-yrune/config'
 import { KnownCoinMetadata } from '../Coin'
 
 export const knownCosmosTokens: Record<
@@ -29,6 +33,20 @@ export const knownCosmosTokens: Record<
     },
   },
   [Chain.THORChain]: {
+    [yRUNEReceiptDenom]: {
+      ticker: 'yRUNE',
+      logo: 'ruji',
+      decimals: 8,
+      priceProviderId: 'thorchain',
+      hiddenFromUI: true,
+    },
+    [yTCYReceiptDenom]: {
+      ticker: 'yTCY',
+      logo: 'tcy',
+      decimals: 8,
+      priceProviderId: 'tcy',
+      hiddenFromUI: true,
+    },
     tcy: {
       ticker: 'TCY',
       logo: 'tcy.png',
