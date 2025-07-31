@@ -5,7 +5,9 @@ import {
   affiliateAddress,
   affiliateContract,
   yRUNEContract,
+  yRUNEReceiptDenom,
   yTCYContract,
+  yTCYReceiptDenom,
 } from '@core/chain/chains/cosmos/thor/ytcy-and-yrune/config'
 import {
   AccountCoin,
@@ -148,7 +150,14 @@ export function useDepositKeysignPayload(
                         amount: amountUnits,
                       },
                     ]
-                  : [],
+                  : [
+                      {
+                        contractAddress: isSellRune
+                          ? yRUNEReceiptDenom
+                          : yTCYReceiptDenom,
+                        amount: amountUnits,
+                      },
+                    ],
             },
           }
           base.toAmount = amountUnits
