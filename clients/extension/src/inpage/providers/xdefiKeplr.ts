@@ -132,24 +132,26 @@ export class XDEFIKeplrProvider extends Keplr {
     )
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
-      const currentChainID = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.CHAIN_ID,
-        params: [],
-      })
-
-      if (currentChainID !== chainId) {
-        await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-          params: [{ chainId }],
+      return this.mutex.runExclusive(async () => {
+        const currentChainID = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.CHAIN_ID,
+          params: [],
         })
-      }
 
-      const accounts = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
+        if (currentChainID !== chainId) {
+          await this.cosmosProvider.request({
+            method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+            params: [{ chainId }],
+          })
+        }
+
+        const accounts = await this.cosmosProvider.request({
+          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          params: [],
+        })
+
+        return accounts as unknown as AccountData[]
       })
-
-      return accounts as unknown as AccountData[]
     }
 
     return cosmSigner as OfflineAminoSigner
