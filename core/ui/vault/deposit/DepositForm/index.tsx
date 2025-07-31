@@ -32,7 +32,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBance'
+import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
 import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
