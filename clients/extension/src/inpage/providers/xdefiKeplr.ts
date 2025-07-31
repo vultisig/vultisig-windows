@@ -107,16 +107,16 @@ export class XDEFIKeplrProvider extends Keplr {
     })
   }
 
-  async enable(_chainIds: string | string[]): Promise<void> {
-    const chainIds = Array.isArray(_chainIds) ? _chainIds : [_chainIds]
-    for (const chainId of chainIds) {
-      await this.runWithChain(chainId, async () => {
-        await this.cosmosProvider.request({
+  enable(_chainIds: string | string[]): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.cosmosProvider
+        .request({
           method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
           params: [],
         })
-      })
-    }
+        .then(() => resolve())
+        .catch(reject)
+    })
   }
 
   getOfflineSigner(
