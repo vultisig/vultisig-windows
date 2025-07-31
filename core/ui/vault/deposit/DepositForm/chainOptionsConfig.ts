@@ -105,7 +105,7 @@ export const getRequiredFieldsPerChainAction = (
         slippage: z
           .string()
           .transform(Number)
-          .pipe(z.number().min(0.001).max(0.1)),
+          .pipe(z.number().min(0.1).max(7.5)),
       }),
   },
   withdraw_yTcy: {
@@ -127,7 +127,7 @@ export const getRequiredFieldsPerChainAction = (
         slippage: z
           .string()
           .transform(Number)
-          .pipe(z.number().min(0.001).max(0.1)),
+          .pipe(z.number().min(0.1).max(7.5)),
       }),
   },
   unmerge: {
