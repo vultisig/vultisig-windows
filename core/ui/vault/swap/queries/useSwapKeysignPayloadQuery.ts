@@ -2,7 +2,6 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -71,15 +70,11 @@ export const useSwapKeysignPayloadQuery = () => {
         publicKeys: vault.publicKeys,
       })
 
-      const fromCoinHexPublicKey = toHexPublicKey({
-        publicKey: fromPublicKey,
-        walletCore,
-      })
+      const fromCoinHexPublicKey = Buffer.from(fromPublicKey.data()).toString(
+        'hex'
+      )
 
-      const toCoinHexPublicKey = toHexPublicKey({
-        publicKey: toPublicKey,
-        walletCore,
-      })
+      const toCoinHexPublicKey = Buffer.from(toPublicKey.data()).toString('hex')
 
       const swapSpecificFields = getSwapKeysignPayloadFields({
         amount,

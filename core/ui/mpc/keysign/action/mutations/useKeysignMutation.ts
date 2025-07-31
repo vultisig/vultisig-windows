@@ -10,7 +10,6 @@ import { decodeTx } from '@core/chain/tx/decode'
 import { getTxHash } from '@core/chain/tx/hash'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
-import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { getTxInputData } from '@core/mpc/keysign/txInputData'
@@ -51,12 +50,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 txInputData,
                 walletCore,
                 chain,
-              }).map(value =>
-                hexEncode({
-                  value,
-                  walletCore,
-                })
-              )
+              }).map(value => Buffer.from(value).toString('hex'))
             )
 
             const msgs = groupedMsgs.flat().sort()

@@ -3,7 +3,6 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
-import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
 import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -60,12 +59,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
               txInputData,
               walletCore,
               chain,
-            }).map(value =>
-              hexEncode({
-                value,
-                walletCore,
-              })
-            )
+            }).map(value => Buffer.from(value).toString('hex'))
           )
 
           return signWithServer({

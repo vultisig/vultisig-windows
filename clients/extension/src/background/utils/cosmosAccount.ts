@@ -1,7 +1,6 @@
 import { getWalletCore } from '@clients/extension/src/background/walletCore'
 import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { hexToBytes } from '@lib/utils/hexToBytes'
@@ -39,7 +38,7 @@ export const generateCosmosAccount = async (
       publicKeys: currentVault.publicKeys,
     })
 
-    const keyBytes = hexToBytes(toHexPublicKey({ publicKey, walletCore }))
+    const keyBytes = hexToBytes(Buffer.from(publicKey.data()).toString('hex'))
 
     return [
       {
