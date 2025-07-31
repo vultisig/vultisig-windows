@@ -1,5 +1,4 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
-import { Messaging } from '@clients/extension/src/utils/interfaces'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
