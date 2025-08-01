@@ -18,7 +18,7 @@ export const DepositConfirmButton = ({
 }: DepositConfirmButtonProps) => {
   const { t } = useTranslation()
   const { invalid, invalidMessage, keysignPayloadQuery } =
-    useDepositKeysignPayload(depositFormData, action)
+    useDepositKeysignPayload({ depositFormData, action })
 
   if (invalid) {
     return <Text color="danger">{invalidMessage}</Text>

@@ -29,10 +29,15 @@ import { ChainAction } from '../../ChainAction'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { transactionConfig } from '../config'
 
-export function useDepositKeysignPayload(
-  depositFormData: Record<string, unknown>,
+type DepositKeysignPayloadProps = {
+  depositFormData: Record<string, unknown>
   action: ChainAction
-) {
+}
+
+export function useDepositKeysignPayload({
+  depositFormData,
+  action,
+}: DepositKeysignPayloadProps) {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const { t } = useTranslation()
   const isTon = coinKey.chain === Chain.Ton
