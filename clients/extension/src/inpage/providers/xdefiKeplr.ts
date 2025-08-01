@@ -33,8 +33,13 @@ class SimpleMutex {
   private queue = Promise.resolve()
 
   async runExclusive<T>(fn: () => Promise<T>): Promise<T> {
-    const result = this.queue.then(fn, fn)
-    this.queue = result.catch(() => {}) as Promise<void>
+    let release: () => void
+    const p = new Promise<void>(res => (release = res))
+
+    const result = this.queue.then(() => fn()).finally(() => release!())
+
+    this.queue = p
+
     return result
   }
 }

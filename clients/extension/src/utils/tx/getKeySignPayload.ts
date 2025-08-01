@@ -41,8 +41,11 @@ import { toUtf8String } from 'ethers'
 
 import { CosmosMsgType } from '../constants'
 
-const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
-  const { chain, ticker, mint } = asset
+const getCoin = async (
+  asset: TransactionDetailsAsset,
+  chain: Chain
+): Promise<Coin> => {
+  const { ticker, mint } = asset
 
   const feeCoin = chainFeeCoin[chain]
 
@@ -74,6 +77,7 @@ const getCoin = async (asset: TransactionDetailsAsset): Promise<Coin> => {
     if (token) {
       return {
         ...token,
+        id: asset.ticker.toLowerCase(),
         chain: Chain.THORChain,
       }
     }
@@ -89,7 +93,7 @@ export const getKeysignPayload = async (
   feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
   const accountCoin = {
-    ...(await getCoin(transaction.transactionDetails.asset)),
+    ...(await getCoin(transaction.transactionDetails.asset, transaction.chain)),
     address: transaction.transactionDetails.from,
   }
 
