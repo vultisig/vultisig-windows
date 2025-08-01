@@ -38,10 +38,8 @@ export const generateMemo = ({
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
-    deposit_yRune: () => '',
-    deposit_yTcy: () => '',
-    withdraw_yRune: () => '',
-    withdraw_yTcy: () => '',
+    mint: () => '',
+    redeem: () => '',
     stake: () =>
       match(chain as StakeableChain, {
         Ton: () => 'd',
