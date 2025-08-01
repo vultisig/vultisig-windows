@@ -62,7 +62,7 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
-  deposit_yRune: {
+  mint: {
     fields: [
       { name: 'amount', type: 'number', label: t('amount'), required: true },
     ],
@@ -74,42 +74,7 @@ export const getRequiredFieldsPerChainAction = (
           .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
       }),
   },
-  deposit_yTcy: {
-    fields: [
-      { name: 'amount', type: 'number', label: t('amount'), required: true },
-    ],
-    schema: ({ totalAmountAvailable }: FunctionSchema) =>
-      z.object({
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
-      }),
-  },
-  withdraw_yRune: {
-    fields: [
-      { name: 'amount', type: 'number', label: t('amount'), required: true },
-      {
-        name: 'slippage',
-        type: 'percentage',
-        label: t('slippage'),
-        required: true,
-        default: 1,
-      },
-    ],
-    schema: ({ totalAmountAvailable }: FunctionSchema) =>
-      z.object({
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().positive().max(totalAmountAvailable)),
-        slippage: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().min(0.1).max(7.5)),
-      }),
-  },
-  withdraw_yTcy: {
+  redeem: {
     fields: [
       { name: 'amount', type: 'number', label: t('amount'), required: true },
       {
