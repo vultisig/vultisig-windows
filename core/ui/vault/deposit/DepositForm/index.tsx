@@ -76,6 +76,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
+
   const coin = useDepositCoin()
 
   const schemaForChainAction = resolveSchema(
@@ -170,10 +171,8 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'merge',
                     'stake',
                     'unmerge',
-                    'deposit_yRune',
-                    'deposit_yTcy',
-                    'withdraw_yRune',
-                    'withdraw_yTcy',
+                    'mint',
+                    'redeem',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin
