@@ -91,7 +91,7 @@ export namespace TransactionType {
       decimals: number
     }
     asset: {
-      chain: Chain
+      chain: string
       symbol: string
       ticker: string
     }
@@ -103,7 +103,7 @@ export namespace TransactionType {
 
   export type Vultisig = {
     asset: {
-      chain: Chain
+      chain: string
       ticker: string
       symbol?: string
     }
@@ -127,7 +127,7 @@ export namespace TransactionType {
 
   export type Phantom = {
     asset: {
-      chain: Chain
+      chain: string
       ticker?: string
       symbol?: string
       mint?: string
@@ -199,7 +199,7 @@ export type CosmosMsgPayload =
     }
 
 export type TransactionDetailsAsset = {
-  chain: Chain
+  chain: string
   ticker: string
   symbol?: string
   mint?: string
