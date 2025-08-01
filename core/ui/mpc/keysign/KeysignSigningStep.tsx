@@ -22,6 +22,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -45,14 +46,12 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   return (
     <MatchQuery
       value={mutationStatus}
-      success={txResults => {
-        const txResult = getLastItem(txResults)
-
+      success={result => {
         const handleFinish = () =>
           isDAppSigning ? window.close() : navigate({ id: 'vault' })
 
         return (
-          <TxHashProvider value={txResult.txHash}>
+          <>
             <PageHeader title={t('overview')} hasBorder />
             <MatchRecordUnion
               value={payload}
@@ -60,52 +59,57 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                 keysign: payload => {
                   const { swapPayload } = payload
                   const isSwapTx = swapPayload && swapPayload.value
+                  const txs = getRecordUnionValue(result, 'txs')
 
-                  return isSwapTx ? (
-                    <PageContent alignItems="center" scrollable>
-                      <SwapKeysignTxOverview
-                        txHashes={txResults.map(tx => tx.txHash)}
-                        value={payload}
-                      />
-                    </PageContent>
-                  ) : (
-                    <StepTransition
-                      from={({ onFinish: onSeeTxDetails }) => (
-                        <>
-                          <PageContent alignItems="center" scrollable>
-                            <VStack gap={16} maxWidth={576} fullWidth>
-                              <TxSuccess
-                                value={payload}
-                                onSeeTxDetails={onSeeTxDetails}
-                              />
-                            </VStack>
-                          </PageContent>
-                          <PageFooter alignItems="center">
-                            <VStack maxWidth={576} fullWidth>
-                              <Button onClick={handleFinish}>
-                                {t('done')}
-                              </Button>
-                            </VStack>
-                          </PageFooter>
-                        </>
+                  return (
+                    <TxHashProvider value={getLastItem(txs).hash}>
+                      {isSwapTx ? (
+                        <PageContent alignItems="center" scrollable>
+                          <SwapKeysignTxOverview
+                            txHashes={txs.map(tx => tx.hash)}
+                            value={payload}
+                          />
+                        </PageContent>
+                      ) : (
+                        <StepTransition
+                          from={({ onFinish: onSeeTxDetails }) => (
+                            <>
+                              <PageContent alignItems="center" scrollable>
+                                <VStack gap={16} maxWidth={576} fullWidth>
+                                  <TxSuccess
+                                    value={payload}
+                                    onSeeTxDetails={onSeeTxDetails}
+                                  />
+                                </VStack>
+                              </PageContent>
+                              <PageFooter alignItems="center">
+                                <VStack maxWidth={576} fullWidth>
+                                  <Button onClick={handleFinish}>
+                                    {t('done')}
+                                  </Button>
+                                </VStack>
+                              </PageFooter>
+                            </>
+                          )}
+                          to={() => (
+                            <>
+                              <PageContent alignItems="center" scrollable>
+                                <VStack gap={16} maxWidth={576} fullWidth>
+                                  <KeysignTxOverview />
+                                </VStack>
+                              </PageContent>
+                              <PageFooter alignItems="center">
+                                <VStack maxWidth={576} fullWidth>
+                                  <Button onClick={handleFinish}>
+                                    {t('complete')}
+                                  </Button>
+                                </VStack>
+                              </PageFooter>
+                            </>
+                          )}
+                        />
                       )}
-                      to={() => (
-                        <>
-                          <PageContent alignItems="center" scrollable>
-                            <VStack gap={16} maxWidth={576} fullWidth>
-                              <KeysignTxOverview />
-                            </VStack>
-                          </PageContent>
-                          <PageFooter alignItems="center">
-                            <VStack maxWidth={576} fullWidth>
-                              <Button onClick={handleFinish}>
-                                {t('complete')}
-                              </Button>
-                            </VStack>
-                          </PageFooter>
-                        </>
-                      )}
-                    />
+                    </TxHashProvider>
                   )
                 },
                 custom: payload => (
@@ -115,7 +119,9 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                         <KeysignCustomMessageInfo value={payload} />
                         <TxOverviewChainDataRow>
                           <span>{t('signature')}</span>
-                          <span>{txResult.txHash}</span>
+                          <span>
+                            {getRecordUnionValue(result, 'signature')}
+                          </span>
                         </TxOverviewChainDataRow>
                       </TxOverviewPanel>
                     </PageContent>
@@ -126,7 +132,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                 ),
               }}
             />
-          </TxHashProvider>
+          </>
         )
       }}
       error={error => (

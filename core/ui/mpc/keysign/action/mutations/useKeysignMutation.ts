@@ -3,13 +3,15 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
+import { Tx } from '@core/chain/tx'
+import { broadcastTx } from '@core/chain/tx/broadcast'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
-import { executeTx } from '@core/chain/tx/execute'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { decodeTx } from '@core/chain/tx/decode'
+import { getTxHash } from '@core/chain/tx/hash'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
-import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -31,8 +33,8 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const mutationListener = useKeysignMutationListener()
 
   return useMutation({
-    mutationFn: async () => {
-      return matchRecordUnion<KeysignMessagePayload, Promise<TxResult[]>>(
+    mutationFn: async (): Promise<KeysignResult> => {
+      return matchRecordUnion<KeysignMessagePayload, Promise<KeysignResult>>(
         payload,
         {
           keysign: async payload => {
@@ -48,12 +50,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 txInputData,
                 walletCore,
                 chain,
-              }).map(value =>
-                hexEncode({
-                  value,
-                  walletCore,
-                })
-              )
+              }).map(value => Buffer.from(value).toString('hex'))
             )
 
             const msgs = groupedMsgs.flat().sort()
@@ -77,26 +74,35 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               publicKeys: vault.publicKeys,
             })
 
-            const hashes = await chainPromises(
-              inputs.map(txInputData => async () => {
-                const compiledTx = compileTx({
-                  walletCore,
-                  txInputData,
-                  chain,
-                  publicKey,
-                  signatures: signaturesRecord,
-                })
-
-                return executeTx({
-                  compiledTx,
-                  walletCore,
-                  chain,
-                  skipBroadcast: payload.skipBroadcast,
-                })
+            const compiledTxs = inputs.map(txInputData =>
+              compileTx({
+                walletCore,
+                txInputData,
+                chain,
+                publicKey,
+                signatures: signaturesRecord,
               })
             )
 
-            return hashes
+            const txs: Tx[] = await Promise.all(
+              compiledTxs.map(async compiledTx => {
+                const tx = decodeTx({ chain, compiledTx })
+                const hash = await getTxHash({ chain, tx })
+
+                return {
+                  ...tx,
+                  hash,
+                }
+              })
+            )
+
+            if (!payload.skipBroadcast) {
+              await chainPromises(
+                txs.map(tx => () => broadcastTx({ chain, tx }))
+              )
+            }
+
+            return { txs }
           },
           custom: async ({ message }) => {
             const messageToHash = message.startsWith('0x')
@@ -122,7 +128,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               signatureFormat,
             })
 
-            return [{ txHash: Buffer.from(result).toString('hex') }]
+            return { signature: Buffer.from(result).toString('hex') }
           },
         }
       )

@@ -1,6 +1,5 @@
 import { create } from '@bufbuild/protobuf'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -49,10 +48,7 @@ export const useSendTxKeysignPayloadQuery = () => {
         return create(KeysignPayloadSchema, {
           coin: toCommCoin({
             ...coin,
-            hexPublicKey: toHexPublicKey({
-              publicKey,
-              walletCore,
-            }),
+            hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           }),
           toAddress: receiver,
           toAmount: cappedAmount.amount.toString(),

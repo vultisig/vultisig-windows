@@ -2,7 +2,6 @@ import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -27,6 +26,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
+import { ITransaction } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
 
 class SimpleMutex {
@@ -172,8 +172,8 @@ export class XDEFIKeplrProvider extends Keplr {
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [{ ...tx, txType: 'Keplr' }],
-      })) as TxResult
-      const parsed = JSON.parse(shouldBePresent(result.encoded))
+      })) as ITransaction<CosmosChain>
+      const parsed = JSON.parse(result.serialized)
 
       return new Uint8Array(Buffer.from(parsed.tx_bytes, 'base64'))
     })
@@ -190,13 +190,13 @@ export class XDEFIKeplrProvider extends Keplr {
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
-      })) as TxResult
+      })) as ITransaction<CosmosChain>
       const txChain = getCosmosChainByChainId(chainId)
 
       if (!txChain) {
         throw new Error(`Chain not supported: ${chainId}`)
       }
-      const parsed = JSON.parse(shouldBePresent(result.encoded))
+      const parsed = JSON.parse(result.serialized)
       const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
       const txBody = TxBody.decode(txRaw.bodyBytes)
       const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
@@ -282,9 +282,9 @@ export class XDEFIKeplrProvider extends Keplr {
             txType: 'Keplr',
           },
         ],
-      })) as TxResult
+      })) as ITransaction<CosmosChain>
       const txChain = getCosmosChainByChainId(chainId)
-      const parsed = JSON.parse(shouldBePresent(result.encoded))
+      const parsed = JSON.parse(result.serialized)
       const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
 
       const accountInfo = await getCosmosAccountInfo({

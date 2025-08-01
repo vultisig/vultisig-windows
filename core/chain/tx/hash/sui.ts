@@ -1,0 +1,18 @@
+import { OtherChain } from '@core/chain/Chain'
+
+import { getSuiClient } from '../../chains/sui/client'
+import { TxHashResolver } from './TxHashResolver'
+
+export const getSuiTxHash: TxHashResolver<OtherChain.Sui> = async ({
+  unsignedTx,
+}) => {
+  const client = getSuiClient()
+
+  const {
+    effects: { transactionDigest },
+  } = await client.dryRunTransactionBlock({
+    transactionBlock: unsignedTx,
+  })
+
+  return transactionDigest
+}

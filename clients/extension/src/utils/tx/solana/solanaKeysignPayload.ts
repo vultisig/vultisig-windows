@@ -3,7 +3,6 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { SolanaSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -42,10 +41,7 @@ export const getSolanaKeysignPayload = (
           ticker: parsedTransactionParams.inputToken.symbol.toUpperCase(),
           address: parsedTransactionParams.authority,
           decimals: parsedTransactionParams.inputToken.decimals,
-          hexPublicKey: toHexPublicKey({
-            publicKey,
-            walletCore,
-          }),
+          hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           logo: parsedTransactionParams.inputToken.name.toLowerCase(),
           priceProviderId:
             parsedTransactionParams.inputToken.symbol === 'SOL'
