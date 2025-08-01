@@ -1,8 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 
-export type WalletApiMetamaskMethod = 'eth_accounts'
-
-export type WalletApiMethod<Input, Output> = {
+type WalletApiMethod<Input, Output> = {
   input: Input
   output: Output
 }

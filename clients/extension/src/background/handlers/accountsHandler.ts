@@ -22,7 +22,7 @@ const instance: Record<Instance, boolean> = {
   [Instance.VAULTS]: false,
 }
 
-export const handleFindAccounts = async (
+const handleFindAccounts = async (
   chain: Chain,
   dappHostname: string
 ): Promise<string[]> => {

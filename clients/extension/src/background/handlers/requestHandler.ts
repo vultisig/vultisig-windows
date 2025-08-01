@@ -63,7 +63,7 @@ const getEvmRpcProvider = memoize(
 
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
-export const handleRequest = (
+export const deprecatedHandleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain,
   dappHostname: string
