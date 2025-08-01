@@ -4,17 +4,14 @@ import { Chain } from '@core/chain/Chain'
 import {
   affiliateAddress,
   affiliateContract,
-  yRUNEContract,
-  yRUNEReceiptDenom,
-  yTCYContract,
-  yTCYReceiptDenom,
-} from '@core/chain/chains/cosmos/thor/ytcy-and-yrune/config'
+  YAsset,
+  yAssetContracts,
+} from '@core/chain/chains/cosmos/thor/yAssets/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
 } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -50,7 +47,6 @@ export function useDepositKeysignPayload(
           ? TransactionType.THOR_MERGE
           : undefined
 
-  // core helpers
   const selectedCoin = depositFormData['selectedCoin'] as
     | AccountCoin
     | undefined
@@ -61,13 +57,11 @@ export function useDepositKeysignPayload(
   const wallet = useAssertWalletCore()
   const chainSpecificQuery = useDepositChainSpecificQuery(txType, coin)
 
-  // form values
   const cfg = transactionConfig(coinKey.chain)[action] || {}
   const rawAmount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
-  const slippage = Number(depositFormData['slippage'] ?? 0) // percent e.g. 1 or 2.5
+  const slippage = Number(depositFormData['slippage'] ?? 0)
   const memo = ''
 
-  // invalid?
   const invalid =
     cfg.requiresAmount && (!Number.isFinite(rawAmount) || rawAmount < 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
@@ -76,7 +70,6 @@ export function useDepositKeysignPayload(
     chainSpecificQuery,
     useCallback(
       chainSpecific => {
-        // build the base keysign payload
         const pubkey = getPublicKey({
           chain: coin.chain,
           walletCore: wallet,
@@ -86,10 +79,7 @@ export function useDepositKeysignPayload(
         const base: any = {
           coin: toCommCoin({
             ...coin,
-            hexPublicKey: toHexPublicKey({
-              publicKey: pubkey,
-              walletCore: wallet,
-            }),
+            hexPublicKey: Buffer.from(pubkey.data()).toString('hex'),
           }),
           memo,
           blockchainSpecific: chainSpecific,
@@ -98,27 +88,20 @@ export function useDepositKeysignPayload(
           libType: vault.libType,
         }
 
-        if (
-          action === 'deposit_yRune' ||
-          action === 'deposit_yTcy' ||
-          action === 'withdraw_yRune' ||
-          action === 'withdraw_yTcy'
-        ) {
-          const isDepositRune = action === 'deposit_yRune'
-          const isDepositTcy = action === 'deposit_yTcy'
-          const isSellRune = action === 'withdraw_yRune'
-
+        if (action === 'mint' || action === 'redeem') {
+          const asset = depositFormData['asset'] as YAsset
+          const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
             shouldBePresent(rawAmount),
             coin.decimals
           ).toString()
 
-          let wasmMsg: any
-
-          if (isDepositRune || isDepositTcy) {
-            wasmMsg = {
+          let executeInner: object
+          if (isDeposit) {
+            executeInner = {
               execute: {
-                contract_addr: isDepositRune ? yRUNEContract : yTCYContract,
+                // TODO: double check this!
+                contract_addr: yAssetContracts[asset],
                 msg: Buffer.from(JSON.stringify({ deposit: {} })).toString(
                   'base64'
                 ),
@@ -126,38 +109,27 @@ export function useDepositKeysignPayload(
               },
             }
           } else {
-            wasmMsg = { withdraw: { slippage: (slippage / 100).toFixed(4) } }
+            executeInner = {
+              withdraw: { slippage: (slippage / 100).toFixed(4) },
+            }
           }
-
-          const contractAddr =
-            isDepositRune || isDepositTcy
-              ? affiliateContract
-              : isSellRune
-                ? yRUNEContract
-                : yTCYContract
 
           base.contractPayload = {
             case: 'wasmExecuteContractPayload',
             value: {
               senderAddress: coin.address,
-              contractAddress: contractAddr,
-              executeMsg: JSON.stringify(wasmMsg),
-              coins:
-                isDepositRune || isDepositTcy
-                  ? [
-                      {
-                        contractAddress: isDepositRune ? 'rune' : 'tcy',
-                        amount: amountUnits,
-                      },
-                    ]
-                  : [
-                      {
-                        contractAddress: isSellRune
-                          ? yRUNEReceiptDenom
-                          : yTCYReceiptDenom,
-                        amount: amountUnits,
-                      },
-                    ],
+              contractAddress: isDeposit
+                ? affiliateContract
+                : yAssetContracts[asset],
+              executeMsg: JSON.stringify(executeInner),
+              coins: isDeposit
+                ? [
+                    {
+                      contractAddress: asset === 'yRUNE' ? 'rune' : 'tcy',
+                      amount: amountUnits,
+                    },
+                  ]
+                : [],
             },
           }
           base.toAmount = amountUnits
