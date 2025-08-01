@@ -15,10 +15,8 @@ type TransactionConfig = {
 export const transactionConfig = (
   chain: Chain
 ): Record<ChainAction, TransactionConfig> => ({
-  deposit_yRune: { requiresAmount: true },
-  deposit_yTcy: { requiresAmount: true },
-  withdraw_yRune: { requiresAmount: true },
-  withdraw_yTcy: { requiresAmount: true },
+  mint: { requiresAmount: true },
+  redeem: { requiresAmount: true },
   bond: { requiresAmount: true, requiresNodeAddress: true },
   unmerge: { requiresAmount: true, requiresNodeAddress: false },
   unbond: { requiresAmount: false, requiresNodeAddress: true },
