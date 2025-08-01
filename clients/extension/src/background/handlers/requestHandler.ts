@@ -643,7 +643,9 @@ export const handleRequest = (
               status: 'default',
             })
               .then(result => {
-                let sig = Signature.from(ensureHexPrefix(result.txHash))
+                let sig = Signature.from(
+                  ensureHexPrefix(shouldBePresent(result.hash))
+                )
                 if (sig.v < 27) {
                   sig = Signature.from({
                     r: sig.r,
@@ -690,7 +692,9 @@ export const handleRequest = (
             status: 'default',
           })
             .then(result => {
-              let sig = Signature.from(ensureHexPrefix(result.txHash))
+              let sig = Signature.from(
+                ensureHexPrefix(shouldBePresent(result.hash))
+              )
               if (sig.v < 27) {
                 sig = Signature.from({
                   r: sig.r,

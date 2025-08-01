@@ -5,7 +5,6 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { getChainSpecificQueryKey } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
@@ -60,17 +59,11 @@ export const useSwapChainSpecificQuery = () => {
         quote: swapQuote,
         fromCoin: {
           ...fromCoin,
-          hexPublicKey: toHexPublicKey({
-            publicKey: fromPublicKey,
-            walletCore,
-          }),
+          hexPublicKey: Buffer.from(fromPublicKey.data()).toString('hex'),
         },
         toCoin: {
           ...toCoin,
-          hexPublicKey: toHexPublicKey({
-            publicKey: toPublicKey,
-            walletCore,
-          }),
+          hexPublicKey: Buffer.from(toPublicKey.data()).toString('hex'),
         },
       })
 

@@ -2,6 +2,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import base58 from 'bs58'
 
+import { tronRpcUrl } from '../../chains/tron/config'
 import { isFeeCoin } from '../utils/isFeeCoin'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
 
@@ -18,7 +19,7 @@ export const getTronCoinBalance: CoinBalanceResolver = async input => {
       const data = await queryUrl<{
         result?: { balance?: string }
         balance?: string
-      }>('https://tron-rpc.publicnode.com/wallet/getaccount', {
+      }>(`${tronRpcUrl}/wallet/getaccount`, {
         body: {
           address: input.address,
           visible: true,

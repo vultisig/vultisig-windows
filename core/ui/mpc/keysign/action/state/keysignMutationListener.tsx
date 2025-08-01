@@ -1,8 +1,8 @@
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { createContext, useContext } from 'react'
 
 export type KeysignMutationListener = {
-  onSuccess?: (result: TxResult[]) => void
+  onSuccess?: (result: KeysignResult) => void
   onError?: (error: Error) => void
 }
 

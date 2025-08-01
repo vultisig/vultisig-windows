@@ -10,7 +10,6 @@ import {
   extractAccountCoinKey,
 } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -93,10 +92,7 @@ export const DepositConfirmButton = ({
         const basePayload: any = {
           coin: toCommCoin({
             ...coin,
-            hexPublicKey: toHexPublicKey({
-              publicKey,
-              walletCore,
-            }),
+            hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           }),
           memo,
           blockchainSpecific: chainSpecific,

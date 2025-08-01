@@ -1,3 +1,4 @@
+import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { KeysignActionProvider } from '@core/ui/mpc/keysign/action/KeysignActionProvider'
 import {
   KeysignMutationListener,
@@ -8,11 +9,13 @@ import { StartKeysignProviders } from '@core/ui/mpc/keysign/start/StartKeysignPr
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { getLastItem } from '@lib/utils/array/getLastItem'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMemo } from 'react'
 
 import { initializeMessenger } from '../../../messengers/initializeMessenger'
 import { useUpdateTransactionMutation } from '../../../transactions/mutations/useUpdateTransactionMutation'
 import { useCurrentVaultTransactionsQuery } from '../../../transactions/state/useTransactions'
+import { ITransaction } from '../../../utils/interfaces'
 
 const backgroundMessenger = initializeMessenger({ connect: 'background' })
 
@@ -24,7 +27,7 @@ export const StartKeysignPage = () => {
 
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
-      onSuccess: txResults => {
+      onSuccess: result => {
         if (!isDAppSigning) {
           return
         }
@@ -33,20 +36,21 @@ export const StartKeysignPage = () => {
         }
         const transaction = getLastItem(transactions)
 
-        const txResult = getLastItem(txResults)
+        const newTransaction: ITransaction = {
+          ...transaction,
+          ...matchRecordUnion<KeysignResult, Partial<ITransaction>>(result, {
+            signature: signature => ({ hash: signature }),
+            txs: txs => getLastItem(txs),
+          }),
+          status: 'success',
+        }
 
         updateTransaction({
-          transaction: {
-            ...transaction,
-            status: 'success',
-            ...txResult,
-          },
+          transaction: newTransaction,
           vaultId: currentVaultId,
         })
 
-        backgroundMessenger.send(`tx_result_${transaction.id}`, {
-          ...txResult,
-        })
+        backgroundMessenger.send(`tx_result_${transaction.id}`, newTransaction)
       },
     }),
     [currentVaultId, isDAppSigning, transactions, updateTransaction]

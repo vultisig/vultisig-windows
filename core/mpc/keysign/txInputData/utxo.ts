@@ -2,7 +2,6 @@ import { UtxoChain } from '@core/chain/Chain'
 import { utxoChainScriptType } from '@core/chain/chains/utxo/tx/UtxoScriptType'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -43,7 +42,7 @@ export const getUtxoTxInputData = ({
     pkh: () => lockScript.matchPayToPubkeyHash(),
   })
 
-  const scriptKey = stripHexPrefix(walletCore.HexCoding.encode(pubKeyHash))
+  const scriptKey = Buffer.from(pubKeyHash).toString('hex')
 
   const script = match(scriptType, {
     wpkh: () =>

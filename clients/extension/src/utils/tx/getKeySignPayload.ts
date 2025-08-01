@@ -19,7 +19,6 @@ import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thor
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
-import { toHexPublicKey } from '@core/chain/utils/toHexPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   CosmosIbcDenomTraceSchema,
@@ -186,10 +185,7 @@ export const getKeysignPayload = async (
     ticker: accountCoin.ticker,
     address: transaction.transactionDetails.from,
     decimals: accountCoin.decimals,
-    hexPublicKey: toHexPublicKey({
-      publicKey,
-      walletCore,
-    }),
+    hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
     isNativeToken: isFeeCoin(accountCoin),
     logo: accountCoin.logo,
     priceProviderId: accountCoin.priceProviderId ?? '',

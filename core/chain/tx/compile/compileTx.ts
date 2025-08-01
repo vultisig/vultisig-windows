@@ -4,7 +4,6 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertSignature } from '@core/chain/utils/assertSignature'
-import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
@@ -41,7 +40,7 @@ export const compileTx = ({
 
     const signature = generateSignature({
       walletCore,
-      signature: signatures[hexEncode({ value: hash, walletCore })],
+      signature: signatures[Buffer.from(hash).toString('hex')],
       signatureFormat,
     })
 

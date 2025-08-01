@@ -2,7 +2,7 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { Tx } from '@core/chain/tx'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
 
@@ -16,7 +16,7 @@ export namespace Messaging {
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
-      | TxResult
+      | ITransaction
   }
 
   export namespace GetVault {
@@ -246,11 +246,10 @@ type ITransactionPayload =
     }
   | { serialized: Uint8Array }
 
-export type ITransaction = {
-  id?: string
-  status: 'default' | 'error' | 'pending' | 'success'
-  transactionPayload: ITransactionPayload
-  txHash?: string
-  encoded?: any
-  windowId?: number
-}
+export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
+  Partial<Pick<Tx<T>, 'hash'>> & {
+    id?: string
+    status: 'default' | 'error' | 'pending' | 'success'
+    transactionPayload: ITransactionPayload
+    windowId?: number
+  }

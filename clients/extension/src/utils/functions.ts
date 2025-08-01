@@ -1,11 +1,12 @@
 import api from '@clients/extension/src/utils/api'
-import { TxResult } from '@core/chain/tx/execute/ExecuteTxResolver'
+import { OtherChain } from '@core/chain/Chain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
-import { Messaging } from './interfaces'
+import { ITransaction, Messaging } from './interfaces'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -111,7 +112,7 @@ export const processBackgroundResponse = (
   data: Messaging.Chain.Request,
   messageKey: MessageKey,
   result: Messaging.Chain.Response
-) => {
+): Messaging.Chain.Response => {
   const handledMethods = [
     RequestMethod.CTRL.TRANSFER,
     RequestMethod.METAMASK.ETH_SEND_TRANSACTION,
@@ -122,7 +123,9 @@ export const processBackgroundResponse = (
 
   if (isOneOf(data.method, handledMethods)) {
     if (messageKey === MessageKey.SOLANA_REQUEST) {
-      return shouldBeDefined((result as TxResult).encoded)
+      return shouldBeDefined(
+        (result as ITransaction<OtherChain.Solana>).encoded
+      )
     } else if (
       messageKey === MessageKey.COSMOS_REQUEST &&
       (data.params[0].txType === 'Vultisig' ||
@@ -130,7 +133,7 @@ export const processBackgroundResponse = (
     ) {
       return result
     }
-    return (result as TxResult).txHash
+    return shouldBePresent((result as ITransaction<OtherChain.Solana>).hash)
   }
 
   return result

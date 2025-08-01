@@ -1,9 +1,13 @@
-import { UtxoBasedChain } from '@core/chain/Chain'
+import { OtherChain, UtxoBasedChain, UtxoChain } from '@core/chain/Chain'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { getBlockchairBaseUrl } from './getBlockchairBaseUrl'
+import { getBlockchairBaseUrl } from '../../chains/utxo/client/getBlockchairBaseUrl'
+import { DecodedTx } from '../decode'
+import { BroadcastTxResolver } from './BroadcastTxResolver'
+
+type UtxoBasedDecodedTx = DecodedTx<UtxoChain> | DecodedTx<OtherChain.Cardano>
 
 type BlockchairBroadcastResponse =
   | {
@@ -18,24 +22,17 @@ type BlockchairBroadcastResponse =
       }
     }
 
-type BroadcastUtxoTransactionInput = {
-  chain: UtxoBasedChain
-  tx: string
-}
-
-export const broadcastUtxoTransaction = async ({
+export const broadcastUtxoTx: BroadcastTxResolver<UtxoBasedChain> = async ({
   chain,
   tx,
-}: BroadcastUtxoTransactionInput) => {
+}) => {
   const url = `${getBlockchairBaseUrl(chain)}/push/transaction`
 
-  console.log('broadcastUtxoTransaction input ', tx)
-
   const response = await queryUrl<BlockchairBroadcastResponse>(url, {
-    body: { data: tx },
+    body: {
+      data: Buffer.from((tx as UtxoBasedDecodedTx).encoded).toString('hex'),
+    },
   })
-
-  console.log('broadcastUtxoTransaction response', response)
 
   if (response.data) {
     return response.data.transaction_hash
