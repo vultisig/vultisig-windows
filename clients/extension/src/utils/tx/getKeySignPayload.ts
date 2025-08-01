@@ -93,7 +93,7 @@ export const getKeysignPayload = async (
   feeSettings: FeeSettings | null
 ): Promise<KeysignPayload> => {
   const accountCoin = {
-    ...(await getCoin(transaction.transactionDetails.asset, transaction.chain)), // TODO: Why asset.chain (BTC) and transaction.chain (Chain.Bitcoin) are not equal dispite of they have same type ?
+    ...(await getCoin(transaction.transactionDetails.asset, transaction.chain)),
     address: transaction.transactionDetails.from,
   }
 
