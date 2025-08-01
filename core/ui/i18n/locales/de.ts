@@ -5,10 +5,8 @@ export const de = {
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
-  deposit_yRune: 'yRUNE erhalten',
-  deposit_yTcy: 'yTCY erhalten',
-  withdraw_yRune: 'yRUNE verkaufen',
-  withdraw_yTcy: 'yTCY verkaufen',
+  mint: 'Erhalten',
+  redeem: 'Verkaufen',
   onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
   onboarding_description_2:

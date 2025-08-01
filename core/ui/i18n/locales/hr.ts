@@ -21,10 +21,8 @@ export const hr = {
   edit_referral: 'Uredi preporuku',
   edit_friends_referral: 'Uredi prijateljevu preporuku',
   add_referral_code: 'Dodaj kod preporuke',
-  deposit_yRune: 'Primi yRUNE',
-  deposit_yTcy: 'Primi yTCY',
-  withdraw_yRune: 'Prodaj yRUNE',
-  withdraw_yTcy: 'Prodaj yTCY',
+  mint: 'Primi',
+  redeem: 'Prodaj',
   your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
   change_your_friends_referral:
     'Promijeni kod preporuke vašeg prijatelja korišten za zamjene',
