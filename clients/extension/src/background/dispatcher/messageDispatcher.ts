@@ -16,7 +16,6 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 
 import { getCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
@@ -28,7 +27,7 @@ export const dispatchMessage = async (
   popupMessenger: Messenger
 ) => {
   const safeOrigin = typeof sender.origin === 'string' ? sender.origin : ''
-  const sessions = (await getVaultsAppSessions()) ?? {}
+  const sessions = await getVaultsAppSessions()
   const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
   if (!dappHostname) {
     console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
@@ -56,34 +55,37 @@ export const dispatchMessage = async (
     },
   } as const
 
-  const basicRequests = [
-    [MessageKey.BITCOIN_REQUEST, Chain.Bitcoin],
-    [MessageKey.BITCOIN_CASH_REQUEST, Chain.BitcoinCash],
-    [MessageKey.DASH_REQUEST, Chain.Dash],
-    [MessageKey.DOGECOIN_REQUEST, Chain.Dogecoin],
-    [MessageKey.LITECOIN_REQUEST, Chain.Litecoin],
-    [MessageKey.MAYA_REQUEST, Chain.MayaChain],
-    [MessageKey.POLKADOT_REQUEST, Chain.Polkadot],
-    [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
-    [MessageKey.SOLANA_REQUEST, Chain.Solana],
-    [MessageKey.THOR_REQUEST, Chain.THORChain],
-    [MessageKey.ZCASH_REQUEST, Chain.Zcash],
-  ] as const
-
-  for (const [key, chain] of basicRequests) {
-    if (type === key) return handleRequest(message, chain, safeOrigin)
+  const basicRequests: Partial<Record<MessageKey, Chain>> = {
+    [MessageKey.BITCOIN_REQUEST]: Chain.Bitcoin,
+    [MessageKey.BITCOIN_CASH_REQUEST]: Chain.BitcoinCash,
+    [MessageKey.DASH_REQUEST]: Chain.Dash,
+    [MessageKey.DOGECOIN_REQUEST]: Chain.Dogecoin,
+    [MessageKey.LITECOIN_REQUEST]: Chain.Litecoin,
+    [MessageKey.MAYA_REQUEST]: Chain.MayaChain,
+    [MessageKey.POLKADOT_REQUEST]: Chain.Polkadot,
+    [MessageKey.RIPPLE_REQUEST]: Chain.Ripple,
+    [MessageKey.SOLANA_REQUEST]: Chain.Solana,
+    [MessageKey.THOR_REQUEST]: Chain.THORChain,
+    [MessageKey.ZCASH_REQUEST]: Chain.Zcash,
   }
-  if (type in chainSelectors) {
-    const selector = chainSelectors[type as keyof typeof chainSelectors]
-    const chain = await selector?.()
-    if (!chain) return
-    const response = await handleRequest(
-      message,
-      shouldBePresent(chain),
-      safeOrigin
-    )
 
-    // Handle Cosmos Account Generation
+  const getChain = async () => {
+    if (type in basicRequests) {
+      return basicRequests[type]
+    }
+
+    if (type in chainSelectors) {
+      const selector = chainSelectors[type as keyof typeof chainSelectors]
+      const chain = await selector?.()
+      return chain
+    }
+  }
+
+  const chain = await getChain()
+
+  if (chain) {
+    const response = await handleRequest(message, chain, dappHostname)
+
     if (
       type === MessageKey.COSMOS_REQUEST &&
       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS

@@ -1,7 +1,4 @@
-import {
-  handleFindAccounts,
-  handleGetAccounts,
-} from '@clients/extension/src/background/handlers/accountsHandler'
+import { handleGetAccounts } from '@clients/extension/src/background/handlers/accountsHandler'
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
@@ -19,10 +16,6 @@ import {
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
-import {
-  getDappHost,
-  getDappHostname,
-} from '@clients/extension/src/utils/connectedApps'
 import {
   EventMethod,
   RequestMethod,
@@ -73,7 +66,7 @@ const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 export const handleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain,
-  sender: string
+  dappHostname: string
 ): Promise<
   Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
 > => {
@@ -81,51 +74,22 @@ export const handleRequest = (
     const { method, params } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.GET_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_ACCOUNTS: {
-        handleFindAccounts(chain, sender)
-          .then(([account]) => {
-            switch (chain) {
-              case Chain.Dydx:
-              case Chain.Cosmos:
-              case Chain.Kujira:
-              case Chain.Osmosis:
-              case Chain.Solana: {
-                resolve(account)
-
-                break
-              }
-              default: {
-                resolve(account ? [account] : [])
-
-                break
-              }
-            }
-          })
-          .catch(reject)
-
-        break
-      }
-
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-        handleGetAccounts(chain, sender)
+        handleGetAccounts(chain, dappHostname)
           .then(([account]) => {
             if (!account) throw new EIP1193Error('UserRejectedRequest')
 
             if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
-                `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
+                `${EventMethod.ACCOUNTS_CHANGED}:${dappHostname}`,
                 account
               )
               try {
-                inpageMessenger.send(
-                  `${EventMethod.CONNECT}:${getDappHost(sender)}`,
-                  {
-                    address: account,
-                    chainId: getEvmChainId(chain as EvmChain),
-                  }
-                )
+                inpageMessenger.send(`${EventMethod.CONNECT}:${dappHostname}`, {
+                  address: account,
+                  chainId: getEvmChainId(chain as EvmChain),
+                })
               } catch (err) {
                 console.log('background err send to inpage:', err)
               }
@@ -383,15 +347,14 @@ export const handleRequest = (
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getDappHostname(sender)
           const allSessions = await getVaultsAppSessions()
-          const previousSession = allSessions?.[safeVaultId]?.[host]
+          const previousSession = allSessions?.[safeVaultId]?.[dappHostname]
 
           if (previousSession) {
             try {
               await updateAppSession({
                 vaultId: safeVaultId,
-                host: host,
+                host: dappHostname,
                 fields: {
                   selectedCosmosChainId:
                     getChainKind(chain) === 'cosmos'
@@ -425,7 +388,6 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-        const host = getDappHostname(sender)
         getVaultsAppSessions()
           .then(async sessions => {
             const updatedSessions: VaultsAppSessions = {}
@@ -433,9 +395,9 @@ export const handleRequest = (
             for (const [vaultId, vaultSessions] of Object.entries(
               sessions ?? {}
             )) {
-              if (vaultSessions[host]) {
+              if (vaultSessions[dappHostname]) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { [host]: _, ...rest } = vaultSessions
+                const { [dappHostname]: _, ...rest } = vaultSessions
                 updatedSessions[vaultId] = rest
               } else {
                 updatedSessions[vaultId] = vaultSessions
@@ -484,14 +446,13 @@ export const handleRequest = (
         )
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getDappHostname(sender)
           const allSessions = await getVaultsAppSessions()
-          const previousSession = allSessions?.[safeVaultId]?.[host]
+          const previousSession = allSessions?.[safeVaultId]?.[dappHostname]
 
           if (previousSession) {
             await updateAppSession({
               vaultId: safeVaultId,
-              host,
+              host: dappHostname,
               fields: {
                 selectedCosmosChainId:
                   getChainKind(chain) === 'cosmos'

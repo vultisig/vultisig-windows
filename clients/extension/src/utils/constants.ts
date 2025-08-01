@@ -55,7 +55,6 @@ export namespace RequestMethod {
   }
 
   export enum METAMASK {
-    ETH_ACCOUNTS = 'eth_accounts',
     ETH_BLOB_BASE_FEE = 'eth_blobBaseFee',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_CALL = 'eth_call',
@@ -112,7 +111,6 @@ export namespace RequestMethod {
   }
 
   export enum VULTISIG {
-    GET_ACCOUNTS = 'get_accounts',
     CHAIN_ID = 'chain_id',
     DEPOSIT_TRANSACTION = 'deposit_transaction',
     GET_TRANSACTION_BY_HASH = 'get_transaction_by_hash',
