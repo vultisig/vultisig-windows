@@ -5,9 +5,10 @@ import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
-import { useSelectedCoinCorrector } from './hooks/useSelectedCoinCorrector'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
+import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
+import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
@@ -18,7 +19,6 @@ type Props = {
 }
 
 export const DepositActionSpecific = ({ action }: Props) => {
-  useSelectedCoinCorrector(action)
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
@@ -46,6 +46,8 @@ export const DepositActionSpecific = ({ action }: Props) => {
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
         unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
+        mint: () => <MintSpecific />,
+        redeem: () => <RedeemSpecific />,
       }}
       else={() => null}
     />
