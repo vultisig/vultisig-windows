@@ -1,16 +1,20 @@
-import { getBackgroundApiMessageSourceId } from './core'
+import {
+  BackgroundApiRequest,
+  getBackgroundApiMessageSourceId,
+  isBackgroundApiMessage,
+} from './core'
 
 export const runBackgroundApiContentAgent = () => {
-  window.addEventListener('message', event => {
-    if (event.source !== window) return
+  window.addEventListener('message', ({ source, data }) => {
+    if (source !== window) return
 
-    const { sourceId, ...rest } = event.data
-    if (sourceId !== getBackgroundApiMessageSourceId('inpage')) return
+    if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(data, 'inpage'))
+      return
 
-    chrome.runtime.sendMessage(rest, response => {
+    chrome.runtime.sendMessage(data, response => {
       window.postMessage(
         {
-          source: contentSource,
+          sourceId: getBackgroundApiMessageSourceId('background'),
           ...response,
         },
         '*'

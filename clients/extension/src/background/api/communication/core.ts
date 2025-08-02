@@ -3,21 +3,34 @@ import { Result } from '@lib/utils/types/Result'
 
 import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
 
-type BackgroundApiMessageSource = 'inpage' | 'content' | 'background'
+type BackgroundApiMessageSource = 'inpage' | 'background'
+
+type BackgroundApiMessageKey = {
+  id: string
+  sourceId: BackgroundApiMessageSource
+}
 
 export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
 ) => `${productName}-${source}`
 
-export type BackgroundApiRequest<M extends BackgroundApiMethodName> = {
-  id: string
-  sourceId: BackgroundApiMessageSource
-  method: M
-  input: BackgroundApiInterface[M]['input']
-}
+export type BackgroundApiRequest<M extends BackgroundApiMethodName> =
+  BackgroundApiMessageKey & {
+    method: M
+    input: BackgroundApiInterface[M]['input']
+  }
 
-export type BackgroundApiResponse<M extends BackgroundApiMethodName> = {
-  id: string
+export type BackgroundApiResponse<M extends BackgroundApiMethodName> =
+  BackgroundApiMessageKey & {
+    result: Result<BackgroundApiInterface[M]['output']>
+  }
+
+export const isBackgroundApiMessage = <T extends BackgroundApiMessageKey>(
+  message: unknown,
   sourceId: BackgroundApiMessageSource
-  result: Result<BackgroundApiInterface[M]['output']>
-}
+): message is T =>
+  typeof message === 'object' &&
+  message !== null &&
+  'id' in message &&
+  'sourceId' in message &&
+  message.sourceId === sourceId

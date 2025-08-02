@@ -4,7 +4,7 @@ import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
 import {
   BackgroundApiRequest,
   BackgroundApiResponse,
-  getBackgroundApiMessageSourceId,
+  isBackgroundApiMessage,
 } from './core'
 
 const listeners: Record<string, (result: Result) => void> = {}
@@ -30,8 +30,10 @@ export const runBackgroundApiInpageAgent = () => {
   window.addEventListener('message', ({ source, data }) => {
     if (source !== window) return
 
-    const { sourceId, id, result } = data as BackgroundApiResponse<any>
-    if (sourceId !== getBackgroundApiMessageSourceId('content')) return
+    if (!isBackgroundApiMessage<BackgroundApiResponse<any>>(data, 'background'))
+      return
+
+    const { id, result } = data
 
     const listener = listeners[id]
     if (listener) {
