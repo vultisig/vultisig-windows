@@ -13,3 +13,5 @@ export type BackgroundApiInterface = {
     VaultExport
   >
 }
+
+export type BackgroundApiMethodName = keyof BackgroundApiInterface
