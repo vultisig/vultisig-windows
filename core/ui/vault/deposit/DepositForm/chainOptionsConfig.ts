@@ -63,8 +63,6 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
-<<<<<<< Updated upstream
-=======
   stake_ruji: {
     fields: [
       {
@@ -114,7 +112,6 @@ export const getRequiredFieldsPerChainAction = (
     fields: [],
     schema: (_: FunctionSchema) => z.object({}),
   },
->>>>>>> Stashed changes
   mint: {
     fields: [
       { name: 'amount', type: 'number', label: t('amount'), required: true },
