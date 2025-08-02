@@ -1,27 +1,15 @@
 import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 
-import { getVaultAppSessions } from '../../../sessions/state/appSessions'
 import { storage } from '../../../storage'
 import { BackgroundApiResolver } from '../resolver'
 
-export const getVault: BackgroundApiResolver<'getVault'> = async ({
-  input,
-}) => {
-  const { dappHostname } = input
-
+export const getVault: BackgroundApiResolver<'getVault'> = async () => {
   const vaults = await storage.getVaults()
   const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) {
     throw new Error('No vault selected')
-  }
-
-  const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[dappHostname]
-
-  if (!currentSession) {
-    throw new Error(`No vault selected for ${dappHostname}`)
   }
 
   const currentVault = vaults.find(

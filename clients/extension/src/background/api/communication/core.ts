@@ -14,11 +14,14 @@ export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
 ) => `${productName}-${source}`
 
+export type BackgroundApiCall<M extends BackgroundApiMethodName> = {
+  method: M
+} & ([BackgroundApiInterface[M]['input']] extends [undefined]
+  ? { input?: BackgroundApiInterface[M]['input'] }
+  : { input: BackgroundApiInterface[M]['input'] })
+
 export type BackgroundApiRequest<M extends BackgroundApiMethodName> =
-  BackgroundApiMessageKey & {
-    method: M
-    input: BackgroundApiInterface[M]['input']
-  }
+  BackgroundApiMessageKey & BackgroundApiCall<M>
 
 export type BackgroundApiResponse<M extends BackgroundApiMethodName> =
   BackgroundApiMessageKey & {
