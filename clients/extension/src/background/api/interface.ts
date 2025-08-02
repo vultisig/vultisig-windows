@@ -6,12 +6,7 @@ type ApiMethod<Input, Output> = {
 }
 
 export type BackgroundApiInterface = {
-  getVault: ApiMethod<
-    {
-      dappHostname: string
-    },
-    VaultExport
-  >
+  getVault: ApiMethod<undefined, VaultExport>
 }
 
 export type BackgroundApiMethodName = keyof BackgroundApiInterface
