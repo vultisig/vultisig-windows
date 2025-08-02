@@ -6,6 +6,7 @@ import {
   BackgroundApiCall,
   BackgroundApiRequest,
   BackgroundApiResponse,
+  getBackgroundApiMessageSourceId,
   isBackgroundApiMessage,
 } from './core'
 
@@ -27,7 +28,7 @@ export const callBackgroundApi = <M extends BackgroundApiMethodName>(
 
     const request: BackgroundApiRequest<M> = {
       id,
-      sourceId: 'inpage',
+      sourceId: getBackgroundApiMessageSourceId('inpage'),
       ...call,
     }
 

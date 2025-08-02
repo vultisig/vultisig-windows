@@ -5,14 +5,18 @@ import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
 
 type BackgroundApiMessageSource = 'inpage' | 'background'
 
-type BackgroundApiMessageKey = {
-  id: string
-  sourceId: BackgroundApiMessageSource
-}
-
 export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
-) => `${productName}-${source}`
+) => `${productName}-background-api-${source}` as const
+
+export type BackgroundApiMessageSourceId = ReturnType<
+  typeof getBackgroundApiMessageSourceId
+>
+
+type BackgroundApiMessageKey = {
+  id: string
+  sourceId: BackgroundApiMessageSourceId
+}
 
 export type BackgroundApiCall<M extends BackgroundApiMethodName> = {
   method: M
@@ -30,10 +34,10 @@ export type BackgroundApiResponse<M extends BackgroundApiMethodName> =
 
 export const isBackgroundApiMessage = <T extends BackgroundApiMessageKey>(
   message: unknown,
-  sourceId: BackgroundApiMessageSource
+  source: BackgroundApiMessageSource
 ): message is T =>
   typeof message === 'object' &&
   message !== null &&
   'id' in message &&
   'sourceId' in message &&
-  message.sourceId === sourceId
+  message.sourceId === getBackgroundApiMessageSourceId(source)

@@ -3,7 +3,11 @@ import { attempt } from '@lib/utils/attempt'
 import { getDappHostname } from '../../../utils/connectedApps'
 import { backgroundApi } from '..'
 import { BackgroundApiMethodName } from '../interface'
-import { BackgroundApiRequest, isBackgroundApiMessage } from './core'
+import {
+  BackgroundApiRequest,
+  getBackgroundApiMessageSourceId,
+  isBackgroundApiMessage,
+} from './core'
 
 export const runBackgroundApiBackgroundAgent = () => {
   chrome.runtime.onMessage.addListener(
@@ -13,7 +17,7 @@ export const runBackgroundApiBackgroundAgent = () => {
       if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(request, 'inpage'))
         return
 
-      const { method, input } = request
+      const { method, input, id } = request
 
       const handler = backgroundApi[method as BackgroundApiMethodName]
       if (!handler) return
@@ -29,7 +33,13 @@ export const runBackgroundApiBackgroundAgent = () => {
             },
           })
         )
-      ).then(sendResponse)
+      ).then(result => {
+        sendResponse({
+          id,
+          result,
+          sourceId: getBackgroundApiMessageSourceId('background'),
+        })
+      })
 
       return true
     }
