@@ -1,6 +1,10 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
+<<<<<<< Updated upstream
+=======
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
+>>>>>>> Stashed changes
 import {
   YieldBearingAsset,
   yieldBearingAssetsAffiliateAddress,
@@ -18,6 +22,10 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+<<<<<<< Updated upstream
+=======
+import { match } from '@lib/utils/match'
+>>>>>>> Stashed changes
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -93,6 +101,68 @@ export function useDepositKeysignPayload({
           libType: vault.libType,
         }
 
+<<<<<<< Updated upstream
+=======
+        if (
+          isOneOf(action, [
+            'stake_ruji',
+            'unstake_ruji',
+            'withdraw_ruji_rewards',
+          ])
+        ) {
+          const amount = Number(depositFormData['amount'] ?? 0)
+          const amountUnits =
+            action === 'stake_ruji'
+              ? toChainAmount(
+                  amount,
+                  rujiraStakingConfig.bondDecimals
+                ).toString()
+              : action === 'unstake_ruji'
+                ? toChainAmount(
+                    amount,
+                    rujiraStakingConfig.bondDecimals
+                  ).toString()
+                : '0'
+
+          let executeInner: string
+          match(action, {
+            stake_ruji: () => {
+              executeInner = JSON.stringify({ account: { bond: {} } })
+            },
+            unstake_ruji: () => {
+              executeInner = JSON.stringify({
+                account: { withdraw: { amount: amountUnits } },
+              })
+            },
+            withdraw_ruji_rewards: () => {
+              executeInner = JSON.stringify({ account: { claim: {} } })
+            },
+          })
+
+          base.contractPayload = {
+            case: 'wasmExecuteContractPayload',
+            value: {
+              senderAddress: coin.address,
+              contractAddress: rujiraStakingConfig.contract,
+              executeMsg: executeInner,
+              coins:
+                action === 'stake_ruji'
+                  ? [
+                      {
+                        denom: rujiraStakingConfig.bondDenom,
+                        amount: amountUnits,
+                      },
+                    ]
+                  : [],
+            },
+          }
+
+          base.toAmount = action === 'withdraw_ruji_rewards' ? '0' : amountUnits
+
+          return { keysign: create(KeysignPayloadSchema, base) }
+        }
+
+>>>>>>> Stashed changes
         if (action === 'mint' || action === 'redeem') {
           const asset = depositFormData['asset'] as YieldBearingAsset
           const isDeposit = action === 'mint'

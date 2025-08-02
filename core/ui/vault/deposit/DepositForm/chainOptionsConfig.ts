@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { match } from '@lib/utils/match'
@@ -62,6 +63,58 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
+<<<<<<< Updated upstream
+=======
+  stake_ruji: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true as const,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(1 / 10 ** rujiraStakingConfig.bondDecimals)
+              .max(totalAmountAvailable)
+          ),
+      }),
+  },
+  unstake_ruji: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true as const,
+      },
+    ],
+    schema: (_: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(1 / 10 ** rujiraStakingConfig.bondDecimals)
+          ),
+      }),
+  },
+  withdraw_ruji_rewards: {
+    fields: [],
+    schema: (_: FunctionSchema) => z.object({}),
+  },
+>>>>>>> Stashed changes
   mint: {
     fields: [
       { name: 'amount', type: 'number', label: t('amount'), required: true },
