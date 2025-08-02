@@ -3,7 +3,7 @@ import {
   handleGetVaults,
 } from '@clients/extension/src/background/handlers/accountsHandler'
 import { handlePluginRequest } from '@clients/extension/src/background/handlers/pluginHandler'
-import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
+import { deprecatedHandleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
 import { Messenger } from '@clients/extension/src/messengers/createMessenger'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
@@ -16,10 +16,12 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { match } from '@lib/utils/match'
 
 import { getCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
+import { walletApi } from '../../wallet/api'
+import { WalletApiMethodName } from '../../wallet/api/interface'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -28,7 +30,7 @@ export const dispatchMessage = async (
   popupMessenger: Messenger
 ) => {
   const safeOrigin = typeof sender.origin === 'string' ? sender.origin : ''
-  const sessions = (await getVaultsAppSessions()) ?? {}
+  const sessions = await getVaultsAppSessions()
   const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
   if (!dappHostname) {
     console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
@@ -56,34 +58,54 @@ export const dispatchMessage = async (
     },
   } as const
 
-  const basicRequests = [
-    [MessageKey.BITCOIN_REQUEST, Chain.Bitcoin],
-    [MessageKey.BITCOIN_CASH_REQUEST, Chain.BitcoinCash],
-    [MessageKey.DASH_REQUEST, Chain.Dash],
-    [MessageKey.DOGECOIN_REQUEST, Chain.Dogecoin],
-    [MessageKey.LITECOIN_REQUEST, Chain.Litecoin],
-    [MessageKey.MAYA_REQUEST, Chain.MayaChain],
-    [MessageKey.POLKADOT_REQUEST, Chain.Polkadot],
-    [MessageKey.RIPPLE_REQUEST, Chain.Ripple],
-    [MessageKey.SOLANA_REQUEST, Chain.Solana],
-    [MessageKey.THOR_REQUEST, Chain.THORChain],
-    [MessageKey.ZCASH_REQUEST, Chain.Zcash],
-  ] as const
-
-  for (const [key, chain] of basicRequests) {
-    if (type === key) return handleRequest(message, chain, safeOrigin)
+  const basicRequests: Partial<Record<MessageKey, Chain>> = {
+    [MessageKey.BITCOIN_REQUEST]: Chain.Bitcoin,
+    [MessageKey.BITCOIN_CASH_REQUEST]: Chain.BitcoinCash,
+    [MessageKey.DASH_REQUEST]: Chain.Dash,
+    [MessageKey.DOGECOIN_REQUEST]: Chain.Dogecoin,
+    [MessageKey.LITECOIN_REQUEST]: Chain.Litecoin,
+    [MessageKey.MAYA_REQUEST]: Chain.MayaChain,
+    [MessageKey.POLKADOT_REQUEST]: Chain.Polkadot,
+    [MessageKey.RIPPLE_REQUEST]: Chain.Ripple,
+    [MessageKey.SOLANA_REQUEST]: Chain.Solana,
+    [MessageKey.THOR_REQUEST]: Chain.THORChain,
+    [MessageKey.ZCASH_REQUEST]: Chain.Zcash,
   }
-  if (type in chainSelectors) {
-    const selector = chainSelectors[type as keyof typeof chainSelectors]
-    const chain = await selector?.()
-    if (!chain) return
-    const response = await handleRequest(
-      message,
-      shouldBePresent(chain),
-      safeOrigin
-    )
 
-    // Handle Cosmos Account Generation
+  const getChain = async () => {
+    if (type in basicRequests) {
+      return basicRequests[type]
+    }
+
+    if (type in chainSelectors) {
+      const selector = chainSelectors[type as keyof typeof chainSelectors]
+      const chain = await selector?.()
+      return chain
+    }
+  }
+
+  const chain = await getChain()
+
+  if (chain) {
+    const handleRequest = () => {
+      const { method } = message
+
+      if (isOneOf(method, Object.keys(walletApi))) {
+        return walletApi[method as WalletApiMethodName]({
+          input: {
+            chain,
+          },
+          context: {
+            dappHostname,
+          },
+        })
+      }
+
+      return deprecatedHandleRequest(message, chain, dappHostname)
+    }
+
+    const response = await handleRequest()
+
     if (
       type === MessageKey.COSMOS_REQUEST &&
       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS

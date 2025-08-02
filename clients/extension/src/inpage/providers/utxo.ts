@@ -37,13 +37,6 @@ export class UTXO extends EventEmitter {
     })
   }
 
-  async getAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-    })
-  }
-
   async signPsbt(_psbt: string | Buffer) {
     return await this.request({
       method: RequestMethod.CTRL.SIGN_PSBT,

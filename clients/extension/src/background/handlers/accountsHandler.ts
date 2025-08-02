@@ -22,16 +22,16 @@ const instance: Record<Instance, boolean> = {
   [Instance.VAULTS]: false,
 }
 
-export const handleFindAccounts = async (
+const handleFindAccounts = async (
   chain: Chain,
-  sender: string
+  dappHostname: string
 ): Promise<string[]> => {
   const currentVaultId = await storage.getCurrentVaultId()
 
   if (!currentVaultId) return []
 
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)]
+  const currentSession = vaultSessions[dappHostname]
 
   if (!currentSession) return []
 
@@ -151,11 +151,15 @@ function handleWithConnection<T>(
 
 export const handleGetAccounts = (
   chain: Chain,
-  sender: string
+  dappHostname: string
 ): Promise<string[]> => {
-  return handleWithConnection(() => handleFindAccounts(chain, sender), sender, {
-    chain,
-  })
+  return handleWithConnection(
+    () => handleFindAccounts(chain, dappHostname),
+    dappHostname,
+    {
+      chain,
+    }
+  )
 }
 
 export const handleGetVault = (
