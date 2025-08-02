@@ -15,6 +15,8 @@ export type ChainAction =
   | 'merge'
   | 'switch'
   | 'unmerge'
+  | 'mint'
+  | 'redeem'
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -26,6 +28,8 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'stake',
     'unstake',
     'unmerge',
+    'mint',
+    'redeem',
   ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],

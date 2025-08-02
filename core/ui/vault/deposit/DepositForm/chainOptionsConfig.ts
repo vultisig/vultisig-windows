@@ -62,6 +62,41 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
+  mint: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
+      }),
+  },
+  redeem: {
+    fields: [
+      { name: 'amount', type: 'number', label: t('amount'), required: true },
+      {
+        name: 'slippage',
+        type: 'percentage',
+        label: t('slippage'),
+        required: true,
+        default: 1,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().max(totalAmountAvailable)),
+        slippage: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().min(0.1).max(7.5)),
+      }),
+  },
   unmerge: {
     fields: [
       {

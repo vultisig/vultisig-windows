@@ -32,7 +32,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBance'
+import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
 import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
@@ -76,6 +76,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
+
   const coin = useDepositCoin()
 
   const schemaForChainAction = resolveSchema(
@@ -170,6 +171,8 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'merge',
                     'stake',
                     'unmerge',
+                    'mint',
+                    'redeem',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin

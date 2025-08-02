@@ -1,6 +1,7 @@
 import { Chain, CosmosChain } from '../../Chain'
 import { kujiraCoinsMigratedToThorChainMetadata } from '../../chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '../../chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
+import { yieldBearingThorChainTokens } from '../../chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
 import { KnownCoinMetadata } from '../Coin'
 
 export const knownCosmosTokens: Record<
@@ -42,6 +43,7 @@ export const knownCosmosTokens: Record<
       priceProviderId: 'rujira',
     },
     ...kujiraCoinsOnThorChain,
+    ...yieldBearingThorChainTokens,
   },
   [Chain.Cosmos]: {
     'ibc/F663521BF1836B00F5F177680F74BFB9A8B5654A694D0D2BC249E03CF2509013': {

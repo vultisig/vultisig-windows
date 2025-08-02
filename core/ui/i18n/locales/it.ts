@@ -32,6 +32,8 @@ export const it = {
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
   digit_input_loading_validation: 'Verifica del codice in corso, attendere',
   referral_reg_fee: 'Quota di registrazione',
+  mint: 'Ricevi',
+  redeem: 'Vendi',
   create_referral: 'Crea referral',
   select: 'Seleziona',
   pick_referral_code: 'Scegli il codice referral',

@@ -7,6 +7,8 @@ import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvi
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
+import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
+import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
@@ -44,6 +46,8 @@ export const DepositActionSpecific = ({ action }: Props) => {
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
         unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
+        mint: () => <MintSpecific />,
+        redeem: () => <RedeemSpecific />,
       }}
       else={() => null}
     />

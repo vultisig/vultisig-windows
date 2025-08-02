@@ -20,6 +20,8 @@ export const pt = {
   collected_rewards: 'Recompensas coletadas',
   expires_on: 'Expira em',
   edit_referral: 'Editar indicação',
+  mint: 'Receber',
+  redeem: 'Vender',
   edit_friends_referral: 'Editar indicação de amigo',
   add_referral_code: 'Adicionar código de indicação',
   your_friends_referral_code: 'Código de indicação do seu amigo',
