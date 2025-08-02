@@ -32,6 +32,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useRujiUiBalances } from '../hooks/stake/useRujiraBalances'
 import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
 import { useDepositCoin } from '../state/coin'
 
@@ -51,11 +52,17 @@ export const DepositForm: FC<DepositFormProps> = ({
   chainActionOptions,
   chain,
 }) => {
+  const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
+
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
-  const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
+
+  const ruji = useRujiUiBalances()
+  const isStakeRuji = selectedChainAction === 'stake_ruji'
+  const isUnstakeRuji = selectedChainAction === 'unstake_ruji'
+  const isWithdrawRewards = selectedChainAction === 'withdraw_ruji_rewards'
 
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
@@ -66,9 +73,15 @@ export const DepositForm: FC<DepositFormProps> = ({
     chain,
   })
 
-  const totalTokenAmount = localSelectedCoin
-    ? selectedCoinBalance
-    : (totalAmountAvailableForChainData?.totalTokenAmount ?? 0)
+  const totalTokenAmount = isStakeRuji
+    ? ruji.liquid
+    : isUnstakeRuji
+      ? ruji.bonded
+      : isWithdrawRewards
+        ? ruji.rewards
+        : localSelectedCoin
+          ? selectedCoinBalance
+          : (totalAmountAvailableForChainData?.totalTokenAmount ?? 0)
 
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
@@ -173,6 +186,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'unmerge',
                     'mint',
                     'redeem',
+                    'stake_ruji',
+                    'unstake_ruji',
+                    'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin
