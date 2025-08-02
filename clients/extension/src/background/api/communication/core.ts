@@ -1,18 +1,23 @@
 import { productName } from '@core/config'
 import { Result } from '@lib/utils/types/Result'
 
-export type Request = {
+import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
+
+type BackgroundApiMessageSource = 'inpage' | 'content' | 'background'
+
+export const getBackgroundApiMessageSourceId = (
+  source: BackgroundApiMessageSource
+) => `${productName}-${source}`
+
+export type BackgroundApiRequest<M extends BackgroundApiMethodName> = {
   id: string
-  source: string
-  method: string
-  input: any
+  sourceId: BackgroundApiMessageSource
+  method: M
+  input: BackgroundApiInterface[M]['input']
 }
 
-export type Response = {
+export type BackgroundApiResponse<M extends BackgroundApiMethodName> = {
   id: string
-  source: string
-  result: Result<any, Error>
+  sourceId: BackgroundApiMessageSource
+  result: Result<BackgroundApiInterface[M]['output']>
 }
-
-export const inpageSource = `${productName}-inpage`
-export const contentSource = `${productName}-content`

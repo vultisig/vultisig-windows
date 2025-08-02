@@ -1,38 +1,42 @@
-import { contentSource, inpageSource, Request, Response } from './core'
+import { Result } from '@lib/utils/types/Result'
 
-export const sendMessageToContentScript = (message: Request): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    listeners[message.id] = ({ result }) => {
-      if (result.error) reject(result.error)
-      else resolve(result.data)
+import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
+import {
+  BackgroundApiRequest,
+  BackgroundApiResponse,
+  getBackgroundApiMessageSourceId,
+} from './core'
+
+const listeners: Record<string, (result: Result) => void> = {}
+
+export const sendBackgroundApiRequestToContentScript = <
+  M extends BackgroundApiMethodName,
+>(
+  request: BackgroundApiRequest<M>
+): Promise<BackgroundApiInterface[M]['output']> =>
+  new Promise((resolve, reject) => {
+    listeners[request.id] = result => {
+      if ('error' in result) {
+        reject(result.error)
+      }
+
+      resolve(result.data as BackgroundApiInterface[M]['output'])
     }
 
-    window.postMessage(
-      {
-        source: inpageSource,
-        payload: message,
-      },
-      '*'
-    )
+    window.postMessage(request, '*')
   })
-}
 
-const listeners: Record<string, (response: Response) => void> = {}
+export const runBackgroundApiInpageAgent = () => {
+  window.addEventListener('message', ({ source, data }) => {
+    if (source !== window) return
 
-export const listen = () => {
-  window.addEventListener('message', event => {
-    if (
-      event.source !== window ||
-      !event.data ||
-      event.data.source !== contentSource
-    )
-      return
+    const { sourceId, id, result } = data as BackgroundApiResponse<any>
+    if (sourceId !== getBackgroundApiMessageSourceId('content')) return
 
-    const response: Response = event.data.payload
-    const listener = listeners[response.id]
+    const listener = listeners[id]
     if (listener) {
-      listener(response)
-      delete listeners[response.id]
+      listener(result)
+      delete listeners[id]
     }
   })
 }

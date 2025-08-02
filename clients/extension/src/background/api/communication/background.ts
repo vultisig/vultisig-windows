@@ -4,7 +4,7 @@ import { backgroundApi } from '..'
 import { BackgroundApiMethodName } from '../interface'
 import { Request } from './core'
 
-export const listen = () => {
+export const runBackgroundApiBackgroundAgent = () => {
   chrome.runtime.onMessage.addListener(
     async (message: Request, sender, sendResponse) => {
       const handler = backgroundApi[message.method as BackgroundApiMethodName]
