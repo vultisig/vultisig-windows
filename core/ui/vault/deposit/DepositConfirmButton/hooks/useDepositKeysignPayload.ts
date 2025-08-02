@@ -2,11 +2,11 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import {
-  affiliateAddress,
-  affiliateContract,
-  YAsset,
-  yAssetContracts,
-} from '@core/chain/chains/cosmos/thor/yAssets/config'
+  YieldBearingAsset,
+  yieldBearingAssetsAffiliateAddress,
+  yieldBearingAssetsAffiliateContract,
+  yieldBearingAssetsContracts,
+} from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
@@ -94,7 +94,7 @@ export function useDepositKeysignPayload({
         }
 
         if (action === 'mint' || action === 'redeem') {
-          const asset = depositFormData['asset'] as YAsset
+          const asset = depositFormData['asset'] as YieldBearingAsset
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
             shouldBePresent(rawAmount),
@@ -106,11 +106,11 @@ export function useDepositKeysignPayload({
             executeInner = {
               execute: {
                 // TODO: double check this!
-                contract_addr: yAssetContracts[asset],
+                contract_addr: yieldBearingAssetsContracts[asset],
                 msg: Buffer.from(JSON.stringify({ deposit: {} })).toString(
                   'base64'
                 ),
-                affiliate: [affiliateAddress, 10],
+                affiliate: [yieldBearingAssetsAffiliateAddress, 10],
               },
             }
           } else {
@@ -124,8 +124,8 @@ export function useDepositKeysignPayload({
             value: {
               senderAddress: coin.address,
               contractAddress: isDeposit
-                ? affiliateContract
-                : yAssetContracts[asset],
+                ? yieldBearingAssetsAffiliateContract
+                : yieldBearingAssetsContracts[asset],
               executeMsg: JSON.stringify(executeInner),
               coins: isDeposit
                 ? [
