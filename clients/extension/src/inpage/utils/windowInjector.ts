@@ -6,18 +6,15 @@ import { MessageKey } from '@clients/extension/src/utils/constants'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { callBackgroundApi } from '../../background/api/communication/inpage'
+
 export const injectToWindow = () => {
   const providers = createProviders()
   const ethereumProvider = providers.ethereum
 
   const vultisigProvider = {
     ...providers,
-    getVault: async () =>
-      messengers.background.send(
-        'providerRequest',
-        { type: MessageKey.VAULT, message: {} },
-        { id: uuidv4() }
-      ),
+    getVault: async () => callBackgroundApi({ method: 'getVault' }),
     getVaults: async () =>
       messengers.background.send(
         'providerRequest',

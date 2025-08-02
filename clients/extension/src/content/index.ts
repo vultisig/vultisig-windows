@@ -1,3 +1,4 @@
+import { runBackgroundApiContentAgent } from '../background/api/communication/content'
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
 import { initializeMessenger } from '../messengers/initializeMessenger'
 import { getPrioritizeWallet } from '../state/currentSettings/isPrioritized'
@@ -28,3 +29,5 @@ window.addEventListener('vulticonnect:inpage:ready', async () => {
     vultisigDefaultProvider: await getPrioritizeWallet(),
   })
 })
+
+runBackgroundApiContentAgent()
