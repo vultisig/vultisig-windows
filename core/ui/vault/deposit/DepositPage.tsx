@@ -5,6 +5,7 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
+import { featureFlags } from '../../config'
 import { ChainAction, chainActionsRecord } from './ChainAction'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
@@ -17,7 +18,12 @@ export const DepositPage = () => {
   const chainActionOptions =
     chainActionsRecord[coin.chain as DepositEnabledChain]
 
-  const filteredChainActionOptions = chainActionOptions
+  const filteredChainActionOptions = chainActionOptions.filter(
+    chainAction =>
+      !featureFlags.mintAndRedeem &&
+      chainAction !== 'mint' &&
+      chainAction !== 'redeem'
+  )
 
   const [state, setState] = useState<{
     depositFormData: FieldValues
