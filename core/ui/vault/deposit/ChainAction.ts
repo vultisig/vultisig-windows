@@ -17,12 +17,9 @@ export type ChainAction =
   | 'unmerge'
   | 'mint'
   | 'redeem'
-<<<<<<< Updated upstream
-=======
   | 'stake_ruji'
   | 'unstake_ruji'
   | 'withdraw_ruji_rewards'
->>>>>>> Stashed changes
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -36,12 +33,9 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'unmerge',
     'mint',
     'redeem',
-<<<<<<< Updated upstream
-=======
     'stake_ruji',
     'unstake_ruji',
     'withdraw_ruji_rewards',
->>>>>>> Stashed changes
   ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],

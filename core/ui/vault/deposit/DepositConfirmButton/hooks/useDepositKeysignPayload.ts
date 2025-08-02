@@ -1,14 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
-<<<<<<< Updated upstream
-=======
-import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
->>>>>>> Stashed changes
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import {
   YieldBearingAsset,
   yieldBearingAssetsAffiliateAddress,
@@ -26,14 +23,7 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-<<<<<<< HEAD
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
-=======
-<<<<<<< Updated upstream
-=======
-import { match } from '@lib/utils/match'
->>>>>>> Stashed changes
->>>>>>> 1941fef55 (feat: progress)
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -111,7 +101,6 @@ export function useDepositKeysignPayload({
           libType: vault.libType,
         }
 
-
         if (
           isOneOf(action, [
             'stake_ruji',
@@ -133,20 +122,23 @@ export function useDepositKeysignPayload({
                   ).toString()
                 : '0'
 
-          let executeInner: string
-          match(action, {
-            stake_ruji: () => {
+          let executeInner = ''
+
+          switch (action) {
+            case 'stake_ruji':
               executeInner = JSON.stringify({ account: { bond: {} } })
-            },
-            unstake_ruji: () => {
+              break
+
+            case 'unstake_ruji':
               executeInner = JSON.stringify({
                 account: { withdraw: { amount: amountUnits } },
               })
-            },
-            withdraw_ruji_rewards: () => {
+              break
+
+            case 'withdraw_ruji_rewards':
               executeInner = JSON.stringify({ account: { claim: {} } })
-            },
-          })
+              break
+          }
 
           base.contractPayload = {
             case: 'wasmExecuteContractPayload',

@@ -32,10 +32,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-<<<<<<< Updated upstream
-=======
 import { useRujiUiBalances } from '../hooks/stake/useRujiraBalances'
->>>>>>> Stashed changes
 import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
 import { useDepositCoin } from '../state/coin'
 
@@ -63,7 +60,6 @@ export const DepositForm: FC<DepositFormProps> = ({
     useGetTotalAmountAvailableForChain(chain)
 
   const ruji = useRujiUiBalances()
-  console.log('🚀 ~ DepositForm ~ ruji:', ruji)
   const isStakeRuji = selectedChainAction === 'stake_ruji'
   const isUnstakeRuji = selectedChainAction === 'unstake_ruji'
   const isWithdrawRewards = selectedChainAction === 'withdraw_ruji_rewards'
@@ -190,6 +186,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'unmerge',
                     'mint',
                     'redeem',
+                    'stake_ruji',
+                    'unstake_ruji',
+                    'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
 
                 const balance = selectedCoin
