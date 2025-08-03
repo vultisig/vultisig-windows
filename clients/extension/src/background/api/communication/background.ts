@@ -25,19 +25,17 @@ export const runBackgroundApiBackgroundAgent = () => {
       const dappHostname = getDappHostname(origin)
 
       attempt(
-        attempt(
-          handler({
-            input,
-            context: {
-              dappHostname,
-            },
-          })
-        )
+        handler({
+          input,
+          context: {
+            dappHostname,
+          },
+        })
       ).then(result => {
         sendResponse({
           id,
-          result,
           sourceId: getBackgroundApiMessageSourceId('background'),
+          result,
         })
       })
 
