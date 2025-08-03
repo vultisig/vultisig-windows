@@ -1,3 +1,3 @@
 export type BackgroundApiContext = {
-  dappHostname: string
+  requestOrigin: string
 }

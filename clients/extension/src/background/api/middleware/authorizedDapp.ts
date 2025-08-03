@@ -1,5 +1,6 @@
 import { getVaultAppSessions } from '../../../sessions/state/appSessions'
 import { storage } from '../../../storage'
+import { getDappHostname } from '../../../utils/connectedApps'
 import { BackgroundApiInterface } from '../interface'
 import { BackgroundApiResolver, BackgroundApiResolverParams } from '../resolver'
 
@@ -9,7 +10,7 @@ export const authorizedDapp =
   ): BackgroundApiResolver<K> =>
   async (params: BackgroundApiResolverParams<K>) => {
     const { context } = params
-    const { dappHostname } = context
+    const { requestOrigin } = context
 
     const currentVaultId = await storage.getCurrentVaultId()
 
@@ -18,6 +19,8 @@ export const authorizedDapp =
     }
 
     const vaultSessions = await getVaultAppSessions(currentVaultId)
+
+    const dappHostname = getDappHostname(requestOrigin)
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {

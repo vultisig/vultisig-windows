@@ -1,6 +1,5 @@
 import { attempt } from '@lib/utils/attempt'
 
-import { getDappHostname } from '../../../utils/connectedApps'
 import { backgroundApi } from '..'
 import { BackgroundApiMethodName } from '../interface'
 import {
@@ -22,13 +21,11 @@ export const runBackgroundApiBackgroundAgent = () => {
       const handler = backgroundApi[method as BackgroundApiMethodName]
       if (!handler) return
 
-      const dappHostname = getDappHostname(origin)
-
       attempt(
         handler({
           input,
           context: {
-            dappHostname,
+            requestOrigin: origin,
           },
         })
       ).then(result => {
