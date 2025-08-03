@@ -111,15 +111,9 @@ export function useDepositKeysignPayload({
           const amount = Number(depositFormData['amount'] ?? 0)
           const amountUnits =
             action === 'stake_ruji'
-              ? toChainAmount(
-                  amount,
-                  rujiraStakingConfig.bondDecimals
-                ).toString()
+              ? toChainAmount(amount, selectedCoin!.decimals).toString()
               : action === 'unstake_ruji'
-                ? toChainAmount(
-                    amount,
-                    rujiraStakingConfig.bondDecimals
-                  ).toString()
+                ? toChainAmount(amount, selectedCoin!.decimals).toString()
                 : '0'
 
           let executeInner = ''
@@ -269,6 +263,7 @@ export function useDepositKeysignPayload({
         isUnmerge,
         memo,
         receiver,
+        selectedCoin,
         slippage,
         validatorAddress,
         vault.hexChainCode,
