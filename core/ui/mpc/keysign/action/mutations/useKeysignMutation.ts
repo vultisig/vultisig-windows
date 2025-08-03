@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -104,31 +105,41 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             return { txs }
           },
-          custom: async ({ message }) => {
-            const messageToHash = message.startsWith('0x')
-              ? Buffer.from(message.slice(2), 'hex')
-              : message
+          custom: async customPayload => {
+            const { message, chain: payloadChain } = customPayload
+            const { chain: defaultChain } = customMessageConfig
+            const chain = (payloadChain as Chain) ?? defaultChain
+            const chainKind = getChainKind(chain)
 
-            const { chain } = customMessageConfig
+            // Decode hex string or use raw message
+            const messageBuffer =
+              typeof message === 'string' && message.startsWith('0x')
+                ? Buffer.from(message.slice(2), 'hex')
+                : typeof message === 'string'
+                  ? new TextEncoder().encode(message)
+                  : Buffer.from(message)
+
+            // Determine the actual message to sign (as hex string)
+            const hexMessage =
+              chainKind === 'evm'
+                ? keccak256(messageBuffer)
+                : messageBuffer.toString('hex')
 
             const [signature] = await keysignAction({
-              msgs: [keccak256(messageToHash)],
-              signatureAlgorithm: signatureAlgorithms[getChainKind(chain)],
-              coinType: getCoinType({
-                walletCore,
-                chain,
-              }),
+              msgs: [hexMessage],
+              signatureAlgorithm: signatureAlgorithms[chainKind],
+              coinType: getCoinType({ walletCore, chain }),
             })
-
-            const signatureFormat = signatureFormats[getChainKind(chain)]
 
             const result = generateSignature({
               walletCore,
               signature,
-              signatureFormat,
+              signatureFormat: signatureFormats[chainKind],
             })
 
-            return { signature: Buffer.from(result).toString('hex') }
+            return {
+              signature: Buffer.from(result).toString('hex'),
+            }
           },
         }
       )

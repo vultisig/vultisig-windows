@@ -12,7 +12,7 @@ import type { Message } from '@bufbuild/protobuf'
 export const file_vultisig_keysign_v1_custom_message_payload: GenFile =
   /*@__PURE__*/
   fileDesc(
-    'CjB2dWx0aXNpZy9rZXlzaWduL3YxL2N1c3RvbV9tZXNzYWdlX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEidQoUQ3VzdG9tTWVzc2FnZVBheWxvYWQSDgoGbWV0aG9kGAEgASgJEg8KB21lc3NhZ2UYAiABKAkSHgoWdmF1bHRfcHVibGljX2tleV9lY2RzYRgDIAEoCRIcChR2YXVsdF9sb2NhbF9wYXJ0eV9pZBgEIAEoCUJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM'
+    'CjB2dWx0aXNpZy9rZXlzaWduL3YxL2N1c3RvbV9tZXNzYWdlX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEikwEKFEN1c3RvbU1lc3NhZ2VQYXlsb2FkEg4KBm1ldGhvZBgBIAEoCRIPCgdtZXNzYWdlGAIgASgJEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYAyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYBCABKAkSEgoFY2hhaW4YBSABKAlIAIgBAUIICgZfY2hhaW5CVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z'
   )
 
 /**
@@ -39,6 +39,11 @@ export type CustomMessagePayload =
      * @generated from field: string vault_local_party_id = 4;
      */
     vaultLocalPartyId: string
+
+    /**
+     * @generated from field: optional string chain = 5;
+     */
+    chain?: string
   }
 
 /**

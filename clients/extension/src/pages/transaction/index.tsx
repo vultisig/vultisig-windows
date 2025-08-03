@@ -147,6 +147,7 @@ export const TransactionPage = () => {
               custom: create(CustomMessagePayloadSchema, {
                 method: custom.method,
                 message: custom.message,
+                chain: custom.chain,
               }),
             }
           },
