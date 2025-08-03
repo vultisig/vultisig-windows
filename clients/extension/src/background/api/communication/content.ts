@@ -1,8 +1,4 @@
-import {
-  BackgroundApiRequest,
-  getBackgroundApiMessageSourceId,
-  isBackgroundApiMessage,
-} from './core'
+import { BackgroundApiRequest, isBackgroundApiMessage } from './core'
 
 export const runBackgroundApiContentAgent = () => {
   window.addEventListener('message', ({ source, data }) => {
@@ -12,13 +8,7 @@ export const runBackgroundApiContentAgent = () => {
       return
 
     chrome.runtime.sendMessage(data, response => {
-      window.postMessage(
-        {
-          sourceId: getBackgroundApiMessageSourceId('background'),
-          ...response,
-        },
-        '*'
-      )
+      window.postMessage(response, '*')
     })
   })
 }
