@@ -59,7 +59,7 @@ export async function fetchRujiraStakeView(
   }
 }
 
-export const toDisplayRUJI = (u: string) =>
-  Number(u) / 10 ** rujiraStakingConfig.bondDecimals
+// TODO: fix this
+export const toDisplayRUJI = (u: string) => Number(u) / 10 ** 8
 export const toDisplayUSDC = (u: string) =>
   Number(u) / 10 ** rujiraStakingConfig.revenueDecimals

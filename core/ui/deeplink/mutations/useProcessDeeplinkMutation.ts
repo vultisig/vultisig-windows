@@ -68,6 +68,10 @@ export const useProcessDeeplinkMutation = () => {
             const vaultId = queryParams.vault
 
             const keysignMsg = fromBinary(KeysignMessageSchema, payload)
+            console.log(
+              '🚀 ~ useProcessDeeplinkMutation ~ keysignMsg:',
+              keysignMsg
+            )
 
             if (keysignMsg.payloadId) {
               const serverType = keysignMsg.useVultisigRelay ? 'relay' : 'local'
