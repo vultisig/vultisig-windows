@@ -15,7 +15,7 @@ export const authorizedDapp =
     const currentVaultId = await storage.getCurrentVaultId()
 
     if (!currentVaultId) {
-      throw new Error('No vault selected')
+      throw new Error('TODO: handle connection request')
     }
 
     const vaultSessions = await getVaultAppSessions(currentVaultId)
@@ -24,7 +24,7 @@ export const authorizedDapp =
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {
-      throw new Error(`No vault selected for ${dappHostname}`)
+      throw new Error('TODO: handle connection request')
     }
 
     return resolver(params)

@@ -8,5 +8,6 @@ export type AppView =
   | { id: 'vaultsTab' }
   | { id: 'transactionTab' }
   | { id: 'pluginTab' }
+  | { id: 'popupApi' }
 
 export type AppViewId = AppView['id']

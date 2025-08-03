@@ -29,7 +29,7 @@ export const callBackgroundApi = <M extends BackgroundApiMethodName>(
     const request: BackgroundApiRequest<M> = {
       id,
       sourceId: getBackgroundApiMessageSourceId('inpage'),
-      ...call,
+      call,
     }
 
     window.postMessage(request, '*')

@@ -24,6 +24,7 @@ import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPag
 import { Views } from '@lib/ui/navigation/Views'
 
 import { PluginPage } from '../pages/plugin'
+import { PopupApi } from '../popup/api'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
@@ -63,6 +64,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   vault: VaultPage,
   vaultsTab: GetVaultsPage,
   pluginTab: PluginPage,
+  popupApi: PopupApi,
 }
 
 export const views: Views<AppViewId> = {

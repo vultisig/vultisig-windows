@@ -1,4 +1,6 @@
 import { attempt } from '@lib/utils/attempt'
+import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 import { backgroundApi } from '..'
 import { BackgroundApiMethodName } from '../interface'
@@ -16,14 +18,15 @@ export const runBackgroundApiBackgroundAgent = () => {
       if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(request, 'inpage'))
         return
 
-      const { method, input, id } = request
+      const { call, id } = request
 
-      const handler = backgroundApi[method as BackgroundApiMethodName]
+      const handler =
+        backgroundApi[getRecordUnionKey(call) as BackgroundApiMethodName]
       if (!handler) return
 
       attempt(
         handler({
-          input,
+          input: getRecordUnionValue(call),
           context: {
             requestOrigin: origin,
           },

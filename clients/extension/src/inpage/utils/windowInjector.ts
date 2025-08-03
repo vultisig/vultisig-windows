@@ -14,7 +14,7 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
-    getVault: async () => callBackgroundApi({ method: 'getVault' }),
+    getVault: async () => callBackgroundApi({ getVault: {} }),
     getVaults: async () =>
       messengers.background.send(
         'providerRequest',

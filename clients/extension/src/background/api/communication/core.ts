@@ -9,7 +9,7 @@ export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
 ) => `${productName}-background-api-${source}` as const
 
-type BackgroundApiMessageSourceId = ReturnType<
+export type BackgroundApiMessageSourceId = ReturnType<
   typeof getBackgroundApiMessageSourceId
 >
 
@@ -19,13 +19,11 @@ type BackgroundApiMessageKey = {
 }
 
 export type BackgroundApiCall<M extends BackgroundApiMethodName> = {
-  method: M
-} & ([BackgroundApiInterface[M]['input']] extends [undefined]
-  ? { input?: BackgroundApiInterface[M]['input'] }
-  : { input: BackgroundApiInterface[M]['input'] })
+  [K in M]: BackgroundApiInterface[K]['input']
+}
 
 export type BackgroundApiRequest<M extends BackgroundApiMethodName> =
-  BackgroundApiMessageKey & BackgroundApiCall<M>
+  BackgroundApiMessageKey & { call: BackgroundApiCall<M> }
 
 export type BackgroundApiResponse<M extends BackgroundApiMethodName> =
   BackgroundApiMessageKey & {

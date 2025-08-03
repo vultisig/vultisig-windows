@@ -1,12 +1,8 @@
 import { VaultExport } from '@core/ui/vault/export/core'
-
-type ApiMethod<Input, Output> = {
-  input: Input
-  output: Output
-}
+import { ApiMethod } from '@lib/utils/api/ApiMethod'
 
 export type BackgroundApiInterface = {
-  getVault: ApiMethod<undefined, VaultExport>
+  getVault: ApiMethod<{}, VaultExport>
 }
 
 export type BackgroundApiMethodName = keyof BackgroundApiInterface
