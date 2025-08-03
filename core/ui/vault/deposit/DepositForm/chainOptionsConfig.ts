@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { match } from '@lib/utils/match'
@@ -74,16 +73,11 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
+        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
-          .pipe(
-            z
-              .number()
-              .positive()
-              .min(1 / 10 ** rujiraStakingConfig.bondDecimals)
-              .max(totalAmountAvailable)
-          ),
+          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
       }),
   },
   unstake_ruji: {
@@ -97,15 +91,11 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: (_: FunctionSchema) =>
       z.object({
+        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
-          .pipe(
-            z
-              .number()
-              .positive()
-              .min(1 / 10 ** rujiraStakingConfig.bondDecimals)
-          ),
+          .pipe(z.number().positive().min(0.001)),
       }),
   },
   withdraw_ruji_rewards: {

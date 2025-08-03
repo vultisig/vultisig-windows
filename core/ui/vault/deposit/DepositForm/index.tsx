@@ -9,7 +9,6 @@ import {
   ErrorText,
   InputFieldWrapper,
 } from '@core/ui/vault/deposit/DepositForm/DepositForm.styled'
-import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { DepositFormHandlersProvider } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import {
   getChainActionSchema,
@@ -32,8 +31,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useRujiUiBalances } from '../hooks/stake/useRujiraBalances'
-import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
+import { useDepositBalance } from '../hooks/useDepositBalanace'
 import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
@@ -56,32 +54,15 @@ export const DepositForm: FC<DepositFormProps> = ({
 
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const { data: totalAmountAvailableForChainData } =
-    useGetTotalAmountAvailableForChain(chain)
-
-  const ruji = useRujiUiBalances()
-  const isStakeRuji = selectedChainAction === 'stake_ruji'
-  const isUnstakeRuji = selectedChainAction === 'unstake_ruji'
-  const isWithdrawRewards = selectedChainAction === 'withdraw_ruji_rewards'
 
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
 
-  const selectedCoinBalance = useSelectedCoinBalance({
-    action: selectedChainAction,
-    selectedCoin: localSelectedCoin,
+  const { balance, balanceFormatted } = useDepositBalance({
     chain,
+    selectedChainAction,
+    selectedCoin: localSelectedCoin,
   })
-
-  const totalTokenAmount = isStakeRuji
-    ? ruji.liquid
-    : isUnstakeRuji
-      ? ruji.bonded
-      : isWithdrawRewards
-        ? ruji.rewards
-        : localSelectedCoin
-          ? selectedCoinBalance
-          : (totalAmountAvailableForChainData?.totalTokenAmount ?? 0)
 
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
@@ -96,7 +77,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chainActionSchema,
     chain,
     walletCore,
-    totalTokenAmount
+    balance
   )
 
   const {
@@ -191,12 +172,6 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
 
-                const balance = selectedCoin
-                  ? selectedCoinBalance
-                  : isTCYAction
-                    ? 0
-                    : totalTokenAmount.toFixed(2)
-
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge' &&
@@ -213,11 +188,12 @@ export const DepositForm: FC<DepositFormProps> = ({
                           (
                           {selectedChainAction === 'unmerge' ? (
                             <>
-                              {t('shares')}: {balance}
+                              {t('shares')}: {balanceFormatted}
                             </>
                           ) : (
                             <>
-                              {t('balance')}: {balance} {ticker && ` ${ticker}`}
+                              {t('balance')}: {balanceFormatted}{' '}
+                              {ticker && ` ${ticker}`}
                             </>
                           )}
                           )
