@@ -1,28 +1,22 @@
-import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
-import { featureFlags } from '../../config'
-import { ChainAction, chainActionsRecord } from './ChainAction'
+import { ChainAction } from './ChainAction'
+import { DepositEnabledChain } from './DepositEnabledChain'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
+import { useFilteredChainActions } from './hooks/useFilteredChainActions'
 import { useDepositCoin } from './state/coin'
 
 const depositSteps = ['form', 'verify'] as const
 
 export const DepositPage = () => {
   const coin = useDepositCoin()
-  const chainActionOptions =
-    chainActionsRecord[coin.chain as DepositEnabledChain]
-
-  const filteredChainActionOptions = chainActionOptions.filter(
-    chainAction =>
-      !featureFlags.mintAndRedeem &&
-      chainAction !== 'mint' &&
-      chainAction !== 'redeem'
+  const filteredChainActionOptions = useFilteredChainActions(
+    coin.chain as DepositEnabledChain
   )
 
   const [state, setState] = useState<{
@@ -30,7 +24,7 @@ export const DepositPage = () => {
     selectedChainAction: ChainAction
   }>({
     depositFormData: {},
-    selectedChainAction: chainActionOptions[0] as ChainAction,
+    selectedChainAction: filteredChainActionOptions[0] as ChainAction,
   })
 
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
