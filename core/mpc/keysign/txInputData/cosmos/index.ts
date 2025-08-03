@@ -25,6 +25,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   chain,
 }) => {
   const coin = getKeysignCoin(keysignPayload)
+  console.log('🚀 ~ getCosmosTxInputData ~ keysignPayload:', keysignPayload)
 
   const chainKind = getCosmosChainKind(chain)
 
@@ -251,6 +252,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     messages,
     fee: getFee(),
   })
+  console.log('🚀 ~ getCosmosTxInputData ~ input:', input)
 
   return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
 }
