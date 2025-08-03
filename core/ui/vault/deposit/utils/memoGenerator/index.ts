@@ -38,6 +38,9 @@ export const generateMemo = ({
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
+    stake_ruji: () => '',
+    unstake_ruji: () => '',
+    withdraw_ruji_rewards: () => '',
     mint: () => '',
     redeem: () => '',
     stake: () =>
