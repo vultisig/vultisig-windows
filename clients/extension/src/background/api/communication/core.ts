@@ -9,7 +9,7 @@ export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
 ) => `${productName}-background-api-${source}` as const
 
-export type BackgroundApiMessageSourceId = ReturnType<
+type BackgroundApiMessageSourceId = ReturnType<
   typeof getBackgroundApiMessageSourceId
 >
 
