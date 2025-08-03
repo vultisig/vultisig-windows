@@ -1,7 +1,7 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { VaultExport } from '@clients/extension/src/utils/interfaces'
 import { useVaults } from '@core/ui/storage/vaults'
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
+import { VaultExport } from '@core/ui/vault/export/core'
+import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -31,24 +31,15 @@ export const GetVaultsPage = () => {
   }
 
   const handleSubmit = async () => {
-    const selectedVaults = vaults
+    const selectedVaults: VaultExport[] = vaults
       .filter(vault => vaultIds.includes(getVaultId(vault)))
-      .map(vault => {
-        const {
-          hex_chain_code,
-          name,
-          public_key_ecdsa,
-          public_key_eddsa,
-          uid,
-        } = getVaultPublicKeyExport(vault)
-        return {
-          name,
-          uid,
-          hexChainCode: hex_chain_code,
-          publicKeyEcdsa: public_key_ecdsa,
-          publicKeyEddsa: public_key_eddsa,
-        } as VaultExport
-      })
+      .map(vault => ({
+        name: vault.name,
+        uid: getVaultExportUid(vault),
+        hexChainCode: vault.hexChainCode,
+        publicKeyEcdsa: vault.publicKeys.ecdsa,
+        publicKeyEddsa: vault.publicKeys.eddsa,
+      }))
 
     try {
       await backgroundMessenger.send('vaults:connect', {

@@ -1,4 +1,4 @@
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
+import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 
 import { storage } from '../../../storage'
@@ -12,21 +12,16 @@ export const getVault: BackgroundApiResolver<'getVault'> = async () => {
     throw new Error('No vault selected')
   }
 
-  const currentVault = vaults.find(
-    vault => getVaultId(vault) === currentVaultId
-  )
-  if (!currentVault) {
+  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
+  if (!vault) {
     throw new Error(`Selected vault not found`)
   }
 
-  const { uid, hex_chain_code, name, public_key_ecdsa, public_key_eddsa } =
-    getVaultPublicKeyExport(currentVault)
-
   return {
-    name,
-    uid,
-    hexChainCode: hex_chain_code,
-    publicKeyEcdsa: public_key_ecdsa,
-    publicKeyEddsa: public_key_eddsa,
+    name: vault.name,
+    uid: getVaultExportUid(vault),
+    hexChainCode: vault.hexChainCode,
+    publicKeyEcdsa: vault.publicKeys.ecdsa,
+    publicKeyEddsa: vault.publicKeys.eddsa,
   }
 }

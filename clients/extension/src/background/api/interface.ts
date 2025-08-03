@@ -1,4 +1,4 @@
-import { VaultExport } from '../../utils/interfaces'
+import { VaultExport } from '@core/ui/vault/export/core'
 
 type ApiMethod<Input, Output> = {
   input: Input
