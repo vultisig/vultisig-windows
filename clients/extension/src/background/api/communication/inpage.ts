@@ -18,12 +18,12 @@ export const callBackgroundApi = <M extends BackgroundApiMethodName>(
   new Promise((resolve, reject) => {
     const id = uuidv4()
 
-    listeners[id] = result => {
-      if ('error' in result) {
-        reject(result.error)
+    listeners[id] = ({ error, data }) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data as BackgroundApiInterface[M]['output'])
       }
-
-      resolve(result.data as BackgroundApiInterface[M]['output'])
     }
 
     const request: BackgroundApiRequest<M> = {
