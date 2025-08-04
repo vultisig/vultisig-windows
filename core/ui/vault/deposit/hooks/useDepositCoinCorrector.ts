@@ -12,8 +12,23 @@ export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
   const navigate = useCoreNavigate()
 
   const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
+  const tcyCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'TCY')
 
   useEffect(() => {
+    if (
+      selectedDepositAction === 'unstake' &&
+      selectedCoin?.ticker !== tcyCoin?.ticker
+    ) {
+      if (!tcyCoin) {
+        navigate({ id: 'vault' })
+        return
+      }
+
+      setValue('selectedCoin', tcyCoin, {
+        shouldValidate: true,
+      })
+    }
+
     if (
       selectedDepositAction === 'bond' &&
       selectedCoin?.ticker !== runeCoin?.ticker
@@ -33,5 +48,6 @@ export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
     selectedCoin?.ticker,
     selectedDepositAction,
     setValue,
+    tcyCoin,
   ])
 }
