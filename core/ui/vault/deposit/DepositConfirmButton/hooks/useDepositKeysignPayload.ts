@@ -46,15 +46,10 @@ export function useDepositKeysignPayload({
 }: DepositKeysignPayloadProps) {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const { t } = useTranslation()
-  const isRuji =
-    action === 'stake_ruji' ||
-    action === 'unstake_ruji' ||
-    action === 'withdraw_ruji_rewards'
 
   const isUnmerge = action === 'unmerge'
-  const txType = isRuji
-    ? TransactionType.GENERIC_CONTRACT
-    : action === 'ibc_transfer'
+  const txType =
+    action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
         ? TransactionType.THOR_UNMERGE
@@ -139,7 +134,7 @@ export function useDepositKeysignPayload({
               break
           }
 
-          base.contractPayload = {
+          basePayload.contractPayload = {
             case: 'wasmExecuteContractPayload',
             value: {
               senderAddress: coin.address,
@@ -157,9 +152,10 @@ export function useDepositKeysignPayload({
             },
           }
 
-          base.toAmount = action === 'withdraw_ruji_rewards' ? '0' : amountUnits
+          basePayload.toAmount =
+            action === 'withdraw_ruji_rewards' ? '0' : amountUnits
 
-          return { keysign: create(KeysignPayloadSchema, base) }
+          return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
         if (action === 'mint' || action === 'redeem') {
