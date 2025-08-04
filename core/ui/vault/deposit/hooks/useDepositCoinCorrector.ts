@@ -10,7 +10,6 @@ import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider
 export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
-  console.log('🚀 ~ useDepositCoinCorrector ~ selectedCoin:', selectedCoin)
   const navigate = useCoreNavigate()
   const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
   const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
