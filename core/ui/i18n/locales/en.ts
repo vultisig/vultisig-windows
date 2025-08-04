@@ -992,6 +992,8 @@ export const en = {
   blockaid_security_scan: 'Blockaid Security Scan',
   transaction_not_scanned: 'Transaction not scanned by <provider></provider>',
   transaction_scanned: 'Transaction scanned by <provider></provider>',
+  risky_transaction_detected: '{{riskLevel}} risk transaction detected',
+  powered_by: 'Powered by <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   ibc_transaction_not_supporting_memo_title:
@@ -999,4 +1001,6 @@ export const en = {
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but Vultisig currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
   scanning: 'scanning...',
+  go_back: 'Go Back',
+  continue_anyway: 'Continue Anyway',
 }

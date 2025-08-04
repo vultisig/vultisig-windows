@@ -1039,4 +1039,15 @@ export const de = {
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
   scanning: 'Scannen...',
+  no_vaults: 'Noch keine Tresore',
+  no_vaults_desc:
+    'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen Tresor oder importieren Sie einen vorhandenen',
+  risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
+  powered_by: 'Unterstützt von <Anbieter></Anbieter>',
+  ibc_transaction_not_supporting_memo_title:
+    'IBC-Transaktionsmemo wird nicht unterstützt',
+  ibc_transaction_not_supporting_memo_desc:
+    'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Das Fortsetzen dieser Transaktion kann zu einem <b>irreversiblen Verlust von Geldern</b> führen.',
+  go_back: 'Geh zurück',
+  continue_anyway: 'Trotzdem fortfahren',
 }
