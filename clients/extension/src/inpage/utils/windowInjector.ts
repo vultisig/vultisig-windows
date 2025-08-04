@@ -2,7 +2,6 @@ import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { messengers } from '@clients/extension/src/inpage/messenger'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
-import { MessageKey } from '@clients/extension/src/utils/constants'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -15,12 +14,7 @@ export const injectToWindow = () => {
   const vultisigProvider = {
     ...providers,
     getVault: async () => callBackgroundApi({ getVault: {} }),
-    getVaults: async () =>
-      messengers.background.send(
-        'providerRequest',
-        { type: MessageKey.VAULTS, message: {} },
-        { id: uuidv4() }
-      ),
+    getVaults: async () => callBackgroundApi({ getVaults: {} }),
   }
 
   Object.defineProperty(window, 'vultisig', {

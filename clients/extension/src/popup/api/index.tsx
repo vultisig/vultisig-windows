@@ -9,21 +9,13 @@ import {
   PopupApiResponse,
 } from './communication/core'
 import { PopupApiInterface, PopupApiMethodName } from './interface'
-import { PopupApiResolver } from './resolver'
-import { GrantVaultAccess } from './resolvers/grantVaultAccess'
-
-type PopupApiImplementation = {
-  [K in keyof PopupApiInterface]: PopupApiResolver<K>
-}
-
-const popupApi: PopupApiImplementation = {
-  grantVaultAccess: GrantVaultAccess,
-}
+import { popupApiResolvers } from './resolvers'
 
 export const PopupApi = () => {
   const [{ call }] = useAppViewState<'popupApi'>()
 
-  const Resolver = popupApi[getRecordUnionKey(call) as PopupApiMethodName]
+  const Resolver =
+    popupApiResolvers[getRecordUnionKey(call) as PopupApiMethodName]
 
   const onFinish = useCallback(
     (result: Result<PopupApiInterface[PopupApiMethodName]['output']>) => {

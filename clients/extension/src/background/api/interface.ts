@@ -3,6 +3,7 @@ import { ApiMethod } from '@lib/utils/api/ApiMethod'
 
 export type BackgroundApiInterface = {
   getVault: ApiMethod<{}, VaultExport>
+  getVaults: ApiMethod<{}, VaultExport[]>
 }
 
 export type BackgroundApiMethodName = keyof BackgroundApiInterface
