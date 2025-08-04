@@ -19,7 +19,7 @@ export type PopupApiCall<M extends PopupApiMethodName> = {
 }
 
 export type PopupApiResponse<M extends PopupApiMethodName> =
-  PopupApiMessageKey & Result<PopupApiInterface[M]['output']>
+  PopupApiMessageKey & { result: Result<PopupApiInterface[M]['output']> }
 
 export const isPopupApiMessage = <T extends PopupApiMessageKey>(
   message: unknown,

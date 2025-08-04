@@ -29,7 +29,7 @@ export const PopupApi = () => {
     (result: Result<PopupApiInterface[PopupApiMethodName]['output']>) => {
       const response: PopupApiResponse<any> = {
         sourceId: getPopupApiMessageSourceId('popup'),
-        ...result,
+        result,
       }
 
       chrome.runtime.sendMessage(response)

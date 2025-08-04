@@ -54,12 +54,14 @@ export const callPopupApi = async <M extends PopupApiMethodName>(
 
   return inWindow(
     () =>
-      new Promise((resolve, reject) =>
-        chrome.runtime.onMessage.addListener(async response => {
+      new Promise((resolve, reject) => {
+        const listener = async (response: any) => {
           if (!isPopupApiMessage<PopupApiResponse<any>>(response, 'popup'))
             return
 
-          const { error, data } = response
+          chrome.runtime.onMessage.removeListener(listener)
+
+          const { error, data } = response.result
           if (error) {
             reject(error)
           } else {
@@ -67,7 +69,9 @@ export const callPopupApi = async <M extends PopupApiMethodName>(
           }
 
           return true
-        })
-      )
+        }
+
+        chrome.runtime.onMessage.addListener(listener)
+      })
   )
 }

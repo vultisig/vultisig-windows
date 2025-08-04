@@ -6,6 +6,7 @@ import { backgroundApi } from '..'
 import { BackgroundApiMethodName } from '../interface'
 import {
   BackgroundApiRequest,
+  BackgroundApiResponse,
   getBackgroundApiMessageSourceId,
   isBackgroundApiMessage,
 } from './core'
@@ -32,11 +33,13 @@ export const runBackgroundApiBackgroundAgent = () => {
           },
         })
       ).then(result => {
-        sendResponse({
+        const response: BackgroundApiResponse<any> = {
           id,
           sourceId: getBackgroundApiMessageSourceId('background'),
           result,
-        })
+        }
+
+        sendResponse(response)
       })
 
       return true
