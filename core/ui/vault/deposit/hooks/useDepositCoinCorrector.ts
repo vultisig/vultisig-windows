@@ -4,32 +4,37 @@ import { useEffect } from 'react'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
+import { stakeableAssetsTickers, StakeableAssetTicker } from '../config'
 import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider'
 
 export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
+  console.log('🚀 ~ useDepositCoinCorrector ~ selectedCoin:', selectedCoin)
   const navigate = useCoreNavigate()
-
   const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
-  const tcyCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'TCY')
+  const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
+  const defaultStakeableAsset = useCurrentVaultCoins().find(
+    coin => coin?.ticker === defaultStakeableAssetTicker
+  )
 
   useEffect(() => {
     if (
       selectedDepositAction === 'unstake' &&
-      selectedCoin?.ticker !== tcyCoin?.ticker
+      (!selectedCoin?.ticker ||
+        !stakeableAssetsTickers.includes(
+          selectedCoin.ticker as StakeableAssetTicker
+        ))
     ) {
-      if (!tcyCoin) {
+      if (!defaultStakeableAsset) {
         navigate({ id: 'vault' })
         return
       }
 
-      setValue('selectedCoin', tcyCoin, {
+      setValue('selectedCoin', defaultStakeableAsset, {
         shouldValidate: true,
       })
-    }
-
-    if (
+    } else if (
       selectedDepositAction === 'bond' &&
       selectedCoin?.ticker !== runeCoin?.ticker
     ) {
@@ -43,11 +48,11 @@ export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
       })
     }
   }, [
+    defaultStakeableAsset,
     navigate,
     runeCoin,
     selectedCoin?.ticker,
     selectedDepositAction,
     setValue,
-    tcyCoin,
   ])
 }
