@@ -7,7 +7,6 @@ export type AppView =
   | { id: 'onboarding' }
   | { id: 'connectedDapps' }
   | { id: 'connectTab' }
-  | { id: 'vaultsTab' }
   | { id: 'transactionTab' }
   | { id: 'pluginTab' }
   | { id: 'popupApi'; state: { call: PopupApiCall<any> } }

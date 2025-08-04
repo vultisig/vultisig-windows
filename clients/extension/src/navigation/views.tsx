@@ -11,7 +11,6 @@ import { StartKeysignPage } from '@clients/extension/src/mpc/keysign/start/Start
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
-import { GetVaultsPage } from '@clients/extension/src/pages/get-vaults'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
@@ -62,7 +61,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   transactionTab: TransactionPage,
   vault: VaultPage,
-  vaultsTab: GetVaultsPage,
   pluginTab: PluginPage,
   popupApi: PopupApi,
 }
