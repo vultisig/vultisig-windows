@@ -16,7 +16,6 @@ export const useSendFormValidation = () => {
 
   const coin = useCurrentSendCoin()
   const [, setFormState] = useSendFormFieldState()
-
   const [amount] = useSendAmount()
   const [address] = useSendReceiver()
   const walletCore = useAssertWalletCore()
@@ -25,7 +24,7 @@ export const useSendFormValidation = () => {
   const errors = useMemo(
     () =>
       validateSendForm(
-        { coin, amount, address },
+        { coin, amount, receiverAddress: address, senderAddress: coin.address },
         {
           balance: balanceQuery.data,
           chain: coin.chain,

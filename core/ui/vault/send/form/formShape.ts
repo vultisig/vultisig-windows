@@ -2,7 +2,8 @@ import { Coin } from '@core/chain/coin/Coin'
 
 export type SendFormShape = {
   amount: bigint | null
-  address: string
+  senderAddress: string
+  receiverAddress: string
   coin: Coin | null
 }
 

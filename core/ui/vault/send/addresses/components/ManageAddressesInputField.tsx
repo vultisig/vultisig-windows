@@ -1,4 +1,3 @@
-import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
@@ -26,6 +25,7 @@ import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
+import { validateSendForm } from '../../form/validateSendForm'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { AddressBookModal } from './AddressBookModal'
 
@@ -43,7 +43,7 @@ export const ManageReceiverAddressInputField = () => {
 
   const [
     {
-      errors: { address: addressError },
+      errors: { receiverAddress: addressError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
@@ -53,18 +53,27 @@ export const ManageReceiverAddressInputField = () => {
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
       setValue(value)
+      const validation = validateSendForm(
+        {
+          coin,
+          amount: 0n,
+          senderAddress: coin.address,
+          receiverAddress: value,
+        },
+        {
+          balance: undefined,
+          chain: coin?.chain,
+          walletCore,
+          t,
+        }
+      )
       setFocusedSendField(state => ({
         ...state,
-        field: isValidAddress({
-          address: value,
-          walletCore,
-          chain: coin?.chain,
-        })
-          ? 'amount'
-          : state.field,
+        errors: validation,
+        field: validation.receiverAddress ? state.field : 'amount',
       }))
     },
-    [coin?.chain, setFocusedSendField, setValue, walletCore]
+    [coin, setValue, setFocusedSendField, walletCore, t]
   )
 
   const onScanSuccess = useCallback(
