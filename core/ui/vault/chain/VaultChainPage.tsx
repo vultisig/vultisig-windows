@@ -33,6 +33,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -76,7 +77,7 @@ export const VaultChainPage = () => {
   }, [address, chain, invalidateQueries, vaultCoins])
 
   return (
-    <VStack flexGrow>
+    <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
@@ -87,7 +88,7 @@ export const VaultChainPage = () => {
         title={chain}
         hasBorder
       />
-      <PageContent gap={16} flexGrow>
+      <PageContent gap={16} scrollable>
         <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
@@ -190,6 +191,8 @@ export const VaultChainPage = () => {
             }}
           />
         </Panel>
+      </PageContent>
+      <PageFooter>
         {hasMultipleCoinsSupport && (
           <ListAddButton
             onClick={() =>
@@ -199,7 +202,7 @@ export const VaultChainPage = () => {
             {t('choose_tokens')}
           </ListAddButton>
         )}
-      </PageContent>
-    </VStack>
+      </PageFooter>
+    </>
   )
 }
