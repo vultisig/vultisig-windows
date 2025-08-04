@@ -18,8 +18,6 @@ import { useTranslation } from 'react-i18next'
 
 import { PopupApiResolver } from '../../resolver'
 
-// Mostly copied from ConnectDAppPage
-// TODO: @rcoderdev clean it up
 export const GrantVaultAccess: PopupApiResolver<'grantVaultAccess'> = ({
   onFinish,
 }) => {
