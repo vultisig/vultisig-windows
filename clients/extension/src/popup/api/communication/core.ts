@@ -3,7 +3,7 @@ import { Result } from '@lib/utils/types/Result'
 
 import { PopupApiInterface, PopupApiMethodName } from '../interface'
 
-type PopupApiMessageSource = 'background'
+type PopupApiMessageSource = 'popup'
 
 export const getPopupApiMessageSourceId = (source: PopupApiMessageSource) =>
   `${productName}-popup-api-${source}` as const
@@ -15,17 +15,11 @@ type PopupApiMessageKey = {
 }
 
 export type PopupApiCall<M extends PopupApiMethodName> = {
-  method: M
-} & ([PopupApiInterface[M]['input']] extends [undefined]
-  ? { input?: PopupApiInterface[M]['input'] }
-  : { input: PopupApiInterface[M]['input'] })
+  [K in M]: PopupApiInterface[K]['input']
+}
 
-export type PopupApiRequest<M extends PopupApiMethodName> = PopupApiMessageKey &
-  PopupApiCall<M>
-
-export type PopupApiResponse<M extends PopupApiMethodName> = Result<
-  PopupApiInterface[M]['output']
->
+export type PopupApiResponse<M extends PopupApiMethodName> =
+  PopupApiMessageKey & Result<PopupApiInterface[M]['output']>
 
 export const isPopupApiMessage = <T extends PopupApiMessageKey>(
   message: unknown,
@@ -33,6 +27,5 @@ export const isPopupApiMessage = <T extends PopupApiMessageKey>(
 ): message is T =>
   typeof message === 'object' &&
   message !== null &&
-  'id' in message &&
   'sourceId' in message &&
   message.sourceId === getPopupApiMessageSourceId(source)

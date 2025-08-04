@@ -9,7 +9,7 @@ export const getBackgroundApiMessageSourceId = (
   source: BackgroundApiMessageSource
 ) => `${productName}-background-api-${source}` as const
 
-export type BackgroundApiMessageSourceId = ReturnType<
+type BackgroundApiMessageSourceId = ReturnType<
   typeof getBackgroundApiMessageSourceId
 >
 
@@ -36,6 +36,5 @@ export const isBackgroundApiMessage = <T extends BackgroundApiMessageKey>(
 ): message is T =>
   typeof message === 'object' &&
   message !== null &&
-  'id' in message &&
   'sourceId' in message &&
   message.sourceId === getBackgroundApiMessageSourceId(source)

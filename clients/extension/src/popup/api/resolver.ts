@@ -1,9 +1,13 @@
+import { OnFinishProp } from '@lib/ui/props'
+import { Result } from '@lib/utils/types/Result'
+import { ReactNode } from 'react'
+
 import { PopupApiInterface } from './interface'
 
-export type PopupApiResolverParams<K extends keyof PopupApiInterface> = {
+type PopupApiResolverProps<K extends keyof PopupApiInterface> = {
   input: PopupApiInterface[K]['input']
-}
+} & OnFinishProp<Result<PopupApiInterface[K]['output']>>
 
 export type PopupApiResolver<K extends keyof PopupApiInterface> = (
-  params: PopupApiResolverParams<K>
-) => Promise<PopupApiInterface[K]['output']>
+  props: PopupApiResolverProps<K>
+) => ReactNode

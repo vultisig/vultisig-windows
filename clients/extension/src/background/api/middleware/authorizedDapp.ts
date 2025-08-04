@@ -1,8 +1,25 @@
-import { getVaultAppSessions } from '../../../sessions/state/appSessions'
+import { CosmosChain, EvmChain } from '@core/chain/Chain'
+import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
+import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+
+import { callPopupApi } from '../../../popup/api/communication/background'
+import {
+  addVaultAppSession,
+  getVaultAppSessions,
+} from '../../../sessions/state/appSessions'
 import { storage } from '../../../storage'
-import { getDappHostname } from '../../../utils/connectedApps'
+import { getDappHost, getDappHostname } from '../../../utils/connectedApps'
 import { BackgroundApiInterface } from '../interface'
 import { BackgroundApiResolver, BackgroundApiResolverParams } from '../resolver'
+
+const getDefaultAppSession = (requestOrigin: string) => {
+  return {
+    host: getDappHostname(requestOrigin),
+    url: getDappHost(requestOrigin),
+    selectedCosmosChainId: getCosmosChainId(CosmosChain.THORChain),
+    selectedEVMChainId: getEvmChainId(EvmChain.Ethereum),
+  }
+}
 
 export const authorizedDapp =
   <K extends keyof BackgroundApiInterface>(
@@ -12,19 +29,43 @@ export const authorizedDapp =
     const { context } = params
     const { requestOrigin } = context
 
-    const currentVaultId = await storage.getCurrentVaultId()
+    const ensureVaultId = async () => {
+      const currentVaultId = await storage.getCurrentVaultId()
+      if (currentVaultId) {
+        return currentVaultId
+      }
 
-    if (!currentVaultId) {
-      throw new Error('TODO: handle connection request')
+      const { vaultId } = await callPopupApi({
+        grantVaultAccess: {},
+      })
+
+      await storage.setCurrentVaultId(vaultId)
+
+      await addVaultAppSession({
+        vaultId: vaultId,
+        session: getDefaultAppSession(requestOrigin),
+      })
+
+      return vaultId
     }
 
-    const vaultSessions = await getVaultAppSessions(currentVaultId)
+    const vaultId = await ensureVaultId()
+    const vaultSessions = await getVaultAppSessions(vaultId)
 
     const dappHostname = getDappHostname(requestOrigin)
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {
-      throw new Error('TODO: handle connection request')
+      const { vaultId } = await callPopupApi({
+        grantVaultAccess: {},
+      })
+
+      await storage.setCurrentVaultId(vaultId)
+
+      await addVaultAppSession({
+        vaultId: vaultId,
+        session: getDefaultAppSession(requestOrigin),
+      })
     }
 
     return resolver(params)

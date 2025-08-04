@@ -1,21 +1,17 @@
 import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { storage } from '../../../storage'
 import { BackgroundApiResolver } from '../resolver'
 
 export const getVault: BackgroundApiResolver<'getVault'> = async () => {
   const vaults = await storage.getVaults()
-  const currentVaultId = await storage.getCurrentVaultId()
+  const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
 
-  if (!currentVaultId) {
-    throw new Error('No vault selected')
-  }
-
-  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
-  if (!vault) {
-    throw new Error(`Selected vault not found`)
-  }
+  const vault = shouldBePresent(
+    vaults.find(vault => getVaultId(vault) === currentVaultId)
+  )
 
   return {
     name: vault.name,

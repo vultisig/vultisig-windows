@@ -2,12 +2,7 @@ import { pick } from '@lib/utils/record/pick'
 
 import { setInitialView } from '../../../storage/initialView'
 import { PopupApiInterface, PopupApiMethodName } from '../interface'
-import {
-  getPopupApiMessageSourceId,
-  PopupApiCall,
-  PopupApiRequest,
-  PopupApiResponse,
-} from './core'
+import { isPopupApiMessage, PopupApiCall, PopupApiResponse } from './core'
 
 const inWindow = async <T>(
   fn: (window: chrome.windows.Window) => Promise<T>
@@ -55,26 +50,24 @@ const inWindow = async <T>(
 export const callPopupApi = async <M extends PopupApiMethodName>(
   call: PopupApiCall<M>
 ): Promise<PopupApiInterface[M]['output']> => {
-  const request: PopupApiRequest<M> = {
-    sourceId: getPopupApiMessageSourceId('background'),
-    ...call,
-  }
-
-  await setInitialView({ id: 'popupApi' })
+  await setInitialView({ id: 'popupApi', state: { call } })
 
   return inWindow(
     () =>
       new Promise((resolve, reject) =>
-        chrome.runtime.sendMessage(
-          request,
-          ({ error, data }: PopupApiResponse<M>) => {
-            if (error) {
-              reject(error)
-            } else {
-              resolve(data as PopupApiInterface[M]['output'])
-            }
+        chrome.runtime.onMessage.addListener(async response => {
+          if (!isPopupApiMessage<PopupApiResponse<any>>(response, 'popup'))
+            return
+
+          const { error, data } = response
+          if (error) {
+            reject(error)
+          } else {
+            resolve(data as PopupApiInterface[M]['output'])
           }
-        )
+
+          return true
+        })
       )
   )
 }

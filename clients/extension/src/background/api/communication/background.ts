@@ -12,7 +12,7 @@ import {
 
 export const runBackgroundApiBackgroundAgent = () => {
   chrome.runtime.onMessage.addListener(
-    async (request: unknown, { origin }, sendResponse) => {
+    async (request, { origin }, sendResponse) => {
       if (!origin) return
 
       if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(request, 'inpage'))
