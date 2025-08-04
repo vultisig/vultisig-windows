@@ -1,4 +1,4 @@
-import { VaultBasedCosmosChain } from '@core/chain/Chain'
+import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
@@ -191,7 +191,8 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
-          txMemo: swapPayload ? '' : memo, // both IOS and Android specify memo in the txInputData as well when deposit
+          // That doesn't make sense, but iOS and Android have this logic.
+          txMemo: chain === Chain.MayaChain ? memo : swapPayload ? '' : memo,
         }
       }
 
