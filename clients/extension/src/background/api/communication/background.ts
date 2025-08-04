@@ -12,37 +12,35 @@ import {
 } from './core'
 
 export const runBackgroundApiBackgroundAgent = () => {
-  chrome.runtime.onMessage.addListener(
-    async (request, { origin }, sendResponse) => {
-      if (!origin) return
+  chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
+    if (!origin) return
 
-      if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(request, 'inpage'))
-        return
+    if (!isBackgroundApiMessage<BackgroundApiRequest<any>>(request, 'inpage'))
+      return
 
-      const { call, id } = request
+    const { call, id } = request
 
-      const handler =
-        backgroundApi[getRecordUnionKey(call) as BackgroundApiMethodName]
-      if (!handler) return
+    const handler =
+      backgroundApi[getRecordUnionKey(call) as BackgroundApiMethodName]
+    if (!handler) return
 
-      attempt(
-        handler({
-          input: getRecordUnionValue(call),
-          context: {
-            requestOrigin: origin,
-          },
-        })
-      ).then(result => {
-        const response: BackgroundApiResponse<any> = {
-          id,
-          sourceId: getBackgroundApiMessageSourceId('background'),
-          result,
-        }
-
-        sendResponse(response)
+    attempt(
+      handler({
+        input: getRecordUnionValue(call),
+        context: {
+          requestOrigin: origin,
+        },
       })
+    ).then(result => {
+      const response: BackgroundApiResponse<any> = {
+        id,
+        sourceId: getBackgroundApiMessageSourceId('background'),
+        result,
+      }
 
-      return true
-    }
-  )
+      sendResponse(response)
+    })
+
+    return true
+  })
 }

@@ -55,7 +55,7 @@ export const callPopupApi = async <M extends PopupApiMethodName>(
   return inWindow(
     () =>
       new Promise((resolve, reject) => {
-        const listener = async (response: any) => {
+        const listener = (response: any) => {
           if (!isPopupApiMessage<PopupApiResponse<any>>(response, 'popup'))
             return
 
