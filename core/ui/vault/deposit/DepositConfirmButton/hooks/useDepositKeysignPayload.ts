@@ -46,10 +46,15 @@ export function useDepositKeysignPayload({
 }: DepositKeysignPayloadProps) {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const { t } = useTranslation()
+  const isRuji =
+    action === 'stake_ruji' ||
+    action === 'unstake_ruji' ||
+    action === 'withdraw_ruji_rewards'
 
   const isUnmerge = action === 'unmerge'
-  const txType =
-    action === 'ibc_transfer'
+  const txType = isRuji
+    ? TransactionType.GENERIC_CONTRACT
+    : action === 'ibc_transfer'
       ? TransactionType.IBC_TRANSFER
       : isUnmerge
         ? TransactionType.THOR_UNMERGE
