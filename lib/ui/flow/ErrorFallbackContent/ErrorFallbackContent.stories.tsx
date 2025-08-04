@@ -9,11 +9,11 @@ const meta: Meta<typeof ErrorFallbackContent> = {
   parameters: { layout: 'centered' },
   argTypes: {
     title: { control: 'text' },
-    message: { control: 'text' },
+    error: { control: 'text' },
   },
   args: {
     title: 'Something went wrong',
-    message: 'Please try refreshing the page.',
+    error: 'Please try refreshing the page.',
   },
 }
 export default meta
@@ -24,12 +24,12 @@ export const Playground: Story = {}
 
 export const LongMessage: Story = {
   args: {
-    message:
+    error:
       'The server returned a 500 error. We’ve logged the problem and will fix it as soon as possible. Meanwhile, you can go back or reload.',
   },
 }
 
 export const TitleOnly: Story = {
-  args: { message: undefined },
+  args: { error: undefined },
   parameters: { controls: { hideNoControlsWarning: true } },
 }

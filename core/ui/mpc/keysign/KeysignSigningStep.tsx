@@ -21,7 +21,6 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -136,10 +135,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
         )
       }}
       error={error => (
-        <FullPageFlowErrorState
-          errorMessage={extractErrorMsg(error)}
-          message={t('signing_error')}
-        />
+        <FullPageFlowErrorState error={error} title={t('signing_error')} />
       )}
       pending={() => (
         <>
