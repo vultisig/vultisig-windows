@@ -12,11 +12,10 @@ export const useSelectedCoinCorrector = (
 ) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
+  console.log('🚀 ~ useSelectedCoinCorrector ~ selectedCoin:', selectedCoin)
   const navigate = useCoreNavigate()
 
-  const rujiCoin = useCurrentVaultCoins().find(
-    coin => coin?.ticker === 'x/ruji'
-  )
+  const rujiCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUJI')
   const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
 
   const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
