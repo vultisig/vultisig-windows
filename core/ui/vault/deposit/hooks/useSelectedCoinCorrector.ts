@@ -1,8 +1,10 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { useEffect } from 'react'
 
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
+import { stakeableAssetsTickers, StakeableAssetTicker } from '../config'
 import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider'
 
 export const useSelectedCoinCorrector = (
@@ -10,13 +12,35 @@ export const useSelectedCoinCorrector = (
 ) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
+  const navigate = useCoreNavigate()
 
   const rujiCoin = useCurrentVaultCoins().find(
     coin => coin?.ticker === 'x/ruji'
   )
+  const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
+
+  const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
+  const defaultStakeableAsset = useCurrentVaultCoins().find(
+    coin => coin?.ticker === defaultStakeableAssetTicker
+  )
 
   useEffect(() => {
     if (
+      selectedDepositAction === 'unstake' &&
+      (!selectedCoin?.ticker ||
+        !stakeableAssetsTickers.includes(
+          selectedCoin.ticker as StakeableAssetTicker
+        ))
+    ) {
+      if (!defaultStakeableAsset) {
+        navigate({ id: 'vault' })
+        return
+      }
+
+      setValue('selectedCoin', defaultStakeableAsset, {
+        shouldValidate: true,
+      })
+    } else if (
       selectedCoin?.ticker !== rujiCoin?.ticker &&
       (selectedDepositAction === 'stake_ruji' ||
         selectedDepositAction === 'unstake_ruji' ||
@@ -25,6 +49,26 @@ export const useSelectedCoinCorrector = (
       setValue('selectedCoin', rujiCoin, {
         shouldValidate: true,
       })
+    } else if (
+      selectedDepositAction === 'bond' &&
+      selectedCoin?.ticker !== runeCoin?.ticker
+    ) {
+      if (!runeCoin) {
+        navigate({ id: 'vault' })
+        return
+      }
+
+      setValue('selectedCoin', runeCoin, {
+        shouldValidate: true,
+      })
     }
-  }, [rujiCoin, selectedCoin?.ticker, selectedDepositAction, setValue])
+  }, [
+    defaultStakeableAsset,
+    navigate,
+    rujiCoin,
+    runeCoin,
+    selectedCoin?.ticker,
+    selectedDepositAction,
+    setValue,
+  ])
 }
