@@ -6,25 +6,25 @@ import {
   TxOverviewRowDepositsFlow,
 } from '@core/ui/chain/tx/TxOverviewRow'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
+import { getRequiredFieldsPerChainAction } from '@core/ui/vault/deposit/DepositForm/chainOptionsConfig'
+import { StrictTextContrast } from '@core/ui/vault/deposit/DepositVerify/DepositVerify.styled'
+import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
+import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
+import { DepositFiatFee } from '@core/ui/vault/deposit/fee/DepositFiatFee'
+import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
+import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { StrictText, Text } from '@lib/ui/text'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-
-import { ChainAction } from '../ChainAction'
-import { DepositConfirmButton } from '../DepositConfirmButton'
-import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
-import { DepositFee } from '../fee/DepositFee'
-import { DepositFiatFee } from '../fee/DepositFiatFee'
-import { useMemoGenerator } from '../hooks/useMemoGenerator'
-import { useSender } from '../hooks/useSender'
-import { StrictTextContrast } from './DepositVerify.styled'
-import { getFormattedFormData } from './utils'
 
 type DepositVerifyProps = {
   depositFormData: FieldValues
@@ -80,7 +80,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               <Text size={18} weight={700}>
                 {t('from')}
               </Text>
-              <StrictTextContrast>{sender}</StrictTextContrast>
+              <StrictTextContrast as={MiddleTruncate} text={sender} />
             </TxOverviewColumn>
             {actionFields.map(field => {
               if (
@@ -117,9 +117,10 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 <Text size={18} weight={700}>
                   {t('to')}
                 </Text>
-                <StrictTextContrast>
-                  {String(formattedDepositFormData.nodeAddress)}
-                </StrictTextContrast>
+                <StrictTextContrast
+                  as={MiddleTruncate}
+                  text={String(formattedDepositFormData.nodeAddress)}
+                />
               </TxOverviewColumn>
             )}
             {selectedChainAction === 'leave' && (
