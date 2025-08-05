@@ -16,31 +16,34 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
   const isDisabled = useIsSwapFormDisabled()
 
   return (
-    <PageContent
-      as="form"
-      gap={40}
-      {...getFormProps({
-        onSubmit: onFinish,
-        isDisabled,
-      })}
-      justifyContent="space-between"
-    >
-      <VStack gap={16}>
-        <VStack gap={8}>
-          <ManageFromCoin />
-          <ReverseSwapWrapper>
-            <ReverseSwap />
-          </ReverseSwapWrapper>
-          <ManageToCoin />
+    <>
+      <PageContent
+        as="form"
+        gap={40}
+        {...getFormProps({
+          onSubmit: onFinish,
+          isDisabled,
+        })}
+        justifyContent="space-between"
+        scrollable
+      >
+        <VStack gap={16}>
+          <VStack gap={8}>
+            <ManageFromCoin />
+            <ReverseSwapWrapper>
+              <ReverseSwap />
+            </ReverseSwapWrapper>
+            <ManageToCoin />
+          </VStack>
+          <VStack gap={10}>
+            <SwapInfo />
+          </VStack>
         </VStack>
-        <VStack gap={10}>
-          <SwapInfo />
-        </VStack>
-      </VStack>
-      <Button disabled={isDisabled} type="submit">
-        {typeof isDisabled === 'string' ? isDisabled : t('continue')}
-      </Button>
-    </PageContent>
+        <Button disabled={isDisabled} type="submit">
+          {typeof isDisabled === 'string' ? isDisabled : t('continue')}
+        </Button>
+      </PageContent>
+    </>
   )
 }
 
