@@ -2,8 +2,8 @@ import { Coin } from '@core/chain/coin/Coin'
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
 
 import { ChainAction } from '../../ChainAction'
-import { useDepositCoinCorrector } from '../../hooks/useDepositCoinCorrector'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
+import { useSelectedCoinCorrector } from '../../hooks/useSelectedCoinCorrector'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
@@ -20,7 +20,7 @@ type Props = {
 }
 
 export const DepositActionSpecific = ({ action }: Props) => {
-  useDepositCoinCorrector(action)
+  useSelectedCoinCorrector(action)
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')

@@ -5,6 +5,7 @@ import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import {
   YieldBearingAsset,
   yieldBearingAssetsAffiliateAddress,
@@ -98,6 +99,63 @@ export function useDepositKeysignPayload({
           vaultLocalPartyId: vault.localPartyId,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           libType: vault.libType,
+        }
+
+        if (
+          isOneOf(action, [
+            'stake_ruji',
+            'unstake_ruji',
+            'withdraw_ruji_rewards',
+          ])
+        ) {
+          const amount = Number(depositFormData['amount'] ?? 0)
+          const amountUnits =
+            action === 'stake_ruji'
+              ? toChainAmount(amount, selectedCoin!.decimals).toString()
+              : action === 'unstake_ruji'
+                ? toChainAmount(amount, selectedCoin!.decimals).toString()
+                : '0'
+
+          let executeInner = ''
+
+          switch (action) {
+            case 'stake_ruji':
+              executeInner = JSON.stringify({ account: { bond: {} } })
+              break
+
+            case 'unstake_ruji':
+              executeInner = JSON.stringify({
+                account: { withdraw: { amount: amountUnits } },
+              })
+              break
+
+            case 'withdraw_ruji_rewards':
+              executeInner = JSON.stringify({ account: { claim: {} } })
+              break
+          }
+
+          basePayload.contractPayload = {
+            case: 'wasmExecuteContractPayload',
+            value: {
+              senderAddress: coin.address,
+              contractAddress: rujiraStakingConfig.contract,
+              executeMsg: executeInner,
+              coins:
+                action === 'stake_ruji'
+                  ? [
+                      {
+                        denom: rujiraStakingConfig.bondDenom,
+                        amount: amountUnits,
+                      },
+                    ]
+                  : [],
+            },
+          }
+
+          basePayload.toAmount =
+            action === 'withdraw_ruji_rewards' ? '0' : amountUnits
+
+          return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
         if (action === 'mint' || action === 'redeem') {
@@ -206,6 +264,7 @@ export function useDepositKeysignPayload({
         isUnmerge,
         memo,
         receiver,
+        selectedCoin,
         slippage,
         validatorAddress,
         vault.hexChainCode,

@@ -21,6 +21,9 @@ export const transactionConfig = (
   unmerge: { requiresAmount: true, requiresNodeAddress: false },
   unbond: { requiresAmount: false, requiresNodeAddress: true },
   leave: { requiresNodeAddress: true, requiresAmount: false },
+  stake_ruji: { requiresAmount: true },
+  unstake_ruji: { requiresAmount: true },
+  withdraw_ruji_rewards: { requiresAmount: false },
   custom: {},
   stake: isStakeableChain(chain)
     ? match(chain as StakeableChain, {

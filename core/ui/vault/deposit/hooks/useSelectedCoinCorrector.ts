@@ -7,11 +7,15 @@ import { ChainAction } from '../ChainAction'
 import { stakeableAssetsTickers, StakeableAssetTicker } from '../config'
 import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider'
 
-export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
+export const useSelectedCoinCorrector = (
+  selectedDepositAction: ChainAction
+) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
   const navigate = useCoreNavigate()
+  const rujiCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUJI')
   const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
+
   const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
   const defaultStakeableAsset = useCurrentVaultCoins().find(
     coin => coin?.ticker === defaultStakeableAssetTicker
@@ -34,6 +38,15 @@ export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
         shouldValidate: true,
       })
     } else if (
+      selectedCoin?.ticker !== rujiCoin?.ticker &&
+      (selectedDepositAction === 'stake_ruji' ||
+        selectedDepositAction === 'unstake_ruji' ||
+        selectedDepositAction === 'withdraw_ruji_rewards')
+    ) {
+      setValue('selectedCoin', rujiCoin, {
+        shouldValidate: true,
+      })
+    } else if (
       selectedDepositAction === 'bond' &&
       selectedCoin?.ticker !== runeCoin?.ticker
     ) {
@@ -49,6 +62,7 @@ export const useDepositCoinCorrector = (selectedDepositAction: ChainAction) => {
   }, [
     defaultStakeableAsset,
     navigate,
+    rujiCoin,
     runeCoin,
     selectedCoin?.ticker,
     selectedDepositAction,
