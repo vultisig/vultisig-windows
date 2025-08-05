@@ -25,7 +25,6 @@ export enum MessageKey {
   ZCASH_REQUEST = 'zcash',
   PRIORITY = 'priority',
   VAULT = 'vault',
-  VAULTS = 'vaults',
   PLUGIN = 'plugin',
 }
 

@@ -1,7 +1,3 @@
-import {
-  handleGetVault,
-  handleGetVaults,
-} from '@clients/extension/src/background/handlers/accountsHandler'
 import { handlePluginRequest } from '@clients/extension/src/background/handlers/pluginHandler'
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
@@ -106,8 +102,6 @@ export const dispatchMessage = async (
 
   try {
     return match(type, {
-      [MessageKey.VAULT]: () => handleGetVault(safeOrigin),
-      [MessageKey.VAULTS]: () => handleGetVaults(popupMessenger),
       [MessageKey.PLUGIN]: () => handlePluginRequest(message, popupMessenger),
     } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
   } catch {
