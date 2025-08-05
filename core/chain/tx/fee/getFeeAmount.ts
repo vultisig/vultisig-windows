@@ -17,7 +17,7 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
       BigInt(priorityFee) == BigInt(0)
         ? BigInt(solanaConfig.priorityFeeLimit)
         : BigInt(priorityFee), // currently we hardcode the priority fee to 100_000 lamports
-    thorchainSpecific: ({ fee }) => BigInt(fee),
+    thorchainSpecific: ({ fee }) => BigInt(fee ?? 0),
     mayaSpecific: () => BigInt(cosmosGasLimitRecord[Chain.MayaChain]),
     cosmosSpecific: ({ gas }) => BigInt(gas),
     polkadotSpecific: () => polkadotConfig.fee,
