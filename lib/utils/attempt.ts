@@ -1,8 +1,5 @@
 import { isPromise } from './promise/isPromise'
-
-type Success<T> = { data: T; error?: never }
-type Failure<E = unknown> = { data?: never; error: E }
-type Result<T, E = unknown> = Success<T> | Failure<E>
+import { Result } from './types/Result'
 
 export function attempt<T, E = unknown>(
   fn: () => Promise<T>

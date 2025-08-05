@@ -1,5 +1,4 @@
 import { ProductSimpleLogo } from '@core/ui/product/logo/ProductSimpleLogo'
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { VaultKey } from '@core/ui/vault/share/VaultKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -11,6 +10,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
+
+import { getVaultExportUid } from '../export/core/uid'
 
 const cardWidth = 320
 const qrCodeSize = cardWidth - 80
@@ -50,10 +51,17 @@ const LogoContainer = styled.div`
 
 export const ShareVaultCard = () => {
   const vault = useCurrentVault()
-  const { uid } = getVaultPublicKeyExport(vault)
   const { name } = vault
 
-  const qrCodeValue = JSON.stringify(getVaultPublicKeyExport(vault))
+  const uid = getVaultExportUid(vault)
+
+  const qrCodeValue = JSON.stringify({
+    uid,
+    name: name,
+    public_key_ecdsa: vault.publicKeys.ecdsa,
+    public_key_eddsa: vault.publicKeys.eddsa,
+    hex_chain_code: vault.hexChainCode,
+  })
 
   const { colors } = useTheme()
 
