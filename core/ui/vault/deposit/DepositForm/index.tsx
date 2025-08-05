@@ -10,7 +10,9 @@ import {
   InputFieldWrapper,
 } from '@core/ui/vault/deposit/DepositForm/DepositForm.styled'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
+import { useSelectedCoinBalance } from '@core/ui/vault/deposit/hooks/useSelectedCoinBalance'
 import { DepositFormHandlersProvider } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
+import { useDepositCoin } from '@core/ui/vault/deposit/state/coin'
 import {
   getChainActionSchema,
   getFieldsForChainAction,
@@ -31,9 +33,6 @@ import { Text } from '@lib/ui/text'
 import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-
-import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
-import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -58,7 +57,8 @@ export const DepositForm: FC<DepositFormProps> = ({
   const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
 
   const isTCYAction =
-    selectedChainAction === 'stake' || selectedChainAction === 'unstake'
+    chain === Chain.THORChain &&
+    (selectedChainAction === 'stake' || selectedChainAction === 'unstake')
 
   const selectedCoinBalance = useSelectedCoinBalance({
     action: selectedChainAction,

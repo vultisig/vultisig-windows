@@ -1,18 +1,17 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
-import { useMemo } from 'react'
-
-import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { useMergeableTokenBalancesQuery } from '@core/ui/vault/deposit/hooks/useMergeableTokenBalancesQuery'
+import { useDepositCoin } from '@core/ui/vault/deposit/state/coin'
 import {
   useVaultChainCoinsQuery,
   VaultChainCoin,
-} from '../../queries/useVaultChainCoinsQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
-import { ChainAction } from '../ChainAction'
-import { useDepositCoin } from '../state/coin'
-import { useMergeableTokenBalancesQuery } from './useMergeableTokenBalancesQuery'
+} from '@core/ui/vault/queries/useVaultChainCoinsQuery'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { useMemo } from 'react'
 
 type Params = {
   action: ChainAction
@@ -33,16 +32,16 @@ export const useSelectedCoinBalance = ({
   )
 
   const [{ coin: feeCoinKey }] = useCoreViewState<'deposit'>()
-  const thorAddr = useCurrentVaultCoin(feeCoinKey)?.address
+  const address = useCurrentVaultCoin(feeCoinKey)?.address
 
   const { data: yTokenRawBalance = 0n } = useBalanceQuery({
-    chain: Chain.THORChain,
-    address: thorAddr,
+    chain,
+    address,
     id: selectedCoin?.id || coin.id,
   })
 
   const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(
-    thorAddr ?? ''
+    address ?? ''
   )
 
   return useMemo(() => {
