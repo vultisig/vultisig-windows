@@ -455,6 +455,8 @@ export const en = {
   send_pending_validation: 'Validating your transaction...',
   send_validation_failed: 'Failed to validate transaction',
   send_invalid_receiver_address: 'Enter a valid receiver address',
+  send_receiver_address_same_as_sender:
+    'Receiver address cannot be the same as sender address',
   amount_required: 'Amount is required',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   coin_not_found_in_current_vault: 'Coin not found in current vault',

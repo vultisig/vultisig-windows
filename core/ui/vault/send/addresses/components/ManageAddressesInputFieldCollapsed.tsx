@@ -19,7 +19,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
   const [
     {
       field,
-      errors: { address: addressError },
+      errors: { receiverAddress: addressError },
     },
     setFocusedSendField,
   ] = useSendFormFieldState()
