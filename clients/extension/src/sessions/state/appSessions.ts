@@ -68,3 +68,21 @@ export const updateAppSession = async ({
   await setVaultsAppSessions(updatedAll)
   return updatedSession
 }
+
+type AddVaultAppSessionInput = {
+  vaultId: string
+  session: AppSession
+}
+
+export const addVaultAppSession = async ({
+  vaultId,
+  session,
+}: AddVaultAppSessionInput): Promise<void> => {
+  const allSessions = await getVaultsAppSessions()
+  const vaultSessions = allSessions[vaultId] ?? {}
+
+  await setVaultsAppSessions({
+    ...allSessions,
+    [vaultId]: { ...vaultSessions, [session.host]: session },
+  })
+}

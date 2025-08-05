@@ -1,7 +1,4 @@
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { VaultExport } from '@clients/extension/src/utils/interfaces'
 import { useVaults } from '@core/ui/storage/vaults'
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -19,46 +16,17 @@ import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const backgroundMessenger = initializeMessenger({ connect: 'background' })
+import { PopupApiResolver } from '../../resolver'
 
-export const GetVaultsPage = () => {
+export const GrantVaultsAccess: PopupApiResolver<'grantVaultsAccess'> = ({
+  onFinish,
+}) => {
   const { t } = useTranslation()
   const [vaultIds, setVaultIds] = useState<string[]>([])
   const vaults = useVaults()
 
   const handleClose = () => {
     window.close()
-  }
-
-  const handleSubmit = async () => {
-    const selectedVaults = vaults
-      .filter(vault => vaultIds.includes(getVaultId(vault)))
-      .map(vault => {
-        const {
-          hex_chain_code,
-          name,
-          public_key_ecdsa,
-          public_key_eddsa,
-          uid,
-        } = getVaultPublicKeyExport(vault)
-        return {
-          name,
-          uid,
-          hexChainCode: hex_chain_code,
-          publicKeyEcdsa: public_key_ecdsa,
-          publicKeyEddsa: public_key_eddsa,
-        } as VaultExport
-      })
-
-    try {
-      await backgroundMessenger.send('vaults:connect', {
-        selectedVaults,
-      })
-    } catch (error) {
-      console.error('Failed to send message to background:', error)
-    }
-
-    handleClose()
   }
 
   return vaults.length ? (
@@ -101,7 +69,10 @@ export const GetVaultsPage = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <Button disabled={!vaultIds.length} onClick={handleSubmit}>
+        <Button
+          disabled={!vaultIds.length}
+          onClick={() => onFinish({ data: { vaultIds } })}
+        >
           {t('connect')}
         </Button>
       </PageFooter>
