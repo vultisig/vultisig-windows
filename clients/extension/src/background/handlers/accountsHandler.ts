@@ -2,16 +2,13 @@ import { Chain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { Messenger } from '../../messengers/createMessenger'
 import { getVaultAppSessions } from '../../sessions/state/appSessions'
 import { storage } from '../../storage'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
-import { Messaging, VaultExport } from '../../utils/interfaces'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
 import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
@@ -64,31 +61,6 @@ export const handleFindAccounts = async (
   })
 
   return [address]
-}
-
-const handleFindVault = async (
-  sender: string
-): Promise<Messaging.GetVault.Response> => {
-  const vaults = await storage.getVaults()
-  const currentVaultId = await storage.getCurrentVaultId()
-  if (!currentVaultId) return undefined
-  const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)] ?? null
-  if (currentSession) {
-    const selected = vaults.find(vault => getVaultId(vault) === currentVaultId)
-    if (!selected) return undefined
-    const { uid, hex_chain_code, name, public_key_ecdsa, public_key_eddsa } =
-      getVaultPublicKeyExport(selected)
-    return {
-      name,
-      uid,
-      hexChainCode: hex_chain_code,
-      publicKeyEcdsa: public_key_ecdsa,
-      publicKeyEddsa: public_key_eddsa,
-    }
-  } else {
-    return undefined
-  }
 }
 
 function handleWithConnection<T>(
@@ -155,30 +127,5 @@ export const handleGetAccounts = (
 ): Promise<string[]> => {
   return handleWithConnection(() => handleFindAccounts(chain, sender), sender, {
     chain,
-  })
-}
-
-export const handleGetVault = (
-  sender: string
-): Promise<Messaging.GetVault.Response> => {
-  return handleWithConnection(() => handleFindVault(sender), sender)
-}
-
-export const handleGetVaults = async (
-  popupMessenger: Messenger
-): Promise<Messaging.GetVaults.Response> => {
-  return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(() => {
-      reject(new Error('Vault selection timeout. Please try again.'))
-    }, 60000) // 60 second timeout
-    handleOpenPanel({ id: 'vaultsTab' })
-    popupMessenger.reply(
-      'vaults:connect',
-      async ({ selectedVaults }: { selectedVaults: VaultExport[] }) => {
-        clearTimeout(timeoutId)
-        resolve(selectedVaults)
-        return
-      }
-    )
   })
 }
