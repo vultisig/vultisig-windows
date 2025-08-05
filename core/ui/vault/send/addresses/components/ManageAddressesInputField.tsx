@@ -62,7 +62,6 @@ export const ManageReceiverAddressInputField = () => {
         },
         {
           balance: undefined,
-          chain: coin?.chain,
           walletCore,
           t,
         }

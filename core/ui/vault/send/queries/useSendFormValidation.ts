@@ -27,7 +27,6 @@ export const useSendFormValidation = () => {
         { coin, amount, receiverAddress: address, senderAddress: coin.address },
         {
           balance: balanceQuery.data,
-          chain: coin.chain,
           walletCore,
           t,
         }

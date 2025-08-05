@@ -12,14 +12,13 @@ export const validateSendForm = (
   values: SendFormShape,
   helpers: {
     balance: bigint | undefined
-    chain: Chain
     walletCore: WalletCore
     t: TFunction
   }
 ): ValidationResult<SendFormShape> => {
   const { coin, amount, senderAddress, receiverAddress } = values
-  const { balance, chain, walletCore, t } = helpers
-
+  const { balance, walletCore, t } = helpers
+  const { chain } = coin
   const errors: ValidationResult<SendFormShape> = {}
 
   if (!coin) errors.coin = t('required_field_missing')

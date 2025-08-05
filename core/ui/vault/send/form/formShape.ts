@@ -4,7 +4,7 @@ export type SendFormShape = {
   amount: bigint | null
   senderAddress: string
   receiverAddress: string
-  coin: Coin | null
+  coin: Coin
 }
 
 export type ValidationResult<T> = Partial<{ [P in keyof T]: string }>
