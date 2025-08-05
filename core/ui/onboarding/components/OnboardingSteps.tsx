@@ -9,7 +9,6 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -139,10 +138,6 @@ const StyledButton = styled(Button)`
 `
 
 const StyledContent = styled(VStack)`
-  background-color: ${({ theme }) =>
-    theme.colors.info.getVariant({ a: () => 0.03 }).toCssValue()};
-  border-bottom: dashed 1px ${getColor('foregroundExtra')};
-  border-top: dashed 1px ${getColor('foregroundExtra')};
   height: 400px;
   padding: 0;
 `
