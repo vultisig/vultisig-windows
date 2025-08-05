@@ -28,6 +28,7 @@ const thorChainSwapEnabledChains = [
   Chain.THORChain,
   Chain.Ripple,
   Chain.Base,
+  Chain.Tron,
 ] as const
 
 export const nativeSwapEnabledChainsRecord = {
