@@ -30,8 +30,8 @@ export const createProviders = () => {
     litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
     mayachain: MAYAChain.getInstance(),
     plugin: {
-      request: async ({ params }: { params: { id: string } }) => {
-        const { id } = params
+      request: async ({ params }: { params: [{ id: string }] }) => {
+        const [{ id }] = params
         const { joinUrl } = await callBackgroundApi({
           pluginReshare: { pluginId: id },
         })
