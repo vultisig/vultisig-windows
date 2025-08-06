@@ -1,6 +1,5 @@
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { ShareVaultCard } from '@core/ui/vault/share/ShareVaultCard'
-import { getVaultPublicKeyExport } from '@core/ui/vault/share/utils/getVaultPublicKeyExport'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
@@ -14,6 +13,8 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { getVaultExportUid } from '../export/core/uid'
+
 const StyledIcon = styled(ShareIcon)`
   color: ${getColor('background')};
 `
@@ -21,8 +22,6 @@ const StyledIcon = styled(ShareIcon)`
 export const ShareVaultPage = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { uid } = getVaultPublicKeyExport(vault)
-  const lastThreeUID = uid.slice(-3)
 
   const { name } = vault
   const qrNodeRef = useRef<HTMLDivElement | null>(null)
@@ -68,7 +67,7 @@ export const ShareVaultPage = () => {
           </Button>
 
           <SaveAsImage
-            fileName={`VaultQR-${name}-${lastThreeUID}`}
+            fileName={`VaultQR-${name}-${getVaultExportUid(vault).slice(-3)}`}
             renderTrigger={({ onClick }) => (
               <Button kind="secondary" onClick={onClick}>
                 {t('save')}
