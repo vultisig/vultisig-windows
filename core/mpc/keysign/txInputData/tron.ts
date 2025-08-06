@@ -65,36 +65,8 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
         return [TW.Tron.Proto.SigningInput.encode(input).finish()]
       },
 
-      general: ({ quote }) => {
-        const tx = shouldBePresent(quote?.tx)
-        const contract = TW.Tron.Proto.TriggerSmartContract.create({
-          ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
-          contractAddress: shouldBePresent(tx.to),
-          data: toTronData(shouldBePresent(tx.data)),
-          callValue: Long.fromString(String(shouldBePresent(tx.value) ?? '0')),
-        })
-
-        const tronTx = TW.Tron.Proto.Transaction.create({
-          triggerSmartContract: contract,
-          timestamp: Long.fromString(tronSpecific.timestamp.toString()),
-          blockHeader: TW.Tron.Proto.BlockHeader.create({
-            timestamp: Long.fromString(
-              tronSpecific.blockHeaderTimestamp.toString()
-            ),
-            number: Long.fromString(tronSpecific.blockHeaderNumber.toString()),
-            version: Number(tronSpecific.blockHeaderVersion.toString()),
-            txTrieRoot: Buffer.from(tronSpecific.blockHeaderTxTrieRoot, 'hex'),
-            parentHash: Buffer.from(tronSpecific.blockHeaderParentHash, 'hex'),
-            witnessAddress: Buffer.from(
-              tronSpecific.blockHeaderWitnessAddress,
-              'hex'
-            ),
-          }),
-          expiration: Long.fromString(tronSpecific.expiration.toString()),
-        })
-
-        const input = TW.Tron.Proto.SigningInput.create({ transaction: tronTx })
-        return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+      general: () => {
+        throw new Error('General swap not supported for Tron')
       },
     })
   }
