@@ -1,4 +1,3 @@
-import { EvmChain } from '@core/chain/Chain'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
@@ -9,9 +8,9 @@ import { encodeFunctionData, erc20Abi } from 'viem'
 import { BlockaidTxScanInput } from '../../resolver'
 import { BlockaidTxScanInputResolver } from '../resolver'
 
-export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
-  EvmChain
-> = ({ payload, chain }) => {
+export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
+  payload,
+}) => {
   const coin = getKeysignCoin(payload)
 
   const toEvmBlockaidTxScanInput = ({
@@ -22,8 +21,7 @@ export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
     to: string
     value: string
     data: string
-  }): BlockaidTxScanInput => ({
-    chain,
+  }) => ({
     data: {
       method: 'eth_sendTransaction',
       params: [{ from: coin.address, to, value, data }],
@@ -33,26 +31,26 @@ export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
   const swapPayload = getKeysignSwapPayload(payload)
 
   if (swapPayload) {
-    return matchRecordUnion<KeysignSwapPayload, BlockaidTxScanInput | null>(
-      swapPayload,
-      {
-        native: () => null,
-        general: generalSwapPayload => {
-          const { quote } = generalSwapPayload
-          if (!quote?.tx) {
-            return null
-          }
+    return matchRecordUnion<
+      KeysignSwapPayload,
+      Pick<BlockaidTxScanInput, 'data'> | null
+    >(swapPayload, {
+      native: () => null,
+      general: generalSwapPayload => {
+        const { quote } = generalSwapPayload
+        if (!quote?.tx) {
+          return null
+        }
 
-          return toEvmBlockaidTxScanInput({
-            to: quote.tx.to,
-            value: quote.tx.value.startsWith('0x')
-              ? quote.tx.value
-              : `0x${bigIntToHex(BigInt(quote.tx.value))}`,
-            data: quote.tx.data,
-          })
-        },
-      }
-    )
+        return toEvmBlockaidTxScanInput({
+          to: quote.tx.to,
+          value: quote.tx.value.startsWith('0x')
+            ? quote.tx.value
+            : `0x${bigIntToHex(BigInt(quote.tx.value))}`,
+          data: quote.tx.data,
+        })
+      },
+    })
   }
 
   const amount = BigInt(payload.toAmount)

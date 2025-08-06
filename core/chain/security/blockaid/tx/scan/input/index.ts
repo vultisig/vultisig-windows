@@ -16,7 +16,7 @@ import { getSolanaBlockaidTxScanInput } from './resolvers/solana'
 
 const resolvers: Record<
   DeriveChainKind<BlockaidSupportedChains>,
-  BlockaidTxScanInputResolver<any>
+  BlockaidTxScanInputResolver
 > = {
   evm: getEvmBlockaidTxScanInput,
   solana: getSolanaBlockaidTxScanInput,
@@ -32,5 +32,11 @@ export const getBlockaidTxScanInput = (
 
   const chainKind = getChainKind(chain)
 
-  return resolvers[chainKind]({ ...input, chain })
+  const txScanInput = resolvers[chainKind](input)
+
+  if (!txScanInput) {
+    return null
+  }
+
+  return { chain, ...txScanInput }
 }
