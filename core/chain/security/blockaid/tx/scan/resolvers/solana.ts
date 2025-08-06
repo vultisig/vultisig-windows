@@ -7,12 +7,14 @@ import { blockaidBaseUrl } from '../../../config'
 import { TxRiskLevel } from '../core'
 import { BlockaidTxScanResolver } from '../resolver'
 
-const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
+const blockaidRiskyTxLevels = ['warning', 'malicious', 'spam'] as const
 
 type BlockaidRiskLevel = (typeof blockaidRiskyTxLevels)[number]
 
 type SolanaBlockaidScanResponse = {
-  result: {
+  status?: string
+  error?: string
+  result?: {
     validation: {
       result_type: BlockaidRiskLevel | string
       reason: string
@@ -26,9 +28,9 @@ type SolanaBlockaidScanResponse = {
 }
 
 const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
-  Warning: 'medium',
-  Malicious: 'high',
-  Spam: 'high',
+  warning: 'medium',
+  malicious: 'high',
+  spam: 'high',
 }
 
 export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
@@ -54,9 +56,28 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
     }
   )
 
-  const { result_type, reason, extended_features } = response.result.validation
+  // Check for errors first (like iOS implementation)
+  if (response.status?.toLowerCase() === 'error' || response.error) {
+    throw new Error(response.error ?? 'Unknown error')
+  }
 
-  if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
+  if (!response.result) {
+    throw new Error("'result' is null")
+  }
+
+  const { result_type, reason, features, extended_features } =
+    response.result.validation
+
+  // Implement Solana-specific risk level logic like iOS
+  const resultTypeLower = result_type.toLowerCase()
+  const isBenign = resultTypeLower === 'benign' && features.length === 0
+
+  if (isBenign) {
+    return null
+  }
+
+  // Check if it's a risky transaction
+  if (!isOneOf(resultTypeLower, blockaidRiskyTxLevels)) {
     return null
   }
 
@@ -66,7 +87,7 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
       : reason
 
   return {
-    level: blockaidRiskLevelToTxRiskLevel[result_type],
+    level: blockaidRiskLevelToTxRiskLevel[resultTypeLower as BlockaidRiskLevel],
     description,
   }
 }

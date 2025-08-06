@@ -17,6 +17,7 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
     recentBlockHash,
     fromTokenAssociatedAddress,
     toTokenAssociatedAddress,
+    programId,
   } = getBlockchainSpecificValue(payload.blockchainSpecific, 'solanaSpecific')
 
   const swapPayload = getKeysignSwapPayload(payload)
@@ -62,15 +63,19 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
 
       const decimals = coin.decimals ?? 6
 
+      const generatedAssociatedAddress = programId
+        ? receiverSolanaAddress.token2022Address(coin.contractAddress)
+        : receiverSolanaAddress.defaultTokenAddress(coin.contractAddress)
+
       const tokenTransferMessage =
         TW.Solana.Proto.CreateAndTransferToken.create({
           recipientMainAddress: payload.toAddress,
           tokenMintAddress: coin.contractAddress,
-          recipientTokenAddress: '',
+          recipientTokenAddress: generatedAssociatedAddress,
           senderTokenAddress: fromTokenAssociatedAddress,
           amount: Long.fromString(amount.toString()),
           decimals,
-          tokenProgramId: coin.contractAddress.endsWith('22')
+          tokenProgramId: programId
             ? TW.Solana.Proto.TokenProgramId.Token2022Program
             : TW.Solana.Proto.TokenProgramId.TokenProgram,
         })
@@ -98,7 +103,7 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
       recipientTokenAddress: toTokenAssociatedAddress,
       amount: Long.fromString(amount.toString()),
       decimals: coin.decimals ?? 6,
-      tokenProgramId: coin.contractAddress?.endsWith('22')
+      tokenProgramId: programId
         ? TW.Solana.Proto.TokenProgramId.Token2022Program
         : TW.Solana.Proto.TokenProgramId.TokenProgram,
     })
@@ -122,6 +127,9 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
 
   return {
     data: {
+      chain: 'mainnet',
+      metadata: { url: 'vultisig.com' },
+      options: ['validation'],
       account_address: coin.address,
       encoding: 'base58',
       transactions: [getSerializedMessage()],
