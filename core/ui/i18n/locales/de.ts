@@ -1043,7 +1043,7 @@ export const de = {
   no_vaults_desc:
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen Tresor oder importieren Sie einen vorhandenen',
   risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
-  powered_by: 'Unterstützt von <Anbieter></Anbieter>',
+  powered_by: 'Unterstützt von <provider></provider>',
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsmemo wird nicht unterstützt',
   ibc_transaction_not_supporting_memo_desc:
