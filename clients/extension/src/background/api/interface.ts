@@ -4,6 +4,7 @@ import { ApiMethod } from '@lib/utils/api/ApiMethod'
 export type BackgroundApiInterface = {
   getVault: ApiMethod<{}, VaultExport>
   getVaults: ApiMethod<{}, VaultExport[]>
+  pluginReshare: ApiMethod<{}, { joinUrl: string }>
 }
 
 export type BackgroundApiMethodName = keyof BackgroundApiInterface

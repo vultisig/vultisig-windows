@@ -16,7 +16,6 @@ import { handleOpenPanel } from '../window/windowManager'
 const instance: Record<Instance, boolean> = {
   [Instance.CONNECT]: false,
   [Instance.TRANSACTION]: false,
-  [Instance.VAULTS]: false,
 }
 
 export const handleFindAccounts = async (
