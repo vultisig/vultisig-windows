@@ -20,10 +20,12 @@ import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignActio
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
+import { sha256 } from 'ethers'
 import { keccak256 } from 'js-sha3'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
@@ -110,23 +112,19 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const { chain: defaultChain } = customMessageConfig
             const chain = (payloadChain as Chain) ?? defaultChain
             const chainKind = getChainKind(chain)
+            const rawBytes = message.startsWith('0x')
+              ? Buffer.from(message.slice(2), 'hex')
+              : new TextEncoder().encode(message)
 
-            // Decode hex string or use raw message
-            const messageBuffer =
-              typeof message === 'string' && message.startsWith('0x')
-                ? Buffer.from(message.slice(2), 'hex')
-                : typeof message === 'string'
-                  ? new TextEncoder().encode(message)
-                  : Buffer.from(message)
-
-            // Determine the actual message to sign (as hex string)
-            const hexMessage =
-              chainKind === 'evm'
-                ? keccak256(messageBuffer)
-                : messageBuffer.toString('hex')
+            const messageHashHex =
+              chainKind === 'evm' ? keccak256(rawBytes) : sha256(rawBytes)
 
             const [signature] = await keysignAction({
-              msgs: [hexMessage],
+              msgs: [
+                Buffer.from(stripHexPrefix(messageHashHex), 'hex').toString(
+                  'hex'
+                ),
+              ],
               signatureAlgorithm: signatureAlgorithms[chainKind],
               coinType: getCoinType({ walletCore, chain }),
             })

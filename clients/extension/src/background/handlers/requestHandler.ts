@@ -789,6 +789,25 @@ export const handleRequest = (
 
         break
       }
+      case RequestMethod.CTRL.SIGN_MESSAGE: {
+        if (Array.isArray(params)) {
+          const [{ message }] = params
+          handleSendTransaction({
+            transactionPayload: {
+              custom: {
+                method,
+                address: '',
+                message: message,
+                chain: chain,
+              },
+            },
+            status: 'default',
+          }).then(result => {
+            resolve(result)
+          })
+        }
+        break
+      }
       default: {
         reject(`Unsupported method: ${method}`)
 
