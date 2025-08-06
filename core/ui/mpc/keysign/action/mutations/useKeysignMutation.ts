@@ -119,12 +119,15 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const messageHashHex =
               chainKind === 'evm' ? keccak256(rawBytes) : sha256(rawBytes)
 
+            const msgToSign =
+              chainKind === 'solana'
+                ? Buffer.from(rawBytes).toString('hex')
+                : Buffer.from(stripHexPrefix(messageHashHex), 'hex').toString(
+                    'hex'
+                  )
+
             const [signature] = await keysignAction({
-              msgs: [
-                Buffer.from(stripHexPrefix(messageHashHex), 'hex').toString(
-                  'hex'
-                ),
-              ],
+              msgs: [msgToSign],
               signatureAlgorithm: signatureAlgorithms[chainKind],
               coinType: getCoinType({ walletCore, chain }),
             })

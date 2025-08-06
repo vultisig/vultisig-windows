@@ -28,6 +28,8 @@
     "@keplr-wallet/provider": "^0.12.202",
     "@lib/utils": "workspace:*",
     "@solana/spl-token": "^0.4.13",
+    "@wallet-standard/base": "^1.1.0",
+    "@wallet-standard/features": "^1.1.0",
     "axios": "^1.8.3",
     "bech32": "^2.0.0",
     "mipd": "^0.0.7",
