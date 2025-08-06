@@ -30,7 +30,7 @@ const api = axios.create({
   timeout: 10000,
 })
 
-export const apiRef = {
+const apiRef = {
   fourByte: 'https://www.4byte.directory/',
   mayaChain: 'https://mayanode.mayachain.info/',
   nineRealms: {
@@ -40,9 +40,6 @@ export const apiRef = {
   vultisig: {
     airdrop: 'https://airdrop.vultisig.com/',
     api: 'https://api.vultisig.com/',
-  },
-  jupiter: {
-    token: 'https://tokens.jup.ag/token',
   },
 }
 
