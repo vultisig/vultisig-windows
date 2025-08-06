@@ -8,7 +8,6 @@ import {
 } from '@clients/extension/src/utils/functions'
 import { Chain } from '@core/chain/Chain'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
-import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 
@@ -31,7 +30,7 @@ const api = axios.create({
   timeout: 10000,
 })
 
-const apiRef = {
+export const apiRef = {
   fourByte: 'https://www.4byte.directory/',
   mayaChain: 'https://mayanode.mayachain.info/',
   nineRealms: {
@@ -193,12 +192,6 @@ export default {
           })
           .catch(reject)
       })
-    },
-  },
-  plugin: {
-    fetchPluginInfo: async (id: string) => {
-      const url = `${apiRef.pluginMarketPlace}plugins/${id}`
-      return (await api.get<PluginMetadata>(url)).data
     },
   },
 }
