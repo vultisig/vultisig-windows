@@ -1,24 +1,18 @@
 import { EvmChain } from '@core/chain/Chain'
-import { BlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan'
+import { BlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan/resolver'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
 
-export const keysignPayloadToBlockaidTxScanInput = (
-  payload: KeysignPayload
-): BlockaidTxScanInput | null => {
-  const coin = getKeysignCoin(payload)
-  const chain = getKeysignChain(payload)
+import { BlockaidTxScanInputResolver } from './BlockaidTxScanInputResolver'
 
-  if (!isOneOf(chain, Object.values(EvmChain))) {
-    return null
-  }
+export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
+  EvmChain
+> = ({ payload, chain }) => {
+  const coin = getKeysignCoin(payload)
 
   const toEvmBlockaidTxScanInput = ({
     to,

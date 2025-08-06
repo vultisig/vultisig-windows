@@ -1,9 +1,11 @@
+import { EvmChain } from '@core/chain/Chain'
 import { productRootDomain, rootApiUrl } from '@core/config'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { EvmChain } from '../../../Chain'
-import { blockaidBaseUrl } from '../config'
+import { blockaidBaseUrl } from '../../../config'
+import { TxRiskLevel } from '../core'
+import { BlockaidTxScanResolver } from '../resolver'
 
 const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
 
@@ -22,23 +24,10 @@ const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
   Spam: 'high',
 }
 
-export type TxRiskLevel = 'medium' | 'high'
-
-export type RiskyTxInfo = {
-  level: TxRiskLevel
-  description: string
-}
-
-export type BlockaidTxScanInput = {
-  chain: EvmChain
-  data: unknown
-}
-
-export type BlockaidTxScanResult = RiskyTxInfo | null
-
-export const scanTxWithBlockaid = async (input: BlockaidTxScanInput) => {
-  const { chain, data } = input
-
+export const scanEvmTxWithBlockaid: BlockaidTxScanResolver<EvmChain> = async ({
+  chain,
+  data,
+}) => {
   const body = {
     chain: chain.toLowerCase(),
     data,
