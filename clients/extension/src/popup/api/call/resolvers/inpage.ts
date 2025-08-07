@@ -1,3 +1,5 @@
+import { Result } from '@lib/utils/types/Result'
+
 import { ExtensionApiMessage } from '../../../../api'
 import { sendThroughInpageBackgroundChannel } from '../../../../channels/inpageBackground/inpage'
 import { PopupApiInterface, PopupApiMethodName } from '../../interface'
@@ -16,7 +18,14 @@ export const callPopupApiFromInpage: CallPopupApiResolver<any> = async <
     },
   }
 
-  return sendThroughInpageBackgroundChannel<PopupApiInterface[M]['output']>(
-    message
-  )
+  const { error, data } =
+    await sendThroughInpageBackgroundChannel<
+      Result<PopupApiInterface[M]['output']>
+    >(message)
+
+  if (data) {
+    return data
+  }
+
+  throw error
 }

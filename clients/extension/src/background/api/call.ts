@@ -1,4 +1,5 @@
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Result } from '@lib/utils/types/Result'
 
 import { ExtensionApiMessage } from '../../api'
 import { sendThroughInpageBackgroundChannel } from '../../channels/inpageBackground/inpage'
@@ -8,7 +9,7 @@ import { BackgroundApiInterface, BackgroundApiMethodName } from './interface'
 
 const backgroundApiSupportedSources = ['inpage']
 
-export const callBackgroundApi = <M extends BackgroundApiMethodName>(
+export const callBackgroundApi = async <M extends BackgroundApiMethodName>(
   call: BackgroundApiCall<M>
 ): Promise<BackgroundApiInterface[M]['output']> => {
   const source = detectScriptType()
@@ -23,7 +24,14 @@ export const callBackgroundApi = <M extends BackgroundApiMethodName>(
     },
   }
 
-  return sendThroughInpageBackgroundChannel<
-    BackgroundApiInterface[M]['output']
-  >(message)
+  const { error, data } =
+    await sendThroughInpageBackgroundChannel<
+      Result<BackgroundApiInterface[M]['output']>
+    >(message)
+
+  if (data) {
+    return data
+  }
+
+  throw error
 }
