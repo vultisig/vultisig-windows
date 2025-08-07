@@ -6,6 +6,7 @@ import {
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
+import { BlockaidTxScanInput } from '../resolver'
 import {
   BlockaidTxScanInputResolver,
   BlockaidTxScanInputResolverInput,
@@ -23,7 +24,7 @@ const resolvers: Record<
 
 export const getBlockaidTxScanInput = (
   input: Omit<BlockaidTxScanInputResolverInput, 'chain'>
-) => {
+): BlockaidTxScanInput | null => {
   const chain = getKeysignChain(input.payload)
   if (!isOneOf(chain, blockaidSupportedChains)) {
     return null
@@ -31,14 +32,14 @@ export const getBlockaidTxScanInput = (
 
   const chainKind = getChainKind(chain)
 
-  const txScanInput = resolvers[chainKind]({
+  const data = resolvers[chainKind]({
     ...input,
     chain,
   })
 
-  if (!txScanInput) {
+  if (!data) {
     return null
   }
 
-  return { chain, ...txScanInput }
+  return { chain, data }
 }
