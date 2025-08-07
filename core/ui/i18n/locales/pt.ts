@@ -1023,4 +1023,15 @@ export const pt = {
   transaction_has_risk:
     'Transação de risco {{riskLevel}} detectada por <provider></provider>',
   scanning: 'escaneando...',
+  no_vaults: 'Nenhum cofre ainda',
+  no_vaults_desc:
+    'Seus cofres aparecerão aqui. Comece criando um ou importando um existente.',
+  risky_transaction_detected: 'Transação de risco {{riskLevel}} detectada',
+  powered_by: 'Desenvolvido por <provider></provider>',
+  ibc_transaction_not_supporting_memo_title:
+    'Memorando de transação IBC não suportado',
+  ibc_transaction_not_supporting_memo_desc:
+    'Esta transação IBC inclui um memorando, mas o Vultisig atualmente não suporta a incorporação de memorandos dentro de mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
+  go_back: 'Volte',
+  continue_anyway: 'Continue assim mesmo',
 }

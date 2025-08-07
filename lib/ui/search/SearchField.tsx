@@ -57,7 +57,7 @@ const SearchIconWrapper = styled.div`
   color: ${getColor('textShy')};
 `
 
-const StyledInput = styled.input`
+const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   width: 100%;
   padding-left: 20px;
   line-height: 20px;
