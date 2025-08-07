@@ -6,15 +6,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { hexToBytes } from '@lib/utils/hexToBytes'
 
 import { storage } from '../../storage'
-
-type CosmosAccount = {
-  pubkey: number[]
-  address: string
-  algo: 'secp256k1'
-  bech32Address: string
-  isKeystone: boolean
-  isNanoLedger: boolean
-}
+import { CosmosAccount } from '../../utils/interfaces'
 
 export const generateCosmosAccount = async (
   responseAddress: string,

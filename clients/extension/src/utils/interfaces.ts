@@ -187,6 +187,15 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
+export type CosmosAccount = {
+  pubkey: number[]
+  address: string
+  algo: 'secp256k1'
+  bech32Address: string
+  isKeystone: boolean
+  isNanoLedger: boolean
+}
+
 export type TransactionDetailsAsset = {
   chain: string
   ticker: string
