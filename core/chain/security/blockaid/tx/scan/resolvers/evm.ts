@@ -5,11 +5,8 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { blockaidBaseUrl } from '../../../config'
 import { TxRiskLevel } from '../core'
+import { BlockaidRiskLevel, blockaidRiskyTxLevels } from '../input/api'
 import { BlockaidTxScanResolver } from '../resolver'
-
-const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
-
-type BlockaidRiskLevel = (typeof blockaidRiskyTxLevels)[number]
 
 type BlockaidScanResponse = {
   validation: {

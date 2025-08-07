@@ -1,3 +1,4 @@
+import { getBlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { BlockaidNoTxScanStatus } from '@core/ui/chain/security/blockaid/tx/BlockaidNoTxScanStatus'
 import { BlockaidTxScanning } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanning'
@@ -22,7 +23,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { getBlockaidTxScanInput } from '../../../chain/security/blockaid/txScanInput'
 
 type VerifyKeysignStartInput = {
   children: ReactNode

@@ -4,12 +4,12 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { blockaidBaseUrl } from '../../../config'
-import { TxRiskLevel } from '../core'
+import {
+  BlockaidRiskLevel,
+  blockaidRiskLevelToTxRiskLevel,
+  blockaidRiskyTxLevels,
+} from '../input/api'
 import { BlockaidTxScanResolver } from '../resolver'
-
-const blockaidRiskyTxLevels = ['warning', 'malicious', 'spam'] as const
-
-type BlockaidRiskLevel = (typeof blockaidRiskyTxLevels)[number]
 
 type SolanaBlockaidScanResponse = {
   status?: string
@@ -27,12 +27,6 @@ type SolanaBlockaidScanResponse = {
   }
 }
 
-const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
-  warning: 'medium',
-  malicious: 'high',
-  spam: 'high',
-}
-
 export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
   OtherChain.Solana
 > = async ({ data }) => {
@@ -43,7 +37,7 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
       url: productRootDomain,
     },
     options: ['validation'],
-    ...(data as Record<string, unknown>),
+    ...data,
   }
 
   const response = await queryUrl<SolanaBlockaidScanResponse>(

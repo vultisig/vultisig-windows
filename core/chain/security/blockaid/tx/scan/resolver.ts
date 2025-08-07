@@ -3,7 +3,7 @@ import { BlockaidTxScanResult } from './core'
 
 export type BlockaidTxScanInput = {
   chain: BlockaidSupportedChains
-  data: unknown
+  data: Record<string, unknown>
 }
 
 export type BlockaidTxScanResolver<
