@@ -10,24 +10,28 @@ import {
 import { BlockaidTxScanResolver } from '../resolver'
 
 type SolanaBlockaidScanResponse = {
-  validation: {
-    result_type: BlockaidRiskLevel | string
-    reason: string
-    features: string[]
-    extended_features: Array<{
-      type: string
-      description: string
-    }>
+  result: {
+    validation: {
+      result_type: BlockaidRiskLevel | string
+      reason: string
+      features: string[]
+      extended_features: Array<{
+        type: string
+        description: string
+      }>
+    }
   }
 }
 
 export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
   OtherChain.Solana
 > = async ({ data }) => {
-  const { validation } = await queryBlockaid<SolanaBlockaidScanResponse>(
+  const { result } = await queryBlockaid<SolanaBlockaidScanResponse>(
     '/solana/message/scan',
     data
   )
+
+  const { validation } = result
 
   const { result_type, reason, extended_features } = validation
 
@@ -42,7 +46,6 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
 
   return {
     level: blockaidRiskLevelToTxRiskLevel[result_type],
-
     description,
   }
 }
