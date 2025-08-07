@@ -2,9 +2,12 @@ import { EvmChain } from '@core/chain/Chain'
 import { productRootDomain } from '@core/config'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-import { queryBlockaid } from '../api'
-import { TxRiskLevel } from '../core'
-import { BlockaidRiskLevel, blockaidRiskyTxLevels } from '../input/api'
+import {
+  BlockaidRiskLevel,
+  blockaidRiskLevelToTxRiskLevel,
+  blockaidRiskyTxLevels,
+} from '../api/core'
+import { queryBlockaid } from '../api/query'
 import { BlockaidTxScanResolver } from '../resolver'
 
 type BlockaidScanResponse = {
@@ -12,12 +15,6 @@ type BlockaidScanResponse = {
     result_type: BlockaidRiskLevel | string
     description: string
   }
-}
-
-const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
-  Warning: 'medium',
-  Malicious: 'high',
-  Spam: 'high',
 }
 
 export const scanEvmTxWithBlockaid: BlockaidTxScanResolver<EvmChain> = async ({

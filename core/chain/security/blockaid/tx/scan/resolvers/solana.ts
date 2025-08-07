@@ -1,12 +1,12 @@
 import { OtherChain } from '@core/chain/Chain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-import { queryBlockaid } from '../api'
+import { queryBlockaid } from '../api/query'
 import {
   BlockaidRiskLevel,
   blockaidRiskLevelToTxRiskLevel,
   blockaidRiskyTxLevels,
-} from '../input/api'
+} from '../api/core'
 import { BlockaidTxScanResolver } from '../resolver'
 
 type SolanaBlockaidScanResponse = {
