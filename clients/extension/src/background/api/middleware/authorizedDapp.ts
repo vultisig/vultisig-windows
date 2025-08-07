@@ -2,7 +2,7 @@ import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 
-import { callPopupApi } from '../../../popup/api/communication/background'
+import { callPopupApi } from '../../../popup/api/call'
 import {
   addVaultAppSession,
   getVaultAppSessions,

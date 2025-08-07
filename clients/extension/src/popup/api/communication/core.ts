@@ -1,6 +1,7 @@
 import { productName } from '@core/config'
 import { Result } from '@lib/utils/types/Result'
 
+import { CallPopupApiOptions } from '../call/resolver'
 import { PopupApiInterface, PopupApiMethodName } from '../interface'
 
 type PopupApiMessageSource = 'popup'
@@ -29,3 +30,8 @@ export const isPopupApiMessage = <T extends PopupApiMessageKey>(
   message !== null &&
   'sourceId' in message &&
   message.sourceId === getPopupApiMessageSourceId(source)
+
+export type PopupApiMessage = {
+  call: PopupApiCall<any>
+  options: CallPopupApiOptions
+}

@@ -1,7 +1,10 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+import { match } from '@lib/utils/match'
 
+import { ExtensionApi, ExtensionApiMessage } from '../api'
+import { runInpageBackgroundChannelBackgroundAgent } from '../channels/inpageBackground/background'
+import { callPopupApiFromInpage } from '../popup/api/call/resolvers/inpage'
 import { MessageKey } from '../utils/constants'
-import { runBackgroundApiBackgroundAgent } from './api/communication/background'
 import { dispatchMessage } from './dispatcher/messageDispatcher'
 import { keepAliveHandler } from './handlers/keepAliveHandler'
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -38,4 +41,14 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
 )
 keepAliveHandler()
 
-runBackgroundApiBackgroundAgent()
+const handlers: Record<ExtensionApi> = {}
+
+runInpageBackgroundChannelBackgroundAgent({
+  getHandler: ({ context, message, reply }) => {
+    const { api, ...rest } = message as ExtensionApiMessage
+
+    const handler = match(api, {
+      popup: () => callPopupApiFromInpage(rest),
+    })
+  },
+})

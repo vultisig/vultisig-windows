@@ -1,6 +1,7 @@
 import { productName } from '@core/config'
 import { Result } from '@lib/utils/types/Result'
 
+import { BackgroundApiContext } from '../context'
 import { BackgroundApiInterface, BackgroundApiMethodName } from '../interface'
 
 type BackgroundApiMessageSource = 'inpage' | 'background'
@@ -38,3 +39,8 @@ export const isBackgroundApiMessage = <T extends BackgroundApiMessageKey>(
   message !== null &&
   'sourceId' in message &&
   message.sourceId === getBackgroundApiMessageSourceId(source)
+
+export type BackgroundApiMessage = {
+  call: BackgroundApiCall<any>
+  context: BackgroundApiContext
+}
