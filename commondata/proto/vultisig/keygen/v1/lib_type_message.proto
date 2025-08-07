@@ -1,0 +1,12 @@
+syntax = "proto3";
+package vultisig.keygen.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keygen/v1;v1";
+option java_package = "vultisig.keygen.v1";
+option swift_prefix = "VS";
+
+// buf:lint:ignore ENUM_ZERO_VALUE_SUFFIX
+enum LibType {
+  LIB_TYPE_GG20 = 0; // Default to GG20
+  LIB_TYPE_DKLS = 1;
+}

@@ -1,0 +1,62 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+import "vultisig/keysign/v1/1inch_swap_payload.proto";
+import "vultisig/keysign/v1/blockchain_specific.proto";
+import "vultisig/keysign/v1/coin.proto";
+import "vultisig/keysign/v1/custom_message_payload.proto";
+import "vultisig/keysign/v1/erc20_approve_payload.proto";
+import "vultisig/keysign/v1/kyberswap_swap_payload.proto";
+import "vultisig/keysign/v1/thorchain_swap_payload.proto";
+import "vultisig/keysign/v1/utxo_info.proto";
+import "vultisig/keysign/v1/wasm_execute_contract_payload.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message KeysignMessage {
+  string session_id = 1;
+  string service_name = 2;
+  string encryption_key_hex = 4;
+  KeysignPayload keysign_payload = 5;
+  bool use_vultisig_relay = 6;
+  string payload_id = 7;
+  optional CustomMessagePayload custom_message_payload = 8;
+}
+
+message KeysignPayload {
+  Coin coin = 1;
+  string to_address = 2;
+  string to_amount = 3;
+  oneof blockchain_specific {
+    UTXOSpecific utxo_specific = 4;
+    EthereumSpecific ethereum_specific = 5;
+    THORChainSpecific thorchain_specific = 6;
+    MAYAChainSpecific maya_specific = 7;
+    CosmosSpecific cosmos_specific = 8;
+    SolanaSpecific solana_specific = 9;
+    PolkadotSpecific polkadot_specific = 10;
+    SuiSpecific suiche_specific = 11;
+    TonSpecific ton_specific = 12;
+    RippleSpecific ripple_specific = 13;
+    TronSpecific tron_specific = 14;
+    CardanoChainSpecific cardano = 15;
+  }
+  repeated UtxoInfo utxo_info = 20;
+  optional string memo = 21;
+  oneof swap_payload {
+    THORChainSwapPayload thorchain_swap_payload = 22;
+    THORChainSwapPayload mayachain_swap_payload = 23;
+    OneInchSwapPayload oneinch_swap_payload = 24;
+    KyberSwapPayload kyberswap_swap_payload = 25;
+  }
+  optional Erc20ApprovePayload erc20_approve_payload = 30;
+  string vault_public_key_ecdsa = 31;
+  string vault_local_party_id = 32;
+  string lib_type = 33;
+  optional bool skip_broadcast = 34;
+  oneof contract_payload {
+    WasmExecuteContractPayload wasm_execute_contract_payload = 35;
+  }
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+// Coin only contains information that the app can use it to identify the relevant coin in the vault
+message Coin {
+  string chain = 1;
+  string ticker = 2;
+  string address = 3;
+  string contract_address = 4;
+  int32 decimals = 5;
+  string price_provider_id = 6;
+  bool is_native_token = 7;
+  string hex_public_key = 8;
+  string logo = 9;
+}

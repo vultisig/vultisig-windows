@@ -1,0 +1,31 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+import "vultisig/keysign/v1/coin.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message KyberSwapTransaction {
+  string from = 1;
+  string to = 2;
+  string data = 3;
+  string value = 4;
+  string gas_price = 5;
+  int64 gas = 6;
+  int64 fee = 7;
+}
+
+message KyberSwapQuote {
+  string dst_amount = 1;
+  KyberSwapTransaction tx = 2;
+}
+
+message KyberSwapPayload {
+  Coin from_coin = 1;
+  Coin to_coin = 2;
+  string from_amount = 3;
+  string to_amount_decimal = 4;
+  KyberSwapQuote quote = 5;
+}

@@ -578,6 +578,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bufbuild/protobuf@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "@bufbuild/protobuf@npm:2.6.3"
+  checksum: 10c0/edbb89698f713f691f2807fdf8c2ef804a98a593e50c6c8d441dd36c35a2ac82d4da1bcfb15a93fbf8122a1fbba0e8414ae47c31c21dad74cad1fc5f0e1eb3d9
+  languageName: node
+  linkType: hard
+
 "@bufbuild/protoc-gen-es@npm:^2.4.0":
   version: 2.4.0
   resolution: "@bufbuild/protoc-gen-es@npm:2.4.0"
@@ -15209,6 +15216,7 @@ __metadata:
   resolution: "vultisig-windows@workspace:."
   dependencies:
     7z-wasm: "npm:^1.1.0"
+    "@bufbuild/protobuf": "npm:^2.6.3"
     "@coral-xyz/anchor": "npm:^0.28.0"
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"

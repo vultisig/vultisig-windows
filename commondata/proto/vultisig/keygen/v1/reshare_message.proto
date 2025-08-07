@@ -1,0 +1,21 @@
+syntax = "proto3";
+package vultisig.keygen.v1;
+
+import "vultisig/keygen/v1/lib_type_message.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keygen/v1;v1";
+option java_package = "vultisig.keygen.v1";
+option swift_prefix = "VS";
+
+message ReshareMessage {
+  string session_id = 1;
+  string hex_chain_code = 2;
+  string service_name = 3;
+  string public_key_ecdsa = 4;
+  repeated string old_parties = 5;
+  string encryption_key_hex = 6;
+  bool use_vultisig_relay = 7;
+  string old_reshare_prefix = 8;
+  string vault_name = 9;
+  LibType lib_type = 20; // Default to GG20
+}

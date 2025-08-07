@@ -1,0 +1,12 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message UtxoInfo {
+  string hash = 1;
+  int64 amount = 2;
+  uint32 index = 3;
+}

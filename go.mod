@@ -73,7 +73,7 @@ require (
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
+	google.golang.org/protobuf v1.36.7 // indirect
 )
 
 replace (
@@ -82,3 +82,5 @@ replace (
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/gogo/protobuf/proto => github.com/gogo/protobuf/proto v1.3.2
 )
+
+replace github.com/vultisig/commondata => ./commondata

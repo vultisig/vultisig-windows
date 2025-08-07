@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message CustomMessagePayload {
+  string method = 1;
+  string message = 2;
+  string vault_public_key_ecdsa = 3;
+  string vault_local_party_id = 4;
+}

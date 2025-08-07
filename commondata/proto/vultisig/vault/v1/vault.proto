@@ -1,0 +1,27 @@
+syntax = "proto3";
+package vultisig.vault.v1;
+
+import "google/protobuf/timestamp.proto";
+import "vultisig/keygen/v1/lib_type_message.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/vault/v1;v1";
+option java_package = "vultisig.vault.v1";
+option swift_prefix = "VS";
+
+message Vault {
+  string name = 1;
+  string public_key_ecdsa = 2;
+  string public_key_eddsa = 3;
+  repeated string signers = 4;
+  google.protobuf.Timestamp created_at = 5;
+  string hex_chain_code = 6;
+  repeated KeyShare key_shares = 7;
+  string local_party_id = 8;
+  string reshare_prefix = 9;
+
+  message KeyShare {
+    string public_key = 1;
+    string keyshare = 2;
+  }
+  vultisig.keygen.v1.LibType lib_type = 10;
+}

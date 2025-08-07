@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message CosmosCoin {
+  string denom = 1;
+  string amount = 2;
+}
+
+message WasmExecuteContractPayload {
+  string sender_address = 1;
+  string contract_address = 2;
+  string execute_msg = 3;
+  repeated CosmosCoin coins = 4; 
+}

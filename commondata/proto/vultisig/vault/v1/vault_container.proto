@@ -1,0 +1,15 @@
+syntax = "proto3";
+package vultisig.vault.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/vault/v1;v1";
+option java_package = "vultisig.vault.v1";
+option swift_prefix = "VS";
+
+message VaultContainer {
+  // version of data format
+  uint64 version = 1;
+  // vault contained the container
+  string vault = 2;
+  // is vault encrypted with password
+  bool is_encrypted = 3;
+}

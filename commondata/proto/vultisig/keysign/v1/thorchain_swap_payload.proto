@@ -1,0 +1,24 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+import "vultisig/keysign/v1/coin.proto";
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message THORChainSwapPayload {
+  string from_address = 1;
+  Coin from_coin = 2;
+  Coin to_coin = 3;
+  string vault_address = 4;
+  optional string router_address = 5;
+  string from_amount = 6;
+  string to_amount_decimal = 7;
+  string to_amount_limit = 8;
+  string streaming_interval = 9;
+  string streaming_quantity = 10;
+  uint64 expiration_time = 11;
+  bool is_affiliate = 12;
+  string fee = 13;
+}

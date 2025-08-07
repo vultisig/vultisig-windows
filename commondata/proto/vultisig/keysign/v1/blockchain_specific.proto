@@ -1,0 +1,128 @@
+syntax = "proto3";
+package vultisig.keysign.v1;
+
+option go_package = "github.com/vultisig/commondata/go/vultisig/keysign/v1;v1";
+option java_package = "vultisig.keysign.v1";
+option swift_prefix = "VS";
+
+message UTXOSpecific {
+  string byte_fee = 1;
+  bool send_max_amount = 2;
+}
+
+message CardanoChainSpecific {
+  int64 byte_fee = 1;
+  bool send_max_amount = 2;
+  uint64 ttl = 3; // Add TTL parameter
+}
+
+message EthereumSpecific {
+  string max_fee_per_gas_wei = 1;
+  string priority_fee = 2;
+  int64 nonce = 3;
+  string gas_limit = 4;
+}
+
+message THORChainSpecific {
+  uint64 account_number = 1;
+  uint64 sequence = 2;
+  uint64 fee = 3;
+  bool is_deposit = 4;
+  TransactionType transaction_type = 5;
+}
+
+message MAYAChainSpecific {
+  uint64 account_number = 1;
+  uint64 sequence = 2;
+  bool is_deposit = 3;
+}
+
+message CosmosSpecific {
+  uint64 account_number = 1;
+  uint64 sequence = 2;
+  uint64 gas = 3;
+  TransactionType transaction_type = 4;
+  optional CosmosIbcDenomTrace ibc_denom_traces = 5;
+  optional CosmosIbcInfo ibc_info = 6;
+}
+
+message CosmosIbcDenomTrace {
+  string path = 1;
+  string base_denom = 2;
+  string latest_block = 3;
+}
+
+message CosmosIbcInfo {
+  string source_port = 1;
+  string source_channel = 2;
+  uint64 revision_number = 3;
+  uint64 revision_height = 4;
+}
+
+enum TransactionType {
+  TRANSACTION_TYPE_UNSPECIFIED = 0;
+  TRANSACTION_TYPE_VOTE = 1;
+  TRANSACTION_TYPE_PROPOSAL = 2;
+  TRANSACTION_TYPE_IBC_TRANSFER = 3;
+  TRANSACTION_TYPE_THOR_MERGE = 4;
+  TRANSACTION_TYPE_THOR_UNMERGE = 5;
+  TRANSACTION_TYPE_TON_DEPOSIT = 6;
+  TRANSACTION_TYPE_TON_WITHDRAW = 7;
+  TRANSACTION_TYPE_GENERIC_CONTRACT = 8;
+}
+
+message SolanaSpecific {
+  string recent_block_hash = 1;
+  string priority_fee = 2;
+  optional string from_token_associated_address = 3;
+  optional string to_token_associated_address = 4;
+  optional bool program_id = 5;
+}
+
+message PolkadotSpecific {
+  string recent_block_hash = 1;
+  uint64 nonce = 2;
+  string current_block_number = 3;
+  uint32 spec_version = 4;
+  uint32 transaction_version = 5;
+  string genesis_hash = 6;
+}
+
+message SuiCoin {
+  string coin_type = 1;
+  string coin_object_id = 2;
+  string version = 3;
+  string digest = 4;
+  string balance = 5;
+  string previous_transaction = 6;
+}
+
+message SuiSpecific {
+  string reference_gas_price = 1;
+  repeated SuiCoin coins = 2;
+}
+
+message TonSpecific {
+  uint64 sequence_number = 1;
+  uint64 expire_at = 2;
+  bool bounceable = 3;
+  bool send_max_amount = 4;
+}
+
+message RippleSpecific {
+  uint64 sequence = 1;
+  uint64 gas = 2;
+  uint64 last_ledger_sequence = 3;
+}
+
+message TronSpecific {
+  uint64 timestamp = 1;
+  uint64 expiration = 2;
+  uint64 block_header_timestamp = 3;
+  uint64 block_header_number = 4;
+  uint64 block_header_version = 5;
+  string block_header_tx_trie_root = 6;
+  string block_header_parent_hash = 7;
+  string block_header_witness_address = 8;
+  uint64 gas_estimation = 9;
+}
