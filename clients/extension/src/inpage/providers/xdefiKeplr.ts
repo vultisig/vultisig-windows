@@ -1,7 +1,5 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { CosmosChain } from '@core/chain/Chain'
-import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
-import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -26,7 +24,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
-import { ITransaction } from '../../utils/interfaces'
+import { CosmosAccount, ITransaction } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
 
 class SimpleMutex {
@@ -187,20 +185,24 @@ export class XDEFIKeplrProvider extends Keplr {
 
   async signAmino(
     chainId: string,
-    signer: string,
+    _signer: string,
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     return this.runWithChain(chainId, async () => {
+      const [account] = (await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        params: [],
+      })) as unknown as CosmosAccount[]
+      if (!account || !account.pubkey) {
+        throw new Error('Missing account info or pubkey')
+      }
+
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
       })) as ITransaction<CosmosChain>
-      const txChain = getCosmosChainByChainId(chainId)
 
-      if (!txChain) {
-        throw new Error(`Chain not supported: ${chainId}`)
-      }
       const parsed = JSON.parse(result.serialized)
       const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
       const txBody = TxBody.decode(txRaw.bodyBytes)
@@ -233,27 +235,24 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
 
-      const accountInfo = await getCosmosAccountInfo({
-        chain: txChain as CosmosChain,
-        address: signer,
-      })
-
-      if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
-        throw new Error('Missing account info or pubkey/accountNumber')
-      }
       const stdSignDoc: StdSignDoc = {
         chain_id: chainId,
-        account_number: accountInfo.accountNumber.toString(),
+        account_number: signDoc.account_number.toString(),
         sequence: sequence,
         fee,
         msgs,
         memo,
       }
-
+      const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
+        'base64'
+      )
       return {
         signed: stdSignDoc,
         signature: {
-          pub_key: accountInfo.pubkey,
+          pub_key: {
+            type: 'tendermint/PubKeySecp256k1',
+            value: publicKey,
+          },
           signature: shouldBePresent(
             Buffer.from(txRaw.signatures[0]).toString('base64')
           ),
@@ -263,7 +262,7 @@ export class XDEFIKeplrProvider extends Keplr {
   }
   async signDirect(
     chainId: string,
-    signer: string,
+    _signer: string,
     signDoc: {
       bodyBytes: Uint8Array
       authInfoBytes: Uint8Array
@@ -273,6 +272,13 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
     return this.runWithChain(chainId, async () => {
+      const [account] = (await this.cosmosProvider.request({
+        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        params: [],
+      })) as unknown as CosmosAccount[]
+      if (!account || !account.pubkey) {
+        throw new Error('Missing account info or pubkey')
+      }
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [
@@ -288,29 +294,26 @@ export class XDEFIKeplrProvider extends Keplr {
           },
         ],
       })) as ITransaction<CosmosChain>
-      const txChain = getCosmosChainByChainId(chainId)
+      const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
+        'base64'
+      )
       const parsed = JSON.parse(result.serialized)
       const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
 
-      const accountInfo = await getCosmosAccountInfo({
-        chain: txChain as CosmosChain,
-        address: signer,
-      })
-
-      if (!accountInfo || !accountInfo.pubkey || !accountInfo.accountNumber) {
-        throw new Error('Missing account info or pubkey/accountNumber')
-      }
       const generatedSignDoc: KeplrSignDoc = {
         bodyBytes: txRaw.bodyBytes,
         authInfoBytes: txRaw.authInfoBytes,
         chainId: chainId,
-        accountNumber: Long.fromString(accountInfo.accountNumber.toString()),
+        accountNumber: Long.fromString(signDoc.accountNumber.toString()),
       }
 
       return {
         signed: generatedSignDoc,
         signature: {
-          pub_key: accountInfo.pubkey,
+          pub_key: {
+            type: 'tendermint/PubKeySecp256k1',
+            value: publicKey,
+          },
           signature: shouldBePresent(
             Buffer.from(txRaw.signatures[0]).toString('base64')
           ),
