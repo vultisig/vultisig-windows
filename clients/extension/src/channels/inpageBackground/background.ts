@@ -16,9 +16,7 @@ export const runInpageBackgroundChannelBackgroundAgent = <
 >({
   handleRequest,
 }: {
-  handleRequest: (
-    input: BackgroundRequestHandler<TMessage, TResponse>
-  ) => Promise<unknown>
+  handleRequest: (input: BackgroundRequestHandler<TMessage, TResponse>) => void
 }) => {
   chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
     if (!origin) return

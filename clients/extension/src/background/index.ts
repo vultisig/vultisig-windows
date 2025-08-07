@@ -48,8 +48,8 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
 keepAliveHandler()
 
 runInpageBackgroundChannelBackgroundAgent<ExtensionApiMessage, Result>({
-  handleRequest: async ({ message, context, reply }) => {
-    const result = await attempt(
+  handleRequest: ({ message, context, reply }) => {
+    attempt(
       matchRecordUnion<ExtensionApiMessage, Promise<unknown>>(message, {
         background: backgroundMessage => {
           const methodName = getRecordUnionKey(backgroundMessage.call)
@@ -66,8 +66,6 @@ runInpageBackgroundChannelBackgroundAgent<ExtensionApiMessage, Result>({
           })
         },
       })
-    )
-
-    reply(result)
+    ).then(reply)
   },
 })
