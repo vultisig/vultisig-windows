@@ -1,22 +1,26 @@
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
-import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PluginReshareMutation } from './PluginReshareMutation'
-
-export const PluginJoinKeygenUrl = ({
-  onFinish,
-}: OnFinishProp<PluginMetadata>) => {
-  const joinUrlQuery = useJoinKeygenUrlQuery()
+export const PluginJoinKeygenUrl = ({ onFinish }: OnFinishProp<string>) => {
+  const query = useJoinKeygenUrlQuery()
   const { t } = useTranslation()
+
+  const { data } = query
+  useEffect(() => {
+    if (data) {
+      onFinish(data)
+    }
+  }, [data, onFinish])
+
   return (
     <MatchQuery
-      value={joinUrlQuery}
+      value={query}
       pending={() => (
         <Center>
           <Spinner />
@@ -27,7 +31,6 @@ export const PluginJoinKeygenUrl = ({
           <StrictText>{t('failed_to_generate_join_url')}</StrictText>
         </Center>
       )}
-      success={url => <PluginReshareMutation value={url} onFinish={onFinish} />}
     />
   )
 }

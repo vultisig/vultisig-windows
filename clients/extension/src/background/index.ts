@@ -21,19 +21,13 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ].forEach(Object.freeze)
 }
 
-const popupMessenger = initializeMessenger({ connect: 'popup' })
 const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
   'providerRequest',
   async ({ type, message }, { sender }) => {
     try {
-      const response = await dispatchMessage(
-        type,
-        message,
-        sender,
-        popupMessenger
-      )
+      const response = await dispatchMessage(type, message, sender)
 
       return response
     } catch (err) {

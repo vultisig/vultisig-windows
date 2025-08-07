@@ -5,8 +5,13 @@ import { setInitialView } from '../../../storage/initialView'
 import { PopupApiInterface, PopupApiMethodName } from '../interface'
 import { isPopupApiMessage, PopupApiCall, PopupApiResponse } from './core'
 
+type CallPopupApiOptions = {
+  closeOnFinish?: boolean
+}
+
 const inNewWindow = async <T>(
-  fn: (signal: AbortSignal) => Promise<T>
+  fn: (signal: AbortSignal) => Promise<T>,
+  { closeOnFinish = true }: CallPopupApiOptions = {}
 ): Promise<T> => {
   const currentWindow = await chrome.windows.getCurrent()
   const newWindow = await new Promise<chrome.windows.Window | undefined>(
@@ -37,12 +42,15 @@ const inNewWindow = async <T>(
     return await fn(controller.signal)
   } finally {
     chrome.windows.onRemoved.removeListener(handleRemoved)
-    await ignorePromiseOutcome(chrome.windows.remove(newWindow.id))
+    if (closeOnFinish) {
+      await ignorePromiseOutcome(chrome.windows.remove(newWindow.id))
+    }
   }
 }
 
 export const callPopupApi = async <M extends PopupApiMethodName>(
-  call: PopupApiCall<M>
+  call: PopupApiCall<M>,
+  options?: CallPopupApiOptions
 ): Promise<PopupApiInterface[M]['output']> => {
   await setInitialView({ id: 'popupApi', state: { call } })
 
@@ -71,6 +79,7 @@ export const callPopupApi = async <M extends PopupApiMethodName>(
 
         chrome.runtime.onMessage.addListener(handleMessage)
         abortSignal.addEventListener('abort', handleAbort, { once: true })
-      })
+      }),
+    options
   )
 }

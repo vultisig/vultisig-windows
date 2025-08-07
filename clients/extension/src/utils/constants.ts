@@ -24,14 +24,11 @@ export enum MessageKey {
   THOR_REQUEST = 'thor',
   ZCASH_REQUEST = 'zcash',
   PRIORITY = 'priority',
-  VAULT = 'vault',
-  PLUGIN = 'plugin',
 }
 
 export enum Instance {
   CONNECT = 'connect',
   TRANSACTION = 'transaction',
-  VAULTS = 'vaults',
 }
 
 export enum EventMethod {

@@ -1,7 +1,5 @@
-import { handlePluginRequest } from '@clients/extension/src/background/handlers/pluginHandler'
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
-import { Messenger } from '@clients/extension/src/messengers/createMessenger'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
 import { getCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
@@ -13,15 +11,13 @@ import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
 
 import { getCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
 
 export const dispatchMessage = async (
   type: MessageKey,
   message: any,
-  sender: chrome.runtime.MessageSender,
-  popupMessenger: Messenger
+  sender: chrome.runtime.MessageSender
 ) => {
   const safeOrigin = typeof sender.origin === 'string' ? sender.origin : ''
   const sessions = (await getVaultsAppSessions()) ?? {}
@@ -98,14 +94,5 @@ export const dispatchMessage = async (
     }
 
     return response
-  }
-
-  try {
-    return match(type, {
-      [MessageKey.PLUGIN]: () => handlePluginRequest(message, popupMessenger),
-    } as Record<MessageKey, () => unknown>) // Forcefully unify return types to unknown because return types are different
-  } catch {
-    console.warn(`Unhandled message type: ${type}`)
-    return
   }
 }
