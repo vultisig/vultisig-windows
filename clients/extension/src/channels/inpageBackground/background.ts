@@ -4,10 +4,7 @@ import {
   isInpageBackgroundChannelMessage,
 } from './core'
 
-export type BackgroundRequestHandler<
-  TMessage = unknown,
-  TResponse = unknown,
-> = {
+type BackgroundRequestHandler<TMessage = unknown, TResponse = unknown> = {
   context: InpageBackgroundChannelContext
   message: TMessage
   reply: (response: TResponse) => void
