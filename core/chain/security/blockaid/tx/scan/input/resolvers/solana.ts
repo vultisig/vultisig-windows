@@ -1,3 +1,4 @@
+import { productRootDomain } from '@core/config'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getSolanaSendTxInputData } from '@core/mpc/keysign/txInputData/solana/send'
 import { assertField } from '@lib/utils/record/assertField'
@@ -26,7 +27,7 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
   return {
     data: {
       chain: 'mainnet',
-      metadata: { url: 'vultisig.com' },
+      metadata: { url: productRootDomain },
       options: ['validation'],
       account_address: coin.address,
       encoding: 'base58',

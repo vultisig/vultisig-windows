@@ -10,4 +10,5 @@ export const getBlockaidTxScanQuery = (input: BlockaidTxScanInput) => ({
   queryFn: () => scanTxWithBlockaid(input),
   ...noRefetchQueryOptions,
   ...noPersistQueryOptions,
+  retry: false,
 })

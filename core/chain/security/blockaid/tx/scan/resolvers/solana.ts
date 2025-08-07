@@ -1,5 +1,4 @@
 import { OtherChain } from '@core/chain/Chain'
-import { productRootDomain } from '@core/config'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { queryBlockaid } from '../api'
@@ -25,19 +24,9 @@ type SolanaBlockaidScanResponse = {
 export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
   OtherChain.Solana
 > = async ({ data }) => {
-  const body = {
-    chain: 'mainnet',
-    metadata: {
-      type: 'wallet',
-      url: productRootDomain,
-    },
-    options: ['validation'],
-    ...data,
-  }
-
   const { validation } = await queryBlockaid<SolanaBlockaidScanResponse>(
     '/solana/message/scan',
-    body
+    data
   )
 
   const { result_type, reason, extended_features } = validation
