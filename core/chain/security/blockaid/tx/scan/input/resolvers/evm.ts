@@ -1,3 +1,4 @@
+import { productRootDomain } from '@core/config'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
@@ -5,12 +6,13 @@ import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
 
+import { EvmChain } from '../../../../../../Chain'
 import { BlockaidTxScanInput } from '../../resolver'
 import { BlockaidTxScanInputResolver } from '../resolver'
 
-export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
-  payload,
-}) => {
+export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
+  EvmChain
+> = ({ payload, chain }) => {
   const coin = getKeysignCoin(payload)
 
   const toEvmBlockaidTxScanInput = ({
@@ -25,6 +27,10 @@ export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver = ({
     data: {
       method: 'eth_sendTransaction',
       params: [{ from: coin.address, to, value, data }],
+    },
+    chain: chain.toLowerCase(),
+    metadata: {
+      domain: productRootDomain,
     },
   })
 

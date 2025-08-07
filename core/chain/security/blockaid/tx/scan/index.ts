@@ -1,13 +1,13 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { BlockaidSupportedChains } from '../../chains'
+import { BlockaidSupportedChain } from '../../chains'
 import { BlockaidTxScanResult } from './core'
 import { BlockaidTxScanInput, BlockaidTxScanResolver } from './resolver'
 import { scanEvmTxWithBlockaid } from './resolvers/evm'
 import { scanSolanaTxWithBlockaid } from './resolvers/solana'
 
 const resolvers: Record<
-  DeriveChainKind<BlockaidSupportedChains>,
+  DeriveChainKind<BlockaidSupportedChain>,
   BlockaidTxScanResolver<any>
 > = {
   evm: scanEvmTxWithBlockaid,

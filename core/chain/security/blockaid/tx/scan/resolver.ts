@@ -1,11 +1,11 @@
-import { BlockaidSupportedChains } from '../../chains'
+import { BlockaidSupportedChain } from '../../chains'
 import { BlockaidTxScanResult } from './core'
 
 export type BlockaidTxScanInput = {
-  chain: BlockaidSupportedChains
+  chain: BlockaidSupportedChain
   data: Record<string, unknown>
 }
 
 export type BlockaidTxScanResolver<
-  T extends BlockaidSupportedChains = BlockaidSupportedChains,
+  T extends BlockaidSupportedChain = BlockaidSupportedChain,
 > = (input: BlockaidTxScanInput & { chain: T }) => Promise<BlockaidTxScanResult>
