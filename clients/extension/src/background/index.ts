@@ -1,9 +1,8 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { match } from '@lib/utils/match'
 
-import { ExtensionApi, ExtensionApiMessage } from '../api'
+import { ExtensionApiMessage } from '../api'
+import { extensionApiHandler } from '../api/handlers/extensionApiHandler'
 import { runInpageBackgroundChannelBackgroundAgent } from '../channels/inpageBackground/background'
-import { callPopupApiFromInpage } from '../popup/api/call/resolvers/inpage'
 import { MessageKey } from '../utils/constants'
 import { dispatchMessage } from './dispatcher/messageDispatcher'
 import { keepAliveHandler } from './handlers/keepAliveHandler'
@@ -41,14 +40,13 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
 )
 keepAliveHandler()
 
-const handlers: Record<ExtensionApi> = {}
-
 runInpageBackgroundChannelBackgroundAgent({
-  getHandler: ({ context, message, reply }) => {
-    const { api, ...rest } = message as ExtensionApiMessage
-
-    const handler = match(api, {
-      popup: () => callPopupApiFromInpage(rest),
+  handleRequest: async ({ message, context, reply }) => {
+    const extensionMessage = message as ExtensionApiMessage
+    await extensionApiHandler({
+      message: extensionMessage,
+      context,
+      reply,
     })
   },
 })

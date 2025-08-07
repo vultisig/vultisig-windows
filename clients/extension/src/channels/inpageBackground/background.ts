@@ -4,20 +4,21 @@ import {
   isInpageBackgroundChannelMessage,
 } from './core'
 
-type HandlerInput = {
+export type BackgroundRequestHandler<
+  TMessage = unknown,
+  TResponse = unknown,
+> = {
   context: InpageBackgroundChannelContext
-  message: unknown
-  reply: (response: unknown) => void
+  message: TMessage
+  reply: (response: TResponse) => void
 }
 
-type Handler = (input: HandlerInput) => Promise<unknown>
-
 type Input = {
-  getHandler: (message: unknown) => Handler
+  handleRequest: (input: BackgroundRequestHandler) => Promise<unknown>
 }
 
 export const runInpageBackgroundChannelBackgroundAgent = ({
-  getHandler,
+  handleRequest,
 }: Input) => {
   chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
     if (!origin) return
@@ -28,9 +29,7 @@ export const runInpageBackgroundChannelBackgroundAgent = ({
 
     const { id, message } = request
 
-    const handler = getHandler(message)
-
-    handler({
+    handleRequest({
       message,
       context: {
         requestOrigin: origin,
