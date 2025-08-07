@@ -1,9 +1,8 @@
 import { EvmChain } from '@core/chain/Chain'
-import { productRootDomain, rootApiUrl } from '@core/config'
+import { productRootDomain } from '@core/config'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { blockaidBaseUrl } from '../../../config'
+import { queryBlockaid } from '../api'
 import { TxRiskLevel } from '../core'
 import { BlockaidRiskLevel, blockaidRiskyTxLevels } from '../input/api'
 import { BlockaidTxScanResolver } from '../resolver'
@@ -33,14 +32,9 @@ export const scanEvmTxWithBlockaid: BlockaidTxScanResolver<EvmChain> = async ({
     },
   }
 
-  const { validation } = await queryUrl<BlockaidScanResponse>(
-    `${blockaidBaseUrl}/evm/json-rpc/scan`,
-    {
-      body,
-      headers: {
-        origin: rootApiUrl,
-      },
-    }
+  const { validation } = await queryBlockaid<BlockaidScanResponse>(
+    '/evm/json-rpc/scan',
+    body
   )
 
   const { result_type, description } = validation

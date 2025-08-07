@@ -1,9 +1,8 @@
 import { OtherChain } from '@core/chain/Chain'
-import { productRootDomain, rootApiUrl } from '@core/config'
+import { productRootDomain } from '@core/config'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { blockaidBaseUrl } from '../../../config'
+import { queryBlockaid } from '../api'
 import {
   BlockaidRiskLevel,
   blockaidRiskLevelToTxRiskLevel,
@@ -12,18 +11,14 @@ import {
 import { BlockaidTxScanResolver } from '../resolver'
 
 type SolanaBlockaidScanResponse = {
-  status?: string
-  error?: string
-  result?: {
-    validation: {
-      result_type: BlockaidRiskLevel | string
-      reason: string
-      features: string[]
-      extended_features: Array<{
-        type: string
-        description: string
-      }>
-    }
+  validation: {
+    result_type: BlockaidRiskLevel | string
+    reason: string
+    features: string[]
+    extended_features: Array<{
+      type: string
+      description: string
+    }>
   }
 }
 
@@ -40,38 +35,14 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
     ...data,
   }
 
-  const response = await queryUrl<SolanaBlockaidScanResponse>(
-    `${blockaidBaseUrl}/solana/message/scan`,
-    {
-      body,
-      headers: {
-        origin: rootApiUrl,
-      },
-    }
+  const { validation } = await queryBlockaid<SolanaBlockaidScanResponse>(
+    '/solana/message/scan',
+    body
   )
 
-  // Check for errors first (like iOS implementation)
-  if (response.status?.toLowerCase() === 'error' || response.error) {
-    throw new Error(response.error ?? 'Unknown error')
-  }
+  const { result_type, reason, extended_features } = validation
 
-  if (!response.result) {
-    throw new Error("'result' is null")
-  }
-
-  const { result_type, reason, features, extended_features } =
-    response.result.validation
-
-  // Implement Solana-specific risk level logic like iOS
-  const resultTypeLower = result_type.toLowerCase()
-  const isBenign = resultTypeLower === 'benign' && features.length === 0
-
-  if (isBenign) {
-    return null
-  }
-
-  // Check if it's a risky transaction
-  if (!isOneOf(resultTypeLower, blockaidRiskyTxLevels)) {
+  if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
     return null
   }
 
@@ -81,7 +52,8 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
       : reason
 
   return {
-    level: blockaidRiskLevelToTxRiskLevel[resultTypeLower as BlockaidRiskLevel],
+    level: blockaidRiskLevelToTxRiskLevel[result_type],
+
     description,
   }
 }
