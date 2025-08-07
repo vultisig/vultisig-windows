@@ -1,18 +1,15 @@
 import { EvmChain } from '@core/chain/Chain'
 import { productRootDomain } from '@core/config'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import {
-  BlockaidRiskLevel,
-  blockaidRiskLevelToTxRiskLevel,
-  blockaidRiskyTxLevels,
+  BlockaidValidation,
+  getRiskLevelFromBlockaidValidation,
 } from '../api/core'
 import { queryBlockaid } from '../api/query'
 import { BlockaidTxScanResolver } from '../resolver'
 
 type BlockaidScanResponse = {
-  validation: {
-    result_type: BlockaidRiskLevel | string
+  validation: BlockaidValidation & {
     description: string
   }
 }
@@ -34,14 +31,16 @@ export const scanEvmTxWithBlockaid: BlockaidTxScanResolver<EvmChain> = async ({
     body
   )
 
-  const { result_type, description } = validation
+  const { description } = validation
 
-  if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
+  const level = getRiskLevelFromBlockaidValidation(validation)
+
+  if (level === null) {
     return null
   }
 
   return {
-    level: blockaidRiskLevelToTxRiskLevel[result_type],
+    level,
     description,
   }
 }

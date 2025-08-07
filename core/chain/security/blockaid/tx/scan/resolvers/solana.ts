@@ -1,18 +1,15 @@
 import { OtherChain } from '@core/chain/Chain'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 
-import { queryBlockaid } from '../api/query'
 import {
-  BlockaidRiskLevel,
-  blockaidRiskLevelToTxRiskLevel,
-  blockaidRiskyTxLevels,
+  BlockaidValidation,
+  getRiskLevelFromBlockaidValidation,
 } from '../api/core'
+import { queryBlockaid } from '../api/query'
 import { BlockaidTxScanResolver } from '../resolver'
 
 type SolanaBlockaidScanResponse = {
   result: {
-    validation: {
-      result_type: BlockaidRiskLevel | string
+    validation: BlockaidValidation & {
       reason: string
       features: string[]
       extended_features: Array<{
@@ -33,19 +30,28 @@ export const scanSolanaTxWithBlockaid: BlockaidTxScanResolver<
 
   const { validation } = result
 
-  const { result_type, reason, extended_features } = validation
+  const level = getRiskLevelFromBlockaidValidation(validation)
 
-  if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
+  if (level === null) {
     return null
   }
 
-  const description =
-    extended_features.length > 0
-      ? extended_features.map(f => f.description).join('\n')
-      : reason
+  const { reason, extended_features, features } = validation
+
+  const getDescription = () => {
+    if (extended_features.length > 0) {
+      return extended_features.map(f => f.description).join('\n')
+    }
+
+    if (features.length > 0) {
+      return features.join('\n')
+    }
+
+    return reason
+  }
 
   return {
-    level: blockaidRiskLevelToTxRiskLevel[result_type],
-    description,
+    level,
+    description: getDescription(),
   }
 }
