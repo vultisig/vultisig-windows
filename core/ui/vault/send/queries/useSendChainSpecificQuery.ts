@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 
 import { getChainSpecificQueryKey } from '../../../chain/coin/queries/useChainSpecificQuery'
 import { useFeeSettings } from '../fee/settings/state/feeSettings'
@@ -30,6 +31,7 @@ export const useSendChainSpecificQuery = () => {
       return {
         queryKey: getChainSpecificQueryKey(input),
         queryFn: () => getChainSpecific(input),
+        ...noRefetchQueryOptions,
       }
     }
   )
