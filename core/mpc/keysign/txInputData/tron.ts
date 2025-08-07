@@ -41,6 +41,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
           ),
         }),
         expiration: Long.fromString(tronSpecific.expiration.toString()),
+        memo: keysignPayload.memo,
       }),
     })
 
@@ -76,6 +77,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
           ),
         }),
         expiration: Long.fromString(tronSpecific.expiration.toString()),
+        memo: keysignPayload.memo,
       }),
     })
 
