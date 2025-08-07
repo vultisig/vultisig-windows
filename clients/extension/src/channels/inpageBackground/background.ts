@@ -13,13 +13,16 @@ export type BackgroundRequestHandler<
   reply: (response: TResponse) => void
 }
 
-type Input = {
-  handleRequest: (input: BackgroundRequestHandler) => Promise<unknown>
-}
-
-export const runInpageBackgroundChannelBackgroundAgent = ({
+export const runInpageBackgroundChannelBackgroundAgent = <
+  TMessage = unknown,
+  TResponse = unknown,
+>({
   handleRequest,
-}: Input) => {
+}: {
+  handleRequest: (
+    input: BackgroundRequestHandler<TMessage, TResponse>
+  ) => Promise<unknown>
+}) => {
   chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
     if (!origin) return
 
@@ -30,15 +33,15 @@ export const runInpageBackgroundChannelBackgroundAgent = ({
     const { id, message } = request
 
     handleRequest({
-      message,
+      message: message as TMessage,
       context: {
         requestOrigin: origin,
       },
-      reply: message => {
+      reply: (response: TResponse) => {
         sendResponse({
           id,
           sourceId: getInpageBackgroundMessageSourceId('background'),
-          message,
+          message: response,
         })
       },
     })
