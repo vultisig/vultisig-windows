@@ -8,7 +8,6 @@ import {
 } from '@clients/extension/src/utils/functions'
 import { Chain } from '@core/chain/Chain'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
-import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 
@@ -42,10 +41,6 @@ const apiRef = {
     airdrop: 'https://airdrop.vultisig.com/',
     api: 'https://api.vultisig.com/',
   },
-  jupiter: {
-    token: 'https://tokens.jup.ag/token',
-  },
-  pluginMarketPlace: 'https://store.vultisigplugin.app/api/',
 }
 
 api.interceptors.request.use(
@@ -193,12 +188,6 @@ export default {
           })
           .catch(reject)
       })
-    },
-  },
-  plugin: {
-    fetchPluginInfo: async (id: string) => {
-      const url = `${apiRef.pluginMarketPlace}plugins/${id}`
-      return (await api.get<PluginMetadata>(url)).data
     },
   },
 }

@@ -8,7 +8,6 @@ export type AppView =
   | { id: 'connectedDapps' }
   | { id: 'connectTab' }
   | { id: 'transactionTab' }
-  | { id: 'pluginTab' }
   | { id: 'popupApi'; state: { call: PopupApiCall<any> } }
 
 export type AppViewId = AppView['id']

@@ -22,7 +22,6 @@ import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
-import { PluginPage } from '../pages/plugin'
 import { PopupApi } from '../popup/api'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -61,7 +60,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   transactionTab: TransactionPage,
   vault: VaultPage,
-  pluginTab: PluginPage,
   popupApi: PopupApi,
 }
 

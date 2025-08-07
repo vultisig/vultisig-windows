@@ -35,11 +35,6 @@ export namespace Messaging {
     export type Request = { priority?: boolean }
     export type Response = any
   }
-
-  export namespace Plugin {
-    export type Request = { method: string; params: Record<string, any>[] }
-    export type Response = string
-  }
 }
 
 export type AccountsProps = {
