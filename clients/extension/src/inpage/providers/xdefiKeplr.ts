@@ -21,12 +21,12 @@ import {
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
 import { CosmosAccount, ITransaction } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
-import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 
 class SimpleMutex {
   private queue = Promise.resolve()
