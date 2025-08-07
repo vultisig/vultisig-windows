@@ -26,6 +26,7 @@ import Long from 'long'
 
 import { CosmosAccount, ITransaction } from '../../utils/interfaces'
 import { Cosmos } from './cosmos'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 
 class SimpleMutex {
   private queue = Promise.resolve()
@@ -185,7 +186,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
   async signAmino(
     chainId: string,
-    _signer: string,
+    signer: string,
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
@@ -197,7 +198,9 @@ export class XDEFIKeplrProvider extends Keplr {
       if (!account || !account.pubkey) {
         throw new Error('Missing account info or pubkey')
       }
-
+      if (!areLowerCaseEqual(signer, account.address)) {
+        throw new Error('Signer does not match current account address')
+      }
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [{ ...signDoc, skipBroadcast: true, txType: 'Keplr' }],
@@ -262,7 +265,7 @@ export class XDEFIKeplrProvider extends Keplr {
   }
   async signDirect(
     chainId: string,
-    _signer: string,
+    signer: string,
     signDoc: {
       bodyBytes: Uint8Array
       authInfoBytes: Uint8Array
@@ -278,6 +281,9 @@ export class XDEFIKeplrProvider extends Keplr {
       })) as unknown as CosmosAccount[]
       if (!account || !account.pubkey) {
         throw new Error('Missing account info or pubkey')
+      }
+      if (!areLowerCaseEqual(signer, account.address)) {
+        throw new Error('Signer does not match current account address')
       }
       const result = (await this.cosmosProvider.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
