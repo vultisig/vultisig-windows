@@ -803,7 +803,7 @@ export const handleRequest = (
             },
             status: 'default',
           }).then(result => {
-            resolve(result)
+            resolve(shouldBePresent(result.hash))
           })
         }
         break
