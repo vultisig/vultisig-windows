@@ -6,6 +6,7 @@ import {
   getAccount,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
+import { SolanaSignMessageInput } from '@solana/wallet-standard-features'
 import {
   Connection,
   PublicKey,
@@ -16,7 +17,7 @@ import {
 } from '@solana/web3.js'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
-import { SolanaSignMessageInput } from '@solana/wallet-standard-features'
+
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import {
   isVersionedTransaction,

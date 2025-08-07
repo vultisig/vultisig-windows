@@ -2,7 +2,7 @@ import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { AminoMsg, Secp256k1Wallet, StdFee } from '@cosmjs/amino'
+import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -21,10 +21,7 @@ import {
   StdSignDoc,
   StdTx,
 } from '@keplr-wallet/types'
-import {
-  SignDoc as KeplrSignDoc,
-  StdSignature,
-} from '@keplr-wallet/types/build/cosmjs'
+import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
@@ -318,37 +315,6 @@ export class XDEFIKeplrProvider extends Keplr {
             Buffer.from(txRaw.signatures[0]).toString('base64')
           ),
         },
-      }
-    })
-  }
-
-  async signArbitrary(
-    chainId: string,
-    signer: string,
-    data: string | Uint8Array
-  ): Promise<StdSignature> {
-    return this.runWithChain(chainId, async () => {
-      const result = (await this.cosmosProvider.request({
-        method: RequestMethod.CTRL.SIGN_MESSAGE,
-        params: [{ message: data }],
-      })) as unknown as {
-        hash: string
-        pubkey?: string
-        messageHashHex: string
-      }
-
-      const txChain = getCosmosChainByChainId(chainId)
-      const accountInfo = await getCosmosAccountInfo({
-        chain: txChain as CosmosChain,
-        address: signer,
-      })
-      const rawSig = Uint8Array.from(Buffer.from(result.hash, 'hex')).slice(
-        0,
-        64
-      )
-      return {
-        pub_key: shouldBePresent(accountInfo.pubkey),
-        signature: Buffer.from(rawSig).toString('base64'),
       }
     })
   }

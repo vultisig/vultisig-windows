@@ -20,12 +20,10 @@ import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignActio
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
-import { sha256 } from 'ethers'
 import { keccak256 } from 'js-sha3'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
@@ -112,22 +110,22 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const { chain: defaultChain } = customMessageConfig
             const chain = (payloadChain as Chain) ?? defaultChain
             const chainKind = getChainKind(chain)
-            const rawBytes = message.startsWith('0x')
+            const messageToHash = message.startsWith('0x')
               ? Buffer.from(message.slice(2), 'hex')
-              : new TextEncoder().encode(message)
+              : message
 
-            const messageHashHex =
-              chainKind === 'evm' ? keccak256(rawBytes) : sha256(rawBytes)
+            const messageBytes =
+              typeof messageToHash === 'string'
+                ? new TextEncoder().encode(messageToHash)
+                : messageToHash
 
-            const msgToSign =
-              chainKind === 'solana'
-                ? Buffer.from(rawBytes).toString('hex')
-                : Buffer.from(stripHexPrefix(messageHashHex), 'hex').toString(
-                    'hex'
-                  )
+            const hexMessage =
+              chainKind === 'evm'
+                ? keccak256(messageBytes)
+                : Buffer.from(messageBytes).toString('hex')
 
             const [signature] = await keysignAction({
-              msgs: [msgToSign],
+              msgs: [hexMessage],
               signatureAlgorithm: signatureAlgorithms[chainKind],
               coinType: getCoinType({ walletCore, chain }),
             })
