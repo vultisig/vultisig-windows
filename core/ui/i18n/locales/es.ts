@@ -1036,4 +1036,15 @@ export const es = {
   transaction_has_risk:
     'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
   scanning: 'exploración...',
+  no_vaults: 'Aún no hay bóvedas',
+  no_vaults_desc:
+    'Tus bóvedas aparecerán aquí. Empieza creando una o importando una existente.',
+  risky_transaction_detected: '{{riskLevel}} transacción de riesgo detectada',
+  powered_by: 'Desarrollado por <provider></provider>',
+  ibc_transaction_not_supporting_memo_title:
+    'Memo de transacción de IBC no compatible',
+  ibc_transaction_not_supporting_memo_desc:
+    'Esta transacción de IBC incluye una nota, pero Vultisig actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
+  go_back: 'Volver',
+  continue_anyway: 'Continuar de todos modos',
 }

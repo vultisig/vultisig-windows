@@ -28,6 +28,7 @@ export const TextInput = ({
   className,
   label,
   ref,
+  autoComplete = 'off',
   ...props
 }: TextInputProps) => {
   return (
@@ -39,6 +40,7 @@ export const TextInput = ({
         ) : (
           <TextInputContainer
             {...props}
+            autoComplete={autoComplete}
             className={className}
             ref={ref}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,7 @@ const TextInputContainer = styled.input<{
   validation?: 'valid' | 'invalid' | 'warning'
 }>`
   ${textInput};
+
   ${({ validation }) =>
     validation === 'valid'
       ? css`

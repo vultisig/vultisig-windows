@@ -455,6 +455,8 @@ export const en = {
   send_pending_validation: 'Validating your transaction...',
   send_validation_failed: 'Failed to validate transaction',
   send_invalid_receiver_address: 'Enter a valid receiver address',
+  send_receiver_address_same_as_sender:
+    'Receiver address cannot be the same as sender address',
   amount_required: 'Amount is required',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   coin_not_found_in_current_vault: 'Coin not found in current vault',
@@ -992,6 +994,8 @@ export const en = {
   blockaid_security_scan: 'Blockaid Security Scan',
   transaction_not_scanned: 'Transaction not scanned by <provider></provider>',
   transaction_scanned: 'Transaction scanned by <provider></provider>',
+  risky_transaction_detected: '{{riskLevel}} risk transaction detected',
+  powered_by: 'Powered by <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   ibc_transaction_not_supporting_memo_title:
@@ -999,4 +1003,6 @@ export const en = {
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but Vultisig currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
   scanning: 'scanning...',
+  go_back: 'Go Back',
+  continue_anyway: 'Continue Anyway',
 }

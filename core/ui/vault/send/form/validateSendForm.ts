@@ -2,6 +2,7 @@ import { Chain, UtxoBasedChain } from '@core/chain/Chain'
 import { validateUtxoRequirements } from '@core/chain/chains/utxo/send/validateUtxoRequirements'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TFunction } from 'i18next'
 
@@ -11,14 +12,13 @@ export const validateSendForm = (
   values: SendFormShape,
   helpers: {
     balance: bigint | undefined
-    chain: Chain
     walletCore: WalletCore
     t: TFunction
   }
 ): ValidationResult<SendFormShape> => {
-  const { coin, amount, address } = values
-  const { balance, chain, walletCore, t } = helpers
-
+  const { coin, amount, senderAddress, receiverAddress } = values
+  const { balance, walletCore, t } = helpers
+  const { chain } = coin
   const errors: ValidationResult<SendFormShape> = {}
 
   if (!coin) errors.coin = t('required_field_missing')
@@ -45,10 +45,15 @@ export const validateSendForm = (
     }
   }
 
-  if (!address) {
-    errors.address = t('send_invalid_receiver_address')
-  } else if (!isValidAddress({ address, chain, walletCore })) {
-    errors.address = t('send_invalid_receiver_address')
+  if (!receiverAddress) {
+    errors.receiverAddress = t('send_invalid_receiver_address')
+  } else if (
+    chain === Chain.Tron &&
+    areLowerCaseEqual(senderAddress, receiverAddress)
+  ) {
+    errors.receiverAddress = t('send_receiver_address_same_as_sender')
+  } else if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
+    errors.receiverAddress = t('send_invalid_receiver_address')
   }
 
   return errors
