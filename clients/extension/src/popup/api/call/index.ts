@@ -1,9 +1,4 @@
-import {
-  getProviderSource,
-  ProviderSource,
-  providerSources,
-} from '@core/inpage-provider/source'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { getProviderSource, ProviderSource } from '@core/inpage-provider/source'
 
 import { PopupApiCall } from '../communication/core'
 import { PopupApiInterface, PopupApiMethodName } from '../interface'
@@ -21,10 +16,6 @@ export const callPopupApi = async <M extends PopupApiMethodName>(
   options: CallPopupApiOptions = { closeOnFinish: true }
 ): Promise<PopupApiInterface[M]['output']> => {
   const source = getProviderSource()
-
-  if (!isOneOf(source, providerSources)) {
-    throw new Error(`Popup API is not supported in ${source}`)
-  }
 
   return resolvers[source]({ call, options })
 }
