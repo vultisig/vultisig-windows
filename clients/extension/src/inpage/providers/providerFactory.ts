@@ -10,7 +10,7 @@ import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { MessageKey } from '@clients/extension/src/utils/constants'
 
-import { callBackgroundApi } from '../../background/api/communication/inpage'
+import { callPopupApi } from '../../popup/api/call'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
@@ -32,9 +32,13 @@ export const createProviders = () => {
     plugin: {
       request: async ({ params }: { params: [{ id: string }] }) => {
         const [{ id }] = params
-        const { joinUrl } = await callBackgroundApi({
-          pluginReshare: { pluginId: id },
-        })
+        const { joinUrl } = await callPopupApi(
+          {
+            pluginReshare: { pluginId: id },
+          },
+          { closeOnFinish: false }
+        )
+
         return joinUrl
       },
     },

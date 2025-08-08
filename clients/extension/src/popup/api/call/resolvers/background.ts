@@ -1,17 +1,18 @@
 import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
 import { pick } from '@lib/utils/record/pick'
 
-import { setInitialView } from '../../../storage/initialView'
-import { PopupApiInterface, PopupApiMethodName } from '../interface'
-import { isPopupApiMessage, PopupApiCall, PopupApiResponse } from './core'
-
-type CallPopupApiOptions = {
-  closeOnFinish?: boolean
-}
+import { setInitialView } from '../../../../storage/initialView'
+import { isPopupApiMessage, PopupApiResponse } from '../../communication/core'
+import { PopupApiInterface, PopupApiMethodName } from '../../interface'
+import {
+  CallPopupApiOptions,
+  CallPopupApiResolver,
+  CallPopupApiResolverInput,
+} from '../resolver'
 
 const inNewWindow = async <T>(
   fn: (signal: AbortSignal) => Promise<T>,
-  { closeOnFinish = true }: CallPopupApiOptions = {}
+  { closeOnFinish }: CallPopupApiOptions
 ): Promise<T> => {
   const currentWindow = await chrome.windows.getCurrent()
   const newWindow = await new Promise<chrome.windows.Window | undefined>(
@@ -48,10 +49,12 @@ const inNewWindow = async <T>(
   }
 }
 
-export const callPopupApi = async <M extends PopupApiMethodName>(
-  call: PopupApiCall<M>,
-  options?: CallPopupApiOptions
-): Promise<PopupApiInterface[M]['output']> => {
+export const callPopupApiFromBackground: CallPopupApiResolver<any> = async <
+  M extends PopupApiMethodName,
+>({
+  call,
+  options,
+}: CallPopupApiResolverInput<M>): Promise<PopupApiInterface[M]['output']> => {
   await setInitialView({ id: 'popupApi', state: { call } })
 
   return inNewWindow(

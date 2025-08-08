@@ -1,4 +1,4 @@
-import { runBackgroundApiInpageAgent } from '../background/api/communication/inpage'
+import { runInpageBackgroundChannelInpageAgent } from '../channels/inpageBackground/inpage'
 import { messengers } from './messenger'
 import { shouldInjectProvider } from './utils/injectHelpers'
 import { injectToWindow } from './utils/windowInjector'
@@ -14,4 +14,4 @@ if (shouldInjectProvider()) {
   keepAlive()
 }
 
-runBackgroundApiInpageAgent()
+runInpageBackgroundChannelInpageAgent()

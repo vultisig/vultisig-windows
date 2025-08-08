@@ -2,7 +2,7 @@ import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { callPopupApi } from '../../../popup/api/communication/background'
+import { callPopupApi } from '../../../popup/api/call'
 import { storage } from '../../../storage'
 import { BackgroundApiResolver } from '../resolver'
 
