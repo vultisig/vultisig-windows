@@ -1,5 +1,4 @@
-export const providerSources = ['inpage', 'background'] as const
-export type ProviderSource = (typeof providerSources)[number]
+export type ProviderSource = 'inpage' | 'background'
 
 export const getProviderSource = (): ProviderSource => {
   const hasChromeRuntime = typeof chrome !== 'undefined' && !!chrome.runtime
