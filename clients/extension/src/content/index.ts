@@ -1,4 +1,5 @@
-import { runInpageBackgroundChannelContentAgent } from '../channels/inpageBackground/content'
+import { runBridgeContentAgent } from '@core/inpage-provider/bridge/content'
+
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
 import { initializeMessenger } from '../messengers/initializeMessenger'
 import { getPrioritizeWallet } from '../state/currentSettings/isPrioritized'
@@ -30,4 +31,4 @@ window.addEventListener('vulticonnect:inpage:ready', async () => {
   })
 })
 
-runInpageBackgroundChannelContentAgent()
+runBridgeContentAgent()

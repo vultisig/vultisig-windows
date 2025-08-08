@@ -1,4 +1,5 @@
-import { runInpageBackgroundChannelInpageAgent } from '../channels/inpageBackground/inpage'
+import { runBridgeInpageAgent } from '@core/inpage-provider/bridge/inpage'
+
 import { messengers } from './messenger'
 import { shouldInjectProvider } from './utils/injectHelpers'
 import { injectToWindow } from './utils/windowInjector'
@@ -14,4 +15,4 @@ if (shouldInjectProvider()) {
   keepAlive()
 }
 
-runInpageBackgroundChannelInpageAgent()
+runBridgeInpageAgent()

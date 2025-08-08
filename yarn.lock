@@ -805,6 +805,7 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
+    "@core/inpage-provider": "workspace:*"
     "@core/mpc": "workspace:*"
     "@core/ui": "workspace:*"
     "@cosmjs/amino": "npm:^0.33.1"
@@ -908,6 +909,12 @@ __metadata:
 "@core/config@workspace:*, @core/config@workspace:core/config":
   version: 0.0.0-use.local
   resolution: "@core/config@workspace:core/config"
+  languageName: unknown
+  linkType: soft
+
+"@core/inpage-provider@workspace:*, @core/inpage-provider@workspace:core/inpage-provider":
+  version: 0.0.0-use.local
+  resolution: "@core/inpage-provider@workspace:core/inpage-provider"
   languageName: unknown
   linkType: soft
 
