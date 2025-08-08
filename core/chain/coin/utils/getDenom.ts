@@ -6,7 +6,7 @@ import { CoinKey } from '../Coin'
 import { isFeeCoin } from './isFeeCoin'
 
 export const getDenom = (coin: CoinKey<CosmosChain>): string => {
-  if (isFeeCoin(coin)) return cosmosFeeCoinDenom[coin.chain]
+  if (isFeeCoin(coin)) return shouldBePresent(cosmosFeeCoinDenom[coin.chain])
 
   if (coin.chain === CosmosChain.THORChain) {
     return 'rune'

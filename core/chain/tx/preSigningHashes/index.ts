@@ -47,15 +47,22 @@ export const getPreSigningHashes = ({
   )
 
   const chainKind = getChainKind(chain)
-
   const decoder = decoders[chainKind]
-
   const output = decoder(preHashes)
 
-  assertErrorMessage(output.errorMessage)
+  if (
+    output.errorMessage &&
+    !(
+      chainKind === 'solana' &&
+      // rawMessage path still returns preimage data even if errorMessage is set
+      (output as any).data &&
+      (output as any).data.length > 0
+    )
+  ) {
+    assertErrorMessage(output.errorMessage)
+  }
 
   if ('hashPublicKeys' in output) {
-    // Ordering to match iOS
     const ordered = (output.hashPublicKeys ?? [])
       .filter(Boolean)
       .slice()
