@@ -3,6 +3,7 @@ export const EthereumL2Chain = {
   Arbitrum: 'Arbitrum',
   Base: 'Base',
   Blast: 'Blast',
+  Mantle: 'Mantle',
   Optimism: 'Optimism',
   Zksync: 'Zksync',
 } as const
