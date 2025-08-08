@@ -55,11 +55,17 @@ export const getPreSigningHashes = ({
   assertErrorMessage(output.errorMessage)
 
   if ('hashPublicKeys' in output) {
-    return without(
-      output.hashPublicKeys.map(hash => hash?.dataHash),
-      null,
-      undefined
-    )
+    // Ordering to match iOS
+    const ordered = (output.hashPublicKeys ?? [])
+      .filter(Boolean)
+      .slice()
+      .sort((a, b) =>
+        Buffer.compare(
+          Buffer.from(a?.dataHash ?? []),
+          Buffer.from(b?.dataHash ?? [])
+        )
+      )
+    return ordered.map(h => h!.dataHash)
   }
 
   const { data } = output

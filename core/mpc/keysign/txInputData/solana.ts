@@ -34,23 +34,17 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
       native: () => {
         throw new Error('Native swap not supported')
       },
-      general: swapPayload => {
-        const tx = shouldBePresent(swapPayload.quote?.tx)
-        const { data } = tx
+      general: ({ quote }) => {
+        const { data } = shouldBePresent(quote?.tx)
 
-        const decodedData = walletCore.TransactionDecoder.decode(
-          getCoinType({
-            walletCore,
-            chain,
-          }),
+        const decoded = walletCore.TransactionDecoder.decode(
+          getCoinType({ walletCore, chain }),
           Buffer.from(data, 'base64')
         )
         const { transaction } =
-          TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+          TW.Solana.Proto.DecodingTransactionOutput.decode(decoded)
 
-        if (!transaction) {
-          throw new Error("Can't decode swap transaction")
-        }
+        if (!transaction) throw new Error("Can't decode swap transaction")
 
         if (transaction.legacy) {
           transaction.legacy.recentBlockhash = recentBlockHash
@@ -84,7 +78,6 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
         limit: solanaConfig.priorityFeeLimit,
       }),
     })
-
     return [TW.Solana.Proto.SigningInput.encode(input).finish()]
   }
 
@@ -95,7 +88,6 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
   }
 
   if (toTokenAssociatedAddress) {
-    // Both addresses are available for token transfer
     const tokenTransferMessage = TW.Solana.Proto.TokenTransfer.create({
       tokenMintAddress: coin.contractAddress,
       senderTokenAddress: fromTokenAssociatedAddress,
@@ -118,7 +110,6 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
         limit: solanaConfig.priorityFeeLimit,
       }),
     })
-
     return [TW.Solana.Proto.SigningInput.encode(input).finish()]
   }
 
@@ -128,7 +119,6 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
   const generatedAssociatedAddress = receiverAddress.defaultTokenAddress(
     coin.contractAddress
   )
-
   if (!generatedAssociatedAddress) {
     throw new Error(
       'We must have the association between the minted token and the TO address'
@@ -159,6 +149,5 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
       limit: solanaConfig.priorityFeeLimit,
     }),
   })
-
   return [TW.Solana.Proto.SigningInput.encode(input).finish()]
 }

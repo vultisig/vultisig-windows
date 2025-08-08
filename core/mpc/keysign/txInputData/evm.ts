@@ -62,6 +62,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
       ? shouldBePresent(swapPayload.general.quote?.tx)
       : undefined
 
+  // @antonio: Needed to allow chain tests to pass
   const txAny = generalTx as any
   const gasPriceLike = generalTx
     ? (txAny.gasPrice ?? txAny.gas_price)
@@ -73,17 +74,14 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
 
   const getToAddress = (): string => {
     if (swapPayload) {
-      return matchRecordUnion(swapPayload, {
+      return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: ({ vaultAddress, routerAddress }) =>
-          routerAddress ?? keysignPayload.toAddress ?? vaultAddress,
+          coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
         general: ({ quote }) => shouldBePresent(quote?.tx?.to),
       })
     }
 
-    if (coin.isNativeToken) {
-      return keysignPayload.toAddress
-    }
-
+    if (coin.isNativeToken) return keysignPayload.toAddress
     return coin.contractAddress
   }
 
@@ -176,11 +174,11 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
   }
 
   const getFeeFields = () => {
-    if (isLegacyFromQuote) {
+    if (generalTx && gasPriceLike != null) {
       return {
         txMode: TW.Ethereum.Proto.TransactionMode.Legacy,
-        gasLimit: toEvmTwAmount(gasLike),
-        gasPrice: toEvmTwAmount(gasPriceLike),
+        gasLimit: toEvmTwAmount(gasLike!),
+        gasPrice: toEvmTwAmount(gasPriceLike!),
       }
     }
 
@@ -192,6 +190,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     }
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
+
       input.maxFeePerGasWei = BigInt(gasPrice)
       input.gasLimit = BigInt(gas)
     }
