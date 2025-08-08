@@ -57,12 +57,25 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
   const { nonce } = evmSpecific
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
+  const generalTx =
+    swapPayload && 'general' in swapPayload
+      ? shouldBePresent(swapPayload.general.quote?.tx)
+      : undefined
 
-  const getToAddress = () => {
+  const txAny = generalTx as any
+  const gasPriceLike = generalTx
+    ? (txAny.gasPrice ?? txAny.gas_price)
+    : undefined
+
+  const gasLike = generalTx ? (txAny.gas ?? txAny.gasLimit) : undefined
+
+  const isLegacyFromQuote = generalTx && gasPriceLike != null
+
+  const getToAddress = (): string => {
     if (swapPayload) {
-      return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
+      return matchRecordUnion(swapPayload, {
         native: ({ vaultAddress, routerAddress }) =>
-          coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
+          routerAddress ?? keysignPayload.toAddress ?? vaultAddress,
         general: ({ quote }) => shouldBePresent(quote?.tx?.to),
       })
     }
@@ -163,6 +176,14 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
   }
 
   const getFeeFields = () => {
+    if (isLegacyFromQuote) {
+      return {
+        txMode: TW.Ethereum.Proto.TransactionMode.Legacy,
+        gasLimit: toEvmTwAmount(gasLike),
+        gasPrice: toEvmTwAmount(gasPriceLike),
+      }
+    }
+
     const input: GetEvmTwFeeFieldsInput = {
       chain,
       maxFeePerGasWei: BigInt(evmSpecific.maxFeePerGasWei),
