@@ -11,6 +11,8 @@ export const incrementKeysignPayloadNonce = (
   const { blockchainSpecific } = keysignPayload
 
   const { nonce, ...rest } = blockchainSpecific.value as EthereumSpecific
+  const current = typeof nonce === 'bigint' ? nonce : BigInt(nonce as any)
+  const nextNonce = current + 1n
 
   return create(KeysignPayloadSchema, {
     ...keysignPayload,
@@ -18,7 +20,7 @@ export const incrementKeysignPayloadNonce = (
       case: 'ethereumSpecific',
       value: {
         ...rest,
-        nonce: nonce + 1n,
+        nonce: nextNonce,
       },
     },
   })

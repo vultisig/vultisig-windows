@@ -64,7 +64,10 @@ export const getSolanaKeysignPayload = (
           coin: accountCoin,
           amount: parsedTransactionParams.inAmount ?? Number(0),
           isDeposit: false,
-          receiver: parsedTransactionParams.receiverAddress ?? '',
+          receiver:
+            parsedTransactionParams.receiverAddress ||
+            parsedTransactionParams.authority ||
+            '',
         })
         chainSpecific.value = {
           ...(chainSpecific.value as SolanaSpecific),
