@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-import { without } from '@lib/utils/array/without'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -37,12 +36,9 @@ export const getPreSigningHashes = ({
   walletCore,
   txInputData,
   chain,
-}: Input) => {
+}: Input): Uint8Array[] => {
   const preHashes = walletCore.TransactionCompiler.preImageHashes(
-    getCoinType({
-      walletCore,
-      chain,
-    }),
+    getCoinType({ walletCore, chain }),
     txInputData
   )
 
@@ -50,36 +46,29 @@ export const getPreSigningHashes = ({
   const decoder = decoders[chainKind]
   const output = decoder(preHashes)
 
-  if (
-    output.errorMessage &&
-    !(
-      chainKind === 'solana' &&
-      // rawMessage path still returns preimage data even if errorMessage is set
-      (output as any).data &&
-      (output as any).data.length > 0
-    )
-  ) {
+  if (chainKind !== 'solana') {
     assertErrorMessage(output.errorMessage)
   }
 
-  if ('hashPublicKeys' in output) {
-    const ordered = (output.hashPublicKeys ?? [])
-      .filter(Boolean)
-      .slice()
-      .sort((a, b) =>
-        Buffer.compare(
-          Buffer.from(a?.dataHash ?? []),
-          Buffer.from(b?.dataHash ?? [])
-        )
-      )
-    return ordered.map(h => h!.dataHash)
+  if ('hashPublicKeys' in output && Array.isArray(output.hashPublicKeys)) {
+    const hashes = output.hashPublicKeys
+      .map(h => h?.dataHash)
+      .filter((x): x is Uint8Array => x != null && x.length > 0)
+      .sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b)))
+
+    if (hashes.length === 0) {
+      throw new Error(`No pre-signing hashes produced (hashPublicKeys empty)`)
+    }
+    return hashes
   }
 
-  const { data } = output
-
-  if ('dataHash' in output && output.dataHash.length > 0) {
+  if ('dataHash' in output && output.dataHash && output.dataHash.length > 0) {
     return [output.dataHash]
   }
 
-  return [data]
+  if ('data' in output && output.data && output.data.length > 0) {
+    return [output.data]
+  }
+
+  throw new Error(`No pre-signing hashes produced for chainKind=${chainKind}`)
 }
