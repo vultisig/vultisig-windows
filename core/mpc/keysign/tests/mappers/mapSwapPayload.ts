@@ -1,5 +1,5 @@
-import { mapNestedCoin } from './mapNestedCoin'
 import { bigishToString, booleanOrUndefined, numberOrUndefined } from '../utils'
+import { mapNestedCoin } from './mapNestedCoin'
 
 export const mapSwapPayload = (spRaw: any) => {
   if (!spRaw) return null

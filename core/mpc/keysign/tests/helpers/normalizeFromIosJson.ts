@@ -1,15 +1,14 @@
 import { create } from '@bufbuild/protobuf'
 
 import { KeysignPayloadSchema } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
-import { mapNestedCoin } from '../mappers/mapNestedCoin'
+import { mapBlockchainSpecific } from '../mappers/mapBlockchainSpecific'
+import { mapSwapPayload } from '../mappers/mapSwapPayload'
 import {
   bigishToString,
   booleanOrUndefined,
   emptyToUndefined,
   numberOrUndefined,
 } from '../utils'
-import { mapBlockchainSpecific } from '../mappers/mapBlockchainSpecific'
-import { mapSwapPayload } from '../mappers/mapSwapPayload'
 import { toBlockchainSpecificOneof } from './toBlockchainSpecificOneof'
 
 /**

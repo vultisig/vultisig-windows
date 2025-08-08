@@ -20,7 +20,6 @@ import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { toTwAddress } from '../tw/toTwAddress'
 import { TxInputDataResolver } from './TxInputDataResolver'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
@@ -54,34 +53,32 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     keysignPayload.blockchainSpecific,
     'ethereumSpecific'
   )
-
   const { nonce } = evmSpecific
 
   const swapPayload = getKeysignSwapPayload(keysignPayload)
   const generalTx =
     swapPayload && 'general' in swapPayload
-      ? shouldBePresent(swapPayload.general.quote?.tx)
+      ? assertField(shouldBePresent(swapPayload.general.quote), 'tx')
       : undefined
 
-  // @antonio: Needed to allow chain tests to pass
-  const txAny = generalTx as any
-  const gasPriceLike = generalTx
-    ? (txAny.gasPrice ?? txAny.gas_price)
-    : undefined
-
-  const gasLike = generalTx ? (txAny.gas ?? txAny.gasLimit) : undefined
+  // DEX/bridge quote values (if present)
+  const gasPriceLike = generalTx?.gasPrice
+  const gasLike = generalTx?.gas // <-- no gasLimit on OneInch/Kyber tx
 
   const getToAddress = (): string => {
     if (swapPayload) {
       return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: ({ vaultAddress, routerAddress }) =>
           coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
-        general: ({ quote }) => shouldBePresent(quote?.tx?.to),
+        general: ({ quote }) => {
+          const q = shouldBePresent(quote)
+          const tx = assertField(q, 'tx')
+          return assertField(tx, 'to')
+        },
       })
     }
-
-    if (coin.isNativeToken) return keysignPayload.toAddress
-    return coin.contractAddress
+    if (coin.isNativeToken) return shouldBePresent(keysignPayload.toAddress)
+    return shouldBePresent(coin.contractAddress)
   }
 
   const getTransaction = (): TW.Ethereum.Proto.ITransaction => {
@@ -90,9 +87,9 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
         KeysignSwapPayload,
         TW.Ethereum.Proto.ITransaction
       >(swapPayload, {
+        // THORChain-style vault deposit (native & ERC20)
         native: ({ fromCoin, fromAmount, vaultAddress, expirationTime }) => {
           const { isNativeToken } = shouldBePresent(fromCoin)
-
           const memo = shouldBePresent(keysignPayload.memo)
 
           if (isNativeToken) {
@@ -108,11 +105,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
             walletCore.EthereumAbiFunction.createWithString('depositWithExpiry')
 
           abiFunction.addParamAddress(
-            toTwAddress({
-              address: vaultAddress,
-              walletCore,
-              chain,
-            }),
+            toTwAddress({ address: vaultAddress, walletCore, chain }),
             false
           )
           abiFunction.addParamAddress(
@@ -128,7 +121,6 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
           abiFunction.addParamUInt256(toEvmTwAmount(expirationTime), false)
 
           const data = walletCore.EthereumAbi.encode(abiFunction)
-
           return {
             contractGeneric:
               TW.Ethereum.Proto.Transaction.ContractGeneric.create({
@@ -137,8 +129,13 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
               }),
           }
         },
+
+        // 1inch/bridge “general” quote: take value+data verbatim
         general: ({ quote }) => {
-          const { data, value } = shouldBePresent(quote?.tx)
+          const q = shouldBePresent(quote)
+          const tx = assertField(q, 'tx')
+          const value = String(tx.value ?? '0')
+          const data = assertField(tx, 'data')
 
           return {
             contractGeneric:
@@ -151,7 +148,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
       })
     }
 
-    const amount = toEvmTwAmount(keysignPayload.toAmount)
+    const amount = toEvmTwAmount(shouldBePresent(keysignPayload.toAmount))
 
     if (coin.isNativeToken) {
       return {
@@ -167,46 +164,47 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     return {
       erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
         amount,
-        to: keysignPayload.toAddress,
+        to: shouldBePresent(keysignPayload.toAddress),
       }),
     }
   }
 
   const getFeeFields = () => {
+    // If the quote includes gasPrice, produce a Legacy tx
     if (generalTx && gasPriceLike != null) {
       return {
         txMode: TW.Ethereum.Proto.TransactionMode.Legacy,
-        gasLimit: toEvmTwAmount(gasLike!),
-        gasPrice: toEvmTwAmount(gasPriceLike!),
+        gasLimit: toEvmTwAmount(String(gasLike ?? '0')),
+        gasPrice: toEvmTwAmount(String(gasPriceLike)),
       }
     }
 
-    const input: GetEvmTwFeeFieldsInput = {
+    // Otherwise compute EIP-1559 from chain defaults or the quote.
+    const ffInput: GetEvmTwFeeFieldsInput = {
       chain,
-      maxFeePerGasWei: BigInt(evmSpecific.maxFeePerGasWei),
-      priorityFee: BigInt(evmSpecific.priorityFee),
-      gasLimit: BigInt(evmSpecific.gasLimit),
+      maxFeePerGasWei: BigInt(shouldBePresent(evmSpecific.maxFeePerGasWei)),
+      priorityFee: BigInt(shouldBePresent(evmSpecific.priorityFee)),
+      gasLimit: BigInt(shouldBePresent(evmSpecific.gasLimit)),
     }
+
     if (swapPayload && 'general' in swapPayload) {
-      const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-
-      input.maxFeePerGasWei = BigInt(gasPrice)
-      input.gasLimit = BigInt(gas)
+      const q = shouldBePresent(swapPayload.general.quote)
+      const tx = assertField(q, 'tx')
+      if (tx.gas != null) ffInput.gasLimit = BigInt(tx.gas)
+      // if tx.gasPrice were present we’d have taken the Legacy branch above
     }
 
-    return getEvmTwFeeFields(input)
+    // Must return fields already in SigningInput shape
+    return getEvmTwFeeFields(ffInput)
   }
 
-  const input = TW.Ethereum.Proto.SigningInput.create({
+  const signingInput = TW.Ethereum.Proto.SigningInput.create({
     toAddress: getToAddress(),
     transaction: TW.Ethereum.Proto.Transaction.create(getTransaction()),
-    chainId: getEvmTwChainId({
-      walletCore,
-      chain,
-    }),
-    nonce: getEvmTwNonce(nonce),
+    chainId: getEvmTwChainId({ walletCore, chain }),
+    nonce: getEvmTwNonce(shouldBePresent(nonce)),
     ...getFeeFields(),
   })
 
-  return [TW.Ethereum.Proto.SigningInput.encode(input).finish()]
+  return [TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()]
 }
