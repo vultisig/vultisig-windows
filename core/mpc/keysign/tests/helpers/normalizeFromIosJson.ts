@@ -92,7 +92,7 @@ export const normalizeFromIosJson = (input: any) => {
 
   const out = {
     coin,
-    toAddress: src.to_address ?? src.toAddress ?? '',
+    toAddress: emptyToUndefined(src.to_address ?? src.toAddress),
     toAmount: bigishToString(src.to_amount ?? src.toAmount),
     memo: src.memo,
     blockchainSpecific,

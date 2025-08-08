@@ -65,17 +65,6 @@ export const getUtxoTxInputData = ({
       })
     : keysignPayload.toAddress
 
-  const sortedUtxos = [...keysignPayload.utxoInfo].sort((a, b) => {
-    const amountDiff = BigInt(b.amount) - BigInt(a.amount)
-    if (amountDiff !== BigInt(0)) {
-      return amountDiff < BigInt(0) ? -1 : 1
-    }
-    const hashDiff = a.hash.localeCompare(b.hash)
-    if (hashDiff !== 0) {
-      return hashDiff
-    }
-    return (a.index ?? 0) - (b.index ?? 0)
-  })
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
     amount: Long.fromString(amount),
@@ -89,7 +78,7 @@ export const getUtxoTxInputData = ({
       [scriptKey]: script,
     },
 
-    utxo: sortedUtxos.map(({ hash, amount, index }) =>
+    utxo: keysignPayload.utxoInfo.map(({ hash, amount, index }) =>
       TW.Bitcoin.Proto.UnspentTransaction.create({
         amount: Long.fromString(amount.toString()),
         outPoint: TW.Bitcoin.Proto.OutPoint.create({

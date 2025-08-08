@@ -20,6 +20,7 @@ import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { toTwAddress } from '../tw/toTwAddress'
 import { TxInputDataResolver } from './TxInputDataResolver'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
@@ -69,8 +70,6 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     : undefined
 
   const gasLike = generalTx ? (txAny.gas ?? txAny.gasLimit) : undefined
-
-  const isLegacyFromQuote = generalTx && gasPriceLike != null
 
   const getToAddress = (): string => {
     if (swapPayload) {
