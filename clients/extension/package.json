@@ -23,6 +23,7 @@
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
     "@core/chain": "workspace:*",
+    "@core/inpage-provider": "workspace:*",
     "@core/mpc": "workspace:*",
     "@cosmjs/amino": "^0.33.1",
     "@keplr-wallet/provider": "^0.12.202",

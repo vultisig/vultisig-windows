@@ -1,37 +1,33 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import {
-  getInpageBackgroundMessageSourceId,
-  InpageBackgroundMessage,
-  isInpageBackgroundChannelMessage,
+  type BridgeMessage,
+  getBridgeMessageSourceId,
+  isBridgeMessage,
 } from './core'
 
 const listeners: Record<string, (result: unknown) => void> = {}
 
-export const sendThroughInpageBackgroundChannel = <T>(
-  message: unknown
-): Promise<T> =>
+export const sendToBackground = <T>(message: unknown): Promise<T> =>
   new Promise(resolve => {
-    const id = uuidv4()
+    const id = crypto.randomUUID()
 
     listeners[id] = response => {
       resolve(response as T)
     }
 
-    const request: InpageBackgroundMessage = {
+    const request: BridgeMessage = {
       id,
-      sourceId: getInpageBackgroundMessageSourceId('inpage'),
+      sourceId: getBridgeMessageSourceId('inpage'),
       message,
     }
 
     window.postMessage(request, '*')
   })
 
-export const runInpageBackgroundChannelInpageAgent = () => {
+export const runBridgeInpageAgent = () => {
   window.addEventListener('message', ({ source, data }) => {
     if (source !== window) return
 
-    if (!isInpageBackgroundChannelMessage(data, 'background')) {
+    if (!isBridgeMessage(data, 'background')) {
       return
     }
 
