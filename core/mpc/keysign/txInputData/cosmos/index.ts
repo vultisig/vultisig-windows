@@ -177,7 +177,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         })
         const toAmount = Number(keysignPayload.toAmount || '0')
         if (toAmount > 0) {
-          depositCoin.amount = keysignPayload.toAmount
+          depositCoin.amount = swapPayload
+            ? getRecordUnionValue(swapPayload).fromAmount
+            : keysignPayload.toAmount
           depositCoin.decimals = new Long(coin.decimals)
         }
 
