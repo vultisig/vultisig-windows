@@ -21,7 +21,8 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
         : BigInt(priorityFee), // currently we hardcode the priority fee to 100_000 lamports
     thorchainSpecific: ({ fee }) => BigInt(fee ?? nativeTxFeeRune),
     mayaSpecific: () => BigInt(cosmosGasLimitRecord[Chain.MayaChain]),
-    cosmosSpecific: ({ gas }) => BigInt(gas),
+    cosmosSpecific: ({ gas }) =>
+      BigInt(gas ?? cosmosGasLimitRecord[Chain.Cosmos]),
     polkadotSpecific: () => polkadotConfig.fee,
     tonSpecific: () => tonConfig.fee,
     tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation || 0),
