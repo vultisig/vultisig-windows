@@ -12,7 +12,7 @@ export const mapBlockchainSpecific = (bsRaw: any) => {
           e.max_fee_per_gas_wei ?? e.maxFeePerGasWei
         ),
         priorityFee: bigishToString(e.priority_fee ?? e.priorityFee),
-        nonce: numberOrUndefined(e.nonce),
+        nonce: BigInt(e.nonce),
         gasLimit: bigishToString(e.gas_limit ?? e.gasLimit),
       },
     }

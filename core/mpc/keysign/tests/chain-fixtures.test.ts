@@ -46,6 +46,7 @@ describe('iOS fixtures parity', () => {
         getPreSigningHashes({ walletCore, chain, txInputData })
       )
       .map(item => Buffer.from(item).toString('hex'))
+      .sort()
 
     expect(hashes).toEqual(expected_image_hash)
   })
