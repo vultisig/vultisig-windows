@@ -175,17 +175,10 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             synth: false,
           }),
         })
-        if (swapPayload) {
-          // For swaps, amount must be the *from* amount from the swap payload
-          depositCoin.amount = getRecordUnionValue(swapPayload).fromAmount
+        const toAmount = Number(keysignPayload.toAmount || '0')
+        if (toAmount > 0) {
+          depositCoin.amount = keysignPayload.toAmount
           depositCoin.decimals = new Long(coin.decimals)
-        } else {
-          // Regular deposit/send uses the normal toAmount
-          const toAmount = keysignPayload.toAmount
-          if (toAmount && Number(toAmount) > 0) {
-            depositCoin.amount = toAmount
-            depositCoin.decimals = new Long(coin.decimals)
-          }
         }
 
         return {
