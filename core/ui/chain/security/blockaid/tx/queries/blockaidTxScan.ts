@@ -1,7 +1,5 @@
-import {
-  BlockaidTxScanInput,
-  scanTxWithBlockaid,
-} from '@core/chain/security/blockaid/tx/scan'
+import { scanTxWithBlockaid } from '@core/chain/security/blockaid/tx/scan'
+import { BlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan/resolver'
 import {
   noPersistQueryOptions,
   noRefetchQueryOptions,

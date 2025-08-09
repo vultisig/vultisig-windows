@@ -1,5 +1,5 @@
+import { getBlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { keysignPayloadToBlockaidTxScanInput } from '@core/ui/chain/security/blockaid/keysignPayload/core/keysignPayloadToBlockaidTxScanInput'
 import { BlockaidNoTxScanStatus } from '@core/ui/chain/security/blockaid/tx/BlockaidNoTxScanStatus'
 import { BlockaidTxScanning } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanning'
 import { BlockaidTxScanResult } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanResult'
@@ -21,6 +21,8 @@ import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
@@ -46,6 +48,8 @@ export const VerifyKeysignStart = ({
     new Array(terms.length).fill(false)
   )
 
+  const walletCore = useAssertWalletCore()
+
   const txScanInput = useTransformQueryData(
     keysignPayloadQuery,
     useCallback(
@@ -54,9 +58,12 @@ export const VerifyKeysignStart = ({
           return null
         }
 
-        return keysignPayloadToBlockaidTxScanInput(payload)
+        return getBlockaidTxScanInput({
+          payload,
+          walletCore,
+        })
       },
-      [isBlockaidEnabled]
+      [isBlockaidEnabled, walletCore]
     )
   )
 
