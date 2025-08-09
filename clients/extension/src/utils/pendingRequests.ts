@@ -1,11 +1,11 @@
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import {
   noPersistQueryOptions,
   noRefetchQueryOptions,
 } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 import { AccountsProps, PluginRequestProps } from './interfaces'
 
 type StoredRequestType = {

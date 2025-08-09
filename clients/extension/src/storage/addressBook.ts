@@ -1,3 +1,5 @@
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { AddressBookItem } from '@core/ui/address-book/model'
 import {
   AddressBookStorage,
@@ -7,9 +9,6 @@ import {
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 const getAddressBookItems: GetAddressBookItemsFunction = async () => {
   return getPersistentState(

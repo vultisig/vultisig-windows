@@ -1,16 +1,13 @@
-import { InpageBackgroundChannelContext } from './context'
-import {
-  getInpageBackgroundMessageSourceId,
-  isInpageBackgroundChannelMessage,
-} from './core'
+import { BridgeContext } from './context'
+import { getBridgeMessageSourceId, isBridgeMessage } from './core'
 
 type BackgroundRequestHandler<TMessage = unknown, TResponse = unknown> = {
-  context: InpageBackgroundChannelContext
+  context: BridgeContext
   message: TMessage
   reply: (response: TResponse) => void
 }
 
-export const runInpageBackgroundChannelBackgroundAgent = <
+export const runBridgeBackgroundAgent = <
   TMessage = unknown,
   TResponse = unknown,
 >({
@@ -21,7 +18,7 @@ export const runInpageBackgroundChannelBackgroundAgent = <
   chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
     if (!origin) return
 
-    if (!isInpageBackgroundChannelMessage(request, 'inpage')) {
+    if (!isBridgeMessage(request, 'inpage')) {
       return
     }
 
@@ -35,7 +32,7 @@ export const runInpageBackgroundChannelBackgroundAgent = <
       reply: (response: TResponse) => {
         sendResponse({
           id,
-          sourceId: getInpageBackgroundMessageSourceId('background'),
+          sourceId: getBridgeMessageSourceId('background'),
           message: response,
         })
       },

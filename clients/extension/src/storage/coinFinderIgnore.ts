@@ -1,4 +1,6 @@
 import { areEqualCoins } from '@core/chain/coin/Coin'
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import {
   AddToCoinFinderIgnoreFunction,
   coinFinderIgnoreInitialValue,
@@ -7,9 +9,6 @@ import {
   RemoveFromCoinFinderIgnoreFunction,
 } from '@core/ui/storage/coinFinderIgnore'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 const getCoinFinderIgnore: GetCoinFinderIgnoreFunction = async () =>
   getPersistentState(StorageKey.coinFinderIgnore, coinFinderIgnoreInitialValue)
