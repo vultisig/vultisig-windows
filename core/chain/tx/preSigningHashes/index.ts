@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { without } from '@lib/utils/array/without'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -36,39 +37,36 @@ export const getPreSigningHashes = ({
   walletCore,
   txInputData,
   chain,
-}: Input): Uint8Array[] => {
+}: Input) => {
   const preHashes = walletCore.TransactionCompiler.preImageHashes(
-    getCoinType({ walletCore, chain }),
+    getCoinType({
+      walletCore,
+      chain,
+    }),
     txInputData
   )
 
   const chainKind = getChainKind(chain)
+
   const decoder = decoders[chainKind]
+
   const output = decoder(preHashes)
 
-  if (chainKind !== 'solana') {
-    assertErrorMessage(output.errorMessage)
+  assertErrorMessage(output.errorMessage)
+
+  if ('hashPublicKeys' in output) {
+    return without(
+      output.hashPublicKeys.map(hash => hash?.dataHash),
+      null,
+      undefined
+    )
   }
 
-  if ('hashPublicKeys' in output && Array.isArray(output.hashPublicKeys)) {
-    const hashes = output.hashPublicKeys
-      .map(h => h?.dataHash)
-      .filter((x): x is Uint8Array => x != null && x.length > 0)
-      .sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b)))
+  const { data } = output
 
-    if (hashes.length === 0) {
-      throw new Error(`No pre-signing hashes produced (hashPublicKeys empty)`)
-    }
-    return hashes
-  }
-
-  if ('dataHash' in output && output.dataHash && output.dataHash.length > 0) {
+  if ('dataHash' in output && output.dataHash.length > 0) {
     return [output.dataHash]
   }
 
-  if ('data' in output && output.data && output.data.length > 0) {
-    return [output.data]
-  }
-
-  throw new Error(`No pre-signing hashes produced for chainKind=${chainKind}`)
+  return [data]
 }
