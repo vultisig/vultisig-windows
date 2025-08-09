@@ -39,8 +39,11 @@ export const JoinMpcServerUrlProvider = ({
           {children}
         </MpcServerUrlProvider>
       )}
-      error={() => (
-        <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
+      error={error => (
+        <FullPageFlowErrorState
+          title={t('failed_to_discover_mediator')}
+          error={error}
+        />
       )}
       pending={() => (
         <>

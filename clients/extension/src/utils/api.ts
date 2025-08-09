@@ -8,9 +8,10 @@ import {
 } from '@clients/extension/src/utils/functions'
 import { Chain } from '@core/chain/Chain'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
-import { PluginMetadata } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
+
+import { RawTransactionReceipt } from './interfaces'
 
 namespace Derivation {
   export type Params = {
@@ -40,10 +41,6 @@ const apiRef = {
     airdrop: 'https://airdrop.vultisig.com/',
     api: 'https://api.vultisig.com/',
   },
-  jupiter: {
-    token: 'https://tokens.jup.ag/token',
-  },
-  pluginMarketPlace: 'https://store.vultisigplugin.app/api/',
 }
 
 api.interceptors.request.use(
@@ -104,6 +101,19 @@ export default {
           id: 1,
           jsonrpc: '2.0',
           method: 'eth_getTransactionByHash',
+          params: [hash],
+        })
+        .then(({ data }) => data.result)
+    },
+    async getRawTransactionReceiptHash(
+      path: string,
+      hash: string
+    ): Promise<RawTransactionReceipt> {
+      return await api
+        .post<{ result: RawTransactionReceipt }>(path, {
+          id: 1,
+          jsonrpc: '2.0',
+          method: 'eth_getTransactionReceipt',
           params: [hash],
         })
         .then(({ data }) => data.result)
@@ -178,12 +188,6 @@ export default {
           })
           .catch(reject)
       })
-    },
-  },
-  plugin: {
-    fetchPluginInfo: async (id: string) => {
-      const url = `${apiRef.pluginMarketPlace}plugins/${id}`
-      return (await api.get<PluginMetadata>(url)).data
     },
   },
 }

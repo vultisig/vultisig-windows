@@ -3,6 +3,7 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { Tx } from '@core/chain/tx'
+import { VaultExport } from '@core/ui/vault/export/core'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
 
@@ -17,6 +18,7 @@ export namespace Messaging {
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
       | ITransaction
+      | RawTransactionReceipt
   }
 
   export namespace GetVault {
@@ -33,19 +35,6 @@ export namespace Messaging {
     export type Request = { priority?: boolean }
     export type Response = any
   }
-
-  export namespace Plugin {
-    export type Request = { method: string; params: Record<string, any>[] }
-    export type Response = string
-  }
-}
-
-export type VaultExport = {
-  uid: string
-  name: string
-  publicKeyEcdsa: string
-  publicKeyEddsa: string
-  hexChainCode: string
 }
 
 export type AccountsProps = {
@@ -199,6 +188,15 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
+export type CosmosAccount = {
+  pubkey: number[]
+  address: string
+  algo: 'secp256k1'
+  bech32Address: string
+  isKeystone: boolean
+  isNanoLedger: boolean
+}
+
 export type TransactionDetailsAsset = {
   chain: string
   ticker: string
@@ -254,3 +252,30 @@ export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
     transactionPayload: ITransactionPayload
     windowId?: number
   }
+
+export type RawTransactionReceipt = {
+  blockHash: string
+  blockNumber: string
+  contractAddress: string | null
+  cumulativeGasUsed: string
+  effectiveGasPrice?: string
+  from: string
+  gasUsed: string
+  logs: Array<{
+    address: string
+    topics: string[]
+    data: string
+    blockNumber: string
+    transactionHash: string
+    transactionIndex: string
+    blockHash: string
+    logIndex: string
+    removed: boolean
+  }>
+  logsBloom: string
+  status: string
+  to: string | null
+  transactionHash: string
+  transactionIndex: string
+  type: string
+}

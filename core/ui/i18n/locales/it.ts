@@ -1033,4 +1033,15 @@ export const it = {
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
   scanning: 'scansione...',
+  no_vaults: 'Ancora nessun caveau',
+  no_vaults_desc:
+    'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
+  risky_transaction_detected: 'Rilevata transazione a rischio {{riskLevel}}',
+  powered_by: 'Fornito da <provider></provider>',
+  ibc_transaction_not_supporting_memo_title:
+    'Promemoria transazione IBC non supportato',
+  ibc_transaction_not_supporting_memo_desc:
+    "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
+  go_back: 'Torna indietro',
+  continue_anyway: 'Continua comunque',
 }

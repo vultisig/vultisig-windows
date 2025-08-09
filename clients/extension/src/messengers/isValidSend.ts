@@ -7,7 +7,7 @@ export function isValidSend({
   topic: string
   message: SendMessage<unknown>
 }) {
-  if (!message.topic) return false
+  if (!message?.topic) return false
   if (topic !== '*' && message.topic !== `> ${topic}`) return false
   if (topic === '*' && message.topic.startsWith('<')) return false
   return true

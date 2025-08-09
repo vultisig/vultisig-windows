@@ -1009,4 +1009,15 @@ export const hr = {
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
   scanning: 'skeniranje...',
+  no_vaults: 'Još nema trezora',
+  no_vaults_desc:
+    'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
+  risky_transaction_detected: 'Otkrivena je rizična transakcija {{riskLevel}}',
+  powered_by: 'Pokreće <provider></provider>',
+  ibc_transaction_not_supporting_memo_title:
+    'IBC transakcijski memorandum nije podržan',
+  ibc_transaction_not_supporting_memo_desc:
+    'Ova IBC transakcija uključuje memorandum, ali Vultisig trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
+  go_back: 'Natrag',
+  continue_anyway: 'Nastavi svejedno',
 }

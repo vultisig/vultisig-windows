@@ -18,6 +18,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
@@ -25,7 +26,6 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { FlowErrorPageContent } from '@lib/ui/flow/FlowErrorPageContent'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -40,7 +40,6 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
@@ -182,7 +181,7 @@ export const TransactionPage = () => {
       error={error => (
         <FlowErrorPageContent
           title="Failed to process transaction"
-          message={extractErrorMsg(error)}
+          error={error}
         />
       )}
       success={({ transaction, keysignMessagePayload }) => {

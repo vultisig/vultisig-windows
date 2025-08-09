@@ -583,11 +583,13 @@ export const handleRequest = (
 
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_RECEIPT: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
-
-          getEvmRpcProvider(chain as EvmChain)
-            .getTransactionReceipt(String(transaction))
-            .then(receipt => resolve(receipt?.toJSON()))
+          const [hash] = params
+          api.ethereum
+            .getRawTransactionReceiptHash(
+              evmChainRpcUrls[chain as EvmChain],
+              String(hash)
+            )
+            .then(resolve)
             .catch(reject)
         } else {
           reject()

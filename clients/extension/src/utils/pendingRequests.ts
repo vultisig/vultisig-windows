@@ -17,7 +17,7 @@ type StoredRequestKey = keyof StoredRequestType
 
 const defaultStoredRequest: StoredRequestType = {}
 
-export const getStoredPendingRequest = async <K extends StoredRequestKey>(
+const getStoredPendingRequest = async <K extends StoredRequestKey>(
   key: K
 ): Promise<StoredRequestType[K]> => {
   const data = await getPersistentState<StoredRequestType>(
