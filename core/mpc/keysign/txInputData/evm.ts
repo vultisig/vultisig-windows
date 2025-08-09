@@ -9,6 +9,7 @@ import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
 import { toEvmTwAmount } from '@core/chain/chains/evm/tx/tw/toEvmTwAmount'
 import { toEvmTxData } from '@core/chain/chains/evm/tx/tw/toEvmTxData'
+import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
@@ -171,8 +172,10 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     }
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-      input.maxFeePerGasWei = BigInt(gasPrice)
-      input.gasLimit = BigInt(gas)
+      if (gas != BigInt(defaultEvmSwapGasLimit) && BigInt(gasPrice) != 0n) {
+        input.gasLimit = BigInt(gas)
+        input.maxFeePerGasWei = BigInt(gasPrice)
+      }
     }
 
     return getEvmTwFeeFields(input)
