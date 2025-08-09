@@ -1,9 +1,8 @@
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { isHasFinishedOnboardingInitially } from '@core/ui/storage/onboarding'
 import { ReferralsStorage } from '@core/ui/storage/referrals'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 export const referralsStorage: ReferralsStorage = {
   getHasFinishedReferralsOnboarding: async () => {

@@ -1,5 +1,5 @@
-import { getPersistentState } from '@clients/extension/src/state/persistent/getPersistentState'
-import { setPersistentState } from '@clients/extension/src/state/persistent/setPersistentState'
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
