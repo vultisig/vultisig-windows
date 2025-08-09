@@ -1,10 +1,10 @@
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { removePersistentState } from '@core/extension/state/persistent/removePersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { CoreView, initialCoreView } from '@core/ui/navigation/CoreView'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { AppView } from '../navigation/AppView'
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { removePersistentState } from '../state/persistent/removePersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 export const initialViewStorage = {
   getInitialView: async () => {
