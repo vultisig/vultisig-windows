@@ -5,7 +5,7 @@ import { createProviders } from '@clients/extension/src/inpage/providers/provide
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
-import { callBackgroundApi } from '../../background/api/communication/inpage'
+import { callBackgroundApi } from '../../background/api/call'
 
 export const injectToWindow = () => {
   const providers = createProviders()
