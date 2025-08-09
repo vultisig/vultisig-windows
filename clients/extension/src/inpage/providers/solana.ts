@@ -6,6 +6,7 @@ import {
   getAccount,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
+import { SolanaSignMessageInput } from '@solana/wallet-standard-features'
 import {
   Connection,
   PublicKey,
@@ -231,12 +232,20 @@ export class Solana extends EventEmitter {
       message: 'This function is not supported by Vultisig',
     })
   }
-
-  async signMessage() {
-    return Promise.reject({
-      code: -32603,
-      message: 'This function is not supported by Vultisig',
+  // This is an standard function of Solana WalletStandard
+  async signMessage({ message, account }: SolanaSignMessageInput) {
+    const decodedString = new TextDecoder().decode(Buffer.from(message))
+    const signature = await this.request({
+      method: RequestMethod.CTRL.SIGN_MESSAGE,
+      params: [{ message: decodedString }],
     })
+
+    return {
+      account: account,
+      signature: Buffer.from(String(signature)),
+      signedMessage: message,
+      signatureType: 'ed25519',
+    }
   }
 
   async signIn() {

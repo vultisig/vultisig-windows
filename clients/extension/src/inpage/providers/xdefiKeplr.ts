@@ -327,6 +327,7 @@ export class XDEFIKeplrProvider extends Keplr {
       }
     })
   }
+
   async experimentalSuggestChain(_chainInfo: any) {
     return
   }
