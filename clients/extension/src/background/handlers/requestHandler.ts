@@ -164,7 +164,12 @@ export const handleRequest = (
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
           handleSendTransaction({
-            transactionPayload: { serialized: _transaction.serializedTx },
+            transactionPayload: {
+              serialized: {
+                data: _transaction.serializedTx,
+                skipBroadcast: _transaction.skipBroadcast,
+              },
+            },
             status: 'default',
           })
             .then(result => resolve(result))

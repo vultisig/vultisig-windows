@@ -154,6 +154,7 @@ export class Solana extends EventEmitter {
         params: [
           {
             serializedTx: transaction.serialize(),
+            skipBroadcast: true,
           },
         ],
       })) as ITransaction<OtherChain.Solana>
@@ -173,6 +174,7 @@ export class Solana extends EventEmitter {
             amount: decodedTransfer.lamports.toString(),
             from: decodedTransfer.fromPubkey.toString(),
             to: decodedTransfer.toPubkey.toString(),
+            skipBroadcast: true,
           }
         } else if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
           //  Handle SPL Token Transfers
@@ -219,6 +221,7 @@ export class Solana extends EventEmitter {
             },
             from: senderTokenAccountInfo.owner.toString(),
             to: recipient,
+            skipBroadcast: true,
           }
         } else {
           continue

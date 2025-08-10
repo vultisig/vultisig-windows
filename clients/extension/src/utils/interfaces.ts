@@ -236,6 +236,11 @@ export type IKeysignTransactionPayload = {
   isDeposit?: boolean
 }
 
+export type ISerializedTransactionPayload = {
+  data: Uint8Array
+  skipBroadcast?: boolean
+}
+
 type ITransactionPayload =
   | {
       keysign: IKeysignTransactionPayload
@@ -243,7 +248,7 @@ type ITransactionPayload =
   | {
       custom: ICustomTransactionPayload
     }
-  | { serialized: Uint8Array }
+  | { serialized: ISerializedTransactionPayload }
 
 export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
   Partial<Pick<Tx<T>, 'hash'>> & {
