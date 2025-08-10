@@ -63,6 +63,7 @@ import {
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 import { VultisigSolanaWalletAccount } from './solana/account'
+import { isSolanaChain, SolanaChain } from './solana/chains'
 export const VultisigNamespace = 'vultisig:'
 export type VultisigFeature = {
   [VultisigNamespace]: {
@@ -296,6 +297,71 @@ export class Solana extends EventEmitter {
     this.#listeners[event]?.forEach(listener => listener.apply(null, args))
   }
 
+  #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
+    if (!this.#account) throw new Error('not connected')
+
+    const outputs: SolanaSignTransactionOutput[] = []
+
+    if (inputs.length === 1) {
+      const { transaction, account, chain } = inputs[0]!
+      if (account !== this.#account) throw new Error('invalid account')
+      if (chain && !isSolanaChain(chain)) throw new Error('invalid chain')
+
+      const signedTransaction = await this.signTransaction(
+        VersionedTransaction.deserialize(transaction)
+      )
+
+      const serializedTransaction = isVersionedTransaction(signedTransaction)
+        ? signedTransaction.serialize()
+        : new Uint8Array(
+            (signedTransaction as Transaction).serialize({
+              requireAllSignatures: false,
+              verifySignatures: false,
+            })
+          )
+
+      outputs.push({ signedTransaction: serializedTransaction })
+    } else if (inputs.length > 1) {
+      let chain: SolanaChain | undefined = undefined
+      for (const input of inputs) {
+        if (input.account !== this.#account) throw new Error('invalid account')
+        if (input.chain) {
+          if (!isSolanaChain(input.chain)) throw new Error('invalid chain')
+          if (chain) {
+            if (input.chain !== chain) throw new Error('conflicting chain')
+          } else {
+            chain = input.chain
+          }
+        }
+      }
+
+      const transactions = inputs.map(({ transaction }) =>
+        VersionedTransaction.deserialize(transaction)
+      )
+
+      const signedTransactions = await this.signAllTransactions(transactions)
+
+      outputs.push(
+        ...signedTransactions.map(signedTransaction => {
+          const serializedTransaction = isVersionedTransaction(
+            signedTransaction
+          )
+            ? signedTransaction.serialize()
+            : new Uint8Array(
+                (signedTransaction as Transaction).serialize({
+                  requireAllSignatures: false,
+                  verifySignatures: false,
+                })
+              )
+
+          return { signedTransaction: serializedTransaction }
+        })
+      )
+    }
+
+    return outputs
+  }
+
   async connect() {
     return await this.request({
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
@@ -350,7 +416,9 @@ export class Solana extends EventEmitter {
     }
   }
 
-  async signAllTransactions(transactions: Transaction[]) {
+  async signAllTransactions<T extends Transaction | VersionedTransaction>(
+    transactions: T[]
+  ) {
     if (!transactions || !transactions.length) {
       return Promise.reject({
         code: -32000,
@@ -387,71 +455,7 @@ export class Solana extends EventEmitter {
       message: 'This function is not supported by Vultisig',
     })
   }
-  #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
-    if (!this.#account) throw new Error('not connected')
 
-    const outputs: SolanaSignTransactionOutput[] = []
-
-    if (inputs.length === 1) {
-      const { transaction, account, chain } = inputs[0]!
-      if (account !== this.#account) throw new Error('invalid account')
-      if (chain && !isSolanaChain(chain)) throw new Error('invalid chain')
-
-      const signedTransaction = await this.#vultisig.signTransaction(
-        VersionedTransaction.deserialize(transaction)
-      )
-
-      const serializedTransaction = isVersionedTransaction(signedTransaction)
-        ? signedTransaction.serialize()
-        : new Uint8Array(
-            (signedTransaction as Transaction).serialize({
-              requireAllSignatures: false,
-              verifySignatures: false,
-            })
-          )
-
-      outputs.push({ signedTransaction: serializedTransaction })
-    } else if (inputs.length > 1) {
-      let chain: SolanaChain | undefined = undefined
-      for (const input of inputs) {
-        if (input.account !== this.#account) throw new Error('invalid account')
-        if (input.chain) {
-          if (!isSolanaChain(input.chain)) throw new Error('invalid chain')
-          if (chain) {
-            if (input.chain !== chain) throw new Error('conflicting chain')
-          } else {
-            chain = input.chain
-          }
-        }
-      }
-
-      const transactions = inputs.map(({ transaction }) =>
-        VersionedTransaction.deserialize(transaction)
-      )
-
-      const signedTransactions =
-        await this.#vultisig.signAllTransactions(transactions)
-
-      outputs.push(
-        ...signedTransactions.map(signedTransaction => {
-          const serializedTransaction = isVersionedTransaction(
-            signedTransaction
-          )
-            ? signedTransaction.serialize()
-            : new Uint8Array(
-                (signedTransaction as Transaction).serialize({
-                  requireAllSignatures: false,
-                  verifySignatures: false,
-                })
-              )
-
-          return { signedTransaction: serializedTransaction }
-        })
-      )
-    }
-
-    return outputs
-  }
   #signMessage: SolanaSignMessageMethod = async (...inputs) => {
     if (!this.#account) throw new Error('not connected')
 
