@@ -6,7 +6,38 @@ import {
   getAccount,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
-import { SolanaSignMessageInput } from '@solana/wallet-standard-features'
+import {
+  SolanaSignAndSendTransaction,
+  type SolanaSignAndSendTransactionFeature,
+  type SolanaSignAndSendTransactionMethod,
+  type SolanaSignAndSendTransactionOutput,
+  SolanaSignIn,
+  type SolanaSignInFeature,
+  type SolanaSignInMethod,
+  type SolanaSignInOutput,
+  SolanaSignMessage,
+  type SolanaSignMessageFeature,
+  type SolanaSignMessageMethod,
+  type SolanaSignMessageOutput,
+  SolanaSignTransaction,
+  type SolanaSignTransactionFeature,
+  type SolanaSignTransactionMethod,
+  type SolanaSignTransactionOutput,
+} from '@solana/wallet-standard-features'
+import {
+  StandardConnect,
+  type StandardConnectFeature,
+  type StandardConnectMethod,
+  StandardDisconnect,
+  type StandardDisconnectFeature,
+  type StandardDisconnectMethod,
+  StandardEvents,
+  type StandardEventsFeature,
+  type StandardEventsListeners,
+  type StandardEventsNames,
+  type StandardEventsOnMethod,
+} from '@wallet-standard/features'
+
 import {
   Connection,
   PublicKey,
@@ -20,6 +51,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import {
+  bytesEqual,
   isVersionedTransaction,
   processBackgroundResponse,
 } from '../../utils/functions'
@@ -30,7 +62,13 @@ import {
 } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
-
+import { VultisigSolanaWalletAccount } from './solana/account'
+export const VultisigNamespace = 'vultisig:'
+export type VultisigFeature = {
+  [VultisigNamespace]: {
+    vultisig: Solana
+  }
+}
 export class Solana extends EventEmitter {
   public chainId: string
   public isConnected: boolean
@@ -39,6 +77,10 @@ export class Solana extends EventEmitter {
   public network: Network
   public publicKey?: PublicKey
   public static instance: Solana | null = null
+  #account: VultisigSolanaWalletAccount | null = null
+  readonly #listeners: {
+    [E in StandardEventsNames]?: StandardEventsListeners[E][]
+  } = {}
   constructor() {
     super()
     this.chainId = 'Solana_mainnet-beta'
@@ -47,7 +89,53 @@ export class Solana extends EventEmitter {
     this.isXDEFI = true
     this.network = 'mainnet'
   }
-
+  get accounts() {
+    return this.#account ? [this.#account] : []
+  }
+  get features(): StandardConnectFeature &
+    StandardDisconnectFeature &
+    StandardEventsFeature &
+    SolanaSignAndSendTransactionFeature &
+    SolanaSignTransactionFeature &
+    SolanaSignMessageFeature &
+    SolanaSignInFeature &
+    VultisigFeature {
+    return {
+      [StandardConnect]: {
+        version: '1.0.0',
+        connect: this.#connect,
+      },
+      [StandardDisconnect]: {
+        version: '1.0.0',
+        disconnect: this.#disconnect,
+      },
+      [StandardEvents]: {
+        version: '1.0.0',
+        on: this.#on,
+      },
+      [SolanaSignAndSendTransaction]: {
+        version: '1.0.0',
+        supportedTransactionVersions: ['legacy', 0],
+        signAndSendTransaction: this.#signAndSendTransaction,
+      },
+      [SolanaSignTransaction]: {
+        version: '1.0.0',
+        supportedTransactionVersions: ['legacy', 0],
+        signTransaction: this.#signTransaction,
+      },
+      [SolanaSignMessage]: {
+        version: '1.0.0',
+        signMessage: this.#signMessage,
+      },
+      [SolanaSignIn]: {
+        version: '1.0.0',
+        signIn: this.#signIn,
+      },
+      [VultisigNamespace]: {
+        vultisig: this.#vultisig,
+      },
+    }
+  }
   static getInstance(): Solana {
     if (!Solana.instance) {
       Solana.instance = new Solana()
@@ -145,6 +233,69 @@ export class Solana extends EventEmitter {
     }
   }
 
+  #connected = () => {
+    const address = this.publicKey?.toBase58()
+    if (address) {
+      const publicKey = this.publicKey!.toBytes()
+      const account = this.#account
+
+      if (
+        !account ||
+        account.address !== address ||
+        !bytesEqual(account.publicKey, publicKey)
+      ) {
+        this.#account = new VultisigSolanaWalletAccount({ address, publicKey })
+        this.#emit('change', { accounts: this.accounts })
+      }
+    }
+  }
+
+  #disconnected = () => {
+    if (this.#account) {
+      this.#account = null
+      this.#emit('change', { accounts: this.accounts })
+    }
+  }
+
+  #reconnected = () => {
+    if (this.publicKey) {
+      this.#connected()
+    } else {
+      this.#disconnected()
+    }
+  }
+
+  #connect: StandardConnectMethod = async () => {
+    if (!this.#account) {
+      await this.request({
+        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        params: [],
+      }).then(account => {
+        // this.isConnected = true
+        // this.publicKey = new PublicKey(shouldBePresent(account))
+        // this.emit(EventMethod.CONNECT, this.publicKey)
+
+        return { publicKey: new PublicKey(shouldBePresent(account)) }
+      })
+    }
+
+    this.#connected()
+
+    return { accounts: this.accounts }
+  }
+
+  #disconnect: StandardDisconnectMethod = async () => {
+    await this.disconnect()
+  }
+
+  #emit<E extends StandardEventsNames>(
+    event: E,
+    ...args: Parameters<StandardEventsListeners[E]>
+  ): void {
+    // eslint-disable-next-line prefer-spread
+    this.#listeners[event]?.forEach(listener => listener.apply(null, args))
+  }
+
   async connect() {
     return await this.request({
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
@@ -162,7 +313,11 @@ export class Solana extends EventEmitter {
     this.isConnected = false
     this.publicKey = undefined
     this.emit(EventMethod.DISCONNECT)
-
+    // TODO
+    this.request({
+      method: RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS,
+      params: [],
+    })
     await Promise.resolve()
   }
 
@@ -232,20 +387,105 @@ export class Solana extends EventEmitter {
       message: 'This function is not supported by Vultisig',
     })
   }
-  // This is an standard function of Solana WalletStandard
-  async signMessage({ message, account }: SolanaSignMessageInput) {
-    const decodedString = new TextDecoder().decode(Buffer.from(message))
-    const signature = await this.request({
-      method: RequestMethod.CTRL.SIGN_MESSAGE,
-      params: [{ message: decodedString }],
-    })
+  #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
+    if (!this.#account) throw new Error('not connected')
 
-    return {
-      account: account,
-      signature: Buffer.from(String(signature)),
-      signedMessage: message,
-      signatureType: 'ed25519',
+    const outputs: SolanaSignTransactionOutput[] = []
+
+    if (inputs.length === 1) {
+      const { transaction, account, chain } = inputs[0]!
+      if (account !== this.#account) throw new Error('invalid account')
+      if (chain && !isSolanaChain(chain)) throw new Error('invalid chain')
+
+      const signedTransaction = await this.#vultisig.signTransaction(
+        VersionedTransaction.deserialize(transaction)
+      )
+
+      const serializedTransaction = isVersionedTransaction(signedTransaction)
+        ? signedTransaction.serialize()
+        : new Uint8Array(
+            (signedTransaction as Transaction).serialize({
+              requireAllSignatures: false,
+              verifySignatures: false,
+            })
+          )
+
+      outputs.push({ signedTransaction: serializedTransaction })
+    } else if (inputs.length > 1) {
+      let chain: SolanaChain | undefined = undefined
+      for (const input of inputs) {
+        if (input.account !== this.#account) throw new Error('invalid account')
+        if (input.chain) {
+          if (!isSolanaChain(input.chain)) throw new Error('invalid chain')
+          if (chain) {
+            if (input.chain !== chain) throw new Error('conflicting chain')
+          } else {
+            chain = input.chain
+          }
+        }
+      }
+
+      const transactions = inputs.map(({ transaction }) =>
+        VersionedTransaction.deserialize(transaction)
+      )
+
+      const signedTransactions =
+        await this.#vultisig.signAllTransactions(transactions)
+
+      outputs.push(
+        ...signedTransactions.map(signedTransaction => {
+          const serializedTransaction = isVersionedTransaction(
+            signedTransaction
+          )
+            ? signedTransaction.serialize()
+            : new Uint8Array(
+                (signedTransaction as Transaction).serialize({
+                  requireAllSignatures: false,
+                  verifySignatures: false,
+                })
+              )
+
+          return { signedTransaction: serializedTransaction }
+        })
+      )
     }
+
+    return outputs
+  }
+  #signMessage: SolanaSignMessageMethod = async (...inputs) => {
+    if (!this.#account) throw new Error('not connected')
+
+    const outputs: SolanaSignMessageOutput[] = []
+    if (inputs.length === 1) {
+      const { message, account } = inputs[0]
+      if (account !== this.#account) throw new Error('invalid account')
+      const decodedString = new TextDecoder().decode(Buffer.from(message))
+      const signature = await this.request({
+        method: RequestMethod.CTRL.SIGN_MESSAGE,
+        params: [{ message: decodedString }],
+      })
+      outputs.push({
+        signedMessage: message,
+        signature: Buffer.from(String(signature)),
+      })
+    } else if (inputs.length > 1) {
+      for (const input of inputs) {
+        outputs.push(...(await this.#signMessage(input)))
+      }
+    }
+    return outputs
+    // const decodedString = new TextDecoder().decode(Buffer.from(message))
+    // const signature = await this.request({
+    //   method: RequestMethod.CTRL.SIGN_MESSAGE,
+    //   params: [{ message: decodedString }],
+    // })
+
+    // return {
+    //   account: account,
+    //   signature: Buffer.from(String(signature)),
+    //   signedMessage: message,
+    //   signatureType: 'ed25519',
+    // }
   }
 
   async signIn() {
