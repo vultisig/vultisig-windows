@@ -13,6 +13,7 @@ import {
   type SolanaSignAndSendTransactionOutput,
   SolanaSignIn,
   type SolanaSignInFeature,
+  SolanaSignInInput,
   type SolanaSignInMethod,
   type SolanaSignInOutput,
   SolanaSignMessage,
@@ -64,6 +65,8 @@ import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 import { VultisigSolanaWalletAccount } from './solana/account'
 import { isSolanaChain, SolanaChain } from './solana/chains'
+import { createSolanaSignInMessage } from './solana/signIn'
+
 export const VultisigNamespace = 'vultisig:'
 export type VultisigFeature = {
   [VultisigNamespace]: {
@@ -492,11 +495,38 @@ export class Solana extends EventEmitter {
     // }
   }
 
-  async signIn() {
-    return Promise.reject({
-      code: -32603,
-      message: 'This function is not supported by Vultisig',
+  signIn = async (input: SolanaSignInInput): Promise<SolanaSignInOutput> => {
+    if (!this.#account || !this.publicKey) {
+      throw new Error('not connected')
+    }
+    const account = this.#account
+    if (input?.address && input.address !== account.address) {
+      throw new Error('requested address does not match connected account')
+    }
+    const { message, bytes } = createSolanaSignInMessage(input)
+    const sig = await this.request({
+      method: RequestMethod.CTRL.SIGN_MESSAGE,
+      params: [{ message }],
     })
+    return {
+      account: account,
+      signedMessage: bytes,
+      signature: Uint8Array.from(Buffer.from(String(sig), 'hex')),
+      signatureType: 'ed25519',
+    }
+  }
+
+  #signIn: SolanaSignInMethod = async (...inputs) => {
+    const outputs: SolanaSignInOutput[] = []
+
+    if (inputs.length > 1) {
+      for (const input of inputs) {
+        outputs.push(await this.signIn(input))
+      }
+    } else {
+      return [await this.signIn(inputs[0])]
+    }
+    return outputs
   }
 
   async handleNotification() {
