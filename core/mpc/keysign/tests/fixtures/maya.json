@@ -10,7 +10,7 @@
         "price_provider_id": "cacao",
         "is_native_token": true,
         "hex_public_key": "03af84e9d32827b9d2806bf64cbff8babc50178b88cabfbc86dba3900d16bae88b",
-        "contract_address": "test_contract_address",
+        "contract_address": "",
         "logo": "cacao"
       },
       "to_address": "maya1tgxm5jw6hrlvslrd6lqpk4jwuu4g29dxyua4tr",
@@ -75,7 +75,7 @@
         "price_provider_id": "maya",
         "is_native_token": false,
         "hex_public_key": "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7",
-        "contract_address": "",
+        "contract_address": "maya",
         "logo": "maya"
       },
       "to_address": "maya18altpx2gwt4c4ejr5uzda4kyzsudyn9q5dhl9c",
