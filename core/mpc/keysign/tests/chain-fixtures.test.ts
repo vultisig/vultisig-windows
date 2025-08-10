@@ -48,6 +48,7 @@ describe('iOS fixtures parity', () => {
       .map(item => Buffer.from(item).toString('hex'))
       .sort()
 
-    expect(hashes).toEqual(expected_image_hash)
+    const expected = [...expected_image_hash].sort()
+    expect(hashes).toEqual(expected)
   })
 })
