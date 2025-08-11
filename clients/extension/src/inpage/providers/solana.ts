@@ -80,7 +80,7 @@ export type VultisigFeature = {
 }
 export class Solana implements Wallet {
   #_publicKey: PublicKey | null = null
-
+  #_isConnected: boolean = false
   readonly #listeners: {
     [E in StandardEventsNames]?: StandardEventsListeners[E][]
   } = {}
@@ -104,6 +104,13 @@ export class Solana implements Wallet {
 
   get chains() {
     return SOLANA_CHAINS.slice()
+  }
+  get isConnected() {
+    return this.#_isConnected
+  }
+
+  set isConnected(isConnected: boolean) {
+    this.#_isConnected = isConnected
   }
 
   get publicKey() {
@@ -162,6 +169,7 @@ export class Solana implements Wallet {
   constructor() {
     this.isPhantom = true
     this.isXDEFI = true
+    this.isConnected = false
     if (new.target === Solana) {
       Object.freeze(this)
     }
@@ -176,6 +184,7 @@ export class Solana implements Wallet {
     })) as string | undefined
 
     if (address) {
+      this.isConnected = true
       this.publicKey = new PublicKey(address)
       let pubkey = this.publicKey.toBytes()
       const account = this.#account
@@ -198,13 +207,7 @@ export class Solana implements Wallet {
 
   #connect: StandardConnectMethod = async () => {
     if (!this.#account) {
-      await this.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
-      }).then(account => {
-        this.publicKey = new PublicKey(shouldBePresent(account))
-        return { publicKey: new PublicKey(shouldBePresent(account)) }
-      })
+      await this.connect()
     }
 
     await this.#connected()
@@ -239,26 +242,28 @@ export class Solana implements Wallet {
     )
   }
 
-  async connect() {
+  connect = async () => {
     return await this.request({
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
       params: [],
     }).then(account => {
       this.publicKey = new PublicKey(shouldBePresent(account))
+      this.isConnected = true
       return { publicKey: this.publicKey }
     })
   }
 
-  async disconnect() {
+  disconnect = async () => {
     this.publicKey = null
     this.request({
       method: RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS,
       params: [],
     })
+    this.isConnected = false
     await Promise.resolve()
   }
 
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
+  request = async (data: Messaging.Chain.Request, callback?: Callback) => {
     try {
       const response = await messengers.background.send<
         any,
@@ -328,10 +333,12 @@ export class Solana implements Wallet {
     }
   }
 
-  async signTransaction(
+  signTransaction = async (
     transaction: Transaction | VersionedTransaction,
     skipBroadcast: boolean = true
-  ) {
+  ) => {
+    console.log('signTransaction:', { transaction, skipBroadcast })
+
     if (isVersionedTransaction(transaction)) {
       const result = (await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
@@ -424,9 +431,9 @@ export class Solana implements Wallet {
     }
   }
 
-  async signAllTransactions<T extends Transaction | VersionedTransaction>(
+  signAllTransactions = async <T extends Transaction | VersionedTransaction>(
     transactions: T[]
-  ) {
+  ) => {
     if (!transactions || !transactions.length) {
       return Promise.reject({
         code: -32000,
@@ -450,10 +457,10 @@ export class Solana implements Wallet {
     return results
   }
 
-  async signAndSendTransaction<T extends Transaction | VersionedTransaction>(
+  signAndSendTransaction = async <T extends Transaction | VersionedTransaction>(
     transaction: T,
     _options?: SendOptions
-  ): Promise<{ signature: TransactionSignature }> {
+  ): Promise<{ signature: TransactionSignature }> => {
     const result = await this.signTransaction(transaction, false)
     if (!result) throw new Error('failed to signAndSendTransaction')
     return {
