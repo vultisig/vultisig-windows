@@ -17,9 +17,10 @@ export type BlockaidValidation = {
   result_type: BlockaidRiskLevel | string
   description?: string
   reason?: string
-  features?: string[]
+  features?: Array<{
+    description: string
+  }>
   extended_features?: Array<{
-    type: string
     description: string
   }>
 }
@@ -40,15 +41,19 @@ const getDescriptionFromBlockaidValidation = ({
   extended_features,
   features,
 }: BlockaidValidation): string => {
+  if (description) {
+    return description
+  }
+
   if (extended_features && extended_features.length > 0) {
     return extended_features.map(f => f.description).join('\n')
   }
 
   if (features && features.length > 0) {
-    return features.join('\n')
+    return features.map(f => f.description).join('\n')
   }
 
-  return shouldBePresent(description || reason)
+  return shouldBePresent(reason)
 }
 
 export const parseBlockaidValidation = (
