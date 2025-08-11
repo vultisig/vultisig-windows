@@ -1,46 +1,18 @@
-import { EvmChain } from '@core/chain/Chain'
-import { productRootDomain } from '@core/config'
-
-import {
-  BlockaidValidation,
-  getRiskLevelFromBlockaidValidation,
-} from '../api/core'
+import { BlockaidValidation, parseBlockaidValidation } from '../api/core'
 import { queryBlockaid } from '../api/query'
 import { BlockaidTxScanResolver } from '../resolver'
 
 type BlockaidScanResponse = {
-  validation: BlockaidValidation & {
-    description: string
-  }
+  validation: BlockaidValidation
 }
 
-export const scanEvmTxWithBlockaid: BlockaidTxScanResolver<EvmChain> = async ({
-  chain,
+export const scanEvmTxWithBlockaid: BlockaidTxScanResolver = async ({
   data,
 }) => {
-  const body = {
-    chain: chain.toLowerCase(),
-    data,
-    metadata: {
-      domain: productRootDomain,
-    },
-  }
-
   const { validation } = await queryBlockaid<BlockaidScanResponse>(
     '/evm/json-rpc/scan',
-    body
+    data
   )
 
-  const { description } = validation
-
-  const level = getRiskLevelFromBlockaidValidation(validation)
-
-  if (level === null) {
-    return null
-  }
-
-  return {
-    level,
-    description,
-  }
+  return parseBlockaidValidation(validation)
 }

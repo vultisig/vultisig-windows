@@ -1,27 +1,21 @@
 import { getCoinType } from '@core/chain/coin/coinType'
-import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignTwPublicKey } from '@core/mpc/keysign/tw/getKeysignTwPublicKey'
-import { getSolanaSendTxInputData } from '@core/mpc/keysign/txInputData/solana/send'
+import { getSuiTxInputData } from '@core/mpc/keysign/txInputData/sui'
 import { assertField } from '@lib/utils/record/assertField'
 
 import { OtherChain } from '../../../../../../Chain'
 import { decodeTx } from '../../../../../../tx/decode'
 import { BlockaidTxScanInputResolver } from '../resolver'
 
-export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
-  OtherChain.Solana
-> = ({ payload, walletCore, chain }) => {
+export const getSuiBlockaidTxScanInput: BlockaidTxScanInputResolver<
+  OtherChain.Sui
+> = ({ payload, walletCore }) => {
   const coin = assertField(payload, 'coin')
 
-  const swapPayload = getKeysignSwapPayload(payload)
-
-  if (swapPayload) {
-    return null
-  }
-
-  const txInputData = getSolanaSendTxInputData({
+  const [txInputData] = getSuiTxInputData({
     keysignPayload: payload,
     walletCore,
+    chain: OtherChain.Sui,
   })
 
   const publicKeyData = getKeysignTwPublicKey(payload)
@@ -37,7 +31,7 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
   publicKeys.add(publicKey.data())
 
   const coinType = getCoinType({
-    chain,
+    chain: OtherChain.Sui,
     walletCore,
   })
 
@@ -48,8 +42,8 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
     publicKeys
   )
 
-  const { encoded } = decodeTx({
-    chain,
+  const { unsignedTx } = decodeTx({
+    chain: OtherChain.Sui,
     compiledTx,
   })
 
@@ -57,8 +51,6 @@ export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
     chain: 'mainnet',
     options: ['validation'],
     account_address: coin.address,
-    encoding: 'base58',
-    transactions: [encoded],
-    method: 'signAndSendTransaction',
+    transaction: unsignedTx as unknown as string,
   }
 }
