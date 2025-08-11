@@ -158,6 +158,14 @@ export class Solana implements Wallet {
     return this.#account ? [this.#account] : []
   }
 
+  get on() {
+    return this.#on
+  }
+
+  get off() {
+    return this.#off
+  }
+
   constructor() {
     this.isPhantom = true
     this.isXDEFI = true
