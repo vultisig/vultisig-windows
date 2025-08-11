@@ -28,6 +28,7 @@ export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
       params: [{ from: coin.address, to, value, data }],
     },
     chain: chain.toLowerCase(),
+    metadata: {},
   })
 
   const swapPayload = getKeysignSwapPayload(payload)
