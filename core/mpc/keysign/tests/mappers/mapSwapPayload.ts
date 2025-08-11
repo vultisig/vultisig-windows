@@ -3,47 +3,11 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { bigishToString, emptyToUndefined } from '../utils'
 import { mapNestedCoin } from './mapNestedCoin'
 
-// ---------- debug helper (no-op unless DEBUG_SWAP is set) ----------
-const swapDebug = (...args: any[]) => {
-  if (!process.env.DEBUG_SWAP) return
-  // stderr tends to show up even when test runners quiet stdout
-  console.error('[swap-debug]', ...args)
-}
-
-// BigInt-safe JSON.stringify for clean logs
-const json = (v: any) =>
-  JSON.stringify(v, (_k, x) => (typeof x === 'bigint' ? x.toString() : x), 2)
-
-// log which module is actually running (helps catch path/caching issues)
-swapDebug('mapper file:', __filename)
-
 export const mapSwapPayload = (
   spRaw: any
 ): KeysignPayload['swapPayload'] | undefined => {
-  if (!spRaw) {
-    swapDebug('no swap payload provided')
-    return undefined
-  }
+  if (!spRaw) return
 
-  // peek at what we got
-  try {
-    const keys = Object.keys(spRaw || {})
-    swapDebug('input keys', keys)
-    swapDebug(
-      'has.Oneinch/oneinch/OneInch:',
-      !!spRaw.OneinchSwapPayload,
-      !!spRaw.oneinchSwapPayload,
-      !!spRaw.OneInchSwapPayload
-    )
-    swapDebug(
-      'has.Thorchain:',
-      !!(spRaw.ThorchainSwapPayload || spRaw.thorchainSwapPayload)
-    )
-  } catch {
-    // ignore debug issues
-  }
-
-  // ---------- OneInch / Lifiswap (EVM & Solana) ----------
   if (
     spRaw.OneinchSwapPayload ||
     spRaw.oneinchSwapPayload ||
@@ -72,7 +36,6 @@ export const mapSwapPayload = (
                     $typeName: '' as any,
                     data: o.quote.tx.data,
                     from: o.quote.tx.from,
-                    // IMPORTANT: avoid BigInt(undefined) crash
                     gas:
                       o.quote.tx.gas !== undefined && o.quote.tx.gas !== null
                         ? BigInt(o.quote.tx.gas)
@@ -90,11 +53,9 @@ export const mapSwapPayload = (
       },
     }
 
-    swapDebug('oneinch payload (pre-encode):\n' + json(res.value))
     return res
   }
 
-  // ---------- THORChain ----------
   if (spRaw.ThorchainSwapPayload || spRaw.thorchainSwapPayload) {
     const t = spRaw.ThorchainSwapPayload ?? spRaw.thorchainSwapPayload
 
@@ -126,10 +87,6 @@ export const mapSwapPayload = (
       },
     }
 
-    swapDebug('thorchain payload (pre-encode):\n' + json(res.value))
     return res
   }
-
-  swapDebug('no known swap payload type matched')
-  return undefined
 }
