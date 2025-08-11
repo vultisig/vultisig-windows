@@ -23,6 +23,7 @@ export default async () => {
           nodePolyfills({
             exclude: ['fs'],
             protocolImports: true,
+            globals: { Buffer: true },
           }),
         ]
         break
@@ -32,6 +33,11 @@ export default async () => {
 
     return defineConfig({
       plugins,
+      resolve: {
+        alias: {
+          'vite-plugin-node-polyfills/shims/buffer': 'buffer',
+        },
+      },
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
