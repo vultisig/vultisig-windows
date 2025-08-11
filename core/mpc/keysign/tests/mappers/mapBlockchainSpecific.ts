@@ -70,15 +70,25 @@ export const mapBlockchainSpecific = (bsRaw: any) => {
   // THORChain
   if (bsRaw.ThorchainSpecific || bsRaw.thorchainSpecific) {
     const t = bsRaw.ThorchainSpecific ?? bsRaw.thorchainSpecific
+
+    const hasIsDeposit =
+      (t.is_deposit ?? t.isDeposit) !== undefined &&
+      (t.is_deposit ?? t.isDeposit) !== null
+    const isDepositVal = hasIsDeposit
+      ? Boolean(t.is_deposit ?? t.isDeposit)
+      : undefined
+
+    const txTypeSrc = t.transaction_type ?? t.transactionType
+    const hasTxType = txTypeSrc !== undefined && txTypeSrc !== null
+    const txTypeVal = hasTxType ? Number(txTypeSrc) : undefined
+
     return {
       thorchainSpecific: {
         accountNumber: numberOrUndefined(t.account_number ?? t.accountNumber),
         sequence: numberOrUndefined(t.sequence),
         fee: numberOrUndefined(t.fee),
-        isDeposit: booleanOrUndefined(t.is_deposit ?? t.isDeposit),
-        transactionType: numberOrUndefined(
-          t.transaction_type ?? t.transactionType
-        ),
+        isDeposit: isDepositVal,
+        transactionType: txTypeVal,
       },
     }
   }
