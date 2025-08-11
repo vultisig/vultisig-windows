@@ -51,6 +51,6 @@ export const getSuiBlockaidTxScanInput: BlockaidTxScanInputResolver<
     chain: 'mainnet',
     options: ['validation'],
     account_address: coin.address,
-    transaction: unsignedTx as unknown as string,
+    transaction: unsignedTx,
   }
 }
