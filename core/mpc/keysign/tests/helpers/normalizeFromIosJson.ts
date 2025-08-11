@@ -40,9 +40,7 @@ export const normalizeFromIosJson = (input: any) => {
     isNativeToken: booleanOrUndefined(
       coinSrc.is_native_token ?? coinSrc.isNativeToken
     ),
-    contractAddress: emptyToUndefined(
-      coinSrc.contract_address ?? coinSrc.contractAddress
-    ),
+    contractAddress: coinSrc.contract_address ?? coinSrc.contractAddress ?? '',
     hexPublicKey: coinSrc.hex_public_key ?? coinSrc.hexPublicKey,
     logo: coinSrc.logo,
   }
