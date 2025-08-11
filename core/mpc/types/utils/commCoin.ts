@@ -7,10 +7,12 @@ import {
   CoinSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 
-export const fromCommCoin = (coin: CommCoin): AccountCoin => {
+export const fromCommCoin = <T extends Chain = Chain>(
+  coin: CommCoin
+): AccountCoin<T> => {
   return {
     id: coin.contractAddress || undefined,
-    chain: coin.chain as Chain,
+    chain: coin.chain as T,
     address: coin.address,
     ticker: coin.ticker,
     logo: coin.logo,

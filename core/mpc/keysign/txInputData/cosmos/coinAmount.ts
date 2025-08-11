@@ -6,7 +6,7 @@ import { KeysignPayload } from '../../../types/vultisig/keysign/v1/keysign_messa
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 
 export const getCosmosCoinAmount = (input: KeysignPayload) => {
-  const coin = getKeysignCoin(input)
+  const coin = getKeysignCoin<CosmosChain>(input)
 
   const denom = isFeeCoin(coin)
     ? cosmosFeeCoinDenom[coin.chain as CosmosChain]
