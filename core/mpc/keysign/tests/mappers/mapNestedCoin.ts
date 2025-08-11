@@ -1,20 +1,17 @@
-import {
-  booleanOrUndefined,
-  emptyToUndefined,
-  numberOrUndefined,
-} from '../utils'
+import { Coin } from '../../../types/vultisig/keysign/v1/coin_pb'
 
-export const mapNestedCoin = (c: any) => {
-  if (!c) return undefined
+export const mapNestedCoin = (c: any): Coin => {
   return {
-    ticker: c.ticker,
     chain: c.chain,
+    ticker: c.ticker,
     address: c.address,
-    contractAddress: emptyToUndefined(c.contract_address ?? c.contractAddress),
-    decimals: numberOrUndefined(c.decimals),
-    isNativeToken: booleanOrUndefined(c.is_native_token ?? c.isNativeToken),
+    hexPublicKey: c.hex_public_key ?? c.hexPublicKey,
+    $typeName: 'vultisig.keysign.v1.Coin',
+    // IMPORTANT: preserve empty string; do NOT emptyToUndefined here
+    contractAddress: c.contract_address ?? c.contractAddress ?? '',
+    decimals: Number(c.decimals),
+    isNativeToken: Boolean(c.is_native_token ?? c.isNativeToken),
     priceProviderId: c.price_provider_id ?? c.priceProviderId,
     logo: c.logo,
-    hexPublicKey: c.hex_public_key ?? c.hexPublicKey,
   }
 }
