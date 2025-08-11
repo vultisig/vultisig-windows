@@ -50,6 +50,7 @@ type ICustomTransactionPayload = {
   method: string
   address: string
   message: string
+  chain?: Chain
 }
 
 export namespace TransactionType {

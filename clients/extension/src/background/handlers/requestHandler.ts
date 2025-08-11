@@ -689,6 +689,7 @@ export const handleRequest = (
                 method,
                 address: String(address),
                 message: fullMessage,
+                chain: chain,
               },
             },
             status: 'default',
@@ -788,6 +789,25 @@ export const handleRequest = (
           reject()
         }
 
+        break
+      }
+      case RequestMethod.CTRL.SIGN_MESSAGE: {
+        if (Array.isArray(params)) {
+          const [{ message }] = params
+          handleSendTransaction({
+            transactionPayload: {
+              custom: {
+                method,
+                address: '',
+                message: message,
+                chain: chain,
+              },
+            },
+            status: 'default',
+          }).then(result => {
+            resolve(shouldBePresent(result.hash))
+          })
+        }
         break
       }
       default: {
