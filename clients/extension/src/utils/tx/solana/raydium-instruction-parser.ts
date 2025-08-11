@@ -2,7 +2,10 @@ import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 
-import { AddressTableLookup, resolveAddressTableKeys } from './solanaSwap'
+import {
+  AddressTableLookup,
+  resolveAddressTableKeys,
+} from './parseSolanaTransaction'
 import {
   ParsedInstructionsSolanaSwapParams,
   PartialInstruction,

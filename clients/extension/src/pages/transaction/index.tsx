@@ -3,8 +3,8 @@ import { getVaultTransactions } from '@clients/extension/src/transactions/state/
 import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
+import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/parseSolanaTransaction'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
-import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/solanaSwap'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
