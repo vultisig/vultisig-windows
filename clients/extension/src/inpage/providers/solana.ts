@@ -340,8 +340,6 @@ export class Solana implements Wallet {
     transaction: Transaction | VersionedTransaction,
     skipBroadcast: boolean = true
   ) => {
-    console.log('signTransaction:', { transaction, skipBroadcast })
-
     if (isVersionedTransaction(transaction)) {
       const result = (await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
@@ -415,7 +413,7 @@ export class Solana implements Wallet {
             },
             from: senderTokenAccountInfo.owner.toString(),
             to: recipient,
-            skipBroadcast: true,
+            skipBroadcast,
           }
         } else {
           continue

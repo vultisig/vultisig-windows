@@ -54,15 +54,14 @@ export class VultisigSolanaWalletAccount implements WalletAccount {
     label,
     icon,
   }: Omit<WalletAccount, 'chains' | 'features'>) {
-    if (new.target === VultisigSolanaWalletAccount) {
-      Object.freeze(this)
-    }
-
     this.#address = address
     this.#publicKey = publicKey
     this.#chains = chains
     this.#features = features
     this.#label = label
     this.#icon = icon
+    if (new.target === VultisigSolanaWalletAccount) {
+      Object.freeze(this)
+    }
   }
 }
