@@ -16,7 +16,8 @@ import { registerWallet } from './solana/register'
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
   const cosmosProvider = Cosmos.getInstance()
-  registerWallet(new Solana())
+  const solanaProvider = new Solana()
+  registerWallet(solanaProvider)
   return {
     bitcoin: utxo(MessageKey.BITCOIN_REQUEST, 'Bitcoin_bitcoin-mainnet'),
     bitcoincash: utxo(
@@ -45,7 +46,7 @@ export const createProviders = () => {
     },
     polkadot: Polkadot.getInstance(),
     ripple: Ripple.getInstance(),
-    solana: new Solana(),
+    solana: solanaProvider,
     thorchain: THORChain.getInstance(),
     zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
   }
