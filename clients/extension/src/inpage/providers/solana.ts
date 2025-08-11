@@ -1,3 +1,4 @@
+import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -26,6 +27,17 @@ import {
   type SolanaSignTransactionOutput,
 } from '@solana/wallet-standard-features'
 import {
+  Connection,
+  PublicKey,
+  SendOptions,
+  SystemInstruction,
+  SystemProgram,
+  Transaction,
+  TransactionSignature,
+  VersionedTransaction,
+} from '@solana/web3.js'
+import type { Wallet } from '@wallet-standard/base'
+import {
   StandardConnect,
   type StandardConnectFeature,
   type StandardConnectMethod,
@@ -38,18 +50,6 @@ import {
   type StandardEventsNames,
   type StandardEventsOnMethod,
 } from '@wallet-standard/features'
-import type { Wallet } from '@wallet-standard/base'
-import {
-  Connection,
-  PublicKey,
-  SendOptions,
-  SystemInstruction,
-  SystemProgram,
-  Transaction,
-  TransactionSignature,
-  VersionedTransaction,
-} from '@solana/web3.js'
-
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey, RequestMethod } from '../../utils/constants'
@@ -63,21 +63,13 @@ import {
   Messaging,
   TransactionType,
 } from '../../utils/interfaces'
-import { Callback, Network } from '../constants'
+import { Callback } from '../constants'
+import icon from '../icon'
 import { messengers } from '../messenger'
 import { VultisigSolanaWalletAccount } from './solana/account'
-import { isSolanaChain, SOLANA_CHAINS, SolanaChain } from './solana/chains'
+import { isSolanaChain, SolanaChain, SolanaChains } from './solana/chains'
 import { createSolanaSignInMessage } from './solana/signIn'
-import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
-import { Vultisig } from './solana/vultisig'
-import icon from '../icon'
 
-export const VultisigNamespace = 'vultisig:'
-export type VultisigFeature = {
-  [VultisigNamespace]: {
-    vultisig: Vultisig
-  }
-}
 export class Solana implements Wallet {
   #_publicKey: PublicKey | null = null
   #_isConnected: boolean = false
@@ -103,7 +95,7 @@ export class Solana implements Wallet {
   }
 
   get chains() {
-    return SOLANA_CHAINS.slice()
+    return SolanaChains.slice()
   }
   get isConnected() {
     return this.#_isConnected
@@ -186,7 +178,7 @@ export class Solana implements Wallet {
     if (address) {
       this.isConnected = true
       this.publicKey = new PublicKey(address)
-      let pubkey = this.publicKey.toBytes()
+      const pubkey = this.publicKey.toBytes()
       const account = this.#account
       if (
         !account ||
@@ -220,8 +212,11 @@ export class Solana implements Wallet {
   }
 
   #on: StandardEventsOnMethod = (event, listener) => {
-    this.#listeners[event]?.push(listener) ||
-      (this.#listeners[event] = [listener])
+    if (this.#listeners[event]) {
+      this.#listeners[event]!.push(listener)
+    } else {
+      this.#listeners[event] = [listener]
+    }
     return (): void => this.#off(event, listener)
   }
 

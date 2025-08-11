@@ -1,5 +1,4 @@
 import type {
-  DEPRECATED_WalletsWindow,
   Wallet,
   WalletEventsWindow,
   WindowRegisterWalletEvent,

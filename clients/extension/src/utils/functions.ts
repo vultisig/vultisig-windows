@@ -153,12 +153,12 @@ export const bytesEqual = (a: Uint8Array, b: Uint8Array): boolean => {
   return arraysEqual(a, b)
 }
 
-interface Indexed<T> {
+type Indexed<T> = {
   length: number
   [index: number]: T
 }
 
-export const arraysEqual = <T>(a: Indexed<T>, b: Indexed<T>): boolean => {
+const arraysEqual = <T>(a: Indexed<T>, b: Indexed<T>): boolean => {
   if (a === b) return true
 
   const length = a.length

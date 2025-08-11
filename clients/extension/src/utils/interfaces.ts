@@ -236,7 +236,7 @@ export type IKeysignTransactionPayload = {
   isDeposit?: boolean
 }
 
-export type ISerializedTransactionPayload = {
+type ISerializedTransactionPayload = {
   data: Uint8Array
   skipBroadcast?: boolean
 }
