@@ -150,7 +150,7 @@ export const TransactionPage = () => {
               }),
             }
           },
-          serialized: async serialized => {
+          serialized: async ({ data: serialized, skipBroadcast }) => {
             const parsed = await getParsedSolanaTransaction(
               walletCore,
               serialized
@@ -160,7 +160,8 @@ export const TransactionPage = () => {
               parsed,
               serialized,
               vault,
-              walletCore
+              walletCore,
+              skipBroadcast
             )
             return { keysign: keysignPayload }
           },

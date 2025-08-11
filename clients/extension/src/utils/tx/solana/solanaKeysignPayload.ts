@@ -20,7 +20,8 @@ export const getSolanaKeysignPayload = (
   parsedTransactionParams: ParsedSolanaTransactionParams,
   serialized: Uint8Array,
   vault: Vault,
-  walletCore: WalletCore
+  walletCore: WalletCore,
+  skipBroadcast?: boolean
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -148,6 +149,7 @@ export const getSolanaKeysignPayload = (
             ? { case: 'oneinchSwapPayload', value: swapPayload }
             : undefined,
           toAddress: parsedTransactionParams.receiverAddress,
+          skipBroadcast,
         })
 
         resolve(keysignPayload)

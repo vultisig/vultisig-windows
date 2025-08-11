@@ -11,11 +11,12 @@ import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdef
 import { MessageKey } from '@clients/extension/src/utils/constants'
 
 import { callPopupApi } from '../../popup/api/call'
+import { registerWallet } from './solana/register'
 
 export const createProviders = () => {
   const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
   const cosmosProvider = Cosmos.getInstance()
-
+  registerWallet(new Solana())
   return {
     bitcoin: utxo(MessageKey.BITCOIN_REQUEST, 'Bitcoin_bitcoin-mainnet'),
     bitcoincash: utxo(

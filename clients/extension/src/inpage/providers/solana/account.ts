@@ -1,5 +1,6 @@
 import {
   SolanaSignAndSendTransaction,
+  SolanaSignIn,
   SolanaSignMessage,
   SolanaSignTransaction,
 } from '@solana/wallet-standard-features'
@@ -11,6 +12,7 @@ const features = [
   SolanaSignAndSendTransaction,
   SolanaSignTransaction,
   SolanaSignMessage,
+  SolanaSignIn,
 ] as const
 
 export class VultisigSolanaWalletAccount implements WalletAccount {
