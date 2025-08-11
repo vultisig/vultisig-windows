@@ -5,7 +5,7 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 
 import { getTxInputData } from '../txInputData'
-import { normalizeFromIosJson } from './helpers/normalizeFromIosJson'
+import { normalizeKeysignPayloadFromJson } from './helpers/normalizeKeysignPayloadFromJson'
 import { resolveChainFromFixture } from './helpers/resolveChainFromFixture'
 
 type Case = {
@@ -34,7 +34,7 @@ describe('iOS fixtures parity', () => {
   const cases = loadAllCases()
 
   it.each(cases)('%s', ({ keysign_payload, expected_image_hash }) => {
-    const keysignPayload = normalizeFromIosJson(keysign_payload)
+    const keysignPayload = normalizeKeysignPayloadFromJson(keysign_payload)
     const chain = resolveChainFromFixture(keysign_payload.coin.chain)
     const inputs = getTxInputData({
       keysignPayload,

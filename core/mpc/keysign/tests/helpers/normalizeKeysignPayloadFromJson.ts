@@ -27,7 +27,7 @@ import { toBlockchainSpecificOneof } from './toBlockchainSpecificOneof'
  *   (and keeps unknowns as-is if they appear)
  * - optional approve/erc20 approve payload passthrough if provided by fixtures
  */
-export const normalizeFromIosJson = (input: any) => {
+export const normalizeKeysignPayloadFromJson = (input: any) => {
   const src = structuredClone(input)
 
   const coinSrc = src.coin ?? {}
@@ -69,12 +69,8 @@ export const normalizeFromIosJson = (input: any) => {
       }))
     : []
 
-  const approve =
-    src.ApprovePayload ??
-    src.approve_payload ??
-    src.approvePayload ??
-    src.erc20ApprovePayload ??
-    src.erc20_approve_payload
+  // Need to include the old `approve_payload` field for parity with iOS.
+  const approve = src.erc20ApprovePayload ?? src.erc20_approve_payload
 
   const approveMapped = approve
     ? {
