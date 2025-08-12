@@ -33,11 +33,6 @@ export default async () => {
 
     return defineConfig({
       plugins,
-      resolve: {
-        alias: {
-          'vite-plugin-node-polyfills/shims/buffer': 'buffer',
-        },
-      },
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
@@ -62,7 +57,7 @@ export default async () => {
     return defineConfig({
       plugins: [
         react(),
-        nodePolyfills({ exclude: ['fs'] }),
+        nodePolyfills({ exclude: ['fs'], globals: { Buffer: true } }),
         wasm(),
         topLevelAwait(),
         viteStaticCopy({
