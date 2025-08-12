@@ -1,9 +1,8 @@
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { removePersistentState } from '@core/extension/state/persistent/removePersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { queriesPersisterKey } from '@core/ui/storage/queriesPersister'
 import { Persister } from '@tanstack/react-query-persist-client'
-
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { removePersistentState } from '../state/persistent/removePersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
 
 export const queriesPersister: Persister = {
   persistClient: async value => {

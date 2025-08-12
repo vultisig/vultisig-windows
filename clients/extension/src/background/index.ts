@@ -1,4 +1,5 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
+import { runBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
@@ -6,7 +7,6 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { Result } from '@lib/utils/types/Result'
 
 import { ExtensionApiMessage } from '../api'
-import { runInpageBackgroundChannelBackgroundAgent } from '../channels/inpageBackground/background'
 import { callPopupApiFromBackground } from '../popup/api/call/resolvers/background'
 import { MessageKey } from '../utils/constants'
 import { backgroundApi } from './api'
@@ -47,7 +47,7 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
 )
 keepAliveHandler()
 
-runInpageBackgroundChannelBackgroundAgent<ExtensionApiMessage, Result>({
+runBridgeBackgroundAgent<ExtensionApiMessage, Result>({
   handleRequest: ({ message, context, reply }) => {
     attempt(
       matchRecordUnion<ExtensionApiMessage, Promise<unknown>>(message, {

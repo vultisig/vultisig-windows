@@ -1,4 +1,5 @@
-import { runInpageBackgroundChannelContentAgent } from '../channels/inpageBackground/content'
+import { runBridgeContentAgent } from '@core/inpage-provider/bridge/content'
+
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
 import { initializeMessenger } from '../messengers/initializeMessenger'
 import { getPrioritizeWallet } from '../state/currentSettings/isPrioritized'
@@ -17,6 +18,8 @@ const insertInpageScript = () => {
   ;(document.head || document.documentElement).appendChild(script)
 }
 try {
+  runBridgeContentAgent()
+
   insertInpageScript()
   setupBridgeMessengerRelay()
 } catch (error) {
@@ -29,5 +32,3 @@ window.addEventListener('vulticonnect:inpage:ready', async () => {
     vultisigDefaultProvider: await getPrioritizeWallet(),
   })
 })
-
-runInpageBackgroundChannelContentAgent()
