@@ -140,10 +140,6 @@ export class Solana implements Wallet {
   constructor() {
     this.isPhantom = true
     this.isXDEFI = true
-    if (new.target === Solana) {
-      Object.freeze(this)
-    }
-
     this.#connected()
   }
 
