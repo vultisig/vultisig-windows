@@ -13,7 +13,7 @@ import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { getSolanaToken } from '@core/chain/coin/find/resolvers/solana/getSolanaToken'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'

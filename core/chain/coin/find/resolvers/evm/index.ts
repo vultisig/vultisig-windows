@@ -1,14 +1,13 @@
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
-import { queryOneInch } from '@core/chain/coin/find/evm/queryOneInch'
-import { FindCoinsResolver } from '@core/chain/coin/find/FindCoinsResolver'
+import { evmNativeCoinAddress } from '@core/chain/chains/evm/config'
+import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
+import { queryOneInch } from '@core/chain/coin/find/resolvers/evm/queryOneInch'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { without } from '@lib/utils/array/without'
 import { attempt } from '@lib/utils/attempt'
 import { NoDataError } from '@lib/utils/error/NoDataError'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
-
-import { evmNativeCoinAddress } from '../../../chains/evm/config'
 
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,

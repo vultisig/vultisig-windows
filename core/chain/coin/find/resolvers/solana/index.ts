@@ -1,9 +1,8 @@
 import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
+import { getSolanaToken } from '@core/chain/coin/find/resolvers/solana/getSolanaToken'
 import { without } from '@lib/utils/array/without'
 import { attempt } from '@lib/utils/attempt'
-
-import { FindCoinsResolver } from '../FindCoinsResolver'
 
 export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
   const accounts = await getSplAccounts(address)

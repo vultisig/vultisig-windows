@@ -1,4 +1,4 @@
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { getSolanaToken } from '@core/chain/coin/find/resolvers/solana/getSolanaToken'
 
 import { CustomTokenResolver } from './CustomTokenResolver'
 

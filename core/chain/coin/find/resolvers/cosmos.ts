@@ -2,11 +2,10 @@ import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
-
-import { FindCoinsResolver } from './FindCoinsResolver'
 
 export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
   address,

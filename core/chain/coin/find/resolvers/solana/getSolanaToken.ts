@@ -1,8 +1,7 @@
+import { Chain } from '@core/chain/Chain'
+import { Coin, Token } from '@core/chain/coin/Coin'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-
-import { Chain } from '../../../Chain'
-import { Coin, Token } from '../../Coin'
-import { SolanaJupiterToken } from '../../jupiter/token'
 
 export const getSolanaToken = async (address: string): Promise<Token<Coin>> => {
   const { decimals, logoURI, symbol, extensions } =
