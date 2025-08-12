@@ -38,6 +38,7 @@ export const getSolanaSendTxInputData = ({
           transferTransaction: TW.Solana.Proto.Transfer.create({
             recipient,
             value: Long.fromString(amount.toString()),
+            memo: keysignPayload.memo,
           }),
         }
       }
