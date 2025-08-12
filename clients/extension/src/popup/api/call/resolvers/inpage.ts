@@ -5,12 +5,12 @@ import { ExtensionApiMessage } from '../../../../api'
 import { PopupApiInterface, PopupApiMethodName } from '../../interface'
 import { CallPopupApiResolver, CallPopupApiResolverInput } from '../resolver'
 
-export const callPopupApiFromInpage: CallPopupApiResolver<any> = async <
+export const callPopupApiFromInpage: CallPopupApiResolver = async <
   M extends PopupApiMethodName,
 >({
   call,
   options,
-}: CallPopupApiResolverInput<M>): Promise<PopupApiInterface[M]['output']> => {
+}: CallPopupApiResolverInput<M>) => {
   const message: ExtensionApiMessage = {
     popup: {
       call,
