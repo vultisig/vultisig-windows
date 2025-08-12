@@ -1,7 +1,7 @@
 import { OtherChain } from '@core/chain/Chain'
+import { getSuiClient } from '@core/chain/chains/sui/client'
 
-import { getSuiClient } from '../../chains/sui/client'
-import { TxHashResolver } from './resolver'
+import { TxHashResolver } from '../resolver'
 
 export const getSuiTxHash: TxHashResolver<OtherChain.Sui> = async ({
   unsignedTx,

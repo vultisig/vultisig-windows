@@ -2,7 +2,7 @@ import { CosmosChain } from '@core/chain/Chain'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { sha256 } from 'viem'
 
-import { TxHashResolver } from './resolver'
+import { TxHashResolver } from '../resolver'
 
 export const getCosmosTxHash: TxHashResolver<CosmosChain> = ({
   serialized,

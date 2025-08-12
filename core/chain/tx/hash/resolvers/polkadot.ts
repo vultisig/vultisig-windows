@@ -1,7 +1,7 @@
 import { OtherChain } from '@core/chain/Chain'
+import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 
-import { getPolkadotClient } from '../../chains/polkadot/client'
-import { TxHashResolver } from './resolver'
+import { TxHashResolver } from '../resolver'
 
 export const getPolkadotTxHash: TxHashResolver<OtherChain.Polkadot> = async ({
   encoded,
