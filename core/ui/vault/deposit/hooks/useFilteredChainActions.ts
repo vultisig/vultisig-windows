@@ -1,9 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { knownTokens } from '@core/chain/coin/knownTokens'
+import { featureFlags } from '@core/ui/config'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { useMemo } from 'react'
 
-import { featureFlags } from '../../../config'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
 

@@ -3,7 +3,6 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import {
   rujiraGraphQlEndpoint,
   RujiraStakeView,
-  rujiraStakingConfig,
 } from '../../../cosmos/thor/rujira/config'
 
 type RootData = {
@@ -58,8 +57,3 @@ export async function fetchRujiraStakeView(
     rewardsTicker: s?.pendingRevenue?.asset?.metadata?.symbol ?? 'USDC',
   }
 }
-
-// TODO: fix this
-export const toDisplayRUJI = (u: string) => Number(u) / 10 ** 8
-export const toDisplayUSDC = (u: string) =>
-  Number(u) / 10 ** rujiraStakingConfig.revenueDecimals

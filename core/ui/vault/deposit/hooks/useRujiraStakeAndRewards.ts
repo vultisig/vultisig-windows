@@ -1,9 +1,7 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import {
-  fetchRujiraStakeView,
-  toDisplayRUJI,
-  toDisplayUSDC,
-} from '@core/chain/chains/thorchain/ruji/services/fetchStakeView'
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
+import { fetchRujiraStakeView } from '@core/chain/chains/thorchain/ruji/services/fetchStakeView'
 import { useQuery } from '@tanstack/react-query'
 
 import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
@@ -16,9 +14,15 @@ export const useRujiraStakeAndRewards = () => {
     queryFn: () => fetchRujiraStakeView(address!),
     select: res => ({
       bondedRaw: res.stakeAmount,
-      bonded: toDisplayRUJI(res.stakeAmount),
+      bonded: fromChainAmount(
+        res.stakeAmount,
+        rujiraStakingConfig.bondDecimals
+      ),
       rewardsRaw: res.rewardsAmount,
-      rewardsUSDC: toDisplayUSDC(res.rewardsAmount),
+      rewardsUSDC: fromChainAmount(
+        res.rewardsAmount,
+        rujiraStakingConfig.revenueDecimals
+      ),
     }),
   })
 }

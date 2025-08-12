@@ -89,13 +89,13 @@ export const getRequiredFieldsPerChainAction = (
         required: true as const,
       },
     ],
-    schema: (_: FunctionSchema) =>
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
         selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
-          .pipe(z.number().positive().min(0.001)),
+          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
       }),
   },
   withdraw_ruji_rewards: {

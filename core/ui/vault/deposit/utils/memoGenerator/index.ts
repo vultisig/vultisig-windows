@@ -46,8 +46,14 @@ export const generateMemo = ({
       ).toString()
       return `bond:${rujiraStakingConfig.bondDenom}:${amount}`
     },
-    unstake_ruji: () => '',
-    withdraw_ruji_rewards: () => '',
+    unstake_ruji: () => {
+      const amount = toChainAmount(
+        Number(depositFormData['amount'] ?? 0),
+        selectedCoin!.decimals
+      ).toString()
+      return `withdraw:${rujiraStakingConfig.bondDenom}:${amount}`
+    },
+    withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
     mint: () => '',
     redeem: () => '',
     stake: () =>

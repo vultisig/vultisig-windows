@@ -49,10 +49,9 @@ export const useDepositBalance = ({
   ])
 
   const balance = useMemo(() => {
-    if (selectedCoin) return selectedCoinBalance
     if (isTCYAction) return 0
     return totalTokenAmount
-  }, [selectedCoin, selectedCoinBalance, isTCYAction, totalTokenAmount])
+  }, [isTCYAction, totalTokenAmount])
 
   return {
     balance,

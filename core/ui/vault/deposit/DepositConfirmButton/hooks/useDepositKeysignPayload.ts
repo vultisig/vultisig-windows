@@ -150,9 +150,8 @@ export function useDepositKeysignPayload({
                   : [],
             },
           }
-
-          basePayload.toAmount =
-            action === 'withdraw_ruji_rewards' ? '0' : amountUnits
+          basePayload.toAddress = rujiraStakingConfig.contract
+          basePayload.toAmount = action === 'stake_ruji' ? amountUnits : '0'
 
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
