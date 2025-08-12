@@ -3,6 +3,7 @@ import { getManifestVersion } from '@clients/extension/src/state/utils/getManife
 import { storage } from '@clients/extension/src/storage'
 import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
 import { isPopupView } from '@clients/extension/src/utils/functions'
+import { queriesPersister } from '@core/extension/storage/queriesPersister'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
@@ -11,8 +12,6 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
-
-import { queriesPersister } from '../storage/queriesPersister'
 
 const coreState: CoreState = {
   ...storage,
