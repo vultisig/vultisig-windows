@@ -1,5 +1,6 @@
-import { getPersistentState } from '../../state/persistent/getPersistentState'
-import { setPersistentState } from '../../state/persistent/setPersistentState'
+import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
+import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+
 import { StorageMigrationKey } from '.'
 
 const latestMigrationKey = 'latestMigration'
