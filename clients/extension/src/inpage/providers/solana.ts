@@ -43,7 +43,6 @@ import {
   type StandardConnectMethod,
   StandardDisconnect,
   type StandardDisconnectFeature,
-  type StandardDisconnectMethod,
   StandardEvents,
   type StandardEventsFeature,
   type StandardEventsListeners,
@@ -70,47 +69,27 @@ import { VultisigSolanaWalletAccount } from './solana/account'
 import { isSolanaChain, SolanaChain, SolanaChains } from './solana/chains'
 import { createSolanaSignInMessage } from './solana/signIn'
 
+const frozenChains = Object.freeze([...SolanaChains] as const)
 export class Solana implements Wallet {
-  #_publicKey: PublicKey | null = null
-  #_isConnected: boolean = false
-  readonly #listeners: {
+  private _publicKey: PublicKey | null = null
+  private _isConnected = false
+  private readonly listeners: {
     [E in StandardEventsNames]?: StandardEventsListeners[E][]
   } = {}
-  readonly #version = '1.0.0' as const
-  readonly #name = 'Vultisig' as const
-  readonly #icon = icon as `data:image/png;base64,${string}`
-  #account: VultisigSolanaWalletAccount | null = null
+  readonly version = '1.0.0' as const
+  readonly name = 'Vultisig' as const
+  readonly icon = icon as `data:image/png;base64,${string}`
+  private account: VultisigSolanaWalletAccount | null = null
   public isPhantom: boolean
   public isXDEFI: boolean
-  get version() {
-    return this.#version
-  }
+  readonly chains = frozenChains as Wallet['chains']
 
-  get name() {
-    return this.#name
-  }
-
-  get icon() {
-    return this.#icon
-  }
-
-  get chains() {
-    return SolanaChains.slice()
-  }
   get isConnected() {
-    return this.#_isConnected
-  }
-
-  set isConnected(isConnected: boolean) {
-    this.#_isConnected = isConnected
+    return this._isConnected
   }
 
   get publicKey() {
-    return this.#_publicKey
-  }
-
-  set publicKey(publicKey: PublicKey | null) {
-    this.#_publicKey = publicKey
+    return this._publicKey
   }
 
   get features(): StandardConnectFeature &
@@ -127,11 +106,11 @@ export class Solana implements Wallet {
       },
       [StandardDisconnect]: {
         version: '1.0.0',
-        disconnect: this.#disconnect,
+        disconnect: this.disconnect,
       },
       [StandardEvents]: {
         version: '1.0.0',
-        on: this.#on,
+        on: this.on,
       },
       [SolanaSignAndSendTransaction]: {
         version: '1.0.0',
@@ -155,21 +134,12 @@ export class Solana implements Wallet {
   }
 
   get accounts() {
-    return this.#account ? [this.#account] : []
-  }
-
-  get on() {
-    return this.#on
-  }
-
-  get off() {
-    return this.#off
+    return this.account ? [this.account] : []
   }
 
   constructor() {
     this.isPhantom = true
     this.isXDEFI = true
-    this.isConnected = false
     if (new.target === Solana) {
       Object.freeze(this)
     }
@@ -184,16 +154,16 @@ export class Solana implements Wallet {
     })) as string | undefined
 
     if (address) {
-      this.isConnected = true
-      this.publicKey = new PublicKey(address)
-      const pubkey = this.publicKey.toBytes()
-      const account = this.#account
+      this._isConnected = true
+      this._publicKey = new PublicKey(address)
+      const pubkey = this._publicKey.toBytes()
+      const account = this.account
       if (
         !account ||
         account.address !== address ||
         !bytesEqual(account.publicKey, pubkey)
       ) {
-        this.#account = new VultisigSolanaWalletAccount({
+        this.account = new VultisigSolanaWalletAccount({
           address,
           publicKey: pubkey,
           label: 'Vultisig Extension',
@@ -206,7 +176,7 @@ export class Solana implements Wallet {
   }
 
   #connect: StandardConnectMethod = async () => {
-    if (!this.#account) {
+    if (!this.account) {
       await this.connect()
     }
 
@@ -215,17 +185,13 @@ export class Solana implements Wallet {
     return { accounts: this.accounts }
   }
 
-  #disconnect: StandardDisconnectMethod = async () => {
-    await this.disconnect()
-  }
-
-  #on: StandardEventsOnMethod = (event, listener) => {
-    if (this.#listeners[event]) {
-      this.#listeners[event]!.push(listener)
+  public on: StandardEventsOnMethod = (event, listener) => {
+    if (this.listeners[event]) {
+      this.listeners[event]!.push(listener)
     } else {
-      this.#listeners[event] = [listener]
+      this.listeners[event] = [listener]
     }
-    return (): void => this.#off(event, listener)
+    return (): void => this.off(event, listener)
   }
 
   #emit<E extends StandardEventsNames>(
@@ -233,14 +199,14 @@ export class Solana implements Wallet {
     ...args: Parameters<StandardEventsListeners[E]>
   ): void {
     // eslint-disable-next-line prefer-spread
-    this.#listeners[event]?.forEach(listener => listener.apply(null, args))
+    this.listeners[event]?.forEach(listener => listener.apply(null, args))
   }
 
-  #off<E extends StandardEventsNames>(
+  public off<E extends StandardEventsNames>(
     event: E,
     listener: StandardEventsListeners[E]
   ): void {
-    this.#listeners[event] = this.#listeners[event]?.filter(
+    this.listeners[event] = this.listeners[event]?.filter(
       existingListener => listener !== existingListener
     )
   }
@@ -250,19 +216,19 @@ export class Solana implements Wallet {
       method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
       params: [],
     }).then(account => {
-      this.publicKey = new PublicKey(shouldBePresent(account))
-      this.isConnected = true
+      this._publicKey = new PublicKey(shouldBePresent(account))
+      this._isConnected = true
       return { publicKey: this.publicKey }
     })
   }
 
   disconnect = async () => {
-    this.publicKey = null
+    this._publicKey = null
     this.request({
       method: RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS,
       params: [],
     })
-    this.isConnected = false
+    this._isConnected = false
     await Promise.resolve()
   }
 
@@ -298,7 +264,7 @@ export class Solana implements Wallet {
   signMessage = async (
     message: Uint8Array
   ): Promise<{ signature: Uint8Array }> => {
-    if (!this.#account) throw new Error('not connected')
+    if (!this.account) throw new Error('not connected')
     const messageBuffer = Buffer.from(message)
     const decodedString = new TextDecoder().decode(messageBuffer)
     const signature = await this.request({
@@ -312,10 +278,10 @@ export class Solana implements Wallet {
   }
   signIn = async (input: SolanaSignInInput): Promise<SolanaSignInOutput> => {
     await this.#connect()
-    if (!this.#account || !this.publicKey) {
+    if (!this.account || !this.publicKey) {
       throw new Error('not connected')
     }
-    const account = this.#account
+    const account = this.account
     if (input?.address && input.address !== account.address) {
       throw new Error('requested address does not match connected account')
     }
@@ -470,13 +436,13 @@ export class Solana implements Wallet {
   }
 
   #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
-    if (!this.#account) throw new Error('not connected')
+    if (!this.account) throw new Error('not connected')
 
     const outputs: SolanaSignTransactionOutput[] = []
 
     if (inputs.length === 1) {
       const { transaction, account, chain } = inputs[0]!
-      if (account !== this.#account) throw new Error('invalid account')
+      if (account !== this.account) throw new Error('invalid account')
       if (chain && !isSolanaChain(chain)) throw new Error('invalid chain')
 
       const signedTransaction = await this.signTransaction(
@@ -496,7 +462,7 @@ export class Solana implements Wallet {
     } else if (inputs.length > 1) {
       let chain: SolanaChain | undefined = undefined
       for (const input of inputs) {
-        if (input.account !== this.#account) throw new Error('invalid account')
+        if (input.account !== this.account) throw new Error('invalid account')
         if (input.chain) {
           if (!isSolanaChain(input.chain)) throw new Error('invalid chain')
           if (chain) {
@@ -535,12 +501,12 @@ export class Solana implements Wallet {
   }
 
   #signMessage: SolanaSignMessageMethod = async (...inputs) => {
-    if (!this.#account) throw new Error('not connected')
+    if (!this.account) throw new Error('not connected')
 
     const outputs: SolanaSignMessageOutput[] = []
     if (inputs.length === 1) {
       const { message, account } = inputs[0]
-      if (account !== this.#account) throw new Error('invalid account')
+      if (account !== this.account) throw new Error('invalid account')
       const { signature } = await this.signMessage(message)
       outputs.push({
         signedMessage: message,
@@ -557,7 +523,7 @@ export class Solana implements Wallet {
   #signAndSendTransaction: SolanaSignAndSendTransactionMethod = async (
     ...inputs
   ) => {
-    if (!this.#account) throw new Error('not connected')
+    if (!this.account) throw new Error('not connected')
 
     const outputs: SolanaSignAndSendTransactionOutput[] = []
 
@@ -565,7 +531,7 @@ export class Solana implements Wallet {
       const { transaction, account, chain, options } = inputs[0]!
       const { minContextSlot, preflightCommitment, skipPreflight, maxRetries } =
         options || {}
-      if (account !== this.#account) throw new Error('invalid account')
+      if (account !== this.account) throw new Error('invalid account')
       if (!isSolanaChain(chain)) throw new Error('invalid chain')
 
       const { signature } = await this.signAndSendTransaction(

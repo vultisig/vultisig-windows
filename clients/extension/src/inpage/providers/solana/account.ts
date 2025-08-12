@@ -17,16 +17,12 @@ const features = [
 ] as const
 
 export class VultisigSolanaWalletAccount implements WalletAccount {
-  readonly #address: WalletAccount['address']
+  readonly address: WalletAccount['address']
   readonly #publicKey: WalletAccount['publicKey']
   readonly #chains: WalletAccount['chains']
   readonly #features: WalletAccount['features']
-  readonly #label: WalletAccount['label']
-  readonly #icon: WalletAccount['icon']
-
-  get address() {
-    return this.#address
-  }
+  readonly label: WalletAccount['label']
+  readonly icon: WalletAccount['icon']
 
   get publicKey() {
     return this.#publicKey.slice()
@@ -40,28 +36,18 @@ export class VultisigSolanaWalletAccount implements WalletAccount {
     return this.#features.slice()
   }
 
-  get label() {
-    return this.#label
-  }
-
-  get icon() {
-    return this.#icon
-  }
-
   constructor({
     address,
     publicKey,
     label,
     icon,
   }: Omit<WalletAccount, 'chains' | 'features'>) {
-    this.#address = address
+    this.address = address
     this.#publicKey = publicKey
     this.#chains = chains
     this.#features = features
-    this.#label = label
-    this.#icon = icon
-    if (new.target === VultisigSolanaWalletAccount) {
-      Object.freeze(this)
-    }
+    this.label = label
+    this.icon = icon
+    Object.freeze(this)
   }
 }
