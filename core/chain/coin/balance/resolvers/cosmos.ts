@@ -1,10 +1,10 @@
 import { CosmosChain } from '@core/chain/Chain'
+import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { getCosmosWasmTokenBalanceUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { getCosmosClient } from '../../chains/cosmos/client'
-import { getCosmosWasmTokenBalanceUrl } from '../../chains/cosmos/cosmosRpcUrl'
-import { getDenom } from '../utils/getDenom'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 const isWasmToken = (id: string): boolean => {
   if (id.startsWith('ibc/') || id.startsWith('factory/')) {

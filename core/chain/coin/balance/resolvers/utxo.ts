@@ -1,8 +1,8 @@
 import { UtxoChain } from '@core/chain/Chain'
+import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { bigIntSum } from '@lib/utils/bigint/bigIntSum'
 
-import { getUtxos } from '../../chains/utxo/tx/getUtxos'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 export const getUtxoCoinBalance: CoinBalanceResolver<
   UtxoChain

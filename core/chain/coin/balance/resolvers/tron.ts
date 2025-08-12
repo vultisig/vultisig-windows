@@ -1,10 +1,10 @@
+import { tronRpcUrl } from '@core/chain/chains/tron/config'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import base58 from 'bs58'
 
-import { tronRpcUrl } from '../../chains/tron/config'
-import { isFeeCoin } from '../utils/isFeeCoin'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 /**
  * Fetches balance for a Tron token (native or TRC20)

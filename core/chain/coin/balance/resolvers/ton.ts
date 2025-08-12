@@ -1,7 +1,7 @@
+import { getTonAccountInfo } from '@core/chain/chains/ton/account/getTonAccountInfo'
 import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
 
-import { getTonAccountInfo } from '../../chains/ton/account/getTonAccountInfo'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 export const getTonCoinBalance: CoinBalanceResolver = async input => {
   const { balance } = await getTonAccountInfo(input.address)

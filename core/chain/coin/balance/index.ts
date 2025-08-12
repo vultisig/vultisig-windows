@@ -1,16 +1,16 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { getCardanoCoinBalance } from './cardano'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
-import { getCosmosCoinBalance } from './cosmos'
-import { getEvmCoinBalance } from './evm'
-import { getPolkadotCoinBalance } from './polkadot'
-import { getRippleCoinBalance } from './ripple'
-import { getSolanaCoinBalance } from './solana'
-import { getSuiCoinBalance } from './sui'
-import { getTonCoinBalance } from './ton'
-import { getTronCoinBalance } from './tron'
-import { getUtxoCoinBalance } from './utxo'
+import { CoinBalanceResolver } from './resolver'
+import { getCardanoCoinBalance } from './resolvers/cardano'
+import { getCosmosCoinBalance } from './resolvers/cosmos'
+import { getEvmCoinBalance } from './resolvers/evm'
+import { getPolkadotCoinBalance } from './resolvers/polkadot'
+import { getRippleCoinBalance } from './resolvers/ripple'
+import { getSolanaCoinBalance } from './resolvers/solana'
+import { getSuiCoinBalance } from './resolvers/sui'
+import { getTonCoinBalance } from './resolvers/ton'
+import { getTronCoinBalance } from './resolvers/tron'
+import { getUtxoCoinBalance } from './resolvers/utxo'
 
 const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   utxo: getUtxoCoinBalance,

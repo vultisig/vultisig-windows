@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 type PolkadotAccountBalance = {
   data: {

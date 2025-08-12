@@ -1,8 +1,8 @@
 import { OtherChain } from '@core/chain/Chain'
+import { cardanoApiUrl } from '@core/chain/chains/cardano/client/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { cardanoApiUrl } from '../../chains/cardano/client/config'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { CoinBalanceResolver } from '../resolver'
 
 type CardanoAddressInfoResponse = Array<{
   balance: string

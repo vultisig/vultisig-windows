@@ -1,5 +1,6 @@
-import { getSuiClient } from '../../chains/sui/client'
-import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { getSuiClient } from '@core/chain/chains/sui/client'
+
+import { CoinBalanceResolver } from '../resolver'
 
 export const getSuiCoinBalance: CoinBalanceResolver = async input => {
   const rpcClient = getSuiClient()
