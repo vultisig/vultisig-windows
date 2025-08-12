@@ -1,8 +1,10 @@
 import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts'
 import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
-import { getSolanaToken } from '@core/chain/coin/find/resolvers/solana/getSolanaToken'
 import { without } from '@lib/utils/array/without'
 import { attempt } from '@lib/utils/attempt'
+
+import { Chain } from '../../../../Chain'
+import { getSolanaTokenMetadata } from '../../../token/metadata/resolvers/solana'
 
 export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
   const accounts = await getSplAccounts(address)
@@ -12,11 +14,12 @@ export const findSolanaCoins: FindCoinsResolver = async ({ address }) => {
   )
 
   const result = await Promise.all(
-    tokenAddresses.map(async tokenAddress => {
-      const { data } = await attempt(getSolanaToken(tokenAddress))
+    tokenAddresses.map(async id => {
+      const key = { id, chain: Chain.Solana } as const
+      const { data } = await attempt(getSolanaTokenMetadata(key))
 
       if (data && data.priceProviderId) {
-        return { ...data, address }
+        return { ...key, ...data, address }
       }
     })
   )
