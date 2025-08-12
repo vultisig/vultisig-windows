@@ -1,15 +1,15 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
-import { broadcastCosmosTx } from './cosmos'
-import { broadcastEvmTx } from './evm'
-import { broadcastPolkadotTx } from './polkadot'
-import { broadcastRippleTx } from './ripple'
-import { broadcastSolanaTx } from './solana'
-import { broadcastSuiTx } from './sui'
-import { broadcastTonTx } from './ton'
-import { broadcastTronTx } from './tron'
-import { broadcastUtxoTx } from './utxo'
+import { BroadcastTxResolver } from './resolver'
+import { broadcastCosmosTx } from './resolvers/cosmos'
+import { broadcastEvmTx } from './resolvers/evm'
+import { broadcastPolkadotTx } from './resolvers/polkadot'
+import { broadcastRippleTx } from './resolvers/ripple'
+import { broadcastSolanaTx } from './resolvers/solana'
+import { broadcastSuiTx } from './resolvers/sui'
+import { broadcastTonTx } from './resolvers/ton'
+import { broadcastTronTx } from './resolvers/tron'
+import { broadcastUtxoTx } from './resolvers/utxo'
 
 const handlers: Record<ChainKind, BroadcastTxResolver<any>> = {
   cardano: broadcastUtxoTx,

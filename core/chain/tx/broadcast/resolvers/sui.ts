@@ -1,7 +1,7 @@
 import { OtherChain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastSuiTx: BroadcastTxResolver<OtherChain.Sui> = async ({
   tx,

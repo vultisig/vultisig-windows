@@ -3,7 +3,7 @@ import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { attempt } from '@lib/utils/attempt'
 import { isInError } from '@lib/utils/error/isInError'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastPolkadotTx: BroadcastTxResolver<
   OtherChain.Polkadot

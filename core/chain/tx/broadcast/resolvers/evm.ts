@@ -4,7 +4,7 @@ import { attempt } from '@lib/utils/attempt'
 import { isInError } from '@lib/utils/error/isInError'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastEvmTx: BroadcastTxResolver<EvmChain> = async ({
   chain,

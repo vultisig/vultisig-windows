@@ -2,7 +2,7 @@ import { OtherChain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
 import { Base64EncodedWireTransaction } from '@solana/web3.js'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastSolanaTx: BroadcastTxResolver<
   OtherChain.Solana

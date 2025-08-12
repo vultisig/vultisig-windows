@@ -3,9 +3,9 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { getBlockchairBaseUrl } from '../../chains/utxo/client/getBlockchairBaseUrl'
-import { DecodedTx } from '../decode'
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { getBlockchairBaseUrl } from '../../../chains/utxo/client/getBlockchairBaseUrl'
+import { DecodedTx } from '../../decode'
+import { BroadcastTxResolver } from '../resolver'
 
 type UtxoBasedDecodedTx = DecodedTx<UtxoChain> | DecodedTx<OtherChain.Cardano>
 

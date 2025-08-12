@@ -1,7 +1,7 @@
 import { OtherChain } from '@core/chain/Chain'
 import { getRippleClient } from '@core/chain/chains/ripple/client'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastRippleTx: BroadcastTxResolver<
   OtherChain.Ripple

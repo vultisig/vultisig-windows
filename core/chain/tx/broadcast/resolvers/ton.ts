@@ -4,7 +4,7 @@ import { attempt } from '@lib/utils/attempt'
 import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { BroadcastTxResolver } from './BroadcastTxResolver'
+import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastTonTx: BroadcastTxResolver<OtherChain.Ton> = async ({
   tx,
