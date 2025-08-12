@@ -1,8 +1,10 @@
 import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
+import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
+import { NavigationProvider } from '@lib/ui/navigation/state'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 
@@ -54,11 +56,13 @@ const App = () => {
   )
 
   return (
-    <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
-      <LauncherObserver />
-      <ActiveView views={views} />
-      <OnboardingResetter />
-    </CoreApp>
+    <NavigationProvider initialValue={{ history: [initialCoreView] }}>
+      <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
+        <LauncherObserver />
+        <ActiveView views={views} />
+        <OnboardingResetter />
+      </CoreApp>
+    </NavigationProvider>
   )
 }
 

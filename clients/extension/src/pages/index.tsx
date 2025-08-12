@@ -1,8 +1,7 @@
 import { views } from '@clients/extension/src/navigation/views'
-import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
-import { storage } from '@clients/extension/src/storage'
-import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
 import { isPopupView } from '@clients/extension/src/utils/functions'
+import { storage } from '@core/extension/storage'
+import { StorageMigrationsManager } from '@core/extension/storage/migrations/StorageMigrationManager'
 import { queriesPersister } from '@core/extension/storage/queriesPersister'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
@@ -13,6 +12,8 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
 
+import { NavigationProvider } from '../navigation/NavigationProvider'
+
 const coreState: CoreState = {
   ...storage,
   client: 'extension',
@@ -22,7 +23,7 @@ const coreState: CoreState = {
   },
   mpcDevice: 'extension',
   getClipboardText: () => navigator.clipboard.readText(),
-  version: getManifestVersion(),
+  version: chrome.runtime.getManifest().version,
   isLocalModeAvailable: false,
   getMpcServerUrl: async ({ serverType }) => {
     if (serverType === 'relay') {
@@ -56,12 +57,15 @@ const ExtensionGlobalStyle = createGlobalStyle`
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ExtensionGlobalStyle />
-    <CoreApp
-      migrationsManager={StorageMigrationsManager}
-      coreState={coreState}
-      queriesPersister={queriesPersister}
-    >
-      <ActiveView views={views} />
-    </CoreApp>
+    <NavigationProvider>
+      {' '}
+      <CoreApp
+        migrationsManager={StorageMigrationsManager}
+        coreState={coreState}
+        queriesPersister={queriesPersister}
+      >
+        <ActiveView views={views} />
+      </CoreApp>
+    </NavigationProvider>
   </StrictMode>
 )

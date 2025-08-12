@@ -1,7 +1,6 @@
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
 import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
-import { getCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
   MessageKey,
@@ -10,9 +9,9 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
+import { getCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
+import { getCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-
-import { getCurrentCosmosChainId } from '../../storage/currentCosmosChainId'
 
 export const dispatchMessage = async (
   type: MessageKey,
