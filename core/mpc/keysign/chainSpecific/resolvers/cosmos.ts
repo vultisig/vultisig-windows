@@ -7,8 +7,8 @@ import {
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
-import { ChainsBySpecific } from './KeysignChainSpecific'
+import { ChainsBySpecific } from '../KeysignChainSpecific'
+import { ChainSpecificResolver } from '../resolver'
 
 type CosmosSpecificChain = ChainsBySpecific<'cosmosSpecific'>
 

@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
-import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
+import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 

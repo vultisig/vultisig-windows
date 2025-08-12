@@ -11,7 +11,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { address } from '@solana/web3.js'
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainSpecificResolver } from '../resolver'
 
 export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
   coin,

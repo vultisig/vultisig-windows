@@ -15,7 +15,7 @@ import {
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { publicActionsL2 } from 'viem/zksync'
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainSpecificResolver } from '../resolver'
 
 const baseFeeMultiplier = 1.5
 

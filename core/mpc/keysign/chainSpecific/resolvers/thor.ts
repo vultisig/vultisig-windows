@@ -8,7 +8,7 @@ import {
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainSpecificResolver } from '../resolver'
 
 export const getThorchainSpecific: ChainSpecificResolver<
   THORChainSpecific

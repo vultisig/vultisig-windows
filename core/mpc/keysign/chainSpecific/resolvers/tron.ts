@@ -7,7 +7,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb' // Import the Coin schema
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainSpecificResolver } from '../resolver'
 
 export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
   coin,

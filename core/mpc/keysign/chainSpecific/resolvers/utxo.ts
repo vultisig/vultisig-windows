@@ -10,7 +10,7 @@ import {
   UTXOSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainSpecificResolver } from '../resolver'
 
 const dustStats = 600n
 
