@@ -8,10 +8,10 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
-import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
-import { GetTxInputDataInput } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
+import { GetTxInputDataInput } from '../resolver'
 
 export const getUtxoTxInputData = ({
   keysignPayload,

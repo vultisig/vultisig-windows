@@ -11,12 +11,12 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
-import { getTwChainId } from '../../tw/getTwChainId'
-import { toTwAddress } from '../../tw/toTwAddress'
-import { getKeysignCoin } from '../../utils/getKeysignCoin'
-import { TxInputDataResolver } from '../TxInputDataResolver'
+import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
+import { getKeysignTwPublicKey } from '../../../tw/getKeysignTwPublicKey'
+import { getTwChainId } from '../../../tw/getTwChainId'
+import { toTwAddress } from '../../../tw/toTwAddress'
+import { getKeysignCoin } from '../../../utils/getKeysignCoin'
+import { TxInputDataResolver } from '../../resolver'
 import { CosmosChainSpecific, getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosCoinAmount } from './coinAmount'
 

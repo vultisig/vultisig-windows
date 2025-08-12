@@ -1,9 +1,9 @@
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { getKeysignTwPublicKey } from '../tw/getKeysignTwPublicKey'
-import { TxInputDataResolver } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
+import { TxInputDataResolver } from '../resolver'
 
 export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   keysignPayload,

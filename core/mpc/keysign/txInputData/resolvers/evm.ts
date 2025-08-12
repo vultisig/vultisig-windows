@@ -14,12 +14,12 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 
-import { KeysignPayloadSchema } from '../../types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { getKeysignSwapPayload } from '../swap/getKeysignSwapPayload'
-import { KeysignSwapPayload } from '../swap/KeysignSwapPayload'
-import { toTwAddress } from '../tw/toTwAddress'
-import { TxInputDataResolver } from './TxInputDataResolver'
+import { KeysignPayloadSchema } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
+import { toTwAddress } from '../../tw/toTwAddress'
+import { TxInputDataResolver } from '../resolver'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')

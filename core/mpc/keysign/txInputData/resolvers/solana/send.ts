@@ -1,10 +1,10 @@
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { KeysignPayload } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { getKeysignCoin } from '../../utils/getKeysignCoin'
+import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
+import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 
 type GetSolanaSendTxInputDataInput = {
   keysignPayload: KeysignPayload

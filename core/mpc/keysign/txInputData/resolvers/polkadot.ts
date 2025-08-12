@@ -4,8 +4,8 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { GetTxInputDataInput } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { GetTxInputDataInput } from '../resolver'
 
 export const getPolkadotTxInputData = ({
   keysignPayload,

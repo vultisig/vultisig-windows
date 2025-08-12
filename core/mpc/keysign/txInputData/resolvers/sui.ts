@@ -2,8 +2,8 @@ import { SuiCoin } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { TxInputDataResolver } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { TxInputDataResolver } from '../resolver'
 
 export const getSuiTxInputData: TxInputDataResolver<'sui'> = ({
   keysignPayload,

@@ -3,8 +3,8 @@ import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { TxInputDataResolver } from './TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { TxInputDataResolver } from '../resolver'
 
 export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   keysignPayload,

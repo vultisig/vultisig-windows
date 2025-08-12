@@ -3,9 +3,9 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { TW } from '@trustwallet/wallet-core'
 
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { TxInputDataResolver } from '../TxInputDataResolver'
+import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
+import { TxInputDataResolver } from '../../resolver'
 import { getSolanaSendTxInputData } from './send'
 
 export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
