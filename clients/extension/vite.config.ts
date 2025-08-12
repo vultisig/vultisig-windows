@@ -57,7 +57,7 @@ export default async () => {
     return defineConfig({
       plugins: [
         react(),
-        nodePolyfills({ exclude: ['fs'], globals: { Buffer: true } }),
+        nodePolyfills({ exclude: ['fs'] }),
         wasm(),
         topLevelAwait(),
         viteStaticCopy({
