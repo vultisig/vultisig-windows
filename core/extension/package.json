@@ -5,6 +5,7 @@
   "dependencies": {
     "@core/chain": "workspace:*",
     "@core/config": "workspace:*",
+    "@core/mpc": "workspace:*",
     "@core/ui": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/utils": "workspace:*"
