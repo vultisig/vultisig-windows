@@ -6,7 +6,6 @@ import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
 import { storage } from './storage'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
-import { queriesPersister } from './storage/queriesPersister'
 
 const coreState: CoreState = {
   ...storage,
@@ -29,14 +28,8 @@ const coreState: CoreState = {
   vaultCreationMpcLib: 'DKLS',
 }
 
-export const ExtensionCoreApp = ({ children }: ChildrenProp) => {
-  return (
-    <CoreApp
-      migrationsManager={StorageMigrationsManager}
-      coreState={coreState}
-      queriesPersister={queriesPersister}
-    >
-      {children}
-    </CoreApp>
-  )
-}
+export const ExtensionCoreApp = ({ children }: ChildrenProp) => (
+  <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
+    {children}
+  </CoreApp>
+)

@@ -1,6 +1,7 @@
 import { views } from '@clients/extension/src/navigation/views'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { ExtensionQueryClientProvider } from '@core/extension/ExtensionQueryClientProvider'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
@@ -30,10 +31,12 @@ const ExtensionGlobalStyle = createGlobalStyle`
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ExtensionGlobalStyle />
-    <NavigationProvider>
-      <ExtensionCoreApp>
-        <ActiveView views={views} />
-      </ExtensionCoreApp>
-    </NavigationProvider>
+    <ExtensionQueryClientProvider>
+      <NavigationProvider>
+        <ExtensionCoreApp>
+          <ActiveView views={views} />
+        </ExtensionCoreApp>
+      </NavigationProvider>
+    </ExtensionQueryClientProvider>
   </StrictMode>
 )

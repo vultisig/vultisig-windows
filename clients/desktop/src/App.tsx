@@ -2,6 +2,7 @@ import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
+import { QueryClientProvider } from '@core/ui/query/QueryClientProvider'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { NavigationProvider } from '@lib/ui/navigation/state'
@@ -56,13 +57,15 @@ const App = () => {
   )
 
   return (
-    <NavigationProvider initialValue={{ history: [initialCoreView] }}>
-      <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
-        <LauncherObserver />
-        <ActiveView views={views} />
-        <OnboardingResetter />
-      </CoreApp>
-    </NavigationProvider>
+    <QueryClientProvider persister={queriesPersister}>
+      <NavigationProvider initialValue={{ history: [initialCoreView] }}>
+        <CoreApp coreState={coreState}>
+          <LauncherObserver />
+          <ActiveView views={views} />
+          <OnboardingResetter />
+        </CoreApp>
+      </NavigationProvider>
+    </QueryClientProvider>
   )
 }
 
