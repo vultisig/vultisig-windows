@@ -55,7 +55,11 @@ export function useDepositKeysignPayload({
         ? TransactionType.THOR_UNMERGE
         : action === 'merge'
           ? TransactionType.THOR_MERGE
-          : undefined
+          : action === 'stake_ruji' ||
+              action === 'unstake_ruji' ||
+              action === 'withdraw_ruji_rewards'
+            ? TransactionType.GENERIC_CONTRACT
+            : undefined
 
   const selectedCoin = depositFormData['selectedCoin'] as
     | AccountCoin
@@ -74,6 +78,10 @@ export function useDepositKeysignPayload({
   const invalid = cfg.requiresAmount && (!Number.isFinite(amount) || amount < 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
   const validatorAddress = depositFormData['validatorAddress'] as string
+  const isRujiAction =
+    action === 'stake_ruji' ||
+    action === 'unstake_ruji' ||
+    action === 'withdraw_ruji_rewards'
   const receiver = cfg.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : ''
@@ -116,23 +124,14 @@ export function useDepositKeysignPayload({
                 ? toChainAmount(amount, selectedCoin!.decimals).toString()
                 : '0'
 
-          let executeInner = ''
+          const executeInnerObj =
+            action === 'stake_ruji'
+              ? { account: { bond: {} } }
+              : action === 'unstake_ruji'
+                ? { account: { withdraw: { amount: amountUnits } } }
+                : { account: { claim: {} } }
 
-          switch (action) {
-            case 'stake_ruji':
-              executeInner = JSON.stringify({ account: { bond: {} } })
-              break
-
-            case 'unstake_ruji':
-              executeInner = JSON.stringify({
-                account: { withdraw: { amount: amountUnits } },
-              })
-              break
-
-            case 'withdraw_ruji_rewards':
-              executeInner = JSON.stringify({ account: { claim: {} } })
-              break
-          }
+          const executeInner = JSON.stringify(executeInnerObj)
 
           basePayload.contractPayload = {
             case: 'wasmExecuteContractPayload',
@@ -220,7 +219,11 @@ export function useDepositKeysignPayload({
           ])
         ) {
           basePayload.toAddress = shouldBePresent(
-            isTonFunction ? validatorAddress : receiver
+            isRujiAction
+              ? rujiraStakingConfig.contract
+              : isTonFunction
+                ? validatorAddress
+                : receiver
           )
           basePayload.toAmount = toChainAmount(
             shouldBePresent(amount),
@@ -260,6 +263,7 @@ export function useDepositKeysignPayload({
         amount,
         coin,
         depositFormData,
+        isRujiAction,
         isTonFunction,
         isUnmerge,
         memo,
