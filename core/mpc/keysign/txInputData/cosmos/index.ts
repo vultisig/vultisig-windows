@@ -175,9 +175,14 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             synth: false,
           }),
         })
-        const toAmount = Number(keysignPayload.toAmount || '0')
-        if (toAmount > 0) {
-          depositCoin.amount = keysignPayload.toAmount
+        const swapFromAmount =
+          swapPayload && 'native' in swapPayload
+            ? swapPayload.native.fromAmount
+            : undefined
+        const depositAmount = swapFromAmount ?? keysignPayload.toAmount
+
+        if (Number(depositAmount || '0') > 0) {
+          depositCoin.amount = depositAmount!
           depositCoin.decimals = new Long(coin.decimals)
         }
 
