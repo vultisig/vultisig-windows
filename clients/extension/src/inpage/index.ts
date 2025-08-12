@@ -11,8 +11,8 @@ const keepAlive = () => {
 }
 
 if (shouldInjectProvider()) {
+  runBridgeInpageAgent()
+
   injectToWindow()
   keepAlive()
 }
-
-runBridgeInpageAgent()

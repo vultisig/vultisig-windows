@@ -18,6 +18,8 @@ const insertInpageScript = () => {
   ;(document.head || document.documentElement).appendChild(script)
 }
 try {
+  runBridgeContentAgent()
+
   insertInpageScript()
   setupBridgeMessengerRelay()
 } catch (error) {
@@ -30,5 +32,3 @@ window.addEventListener('vulticonnect:inpage:ready', async () => {
     vultisigDefaultProvider: await getPrioritizeWallet(),
   })
 })
-
-runBridgeContentAgent()
