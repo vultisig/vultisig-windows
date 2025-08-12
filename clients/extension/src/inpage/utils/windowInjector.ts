@@ -74,12 +74,11 @@ function setupContentScriptMessenger(
           info: {
             icon: VULTI_ICON_RAW_SVG,
             name: 'Vultisig',
-            rdns: 'me.vultisig',
+            rdns: 'app.phantom',
             uuid: uuidv4(),
           },
-          provider: providerCopy as unknown as EIP1193Provider,
+          provider: ethereumProvider as unknown as EIP1193Provider,
         })
-
         Object.defineProperties(window, {
           ethereum: {
             get: () => window.vultiConnectRouter.currentProvider,
