@@ -23,7 +23,6 @@ export default async () => {
           nodePolyfills({
             exclude: ['fs'],
             protocolImports: true,
-            globals: { Buffer: true },
           }),
         ]
         break
