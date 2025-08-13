@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { knownTokens } from '@core/chain/coin/knownTokens'
-import { featureFlags } from '@core/ui/config'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 import { useMemo } from 'react'
 
@@ -23,13 +22,6 @@ export const useFilteredChainActions = (chain: DepositEnabledChain) => {
 
   return useMemo(() => {
     return actionsForCurrentChain.filter(action => {
-      if (
-        !featureFlags.mintAndRedeem &&
-        (action === 'mint' || action === 'redeem')
-      ) {
-        return false
-      }
-
       if (!rujiCoin && rujiAction.includes(action)) {
         return false
       }

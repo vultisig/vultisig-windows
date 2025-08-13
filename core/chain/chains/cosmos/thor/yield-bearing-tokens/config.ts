@@ -1,21 +1,24 @@
 export const yieldBearingAssetsIds = ['yRUNE', 'yTCY'] as const
 export type YieldBearingAsset = (typeof yieldBearingAssetsIds)[number]
 
+// MAINNET contracts
 export const yieldBearingAssetsContracts: Record<YieldBearingAsset, string> = {
-  yRUNE: 'sthor1qv8n2kz3j4h7w9v5k5w2c5g9q2v7e6xw5g0n6y',
-  yTCY: 'sthor1zv9m3kq2v6n8w4x8k8w3c6g0q3v8e7xw9g1n7z',
+  yRUNE: 'thor1mlphkryw5g54yfkrp6xpqzlpv4f8wh6hyw27yyg4z2els8a9gxpqhfhekt',
+  yTCY: 'thor1h0hr0rm3dawkedh44hlrmgvya6plsryehcr46yda2vj0wfwgq5xqrs86px',
 }
 
+// MAINNET affiliate contract + your affiliate address
 export const yieldBearingAssetsAffiliateContract =
-  'sthor1m4pk0kyc5xln5uznsur0d6frlvteghs0v6fyt8pw4vxfhfgskzts2g8ln6'
+  'thor1v3f7h384r8hw6r3dtcgfq6d5fq842u6cjzeuu8nr0cp93j7zfxyquyrfl8'
 export const yieldBearingAssetsAffiliateAddress =
   'thor1svfwxevnxtm4ltnw92hrqpqk4vzuzw9a4jzy04'
 
+// MAINNET receipt denoms
 export const yieldBearingAssetsReceiptDenoms: Record<
   YieldBearingAsset,
   string
 > = {
   yRUNE:
-    'x/nami-index-nav-sthor1552fjtt2u6evfxwmnx0w68kh7u4fqt7e6vv0du3vj5rwggumy5jsmwzjsr-rcpt',
-  yTCY: 'x/nami-index-nav-sthor14t7ns0zs8tfnxe8e0zke96y54g07tlwywgpm s4h3aaftvdtlparskcaflv-rcpt',
+    'x/nami-index-nav-thor1mlphkryw5g54yfkrp6xpqzlpv4f8wh6hyw27yyg4z2els8a9gxpqhfhekt-rcpt',
+  yTCY: 'x/nami-index-nav-thor1h0hr0rm3dawkedh44hlrmgvya6plsryehcr46yda2vj0wfwgq5xqrs86px-rcpt',
 }

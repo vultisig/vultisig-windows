@@ -1,21 +1,23 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
 import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import {
-  YieldBearingAsset,
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
   yieldBearingAssetsContracts,
+  yieldBearingAssetsReceiptDenoms,
 } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
 import {
   AccountCoin,
   extractAccountCoinKey,
 } from '@core/chain/coin/AccountCoin'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -57,7 +59,9 @@ export function useDepositKeysignPayload({
           ? TransactionType.THOR_MERGE
           : action === 'stake_ruji' ||
               action === 'unstake_ruji' ||
-              action === 'withdraw_ruji_rewards'
+              action === 'withdraw_ruji_rewards' ||
+              action === 'mint' ||
+              action === 'redeem'
             ? TransactionType.GENERIC_CONTRACT
             : undefined
 
@@ -157,50 +161,79 @@ export function useDepositKeysignPayload({
         }
 
         if (action === 'mint' || action === 'redeem') {
-          const asset = depositFormData['asset'] as YieldBearingAsset
+          // Figure out which vault we target from the selected coin
+          const selectedTicker = coin.ticker?.toLowerCase()
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
             shouldBePresent(amount),
             coin.decimals
           ).toString()
 
-          let executeInner: object
+          // Resolve contract & funds
+          let contractAddress: string
+          let funds: Array<{ denom: string; amount: string }>
+
           if (isDeposit) {
-            executeInner = {
+            // User selected base asset (RUNE or TCY)
+            const isRuneMint = selectedTicker === 'rune'
+            contractAddress = yieldBearingAssetsAffiliateContract
+            const targetYContract =
+              yieldBearingAssetsContracts[isRuneMint ? 'yRUNE' : 'yTCY']
+
+            const executeInner = {
               execute: {
-                // TODO: double check this!
-                contract_addr: yieldBearingAssetsContracts[asset],
+                contract_addr: targetYContract,
                 msg: Buffer.from(JSON.stringify({ deposit: {} })).toString(
                   'base64'
                 ),
                 affiliate: [yieldBearingAssetsAffiliateAddress, 10],
               },
             }
+
+            funds = [
+              { denom: isRuneMint ? 'rune' : 'tcy', amount: amountUnits },
+            ]
+
+            basePayload.contractPayload = {
+              case: 'wasmExecuteContractPayload',
+              value: {
+                senderAddress: coin.address,
+                contractAddress, // affiliate contract
+                executeMsg: JSON.stringify(executeInner),
+                coins: funds, // denom + amount (NOT contractAddress)
+              },
+            }
           } else {
-            executeInner = {
-              withdraw: { slippage: (slippage / 100).toFixed(4) },
+            // Redeem: user selected receipt token (yRUNE/yTCY)
+            const isYRUNE = coin.id === yieldBearingAssetsReceiptDenoms.yRUNE
+            const yContract =
+              yieldBearingAssetsContracts[isYRUNE ? 'yRUNE' : 'yTCY']
+
+            const executeInner = {
+              withdraw: { slippage: (slippage / 100).toFixed(2) },
+            } // 2dp like Android
+
+            funds = [
+              {
+                denom: getDenom(coin as CoinKey<CosmosChain>),
+                amount: amountUnits,
+              },
+            ]
+
+            basePayload.contractPayload = {
+              case: 'wasmExecuteContractPayload',
+              value: {
+                senderAddress: coin.address,
+                contractAddress: yContract,
+                executeMsg: JSON.stringify(executeInner),
+                coins: funds,
+              },
             }
           }
 
-          basePayload.contractPayload = {
-            case: 'wasmExecuteContractPayload',
-            value: {
-              senderAddress: coin.address,
-              contractAddress: isDeposit
-                ? yieldBearingAssetsAffiliateContract
-                : yieldBearingAssetsContracts[asset],
-              executeMsg: JSON.stringify(executeInner),
-              coins: isDeposit
-                ? [
-                    {
-                      contractAddress: asset === 'yRUNE' ? 'rune' : 'tcy',
-                      amount: amountUnits,
-                    },
-                  ]
-                : [],
-            },
-          }
           basePayload.toAmount = amountUnits
+          basePayload.memo = memo
+
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
