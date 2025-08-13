@@ -1,6 +1,6 @@
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { rujiGraphQlEndpoint } from '../../../cosmos/thor/ruji-unmerge/config'
+import { rujiraGraphQlEndpoint } from '../../../cosmos/thor/rujira/config'
 
 type MergeAccount = {
   shares: string
@@ -29,7 +29,7 @@ export type TokenBalance = {
 export const fetchMergeableTokenBalances = async (
   thorAddr: string
 ): Promise<TokenBalance[]> => {
-  const { data, errors } = await queryUrl<Gql>(rujiGraphQlEndpoint, {
+  const { data, errors } = await queryUrl<Gql>(rujiraGraphQlEndpoint, {
     body: {
       query: `
         query ($id: ID!) {

@@ -9,7 +9,6 @@ import {
   ErrorText,
   InputFieldWrapper,
 } from '@core/ui/vault/deposit/DepositForm/DepositForm.styled'
-import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { DepositFormHandlersProvider } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import {
   getChainActionSchema,
@@ -32,7 +31,7 @@ import { FC, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useSelectedCoinBalance } from '../hooks/useSelectedCoinBalance'
+import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositCoin } from '../state/coin'
 
 export type FormData = Record<string, any>
@@ -51,24 +50,19 @@ export const DepositForm: FC<DepositFormProps> = ({
   chainActionOptions,
   chain,
 }) => {
+  const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
+
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const { data: totalAmountAvailableForChainData } =
-    useGetTotalAmountAvailableForChain(chain)
-  const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
 
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
 
-  const selectedCoinBalance = useSelectedCoinBalance({
-    action: selectedChainAction,
-    selectedCoin: localSelectedCoin,
+  const { balance, balanceFormatted } = useDepositBalance({
     chain,
+    selectedChainAction,
+    selectedCoin: localSelectedCoin,
   })
-
-  const totalTokenAmount = localSelectedCoin
-    ? selectedCoinBalance
-    : (totalAmountAvailableForChainData?.totalTokenAmount ?? 0)
 
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
@@ -83,7 +77,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chainActionSchema,
     chain,
     walletCore,
-    totalTokenAmount
+    balance
   )
 
   const {
@@ -173,13 +167,10 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'unmerge',
                     'mint',
                     'redeem',
+                    'stake_ruji',
+                    'unstake_ruji',
+                    'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
-
-                const balance = selectedCoin
-                  ? selectedCoinBalance
-                  : isTCYAction
-                    ? 0
-                    : totalTokenAmount.toFixed(2)
 
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
@@ -197,11 +188,12 @@ export const DepositForm: FC<DepositFormProps> = ({
                           (
                           {selectedChainAction === 'unmerge' ? (
                             <>
-                              {t('shares')}: {balance}
+                              {t('shares')}: {balanceFormatted}
                             </>
                           ) : (
                             <>
-                              {t('balance')}: {balance} {ticker && ` ${ticker}`}
+                              {t('balance')}: {balanceFormatted}{' '}
+                              {ticker && ` ${ticker}`}
                             </>
                           )}
                           )

@@ -62,6 +62,46 @@ export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
 ) => ({
+  stake_ruji: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true as const,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
+      }),
+  },
+  unstake_ruji: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: t('amount'),
+        required: true as const,
+      },
+    ],
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({
+        selectedCoin: CoinSchema,
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
+      }),
+  },
+  withdraw_ruji_rewards: {
+    fields: [],
+    schema: (_: FunctionSchema) => z.object({}),
+  },
   mint: {
     fields: [
       { name: 'amount', type: 'number', label: t('amount'), required: true },

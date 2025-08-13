@@ -1,5 +1,6 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, CosmosChain } from '@core/chain/Chain'
+import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
@@ -38,6 +39,21 @@ export const generateMemo = ({
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
+    stake_ruji: () => {
+      const chainAmount = toChainAmount(
+        shouldBePresent(Number(amount)),
+        selectedCoin!.decimals
+      ).toString()
+      return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+    },
+    unstake_ruji: () => {
+      const chainAmount = toChainAmount(
+        shouldBePresent(Number(amount)),
+        selectedCoin!.decimals
+      ).toString()
+      return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+    },
+    withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
     mint: () => '',
     redeem: () => '',
     stake: () =>
