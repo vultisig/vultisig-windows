@@ -71,6 +71,7 @@ export function useDepositKeysignPayload({
   const coin = useCurrentVaultCoin(
     selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
+  console.log('🚀 ~ useDepositKeysignPayload ~ coin:', coin)
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const chainSpecificQuery = useDepositChainSpecificQuery(txType, coin)
@@ -161,24 +162,25 @@ export function useDepositKeysignPayload({
         }
 
         if (action === 'mint' || action === 'redeem') {
-          // Figure out which vault we target from the selected coin
-          const selectedTicker = coin.ticker?.toLowerCase()
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
             shouldBePresent(amount),
             coin.decimals
           ).toString()
 
-          // Resolve contract & funds
           let contractAddress: string
           let funds: Array<{ denom: string; amount: string }>
 
           if (isDeposit) {
-            // User selected base asset (RUNE or TCY)
-            const isRuneMint = selectedTicker === 'rune'
+            const baseDenom = getDenom(coin as CoinKey<CosmosChain>)
+            if (baseDenom !== 'rune' && baseDenom !== 'tcy') {
+              throw new Error('Mint supports RUNE/TCY only')
+            }
             contractAddress = yieldBearingAssetsAffiliateContract
             const targetYContract =
-              yieldBearingAssetsContracts[isRuneMint ? 'yRUNE' : 'yTCY']
+              yieldBearingAssetsContracts[
+                baseDenom === 'rune' ? 'yRUNE' : 'yTCY'
+              ]
 
             const executeInner = {
               execute: {
@@ -190,28 +192,25 @@ export function useDepositKeysignPayload({
               },
             }
 
-            funds = [
-              { denom: isRuneMint ? 'rune' : 'tcy', amount: amountUnits },
-            ]
+            funds = [{ denom: baseDenom, amount: amountUnits }]
 
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
                 senderAddress: coin.address,
-                contractAddress, // affiliate contract
+                contractAddress,
                 executeMsg: JSON.stringify(executeInner),
-                coins: funds, // denom + amount (NOT contractAddress)
+                coins: funds,
               },
             }
           } else {
-            // Redeem: user selected receipt token (yRUNE/yTCY)
             const isYRUNE = coin.id === yieldBearingAssetsReceiptDenoms.yRUNE
             const yContract =
               yieldBearingAssetsContracts[isYRUNE ? 'yRUNE' : 'yTCY']
 
             const executeInner = {
               withdraw: { slippage: (slippage / 100).toFixed(2) },
-            } // 2dp like Android
+            }
 
             funds = [
               {
