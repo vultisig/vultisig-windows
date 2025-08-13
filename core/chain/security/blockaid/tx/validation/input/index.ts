@@ -6,27 +6,27 @@ import {
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-import { BlockaidTxScanInput } from '../resolver'
+import { BlockaidTxValidationInput } from '../resolver'
 import {
-  BlockaidTxScanInputResolver,
-  BlockaidTxScanInputResolverInput,
+  BlockaidTxValidationInputResolver,
+  BlockaidTxValidationInputResolverInput,
 } from './resolver'
-import { getEvmBlockaidTxScanInput } from './resolvers/evm'
-import { getSolanaBlockaidTxScanInput } from './resolvers/solana'
-import { getSuiBlockaidTxScanInput } from './resolvers/sui'
+import { getEvmBlockaidTxValidationInput } from './resolvers/evm'
+import { getSolanaBlockaidTxValidationInput } from './resolvers/solana'
+import { getSuiBlockaidTxValidationInput } from './resolvers/sui'
 
 const resolvers: Record<
   BlockaidSupportedChainKind,
-  BlockaidTxScanInputResolver<any>
+  BlockaidTxValidationInputResolver<any>
 > = {
-  evm: getEvmBlockaidTxScanInput,
-  solana: getSolanaBlockaidTxScanInput,
-  sui: getSuiBlockaidTxScanInput,
+  evm: getEvmBlockaidTxValidationInput,
+  solana: getSolanaBlockaidTxValidationInput,
+  sui: getSuiBlockaidTxValidationInput,
 }
 
-export const getBlockaidTxScanInput = (
-  input: Omit<BlockaidTxScanInputResolverInput, 'chain'>
-): BlockaidTxScanInput | null => {
+export const getBlockaidTxValidationInput = (
+  input: Omit<BlockaidTxValidationInputResolverInput, 'chain'>
+): BlockaidTxValidationInput | null => {
   const chain = getKeysignChain(input.payload)
   if (!isOneOf(chain, blockaidSupportedChains)) {
     return null

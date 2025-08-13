@@ -3,9 +3,9 @@ import { assertField } from '@lib/utils/record/assertField'
 import { OtherChain } from '../../../../../../Chain'
 import { decodeTx } from '../../../../../../tx/decode'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
-import { BlockaidTxScanInputResolver } from '../resolver'
+import { BlockaidTxValidationInputResolver } from '../resolver'
 
-export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
+export const getSolanaBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
   OtherChain.Solana
 > = ({ payload, walletCore, chain }) => {
   const coin = assertField(payload, 'coin')

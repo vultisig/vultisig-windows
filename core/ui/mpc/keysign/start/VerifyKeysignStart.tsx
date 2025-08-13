@@ -1,4 +1,4 @@
-import { getBlockaidTxScanInput } from '@core/chain/security/blockaid/tx/scan/input'
+import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { BlockaidNoTxScanStatus } from '@core/ui/chain/security/blockaid/tx/BlockaidNoTxScanStatus'
 import { BlockaidTxScanning } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanning'
@@ -58,7 +58,7 @@ export const VerifyKeysignStart = ({
           return null
         }
 
-        return getBlockaidTxScanInput({
+        return getBlockaidTxValidationInput({
           payload,
           walletCore,
         })

@@ -6,10 +6,10 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
 
 import { EvmChain } from '../../../../../../Chain'
-import { BlockaidTxScanInput } from '../../resolver'
-import { BlockaidTxScanInputResolver } from '../resolver'
+import { BlockaidTxValidationInput } from '../../resolver'
+import { BlockaidTxValidationInputResolver } from '../resolver'
 
-export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
+export const getEvmBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
   EvmChain
 > = ({ payload, chain }) => {
   const coin = getKeysignCoin(payload)
@@ -36,7 +36,7 @@ export const getEvmBlockaidTxScanInput: BlockaidTxScanInputResolver<
   if (swapPayload) {
     return matchRecordUnion<
       KeysignSwapPayload,
-      Pick<BlockaidTxScanInput, 'data'> | null
+      Pick<BlockaidTxValidationInput, 'data'> | null
     >(swapPayload, {
       native: () => null,
       general: generalSwapPayload => {

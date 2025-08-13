@@ -3,9 +3,9 @@ import { assertField } from '@lib/utils/record/assertField'
 import { OtherChain } from '../../../../../../Chain'
 import { decodeTx } from '../../../../../../tx/decode'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
-import { BlockaidTxScanInputResolver } from '../resolver'
+import { BlockaidTxValidationInputResolver } from '../resolver'
 
-export const getSuiBlockaidTxScanInput: BlockaidTxScanInputResolver<
+export const getSuiBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
   OtherChain.Sui
 > = ({ payload, walletCore }) => {
   const coin = assertField(payload, 'coin')

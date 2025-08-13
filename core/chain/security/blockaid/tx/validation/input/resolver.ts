@@ -3,9 +3,9 @@ import { Resolver } from '@lib/utils/types/Resolver'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { BlockaidSupportedChain } from '../../../chains'
-import { BlockaidTxScanInput } from '../resolver'
+import { BlockaidTxValidationInput } from '../resolver'
 
-export type BlockaidTxScanInputResolverInput<
+export type BlockaidTxValidationInputResolverInput<
   T extends BlockaidSupportedChain = BlockaidSupportedChain,
 > = {
   payload: KeysignPayload
@@ -13,7 +13,7 @@ export type BlockaidTxScanInputResolverInput<
   chain: T
 }
 
-export type BlockaidTxScanInputResolver<
+export type BlockaidTxValidationInputResolver<
   T extends BlockaidSupportedChain = BlockaidSupportedChain,
 > = Resolver<
   {
@@ -21,5 +21,5 @@ export type BlockaidTxScanInputResolver<
     walletCore: WalletCore
     chain: T
   },
-  BlockaidTxScanInput['data'] | null
+  BlockaidTxValidationInput['data'] | null
 >

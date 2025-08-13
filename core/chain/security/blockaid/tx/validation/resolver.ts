@@ -1,15 +1,15 @@
 import { Resolver } from '@lib/utils/types/Resolver'
 
 import { BlockaidSupportedChain } from '../../chains'
-import { BlockaidTxScanResult } from './core'
+import { BlockaidValidation } from './api/core'
 
-export type BlockaidTxScanInput<
+export type BlockaidTxValidationInput<
   T extends BlockaidSupportedChain = BlockaidSupportedChain,
 > = {
   chain: T
   data: Record<string, unknown>
 }
 
-export type BlockaidTxScanResolver<
+export type BlockaidTxValidationResolver<
   T extends BlockaidSupportedChain = BlockaidSupportedChain,
-> = Resolver<BlockaidTxScanInput<T>, Promise<BlockaidTxScanResult>>
+> = Resolver<BlockaidTxValidationInput<T>, Promise<BlockaidValidation>>

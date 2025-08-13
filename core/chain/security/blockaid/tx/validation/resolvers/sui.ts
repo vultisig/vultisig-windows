@@ -1,14 +1,14 @@
 import { OtherChain } from '@core/chain/Chain'
 
-import { BlockaidValidation, parseBlockaidValidation } from '../api/core'
+import { BlockaidValidation } from '../api/core'
 import { queryBlockaid } from '../api/query'
-import { BlockaidTxScanResolver } from '../resolver'
+import { BlockaidTxValidationResolver } from '../resolver'
 
 type SuiBlockaidScanResponse = {
   validation: BlockaidValidation
 }
 
-export const scanSuiTxWithBlockaid: BlockaidTxScanResolver<
+export const getSuiTxBlockaidValidation: BlockaidTxValidationResolver<
   OtherChain.Sui
 > = async ({ data }) => {
   const { validation } = await queryBlockaid<SuiBlockaidScanResponse>(
@@ -16,5 +16,5 @@ export const scanSuiTxWithBlockaid: BlockaidTxScanResolver<
     data
   )
 
-  return parseBlockaidValidation(validation)
+  return validation
 }
