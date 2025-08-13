@@ -54,8 +54,26 @@ export const generateMemo = ({
       return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
     },
     withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
-    mint: () => '',
-    redeem: () => '',
+    mint: () => {
+      const token = shouldBePresent(selectedCoin, 'Selected coin')
+      const amountInUnits = toChainAmount(
+        shouldBePresent(amount),
+        token.decimals
+      ).toString()
+      const base = token.ticker.toLowerCase()
+      if (base !== 'rune' && base !== 'tcy')
+        throw new Error('Mint supports RUNE/TCY only')
+      return `receive:${base}:${amountInUnits}`
+    },
+    redeem: () => {
+      const token = shouldBePresent(selectedCoin, 'Selected coin')
+      const amountInUnits = toChainAmount(
+        shouldBePresent(amount),
+        token.decimals
+      ).toString()
+      const denom = shouldBePresent(token.id)
+      return `sell:${denom}:${amountInUnits}`
+    },
     stake: () =>
       match(chain as StakeableChain, {
         Ton: () => 'd',
