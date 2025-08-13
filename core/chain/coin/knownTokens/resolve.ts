@@ -1,4 +1,5 @@
 import { Chain, CosmosChain } from '@core/chain/Chain'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { attempt } from '@lib/utils/attempt'
 
 import { cosmosRpcUrl } from '../../chains/cosmos/cosmosRpcUrl'
@@ -37,10 +38,10 @@ const deriveTicker = (denom: string, meta?: DenomMetadata | null): string => {
     return `S${base}`
   }
   if (denom.startsWith('x/')) {
-    return denom.split('/').pop()!
+    return getLastItem(denom.split('/'))
   }
   if (denom.startsWith('factory/')) {
-    const sub = denom.split('/').pop()!
+    const sub = getLastItem(denom.split('/'))
     return sub.replace(/^u/, '')
   }
   return denom
@@ -62,8 +63,6 @@ const getDenomMetaFromLCD = async (
     fetchJson<{ metadatas?: DenomMetadata[] }>(listUrl)
   )
   return listRes.data?.metadatas?.find(data => data.base === denom) ?? null
-
-  return null
 }
 
 export const getKnownOrFetchToken = async ({
