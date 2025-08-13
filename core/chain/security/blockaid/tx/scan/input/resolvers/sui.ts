@@ -5,29 +5,29 @@ import { decodeTx } from '../../../../../../tx/decode'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
 import { BlockaidTxScanInputResolver } from '../resolver'
 
-export const getSolanaBlockaidTxScanInput: BlockaidTxScanInputResolver<
-  OtherChain.Solana
-> = ({ payload, walletCore, chain }) => {
+export const getSuiBlockaidTxScanInput: BlockaidTxScanInputResolver<
+  OtherChain.Sui
+> = ({ payload, walletCore }) => {
   const coin = assertField(payload, 'coin')
 
-  const transactions = getCompiledTxsForBlockaidInput({
+  const compiledTxs = getCompiledTxsForBlockaidInput({
     payload,
     walletCore,
-  }).map(
-    tx =>
+  })
+
+  const [transaction] = compiledTxs.map(
+    compiledTx =>
       decodeTx({
-        chain,
-        compiledTx: tx,
-      }).encoded
+        chain: OtherChain.Sui,
+        compiledTx,
+      }).unsignedTx
   )
 
   return {
     chain: 'mainnet',
     options: ['validation'],
     account_address: coin.address,
-    encoding: 'base58',
-    transactions,
-    method: 'signAndSendTransaction',
+    transaction,
     metadata: {},
   }
 }

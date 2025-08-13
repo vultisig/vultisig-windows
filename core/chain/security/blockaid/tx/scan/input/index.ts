@@ -13,6 +13,7 @@ import {
 } from './resolver'
 import { getEvmBlockaidTxScanInput } from './resolvers/evm'
 import { getSolanaBlockaidTxScanInput } from './resolvers/solana'
+import { getSuiBlockaidTxScanInput } from './resolvers/sui'
 
 const resolvers: Record<
   BlockaidSupportedChainKind,
@@ -20,6 +21,7 @@ const resolvers: Record<
 > = {
   evm: getEvmBlockaidTxScanInput,
   solana: getSolanaBlockaidTxScanInput,
+  sui: getSuiBlockaidTxScanInput,
 }
 
 export const getBlockaidTxScanInput = (
