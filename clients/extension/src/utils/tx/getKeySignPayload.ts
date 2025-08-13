@@ -58,7 +58,7 @@ const getCoin = async (
       return chainFeeCoin[chain]
     }
   }
-  const knownToken = await ensureKnownToken(chain, ticker)
+  const knownToken = await ensureKnownToken({ chain, denom: ticker })
 
   if (knownToken) {
     return knownToken

@@ -6,7 +6,7 @@ import { knownCosmosTokens } from './cosmos'
 import { getKnownOrFetchToken } from './resolve'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
-
+type EnsureKnownTokenInput = { chain: Chain; denom: string }
 const leanTokens: Partial<LeanChainTokensRecord> = {
   [Chain.Tron]: {
     TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t: {
@@ -588,14 +588,14 @@ export const knownTokens = makeRecord(Object.values(Chain), chain => {
   return result
 })
 
-export const ensureKnownToken = async (
-  chain: Chain,
-  denom: string
-): Promise<KnownCoin | null> => {
+export const ensureKnownToken = async ({
+  chain,
+  denom,
+}: EnsureKnownTokenInput): Promise<KnownCoin | null> => {
   const localKnown = (leanTokens as any)[chain] as
     | Record<string, KnownCoinMetadata>
     | undefined
   const local = localKnown?.[denom]
   if (local) return { ...local, chain, id: denom }
-  return await getKnownOrFetchToken(chain, denom, localKnown)
+  return await getKnownOrFetchToken({ chain, denom, localKnown })
 }

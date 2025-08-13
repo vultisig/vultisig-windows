@@ -1,4 +1,5 @@
 import { Chain, CosmosChain } from '@core/chain/Chain'
+import { attempt } from '@lib/utils/attempt'
 
 import { cosmosRpcUrl } from '../../chains/cosmos/cosmosRpcUrl'
 import { KnownCoin, KnownCoinMetadata } from '../Coin'
@@ -10,7 +11,11 @@ type DenomMetadata = {
   display?: string
   denom_units?: DenomUnits[]
 }
-
+type GetKnownOrFetchTokenInput = {
+  chain: Chain
+  denom: string
+  localKnown: Record<string, KnownCoinMetadata> | undefined
+}
 const fetchJson = async <T>(url: string): Promise<T> => {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`${res.status} ${url}`)
@@ -46,30 +51,26 @@ const getDenomMetaFromLCD = async (
   denom: string
 ): Promise<DenomMetadata | null> => {
   const byDenom = `${lcdBase}/cosmos/bank/v1beta1/denoms_metadata/${encodeURIComponent(denom)}`
-  try {
-    const denomInfo = await fetchJson<{ metadata?: DenomMetadata }>(byDenom)
-    if (denomInfo?.metadata) return denomInfo.metadata
-  } catch {
-    // ignore
-  }
+  const byDenomRes = await attempt(() =>
+    fetchJson<{ metadata?: DenomMetadata }>(byDenom)
+  )
+  if (byDenomRes.data?.metadata) return byDenomRes.data.metadata
 
   // Fallback: list & filter
-  try {
-    const listUrl = `${lcdBase}/cosmos/bank/v1beta1/denoms_metadata?pagination.limit=1000`
-    const denomInfo = await fetchJson<{ metadatas?: DenomMetadata[] }>(listUrl)
-    return denomInfo.metadatas?.find(data => data.base === denom) ?? null
-  } catch {
-    // ignore
-  }
+  const listUrl = `${lcdBase}/cosmos/bank/v1beta1/denoms_metadata?pagination.limit=1000`
+  const listRes = await attempt(() =>
+    fetchJson<{ metadatas?: DenomMetadata[] }>(listUrl)
+  )
+  return listRes.data?.metadatas?.find(data => data.base === denom) ?? null
 
   return null
 }
 
-export const getKnownOrFetchToken = async (
-  chain: Chain,
-  denom: string,
-  localKnown: Record<string, KnownCoinMetadata> | undefined
-): Promise<KnownCoin | null> => {
+export const getKnownOrFetchToken = async ({
+  chain,
+  denom,
+  localKnown,
+}: GetKnownOrFetchTokenInput): Promise<KnownCoin | null> => {
   const local = localKnown?.[denom]
   if (local) {
     return { ...local, chain, id: denom }
