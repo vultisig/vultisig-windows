@@ -5,7 +5,10 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
 
 import { IDL } from './idl/jupiter'
-import { AddressTableLookup, resolveAddressTableKeys } from './solanaSwap'
+import {
+  AddressTableLookup,
+  resolveAddressTableKeys,
+} from './parseSolanaTransaction'
 import {
   ParsedInstructionsSolanaSwapParams,
   PartialInstruction,

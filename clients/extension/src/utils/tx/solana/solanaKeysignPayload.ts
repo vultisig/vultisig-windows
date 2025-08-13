@@ -20,7 +20,8 @@ export const getSolanaKeysignPayload = (
   parsedTransactionParams: ParsedSolanaTransactionParams,
   serialized: Uint8Array,
   vault: Vault,
-  walletCore: WalletCore
+  walletCore: WalletCore,
+  skipBroadcast?: boolean
 ): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
@@ -36,6 +37,7 @@ export const getSolanaKeysignPayload = (
         const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
         const dataBuffer = Buffer.from(txInputDataBuffer)
         const base64Data = base64.encode(dataBuffer)
+        const isNativeCoin = parsedTransactionParams.inputToken.symbol === 'SOL'
         const coin = create(CoinSchema, {
           chain: Chain.Solana,
           ticker: parsedTransactionParams.inputToken.symbol.toUpperCase(),
@@ -43,21 +45,19 @@ export const getSolanaKeysignPayload = (
           decimals: parsedTransactionParams.inputToken.decimals,
           hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           logo: parsedTransactionParams.inputToken.name.toLowerCase(),
-          priceProviderId:
-            parsedTransactionParams.inputToken.symbol === 'SOL'
-              ? 'solana'
-              : parsedTransactionParams.inputToken.extensions?.coingeckoId,
-          contractAddress:
-            parsedTransactionParams.inputToken.symbol === 'SOL'
-              ? ''
-              : parsedTransactionParams.inputToken.address,
+          priceProviderId: isNativeCoin
+            ? 'solana'
+            : parsedTransactionParams.inputToken.extensions?.coingeckoId,
+          contractAddress: isNativeCoin
+            ? ''
+            : parsedTransactionParams.inputToken.address,
+          isNativeToken: isNativeCoin,
         })
         const accountCoin = {
           ...coin,
-          id:
-            parsedTransactionParams.inputToken.symbol === 'SOL'
-              ? coin.ticker
-              : parsedTransactionParams.inputToken.address,
+          id: !isNativeCoin
+            ? parsedTransactionParams.inputToken.address
+            : undefined,
         } as AccountCoin
 
         const chainSpecific = await getChainSpecific({
@@ -148,6 +148,7 @@ export const getSolanaKeysignPayload = (
             ? { case: 'oneinchSwapPayload', value: swapPayload }
             : undefined,
           toAddress: parsedTransactionParams.receiverAddress,
+          skipBroadcast,
         })
 
         resolve(keysignPayload)

@@ -1,7 +1,8 @@
-import { Chain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
+import { getCosmosGasLimit } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -24,7 +25,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   walletCore,
   chain,
 }) => {
-  const coin = getKeysignCoin(keysignPayload)
+  const coin = getKeysignCoin<CosmosChain>(keysignPayload)
 
   const chainKind = getCosmosChainKind(chain)
 
@@ -174,9 +175,14 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             synth: false,
           }),
         })
-        const toAmount = Number(keysignPayload.toAmount || '0')
-        if (toAmount > 0) {
-          depositCoin.amount = keysignPayload.toAmount
+        const swapFromAmount =
+          swapPayload && 'native' in swapPayload
+            ? swapPayload.native.fromAmount
+            : undefined
+        const depositAmount = swapFromAmount ?? keysignPayload.toAmount
+
+        if (Number(depositAmount || '0') > 0) {
+          depositCoin.amount = depositAmount!
           depositCoin.decimals = new Long(coin.decimals)
         }
 
@@ -220,22 +226,34 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
   })
 
   const getFee = () => {
-    const result = TW.Cosmos.Proto.Fee.create({
-      gas: new Long(cosmosGasLimitRecord[chain]),
-    })
+    const getFeeAmounts = () => {
+      if (chainKind !== 'ibcEnabled') return
 
-    if (chainKind === 'ibcEnabled') {
       const { gas } = getRecordUnionValue(chainSpecific, 'ibcEnabled')
 
-      result.amounts = [
+      const amounts: TW.Cosmos.Proto.Amount[] = [
         TW.Cosmos.Proto.Amount.create({
           amount: gas.toString(),
           denom: cosmosFeeCoinDenom[chain],
         }),
       ]
+
+      if (areEqualCoins(coin, { chain: Chain.TerraClassic, id: 'uusd' })) {
+        amounts.push(
+          TW.Cosmos.Proto.Amount.create({
+            denom: coin.id,
+            amount: '1000000',
+          })
+        )
+      }
+
+      return amounts
     }
 
-    return result
+    return TW.Cosmos.Proto.Fee.create({
+      gas: Long.fromBigInt(getCosmosGasLimit(coin)),
+      amounts: getFeeAmounts(),
+    })
   }
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)

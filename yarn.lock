@@ -805,6 +805,8 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
+    "@core/extension": "workspace:*"
+    "@core/inpage-provider": "workspace:*"
     "@core/mpc": "workspace:*"
     "@core/ui": "workspace:*"
     "@cosmjs/amino": "npm:^0.33.1"
@@ -824,6 +826,8 @@ __metadata:
     "@types/react-dom": "npm:^19.0.4"
     "@types/uuid": "npm:^10.0.0"
     "@vitejs/plugin-react": "npm:^4.3.4"
+    "@wallet-standard/base": "npm:^1.1.0"
+    "@wallet-standard/features": "npm:^1.1.0"
     axios: "npm:^1.8.3"
     bech32: "npm:^2.0.0"
     chokidar: "npm:^4.0.3"
@@ -908,6 +912,18 @@ __metadata:
 "@core/config@workspace:*, @core/config@workspace:core/config":
   version: 0.0.0-use.local
   resolution: "@core/config@workspace:core/config"
+  languageName: unknown
+  linkType: soft
+
+"@core/extension@workspace:*, @core/extension@workspace:core/extension":
+  version: 0.0.0-use.local
+  resolution: "@core/extension@workspace:core/extension"
+  languageName: unknown
+  linkType: soft
+
+"@core/inpage-provider@workspace:*, @core/inpage-provider@workspace:core/inpage-provider":
+  version: 0.0.0-use.local
+  resolution: "@core/inpage-provider@workspace:core/inpage-provider"
   languageName: unknown
   linkType: soft
 
