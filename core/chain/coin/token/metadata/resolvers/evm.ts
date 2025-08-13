@@ -23,8 +23,6 @@ export const getEvmTokenMetadata: TokenMetadataResolver<EvmChain> = async ({
   ])
 
   return {
-    chain,
-    id,
     ticker,
     decimals,
   }
