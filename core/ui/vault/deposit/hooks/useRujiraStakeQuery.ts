@@ -6,19 +6,17 @@ import { useQuery } from '@tanstack/react-query'
 
 import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 
-export const useRujiraStakeAndRewards = () => {
+export const useRujiraStakeQuery = () => {
   const address = useCurrentVaultAddress(Chain.THORChain)
 
   return useQuery({
     queryKey: ['rujira', 'stakeView', address],
     queryFn: () => fetchRujiraStakeView(address!),
     select: res => ({
-      bondedRaw: res.stakeAmount,
       bonded: fromChainAmount(
         res.stakeAmount,
         rujiraStakingConfig.bondDecimals
       ),
-      rewardsRaw: res.rewardsAmount,
       rewardsUSDC: fromChainAmount(
         res.rewardsAmount,
         rujiraStakingConfig.revenueDecimals

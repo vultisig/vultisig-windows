@@ -40,18 +40,18 @@ export const generateMemo = ({
 
   return match(selectedChainAction, {
     stake_ruji: () => {
-      const amount = toChainAmount(
-        Number(depositFormData['amount'] ?? 0),
+      const chainAmount = toChainAmount(
+        shouldBePresent(Number(amount)),
         selectedCoin!.decimals
       ).toString()
-      return `bond:${rujiraStakingConfig.bondDenom}:${amount}`
+      return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
     },
     unstake_ruji: () => {
-      const amount = toChainAmount(
-        Number(depositFormData['amount'] ?? 0),
+      const chainAmount = toChainAmount(
+        shouldBePresent(Number(amount)),
         selectedCoin!.decimals
       ).toString()
-      return `withdraw:${rujiraStakingConfig.bondDenom}:${amount}`
+      return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
     },
     withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
     mint: () => '',
