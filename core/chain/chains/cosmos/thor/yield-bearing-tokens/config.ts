@@ -1,5 +1,5 @@
 export const yieldBearingAssetsIds = ['yRUNE', 'yTCY'] as const
-export type YieldBearingAsset = (typeof yieldBearingAssetsIds)[number]
+type YieldBearingAsset = (typeof yieldBearingAssetsIds)[number]
 
 // MAINNET contracts
 export const yieldBearingAssetsContracts: Record<YieldBearingAsset, string> = {
