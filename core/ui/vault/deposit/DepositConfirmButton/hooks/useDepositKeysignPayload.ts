@@ -71,7 +71,6 @@ export function useDepositKeysignPayload({
   const coin = useCurrentVaultCoin(
     selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
   )
-  console.log('🚀 ~ useDepositKeysignPayload ~ coin:', coin)
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const chainSpecificQuery = useDepositChainSpecificQuery(txType, coin)
