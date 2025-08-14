@@ -187,6 +187,14 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
+  | {
+      case: CosmosMsgType.THORCHAIN_MSG_SEND_URL
+      value: {
+        amount: { denom: string; amount: string }[]
+        fromAddress: string
+        toAddress: string
+      }
+    }
 
 export type CosmosAccount = {
   pubkey: number[]
