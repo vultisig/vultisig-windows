@@ -9,12 +9,14 @@ import {
 import { getEvmTxBlockaidValidation } from './resolvers/evm'
 import { getSolanaTxBlockaidValidation } from './resolvers/solana'
 import { getSuiTxBlockaidValidation } from './resolvers/sui'
+import { getUtxoTxBlockaidValidation } from './resolvers/utxo'
 
 const resolvers: Record<
   DeriveChainKind<BlockaidSupportedChain>,
   BlockaidTxValidationResolver<any>
 > = {
   evm: getEvmTxBlockaidValidation,
+  utxo: getUtxoTxBlockaidValidation,
   solana: getSolanaTxBlockaidValidation,
   sui: getSuiTxBlockaidValidation,
 }
