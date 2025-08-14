@@ -5,16 +5,16 @@ import { ManageVaultCoin } from '../../../vault/chain/manage/coin/ManageVaultCoi
 import { useCurrentVaultChainCoins } from '../../../vault/state/currentVaultCoins'
 import { CustomTokenResult } from './CustomTokenResult'
 
-export const CustomToken = ({ address }: { address: string }) => {
+export const CustomToken = ({ id }: { id: string }) => {
   const [{ chain }] = useCoreViewState<'addCustomToken'>()
 
   const coins = useCurrentVaultChainCoins(chain)
 
-  const coin = coins.find(coin => areEqualCoins(coin, { id: address, chain }))
+  const coin = coins.find(coin => areEqualCoins(coin, { id, chain }))
 
   if (coin) {
     return <ManageVaultCoin key={coinKeyToString(coin)} value={coin} />
   }
 
-  return <CustomTokenResult address={address} />
+  return <CustomTokenResult id={id} />
 }

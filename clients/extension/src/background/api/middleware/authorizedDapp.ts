@@ -10,7 +10,7 @@ import {
 import { storage } from '../../../storage'
 import { getDappHost, getDappHostname } from '../../../utils/connectedApps'
 import { BackgroundApiInterface } from '../interface'
-import { BackgroundApiResolver, BackgroundApiResolverParams } from '../resolver'
+import { BackgroundApiResolver } from '../resolver'
 
 const getDefaultAppSession = (requestOrigin: string) => {
   return {
@@ -25,7 +25,7 @@ export const authorizedDapp =
   <K extends keyof BackgroundApiInterface>(
     resolver: BackgroundApiResolver<K>
   ): BackgroundApiResolver<K> =>
-  async (params: BackgroundApiResolverParams<K>) => {
+  async params => {
     const { context } = params
     const { requestOrigin } = context
 
