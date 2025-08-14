@@ -133,7 +133,20 @@ export const processBackgroundResponse = (
     ) {
       return result
     }
-    return shouldBePresent((result as ITransaction<OtherChain.Solana>).hash)
+    // Para transacciones UTXO, devolver el encoded en lugar del hash
+    else if (
+      messageKey === MessageKey.BITCOIN_REQUEST ||
+      messageKey === MessageKey.BITCOIN_CASH_REQUEST ||
+      messageKey === MessageKey.DASH_REQUEST ||
+      messageKey === MessageKey.DOGECOIN_REQUEST ||
+      messageKey === MessageKey.LITECOIN_REQUEST ||
+      messageKey === MessageKey.MAYA_REQUEST ||
+      messageKey === MessageKey.ZCASH_REQUEST
+    ) {
+      return shouldBePresent(result)
+    }
+    // Para otras cadenas, devolver el hash
+    return shouldBePresent((result as ITransaction).hash)
   }
 
   return result
