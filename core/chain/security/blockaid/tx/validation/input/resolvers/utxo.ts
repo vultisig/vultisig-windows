@@ -1,8 +1,8 @@
-import { UtxoChain } from '@core/chain/Chain'
+import { getTxInputData } from '@core/mpc/keysign/txInputData'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 
-import { decodeTx } from '../../../../../../tx/decode'
-import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
+import { UtxoChain } from '../../../../../../Chain'
+import { getPreSigningHashes } from '../../../../../../tx/preSigningHashes'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
 export const getUtxoBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
@@ -10,22 +10,22 @@ export const getUtxoBlockaidTxValidationInput: BlockaidTxValidationInputResolver
 > = ({ payload, walletCore, chain }) => {
   const { address } = getKeysignCoin(payload)
 
-  const [encoded] = getCompiledTxsForBlockaidInput({
-    payload,
+  const [txInputData] = getTxInputData({
+    keysignPayload: payload,
     walletCore,
-  }).map(
-    compiledTx =>
-      decodeTx({
-        chain,
-        compiledTx,
-      }).encoded
-  )
+  })
+
+  const [preHash] = getPreSigningHashes({
+    walletCore,
+    txInputData,
+    chain,
+  })
 
   return {
     chain: chain.toLowerCase(),
     options: ['validation'],
     account_address: address,
-    transaction: Buffer.from(encoded).toString('hex'),
+    transaction: Buffer.from(preHash).toString('hex'),
     metadata: {},
   }
 }
