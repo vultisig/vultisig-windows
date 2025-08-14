@@ -181,10 +181,25 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             : undefined
         const depositAmount = swapFromAmount ?? keysignPayload.toAmount
 
-        if (Number(depositAmount || '0') > 0) {
+        if (Number(depositAmount) > 0) {
           depositCoin.amount = depositAmount!
           depositCoin.decimals = new Long(coin.decimals)
         }
+
+        const getTxMemo = () => {
+          if (isDeposit) {
+            return memo
+          }
+
+          const swapChain =
+            swapPayload && 'native' in swapPayload
+              ? swapPayload.native.chain
+              : chain
+
+          return swapChain === Chain.MayaChain ? memo : ''
+        }
+
+        const txMemo = getTxMemo()
 
         return {
           messages: [
@@ -197,8 +212,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
                 }),
             }),
           ],
-          // That doesn't make sense, but iOS and Android have this logic.
-          txMemo: chain === Chain.MayaChain ? memo : swapPayload ? '' : memo,
+          txMemo,
         }
       }
 
