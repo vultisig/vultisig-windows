@@ -17,7 +17,7 @@ import { getTonSpecific } from './resolvers/ton'
 import { getTronSpecific } from './resolvers/tron'
 import { getUtxoSpecific } from './resolvers/utxo'
 
-const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
+const resolvers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   ethereumSpecific: getEthereumSpecific,
   utxoSpecific: getUtxoSpecific,
   thorchainSpecific: getThorchainSpecific,
@@ -36,7 +36,7 @@ export const getChainSpecific = async (
   input: ChainSpecificResolverInput
 ): Promise<KeysignChainSpecific> => {
   const chainSpecificCase = chainSpecificRecord[input.coin.chain]
-  const value = await handlers[chainSpecificCase](input)
+  const value = await resolvers[chainSpecificCase](input)
 
   return {
     case: chainSpecificCase,

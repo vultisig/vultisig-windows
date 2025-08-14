@@ -12,7 +12,7 @@ import { getTonCoinBalance } from './resolvers/ton'
 import { getTronCoinBalance } from './resolvers/tron'
 import { getUtxoCoinBalance } from './resolvers/utxo'
 
-const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
+const resolvers: Record<ChainKind, CoinBalanceResolver<any>> = {
   utxo: getUtxoCoinBalance,
   cosmos: getCosmosCoinBalance,
   sui: getSuiCoinBalance,
@@ -25,10 +25,5 @@ const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   cardano: getCardanoCoinBalance,
 }
 
-export const getCoinBalance: CoinBalanceResolver = async input => {
-  const chainKind = getChainKind(input.chain)
-
-  const handler = handlers[chainKind]
-
-  return handler(input)
-}
+export const getCoinBalance: CoinBalanceResolver = async input =>
+  resolvers[getChainKind(input.chain)](input)

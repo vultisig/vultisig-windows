@@ -11,7 +11,7 @@ import { broadcastTonTx } from './resolvers/ton'
 import { broadcastTronTx } from './resolvers/tron'
 import { broadcastUtxoTx } from './resolvers/utxo'
 
-const handlers: Record<ChainKind, BroadcastTxResolver<any>> = {
+const resolvers: Record<ChainKind, BroadcastTxResolver<any>> = {
   cardano: broadcastUtxoTx,
   cosmos: broadcastCosmosTx,
   evm: broadcastEvmTx,
@@ -25,4 +25,4 @@ const handlers: Record<ChainKind, BroadcastTxResolver<any>> = {
 }
 
 export const broadcastTx: BroadcastTxResolver = input =>
-  handlers[getChainKind(input.chain)](input)
+  resolvers[getChainKind(input.chain)](input)

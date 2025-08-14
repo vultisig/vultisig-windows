@@ -20,7 +20,7 @@ type Input = {
   walletCore: WalletCore
 }
 
-const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
+const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {
   cardano: getCardanoTxInputData,
   cosmos: getCosmosTxInputData,
   evm: getEvmTxInputData,
@@ -42,7 +42,7 @@ export const getTxInputData = (input: Input) => {
   const chain = getKeysignChain(input.keysignPayload)
   const chainKind = getChainKind(chain)
 
-  return handlers[chainKind]({
+  return resolvers[chainKind]({
     ...input,
     chain,
   })
