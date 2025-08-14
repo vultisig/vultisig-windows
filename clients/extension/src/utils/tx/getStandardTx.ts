@@ -271,6 +271,51 @@ const transactionHandlers: TransactionHandlers = {
           skipBroadcast,
         }
       },
+      [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: () => {
+        const decodedMessage = TW.Cosmos.Proto.Message.THORChainSend.decode(
+          message.value
+        )
+        if (
+          !decodedMessage.amounts ||
+          decodedMessage.amounts.length === 0 ||
+          !decodedMessage.amounts[0].denom
+        ) {
+          throw new Error(' amounts array is required and cannot be empty')
+        }
+
+        const fromAddress = bech32.encode(
+          'thor',
+          bech32.toWords(decodedMessage.fromAddress)
+        )
+
+        const toAddress = bech32.encode(
+          'thor',
+          bech32.toWords(decodedMessage.toAddress)
+        )
+
+        return {
+          asset: {
+            chain: chain,
+            ticker: decodedMessage.amounts[0].denom,
+          },
+          amount: {
+            amount: decodedMessage.amounts[0].amount,
+            decimals: chainFeeCoin[chain].decimals,
+          },
+          from: fromAddress,
+          to: toAddress,
+          data: memo,
+          cosmosMsgPayload: {
+            case: message.typeUrl,
+            value: {
+              amount: decodedMessage.amounts,
+              fromAddress: fromAddress,
+              toAddress: toAddress,
+            },
+          } as CosmosMsgPayload,
+          skipBroadcast,
+        }
+      },
     })
   },
 
