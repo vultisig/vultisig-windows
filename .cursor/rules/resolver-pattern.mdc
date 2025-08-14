@@ -1,0 +1,221 @@
+---
+globs: *.ts,*.tsx
+description: Resolver pattern – how to design, name, type, and route resolvers (index.ts/resolver.ts/resolvers/*) with chain/chainKind or other discriminants. Aligns with assert, pattern-matching, functions, attempt-over-try-catch, and type-definitions rules.
+---
+
+## Resolver Pattern Guide
+
+Build logic as small, composable resolvers and a single router instead of switch/case. Each resolver set handles one responsibility.
+
+### When to use
+
+- Routing work by a discriminant:
+  - chain/chainKind for chain-dependent features (e.g., `@balance/`, `@hash/`, `@broadcast/`, `@metadata/`, `@chainSpecific/`, `@txInputData/`).
+  - requested call or method name for API modules (e.g., `@api/`, popup/background API) – route by the requested call, not by chain.
+- A single operation that varies by the chosen discriminant.
+
+### Files and layout
+
+- index.ts: Main exported function. Extract discriminant, select resolver, delegate.
+- resolver.ts: Exports the resolver type(s) and input/output types using `type` per type-definitions.
+- resolvers/: One file per routing value. Each exports a single, fully named resolver function.
+- chains.ts (optional): Lists supported chains/chain kinds for this operation.
+
+Folder example:
+
+```
+<feature>/
+  index.ts
+  resolver.ts
+  resolvers/
+    evm.ts
+    solana.ts
+    ...
+  [chains.ts]
+```
+
+### Naming conventions
+
+- Resolver file names match the routing value (e.g., `evm.ts`, `utxo.ts`, `sui.ts`).
+- Resolver function names include the full operation name and routing value for clarity, e.g., `getEvmCoinBalance`, `broadcastSolanaTx`, `getSuiTxHash`.
+- For API-style modules without a natural routing key (e.g., `@api/`), resolver files should use a full, descriptive name.
+
+### Router implementation patterns
+
+1. Route by chainKind
+
+```ts
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+
+import { SomeResolver } from './resolver'
+import { getCardanoX } from './resolvers/cardano'
+import { getCosmosX } from './resolvers/cosmos'
+import { getEvmX } from './resolvers/evm'
+// ...
+
+const resolvers: Record<ChainKind, SomeResolver<any>> = {
+  cardano: getCardanoX,
+  cosmos: getCosmosX,
+  evm: getEvmX,
+  polkadot: getPolkadotX,
+  ripple: getRippleX,
+  solana: getSolanaX,
+  sui: getSuiX,
+  ton: getTonX,
+  utxo: getUtxoX,
+  tron: getTronX,
+}
+
+export const doX: SomeResolver = async input =>
+  resolvers[getChainKind(input.chain)](input)
+```
+
+2. Route a supported subset and validate
+
+```ts
+import { getChainKind } from '@core/chain/ChainKind'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+
+import { SupportedKind, supportedKinds } from './chains'
+import { SomeResolver } from './resolver'
+import { getEvmX } from './resolvers/evm'
+import { getSolanaX } from './resolvers/solana'
+import { getSuiX } from './resolvers/sui'
+
+const resolvers: Record<SupportedKind, SomeResolver<any>> = {
+  evm: getEvmX,
+  solana: getSolanaX,
+  sui: getSuiX,
+}
+
+export const doX: SomeResolver = async input => {
+  const chainKind = getChainKind(input.chain)
+  if (!isOneOf(chainKind, supportedKinds)) {
+    throw new Error(
+      `Unsupported doX chain kind: ${chainKind}, should be one of ${supportedKinds.join(', ')}`
+    )
+  }
+  return resolvers[chainKind](input)
+}
+```
+
+### Resolver typing (resolver.ts)
+
+- Use `type` for object types and generics.
+- Follow functions rule: use object params when there is more than one parameter.
+
+```ts
+import { Chain } from '@core/chain/Chain'
+import { Resolver } from '@lib/utils/types/Resolver'
+
+export type DoXInput<T extends Chain = Chain> = {
+  chain: T
+  // other fields...
+}
+
+export type DoXResolver<T extends Chain = Chain> = Resolver<
+  DoXInput<T>,
+  Promise<OutputType>
+>
+```
+
+### Implementation guidelines
+
+- Assertions: Prefer `shouldBePresent()` and `assertField()` over optional chaining when values must exist (assert rule).
+- Pattern matching: Prefer `match`, `matchRecordUnion`, and record lookups over switch/case (pattern-matching rule). See usage in `@txInputData/` and `@chainSpecific/`.
+- Error handling: Do not add try/catch for logging. Use `attempt()` only when you must show an error to users or pursue alternative logic (attempt-over-try-catch rule). Use `isInError()` for known benign errors.
+- Function params: If you need more than one parameter, use an object parameter with a `{FunctionName}Input` type (functions rule).
+- Imports: Use package paths from the monorepo (imports rule), not deep relative paths.
+- Types: Use `type` for object types and unions (type-definitions rule).
+
+### Real examples in this codebase
+
+- Chain-based routing:
+  - `@balance/`: `core/chain/coin/balance/index.ts`
+  - `@hash/`: `core/chain/tx/hash/index.ts`
+  - `@broadcast/`: `core/chain/tx/broadcast/index.ts`
+  - `@metadata/`: `core/chain/coin/token/metadata/index.ts`
+- Supported subset validation:
+  - `@find/`: `core/chain/coin/find/index.ts` with `chains.ts`-like constraints
+- Optional return contract:
+  - `@validation/input/`: `core/chain/security/blockaid/tx/validation/input/index.ts` returns `null` when unsupported
+- Complex per-chain specifics and unions:
+  - `@chainSpecific/`: `core/mpc/keysign/chainSpecific/index.ts`
+  - `@txInputData/`: `core/mpc/keysign/txInputData/index.ts`
+- Non-chain routing:
+  - `clients/extension/src/popup/api/call/index.ts` routes by provider source
+
+### Template – scaffold a new resolver set
+
+1. Create `resolver.ts` with typed input/output:
+
+```ts
+// resolver.ts
+import { Chain } from '@core/chain/Chain'
+import { Resolver } from '@lib/utils/types/Resolver'
+
+export type FooInput<T extends Chain = Chain> = {
+  chain: T
+  // ...
+}
+
+export type FooResolver<T extends Chain = Chain> = Resolver<
+  FooInput<T>,
+  Promise<FooOutput>
+>
+```
+
+2. Add resolvers under `resolvers/` named by routing value, with fully named functions:
+
+```ts
+// resolvers/evm.ts
+import { EvmChain } from '@core/chain/Chain'
+import { FooResolver } from '../resolver'
+
+export const getEvmFoo: FooResolver<EvmChain> = async input => {
+  // use shouldBePresent/assertField as needed
+  return doWork(input)
+}
+```
+
+3. Implement `index.ts` router:
+
+```ts
+// index.ts
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { FooResolver } from './resolver'
+import { getEvmFoo } from './resolvers/evm'
+import { getSolanaFoo } from './resolvers/solana'
+// ...
+
+const resolvers: Record<ChainKind, FooResolver<any>> = {
+  cardano: getCardanoFoo,
+  cosmos: getCosmosFoo,
+  evm: getEvmFoo,
+  polkadot: getPolkadotFoo,
+  ripple: getRippleFoo,
+  solana: getSolanaFoo,
+  sui: getSuiFoo,
+  ton: getTonFoo,
+  utxo: getUtxoFoo,
+  tron: getTronFoo,
+}
+
+export const doFoo: FooResolver = async input => {
+  const chainKind = getChainKind(input.chain)
+  return resolvers[chainKind](input)
+}
+```
+
+4. If operation supports only a subset, add `chains.ts` and validate with `isOneOf` in `index.ts`.
+
+### Checklist
+
+- Single responsibility: One operation per resolver set.
+- Strong types in `resolver.ts` with `type`, not `interface`.
+- Router uses a typed `Record` map; no `switch`.
+- Enforce supported chains with `chains.ts` when necessary.
+- Use `assertField`/`shouldBePresent` for required values.
+- Only use `attempt()` when alternative logic or user-facing errors are needed.
+- Use object parameters for multi-arg functions.
+- Prefer monorepo import paths.
