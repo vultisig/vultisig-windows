@@ -4,8 +4,8 @@ import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { storage } from '@core/extension/storage'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { callPopup } from '@core/inpage-provider/popup'
 
-import { callPopupApi } from '../../../popup/api/call'
 import {
   addVaultAppSession,
   getVaultAppSessions,
@@ -35,7 +35,7 @@ export const authorizedDapp =
         return currentVaultId
       }
 
-      const { vaultId } = await callPopupApi({
+      const { vaultId } = await callPopup({
         grantVaultAccess: {},
       })
 
@@ -56,7 +56,7 @@ export const authorizedDapp =
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {
-      const { vaultId } = await callPopupApi({
+      const { vaultId } = await callPopup({
         grantVaultAccess: {},
       })
 

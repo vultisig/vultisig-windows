@@ -1,3 +1,4 @@
+import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -15,8 +16,6 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { PopupResolver } from '@core/inpage-provider/popup/resolver'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,

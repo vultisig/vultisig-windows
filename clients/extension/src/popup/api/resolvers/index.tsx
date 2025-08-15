@@ -1,5 +1,5 @@
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
-import { PopupResolver } from '@core/inpage-provider/popup/resolver'
+import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 
 import { GrantVaultAccess } from './grantVaultAccess'
 import { GrantVaultsAccess } from './grantVaultsAccess'

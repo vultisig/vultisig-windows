@@ -1,3 +1,4 @@
+import { ExtensionApiMessage } from '@clients/extension/src/api'
 import { sendToBackground } from '@core/inpage-provider/bridge/inpage'
 import {
   PopupInterface,
@@ -5,15 +6,14 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { Result } from '@lib/utils/types/Result'
 
-import { ExtensionApiMessage } from '../../../../api'
-import { CallPopupResolver, CallPopupResolverInput } from '../resolver'
+import { PopupCallResolver, PopupCallResolverInput } from '../resolver'
 
-export const callPopupApiFromInpage: CallPopupResolver = async <
+export const callPopupFromInpage: PopupCallResolver = async <
   M extends PopupMethod,
 >({
   call,
   options,
-}: CallPopupResolverInput<M>) => {
+}: PopupCallResolverInput<M>) => {
   const message: ExtensionApiMessage = {
     popup: {
       call,

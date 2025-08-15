@@ -1,13 +1,12 @@
 import { storage } from '@core/extension/storage'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { callPopup } from '@core/inpage-provider/popup'
 import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { callPopupApi } from '../../../popup/api/call'
-import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-
 export const getVaults: BackgroundResolver<'getVaults'> = async () => {
-  const { vaultIds } = await callPopupApi({
+  const { vaultIds } = await callPopup({
     grantVaultsAccess: {},
   })
 

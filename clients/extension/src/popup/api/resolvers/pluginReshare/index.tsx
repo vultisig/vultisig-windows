@@ -1,3 +1,4 @@
+import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { PluginReshareFlow } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
@@ -11,7 +12,6 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { PluginJoinKeygenUrl } from '../../../../pages/plugin/PluginJoinKeygenUrl'
-import { PopupResolver } from '@core/inpage-provider/popup/resolver'
 
 export const PluginReshare: PopupResolver<'pluginReshare'> = ({
   onFinish,
