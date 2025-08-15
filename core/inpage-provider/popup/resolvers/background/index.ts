@@ -1,0 +1,51 @@
+import {
+  PopupInterface,
+  PopupMethod,
+} from '@core/inpage-provider/popup/interface'
+
+import {
+  isPopupMessage,
+  PopupCallResolver,
+  PopupCallResolverInput,
+  PopupResponse,
+} from '../../resolver'
+import { addPopupViewCall } from '../../view/state/calls'
+import { inNewWindow } from './inNewWindow'
+
+export const callPopupFromBackground: PopupCallResolver = async <
+  M extends PopupMethod,
+>({
+  call,
+  options,
+}: PopupCallResolverInput<M>) => {
+  const callId = await addPopupViewCall(call)
+
+  return inNewWindow({
+    ...options,
+    url: chrome.runtime.getURL(`index.html?callId=${callId}`),
+    execute: abortSignal =>
+      new Promise<PopupInterface[M]['output']>((resolve, reject) => {
+        const handleMessage = (response: any) => {
+          if (!isPopupMessage<PopupResponse<any>>(response, 'popup')) return
+
+          chrome.runtime.onMessage.removeListener(handleMessage)
+          abortSignal.removeEventListener('abort', handleAbort)
+
+          const { error, data } = response.result
+          if (error) {
+            reject(error)
+          } else {
+            resolve(data as PopupInterface[M]['output'])
+          }
+        }
+
+        const handleAbort = () => {
+          chrome.runtime.onMessage.removeListener(handleMessage)
+          reject(new Error('Popup window was closed'))
+        }
+
+        chrome.runtime.onMessage.addListener(handleMessage)
+        abortSignal.addEventListener('abort', handleAbort, { once: true })
+      }),
+  })
+}

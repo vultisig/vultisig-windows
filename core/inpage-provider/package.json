@@ -1,5 +1,11 @@
 {
   "name": "@core/inpage-provider",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@core/ui": "workspace:*",
+    "@lib/utils": "workspace:*",
+    "@core/config": "workspace:*",
+    "@lib/ui": "workspace:*"
+  }
 }
