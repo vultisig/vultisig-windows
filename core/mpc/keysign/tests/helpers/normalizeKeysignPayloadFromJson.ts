@@ -83,6 +83,22 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
       }
     : undefined
 
+  const wasmContractPayload = src.wasm_execute_contract_payload
+  const parsedContractPayload = wasmContractPayload
+    ? {
+        case: 'wasmExecuteContractPayload',
+        value: {
+          senderAddress: wasmContractPayload.sender_address,
+          contractAddress: wasmContractPayload.contract_address,
+          executeMsg: wasmContractPayload.execute_msg,
+          coins: wasmContractPayload.coins.map((coin: any) => ({
+            denom: coin.denom,
+            amount: coin.amount,
+          })),
+        },
+      }
+    : undefined
+
   const out = {
     coin,
     toAddress: emptyToUndefined(src.to_address ?? src.toAddress),
@@ -98,6 +114,7 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
     libType: src.lib_type ?? src.libType,
     erc20ApprovePayload: approveMapped,
     approvePayload: approveMapped,
+    contractPayload: parsedContractPayload,
   }
 
   return create(KeysignPayloadSchema, out)
