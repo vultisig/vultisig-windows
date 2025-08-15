@@ -8,7 +8,6 @@ import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { defaultChainsStorage } from './defaultChains'
 import { fiatCurrencyStorage } from './fiatCurrency'
-import { initialViewStorage } from './initialView'
 import { languageStorage } from './language'
 import { onboardingStorage } from './onboarding'
 import { passcodeAutoLockStorage } from './passcodeAutoLock'
@@ -30,7 +29,6 @@ export const storage: CoreStorage = {
   ...balanceVisibilityStorage,
   ...blockaidStorage,
   ...onboardingStorage,
-  ...initialViewStorage,
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
   ...referralsStorage,

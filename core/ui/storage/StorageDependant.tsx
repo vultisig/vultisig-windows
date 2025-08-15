@@ -1,5 +1,4 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
-import { NavigationProvider } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
@@ -19,7 +18,6 @@ import {
 } from './currentVaultId'
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
-import { useInitialViewQuery } from './initialView'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
@@ -37,7 +35,6 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const language = useLanguageQuery()
   const isBalanceVisible = useIsBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
-  const initialView = useInitialViewQuery()
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
@@ -53,7 +50,6 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     language,
     isBalanceVisible,
     hasFinishedOnboarding,
-    initialView,
     coinFinderIgnore,
     passcodeEncryption,
     passcodeAutoLock,
@@ -63,21 +59,19 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId, vaults, initialView }) => (
+      success={({ currentVaultId, vaults }) => (
         <I18nProvider>
-          <NavigationProvider initialValue={{ history: [initialView] }}>
-            <RootErrorBoundary>
-              <VaultsProvider value={vaults}>
-                <CurrentVaultIdProvider value={currentVaultId}>
-                  <PasscodeProvider initialValue={null}>
-                    <RootCurrentVaultProvider>
-                      {children}
-                    </RootCurrentVaultProvider>
-                  </PasscodeProvider>
-                </CurrentVaultIdProvider>
-              </VaultsProvider>
-            </RootErrorBoundary>
-          </NavigationProvider>
+          <RootErrorBoundary>
+            <VaultsProvider value={vaults}>
+              <CurrentVaultIdProvider value={currentVaultId}>
+                <PasscodeProvider initialValue={null}>
+                  <RootCurrentVaultProvider>
+                    {children}
+                  </RootCurrentVaultProvider>
+                </PasscodeProvider>
+              </CurrentVaultIdProvider>
+            </VaultsProvider>
+          </RootErrorBoundary>
         </I18nProvider>
       )}
       error={error => (
