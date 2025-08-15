@@ -1,39 +1,13 @@
 import { views } from '@clients/extension/src/navigation/views'
-import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
-import { storage } from '@clients/extension/src/storage'
-import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
 import { isPopupView } from '@clients/extension/src/utils/functions'
-import { mpcServerUrl } from '@core/mpc/MpcServerType'
-import { CoreApp } from '@core/ui/CoreApp'
-import { CoreState } from '@core/ui/state/core'
+import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { ExtensionQueryClientProvider } from '@core/extension/ExtensionQueryClientProvider'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
-import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
 
-import { queriesPersister } from '../storage/queriesPersister'
-
-const coreState: CoreState = {
-  ...storage,
-  client: 'extension',
-  openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
-  saveFile: async ({ name, blob }) => {
-    initiateFileDownload({ name, blob })
-  },
-  mpcDevice: 'extension',
-  getClipboardText: () => navigator.clipboard.readText(),
-  version: getManifestVersion(),
-  isLocalModeAvailable: false,
-  getMpcServerUrl: async ({ serverType }) => {
-    if (serverType === 'relay') {
-      return mpcServerUrl.relay
-    }
-
-    throw new Error('Local mode is not available in extension')
-  },
-  vaultCreationMpcLib: 'DKLS',
-}
+import { NavigationProvider } from '../navigation/NavigationProvider'
 
 const isPopup = isPopupView()
 
@@ -57,12 +31,12 @@ const ExtensionGlobalStyle = createGlobalStyle`
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ExtensionGlobalStyle />
-    <CoreApp
-      migrationsManager={StorageMigrationsManager}
-      coreState={coreState}
-      queriesPersister={queriesPersister}
-    >
-      <ActiveView views={views} />
-    </CoreApp>
+    <ExtensionQueryClientProvider>
+      <NavigationProvider>
+        <ExtensionCoreApp>
+          <ActiveView views={views} />
+        </ExtensionCoreApp>
+      </NavigationProvider>
+    </ExtensionQueryClientProvider>
   </StrictMode>
 )

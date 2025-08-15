@@ -1,8 +1,8 @@
+import { storage } from '@core/extension/storage'
 import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { storage } from '../../../storage'
 import { BackgroundApiResolver } from '../resolver'
 
 export const getVault: BackgroundApiResolver<'getVault'> = async () => {
