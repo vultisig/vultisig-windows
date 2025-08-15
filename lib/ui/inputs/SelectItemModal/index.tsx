@@ -11,6 +11,7 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
+    renderFooter?: () => ReactNode
   }
 
 export const SelectItemModal = <T extends { id?: string; chain?: string }>({
@@ -19,6 +20,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   title,
   optionComponent: OptionComponent,
   filterFunction,
+  renderFooter,
   renderListHeader,
 }: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -28,8 +30,8 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
       <VStack gap={20}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         <VStack gap={16}>
-          {renderListHeader && renderListHeader()}
-          <ListWrapper>
+          {renderListHeader?.()}
+          <ListWrapper flexGrow>
             {options
               .filter(option => filterFunction(option, searchQuery))
               .map(option => (
@@ -40,6 +42,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
                 />
               ))}
           </ListWrapper>
+          {renderFooter?.()}
         </VStack>
       </VStack>
     </Modal>
