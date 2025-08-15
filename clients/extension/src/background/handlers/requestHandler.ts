@@ -11,9 +11,6 @@ import {
   updateAppSession,
   VaultsAppSessions,
 } from '@clients/extension/src/sessions/state/appSessions'
-import { storage } from '@clients/extension/src/storage'
-import { setCurrentCosmosChainId } from '@clients/extension/src/storage/currentCosmosChainId'
-import { setCurrentEVMChainId } from '@clients/extension/src/storage/currentEvmChainId'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
@@ -50,6 +47,9 @@ import {
   getEvmChainId,
 } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { storage } from '@core/extension/storage'
+import { setCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
+import { setCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'

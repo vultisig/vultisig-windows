@@ -1,7 +1,8 @@
 import { AppView } from '@clients/extension/src/navigation/AppView'
-import { setInitialView } from '@clients/extension/src/storage/initialView'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import { CoreView } from '@core/ui/navigation/CoreView'
+
+import { setInitialView } from '../../storage/initialView'
 
 export const handleOpenPanel = async (
   view: AppView | CoreView
