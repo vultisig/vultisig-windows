@@ -8,16 +8,19 @@ import {
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
-import { HStack } from '@lib/ui/layout/Stack'
-import { InputProps } from '@lib/ui/props'
+import { HStack, hStack } from '@lib/ui/layout/Stack'
+import { InputProps, IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
 import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
@@ -30,12 +33,14 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
-  const coin = useCurrentVaultCoin(value)
+  const coin = shouldBePresent(useCurrentVaultCoin(value))
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
 
-  if (!coin) return
+  const coinOptions = coins.filter(
+    coin => isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
+  )
 
   return (
     <Opener
@@ -94,6 +99,28 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 setIsCoinModalOpen(false)
               }}
               options={coins.filter(c => c.chain === coin?.chain)}
+              renderFooter={() => (
+                <Footer>
+                  {coinOptions.map(coin => {
+                    const chain = coin.chain
+                    return (
+                      <FooterItem
+                        isActive={
+                          side === 'from'
+                            ? chain === fromCoinKey.chain
+                            : chain === currentToCoin.chain
+                        }
+                        key={chain}
+                      >
+                        <CoinIcon coin={coin} style={{ fontSize: 16 }} />
+                        <Text size={12} weight={500}>
+                          {chain}
+                        </Text>
+                      </FooterItem>
+                    )
+                  })}
+                </Footer>
+              )}
             />
           )}
           {isChainModalOpen && (
@@ -114,10 +141,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 }
                 setIsChainModalOpen(false)
               }}
-              options={coins.filter(
-                coin =>
-                  isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
-              )}
+              options={coinOptions}
               filterFunction={(option, query) =>
                 option.chain.toLowerCase().startsWith(query.toLowerCase())
               }
@@ -128,3 +152,32 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
     />
   )
 }
+
+const Footer = styled.div`
+  ${hStack({
+    alignItems: 'center',
+    gap: 10,
+  })};
+
+  overflow-x: auto;
+  ${hideScrollbars};
+`
+
+const FooterItem = styled.div<IsActiveProp>`
+  ${hStack({
+    gap: 6,
+    alignItems: 'center',
+  })};
+
+  padding: 8px 12px 8px 8px;
+  border-radius: 99px;
+
+  ${({ isActive, theme }) =>
+    isActive &&
+    `
+      /* One off colors, not adding them to the theme */
+      background: rgba(6, 27, 58, 0.01);
+      box-shadow: 0 0 13.7px 0 rgba(33, 85, 223, 0.68);
+      border: 1px solid ${theme.colors.buttonPrimary.toCssValue()};
+  `}
+`
