@@ -1,20 +1,20 @@
 import {
   PopupInterface,
-  PopupMethodName,
+  PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { getProviderSource, ProviderSource } from '@core/inpage-provider/source'
 
 import { PopupApiCall } from '../communication/core'
-import { CallPopupApiOptions, CallPopupApiResolver } from './resolver'
+import { CallPopupApiOptions, CallPopupResolver } from './resolver'
 import { callPopupApiFromBackground } from './resolvers/background'
 import { callPopupApiFromInpage } from './resolvers/inpage'
 
-const resolvers: Record<ProviderSource, CallPopupApiResolver<any>> = {
+const resolvers: Record<ProviderSource, CallPopupResolver<any>> = {
   background: callPopupApiFromBackground,
   inpage: callPopupApiFromInpage,
 }
 
-export const callPopupApi = async <M extends PopupMethodName>(
+export const callPopupApi = async <M extends PopupMethod>(
   call: PopupApiCall<M>,
   options: CallPopupApiOptions = { closeOnFinish: true }
 ): Promise<PopupInterface[M]['output']> => {

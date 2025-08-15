@@ -1,9 +1,9 @@
 import {
   BackgroundInterface,
-  BackgroundMethodName,
+  BackgroundMethod,
 } from '@core/inpage-provider/background/interface'
 
-export type BackgroundApiCall<M extends BackgroundMethodName> = {
+export type BackgroundApiCall<M extends BackgroundMethod> = {
   [K in M]: BackgroundInterface[K]['input']
 }
 

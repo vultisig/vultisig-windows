@@ -11,9 +11,9 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { PluginJoinKeygenUrl } from '../../../../pages/plugin/PluginJoinKeygenUrl'
-import { PopupApiResolver } from '../../resolver'
+import { PopupResolver } from '@core/inpage-provider/popup/resolver'
 
-export const PluginReshare: PopupApiResolver<'pluginReshare'> = ({
+export const PluginReshare: PopupResolver<'pluginReshare'> = ({
   onFinish,
   input: { pluginId },
 }) => {

@@ -6,4 +6,4 @@ export type BackgroundInterface = {
   getVaults: Method<{}, VaultExport[]>
 }
 
-export type BackgroundMethodName = keyof BackgroundInterface
+export type BackgroundMethod = keyof BackgroundInterface

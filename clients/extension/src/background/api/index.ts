@@ -1,11 +1,12 @@
-import { BackgroundInterface } from '@core/inpage-provider/background/interface'
+import { BackgroundMethod } from '@core/inpage-provider/background/interface'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+
 import { authorizedDapp } from './middleware/authorizedDapp'
-import { BackgroundApiResolver } from './resolver'
 import { getVault } from './resolvers/getVault'
 import { getVaults } from './resolvers/getVaults'
 
 type BackgroundApiImplementation = {
-  [K in keyof BackgroundInterface]: BackgroundApiResolver<K>
+  [K in BackgroundMethod]: BackgroundResolver<K>
 }
 
 export const backgroundApi: BackgroundApiImplementation = {

@@ -16,9 +16,9 @@ import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PopupApiResolver } from '../../resolver'
+import { PopupResolver } from '@core/inpage-provider/popup/resolver'
 
-export const GrantVaultAccess: PopupApiResolver<'grantVaultAccess'> = ({
+export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()

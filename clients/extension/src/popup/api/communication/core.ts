@@ -1,7 +1,7 @@
 import { productName } from '@core/config'
 import {
   PopupInterface,
-  PopupMethodName,
+  PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { Result } from '@lib/utils/types/Result'
 
@@ -18,11 +18,11 @@ type PopupApiMessageKey = {
   sourceId: PopupApiMessageSourceId
 }
 
-export type PopupApiCall<M extends PopupMethodName> = {
+export type PopupApiCall<M extends PopupMethod> = {
   [K in M]: PopupInterface[K]['input']
 }
 
-export type PopupApiResponse<M extends PopupMethodName> = PopupApiMessageKey & {
+export type PopupApiResponse<M extends PopupMethod> = PopupApiMessageKey & {
   result: Result<PopupInterface[M]['output']>
 }
 

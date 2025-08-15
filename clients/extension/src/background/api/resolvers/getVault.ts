@@ -3,9 +3,9 @@ import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { BackgroundApiResolver } from '../resolver'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
-export const getVault: BackgroundApiResolver<'getVault'> = async () => {
+export const getVault: BackgroundResolver<'getVault'> = async () => {
   const vaults = await storage.getVaults()
   const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
 

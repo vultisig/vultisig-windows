@@ -2,6 +2,8 @@ import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { storage } from '@core/extension/storage'
+import { BackgroundMethod } from '@core/inpage-provider/background/interface'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
 import { callPopupApi } from '../../../popup/api/call'
 import {
@@ -9,8 +11,6 @@ import {
   getVaultAppSessions,
 } from '../../../sessions/state/appSessions'
 import { getDappHost, getDappHostname } from '../../../utils/connectedApps'
-import { BackgroundInterface } from '@core/inpage-provider/background/interface'
-import { BackgroundApiResolver } from '../resolver'
 
 const getDefaultAppSession = (requestOrigin: string) => {
   return {
@@ -22,9 +22,9 @@ const getDefaultAppSession = (requestOrigin: string) => {
 }
 
 export const authorizedDapp =
-  <K extends keyof BackgroundInterface>(
-    resolver: BackgroundApiResolver<K>
-  ): BackgroundApiResolver<K> =>
+  <K extends BackgroundMethod>(
+    resolver: BackgroundResolver<K>
+  ): BackgroundResolver<K> =>
   async params => {
     const { context } = params
     const { requestOrigin } = context

@@ -6,4 +6,4 @@ export type PopupInterface = {
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
 }
 
-export type PopupMethodName = keyof PopupInterface
+export type PopupMethod = keyof PopupInterface

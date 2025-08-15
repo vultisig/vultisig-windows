@@ -1,19 +1,19 @@
 import { sendToBackground } from '@core/inpage-provider/bridge/inpage'
 import {
   PopupInterface,
-  PopupMethodName,
+  PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { Result } from '@lib/utils/types/Result'
 
 import { ExtensionApiMessage } from '../../../../api'
-import { CallPopupApiResolver, CallPopupApiResolverInput } from '../resolver'
+import { CallPopupResolver, CallPopupResolverInput } from '../resolver'
 
-export const callPopupApiFromInpage: CallPopupApiResolver = async <
-  M extends PopupMethodName,
+export const callPopupApiFromInpage: CallPopupResolver = async <
+  M extends PopupMethod,
 >({
   call,
   options,
-}: CallPopupApiResolverInput<M>) => {
+}: CallPopupResolverInput<M>) => {
   const message: ExtensionApiMessage = {
     popup: {
       call,

@@ -1,6 +1,6 @@
 import {
   PopupInterface,
-  PopupMethodName,
+  PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
 import { pick } from '@lib/utils/record/pick'
@@ -9,8 +9,8 @@ import { setInitialView } from '../../../../storage/initialView'
 import { isPopupApiMessage, PopupApiResponse } from '../../communication/core'
 import {
   CallPopupApiOptions,
-  CallPopupApiResolver,
-  CallPopupApiResolverInput,
+  CallPopupResolver,
+  CallPopupResolverInput,
 } from '../resolver'
 
 const inNewWindow = async <T>(
@@ -52,12 +52,12 @@ const inNewWindow = async <T>(
   }
 }
 
-export const callPopupApiFromBackground: CallPopupApiResolver = async <
-  M extends PopupMethodName,
+export const callPopupApiFromBackground: CallPopupResolver = async <
+  M extends PopupMethod,
 >({
   call,
   options,
-}: CallPopupApiResolverInput<M>) => {
+}: CallPopupResolverInput<M>) => {
   await setInitialView({ id: 'popupApi', state: { call } })
 
   return inNewWindow(

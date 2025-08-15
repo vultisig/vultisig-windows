@@ -1,6 +1,6 @@
 import {
   PopupInterface,
-  PopupMethodName,
+  PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { Resolver } from '@lib/utils/types/Resolver'
 
@@ -10,10 +10,12 @@ export type CallPopupApiOptions = {
   closeOnFinish?: boolean
 }
 
-export type CallPopupApiResolverInput<M extends PopupMethodName> = {
+export type CallPopupResolverInput<M extends PopupMethod> = {
   call: PopupApiCall<M>
   options: CallPopupApiOptions
 }
 
-export type CallPopupApiResolver<M extends PopupMethodName = PopupMethodName> =
-  Resolver<CallPopupApiResolverInput<M>, Promise<PopupInterface[M]['output']>>
+export type CallPopupResolver<M extends PopupMethod = PopupMethod> = Resolver<
+  CallPopupResolverInput<M>,
+  Promise<PopupInterface[M]['output']>
+>
