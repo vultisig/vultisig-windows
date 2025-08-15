@@ -1,3 +1,7 @@
+import {
+  PopupInterface,
+  PopupMethodName,
+} from '@core/inpage-provider/popup/interface'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { Result } from '@lib/utils/types/Result'
@@ -8,17 +12,15 @@ import {
   getPopupApiMessageSourceId,
   PopupApiResponse,
 } from './communication/core'
-import { PopupApiInterface, PopupApiMethodName } from './interface'
 import { popupApiResolvers } from './resolvers'
 
 export const PopupApi = () => {
   const [{ call }] = useAppViewState<'popupApi'>()
 
-  const Resolver =
-    popupApiResolvers[getRecordUnionKey(call) as PopupApiMethodName]
+  const Resolver = popupApiResolvers[getRecordUnionKey(call) as PopupMethodName]
 
   const onFinish = useCallback(
-    (result: Result<PopupApiInterface[PopupApiMethodName]['output']>) => {
+    (result: Result<PopupInterface[PopupMethodName]['output']>) => {
       const response: PopupApiResponse<any> = {
         sourceId: getPopupApiMessageSourceId('popup'),
         result,

@@ -1,9 +1,12 @@
+import {
+  PopupInterface,
+  PopupMethodName,
+} from '@core/inpage-provider/popup/interface'
 import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
 import { pick } from '@lib/utils/record/pick'
 
 import { setInitialView } from '../../../../storage/initialView'
 import { isPopupApiMessage, PopupApiResponse } from '../../communication/core'
-import { PopupApiInterface, PopupApiMethodName } from '../../interface'
 import {
   CallPopupApiOptions,
   CallPopupApiResolver,
@@ -50,7 +53,7 @@ const inNewWindow = async <T>(
 }
 
 export const callPopupApiFromBackground: CallPopupApiResolver = async <
-  M extends PopupApiMethodName,
+  M extends PopupMethodName,
 >({
   call,
   options,
@@ -59,7 +62,7 @@ export const callPopupApiFromBackground: CallPopupApiResolver = async <
 
   return inNewWindow(
     abortSignal =>
-      new Promise<PopupApiInterface[M]['output']>((resolve, reject) => {
+      new Promise<PopupInterface[M]['output']>((resolve, reject) => {
         const handleMessage = (response: any) => {
           if (!isPopupApiMessage<PopupApiResponse<any>>(response, 'popup'))
             return
@@ -71,7 +74,7 @@ export const callPopupApiFromBackground: CallPopupApiResolver = async <
           if (error) {
             reject(error)
           } else {
-            resolve(data as PopupApiInterface[M]['output'])
+            resolve(data as PopupInterface[M]['output'])
           }
         }
 

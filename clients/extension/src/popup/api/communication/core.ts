@@ -1,8 +1,11 @@
 import { productName } from '@core/config'
+import {
+  PopupInterface,
+  PopupMethodName,
+} from '@core/inpage-provider/popup/interface'
 import { Result } from '@lib/utils/types/Result'
 
 import { CallPopupApiOptions } from '../call/resolver'
-import { PopupApiInterface, PopupApiMethodName } from '../interface'
 
 type PopupApiMessageSource = 'popup'
 
@@ -15,12 +18,13 @@ type PopupApiMessageKey = {
   sourceId: PopupApiMessageSourceId
 }
 
-export type PopupApiCall<M extends PopupApiMethodName> = {
-  [K in M]: PopupApiInterface[K]['input']
+export type PopupApiCall<M extends PopupMethodName> = {
+  [K in M]: PopupInterface[K]['input']
 }
 
-export type PopupApiResponse<M extends PopupApiMethodName> =
-  PopupApiMessageKey & { result: Result<PopupApiInterface[M]['output']> }
+export type PopupApiResponse<M extends PopupMethodName> = PopupApiMessageKey & {
+  result: Result<PopupInterface[M]['output']>
+}
 
 export const isPopupApiMessage = <T extends PopupApiMessageKey>(
   message: unknown,
