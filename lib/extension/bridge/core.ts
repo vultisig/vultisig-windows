@@ -1,4 +1,4 @@
-import { ProviderSource } from '../source'
+import { ProviderSource } from '@core/inpage-provider/source'
 
 export const getBridgeMessageSourceId = (source: ProviderSource) =>
   `bridge-channel-${source}` as const

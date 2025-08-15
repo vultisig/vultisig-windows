@@ -1,18 +1,10 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { BackgroundMethod } from '@core/inpage-provider/background/interface'
-import { runBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
-import { callPopupFromBackground } from '@core/inpage-provider/popup/resolvers/background'
-import { attempt } from '@lib/utils/attempt'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { Result } from '@lib/utils/types/Result'
+import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
-import { ExtensionApiMessage } from '../api'
 import { MessageKey } from '../utils/constants'
-import { backgroundApi } from './api'
 import { dispatchMessage } from './dispatcher/messageDispatcher'
 import { keepAliveHandler } from './handlers/keepAliveHandler'
+
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -47,25 +39,4 @@ inpageMessenger.reply<{ type: MessageKey; message: any }, unknown>(
 )
 keepAliveHandler()
 
-runBridgeBackgroundAgent<ExtensionApiMessage, Result>({
-  handleRequest: ({ message, context, reply }) => {
-    attempt(
-      matchRecordUnion<ExtensionApiMessage, Promise<unknown>>(message, {
-        background: backgroundMessage => {
-          const methodName = getRecordUnionKey(backgroundMessage.call)
-          const input = getRecordUnionValue(backgroundMessage.call)
-
-          const resolver = backgroundApi[methodName as BackgroundMethod]
-
-          return resolver({ input, context })
-        },
-        popup: popupMessage => {
-          return callPopupFromBackground({
-            call: popupMessage.call,
-            options: popupMessage.options,
-          })
-        },
-      })
-    ).then(reply)
-  },
-})
+runInpageProviderBridgeBackgroundAgent()

@@ -2,7 +2,7 @@ import {
   BackgroundInterface,
   BackgroundMethod,
 } from '@core/inpage-provider/background/interface'
-import { BridgeContext } from '@core/inpage-provider/bridge/context'
+import { BridgeContext } from '@lib/extension/bridge/context'
 import { Resolver } from '@lib/utils/types/Resolver'
 
 export type BackgroundResolver<K extends BackgroundMethod> = Resolver<
