@@ -1,9 +1,6 @@
-type GetPersistentStateFunction = <T>(
-  key: string,
-  initialValue: T
-) => Promise<T>
+type GetStorageValueFunction = <T>(key: string, initialValue: T) => Promise<T>
 
-export const getPersistentState: GetPersistentStateFunction = async (
+export const getStorageValue: GetStorageValueFunction = async (
   key,
   initialValue
 ) => {

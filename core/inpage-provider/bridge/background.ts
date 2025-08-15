@@ -1,4 +1,4 @@
-import { backgroundApi } from '@clients/extension/src/background/api'
+import { backgroundResolvers } from '@clients/extension/src/background/api/resolvers'
 import { runBridgeBackgroundAgent } from '@lib/extension/bridge/background'
 import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -21,7 +21,8 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
               const methodName = getRecordUnionKey(call)
               const input = getRecordUnionValue(call)
 
-              const resolver = backgroundApi[methodName as BackgroundMethod]
+              const resolver =
+                backgroundResolvers[methodName as BackgroundMethod]
 
               return resolver({ input, context })
             },

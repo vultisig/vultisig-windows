@@ -1,10 +1,9 @@
-import { BackgroundApiMessage } from '@clients/extension/src/background/api/communication/core'
-
+import { BackgroundMessage } from '../background/resolver'
 import { PopupMessage } from '../popup/resolver'
 
 export type InpageProviderBridgeMessage =
   | {
-      background: BackgroundApiMessage
+      background: BackgroundMessage
     }
   | {
       popup: PopupMessage

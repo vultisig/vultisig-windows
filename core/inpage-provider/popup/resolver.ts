@@ -34,8 +34,8 @@ export const isPopupMessage = <T extends PopupMessageKey>(
   'sourceId' in message &&
   message.sourceId === getPopupMessageSourceId(source)
 
-export type PopupMessage = {
-  call: PopupCall<any>
+export type PopupMessage<M extends PopupMethod = PopupMethod> = {
+  call: PopupCall<M>
   options: PopupOptions
 }
 

@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 import { PopupCall } from '../../resolver'
 
@@ -7,15 +7,15 @@ const popupViewCallsKey = 'popupViewCalls'
 
 type PopupViewCalls = Record<string, PopupCall<any>>
 
-export const getPopupViewCalls = async () =>
-  getPersistentState<PopupViewCalls>(popupViewCallsKey, {})
+const getPopupViewCalls = async () =>
+  getStorageValue<PopupViewCalls>(popupViewCallsKey, {})
 
 export const addPopupViewCall = async (call: PopupCall<any>) => {
   const calls = await getPopupViewCalls()
 
   const id = crypto.randomUUID()
 
-  await setPersistentState(popupViewCallsKey, {
+  await setStorageValue(popupViewCallsKey, {
     ...calls,
     [id]: call,
   })

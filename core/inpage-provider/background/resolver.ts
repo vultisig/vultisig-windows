@@ -5,6 +5,14 @@ import {
 import { BridgeContext } from '@lib/extension/bridge/context'
 import { Resolver } from '@lib/utils/types/Resolver'
 
+export type BackgroundCall<M extends BackgroundMethod> = {
+  [K in M]: BackgroundInterface[K]['input']
+}
+
+export type BackgroundMessage<M extends BackgroundMethod = BackgroundMethod> = {
+  call: BackgroundCall<M>
+}
+
 export type BackgroundResolver<K extends BackgroundMethod> = Resolver<
   {
     input: BackgroundInterface[K]['input']

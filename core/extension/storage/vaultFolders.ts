@@ -1,5 +1,3 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
   GetVaultFoldersFunction,
@@ -8,17 +6,19 @@ import {
 } from '@core/ui/storage/vaultFolders'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { updateVaults, vaultsStorage } from './vaults'
 
 const getVaultFolders: GetVaultFoldersFunction = async () => {
-  return getPersistentState(StorageKey.vaultFolders, vaultFoldersInitialValue)
+  return getStorageValue(StorageKey.vaultFolders, vaultFoldersInitialValue)
 }
 
 const updateVaultFolders = async (folders: VaultFolder[]) => {
-  await setPersistentState(StorageKey.vaultFolders, folders)
+  await setStorageValue(StorageKey.vaultFolders, folders)
 }
 
 export const vaultFoldersStorage: VaultFoldersStorage = {

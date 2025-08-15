@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import {
   useMutation,
@@ -11,11 +11,11 @@ const isPrioritizedQueryKey = ['isPrioritized']
 const [key] = isPrioritizedQueryKey
 
 const setPrioritizeWallet = async (isPrioritized: boolean): Promise<void> => {
-  await setPersistentState<boolean>(key, isPrioritized)
+  await setStorageValue<boolean>(key, isPrioritized)
 }
 
 export const getPrioritizeWallet = async (): Promise<boolean> => {
-  return getPersistentState<boolean>(key, true)
+  return getStorageValue<boolean>(key, true)
 }
 
 export const useIsPrioritizedWalletQuery = () => {

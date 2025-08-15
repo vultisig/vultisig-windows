@@ -1,6 +1,6 @@
-export type ProviderSource = 'inpage' | 'background'
+export type BridgeSide = 'inpage' | 'background'
 
-export const getProviderSource = (): ProviderSource => {
+export const getBridgeSide = (): BridgeSide => {
   const hasChromeRuntime = typeof chrome !== 'undefined' && !!chrome.runtime
   const hasWindow = typeof window !== 'undefined'
 
@@ -13,8 +13,8 @@ export const getProviderSource = (): ProviderSource => {
   if (hasWindow && window.location.protocol === 'chrome-extension:') {
     const path = window.location.pathname
     if (path.includes('background')) return 'background'
-    throw new Error('Unsupported provider source: extension page')
+    throw new Error('Unsupported bridge side: extension page')
   }
 
-  throw new Error('Unsupported provider source')
+  throw new Error('Unsupported bridge side')
 }

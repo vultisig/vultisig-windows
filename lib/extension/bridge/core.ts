@@ -1,6 +1,6 @@
-import { ProviderSource } from '@core/inpage-provider/source'
+import { BridgeSide } from '@lib/extension/bridge/side'
 
-export const getBridgeMessageSourceId = (source: ProviderSource) =>
+export const getBridgeMessageSourceId = (source: BridgeSide) =>
   `bridge-channel-${source}` as const
 
 type BridgeMessageSourceId = ReturnType<typeof getBridgeMessageSourceId>
@@ -16,7 +16,7 @@ export type BridgeMessage = BridgeMessageKey & {
 
 export const isBridgeMessage = (
   message: unknown,
-  source: ProviderSource
+  source: BridgeSide
 ): message is BridgeMessage =>
   typeof message === 'object' &&
   message !== null &&

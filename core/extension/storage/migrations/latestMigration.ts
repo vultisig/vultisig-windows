@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 import { StorageMigrationKey } from '.'
 
@@ -7,14 +7,11 @@ const latestMigrationKey = 'latestMigration'
 
 export const getLatestMigration =
   async (): Promise<StorageMigrationKey | null> => {
-    return getPersistentState<StorageMigrationKey | null>(
-      latestMigrationKey,
-      null
-    )
+    return getStorageValue<StorageMigrationKey | null>(latestMigrationKey, null)
   }
 
 export const setLatestMigration = async (
   version: StorageMigrationKey
 ): Promise<void> => {
-  await setPersistentState<StorageMigrationKey>(latestMigrationKey, version)
+  await setStorageValue<StorageMigrationKey>(latestMigrationKey, version)
 }

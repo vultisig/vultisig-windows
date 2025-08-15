@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 export const appSessionsQueryKey = ['appSessions']
 const [key] = appSessionsQueryKey
@@ -23,11 +23,11 @@ export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
 ): Promise<void> => {
-  await setPersistentState<VaultsAppSessions>(key, sessions)
+  await setStorageValue<VaultsAppSessions>(key, sessions)
 }
 
 export const getVaultsAppSessions = async (): Promise<VaultsAppSessions> => {
-  return getPersistentState<VaultsAppSessions>(key, {})
+  return getStorageValue<VaultsAppSessions>(key, {})
 }
 
 export const getVaultAppSessions = async (
