@@ -9,7 +9,7 @@ import {
   getVaultAppSessions,
 } from '../../../sessions/state/appSessions'
 import { getDappHost, getDappHostname } from '../../../utils/connectedApps'
-import { BackgroundApiInterface } from '../interface'
+import { BackgroundInterface } from '@core/inpage-provider/background/interface'
 import { BackgroundApiResolver } from '../resolver'
 
 const getDefaultAppSession = (requestOrigin: string) => {
@@ -22,7 +22,7 @@ const getDefaultAppSession = (requestOrigin: string) => {
 }
 
 export const authorizedDapp =
-  <K extends keyof BackgroundApiInterface>(
+  <K extends keyof BackgroundInterface>(
     resolver: BackgroundApiResolver<K>
   ): BackgroundApiResolver<K> =>
   async params => {

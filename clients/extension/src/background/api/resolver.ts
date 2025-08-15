@@ -1,13 +1,12 @@
+import { BackgroundInterface } from '@core/inpage-provider/background/interface'
 import { BridgeContext } from '@core/inpage-provider/bridge/context'
 import { Resolver } from '@lib/utils/types/Resolver'
 
-import { BackgroundApiInterface } from './interface'
-
-export type BackgroundApiResolver<K extends keyof BackgroundApiInterface> =
+export type BackgroundApiResolver<K extends keyof BackgroundInterface> =
   Resolver<
     {
-      input: BackgroundApiInterface[K]['input']
+      input: BackgroundInterface[K]['input']
       context: BridgeContext
     },
-    Promise<BackgroundApiInterface[K]['output']>
+    Promise<BackgroundInterface[K]['output']>
   >

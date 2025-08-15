@@ -10,7 +10,7 @@ import { ExtensionApiMessage } from '../api'
 import { callPopupApiFromBackground } from '../popup/api/call/resolvers/background'
 import { MessageKey } from '../utils/constants'
 import { backgroundApi } from './api'
-import { BackgroundApiMethodName } from './api/interface'
+import { BackgroundMethodName } from '@core/inpage-provider/background/interface'
 import { dispatchMessage } from './dispatcher/messageDispatcher'
 import { keepAliveHandler } from './handlers/keepAliveHandler'
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -55,7 +55,7 @@ runBridgeBackgroundAgent<ExtensionApiMessage, Result>({
           const methodName = getRecordUnionKey(backgroundMessage.call)
           const input = getRecordUnionValue(backgroundMessage.call)
 
-          const resolver = backgroundApi[methodName as BackgroundApiMethodName]
+          const resolver = backgroundApi[methodName as BackgroundMethodName]
 
           return resolver({ input, context })
         },
