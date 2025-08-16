@@ -6,22 +6,17 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { callIdQueryParam } from '../config'
-import { finishPopupFlow } from './flow/core/finish'
+import { usePopupCallId, useResolvePopupCall } from './core/call'
 import { PopupDeadEnd } from './flow/PopupDeadEnd'
 import { PopupResolvers } from './resolvers'
 import { getPopupViewCall, removePopupViewCall } from './state/calls'
 
 export const PopupView = () => {
+  const callId = usePopupCallId()
+  const resolvePopupCall = useResolvePopupCall()
+
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
-      const url = new URL(window.location.href)
-      const callId = url.searchParams.get(callIdQueryParam)
-
-      if (!callId) {
-        throw new Error(`No ${callIdQueryParam} query param found`)
-      }
-
       const call = await getPopupViewCall(callId)
       if (!call) {
         throw new Error(`No call found in the storage for ${callId}`)
@@ -33,7 +28,7 @@ export const PopupView = () => {
       await removePopupViewCall(call.id)
     },
     onError: error => {
-      finishPopupFlow({ error })
+      resolvePopupCall({ error })
     },
   })
 
@@ -50,7 +45,7 @@ export const PopupView = () => {
 
         const Resolver = PopupResolvers[method]
 
-        return <Resolver input={input} onFinish={finishPopupFlow} />
+        return <Resolver input={input} onFinish={resolvePopupCall} />
       }}
       pending={() => (
         <PopupDeadEnd>

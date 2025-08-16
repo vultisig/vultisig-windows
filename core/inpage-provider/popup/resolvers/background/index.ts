@@ -32,6 +32,8 @@ export const callPopupFromBackground: PopupCallResolver = async <
         const handleMessage = (response: any) => {
           if (!isPopupMessage<PopupResponse<any>>(response, 'popup')) return
 
+          if (response.callId !== callId) return
+
           chrome.runtime.onMessage.removeListener(handleMessage)
           abortSignal.removeEventListener('abort', handleAbort)
 

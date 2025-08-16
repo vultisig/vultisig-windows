@@ -15,6 +15,7 @@ type PopupMessageSourceId = ReturnType<typeof getPopupMessageSourceId>
 
 type PopupMessageKey = {
   sourceId: PopupMessageSourceId
+  callId: string
 }
 
 export type PopupCall<M extends PopupMethod> = {
