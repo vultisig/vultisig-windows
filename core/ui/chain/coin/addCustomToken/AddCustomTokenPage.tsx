@@ -68,7 +68,7 @@ export const AddCustomTokenPage = () => {
               address: value,
               walletCore,
             }) ? (
-              <CustomToken address={value} />
+              <CustomToken id={value} />
             ) : (
               <Text>{t('invalid_token_address')}</Text>
             )

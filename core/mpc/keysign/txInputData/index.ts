@@ -3,24 +3,24 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
-import { getCardanoTxInputData } from './cardano'
-import { getCosmosTxInputData } from './cosmos'
-import { getEvmTxInputData } from './evm'
-import { getPolkadotTxInputData } from './polkadot'
-import { getRippleTxInputData } from './ripple'
-import { getSolanaTxInputData } from './solana'
-import { getSuiTxInputData } from './sui'
-import { getTonTxInputData } from './ton'
-import { getTronTxInputData } from './tron'
-import { TxInputDataResolver } from './TxInputDataResolver'
-import { getUtxoTxInputData } from './utxo'
+import { TxInputDataResolver } from './resolver'
+import { getCardanoTxInputData } from './resolvers/cardano'
+import { getCosmosTxInputData } from './resolvers/cosmos'
+import { getEvmTxInputData } from './resolvers/evm'
+import { getPolkadotTxInputData } from './resolvers/polkadot'
+import { getRippleTxInputData } from './resolvers/ripple'
+import { getSolanaTxInputData } from './resolvers/solana'
+import { getSuiTxInputData } from './resolvers/sui'
+import { getTonTxInputData } from './resolvers/ton'
+import { getTronTxInputData } from './resolvers/tron'
+import { getUtxoTxInputData } from './resolvers/utxo'
 
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
 }
 
-const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
+const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {
   cardano: getCardanoTxInputData,
   cosmos: getCosmosTxInputData,
   evm: getEvmTxInputData,
@@ -42,7 +42,7 @@ export const getTxInputData = (input: Input) => {
   const chain = getKeysignChain(input.keysignPayload)
   const chainKind = getChainKind(chain)
 
-  return handlers[chainKind]({
+  return resolvers[chainKind]({
     ...input,
     chain,
   })

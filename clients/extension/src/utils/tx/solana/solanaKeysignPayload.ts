@@ -4,7 +4,7 @@ import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -27,7 +27,15 @@ const resolveTokenFromMint = async (mint: string): Promise<Coin> => {
     return chainFeeCoin.Solana
   }
   try {
-    return await getSolanaToken(mint)
+    const key = {
+      chain: Chain.Solana,
+      id: mint,
+    } as const
+    const metadata = await getSolanaTokenMetadata(key)
+    return {
+      ...key,
+      ...metadata,
+    }
   } catch {
     return chainFeeCoin.Solana
   }

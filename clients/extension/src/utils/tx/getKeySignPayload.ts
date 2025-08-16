@@ -13,9 +13,9 @@ import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
+import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
@@ -69,7 +69,15 @@ const getCoin = async (
   }
 
   if (chain === Chain.Solana && mint) {
-    return getSolanaToken(mint)
+    const key = {
+      chain,
+      id: mint,
+    } as const
+    const metadata = await getSolanaTokenMetadata(key)
+    return {
+      ...key,
+      ...metadata,
+    }
   }
 
   if (chain === Chain.THORChain) {

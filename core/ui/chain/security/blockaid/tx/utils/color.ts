@@ -1,4 +1,4 @@
-import { TxRiskLevel } from '@core/chain/security/blockaid/tx/scan/core'
+import { TxRiskLevel } from '@core/chain/security/blockaid/tx/validation/core'
 import { match } from '@lib/utils/match'
 import { DefaultTheme } from 'styled-components'
 

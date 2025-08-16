@@ -1,6 +1,9 @@
 import { create } from '@bufbuild/protobuf'
 
-import { KeysignPayloadSchema } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '../../../types/vultisig/keysign/v1/keysign_message_pb'
 import { mapBlockchainSpecific } from '../mappers/mapBlockchainSpecific'
 import { mapSwapPayload } from '../mappers/mapSwapPayload'
 import {
@@ -83,6 +86,24 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
       }
     : undefined
 
+  const wasmContractPayload = src.wasm_execute_contract_payload
+  const contractPayload: KeysignPayload['contractPayload'] | undefined =
+    wasmContractPayload
+      ? {
+          case: 'wasmExecuteContractPayload',
+          value: {
+            $typeName: 'vultisig.keysign.v1.WasmExecuteContractPayload',
+            senderAddress: wasmContractPayload.sender_address,
+            contractAddress: wasmContractPayload.contract_address,
+            executeMsg: wasmContractPayload.execute_msg,
+            coins: wasmContractPayload.coins.map((coin: any) => ({
+              denom: coin.denom,
+              amount: coin.amount,
+            })) as any,
+          },
+        }
+      : undefined
+
   const out = {
     coin,
     toAddress: emptyToUndefined(src.to_address ?? src.toAddress),
@@ -98,6 +119,7 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
     libType: src.lib_type ?? src.libType,
     erc20ApprovePayload: approveMapped,
     approvePayload: approveMapped,
+    contractPayload,
   }
 
   return create(KeysignPayloadSchema, out)
