@@ -1,13 +1,5 @@
-import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
-import { PopupView } from '@core/inpage-provider/popup/view'
-import { VaultsOnly } from '@core/inpage-provider/popup/view/flow/VaultsOnly'
+import { PopupApp } from '@core/inpage-provider/popup/app'
 
 import { renderExtensionPage } from './core/render'
 
-renderExtensionPage(
-  <ExtensionCoreApp>
-    <VaultsOnly>
-      <PopupView />
-    </VaultsOnly>
-  </ExtensionCoreApp>
-)
+renderExtensionPage(<PopupApp />)

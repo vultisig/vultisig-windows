@@ -31,6 +31,7 @@ export type CoreState = CoreStorage & {
   isLocalModeAvailable: boolean
   getMpcServerUrl: (input: GetMpcServerUrlInput) => Promise<string>
   processError?: ErrorBoundaryProcessError
+  goBack: () => void
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

@@ -1,10 +1,10 @@
+import { useCore } from '@core/ui/state/core'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnClickProp } from '@lib/ui/props'
 
 export const PageHeaderBackButton = ({ onClick }: Partial<OnClickProp>) => {
-  const goBack = useNavigateBack()
+  const { goBack } = useCore()
 
   return (
     <IconButton onClick={onClick ?? goBack}>

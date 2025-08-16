@@ -5,6 +5,7 @@ import {
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
 } from '@core/ui/chain/tx/TxOverviewRow'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
@@ -19,7 +20,6 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { StrictText, Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'

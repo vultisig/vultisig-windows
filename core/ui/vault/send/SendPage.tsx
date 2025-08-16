@@ -1,8 +1,8 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
+import { useCore } from '../../state/core'
 import { FeeSettingsProvider } from './fee/settings/state/feeSettings'
 import { SendForm } from './form/SendForm'
 import { SendAmountProvider } from './state/amount'
@@ -15,9 +15,10 @@ import { SendVerify } from './verify/SendVerify'
 const sendSteps = ['form', 'verify'] as const
 
 export const SendPage = () => {
+  const { goBack } = useCore()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: sendSteps,
-    onExit: useNavigateBack(),
+    onExit: goBack,
   })
   const [{ address }] = useCoreViewState<'send'>()
 

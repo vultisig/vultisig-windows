@@ -1,7 +1,7 @@
 import { useProcessDeeplinkMutation } from '@core/ui/deeplink/mutations/useProcessDeeplinkMutation'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'

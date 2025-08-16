@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
