@@ -33,6 +33,7 @@ export const CoreApp = ({
   children,
   coreState,
   migrationsManager: MigrationsManager,
+  processError,
 }: CoreAppProps) => {
   return (
     <ThemeProvider theme={darkTheme}>
@@ -40,7 +41,7 @@ export const CoreApp = ({
       <CoreProvider value={coreState}>
         <WalletCoreProvider>
           <Wrap wrap={MigrationsManager}>
-            <StorageDependant>
+            <StorageDependant processError={processError}>
               <ToastProvider>
                 <ResponsivenessProvider>
                   <Container>
