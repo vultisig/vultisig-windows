@@ -1,28 +1,16 @@
-import {
-  PopupInterface,
-  PopupMethod,
-} from '@core/inpage-provider/popup/interface'
+import { PopupMethod } from '@core/inpage-provider/popup/interface'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { Result } from '@lib/utils/types/Result'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { callIdQueryParam } from '../config'
-import { getPopupMessageSourceId } from '../resolver'
+import { finishPopupFlow } from './flow/core/finish'
 import { PopupResolvers } from './resolvers'
 import { getPopupViewCall, removePopupViewCall } from './state/calls'
-
-const onFinish = (result: Result<PopupInterface[PopupMethod]['output']>) => {
-  chrome.runtime.sendMessage({
-    sourceId: getPopupMessageSourceId('popup'),
-    result,
-  })
-  window.close()
-}
 
 export const PopupView = () => {
   const { mutate, ...mutationState } = useMutation({
@@ -45,7 +33,7 @@ export const PopupView = () => {
       await removePopupViewCall(call.id)
     },
     onError: error => {
-      onFinish({ error })
+      finishPopupFlow({ error })
     },
   })
 
@@ -62,7 +50,7 @@ export const PopupView = () => {
 
         const Resolver = PopupResolvers[method]
 
-        return <Resolver input={input} onFinish={onFinish} />
+        return <Resolver input={input} onFinish={finishPopupFlow} />
       }}
       pending={() => (
         <Center>
