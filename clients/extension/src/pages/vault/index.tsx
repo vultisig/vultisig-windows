@@ -112,7 +112,7 @@ export const VaultPage = () => {
 
               return (
                 <ListItem
-                  description={<MiddleTruncate text={address} width={80} />}
+                  description={<MiddleTruncate text={address} width={160} />}
                   extra={
                     <VStack gap={4} alignItems="end">
                       <Text weight={500} size={14} color="contrast">
