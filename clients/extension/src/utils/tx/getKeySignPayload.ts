@@ -14,7 +14,10 @@ import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
-import { ensureKnownToken } from '@core/chain/coin/knownTokens'
+import {
+  ensureKnownCosmosToken,
+  knownTokens,
+} from '@core/chain/coin/knownTokens'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -33,6 +36,7 @@ import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysi
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -56,9 +60,16 @@ const getCoin = async (
     const expectedDenom = cosmosFeeCoinDenom[chain as CosmosChain]
     if (areLowerCaseEqual(ticker, expectedDenom)) {
       return chainFeeCoin[chain]
+    } else {
+      const cosmosToken = await ensureKnownCosmosToken({ chain, denom: ticker })
+      if (cosmosToken) {
+        return cosmosToken
+      }
     }
   }
-  const knownToken = await ensureKnownToken({ chain, denom: ticker })
+  const knownToken = knownTokens[chain].find(token =>
+    areLowerCaseEqual(shouldBePresent(token.id), ticker)
+  )
 
   if (knownToken) {
     return knownToken

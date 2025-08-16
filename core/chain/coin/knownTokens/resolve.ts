@@ -15,7 +15,6 @@ type DenomMetadata = {
 type GetKnownOrFetchTokenInput = {
   chain: Chain
   denom: string
-  localKnown: Record<string, KnownCoinMetadata> | undefined
 }
 const fetchJson = async <T>(url: string): Promise<T> => {
   const res = await fetch(url)
@@ -25,7 +24,9 @@ const fetchJson = async <T>(url: string): Promise<T> => {
 
 const decimalsFromMeta = (meta?: DenomMetadata | null): number | null => {
   if (!meta?.denom_units || !meta.display) return null
-  const unit = meta.denom_units.find(u => u.denom === meta.display)
+  const unit = meta.denom_units.find(
+    u => u.denom === (meta.symbol || meta.display)
+  )
   return unit?.exponent ?? null
 }
 
@@ -65,22 +66,21 @@ const getDenomMetaFromLCD = async (
   return listRes.data?.metadatas?.find(data => data.base === denom) ?? null
 }
 
-export const getKnownOrFetchToken = async ({
+export const getFetchCosmosToken = async ({
   chain,
   denom,
-  localKnown,
 }: GetKnownOrFetchTokenInput): Promise<KnownCoin | null> => {
-  const local = localKnown?.[denom]
-  if (local) {
-    return { ...local, chain, id: denom }
-  }
   // only try to fetch for Cosmos chains
   const lcd = cosmosRpcUrl[chain as CosmosChain]
   if (!lcd) return null
 
   const meta = await getDenomMetaFromLCD(lcd, denom)
+  console.log('meta:', meta)
+
   // derive decimals
   let decimals = decimalsFromMeta(meta)
+  console.log('decimals:', decimals)
+
   if (decimals == null) {
     // sensible defaults
     decimals = chain === Chain.THORChain || denom.startsWith('x/') ? 8 : 6
