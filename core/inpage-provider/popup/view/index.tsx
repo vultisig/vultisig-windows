@@ -29,6 +29,7 @@ export const PopupView = () => {
     },
     onError: error => {
       resolvePopupCall({ error })
+      window.close()
     },
   })
 

@@ -19,11 +19,12 @@ export const PopupDeadEnd = ({ children }: ChildrenProp) => {
       <PageFooter>
         <Button
           kind="secondary"
-          onClick={() =>
+          onClick={() => {
             resolvePopupCall({
               error: new Error('User closed the popup at the dead end'),
             })
-          }
+            window.close()
+          }}
         >
           {t('close')}
         </Button>

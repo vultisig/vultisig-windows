@@ -10,6 +10,7 @@ export const PopupApp = () => {
 
   const goBack = useCallback(() => {
     resolvePopupCall({ error: 'Popup window was closed' })
+    window.close()
   }, [resolvePopupCall])
 
   return (

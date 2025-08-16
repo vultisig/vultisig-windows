@@ -25,9 +25,6 @@ export const useResolvePopupCall = () => {
         callId,
         result,
       })
-      if ('error' in result) {
-        window.close()
-      }
     },
     [callId]
   )
