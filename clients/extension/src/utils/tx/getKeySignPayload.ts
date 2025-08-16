@@ -13,7 +13,10 @@ import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { knownTokens } from '@core/chain/coin/knownTokens'
+import {
+  ensureKnownCosmosToken,
+  knownTokens,
+} from '@core/chain/coin/knownTokens'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
@@ -57,9 +60,13 @@ const getCoin = async (
     const expectedDenom = cosmosFeeCoinDenom[chain as CosmosChain]
     if (areLowerCaseEqual(ticker, expectedDenom)) {
       return chainFeeCoin[chain]
+    } else {
+      const cosmosToken = await ensureKnownCosmosToken({ chain, denom: ticker })
+      if (cosmosToken) {
+        return cosmosToken
+      }
     }
   }
-
   const knownToken = knownTokens[chain].find(token =>
     areLowerCaseEqual(shouldBePresent(token.id), ticker)
   )
