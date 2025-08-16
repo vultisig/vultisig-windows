@@ -19,7 +19,7 @@ export const SwapProvider = () => {
         value={query}
         pending={() => <Skeleton width="88px" height="12px" />}
         success={quote => (
-          <Text color="supporting">{getSwapQuoteProviderName(quote)}</Text>
+          <Text color="shy">{getSwapQuoteProviderName(quote)}</Text>
         )}
       />
     </StrictInfoRow>
