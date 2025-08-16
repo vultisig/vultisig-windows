@@ -4,10 +4,12 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { finishPopupFlow } from './core/finish'
+import { useResolvePopupCall } from '../core/call'
 
 export const PopupDeadEnd = ({ children }: ChildrenProp) => {
   const { t } = useTranslation()
+
+  const resolvePopupCall = useResolvePopupCall()
 
   return (
     <>
@@ -18,7 +20,9 @@ export const PopupDeadEnd = ({ children }: ChildrenProp) => {
         <Button
           kind="secondary"
           onClick={() =>
-            finishPopupFlow({ error: new Error('Popup flow reached dead end') })
+            resolvePopupCall({
+              error: new Error('User closed the popup at the dead end'),
+            })
           }
         >
           {t('close')}
