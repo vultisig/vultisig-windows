@@ -10,7 +10,7 @@ import {
   setVaultsAppSessions,
   updateAppSession,
   VaultsAppSessions,
-} from '@clients/extension/src/sessions/state/appSessions'
+} from '@core/extension/storage/appSessions'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,

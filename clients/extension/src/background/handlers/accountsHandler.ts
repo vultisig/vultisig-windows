@@ -6,7 +6,7 @@ import { storage } from '@core/extension/storage'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { getVaultAppSessions } from '../../sessions/state/appSessions'
+import { getVaultAppSessions } from '@core/extension/storage/appSessions'
 import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'

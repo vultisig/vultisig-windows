@@ -1,7 +1,10 @@
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
-import { appSessionsQueryKey, setVaultsAppSessions } from '../state/appSessions'
+import {
+  appSessionsQueryKey,
+  setVaultsAppSessions,
+} from '@core/extension/storage/appSessions'
 import {
   currentVaultAppSessionsQueryKey,
   useAppSessionsQuery,

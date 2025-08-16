@@ -1,16 +1,18 @@
+import {
+  getDappHost,
+  getDappHostname,
+} from '@clients/extension/src/utils/connectedApps'
 import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { storage } from '@core/extension/storage'
-import { BackgroundMethod } from '@core/inpage-provider/background/interface'
-import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { callPopup } from '@core/inpage-provider/popup'
-
 import {
   addVaultAppSession,
   getVaultAppSessions,
-} from '../../../sessions/state/appSessions'
-import { getDappHost, getDappHostname } from '../../../utils/connectedApps'
+} from '@core/extension/storage/appSessions'
+import { BackgroundMethod } from '@core/inpage-provider/background/interface'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { callPopup } from '@core/inpage-provider/popup'
 
 const getDefaultAppSession = (requestOrigin: string) => {
   return {

@@ -5,7 +5,7 @@ import {
   AppSession,
   appSessionsQueryKey,
   getVaultsAppSessions,
-} from './appSessions'
+} from '@core/extension/storage/appSessions'
 
 export const currentVaultAppSessionsQueryKey = ['currentVaultAppSessions']
 
