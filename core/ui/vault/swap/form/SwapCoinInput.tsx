@@ -9,9 +9,8 @@ import {
 } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
-import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
-import { HStack, hStack } from '@lib/ui/layout/Stack'
+import { hStack } from '@lib/ui/layout/Stack'
 import { InputProps, IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
@@ -27,10 +26,13 @@ import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 import { useToCoin } from '../state/toCoin'
+import { useScrollSelectedChainIntoView } from './hooks/useScrollSelectedChainIntoView'
+import { useSortedSwapCoins } from './hooks/useSortedSwapCoins'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
+
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = shouldBePresent(useCurrentVaultCoin(value))
@@ -41,6 +43,15 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const coinOptions = coins.filter(
     coin => isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
   )
+
+  const sortedSwapCoins = useSortedSwapCoins(value)
+
+  const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+  const { footerRef, itemRefs, scrollChainIntoView } =
+    useScrollSelectedChainIntoView({
+      chain: currentChain,
+      enabled: isCoinModalOpen,
+    })
 
   return (
     <Opener
@@ -61,32 +72,6 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
         <>
           {isCoinModalOpen && (
             <SelectItemModal
-              renderListHeader={() => (
-                <HStack alignItems="center" gap={6}>
-                  <Text color="shy" size={12} weight={500}>
-                    {t('chain')}
-                  </Text>
-                  <HStack
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    onClick={() => {
-                      setIsChainModalOpen(true)
-                    }}
-                    gap={4}
-                  >
-                    <CoinIcon coin={coin} style={{ fontSize: 16 }} />
-                    <HStack alignItems="center">
-                      <Text size={12} weight={500}>
-                        {coin.chain}
-                      </Text>
-                      <ChevronDownIcon />
-                    </HStack>
-                  </HStack>
-                </HStack>
-              )}
               filterFunction={(option, query) =>
                 option.ticker.toLowerCase().startsWith(query.toLowerCase())
               }
@@ -98,13 +83,24 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 }
                 setIsCoinModalOpen(false)
               }}
-              options={coins.filter(c => c.chain === coin?.chain)}
+              options={sortedSwapCoins}
               renderFooter={() => (
-                <Footer>
+                <Footer ref={footerRef}>
                   {coinOptions.map(coin => {
                     const chain = coin.chain
                     return (
                       <FooterItem
+                        ref={el => {
+                          itemRefs.current[chain] = el
+                        }}
+                        tabIndex={0}
+                        role="button"
+                        onClick={() => {
+                          scrollChainIntoView(chain, 'smooth')
+                          if (currentChain !== chain) {
+                            onChange(coin)
+                          }
+                        }}
                         isActive={
                           side === 'from'
                             ? chain === fromCoinKey.chain
@@ -136,9 +132,13 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 return <ChainOption {...props} isSelected={isSelected} />
               }}
               onFinish={(newValue: CoinKey | undefined) => {
-                if (newValue) {
+                const currentCoinChain =
+                  side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+                if (newValue && newValue.chain !== currentCoinChain) {
                   onChange(newValue)
                 }
+
                 setIsChainModalOpen(false)
               }}
               options={coinOptions}
@@ -158,7 +158,6 @@ const Footer = styled.div`
     alignItems: 'center',
     gap: 10,
   })};
-
   overflow-x: auto;
   ${hideScrollbars};
 `
@@ -169,6 +168,7 @@ const FooterItem = styled.div<IsActiveProp>`
     alignItems: 'center',
   })};
 
+  cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
 
