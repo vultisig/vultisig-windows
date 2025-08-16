@@ -1,5 +1,4 @@
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
-import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
@@ -9,6 +8,7 @@ import { useEffect } from 'react'
 
 import { callIdQueryParam } from '../config'
 import { finishPopupFlow } from './flow/core/finish'
+import { PopupDeadEnd } from './flow/PopupDeadEnd'
 import { PopupResolvers } from './resolvers'
 import { getPopupViewCall, removePopupViewCall } from './state/calls'
 
@@ -53,9 +53,9 @@ export const PopupView = () => {
         return <Resolver input={input} onFinish={finishPopupFlow} />
       }}
       pending={() => (
-        <Center>
+        <PopupDeadEnd>
           <Spinner />
-        </Center>
+        </PopupDeadEnd>
       )}
     />
   )

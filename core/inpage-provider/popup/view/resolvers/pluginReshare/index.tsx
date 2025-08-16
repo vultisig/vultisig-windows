@@ -11,6 +11,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { PopupDeadEnd } from '../../flow/PopupDeadEnd'
 import { PluginJoinKeygenUrl } from './PluginJoinKeygenUrl'
 
 export const PluginReshare: PopupResolver<'pluginReshare'> = ({
@@ -43,9 +44,9 @@ export const PluginReshare: PopupResolver<'pluginReshare'> = ({
         </ReshareVaultFlowProviders>
       )}
       pending={() => (
-        <Center>
+        <PopupDeadEnd>
           <Spinner />
-        </Center>
+        </PopupDeadEnd>
       )}
       error={() => (
         <Center>
