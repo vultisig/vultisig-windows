@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import { PluginJoinKeygenUrl } from './PluginJoinKeygenUrl'
 
-const PluginReshareImpl: PopupResolver<'pluginReshare'> = ({
+export const PluginReshare: PopupResolver<'pluginReshare'> = ({
   onFinish,
   input: { pluginId },
 }) => {
@@ -55,5 +55,3 @@ const PluginReshareImpl: PopupResolver<'pluginReshare'> = ({
     />
   )
 }
-
-export default PluginReshareImpl
