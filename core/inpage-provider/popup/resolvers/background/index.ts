@@ -2,7 +2,9 @@ import {
   PopupInterface,
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
+import { callIdQueryParam } from '../../config'
 import {
   isPopupMessage,
   PopupCallResolver,
@@ -22,7 +24,9 @@ export const callPopupFromBackground: PopupCallResolver = async <
 
   return inNewWindow({
     ...options,
-    url: chrome.runtime.getURL(`index.html?callId=${callId}`),
+    url: chrome.runtime.getURL(
+      addQueryParams('popup.html', { [callIdQueryParam]: callId })
+    ),
     execute: abortSignal =>
       new Promise<PopupInterface[M]['output']>((resolve, reject) => {
         const handleMessage = (response: any) => {

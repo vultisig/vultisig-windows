@@ -1,4 +1,4 @@
-export type CallbackOptions = {
+type CallbackOptions = {
   /** The sender of the message. */
   sender: any
   /** The topic provided. */
@@ -12,9 +12,7 @@ export type CallbackFunction<TPayload = any, TResponse = any> = (
   options: CallbackOptions
 ) => Promise<TResponse> | TResponse
 
-export type Source = 'background' | 'content' | 'inpage' | 'popup'
-
-export type Messenger = {
+type Messenger = {
   /** Whether or not the messenger is available in the context. */
   available: boolean
   /** Name of the messenger */

@@ -1,4 +1,3 @@
-import { PopupCall } from '@core/inpage-provider/popup/resolver'
 import { CoreView } from '@core/ui/navigation/CoreView'
 
 export type AppView =
@@ -7,6 +6,5 @@ export type AppView =
   | { id: 'connectedDapps' }
   | { id: 'connectTab' }
   | { id: 'transactionTab' }
-  | { id: 'popupApi'; state: { call: PopupCall<any> } }
 
 export type AppViewId = AppView['id']

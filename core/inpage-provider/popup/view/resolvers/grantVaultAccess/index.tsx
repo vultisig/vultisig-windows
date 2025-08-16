@@ -17,7 +17,7 @@ import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
+const GrantVaultAccessImpl: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()
@@ -101,3 +101,5 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     </PageContent>
   )
 }
+
+export default GrantVaultAccessImpl

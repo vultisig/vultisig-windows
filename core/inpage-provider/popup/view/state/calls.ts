@@ -1,5 +1,6 @@
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { omit } from '@lib/utils/record/omit'
 
 import { PopupCall } from '../../resolver'
 
@@ -21,4 +22,14 @@ export const addPopupViewCall = async (call: PopupCall<any>) => {
   })
 
   return id
+}
+
+export const removePopupViewCall = async (id: string) => {
+  const calls = await getPopupViewCalls()
+  return setStorageValue(popupViewCallsKey, omit(calls, id))
+}
+
+export const getPopupViewCall = async (id: string) => {
+  const calls = await getPopupViewCalls()
+  return calls[id]
 }

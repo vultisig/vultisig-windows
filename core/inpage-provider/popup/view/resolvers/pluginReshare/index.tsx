@@ -11,9 +11,9 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { PluginJoinKeygenUrl } from '../../../../pages/plugin/PluginJoinKeygenUrl'
+import { PluginJoinKeygenUrl } from './PluginJoinKeygenUrl'
 
-export const PluginReshare: PopupResolver<'pluginReshare'> = ({
+const PluginReshareImpl: PopupResolver<'pluginReshare'> = ({
   onFinish,
   input: { pluginId },
 }) => {
@@ -55,3 +55,5 @@ export const PluginReshare: PopupResolver<'pluginReshare'> = ({
     />
   )
 }
+
+export default PluginReshareImpl
