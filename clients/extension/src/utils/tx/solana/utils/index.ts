@@ -1,4 +1,8 @@
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+  NATIVE_MINT,
+  TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
 
 import { AddressTableLookup, PartialInstruction } from '../types/types'
@@ -90,6 +94,9 @@ export const mintFromTokenAccount = async (
   connection: Connection,
   ata: PublicKey
 ): Promise<string | null> => {
+  if (ata === NATIVE_MINT) {
+    return NATIVE_MINT.toBase58()
+  }
   const info = await connection.getParsedAccountInfo(ata)
   return (info.value as any)?.data?.parsed?.info?.mint ?? null
 }

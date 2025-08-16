@@ -4,7 +4,12 @@ import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
-import { jupiterV6ProgramId, raydiumAmmRouting } from './config'
+import {
+  jupiterOrderEngine,
+  jupiterV6ProgramId,
+  raydiumAmmRouting,
+} from './config'
+import { handleJupiterOrderEngine } from './handlers/jupiterOrderEngine'
 import { handleJupiter } from './handlers/jupiterV6'
 import { handleRaydium } from './handlers/raydium'
 import { handleSplTransfer } from './handlers/splToken'
@@ -54,6 +59,7 @@ export const parseSolanaTx = async (
     const handlers: Record<string, () => Promise<ParsedResult | null>> = {
       [jupiterV6ProgramId.toBase58()]: () => handleJupiter(ix, keys, ctx),
       [raydiumAmmRouting.toBase58()]: () => handleRaydium(ix, keys, ctx),
+      [jupiterOrderEngine.toBase58()]: () => handleJupiterOrderEngine(ix, keys),
       [TOKEN_PROGRAM_ID.toBase58()]: () => handleSplTransfer(ix, keys, ctx),
       [SystemProgram.programId.toBase58()]: () =>
         handleSystemTransfer(ix, keys),
