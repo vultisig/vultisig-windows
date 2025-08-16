@@ -3,13 +3,13 @@ import { getVaultTransactions } from '@clients/extension/src/transactions/state/
 import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
 import { splitString } from '@clients/extension/src/utils/functions'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
-import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/parseSolanaTransaction'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
@@ -17,18 +17,25 @@ import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignCha
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import {
+  ContentWrapper,
+  HorizontalLine,
+  IconWrapper,
+} from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -50,6 +57,7 @@ import { Trans } from 'react-i18next'
 
 import { CosmosMsgType } from '../../utils/constants'
 import { ITransaction } from '../../utils/interfaces'
+import { parseSolanaTx } from '../../utils/tx/solana/parser'
 import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
@@ -151,11 +159,10 @@ export const TransactionPage = () => {
             }
           },
           serialized: async ({ data: serialized, skipBroadcast }) => {
-            const parsed = await getParsedSolanaTransaction(
-              walletCore,
-              serialized
-            )
-
+            const parsed = await parseSolanaTx(walletCore, serialized)
+            if (!parsed) {
+              throw new Error('Could not parse transaction')
+            }
             const keysignPayload = await getSolanaKeysignPayload(
               parsed,
               serialized,
@@ -256,177 +263,247 @@ export const TransactionPage = () => {
                             />
                           </>
                         ),
-                        keysign: keysign => (
-                          <>
-                            <ListItem
-                              title={t('from')}
-                              description={
-                                <MiddleTruncate text={keysign.coin!.address} />
-                              }
-                            />
-                            {keysign.toAddress && (
+                        keysign: keysign =>
+                          keysign.swapPayload && keysign.swapPayload.value ? (
+                            <>
+                              <ContentWrapper gap={24}>
+                                <Text color="supporting" size={15}>
+                                  {t('youre_swapping')}
+                                </Text>
+                                <VStack gap={16}>
+                                  <HStack gap={8}>
+                                    <CoinIcon
+                                      coin={
+                                        keysign.swapPayload.value
+                                          .fromCoin as AccountCoin
+                                      }
+                                      style={{ fontSize: 24 }}
+                                    />
+                                    <Text
+                                      weight="500"
+                                      size={17}
+                                      color="contrast"
+                                    >
+                                      {Number(
+                                        formatUnits(
+                                          keysign.swapPayload.value.fromAmount,
+                                          keysign.swapPayload.value.fromCoin
+                                            ?.decimals
+                                        )
+                                      )}
+                                      <Text as="span" color="shy" size={17}>
+                                        {keysign.swapPayload.value.fromCoin?.ticker.toUpperCase()}
+                                      </Text>
+                                    </Text>
+                                  </HStack>
+                                  <HStack alignItems="center" gap={21}>
+                                    <IconWrapper>
+                                      <ArrowDownIcon />
+                                    </IconWrapper>
+                                    <HorizontalLine />
+                                  </HStack>
+                                  <HStack gap={8}>
+                                    <CoinIcon
+                                      coin={
+                                        keysign.swapPayload.value
+                                          .toCoin as AccountCoin
+                                      }
+                                      style={{ fontSize: 24 }}
+                                    />
+                                    <Text
+                                      weight="500"
+                                      size={17}
+                                      color="contrast"
+                                    >
+                                      {
+                                        keysign.swapPayload.value
+                                          .toAmountDecimal
+                                      }{' '}
+                                      <Text as="span" color="shy" size={17}>
+                                        {keysign.swapPayload.value.fromCoin?.ticker.toUpperCase()}
+                                      </Text>
+                                    </Text>
+                                  </HStack>
+                                </VStack>
+                              </ContentWrapper>
+                            </>
+                          ) : (
+                            <>
                               <ListItem
-                                title={t('to')}
+                                title={t('from')}
                                 description={
-                                  <MiddleTruncate text={keysign.toAddress} />
+                                  <MiddleTruncate
+                                    text={keysign.coin!.address}
+                                  />
                                 }
                               />
-                            )}
-                            {keysign.toAmount && (
+                              {keysign.toAddress && (
+                                <ListItem
+                                  title={t('to')}
+                                  description={
+                                    <MiddleTruncate text={keysign.toAddress} />
+                                  }
+                                />
+                              )}
+                              {keysign.toAmount && (
+                                <ListItem
+                                  title={t('amount')}
+                                  description={`${formatUnits(
+                                    keysign.toAmount,
+                                    keysign.coin?.decimals
+                                  )} ${keysign.coin?.ticker}`}
+                                />
+                              )}
                               <ListItem
-                                title={t('amount')}
-                                description={`${formatUnits(
-                                  keysign.toAmount,
-                                  keysign.coin?.decimals
-                                )} ${keysign.coin?.ticker}`}
+                                title="Network"
+                                description={getKeysignChain(keysign)}
                               />
-                            )}
-                            <ListItem
-                              title="Network"
-                              description={getKeysignChain(keysign)}
-                            />
-                            <MatchRecordUnion
-                              value={transaction.transactionPayload}
-                              handlers={{
-                                keysign: transactionPayload => (
-                                  <>
-                                    <ListItem
-                                      title={t('est_network_fee')}
-                                      description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
-                                      extra={
-                                        <GasFeeAdjuster
-                                          keysignPayload={keysignMessagePayload}
-                                          gasLimit={Number(
-                                            transactionPayload
-                                              .transactionDetails?.gasSettings
-                                              ?.gasLimit
-                                          )}
-                                          baseFee={Number(
-                                            transactionPayload.txFee
-                                          )}
-                                          onFeeChange={async (
-                                            fee,
-                                            gasLimit
-                                          ) => {
-                                            if (
-                                              'keysign' in keysignMessagePayload
-                                            ) {
-                                              const priorityFeeInBaseUnit =
-                                                shouldBePresent(
-                                                  formatUnits(
-                                                    BigInt(fee),
-                                                    keysign.coin?.decimals
+                              <MatchRecordUnion
+                                value={transaction.transactionPayload}
+                                handlers={{
+                                  keysign: transactionPayload => (
+                                    <>
+                                      <ListItem
+                                        title={t('est_network_fee')}
+                                        description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
+                                        extra={
+                                          <GasFeeAdjuster
+                                            keysignPayload={
+                                              keysignMessagePayload
+                                            }
+                                            gasLimit={Number(
+                                              transactionPayload
+                                                .transactionDetails?.gasSettings
+                                                ?.gasLimit
+                                            )}
+                                            baseFee={Number(
+                                              transactionPayload.txFee
+                                            )}
+                                            onFeeChange={async (
+                                              fee,
+                                              gasLimit
+                                            ) => {
+                                              if (
+                                                'keysign' in
+                                                keysignMessagePayload
+                                              ) {
+                                                const priorityFeeInBaseUnit =
+                                                  shouldBePresent(
+                                                    formatUnits(
+                                                      BigInt(fee),
+                                                      keysign.coin?.decimals
+                                                    )
                                                   )
+                                                const totalFee =
+                                                  Number(
+                                                    transactionPayload.txFee
+                                                  ) +
+                                                  Number(priorityFeeInBaseUnit)
+                                                setUpdatedTxFee(
+                                                  totalFee.toString()
                                                 )
-                                              const totalFee =
-                                                Number(
-                                                  transactionPayload.txFee
-                                                ) +
-                                                Number(priorityFeeInBaseUnit)
-                                              setUpdatedTxFee(
-                                                totalFee.toString()
-                                              )
-                                              setUpdatedGasLimit(gasLimit)
+                                                setUpdatedGasLimit(gasLimit)
 
-                                              // Update the stored transaction with new gas limit
-                                              const updatedTransaction = {
-                                                ...transaction,
-                                                transactionPayload: {
-                                                  ...transaction.transactionPayload,
-                                                  keysign: {
-                                                    ...transactionPayload,
-                                                    transactionDetails: {
-                                                      ...transactionPayload.transactionDetails,
-                                                      gasSettings: {
-                                                        ...transactionPayload
-                                                          .transactionDetails
-                                                          .gasSettings,
-                                                        gasLimit:
-                                                          gasLimit.toString(),
+                                                // Update the stored transaction with new gas limit
+                                                const updatedTransaction = {
+                                                  ...transaction,
+                                                  transactionPayload: {
+                                                    ...transaction.transactionPayload,
+                                                    keysign: {
+                                                      ...transactionPayload,
+                                                      transactionDetails: {
+                                                        ...transactionPayload.transactionDetails,
+                                                        gasSettings: {
+                                                          ...transactionPayload
+                                                            .transactionDetails
+                                                            .gasSettings,
+                                                          gasLimit:
+                                                            gasLimit.toString(),
+                                                        },
                                                       },
                                                     },
                                                   },
-                                                },
+                                                }
+
+                                                await updateTransaction(
+                                                  getVaultId(vault),
+                                                  updatedTransaction
+                                                )
+
+                                                // Re-process transaction with updated gas settings
+                                                processTransaction()
                                               }
-
-                                              await updateTransaction(
-                                                getVaultId(vault),
-                                                updatedTransaction
-                                              )
-
-                                              // Re-process transaction with updated gas settings
-                                              processTransaction()
-                                            }
-                                          }}
-                                        />
-                                      }
-                                    />
-                                    {transactionPayload.memo?.isParsed ? (
-                                      <>
-                                        <ListItem
-                                          title={t('function_signature')}
-                                          description={
-                                            <VStack as="pre" scrollable>
-                                              <Text as="code" family="mono">
-                                                {
-                                                  (
-                                                    transactionPayload.memo
-                                                      .value as ParsedMemoParams
-                                                  ).functionSignature
-                                                }
-                                              </Text>
-                                            </VStack>
-                                          }
-                                        />
-                                        <ListItem
-                                          title={t('function_inputs')}
-                                          description={
-                                            <VStack as="pre" scrollable>
-                                              <Text as="code" family="mono">
-                                                {
-                                                  (
-                                                    transactionPayload.memo
-                                                      .value as ParsedMemoParams
-                                                  ).functionArguments
-                                                }
-                                              </Text>
-                                            </VStack>
-                                          }
-                                        />
-                                      </>
-                                    ) : (
-                                      transactionPayload.memo?.value && (
-                                        <ListItem
-                                          title={t('memo')}
-                                          description={splitString(
-                                            transactionPayload.memo
-                                              .value as string,
-                                            32
-                                          ).map((str, index) => (
-                                            <span key={index}>{str}</span>
-                                          ))}
-                                        />
-                                      )
-                                    )}
-                                    {transactionPayload.transactionDetails
-                                      .cosmosMsgPayload?.case ===
-                                      CosmosMsgType.MSG_EXECUTE_CONTRACT && (
-                                      <ListItem
-                                        title={t('message')}
-                                        description={
-                                          transactionPayload.transactionDetails
-                                            .cosmosMsgPayload.value.msg
+                                            }}
+                                          />
                                         }
                                       />
-                                    )}
-                                  </>
-                                ),
-                                custom: () => null,
-                                serialized: () => null,
-                              }}
-                            />
-                          </>
-                        ),
+                                      {transactionPayload.memo?.isParsed ? (
+                                        <>
+                                          <ListItem
+                                            title={t('function_signature')}
+                                            description={
+                                              <VStack as="pre" scrollable>
+                                                <Text as="code" family="mono">
+                                                  {
+                                                    (
+                                                      transactionPayload.memo
+                                                        .value as ParsedMemoParams
+                                                    ).functionSignature
+                                                  }
+                                                </Text>
+                                              </VStack>
+                                            }
+                                          />
+                                          <ListItem
+                                            title={t('function_inputs')}
+                                            description={
+                                              <VStack as="pre" scrollable>
+                                                <Text as="code" family="mono">
+                                                  {
+                                                    (
+                                                      transactionPayload.memo
+                                                        .value as ParsedMemoParams
+                                                    ).functionArguments
+                                                  }
+                                                </Text>
+                                              </VStack>
+                                            }
+                                          />
+                                        </>
+                                      ) : (
+                                        transactionPayload.memo?.value && (
+                                          <ListItem
+                                            title={t('memo')}
+                                            description={splitString(
+                                              transactionPayload.memo
+                                                .value as string,
+                                              32
+                                            ).map((str, index) => (
+                                              <span key={index}>{str}</span>
+                                            ))}
+                                          />
+                                        )
+                                      )}
+                                      {transactionPayload.transactionDetails
+                                        .cosmosMsgPayload?.case ===
+                                        CosmosMsgType.MSG_EXECUTE_CONTRACT && (
+                                        <ListItem
+                                          title={t('message')}
+                                          description={
+                                            transactionPayload
+                                              .transactionDetails
+                                              .cosmosMsgPayload.value.msg
+                                          }
+                                        />
+                                      )}
+                                    </>
+                                  ),
+                                  custom: () => null,
+                                  serialized: () => null,
+                                }}
+                              />
+                            </>
+                          ),
                       }}
                     />
                   </List>
