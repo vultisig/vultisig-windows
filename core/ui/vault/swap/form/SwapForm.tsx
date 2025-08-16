@@ -1,4 +1,4 @@
-import { useIsSwapFormDisabled } from '@core/ui/vault/swap/form/hooks/useIsSwapFormDisabled'
+import { useSwapFormStates } from '@core/ui/vault/swap/form/hooks/useSwapFormStates'
 import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
 import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
 import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'
@@ -13,7 +13,7 @@ import { FC } from 'react'
 import styled from 'styled-components'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
-  const isDisabled = useIsSwapFormDisabled()
+  const { isDisabled } = useSwapFormStates()
 
   return (
     <>
