@@ -62,6 +62,8 @@ export const mapBlockchainSpecific = (bsRaw: any) => {
       solanaSpecific: {
         recentBlockHash: s.recent_block_hash ?? s.recentBlockHash,
         priorityFee: bigishToString(s.priority_fee ?? s.priorityFee),
+        fromTokenAssociatedAddress: s.from_token_associated_address,
+        toTokenAssociatedAddress: s.to_token_associated_address,
         hasProgramId: booleanOrUndefined(s.has_program_id ?? s.hasProgramId),
       },
     }
@@ -130,6 +132,56 @@ export const mapBlockchainSpecific = (bsRaw: any) => {
       },
     }
   }
+  // TRON
 
+  if (bsRaw.TronSpecific || bsRaw.tronSpecific) {
+    const t = bsRaw.TronSpecific ?? bsRaw.tronSpecific
+    return {
+      tronSpecific: {
+        timestamp: numberOrUndefined(t.timestamp),
+        expiration: numberOrUndefined(t.expiration),
+        blockHeaderTimestamp: numberOrUndefined(t.block_header_timestamp),
+        blockHeaderNumber: numberOrUndefined(t.block_header_number),
+        blockHeaderVersion: numberOrUndefined(t.block_header_version),
+        blockHeaderTxTrieRoot: t.block_header_tx_trie_root,
+        blockHeaderParentHash: t.block_header_parent_hash,
+        blockHeaderWitnessAddress: t.block_header_witness_address,
+        gasEstimation: t.gas_estimation,
+      },
+    }
+  }
+
+  // Polkadot
+  if (bsRaw.PolkadotSpecific || bsRaw.polkadotSpecific) {
+    const p = bsRaw.PolkadotSpecific ?? bsRaw.polkadotSpecific
+    return {
+      polkadotSpecific: {
+        recentBlockHash: p.recent_block_hash,
+        nonce: numberOrUndefined(p.nonce),
+        currentBlockNumber: p.current_block_number,
+        specVersion: numberOrUndefined(p.spec_version),
+        transactionVersion: numberOrUndefined(p.transaction_version),
+        genesisHash: p.genesis_hash,
+      },
+    }
+  }
+
+  // Sui
+  if (bsRaw.SuicheSpecific || bsRaw.suicheSpecific) {
+    const s = bsRaw.SuicheSpecific ?? bsRaw.suicheSpecific
+    return {
+      suicheSpecific: {
+        referenceGasPrice: s.reference_gas_price,
+        coins: s.coins.map((coin: any) => ({
+          coinType: coin.coin_type,
+          coinObjectId: coin.coin_object_id,
+          version: coin.version,
+          digest: coin.digest,
+          balance: coin.balance,
+          previousTransaction: coin.previous_transaction,
+        })),
+      },
+    }
+  }
   return bsRaw
 }

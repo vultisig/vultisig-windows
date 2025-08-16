@@ -7,7 +7,7 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
+import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { match } from '@lib/utils/match'
 import { TW } from '@trustwallet/wallet-core'
 import { bech32 } from 'bech32'
@@ -291,7 +291,15 @@ const transactionHandlers: TransactionHandlers = {
         throw new Error('No mint address provided')
       }
       try {
-        const token = await getSolanaToken(tx.asset.mint)
+        const key = {
+          chain: Chain.Solana,
+          id: tx.asset.mint,
+        } as const
+        const metadata = await getSolanaTokenMetadata(key)
+        const token = {
+          ...key,
+          ...metadata,
+        }
 
         return {
           asset: {

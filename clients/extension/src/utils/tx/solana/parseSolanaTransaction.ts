@@ -1,7 +1,8 @@
+import { OtherChain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { getAccount, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
@@ -84,9 +85,13 @@ export async function getParsedSolanaTransaction(
   const buildToken = async (mint: string): Promise<SolanaJupiterToken> => {
     if (mint === NATIVE_MINT.toString()) return nativeSolToken()
     try {
-      const coin = await getSolanaToken(mint)
+      const key = {
+        id: mint,
+        chain: OtherChain.Solana,
+      } as const
+      const coin = await getSolanaTokenMetadata(key)
       return {
-        address: coin.id,
+        address: mint,
         name: coin.ticker,
         symbol: coin.ticker,
         decimals: coin.decimals,

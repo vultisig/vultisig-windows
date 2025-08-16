@@ -6,7 +6,6 @@ import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { DefaultChainsStorage } from './defaultChains'
 import { FiatCurrencyStorage } from './fiatCurrency'
-import { InitialViewStorage } from './initialView'
 import { LanguageStorage } from './language'
 import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
@@ -28,6 +27,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   BlockaidStorage &
   OnboardingStorage &
   ReferralsStorage &
-  InitialViewStorage &
   PasscodeEncryptionStorage &
   PasscodeAutoLockStorage

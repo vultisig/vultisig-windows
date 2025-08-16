@@ -1,15 +1,15 @@
 import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
+import { ChainWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { CustomTokenEnabledChain } from '@core/ui/chain/coin/addCustomToken/core/chains'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
-  | { id: 'addCustomToken'; state: { chain: CustomTokenEnabledChain } }
+  | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'airdropRegister' }

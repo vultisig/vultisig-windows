@@ -49,12 +49,12 @@ const inNewWindow = async <T>(
   }
 }
 
-export const callPopupApiFromBackground: CallPopupApiResolver<any> = async <
+export const callPopupApiFromBackground: CallPopupApiResolver = async <
   M extends PopupApiMethodName,
 >({
   call,
   options,
-}: CallPopupApiResolverInput<M>): Promise<PopupApiInterface[M]['output']> => {
+}: CallPopupApiResolverInput<M>) => {
   await setInitialView({ id: 'popupApi', state: { call } })
 
   return inNewWindow(

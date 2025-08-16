@@ -1,8 +1,8 @@
+import { storage } from '@core/extension/storage'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
-import { storage } from '../../storage'
 import {
   addTransactionToVault,
   getVaultTransactions,

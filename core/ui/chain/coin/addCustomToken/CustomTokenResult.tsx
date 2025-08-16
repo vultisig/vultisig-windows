@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { ManageVaultCoin } from '../../../vault/chain/manage/coin/ManageVaultCoin'
-import { useCustomTokenQuery } from './queries/useCustomTokenQuery'
+import { useTokenMetadataQuery } from './queries/tokenMetadata'
 
-export const CustomTokenResult = ({ address }: { address: string }) => {
+export const CustomTokenResult = ({ id }: { id: string }) => {
   const [{ chain }] = useCoreViewState<'addCustomToken'>()
+  const key = { chain, id } as const
 
-  const query = useCustomTokenQuery({ chain, address })
+  const query = useTokenMetadataQuery(key)
 
   const { t } = useTranslation()
 
@@ -19,9 +20,10 @@ export const CustomTokenResult = ({ address }: { address: string }) => {
       value={query}
       error={() => <Text>{t('no_token_found')}</Text>}
       pending={() => <Text>{t('loading')}</Text>}
-      success={coin => (
-        <ManageVaultCoin key={coinKeyToString(coin)} value={coin} />
-      )}
+      success={metadata => {
+        const coin = { ...key, ...metadata }
+        return <ManageVaultCoin key={coinKeyToString(coin)} value={coin} />
+      }}
     />
   )
 }
