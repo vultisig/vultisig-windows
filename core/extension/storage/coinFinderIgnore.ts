@@ -1,6 +1,4 @@
 import { areEqualCoins } from '@core/chain/coin/Coin'
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import {
   AddToCoinFinderIgnoreFunction,
   coinFinderIgnoreInitialValue,
@@ -9,9 +7,11 @@ import {
   RemoveFromCoinFinderIgnoreFunction,
 } from '@core/ui/storage/coinFinderIgnore'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 const getCoinFinderIgnore: GetCoinFinderIgnoreFunction = async () =>
-  getPersistentState(StorageKey.coinFinderIgnore, coinFinderIgnoreInitialValue)
+  getStorageValue(StorageKey.coinFinderIgnore, coinFinderIgnoreInitialValue)
 
 const addToCoinFinderIgnore: AddToCoinFinderIgnoreFunction = async coinKey => {
   const list = await getCoinFinderIgnore()
@@ -22,7 +22,7 @@ const addToCoinFinderIgnore: AddToCoinFinderIgnoreFunction = async coinKey => {
 
   const newList = [...list, coinKey]
 
-  await setPersistentState(StorageKey.coinFinderIgnore, newList)
+  await setStorageValue(StorageKey.coinFinderIgnore, newList)
 }
 
 const removeFromCoinFinderIgnore: RemoveFromCoinFinderIgnoreFunction =
@@ -31,7 +31,7 @@ const removeFromCoinFinderIgnore: RemoveFromCoinFinderIgnoreFunction =
 
     const newList = list.filter(key => !areEqualCoins(key, coinKey))
 
-    await setPersistentState(StorageKey.coinFinderIgnore, newList)
+    await setStorageValue(StorageKey.coinFinderIgnore, newList)
   }
 
 export const coinFinderIgnoreStorage: CoinFinderIgnoreStorage = {

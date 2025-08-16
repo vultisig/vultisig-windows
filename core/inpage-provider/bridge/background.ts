@@ -1,43 +1,35 @@
-import { BridgeContext } from './context'
-import { getBridgeMessageSourceId, isBridgeMessage } from './core'
+import { runBridgeBackgroundAgent } from '@lib/extension/bridge/background'
+import { attempt } from '@lib/utils/attempt'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { Result } from '@lib/utils/types/Result'
 
-type BackgroundRequestHandler<TMessage = unknown, TResponse = unknown> = {
-  context: BridgeContext
-  message: TMessage
-  reply: (response: TResponse) => void
-}
+import { BackgroundMethod } from '../background/interface'
+import { backgroundResolvers } from '../background/resolvers'
+import { callPopupFromBackground } from '../popup/resolvers/background'
+import { InpageProviderBridgeMessage } from './message'
 
-export const runBridgeBackgroundAgent = <
-  TMessage = unknown,
-  TResponse = unknown,
->({
-  handleRequest,
-}: {
-  handleRequest: (input: BackgroundRequestHandler<TMessage, TResponse>) => void
-}) => {
-  chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
-    if (!origin) return
+export const runInpageProviderBridgeBackgroundAgent = () => {
+  runBridgeBackgroundAgent<InpageProviderBridgeMessage, Result>({
+    handleRequest: ({ message, context, reply }) => {
+      attempt(
+        matchRecordUnion<InpageProviderBridgeMessage, Promise<unknown>>(
+          message,
+          {
+            background: ({ call }) => {
+              const methodName = getRecordUnionKey(call)
+              const input = getRecordUnionValue(call)
 
-    if (!isBridgeMessage(request, 'inpage')) {
-      return
-    }
+              const resolver =
+                backgroundResolvers[methodName as BackgroundMethod]
 
-    const { id, message } = request
-
-    handleRequest({
-      message: message as TMessage,
-      context: {
-        requestOrigin: origin,
-      },
-      reply: (response: TResponse) => {
-        sendResponse({
-          id,
-          sourceId: getBridgeMessageSourceId('background'),
-          message: response,
-        })
-      },
-    })
-
-    return true
+              return resolver({ input, context })
+            },
+            popup: callPopupFromBackground,
+          }
+        )
+      ).then(reply)
+    },
   })
 }

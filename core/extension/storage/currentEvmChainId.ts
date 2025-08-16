@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 type GetCurrentEVMChainIdFunction = () => Promise<string>
 
@@ -12,10 +12,10 @@ const initialEVMChainID = getEvmChainId(Chain.Ethereum)
 const currentEVMChainIdStorageKey = 'currentEVMChainId'
 
 export const getCurrentEVMChainId: GetCurrentEVMChainIdFunction = () =>
-  getPersistentState(currentEVMChainIdStorageKey, initialEVMChainID)
+  getStorageValue(currentEVMChainIdStorageKey, initialEVMChainID)
 
 export const setCurrentEVMChainId: SetCurrentEVMChainIdFunction = async (
   chainId: string
 ) => {
-  await setPersistentState(currentEVMChainIdStorageKey, chainId)
+  await setStorageValue(currentEVMChainIdStorageKey, chainId)
 }

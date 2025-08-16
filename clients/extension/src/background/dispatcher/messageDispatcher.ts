@@ -1,7 +1,5 @@
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
 import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
-import { getVaultsAppSessions } from '@clients/extension/src/sessions/state/appSessions'
-import { getDappHostname } from '@clients/extension/src/utils/connectedApps'
 import {
   MessageKey,
   RequestMethod,
@@ -9,9 +7,11 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
+import { getVaultsAppSessions } from '@core/extension/storage/appSessions'
 import { getCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
 import { getCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 export const dispatchMessage = async (
   type: MessageKey,
@@ -20,7 +20,7 @@ export const dispatchMessage = async (
 ) => {
   const safeOrigin = typeof sender.origin === 'string' ? sender.origin : ''
   const sessions = (await getVaultsAppSessions()) ?? {}
-  const dappHostname = safeOrigin ? getDappHostname(safeOrigin) : ''
+  const dappHostname = safeOrigin ? getUrlBaseDomain(safeOrigin) : ''
   if (!dappHostname) {
     console.warn('dispatcher: Cannot resolve dapp hostname - aborting request')
     return

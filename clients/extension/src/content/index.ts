@@ -1,4 +1,4 @@
-import { runBridgeContentAgent } from '@core/inpage-provider/bridge/content'
+import { runBridgeContentAgent } from '@lib/extension/bridge/content'
 
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
 import { initializeMessenger } from '../messengers/initializeMessenger'

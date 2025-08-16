@@ -11,9 +11,8 @@
     "clients/extension/src/background/index.ts",
     "clients/extension/src/content/index.ts",
     "clients/extension/src/inpage/index.ts",
-    "clients/extension/src/messengers/bridge.ts",
-    "clients/extension/src/messengers/createMessenger.ts",
-    "clients/extension/src/pages/index.tsx"
+    "clients/extension/src/pages/index.tsx",
+    "clients/extension/src/pages/popup.tsx"
   ],
   "ignoreDependencies": [
     "@bufbuild/buf",

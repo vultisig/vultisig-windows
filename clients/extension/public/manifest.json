@@ -25,15 +25,24 @@
   },
   "content_scripts": [
     {
-      "exclude_matches": ["https://*.google.com/*"],
-      "js": ["content.js"],
-      "matches": ["http://*/*", "https://*/*"]
+      "exclude_matches": [
+        "https://*.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
     }
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost;object-src 'self'"
   },
-  "host_permissions": ["https://*/*"],
+  "host_permissions": [
+    "https://*/*"
+  ],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -41,16 +50,30 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "storage"],
+  "permissions": [
+    "activeTab",
+    "clipboardRead",
+    "clipboardWrite",
+    "storage"
+  ],
   "web_accessible_resources": [
     {
-      "matches": ["<all_urls>"],
-      "resources": ["wallet-core.wasm"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "wallet-core.wasm",
+        "popup.html"
+      ],
       "use_dynamic_url": false
     },
     {
-      "matches": ["<all_urls>"],
-      "resources": ["inpage.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "inpage.js"
+      ],
       "use_dynamic_url": false
     }
   ]

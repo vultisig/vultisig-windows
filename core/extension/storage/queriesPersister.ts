@@ -1,13 +1,13 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { removePersistentState } from '@core/extension/state/persistent/removePersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { queriesPersisterKey } from '@core/ui/storage/queriesPersister'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { removeStorageValue } from '@lib/extension/storage/remove'
+import { setStorageValue } from '@lib/extension/storage/set'
 import { Persister } from '@tanstack/react-query-persist-client'
 
 export const queriesPersister: Persister = {
   persistClient: async value => {
-    await setPersistentState(queriesPersisterKey, value)
+    await setStorageValue(queriesPersisterKey, value)
   },
-  restoreClient: async () => getPersistentState(queriesPersisterKey, undefined),
-  removeClient: () => removePersistentState(queriesPersisterKey),
+  restoreClient: async () => getStorageValue(queriesPersisterKey, undefined),
+  removeClient: () => removeStorageValue(queriesPersisterKey),
 }

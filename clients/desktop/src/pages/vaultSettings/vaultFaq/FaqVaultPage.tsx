@@ -5,7 +5,7 @@ import {
   HorizontalLine,
   Row,
 } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage.styles'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageSlice } from '@lib/ui/page/PageSlice'

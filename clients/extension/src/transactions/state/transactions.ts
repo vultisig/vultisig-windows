@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 import { ITransaction } from '../../utils/interfaces'
 
@@ -9,13 +9,13 @@ const [key] = transactionsQueryKey
 type VaultsTransactions = Record<string, ITransaction[]>
 
 export const getVaultsTransactions = async (): Promise<VaultsTransactions> => {
-  return getPersistentState<VaultsTransactions>(key, {})
+  return getStorageValue<VaultsTransactions>(key, {})
 }
 
 export const setVaultsTransactions = async (
   transactions: VaultsTransactions
 ): Promise<void> => {
-  await setPersistentState(key, transactions)
+  await setStorageValue(key, transactions)
 }
 
 export const getVaultTransactions = async (

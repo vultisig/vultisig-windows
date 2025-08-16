@@ -1,11 +1,10 @@
-import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { useQuery } from '@tanstack/react-query'
-
 import {
   AppSession,
   appSessionsQueryKey,
   getVaultsAppSessions,
-} from './appSessions'
+} from '@core/extension/storage/appSessions'
+import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { useQuery } from '@tanstack/react-query'
 
 export const currentVaultAppSessionsQueryKey = ['currentVaultAppSessions']
 

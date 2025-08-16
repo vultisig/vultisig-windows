@@ -1,9 +1,9 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
+import { useCore } from '../../state/core'
 import { ChainAction } from './ChainAction'
 import { DepositEnabledChain } from './DepositEnabledChain'
 import { DepositForm } from './DepositForm'
@@ -18,7 +18,7 @@ export const DepositPage = () => {
   const filteredChainActionOptions = useFilteredChainActions(
     coin.chain as DepositEnabledChain
   )
-
+  const { goBack } = useCore()
   const [state, setState] = useState<{
     depositFormData: FieldValues
     selectedChainAction: ChainAction
@@ -29,7 +29,7 @@ export const DepositPage = () => {
 
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: depositSteps,
-    onExit: useNavigateBack(),
+    onExit: goBack,
   })
 
   const handleDepositFormSubmit = (data: FieldValues) => {

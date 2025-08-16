@@ -1,4 +1,4 @@
-import { runBridgeInpageAgent } from '@core/inpage-provider/bridge/inpage'
+import { runBridgeInpageAgent } from '@lib/extension/bridge/inpage'
 
 import { messengers } from './messenger'
 import { shouldInjectProvider } from './utils/injectHelpers'

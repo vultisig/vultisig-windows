@@ -3,6 +3,7 @@ import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/m
 import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
 import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { EventMethod } from '@clients/extension/src/utils/constants'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -12,7 +13,6 @@ import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -30,7 +30,7 @@ export const ConnectedDappsPage = () => {
   const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
   const sessionsArray = Object.entries(sessions)
   const currentVaultId = useCurrentVaultId()
-  const navigateBack = useNavigateBack()
+  const { goBack } = useCore()
 
   const handleDisconnect = async (host: string, url: string) => {
     try {
@@ -61,7 +61,7 @@ export const ConnectedDappsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <IconButton onClick={navigateBack}>
+          <IconButton onClick={goBack}>
             <ChevronLeftIcon />
           </IconButton>
         }

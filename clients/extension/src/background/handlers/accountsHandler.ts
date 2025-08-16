@@ -3,11 +3,11 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { storage } from '@core/extension/storage'
+import { getVaultAppSessions } from '@core/extension/storage/appSessions'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import { getVaultAppSessions } from '../../sessions/state/appSessions'
-import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
 import { getWalletCore } from '../walletCore'
@@ -27,7 +27,7 @@ export const handleFindAccounts = async (
   if (!currentVaultId) return []
 
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)]
+  const currentSession = vaultSessions[getUrlBaseDomain(sender)]
 
   if (!currentSession) return []
 

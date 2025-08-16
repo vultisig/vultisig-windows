@@ -1,12 +1,14 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 
-import { RootErrorBoundary } from '../errors/RootErrorBoundary'
+import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
+import { useCore } from '../state/core'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
@@ -40,6 +42,8 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
 
+  const { processError } = useCore()
+
   const query = useMergeQueries({
     vaults,
     vaultFolders,
@@ -61,7 +65,10 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       value={query}
       success={({ currentVaultId, vaults }) => (
         <I18nProvider>
-          <RootErrorBoundary>
+          <ErrorBoundary
+            fallback={RootErrorFallback}
+            processError={processError}
+          >
             <VaultsProvider value={vaults}>
               <CurrentVaultIdProvider value={currentVaultId}>
                 <PasscodeProvider initialValue={null}>
@@ -71,7 +78,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
                 </PasscodeProvider>
               </CurrentVaultIdProvider>
             </VaultsProvider>
-          </RootErrorBoundary>
+          </ErrorBoundary>
         </I18nProvider>
       )}
       error={error => (

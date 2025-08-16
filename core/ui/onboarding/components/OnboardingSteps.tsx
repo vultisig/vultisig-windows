@@ -1,4 +1,5 @@
 import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
+import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
@@ -6,7 +7,6 @@ import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
@@ -24,7 +24,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations()
-  const navigateBack = useNavigateBack()
+  const { goBack } = useCore()
   const fontSize = 28
 
   return (
@@ -34,7 +34,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
           <StyledButton
             icon={<ChevronLeftIcon fontSize={18} />}
             kind="link"
-            onClick={!currentAnimation ? navigateBack : handlePrevAnimation}
+            onClick={!currentAnimation ? goBack : handlePrevAnimation}
             size="sm"
           >
             {t('back')}

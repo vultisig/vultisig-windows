@@ -1,3 +1,4 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useCreateVaultFolderMutation,
   useVaultFolders,
@@ -12,22 +13,22 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useCore } from '../../../state/core'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()
   const { mutate, isPending } = useCreateVaultFolderMutation()
   const [name, setName] = useState<string>('')
   const [vaultIds, setVaultIds] = useState<string[]>([])
-  const navigateBack = useNavigateBack()
+  const { goBack } = useCore()
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
 
@@ -52,7 +53,7 @@ export const CreateVaultFolderPage = () => {
               order: getLastItemOrder(folders.map(({ order }) => order)),
               vaultIds,
             },
-            { onSuccess: navigateBack }
+            { onSuccess: goBack }
           ),
       })}
       fullHeight

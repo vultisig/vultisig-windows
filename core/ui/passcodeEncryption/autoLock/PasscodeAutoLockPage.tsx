@@ -1,10 +1,10 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useSetPasscodeAutoLockMutation } from '@core/ui/passcodeEncryption/autoLock/mutations/setPasscodeAutoLock'
 import {
   passcodeAutoLockOptions,
   PasscodeAutoLockValue,
   usePasscodeAutoLock,
 } from '@core/ui/storage/passcodeAutoLock'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { RadioOptionsList } from '@lib/ui/inputs/RadioOptionsList'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'

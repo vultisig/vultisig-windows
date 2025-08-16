@@ -81,6 +81,7 @@ export default async () => {
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'index.html'),
+            popup: path.resolve(__dirname, 'popup.html'),
           },
           onwarn: () => {},
           output: {
