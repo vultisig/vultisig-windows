@@ -1,6 +1,7 @@
 import { views } from '@clients/extension/src/navigation/views'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { createGlobalStyle, css } from 'styled-components'
 
@@ -26,13 +27,21 @@ const ExtensionGlobalStyle = createGlobalStyle`
   }
 `
 
+const App = () => {
+  const processError = useProcessAppError()
+
+  return (
+    <ExtensionCoreApp processError={processError}>
+      <ActiveView views={views} />
+    </ExtensionCoreApp>
+  )
+}
+
 renderExtensionPage(
   <>
     <ExtensionGlobalStyle />
     <NavigationProvider>
-      <ExtensionCoreApp>
-        <ActiveView views={views} />
-      </ExtensionCoreApp>
+      <App />
     </NavigationProvider>
   </>
 )

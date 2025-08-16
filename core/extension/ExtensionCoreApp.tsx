@@ -1,6 +1,7 @@
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
+import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
 
@@ -28,8 +29,19 @@ const coreState: CoreState = {
   vaultCreationMpcLib: 'DKLS',
 }
 
-export const ExtensionCoreApp = ({ children }: ChildrenProp) => (
-  <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
+type ExtensionCoreAppProps = ChildrenProp & {
+  processError?: ErrorBoundaryProcessError
+}
+
+export const ExtensionCoreApp = ({
+  children,
+  processError,
+}: ExtensionCoreAppProps) => (
+  <CoreApp
+    migrationsManager={StorageMigrationsManager}
+    coreState={coreState}
+    processError={processError}
+  >
     {children}
   </CoreApp>
 )

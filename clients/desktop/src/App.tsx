@@ -1,6 +1,7 @@
 import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
+import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { QueryClientProvider } from '@core/ui/query/QueryClientProvider'
 import { CoreState } from '@core/ui/state/core'
@@ -45,7 +46,7 @@ const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
   },
 }
 
-const App = () => {
+const AppContent = () => {
   const [vaultCreationMpcLib] = useVaultCreationMpcLib()
 
   const coreState = useMemo(
@@ -56,14 +57,22 @@ const App = () => {
     [vaultCreationMpcLib]
   )
 
+  const processError = useProcessAppError()
+
+  return (
+    <CoreApp coreState={coreState} processError={processError}>
+      <LauncherObserver />
+      <ActiveView views={views} />
+      <OnboardingResetter />
+    </CoreApp>
+  )
+}
+
+const App = () => {
   return (
     <QueryClientProvider persister={queriesPersister}>
       <NavigationProvider initialValue={{ history: [initialCoreView] }}>
-        <CoreApp coreState={coreState}>
-          <LauncherObserver />
-          <ActiveView views={views} />
-          <OnboardingResetter />
-        </CoreApp>
+        <AppContent />
       </NavigationProvider>
     </QueryClientProvider>
   )

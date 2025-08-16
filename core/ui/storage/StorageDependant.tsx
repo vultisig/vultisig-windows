@@ -1,9 +1,13 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import {
+  ErrorBoundary,
+  ErrorBoundaryProcessError,
+} from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 
-import { RootErrorBoundary } from '../errors/RootErrorBoundary'
+import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
@@ -25,7 +29,14 @@ import { usePasscodeEncryptionQuery } from './passcodeEncryption'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
-export const StorageDependant = ({ children }: ChildrenProp) => {
+type StorageDependantProps = ChildrenProp & {
+  processError?: ErrorBoundaryProcessError
+}
+
+export const StorageDependant = ({
+  children,
+  processError,
+}: StorageDependantProps) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const defaultChains = useDefaultChainsQuery()
@@ -61,7 +72,10 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       value={query}
       success={({ currentVaultId, vaults }) => (
         <I18nProvider>
-          <RootErrorBoundary>
+          <ErrorBoundary
+            fallback={RootErrorFallback}
+            processError={processError}
+          >
             <VaultsProvider value={vaults}>
               <CurrentVaultIdProvider value={currentVaultId}>
                 <PasscodeProvider initialValue={null}>
@@ -71,7 +85,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
                 </PasscodeProvider>
               </CurrentVaultIdProvider>
             </VaultsProvider>
-          </RootErrorBoundary>
+          </ErrorBoundary>
         </I18nProvider>
       )}
       error={error => (

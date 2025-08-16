@@ -1,5 +1,6 @@
 import { Wrap } from '@lib/ui/base/Wrap'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
+import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { vStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
@@ -20,6 +21,7 @@ import { CoinsMetadataManager } from './vault/chain/coin/metadata/CoinsMetadataM
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
+  processError?: ErrorBoundaryProcessError
 }
 
 const Container = styled.div`
