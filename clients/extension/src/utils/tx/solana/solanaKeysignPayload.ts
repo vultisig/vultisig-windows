@@ -2,6 +2,9 @@ import { create } from '@bufbuild/protobuf'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Coin } from '@core/chain/coin/Coin'
+import { getSolanaToken } from '@core/chain/coin/find/solana/getSolanaToken'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -12,12 +15,26 @@ import {
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { NATIVE_MINT } from '@solana/spl-token'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
-import { ParsedSolanaTransactionParams } from './types/types'
+import { ParsedResult } from './types/types'
+
+const resolveTokenFromMint = async (mint: string): Promise<Coin> => {
+  // Native SOL
+  if (mint === NATIVE_MINT.toBase58()) {
+    return chainFeeCoin.Solana
+  }
+  try {
+    return await getSolanaToken(mint)
+  } catch {
+    return chainFeeCoin.Solana
+  }
+}
+
 export const getSolanaKeysignPayload = (
-  parsedTransactionParams: ParsedSolanaTransactionParams,
+  parsed: ParsedResult,
   serialized: Uint8Array,
   vault: Vault,
   walletCore: WalletCore,
@@ -27,6 +44,10 @@ export const getSolanaKeysignPayload = (
     ;(async () => {
       try {
         const txInputDataArray = Object.values(serialized)
+        const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
+        const dataBuffer = Buffer.from(txInputDataBuffer)
+        const base64Data = base64.encode(dataBuffer)
+
         const publicKey = getPublicKey({
           chain: Chain.Solana,
           walletCore,
@@ -34,38 +55,35 @@ export const getSolanaKeysignPayload = (
           publicKeys: vault.publicKeys,
         })
 
-        const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
-        const dataBuffer = Buffer.from(txInputDataBuffer)
-        const base64Data = base64.encode(dataBuffer)
-        const isNativeCoin = parsedTransactionParams.inputToken.symbol === 'SOL'
+        const inputToken = await resolveTokenFromMint(parsed.inputMint)
+        const isNativeCoin = inputToken.ticker === 'SOL'
+
+        // primary Coin for the KeysignPayload
         const coin = create(CoinSchema, {
           chain: Chain.Solana,
-          ticker: parsedTransactionParams.inputToken.symbol.toUpperCase(),
-          address: parsedTransactionParams.authority,
-          decimals: parsedTransactionParams.inputToken.decimals,
+          ticker: inputToken.ticker.toUpperCase(),
+          address: parsed.authority, // sender/authority
+          decimals: inputToken.decimals,
           hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
-          logo: parsedTransactionParams.inputToken.name.toLowerCase(),
-          priceProviderId: isNativeCoin
-            ? 'solana'
-            : parsedTransactionParams.inputToken.extensions?.coingeckoId,
-          contractAddress: isNativeCoin
-            ? ''
-            : parsedTransactionParams.inputToken.address,
+          logo: inputToken.logo,
+          priceProviderId: inputToken.priceProviderId,
+          contractAddress: isNativeCoin ? '' : inputToken.id,
           isNativeToken: isNativeCoin,
         })
+
         const accountCoin = {
           ...coin,
-          id: !isNativeCoin
-            ? parsedTransactionParams.inputToken.address
-            : undefined,
+          id: !isNativeCoin ? inputToken.id : undefined,
         } as AccountCoin
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: parsedTransactionParams.inAmount ?? Number(0),
+          amount: parsed.inAmount ?? 0,
           isDeposit: false,
-          receiver: parsedTransactionParams.receiverAddress ?? '',
+          receiver:
+            parsed.kind === 'transfer' ? (parsed.receiverAddress ?? '') : '',
         })
+
         chainSpecific.value = {
           ...(chainSpecific.value as SolanaSpecific),
           priorityFee:
@@ -73,59 +91,52 @@ export const getSolanaKeysignPayload = (
               ? '1000000'
               : (chainSpecific.value as SolanaSpecific).priorityFee,
         }
+
         let swapPayload = null
-        if (
-          parsedTransactionParams.outputToken &&
-          parsedTransactionParams.outAmount
-        ) {
+        if (parsed.kind === 'swap') {
+          const outputToken = await resolveTokenFromMint(parsed.outputMint)
+
           swapPayload = create(OneInchSwapPayloadSchema, {
             fromCoin: {
-              address: parsedTransactionParams.authority,
+              address: parsed.authority,
               chain: Chain.Solana,
-              contractAddress:
-                parsedTransactionParams.inputToken.symbol === 'SOL'
-                  ? ''
-                  : parsedTransactionParams.inputToken.address,
-              decimals: parsedTransactionParams.inputToken.decimals,
+              contractAddress: isNativeCoin ? '' : inputToken.id,
+              decimals: inputToken.decimals,
               hexPublicKey: vault.publicKeys.ecdsa,
-              priceProviderId:
-                parsedTransactionParams.inputToken.extensions?.coingeckoId ??
-                parsedTransactionParams.inputToken.name.toLowerCase(),
-              logo:
-                parsedTransactionParams.inputToken.symbol === 'SOL'
-                  ? parsedTransactionParams.inputToken.name.toLowerCase()
-                  : parsedTransactionParams.inputToken.symbol.toLowerCase(),
-              isNativeToken:
-                parsedTransactionParams.inputToken.symbol === 'SOL',
-              ticker: parsedTransactionParams.inputToken.symbol.toUpperCase(),
+              priceProviderId: isNativeCoin
+                ? 'solana'
+                : inputToken.priceProviderId,
+              logo: isNativeCoin
+                ? inputToken.ticker.toLowerCase()
+                : inputToken.logo,
+              isNativeToken: isNativeCoin,
+              ticker: inputToken.ticker,
             },
             toCoin: {
-              address: parsedTransactionParams.authority,
+              address: parsed.authority,
               chain: Chain.Solana,
               contractAddress:
-                parsedTransactionParams.outputToken.symbol === 'SOL'
-                  ? ''
-                  : parsedTransactionParams.outputToken.address,
-              decimals: parsedTransactionParams.outputToken.decimals,
+                outputToken.ticker === 'SOL' ? '' : outputToken.id,
+              decimals: outputToken.decimals,
               hexPublicKey: vault.publicKeys.ecdsa,
               priceProviderId:
-                parsedTransactionParams.outputToken.extensions?.coingeckoId ??
-                parsedTransactionParams.outputToken.name.toLowerCase(),
+                outputToken.ticker === 'SOL'
+                  ? 'solana'
+                  : outputToken.priceProviderId,
               logo:
-                parsedTransactionParams.outputToken.symbol === 'SOL'
-                  ? parsedTransactionParams.outputToken.name.toLowerCase()
-                  : parsedTransactionParams.outputToken.symbol.toLowerCase(),
-              isNativeToken:
-                parsedTransactionParams.outputToken.symbol === 'SOL',
-              ticker: parsedTransactionParams.outputToken.symbol.toUpperCase(),
+                outputToken.ticker === 'SOL'
+                  ? outputToken.ticker.toLowerCase()
+                  : outputToken.logo,
+              isNativeToken: outputToken.ticker === 'SOL',
+              ticker: outputToken.ticker,
             },
-            fromAmount: String(parsedTransactionParams.inAmount),
+            fromAmount: String(parsed.inAmount),
             toAmountDecimal: formatUnits(
-              parsedTransactionParams.outAmount,
-              parsedTransactionParams.outputToken.decimals
+              String(parsed.outAmount ?? 0),
+              outputToken.decimals
             ),
             quote: {
-              dstAmount: String(parsedTransactionParams.outAmount),
+              dstAmount: String(parsed.outAmount ?? 0),
               tx: {
                 data: base64Data,
                 value: '0',
@@ -137,9 +148,7 @@ export const getSolanaKeysignPayload = (
         }
 
         const keysignPayload = create(KeysignPayloadSchema, {
-          toAmount: swapPayload
-            ? swapPayload.quote?.dstAmount
-            : String(parsedTransactionParams?.inAmount ?? 0),
+          toAmount: String(parsed.inAmount ?? 0),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,
@@ -147,7 +156,8 @@ export const getSolanaKeysignPayload = (
           swapPayload: swapPayload
             ? { case: 'oneinchSwapPayload', value: swapPayload }
             : undefined,
-          toAddress: parsedTransactionParams.receiverAddress,
+          toAddress:
+            parsed.kind === 'transfer' ? parsed.receiverAddress : undefined,
           skipBroadcast,
         })
 
