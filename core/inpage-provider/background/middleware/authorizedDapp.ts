@@ -1,7 +1,3 @@
-import {
-  getDappHost,
-  getDappHostname,
-} from '@clients/extension/src/utils/connectedApps'
 import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
@@ -13,11 +9,13 @@ import {
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { callPopup } from '@core/inpage-provider/popup'
+import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
+import { getUrlHost } from '@lib/utils/url/getUrlHost'
 
 const getDefaultAppSession = (requestOrigin: string) => {
   return {
-    host: getDappHostname(requestOrigin),
-    url: getDappHost(requestOrigin),
+    host: getBaseDomain(requestOrigin),
+    url: getUrlHost(requestOrigin),
     selectedCosmosChainId: getCosmosChainId(CosmosChain.THORChain),
     selectedEVMChainId: getEvmChainId(EvmChain.Ethereum),
   }
@@ -54,7 +52,7 @@ export const authorizedDapp =
     const vaultId = await ensureVaultId()
     const vaultSessions = await getVaultAppSessions(vaultId)
 
-    const dappHostname = getDappHostname(requestOrigin)
+    const dappHostname = getBaseDomain(requestOrigin)
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {

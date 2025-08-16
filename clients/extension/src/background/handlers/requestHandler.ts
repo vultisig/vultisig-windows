@@ -6,20 +6,10 @@ import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHa
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
-  getVaultsAppSessions,
-  setVaultsAppSessions,
-  updateAppSession,
-  VaultsAppSessions,
-} from '@core/extension/storage/appSessions'
-import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
-import {
-  getDappHost,
-  getDappHostname,
-} from '@clients/extension/src/utils/connectedApps'
 import {
   EventMethod,
   RequestMethod,
@@ -48,11 +38,19 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { storage } from '@core/extension/storage'
+import {
+  getVaultsAppSessions,
+  setVaultsAppSessions,
+  updateAppSession,
+  VaultsAppSessions,
+} from '@core/extension/storage/appSessions'
 import { setCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
 import { setCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
+import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
+import { getUrlHost } from '@lib/utils/url/getUrlHost'
 import {
   getBytes,
   isHexString,
@@ -115,12 +113,12 @@ export const handleRequest = (
 
             if (getChainKind(chain) === 'evm') {
               inpageMessenger.send(
-                `${EventMethod.ACCOUNTS_CHANGED}:${getDappHost(sender)}`,
+                `${EventMethod.ACCOUNTS_CHANGED}:${getUrlHost(sender)}`,
                 account
               )
               try {
                 inpageMessenger.send(
-                  `${EventMethod.CONNECT}:${getDappHost(sender)}`,
+                  `${EventMethod.CONNECT}:${getUrlHost(sender)}`,
                   {
                     address: account,
                     chainId: getEvmChainId(chain as EvmChain),
@@ -388,7 +386,7 @@ export const handleRequest = (
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getDappHostname(sender)
+          const host = getBaseDomain(sender)
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
@@ -430,7 +428,7 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-        const host = getDappHostname(sender)
+        const host = getBaseDomain(sender)
         getVaultsAppSessions()
           .then(async sessions => {
             const updatedSessions: VaultsAppSessions = {}
@@ -489,7 +487,7 @@ export const handleRequest = (
         )
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getDappHostname(sender)
+          const host = getBaseDomain(sender)
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
