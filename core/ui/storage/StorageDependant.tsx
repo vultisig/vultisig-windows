@@ -1,8 +1,5 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
-import {
-  ErrorBoundary,
-  ErrorBoundaryProcessError,
-} from '@lib/ui/errors/ErrorBoundary'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
@@ -11,6 +8,7 @@ import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
+import { useCore } from '../state/core'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
@@ -29,14 +27,7 @@ import { usePasscodeEncryptionQuery } from './passcodeEncryption'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
-type StorageDependantProps = ChildrenProp & {
-  processError?: ErrorBoundaryProcessError
-}
-
-export const StorageDependant = ({
-  children,
-  processError,
-}: StorageDependantProps) => {
+export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const defaultChains = useDefaultChainsQuery()
@@ -50,6 +41,8 @@ export const StorageDependant = ({
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
+
+  const { processError } = useCore()
 
   const query = useMergeQueries({
     vaults,

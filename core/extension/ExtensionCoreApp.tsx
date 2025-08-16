@@ -4,11 +4,12 @@ import { CoreState } from '@core/ui/state/core'
 import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
+import { useMemo } from 'react'
 
 import { storage } from './storage'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
 
-const coreState: CoreState = {
+const partialCoreState: CoreState = {
   ...storage,
   client: 'extension',
   openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
@@ -36,12 +37,18 @@ type ExtensionCoreAppProps = ChildrenProp & {
 export const ExtensionCoreApp = ({
   children,
   processError,
-}: ExtensionCoreAppProps) => (
-  <CoreApp
-    migrationsManager={StorageMigrationsManager}
-    coreState={coreState}
-    processError={processError}
-  >
-    {children}
-  </CoreApp>
-)
+}: ExtensionCoreAppProps) => {
+  const coreState = useMemo(
+    () => ({
+      ...partialCoreState,
+      processError,
+    }),
+    [processError]
+  )
+
+  return (
+    <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
+      {children}
+    </CoreApp>
+  )
+}

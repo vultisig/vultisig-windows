@@ -48,19 +48,19 @@ const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
 
 const AppContent = () => {
   const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+  const processError = useProcessAppError()
 
   const coreState = useMemo(
     () => ({
       ...baseCoreState,
       vaultCreationMpcLib,
+      processError,
     }),
-    [vaultCreationMpcLib]
+    [vaultCreationMpcLib, processError]
   )
 
-  const processError = useProcessAppError()
-
   return (
-    <CoreApp coreState={coreState} processError={processError}>
+    <CoreApp coreState={coreState}>
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />
