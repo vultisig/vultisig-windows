@@ -3,7 +3,7 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
-import { getUrlHost } from '@lib/utils/url/getUrlHost'
+import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'

@@ -20,8 +20,8 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
-import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
-import { getUrlHost } from '@lib/utils/url/getUrlHost'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlHost } from '@lib/utils/url/host'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -47,7 +47,7 @@ export const ConnectDAppPage = () => {
     await addSession({
       vaultId: vaultId,
       session: {
-        host: getBaseDomain(sender),
+        host: getUrlBaseDomain(sender),
         url: getUrlHost(sender),
         selectedCosmosChainId:
           getChainKind(chain) === 'cosmos'

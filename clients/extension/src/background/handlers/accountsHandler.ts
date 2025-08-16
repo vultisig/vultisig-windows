@@ -6,7 +6,7 @@ import { storage } from '@core/extension/storage'
 import { getVaultAppSessions } from '@core/extension/storage/appSessions'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 import { Instance } from '../../utils/constants'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
@@ -27,7 +27,7 @@ export const handleFindAccounts = async (
   if (!currentVaultId) return []
 
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getBaseDomain(sender)]
+  const currentSession = vaultSessions[getUrlBaseDomain(sender)]
 
   if (!currentSession) return []
 

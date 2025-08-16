@@ -49,8 +49,8 @@ import { setCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
-import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
-import { getUrlHost } from '@lib/utils/url/getUrlHost'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlHost } from '@lib/utils/url/host'
 import {
   getBytes,
   isHexString,
@@ -386,7 +386,7 @@ export const handleRequest = (
 
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getBaseDomain(sender)
+          const host = getUrlBaseDomain(sender)
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
@@ -428,7 +428,7 @@ export const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-        const host = getBaseDomain(sender)
+        const host = getUrlBaseDomain(sender)
         getVaultsAppSessions()
           .then(async sessions => {
             const updatedSessions: VaultsAppSessions = {}
@@ -487,7 +487,7 @@ export const handleRequest = (
         )
         storage.getCurrentVaultId().then(async vaultId => {
           const safeVaultId = shouldBePresent(vaultId)
-          const host = getBaseDomain(sender)
+          const host = getUrlBaseDomain(sender)
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 

@@ -9,12 +9,12 @@ import {
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { callPopup } from '@core/inpage-provider/popup'
-import { getBaseDomain } from '@lib/utils/url/getBaseDomain'
-import { getUrlHost } from '@lib/utils/url/getUrlHost'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlHost } from '@lib/utils/url/host'
 
 const getDefaultAppSession = (requestOrigin: string) => {
   return {
-    host: getBaseDomain(requestOrigin),
+    host: getUrlBaseDomain(requestOrigin),
     url: getUrlHost(requestOrigin),
     selectedCosmosChainId: getCosmosChainId(CosmosChain.THORChain),
     selectedEVMChainId: getEvmChainId(EvmChain.Ethereum),
@@ -52,7 +52,7 @@ export const authorizedDapp =
     const vaultId = await ensureVaultId()
     const vaultSessions = await getVaultAppSessions(vaultId)
 
-    const dappHostname = getBaseDomain(requestOrigin)
+    const dappHostname = getUrlBaseDomain(requestOrigin)
     const currentSession = vaultSessions[dappHostname]
 
     if (!currentSession) {
