@@ -1,3 +1,4 @@
+import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
@@ -7,14 +8,12 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createGlobalStyle, css } from 'styled-components'
 
-import { NavigationProvider } from '../navigation/NavigationProvider'
-
 const isPopup = isPopupView()
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
     min-height: 600px;
-    min-width: 400px;
+    min-width: 480px;
     overflow: hidden;
 
     ${
