@@ -113,8 +113,24 @@ const Container = styled(HStack)`
   padding: 12px 20px;
   border-radius: 0px;
   position: relative;
+  background-color: ${getColor('foreground')};
   cursor: pointer;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 320px;
+    height: 1px;
+    background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  &:last-child::after {
+    content: none;
+  }
 `
 
 const PillWrapper = styled.div`
