@@ -10,5 +10,7 @@ export const finishPopupFlow = (
     sourceId: getPopupMessageSourceId('popup'),
     result,
   })
-  window.close()
+  if ('error' in result) {
+    window.close()
+  }
 }
