@@ -51,6 +51,7 @@ type ICustomTransactionPayload = {
   address: string
   message: string
   chain?: Chain
+  prefix?: string
 }
 
 export namespace TransactionType {
