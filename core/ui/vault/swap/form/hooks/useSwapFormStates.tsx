@@ -11,7 +11,7 @@ import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../../state/fromAmount'
 
-export const useIsSwapFormDisabled = () => {
+export const useSwapFormStates = () => {
   const [amount] = useFromAmount()
 
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
@@ -23,7 +23,7 @@ export const useIsSwapFormDisabled = () => {
 
   const swapQuoteQuery = useSwapQuoteQuery()
 
-  return useMemo(() => {
+  const isDisabled = useMemo(() => {
     if (!amount) {
       return t('amount_required')
     }
@@ -68,4 +68,9 @@ export const useIsSwapFormDisabled = () => {
     swapQuoteQuery.isPending,
     t,
   ])
+
+  return {
+    isDisabled,
+    isLoading: balanceQuery.isPending || swapFeesQuery.isPending,
+  }
 }

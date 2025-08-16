@@ -1,9 +1,12 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { VStack } from '@lib/ui/layout/Stack'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, TextColor } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { TFunction } from 'i18next'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +22,12 @@ type SwapFeesProps = {
 }
 
 export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
+  const [showFeesBreakdown, { toggle }] = useBoolean(false)
+  const prefersReduced = useReducedMotion()
+  const chevronTransition = {
+    duration: prefersReduced ? 0 : 0.2,
+    ease: 'easeOut',
+  }
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
   const chainSpecificQuery = useSwapChainSpecificQuery()
@@ -33,50 +42,77 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
           pending={() => <Skeleton width="88px" height="12px" />}
           error={() => <Text color="danger">{t('failed_to_load')}</Text>}
           success={value => (
-            <Text color="supporting">
-              <SwapFeeFiatValue value={Object.values(value)} />
-            </Text>
+            <HStack alignItems="center" gap={4}>
+              <Text color="shy">
+                <SwapFeeFiatValue value={Object.values(value)} />
+              </Text>
+              <ChevronIconWrapper
+                role="button"
+                aria-expanded={showFeesBreakdown}
+                onClick={toggle}
+                animate={{ rotate: showFeesBreakdown ? 180 : 0 }}
+                transition={chevronTransition}
+              >
+                <ChevronDownIcon />
+              </ChevronIconWrapper>
+            </HStack>
           )}
         />
       </RowComponent>
-      <FeesWrapper gap={10}>
-        <RowComponent>
-          <Text>{t('swap_fee')}</Text>
-          <MatchQuery
-            value={query}
-            pending={() => <Skeleton width="48px" height="12px" />}
-            error={() => <Text color="danger">{t('failed_to_load')}</Text>}
-            success={({ swap }) => (
-              <Text color="supporting">
-                <SwapFeeFiatValue value={[swap]} />
-              </Text>
-            )}
-          />
-        </RowComponent>
-        <MatchQuery
-          value={query}
-          success={({ network }) => {
-            if (!network) return null
+      <AnimatePresence initial={false}>
+        {showFeesBreakdown && (
+          <motion.div
+            key="fees"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              duration: prefersReduced ? 0 : 0.28,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <FeesWrapper gap={10}>
+              <RowComponent>
+                <Text>{t('swap_fee')}</Text>
+                <MatchQuery
+                  value={query}
+                  pending={() => <Skeleton width="48px" height="12px" />}
+                  error={() => (
+                    <Text color="danger">{t('failed_to_load')}</Text>
+                  )}
+                  success={({ swap }) => (
+                    <Text color="shy">
+                      <SwapFeeFiatValue value={[swap]} />
+                    </Text>
+                  )}
+                />
+              </RowComponent>
 
-            return (
               <MatchQuery
-                value={chainSpecificQuery}
-                success={chainSpecific => {
+                value={query}
+                success={({ network }) => {
+                  if (!network) return null
                   return (
-                    <RowComponent>
-                      <span>{t('network_fee')}</span>
-                      <Text color="supporting">
-                        {formatFee({ ...network, chainSpecific })} (~
-                        <SwapFeeFiatValue value={[network]} />)
-                      </Text>
-                    </RowComponent>
+                    <MatchQuery
+                      value={chainSpecificQuery}
+                      success={chainSpecific => (
+                        <RowComponent>
+                          <span>{t('network_fee')}</span>
+                          <Text color="shy">
+                            {formatFee({ ...network, chainSpecific })} (~
+                            <SwapFeeFiatValue value={[network]} />)
+                          </Text>
+                        </RowComponent>
+                      )}
+                    />
                   )
                 }}
               />
-            )
-          }}
-        />
-      </FeesWrapper>
+            </FeesWrapper>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <MatchQuery
         value={swapQuoteQuery}
@@ -140,3 +176,10 @@ const getPriceImpactVariant = (
           color: 'danger',
           label: t('price_impact_high'),
         }
+
+const ChevronIconWrapper = styled(motion.span)`
+  color: ${getColor('textShy')};
+  size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+`

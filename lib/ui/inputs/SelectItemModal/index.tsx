@@ -11,6 +11,7 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
+    renderFooter?: () => ReactNode
   }
 
 export const SelectItemModal = <T extends { id?: string; chain?: string }>({
@@ -19,17 +20,18 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   title,
   optionComponent: OptionComponent,
   filterFunction,
+  renderFooter,
   renderListHeader,
 }: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
-      <VStack gap={20}>
+      <VStack gap={14}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
-        <VStack gap={16}>
-          {renderListHeader && renderListHeader()}
-          <ListWrapper>
+        <ContentWrapper gap={8}>
+          {renderListHeader?.()}
+          <ListWrapper flexGrow>
             {options
               .filter(option => filterFunction(option, searchQuery))
               .map(option => (
@@ -40,11 +42,16 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
                 />
               ))}
           </ListWrapper>
-        </VStack>
+          {renderFooter?.()}
+        </ContentWrapper>
       </VStack>
     </Modal>
   )
 }
+
+const ContentWrapper = styled(VStack)`
+  margin-top: -6px;
+`
 
 const ListWrapper = styled(VStack)`
   & > :first-child {
