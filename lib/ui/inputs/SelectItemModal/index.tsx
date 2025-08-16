@@ -27,9 +27,9 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
-      <VStack gap={20}>
+      <VStack gap={14}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
-        <VStack gap={16}>
+        <ContentWrapper gap={8}>
           {renderListHeader?.()}
           <ListWrapper flexGrow>
             {options
@@ -43,11 +43,15 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
               ))}
           </ListWrapper>
           {renderFooter?.()}
-        </VStack>
+        </ContentWrapper>
       </VStack>
     </Modal>
   )
 }
+
+const ContentWrapper = styled(VStack)`
+  margin-top: -6px;
+`
 
 const ListWrapper = styled(VStack)`
   & > :first-child {
