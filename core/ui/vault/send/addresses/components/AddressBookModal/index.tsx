@@ -44,9 +44,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
 
   const vaultsAndAddressForSelectedCoin = useMemo(() => {
     return vaults.reduce<VaultAddressBookItem[]>((acc, vault) => {
-      const match = vault.coins.find(
-        c => c.chain === coin.chain && (coin.id ? c.id === coin.id : !c.id)
-      )
+      const match = vault.coins.find(c => c.chain === coin.chain)
 
       if (match?.address) {
         acc.push({ name: vault.name, address: match.address })
