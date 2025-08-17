@@ -35,16 +35,19 @@ export const getVaultIdByTransaction = async ({
         : undefined
     },
   })
-  return vaultId ?? shouldBePresent(await storage.getCurrentVaultId())
+  if (vaultId) {
+    await storage.setCurrentVaultId(vaultId)
+    return vaultId
+  }
+  return shouldBePresent(await storage.getCurrentVaultId())
 }
 
 const getVaultIdByAddress = async (address: string) => {
   const vaultsCoins = await storage.getCoins()
   for (const [vaultId, coins] of Object.entries(vaultsCoins)) {
     if (coins.some(c => c.address.toLowerCase() === address.toLowerCase())) {
-      await storage.setCurrentVaultId(vaultId)
       return vaultId
     }
   }
-  return await storage.getCurrentVaultId()
+  return undefined
 }
