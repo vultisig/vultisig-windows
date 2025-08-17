@@ -1,4 +1,4 @@
-import { useSwapFormStates } from '@core/ui/vault/swap/form/hooks/useSwapFormStates'
+import { useSwapFormStates } from './hooks/useSwapFormStates'
 import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
 import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
 import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'

@@ -26,6 +26,7 @@ import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 import { useToCoin } from '../state/toCoin'
+import { useChainSummaries } from './hooks/useChainSummaries'
 import { useScrollSelectedChainIntoView } from './hooks/useScrollSelectedChainIntoView'
 import { useSortedSwapCoins } from './hooks/useSortedSwapCoins'
 
@@ -39,6 +40,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
+  const chainSummaries = useChainSummaries()
 
   const coinOptions = coins.filter(
     coin => isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
@@ -129,7 +131,15 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     ? currentItemChain === fromCoinKey.chain
                     : currentItemChain === currentToCoin.chain
 
-                return <ChainOption {...props} isSelected={isSelected} />
+                const summary = chainSummaries.data?.[currentItemChain]
+
+                return (
+                  <ChainOption
+                    {...props}
+                    isSelected={isSelected}
+                    totalFiatAmount={summary?.totalUsd}
+                  />
+                )
               }}
               onFinish={(newValue: CoinKey | undefined) => {
                 const currentCoinChain =
