@@ -57,6 +57,8 @@ export const authorizedDapp =
     const dappHostname = getUrlBaseDomain(requestOrigin)
     const currentSession = vaultSessions[dappHostname]
 
+    const appSession = currentSession ?? getDefaultAppSession(requestOrigin)
+
     if (!currentSession) {
       const { vaultId } = await callPopup({
         grantVaultAccess: {},
@@ -66,12 +68,9 @@ export const authorizedDapp =
 
       await addVaultAppSession({
         vaultId: vaultId,
-        session: getDefaultAppSession(requestOrigin),
+        session: appSession,
       })
     }
-
-    const appSession: AppSession =
-      currentSession ?? getDefaultAppSession(requestOrigin)
 
     return resolver({
       ...params,
