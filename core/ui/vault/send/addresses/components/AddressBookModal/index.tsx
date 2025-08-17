@@ -51,7 +51,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
       }
       return acc
     }, [])
-  }, [coin.chain, coin.id, vaults])
+  }, [coin.chain, vaults])
 
   return (
     <Modal withDefaultStructure={false} onClose={onClose}>
