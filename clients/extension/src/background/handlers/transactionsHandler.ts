@@ -1,4 +1,3 @@
-import { storage } from '@core/extension/storage'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -10,6 +9,7 @@ import {
   updateTransaction,
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
+import { getVaultIdByTransaction } from '../utils/getVaultIdByTransaction'
 import { handleOpenPanel } from '../window/windowManager'
 
 const popupMessenger = initializeMessenger({ connect: 'popup' })
@@ -20,7 +20,7 @@ export const handleSendTransaction = async (
   const uuid = uuidv4()
 
   try {
-    const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
+    const currentVaultId = await getVaultIdByTransaction(transaction)
 
     await addTransactionToVault(currentVaultId, {
       ...transaction,
