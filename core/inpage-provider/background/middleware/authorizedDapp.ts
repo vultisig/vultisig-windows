@@ -4,11 +4,13 @@ import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { storage } from '@core/extension/storage'
 import {
   addVaultAppSession,
+  type AppSession,
   getVaultAppSessions,
 } from '@core/extension/storage/appSessions'
-import { BackgroundMethod } from '@core/inpage-provider/background/interface'
-import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import type { BackgroundMethod } from '@core/inpage-provider/background/interface'
+import type { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { callPopup } from '@core/inpage-provider/popup'
+import type { BridgeContext } from '@lib/extension/bridge/context'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
 
@@ -23,7 +25,7 @@ const getDefaultAppSession = (requestOrigin: string) => {
 
 export const authorizedDapp =
   <K extends BackgroundMethod>(
-    resolver: BackgroundResolver<K>
+    resolver: BackgroundResolver<K, BridgeContext & { appSession: AppSession }>
   ): BackgroundResolver<K> =>
   async params => {
     const { context } = params
@@ -68,5 +70,14 @@ export const authorizedDapp =
       })
     }
 
-    return resolver(params)
+    const appSession: AppSession =
+      currentSession ?? getDefaultAppSession(requestOrigin)
+
+    return resolver({
+      ...params,
+      context: {
+        ...params.context,
+        appSession,
+      },
+    })
   }

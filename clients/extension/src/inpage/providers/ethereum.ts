@@ -3,6 +3,7 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
+import { callBackground } from '@core/inpage-provider/background'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
@@ -112,10 +113,9 @@ export class Ethereum extends EventEmitter {
 
   on = (event: string, callback: (data: any) => void): this => {
     if (event === EventMethod.CONNECT && this.isConnected()) {
-      this.request({
-        method: RequestMethod.METAMASK.ETH_CHAIN_ID,
-        params: [],
-      }).then(chainId => callback({ chainId }))
+      callBackground({ getAppSession: {} }).then(({ selectedEVMChainId }) => {
+        callback({ chainId: selectedEVMChainId })
+      })
     } else {
       super.on(event, callback)
     }

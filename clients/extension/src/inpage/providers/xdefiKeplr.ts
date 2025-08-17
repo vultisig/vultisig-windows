@@ -1,5 +1,6 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
 import { CosmosChain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -95,12 +96,11 @@ export class XDEFIKeplrProvider extends Keplr {
     fn: () => Promise<T>
   ): Promise<T> {
     return this.mutex.runExclusive(async () => {
-      const currentChainID = await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.CHAIN_ID,
-        params: [],
+      const { selectedCosmosChainId } = await callBackground({
+        getAppSession: {},
       })
 
-      if (currentChainID !== chainId) {
+      if (selectedCosmosChainId !== chainId) {
         await this.cosmosProvider.request({
           method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
           params: [{ chainId }],
