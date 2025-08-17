@@ -135,23 +135,42 @@ export class Ethereum extends EventEmitter {
 
   async request(data: Messaging.Chain.Request, callback?: Callback) {
     try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.ETHEREUM_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
+      const processRequest = async () => {
+        // TODO: Extract handling of Ethereum requests
+        const handlers = {
+          eth_chainId: async () => {
+            const { selectedEVMChainId } = await callBackground({
+              getAppSession: {},
+            })
 
-      const result = processBackgroundResponse(
-        data,
-        MessageKey.ETHEREUM_REQUEST,
-        response
-      )
+            return selectedEVMChainId
+          },
+        } as const
+
+        if (data.method in handlers) {
+          return handlers[data.method as keyof typeof handlers]()
+        }
+
+        const response = await messengers.background.send<
+          any,
+          Messaging.Chain.Response
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.ETHEREUM_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
+
+        return processBackgroundResponse(
+          data,
+          MessageKey.ETHEREUM_REQUEST,
+          response
+        )
+      }
+
+      const result = await processRequest()
 
       switch (data.method) {
         case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
