@@ -10,7 +10,7 @@ import {
 import { Opener } from '@lib/ui/base/Opener'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
-import { hStack } from '@lib/ui/layout/Stack'
+import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { InputProps, IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
@@ -123,6 +123,16 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
           )}
           {isChainModalOpen && (
             <SelectItemModal
+              renderListHeader={() => (
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Text color="shy" size={12} weight={500}>
+                    {t('chain')}
+                  </Text>
+                  <Text color="shy" size={12} weight={500}>
+                    {t('balance')}
+                  </Text>
+                </HStack>
+              )}
               title={t('select_network')}
               optionComponent={props => {
                 const currentItemChain = props.value.chain
