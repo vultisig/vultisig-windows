@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'
 import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
 
-export type ChainSummary = {
+type ChainSummary = {
   feeCoinAmount: number
   totalUsd: number
 }

@@ -1,4 +1,5 @@
-import { CoinKey } from '@core/chain/coin/Coin'
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { useAutoDiscoverTokens } from '@core/chain/coin/hooks/useAutoDiscoverTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -44,12 +45,20 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const chainSummaries = useChainSummaries()
 
   const coinOptions = coins.filter(
-    coin => isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
+    c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)
   )
 
   const sortedSwapCoins = useSortedSwapCoins(value)
 
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+  const { discoveredCoins, ensureSaved } = useAutoDiscoverTokens({
+    chain: currentChain,
+    enabled: isCoinModalOpen,
+  })
+
+  const mergedOptions: Coin[] = [...sortedSwapCoins, ...discoveredCoins]
+
   const { footerRef, itemRefs, scrollChainIntoView } =
     useScrollSelectedChainIntoView({
       chain: currentChain,
@@ -75,22 +84,24 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
         <>
           {isCoinModalOpen && (
             <SelectItemModal
+              virtualizePageSize={20}
               filterFunction={(option, query) =>
                 option.ticker.toLowerCase().startsWith(query.toLowerCase())
               }
               title={t('select_asset')}
               optionComponent={CoinOption}
-              onFinish={(newValue: CoinKey | undefined) => {
+              onFinish={async (newValue: CoinKey | undefined) => {
                 if (newValue) {
+                  await ensureSaved(newValue)
                   onChange(newValue)
                 }
                 setIsCoinModalOpen(false)
               }}
-              options={sortedSwapCoins}
+              options={mergedOptions}
               renderFooter={() => (
                 <Footer ref={footerRef}>
-                  {coinOptions.map(coin => {
-                    const chain = coin.chain
+                  {coinOptions.map(c => {
+                    const chain = c.chain
                     return (
                       <FooterItem
                         ref={el => {
@@ -101,6 +112,9 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                         onClick={() => {
                           scrollChainIntoView(chain, 'smooth')
                           if (currentChain !== chain) {
+                            const coin = coinOptions.find(
+                              o => o.chain === chain
+                            )!
                             onChange(coin)
                           }
                         }}
@@ -111,7 +125,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                         }
                         key={chain}
                       >
-                        <CoinIcon coin={coin} style={{ fontSize: 16 }} />
+                        <CoinIcon coin={c} style={{ fontSize: 16 }} />
                         <Text size={12} weight={500}>
                           {chain}
                         </Text>
@@ -122,6 +136,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               )}
             />
           )}
+
           {isChainModalOpen && (
             <SelectItemModal
               renderListHeader={() => (
