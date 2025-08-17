@@ -1,5 +1,5 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 import {
   noPersistQueryOptions,
   noRefetchQueryOptions,
@@ -20,7 +20,7 @@ const defaultStoredRequest: StoredRequestType = {}
 const getStoredPendingRequest = async <K extends StoredRequestKey>(
   key: K
 ): Promise<StoredRequestType[K]> => {
-  const data = await getPersistentState<StoredRequestType>(
+  const data = await getStorageValue<StoredRequestType>(
     'storedRequest',
     defaultStoredRequest
   )
@@ -37,7 +37,7 @@ export const setStoredPendingRequest = async <K extends StoredRequestKey>(
   key: K,
   value: StoredRequestType[K]
 ): Promise<void> => {
-  const current = await getPersistentState<StoredRequestType>(
+  const current = await getStorageValue<StoredRequestType>(
     'storedRequest',
     defaultStoredRequest
   )
@@ -45,7 +45,7 @@ export const setStoredPendingRequest = async <K extends StoredRequestKey>(
     ...current,
     [key]: value,
   }
-  await setPersistentState('storedRequest', updated)
+  await setStorageValue('storedRequest', updated)
 }
 
 export const useStoredPendingRequestQuery = <K extends StoredRequestKey>(
