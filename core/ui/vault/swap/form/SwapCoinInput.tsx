@@ -13,6 +13,7 @@ import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { InputProps, IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
@@ -191,6 +192,7 @@ const FooterItem = styled.div<IsActiveProp>`
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
+  transition: background 0.3s;
 
   ${({ isActive, theme }) =>
     isActive &&
@@ -200,4 +202,8 @@ const FooterItem = styled.div<IsActiveProp>`
       box-shadow: 0 0 13.7px 0 rgba(33, 85, 223, 0.68);
       border: 1px solid ${theme.colors.buttonPrimary.toCssValue()};
   `}
+
+  &:hover {
+    background: ${getColor('foregroundExtra')};
+  }
 `
