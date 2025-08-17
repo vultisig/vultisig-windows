@@ -1,3 +1,4 @@
+import type * as CSS from 'csstype'
 import { ElementType, ReactNode, SVGProps } from 'react'
 
 export type OnCloseProp = {
@@ -97,3 +98,5 @@ export type MessageProp = {
 export type RenderProp = {
   render: () => ReactNode
 }
+
+export type CSSProperties = CSS.Properties<string>

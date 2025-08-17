@@ -1,4 +1,5 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { CSSProperties } from '@lib/ui/props'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -111,3 +112,109 @@ export const VStack = styled.div<FixedDirectionStackProps>`
 export const HStack = styled.div<FixedDirectionStackProps>`
   ${hStack}
 `
+
+const cssPropertiesToString = (props: CSSProperties) => {
+  return Object.entries(props)
+    .map(
+      ([key, value]) =>
+        `${key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}: ${value};`
+    )
+    .join('\n')
+}
+
+const stackPropertiesToString = (props: DefStackProps) => {
+  const { $after, $before, $hover, $style } = props
+
+  return css`
+    ${$style && cssPropertiesToString($style)}
+
+    ${$after &&
+    css`
+      &::after {
+        ${cssPropertiesToString({ ...$after, content: $after.content || `''` })}
+      }
+    `}
+
+  ${$before &&
+    css`
+      &::before {
+        ${cssPropertiesToString({
+          ...$before,
+          content: $before.content || `''`,
+        })}
+      }
+    `}
+
+  ${$hover &&
+    css`
+      ${!$style?.transition &&
+      css`
+        transition: all 0.2s;
+      `}
+
+      &:hover {
+        ${cssPropertiesToString($hover)}
+      }
+    `}
+  `
+}
+
+const newStack = (props: NewStackProps) => {
+  const { $media } = props
+
+  return css`
+    ${stackPropertiesToString(props)}
+
+    ${$media?.sm &&
+    css`
+      @media (min-width: 576px) {
+        ${stackPropertiesToString($media.sm)}
+      }
+    `}
+    
+    ${$media?.lg &&
+    css`
+      @media (min-width: 992px) {
+        ${stackPropertiesToString($media.lg)}
+      }
+    `}
+
+    ${$media?.xl &&
+    css`
+      @media (min-width: 1200px) {
+        ${stackPropertiesToString($media.xl)}
+      }
+    `}
+  `
+}
+
+export const NewStack = styled.div<NewStackProps>`
+  ${newStack}
+`
+
+export const NewHStack = styled.div<NewStackProps>`
+  ${({ $style, ...props }) =>
+    newStack({
+      ...props,
+      $style: { ...($style || {}), display: 'flex', flexDirection: 'row' },
+    })}
+`
+
+export const NewVStack = styled.div<NewStackProps>`
+  ${({ $style, ...props }) =>
+    newStack({
+      ...props,
+      $style: { ...($style || {}), display: 'flex', flexDirection: 'column' },
+    })}
+`
+
+type DefStackProps = {
+  $after?: CSSProperties
+  $before?: CSSProperties
+  $hover?: CSSProperties
+  $style?: CSSProperties
+}
+
+type NewStackProps = DefStackProps & {
+  $media?: { sm?: DefStackProps; lg?: DefStackProps; xl?: DefStackProps }
+}
