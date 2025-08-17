@@ -99,7 +99,16 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               }}
               options={mergedOptions}
               renderFooter={() => (
-                <Footer ref={footerRef}>
+                <Footer
+                  onWheel={e => {
+                    if (e.deltaY === 0) return
+                    e.currentTarget.scrollBy({
+                      left: e.deltaY,
+                      behavior: 'smooth',
+                    })
+                  }}
+                  ref={footerRef}
+                >
                   {coinOptions.map(c => {
                     const chain = c.chain
                     return (
@@ -204,6 +213,7 @@ const FooterItem = styled.div<IsActiveProp>`
     alignItems: 'center',
   })};
 
+  flex-shrink: 0;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
