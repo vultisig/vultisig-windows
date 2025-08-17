@@ -278,7 +278,7 @@ export const TransactionPage = () => {
                             )}
                             <ListItem
                               description={getKeysignChain(keysign)}
-                              title="Network"
+                              title={t('network')}
                             />
                             <MatchRecordUnion
                               value={transaction.transactionPayload}
