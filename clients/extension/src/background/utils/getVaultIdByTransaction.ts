@@ -7,13 +7,15 @@ import { ITransaction } from '../../utils/interfaces'
 import { getParsedSolanaTransaction } from '../../utils/tx/solana/parseSolanaTransaction'
 import { getWalletCore } from '../walletCore'
 
-export const getVaultIdByTransaction = async (
-  transaction: ITransaction
-): Promise<string> => {
-  const resolved = await matchRecordUnion<
+type GetVaultIdByTransactionInput = Pick<ITransaction, 'transactionPayload'>
+
+export const getVaultIdByTransaction = async ({
+  transactionPayload,
+}: GetVaultIdByTransactionInput): Promise<string> => {
+  const vaultId = await matchRecordUnion<
     ITransaction['transactionPayload'],
     Promise<CurrentVaultId | undefined>
-  >(transaction.transactionPayload, {
+  >(transactionPayload, {
     keysign: async keysign =>
       keysign.transactionDetails.from
         ? await getVaultIdByAddress(keysign.transactionDetails.from)
@@ -33,7 +35,7 @@ export const getVaultIdByTransaction = async (
         : undefined
     },
   })
-  return resolved ?? shouldBePresent(await storage.getCurrentVaultId())
+  return vaultId ?? shouldBePresent(await storage.getCurrentVaultId())
 }
 
 const getVaultIdByAddress = async (address: string) => {
