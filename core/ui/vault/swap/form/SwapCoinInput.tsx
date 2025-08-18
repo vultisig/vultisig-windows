@@ -188,9 +188,15 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 setIsChainModalOpen(false)
               }}
               options={coinOptions}
-              filterFunction={(option, query) =>
-                option.chain.toLowerCase().startsWith(query.toLowerCase())
-              }
+              filterFunction={(option, query) => {
+                const q = query.trim().toLowerCase()
+                if (!q) return true
+
+                const chain = option.chain?.toLowerCase() ?? ''
+                const ticker = option.ticker?.toLowerCase() ?? ''
+
+                return chain.startsWith(q) || ticker.startsWith(q)
+              }}
             />
           )}
         </>
