@@ -2,8 +2,8 @@ import { Chain, CosmosChain } from '@core/chain/Chain'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { attempt } from '@lib/utils/attempt'
 
-import { cosmosRpcUrl } from '../../chains/cosmos/cosmosRpcUrl'
-import { KnownCoin, KnownCoinMetadata } from '../Coin'
+import { cosmosRpcUrl } from '../../../../chains/cosmos/cosmosRpcUrl'
+import { TokenMetadataResolver } from '../resolver'
 
 type DenomUnits = { denom: string; exponent: number }
 type DenomMetadata = {
@@ -11,10 +11,6 @@ type DenomMetadata = {
   symbol?: string
   display?: string
   denom_units?: DenomUnits[]
-}
-type GetKnownOrFetchTokenInput = {
-  chain: Chain
-  denom: string
 }
 const fetchJson = async <T>(url: string): Promise<T> => {
   const res = await fetch(url)
@@ -66,32 +62,21 @@ const getDenomMetaFromLCD = async (
   return listRes.data?.metadatas?.find(data => data.base === denom) ?? null
 }
 
-export const getFetchCosmosToken = async ({
-  chain,
-  denom,
-}: GetKnownOrFetchTokenInput): Promise<KnownCoin | null> => {
-  // only try to fetch for Cosmos chains
+export const getCosmosTokenMetadata: TokenMetadataResolver<
+  CosmosChain
+> = async ({ chain, id }) => {
   const lcd = cosmosRpcUrl[chain as CosmosChain]
-  if (!lcd) return null
+  const meta = await getDenomMetaFromLCD(lcd, id)
 
-  const meta = await getDenomMetaFromLCD(lcd, denom)
-  console.log('meta:', meta)
-
-  // derive decimals
   let decimals = decimalsFromMeta(meta)
-  console.log('decimals:', decimals)
-
   if (decimals == null) {
-    // sensible defaults
-    decimals = chain === Chain.THORChain || denom.startsWith('x/') ? 8 : 6
+    decimals = chain === Chain.THORChain || id.startsWith('x/') ? 8 : 6
   }
 
-  const ticker = deriveTicker(denom, meta)
+  const ticker = deriveTicker(id, meta)
 
-  const resolved: KnownCoinMetadata = {
+  return {
     ticker,
     decimals,
-    logo: ticker.toLowerCase(),
   }
-  return { ...resolved, chain, id: denom }
 }

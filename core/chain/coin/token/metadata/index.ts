@@ -2,6 +2,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 
 import { ChainKindWithTokenMetadataDiscovery } from './chains'
 import { TokenMetadataResolver } from './resolver'
+import { getCosmosTokenMetadata } from './resolvers/cosmos'
 import { getEvmTokenMetadata } from './resolvers/evm'
 import { getSolanaTokenMetadata } from './resolvers/solana'
 
@@ -11,6 +12,7 @@ const resolvers: Record<
 > = {
   evm: getEvmTokenMetadata,
   solana: getSolanaTokenMetadata,
+  cosmos: getCosmosTokenMetadata,
 }
 
 export const getTokenMetadata: TokenMetadataResolver = async input => {

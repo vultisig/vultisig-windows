@@ -13,11 +13,9 @@ import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import {
-  ensureKnownCosmosToken,
-  knownTokens,
-} from '@core/chain/coin/knownTokens'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
+import { getCosmosTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/cosmos'
 import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -60,11 +58,6 @@ const getCoin = async (
     const expectedDenom = cosmosFeeCoinDenom[chain as CosmosChain]
     if (areLowerCaseEqual(ticker, expectedDenom)) {
       return chainFeeCoin[chain]
-    } else {
-      const cosmosToken = await ensureKnownCosmosToken({ chain, denom: ticker })
-      if (cosmosToken) {
-        return cosmosToken
-      }
     }
   }
   const knownToken = knownTokens[chain].find(token =>
@@ -74,7 +67,17 @@ const getCoin = async (
   if (knownToken) {
     return knownToken
   }
-
+  if (getChainKind(chain) === 'cosmos') {
+    const key = {
+      chain: chain as CosmosChain,
+      id: ticker,
+    } as const
+    const metadata = await getCosmosTokenMetadata(key)
+    return {
+      ...key,
+      ...metadata,
+    }
+  }
   if (chain === Chain.Solana && mint) {
     const key = {
       chain,

@@ -1,12 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { makeRecord } from '@lib/utils/record/makeRecord'
 
-import { areEqualCoins, KnownCoin, KnownCoinMetadata } from '../Coin'
+import { KnownCoin, KnownCoinMetadata } from '../Coin'
 import { knownCosmosTokens } from './cosmos'
-import { getFetchCosmosToken } from './resolve'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
-type EnsureKnownTokenInput = { chain: Chain; denom: string }
+
 const leanTokens: Partial<LeanChainTokensRecord> = {
   [Chain.Tron]: {
     TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t: {
@@ -587,16 +586,3 @@ export const knownTokens = makeRecord(Object.values(Chain), chain => {
 
   return result
 })
-
-export const ensureKnownCosmosToken = async ({
-  chain,
-  denom,
-}: EnsureKnownTokenInput): Promise<KnownCoin | null> => {
-  const coin = knownTokens[chain].find(token =>
-    areEqualCoins(token, { chain, id: denom })
-  )
-  if (coin) {
-    return coin
-  }
-  return await getFetchCosmosToken({ chain, denom })
-}
