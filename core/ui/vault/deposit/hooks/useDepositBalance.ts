@@ -13,6 +13,14 @@ type Params = {
   selectedCoin: Coin | null
 }
 
+const defaultPrecision = 2
+const actionPrecision: Partial<Record<ChainAction, number>> = {
+  redeem: 4,
+}
+
+const getPrecisionForAction = (action: ChainAction) =>
+  actionPrecision[action] ?? defaultPrecision
+
 export const useDepositBalance = ({
   chain,
   selectedChainAction,
@@ -55,6 +63,8 @@ export const useDepositBalance = ({
 
   return {
     balance,
-    balanceFormatted: balance.toFixed(2),
+    balanceFormatted: balance.toFixed(
+      getPrecisionForAction(selectedChainAction)
+    ),
   }
 }
