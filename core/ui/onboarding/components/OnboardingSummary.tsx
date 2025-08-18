@@ -156,7 +156,7 @@ const Summary = styled(VStack)`
 const WarningIcon = styled.div`
   color: ${getColor('idle')};
   flex: none;
-  font-size: 24;
+  font-size: 24px;
 `
 
 const Wrapper = styled(VStack)`
