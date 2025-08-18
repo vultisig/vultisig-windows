@@ -1,6 +1,3 @@
-import { CosmosChain, EvmChain } from '@core/chain/Chain'
-import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { storage } from '@core/extension/storage'
 import {
   addVaultAppSession,
@@ -18,8 +15,6 @@ const getDefaultAppSession = (requestOrigin: string) => {
   return {
     host: getUrlBaseDomain(requestOrigin),
     url: getUrlHost(requestOrigin),
-    selectedCosmosChainId: getCosmosChainId(CosmosChain.THORChain),
-    selectedEVMChainId: getEvmChainId(EvmChain.Ethereum),
   }
 }
 

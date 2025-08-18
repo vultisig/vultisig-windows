@@ -113,8 +113,8 @@ export class Ethereum extends EventEmitter {
 
   on = (event: string, callback: (data: any) => void): this => {
     if (event === EventMethod.CONNECT && this.isConnected()) {
-      callBackground({ getAppSession: {} }).then(({ selectedEVMChainId }) => {
-        callback({ chainId: selectedEVMChainId })
+      callBackground({ getAppChainId: { chainKind: 'evm' } }).then(chainId => {
+        callback({ chainId })
       })
     } else {
       super.on(event, callback)
@@ -138,13 +138,10 @@ export class Ethereum extends EventEmitter {
       const processRequest = async () => {
         // TODO: Extract handling of Ethereum requests
         const handlers = {
-          eth_chainId: async () => {
-            const { selectedEVMChainId } = await callBackground({
-              getAppSession: {},
-            })
-
-            return selectedEVMChainId
-          },
+          eth_chainId: async () =>
+            callBackground({
+              getAppChainId: { chainKind: 'evm' },
+            }),
         } as const
 
         if (data.method in handlers) {

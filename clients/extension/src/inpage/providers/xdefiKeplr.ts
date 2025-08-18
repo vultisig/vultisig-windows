@@ -96,11 +96,11 @@ export class XDEFIKeplrProvider extends Keplr {
     fn: () => Promise<T>
   ): Promise<T> {
     return this.mutex.runExclusive(async () => {
-      const { selectedCosmosChainId } = await callBackground({
-        getAppSession: {},
+      const selectedChainId = await callBackground({
+        getAppChainId: { chainKind: 'cosmos' },
       })
 
-      if (selectedCosmosChainId !== chainId) {
+      if (selectedChainId !== chainId) {
         await this.cosmosProvider.request({
           method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
           params: [{ chainId }],
