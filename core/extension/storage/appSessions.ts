@@ -1,8 +1,6 @@
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-
-export const appSessionsQueryKey = ['appSessions']
-const [key] = appSessionsQueryKey
 
 type UpdateAppSessionFieldsInput = {
   vaultId: string
@@ -22,11 +20,11 @@ export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
 ): Promise<void> => {
-  await setStorageValue<VaultsAppSessions>(key, sessions)
+  await setStorageValue<VaultsAppSessions>(StorageKey.appSessions, sessions)
 }
 
 export const getVaultsAppSessions = async (): Promise<VaultsAppSessions> => {
-  return getStorageValue<VaultsAppSessions>(key, {})
+  return getStorageValue<VaultsAppSessions>(StorageKey.appSessions, {})
 }
 
 export const getVaultAppSessions = async (
