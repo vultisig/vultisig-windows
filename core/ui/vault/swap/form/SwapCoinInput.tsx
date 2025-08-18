@@ -1,5 +1,4 @@
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import { useAutoDiscoverTokens } from '@core/chain/coin/hooks/useAutoDiscoverTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -23,6 +22,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useAutoDiscoverTokensQuery } from '../../../chain/coin/queries/useAutoDiscoverTokensQuery'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
@@ -53,7 +53,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const sortedSwapCoins = useSortedSwapCoins(value)
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
-  const { discoveredCoins, ensureSaved } = useAutoDiscoverTokens({
+  const { discoveredCoins, ensureSaved } = useAutoDiscoverTokensQuery({
     chain: currentChain,
     enabled: isCoinModalOpen,
   })

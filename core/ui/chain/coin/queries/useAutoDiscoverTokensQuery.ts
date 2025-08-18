@@ -25,7 +25,7 @@ const keyOf = (c: CoinKey) => {
   return coinKeyToString({ chain, id: id?.toLowerCase() })
 }
 
-export const useAutoDiscoverTokens = ({ chain, enabled }: Props) => {
+export const useAutoDiscoverTokensQuery = ({ chain, enabled }: Props) => {
   const { data: whitelisted, isPending } = useWhitelistedCoinsQuery(
     chain,
     enabled
