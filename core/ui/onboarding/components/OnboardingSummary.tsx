@@ -93,7 +93,7 @@ const CheckBox = styled(LibCheckBox)`
 const InfoIcon = styled.div`
   color: ${getColor('primaryAlt')};
   flex: none;
-  font-size: 24;
+  font-size: 24px;
 `
 
 const Item = styled(HStack)`
