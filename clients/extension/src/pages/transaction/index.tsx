@@ -244,18 +244,32 @@ export const TransactionPage = () => {
                     <MatchRecordUnion
                       value={keysignMessagePayload}
                       handlers={{
-                        custom: custom => (
-                          <>
-                            <ListItem
-                              title={t('method')}
-                              description={custom.method}
-                            />
-                            <ListItem
-                              title={t('message')}
-                              description={custom.message}
-                            />
-                          </>
-                        ),
+                        custom: custom => {
+                          const txPayload = transaction.transactionPayload
+                          const prefix =
+                            'custom' in txPayload &&
+                            typeof txPayload.custom?.prefix === 'string'
+                              ? txPayload.custom.prefix
+                              : undefined
+
+                          const displayMessage =
+                            prefix && prefix.length > 0
+                              ? custom.message.slice(prefix.length)
+                              : custom.message
+
+                          return (
+                            <>
+                              <ListItem
+                                title={t('method')}
+                                description={custom.method}
+                              />
+                              <ListItem
+                                title={t('message')}
+                                description={displayMessage}
+                              />
+                            </>
+                          )
+                        },
                         keysign: keysign => (
                           <>
                             <ListItem
