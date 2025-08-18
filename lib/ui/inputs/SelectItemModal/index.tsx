@@ -13,7 +13,7 @@ import React, {
 } from 'react'
 import styled from 'styled-components'
 
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver'
+import { useIntersection } from '../../hooks/useIntersection'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> &
@@ -54,39 +54,44 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   }, [filtered.length, pageSize])
 
   const listRef = useRef<HTMLDivElement | null>(null)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
 
   const loadMore = useCallback(() => {
     setVisibleCount(c => Math.min(c + pageSize, filtered.length))
   }, [pageSize, filtered.length])
 
-  const sentinelRef = useIntersectionObserver<HTMLDivElement>({
-    rootRef: listRef,
+  const intersection = useIntersection(sentinelRef, {
+    root: listRef.current,
+    rootMargin: '0px 0px 200px 0px',
     threshold: 0,
-    onIntersect: () => {
-      if (virtualizePageSize && visibleCount < filtered.length) {
-        loadMore()
-      }
-    },
   })
 
-  const slice = virtualizePageSize ? filtered.slice(0, visibleCount) : filtered
+  useEffect(() => {
+    if (!virtualizePageSize) return
+    if (intersection?.isIntersecting && visibleCount < filtered.length) {
+      loadMore()
+    }
+  }, [
+    intersection?.isIntersecting,
+    virtualizePageSize,
+    visibleCount,
+    filtered.length,
+    loadMore,
+  ])
 
-  const defaultGetKey = (o: T, i: number) => {
-    const id = 'id' in o ? o.id : undefined
-    const chain = 'chain' in o ? o.chain : undefined
-    return `${id ?? ''}-${chain ?? ''}-${i}`
-  }
+  const slice = virtualizePageSize ? filtered.slice(0, visibleCount) : filtered
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
       <VStack gap={8}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
+
         {renderListHeader?.() || <div />}
 
         <ListWrapper ref={listRef} flexGrow>
           {slice.map((option, index) => (
             <OptionComponent
-              key={(getKey ?? defaultGetKey)(option, index)}
+              key={getKey?.(option, index) || option?.id || index}
               value={option}
               onClick={() => onFinish(option)}
             />

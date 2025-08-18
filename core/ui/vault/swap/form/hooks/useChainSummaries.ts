@@ -3,6 +3,7 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { Query } from '@lib/ui/query/Query'
 import { useMemo } from 'react'
 
@@ -21,42 +22,42 @@ export const useChainSummaries = (): Query<
   const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
   const pricesQuery = useCoinPricesQuery({ coins })
 
-  return useMemo(() => {
-    const isPending = Boolean(balancesQuery.isPending || pricesQuery.isPending)
-    const error = balancesQuery.errors?.[0] ?? pricesQuery.errors?.[0] ?? null
+  const transform = useMemo(
+    () =>
+      ({
+        balances,
+        prices,
+      }: {
+        balances: Record<string, number | bigint>
+        prices: Record<string, number>
+      }) => {
+        const result: Record<Coin['chain'], ChainSummary> = {} as any
 
-    if (isPending || error) {
-      return {
-        data: undefined,
-        isPending,
-        error,
-      }
-    }
+        for (const coin of coins) {
+          const key = coinKeyToString(extractAccountCoinKey(coin))
+          const rawBal = balances[key] ?? 0
+          const amount = fromChainAmount(rawBal, coin.decimals)
+          const price = prices[key] ?? 0
+          const usd = amount * price
 
-    const balances = balancesQuery.data ?? {}
-    const prices = pricesQuery.data ?? {}
+          const chain = coin.chain
+          const bucket =
+            result[chain] ?? (result[chain] = { feeCoinAmount: 0, totalUsd: 0 })
 
-    const result: Record<Coin['chain'], ChainSummary> = {} as any
+          bucket.totalUsd += usd
+          if (isFeeCoin(coin)) bucket.feeCoinAmount = amount
+        }
 
-    for (const coin of coins) {
-      const key = coinKeyToString(extractAccountCoinKey(coin))
-      const rawBal = balances[key] ?? 0
-      const amount = fromChainAmount(rawBal, coin.decimals)
-      const price = prices[key] ?? 0
-      const usd = amount * price
+        return result
+      },
+    [coins]
+  )
 
-      const chain = coin.chain
-      const bucket =
-        result[chain] ?? (result[chain] = { feeCoinAmount: 0, totalUsd: 0 })
-
-      bucket.totalUsd += usd
-      if (isFeeCoin(coin)) bucket.feeCoinAmount = amount
-    }
-
-    return {
-      data: result,
-      isPending: false,
-      error: null,
-    }
-  }, [coins, balancesQuery, pricesQuery])
+  return useTransformQueriesData(
+    {
+      balances: { ...balancesQuery, error: balancesQuery.errors[0] },
+      prices: { ...pricesQuery, error: pricesQuery.errors[0] },
+    },
+    ({ balances, prices }) => transform({ balances, prices })
+  )
 }

@@ -7,7 +7,6 @@ import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Opener } from '@lib/ui/base/Opener'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -22,7 +21,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAutoDiscoverTokensQuery } from '../../../chain/coin/queries/useAutoDiscoverTokensQuery'
+import { useAutoDiscoverTokensQuery } from '../../../chain/hooks/useAutoDiscoverTokensQuery'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
@@ -33,8 +32,7 @@ import { useScrollSelectedChainIntoView } from './hooks/useScrollSelectedChainIn
 import { useSortedSwapCoins } from './hooks/useSortedSwapCoins'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
-  const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
-  const [isChainModalOpen, setIsChainModalOpen] = useState(false)
+  const [opened, setOpened] = useState<null | 'coin' | 'chain'>(null)
 
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
@@ -55,156 +53,136 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
 
   const { discoveredCoins, ensureSaved } = useAutoDiscoverTokensQuery({
     chain: currentChain,
-    enabled: isCoinModalOpen,
+    enabled: opened === 'coin',
   })
-
-  const mergedOptions: Coin[] = [...sortedSwapCoins, ...discoveredCoins]
 
   const { footerRef, itemRefs, scrollChainIntoView } =
     useScrollSelectedChainIntoView({
       chain: currentChain,
-      enabled: isCoinModalOpen,
+      enabled: opened === 'coin',
     })
 
+  const mergedOptions: Coin[] = [...sortedSwapCoins, ...discoveredCoins]
+
   return (
-    <Opener
-      renderOpener={({ onOpen }) => (
-        <SwapCoinInputField
-          value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
-          onChainClick={() => {
-            onOpen()
-            setIsChainModalOpen(true)
+    <>
+      <SwapCoinInputField
+        value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
+        onChainClick={() => setOpened('chain')}
+        onCoinClick={() => setOpened('coin')}
+      />
+      {opened === 'coin' && (
+        <SelectItemModal
+          virtualizePageSize={20}
+          filterFunction={(option, query) =>
+            option.ticker.toLowerCase().startsWith(query.toLowerCase())
+          }
+          title={t('select_asset')}
+          optionComponent={CoinOption}
+          onFinish={async (newValue: CoinKey | undefined) => {
+            try {
+              if (newValue) {
+                await ensureSaved(newValue)
+                onChange(newValue)
+              }
+            } finally {
+              setOpened(null)
+            }
           }}
-          onCoinClick={() => {
-            onOpen()
-            setIsCoinModalOpen(true)
+          options={mergedOptions}
+          renderFooter={() => (
+            <Footer
+              onWheel={e => {
+                if (e.deltaY === 0) return
+                e.currentTarget.scrollBy({ left: e.deltaY, behavior: 'smooth' })
+              }}
+              ref={footerRef}
+            >
+              {coinOptions.map(c => {
+                const chain = c.chain
+                return (
+                  <FooterItem
+                    ref={el => {
+                      itemRefs.current[chain] = el
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    onClick={() => {
+                      scrollChainIntoView(chain, 'smooth')
+                      if (currentChain !== chain) {
+                        const coin = coinOptions.find(o => o.chain === chain)!
+                        onChange(coin)
+                      }
+                    }}
+                    isActive={
+                      side === 'from'
+                        ? chain === fromCoinKey.chain
+                        : chain === currentToCoin.chain
+                    }
+                    key={chain}
+                  >
+                    <CoinIcon coin={c} style={{ fontSize: 16 }} />
+                    <Text size={12} weight={500}>
+                      {chain}
+                    </Text>
+                  </FooterItem>
+                )
+              })}
+            </Footer>
+          )}
+        />
+      )}
+
+      {opened === 'chain' && (
+        <SelectItemModal
+          renderListHeader={() => (
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text color="shy" size={12} weight={500}>
+                {t('chain')}
+              </Text>
+              <Text color="shy" size={12} weight={500}>
+                {t('balance')}
+              </Text>
+            </HStack>
+          )}
+          title={t('select_network')}
+          optionComponent={props => {
+            const currentItemChain = props.value.chain
+            const isSelected =
+              side === 'from'
+                ? currentItemChain === fromCoinKey.chain
+                : currentItemChain === currentToCoin.chain
+
+            const summary = chainSummaries.data?.[currentItemChain]
+
+            return (
+              <ChainOption
+                {...props}
+                isSelected={isSelected}
+                totalFiatAmount={summary?.totalUsd}
+              />
+            )
+          }}
+          onFinish={(newValue: CoinKey | undefined) => {
+            const currentCoinChain =
+              side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+            if (newValue && newValue.chain !== currentCoinChain) {
+              onChange(newValue)
+            }
+            setOpened(null)
+          }}
+          options={coinOptions}
+          filterFunction={(option, query) => {
+            const q = query.trim().toLowerCase()
+            if (!q) return true
+            const chain = option.chain?.toLowerCase() ?? ''
+            const ticker = option.ticker?.toLowerCase() ?? ''
+            return chain.startsWith(q) || ticker.startsWith(q)
           }}
         />
       )}
-      renderContent={() => (
-        <>
-          {isCoinModalOpen && (
-            <SelectItemModal
-              virtualizePageSize={20}
-              filterFunction={(option, query) =>
-                option.ticker.toLowerCase().startsWith(query.toLowerCase())
-              }
-              title={t('select_asset')}
-              optionComponent={CoinOption}
-              onFinish={async (newValue: CoinKey | undefined) => {
-                try {
-                  if (newValue) {
-                    await ensureSaved(newValue)
-                    onChange(newValue)
-                  }
-                } finally {
-                  setIsCoinModalOpen(false)
-                }
-              }}
-              options={mergedOptions}
-              renderFooter={() => (
-                <Footer
-                  onWheel={e => {
-                    if (e.deltaY === 0) return
-                    e.currentTarget.scrollBy({
-                      left: e.deltaY,
-                      behavior: 'smooth',
-                    })
-                  }}
-                  ref={footerRef}
-                >
-                  {coinOptions.map(c => {
-                    const chain = c.chain
-                    return (
-                      <FooterItem
-                        ref={el => {
-                          itemRefs.current[chain] = el
-                        }}
-                        tabIndex={0}
-                        role="button"
-                        onClick={() => {
-                          scrollChainIntoView(chain, 'smooth')
-                          if (currentChain !== chain) {
-                            const coin = coinOptions.find(
-                              o => o.chain === chain
-                            )!
-                            onChange(coin)
-                          }
-                        }}
-                        isActive={
-                          side === 'from'
-                            ? chain === fromCoinKey.chain
-                            : chain === currentToCoin.chain
-                        }
-                        key={chain}
-                      >
-                        <CoinIcon coin={c} style={{ fontSize: 16 }} />
-                        <Text size={12} weight={500}>
-                          {chain}
-                        </Text>
-                      </FooterItem>
-                    )
-                  })}
-                </Footer>
-              )}
-            />
-          )}
-
-          {isChainModalOpen && (
-            <SelectItemModal
-              renderListHeader={() => (
-                <HStack alignItems="center" justifyContent="space-between">
-                  <Text color="shy" size={12} weight={500}>
-                    {t('chain')}
-                  </Text>
-                  <Text color="shy" size={12} weight={500}>
-                    {t('balance')}
-                  </Text>
-                </HStack>
-              )}
-              title={t('select_network')}
-              optionComponent={props => {
-                const currentItemChain = props.value.chain
-                const isSelected =
-                  side === 'from'
-                    ? currentItemChain === fromCoinKey.chain
-                    : currentItemChain === currentToCoin.chain
-
-                const summary = chainSummaries.data?.[currentItemChain]
-
-                return (
-                  <ChainOption
-                    {...props}
-                    isSelected={isSelected}
-                    totalFiatAmount={summary?.totalUsd}
-                  />
-                )
-              }}
-              onFinish={(newValue: CoinKey | undefined) => {
-                const currentCoinChain =
-                  side === 'from' ? fromCoinKey.chain : currentToCoin.chain
-
-                if (newValue && newValue.chain !== currentCoinChain) {
-                  onChange(newValue)
-                }
-
-                setIsChainModalOpen(false)
-              }}
-              options={coinOptions}
-              filterFunction={(option, query) => {
-                const q = query.trim().toLowerCase()
-                if (!q) return true
-
-                const chain = option.chain?.toLowerCase() ?? ''
-                const ticker = option.ticker?.toLowerCase() ?? ''
-
-                return chain.startsWith(q) || ticker.startsWith(q)
-              }}
-            />
-          )}
-        </>
-      )}
-    />
+    </>
   )
 }
 

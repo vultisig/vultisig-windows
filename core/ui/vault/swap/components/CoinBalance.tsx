@@ -8,12 +8,11 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, text } from '@lib/ui/text'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useFromAmount } from '../state/fromAmount'
-
 const Container = styled.div`
   ${text({
     color: 'shy',
@@ -42,8 +41,10 @@ export const CoinBalance = ({ value }: ValueProp<CoinKey>) => {
             onClick={() => setFromValue(fromChainAmount(amount, coin.decimals))}
           >
             <Text as="span" size={12} color="shy" weight={500}>
-              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
-              {` ${coin.ticker}`}
+              {formatAmount(
+                fromChainAmount(amount, coin.decimals),
+                coin.ticker
+              )}
             </Text>
           </UnstyledButton>
         )}

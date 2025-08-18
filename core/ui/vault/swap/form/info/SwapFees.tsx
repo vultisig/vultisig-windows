@@ -1,6 +1,7 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
-import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
+import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -24,10 +25,7 @@ type SwapFeesProps = {
 export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
   const [showFeesBreakdown, { toggle }] = useBoolean(false)
   const prefersReduced = useReducedMotion()
-  const chevronTransition = {
-    duration: prefersReduced ? 0 : 0.2,
-    ease: 'easeOut',
-  }
+
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
   const chainSpecificQuery = useSwapChainSpecificQuery()
@@ -46,15 +44,9 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
               <Text color="shy">
                 <SwapFeeFiatValue value={Object.values(value)} />
               </Text>
-              <ChevronIconWrapper
-                role="button"
-                aria-expanded={showFeesBreakdown}
-                onClick={toggle}
-                animate={{ rotate: showFeesBreakdown ? 180 : 0 }}
-                transition={chevronTransition}
-              >
-                <ChevronDownIcon />
-              </ChevronIconWrapper>
+              <UnstyledButton onClick={toggle}>
+                <CollapsableStateIndicator isOpen={showFeesBreakdown} />
+              </UnstyledButton>
             </HStack>
           )}
         />
@@ -176,10 +168,3 @@ const getPriceImpactVariant = (
           color: 'danger',
           label: t('price_impact_high'),
         }
-
-const ChevronIconWrapper = styled(motion.span)`
-  color: ${getColor('textShy')};
-  font-size: 12px;
-  cursor: pointer;
-  display: inline-flex;
-`

@@ -5,7 +5,10 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -21,12 +24,11 @@ export const CoinOption = ({
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, ticker, decimals } = value
-
+  const address = useCurrentVaultAddress(chain)
   const coins = useCurrentVaultCoins()
-  const currentChainAddress = coins.find(c => c.chain === chain)!.address
   const coin = coins.find(c => c.chain === chain && c.id === value.id) ?? {
     ...value,
-    address: currentChainAddress,
+    address,
   }
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const priceQuery = useCoinPriceQuery({
