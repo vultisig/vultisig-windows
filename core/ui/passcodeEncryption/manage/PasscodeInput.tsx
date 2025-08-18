@@ -1,3 +1,4 @@
+import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import {
   MultiCharacterInput,
@@ -5,13 +6,16 @@ import {
 } from '@lib/ui/inputs/MultiCharacterInput'
 import { InputProps, LabelProp } from '@lib/ui/props'
 
-import { passcodeEncryptionConfig } from '../core/config'
-
 type PasscodeInputProps = InputProps<string | null> &
   Partial<LabelProp> &
-  Partial<Pick<MultiCharacterInputProps, 'validation' | 'validationMessages'>>
+  Partial<
+    Pick<MultiCharacterInputProps, 'validation' | 'validationMessages'>
+  > & {
+    autoFocus?: boolean
+  }
 
 export const PasscodeInput = ({
+  autoFocus = false,
   value,
   onChange,
   label,
@@ -22,12 +26,13 @@ export const PasscodeInput = ({
     <>
       {label && <InputLabel>{label}</InputLabel>}
       <MultiCharacterInput
-        value={value}
+        autoFocusFirst={autoFocus}
+        includePasteButton={false}
         length={passcodeEncryptionConfig.passcodeLength}
         onChange={newValue => onChange(newValue)}
         validation={validation}
         validationMessages={validationMessages}
-        includePasteButton={false}
+        value={value}
       />
     </>
   )
