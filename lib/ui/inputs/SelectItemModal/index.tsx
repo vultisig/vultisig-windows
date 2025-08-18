@@ -61,7 +61,6 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
 
   const sentinelRef = useIntersectionObserver<HTMLDivElement>({
     rootRef: listRef,
-    rootMargin: '120px 0px 120px 0px',
     threshold: 0,
     onIntersect: () => {
       if (virtualizePageSize && visibleCount < filtered.length) {
