@@ -92,11 +92,14 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               title={t('select_asset')}
               optionComponent={CoinOption}
               onFinish={async (newValue: CoinKey | undefined) => {
-                if (newValue) {
-                  await ensureSaved(newValue)
-                  onChange(newValue)
+                try {
+                  if (newValue) {
+                    await ensureSaved(newValue)
+                    onChange(newValue)
+                  }
+                } finally {
+                  setIsCoinModalOpen(false)
                 }
-                setIsCoinModalOpen(false)
               }}
               options={mergedOptions}
               renderFooter={() => (

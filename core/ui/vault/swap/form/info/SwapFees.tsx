@@ -179,7 +179,7 @@ const getPriceImpactVariant = (
 
 const ChevronIconWrapper = styled(motion.span)`
   color: ${getColor('textShy')};
-  size: 12px;
+  font-size: 12px;
   cursor: pointer;
   display: inline-flex;
 `

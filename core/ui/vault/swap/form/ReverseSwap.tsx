@@ -5,7 +5,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
-import { SwapLoadingIcon } from '@lib/ui/icons/SwapLoadingIcon '
+import { SwapLoadingIcon } from '@lib/ui/icons/SwapLoadingIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion, useReducedMotion } from 'framer-motion'
@@ -38,7 +38,7 @@ export const ReverseSwap = () => {
             style={{
               display: 'inline-flex',
               willChange: 'transform',
-              size: 12,
+              fontSize: 12,
             }}
             initial={{ rotate: 0 }}
             animate={prefersReducedMotion ? { rotate: 0 } : { rotate: 360 }}

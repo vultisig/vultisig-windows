@@ -71,8 +71,11 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
 
   const slice = virtualizePageSize ? filtered.slice(0, visibleCount) : filtered
 
-  const defaultGetKey = (o: T, i: number) =>
-    `${(o as any).id ?? ''}-${(o as any).chain ?? ''}-${i}`
+  const defaultGetKey = (o: T, i: number) => {
+    const id = 'id' in o ? o.id : undefined
+    const chain = 'chain' in o ? o.chain : undefined
+    return `${id ?? ''}-${chain ?? ''}-${i}`
+  }
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
@@ -116,5 +119,6 @@ const ListWrapper = styled(VStack)`
 `
 
 const Sentinel = styled.div`
-  height: 1px;
+  height: 2px;
+  width: 100%;
 `
