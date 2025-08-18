@@ -1,4 +1,5 @@
 import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import {
@@ -8,7 +9,6 @@ import {
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'

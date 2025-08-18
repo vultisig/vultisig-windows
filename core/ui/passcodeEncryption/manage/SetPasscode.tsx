@@ -62,14 +62,15 @@ export const SetPasscode = () => {
         renderContent={() => (
           <>
             <PasscodeInput
-              value={passcode}
-              onChange={setPasscode}
               label={t('enter_passcode')}
+              onChange={setPasscode}
+              value={passcode}
+              autoFocus
             />
             <PasscodeInput
-              value={confirmPasscode}
-              onChange={setConfirmPasscode}
               label={t('confirm_passcode')}
+              onChange={setConfirmPasscode}
+              value={confirmPasscode}
             />
             <Button disabled={isDisabled} loading={isPending} type="submit">
               {t('set_passcode')}

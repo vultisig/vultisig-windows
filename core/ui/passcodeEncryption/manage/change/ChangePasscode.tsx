@@ -1,3 +1,6 @@
+import { useChangePasscodeMutation } from '@core/ui/passcodeEncryption/manage/change/mutations/changePasscode'
+import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
+import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -10,15 +13,9 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { usePasscode } from '../../state/passcode'
-import { PasscodeInput } from '../PasscodeInput'
-import { useChangePasscodeMutation } from './mutations/changePasscode'
-
 export const ChangePasscode = () => {
   const { t } = useTranslation()
-
   const [passcode] = usePasscode()
-
   const [currentPasscode, setCurrentPasscode] = useState<string | null>(null)
   const [newPasscode, setNewPasscode] = useState<string | null>(null)
   const [confirmNewPasscode, setConfirmNewPasscode] = useState<string | null>(
@@ -84,19 +81,20 @@ export const ChangePasscode = () => {
             gap={14}
           >
             <PasscodeInput
-              value={currentPasscode}
               label={t('current_passcode')}
               onChange={setCurrentPasscode}
+              value={currentPasscode}
+              autoFocus
             />
             <PasscodeInput
-              value={newPasscode}
               label={t('new_passcode')}
               onChange={setNewPasscode}
+              value={newPasscode}
             />
             <PasscodeInput
-              value={confirmNewPasscode}
               label={t('confirm_new_passcode')}
               onChange={setConfirmNewPasscode}
+              value={confirmNewPasscode}
             />
             {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
           </StackSeparatedBy>
