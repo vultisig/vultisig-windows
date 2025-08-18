@@ -12,7 +12,6 @@ type UpdateAppSessionFieldsInput = {
 
 export type AppSession = {
   host: string
-  addresses?: string[]
   url: string
   selectedEVMChainId?: string
   selectedCosmosChainId?: string
