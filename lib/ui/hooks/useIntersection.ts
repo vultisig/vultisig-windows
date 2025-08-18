@@ -5,10 +5,6 @@ type UseIntersectionParams = Pick<
   'root' | 'rootMargin' | 'threshold'
 >
 
-/**
- * Observes the element referenced by `ref` and returns the latest
- * IntersectionObserverEntry (or null). Clean deps, no suppressions.
- */
 export const useIntersection = (
   ref: RefObject<HTMLElement | null>,
   { root, rootMargin, threshold }: UseIntersectionParams

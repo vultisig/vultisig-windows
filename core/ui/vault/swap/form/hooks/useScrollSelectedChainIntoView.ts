@@ -1,11 +1,10 @@
 import { useCallback, useLayoutEffect, useRef } from 'react'
 
 type Props = {
-  enabled: boolean
   chain: string
 }
 
-export const useScrollSelectedChainIntoView = ({ enabled, chain }: Props) => {
+export const useScrollSelectedChainIntoView = ({ chain }: Props) => {
   const footerRef = useRef<HTMLDivElement | null>(null)
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const prevChain = useRef<string | undefined>(undefined)
@@ -44,7 +43,8 @@ export const useScrollSelectedChainIntoView = ({ enabled, chain }: Props) => {
   )
 
   useLayoutEffect(() => {
-    if (!enabled || !chain) return
+    if (!chain) return
+
     const id = requestAnimationFrame(() => {
       const behavior: ScrollBehavior =
         prevChain.current && prevChain.current !== chain ? 'smooth' : 'auto'
@@ -52,7 +52,7 @@ export const useScrollSelectedChainIntoView = ({ enabled, chain }: Props) => {
       prevChain.current = chain
     })
     return () => cancelAnimationFrame(id)
-  }, [enabled, chain, scrollChainIntoView])
+  }, [chain, scrollChainIntoView])
 
   return {
     footerRef,

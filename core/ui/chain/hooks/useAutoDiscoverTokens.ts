@@ -5,7 +5,6 @@ import {
   CoinKey,
   coinKeyToString,
   coinMetadataFields,
-  extractCoinKey,
 } from '@core/chain/coin/Coin'
 import { coins } from '@core/chain/coin/coins'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
@@ -18,18 +17,10 @@ import {
 import { pick } from '@lib/utils/record/pick'
 import { useCallback, useMemo } from 'react'
 
-type Props = { chain: Chain; enabled: boolean }
+type Props = { chain: Chain }
 
-const keyOf = (c: CoinKey) => {
-  const { chain, id } = extractCoinKey(c)
-  return coinKeyToString({ chain, id: id?.toLowerCase() })
-}
-
-export const useAutoDiscoverTokensQuery = ({ chain, enabled }: Props) => {
-  const { data: whitelisted, isPending } = useWhitelistedCoinsQuery(
-    chain,
-    enabled
-  )
+export const useAutoDiscoverTokens = ({ chain }: Props) => {
+  const { data: whitelisted, isPending } = useWhitelistedCoinsQuery(chain)
 
   const vaultCoins = useCurrentVaultCoins()
   const addresses = useCurrentVaultAddresses()
@@ -40,20 +31,21 @@ export const useAutoDiscoverTokensQuery = ({ chain, enabled }: Props) => {
 
   const metaByKey = useMemo(() => {
     const m = new Map<string, Partial<Coin>>()
-    for (const k of coins) m.set(keyOf(k), pick(k, coinMetadataFields))
+    for (const k of coins)
+      m.set(coinKeyToString(k), pick(k, coinMetadataFields))
     return m
   }, [])
 
   const vaultSet = useMemo(() => {
     const s = new Set<string>()
-    for (const vc of vaultCoins) s.add(keyOf(vc))
+    for (const vc of vaultCoins) s.add(coinKeyToString(vc))
     return s
   }, [vaultCoins])
 
   const discoveredCoins: Coin[] = useMemo(() => {
     if (!whitelisted) return []
     return whitelisted.map(w => {
-      const k = keyOf(w)
+      const k = coinKeyToString(w)
       return { ...w, ...(metaByKey.get(k) ?? {}) }
     })
   }, [whitelisted, metaByKey])
@@ -62,7 +54,7 @@ export const useAutoDiscoverTokensQuery = ({ chain, enabled }: Props) => {
     if (!accountAddress) return []
     const out: AccountCoin[] = []
     for (const c of discoveredCoins) {
-      const k = keyOf(c)
+      const k = coinKeyToString(c)
       if (vaultSet.has(k)) continue
       out.push({ ...c, address: accountAddress })
     }
@@ -71,9 +63,9 @@ export const useAutoDiscoverTokensQuery = ({ chain, enabled }: Props) => {
 
   const ensureSaved = useCallback(
     async (selected: CoinKey) => {
-      const k = keyOf(selected)
+      const k = coinKeyToString(selected)
       if (vaultSet.has(k)) return
-      const toSave = discoveredAccountCoins.find(d => keyOf(d) === k)
+      const toSave = discoveredAccountCoins.find(d => coinKeyToString(d) === k)
       if (!toSave) return
       await saveCoins({ vaultId, coins: [toSave] })
     },
