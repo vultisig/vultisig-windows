@@ -9,8 +9,8 @@ import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { MessageKey } from '@clients/extension/src/utils/constants'
+import { callPopup } from '@core/inpage-provider/popup'
 
-import { callPopupApi } from '../../popup/api/call'
 import { registerWallet } from './solana/register'
 
 export const createProviders = () => {
@@ -34,7 +34,7 @@ export const createProviders = () => {
     plugin: {
       request: async ({ params }: { params: [{ id: string }] }) => {
         const [{ id }] = params
-        const { joinUrl } = await callPopupApi(
+        const { joinUrl } = await callPopup(
           {
             pluginReshare: { pluginId: id },
           },

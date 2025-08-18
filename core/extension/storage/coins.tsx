@@ -1,6 +1,4 @@
 import { areEqualCoins } from '@core/chain/coin/Coin'
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import {
   CoinsRecord,
   CoinsStorage,
@@ -8,12 +6,14 @@ import {
   initialCoinsRecord,
 } from '@core/ui/storage/coins'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 
 const getCoins = async () =>
-  getPersistentState(StorageKey.vaultsCoins, initialCoinsRecord)
+  getStorageValue(StorageKey.vaultsCoins, initialCoinsRecord)
 
 export const updateCoins = async (coins: CoinsRecord) => {
-  await setPersistentState(StorageKey.vaultsCoins, coins)
+  await setStorageValue(StorageKey.vaultsCoins, coins)
 }
 
 const createCoins: CreateCoinsFunction = async ({ vaultId, coins }) => {

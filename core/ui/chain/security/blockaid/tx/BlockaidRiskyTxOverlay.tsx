@@ -4,7 +4,6 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { ValueProp } from '@lib/ui/props'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -12,6 +11,7 @@ import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
+import { useCore } from '../../../../state/core'
 import { BlockaidLogo } from '../BlockaidLogo'
 import { txRiskLevelIcon } from './TxRiskLevelIcon'
 import { getRiskyTxColor } from './utils/color'
@@ -38,7 +38,7 @@ export const BlockaidRiskyTxOverlay = ({ value }: ValueProp<RiskyTxInfo>) => {
 
   const { t } = useTranslation()
 
-  const goBack = useNavigateBack()
+  const { goBack } = useCore()
 
   if (isDismissed) return null
 

@@ -1,4 +1,5 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -12,7 +13,6 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useTranslation } from 'react-i18next'
 
 export const VaultSettingsPage = () => {
