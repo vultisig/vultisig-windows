@@ -18,7 +18,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -44,12 +44,13 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const side = useTransferDirection()
   const chainSummaries = useChainSummaries()
 
-  const coinOptions = coins.filter(
-    c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)
+  const coinOptions = useMemo(
+    () =>
+      coins.filter(c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)),
+    [coins]
   )
 
   const sortedSwapCoins = useSortedSwapCoins(value)
-
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
   const { discoveredCoins, ensureSaved } = useAutoDiscoverTokens({
