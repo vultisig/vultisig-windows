@@ -1,8 +1,8 @@
-import { getPersistentState } from '@core/extension/state/persistent/getPersistentState'
-import { setPersistentState } from '@core/extension/state/persistent/setPersistentState'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { setStorageValue } from '@lib/extension/storage/set'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getLastItem } from '@lib/utils/array/getLastItem'
@@ -18,11 +18,11 @@ const latestInstalledVersionQueryKey = ['latestInstalledVersion']
 const [key] = latestInstalledVersionQueryKey
 
 const getExtensionVersion = async (): Promise<string | null> => {
-  return getPersistentState<string | null>(key, null)
+  return getStorageValue<string | null>(key, null)
 }
 
 const setExtensionVersion = async (version: string): Promise<void> => {
-  await setPersistentState<string>(key, version)
+  await setStorageValue<string>(key, version)
 }
 
 export const StorageMigrationsManager = ({ children }: ChildrenProp) => {

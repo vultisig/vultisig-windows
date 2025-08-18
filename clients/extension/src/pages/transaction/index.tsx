@@ -1,7 +1,10 @@
 import { create } from '@bufbuild/protobuf'
+import { GasFeeAdjuster } from '@clients/extension/src/pages/transaction/GasFeeAdjuster'
 import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
 import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
+import { CosmosMsgType } from '@clients/extension/src/utils/constants'
 import { splitString } from '@clients/extension/src/utils/functions'
+import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/parseSolanaTransaction'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
@@ -46,10 +49,6 @@ import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
-
-import { CosmosMsgType } from '../../utils/constants'
-import { ITransaction } from '../../utils/interfaces'
-import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -243,18 +242,32 @@ export const TransactionPage = () => {
                     <MatchRecordUnion
                       value={keysignMessagePayload}
                       handlers={{
-                        custom: custom => (
-                          <>
-                            <ListItem
-                              description={custom.method}
-                              title={t('method')}
-                            />
-                            <ListItem
-                              description={custom.message}
-                              title={t('message')}
-                            />
-                          </>
-                        ),
+                        custom: custom => {
+                          const txPayload = transaction.transactionPayload
+                          const prefix =
+                            'custom' in txPayload &&
+                            typeof txPayload.custom?.prefix === 'string'
+                              ? txPayload.custom.prefix
+                              : undefined
+
+                          const displayMessage =
+                            prefix && prefix.length > 0
+                              ? custom.message.slice(prefix.length)
+                              : custom.message
+
+                          return (
+                            <>
+                              <ListItem
+                                description={custom.method}
+                                title={t('method')}
+                              />
+                              <ListItem
+                                description={displayMessage}
+                                title={t('message')}
+                              />
+                            </>
+                          )
+                        },
                         keysign: keysign => (
                           <>
                             <ListItem

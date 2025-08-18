@@ -96,18 +96,15 @@ export const EnterPasscode = () => {
         </VStack>
         <Content>
           <PasscodeInput
-            value={inputValue}
+            onChange={setInputValue}
             validation={
               inputValue ? (isDisabled ? 'invalid' : 'valid') : undefined
             }
-            onChange={setInputValue}
             validationMessages={
-              isDisabled
-                ? {
-                    invalid: isDisabled,
-                  }
-                : undefined
+              isDisabled ? { invalid: isDisabled } : undefined
             }
+            value={inputValue}
+            autoFocus
           />
         </Content>
       </Container>
