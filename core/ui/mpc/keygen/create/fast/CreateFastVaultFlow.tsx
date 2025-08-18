@@ -3,16 +3,17 @@ import { ServerEmailStep } from '@core/ui/mpc/keygen/create/fast/server/email/Se
 import { SetServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/SetServerPasswordStep'
 import { ServerPasswordHintStep } from '@core/ui/mpc/keygen/create/fast/server/password-hint/ServerPasswordHintStep'
 import { FastKeygenFlow } from '@core/ui/mpc/keygen/fast/FastKeygenFlow'
+import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 
 const steps = ['name', 'email', 'password', 'hint', 'keygen'] as const
 
 export const CreateFastVaultFlow = () => {
+  const { goBack } = useCore()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps,
-    onExit: useNavigateBack(),
+    onExit: goBack,
   })
 
   return (

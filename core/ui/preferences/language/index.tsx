@@ -1,3 +1,4 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName, languages } from '@core/ui/i18n/Language'
 import { useLanguage, useSetLanguageMutation } from '@core/ui/storage/language'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -6,7 +7,6 @@ import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useTranslation } from 'react-i18next'
 
 export const LanguagePage = () => {
