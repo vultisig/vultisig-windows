@@ -1,7 +1,7 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
 import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnBackProp, OnFinishProp, TitleProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'

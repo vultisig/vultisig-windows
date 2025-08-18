@@ -1,13 +1,15 @@
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
+import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
+import { useMemo } from 'react'
 
 import { storage } from './storage'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
 
-const coreState: CoreState = {
+const baseCoreState: Omit<CoreState, 'goBack'> = {
   ...storage,
   client: 'extension',
   openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
@@ -28,8 +30,28 @@ const coreState: CoreState = {
   vaultCreationMpcLib: 'DKLS',
 }
 
-export const ExtensionCoreApp = ({ children }: ChildrenProp) => (
-  <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
-    {children}
-  </CoreApp>
-)
+type ExtensionCoreAppProps = ChildrenProp & {
+  processError?: ErrorBoundaryProcessError
+  goBack: () => void
+}
+
+export const ExtensionCoreApp = ({
+  children,
+  processError,
+  goBack,
+}: ExtensionCoreAppProps) => {
+  const coreState = useMemo(
+    () => ({
+      ...baseCoreState,
+      processError,
+      goBack,
+    }),
+    [processError, goBack]
+  )
+
+  return (
+    <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
+      {children}
+    </CoreApp>
+  )
+}
