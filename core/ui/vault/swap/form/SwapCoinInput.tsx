@@ -1,21 +1,18 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Opener } from '@lib/ui/base/Opener'
-import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,107 +21,90 @@ import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 import { useToCoin } from '../state/toCoin'
+import { useChainSummaries } from './hooks/useChainSummaries'
+import { SwapCoinsExplorer } from './SwapCoinsExplorer'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
-  const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
-  const [isChainModalOpen, setIsChainModalOpen] = useState(false)
+  const [opened, setOpened] = useState<null | 'coin' | 'chain'>(null)
+
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
-  const coin = useCurrentVaultCoin(value)
+  const coin = shouldBePresent(useCurrentVaultCoin(value))
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
+  const chainSummaries = useChainSummaries()
 
-  if (!coin) return
+  const coinOptions = useMemo(
+    () =>
+      coins.filter(c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)),
+    [coins]
+  )
 
   return (
-    <Opener
-      renderOpener={({ onOpen }) => (
-        <SwapCoinInputField
-          value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
-          onChainClick={() => {
-            onOpen()
-            setIsChainModalOpen(true)
+    <>
+      <SwapCoinInputField
+        value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
+        onChainClick={() => setOpened('chain')}
+        onCoinClick={() => setOpened('coin')}
+      />
+      {opened === 'coin' && (
+        <SwapCoinsExplorer
+          onClose={() => setOpened(null)}
+          value={value}
+          onChange={onChange}
+        />
+      )}
+
+      {opened === 'chain' && (
+        <SelectItemModal
+          renderListHeader={() => (
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text color="shy" size={12} weight={500}>
+                {t('chain')}
+              </Text>
+              <Text color="shy" size={12} weight={500}>
+                {t('balance')}
+              </Text>
+            </HStack>
+          )}
+          title={t('select_network')}
+          optionComponent={props => {
+            const currentItemChain = props.value.chain
+            const isSelected =
+              side === 'from'
+                ? currentItemChain === fromCoinKey.chain
+                : currentItemChain === currentToCoin.chain
+
+            const summary = chainSummaries.data?.[currentItemChain]
+
+            return (
+              <ChainOption
+                {...props}
+                isSelected={isSelected}
+                totalFiatAmount={summary?.totalUsd}
+              />
+            )
           }}
-          onCoinClick={() => {
-            onOpen()
-            setIsCoinModalOpen(true)
+          onFinish={(newValue: CoinKey | undefined) => {
+            const currentCoinChain =
+              side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+            if (newValue && newValue.chain !== currentCoinChain) {
+              onChange(newValue)
+            }
+            setOpened(null)
+          }}
+          options={coinOptions}
+          filterFunction={(option, query) => {
+            const q = query.trim().toLowerCase()
+            if (!q) return true
+            const chain = option.chain?.toLowerCase() ?? ''
+            const ticker = option.ticker?.toLowerCase() ?? ''
+            return chain.startsWith(q) || ticker.startsWith(q)
           }}
         />
       )}
-      renderContent={() => (
-        <>
-          {isCoinModalOpen && (
-            <SelectItemModal
-              renderListHeader={() => (
-                <HStack alignItems="center" gap={6}>
-                  <Text color="shy" size={12} weight={500}>
-                    {t('chain')}
-                  </Text>
-                  <HStack
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    onClick={() => {
-                      setIsChainModalOpen(true)
-                    }}
-                    gap={4}
-                  >
-                    <CoinIcon coin={coin} style={{ fontSize: 16 }} />
-                    <HStack alignItems="center">
-                      <Text size={12} weight={500}>
-                        {coin.chain}
-                      </Text>
-                      <ChevronDownIcon />
-                    </HStack>
-                  </HStack>
-                </HStack>
-              )}
-              filterFunction={(option, query) =>
-                option.ticker.toLowerCase().startsWith(query.toLowerCase())
-              }
-              title={t('select_asset')}
-              optionComponent={CoinOption}
-              onFinish={(newValue: CoinKey | undefined) => {
-                if (newValue) {
-                  onChange(newValue)
-                }
-                setIsCoinModalOpen(false)
-              }}
-              options={coins.filter(c => c.chain === coin?.chain)}
-            />
-          )}
-          {isChainModalOpen && (
-            <SelectItemModal
-              title={t('select_network')}
-              optionComponent={props => {
-                const currentItemChain = props.value.chain
-                const isSelected =
-                  side === 'from'
-                    ? currentItemChain === fromCoinKey.chain
-                    : currentItemChain === currentToCoin.chain
-
-                return <ChainOption {...props} isSelected={isSelected} />
-              }}
-              onFinish={(newValue: CoinKey | undefined) => {
-                if (newValue) {
-                  onChange(newValue)
-                }
-                setIsChainModalOpen(false)
-              }}
-              options={coins.filter(
-                coin =>
-                  isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
-              )}
-              filterFunction={(option, query) =>
-                option.chain.toLowerCase().startsWith(query.toLowerCase())
-              }
-            />
-          )}
-        </>
-      )}
-    />
+    </>
   )
 }
