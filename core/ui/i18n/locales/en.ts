@@ -589,7 +589,7 @@ export const en = {
   fastVaultSetup: {
     backup: {
       heldByServer: 'held by the server',
-      part1: 'Part 1 of the vault shares will be',
+      part1: 'Share 1 of the vault shares will be',
       backThemUpNow: 'back them up now',
       vaultShares: 'Your vault holds 2 shares,',
       completeCustody: 'It is sent to you for complete self-custody!',
