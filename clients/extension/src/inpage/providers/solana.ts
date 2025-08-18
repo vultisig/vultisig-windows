@@ -312,7 +312,7 @@ export class Solana implements Wallet {
           },
         ],
       })) as ITransaction<OtherChain.Solana>
-      const rawData = Buffer.from(result.encoded, 'base64')
+      const rawData = bs58.decode(String(result))
       return VersionedTransaction.deserialize(rawData)
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
@@ -384,10 +384,7 @@ export class Solana implements Wallet {
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [modifiedTransfer],
         }).then(result => {
-          const rawData = Buffer.from(
-            (result as ITransaction<OtherChain.Solana>).encoded,
-            'base64'
-          )
+          const rawData = bs58.decode(String(result))
           return Transaction.from(rawData)
         })
       }

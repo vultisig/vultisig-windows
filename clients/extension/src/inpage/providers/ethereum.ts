@@ -3,10 +3,11 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
+import { getUrlHost } from '@lib/utils/url/host'
+import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getDappHost, isValidUrl } from '../../utils/connectedApps'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
@@ -37,8 +38,8 @@ export class Ethereum extends EventEmitter {
 
     this.sendAsync = this.request
 
-    if (isValidUrl(window.location.href)) {
-      const host = getDappHost(window.location.href)
+    if (!validateUrl(window.location.href)) {
+      const host = getUrlHost(window.location.href)
       messengers.popup?.reply(
         `${EventMethod.ACCOUNTS_CHANGED}:${host}`,
         async address => {
