@@ -1,5 +1,5 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { vStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { ActionProp, TitleProp } from '@lib/ui/props'

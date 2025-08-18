@@ -1,4 +1,5 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Divider } from '@lib/ui/divider'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -6,7 +7,6 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useTranslation } from 'react-i18next'
 
 export const VaultDetailsPage = () => {

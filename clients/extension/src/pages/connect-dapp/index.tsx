@@ -1,8 +1,4 @@
 import { useAddVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useAddVaultSessionMutation'
-import {
-  getDappHost,
-  getDappHostname,
-} from '@clients/extension/src/utils/connectedApps'
 import { useStoredPendingRequestQuery } from '@clients/extension/src/utils/pendingRequests'
 import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
@@ -24,6 +20,8 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlHost } from '@lib/utils/url/host'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -49,8 +47,8 @@ export const ConnectDAppPage = () => {
     await addSession({
       vaultId: vaultId,
       session: {
-        host: getDappHostname(sender),
-        url: getDappHost(sender),
+        host: getUrlBaseDomain(sender),
+        url: getUrlHost(sender),
         selectedCosmosChainId:
           getChainKind(chain) === 'cosmos'
             ? getCosmosChainId(chain as CosmosChain)
