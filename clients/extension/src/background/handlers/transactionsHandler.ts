@@ -1,3 +1,4 @@
+import { storage } from '@core/extension/storage'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -20,7 +21,9 @@ export const handleSendTransaction = async (
   const uuid = uuidv4()
 
   try {
-    const currentVaultId = await getVaultIdByTransaction(transaction)
+    const currentVaultId =
+      (await getVaultIdByTransaction(transaction)) ??
+      shouldBePresent(await storage.getCurrentVaultId())
 
     await addTransactionToVault(currentVaultId, {
       ...transaction,

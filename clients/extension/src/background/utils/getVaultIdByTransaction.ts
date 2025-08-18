@@ -1,6 +1,5 @@
 import { storage } from '@core/extension/storage'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { ITransaction } from '../../utils/interfaces'
@@ -11,7 +10,7 @@ type GetVaultIdByTransactionInput = Pick<ITransaction, 'transactionPayload'>
 
 export const getVaultIdByTransaction = async ({
   transactionPayload,
-}: GetVaultIdByTransactionInput): Promise<string> => {
+}: GetVaultIdByTransactionInput): Promise<CurrentVaultId | undefined> => {
   const vaultId = await matchRecordUnion<
     ITransaction['transactionPayload'],
     Promise<CurrentVaultId | undefined>
@@ -35,11 +34,7 @@ export const getVaultIdByTransaction = async ({
         : undefined
     },
   })
-  if (vaultId) {
-    await storage.setCurrentVaultId(vaultId)
-    return vaultId
-  }
-  return shouldBePresent(await storage.getCurrentVaultId())
+  return vaultId
 }
 
 const getVaultIdByAddress = async (address: string) => {
