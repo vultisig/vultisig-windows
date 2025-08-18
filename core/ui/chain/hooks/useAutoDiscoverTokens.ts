@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import {
+  areEqualCoins, // ✅ use equality helper
   Coin,
   CoinKey,
   coinKeyToString,
@@ -36,6 +37,7 @@ export const useAutoDiscoverTokens = ({ chain }: Props) => {
     return m
   }, [])
 
+  // Set of existing vault coin keys to prevent saving duplicates
   const vaultSet = useMemo(() => {
     const s = new Set<string>()
     for (const vc of vaultCoins) s.add(coinKeyToString(vc))
@@ -44,10 +46,15 @@ export const useAutoDiscoverTokens = ({ chain }: Props) => {
 
   const discoveredCoins: Coin[] = useMemo(() => {
     if (!whitelisted) return []
-    return whitelisted.map(w => {
+    const seen = new Set<string>()
+    const out: Coin[] = []
+    for (const w of whitelisted) {
       const k = coinKeyToString(w)
-      return { ...w, ...(metaByKey.get(k) ?? {}) }
-    })
+      if (seen.has(k)) continue
+      seen.add(k)
+      out.push({ ...w, ...(metaByKey.get(k) ?? {}) })
+    }
+    return out
   }, [whitelisted, metaByKey])
 
   const discoveredAccountCoins: AccountCoin[] = useMemo(() => {
@@ -63,18 +70,18 @@ export const useAutoDiscoverTokens = ({ chain }: Props) => {
 
   const ensureSaved = useCallback(
     async (selected: CoinKey) => {
-      const k = coinKeyToString(selected)
-      if (vaultSet.has(k)) return
-      const toSave = discoveredAccountCoins.find(d => coinKeyToString(d) === k)
+      const key = coinKeyToString(selected)
+      if (vaultSet.has(key)) return
+
+      const toSave = discoveredAccountCoins.find(d =>
+        areEqualCoins(d, selected)
+      )
       if (!toSave) return
+
       await saveCoins({ vaultId, coins: [toSave] })
     },
     [discoveredAccountCoins, vaultSet, saveCoins, vaultId]
   )
 
-  return {
-    isPending,
-    discoveredCoins,
-    ensureSaved,
-  }
+  return { isPending, discoveredCoins, ensureSaved }
 }
