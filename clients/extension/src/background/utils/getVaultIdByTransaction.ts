@@ -15,10 +15,10 @@ export const getVaultIdByTransaction = async ({
     ITransaction['transactionPayload'],
     Promise<CurrentVaultId | undefined>
   >(transactionPayload, {
-    keysign: async keysign =>
-      keysign.transactionDetails.from
-        ? await getVaultIdByAddress(keysign.transactionDetails.from)
-        : undefined,
+    keysign: async keysign => {
+      const from = keysign.transactionDetails?.from
+      return from ? await getVaultIdByAddress(from) : undefined
+    },
 
     custom: async custom =>
       custom.address ? await getVaultIdByAddress(custom.address) : undefined,
@@ -37,7 +37,9 @@ export const getVaultIdByTransaction = async ({
   return vaultId
 }
 
-const getVaultIdByAddress = async (address: string) => {
+const getVaultIdByAddress = async (
+  address: string
+): Promise<string | undefined> => {
   const vaultsCoins = await storage.getCoins()
   for (const [vaultId, coins] of Object.entries(vaultsCoins)) {
     if (coins.some(c => c.address.toLowerCase() === address.toLowerCase())) {
