@@ -1,7 +1,7 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { useMpcPeersQuery } from '@core/ui/mpc/devices/peers/queries/useMpcPeersQuery'
 import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
