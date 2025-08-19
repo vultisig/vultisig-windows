@@ -36,8 +36,7 @@
     - [Ethereum](#ethereum-5)
     - [Other Supported Chains](#other-supported-chains-3)
   - [8. Event Handling](#8-event-handling)
-  - [9. Get Vault](#9-get-vault)
-  - [10. Detailed Implementation Examples](#10-detailed-implementation-examples)
+  - [9. Detailed Implementation Examples](#9-detailed-implementation-examples)
     - [Transaction Object Structure](#transaction-object-structure)
     - [Ethereum Account Management Examples](#ethereum-account-management-examples)
     - [Ethereum Gas Management Examples](#ethereum-gas-management-examples)
@@ -597,26 +596,7 @@ if (provider) {
 }
 ```
 
-## 9. Get Vault
-
-VultiConnect provides a function to get vault properties.
-
-```javascript
-const provider = window.vultisig
-
-if (provider) {
-  provider
-    .getVault()
-    .then(vault => {
-      console.log('vault:', vault)
-    })
-    .catch(error => {
-      console.log('error:', error)
-    })
-}
-```
-
-## 10. Detailed Implementation Examples
+## 9. Detailed Implementation Examples
 
 ### Transaction Object Structure
 
