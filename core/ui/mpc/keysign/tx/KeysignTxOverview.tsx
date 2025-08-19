@@ -13,7 +13,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -82,14 +82,12 @@ export const KeysignTxOverview = () => {
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
+            <VStack gap={4}>
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <Text>
-                <MiddleTruncate text={toAddress} width={200} />
-              </Text>
-            </HStack>
+              <Text>{toAddress}</Text>
+            </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">

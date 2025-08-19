@@ -678,6 +678,7 @@ export const handleRequest = (
                 address: String(address),
                 message: fullMessage,
                 chain: chain,
+                prefix,
               },
             },
             status: 'default',
