@@ -158,6 +158,9 @@ export class Ethereum extends EventEmitter {
               }),
               []
             ),
+          // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
+          wallet_getPermissions: async () => [],
+          wallet_requestPermissions: async () => [],
         } as const
 
         if (data.method in handlers) {

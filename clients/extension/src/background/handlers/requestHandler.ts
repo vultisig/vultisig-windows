@@ -373,16 +373,6 @@ export const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.WALLET_GET_PERMISSIONS: {
-        resolve([])
-
-        break
-      }
-      case RequestMethod.METAMASK.WALLET_REQUEST_PERMISSIONS: {
-        resolve([])
-
-        break
-      }
       case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
         const host = getUrlBaseDomain(sender)
         getVaultsAppSessions()
