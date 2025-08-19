@@ -21,12 +21,12 @@ export const SendFiatFeeValue = () => {
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
 
+  const feeCoin = chainFeeCoin[coin.chain]
   const { isPending, data: price } = useCoinPriceQuery({
-    coin,
+    coin: feeCoin,
   })
 
-  const { decimals: feeCoinDecimals, ticker: feeCoinTicker } =
-    chainFeeCoin[coin.chain]
+  const { decimals: feeCoinDecimals, ticker: feeCoinTicker } = feeCoin
 
   const humanReadableFeeValue = fromChainAmount(fee, feeCoinDecimals)
 
