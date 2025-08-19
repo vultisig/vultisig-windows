@@ -290,7 +290,7 @@ export const TransactionPage = () => {
                                           keysign.swapPayload.value.fromCoin
                                             ?.decimals
                                         )
-                                      )}
+                                      )}{' '}
                                       <Text as="span" color="shy" size={17}>
                                         {keysign.swapPayload.value.fromCoin?.ticker.toUpperCase()}
                                       </Text>
@@ -320,7 +320,7 @@ export const TransactionPage = () => {
                                           .toAmountDecimal
                                       }{' '}
                                       <Text as="span" color="shy" size={17}>
-                                        {keysign.swapPayload.value.fromCoin?.ticker.toUpperCase()}
+                                        {keysign.swapPayload.value.toCoin?.ticker.toUpperCase()}
                                       </Text>
                                     </Text>
                                   </HStack>

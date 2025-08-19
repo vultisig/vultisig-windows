@@ -62,11 +62,10 @@ export const getSolanaKeysignPayload = (
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
         })
-
         const inputToken = await resolveTokenFromMint(parsed.inputMint)
+
         const isNativeCoin = inputToken.ticker === 'SOL'
 
-        // primary Coin for the KeysignPayload
         const coin = create(CoinSchema, {
           chain: Chain.Solana,
           ticker: inputToken.ticker.toUpperCase(),
@@ -156,7 +155,7 @@ export const getSolanaKeysignPayload = (
         }
 
         const keysignPayload = create(KeysignPayloadSchema, {
-          toAmount: String(parsed.inAmount ?? 0),
+          toAmount: String(parsed.inAmount),
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           vaultLocalPartyId: 'VultiConnect',
           coin,

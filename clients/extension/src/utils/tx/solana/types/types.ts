@@ -1,17 +1,3 @@
-import { Connection } from '@solana/web3.js'
-
-export type PartialInstruction = {
-  programId: any
-  programData: Uint8Array
-  accounts: any
-}
-export type ParserCtx = {
-  connection: Connection
-  caches?: {
-    accountInfo?: Map<string, any>
-  }
-}
-
 export type ParsedResult =
   | {
       kind: 'swap'
