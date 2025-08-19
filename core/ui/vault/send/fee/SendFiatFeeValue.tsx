@@ -21,11 +21,12 @@ export const SendFiatFeeValue = () => {
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
 
-  const { isPending, data: price } = useCoinPriceQuery({
-    coin,
-  })
+  const feeCoin = chainFeeCoin[coin.chain]
+  const { decimals } = feeCoin
 
-  const { decimals } = chainFeeCoin[coin.chain]
+  const { isPending, data: price } = useCoinPriceQuery({
+    coin: feeCoin,
+  })
   const humanReadableFeeValue = fromChainAmount(fee, decimals)
 
   let formattedAmount: string | null = null
@@ -53,7 +54,7 @@ export const SendFiatFeeValue = () => {
   return (
     <VStack alignItems="flex-end">
       <Text size={14}>
-        {formatTokenAmount(humanReadableFeeValue, coin.ticker)}
+        {formatTokenAmount(humanReadableFeeValue, feeCoin.ticker)}
       </Text>
       <Text size={14} color="shy">
         {formattedAmount}
