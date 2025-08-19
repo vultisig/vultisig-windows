@@ -5,7 +5,10 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultCoins,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -21,7 +24,12 @@ export const CoinOption = ({
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, ticker, decimals } = value
-  const coin = useCurrentVaultCoin(value)
+  const address = useCurrentVaultAddress(chain)
+  const coins = useCurrentVaultCoins()
+  const coin = coins.find(c => c.chain === chain && c.id === value.id) ?? {
+    ...value,
+    address,
+  }
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const priceQuery = useCoinPriceQuery({
     coin,
@@ -113,8 +121,24 @@ const Container = styled(HStack)`
   padding: 12px 20px;
   border-radius: 0px;
   position: relative;
+  background-color: ${getColor('foreground')};
   cursor: pointer;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 320px;
+    height: 1px;
+    background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  &:last-child::after {
+    content: none;
+  }
 `
 
 const PillWrapper = styled.div`

@@ -1,3 +1,4 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useUpdateVaultFolderMutation,
   useVaultFolders,
@@ -23,16 +24,16 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '@lib/ui/list/item/DnDItemContainer'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useCore } from '../../../state/core'
 
 const AddVaultsToFolder = () => {
   const { t } = useTranslation()
@@ -143,7 +144,7 @@ export const UpdateVaultFolderPage = () => {
   const { mutate, isPending } = useUpdateVaultFolderMutation()
   const { id, name: currentName } = useCurrentVaultFolder()
   const [name, setName] = useState<string>(currentName)
-  const navigateBack = useNavigateBack()
+  const { goBack } = useCore()
   const folders = useVaultFolders()
 
   const names = useMemo(
@@ -163,8 +164,7 @@ export const UpdateVaultFolderPage = () => {
       {...getFormProps({
         isDisabled,
         isPending,
-        onSubmit: () =>
-          mutate({ id, fields: { name } }, { onSuccess: navigateBack }),
+        onSubmit: () => mutate({ id, fields: { name } }, { onSuccess: goBack }),
       })}
       fullHeight
     >

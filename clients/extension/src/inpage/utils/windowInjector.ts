@@ -2,10 +2,9 @@ import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { messengers } from '@clients/extension/src/inpage/messenger'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
+import { callBackground } from '@core/inpage-provider/background'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-
-import { callBackgroundApi } from '../../background/api/call'
 
 export const injectToWindow = () => {
   const providers = createProviders()
@@ -13,8 +12,7 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
-    getVault: async () => callBackgroundApi({ getVault: {} }),
-    getVaults: async () => callBackgroundApi({ getVaults: {} }),
+    getVaults: async () => callBackground({ getVaults: {} }),
   }
 
   Object.defineProperty(window, 'vultisig', {
