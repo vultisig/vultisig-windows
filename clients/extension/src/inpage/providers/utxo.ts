@@ -1,3 +1,6 @@
+import { UtxoChain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -7,25 +10,32 @@ import { Messaging } from '../../utils/interfaces'
 import { Callback, Network } from '../constants'
 import { messengers } from '../messenger'
 
+type SupportedUtxoChain =
+  | UtxoChain.Bitcoin
+  | UtxoChain.BitcoinCash
+  | UtxoChain.Dogecoin
+  | UtxoChain.Litecoin
+  | UtxoChain.Zcash
+
 export class UTXO extends EventEmitter {
-  public chainId: string
+  public chain: UtxoChain
   public network: Network
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
-  constructor(providerType: string, chainId: string) {
+  constructor(providerType: string, chain: SupportedUtxoChain) {
     super()
     this.providerType = providerType as MessageKey
-    this.chainId = chainId
+    this.chain = chain
     this.network = 'mainnet'
   }
 
-  static getInstance(providerType: string, chainId: string): UTXO {
+  static getInstance(providerType: string, chain: SupportedUtxoChain): UTXO {
     if (!UTXO.instances) {
       UTXO.instances = new Map<string, UTXO>()
     }
 
     if (!UTXO.instances.has(providerType)) {
-      UTXO.instances.set(providerType, new UTXO(providerType, chainId))
+      UTXO.instances.set(providerType, new UTXO(providerType, chain))
     }
     return UTXO.instances.get(providerType)!
   }
@@ -38,10 +48,14 @@ export class UTXO extends EventEmitter {
   }
 
   async getAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-    })
+    return withFallback(
+      attempt(async () => [
+        await callBackground({
+          getAddress: { chain: this.chain },
+        }),
+      ]),
+      []
+    )
   }
 
   async signPSBT(_psbt: string | Buffer) {
@@ -52,14 +66,12 @@ export class UTXO extends EventEmitter {
   }
 
   changeNetwork(network: Network) {
-    if (network !== 'mainnet' && network !== 'testnet')
-      throw Error(`Invalid network ${network}`)
-    else if (network === 'testnet')
-      throw Error(`We only support the mainnet network.`)
-
-    this.chainId = `Bitcoin_bitcoin-${network}`
-    this.network = network
-    this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
+    const supportedNetwork: Network[] = ['mainnet']
+    if (!supportedNetwork.includes(network)) {
+      throw Error(
+        `Invalid network ${network}, only ${supportedNetwork.join(', ')} are supported`
+      )
+    }
   }
 
   emitAccountsChanged() {

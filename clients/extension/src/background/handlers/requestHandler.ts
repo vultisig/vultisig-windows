@@ -79,7 +79,6 @@ export const handleRequest = (
     const { method, params } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.GET_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_ACCOUNTS: {
         handleFindAccounts(chain, sender)
           .then(([account]) => {
