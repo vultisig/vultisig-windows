@@ -4,13 +4,13 @@ import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { storage } from '@core/extension/storage'
 import { getVaultAppSessions } from '@core/extension/storage/appSessions'
+import { getWalletCore } from '@core/extension/tw'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 import { Instance } from '../../utils/constants'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
-import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
 const instance: Record<Instance, boolean> = {
