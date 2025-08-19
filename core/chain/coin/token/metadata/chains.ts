@@ -1,10 +1,11 @@
 import { DeriveChainKind } from '@core/chain/ChainKind'
 
-import { EvmChain, OtherChain } from '../../../Chain'
+import { CosmosChain, EvmChain, OtherChain } from '../../../Chain'
 
 export const chainsWithTokenMetadataDiscovery = [
   ...Object.values(EvmChain),
   OtherChain.Solana,
+  ...Object.values(CosmosChain),
 ] as const
 
 export type ChainWithTokenMetadataDiscovery =
