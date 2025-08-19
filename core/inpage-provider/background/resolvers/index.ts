@@ -1,7 +1,7 @@
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
-import { authorizedDapp } from '../middleware/authorizedDapp'
+import { getAppChainId } from './getAppChainId'
 import { getVault } from './getVault'
 import { getVaults } from './getVaults'
 
@@ -10,6 +10,7 @@ type BackgroundResolvers = {
 }
 
 export const backgroundResolvers: BackgroundResolvers = {
-  getVault: authorizedDapp(getVault),
+  getVault,
   getVaults,
+  getAppChainId,
 }

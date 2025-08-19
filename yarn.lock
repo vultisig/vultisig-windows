@@ -934,7 +934,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/inpage-provider@workspace:core/inpage-provider"
   dependencies:
-    "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
     "@core/extension": "workspace:*"
     "@core/ui": "workspace:*"

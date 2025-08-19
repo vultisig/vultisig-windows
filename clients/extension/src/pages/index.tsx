@@ -1,4 +1,6 @@
+import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'
+import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
@@ -6,15 +8,12 @@ import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { createGlobalStyle, css } from 'styled-components'
 
-import { NavigationProvider } from '../navigation/NavigationProvider'
-import { renderExtensionPage } from './core/render'
-
 const isPopup = isPopupView()
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
     min-height: 600px;
-    min-width: 400px;
+    min-width: 480px;
     overflow: hidden;
 
     ${
