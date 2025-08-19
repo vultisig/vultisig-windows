@@ -583,25 +583,6 @@ if (provider) {
 }
 ```
 
-## 9. Get Vault
-
-VultiConnect provides a function to get vault properties.
-
-```javascript
-const provider = window.vultisig;
-
-if (provider) {
-  provider
-    .getVault()
-    .then((vault) => {
-      console.log("vault:", vault);
-    })
-    .catch((error) => {
-      console.log("error:", error);
-    });
-}
-```
-
 ## 10. Detailed Implementation Examples
 
 ### Transaction Object Structure
