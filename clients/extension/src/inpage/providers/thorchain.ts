@@ -58,11 +58,7 @@ export class THORChain extends BaseCosmosChain {
         { id: uuidv4() }
       )
 
-      return processBackgroundResponse(
-        data,
-        MessageKey.ETHEREUM_REQUEST,
-        response
-      )
+      return processBackgroundResponse(data, this.messageKey, response)
     }
 
     try {
