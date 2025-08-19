@@ -8,6 +8,7 @@ import type { BackgroundMethod } from '@core/inpage-provider/background/interfac
 import type { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { callPopup } from '@core/inpage-provider/popup'
 import type { BridgeContext } from '@lib/extension/bridge/context'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
 
@@ -18,7 +19,7 @@ const getDefaultAppSession = (requestOrigin: string) => {
   }
 }
 
-export const authorizedDapp =
+export const authorized =
   <K extends BackgroundMethod>(
     resolver: BackgroundResolver<K, BridgeContext & { appSession: AppSession }>
   ): BackgroundResolver<K> =>
@@ -26,31 +27,14 @@ export const authorizedDapp =
     const { context } = params
     const { requestOrigin } = context
 
-    const ensureVaultId = async () => {
-      const currentVaultId = await storage.getCurrentVaultId()
-      if (currentVaultId) {
-        return currentVaultId
-      }
-
-      const { vaultId } = await callPopup({
-        grantVaultAccess: {},
-      })
-
-      await storage.setCurrentVaultId(vaultId)
-
-      await addVaultAppSession({
-        vaultId: vaultId,
-        session: getDefaultAppSession(requestOrigin),
-      })
-
-      return vaultId
-    }
-
-    const vaultId = await ensureVaultId()
+    const vaultId = shouldBePresent(
+      await storage.getCurrentVaultId(),
+      'currentVaultId'
+    )
     const vaultSessions = await getVaultAppSessions(vaultId)
 
-    const dappHostname = getUrlBaseDomain(requestOrigin)
-    const currentSession = vaultSessions[dappHostname]
+    const Hostname = getUrlBaseDomain(requestOrigin)
+    const currentSession = vaultSessions[Hostname]
 
     const appSession = currentSession ?? getDefaultAppSession(requestOrigin)
 
@@ -62,7 +46,7 @@ export const authorizedDapp =
       await storage.setCurrentVaultId(vaultId)
 
       await addVaultAppSession({
-        vaultId: vaultId,
+        vaultId,
         session: appSession,
       })
     }

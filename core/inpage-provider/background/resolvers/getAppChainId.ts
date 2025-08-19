@@ -3,10 +3,10 @@ import { getCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { match } from '@lib/utils/match'
 
-import { authorizedDapp } from '../middleware/authorizedDapp'
+import { authorized } from '../middleware/authorized'
 
-export const getAppChainId: BackgroundResolver<'getAppChainId'> =
-  authorizedDapp(async ({ context: { appSession }, input: { chainKind } }) => {
+export const getAppChainId: BackgroundResolver<'getAppChainId'> = authorized(
+  async ({ context: { appSession }, input: { chainKind } }) => {
     const appChainId = match(chainKind, {
       cosmos: () => appSession.selectedCosmosChainId,
       evm: () => appSession.selectedEVMChainId,
@@ -20,4 +20,5 @@ export const getAppChainId: BackgroundResolver<'getAppChainId'> =
       cosmos: () => getCurrentCosmosChainId(),
       evm: () => getCurrentEVMChainId(),
     })
-  })
+  }
+)
