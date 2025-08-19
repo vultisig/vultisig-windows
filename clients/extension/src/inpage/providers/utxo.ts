@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback, Network } from '../constants'
+import { Callback } from '../constants'
 import { messengers } from '../messenger'
 
 type SupportedUtxoChain =
@@ -19,14 +19,12 @@ type SupportedUtxoChain =
 
 export class UTXO extends EventEmitter {
   public chain: UtxoChain
-  public network: Network
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
   constructor(providerType: string, chain: SupportedUtxoChain) {
     super()
     this.providerType = providerType as MessageKey
     this.chain = chain
-    this.network = 'mainnet'
   }
 
   static getInstance(providerType: string, chain: SupportedUtxoChain): UTXO {
@@ -63,15 +61,6 @@ export class UTXO extends EventEmitter {
       method: RequestMethod.CTRL.SIGN_PSBT,
       params: [],
     })
-  }
-
-  changeNetwork(network: Network) {
-    const supportedNetwork: Network[] = ['mainnet']
-    if (!supportedNetwork.includes(network)) {
-      throw Error(
-        `Invalid network ${network}, only ${supportedNetwork.join(', ')} are supported`
-      )
-    }
   }
 
   emitAccountsChanged() {
