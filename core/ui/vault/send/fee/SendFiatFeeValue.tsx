@@ -25,8 +25,10 @@ export const SendFiatFeeValue = () => {
     coin,
   })
 
-  const feeCoin = chainFeeCoin[coin.chain]
-  const humanReadableFeeValue = fromChainAmount(fee, feeCoin.decimals)
+  const { decimals: feeCoinDecimals, ticker: feeCoinTicker } =
+    chainFeeCoin[coin.chain]
+
+  const humanReadableFeeValue = fromChainAmount(fee, feeCoinDecimals)
 
   let formattedAmount: string | null = null
 
@@ -53,7 +55,7 @@ export const SendFiatFeeValue = () => {
   return (
     <VStack alignItems="flex-end">
       <Text size={14}>
-        {formatTokenAmount(humanReadableFeeValue, feeCoin.ticker)}
+        {formatTokenAmount(humanReadableFeeValue, feeCoinTicker)}
       </Text>
       <Text size={14} color="shy">
         {formattedAmount}
