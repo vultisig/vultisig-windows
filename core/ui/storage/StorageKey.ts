@@ -15,4 +15,6 @@ export enum StorageKey {
   passcodeAutoLock = 'passcodeAutoLock',
   hasFinishedReferralsOnboarding = 'hasFinishedReferralsOnboarding',
   hasAddedFriendReferral = 'hasAddedFriendReferral',
+  appSessions = 'appSessions',
+  latestInstalledVersion = 'latestInstalledVersion',
 }

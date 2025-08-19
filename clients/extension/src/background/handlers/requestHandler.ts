@@ -143,21 +143,6 @@ export const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.CHAIN_ID:
-      case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        let chainId: string | undefined = undefined
-
-        if (getChainKind(chain) === 'evm') {
-          chainId = getEvmChainId(chain as EvmChain)
-        } else if (getChainKind(chain) === 'cosmos') {
-          chainId = getCosmosChainId(chain as CosmosChain)
-        }
-
-        if (chainId) resolve(chainId)
-        else reject()
-
-        break
-      }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {

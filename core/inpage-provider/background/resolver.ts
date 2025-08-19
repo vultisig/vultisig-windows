@@ -13,10 +13,13 @@ export type BackgroundMessage<M extends BackgroundMethod = BackgroundMethod> = {
   call: BackgroundCall<M>
 }
 
-export type BackgroundResolver<K extends BackgroundMethod> = Resolver<
+export type BackgroundResolver<
+  K extends BackgroundMethod,
+  Ctx extends BridgeContext = BridgeContext,
+> = Resolver<
   {
     input: BackgroundInterface[K]['input']
-    context: BridgeContext
+    context: Ctx
   },
   Promise<BackgroundInterface[K]['output']>
 >
