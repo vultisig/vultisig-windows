@@ -24,7 +24,7 @@ export const getVaultIdByTransaction = async ({
 
     serialized: async serialized => {
       const authority = getTransactionAuthority(serialized.data)
-      return authority ? getVaultIdByAddress(authority) : undefined
+      return authority ? await getVaultIdByAddress(authority) : undefined
     },
   })
   return vaultId
