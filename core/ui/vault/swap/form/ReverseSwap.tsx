@@ -5,9 +5,58 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
+import { SwapLoadingIcon } from '@lib/ui/icons/SwapLoadingIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
+import { motion, useReducedMotion } from 'framer-motion'
 import styled from 'styled-components'
+
+import { useSwapFormStates } from './hooks/useSwapFormStates'
+
+export const ReverseSwap = () => {
+  const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
+  const [toCoin, setToCoin] = useToCoin()
+  const { isLoading } = useSwapFormStates()
+  const prefersReducedMotion = useReducedMotion()
+
+  return (
+    <Wrapper justifyContent="center" alignItems="center">
+      <Button
+        onClick={() => {
+          setViewState(prev => ({
+            ...prev,
+            coin: toCoin,
+          }))
+          setToCoin(fromCoin)
+        }}
+      >
+        {isLoading ? (
+          <motion.span
+            key="spinner"
+            role="img"
+            aria-label="loading"
+            style={{
+              display: 'inline-flex',
+              willChange: 'transform',
+              fontSize: 12,
+            }}
+            initial={{ rotate: 0 }}
+            animate={prefersReducedMotion ? { rotate: 0 } : { rotate: 360 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { repeat: Infinity, ease: 'linear', duration: 0.8 }
+            }
+          >
+            <SwapLoadingIcon />
+          </motion.span>
+        ) : (
+          <ArrowUpDownIcon />
+        )}
+      </Button>
+    </Wrapper>
+  )
+}
 
 const Wrapper = styled(HStack)`
   background-color: ${getColor('background')};
@@ -48,30 +97,9 @@ const Wrapper = styled(HStack)`
 const Button = styled(UnstyledButton)`
   ${round};
   ${sameDimensions(40)};
-  background: ${getColor('primaryAlt')};
+  background: ${getColor('buttonPrimary')};
   border: 2px solid ${getColor('background')};
   ${centerContent};
   font-size: 16px;
   color: ${getColor('contrast')};
 `
-
-export const ReverseSwap = () => {
-  const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
-  const [toCoin, setToCoin] = useToCoin()
-
-  return (
-    <Wrapper justifyContent="center" alignItems="center">
-      <Button
-        onClick={() => {
-          setViewState(prev => ({
-            ...prev,
-            coin: toCoin,
-          }))
-          setToCoin(fromCoin)
-        }}
-      >
-        <ArrowUpDownIcon />
-      </Button>
-    </Wrapper>
-  )
-}

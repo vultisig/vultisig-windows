@@ -1,8 +1,6 @@
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-
-export const appSessionsQueryKey = ['appSessions']
-const [key] = appSessionsQueryKey
 
 type UpdateAppSessionFieldsInput = {
   vaultId: string
@@ -12,7 +10,6 @@ type UpdateAppSessionFieldsInput = {
 
 export type AppSession = {
   host: string
-  addresses?: string[]
   url: string
   selectedEVMChainId?: string
   selectedCosmosChainId?: string
@@ -23,11 +20,11 @@ export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
 ): Promise<void> => {
-  await setStorageValue<VaultsAppSessions>(key, sessions)
+  await setStorageValue<VaultsAppSessions>(StorageKey.appSessions, sessions)
 }
 
 export const getVaultsAppSessions = async (): Promise<VaultsAppSessions> => {
-  return getStorageValue<VaultsAppSessions>(key, {})
+  return getStorageValue<VaultsAppSessions>(StorageKey.appSessions, {})
 }
 
 export const getVaultAppSessions = async (
@@ -67,22 +64,4 @@ export const updateAppSession = async ({
 
   await setVaultsAppSessions(updatedAll)
   return updatedSession
-}
-
-type AddVaultAppSessionInput = {
-  vaultId: string
-  session: AppSession
-}
-
-export const addVaultAppSession = async ({
-  vaultId,
-  session,
-}: AddVaultAppSessionInput): Promise<void> => {
-  const allSessions = await getVaultsAppSessions()
-  const vaultSessions = allSessions[vaultId] ?? {}
-
-  await setVaultsAppSessions({
-    ...allSessions,
-    [vaultId]: { ...vaultSessions, [session.host]: session },
-  })
 }

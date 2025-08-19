@@ -1,6 +1,7 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { ChildrenProp } from '@lib/ui/props'
@@ -14,15 +15,12 @@ import { storageMigrationKeys } from '.'
 import { setLatestMigration } from './latestMigration'
 import { runStorageMigrations } from './run'
 
-const latestInstalledVersionQueryKey = ['latestInstalledVersion']
-const [key] = latestInstalledVersionQueryKey
-
 const getExtensionVersion = async (): Promise<string | null> => {
-  return getStorageValue<string | null>(key, null)
+  return getStorageValue<string | null>(StorageKey.latestInstalledVersion, null)
 }
 
 const setExtensionVersion = async (version: string): Promise<void> => {
-  await setStorageValue<string>(key, version)
+  await setStorageValue<string>(StorageKey.latestInstalledVersion, version)
 }
 
 export const StorageMigrationsManager = ({ children }: ChildrenProp) => {

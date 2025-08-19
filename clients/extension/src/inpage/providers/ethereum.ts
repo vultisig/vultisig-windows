@@ -3,6 +3,7 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
+import { callBackground } from '@core/inpage-provider/background'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
@@ -112,10 +113,9 @@ export class Ethereum extends EventEmitter {
 
   on = (event: string, callback: (data: any) => void): this => {
     if (event === EventMethod.CONNECT && this.isConnected()) {
-      this.request({
-        method: RequestMethod.METAMASK.ETH_CHAIN_ID,
-        params: [],
-      }).then(chainId => callback({ chainId }))
+      callBackground({ getAppChainId: { chainKind: 'evm' } }).then(chainId => {
+        callback({ chainId })
+      })
     } else {
       super.on(event, callback)
     }
@@ -135,23 +135,39 @@ export class Ethereum extends EventEmitter {
 
   async request(data: Messaging.Chain.Request, callback?: Callback) {
     try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.ETHEREUM_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
+      const processRequest = async () => {
+        // TODO: Extract handling of Ethereum requests
+        const handlers = {
+          eth_chainId: async () =>
+            callBackground({
+              getAppChainId: { chainKind: 'evm' },
+            }),
+        } as const
 
-      const result = processBackgroundResponse(
-        data,
-        MessageKey.ETHEREUM_REQUEST,
-        response
-      )
+        if (data.method in handlers) {
+          return handlers[data.method as keyof typeof handlers]()
+        }
+
+        const response = await messengers.background.send<
+          any,
+          Messaging.Chain.Response
+        >(
+          'providerRequest',
+          {
+            type: MessageKey.ETHEREUM_REQUEST,
+            message: data,
+          },
+          { id: uuidv4() }
+        )
+
+        return processBackgroundResponse(
+          data,
+          MessageKey.ETHEREUM_REQUEST,
+          response
+        )
+      }
+
+      const result = await processRequest()
 
       switch (data.method) {
         case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:

@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@core/chain": "workspace:*",
     "@core/config": "workspace:*",
     "@core/extension": "workspace:*",
     "@core/ui": "workspace:*",

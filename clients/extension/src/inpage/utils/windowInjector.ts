@@ -12,7 +12,6 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
-    getVault: async () => callBackground({ getVault: {} }),
     getVaults: async () => callBackground({ getVaults: {} }),
   }
 
