@@ -276,8 +276,8 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     '0x4c5d8A75F3762c1561D96f177694f67378705E98': {
       ticker: 'PYTH',
       logo: 'pyth',
-      decimals: 18,
-      priceProviderId: 'pyth',
+      decimals: 6,
+      priceProviderId: 'pyth-network',
     },
     '0xB0fFa8000886e57F86dd5264b9582b2Ad87b2b91': {
       ticker: 'W',
@@ -381,7 +381,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'PYTH',
       logo: 'pyth',
       decimals: 6,
-      priceProviderId: 'PYTH',
+      priceProviderId: 'pyth-network',
     },
     '0x13Ad51ed4F1B7e9Dc168d8a00cB3f4dDD85EfA60': {
       ticker: 'LDO',
@@ -440,6 +440,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'PYTH',
       logo: 'pyth',
       decimals: 6,
+      priceProviderId: 'pyth-network',
     },
     '0xFdb794692724153d1488CcdBE0C56c252596735F': {
       ticker: 'LDO',
