@@ -1,71 +1,75 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { useEffect } from 'react'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useEffect, useMemo } from 'react'
 
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
-import { stakeableAssetsTickers, StakeableAssetTicker } from '../config'
+import { isStakeableCoin } from '../config'
 import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider'
 
-export const useSelectedCoinCorrector = (
-  selectedDepositAction: ChainAction
-) => {
+export const useSelectedCoinGuard = (action: ChainAction) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
-  const navigate = useCoreNavigate()
-  const rujiCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUJI')
-  const runeCoin = useCurrentVaultCoins().find(coin => coin?.ticker === 'RUNE')
+  const selectedTicker = selectedCoin?.ticker
 
-  const defaultStakeableAssetTicker = stakeableAssetsTickers[0]
-  const defaultStakeableAsset = useCurrentVaultCoins().find(
-    coin => coin?.ticker === defaultStakeableAssetTicker
-  )
+  const coins = useCurrentVaultCoins()
+
+  const { ruji, rune } = useMemo(() => {
+    let ruji: Coin | null = null
+    let rune: Coin | null = null
+    for (const c of coins) {
+      if (!c?.ticker) continue
+      if (!ruji && c.ticker === 'RUJI') ruji = c
+      if (!rune && c.ticker === 'RUNE') rune = c
+      if (ruji && rune) break
+    }
+    return { ruji, rune }
+  }, [coins])
 
   useEffect(() => {
-    if (
-      selectedDepositAction === 'unstake' &&
-      (!selectedCoin?.ticker ||
-        !stakeableAssetsTickers.includes(
-          selectedCoin.ticker as StakeableAssetTicker
-        ))
-    ) {
-      if (!defaultStakeableAsset) {
-        navigate({ id: 'vault' })
-        return
+    const resetSelectedCoin = () => {
+      if (selectedCoin) {
+        setValue('selectedCoin', null, { shouldValidate: true })
       }
-
-      setValue('selectedCoin', defaultStakeableAsset, {
-        shouldValidate: true,
-      })
-    } else if (
-      selectedCoin?.ticker !== rujiCoin?.ticker &&
-      (selectedDepositAction === 'stake_ruji' ||
-        selectedDepositAction === 'unstake_ruji' ||
-        selectedDepositAction === 'withdraw_ruji_rewards')
-    ) {
-      setValue('selectedCoin', rujiCoin, {
-        shouldValidate: true,
-      })
-    } else if (
-      selectedDepositAction === 'bond' &&
-      selectedCoin?.ticker !== runeCoin?.ticker
-    ) {
-      if (!runeCoin) {
-        navigate({ id: 'vault' })
-        return
-      }
-
-      setValue('selectedCoin', runeCoin, {
-        shouldValidate: true,
-      })
     }
-  }, [
-    defaultStakeableAsset,
-    navigate,
-    rujiCoin,
-    runeCoin,
-    selectedCoin?.ticker,
-    selectedDepositAction,
-    setValue,
-  ])
+    const adjustSelectedCoin = (coin: Coin | null | undefined) => {
+      if (!coin) return
+      if (selectedCoin?.ticker !== coin.ticker) {
+        setValue('selectedCoin', coin, { shouldValidate: true })
+      }
+    }
+
+    if (
+      action === 'stake_ruji' ||
+      action === 'unstake_ruji' ||
+      action === 'withdraw_ruji_rewards'
+    ) {
+      if (ruji) adjustSelectedCoin(ruji)
+      else resetSelectedCoin()
+      return
+    }
+
+    if (action === 'bond') {
+      if (rune) adjustSelectedCoin(rune)
+      else resetSelectedCoin()
+      return
+    }
+
+    if (action === 'stake' || action === 'unstake') {
+      if (selectedTicker && !isStakeableCoin(selectedTicker)) {
+        resetSelectedCoin()
+      }
+      return
+    }
+
+    if (
+      action === 'merge' ||
+      action === 'unmerge' ||
+      action === 'ibc_transfer' ||
+      action === 'switch' ||
+      action === 'redeem'
+    ) {
+      if (selectedTicker === 'RUNE') resetSelectedCoin()
+      return
+    }
+  }, [action, ruji, rune, selectedTicker, selectedCoin, setValue])
 }
