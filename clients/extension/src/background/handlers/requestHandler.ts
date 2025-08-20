@@ -101,7 +101,9 @@ export const handleRequest = (
               }
             }
             if (chain === Chain.Bitcoin) {
-              handleBtcRequestAccounts({ sender, context }).then(resolve)
+              handleBtcRequestAccounts({ sender, context })
+                .then(resolve)
+                .catch(reject)
             } else {
               const specialChains = [
                 Chain.Dydx,
