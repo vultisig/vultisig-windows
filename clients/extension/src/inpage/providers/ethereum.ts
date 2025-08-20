@@ -4,12 +4,15 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { callBackground } from '@core/inpage-provider/background'
+import { UnauthorizedError } from '@core/inpage-provider/core/error'
+import { callPopup } from '@core/inpage-provider/popup'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
+import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
@@ -151,13 +154,31 @@ export class Ethereum extends EventEmitter {
               }),
               []
             ),
-          eth_requestAccounts: async () =>
-            withFallback(
-              attempt(async () => {
-                return ['1234']
-              }),
-              []
-            ),
+          eth_requestAccounts: async () => {
+            const chain = await callBackground({
+              getAppChain: { chainKind: 'evm' },
+            })
+
+            const { error, data } = await attempt(async () => {
+              return await callBackground({
+                getAddress: { chain },
+              })
+            })
+
+            if (data) {
+              return [data]
+            }
+
+            if (!(error instanceof UnauthorizedError)) {
+              throw new EIP1193Error('InternalError')
+            }
+
+            const result = await callPopup({
+              grantVaultAccess: {
+                requestOrigin: window.location.origin,
+              },
+            })
+          },
           // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
           wallet_getPermissions: async () => [],
           wallet_requestPermissions: async () => [],
