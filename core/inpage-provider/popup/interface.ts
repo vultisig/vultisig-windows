@@ -3,7 +3,10 @@ import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
 export type PopupInterface = {
-  grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
+  grantVaultAccess: Method<
+    { requestOrigin: string },
+    { appSession: VaultAppSession }
+  >
   exportVaults: Method<{}, { vaults: VaultExport[] }>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
 }

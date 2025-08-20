@@ -1,7 +1,10 @@
 import {
   addVaultAppSession,
   getVaultsAppSessions,
+  removeAllVaultAppSessions,
+  removeVaultAppSession,
   VaultAppSession,
+  VaultAppSessionKey,
 } from '@core/extension/storage/appSessions'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { StorageKey } from '@core/ui/storage/StorageKey'
@@ -12,7 +15,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 const queryKey = [StorageKey.appSessions]
 
-export const useAppSessionsQuery = () => {
+const useAppSessionsQuery = () => {
   return useQuery({
     queryKey,
     queryFn: getVaultsAppSessions,
@@ -28,7 +31,7 @@ export const useCurrentVaultAppSessionsQuery = () => {
   )
 }
 
-export const useAddAppSessionMutation = (
+export const useAddVaultAppSessionMutation = (
   options: Partial<OnSuccessProp<VaultAppSession>> = {}
 ) => {
   const invalidate = useInvalidateQueries()
@@ -41,5 +44,27 @@ export const useAddAppSessionMutation = (
       return session
     },
     ...options,
+  })
+}
+
+export const useRemoveVaultAppSessionMutation = () => {
+  const invalidate = useInvalidateQueries()
+
+  return useMutation({
+    mutationFn: async (session: VaultAppSessionKey) => {
+      await removeVaultAppSession(session)
+      await invalidate(queryKey)
+    },
+  })
+}
+
+export const useRemoveAllVaultAppSessionsMutation = () => {
+  const invalidate = useInvalidateQueries()
+
+  return useMutation({
+    mutationFn: async (vaultId: string) => {
+      await removeAllVaultAppSessions(vaultId)
+      await invalidate(queryKey)
+    },
   })
 }

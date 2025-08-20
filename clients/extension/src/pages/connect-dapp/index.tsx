@@ -1,9 +1,9 @@
-import { useAddVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useAddVaultSessionMutation'
 import { useStoredPendingRequestQuery } from '@clients/extension/src/utils/pendingRequests'
 import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -32,7 +32,7 @@ export const ConnectDAppPage = () => {
   const sender = data?.sender
   const chain = data?.chain
   const vaults = useVaults()
-  const { mutateAsync: addSession } = useAddVaultSessionMutation()
+  const { mutateAsync: addSession } = useAddVaultAppSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
   const handleClose = () => {
@@ -46,18 +46,16 @@ export const ConnectDAppPage = () => {
 
     await addSession({
       vaultId: vaultId,
-      session: {
-        host: getUrlBaseDomain(sender),
-        url: getUrlHost(sender),
-        selectedCosmosChainId:
-          getChainKind(chain) === 'cosmos'
-            ? getCosmosChainId(chain as CosmosChain)
-            : undefined,
-        selectedEVMChainId:
-          getChainKind(chain) === 'evm'
-            ? getEvmChainId(chain as EvmChain)
-            : undefined,
-      },
+      host: getUrlBaseDomain(sender),
+      url: getUrlHost(sender),
+      selectedCosmosChainId:
+        getChainKind(chain) === 'cosmos'
+          ? getCosmosChainId(chain as CosmosChain)
+          : undefined,
+      selectedEVMChainId:
+        getChainKind(chain) === 'evm'
+          ? getEvmChainId(chain as EvmChain)
+          : undefined,
     })
 
     handleClose()

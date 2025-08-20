@@ -1,4 +1,4 @@
-import { useAddAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
+import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useVaults } from '@core/ui/storage/vaults'
@@ -19,12 +19,12 @@ import { useTranslation } from 'react-i18next'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
-  context: { requestOrigin },
+  input: { requestOrigin },
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const vaults = useVaults()
-  const { mutate: addAppSession } = useAddAppSessionMutation({
+  const { mutate: addAppSession } = useAddVaultAppSessionMutation({
     onSuccess: appSession => {
       onFinish({ data: { appSession } })
     },
@@ -43,7 +43,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           url: getUrlHost(requestOrigin),
         }),
     }
-  }, [vaultId, addAppSession])
+  }, [addAppSession, requestOrigin, vaultId])
 
   return (
     <VStack fullHeight>

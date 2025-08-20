@@ -7,8 +7,8 @@ import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { authorized } from '../middleware/authorized'
 
 export const getAddress: BackgroundResolver<'getAddress'> = authorized(
-  async ({ context: { vaultId }, input: { chain } }) => {
-    const vault = await getVault(vaultId)
+  async ({ context: { appSession }, input: { chain } }) => {
+    const vault = await getVault(appSession.vaultId)
 
     const walletCore = await getWalletCore()
 
