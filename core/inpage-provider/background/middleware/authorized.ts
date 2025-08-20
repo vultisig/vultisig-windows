@@ -9,7 +9,7 @@ import type { BridgeContext } from '@lib/extension/bridge/context'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import { UnauthorizedError } from '../../core/error'
+import { BackgroundError } from '../error'
 
 export const authorized =
   <K extends BackgroundMethod>(
@@ -31,7 +31,7 @@ export const authorized =
     const appSession = vaultSessions[getUrlBaseDomain(requestOrigin)]
 
     if (!appSession) {
-      throw new UnauthorizedError()
+      throw BackgroundError.Unauthorized
     }
 
     return resolver({

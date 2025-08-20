@@ -4,9 +4,9 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { callBackground } from '@core/inpage-provider/background'
-import { UnauthorizedError } from '@core/inpage-provider/core/error'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { callPopup } from '@core/inpage-provider/popup'
-import { CancelPopupCallError } from '@core/inpage-provider/popup/view/core/error'
+import { PopupError } from '@core/inpage-provider/popup/error'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
@@ -170,7 +170,7 @@ export class Ethereum extends EventEmitter {
               return [data]
             }
 
-            if (error instanceof UnauthorizedError) {
+            if (error === BackgroundError.Unauthorized) {
               const { data, error } = await attempt(
                 callPopup({
                   grantVaultAccess: {},
@@ -185,7 +185,7 @@ export class Ethereum extends EventEmitter {
                 return [address]
               }
 
-              if (error instanceof CancelPopupCallError) {
+              if (error === PopupError.RejectedByUser) {
                 throw new EIP1193Error('UserRejectedRequest')
               }
             }
