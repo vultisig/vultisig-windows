@@ -1,13 +1,13 @@
 import { UtxoChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
-import { ProviderId } from '@core/inpage-provider/background/interface'
+
 import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
+import { Messaging, ProviderId } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
 
@@ -67,7 +67,6 @@ export class UTXO extends EventEmitter {
         await callBackground({
           getAddress: {
             chain: this.chain,
-            context: { provider: this.providerId },
           },
         }),
       ]),

@@ -2,11 +2,10 @@ import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { storage } from '@core/extension/storage'
 import { getWalletCore } from '@core/extension/tw'
-import { RequestContext } from '@core/inpage-provider/background/interface'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { BitcoinAccount } from '../../../utils/interfaces'
+import { BitcoinAccount, RequestContext } from '../../../utils/interfaces'
 import { handleFindAccounts } from '../accountsHandler'
 
 type HandleBtcRequestAccountsParams = {

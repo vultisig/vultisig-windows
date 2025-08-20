@@ -5,16 +5,6 @@ import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
 
-export type ProviderId =
-  | 'vultisig'
-  | 'phantom-override'
-  | 'keplr-override'
-  | 'ctrl-override'
-
-export type RequestContext = {
-  provider: ProviderId
-}
-
 type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
   { chainKind: K },
   ChainOfKind<K>
@@ -24,7 +14,7 @@ export type BackgroundInterface = {
   getVaults: Method<{}, VaultExport[]>
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   getAppChain: GetAppChainMethod
-  getAddress: Method<{ chain: Chain; context?: RequestContext }, string>
+  getAddress: Method<{ chain: Chain }, string>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

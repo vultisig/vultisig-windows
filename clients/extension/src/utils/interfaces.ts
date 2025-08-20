@@ -3,7 +3,7 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { Tx } from '@core/chain/tx'
-import { RequestContext } from '@core/inpage-provider/background/interface'
+
 import { VaultExport } from '@core/ui/vault/export/core'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'
@@ -58,6 +58,16 @@ type ICustomTransactionPayload = {
   message: string
   chain?: Chain
   prefix?: string
+}
+
+export type ProviderId =
+  | 'vultisig'
+  | 'phantom-override'
+  | 'keplr-override'
+  | 'ctrl-override'
+
+export type RequestContext = {
+  provider: ProviderId
 }
 
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
