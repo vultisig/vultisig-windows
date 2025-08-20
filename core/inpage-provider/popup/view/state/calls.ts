@@ -17,12 +17,7 @@ type PopupViewCalls = Record<string, PopupViewCallEntry>
 const getPopupViewCalls = async () =>
   getStorageValue<PopupViewCalls>(popupViewCallsKey, {})
 
-type PopupViewCall = {
-  call: PopupCall<any>
-  context?: BridgeContext
-}
-
-export const addPopupViewCall = async (input: PopupViewCall) => {
+export const addPopupViewCall = async (input: PopupViewCallEntry) => {
   const calls = await getPopupViewCalls()
 
   const id = crypto.randomUUID()
