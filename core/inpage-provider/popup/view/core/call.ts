@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { callIdQueryParam } from '../../config'
 import { PopupInterface, PopupMethod } from '../../interface'
 import { getPopupMessageSourceId } from '../../resolver'
+import { CancelPopupCallError } from './error'
 
 export const usePopupCallId = () => {
   const url = new URL(window.location.href)
@@ -28,4 +29,17 @@ export const useResolvePopupCall = () => {
     },
     [callId]
   )
+}
+
+export const useCancelPopupCall = () => {
+  const callId = usePopupCallId()
+
+  return useCallback(() => {
+    chrome.runtime.sendMessage({
+      sourceId: getPopupMessageSourceId('popup'),
+      callId,
+      result: new CancelPopupCallError(),
+    })
+    window.close()
+  }, [callId])
 }

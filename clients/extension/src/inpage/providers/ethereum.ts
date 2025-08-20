@@ -82,13 +82,6 @@ export class Ethereum extends EventEmitter {
     return Ethereum.instance
   }
 
-  async enable() {
-    return await this.request({
-      method: RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS,
-      params: [],
-    })
-  }
-
   emitAccountsChanged(addresses: string[]) {
     if (addresses.length) {
       const [address] = addresses
@@ -155,6 +148,13 @@ export class Ethereum extends EventEmitter {
                 })
 
                 return [address]
+              }),
+              []
+            ),
+          eth_requestAccounts: async () =>
+            withFallback(
+              attempt(async () => {
+                return ['1234']
               }),
               []
             ),

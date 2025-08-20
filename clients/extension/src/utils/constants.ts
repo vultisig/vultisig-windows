@@ -83,7 +83,6 @@ export namespace RequestMethod {
     ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
     ETH_NEW_FILTER = 'eth_newFilter',
     ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
-    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SIGN = 'eth_sign',

@@ -15,6 +15,10 @@ export type AppSession = {
   selectedCosmosChainId?: string
 }
 
+export type VaultAppSession = {
+  vaultId: string
+} & AppSession
+
 export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 
 export const setVaultsAppSessions = async (
@@ -64,4 +68,17 @@ export const updateAppSession = async ({
 
   await setVaultsAppSessions(updatedAll)
   return updatedSession
+}
+
+export const addVaultAppSession = async ({
+  vaultId,
+  ...session
+}: VaultAppSession): Promise<void> => {
+  const allSessions = await getVaultsAppSessions()
+  const vaultSessions = allSessions[vaultId]
+
+  await setVaultsAppSessions({
+    ...allSessions,
+    [vaultId]: { ...vaultSessions, [session.host]: session },
+  })
 }

@@ -1,7 +1,7 @@
 import { storage } from '@core/extension/storage'
 import {
-  type AppSession,
   getVaultAppSessions,
+  VaultAppSession,
 } from '@core/extension/storage/appSessions'
 import type { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import type { BackgroundResolver } from '@core/inpage-provider/background/resolver'
@@ -15,7 +15,7 @@ export const authorized =
   <K extends BackgroundMethod>(
     resolver: BackgroundResolver<
       K,
-      BridgeContext & { appSession: AppSession; vaultId: string }
+      BridgeContext & { appSession: VaultAppSession }
     >
   ): BackgroundResolver<K> =>
   async params => {
@@ -38,8 +38,7 @@ export const authorized =
       ...params,
       context: {
         ...params.context,
-        appSession,
-        vaultId,
+        appSession: { ...appSession, vaultId },
       },
     })
   }
