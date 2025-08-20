@@ -1,5 +1,4 @@
 import { storage } from '@core/extension/storage'
-import { getWalletCore } from '@core/extension/tw'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
