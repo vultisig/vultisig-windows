@@ -1,7 +1,10 @@
 import { create } from '@bufbuild/protobuf'
+import { GasFeeAdjuster } from '@clients/extension/src/pages/transaction/GasFeeAdjuster'
 import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
 import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
+import { CosmosMsgType } from '@clients/extension/src/utils/constants'
 import { splitString } from '@clients/extension/src/utils/functions'
+import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/parseSolanaTransaction'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
@@ -37,7 +40,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -47,10 +49,6 @@ import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
-
-import { CosmosMsgType } from '../../utils/constants'
-import { ITransaction } from '../../utils/interfaces'
-import { GasFeeAdjuster } from './GasFeeAdjuster'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -244,46 +242,56 @@ export const TransactionPage = () => {
                     <MatchRecordUnion
                       value={keysignMessagePayload}
                       handlers={{
-                        custom: custom => (
-                          <>
-                            <ListItem
-                              title={t('method')}
-                              description={custom.method}
-                            />
-                            <ListItem
-                              title={t('message')}
-                              description={custom.message}
-                            />
-                          </>
-                        ),
+                        custom: custom => {
+                          const txPayload = transaction.transactionPayload
+                          const prefix =
+                            'custom' in txPayload &&
+                            typeof txPayload.custom?.prefix === 'string'
+                              ? txPayload.custom.prefix
+                              : undefined
+
+                          const displayMessage =
+                            prefix && prefix.length > 0
+                              ? custom.message.slice(prefix.length)
+                              : custom.message
+
+                          return (
+                            <>
+                              <ListItem
+                                description={custom.method}
+                                title={t('method')}
+                              />
+                              <ListItem
+                                description={displayMessage}
+                                title={t('message')}
+                              />
+                            </>
+                          )
+                        },
                         keysign: keysign => (
                           <>
                             <ListItem
+                              description={keysign.coin!.address}
                               title={t('from')}
-                              description={
-                                <MiddleTruncate text={keysign.coin!.address} />
-                              }
                             />
                             {keysign.toAddress && (
                               <ListItem
+                                description={keysign.toAddress}
                                 title={t('to')}
-                                description={
-                                  <MiddleTruncate text={keysign.toAddress} />
-                                }
                               />
                             )}
                             {keysign.toAmount && (
                               <ListItem
-                                title={t('amount')}
                                 description={`${formatUnits(
                                   keysign.toAmount,
                                   keysign.coin?.decimals
                                 )} ${keysign.coin?.ticker}`}
+                                title={t('amount')}
                               />
                             )}
                             <ListItem
-                              title="Network"
                               description={getKeysignChain(keysign)}
+                              title={t('network')}
                             />
                             <MatchRecordUnion
                               value={transaction.transactionPayload}
@@ -291,7 +299,6 @@ export const TransactionPage = () => {
                                 keysign: transactionPayload => (
                                   <>
                                     <ListItem
-                                      title={t('est_network_fee')}
                                       description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysign)].ticker}`}
                                       extra={
                                         <GasFeeAdjuster
@@ -360,11 +367,11 @@ export const TransactionPage = () => {
                                           }}
                                         />
                                       }
+                                      title={t('est_network_fee')}
                                     />
                                     {transactionPayload.memo?.isParsed ? (
                                       <>
                                         <ListItem
-                                          title={t('function_signature')}
                                           description={
                                             <VStack as="pre" scrollable>
                                               <Text as="code" family="mono">
@@ -377,9 +384,9 @@ export const TransactionPage = () => {
                                               </Text>
                                             </VStack>
                                           }
+                                          title={t('function_signature')}
                                         />
                                         <ListItem
-                                          title={t('function_inputs')}
                                           description={
                                             <VStack as="pre" scrollable>
                                               <Text as="code" family="mono">
@@ -392,12 +399,12 @@ export const TransactionPage = () => {
                                               </Text>
                                             </VStack>
                                           }
+                                          title={t('function_inputs')}
                                         />
                                       </>
                                     ) : (
                                       transactionPayload.memo?.value && (
                                         <ListItem
-                                          title={t('memo')}
                                           description={splitString(
                                             transactionPayload.memo
                                               .value as string,
@@ -405,6 +412,7 @@ export const TransactionPage = () => {
                                           ).map((str, index) => (
                                             <span key={index}>{str}</span>
                                           ))}
+                                          title={t('memo')}
                                         />
                                       )
                                     )}
@@ -412,11 +420,11 @@ export const TransactionPage = () => {
                                       .cosmosMsgPayload?.case ===
                                       CosmosMsgType.MSG_EXECUTE_CONTRACT && (
                                       <ListItem
-                                        title={t('message')}
                                         description={
                                           transactionPayload.transactionDetails
                                             .cosmosMsgPayload.value.msg
                                         }
+                                        title={t('message')}
                                       />
                                     )}
                                   </>

@@ -2,6 +2,7 @@ import { Chain, CosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosGasLimit } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -165,8 +166,33 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         }
       }
 
-      const swapPayload = getKeysignSwapPayload(keysignPayload)
-      if (isDeposit || swapPayload) {
+      const getSwapPayload = () => {
+        const swapPayload = getKeysignSwapPayload(keysignPayload)
+        if (!swapPayload) {
+          return null
+        }
+
+        return getRecordUnionValue(swapPayload, 'native')
+      }
+
+      const swapPayload = getSwapPayload()
+
+      const getDepositAmount = () => {
+        if (isDeposit) {
+          return shouldBePresent(keysignPayload.toAmount)
+        }
+
+        if (
+          swapPayload &&
+          areEqualCoins(coin, chainFeeCoin[swapPayload.chain])
+        ) {
+          return swapPayload.fromAmount
+        }
+      }
+
+      const depositAmount = getDepositAmount()
+
+      if (depositAmount) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
             chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
@@ -174,17 +200,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             ticker: coin.ticker,
             synth: false,
           }),
+          amount: depositAmount,
+          decimals: new Long(coin.decimals),
         })
-        const swapFromAmount =
-          swapPayload && 'native' in swapPayload
-            ? swapPayload.native.fromAmount
-            : undefined
-        const depositAmount = swapFromAmount ?? keysignPayload.toAmount
-
-        if (Number(depositAmount || '0') > 0) {
-          depositCoin.amount = depositAmount!
-          depositCoin.decimals = new Long(coin.decimals)
-        }
 
         return {
           messages: [

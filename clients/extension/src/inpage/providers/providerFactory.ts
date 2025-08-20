@@ -9,32 +9,33 @@ import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { MessageKey } from '@clients/extension/src/utils/constants'
+import { UtxoChain } from '@core/chain/Chain'
+import { callPopup } from '@core/inpage-provider/popup'
 
-import { callPopupApi } from '../../popup/api/call'
 import { registerWallet } from './solana/register'
 
 export const createProviders = () => {
-  const utxo = (key: string, chainId: string) => new UTXO(key, chainId)
   const cosmosProvider = Cosmos.getInstance()
   const solanaProvider = new Solana()
   registerWallet(solanaProvider)
   return {
-    bitcoin: utxo(MessageKey.BITCOIN_REQUEST, 'Bitcoin_bitcoin-mainnet'),
-    bitcoincash: utxo(
+    bitcoin: new UTXO(MessageKey.BITCOIN_REQUEST, UtxoChain.Bitcoin),
+    bitcoincash: new UTXO(
       MessageKey.BITCOIN_CASH_REQUEST,
-      'Bitcoincash_bitcoincash'
+      UtxoChain.BitcoinCash
     ),
+    dogecoin: new UTXO(MessageKey.DOGECOIN_REQUEST, UtxoChain.Dogecoin),
+    litecoin: new UTXO(MessageKey.LITECOIN_REQUEST, UtxoChain.Litecoin),
+    zcash: new UTXO(MessageKey.ZCASH_REQUEST, UtxoChain.Zcash),
     cosmos: cosmosProvider,
     dash: new Dash(),
-    dogecoin: utxo(MessageKey.DOGECOIN_REQUEST, 'Dogecoin_dogecoin'),
     ethereum: new Ethereum(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
-    litecoin: utxo(MessageKey.LITECOIN_REQUEST, 'Litecoin_litecoin'),
     mayachain: MAYAChain.getInstance(),
     plugin: {
       request: async ({ params }: { params: [{ id: string }] }) => {
         const [{ id }] = params
-        const { joinUrl } = await callPopupApi(
+        const { joinUrl } = await callPopup(
           {
             pluginReshare: { pluginId: id },
           },
@@ -48,6 +49,5 @@ export const createProviders = () => {
     ripple: Ripple.getInstance(),
     solana: solanaProvider,
     thorchain: THORChain.getInstance(),
-    zcash: utxo(MessageKey.ZCASH_REQUEST, 'Zcash_zcash'),
   }
 }

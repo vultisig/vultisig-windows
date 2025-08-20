@@ -2,8 +2,18 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
 import { SearchField } from '@lib/ui/search/SearchField'
-import { FC, ReactNode, useState } from 'react'
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import styled from 'styled-components'
+
+import { useIntersection } from '../../hooks/useIntersection'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> &
@@ -11,6 +21,9 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
+    renderFooter?: () => ReactNode
+    virtualizePageSize?: number
+    getKey?: (option: T, index: number) => string
   }
 
 export const SelectItemModal = <T extends { id?: string; chain?: string }>({
@@ -19,34 +32,86 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>({
   title,
   optionComponent: OptionComponent,
   filterFunction,
+  renderFooter,
   renderListHeader,
+  virtualizePageSize,
+  getKey,
 }: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
 
+  const filtered = useMemo(
+    () => options.filter(o => filterFunction(o, searchQuery)),
+    [options, filterFunction, searchQuery]
+  )
+
+  const pageSize = virtualizePageSize ?? filtered.length
+  const [visibleCount, setVisibleCount] = useState(
+    Math.min(pageSize, filtered.length)
+  )
+
+  useEffect(() => {
+    setVisibleCount(Math.min(pageSize, filtered.length))
+  }, [filtered.length, pageSize])
+
+  const listRef = useRef<HTMLDivElement | null>(null)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+
+  const loadMore = useCallback(() => {
+    setVisibleCount(c => Math.min(c + pageSize, filtered.length))
+  }, [pageSize, filtered.length])
+
+  const intersection = useIntersection(sentinelRef, {
+    root: listRef.current,
+    rootMargin: '0px 0px 200px 0px',
+    threshold: 0,
+  })
+
+  useEffect(() => {
+    if (!virtualizePageSize) return
+    if (intersection?.isIntersecting && visibleCount < filtered.length) {
+      loadMore()
+    }
+  }, [
+    intersection?.isIntersecting,
+    virtualizePageSize,
+    visibleCount,
+    filtered.length,
+    loadMore,
+  ])
+
+  const slice = virtualizePageSize ? filtered.slice(0, visibleCount) : filtered
+
   return (
     <Modal onClose={() => onFinish()} title={title}>
-      <VStack gap={20}>
+      <VStack gap={8}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
-        <VStack gap={16}>
-          {renderListHeader && renderListHeader()}
-          <ListWrapper>
-            {options
-              .filter(option => filterFunction(option, searchQuery))
-              .map(option => (
-                <OptionComponent
-                  key={`${option.id}-${option.chain}`}
-                  value={option}
-                  onClick={() => onFinish(option)}
-                />
-              ))}
-          </ListWrapper>
-        </VStack>
+
+        {renderListHeader?.() || <div />}
+
+        <ListWrapper ref={listRef} flexGrow>
+          {slice.map((option, index) => (
+            <OptionComponent
+              key={getKey?.(option, index) || option?.id || index}
+              value={option}
+              onClick={() => onFinish(option)}
+            />
+          ))}
+
+          {virtualizePageSize && visibleCount < filtered.length && (
+            <Sentinel ref={sentinelRef} />
+          )}
+        </ListWrapper>
+
+        {renderFooter?.()}
       </VStack>
     </Modal>
   )
 }
 
 const ListWrapper = styled(VStack)`
+  max-height: 400px;
+  overflow-y: auto;
+
   & > :first-child {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
@@ -56,4 +121,9 @@ const ListWrapper = styled(VStack)`
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
   }
+`
+
+const Sentinel = styled.div`
+  height: 2px;
+  width: 100%;
 `

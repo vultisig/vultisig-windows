@@ -52,11 +52,9 @@ export namespace RequestMethod {
   }
 
   export enum METAMASK {
-    ETH_ACCOUNTS = 'eth_accounts',
     ETH_BLOB_BASE_FEE = 'eth_blobBaseFee',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_CALL = 'eth_call',
-    ETH_CHAIN_ID = 'eth_chainId',
     ETH_COINBASE = 'eth_coinbase',
     ETH_DECRYPT = 'eth_decrypt',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
@@ -98,9 +96,7 @@ export namespace RequestMethod {
     NET_VERSION = 'net_version',
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
-    WALLET_GET_PERMISSIONS = 'wallet_getPermissions',
     WALLET_REGISTER_ONBOARDING = 'wallet_registerOnboarding',
-    WALLET_REQUEST_PERMISSIONS = 'wallet_requestPermissions',
     WALLET_REVOKE_PERMISSIONS = 'wallet_revokePermissions',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     WALLET_SCAN_QR_CODE = 'wallet_scanQRCode',
@@ -109,8 +105,6 @@ export namespace RequestMethod {
   }
 
   export enum VULTISIG {
-    GET_ACCOUNTS = 'get_accounts',
-    CHAIN_ID = 'chain_id',
     DEPOSIT_TRANSACTION = 'deposit_transaction',
     GET_TRANSACTION_BY_HASH = 'get_transaction_by_hash',
     REQUEST_ACCOUNTS = 'request_accounts',

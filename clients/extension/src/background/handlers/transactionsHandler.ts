@@ -1,8 +1,8 @@
+import { storage } from '@core/extension/storage'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { v4 as uuidv4 } from 'uuid'
 
 import { initializeMessenger } from '../../messengers/initializeMessenger'
-import { storage } from '../../storage'
 import {
   addTransactionToVault,
   getVaultTransactions,
@@ -10,6 +10,7 @@ import {
   updateTransaction,
 } from '../../transactions/state/transactions'
 import { ITransaction } from '../../utils/interfaces'
+import { getVaultIdByTransaction } from '../utils/getVaultIdByTransaction'
 import { handleOpenPanel } from '../window/windowManager'
 
 const popupMessenger = initializeMessenger({ connect: 'popup' })
@@ -20,7 +21,9 @@ export const handleSendTransaction = async (
   const uuid = uuidv4()
 
   try {
-    const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
+    const currentVaultId =
+      (await getVaultIdByTransaction(transaction)) ??
+      shouldBePresent(await storage.getCurrentVaultId())
 
     await addTransactionToVault(currentVaultId, {
       ...transaction,

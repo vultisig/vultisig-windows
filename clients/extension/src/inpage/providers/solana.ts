@@ -1,7 +1,9 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
+import { callBackground } from '@core/inpage-provider/background'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
@@ -144,10 +146,11 @@ export class Solana implements Wallet {
   }
 
   #connected = async () => {
-    const address = (await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-    })) as string | undefined
+    const { data: address } = await attempt(
+      callBackground({
+        getAddress: { chain: Chain.Solana },
+      })
+    )
 
     if (address) {
       this._isConnected = true
@@ -312,7 +315,7 @@ export class Solana implements Wallet {
           },
         ],
       })) as ITransaction<OtherChain.Solana>
-      const rawData = Buffer.from(result.encoded, 'base64')
+      const rawData = bs58.decode(String(result))
       return VersionedTransaction.deserialize(rawData)
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
@@ -384,10 +387,7 @@ export class Solana implements Wallet {
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [modifiedTransfer],
         }).then(result => {
-          const rawData = Buffer.from(
-            (result as ITransaction<OtherChain.Solana>).encoded,
-            'base64'
-          )
+          const rawData = bs58.decode(String(result))
           return Transaction.from(rawData)
         })
       }

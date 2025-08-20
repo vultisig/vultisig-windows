@@ -1,5 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
@@ -14,6 +15,7 @@ import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
 import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
+import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
 type Props = {
   action: ChainAction
@@ -50,6 +52,9 @@ export const DepositActionSpecific = ({ action }: Props) => {
         unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
         mint: () => <MintSpecific />,
         redeem: () => <RedeemSpecific />,
+        withdraw_ruji_rewards: () => (
+          <WithdrawRujiRewardsSpecific value={shouldBePresent(selectedCoin)} />
+        ),
       }}
       else={() => null}
     />

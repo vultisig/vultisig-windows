@@ -10,10 +10,11 @@ export enum StorageKey {
   isBalanceVisible = 'isVaultBalanceVisible',
   isBlockaidEnabled = 'isBlockaidEnabled',
   hasFinishedOnboarding = 'hasFinishedOnboarding',
-  initialView = 'initialView',
   coinFinderIgnore = 'coinFinderIgnore',
   passcodeEncryption = 'passcodeEncryption',
   passcodeAutoLock = 'passcodeAutoLock',
   hasFinishedReferralsOnboarding = 'hasFinishedReferralsOnboarding',
   hasAddedFriendReferral = 'hasAddedFriendReferral',
+  appSessions = 'appSessions',
+  latestInstalledVersion = 'latestInstalledVersion',
 }

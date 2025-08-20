@@ -1,6 +1,7 @@
 import { MpcDevice } from '@core/mpc/devices/MpcDevice'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { MpcServerType } from '@core/mpc/MpcServerType'
+import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { NameProp } from '@lib/utils/entities/props'
 
@@ -29,6 +30,8 @@ export type CoreState = CoreStorage & {
   version: string
   isLocalModeAvailable: boolean
   getMpcServerUrl: (input: GetMpcServerUrlInput) => Promise<string>
+  processError?: ErrorBoundaryProcessError
+  goBack: () => void
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

@@ -814,6 +814,7 @@ __metadata:
     "@fontsource/roboto-mono": "npm:^5.2.5"
     "@keplr-wallet/provider": "npm:^0.12.202"
     "@keplr-wallet/types": "npm:^0.12.202"
+    "@lib/extension": "workspace:*"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
     "@solana/spl-token": "npm:^0.4.13"
@@ -918,12 +919,28 @@ __metadata:
 "@core/extension@workspace:*, @core/extension@workspace:core/extension":
   version: 0.0.0-use.local
   resolution: "@core/extension@workspace:core/extension"
+  dependencies:
+    "@core/chain": "workspace:*"
+    "@core/config": "workspace:*"
+    "@core/mpc": "workspace:*"
+    "@core/ui": "workspace:*"
+    "@lib/extension": "workspace:*"
+    "@lib/ui": "workspace:*"
+    "@lib/utils": "workspace:*"
   languageName: unknown
   linkType: soft
 
 "@core/inpage-provider@workspace:*, @core/inpage-provider@workspace:core/inpage-provider":
   version: 0.0.0-use.local
   resolution: "@core/inpage-provider@workspace:core/inpage-provider"
+  dependencies:
+    "@core/chain": "workspace:*"
+    "@core/config": "workspace:*"
+    "@core/extension": "workspace:*"
+    "@core/ui": "workspace:*"
+    "@lib/extension": "workspace:*"
+    "@lib/ui": "workspace:*"
+    "@lib/utils": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2138,6 +2155,12 @@ __metadata:
 "@lib/dkls@workspace:*, @lib/dkls@workspace:lib/dkls":
   version: 0.0.0-use.local
   resolution: "@lib/dkls@workspace:lib/dkls"
+  languageName: unknown
+  linkType: soft
+
+"@lib/extension@workspace:*, @lib/extension@workspace:lib/extension":
+  version: 0.0.0-use.local
+  resolution: "@lib/extension@workspace:lib/extension"
   languageName: unknown
   linkType: soft
 

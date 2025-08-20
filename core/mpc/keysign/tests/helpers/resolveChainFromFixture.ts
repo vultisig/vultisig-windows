@@ -35,6 +35,7 @@ const aliases: Record<string, Chain> = {
   tron: Chain.Tron,
   polkadot: Chain.Polkadot,
   cardano: Chain.Cardano,
+  sui: Chain.Sui,
 }
 
 export const resolveChainFromFixture = (s: string): Chain => {

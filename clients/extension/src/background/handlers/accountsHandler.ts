@@ -2,15 +2,15 @@ import { Chain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { storage } from '@core/extension/storage'
+import { getVaultAppSessions } from '@core/extension/storage/appSessions'
+import { getWalletCore } from '@core/extension/tw'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import { getVaultAppSessions } from '../../sessions/state/appSessions'
-import { storage } from '../../storage'
-import { getDappHostname } from '../../utils/connectedApps'
 import { Instance } from '../../utils/constants'
 import { setStoredPendingRequest } from '../../utils/pendingRequests'
-import { getWalletCore } from '../walletCore'
 import { handleOpenPanel } from '../window/windowManager'
 
 const instance: Record<Instance, boolean> = {
@@ -18,7 +18,7 @@ const instance: Record<Instance, boolean> = {
   [Instance.TRANSACTION]: false,
 }
 
-export const handleFindAccounts = async (
+const handleFindAccounts = async (
   chain: Chain,
   sender: string
 ): Promise<string[]> => {
@@ -27,7 +27,7 @@ export const handleFindAccounts = async (
   if (!currentVaultId) return []
 
   const vaultSessions = await getVaultAppSessions(currentVaultId)
-  const currentSession = vaultSessions[getDappHostname(sender)]
+  const currentSession = vaultSessions[getUrlBaseDomain(sender)]
 
   if (!currentSession) return []
 

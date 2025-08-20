@@ -1,8 +1,13 @@
 import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
+import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
+import { initialCoreView } from '@core/ui/navigation/CoreView'
+import { QueryClientProvider } from '@core/ui/query/QueryClientProvider'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { NavigationProvider } from '@lib/ui/navigation/state'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 
@@ -15,7 +20,7 @@ import { OnboardingResetter } from './onboarding/OnboardingResetter'
 import { storage } from './storage'
 import { queriesPersister } from './storage/queriesPersister'
 
-const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
+const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib' | 'goBack'> = {
   ...storage,
   client: 'desktop',
   openUrl: BrowserOpenURL,
@@ -42,23 +47,37 @@ const baseCoreState: Omit<CoreState, 'vaultCreationMpcLib'> = {
   },
 }
 
-const App = () => {
+const AppContent = () => {
   const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+  const processError = useProcessAppError()
+  const goBack = useNavigateBack()
 
   const coreState = useMemo(
     () => ({
       ...baseCoreState,
       vaultCreationMpcLib,
+      processError,
+      goBack,
     }),
-    [vaultCreationMpcLib]
+    [vaultCreationMpcLib, processError, goBack]
   )
 
   return (
-    <CoreApp coreState={coreState} queriesPersister={queriesPersister}>
+    <CoreApp coreState={coreState}>
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />
     </CoreApp>
+  )
+}
+
+const App = () => {
+  return (
+    <QueryClientProvider persister={queriesPersister}>
+      <NavigationProvider initialValue={{ history: [initialCoreView] }}>
+        <AppContent />
+      </NavigationProvider>
+    </QueryClientProvider>
   )
 }
 

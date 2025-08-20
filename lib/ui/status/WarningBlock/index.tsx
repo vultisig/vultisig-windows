@@ -34,7 +34,15 @@ export const WarningBlock = ({
   ...rest
 }: WarningBlockProps) => {
   return (
-    <Container alignItems="center" gap={8} {...rest} fullWidth>
+    <Container
+      alignItems="center"
+      justifyContent="space-between"
+      {...rest}
+      fullWidth
+    >
+      <Text color="idle" size={14} weight="400">
+        {children}
+      </Text>
       {iconTooltipContent ? (
         <Tooltip
           content={iconTooltipContent}
@@ -49,9 +57,6 @@ export const WarningBlock = ({
           <Icon />
         </IconContainer>
       )}
-      <Text color="idle" size={14} weight="400">
-        {children}
-      </Text>
     </Container>
   )
 }
