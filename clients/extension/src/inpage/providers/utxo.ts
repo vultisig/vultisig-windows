@@ -52,6 +52,7 @@ export class UTXO extends EventEmitter {
     return await this.request({
       method: RequestMethod.VULTISIG.GET_ACCOUNTS,
       params: [],
+      context: { provider: this.providerId },
     })
   }
 
@@ -59,6 +60,7 @@ export class UTXO extends EventEmitter {
     return await this.request({
       method: RequestMethod.CTRL.SIGN_PSBT,
       params: [],
+      context: { provider: this.providerId },
     })
   }
 
