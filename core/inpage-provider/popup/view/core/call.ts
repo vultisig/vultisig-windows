@@ -32,14 +32,10 @@ export const useResolvePopupCall = () => {
 }
 
 export const useCancelPopupCall = () => {
-  const callId = usePopupCallId()
+  const resolvePopupCall = useResolvePopupCall()
 
   return useCallback(() => {
-    chrome.runtime.sendMessage({
-      sourceId: getPopupMessageSourceId('popup'),
-      callId,
-      result: new CancelPopupCallError(),
-    })
+    resolvePopupCall({ error: new CancelPopupCallError() })
     window.close()
-  }, [callId])
+  }, [resolvePopupCall])
 }
