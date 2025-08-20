@@ -4,17 +4,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventMethod, MessageKey } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback, Network } from '../constants'
+import { Callback } from '../constants'
 import { messengers } from '../messenger'
 
 export class Dash extends EventEmitter {
   public chainId: string
-  public network: Network
   public static instance: Dash | null = null
   constructor() {
     super()
     this.chainId = 'Dash_dash'
-    this.network = 'mainnet'
   }
 
   static getInstance(): Dash {

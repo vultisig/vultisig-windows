@@ -100,7 +100,16 @@ export const getRequiredFieldsPerChainAction = (
   },
   withdraw_ruji_rewards: {
     fields: [],
-    schema: (_: FunctionSchema) => z.object({}),
+    schema: ({ totalAmountAvailable }: FunctionSchema) =>
+      z.object({}).superRefine((_val, ctx) => {
+        if (totalAmountAvailable <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Nothing to withdraw (balance is 0).',
+            path: ['_form'],
+          })
+        }
+      }),
   },
   mint: {
     fields: [

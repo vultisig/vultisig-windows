@@ -2,6 +2,7 @@ import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { messengers } from '@clients/extension/src/inpage/messenger'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
+import { UtxoChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
@@ -54,7 +55,7 @@ function setupContentScriptMessenger(
   const phantomProvider = {
     bitcoin: new UTXO(
       MessageKey.BITCOIN_REQUEST,
-      'Bitcoin_bitcoin-mainnet',
+      UtxoChain.Bitcoin,
       'phantom-override'
     ),
     ethereum: ethereumProvider,

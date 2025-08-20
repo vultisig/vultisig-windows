@@ -1,7 +1,4 @@
-import {
-  handleFindAccounts,
-  handleGetAccounts,
-} from '@clients/extension/src/background/handlers/accountsHandler'
+import { handleGetAccounts } from '@clients/extension/src/background/handlers/accountsHandler'
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
@@ -80,32 +77,6 @@ export const handleRequest = (
     const { method, params, context } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.GET_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_ACCOUNTS: {
-        handleFindAccounts(chain, sender)
-          .then(([account]) => {
-            switch (chain) {
-              case Chain.Dydx:
-              case Chain.Cosmos:
-              case Chain.Kujira:
-              case Chain.Osmosis:
-              case Chain.Solana: {
-                resolve(account)
-
-                break
-              }
-              default: {
-                resolve(account ? [account] : [])
-
-                break
-              }
-            }
-          })
-          .catch(reject)
-
-        break
-      }
-
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
@@ -403,16 +374,6 @@ export const handleRequest = (
           }
           resolve(param.chainId)
         })
-
-        break
-      }
-      case RequestMethod.METAMASK.WALLET_GET_PERMISSIONS: {
-        resolve([])
-
-        break
-      }
-      case RequestMethod.METAMASK.WALLET_REQUEST_PERMISSIONS: {
-        resolve([])
 
         break
       }

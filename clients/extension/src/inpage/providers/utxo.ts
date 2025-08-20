@@ -1,29 +1,42 @@
+import { UtxoChain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
+import { ProviderId } from '@core/inpage-provider/background/interface'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging, ProviderId } from '../../utils/interfaces'
-import { Callback, Network } from '../constants'
+import { Messaging } from '../../utils/interfaces'
+import { Callback } from '../constants'
 import { messengers } from '../messenger'
 
+type SupportedUtxoChain =
+  | UtxoChain.Bitcoin
+  | UtxoChain.BitcoinCash
+  | UtxoChain.Dogecoin
+  | UtxoChain.Litecoin
+  | UtxoChain.Zcash
+
 export class UTXO extends EventEmitter {
-  public chainId: string
-  public network: Network
+  public chain: UtxoChain
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
   private providerId: ProviderId
-  constructor(providerType: string, chainId: string, providerId: ProviderId) {
+  constructor(
+    providerType: string,
+    chain: SupportedUtxoChain,
+    providerId: ProviderId = 'vultisig'
+  ) {
     super()
     this.providerType = providerType as MessageKey
-    this.chainId = chainId
-    this.network = 'mainnet'
+    this.chain = chain
     this.providerId = providerId
   }
 
   static getInstance(
     providerType: string,
-    chainId: string,
+    chain: SupportedUtxoChain,
     providerId: ProviderId
   ): UTXO {
     if (!UTXO.instances) {
@@ -33,7 +46,7 @@ export class UTXO extends EventEmitter {
     if (!UTXO.instances.has(providerType)) {
       UTXO.instances.set(
         providerType,
-        new UTXO(providerType, chainId, providerId)
+        new UTXO(providerType, chain, providerId)
       )
     }
     return UTXO.instances.get(providerType)!
@@ -49,11 +62,17 @@ export class UTXO extends EventEmitter {
   }
 
   async getAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-      context: { provider: this.providerId },
-    })
+    return withFallback(
+      attempt(async () => [
+        await callBackground({
+          getAddress: {
+            chain: this.chain,
+            context: { provider: this.providerId },
+          },
+        }),
+      ]),
+      []
+    )
   }
 
   async signPSBT(_psbt: string | Buffer) {
@@ -62,17 +81,6 @@ export class UTXO extends EventEmitter {
       params: [],
       context: { provider: this.providerId },
     })
-  }
-
-  changeNetwork(network: Network) {
-    if (network !== 'mainnet' && network !== 'testnet')
-      throw Error(`Invalid network ${network}`)
-    else if (network === 'testnet')
-      throw Error(`We only support the mainnet network.`)
-
-    this.chainId = `Bitcoin_bitcoin-${network}`
-    this.network = network
-    this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
   }
 
   emitAccountsChanged() {

@@ -1,10 +1,10 @@
 import { storage } from '@core/extension/storage'
+import { getWalletCore } from '@core/extension/tw'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { ITransaction } from '../../utils/interfaces'
 import { getParsedSolanaTransaction } from '../../utils/tx/solana/parseSolanaTransaction'
-import { getWalletCore } from '../walletCore'
 
 type GetVaultIdByTransactionInput = Pick<ITransaction, 'transactionPayload'>
 
