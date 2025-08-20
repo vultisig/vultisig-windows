@@ -1,7 +1,7 @@
-import { getWalletCore } from '@clients/extension/src/background/walletCore'
 import { Chain } from '@core/chain/Chain'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { storage } from '@core/extension/storage'
+import { getWalletCore } from '@core/extension/tw'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { hexToBytes } from '@lib/utils/hexToBytes'

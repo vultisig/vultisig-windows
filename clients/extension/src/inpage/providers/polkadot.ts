@@ -1,4 +1,3 @@
-import { Network } from '@clients/extension/src/inpage/constants'
 import { messengers } from '@clients/extension/src/inpage/messenger'
 import { MessageKey } from '@clients/extension/src/utils/constants'
 import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
@@ -7,11 +6,9 @@ import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 export class Polkadot extends EventEmitter {
-  public network: Network
   public static instance: Polkadot | null = null
   constructor() {
     super()
-    this.network = 'mainnet'
   }
 
   static getInstance(): Polkadot {
