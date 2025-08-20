@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
 import { Messaging } from '../../utils/interfaces'
-import { Callback } from '../constants'
 import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
 export class Cosmos extends BaseCosmosChain {
@@ -21,27 +20,15 @@ export class Cosmos extends BaseCosmosChain {
   }
 
   async request(
-    data: Messaging.Chain.Request,
-    callback?: Callback
+    data: Messaging.Chain.Request
   ): Promise<Messaging.Chain.Response> {
-    try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: this.messageKey,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
-
-      if (callback) callback(null, response)
-      return response
-    } catch (error) {
-      if (callback) callback(error as Error)
-      throw error
-    }
+    return messengers.background.send<any, Messaging.Chain.Response>(
+      'providerRequest',
+      {
+        type: this.messageKey,
+        message: data,
+      },
+      { id: uuidv4() }
+    )
   }
 }
