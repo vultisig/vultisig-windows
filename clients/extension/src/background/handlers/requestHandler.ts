@@ -61,6 +61,7 @@ import {
 } from 'ethers'
 
 import { safeJsonStringify } from '../utils/bigIntUtils'
+import { handleBtcRequestAccounts } from './requests/handleBtcRequestAccounts'
 
 const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
@@ -76,7 +77,7 @@ export const handleRequest = (
   Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
 > => {
   return new Promise((resolve, reject) => {
-    const { method, params } = body
+    const { method, params, context } = body
 
     switch (method) {
       case RequestMethod.VULTISIG.GET_ACCOUNTS:
@@ -128,16 +129,19 @@ export const handleRequest = (
                 console.log('background err send to inpage:', err)
               }
             }
+            if (chain === Chain.Bitcoin) {
+              handleBtcRequestAccounts({ sender, context }).then(resolve)
+            } else {
+              const specialChains = [
+                Chain.Dydx,
+                Chain.Cosmos,
+                Chain.Kujira,
+                Chain.Osmosis,
+                Chain.Solana,
+              ] as Chain[]
 
-            const specialChains = [
-              Chain.Dydx,
-              Chain.Cosmos,
-              Chain.Kujira,
-              Chain.Osmosis,
-              Chain.Solana,
-            ] as Chain[]
-
-            resolve(specialChains.includes(chain) ? account : [account])
+              resolve(specialChains.includes(chain) ? account : [account])
+            }
           })
           .catch(reject)
 

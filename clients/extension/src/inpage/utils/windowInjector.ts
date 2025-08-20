@@ -6,6 +6,9 @@ import { callBackground } from '@core/inpage-provider/background'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { MessageKey } from '../../utils/constants'
+import { UTXO } from '../providers/utxo'
+
 export const injectToWindow = () => {
   const providers = createProviders()
   const ethereumProvider = providers.ethereum
@@ -49,7 +52,11 @@ function setupContentScriptMessenger(
 ) {
   const ethereumProvider = providers.ethereum
   const phantomProvider = {
-    bitcoin: providers.bitcoin,
+    bitcoin: new UTXO(
+      MessageKey.BITCOIN_REQUEST,
+      'Bitcoin_bitcoin-mainnet',
+      'phantom-override'
+    ),
     ethereum: ethereumProvider,
     solana: providers.solana,
   }
