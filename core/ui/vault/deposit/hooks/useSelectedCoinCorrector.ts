@@ -6,7 +6,7 @@ import { ChainAction } from '../ChainAction'
 import { isStakeableCoin } from '../config'
 import { useDepositFormHandlers } from '../providers/DepositFormHandlersProvider'
 
-export const useSelectedCoinGuard = (action: ChainAction) => {
+export const useSelectedCoinCorrector = (action: ChainAction) => {
   const [{ watch, setValue }] = useDepositFormHandlers()
   const selectedCoin = watch('selectedCoin') as Coin | null
   const selectedTicker = selectedCoin?.ticker
