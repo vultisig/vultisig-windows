@@ -19,8 +19,9 @@ export const callPopupFromBackground: PopupCallResolver = async <
 >({
   call,
   options,
+  context,
 }: PopupCallResolverInput<M>) => {
-  const callId = await addPopupViewCall(call)
+  const callId = await addPopupViewCall({ call, context })
 
   return inNewWindow({
     ...options,

@@ -12,6 +12,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
 import { useMemo, useState } from 'react'
@@ -19,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
-  input: { requestOrigin },
+  context,
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
@@ -29,6 +30,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       onFinish({ data: { appSession } })
     },
   })
+  const { requestOrigin } = shouldBePresent(context)
 
   const submitButtonProps = useMemo(() => {
     if (!vaultId) {

@@ -6,6 +6,7 @@ import {
 import { callBackground } from '@core/inpage-provider/background'
 import { UnauthorizedError } from '@core/inpage-provider/core/error'
 import { callPopup } from '@core/inpage-provider/popup'
+import { CancelPopupCallError } from '@core/inpage-provider/popup/view/core/error'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
@@ -173,11 +174,26 @@ export class Ethereum extends EventEmitter {
               throw new EIP1193Error('InternalError')
             }
 
-            const result = await callPopup({
-              grantVaultAccess: {
-                requestOrigin: window.location.origin,
-              },
+            const grantVaultAccessResult = await callPopup({
+              grantVaultAccess: {},
             })
+
+            if ('data' in grantVaultAccessResult) {
+              const address = await callBackground({
+                getAddress: { chain },
+              })
+
+              return [address]
+            }
+
+            if (
+              'error' in grantVaultAccessResult &&
+              grantVaultAccessResult.error instanceof CancelPopupCallError
+            ) {
+              throw new EIP1193Error('UserRejectedRequest')
+            }
+
+            throw new EIP1193Error('InternalError')
           },
           // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
           wallet_getPermissions: async () => [],

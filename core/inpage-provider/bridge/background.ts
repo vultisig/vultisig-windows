@@ -35,7 +35,8 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
           message,
           {
             background: ({ call }) => callBackgroundResolver({ call, context }),
-            popup: callPopupFromBackground,
+            popup: ({ call, options }) =>
+              callPopupFromBackground({ call, options, context }),
           }
         )
       ).then(reply)
