@@ -8,6 +8,7 @@ import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 type SupportedUtxoChain =
   | UtxoChain.Bitcoin
@@ -67,6 +68,11 @@ export class UTXO extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request) {
+    const handlers = getSharedHandlers(this.chain)
+
+    if (data.method in handlers) {
+      return handlers[data.method as keyof typeof handlers]()
+    }
     const response = await messengers.background.send<
       any,
       Messaging.Chain.Response

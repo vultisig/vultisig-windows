@@ -1,3 +1,4 @@
+import { UtxoChain } from '@core/chain/Chain'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -5,6 +6,7 @@ import { EventMethod, MessageKey } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 export class Dash extends EventEmitter {
   public chainId: string
@@ -26,6 +28,11 @@ export class Dash extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request) {
+    const handlers = getSharedHandlers(UtxoChain.Dash)
+
+    if (data.method in handlers) {
+      return handlers[data.method as keyof typeof handlers]()
+    }
     const response = await messengers.background.send<
       any,
       Messaging.Chain.Response
