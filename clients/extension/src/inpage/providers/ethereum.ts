@@ -160,22 +160,22 @@ export class Ethereum extends EventEmitter {
               getAppChain: { chainKind: 'evm' },
             })
 
-            const { error, data } = await attempt(async () => {
-              return await callBackground({
+            const { error, data } = await attempt(
+              callBackground({
                 getAddress: { chain },
               })
-            })
+            )
 
             if (data) {
               return [data]
             }
 
             if (error instanceof UnauthorizedError) {
-              const { data, error } = await attempt(async () => {
-                return await callPopup({
+              const { data, error } = await attempt(
+                callPopup({
                   grantVaultAccess: {},
                 })
-              })
+              )
 
               if (data) {
                 const address = await callBackground({
