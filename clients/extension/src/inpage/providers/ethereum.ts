@@ -170,27 +170,24 @@ export class Ethereum extends EventEmitter {
               return [data]
             }
 
-            if (!(error instanceof UnauthorizedError)) {
-              throw new EIP1193Error('InternalError')
-            }
-
-            const grantVaultAccessResult = await callPopup({
-              grantVaultAccess: {},
-            })
-
-            if ('data' in grantVaultAccessResult) {
-              const address = await callBackground({
-                getAddress: { chain },
+            if (error instanceof UnauthorizedError) {
+              const { data, error } = await attempt(async () => {
+                return await callPopup({
+                  grantVaultAccess: {},
+                })
               })
 
-              return [address]
-            }
+              if (data) {
+                const address = await callBackground({
+                  getAddress: { chain },
+                })
 
-            if (
-              'error' in grantVaultAccessResult &&
-              grantVaultAccessResult.error instanceof CancelPopupCallError
-            ) {
-              throw new EIP1193Error('UserRejectedRequest')
+                return [address]
+              }
+
+              if (error instanceof CancelPopupCallError) {
+                throw new EIP1193Error('UserRejectedRequest')
+              }
             }
 
             throw new EIP1193Error('InternalError')
