@@ -11,3 +11,9 @@ export type StakeableAssetTicker = (typeof stakeableAssetsTickers)[number]
 
 export const isStakeableChain = (c: Chain): c is StakeableChain =>
   stakeableChains.includes(c as StakeableChain)
+
+export const isStakeableCoin = (ticker: string): boolean => {
+  return (
+    !!ticker && stakeableAssetsTickers.includes(ticker as StakeableAssetTicker)
+  )
+}
