@@ -1,7 +1,9 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
+import { callBackground } from '@core/inpage-provider/background'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
@@ -144,10 +146,11 @@ export class Solana implements Wallet {
   }
 
   #connected = async () => {
-    const address = (await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-    })) as string | undefined
+    const { data: address } = await attempt(
+      callBackground({
+        getAddress: { chain: Chain.Solana },
+      })
+    )
 
     if (address) {
       this._isConnected = true

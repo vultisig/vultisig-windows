@@ -4,6 +4,7 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { callBackground } from '@core/inpage-provider/background'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
@@ -142,6 +143,24 @@ export class Ethereum extends EventEmitter {
             callBackground({
               getAppChainId: { chainKind: 'evm' },
             }),
+          eth_accounts: async () =>
+            withFallback(
+              attempt(async () => {
+                const chain = await callBackground({
+                  getAppChain: { chainKind: 'evm' },
+                })
+
+                const address = await callBackground({
+                  getAddress: { chain },
+                })
+
+                return [address]
+              }),
+              []
+            ),
+          // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
+          wallet_getPermissions: async () => [],
+          wallet_requestPermissions: async () => [],
         } as const
 
         if (data.method in handlers) {

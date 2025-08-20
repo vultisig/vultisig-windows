@@ -1,3 +1,6 @@
+import { CosmosChain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
@@ -25,7 +28,24 @@ export class THORChain extends BaseCosmosChain {
     data: Messaging.Chain.Request,
     callback?: Callback
   ): Promise<Messaging.Chain.Response> {
-    try {
+    const processRequest = async () => {
+      // TODO: Extract handling of Thorchain requests
+      const handlers = {
+        get_accounts: async () =>
+          withFallback(
+            attempt(async () => [
+              await callBackground({
+                getAddress: { chain: CosmosChain.THORChain },
+              }),
+            ]),
+            []
+          ),
+      } as const
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
+
       const response = await messengers.background.send<
         any,
         Messaging.Chain.Response
@@ -38,7 +58,11 @@ export class THORChain extends BaseCosmosChain {
         { id: uuidv4() }
       )
 
-      const result = processBackgroundResponse(data, this.messageKey, response)
+      return processBackgroundResponse(data, this.messageKey, response)
+    }
+
+    try {
+      const result = await processRequest()
 
       if (callback) callback(null, result)
       return result
