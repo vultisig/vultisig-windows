@@ -3,7 +3,6 @@ import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchai
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { Tx } from '@core/chain/tx'
-
 import { VaultExport } from '@core/ui/vault/export/core'
 import { StdSignDoc } from '@keplr-wallet/types'
 import { TransactionResponse } from 'ethers'

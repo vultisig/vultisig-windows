@@ -1,6 +1,5 @@
 import { UtxoChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
-
 import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
