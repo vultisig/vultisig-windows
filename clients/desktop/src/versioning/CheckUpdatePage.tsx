@@ -1,55 +1,19 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageSlice } from '@lib/ui/page/PageSlice'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { isUpdateAvailable } from './core/isUpdateAvailable'
 import { useLatestVersionQuery } from './queries/latestVersion'
-
-const FixedWrapper = styled.div`
-  position: fixed;
-  inset: 0;
-  width: 350px;
-  height: 350px;
-  margin: auto;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-`
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-`
-
-const CenteredText = styled(Text)`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-`
-
-const DownloadButton = styled(UnstyledButton)`
-  margin-left: 8px;
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
-  color: ${({ theme }) => theme.colors.primary.toCssValue()};
-  font-weight: 600;
-`
 
 export const CheckUpdatePage = () => {
   const { t } = useTranslation()
@@ -62,41 +26,51 @@ export const CheckUpdatePage = () => {
         primaryControls={<PageHeaderBackButton />}
         title={t('vaultCheckUpdatePage.title')}
       />
-
+      <Overlay />
       <FixedWrapper>
-        <ProductLogo fontSize={200} />
+        <ProductLogo fontSize={72} />
         <Content>
           <MatchQuery
             value={latestVersionQuery}
-            success={latestVersion => {
+            success={(latestVersion = '13.1.1') => {
               if (
                 isUpdateAvailable({ current: version, latest: latestVersion })
               ) {
                 return (
-                  <CenteredText>
-                    {t('vaultCheckUpdatePage.newVersionAvailable', {
-                      version: latestVersion,
-                    })}
+                  <VStack gap={30} alignItems="center">
+                    <VStack gap={12} alignItems="center">
+                      <CenteredText>
+                        {t('vaultCheckUpdatePage.update_is_available')}
+                      </CenteredText>
+                      <CenteredText color="shy" size={14}>
+                        {t('vaultCheckUpdatePage.version', {
+                          latestVersion,
+                        })}
+                      </CenteredText>
+                    </VStack>
                     <DownloadButton
+                      kind="primary"
                       onClick={() =>
                         openUrl('https://vultisig.com/download/vultisig')
                       }
                     >
                       {t('vaultCheckUpdatePage.downloadButton')}
                     </DownloadButton>
-                  </CenteredText>
+                  </VStack>
                 )
               }
 
               return (
-                <>
-                  <Text color="contrast" weight={500}>
+                <VStack gap={12} alignItems="center">
+                  <Text color="contrast" weight={500} size={16}>
                     {t('vaultCheckUpdatePage.applicationUpToDate')}
                   </Text>
-                  <Text color="contrast" size={14}>
-                    {version}
+                  <Text color="shy" size={14}>
+                    {t('vaultCheckUpdatePage.version', {
+                      latestVersion: version,
+                    })}
                   </Text>
-                </>
+                </VStack>
               )
             }}
             pending={() => (
@@ -117,3 +91,59 @@ export const CheckUpdatePage = () => {
     </PageSlice>
   )
 }
+
+const FixedWrapper = styled.div`
+  position: fixed;
+  inset: 0;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 34px;
+`
+
+const Overlay = styled(VStack)`
+  position: fixed;
+  inset: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 416px;
+    background: linear-gradient(
+      82deg,
+      rgba(51, 230, 191, 0.15) 8.02%,
+      rgba(4, 57, 199, 0.15) 133.75%
+    );
+    filter: blur(126.94499969482422px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+`
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`
+
+const CenteredText = styled(Text)`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`
+
+const DownloadButton = styled(Button)`
+  padding: 14px 32px;
+  border-radius: 99px;
+  background-color: ${getColor('buttonPrimary')};
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 148px;
+`
