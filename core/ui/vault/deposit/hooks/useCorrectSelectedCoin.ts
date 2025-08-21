@@ -7,6 +7,7 @@ import { ChainAction } from '../ChainAction'
 import { isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
+import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
 type Props = {
@@ -26,6 +27,7 @@ export const useCorrectSelectedCoin = ({
   const unmergeOptions = useUnmergeOptions()
   const mergeOptions = useMergeOptions()
   const redeemOptions = useRedeemOptions()
+  const mintOptions = useMintOptions()
 
   return useCallback(() => {
     if (coins) {
@@ -41,14 +43,26 @@ export const useCorrectSelectedCoin = ({
       }
 
       if (
+        action === 'mint' &&
+        !findByTicker({
+          coins: mintOptions,
+          ticker: currentTicker,
+        })
+      ) {
+        return mintOptions[0]
+      }
+
+      if (
         action === 'redeem' &&
-        !redeemOptions.some(option => option.ticker === currentTicker)
+        !findByTicker({
+          coins: redeemOptions,
+          ticker: currentTicker,
+        })
       ) {
         return redeemOptions[0]
       }
 
-      if (action === 'bond') {
-        if (currentTicker === 'RUNE') return
+      if (action === 'bond' && currentTicker !== 'RUNE') {
         return findByTicker({
           coins,
           ticker: 'RUNE',
@@ -57,14 +71,20 @@ export const useCorrectSelectedCoin = ({
 
       if (
         action === 'merge' &&
-        !mergeOptions.some(option => option.ticker === currentTicker)
+        !findByTicker({
+          coins: mergeOptions,
+          ticker: currentTicker,
+        })
       ) {
         return mergeOptions[0]
       }
 
       if (
         action === 'unmerge' &&
-        !unmergeOptions.some(option => option.ticker === currentTicker)
+        !findByTicker({
+          coins: unmergeOptions,
+          ticker: currentTicker,
+        })
       ) {
         return unmergeOptions[0]
       }
@@ -95,13 +115,14 @@ export const useCorrectSelectedCoin = ({
 
     return selected
   }, [
-    coins,
     action,
-    selected,
-    redeemOptions,
-    mergeOptions,
-    unmergeOptions,
-    currentTicker,
     chain,
+    coins,
+    currentTicker,
+    mergeOptions,
+    mintOptions,
+    redeemOptions,
+    selected,
+    unmergeOptions,
   ])
 }

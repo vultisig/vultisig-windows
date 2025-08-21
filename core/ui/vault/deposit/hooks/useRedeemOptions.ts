@@ -1,14 +1,15 @@
+import { Chain } from '@core/chain/Chain'
 import {
   yieldBearingAssetsIds,
   yieldBearingAssetsReceiptDenoms,
 } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import { makeAccountCoin } from '@core/chain/coin/utils/makeAccountCoin'
 import { useMemo } from 'react'
 
 import {
   useCurrentVaultAddresses,
   useCurrentVaultCoins,
 } from '../../state/currentVaultCoins'
-import { createMintUnmintCoin } from '../DepositForm/ActionSpecific/MintUnmintSpecific/utils'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export const useRedeemOptions = () => {
@@ -22,7 +23,10 @@ export const useRedeemOptions = () => {
     () =>
       yieldBearingAssetsIds.map(asset => {
         const denom = yieldBearingAssetsReceiptDenoms[asset]
-        return coinById.get(denom) ?? createMintUnmintCoin(denom, address)
+        return (
+          coinById.get(denom) ??
+          makeAccountCoin({ chain: Chain.THORChain, id: denom }, address)
+        )
       }),
     [coinById, address]
   )
