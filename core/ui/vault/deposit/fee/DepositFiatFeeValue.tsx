@@ -15,11 +15,12 @@ import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecific
 
 export const DepositFiatFeeValue = () => {
   const [coin] = useDepositCoin()
+  const fiatCurrency = useFiatCurrency()
   const priceQuery = useCoinPriceQuery({
     coin,
+    fiatCurrency,
   })
 
-  const fiatCurrency = useFiatCurrency()
   const chainSpecificQuery = useDepositChainSpecificQuery(coin)
   const { decimals } = chainFeeCoin[coin.chain]
 

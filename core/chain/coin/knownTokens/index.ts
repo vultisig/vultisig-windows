@@ -595,7 +595,8 @@ export const knownTokensIndex: KnownIndex = makeRecord(
   chain => {
     const byId: Record<string, KnownCoin> = {}
     for (const coin of knownTokens[chain] ?? []) {
-      byId[coin.id?.toLowerCase() || ''] = coin
+      if (!coin.id) continue
+      byId[coin.id.toLowerCase()] = coin
     }
     return byId
   }
