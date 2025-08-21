@@ -7,6 +7,7 @@ import { ChainAction } from '../ChainAction'
 import { isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
+import { useRedeemOptions } from './useRedeemOptions'
 
 type Props = {
   chain: Chain
@@ -21,9 +22,10 @@ export const useCorrectSelectedCoin = ({
   selected,
   coins,
 }: Props) => {
-  const selTicker = selected?.ticker
+  const currentTicker = selected?.ticker
   const unmergeOptions = useUnmergeOptions()
   const mergeOptions = useMergeOptions()
+  const redeemOptions = useRedeemOptions()
 
   return useCallback(() => {
     if (coins) {
@@ -32,35 +34,52 @@ export const useCorrectSelectedCoin = ({
         action === 'unstake_ruji' ||
         action === 'withdraw_ruji_rewards'
       ) {
-        return findByTicker(coins, 'RUJI')
+        return findByTicker({
+          coins,
+          ticker: 'RUJI',
+        })
+      }
+
+      if (
+        action === 'redeem' &&
+        !redeemOptions.some(option => option.ticker === currentTicker)
+      ) {
+        return redeemOptions[0]
       }
 
       if (action === 'bond') {
-        if (selTicker === 'RUNE') return
-        return findByTicker(coins, 'RUNE')
+        if (currentTicker === 'RUNE') return
+        return findByTicker({
+          coins,
+          ticker: 'RUNE',
+        })
       }
 
       if (
         action === 'merge' &&
-        !mergeOptions.some(option => option.ticker === selTicker)
+        !mergeOptions.some(option => option.ticker === currentTicker)
       ) {
         return mergeOptions[0]
       }
 
       if (
         action === 'unmerge' &&
-        !unmergeOptions.some(option => option.ticker === selTicker)
+        !unmergeOptions.some(option => option.ticker === currentTicker)
       ) {
         return (
-          unmergeOptions.find(c => c.ticker === selTicker) || unmergeOptions[0]
+          unmergeOptions.find(c => c.ticker === currentTicker) ||
+          unmergeOptions[0]
         )
       }
 
       if (action === 'stake' || action === 'unstake') {
         if (chain === Chain.THORChain) {
-          return selTicker && isStakeableCoin(selTicker)
+          return currentTicker && isStakeableCoin(currentTicker)
             ? selected
-            : findByTicker(coins, 'TCY')
+            : findByTicker({
+                coins,
+                ticker: 'TCY',
+              })
         }
         return null
       }
@@ -73,10 +92,19 @@ export const useCorrectSelectedCoin = ({
       action === 'switch' ||
       action === 'redeem'
     ) {
-      if (selTicker === 'RUNE') return null
+      if (currentTicker === 'RUNE') return null
       return selected
     }
 
     return selected
-  }, [action, chain, coins, mergeOptions, selTicker, selected, unmergeOptions])
+  }, [
+    coins,
+    action,
+    selected,
+    redeemOptions,
+    mergeOptions,
+    unmergeOptions,
+    currentTicker,
+    chain,
+  ])
 }

@@ -95,7 +95,7 @@ export const SwitchSpecific = () => {
           <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
-                {selectedCoin?.ticker || t('select_token')}
+                {selectedCoin.ticker || t('select_token')}
               </Text>
               {!selectedCoin && (
                 <AssetRequiredLabel as="span" color="danger" size={14}>

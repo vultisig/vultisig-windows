@@ -1,4 +1,12 @@
 import { AccountCoin } from '../AccountCoin'
 
-export const findByTicker = (coins: AccountCoin[], ticker: string) =>
-  (coins || []).find(c => c.ticker === ticker) ?? null
+type FindByTickerInput = {
+  coins: readonly AccountCoin[]
+  ticker: string
+}
+
+export const findByTicker = ({
+  coins,
+  ticker,
+}: FindByTickerInput): AccountCoin | null =>
+  coins.find(c => c.ticker === ticker) ?? null

@@ -19,7 +19,7 @@ export const MergeSpecific = () => {
         <Container onClick={onOpen}>
           <HStack alignItems="center" gap={4}>
             <Text weight="400" family="mono" size={16}>
-              {depositCoin?.ticker || t('select_token')}
+              {depositCoin.ticker || t('select_token')}
             </Text>
             {!depositCoin && (
               <AssetRequiredLabel as="span" color="danger" size={14}>

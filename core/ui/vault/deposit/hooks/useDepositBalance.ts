@@ -3,8 +3,8 @@ import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks
 import { useMemo } from 'react'
 
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
-import { useSelectedCoinBalance } from './useSelectedCoinBalance'
 
 type Params = {
   selectedChainAction: ChainAction
@@ -25,12 +25,10 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     useGetTotalAmountAvailableForChain(chain)
   const { data: stakeAndRewards } = useRujiraStakeQuery()
 
-  const selectedCoinBalance =
-    useSelectedCoinBalance({
-      action: selectedChainAction,
-      selectedCoin,
-      chain,
-    }) ?? 0
+  const selectedCoinBalance = useDepositCoinBalance({
+    action: selectedChainAction,
+    chain,
+  })
 
   const isTCYAction =
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
