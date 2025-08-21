@@ -1,12 +1,12 @@
-import { AccountCoin } from '../AccountCoin'
+import { Coin } from '../Coin'
 
-type FindByTickerInput = {
-  coins: readonly AccountCoin[]
+type FindByTickerInput<T extends Coin> = {
+  coins: T[]
   ticker: string
 }
 
-export const findByTicker = ({
+export const findByTicker = <T extends Coin>({
   coins,
   ticker,
-}: FindByTickerInput): AccountCoin | null =>
+}: FindByTickerInput<T>): T | null =>
   coins.find(c => c.ticker === ticker) ?? null
