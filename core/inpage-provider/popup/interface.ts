@@ -4,7 +4,7 @@ import { Method } from '@lib/utils/types/Method'
 
 export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
-  exportVaults: Method<{}, { vaults: VaultExport[] }>
+  exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
 }
 
