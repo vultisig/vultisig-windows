@@ -66,10 +66,7 @@ export const useCorrectSelectedCoin = ({
         action === 'unmerge' &&
         !unmergeOptions.some(option => option.ticker === currentTicker)
       ) {
-        return (
-          unmergeOptions.find(c => c.ticker === currentTicker) ||
-          unmergeOptions[0]
-        )
+        return unmergeOptions[0]
       }
 
       if (action === 'stake' || action === 'unstake') {
