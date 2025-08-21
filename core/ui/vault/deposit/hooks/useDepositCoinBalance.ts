@@ -18,13 +18,12 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
   const [selectedCoin] = useDepositCoin()
   const { data: vaultCoins = [] } = useVaultChainCoinsQuery(chain)
   const vaultEntry = vaultCoins.find(c => c.id === selectedCoin.id)
-  const [coin] = useDepositCoin()
-  const thorAddr = useCurrentVaultCoin(coin)?.address
+  const thorAddr = useCurrentVaultCoin(selectedCoin)?.address
 
   const { data: yTokenRawBalance = 0n } = useBalanceQuery({
     chain: Chain.THORChain,
     address: thorAddr,
-    id: selectedCoin.id || coin.id,
+    id: selectedCoin.id,
   })
 
   const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(
