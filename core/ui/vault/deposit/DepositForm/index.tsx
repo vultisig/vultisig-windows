@@ -31,24 +31,22 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositBalance } from '../hooks/useDepositBalance'
+import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
-  selectedChainAction: ChainAction
-  onSelectChainAction: (action: ChainAction) => void
   chainActionOptions: ChainAction[]
   chain: Chain
 }
 
 export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
-  selectedChainAction,
-  onSelectChainAction,
   chainActionOptions,
   chain,
 }) => {
+  const [selectedChainAction, setSelectedChainAction] = useDepositAction()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
 
@@ -131,7 +129,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 options={chainActionOptions}
                 onOptionClick={option => {
                   onClose()
-                  onSelectChainAction(option)
+                  setSelectedChainAction(option)
                 }}
               />
             )}

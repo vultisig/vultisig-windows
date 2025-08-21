@@ -3,9 +3,10 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { useCallback } from 'react'
 
-import { ChainAction } from '../../ChainAction'
-import { isStakeableCoin } from '../../config'
-import { useUnmergeOptions } from '../../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
+import { ChainAction } from '../ChainAction'
+import { isStakeableCoin } from '../config'
+import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
+import { useMergeOptions } from './useMergeOptions'
 
 type Props = {
   chain: Chain
@@ -14,10 +15,15 @@ type Props = {
   coins: AccountCoin[]
 }
 
-export const useCorrectSelectedCoin = (ctx: Props) => {
-  const { chain, action, selected, coins } = ctx
+export const useCorrectSelectedCoin = ({
+  chain,
+  action,
+  selected,
+  coins,
+}: Props) => {
   const selTicker = selected?.ticker
   const unmergeOptions = useUnmergeOptions()
+  const mergeOptions = useMergeOptions()
 
   return useCallback(() => {
     if (coins) {
@@ -29,9 +35,16 @@ export const useCorrectSelectedCoin = (ctx: Props) => {
         return findByTicker(coins, 'RUJI')
       }
 
-      // BOND requires RUNE explicitly
       if (action === 'bond') {
+        if (selTicker === 'RUNE') return
         return findByTicker(coins, 'RUNE')
+      }
+
+      if (
+        action === 'merge' &&
+        !mergeOptions.some(option => option.ticker === selTicker)
+      ) {
+        return mergeOptions[0]
       }
 
       if (
@@ -65,5 +78,5 @@ export const useCorrectSelectedCoin = (ctx: Props) => {
     }
 
     return selected
-  }, [action, chain, coins, selTicker, selected, unmergeOptions])
+  }, [action, chain, coins, mergeOptions, selTicker, selected, unmergeOptions])
 }

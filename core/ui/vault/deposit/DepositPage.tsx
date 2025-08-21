@@ -6,11 +6,11 @@ import { FieldValues } from 'react-hook-form'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useCore } from '../../state/core'
 import { useCurrentVaultCoin } from '../state/currentVaultCoins'
-import { ChainAction } from './ChainAction'
 import { DepositEnabledChain } from './DepositEnabledChain'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
 import { useFilteredChainActions } from './hooks/useFilteredChainActions'
+import { DepositActionProvider } from './providers/DepositActionProvider'
 import { DepositCoinProvider } from './providers/DepositCoinProvider'
 
 const depositSteps = ['form', 'verify'] as const
@@ -23,14 +23,10 @@ export const DepositPage = () => {
     coin.chain as DepositEnabledChain
   )
 
+  const initialAction = filteredChainActionOptions[0]
+
   const { goBack } = useCore()
-  const [state, setState] = useState<{
-    depositFormData: FieldValues
-    selectedChainAction: ChainAction
-  }>({
-    depositFormData: {},
-    selectedChainAction: filteredChainActionOptions[0],
-  })
+  const [state, setState] = useState<FieldValues>({})
 
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: depositSteps,
@@ -46,34 +42,25 @@ export const DepositPage = () => {
   }
 
   return (
-    <DepositCoinProvider
-      initialCoin={coin}
-      action={filteredChainActionOptions[0]}
-    >
-      <Match
-        value={step}
-        form={() => (
-          <DepositForm
-            selectedChainAction={state.selectedChainAction}
-            onSelectChainAction={action =>
-              setState(prevState => ({
-                ...prevState,
-                selectedChainAction: action,
-              }))
-            }
-            onSubmit={handleDepositFormSubmit}
-            chainActionOptions={filteredChainActionOptions}
-            chain={coin.chain}
-          />
-        )}
-        verify={() => (
-          <DepositVerify
-            selectedChainAction={state.selectedChainAction}
-            onBack={toPreviousStep}
-            depositFormData={state.depositFormData}
-          />
-        )}
-      />
-    </DepositCoinProvider>
+    <DepositActionProvider initialValue={initialAction}>
+      <DepositCoinProvider initialCoin={coin}>
+        <Match
+          value={step}
+          form={() => (
+            <DepositForm
+              onSubmit={handleDepositFormSubmit}
+              chainActionOptions={filteredChainActionOptions}
+              chain={coin.chain}
+            />
+          )}
+          verify={() => (
+            <DepositVerify
+              onBack={toPreviousStep}
+              depositFormData={state.depositFormData}
+            />
+          )}
+        />
+      </DepositCoinProvider>
+    </DepositActionProvider>
   )
 }

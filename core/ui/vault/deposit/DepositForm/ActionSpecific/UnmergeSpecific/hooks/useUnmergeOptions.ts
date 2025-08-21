@@ -1,14 +1,13 @@
 import { Chain } from '@core/chain/Chain'
 import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import {
   useCurrentVaultAddresses,
   useCurrentVaultChainCoins,
 } from '../../../../../state/currentVaultCoins'
 import { useMergeableTokenBalancesQuery } from '../../../../hooks/useMergeableTokenBalancesQuery'
-import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { makeUnmergeSpecificPlaceholderCoin } from '../utils'
 
 /**
@@ -22,7 +21,6 @@ export const useUnmergeOptions = (): AccountCoin[] => {
   const coins = useCurrentVaultChainCoins(Chain.THORChain)
   const address = useCurrentVaultAddresses()[Chain.THORChain]
   const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
-  const [{ ticker }, setSelectedCoin] = useDepositCoin()
 
   const tokens = useMemo(() => {
     const kujiraTokens = coins.filter(
@@ -43,12 +41,6 @@ export const useUnmergeOptions = (): AccountCoin[] => {
 
     return [...kujiraTokens, ...extraTokens]
   }, [coins, balances, address])
-
-  useEffect(() => {
-    if (!tokens.some(({ ticker: currentTicker }) => currentTicker === ticker)) {
-      setSelectedCoin(tokens[0])
-    }
-  }, [setSelectedCoin, ticker, tokens])
 
   return tokens
 }

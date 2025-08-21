@@ -1,5 +1,4 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getRequiredFieldsPerChainAction } from '@core/ui/vault/deposit/DepositForm/chainOptionsConfig'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
@@ -19,19 +18,19 @@ import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 type DepositVerifyProps = {
   depositFormData: FieldValues
-  selectedChainAction: ChainAction
   onBack: () => void
 }
 
 export const DepositVerify: FC<DepositVerifyProps> = ({
   onBack,
   depositFormData,
-  selectedChainAction,
 }) => {
+  const [selectedChainAction] = useDepositAction()
   const [coin] = useDepositCoin()
 
   const depositFormDataWithMemo = useMemoGenerator({
