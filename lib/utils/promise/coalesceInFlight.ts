@@ -1,6 +1,6 @@
-type CoalesceOptions<Input> = {
-  getKey: (input: Input) => string
-  shouldCoalesce?: (input: Input) => boolean
+type CoalesceOptions<Args extends any[]> = {
+  getKey?: (...args: Args) => string
+  shouldCoalesce?: (...args: Args) => boolean
 }
 
 /**
@@ -8,29 +8,30 @@ type CoalesceOptions<Input> = {
  * While a call with the same key is pending, subsequent calls return the same promise.
  * Once it settles, the entry is removed and the next call will execute again.
  */
-export function createInFlightCoalescer<Input, Output>({
-  getKey,
-  shouldCoalesce,
-}: CoalesceOptions<Input>) {
-  const inFlight = new Map<string, Promise<Output>>()
+export function withInFlightCoalescer<
+  T extends (...args: any[]) => Promise<any>,
+>(resolver: T, options?: CoalesceOptions<Parameters<T>>): T {
+  const getKey =
+    options?.getKey ?? ((...args: Parameters<T>) => JSON.stringify(args))
+  const shouldCoalesce = options?.shouldCoalesce
+  const inFlight = new Map<string, ReturnType<T>>()
 
-  return async (
-    input: Input,
-    executor: (input: Input) => Promise<Output>
-  ): Promise<Output> => {
-    if (shouldCoalesce && !shouldCoalesce(input)) {
-      return executor(input)
+  const wrapped = (async (...args: Parameters<T>): Promise<any> => {
+    if (shouldCoalesce && !shouldCoalesce(...args)) {
+      return resolver(...args)
     }
 
-    const key = getKey(input)
+    const key = getKey(...args)
     const existing = inFlight.get(key)
     if (existing) return existing
 
-    const promise = executor(input).finally(() => {
+    const promise = (resolver(...args) as ReturnType<T>).finally(() => {
       inFlight.delete(key)
-    })
+    }) as ReturnType<T>
 
     inFlight.set(key, promise)
     return promise
-  }
+  }) as T
+
+  return wrapped
 }
