@@ -4,19 +4,16 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import { callBackground } from '@core/inpage-provider/background'
-import { BackgroundError } from '@core/inpage-provider/background/error'
-import { callPopup } from '@core/inpage-provider/popup'
-import { PopupError } from '@core/inpage-provider/popup/error'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
-import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
 
 export class Ethereum extends EventEmitter {
   public chainId: string
@@ -134,8 +131,8 @@ export class Ethereum extends EventEmitter {
               getAppChain: { chainKind: 'evm' },
             })
 
-            const address = await callBackground({
-              getAddress: { chain },
+            const { address } = await callBackground({
+              getAccount: { chain },
             })
 
             return [address]
@@ -147,37 +144,9 @@ export class Ethereum extends EventEmitter {
           getAppChain: { chainKind: 'evm' },
         })
 
-        const { error, data } = await attempt(
-          callBackground({
-            getAddress: { chain },
-          })
-        )
+        const { address } = await requestAccount(chain)
 
-        if (data) {
-          return [data]
-        }
-
-        if (error === BackgroundError.Unauthorized) {
-          const { data, error } = await attempt(
-            callPopup({
-              grantVaultAccess: {},
-            })
-          )
-
-          if (data) {
-            const address = await callBackground({
-              getAddress: { chain },
-            })
-
-            return [address]
-          }
-
-          if (error === PopupError.RejectedByUser) {
-            throw new EIP1193Error('UserRejectedRequest')
-          }
-        }
-
-        throw new EIP1193Error('InternalError')
+        return [address]
       },
       // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
       wallet_getPermissions: async () => [],

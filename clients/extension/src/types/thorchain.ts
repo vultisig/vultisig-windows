@@ -65,7 +65,6 @@ export type ThornodeTxResponse =
 // Provider-specific types
 
 export type ThorchainProviderMethod =
-  | 'request_accounts'
   | 'send_transaction'
   | 'deposit_transaction'
   | 'get_transaction_by_hash'

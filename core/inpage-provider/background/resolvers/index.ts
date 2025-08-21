@@ -1,7 +1,7 @@
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
-import { getAddress } from './getAddress'
+import { getAccount } from './getAccount'
 import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
 
@@ -12,5 +12,5 @@ type BackgroundResolvers = {
 export const backgroundResolvers: BackgroundResolvers = {
   getAppChainId,
   getAppChain,
-  getAddress,
+  getAccount,
 }

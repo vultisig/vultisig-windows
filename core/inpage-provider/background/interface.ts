@@ -12,7 +12,7 @@ type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   getAppChain: GetAppChainMethod
-  getAddress: Method<{ chain: Chain }, string>
+  getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

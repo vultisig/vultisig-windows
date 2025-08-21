@@ -6,7 +6,7 @@ import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
 import { authorized } from '../middleware/authorized'
 
-export const getAddress: BackgroundResolver<'getAddress'> = authorized(
+export const getAccount: BackgroundResolver<'getAccount'> = authorized(
   async ({ context: { appSession }, input: { chain } }) => {
     const vault = await getVault(appSession.vaultId)
 
@@ -19,10 +19,15 @@ export const getAddress: BackgroundResolver<'getAddress'> = authorized(
       publicKeys: vault.publicKeys,
     })
 
-    return deriveAddress({
+    const address = deriveAddress({
       chain,
       publicKey,
       walletCore,
     })
+
+    return {
+      address,
+      publicKey: Buffer.from(publicKey.data()).toString('hex'),
+    }
   }
 )
