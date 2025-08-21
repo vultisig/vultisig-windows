@@ -9,6 +9,7 @@ import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 type SupportedUtxoChain =
   | UtxoChain.Bitcoin
@@ -68,7 +69,12 @@ export class UTXO extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(this.chain)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
       const response = await messengers.background.send<
         any,
         Messaging.Chain.Response
@@ -81,16 +87,17 @@ export class UTXO extends EventEmitter {
         { id: uuidv4() }
       )
 
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
+      return processBackgroundResponse(data, this.providerType, response)
+    }
 
-      if (callback) callback(null, result)
+    try {
+      const result = await processRequest()
+
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

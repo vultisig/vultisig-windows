@@ -1,8 +1,10 @@
 import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { useClearVaultSessionsMutation } from '@clients/extension/src/sessions/mutations/useClearVaultSessionsMutation'
-import { useRemoveVaultSessionMutation } from '@clients/extension/src/sessions/mutations/useRemoveVaultSessionMutation'
-import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { EventMethod } from '@clients/extension/src/utils/constants'
+import {
+  useCurrentVaultAppSessionsQuery,
+  useRemoveAllVaultAppSessionsMutation,
+  useRemoveVaultAppSessionMutation,
+} from '@core/extension/storage/hooks/appSessions'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
@@ -26,8 +28,8 @@ const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
-  const { mutateAsync: removeSession } = useRemoveVaultSessionMutation()
-  const { mutateAsync: clearSessions } = useClearVaultSessionsMutation()
+  const { mutateAsync: removeSession } = useRemoveVaultAppSessionMutation()
+  const { mutateAsync: clearSessions } = useRemoveAllVaultAppSessionsMutation()
   const sessionsArray = Object.entries(sessions)
   const currentVaultId = useCurrentVaultId()
   const { goBack } = useCore()
@@ -43,7 +45,7 @@ export const ConnectedDappsPage = () => {
 
   const handleDisconnectAll = async () => {
     try {
-      await clearSessions({ vaultId: shouldBePresent(currentVaultId) })
+      await clearSessions(shouldBePresent(currentVaultId))
       const uniqueUrls = new Set(
         Object.values(sessions).map(session => session.url)
       )

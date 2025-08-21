@@ -76,8 +76,7 @@ export const handleRequest = (
     const { method, params } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
+      case RequestMethod.VULTISIG.REQUEST_ACCOUNTS: {
         handleGetAccounts(chain, sender)
           .then(([account]) => {
             if (!account) throw new EIP1193Error('UserRejectedRequest')
