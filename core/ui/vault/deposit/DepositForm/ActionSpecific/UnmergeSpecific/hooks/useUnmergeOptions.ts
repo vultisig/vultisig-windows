@@ -1,12 +1,14 @@
-// hooks/useUnmergeOptions.ts
+import { Chain } from '@core/chain/Chain'
 import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
-import { TokenBalance } from '@core/chain/chains/thorchain/ruji/services/fetchMergeableTokenBalances'
-import { Coin } from '@core/chain/coin/Coin'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { useEffect, useMemo } from 'react'
 
-import { useCoreViewState } from '../../../../../../navigation/hooks/useCoreViewState'
-import { useCurrentVaultCoin } from '../../../../../state/currentVaultCoins'
-import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
+import {
+  useCurrentVaultAddresses,
+  useCurrentVaultChainCoins,
+} from '../../../../../state/currentVaultCoins'
+import { useMergeableTokenBalancesQuery } from '../../../../hooks/useMergeableTokenBalancesQuery'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { makeUnmergeSpecificPlaceholderCoin } from '../utils'
 
 /**
@@ -16,16 +18,11 @@ import { makeUnmergeSpecificPlaceholderCoin } from '../utils'
  *  – RUJI itself
  *  – any symbol that appears in `balances`, even if we don’t know it yet
  */
-export const useUnmergeOptions = ({
-  coins,
-  balances,
-}: {
-  coins: Coin[]
-  balances: TokenBalance[]
-}): Coin[] => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const { ticker } = useCurrentVaultCoin(coinKey)
-  const [{ setValue }] = useDepositFormHandlers()
+export const useUnmergeOptions = (): AccountCoin[] => {
+  const coins = useCurrentVaultChainCoins(Chain.THORChain)
+  const address = useCurrentVaultAddresses()[Chain.THORChain]
+  const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
+  const [{ ticker }, setSelectedCoin] = useDepositCoin()
 
   const tokens = useMemo(() => {
     const kujiraTokens = coins.filter(
@@ -36,7 +33,7 @@ export const useUnmergeOptions = ({
       .map(
         tb =>
           coins.find(c => c.ticker.toUpperCase() === tb.symbol.toUpperCase()) ??
-          makeUnmergeSpecificPlaceholderCoin(tb.symbol)
+          makeUnmergeSpecificPlaceholderCoin(tb.symbol, address)
       )
       .filter(
         (c, i, self) =>
@@ -45,15 +42,13 @@ export const useUnmergeOptions = ({
       )
 
     return [...kujiraTokens, ...extraTokens]
-  }, [coins, balances])
+  }, [coins, balances, address])
 
   useEffect(() => {
     if (!tokens.some(({ ticker: currentTicker }) => currentTicker === ticker)) {
-      setValue('selectedCoin', tokens[0], {
-        shouldValidate: true,
-      })
+      setSelectedCoin(tokens[0])
     }
-  }, [setValue, ticker, tokens])
+  }, [setSelectedCoin, ticker, tokens])
 
   return tokens
 }

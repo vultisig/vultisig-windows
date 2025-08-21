@@ -4,8 +4,7 @@ import {
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
 import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
-import { Coin } from '@core/chain/coin/Coin'
-import { FormData } from '@core/ui/vault/deposit/DepositForm'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -14,24 +13,25 @@ import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { FC, useMemo } from 'react'
-import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositCoin } from '../../../providers/DepositCoinProvider'
+import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
+
 type Props = {
-  activeOption?: Coin
-  onOptionClick: (option: Coin) => void
+  activeOption?: AccountCoin
+  onOptionClick: (option: AccountCoin) => void
   onClose: () => void
-  setValue: UseFormSetValue<FormData>
 }
 
 export const MergeTokenExplorer: FC<Props> = ({
   onClose,
   onOptionClick,
   activeOption,
-  setValue,
 }) => {
+  const [{ setValue }] = useDepositFormHandlers()
   const thorChainCoins = useCurrentVaultChainCoins(Chain.THORChain)
-
+  const [, setDepositCoin] = useDepositCoin()
   const tokens = useMemo(
     () =>
       thorChainCoins.filter(
@@ -60,10 +60,7 @@ export const MergeTokenExplorer: FC<Props> = ({
                       ]
                     ]
 
-                  setValue('selectedCoin', token, {
-                    shouldValidate: true,
-                  })
-
+                  setDepositCoin(token)
                   setValue('nodeAddress', selectedMergeAddress, {
                     shouldValidate: true,
                   })

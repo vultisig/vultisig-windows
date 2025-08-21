@@ -1,6 +1,4 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getRequiredFieldsPerChainAction } from '@core/ui/vault/deposit/DepositForm/chainOptionsConfig'
@@ -9,7 +7,6 @@ import { DepositFeeValue } from '@core/ui/vault/deposit/fee/DepositFeeValue'
 import { DepositFiatFeeValue } from '@core/ui/vault/deposit/fee/DepositFiatFeeValue'
 import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -22,6 +19,8 @@ import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositCoin } from '../providers/DepositCoinProvider'
+
 type DepositVerifyProps = {
   depositFormData: FieldValues
   selectedChainAction: ChainAction
@@ -33,14 +32,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const selectedCoin =
-    depositFormData?.selectedCoin &&
-    typeof depositFormData.selectedCoin === 'object'
-      ? (depositFormData.selectedCoin as Coin)
-      : undefined
-  const currentCoin = useCurrentVaultCoin(coinKey)
-  const coin = selectedCoin || currentCoin
+  const [coin] = useDepositCoin()
 
   const depositFormDataWithMemo = useMemoGenerator({
     depositFormData: depositFormData,

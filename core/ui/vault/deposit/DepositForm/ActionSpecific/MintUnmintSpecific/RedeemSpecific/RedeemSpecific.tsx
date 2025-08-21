@@ -2,7 +2,6 @@ import {
   yieldBearingAssetsIds,
   yieldBearingAssetsReceiptDenoms,
 } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { Coin } from '@core/chain/coin/Coin'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -11,36 +10,36 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
-import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
+import {
+  useCurrentVaultAddresses,
+  useCurrentVaultCoins,
+} from '../../../../../state/currentVaultCoins'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { AssetRequiredLabel, Container } from '../../../DepositForm.styled'
 import { createMintUnmintCoin } from '../utils'
 import { RedeemTokenExplorer } from './RedeemTokenExplorer'
 
 export const RedeemSpecific = () => {
-  const [{ setValue, getValues }] = useDepositFormHandlers()
   const coins = useCurrentVaultCoins()
 
   const { t } = useTranslation()
-  const selectedCoin = getValues('selectedCoin') as Coin | null
+  const [selectedCoin, setSelectedCoin] = useDepositCoin()
   const coinById = useMemo(() => new Map(coins.map(c => [c.id, c])), [coins])
-
+  const address = useCurrentVaultAddresses()[selectedCoin.chain]
   const tokens = useMemo(
     () =>
       yieldBearingAssetsIds.map(asset => {
         const denom = yieldBearingAssetsReceiptDenoms[asset]
-        return coinById.get(denom) ?? createMintUnmintCoin(denom)
+        return coinById.get(denom) ?? createMintUnmintCoin(denom, address)
       }),
-    [coinById]
+    [coinById, address]
   )
 
   useEffect(() => {
     if (!tokens.some(token => token.ticker === selectedCoin?.ticker)) {
-      setValue('selectedCoin', tokens[0], {
-        shouldValidate: true,
-      })
+      setSelectedCoin(tokens[0])
     }
-  }, [selectedCoin?.ticker, setValue, tokens])
+  }, [selectedCoin?.ticker, setSelectedCoin, tokens])
 
   return (
     <Opener
@@ -65,9 +64,7 @@ export const RedeemSpecific = () => {
         <RedeemTokenExplorer
           options={tokens}
           onOptionClick={token => {
-            setValue('selectedCoin', token, {
-              shouldValidate: true,
-            })
+            setSelectedCoin(token)
             onClose()
           }}
           onClose={onClose}

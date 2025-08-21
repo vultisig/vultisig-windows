@@ -1,16 +1,13 @@
-import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { useMemo } from 'react'
 
+import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
 import { useSelectedCoinBalance } from './useSelectedCoinBalance'
 
 type Params = {
-  chain: Chain
   selectedChainAction: ChainAction
-  selectedCoin: Coin | null
 }
 
 const defaultPrecision = 2
@@ -21,11 +18,9 @@ const actionPrecision: Partial<Record<ChainAction, number>> = {
 const getPrecisionForAction = (action: ChainAction) =>
   actionPrecision[action] ?? defaultPrecision
 
-export const useDepositBalance = ({
-  chain,
-  selectedChainAction,
-  selectedCoin,
-}: Params) => {
+export const useDepositBalance = ({ selectedChainAction }: Params) => {
+  const [selectedCoin] = useDepositCoin()
+  const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
   const { data: stakeAndRewards } = useRujiraStakeQuery()
