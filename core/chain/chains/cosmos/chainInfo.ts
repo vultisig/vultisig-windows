@@ -1,4 +1,4 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { CosmosChain } from '@core/chain/Chain'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 
 const cosmosChainId: Record<CosmosChain, string> = {
@@ -18,6 +18,8 @@ export const getCosmosChainId = (chain: CosmosChain): string => {
   return cosmosChainId[chain]
 }
 
-export const getCosmosChainByChainId = (chainId: string): Chain | undefined => {
+export const getCosmosChainByChainId = (
+  chainId: string
+): CosmosChain | undefined => {
   return mirrorRecord(cosmosChainId)[chainId]
 }

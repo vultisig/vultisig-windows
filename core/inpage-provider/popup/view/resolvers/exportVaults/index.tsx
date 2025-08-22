@@ -23,21 +23,19 @@ export const ExportVaults: PopupResolver<'exportVaults'> = ({ onFinish }) => {
 
   const onSubmit = useCallback(() => {
     onFinish({
-      data: {
-        vaults: vaultIds.map(vaultId => {
-          const vault = shouldBePresent(
-            vaults.find(vault => getVaultId(vault) === vaultId)
-          )
+      data: vaultIds.map(vaultId => {
+        const vault = shouldBePresent(
+          vaults.find(vault => getVaultId(vault) === vaultId)
+        )
 
-          return {
-            name: vault.name,
-            uid: getVaultExportUid(vault),
-            hexChainCode: vault.hexChainCode,
-            publicKeyEcdsa: vault.publicKeys.ecdsa,
-            publicKeyEddsa: vault.publicKeys.eddsa,
-          }
-        }),
-      },
+        return {
+          name: vault.name,
+          uid: getVaultExportUid(vault),
+          hexChainCode: vault.hexChainCode,
+          publicKeyEcdsa: vault.publicKeys.ecdsa,
+          publicKeyEddsa: vault.publicKeys.eddsa,
+        }
+      }),
     })
   }, [onFinish, vaultIds, vaults])
 
