@@ -643,9 +643,11 @@ export const de = {
     fetchingLatestVersion: 'Neueste Version wird abgerufen...',
     applicationUpToDate: 'Anwendung ist auf dem neuesten Stand.',
     newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
-    downloadButton: 'Jetzt herunterladen.',
     currentVersion: '{{localVersion}}',
     title: 'Update prüfen',
+    version: 'Version {{latestVersion}}',
+    downloadButton: 'Jetzt aktualisieren',
+    update_is_available: 'Ein Update ist verfügbar',
   },
   updatePopup: {
     updateAvailableMessage:
