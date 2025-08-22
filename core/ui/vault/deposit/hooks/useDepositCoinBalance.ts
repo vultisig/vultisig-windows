@@ -1,44 +1,29 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { useMemo } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import {
-  useVaultChainCoinsQuery,
-  VaultChainCoin,
-} from '../../queries/useVaultChainCoinsQuery'
+import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
-import { useDepositCoin } from '../state/coin'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useMergeableTokenBalancesQuery } from './useMergeableTokenBalancesQuery'
 
 type Params = {
   action: ChainAction
-  selectedCoin: Coin | null
   chain: Chain
 }
 
-export const useSelectedCoinBalance = ({
-  action,
-  selectedCoin,
-  chain,
-}: Params) => {
+export const useDepositCoinBalance = ({ action, chain }: Params) => {
+  const [selectedCoin] = useDepositCoin()
   const { data: vaultCoins = [] } = useVaultChainCoinsQuery(chain)
-  const coin = useDepositCoin()
-
-  const vaultEntry: VaultChainCoin | undefined = vaultCoins.find(
-    c => c.id === selectedCoin?.id
-  )
-
-  const [{ coin: feeCoinKey }] = useCoreViewState<'deposit'>()
-  const thorAddr = useCurrentVaultCoin(feeCoinKey)?.address
+  const vaultEntry = vaultCoins.find(c => c.id === selectedCoin.id)
+  const thorAddr = useCurrentVaultCoin(selectedCoin)?.address
 
   const { data: yTokenRawBalance = 0n } = useBalanceQuery({
     chain: Chain.THORChain,
     address: thorAddr,
-    id: selectedCoin?.id || coin.id,
+    id: selectedCoin.id,
   })
 
   const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(

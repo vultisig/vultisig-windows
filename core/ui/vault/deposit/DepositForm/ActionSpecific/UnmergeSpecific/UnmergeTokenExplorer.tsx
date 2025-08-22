@@ -1,24 +1,21 @@
-import { Coin } from '@core/chain/coin/Coin'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { UnmergeExplorerOption } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/components/UnmergeExplorerOption'
 import { formatUnmergeShares } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/utils'
 import { useMergeableTokenBalancesQuery } from '@core/ui/vault/deposit/hooks/useMergeableTokenBalancesQuery'
-import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositCoin } from '../../../providers/DepositCoinProvider'
+
 export const UnmergeTokenExplorer = ({
   value: tokens,
   onClose,
-}: OnCloseProp & ValueProp<Coin[]>) => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const { address } = useCurrentVaultCoin(coinKey)
-  const [{ setValue, watch }] = useDepositFormHandlers()
-  const activeOption = watch('selectedCoin')
+}: OnCloseProp & ValueProp<AccountCoin[]>) => {
+  const [coin, setDepositCoin] = useDepositCoin()
+  const { address } = coin
   const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
   const { t } = useTranslation()
 
@@ -35,11 +32,9 @@ export const UnmergeTokenExplorer = ({
                   ticker: token.ticker,
                   balance: `${balance?.shares ? formatUnmergeShares(balance.shares) : 0} shares`,
                 }}
-                isActive={activeOption?.ticker === token.ticker}
+                isActive={coin?.ticker === token.ticker}
                 onClick={() => {
-                  setValue('selectedCoin', token, {
-                    shouldValidate: true,
-                  })
+                  setDepositCoin(token)
                   onClose()
                 }}
               />
