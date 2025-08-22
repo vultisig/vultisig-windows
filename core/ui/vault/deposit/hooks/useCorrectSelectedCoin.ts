@@ -1,20 +1,24 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableCoin } from '../config'
+import {
+  isStakeableCoin,
+  stakeableAssetsTickers,
+  StakeableAssetTicker,
+} from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
 type Props = {
-  chain: Chain
+  chain?: Chain
   action: ChainAction
-  selected: AccountCoin
-  coins: AccountCoin[]
+  selected?: AccountCoin
+  coins?: AccountCoin[]
 }
 
 export const useCorrectSelectedCoin = ({
@@ -23,106 +27,105 @@ export const useCorrectSelectedCoin = ({
   selected,
   coins,
 }: Props) => {
-  const currentTicker = selected?.ticker
   const unmergeOptions = useUnmergeOptions()
   const mergeOptions = useMergeOptions()
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
-  return useCallback(() => {
-    if (coins) {
-      if (
-        action === 'stake_ruji' ||
-        action === 'unstake_ruji' ||
-        action === 'withdraw_ruji_rewards'
-      ) {
-        return findByTicker({
-          coins,
-          ticker: 'RUJI',
-        })
-      }
+  const isLoading = useMemo(() => {
+    if (!coins || !selected) return false
+    switch (action) {
+      case 'mint':
+        return mintOptions.length > 0
+      case 'redeem':
+        return redeemOptions.length > 0
+      case 'merge':
+        return mergeOptions.length > 0
+      case 'unmerge':
+        return unmergeOptions.length > 0
+      default:
+        return true
+    }
+  }, [
+    action,
+    coins,
+    selected,
+    mergeOptions,
+    mintOptions,
+    redeemOptions,
+    unmergeOptions,
+  ])
 
-      if (
-        action === 'mint' &&
-        !findByTicker({
-          coins: mintOptions,
-          ticker: currentTicker,
-        })
-      ) {
-        return mintOptions[0]
-      }
+  const correctedCoin = useMemo(() => {
+    if (!isLoading || !coins || !selected) return undefined
 
-      if (
-        action === 'redeem' &&
-        !findByTicker({
-          coins: redeemOptions,
-          ticker: currentTicker,
-        })
-      ) {
-        return redeemOptions[0]
-      }
+    const currentTicker = selected.ticker
 
-      if (action === 'bond' && currentTicker !== 'RUNE') {
-        return findByTicker({
-          coins,
-          ticker: 'RUNE',
-        })
-      }
-
-      if (
-        action === 'merge' &&
-        !findByTicker({
-          coins: mergeOptions,
-          ticker: currentTicker,
-        })
-      ) {
-        return mergeOptions[0]
-      }
-
-      if (
-        action === 'unmerge' &&
-        !findByTicker({
-          coins: unmergeOptions,
-          ticker: currentTicker,
-        })
-      ) {
-        return unmergeOptions[0]
-      }
-
-      if (action === 'stake' || action === 'unstake') {
-        if (chain === Chain.THORChain) {
-          return currentTicker && isStakeableCoin(currentTicker)
-            ? selected
-            : findByTicker({
-                coins,
-                ticker: 'TCY',
-              })
-        }
-        return null
-      }
+    if (
+      action === 'stake_ruji' ||
+      action === 'unstake_ruji' ||
+      action === 'withdraw_ruji_rewards'
+    ) {
+      return findByTicker({ coins, ticker: 'RUJI' }) ?? selected
     }
 
     if (
-      action === 'merge' ||
-      action === 'unmerge' ||
-      action === 'ibc_transfer' ||
-      action === 'switch' ||
-      action === 'redeem'
+      (action === 'unstake' || action === 'stake') &&
+      !stakeableAssetsTickers.includes(currentTicker as StakeableAssetTicker)
     ) {
-      if (currentTicker === 'RUNE') return null
+      return (
+        findByTicker({ coins, ticker: stakeableAssetsTickers[0] }) ?? selected
+      )
+    }
+
+    if (action === 'mint') {
+      const ok = findByTicker({ coins: mintOptions, ticker: currentTicker })
+      return ok ?? mintOptions[0] ?? selected
+    }
+
+    if (action === 'redeem') {
+      const ok = findByTicker({ coins: redeemOptions, ticker: currentTicker })
+      return ok ?? redeemOptions[0] ?? selected
+    }
+
+    if (action === 'bond') {
+      if (currentTicker !== 'RUNE') {
+        return findByTicker({ coins, ticker: 'RUNE' }) ?? selected
+      }
+      return selected
+    }
+
+    if (action === 'merge') {
+      const ok = findByTicker({ coins: mergeOptions, ticker: currentTicker })
+      return ok ?? mergeOptions[0] ?? selected
+    }
+
+    if (action === 'unmerge') {
+      const ok = findByTicker({ coins: unmergeOptions, ticker: currentTicker })
+      return ok ?? unmergeOptions[0] ?? selected
+    }
+
+    if (action === 'stake' || action === 'unstake') {
+      if (chain === Chain.THORChain) {
+        return currentTicker && isStakeableCoin(currentTicker)
+          ? selected
+          : (findByTicker({ coins, ticker: 'TCY' }) ?? selected)
+      }
       return selected
     }
 
     return selected
   }, [
+    isLoading,
+    coins,
+    selected,
     action,
     chain,
-    coins,
-    currentTicker,
     mergeOptions,
     mintOptions,
     redeemOptions,
-    selected,
     unmergeOptions,
   ])
+
+  return { correctedCoin, isLoading }
 }
