@@ -25,6 +25,7 @@ export const chainSigningType: Record<
   [EvmChain.CronosChain]: SigningType.EIP191,
   [EvmChain.BSC]: SigningType.EIP191,
   [EvmChain.Zksync]: SigningType.EIP191,
+  [EvmChain.Mantle]: SigningType.EIP191,
 
   [OtherChain.Solana]: SigningType.RAW_BYTES,
 }

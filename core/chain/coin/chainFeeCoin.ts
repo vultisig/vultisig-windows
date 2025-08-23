@@ -176,6 +176,12 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 6,
     priceProviderId: 'cardano',
   },
+  [Chain.Mantle]: {
+    ticker: 'MNT',
+    logo: 'mantle',
+    decimals: 18,
+    priceProviderId: 'mantle',
+  },
 }
 
 export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(
