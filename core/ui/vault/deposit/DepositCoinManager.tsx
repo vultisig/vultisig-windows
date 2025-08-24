@@ -16,7 +16,7 @@ export const DepositCoinManager = ({
   const coins = useCurrentVaultCoins()
   const chain = coin?.chain
 
-  const { correctedCoin, isLoading } = useCorrectSelectedCoin({
+  const { correctedCoin, isReady } = useCorrectSelectedCoin({
     chain,
     action,
     selected: coin,
@@ -24,9 +24,9 @@ export const DepositCoinManager = ({
   })
 
   const needsCorrection = useMemo(() => {
-    if (!coin || !correctedCoin || !isLoading) return false
+    if (!coin || !correctedCoin || !isReady) return false
     return coin.ticker !== correctedCoin.ticker
-  }, [isLoading, coin, correctedCoin])
+  }, [isReady, coin, correctedCoin])
 
   useLayoutEffect(() => {
     if (needsCorrection && correctedCoin) {
@@ -34,7 +34,7 @@ export const DepositCoinManager = ({
     }
   }, [needsCorrection, correctedCoin, setCoin])
 
-  if (!isLoading || needsCorrection || !coin) {
+  if (!isReady || needsCorrection || !coin) {
     return (
       <CenterAbsolutely>
         <Spinner size="3em" />

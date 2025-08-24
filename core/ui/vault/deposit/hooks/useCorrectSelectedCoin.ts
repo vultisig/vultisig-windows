@@ -32,7 +32,7 @@ export const useCorrectSelectedCoin = ({
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
-  const isLoading = useMemo(() => {
+  const isReady = useMemo(() => {
     if (!coins || !selected) return false
     switch (action) {
       case 'mint':
@@ -57,7 +57,7 @@ export const useCorrectSelectedCoin = ({
   ])
 
   const correctedCoin = useMemo(() => {
-    if (!isLoading || !coins || !selected) return undefined
+    if (!isReady || !coins || !selected) return undefined
 
     const currentTicker = selected.ticker
 
@@ -116,7 +116,7 @@ export const useCorrectSelectedCoin = ({
 
     return selected
   }, [
-    isLoading,
+    isReady,
     coins,
     selected,
     action,
@@ -127,5 +127,5 @@ export const useCorrectSelectedCoin = ({
     unmergeOptions,
   ])
 
-  return { correctedCoin, isLoading }
+  return { correctedCoin, isReady }
 }
