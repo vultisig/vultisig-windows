@@ -17,15 +17,15 @@ export const PopupView = () => {
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
-      const call = await getPopupViewCall(callId)
-      if (!call) {
+      const entry = await getPopupViewCall(callId)
+      if (!entry) {
         throw new Error(`No call found in the storage for ${callId}`)
       }
 
-      return call
+      return entry
     },
-    onSuccess: async call => {
-      await removePopupViewCall(call.id)
+    onSuccess: async () => {
+      await removePopupViewCall(callId)
     },
     onError: error => {
       resolvePopupCall({ error })
@@ -40,13 +40,19 @@ export const PopupView = () => {
   return (
     <MatchQuery
       value={mutationState}
-      success={call => {
+      success={({ call, context }) => {
         const method = getRecordUnionKey(call) as PopupMethod
         const input = getRecordUnionValue(call)
 
         const Resolver = PopupResolvers[method]
 
-        return <Resolver input={input} onFinish={resolvePopupCall} />
+        return (
+          <Resolver
+            input={input}
+            context={context}
+            onFinish={resolvePopupCall}
+          />
+        )
       }}
       pending={() => (
         <PopupDeadEnd>

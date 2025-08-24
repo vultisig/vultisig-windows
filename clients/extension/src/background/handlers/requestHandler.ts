@@ -1,16 +1,10 @@
-import { handleGetAccounts } from '@clients/extension/src/background/handlers/accountsHandler'
-import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
-import {
-  EventMethod,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+import { RequestMethod } from '@clients/extension/src/utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -47,7 +41,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { memoize } from '@lib/utils/memoize'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { getUrlHost } from '@lib/utils/url/host'
 import {
   getBytes,
   isHexString,
@@ -63,8 +56,6 @@ const getEvmRpcProvider = memoize(
   (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
 )
 
-const inpageMessenger = initializeMessenger({ connect: 'inpage' })
-
 export const handleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain,
@@ -76,44 +67,6 @@ export const handleRequest = (
     const { method, params } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-        handleGetAccounts(chain, sender)
-          .then(([account]) => {
-            if (!account) throw new EIP1193Error('UserRejectedRequest')
-
-            if (getChainKind(chain) === 'evm') {
-              inpageMessenger.send(
-                `${EventMethod.ACCOUNTS_CHANGED}:${getUrlHost(sender)}`,
-                account
-              )
-              try {
-                inpageMessenger.send(
-                  `${EventMethod.CONNECT}:${getUrlHost(sender)}`,
-                  {
-                    address: account,
-                    chainId: getEvmChainId(chain as EvmChain),
-                  }
-                )
-              } catch (err) {
-                console.log('background err send to inpage:', err)
-              }
-            }
-
-            const specialChains = [
-              Chain.Dydx,
-              Chain.Cosmos,
-              Chain.Kujira,
-              Chain.Osmosis,
-              Chain.Solana,
-            ] as Chain[]
-
-            resolve(specialChains.includes(chain) ? account : [account])
-          })
-          .catch(reject)
-
-        break
-      }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
@@ -437,25 +390,27 @@ export const handleRequest = (
           const allSessions = await getVaultsAppSessions()
           const previousSession = allSessions?.[safeVaultId]?.[host]
 
+          const chainKind = getChainKind(chain)
+
           if (previousSession) {
             await updateAppSession({
               vaultId: safeVaultId,
               host,
               fields: {
                 selectedCosmosChainId:
-                  getChainKind(chain) === 'cosmos'
+                  chainKind === 'cosmos'
                     ? getCosmosChainId(chain as CosmosChain)
                     : previousSession.selectedCosmosChainId,
                 selectedEVMChainId:
-                  getChainKind(chain) === 'evm'
+                  chainKind === 'evm'
                     ? getEvmChainId(chain as EvmChain)
                     : previousSession.selectedEVMChainId,
               },
             })
           } else {
-            if (getChainKind(chain) === 'evm') {
+            if (chainKind === 'evm') {
               await setCurrentEVMChainId(param.chainId)
-            } else if (getChainKind(chain) === 'cosmos') {
+            } else if (chainKind === 'cosmos') {
               await setCurrentCosmosChainId(param.chainId)
             }
           }

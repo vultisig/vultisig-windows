@@ -9,7 +9,6 @@ import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeyge
 import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
 import { StartKeysignPage } from '@clients/extension/src/mpc/keysign/start/StartKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
-import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { TransactionPage } from '@clients/extension/src/pages/transaction'
@@ -24,7 +23,6 @@ import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
-  connectTab: ConnectDAppPage,
   importVault: () => (
     <ExpandViewGuard>
       <ImportVaultPage />

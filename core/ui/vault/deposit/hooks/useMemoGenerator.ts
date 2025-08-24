@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { FieldValues } from 'react-hook-form'
 
 import { ChainAction } from '../ChainAction'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { MayaChainPool } from '../types/mayaChain'
 import { generateMemo } from '../utils/memoGenerator'
 
@@ -20,15 +21,17 @@ export const useMemoGenerator = ({
   bondableAsset,
   chain,
 }: UseMemoGeneratorProps): FieldValues => {
+  const [depositCoin] = useDepositCoin()
   const memoValue = useMemo(
     () =>
       generateMemo({
+        coin: depositCoin,
         selectedChainAction,
         depositFormData,
         bondableAsset,
         chain,
       }),
-    [selectedChainAction, depositFormData, bondableAsset, chain]
+    [depositCoin, selectedChainAction, depositFormData, bondableAsset, chain]
   )
 
   return { ...depositFormData, memo: memoValue }

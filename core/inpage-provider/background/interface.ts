@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
-import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
@@ -11,10 +10,9 @@ type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
 >
 
 export type BackgroundInterface = {
-  getVaults: Method<{}, VaultExport[]>
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   getAppChain: GetAppChainMethod
-  getAddress: Method<{ chain: Chain }, string>
+  getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

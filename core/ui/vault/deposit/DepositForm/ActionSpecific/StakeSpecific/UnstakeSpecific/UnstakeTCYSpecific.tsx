@@ -11,20 +11,16 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FormData } from '../../..'
+import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
 import { useUnstakableTcyQuery } from './hooks/useUnstakableTcyQuery'
-
-type Props = {
-  setValue: UseFormSetValue<FormData>
-  getValues: UseFormGetValues<FormData>
-}
 
 const suggestions = [0.25, 0.5, 0.75]
 
-export const UnstakeTCYSpecific = ({ setValue, getValues }: Props) => {
+export const UnstakeTCYSpecific = () => {
+  const [{ setValue, getValues }] = useDepositFormHandlers()
+
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address!)

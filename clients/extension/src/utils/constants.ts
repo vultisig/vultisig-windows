@@ -26,11 +26,6 @@ export enum MessageKey {
   PRIORITY = 'priority',
 }
 
-export enum Instance {
-  CONNECT = 'connect',
-  TRANSACTION = 'transaction',
-}
-
 export enum EventMethod {
   ACCOUNTS_CHANGED = 'accountsChanged',
   CHAIN_CHANGED = 'chainChanged',
@@ -83,7 +78,6 @@ export namespace RequestMethod {
     ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
     ETH_NEW_FILTER = 'eth_newFilter',
     ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
-    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SIGN = 'eth_sign',
@@ -106,7 +100,6 @@ export namespace RequestMethod {
   export enum VULTISIG {
     DEPOSIT_TRANSACTION = 'deposit_transaction',
     GET_TRANSACTION_BY_HASH = 'get_transaction_by_hash',
-    REQUEST_ACCOUNTS = 'request_accounts',
     SEND_TRANSACTION = 'send_transaction',
     WALLET_ADD_CHAIN = 'wallet_add_chain',
     WALLET_SWITCH_CHAIN = 'wallet_switch_chain',

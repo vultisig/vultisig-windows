@@ -4,10 +4,12 @@ import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/confi
 import { fetchRujiraStakeView } from '@core/chain/chains/thorchain/ruji/services/fetchStakeView'
 import { useQuery } from '@tanstack/react-query'
 
-import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
+import { useCurrentVaultAddresses } from '../../state/currentVaultCoins'
 
 export const useRujiraStakeQuery = () => {
-  const address = useCurrentVaultAddress(Chain.THORChain)
+  const addresses = useCurrentVaultAddresses() || []
+  const [, address] =
+    Object.entries(addresses).find(([chain]) => chain === Chain.THORChain) || []
 
   return useQuery({
     queryKey: ['rujira', 'stakeView', address],

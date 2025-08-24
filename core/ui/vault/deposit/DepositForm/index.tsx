@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
@@ -27,31 +26,27 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositBalance } from '../hooks/useDepositBalance'
-import { useDepositCoin } from '../state/coin'
+import { useDepositAction } from '../providers/DepositActionProvider'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
-  selectedChainAction: ChainAction
-  onSelectChainAction: (action: ChainAction) => void
   chainActionOptions: ChainAction[]
   chain: Chain
 }
 
 export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
-  selectedChainAction,
-  onSelectChainAction,
   chainActionOptions,
   chain,
 }) => {
-  const [localSelectedCoin, setLocalSelectedCoin] = useState<Coin | null>(null)
-
+  const [selectedChainAction, setSelectedChainAction] = useDepositAction()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
 
@@ -59,9 +54,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction === 'stake' || selectedChainAction === 'unstake'
 
   const { balance, balanceFormatted } = useDepositBalance({
-    chain,
     selectedChainAction,
-    selectedCoin: localSelectedCoin,
   })
 
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
@@ -70,8 +63,6 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
     t
   )
-
-  const coin = useDepositCoin()
 
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
@@ -94,18 +85,11 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onSubmit',
   })
 
-  const selectedCoin = getValues('selectedCoin') as Coin | undefined
+  const [coin] = useDepositCoin()
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
   }
-
-  // @tony: This duplication is needed because we can only derive the selectedCoin from the form data and for the form data, we need to first pass the schema
-  useEffect(() => {
-    if (selectedCoin) {
-      setLocalSelectedCoin(selectedCoin)
-    }
-  }, [selectedCoin])
 
   return (
     <DepositFormHandlersProvider
@@ -145,7 +129,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 options={chainActionOptions}
                 onOptionClick={option => {
                   onClose()
-                  onSelectChainAction(option)
+                  setSelectedChainAction(option)
                 }}
               />
             )}
@@ -176,7 +160,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge' &&
                   !isTCYAction
-                    ? selectedCoin?.ticker || coin?.ticker
+                    ? coin?.ticker
                     : ''
 
                 return (

@@ -1,6 +1,4 @@
 import { UtxoChain } from '@core/chain/Chain'
-import { callBackground } from '@core/inpage-provider/background'
-import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -9,6 +7,8 @@ import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 type SupportedUtxoChain =
   | UtxoChain.Bitcoin
@@ -39,21 +39,8 @@ export class UTXO extends EventEmitter {
   }
 
   async requestAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
-    })
-  }
-
-  async getAccounts() {
-    return withFallback(
-      attempt(async () => [
-        await callBackground({
-          getAddress: { chain: this.chain },
-        }),
-      ]),
-      []
-    )
+    const { address } = await requestAccount(this.chain)
+    return [address]
   }
 
   async signPSBT(_psbt: string | Buffer) {
@@ -68,7 +55,12 @@ export class UTXO extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(this.chain)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
       const response = await messengers.background.send<
         any,
         Messaging.Chain.Response
@@ -81,16 +73,17 @@ export class UTXO extends EventEmitter {
         { id: uuidv4() }
       )
 
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
+      return processBackgroundResponse(data, this.providerType, response)
+    }
 
-      if (callback) callback(null, result)
+    try {
+      const result = await processRequest()
+
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }
