@@ -45,6 +45,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Tron]: 'https://tronscan.org/#',
   [Chain.Zcash]: 'https://blockchair.com/zcash',
   [Chain.Cardano]: 'https://cardanoscan.io',
+  [Chain.Mantle]: 'https://explorer.mantle.xyz',
 }
 
 export const getBlockExplorerUrl = ({
@@ -89,6 +90,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Tron]: () => `${baseUrl}/address/${value}`,
         [Chain.Zcash]: () => `${baseUrl}/address/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/address/${value}`,
+        [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -125,6 +127,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Tron]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/transaction/${value}`,
+        [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
       }),
   })
 }

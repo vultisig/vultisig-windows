@@ -568,6 +568,20 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'zksync',
     },
   },
+  [Chain.Mantle]: {
+    '0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE': {
+      ticker: 'USDT',
+      logo: 'usdt',
+      decimals: 6,
+      priceProviderId: 'tether',
+    },
+    '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9': {
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+    },
+  },
   ...knownCosmosTokens,
 }
 
