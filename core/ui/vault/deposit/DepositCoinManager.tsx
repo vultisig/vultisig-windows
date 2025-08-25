@@ -12,11 +12,8 @@ export const DepositCoinManager = ({
   children,
 }: ChildrenProp & { action: ChainAction }) => {
   const [coin, setCoin] = useDepositCoin()
-  console.log('🚀 ~ DepositCoinManager ~ coin:', coin)
 
   const { correctedCoin, isReady } = useCorrectSelectedCoin(action)
-  console.log('🚀 ~ DepositCoinManager ~ isReady:', isReady)
-  console.log('🚀 ~ DepositCoinManager ~ correctedCoin:', correctedCoin)
 
   const needsCorrection = useMemo(() => {
     if (!coin || !correctedCoin || !isReady) return false
