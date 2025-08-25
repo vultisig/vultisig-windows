@@ -1,0 +1,87 @@
+---
+description: windows/native-porting-sync – how to port and sync functionality from native iOS/Android apps into the TypeScript monorepo with 1:1 behavior while following our TS style and workspace rules
+globs: *.ts,*.tsx
+---
+
+## Native Porting & Sync Guide
+
+Expert guidance for porting or syncing features from the native iOS/Android repositories into this TypeScript monorepo, ensuring functional parity with native while using idiomatic, maintainable TypeScript that follows our workspace rules.
+
+### Scope and Responsibilities
+
+- Only modify the TypeScript monorepo. Treat native repositories as read-only specifications.
+- Functional behavior must match the native implementation 1:1. Implementation style must follow our TypeScript rules and architecture.
+- Preserve external contracts (inputs/outputs, side effects, errors) so that end-user experience and system behavior are identical.
+
+### Conformance to Repo Standards
+
+Follow the repo’s generic rules in `@rules/` as if implementing any other feature in this codebase. Do not restate or duplicate those rules here.
+
+### Porting Strategy
+
+1. Identify the native feature as the source of truth.
+   - Gather all inputs, outputs, state transitions, edge cases, and error conditions.
+   - Extract any constants, feature flags, and configuration.
+
+2. Map native concepts to TypeScript idioms.
+   - Swift optionals / Kotlin nullable → required values with `shouldBePresent()`/`assertField()` when they must exist; use proper union types for truly optional data.
+   - Swift/Kotlin enums and sealed types → discriminated unions or string literal unions.
+   - Error enums / sealed errors → discriminated unions or string unions; throw for unexpected states.
+   - Data classes / structs → `type` definitions; avoid `interface` unless implementing classes.
+   - Coroutines/suspend/flows → `async`/`await` and event/observable patterns as appropriate.
+   - Byte arrays → `Uint8Array`; respect encoding/endianness.
+
+3. Align architecture with our resolvers and routing.
+   - Use the standard routing patterns established in this repo (e.g., resolvers and router maps).
+   - Keep single responsibility per resolver set; share utilities where appropriate.
+
+4. Preserve algorithmic behavior and determinism.
+   - Keep operation order, rounding/precision, and edge-case handling identical.
+   - For crypto/serialization: match algorithms, parameters, endianness, and encoding.
+   - Prefer well-vetted libraries over custom implementations; verify against native test vectors.
+
+5. Error handling and user feedback.
+   - Mirror native error taxonomy for user-visible cases.
+   - Follow repo-standard error handling conventions.
+
+6. Internationalization and UX parity.
+   - Follow repo-standard i18n conventions.
+   - Keep UX-visible behavior (messages, counts, pluralization) consistent with native.
+
+7. Imports and package boundaries.
+   - Follow repo-standard import conventions and package boundaries.
+   - Do not import from or modify native repositories; treat them as specifications only.
+
+### Data and Precision Considerations
+
+- Numeric precision: use `BigInt` or decimal libraries when native uses arbitrary precision; avoid floating-point drift.
+- Time: match timezone semantics and epoch units (ms vs s) exactly.
+- Encoding: maintain hex/base64/base58 choices to match native contracts and APIs.
+- Serialization: mirror field ordering and canonical forms as used by native.
+
+### Testing for Parity
+
+- Extract examples and test vectors from native implementations when possible.
+- Add golden tests that validate identical outputs for the same inputs, including edge cases.
+- Where feasible, property-based tests can validate invariants derived from native behavior.
+- If platform differences force a deviation, document the rationale and add tests that guarantee the same external behavior.
+
+### Performance and Side Effects
+
+- Maintain asymptotic complexity and avoid regressions that could impact UX.
+- Preserve side-effect timing and ordering when they affect user-visible behavior or protocol correctness.
+
+### Porting Checklist
+
+- Validate inputs/outputs, side effects, and errors match native behavior.
+- Preserve algorithmic order, determinism, precision, and encodings.
+- Reproduce edge cases from native, including failure modes.
+- Add parity tests with native-derived vectors and golden cases.
+- Respect repo-standard architecture, i18n, imports, and typing conventions (per `@rules/`).
+- Run type checking if changes are cross-cutting.
+
+### Notes on Workspace Integration
+
+- Treat added native repositories in the workspace as read-only references.
+- Never modify native code; instead, port the behavior into this monorepo following these rules.
+- If a native API is ambiguous, prefer explicit assertions and clear types to avoid invalid states.
