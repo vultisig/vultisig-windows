@@ -9,12 +9,6 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
-import {
-  chainSigningType,
-  customMessageDefaultChain,
-  CustomMessageSupportedChain,
-  SigningType,
-} from '@core/ui/mpc/keysign/customMessage/config'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -22,13 +16,15 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { match } from '@lib/utils/match'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMutation } from '@tanstack/react-query'
-import { keccak256 } from 'js-sha3'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { customMessageSupportedChains } from '../customMessage/chains'
+import { getCustomMessageHex } from '../customMessage/getCustomMessageHex'
 
 type FastKeysignServerStepProps = OnFinishProp & {
   password: string
@@ -80,28 +76,12 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             vault_password: password,
           })
         },
-        custom: ({ message, chain: payloadChain }) => {
-          const chain =
-            (payloadChain as CustomMessageSupportedChain) ??
-            (customMessageDefaultChain as CustomMessageSupportedChain)
+        custom: async ({ message, chain = customMessageDefaultChain }) => {
+          if (!isOneOf(chain, customMessageSupportedChains)) {
+            throw new Error(`Unsupported chain ${chain}`)
+          }
 
-          const messageToHash = message.startsWith('0x')
-            ? Buffer.from(message.slice(2), 'hex')
-            : message
-
-          const signingType: SigningType = chainSigningType[chain]
-          if (!signingType)
-            throw new Error(`Unsupported signing for chain ${chain}`)
-
-          const messageBytes =
-            typeof messageToHash === 'string'
-              ? new TextEncoder().encode(messageToHash)
-              : messageToHash
-
-          const hexMessage = match(signingType, {
-            EIP191: () => keccak256(messageBytes),
-            RAW_BYTES: () => Buffer.from(messageBytes).toString('hex'),
-          })
+          const hexMessage = getCustomMessageHex({ chain, message })
 
           return signWithServer({
             public_key: publicKeys.ecdsa,
