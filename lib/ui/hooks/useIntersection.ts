@@ -1,33 +1,30 @@
-import { RefObject, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-type UseIntersectionParams = Pick<
-  IntersectionObserverInit,
-  'root' | 'rootMargin' | 'threshold'
->
+type Params = {
+  target: Element | null
+  root?: Element | null
+  rootMargin?: string
+  threshold?: number | number[]
+}
 
-export const useIntersection = (
-  ref: RefObject<HTMLElement | null>,
-  { root, rootMargin, threshold }: UseIntersectionParams
-): IntersectionObserverEntry | null => {
+export function useIntersection({
+  target,
+  root = null,
+  rootMargin = '0px',
+  threshold = 0,
+}: Params): IntersectionObserverEntry | null {
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null)
 
   useEffect(() => {
-    const node = ref.current
-    if (!node) return
-    if (typeof IntersectionObserver !== 'function') return
-
-    const observer = new IntersectionObserver(entries => setEntry(entries[0]), {
-      root: root ?? null,
+    if (!target || typeof IntersectionObserver !== 'function') return
+    const obs = new IntersectionObserver(([e]) => setEntry(e), {
+      root,
       rootMargin,
       threshold,
     })
-
-    observer.observe(node)
-    return () => {
-      setEntry(null)
-      observer.disconnect()
-    }
-  }, [ref, root, rootMargin, threshold])
+    obs.observe(target)
+    return () => obs.disconnect()
+  }, [target, root, rootMargin, threshold])
 
   return entry
 }
