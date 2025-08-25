@@ -23,7 +23,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { customMessageSupportedChains } from '../customMessage/chains'
+import {
+  customMessageDefaultChain,
+  customMessageSupportedChains,
+} from '../customMessage/chains'
 import { getCustomMessageHex } from '../customMessage/getCustomMessageHex'
 
 type FastKeysignServerStepProps = OnFinishProp & {
