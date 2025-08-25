@@ -22,7 +22,6 @@ export namespace Messaging {
       | TransactionResponse
       | ITransaction
       | RawTransactionReceipt
-      | BitcoinAccount[]
   }
 
   export namespace GetVault {
