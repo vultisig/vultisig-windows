@@ -1,10 +1,9 @@
 import { storage } from '@core/extension/storage'
-import { getWalletCore } from '@core/extension/tw'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { ITransaction } from '../../utils/interfaces'
-import { getParsedSolanaTransaction } from '../../utils/tx/solana/parseSolanaTransaction'
+import { getTransactionAuthority } from '../../utils/tx/solana/utils'
 
 type GetVaultIdByTransactionInput = Pick<ITransaction, 'transactionPayload'>
 
@@ -24,14 +23,8 @@ export const getVaultIdByTransaction = async ({
       custom.address ? await getVaultIdByAddress(custom.address) : undefined,
 
     serialized: async serialized => {
-      const walletCore = await getWalletCore()
-      const parsed = await getParsedSolanaTransaction(
-        walletCore,
-        serialized.data
-      )
-      return parsed.authority
-        ? await getVaultIdByAddress(parsed.authority)
-        : undefined
+      const authority = getTransactionAuthority(serialized.data)
+      return authority ? await getVaultIdByAddress(authority) : undefined
     },
   })
   return vaultId
