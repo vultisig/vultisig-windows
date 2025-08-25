@@ -3,7 +3,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ChildrenProp } from '@lib/ui/props'
 import { useLayoutEffect, useMemo } from 'react'
 
-import { useCurrentVaultCoins } from '../state/currentVaultCoins'
 import { ChainAction } from './ChainAction'
 import { useCorrectSelectedCoin } from './hooks/useCorrectSelectedCoin'
 import { useDepositCoin } from './providers/DepositCoinProvider'
@@ -13,15 +12,11 @@ export const DepositCoinManager = ({
   children,
 }: ChildrenProp & { action: ChainAction }) => {
   const [coin, setCoin] = useDepositCoin()
-  const coins = useCurrentVaultCoins()
-  const chain = coin?.chain
+  console.log('🚀 ~ DepositCoinManager ~ coin:', coin)
 
-  const { correctedCoin, isReady } = useCorrectSelectedCoin({
-    chain,
-    action,
-    selected: coin,
-    coins,
-  })
+  const { correctedCoin, isReady } = useCorrectSelectedCoin(action)
+  console.log('🚀 ~ DepositCoinManager ~ isReady:', isReady)
+  console.log('🚀 ~ DepositCoinManager ~ correctedCoin:', correctedCoin)
 
   const needsCorrection = useMemo(() => {
     if (!coin || !correctedCoin || !isReady) return false
