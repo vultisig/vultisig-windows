@@ -1,42 +1,30 @@
 import { Match } from '@lib/ui/base/Match'
 
-import {
-  stakeableAssetsTickers,
-  StakeableAssetTicker,
-  StakeableChain,
-} from '../../../../config'
+import { StakeableAssetTicker, StakeableChain } from '../../../../config'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
 import { StakeSpecific } from '../StakeSpecific'
 import { UnstakeTCYSpecific } from './UnstakeTCYSpecific'
 
 export const UnstakeSpecific = () => {
-  const [{ setValue, watch, chain, getValues }] = useDepositFormHandlers()
-
-  const selectedCoinTicker = watch('selectedCoin')
-    ?.ticker as StakeableAssetTicker
-
-  if (
-    !selectedCoinTicker ||
-    !stakeableAssetsTickers.includes(selectedCoinTicker)
-  ) {
-    return null
-  }
+  const [{ chain }] = useDepositFormHandlers()
+  const [{ ticker: selectedCoinTicker }] = useDepositCoin()
 
   return (
-    <Match
-      value={chain as StakeableChain}
-      THORChain={() => (
-        <>
-          <StakeSpecific />
-          <Match
-            value={selectedCoinTicker}
-            TCY={() => (
-              <UnstakeTCYSpecific getValues={getValues} setValue={setValue} />
-            )}
-          />
-        </>
-      )}
-      Ton={() => null}
-    />
+    <>
+      <StakeSpecific />
+      <Match
+        value={chain as StakeableChain}
+        THORChain={() => (
+          <>
+            <Match
+              value={selectedCoinTicker as StakeableAssetTicker}
+              TCY={() => <UnstakeTCYSpecific />}
+            />
+          </>
+        )}
+        Ton={() => null}
+      />
+    </>
   )
 }

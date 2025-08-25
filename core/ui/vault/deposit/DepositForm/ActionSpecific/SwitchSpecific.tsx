@@ -1,5 +1,4 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -13,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useIBCAcceptedTokens } from '../../hooks/useIBCAcceptedTokens'
 import { useSwitchTransferTargetQuery } from '../../hooks/useSwitchTransferTarget'
+import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import {
   AssetRequiredLabel,
@@ -22,8 +22,9 @@ import {
 import { TokenExplorer } from '../TokenExplorer'
 
 export const SwitchSpecific = () => {
-  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
+  const [{ setValue }] = useDepositFormHandlers()
   const { t } = useTranslation()
+  const [selectedCoin, setDepositCoin] = useDepositCoin()
 
   const {
     data: destinationAddress,
@@ -34,7 +35,7 @@ export const SwitchSpecific = () => {
     coin => coin.ticker === chainFeeCoin.THORChain.ticker
   )
 
-  const [{ coin }] = useCoreViewState<'deposit'>()
+  const [coin] = useDepositCoin()
   const tokens = useIBCAcceptedTokens(coin.chain)
 
   useEffect(() => {
@@ -52,8 +53,6 @@ export const SwitchSpecific = () => {
       })
     }
   }, [setValue, throchainCoin])
-
-  const selectedCoin = getValues('selectedCoin')
 
   return (
     <>
@@ -96,7 +95,7 @@ export const SwitchSpecific = () => {
           <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
-                {selectedCoin?.ticker || t('select_token')}
+                {selectedCoin.ticker || t('select_token')}
               </Text>
               {!selectedCoin && (
                 <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -112,10 +111,8 @@ export const SwitchSpecific = () => {
         renderContent={({ onClose }) => (
           <TokenExplorer
             options={tokens}
-            activeOption={watch('selectedCoin')}
-            onOptionClick={token =>
-              setValue('selectedCoin', token, { shouldValidate: true })
-            }
+            activeOption={selectedCoin}
+            onOptionClick={token => setDepositCoin(token)}
             onClose={onClose}
           />
         )}

@@ -1,6 +1,7 @@
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { omit } from '@lib/utils/record/omit'
 
 type UpdateAppSessionFieldsInput = {
   vaultId: string
@@ -14,6 +15,10 @@ export type AppSession = {
   selectedEVMChainId?: string
   selectedCosmosChainId?: string
 }
+
+export type VaultAppSession = {
+  vaultId: string
+} & AppSession
 
 export type VaultsAppSessions = Record<string, Record<string, AppSession>>
 
@@ -64,4 +69,38 @@ export const updateAppSession = async ({
 
   await setVaultsAppSessions(updatedAll)
   return updatedSession
+}
+
+export const addVaultAppSession = async ({
+  vaultId,
+  ...session
+}: VaultAppSession): Promise<void> => {
+  const allSessions = await getVaultsAppSessions()
+  const vaultSessions = allSessions[vaultId]
+
+  await setVaultsAppSessions({
+    ...allSessions,
+    [vaultId]: { ...vaultSessions, [session.host]: session },
+  })
+}
+
+export type VaultAppSessionKey = Pick<VaultAppSession, 'vaultId' | 'host'>
+
+export const removeVaultAppSession = async ({
+  vaultId,
+  host,
+}: VaultAppSessionKey): Promise<void> => {
+  const allSessions = await getVaultsAppSessions()
+
+  await setVaultsAppSessions({
+    ...allSessions,
+    [vaultId]: omit(allSessions[vaultId], host),
+  })
+}
+
+export const removeAllVaultAppSessions = async (
+  vaultId: string
+): Promise<void> => {
+  const allSessions = await getVaultsAppSessions()
+  await setVaultsAppSessions(omit(allSessions, vaultId))
 }

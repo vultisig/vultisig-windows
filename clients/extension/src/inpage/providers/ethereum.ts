@@ -12,8 +12,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback } from '../constants'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
 
 export class Ethereum extends EventEmitter {
   public chainId: string
@@ -82,13 +82,6 @@ export class Ethereum extends EventEmitter {
     return Ethereum.instance
   }
 
-  async enable() {
-    return await this.request({
-      method: RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS,
-      params: [],
-    })
-  }
-
   emitAccountsChanged(addresses: string[]) {
     if (addresses.length) {
       const [address] = addresses
@@ -124,89 +117,77 @@ export class Ethereum extends EventEmitter {
     return this
   }
 
-  async send(x: any, y: any) {
-    if (typeof x === 'string') {
-      return await this.request({ method: x, params: y ?? [] })
-    } else if (typeof y === 'function') {
-      this.request(x, y)
-    } else {
-      return await this.request(x)
+  async request(data: Messaging.Chain.Request) {
+    // TODO: Extract handling of Ethereum requests
+    const handlers = {
+      eth_chainId: async () =>
+        callBackground({
+          getAppChainId: { chainKind: 'evm' },
+        }),
+      eth_accounts: async () =>
+        withFallback(
+          attempt(async () => {
+            const chain = await callBackground({
+              getAppChain: { chainKind: 'evm' },
+            })
+
+            const { address } = await callBackground({
+              getAccount: { chain },
+            })
+
+            return [address]
+          }),
+          []
+        ),
+      eth_requestAccounts: async () => {
+        const chain = await callBackground({
+          getAppChain: { chainKind: 'evm' },
+        })
+
+        const { address } = await requestAccount(chain)
+
+        return [address]
+      },
+      // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
+      wallet_getPermissions: async () => [],
+      wallet_requestPermissions: async () => [],
+    } as const
+
+    if (data.method in handlers) {
+      return handlers[data.method as keyof typeof handlers]()
     }
-  }
 
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
-      const processRequest = async () => {
-        // TODO: Extract handling of Ethereum requests
-        const handlers = {
-          eth_chainId: async () =>
-            callBackground({
-              getAppChainId: { chainKind: 'evm' },
-            }),
-          eth_accounts: async () =>
-            withFallback(
-              attempt(async () => {
-                const chain = await callBackground({
-                  getAppChain: { chainKind: 'evm' },
-                })
+    const response = await messengers.background.send<
+      any,
+      Messaging.Chain.Response
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.ETHEREUM_REQUEST,
+        message: data,
+      },
+      { id: uuidv4() }
+    )
 
-                const address = await callBackground({
-                  getAddress: { chain },
-                })
+    const result = processBackgroundResponse(
+      data,
+      MessageKey.ETHEREUM_REQUEST,
+      response
+    )
 
-                return [address]
-              }),
-              []
-            ),
-          // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
-          wallet_getPermissions: async () => [],
-          wallet_requestPermissions: async () => [],
-        } as const
-
-        if (data.method in handlers) {
-          return handlers[data.method as keyof typeof handlers]()
-        }
-
-        const response = await messengers.background.send<
-          any,
-          Messaging.Chain.Response
-        >(
-          'providerRequest',
-          {
-            type: MessageKey.ETHEREUM_REQUEST,
-            message: data,
-          },
-          { id: uuidv4() }
-        )
-
-        return processBackgroundResponse(
-          data,
-          MessageKey.ETHEREUM_REQUEST,
-          response
-        )
+    switch (data.method) {
+      case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
+      case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
+        this.emitUpdateNetwork({ chainId: result as string })
+        break
       }
-
-      const result = await processRequest()
-
-      switch (data.method) {
-        case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
-        case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-          this.emitUpdateNetwork({ chainId: result as string })
-          break
-        }
-        case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-          this.emit(EventMethod.DISCONNECT, result)
-          break
-        }
+      case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+        this.emit(EventMethod.DISCONNECT, result)
+        break
       }
-
-      if (callback) callback(null, result)
-
-      return result
-    } catch (error) {
-      if (callback) callback(error as Error)
-      throw error
     }
+
+    return result
   }
 
   _connect = (): void => {

@@ -4,7 +4,6 @@ export type AppView =
   | CoreView
   | { id: 'onboarding' }
   | { id: 'connectedDapps' }
-  | { id: 'connectTab' }
   | { id: 'transactionTab' }
 
 export type AppViewId = AppView['id']

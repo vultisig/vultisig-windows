@@ -1,7 +1,7 @@
 import { storage } from '@core/extension/storage'
 import {
-  type AppSession,
   getVaultAppSessions,
+  VaultAppSession,
 } from '@core/extension/storage/appSessions'
 import type { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import type { BackgroundResolver } from '@core/inpage-provider/background/resolver'
@@ -9,13 +9,13 @@ import type { BridgeContext } from '@lib/extension/bridge/context'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import { UnauthorizedError } from '../../core/error'
+import { BackgroundError } from '../error'
 
 export const authorized =
   <K extends BackgroundMethod>(
     resolver: BackgroundResolver<
       K,
-      BridgeContext & { appSession: AppSession; vaultId: string }
+      BridgeContext & { appSession: VaultAppSession }
     >
   ): BackgroundResolver<K> =>
   async params => {
@@ -31,15 +31,14 @@ export const authorized =
     const appSession = vaultSessions[getUrlBaseDomain(requestOrigin)]
 
     if (!appSession) {
-      throw new UnauthorizedError()
+      throw BackgroundError.Unauthorized
     }
 
     return resolver({
       ...params,
       context: {
         ...params.context,
-        appSession,
-        vaultId,
+        appSession: { ...appSession, vaultId },
       },
     })
   }

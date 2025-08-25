@@ -1,6 +1,4 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { callBackground } from '@core/inpage-provider/background'
-import { attempt, withFallback } from '@lib/utils/attempt'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
@@ -9,6 +7,7 @@ import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
+import { getSharedHandlers } from './core/sharedHandlers'
 export class THORChain extends BaseCosmosChain {
   public static instance: THORChain | null = null
   public messageKey = MessageKey.THOR_REQUEST
@@ -29,18 +28,7 @@ export class THORChain extends BaseCosmosChain {
     callback?: Callback
   ): Promise<Messaging.Chain.Response> {
     const processRequest = async () => {
-      // TODO: Extract handling of Thorchain requests
-      const handlers = {
-        get_accounts: async () =>
-          withFallback(
-            attempt(async () => [
-              await callBackground({
-                getAddress: { chain: CosmosChain.THORChain },
-              }),
-            ]),
-            []
-          ),
-      } as const
+      const handlers = getSharedHandlers(CosmosChain.THORChain)
 
       if (data.method in handlers) {
         return handlers[data.method as keyof typeof handlers]()
@@ -64,10 +52,11 @@ export class THORChain extends BaseCosmosChain {
     try {
       const result = await processRequest()
 
-      if (callback) callback(null, result)
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

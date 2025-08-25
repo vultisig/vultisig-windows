@@ -1,16 +1,16 @@
-import { Coin } from '@core/chain/coin/Coin'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 
 type Props = {
-  onOptionClick: (option: Coin) => void
+  onOptionClick: (option: AccountCoin) => void
   onClose: () => void
-  options: Coin[]
+  options: AccountCoin[]
 }
 
 export const RedeemTokenExplorer: FC<Props> = ({
@@ -18,11 +18,8 @@ export const RedeemTokenExplorer: FC<Props> = ({
   onOptionClick,
   options,
 }) => {
-  const [{ watch }] = useDepositFormHandlers()
-
+  const [selectedCoin] = useDepositCoin()
   const { t } = useTranslation()
-
-  const activeOption = watch('selectedCoin')
 
   return (
     <Modal onClose={onClose} title={t('select_token')}>
@@ -32,7 +29,7 @@ export const RedeemTokenExplorer: FC<Props> = ({
             <DepositActionOption
               key={index}
               value={token.ticker}
-              isActive={activeOption?.ticker === token.ticker}
+              isActive={selectedCoin.ticker === token.ticker}
               onClick={() => onOptionClick(token)}
             />
           )

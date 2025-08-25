@@ -14,7 +14,6 @@ export namespace Messaging {
     export type Request = {
       method: string
       params: Record<string, any>[]
-      context?: RequestContext
     }
     export type Response =
       | string
@@ -42,15 +41,6 @@ export namespace Messaging {
   }
 }
 
-export type AccountsProps = {
-  chain: Chain
-  sender: string
-}
-
-export type PluginRequestProps = {
-  id: string
-}
-
 type ICustomTransactionPayload = {
   method: string
   address: string
@@ -64,10 +54,6 @@ export type ProviderId =
   | 'phantom-override'
   | 'keplr-override'
   | 'ctrl-override'
-
-export type RequestContext = {
-  provider: ProviderId
-}
 
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
@@ -212,15 +198,6 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
-
-export type CosmosAccount = {
-  pubkey: number[]
-  address: string
-  algo: 'secp256k1'
-  bech32Address: string
-  isKeystone: boolean
-  isNanoLedger: boolean
-}
 
 export type TransactionDetailsAsset = {
   chain: string
