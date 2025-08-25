@@ -627,6 +627,8 @@ export const hr = {
     downloadButton: 'Preuzmi sada.',
     currentVersion: '{{localVersion}}',
     title: 'Provjeri ažuriranje',
+    version: 'Verzija {{latestVersion}}',
+    update_is_available: 'Dostupno je ažuriranje',
   },
   updatePopup: {
     updateAvailableMessage:

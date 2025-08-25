@@ -1,11 +1,8 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
-import { useEffect } from 'react'
 
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
-import { ChainAction } from '../ChainAction'
-import { useCorrectSelectedCoin } from '../hooks/useCorrectSelectedCoin'
+import { DepositCoinManager } from '../DepositCoinManager'
 import { useDepositAction } from './DepositActionProvider'
 
 export const {
@@ -13,27 +10,6 @@ export const {
   provider: InternalDepositCoinProvider,
 } = getStateProviderSetup<AccountCoin>('DepositCoin')
 
-const DepositCoinManager = ({ action }: { action: ChainAction }) => {
-  const [coin, setCoin] = useDepositCoin()
-  const chain = coin?.chain
-  const coins = useCurrentVaultCoins()
-  const correctCoin = useCorrectSelectedCoin({
-    chain,
-    action,
-    selected: coin,
-    coins,
-  })
-
-  useEffect(() => {
-    const correctedCoin = correctCoin()
-    const isSameAsBefore =
-      !!correctedCoin && correctedCoin.ticker === coin.ticker
-
-    if (!isSameAsBefore && correctedCoin) setCoin(correctedCoin)
-  }, [coin, correctCoin, setCoin])
-
-  return null
-}
 export const DepositCoinProvider = ({
   children,
   initialCoin,
@@ -42,8 +18,7 @@ export const DepositCoinProvider = ({
 
   return (
     <InternalDepositCoinProvider initialValue={initialCoin}>
-      <DepositCoinManager action={action} />
-      {children}
+      <DepositCoinManager action={action}>{children}</DepositCoinManager>
     </InternalDepositCoinProvider>
   )
 }
