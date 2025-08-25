@@ -640,9 +640,11 @@ export const pt = {
     fetchingLatestVersion: 'Buscando a versão mais recente...',
     applicationUpToDate: 'O aplicativo está atualizado.',
     newVersionAvailable: 'Uma nova versão ({{latestVersion}}) está disponível!',
-    downloadButton: 'Baixe agora.',
     currentVersion: '{{localVersion}}',
     title: 'Verificar atualização',
+    version: 'Versão {{latestVersion}}',
+    downloadButton: 'Atualizar agora',
+    update_is_available: 'Uma atualização está disponível',
   },
   updatePopup: {
     updateAvailableMessage:

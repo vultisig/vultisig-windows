@@ -1,6 +1,7 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, CosmosChain } from '@core/chain/Chain'
 import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
@@ -18,6 +19,7 @@ type MemoParams = {
   depositFormData: FieldValues
   bondableAsset: MayaChainPool['asset']
   chain: Chain
+  coin: AccountCoin
 }
 
 export const generateMemo = ({
@@ -25,6 +27,7 @@ export const generateMemo = ({
   depositFormData,
   bondableAsset,
   chain,
+  coin,
 }: MemoParams): string => {
   const {
     nodeAddress,
@@ -34,7 +37,6 @@ export const generateMemo = ({
     provider,
     operatorFee,
     destinationChain,
-    selectedCoin,
     thorchainAddress,
   } = extractFormValues(depositFormData)
 
@@ -42,20 +44,20 @@ export const generateMemo = ({
     stake_ruji: () => {
       const chainAmount = toChainAmount(
         shouldBePresent(Number(amount)),
-        selectedCoin!.decimals
+        coin.decimals
       ).toString()
       return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
     },
     unstake_ruji: () => {
       const chainAmount = toChainAmount(
         shouldBePresent(Number(amount)),
-        selectedCoin!.decimals
+        coin.decimals
       ).toString()
       return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
     },
     withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
     mint: () => {
-      const token = shouldBePresent(selectedCoin, 'Selected coin')
+      const token = shouldBePresent(coin, 'Selected coin')
       const amountInUnits = toChainAmount(
         shouldBePresent(amount),
         token.decimals
@@ -66,7 +68,7 @@ export const generateMemo = ({
       return `receive:${base}:${amountInUnits}`
     },
     redeem: () => {
-      const token = shouldBePresent(selectedCoin, 'Selected coin')
+      const token = shouldBePresent(coin, 'Selected coin')
       const amountInUnits = toChainAmount(
         shouldBePresent(amount),
         token.decimals
@@ -78,7 +80,7 @@ export const generateMemo = ({
       match(chain as StakeableChain, {
         Ton: () => 'd',
         THORChain: () => {
-          if (selectedCoin?.ticker === 'TCY') {
+          if (coin.ticker === 'TCY') {
             return 'tcy+'
           }
           throw new Error(
@@ -90,7 +92,7 @@ export const generateMemo = ({
       match(chain as StakeableChain, {
         Ton: () => 'w',
         THORChain: () => {
-          if (selectedCoin?.ticker === 'TCY') {
+          if (coin.ticker === 'TCY') {
             const pct = shouldBePresent(
               depositFormData.percentage,
               'Percentage'
@@ -152,7 +154,7 @@ export const generateMemo = ({
       return `${destinationChain}:${sourceChannel}:${nodeAddress}`
     },
     merge: () => {
-      const token = shouldBePresent(selectedCoin, 'Token to merge')
+      const token = shouldBePresent(coin, 'Token to merge')
       const denom =
         token.chain === Chain.THORChain
           ? token.ticker.toLowerCase()
@@ -167,13 +169,13 @@ export const generateMemo = ({
       if (!amount) {
         throw new Error('Amount is required for unmerge')
       }
-      if (!selectedCoin) {
+      if (!coin) {
         throw new Error('Token is required for unmerge')
       }
 
-      const sharesRaw = toChainAmount(amount, selectedCoin.decimals)
+      const sharesRaw = toChainAmount(amount, coin.decimals)
       // For unmerge, use the full coin ID (e.g., "thor.kuji")
-      const denom = shouldBePresent(selectedCoin.id)
+      const denom = shouldBePresent(coin.id)
       const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
 
       return memo
@@ -193,7 +195,7 @@ function extractFormValues(formData: FieldValues) {
     operatorFee: formData.operatorFee as string | null,
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
-    selectedCoin: formData.selectedCoin as Coin | null,
+    coin: formData.coin as Coin | null,
     thorchainAddress: formData.thorchainAddress as string | null,
   }
 }

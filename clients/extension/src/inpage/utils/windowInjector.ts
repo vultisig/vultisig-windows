@@ -2,9 +2,13 @@ import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { messengers } from '@clients/extension/src/inpage/messenger'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
-import { callBackground } from '@core/inpage-provider/background'
+import { UtxoChain } from '@core/chain/Chain'
+import { callPopup } from '@core/inpage-provider/popup'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
+
+import { MessageKey } from '../../utils/constants'
+import { UTXO } from '../providers/utxo'
 
 export const injectToWindow = () => {
   const providers = createProviders()
@@ -12,7 +16,7 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
-    getVaults: async () => callBackground({ getVaults: {} }),
+    getVaults: async () => callPopup({ exportVaults: {} }),
   }
 
   Object.defineProperty(window, 'vultisig', {
@@ -49,7 +53,11 @@ function setupContentScriptMessenger(
 ) {
   const ethereumProvider = providers.ethereum
   const phantomProvider = {
-    bitcoin: providers.bitcoin,
+    bitcoin: new UTXO(
+      MessageKey.BITCOIN_REQUEST,
+      UtxoChain.Bitcoin,
+      'phantom-override'
+    ),
     ethereum: ethereumProvider,
     solana: providers.solana,
   }

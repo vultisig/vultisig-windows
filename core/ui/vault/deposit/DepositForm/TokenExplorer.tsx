@@ -1,4 +1,4 @@
-import { Coin } from '@core/chain/coin/Coin'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -7,10 +7,10 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
-  activeOption?: Coin
-  onOptionClick: (option: Coin) => void
+  activeOption?: AccountCoin
+  onOptionClick: (option: AccountCoin) => void
   onClose: () => void
-  options: Coin[]
+  options: AccountCoin[]
 }
 
 export const TokenExplorer: FC<Props> = ({

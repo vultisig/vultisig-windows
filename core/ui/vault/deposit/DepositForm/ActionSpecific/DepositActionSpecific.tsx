@@ -1,10 +1,7 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
-import { useSelectedCoinCorrector } from '../../hooks/useSelectedCoinCorrector'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
@@ -22,11 +19,9 @@ type Props = {
 }
 
 export const DepositActionSpecific = ({ action }: Props) => {
-  useSelectedCoinCorrector(action)
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
-  const selectedCoin = getValues('selectedCoin') as Coin | null
 
   return (
     <PartialMatch
@@ -45,16 +40,14 @@ export const DepositActionSpecific = ({ action }: Props) => {
           />
         ),
         ibc_transfer: () => <IBCTransferSpecific />,
-        merge: () => <MergeSpecific selectedCoin={selectedCoin} />,
+        merge: () => <MergeSpecific />,
         switch: () => <SwitchSpecific />,
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
-        unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
+        unmerge: () => <UnmergeSpecific />,
         mint: () => <MintSpecific />,
         redeem: () => <RedeemSpecific />,
-        withdraw_ruji_rewards: () => (
-          <WithdrawRujiRewardsSpecific value={shouldBePresent(selectedCoin)} />
-        ),
+        withdraw_ruji_rewards: () => <WithdrawRujiRewardsSpecific />,
       }}
       else={() => null}
     />

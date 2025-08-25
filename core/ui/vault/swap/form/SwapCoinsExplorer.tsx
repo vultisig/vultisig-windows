@@ -49,7 +49,10 @@ export const SwapCoinsExplorer = ({
     chain: currentChain,
   })
 
-  const mergedOptions = [...sortedSwapCoins, ...discoveredCoins]
+  const mergedOptions = useMemo(
+    () => [...sortedSwapCoins, ...discoveredCoins],
+    [discoveredCoins, sortedSwapCoins]
+  )
 
   return (
     <SelectItemModal

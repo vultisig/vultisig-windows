@@ -13,4 +13,5 @@ export const evmChainTxFeeFormat: Record<EvmChain, EvmTxFeeFormat> = {
   [EvmChain.BSC]: 'legacy',
   [EvmChain.Ethereum]: 'enveloped',
   [EvmChain.Polygon]: 'enveloped',
+  [EvmChain.Mantle]: 'enveloped',
 }

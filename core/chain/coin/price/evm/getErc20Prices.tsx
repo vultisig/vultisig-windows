@@ -24,6 +24,7 @@ const coinGeckoNetwork: Record<EvmChain, string> = {
   [EvmChain.BSC]: 'binance-smart-chain',
   [EvmChain.Zksync]: 'zksync',
   [EvmChain.CronosChain]: 'cronos',
+  [EvmChain.Mantle]: 'mantle',
 }
 
 export const getErc20Prices = async ({

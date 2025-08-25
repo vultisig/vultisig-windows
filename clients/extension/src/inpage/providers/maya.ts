@@ -1,11 +1,12 @@
+import { CosmosChain } from '@core/chain/Chain'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MessageKey } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
+import { getSharedHandlers } from './core/sharedHandlers'
 export class MAYAChain extends BaseCosmosChain {
   public static instance: MAYAChain | null = null
   public messageKey = MessageKey.MAYA_REQUEST
@@ -25,11 +26,13 @@ export class MAYAChain extends BaseCosmosChain {
     data: Messaging.Chain.Request,
     callback?: Callback
   ): Promise<Messaging.Chain.Response> {
-    try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(CosmosChain.MayaChain)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
+      return messengers.background.send<any, Messaging.Chain.Response>(
         'providerRequest',
         {
           type: this.messageKey,
@@ -37,13 +40,16 @@ export class MAYAChain extends BaseCosmosChain {
         },
         { id: uuidv4() }
       )
+    }
 
-      const result = processBackgroundResponse(data, this.messageKey, response)
+    try {
+      const result = await processRequest()
 
-      if (callback) callback(null, result)
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

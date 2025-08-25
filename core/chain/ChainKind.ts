@@ -11,6 +11,7 @@ const chainKindRecord = {
   [EvmChain.Optimism]: 'evm',
   [EvmChain.Polygon]: 'evm',
   [EvmChain.Zksync]: 'evm',
+  [EvmChain.Mantle]: 'evm',
 
   [UtxoChain.Bitcoin]: 'utxo',
   [UtxoChain.BitcoinCash]: 'utxo',

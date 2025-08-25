@@ -12,6 +12,7 @@ import {
   bsc,
   cronos,
   mainnet,
+  mantle,
   optimism,
   polygon,
   zksync,
@@ -28,6 +29,7 @@ export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.BSC]: `${rootApiUrl}/bsc/`,
   [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
   [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
+  [EvmChain.Mantle]: `${rootApiUrl}/mantle/`,
 }
 
 const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
@@ -41,6 +43,7 @@ const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.BSC]: bsc,
   [EvmChain.Zksync]: zksync,
   [EvmChain.Avalanche]: avalanche,
+  [EvmChain.Mantle]: mantle,
 }
 
 const evmChainId: Record<EvmChain, string> = recordMap(

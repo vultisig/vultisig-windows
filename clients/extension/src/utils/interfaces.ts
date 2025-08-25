@@ -11,7 +11,10 @@ import { CosmosMsgType } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
-    export type Request = { method: string; params: Record<string, any>[] }
+    export type Request = {
+      method: string
+      params: Record<string, any>[]
+    }
     export type Response =
       | string
       | string[]
@@ -37,21 +40,27 @@ export namespace Messaging {
   }
 }
 
-export type AccountsProps = {
-  chain: Chain
-  sender: string
-}
-
-export type PluginRequestProps = {
-  id: string
-}
-
 type ICustomTransactionPayload = {
   method: string
   address: string
   message: string
   chain?: Chain
   prefix?: string
+}
+
+export type ProviderId =
+  | 'vultisig'
+  | 'phantom-override'
+  | 'keplr-override'
+  | 'ctrl-override'
+
+type BitcoinAccountPurpose = 'payment' | 'ordinals'
+
+export type BitcoinAccount = {
+  address: string
+  publicKey: string
+  addressType: string
+  purpose: BitcoinAccountPurpose
 }
 
 export namespace TransactionType {
@@ -188,15 +197,6 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
-
-export type CosmosAccount = {
-  pubkey: number[]
-  address: string
-  algo: 'secp256k1'
-  bech32Address: string
-  isKeystone: boolean
-  isNanoLedger: boolean
-}
 
 export type TransactionDetailsAsset = {
   chain: string
