@@ -20,7 +20,7 @@ export type VaultAppSession = {
   vaultId: string
 } & AppSession
 
-export type VaultsAppSessions = Record<string, Record<string, AppSession>>
+type VaultsAppSessions = Record<string, Record<string, AppSession>>
 
 export const setVaultsAppSessions = async (
   sessions: VaultsAppSessions
