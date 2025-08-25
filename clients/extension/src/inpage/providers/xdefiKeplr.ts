@@ -28,6 +28,7 @@ import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
+import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { ITransaction } from '../../utils/interfaces'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
@@ -118,9 +119,13 @@ export class XDEFIKeplrProvider extends Keplr {
       })
 
       if (selectedChainId !== chainId) {
-        await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-          params: [{ chainId }],
+        const chain = getCosmosChainByChainId(chainId)
+        if (!chain) {
+          throw new EIP1193Error('UnrecognizedChain')
+        }
+
+        await callBackground({
+          setAppChain: { cosmos: chain },
         })
       }
 

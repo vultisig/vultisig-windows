@@ -8,6 +8,7 @@ type Type =
   | 'MethodNotFound'
   | 'InvalidParams'
   | 'InternalError'
+  | 'UnrecognizedChain'
 
 const errors: Record<Type, { code: number; message: string }> = {
   UserRejectedRequest: {
@@ -46,6 +47,7 @@ const errors: Record<Type, { code: number; message: string }> = {
     code: -32603,
     message: 'Internal error',
   },
+  UnrecognizedChain: { code: 4902, message: 'Unrecognized chain ID' },
 } as const
 
 export class EIP1193Error extends Error {

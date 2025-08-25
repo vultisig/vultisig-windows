@@ -2,28 +2,9 @@ import {
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,
 } from '@clients/extension/src/types/thorchain'
-import {
-  toCamelCase,
-  toSnakeCase,
-} from '@clients/extension/src/utils/functions'
+import { toCamelCase } from '@clients/extension/src/utils/functions'
 import { Chain } from '@core/chain/Chain'
-import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import axios from 'axios'
-import { TransactionResponse } from 'ethers'
-
-import { RawTransactionReceipt } from './interfaces'
-
-namespace Derivation {
-  export type Params = {
-    publicKeyEcdsa: string
-    hexChainCode: string
-    derivePath: string
-  }
-
-  export type Props = {
-    publicKey: string
-  }
-}
 
 const api = axios.create({
   headers: { accept: 'application/json' },
@@ -57,30 +38,6 @@ api.interceptors.response.use(response => {
 })
 
 export default {
-  derivePublicKey: async (params: Derivation.Params) => {
-    return await api.post<Derivation.Props>(
-      `${apiRef.vultisig.airdrop}api/derive-public-key`,
-      toSnakeCase(params)
-    )
-  },
-  getFunctionSelector: async (hexFunction: string) => {
-    return new Promise<string>((resolve, reject) => {
-      api
-        .get<{ results: { textSignature: string }[] }>(
-          `${apiRef.fourByte}api/v1/signatures/?format=json&hex_signature=${hexFunction}&ordering=created_at`
-        )
-        .then(({ data }) => {
-          if (data.results?.length) {
-            const [result] = data.results
-
-            resolve(result.textSignature)
-          } else {
-            throw new Error('')
-          }
-        })
-        .catch(() => reject('Error getting FunctionSelector Text'))
-    })
-  },
   getIsFunctionSelector: async (hexFunction: string) => {
     return new Promise<boolean>(resolve => {
       api
@@ -90,34 +47,6 @@ export default {
         .then(({ data }) => resolve(data.count > 0))
         .catch(() => resolve(false))
     })
-  },
-  ethereum: {
-    async getTransactionByHash(
-      path: string,
-      hash: string
-    ): Promise<TransactionResponse> {
-      return await api
-        .post<{ result: TransactionResponse }>(path, {
-          id: 1,
-          jsonrpc: '2.0',
-          method: 'eth_getTransactionByHash',
-          params: [hash],
-        })
-        .then(({ data }) => data.result)
-    },
-    async getRawTransactionReceiptHash(
-      path: string,
-      hash: string
-    ): Promise<RawTransactionReceipt> {
-      return await api
-        .post<{ result: RawTransactionReceipt }>(path, {
-          id: 1,
-          jsonrpc: '2.0',
-          method: 'eth_getTransactionReceipt',
-          params: [hash],
-        })
-        .then(({ data }) => data.result)
-    },
   },
   thorchain: {
     getTransactionByHash(hash: string): Promise<ThornodeTxResponseSuccess> {
@@ -134,42 +63,6 @@ export default {
           })
           .catch(reject)
       })
-    },
-  },
-  transaction: {
-    getComplete: async (
-      uuid: string,
-      message?: string
-    ): Promise<KeysignSignature> => {
-      return new Promise((resolve, reject) => {
-        api
-          .get(`${apiRef.vultisig.api}router/complete/${uuid}/keysign`, {
-            headers: { message_id: message ?? '' },
-          })
-          .then(({ data, status }) => {
-            if (status === 200) {
-              const response: KeysignSignature = {
-                der_signature: data.DerSignature || data.derSignature,
-                msg: data.Msg || data.msg,
-                r: data.R || data.r,
-                recovery_id: data.RecoveryID || data.recoveryId,
-                s: data.S || data.s,
-              }
-
-              resolve(response)
-            }
-          })
-          .catch(reject)
-      })
-    },
-    getDevices: async (uuid: string) => {
-      return await api.get<string[]>(`${apiRef.vultisig.api}router/${uuid}`)
-    },
-    setStart: async (uuid: string, devices: string[]) => {
-      return await api.post(
-        `${apiRef.vultisig.api}router/start/${uuid}`,
-        devices
-      )
     },
   },
   utxo: {
