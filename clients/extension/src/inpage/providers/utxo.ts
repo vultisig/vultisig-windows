@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
+import { BitcoinAccount, Messaging, ProviderId } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
@@ -21,25 +21,44 @@ export class UTXO extends EventEmitter {
   public chain: UtxoChain
   private providerType: MessageKey
   public static instances: Map<string, UTXO>
-  constructor(providerType: string, chain: SupportedUtxoChain) {
+  private providerId: ProviderId
+  constructor(
+    providerType: string,
+    chain: SupportedUtxoChain,
+    providerId: ProviderId = 'vultisig'
+  ) {
     super()
     this.providerType = providerType as MessageKey
     this.chain = chain
+    this.providerId = providerId
   }
 
-  static getInstance(providerType: string, chain: SupportedUtxoChain): UTXO {
+  static getInstance(
+    providerType: string,
+    chain: SupportedUtxoChain,
+    providerId: ProviderId
+  ): UTXO {
     if (!UTXO.instances) {
       UTXO.instances = new Map<string, UTXO>()
     }
 
     if (!UTXO.instances.has(providerType)) {
-      UTXO.instances.set(providerType, new UTXO(providerType, chain))
+      UTXO.instances.set(
+        providerType,
+        new UTXO(providerType, chain, providerId)
+      )
     }
     return UTXO.instances.get(providerType)!
   }
 
-  async requestAccounts() {
-    const { address } = await requestAccount(this.chain)
+  async requestAccounts(): Promise<BitcoinAccount[] | string[]> {
+    const { address, publicKey } = await requestAccount(this.chain)
+    if (this.providerId === 'phantom-override') {
+      return [
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'payment' },
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'ordinals' },
+      ]
+    }
     return [address]
   }
 
