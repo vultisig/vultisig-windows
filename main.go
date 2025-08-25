@@ -65,8 +65,8 @@ func main() {
 		Title:     "Vultisig",
 		Width:     1024,
 		Height:    768,
-		MinHeight: 768,
-		MinWidth:  1024,
+	 	MinWidth:  320,   
+  		MinHeight: 240,   
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
