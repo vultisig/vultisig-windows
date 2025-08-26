@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { featureFlags } from '@core/ui/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -40,6 +41,8 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentVaultAddress } from '../vault/state/currentVaultCoins'
+
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
@@ -79,6 +82,10 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const thorchainAddressExists = Boolean(
+    useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
+  )
+  const areReferralEnabled = thorchainAddressExists && featureFlags.referrals
 
   return (
     <>
@@ -140,7 +147,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-            {featureFlags.referrals && (
+            {areReferralEnabled && (
               <ListItem
                 icon={<MegaphoneIcon fontSize={iconSize} />}
                 onClick={() => navigate({ id: 'referral' })}
