@@ -1,8 +1,5 @@
 import { storage } from '@core/extension/storage'
-import {
-  getVaultAppSessions,
-  VaultAppSession,
-} from '@core/extension/storage/appSessions'
+import { getVaultAppSessions } from '@core/extension/storage/appSessions'
 import { coinsStorage } from '@core/extension/storage/coins'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -10,15 +7,11 @@ import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import type { InpageProviderContext } from '../../bridge/context'
-
-export type AuthorizedContext = InpageProviderContext & {
-  appSession: VaultAppSession
-}
+import { AuthorizedCallContext, CallInitialContext } from '../../call/context'
 
 export const authorizeContext = async (
-  context: InpageProviderContext
-): Promise<AuthorizedContext> => {
+  context: CallInitialContext
+): Promise<AuthorizedCallContext> => {
   const { requestOrigin, account } = context
 
   const getVaultId = async () => {

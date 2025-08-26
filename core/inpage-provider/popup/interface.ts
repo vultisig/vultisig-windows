@@ -14,4 +14,9 @@ export type PopupMethod = keyof PopupInterface
 
 export const mergeableInFlightPopupMethods: PopupMethod[] = ['grantVaultAccess']
 
-export const authorizedMethods: PopupMethod[] = ['signMessage']
+export const authorizedPopupMethods = [
+  'signMessage',
+  'pluginReshare',
+] as const satisfies readonly PopupMethod[]
+
+export type AuthorizedPopupMethod = (typeof authorizedPopupMethods)[number]

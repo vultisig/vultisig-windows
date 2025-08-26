@@ -6,19 +6,16 @@ import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { Result } from '@lib/utils/types/Result'
 
-import {
-  authorizeContext,
-  AuthorizedContext,
-} from '../background/core/authorization'
+import { authorizeContext } from '../background/core/authorization'
 import {
   authorizedBackgroundMethods,
   BackgroundMethod,
 } from '../background/interface'
 import { BackgroundMessage } from '../background/resolver'
 import { backgroundResolvers } from '../background/resolvers'
-import { authorizedMethods as authorizedPopupMethods } from '../popup/interface'
+import { CallContext } from '../call/context'
+import { authorizedPopupMethods } from '../popup/interface'
 import { callPopupFromBackground } from '../popup/resolvers/background'
-import { InpageProviderContext } from './context'
 import { InpageProviderBridgeMessage } from './message'
 
 const callBackgroundResolver = <M extends BackgroundMethod = BackgroundMethod>({
@@ -26,7 +23,7 @@ const callBackgroundResolver = <M extends BackgroundMethod = BackgroundMethod>({
   context,
 }: {
   call: BackgroundMessage<M>['call']
-  context: InpageProviderContext | AuthorizedContext
+  context: CallContext
 }) => {
   const methodName = getRecordUnionKey(call)
   const input = getRecordUnionValue(call, methodName)
@@ -40,32 +37,19 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
   runBridgeBackgroundAgent<InpageProviderBridgeMessage, Result>({
     handleRequest: ({ message, context: initialContext, reply }) => {
       attempt(async () => {
-        const getExtendedContext = async () => {
-          const result: InpageProviderContext | AuthorizedContext = {
-            ...initialContext,
-          }
+        const requiresAuth = matchRecordUnion<
+          InpageProviderBridgeMessage,
+          boolean
+        >(message, {
+          background: ({ call }) =>
+            isOneOf(getRecordUnionKey(call), authorizedBackgroundMethods),
+          popup: ({ call }) =>
+            isOneOf(getRecordUnionKey(call), authorizedPopupMethods),
+        })
 
-          const { options } = getRecordUnionValue(message)
-          if (options?.account) {
-            result.account = options.account
-          }
-
-          const requiresAuth = matchRecordUnion<
-            InpageProviderBridgeMessage,
-            boolean
-          >(message, {
-            background: ({ call }) =>
-              isOneOf(getRecordUnionKey(call), authorizedBackgroundMethods),
-            popup: ({ call }) =>
-              isOneOf(getRecordUnionKey(call), authorizedPopupMethods),
-          })
-
-          if (!requiresAuth) return result
-
-          return authorizeContext(result)
-        }
-
-        const context = await getExtendedContext()
+        const context = requiresAuth
+          ? await authorizeContext(initialContext)
+          : initialContext
 
         return matchRecordUnion<InpageProviderBridgeMessage, Promise<unknown>>(
           message,
