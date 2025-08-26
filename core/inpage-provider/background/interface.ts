@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
+import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
@@ -20,6 +21,7 @@ export type BackgroundInterface = {
   getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
   signOut: Method<{}>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
+  exportVault: Method<{}, VaultExport>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
