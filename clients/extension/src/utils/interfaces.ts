@@ -11,7 +11,10 @@ import { CosmosMsgType } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
-    export type Request = { method: string; params: Record<string, any>[] }
+    export type Request = {
+      method: string
+      params: Record<string, any>[]
+    }
     export type Response =
       | string
       | string[]
@@ -42,6 +45,21 @@ type ICustomTransactionPayload = {
   message: string
   chain?: Chain
   prefix?: string
+}
+
+export type ProviderId =
+  | 'vultisig'
+  | 'phantom-override'
+  | 'keplr-override'
+  | 'ctrl-override'
+
+type BitcoinAccountPurpose = 'payment' | 'ordinals'
+
+export type BitcoinAccount = {
+  address: string
+  publicKey: string
+  addressType: string
+  purpose: BitcoinAccountPurpose
 }
 
 export namespace TransactionType {
