@@ -6,7 +6,6 @@ import {
 import { OnFinishProp } from '@lib/ui/props'
 import { Resolver } from '@lib/utils/types/Resolver'
 import { Result } from '@lib/utils/types/Result'
-import { M } from 'framer-motion/dist/types.d-B50aGbjN'
 import { ReactNode } from 'react'
 
 import {
@@ -14,10 +13,10 @@ import {
   UnauthorizedCallContext,
 } from '../../call/context'
 
-export type PopupResolver<K extends PopupMethod> = Resolver<
+export type PopupResolver<M extends PopupMethod> = Resolver<
   {
-    input: PopupInterface[K]['input']
-  } & OnFinishProp<Result<PopupInterface[K]['output']>> & {
+    input: PopupInterface[M]['input']
+  } & OnFinishProp<Result<PopupInterface[M]['output']>> & {
       context: M extends AuthorizedPopupMethod
         ? AuthorizedCallContext
         : UnauthorizedCallContext
