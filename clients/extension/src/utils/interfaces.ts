@@ -21,7 +21,6 @@ export namespace Messaging {
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
       | ITransaction
-      | RawTransactionReceipt
   }
 
   export namespace GetVault {
@@ -258,30 +257,3 @@ export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
     transactionPayload: ITransactionPayload
     windowId?: number
   }
-
-export type RawTransactionReceipt = {
-  blockHash: string
-  blockNumber: string
-  contractAddress: string | null
-  cumulativeGasUsed: string
-  effectiveGasPrice?: string
-  from: string
-  gasUsed: string
-  logs: Array<{
-    address: string
-    topics: string[]
-    data: string
-    blockNumber: string
-    transactionHash: string
-    transactionIndex: string
-    blockHash: string
-    logIndex: string
-    removed: boolean
-  }>
-  logsBloom: string
-  status: string
-  to: string | null
-  transactionHash: string
-  transactionIndex: string
-  type: string
-}

@@ -222,9 +222,8 @@ export class Solana implements Wallet {
 
   disconnect = async () => {
     this._publicKey = null
-    this.request({
-      method: RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS,
-      params: [],
+    await callBackground({
+      signOut: {},
     })
     this._isConnected = false
     await Promise.resolve()

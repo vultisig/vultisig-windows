@@ -1,4 +1,4 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { EvmChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { numberToHex } from '@lib/utils/hex/numberToHex'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
@@ -18,7 +18,7 @@ import {
   zksync,
 } from 'viem/chains'
 
-export const evmChainRpcUrls: Record<EvmChain, string> = {
+const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,
   [EvmChain.Base]: `${rootApiUrl}/base/`,
   [EvmChain.Arbitrum]: `${rootApiUrl}/arb/`,
@@ -70,6 +70,6 @@ export const getEvmChainId = (chain: EvmChain): string => {
   return evmChainId[chain]
 }
 
-export const getEvmChainByChainId = (chainId: string): Chain | undefined => {
+export const getEvmChainByChainId = (chainId: string): EvmChain | undefined => {
   return mirrorRecord(evmChainId)[chainId]
 }
