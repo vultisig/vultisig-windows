@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin' // <-- for RUNE
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -15,7 +16,6 @@ import { useCoinPriceQuery } from '../../../../../../../chain/coin/price/queries
 import { useFiatCurrency } from '../../../../../../../storage/fiatCurrency'
 import { useReferralSender } from '../../../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../../../providers/EditReferralFormProvider'
-import { useReferralPayoutAsset } from '../../../../providers/ReferralPayoutAssetProvider'
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
@@ -23,20 +23,16 @@ export const Fees = () => {
   const { t } = useTranslation()
   const { watch, setValue } = useEditReferralFormData()
   const address = useReferralSender()
-
   const existing = useUserValidThorchainNameQuery(address)
+  const runeCoin = chainFeeCoin.THORChain
+  const runePrice = useCoinPriceQuery({ coin: runeCoin })
   const currency = useFiatCurrency()
-  const [coin] = useReferralPayoutAsset()
-  const coinPrice = useCoinPriceQuery({ coin })
 
-  // user input (requested TOTAL years)
   const requestedYears = useDebounce(watch('expiration'), 300)
 
-  // fetch a 1-year quote and scale from it
   const tnsFees1y = useTnsFeesQuery(1)
 
-  // merge for loading/error handling
-  const query = useMergeQueries({ coinPrice, existing, tnsFees: tnsFees1y })
+  const query = useMergeQueries({ runePrice, existing, tnsFees: tnsFees1y })
 
   return (
     <VStack style={{ position: 'relative' }} gap={14}>
@@ -51,12 +47,13 @@ export const Fees = () => {
           <CenterAbsolutely>{extractErrorMsg(err)}</CenterAbsolutely>
         )}
         success={({
-          coinPrice,
+          runePrice,
           existing: valid,
           tnsFees: { registerFee, runeFee },
         }) => {
           const remaining = valid?.remainingYears ?? 0
           const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
+
           const perYearFee = runeFee - registerFee
           const extensionFee = perYearFee * yearsToAdd
 
@@ -66,8 +63,8 @@ export const Fees = () => {
             })
           }
 
-          const perYearFiat = formatAmount(perYearFee * coinPrice, currency)
-          const totalFiat = formatAmount(extensionFee * coinPrice, currency)
+          const perYearFiat = formatAmount(perYearFee * runePrice, currency)
+          const totalFiat = formatAmount(extensionFee * runePrice, currency)
 
           return (
             <>
