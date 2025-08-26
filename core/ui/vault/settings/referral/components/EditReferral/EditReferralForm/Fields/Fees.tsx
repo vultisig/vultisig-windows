@@ -19,22 +19,24 @@ import { useReferralPayoutAsset } from '../../../../providers/ReferralPayoutAsse
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
-const debounceDelayMs = 300
-
 export const Fees = () => {
   const { t } = useTranslation()
   const { watch, setValue } = useEditReferralFormData()
   const address = useReferralSender()
-  const existing = useUserValidThorchainNameQuery(address)
-  const yearsToAdd = watch('expiration')
-  const debouncedYears = useDebounce(yearsToAdd, debounceDelayMs)
 
-  const tnsFees = useTnsFeesQuery(debouncedYears)
+  const existing = useUserValidThorchainNameQuery(address)
   const currency = useFiatCurrency()
   const [coin] = useReferralPayoutAsset()
   const coinPrice = useCoinPriceQuery({ coin })
 
-  const query = useMergeQueries({ coinPrice, tnsFees, existing })
+  // user input (requested TOTAL years)
+  const requestedYears = useDebounce(watch('expiration'), 300)
+
+  // fetch a 1-year quote and scale from it
+  const tnsFees1y = useTnsFeesQuery(1)
+
+  // merge for loading/error handling
+  const query = useMergeQueries({ coinPrice, existing, tnsFees: tnsFees1y })
 
   return (
     <VStack style={{ position: 'relative' }} gap={14}>
@@ -50,24 +52,22 @@ export const Fees = () => {
         )}
         success={({
           coinPrice,
-          tnsFees: { registerFee, runeFee },
           existing: valid,
+          tnsFees: { registerFee, runeFee },
         }) => {
-          // only block-fees = runeFee - registerFee
-          const extensionCost = runeFee - registerFee
-          const currentValue = watch('referralFeeAmount')
+          const remaining = valid?.remainingYears ?? 0
+          const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
+          const perYearFee = runeFee - registerFee
+          const extensionFee = perYearFee * yearsToAdd
 
-          const perYearFee = extensionCost / debouncedYears
-
-          if (currentValue !== extensionCost) {
-            setValue('referralFeeAmount', extensionCost, {
+          if (watch('referralFeeAmount') !== extensionFee) {
+            setValue('referralFeeAmount', extensionFee, {
               shouldValidate: true,
             })
           }
 
-          // format fiat
           const perYearFiat = formatAmount(perYearFee * coinPrice, currency)
-          const totalFiat = formatAmount(extensionCost * coinPrice, currency)
+          const totalFiat = formatAmount(extensionFee * coinPrice, currency)
 
           return (
             <>
@@ -75,7 +75,7 @@ export const Fees = () => {
                 <Text size={13} color="supporting">
                   {t('current_expiry')}
                 </Text>
-                <Text size={14}>{Math.ceil(valid?.remainingYears)} yrs</Text>
+                <Text size={14}>{Math.ceil(remaining)} yrs</Text>
               </RowWrapper>
 
               <RowWrapper>
@@ -94,11 +94,11 @@ export const Fees = () => {
 
               <RowWrapper>
                 <Text size={13} color="supporting">
-                  {t('referral_extension_fee', { years: debouncedYears })}
+                  {t('referral_extension_fee', { years: yearsToAdd })}
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(extensionCost, 'RUNE')}
+                    {formatTokenAmount(extensionFee, 'RUNE')}
                   </Text>
                   <Text size={14} color="supporting">
                     {totalFiat}
