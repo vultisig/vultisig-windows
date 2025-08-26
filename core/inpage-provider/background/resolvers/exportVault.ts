@@ -5,6 +5,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { authorized } from '../middleware/authorized'
+import { hasServer } from '@core/mpc/devices/localPartyId'
 
 export const exportVault: BackgroundResolver<'exportVault'> = authorized(
   async () => {
@@ -21,7 +22,7 @@ export const exportVault: BackgroundResolver<'exportVault'> = authorized(
       hexChainCode: vault.hexChainCode,
       publicKeyEcdsa: vault.publicKeys.ecdsa,
       publicKeyEddsa: vault.publicKeys.eddsa,
-      singers: vault.signers,
+      isFastVault: hasServer(vault.signers),
     }
   }
 )
