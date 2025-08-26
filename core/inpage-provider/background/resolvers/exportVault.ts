@@ -21,6 +21,7 @@ export const exportVault: BackgroundResolver<'exportVault'> = authorized(
       hexChainCode: vault.hexChainCode,
       publicKeyEcdsa: vault.publicKeys.ecdsa,
       publicKeyEddsa: vault.publicKeys.eddsa,
+      singers: vault.signers,
     }
   }
 )
