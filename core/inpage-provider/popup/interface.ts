@@ -12,5 +12,6 @@ export type PopupInterface = {
 
 export type PopupMethod = keyof PopupInterface
 
-// Methods whose in-flight calls are merged; subsequent calls while the first is pending receive the first result.
 export const mergeableInFlightPopupMethods: PopupMethod[] = ['grantVaultAccess']
+
+export const authorizedMethods: PopupMethod[] = ['signMessage']

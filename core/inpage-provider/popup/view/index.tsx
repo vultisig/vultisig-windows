@@ -49,7 +49,7 @@ export const PopupView = () => {
         return (
           <Resolver
             input={input}
-            context={context}
+            context={context as any}
             onFinish={resolvePopupCall}
           />
         )

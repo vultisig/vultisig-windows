@@ -1,8 +1,13 @@
-import { mergeableInFlightPopupMethods } from '@core/inpage-provider/popup/interface'
+import {
+  authorizedMethods,
+  mergeableInFlightPopupMethods,
+} from '@core/inpage-provider/popup/interface'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { withInFlightCoalescer } from '@lib/utils/promise/coalesceInFlight'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 
+import { authorizeContext } from '../../../background/core/authorization'
 import { callIdQueryParam } from '../../config'
 import {
   isPopupMessage,
@@ -14,7 +19,15 @@ import { inNewWindow } from './inNewWindow'
 
 export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
   async ({ call, options, context }) => {
-    const callId = await addPopupViewCall({ call, context })
+    const method = getRecordUnionKey(call)
+
+    const existingContext = shouldBePresent(context, 'bridge context')
+
+    const augmentedContext = authorizedMethods.includes(method)
+      ? await authorizeContext(existingContext)
+      : existingContext
+
+    const callId = await addPopupViewCall({ call, context: augmentedContext })
 
     return inNewWindow({
       ...options,
