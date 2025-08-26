@@ -23,7 +23,7 @@ import styled from 'styled-components'
 
 import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
+import { useCurrentVaultAddress } from '../../../../state/currentVaultCoins'
 import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
@@ -42,10 +42,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
 
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
+  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
 
   const { data: allowedPools = [] } = useActivePoolsQuery()
 
