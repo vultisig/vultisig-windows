@@ -10,7 +10,7 @@ import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
 } from '../../../../storage/referrals'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { useCurrentVaultAddress } from '../../../state/currentVaultCoins'
 import { CreateReferralFormProvider } from '../providers/CreateReferralFormProvider'
 import { EditReferralFormProvider } from '../providers/EditReferralFormProvider'
 import { ReferralPayoutAssetProvider } from '../providers/ReferralPayoutAssetProvider'
@@ -38,10 +38,7 @@ export const ManageReferrals = () => {
     useFriendReferralQuery()
   const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
 
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
+  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
 
   const { data: validNameDetails, status } =
     useUserValidThorchainNameQuery(address)
