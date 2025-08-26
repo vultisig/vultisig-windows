@@ -1,11 +1,11 @@
 import { storage } from '@core/extension/storage'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { hasServer } from '@core/mpc/devices/localPartyId'
 import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { authorized } from '../middleware/authorized'
-import { hasServer } from '@core/mpc/devices/localPartyId'
 
 export const exportVault: BackgroundResolver<'exportVault'> = authorized(
   async () => {
