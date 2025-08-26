@@ -42,8 +42,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
 
-  const { processError } = useCore()
-  const { targetVaultId } = useCore()
+  const { processError, targetVaultId } = useCore()
 
   const query = useMergeQueries({
     vaults,
