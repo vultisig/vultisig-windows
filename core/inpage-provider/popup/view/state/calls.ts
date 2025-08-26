@@ -1,3 +1,4 @@
+import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { BridgeContext } from '@lib/extension/bridge/context'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
@@ -9,7 +10,7 @@ const popupViewCallsKey = 'popupViewCalls'
 
 type PopupViewCallEntry = {
   call: PopupCall<any>
-  context?: BridgeContext
+  context?: BridgeContext & { appSession?: VaultAppSession }
 }
 
 type PopupViewCalls = Record<string, PopupViewCallEntry>

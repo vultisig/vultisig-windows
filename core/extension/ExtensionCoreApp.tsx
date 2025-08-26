@@ -33,20 +33,23 @@ const baseCoreState: Omit<CoreState, 'goBack'> = {
 type ExtensionCoreAppProps = ChildrenProp & {
   processError?: ErrorBoundaryProcessError
   goBack: () => void
+  targetVaultId?: string
 }
 
 export const ExtensionCoreApp = ({
   children,
   processError,
   goBack,
+  targetVaultId,
 }: ExtensionCoreAppProps) => {
   const coreState = useMemo(
     () => ({
       ...baseCoreState,
       processError,
+      targetVaultId,
       goBack,
     }),
-    [processError, goBack]
+    [processError, targetVaultId, goBack]
   )
 
   return (

@@ -1,4 +1,3 @@
-import { VaultAppSession } from '@core/extension/storage/appSessions'
 import {
   authorizedMethods,
   PopupInterface,
@@ -10,16 +9,14 @@ import { Resolver } from '@lib/utils/types/Resolver'
 import { Result } from '@lib/utils/types/Result'
 import { ReactNode } from 'react'
 
-type AuthorizedPopupContext = BridgeContext & {
-  appSession: VaultAppSession
-}
+import { AuthorizedContext } from '../../background/core/authorization'
 
 export type PopupResolver<K extends PopupMethod> = Resolver<
   {
     input: PopupInterface[K]['input']
   } & OnFinishProp<Result<PopupInterface[K]['output']>> &
     (K extends (typeof authorizedMethods)[number]
-      ? { context: AuthorizedPopupContext }
+      ? { context: AuthorizedContext }
       : { context?: BridgeContext }),
   ReactNode
 >

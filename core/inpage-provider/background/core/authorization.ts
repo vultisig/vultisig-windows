@@ -8,7 +8,7 @@ import type { BridgeContext } from '@lib/extension/bridge/context'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-type AuthorizedContext = BridgeContext & {
+export type AuthorizedContext = BridgeContext & {
   appSession: VaultAppSession
 }
 
