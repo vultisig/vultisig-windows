@@ -19,7 +19,7 @@ const resolvers: Record<BridgeSide, PopupCallResolver<any>> = {
 
 export const callPopup = async <M extends PopupMethod>(
   call: PopupCall<M>,
-  options: PopupOptions = { closeOnFinish: true }
+  options: PopupOptions & { account?: string } = { closeOnFinish: true }
 ): Promise<PopupInterface[M]['output']> => {
   const source = getBridgeSide()
 

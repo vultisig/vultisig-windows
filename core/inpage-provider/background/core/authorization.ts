@@ -3,26 +3,45 @@ import {
   getVaultAppSessions,
   VaultAppSession,
 } from '@core/extension/storage/appSessions'
+import { coinsStorage } from '@core/extension/storage/coins'
 import { BackgroundError } from '@core/inpage-provider/background/error'
-import type { BridgeContext } from '@lib/extension/bridge/context'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-export type AuthorizedContext = BridgeContext & {
+import type { InpageProviderContext } from '../../bridge/context'
+
+export type AuthorizedContext = InpageProviderContext & {
   appSession: VaultAppSession
 }
 
 export const authorizeContext = async (
-  context: BridgeContext
+  context: InpageProviderContext
 ): Promise<AuthorizedContext> => {
-  const { requestOrigin } = context
+  const { requestOrigin, account } = context
 
-  const vaultId = shouldBePresent(
-    await storage.getCurrentVaultId(),
-    'currentVaultId'
-  )
+  const getVaultId = async () => {
+    if (account) {
+      const coinsRecord = await coinsStorage.getCoins()
+
+      const vaultId = getRecordKeys(coinsRecord).find(vaultId =>
+        coinsRecord[vaultId]?.some(c => areLowerCaseEqual(c.address, account))
+      )
+
+      if (vaultId) {
+        return vaultId
+      }
+
+      throw BackgroundError.Unauthorized
+    }
+
+    return shouldBePresent(await storage.getCurrentVaultId(), 'currentVaultId')
+  }
+
+  const vaultId = await getVaultId()
+
   const vaultSessions = await getVaultAppSessions(vaultId)
-
   const appSession = vaultSessions[getUrlBaseDomain(requestOrigin)]
 
   if (!appSession) {
