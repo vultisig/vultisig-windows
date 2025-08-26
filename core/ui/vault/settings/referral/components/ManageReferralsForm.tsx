@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ReferralPageWrapper } from './Referrals.styled'
 
@@ -24,10 +25,12 @@ export const ManageReferralsForm = ({
   onSaveReferral,
   onCreateReferral,
 }: Props) => {
+  const [value, setValue] = useState('')
+
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { data: friendReferral } = useFriendReferralQuery()
-  const [value, setValue] = useState('')
+  const vaultId = useAssertCurrentVaultId()
+  const { data: friendReferral } = useFriendReferralQuery(vaultId)
 
   useEffect(() => {
     if (friendReferral) {
