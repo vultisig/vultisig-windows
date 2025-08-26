@@ -6,6 +6,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useEffect, useState } from 'react'
 
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
@@ -34,9 +35,12 @@ type ManageReferralUIState =
 export const ManageReferrals = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
 
+  const vaultId = useAssertCurrentVaultId()
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
-    useFriendReferralQuery()
-  const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
+    useFriendReferralQuery(vaultId)
+
+  const { mutateAsync: setFriendReferral } =
+    useSetFriendReferralMutation(vaultId)
 
   const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
 
@@ -60,7 +64,6 @@ export const ManageReferrals = () => {
         value={uiState}
         editFriendReferral={() => (
           <EditFriendReferralForm
-            userReferralName={validNameDetails?.name}
             onFinish={() =>
               validNameDetails
                 ? setUiState('existingReferral')

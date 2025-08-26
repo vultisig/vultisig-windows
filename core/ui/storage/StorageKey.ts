@@ -17,4 +17,5 @@ export enum StorageKey {
   hasAddedFriendReferral = 'hasAddedFriendReferral',
   appSessions = 'appSessions',
   latestInstalledVersion = 'latestInstalledVersion',
+  friendReferral = 'friendReferral',
 }
