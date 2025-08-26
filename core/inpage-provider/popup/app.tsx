@@ -1,5 +1,6 @@
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
+import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
@@ -12,7 +13,6 @@ import {
   usePopupCallId,
   useResolvePopupCall,
 } from './view/core/call'
-import { PopupDeadEnd } from './view/flow/PopupDeadEnd'
 import { VaultsOnly } from './view/flow/VaultsOnly'
 import { PopupResolvers } from './view/resolvers'
 import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
@@ -69,9 +69,9 @@ export const PopupApp = () => {
         )
       }}
       pending={() => (
-        <PopupDeadEnd>
+        <Center>
           <Spinner />
-        </PopupDeadEnd>
+        </Center>
       )}
     />
   )
