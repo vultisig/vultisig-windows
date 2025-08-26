@@ -7,6 +7,7 @@ import { ValidThorchainNameDetails } from '../../../services/getUserValidThorcha
 
 export const useFriendReferralValidation = (input: string) => {
   const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
+
   const {
     data: {
       name: lookedUpName = '',
@@ -25,15 +26,23 @@ export const useFriendReferralValidation = (input: string) => {
     )
   )
 
-  return isOwn
-    ? t('used_referral_error')
-    : tooLong
-      ? t('tns_max_4_chars')
-      : badChars
-        ? t('tns_alnum_only')
-        : input && !exists
-          ? t('tns_not_found')
-          : input && exists && !hasThorAlias
-            ? t('tns_missing_thor_alias')
-            : undefined
+  if (isOwn) {
+    return t('used_referral_error')
+  }
+
+  if (tooLong) {
+    return t('tns_max_4_chars')
+  }
+
+  if (badChars) {
+    return t('tns_alnum_only')
+  }
+
+  if (input && !exists) {
+    return t('tns_not_found')
+  }
+
+  if (input && exists && !hasThorAlias) {
+    return t('tns_missing_thor_alias')
+  }
 }
