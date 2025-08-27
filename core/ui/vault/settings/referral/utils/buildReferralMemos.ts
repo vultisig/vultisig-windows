@@ -1,24 +1,44 @@
-export const buildCreateReferralMemo = ({
-  name,
-  payoutAddress,
-  ownerThorAddr,
-}: {
-  name: string
-  payoutAddress: string
-  ownerThorAddr: string
-}) => `~:${name.toUpperCase()}:THOR:${payoutAddress}:${ownerThorAddr}`
-
-export const buildEditReferralMemo = ({
-  name,
-  thorAliasAddress,
-  preferredAsset,
-}: {
+type CreateArgs = {
   name: string
   thorAliasAddress: string
   preferredAsset?: string
-}) => {
-  const upper = name.toUpperCase()
-  const base = `~:${upper}:THOR:${thorAliasAddress}`
-  // if they chose a new asset, add it; otherwise just renew
-  return preferredAsset ? `${base}::${preferredAsset}` : base
+}
+
+// ~:name:THOR:<thor-alias-address>:<owner-thor-addr>:?preferredAsset
+export function buildCreateReferralMemo({
+  name,
+  thorAliasAddress,
+  preferredAsset,
+}: CreateArgs) {
+  const parts = ['~', name, 'THOR', thorAliasAddress, thorAliasAddress]
+  if (preferredAsset) parts.push(preferredAsset)
+  return parts.join(':')
+}
+
+type RenewArgs = { name: string; thorAliasAddress: string }
+// ~:name:THOR:<thor-alias-address>
+export function buildRenewalMemo({ name, thorAliasAddress }: RenewArgs) {
+  return ['~', name, 'THOR', thorAliasAddress].join(':')
+}
+
+type EditArgs = {
+  name: string
+  thorAliasAddress: string
+  preferredAsset: string
+}
+
+// (Set preferred asset + keep THOR alias explicit)
+export function buildSetPreferredAssetMemo({
+  name,
+  thorAliasAddress,
+  preferredAsset,
+}: EditArgs) {
+  return [
+    '~',
+    name,
+    'THOR',
+    thorAliasAddress,
+    thorAliasAddress,
+    preferredAsset,
+  ].join(':')
 }
