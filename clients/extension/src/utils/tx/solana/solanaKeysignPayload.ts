@@ -111,11 +111,9 @@ export const getSolanaKeysignPayload = (
               decimals: inputToken.decimals,
               hexPublicKey: vault.publicKeys.ecdsa,
               priceProviderId: isNativeCoin
-                ? 'solana'
+                ? chainFeeCoin.Solana.priceProviderId
                 : inputToken.priceProviderId,
-              logo: isNativeCoin
-                ? inputToken.ticker.toLowerCase()
-                : inputToken.logo,
+              logo: inputToken.logo,
               isNativeToken: isNativeCoin,
               ticker: inputToken.ticker,
             },
@@ -128,12 +126,9 @@ export const getSolanaKeysignPayload = (
               hexPublicKey: vault.publicKeys.ecdsa,
               priceProviderId:
                 outputToken.ticker === 'SOL'
-                  ? 'solana'
+                  ? chainFeeCoin.Solana.priceProviderId
                   : outputToken.priceProviderId,
-              logo:
-                outputToken.ticker === 'SOL'
-                  ? outputToken.ticker.toLowerCase()
-                  : outputToken.logo,
+              logo: outputToken.logo,
               isNativeToken: outputToken.ticker === 'SOL',
               ticker: outputToken.ticker,
             },
