@@ -85,7 +85,7 @@ export const getSolanaKeysignPayload = (
 
         const chainSpecific = await getChainSpecific({
           coin: accountCoin,
-          amount: parsed.inAmount ?? 0,
+          amount: parsed.inAmount ? Number(parsed.inAmount) : 0,
           isDeposit: false,
           receiver:
             parsed.kind === 'transfer' ? (parsed.receiverAddress ?? '') : '',

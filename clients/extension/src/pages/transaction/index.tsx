@@ -158,7 +158,10 @@ export const TransactionPage = () => {
             }
           },
           serialized: async ({ data: serialized, skipBroadcast }) => {
-            const parsed = await parseSolanaTx(walletCore, serialized)
+            const parsed = await parseSolanaTx({
+              walletCore,
+              inputTx: serialized,
+            })
             if (!parsed) {
               throw new Error('Could not parse transaction')
             }

@@ -7,6 +7,12 @@ import {
 } from '@solana/web3.js'
 
 type MintAmount = { mint: string; amount: bigint }
+type SimulateSolanaTransactionInput = {
+  conn: Connection
+  tx: VersionedTransaction
+  keysIn: PublicKey[]
+  owners?: Set<string>
+}
 type SolanaSimulationIO = {
   inputs: MintAmount[]
   outputs: MintAmount[]
@@ -74,12 +80,12 @@ const normalizeSolWithFee = (io: {
   return { ...io, inputs, outputs }
 }
 
-export const simulateSolanaTransaction = async (
-  conn: Connection,
-  tx: VersionedTransaction,
-  keysIn: PublicKey[],
-  owners?: Set<string>
-): Promise<SolanaSimulationIO | null> => {
+export const simulateSolanaTransaction = async ({
+  conn,
+  tx,
+  keysIn,
+  owners,
+}: SimulateSolanaTransactionInput): Promise<SolanaSimulationIO | null> => {
   const message = tx.message
   if (!message) return null
 

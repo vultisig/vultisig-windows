@@ -4,14 +4,14 @@ export type ParsedResult =
       authority: string
       inputMint: string
       outputMint: string
-      inAmount: number
-      outAmount: number
+      inAmount: string
+      outAmount: string
     }
   | {
       kind: 'transfer'
       authority: string
       inputMint: string
-      inAmount: number
+      inAmount: string
       receiverAddress: string
     }
 
