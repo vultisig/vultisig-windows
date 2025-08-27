@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin' // <-- for RUNE
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
