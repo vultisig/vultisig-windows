@@ -6,7 +6,6 @@
     "@core/chain": "workspace:*",
     "@core/config": "workspace:*",
     "@core/extension": "workspace:*",
-    "@core/mpc": "workspace:*",
     "@core/ui": "workspace:*",
     "@lib/extension": "workspace:*",
     "@lib/ui": "workspace:*",

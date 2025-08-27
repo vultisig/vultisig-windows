@@ -1,28 +1,17 @@
 import { storage } from '@core/extension/storage'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
+import { toVaultExport } from '@core/ui/vault/export/core/toVaultExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { authorized } from '../middleware/authorized'
+export const exportVault: BackgroundResolver<'exportVault'> = async ({
+  context: { appSession },
+}) => {
+  const vaults = await storage.getVaults()
 
-export const exportVault: BackgroundResolver<'exportVault'> = authorized(
-  async () => {
-    const vaults = await storage.getVaults()
-    const currentVaultId = shouldBePresent(await storage.getCurrentVaultId())
+  const vault = shouldBePresent(
+    vaults.find(vault => getVaultId(vault) === appSession.vaultId)
+  )
 
-    const vault = shouldBePresent(
-      vaults.find(vault => getVaultId(vault) === currentVaultId)
-    )
-
-    return {
-      name: vault.name,
-      uid: getVaultExportUid(vault),
-      hexChainCode: vault.hexChainCode,
-      publicKeyEcdsa: vault.publicKeys.ecdsa,
-      publicKeyEddsa: vault.publicKeys.eddsa,
-      isFastVault: hasServer(vault.signers),
-    }
-  }
-)
+  return toVaultExport(vault)
+}
