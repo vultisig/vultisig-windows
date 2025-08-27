@@ -1,9 +1,5 @@
 import { handleRequest } from '@clients/extension/src/background/handlers/requestHandler'
-import { generateCosmosAccount } from '@clients/extension/src/background/utils/cosmosAccount'
-import {
-  MessageKey,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+import { MessageKey } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
@@ -62,35 +58,13 @@ export const dispatchMessage = async (
   ] as const
 
   for (const [key, chain] of basicRequests) {
-    if (type === key) return handleRequest(message, chain, safeOrigin)
+    if (type === key) return handleRequest(message, chain)
   }
   if (type in chainSelectors) {
     const selector = chainSelectors[type as keyof typeof chainSelectors]
     const chain = await selector?.()
     if (!chain) return
-    const response = await handleRequest(
-      message,
-      shouldBePresent(chain),
-      safeOrigin
-    )
-
-    // Handle Cosmos Account Generation
-    if (
-      type === MessageKey.COSMOS_REQUEST &&
-      message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
-    ) {
-      const address = Array.isArray(response) ? response[0] : response
-
-      if (typeof address === 'string') {
-        return await generateCosmosAccount(address, chain)
-      } else {
-        console.warn(
-          'Unexpected response format, cannot extract address:',
-          response
-        )
-        return
-      }
-    }
+    const response = await handleRequest(message, shouldBePresent(chain))
 
     return response
   }

@@ -648,9 +648,11 @@ export const it = {
     applicationUpToDate: "L'applicazione è aggiornata.",
     newVersionAvailable:
       'È disponibile una nuova versione ({{latestVersion}})!',
-    downloadButton: 'Scaricala ora.',
     currentVersion: '{{localVersion}}',
     title: 'Controlla aggiornamento',
+    version: 'Versione {{latestVersion}}',
+    downloadButton: 'Aggiorna ora',
+    update_is_available: 'È disponibile un aggiornamento',
   },
   updatePopup: {
     updateAvailableMessage:

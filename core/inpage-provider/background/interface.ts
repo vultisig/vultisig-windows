@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
-import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
@@ -10,11 +9,25 @@ type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
   ChainOfKind<K>
 >
 
+export type SetAppChainInput = {
+  [K in ActiveChainKind]: { [P in K]: ChainOfKind<P> }
+}[ActiveChainKind]
+
 export type BackgroundInterface = {
-  getVaults: Method<{}, VaultExport[]>
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
+  setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
-  getAddress: Method<{ chain: Chain }, string>
+  getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
+  signOut: Method<{}>
+  evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
+
+export const authorizedBackgroundMethods = [
+  'getAccount',
+  'setAppChain',
+] as const satisfies readonly BackgroundMethod[]
+
+export type AuthorizedBackgroundMethod =
+  (typeof authorizedBackgroundMethods)[number]

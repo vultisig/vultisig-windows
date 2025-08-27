@@ -1,19 +1,22 @@
+import { EventMethod, MessageKey } from '@clients/extension/src/utils/constants'
+import { EvmChain } from '@core/chain/Chain'
 import {
-  EventMethod,
-  MessageKey,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+  getEvmChainByChainId,
+  getEvmChainId,
+} from '@core/chain/chains/evm/chainInfo'
 import { callBackground } from '@core/inpage-provider/background'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
+import { BlockTag } from 'viem'
 
+import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
-import { Callback } from '../constants'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
 
 export class Ethereum extends EventEmitter {
   public chainId: string
@@ -82,13 +85,6 @@ export class Ethereum extends EventEmitter {
     return Ethereum.instance
   }
 
-  async enable() {
-    return await this.request({
-      method: RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS,
-      params: [],
-    })
-  }
-
   emitAccountsChanged(addresses: string[]) {
     if (addresses.length) {
       const [address] = addresses
@@ -120,93 +116,165 @@ export class Ethereum extends EventEmitter {
     } else {
       super.on(event, callback)
     }
-
     return this
   }
 
-  async send(x: any, y: any) {
-    if (typeof x === 'string') {
-      return await this.request({ method: x, params: y ?? [] })
-    } else if (typeof y === 'function') {
-      this.request(x, y)
-    } else {
-      return await this.request(x)
+  async request(data: Messaging.Chain.Request) {
+    const getChain = async () => {
+      const chain = await callBackground({
+        getAppChain: { chainKind: 'evm' },
+      })
+      return chain as EvmChain
     }
-  }
 
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
-      const processRequest = async () => {
-        // TODO: Extract handling of Ethereum requests
-        const handlers = {
-          eth_chainId: async () =>
-            callBackground({
-              getAppChainId: { chainKind: 'evm' },
-            }),
-          eth_accounts: async () =>
-            withFallback(
-              attempt(async () => {
-                const chain = await callBackground({
-                  getAppChain: { chainKind: 'evm' },
-                })
+    const switchChainHandler = async ([{ chainId }]: [{ chainId: string }]) => {
+      const chain = getEvmChainByChainId(chainId)
+      if (!chain) {
+        throw new EIP1193Error('UnrecognizedChain')
+      }
 
-                const address = await callBackground({
-                  getAddress: { chain },
-                })
+      await callBackground({
+        setAppChain: { evm: chain },
+      })
 
-                return [address]
-              }),
-              []
-            ),
-          // TODO: Check if this actually makes sense, as it might be better to throw a "MethodNotFound" error if we don't support permissions.
-          wallet_getPermissions: async () => [],
-          wallet_requestPermissions: async () => [],
-        } as const
+      this.emitUpdateNetwork({ chainId })
 
-        if (data.method in handlers) {
-          return handlers[data.method as keyof typeof handlers]()
-        }
+      return null
+    }
+    const handlers = {
+      eth_chainId: async () =>
+        callBackground({
+          getAppChainId: { chainKind: 'evm' },
+        }),
+      eth_accounts: async () =>
+        withFallback(
+          attempt(async () => {
+            const chain = await getChain()
 
-        const response = await messengers.background.send<
-          any,
-          Messaging.Chain.Response
-        >(
-          'providerRequest',
-          {
-            type: MessageKey.ETHEREUM_REQUEST,
-            message: data,
+            const { address } = await callBackground({
+              getAccount: { chain },
+            })
+
+            return [address]
+          }),
+          []
+        ),
+      eth_requestAccounts: async () => {
+        const chain = await getChain()
+
+        const { address } = await requestAccount(chain)
+
+        return [address]
+      },
+      wallet_switchEthereumChain: switchChainHandler,
+      wallet_addEthereumChain: switchChainHandler,
+      wallet_getPermissions: async () => [],
+      wallet_requestPermissions: async () => [],
+      wallet_revokePermissions: async () => {
+        await callBackground({
+          signOut: {},
+        })
+        this.emit(EventMethod.DISCONNECT)
+      },
+      net_version: async () => {
+        const chain = await getChain()
+
+        return parseInt(getEvmChainId(chain), 16).toString()
+      },
+      eth_getCode: async ([address, at]: [
+        `0x${string}`,
+        BlockTag | `0x${string}` | undefined,
+      ]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getCode',
+            params: [address, at ?? 'latest'],
           },
-          { id: uuidv4() }
-        )
+        }),
+      eth_getTransactionCount: async ([address, at]: [
+        `0x${string}`,
+        BlockTag | `0x${string}` | undefined,
+      ]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getTransactionCount',
+            params: [address, at ?? 'latest'],
+          },
+        }),
+      eth_getBalance: async ([address, at]: [
+        `0x${string}`,
+        BlockTag | `0x${string}` | undefined,
+      ]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getBalance',
+            params: [address, at ?? 'latest'],
+          },
+        }),
+      eth_blockNumber: async () =>
+        callBackground({
+          evmClientRequest: { method: 'eth_blockNumber' },
+        }),
+      eth_getBlockByNumber: async (params: unknown[]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getBlockByNumber',
+            params,
+          },
+        }),
+      eth_gasPrice: async () =>
+        callBackground({
+          evmClientRequest: { method: 'eth_gasPrice' },
+        }),
+      eth_maxPriorityFeePerGas: async () =>
+        callBackground({
+          evmClientRequest: { method: 'eth_maxPriorityFeePerGas' },
+        }),
+      eth_estimateGas: async (params: unknown[]) =>
+        callBackground({
+          evmClientRequest: { method: 'eth_estimateGas', params },
+        }),
+      eth_call: async (params: unknown[]) =>
+        callBackground({
+          evmClientRequest: { method: 'eth_call', params },
+        }),
+      eth_getTransactionReceipt: async (params: unknown[]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getTransactionReceipt',
+            params,
+          },
+        }),
+      eth_getTransactionByHash: async (params: unknown[]) =>
+        callBackground({
+          evmClientRequest: {
+            method: 'eth_getTransactionByHash',
+            params,
+          },
+        }),
+    } as const
 
-        return processBackgroundResponse(
-          data,
-          MessageKey.ETHEREUM_REQUEST,
-          response
-        )
-      }
-
-      const result = await processRequest()
-
-      switch (data.method) {
-        case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
-        case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-          this.emitUpdateNetwork({ chainId: result as string })
-          break
-        }
-        case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-          this.emit(EventMethod.DISCONNECT, result)
-          break
-        }
-      }
-
-      if (callback) callback(null, result)
-
-      return result
-    } catch (error) {
-      if (callback) callback(error as Error)
-      throw error
+    if (data.method in handlers) {
+      return handlers[data.method as keyof typeof handlers](data.params as any)
     }
+
+    const response = await messengers.background.send<
+      any,
+      Messaging.Chain.Response
+    >(
+      'providerRequest',
+      {
+        type: MessageKey.ETHEREUM_REQUEST,
+        message: data,
+      },
+      { id: uuidv4() }
+    )
+
+    return processBackgroundResponse(
+      data,
+      MessageKey.ETHEREUM_REQUEST,
+      response
+    )
   }
 
   _connect = (): void => {

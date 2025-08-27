@@ -1,4 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -6,17 +5,13 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
+import { useDepositCoin } from '../../../providers/DepositCoinProvider'
 import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
 import { MergeTokenExplorer } from './MergeTokenExplorer'
 
-type MergeSpecificProps = {
-  selectedCoin: Coin | null
-}
-
-export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
+export const MergeSpecific = () => {
   const { t } = useTranslation()
-  const [{ setValue, watch }] = useDepositFormHandlers()
+  const [depositCoin, setDepositCoin] = useDepositCoin()
 
   return (
     <Opener
@@ -24,9 +19,9 @@ export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
         <Container onClick={onOpen}>
           <HStack alignItems="center" gap={4}>
             <Text weight="400" family="mono" size={16}>
-              {selectedCoin?.ticker || t('select_token')}
+              {depositCoin.ticker || t('select_token')}
             </Text>
-            {!selectedCoin && (
+            {!depositCoin && (
               <AssetRequiredLabel as="span" color="danger" size={14}>
                 *
               </AssetRequiredLabel>
@@ -39,13 +34,8 @@ export const MergeSpecific = ({ selectedCoin }: MergeSpecificProps) => {
       )}
       renderContent={({ onClose }) => (
         <MergeTokenExplorer
-          setValue={setValue}
-          activeOption={watch('selectedCoin')}
-          onOptionClick={token =>
-            setValue('selectedCoin', token, {
-              shouldValidate: true,
-            })
-          }
+          activeOption={depositCoin}
+          onOptionClick={token => setDepositCoin(token)}
           onClose={onClose}
         />
       )}

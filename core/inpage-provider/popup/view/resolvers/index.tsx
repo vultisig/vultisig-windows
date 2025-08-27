@@ -1,9 +1,10 @@
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
 
 import { PopupResolver } from '../resolver'
+import { ExportVaults } from './exportVaults'
 import { GrantVaultAccess } from './grantVaultAccess'
-import { GrantVaultsAccess } from './grantVaultsAccess'
 import { PluginReshare } from './pluginReshare'
+import { SignMessage } from './signMessage'
 
 type PopupApiImplementation = {
   [K in PopupMethod]: PopupResolver<K>
@@ -11,6 +12,7 @@ type PopupApiImplementation = {
 
 export const PopupResolvers: PopupApiImplementation = {
   grantVaultAccess: GrantVaultAccess,
-  grantVaultsAccess: GrantVaultsAccess,
+  exportVaults: ExportVaults,
   pluginReshare: PluginReshare,
+  signMessage: SignMessage,
 }

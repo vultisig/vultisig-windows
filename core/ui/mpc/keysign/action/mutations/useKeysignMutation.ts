@@ -18,18 +18,17 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import {
-  chainSigningType,
   customMessageDefaultChain,
-  CustomMessageSupportedChain,
-  SigningType,
-} from '@core/ui/mpc/keysign/customMessage/config'
+  customMessageSupportedChains,
+} from '@core/ui/mpc/keysign/customMessage/chains'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { match } from '@lib/utils/match'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
-import { keccak256 } from 'js-sha3'
+
+import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -110,29 +109,14 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             return { txs }
           },
-          custom: async customPayload => {
-            const { message, chain: payloadChain } = customPayload
-            const chain =
-              (payloadChain as CustomMessageSupportedChain) ??
-              (customMessageDefaultChain as CustomMessageSupportedChain)
+          custom: async ({ message, chain = customMessageDefaultChain }) => {
+            if (!isOneOf(chain, customMessageSupportedChains)) {
+              throw new Error(`Unsupported chain ${chain}`)
+            }
+
             const chainKind = getChainKind(chain)
-            const messageToHash = message.startsWith('0x')
-              ? Buffer.from(message.slice(2), 'hex')
-              : message
 
-            const signingType: SigningType = chainSigningType[chain]
-            if (!signingType)
-              throw new Error(`Unsupported signing for chain ${chain}`)
-
-            const messageBytes =
-              typeof messageToHash === 'string'
-                ? new TextEncoder().encode(messageToHash)
-                : messageToHash
-
-            const hexMessage = match(signingType, {
-              EIP191: () => keccak256(messageBytes),
-              RAW_BYTES: () => Buffer.from(messageBytes).toString('hex'),
-            })
+            const hexMessage = getCustomMessageHex({ chain, message })
 
             const [signature] = await keysignAction({
               msgs: [hexMessage],

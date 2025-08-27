@@ -49,15 +49,6 @@ type FunctionSchema = {
   totalAmountAvailable: number
 }
 
-const CoinSchema = z.object({
-  chain: z.string(),
-  id: z.string().optional(),
-  priceProviderId: z.string().optional(),
-  decimals: z.number(),
-  ticker: z.string(),
-  logo: z.string(),
-})
-
 export const getRequiredFieldsPerChainAction = (
   t: TFunction,
   chain: Chain
@@ -73,7 +64,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
@@ -91,7 +81,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
@@ -117,7 +106,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
@@ -137,7 +125,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(Number)
@@ -159,7 +146,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) => {
       return z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(val => Number(val))
@@ -179,7 +165,7 @@ export const getRequiredFieldsPerChainAction = (
     schema: ({ totalAmountAvailable }: FunctionSchema) => {
       return z.object({
         nodeAddress: z.string().min(1, 'Required'),
-        selectedCoin: CoinSchema,
+
         amount: z
           .string()
           .transform(val => Number(val))
@@ -198,7 +184,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         amount: z
           .string()
           .transform(val => Number(val))
@@ -218,7 +203,6 @@ export const getRequiredFieldsPerChainAction = (
     ],
     schema: ({ totalAmountAvailable }: FunctionSchema) =>
       z.object({
-        selectedCoin: CoinSchema,
         destinationChain: z.string().min(1, 'Destination Chain is required'),
         nodeAddress: z.string().min(1, 'Destination Address is required'),
         amount: z
@@ -613,7 +597,6 @@ export const getRequiredFieldsPerChainAction = (
       return match(chain, {
         THORChain: () =>
           z.object({
-            selectedCoin: CoinSchema,
             amount: z
               .string()
               .transform(Number)
@@ -662,7 +645,6 @@ export const getRequiredFieldsPerChainAction = (
       return match(chain, {
         THORChain: () =>
           z.object({
-            selectedCoin: CoinSchema,
             percentage: z
               .string()
               .transform(Number)

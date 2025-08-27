@@ -1,16 +1,10 @@
-import { handleGetAccounts } from '@clients/extension/src/background/handlers/accountsHandler'
-import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
-import {
-  EventMethod,
-  RequestMethod,
-} from '@clients/extension/src/utils/constants'
+import { RequestMethod } from '@clients/extension/src/utils/constants'
 import {
   ITransaction,
   Messaging,
@@ -21,105 +15,24 @@ import {
   getStandardTransactionDetails,
   isBasicTransaction,
 } from '@clients/extension/src/utils/tx/getStandardTx'
-import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import {
-  getCosmosChainByChainId,
-  getCosmosChainId,
-} from '@core/chain/chains/cosmos/chainInfo'
+import { Chain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import {
-  evmChainRpcUrls,
-  getEvmChainByChainId,
-  getEvmChainId,
-} from '@core/chain/chains/evm/chainInfo'
-import { getEvmClient } from '@core/chain/chains/evm/client'
-import { storage } from '@core/extension/storage'
-import {
-  getVaultsAppSessions,
-  setVaultsAppSessions,
-  updateAppSession,
-  VaultsAppSessions,
-} from '@core/extension/storage/appSessions'
-import { setCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
-import { setCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
-import { memoize } from '@lib/utils/memoize'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { getUrlHost } from '@lib/utils/url/host'
-import {
-  getBytes,
-  isHexString,
-  JsonRpcProvider,
-  Signature,
-  TransactionRequest,
-  TypedDataEncoder,
-} from 'ethers'
+import { getBytes, isHexString, Signature, TypedDataEncoder } from 'ethers'
 
 import { safeJsonStringify } from '../utils/bigIntUtils'
-import { handleBtcRequestAccounts } from './requests/handleBtcRequestAccounts'
-
-const getEvmRpcProvider = memoize(
-  (chain: EvmChain) => new JsonRpcProvider(evmChainRpcUrls[chain])
-)
-
-const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 export const handleRequest = (
   body: Messaging.Chain.Request,
-  chain: Chain,
-  sender: string
+  chain: Chain
 ): Promise<
   Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
 > => {
   return new Promise((resolve, reject) => {
-    const { method, params, context } = body
+    const { method, params } = body
 
     switch (method) {
-      case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-        handleGetAccounts(chain, sender)
-          .then(([account]) => {
-            if (!account) throw new EIP1193Error('UserRejectedRequest')
-
-            if (getChainKind(chain) === 'evm') {
-              inpageMessenger.send(
-                `${EventMethod.ACCOUNTS_CHANGED}:${getUrlHost(sender)}`,
-                account
-              )
-              try {
-                inpageMessenger.send(
-                  `${EventMethod.CONNECT}:${getUrlHost(sender)}`,
-                  {
-                    address: account,
-                    chainId: getEvmChainId(chain as EvmChain),
-                  }
-                )
-              } catch (err) {
-                console.log('background err send to inpage:', err)
-              }
-            }
-            if (chain === Chain.Bitcoin) {
-              handleBtcRequestAccounts({ sender, context })
-                .then(resolve)
-                .catch(reject)
-            } else {
-              const specialChains = [
-                Chain.Dydx,
-                Chain.Cosmos,
-                Chain.Kujira,
-                Chain.Osmosis,
-                Chain.Solana,
-              ] as Chain[]
-
-              resolve(specialChains.includes(chain) ? account : [account])
-            }
-          })
-          .catch(reject)
-
-        break
-      }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         if (chain === Chain.Solana && _transaction.serializedTx) {
@@ -234,8 +147,7 @@ export const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH:
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_BY_HASH: {
+      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH: {
         if (Array.isArray(params)) {
           const [hash] = params
 
@@ -268,30 +180,6 @@ export const handleRequest = (
 
                 break
               }
-              // EVM
-              case Chain.Avalanche:
-              case Chain.Arbitrum:
-              case Chain.Base:
-              case Chain.BSC:
-              case Chain.CronosChain:
-              case Chain.Ethereum:
-              case Chain.Optimism:
-              case Chain.Polygon: {
-                const client = getEvmClient(chain)
-                client
-                  .getTransaction({ hash: String(hash) as `0x${string}` })
-                  .then(result => {
-                    // https://github.com/vultisig/vultisig-windows/issues/2130
-                    const ethStandardTx = {
-                      ...result,
-                      type: result.typeHex,
-                    }
-                    return resolve(safeJsonStringify(ethStandardTx))
-                  })
-                  .catch(reject)
-
-                break
-              }
               default: {
                 api.utxo
                   .blockchairGetTx(chain, String(hash))
@@ -310,267 +198,7 @@ export const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_COUNT: {
-        const [address, tag] = params
-        getEvmRpcProvider(chain as EvmChain)
-          .getTransactionCount(String(address), String(tag))
-          .then(count => resolve(String(count)))
-          .catch(reject)
-        break
-      }
-      case RequestMethod.METAMASK.ETH_BLOCK_NUMBER: {
-        getEvmRpcProvider(chain as EvmChain)
-          .getBlock('latest')
-          .then(block => resolve(String(block?.number)))
-          .catch(reject)
 
-        break
-      }
-      case RequestMethod.VULTISIG.WALLET_ADD_CHAIN:
-      case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN: {
-        if (!Array.isArray(params)) {
-          reject()
-          break
-        }
-        const [param] = params
-        if (!param?.chainId) {
-          reject()
-          break
-        }
-
-        const chain =
-          getCosmosChainByChainId(param.chainId) ||
-          getEvmChainByChainId(param.chainId)
-
-        if (!chain) {
-          reject()
-          return
-        }
-
-        storage.getCurrentVaultId().then(async vaultId => {
-          const safeVaultId = shouldBePresent(vaultId)
-          const host = getUrlBaseDomain(sender)
-          const allSessions = await getVaultsAppSessions()
-          const previousSession = allSessions?.[safeVaultId]?.[host]
-
-          if (previousSession) {
-            try {
-              await updateAppSession({
-                vaultId: safeVaultId,
-                host: host,
-                fields: {
-                  selectedCosmosChainId:
-                    getChainKind(chain) === 'cosmos'
-                      ? param.chainId
-                      : previousSession.selectedCosmosChainId,
-                  selectedEVMChainId:
-                    getChainKind(chain) === 'evm'
-                      ? param.chainId
-                      : previousSession.selectedEVMChainId,
-                },
-              })
-            } catch (e) {
-              reject(e)
-            }
-          } else {
-            await setCurrentEVMChainId(param.chainId)
-          }
-          resolve(param.chainId)
-        })
-
-        break
-      }
-      case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-        const host = getUrlBaseDomain(sender)
-        getVaultsAppSessions()
-          .then(async sessions => {
-            const updatedSessions: VaultsAppSessions = {}
-
-            for (const [vaultId, vaultSessions] of Object.entries(
-              sessions ?? {}
-            )) {
-              if (vaultSessions[host]) {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { [host]: _, ...rest } = vaultSessions
-                updatedSessions[vaultId] = rest
-              } else {
-                updatedSessions[vaultId] = vaultSessions
-              }
-            }
-            await setVaultsAppSessions(updatedSessions)
-            resolve([])
-          })
-          .catch(reject)
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_ESTIMATE_GAS: {
-        if (Array.isArray(params)) {
-          const [transaction] = params as TransactionRequest[]
-
-          if (transaction) {
-            getEvmRpcProvider(chain as EvmChain)
-              .estimateGas(transaction)
-              .then(gas => resolve(gas.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
-        } else {
-          reject()
-        }
-
-        break
-      }
-      case RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN:
-      case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-        if (!Array.isArray(params)) {
-          reject()
-          break
-        }
-        const [param] = params
-        if (!param?.chainId) {
-          reject()
-          break
-        }
-
-        const chain = shouldBePresent(
-          getCosmosChainByChainId(param.chainId) ||
-            getEvmChainByChainId(param.chainId)
-        )
-        storage.getCurrentVaultId().then(async vaultId => {
-          const safeVaultId = shouldBePresent(vaultId)
-          const host = getUrlBaseDomain(sender)
-          const allSessions = await getVaultsAppSessions()
-          const previousSession = allSessions?.[safeVaultId]?.[host]
-
-          if (previousSession) {
-            await updateAppSession({
-              vaultId: safeVaultId,
-              host,
-              fields: {
-                selectedCosmosChainId:
-                  getChainKind(chain) === 'cosmos'
-                    ? getCosmosChainId(chain as CosmosChain)
-                    : previousSession.selectedCosmosChainId,
-                selectedEVMChainId:
-                  getChainKind(chain) === 'evm'
-                    ? getEvmChainId(chain as EvmChain)
-                    : previousSession.selectedEVMChainId,
-              },
-            })
-          } else {
-            if (getChainKind(chain) === 'evm') {
-              await setCurrentEVMChainId(param.chainId)
-            } else if (getChainKind(chain) === 'cosmos') {
-              await setCurrentCosmosChainId(param.chainId)
-            }
-          }
-          resolve(param.chainId)
-        })
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_GET_BALANCE: {
-        if (Array.isArray(params)) {
-          const [address, tag] = params
-
-          if (address && tag) {
-            getEvmRpcProvider(chain as EvmChain)
-              .getBalance(String(address), String(tag))
-              .then(value => resolve(value.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
-        } else {
-          reject()
-        }
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_GET_BLOCK_BY_NUMBER: {
-        const [tag, refresh] = params
-        getEvmRpcProvider(chain as EvmChain)
-          .getBlock(String(tag), Boolean(refresh))
-          .then(block => resolve(block?.toJSON()))
-          .catch(reject)
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_GAS_PRICE: {
-        getEvmRpcProvider(chain as EvmChain)
-          .getFeeData()
-          .then(({ gasPrice, maxFeePerGas }) =>
-            resolve((gasPrice ?? maxFeePerGas ?? 0n).toString())
-          )
-          .catch(reject)
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_MAX_PRIORITY_FEE_PER_GAS: {
-        getEvmRpcProvider(chain as EvmChain)
-          .getFeeData()
-          .then(({ maxPriorityFeePerGas }) =>
-            resolve((maxPriorityFeePerGas ?? 0n).toString())
-          )
-          .catch(reject)
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_CALL: {
-        if (Array.isArray(params)) {
-          const [transaction] = params as TransactionRequest[]
-
-          if (transaction) {
-            getEvmRpcProvider(chain as EvmChain)
-              .call(transaction)
-              .then(resolve)
-              .catch(reject)
-          } else {
-            reject(new Error('Invalid transaction'))
-          }
-        } else {
-          reject(new Error('Invalid params'))
-        }
-
-        break
-      }
-
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_RECEIPT: {
-        if (Array.isArray(params)) {
-          const [hash] = params
-          api.ethereum
-            .getRawTransactionReceiptHash(
-              evmChainRpcUrls[chain as EvmChain],
-              String(hash)
-            )
-            .then(resolve)
-            .catch(reject)
-        } else {
-          reject()
-        }
-
-        break
-      }
-      case RequestMethod.METAMASK.ETH_GET_CODE: {
-        if (Array.isArray(params)) {
-          const [address, tag] = params
-
-          if (address && tag) {
-            getEvmRpcProvider(chain as EvmChain)
-              .getCode(String(address), String(tag))
-              .then(value => resolve(value.toString()))
-              .catch(reject)
-          } else {
-            reject()
-          }
-        } else {
-          reject()
-        }
-
-        break
-      }
       case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
         if (Array.isArray(params)) {
           try {
@@ -668,20 +296,6 @@ export const handleRequest = (
         } else {
           reject()
         }
-
-        break
-      }
-      case RequestMethod.METAMASK.NET_VERSION: {
-        let chainId: string | undefined = undefined
-
-        if (getChainKind(chain) === 'evm') {
-          chainId = getEvmChainId(chain as EvmChain)
-        } else if (getChainKind(chain) === 'cosmos') {
-          chainId = getCosmosChainId(chain as CosmosChain)
-        }
-
-        if (chainId) resolve(parseInt(chainId, 16).toString())
-        else reject()
 
         break
       }

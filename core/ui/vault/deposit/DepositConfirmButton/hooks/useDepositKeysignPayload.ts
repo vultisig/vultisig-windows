@@ -12,10 +12,6 @@ import {
   yieldBearingAssetsContracts,
   yieldBearingAssetsReceiptDenoms,
 } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import {
-  AccountCoin,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -30,10 +26,9 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
-import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '../../../state/currentVault'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 import { ChainAction } from '../../ChainAction'
+import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { transactionConfig } from '../config'
 
@@ -46,7 +41,6 @@ export function useDepositKeysignPayload({
   depositFormData,
   action,
 }: DepositKeysignPayloadProps) {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const { t } = useTranslation()
 
   const isUnmerge = action === 'unmerge'
@@ -65,17 +59,12 @@ export function useDepositKeysignPayload({
             ? TransactionType.GENERIC_CONTRACT
             : undefined
 
-  const selectedCoin = depositFormData['selectedCoin'] as
-    | AccountCoin
-    | undefined
-  const coin = useCurrentVaultCoin(
-    selectedCoin ? extractAccountCoinKey(selectedCoin) : coinKey
-  )
+  const [coin] = useDepositCoin()
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
-  const chainSpecificQuery = useDepositChainSpecificQuery(txType, coin)
-  const isTonFunction = coinKey.chain === Chain.Ton
-  const cfg = transactionConfig(coinKey.chain)[action] || {}
+  const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
+  const isTonFunction = coin.chain === Chain.Ton
+  const cfg = transactionConfig(coin.chain)[action] || {}
   const amount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
   const slippage = Number(depositFormData['slippage'] ?? 0)
   const memo = (depositFormData['memo'] as string) ?? ''
@@ -104,6 +93,7 @@ export function useDepositKeysignPayload({
         const basePayload: any = {
           coin: toCommCoin({
             ...coin,
+            address: coin.address,
             hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           }),
           memo,
@@ -123,9 +113,9 @@ export function useDepositKeysignPayload({
           const amount = Number(depositFormData['amount'] ?? 0)
           const amountUnits =
             action === 'stake_ruji'
-              ? toChainAmount(amount, selectedCoin!.decimals).toString()
+              ? toChainAmount(amount, coin.decimals).toString()
               : action === 'unstake_ruji'
-                ? toChainAmount(amount, selectedCoin!.decimals).toString()
+                ? toChainAmount(amount, coin.decimals).toString()
                 : '0'
 
           const executeInnerObj =
@@ -298,7 +288,6 @@ export function useDepositKeysignPayload({
         isUnmerge,
         memo,
         receiver,
-        selectedCoin,
         slippage,
         validatorAddress,
         vault.hexChainCode,

@@ -1,14 +1,14 @@
 import { UtxoChain } from '@core/chain/Chain'
-import { callBackground } from '@core/inpage-provider/background'
-import { attempt, withFallback } from '@lib/utils/attempt'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
 import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging, ProviderId } from '../../utils/interfaces'
+import { BitcoinAccount, Messaging, ProviderId } from '../../utils/interfaces'
 import { Callback } from '../constants'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 type SupportedUtxoChain =
   | UtxoChain.Bitcoin
@@ -51,26 +51,15 @@ export class UTXO extends EventEmitter {
     return UTXO.instances.get(providerType)!
   }
 
-  async requestAccounts() {
-    const address = await this.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
-      context: { provider: this.providerId },
-    })
-    return address
-  }
-
-  async getAccounts() {
-    return withFallback(
-      attempt(async () => [
-        await callBackground({
-          getAddress: {
-            chain: this.chain,
-          },
-        }),
-      ]),
-      []
-    )
+  async requestAccounts(): Promise<BitcoinAccount[] | string[]> {
+    const { address, publicKey } = await requestAccount(this.chain)
+    if (this.providerId === 'phantom-override') {
+      return [
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'payment' },
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'ordinals' },
+      ]
+    }
+    return [address]
   }
 
   async signPSBT(psbt: Buffer) {
@@ -89,7 +78,12 @@ export class UTXO extends EventEmitter {
   }
 
   async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(this.chain)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
       const response = await messengers.background.send<
         any,
         Messaging.Chain.Response
@@ -102,16 +96,17 @@ export class UTXO extends EventEmitter {
         { id: uuidv4() }
       )
 
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
+      return processBackgroundResponse(data, this.providerType, response)
+    }
 
-      if (callback) callback(null, result)
+    try {
+      const result = await processRequest()
+
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

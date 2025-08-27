@@ -10074,13 +10074,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-sha3@npm:^0.9.3":
-  version: 0.9.3
-  resolution: "js-sha3@npm:0.9.3"
-  checksum: 10c0/6976feaf79842e39b87d17e41c5bd397240a5d68920ea911fdfb3615eea29f72c6067a5aa19e38989a29b3031ff39834ec9fb2ab066c59368751296629a798f1
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -15356,7 +15349,6 @@ __metadata:
     html-to-image: "npm:^1.11.13"
     i18next: "npm:^24.2.3"
     i18next-http-backend: "npm:^3.0.2"
-    js-sha3: "npm:^0.9.3"
     jsqr: "npm:^1.4.0"
     knip: "npm:^5.46.0"
     long: "npm:^5.3.1"

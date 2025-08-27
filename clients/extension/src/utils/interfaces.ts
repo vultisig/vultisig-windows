@@ -14,7 +14,6 @@ export namespace Messaging {
     export type Request = {
       method: string
       params: Record<string, any>[]
-      context?: RequestContext
     }
     export type Response =
       | string
@@ -22,8 +21,6 @@ export namespace Messaging {
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
       | ITransaction
-      | RawTransactionReceipt
-      | BitcoinAccount[]
   }
 
   export namespace GetVault {
@@ -42,15 +39,6 @@ export namespace Messaging {
   }
 }
 
-export type AccountsProps = {
-  chain: Chain
-  sender: string
-}
-
-export type PluginRequestProps = {
-  id: string
-}
-
 type ICustomTransactionPayload = {
   method: string
   address: string
@@ -64,10 +52,6 @@ export type ProviderId =
   | 'phantom-override'
   | 'keplr-override'
   | 'ctrl-override'
-
-export type RequestContext = {
-  provider: ProviderId
-}
 
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
@@ -213,15 +197,6 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
-export type CosmosAccount = {
-  pubkey: number[]
-  address: string
-  algo: 'secp256k1'
-  bech32Address: string
-  isKeystone: boolean
-  isNanoLedger: boolean
-}
-
 export type TransactionDetailsAsset = {
   chain: string
   ticker: string
@@ -283,30 +258,3 @@ export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
     transactionPayload: ITransactionPayload
     windowId?: number
   }
-
-export type RawTransactionReceipt = {
-  blockHash: string
-  blockNumber: string
-  contractAddress: string | null
-  cumulativeGasUsed: string
-  effectiveGasPrice?: string
-  from: string
-  gasUsed: string
-  logs: Array<{
-    address: string
-    topics: string[]
-    data: string
-    blockNumber: string
-    transactionHash: string
-    transactionIndex: string
-    blockHash: string
-    logIndex: string
-    removed: boolean
-  }>
-  logsBloom: string
-  status: string
-  to: string | null
-  transactionHash: string
-  transactionIndex: string
-  type: string
-}

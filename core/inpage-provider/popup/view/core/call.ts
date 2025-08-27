@@ -3,6 +3,7 @@ import { Result } from '@lib/utils/types/Result'
 import { useCallback } from 'react'
 
 import { callIdQueryParam } from '../../config'
+import { PopupError } from '../../error'
 import { PopupInterface, PopupMethod } from '../../interface'
 import { getPopupMessageSourceId } from '../../resolver'
 
@@ -28,4 +29,13 @@ export const useResolvePopupCall = () => {
     },
     [callId]
   )
+}
+
+export const useCancelPopupCall = () => {
+  const resolvePopupCall = useResolvePopupCall()
+
+  return useCallback(() => {
+    resolvePopupCall({ error: PopupError.RejectedByUser })
+    window.close()
+  }, [resolvePopupCall])
 }

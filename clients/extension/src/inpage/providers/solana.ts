@@ -67,6 +67,8 @@ import {
 import { Callback } from '../constants'
 import icon from '../icon'
 import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
+import { getSharedHandlers } from './core/sharedHandlers'
 import { VultisigSolanaWalletAccount } from './solana/account'
 import { isSolanaChain, SolanaChain, SolanaChains } from './solana/chains'
 import { createSolanaSignInMessage } from './solana/signIn'
@@ -146,13 +148,14 @@ export class Solana implements Wallet {
   }
 
   #connected = async () => {
-    const { data: address } = await attempt(
+    const { data } = await attempt(
       callBackground({
-        getAddress: { chain: Chain.Solana },
+        getAccount: { chain: Chain.Solana },
       })
     )
 
-    if (address) {
+    if (data) {
+      const { address } = data
       this._isConnected = true
       this._publicKey = new PublicKey(address)
       const pubkey = this._publicKey.toBytes()
@@ -211,28 +214,28 @@ export class Solana implements Wallet {
   }
 
   connect = async () => {
-    return await this.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
-    }).then(account => {
-      this._publicKey = new PublicKey(shouldBePresent(account))
-      this._isConnected = true
-      return { publicKey: this.publicKey }
-    })
+    const { address } = await requestAccount(Chain.Solana)
+    this._publicKey = new PublicKey(shouldBePresent(address))
+    this._isConnected = true
+    return { publicKey: this.publicKey }
   }
 
   disconnect = async () => {
     this._publicKey = null
-    this.request({
-      method: RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS,
-      params: [],
+    await callBackground({
+      signOut: {},
     })
     this._isConnected = false
     await Promise.resolve()
   }
 
   request = async (data: Messaging.Chain.Request, callback?: Callback) => {
-    try {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(Chain.Solana)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers]()
+      }
       const response = await messengers.background.send<
         any,
         Messaging.Chain.Response
@@ -245,17 +248,21 @@ export class Solana implements Wallet {
         { id: uuidv4() }
       )
 
-      const result = processBackgroundResponse(
+      return processBackgroundResponse(
         data,
         MessageKey.SOLANA_REQUEST,
         response
       )
+    }
 
-      if (callback) callback(null, result)
+    try {
+      const result = await processRequest()
+
+      callback?.(null, result)
 
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

@@ -1,13 +1,14 @@
 import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
 import { knownTokens } from '@core/chain/coin/knownTokens'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useMemo } from 'react'
 
+import { useDepositCoin } from '../providers/DepositCoinProvider'
+
 export const useIBCAcceptedTokens = (destinationChain?: Chain) => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const sourceCoins = useCurrentVaultChainCoins(coinKey.chain)
+  const [{ chain }] = useDepositCoin()
+  const sourceCoins = useCurrentVaultChainCoins(chain)
 
   return useMemo(() => {
     if (

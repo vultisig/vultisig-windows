@@ -1,5 +1,6 @@
 import { RequestMethod } from '@clients/extension/src/utils/constants'
-import { CosmosChain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
+import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { callBackground } from '@core/inpage-provider/background'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
@@ -22,12 +23,29 @@ import {
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { hexToBytes } from '@lib/utils/hexToBytes'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import Long from 'long'
 
-import { CosmosAccount, ITransaction } from '../../utils/interfaces'
+import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { ITransaction } from '../../utils/interfaces'
+import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+
+const getAccounts = async (chainId: string): Promise<AccountData[]> => {
+  const { publicKey, address } = await requestAccount(
+    shouldBePresent(getCosmosChainByChainId(chainId))
+  )
+
+  return [
+    {
+      algo: 'secp256k1',
+      address,
+      pubkey: hexToBytes(publicKey),
+    },
+  ]
+}
 
 class SimpleMutex {
   private queue = Promise.resolve()
@@ -101,9 +119,13 @@ export class XDEFIKeplrProvider extends Keplr {
       })
 
       if (selectedChainId !== chainId) {
-        await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
-          params: [{ chainId }],
+        const chain = getCosmosChainByChainId(chainId)
+        if (!chain) {
+          throw new EIP1193Error('UnrecognizedChain')
+        }
+
+        await callBackground({
+          setAppChain: { cosmos: chain },
         })
       }
 
@@ -111,16 +133,8 @@ export class XDEFIKeplrProvider extends Keplr {
     })
   }
 
-  enable(_chainIds: string | string[]): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.cosmosProvider
-        .request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-          params: [],
-        })
-        .then(() => resolve())
-        .catch(reject)
-    })
+  async enable(_chainIds: string | string[]): Promise<void> {
+    await requestAccount(Chain.Cosmos)
   }
 
   getOfflineSigner(
@@ -130,14 +144,17 @@ export class XDEFIKeplrProvider extends Keplr {
     const cosmSigner = new CosmJSOfflineSigner(chainId, this, _signOptions)
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
-      return this.runWithChain(chainId, async () => {
-        const accounts = await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-          params: [],
-        })
+      const { publicKey, address } = await requestAccount(
+        shouldBePresent(getCosmosChainByChainId(chainId))
+      )
 
-        return accounts as unknown as AccountData[]
-      })
+      return [
+        {
+          algo: 'secp256k1',
+          address,
+          pubkey: hexToBytes(publicKey),
+        },
+      ]
     }
 
     return cosmSigner as OfflineAminoSigner & OfflineDirectSigner
@@ -155,12 +172,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
       return this.runWithChain(chainId, async () => {
-        const accounts = await this.cosmosProvider.request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-          params: [],
-        })
-
-        return accounts as unknown as AccountData[]
+        return getAccounts(chainId)
       })
     }
 
@@ -191,13 +203,7 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     return this.runWithChain(chainId, async () => {
-      const [account] = (await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
-      })) as unknown as CosmosAccount[]
-      if (!account || !account.pubkey) {
-        throw new Error('Missing account info or pubkey')
-      }
+      const [account] = await getAccounts(chainId)
       if (!areLowerCaseEqual(signer, account.address)) {
         throw new Error('Signer does not match current account address')
       }
@@ -275,13 +281,7 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
     return this.runWithChain(chainId, async () => {
-      const [account] = (await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
-      })) as unknown as CosmosAccount[]
-      if (!account || !account.pubkey) {
-        throw new Error('Missing account info or pubkey')
-      }
+      const [account] = await getAccounts(chainId)
       if (!areLowerCaseEqual(signer, account.address)) {
         throw new Error('Signer does not match current account address')
       }
@@ -340,18 +340,17 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async getKey(chainId: string): Promise<Key> {
-    const accounts = await this.runWithChain(chainId, async () => {
-      return this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-        params: [],
-      })
-    })
+    const [{ pubkey, address, algo }] = await getAccounts(chainId)
 
-    const transformedAccounts = (accounts as any[]).map((account: any) => ({
-      ...account,
-      pubKey: account.pubkey,
-    }))
-
-    return transformedAccounts[0]
+    return {
+      pubKey: pubkey,
+      bech32Address: address,
+      ethereumHexAddress: address,
+      address: hexToBytes(address),
+      isNanoLedger: false,
+      isKeystone: false,
+      name: '',
+      algo,
+    }
   }
 }
