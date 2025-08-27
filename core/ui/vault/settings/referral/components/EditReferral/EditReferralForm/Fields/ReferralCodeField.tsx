@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -9,12 +8,10 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
-import { useCurrentVaultAddress } from '../../../../../../state/currentVaultCoins'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
 export const ReferralCodeField = () => {
-  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
-  const { data: nameDetails } = useUserValidThorchainNameQuery(address)
+  const { data: nameDetails } = useUserValidThorchainNameQuery()
   const name = shouldBePresent(nameDetails?.name)
   const [, copyToClipboard] = useCopyToClipboard()
 
