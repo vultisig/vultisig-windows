@@ -14,7 +14,8 @@ import styled from 'styled-components'
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
-import { ReferralPageWrapper } from './Referrals.styled'
+import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
+import { FormFieldErrorText, ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
   onSaveReferral: (friendReferral: string) => void
@@ -33,6 +34,9 @@ export const ManageReferralsForm = ({
   const navigate = useCoreNavigate()
   const vaultId = useAssertCurrentVaultId()
   const { data: friendReferral } = useFriendReferralQuery(vaultId)
+
+  const error = useFriendReferralValidation(value)
+  const disabled = Boolean(error)
 
   useEffect(() => {
     if (friendReferral) {
@@ -70,14 +74,18 @@ export const ManageReferralsForm = ({
             <VStack gap={16}>
               <VStack gap={8}>
                 <Text size={14}>{t('use_referral_code')}</Text>
-                <TextInput
-                  value={value}
-                  disabled={Boolean(friendReferral)}
-                  onValueChange={val => setValue(val)}
-                  placeholder={t('enter_referral_code_placeholder')}
-                />
+                <VStack gap={2}>
+                  <TextInput
+                    value={value}
+                    disabled={Boolean(friendReferral)}
+                    onValueChange={val => setValue(val)}
+                    placeholder={t('enter_referral_code_placeholder')}
+                  />
+                  <FormFieldErrorText>{error}</FormFieldErrorText>
+                </VStack>
               </VStack>
               <SaveReferralButton
+                disabled={disabled}
                 onClick={() =>
                   friendReferral
                     ? onEditFriendReferral()
