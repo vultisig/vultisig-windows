@@ -23,3 +23,11 @@ export type BackgroundInterface = {
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
+
+export const authorizedBackgroundMethods = [
+  'getAccount',
+  'setAppChain',
+] as const satisfies readonly BackgroundMethod[]
+
+export type AuthorizedBackgroundMethod =
+  (typeof authorizedBackgroundMethods)[number]

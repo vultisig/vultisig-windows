@@ -42,7 +42,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
 
-  const { processError } = useCore()
+  const { processError, targetVaultId } = useCore()
 
   const query = useMergeQueries({
     vaults,
@@ -70,7 +70,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
             processError={processError}
           >
             <VaultsProvider value={vaults}>
-              <CurrentVaultIdProvider value={currentVaultId}>
+              <CurrentVaultIdProvider value={targetVaultId ?? currentVaultId}>
                 <PasscodeProvider initialValue={null}>
                   <RootCurrentVaultProvider>
                     {children}
