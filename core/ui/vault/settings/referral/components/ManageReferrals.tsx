@@ -81,6 +81,7 @@ export const ManageReferrals = () => {
         }
         default={() => (
           <ManageReferralsForm
+            onEditFriendReferral={() => setUiState('editFriendReferral')}
             onSaveReferral={(value = '') => {
               const newFriendReferral = value.trim()
 

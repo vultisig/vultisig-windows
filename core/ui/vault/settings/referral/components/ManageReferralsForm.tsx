@@ -19,11 +19,13 @@ import { ReferralPageWrapper } from './Referrals.styled'
 type Props = {
   onSaveReferral: (friendReferral: string) => void
   onCreateReferral: () => void
+  onEditFriendReferral: () => void
 }
 
 export const ManageReferralsForm = ({
   onSaveReferral,
   onCreateReferral,
+  onEditFriendReferral,
 }: Props) => {
   const [value, setValue] = useState('')
 
@@ -75,7 +77,13 @@ export const ManageReferralsForm = ({
                   placeholder={t('enter_referral_code_placeholder')}
                 />
               </VStack>
-              <SaveReferralButton onClick={() => onSaveReferral(value)}>
+              <SaveReferralButton
+                onClick={() =>
+                  friendReferral
+                    ? onEditFriendReferral()
+                    : onSaveReferral(value)
+                }
+              >
                 {friendReferral
                   ? t('edit_friends_referral')
                   : t('add_referral_code')}

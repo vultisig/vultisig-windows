@@ -28,7 +28,7 @@ export const en = {
   save_code: 'Save code',
   used_referral_error:
     'Used referral code can not be the same as your referral code',
-  tns_max_4_chars: 'Referral code must be less than 4 characters',
+  tns_max_4_chars: 'Referral code must be no more than 4 characters',
   tns_alnum_only: 'Referral code must contain only alphanumeric characters',
   tns_not_found: 'Referral code not found',
   tns_missing_thor_alias: 'Referral code must have a THOR‐chain alias',
