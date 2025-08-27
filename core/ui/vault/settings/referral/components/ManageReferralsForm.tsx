@@ -36,7 +36,9 @@ export const ManageReferralsForm = ({
   const { data: friendReferral } = useFriendReferralQuery(vaultId)
 
   const error = useFriendReferralValidation(value)
-  const disabled = Boolean(error)
+  const disabled = friendReferral
+    ? false
+    : Boolean(error) || value.trim().length === 0
 
   useEffect(() => {
     if (friendReferral) {
@@ -81,7 +83,9 @@ export const ManageReferralsForm = ({
                     onValueChange={val => setValue(val)}
                     placeholder={t('enter_referral_code_placeholder')}
                   />
-                  <FormFieldErrorText>{error}</FormFieldErrorText>
+                  {!friendReferral && error && (
+                    <FormFieldErrorText>{error}</FormFieldErrorText>
+                  )}
                 </VStack>
               </VStack>
               <SaveReferralButton

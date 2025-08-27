@@ -4,7 +4,6 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
@@ -12,7 +11,6 @@ import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValid
 
 export const ReferralCodeField = () => {
   const { data: nameDetails } = useUserValidThorchainNameQuery()
-  const name = shouldBePresent(nameDetails?.name)
   const [, copyToClipboard] = useCopyToClipboard()
 
   return (
@@ -23,9 +21,11 @@ export const ReferralCodeField = () => {
         alignItems: 'center',
       }}
     >
-      <Text>{name}</Text>
+      <Text>{nameDetails?.name}</Text>
       <FieldIconWrapper>
-        <UnstyledButton onClick={() => copyToClipboard(name)}>
+        <UnstyledButton
+          onClick={() => copyToClipboard(nameDetails?.name || '')}
+        >
           <CopyIcon />
         </UnstyledButton>
       </FieldIconWrapper>
