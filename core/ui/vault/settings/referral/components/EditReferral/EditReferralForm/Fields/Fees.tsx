@@ -51,7 +51,6 @@ export const Fees = () => {
         }) => {
           const remaining = valid?.remainingYears ?? 0
           const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
-
           const perYearFee = runeFee - registerFee
           const extensionFee = perYearFee * yearsToAdd
 

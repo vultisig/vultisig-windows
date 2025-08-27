@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -21,12 +22,14 @@ import styled from 'styled-components'
 
 import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
-import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
+import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
 import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
+import { normaliseChainToMatchPoolChain } from '../EditReferral/EditReferralForm/config'
 import { ReferralPageWrapper } from '../Referrals.styled'
 
 export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
@@ -38,23 +41,35 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const referralAmount = watch('referralFeeAmount')
   const name = watch('referralName')
 
-  const { data: validNameDetails } = useUserValidThorchainNameQuery()
+  const { data: allowedPools = [] } = useActivePoolsQuery()
+
+  const preferredAsset = allowedPools.find(pool => {
+    const [poolChain, tail] = pool.asset.split('.')
+    const poolTicker = tail.split('-')[0]
+    return (
+      normaliseChainToMatchPoolChain(poolChain) ===
+        normaliseChainToMatchPoolChain(coin.chain) &&
+      poolTicker.toUpperCase() === coin.ticker.toUpperCase()
+    )
+  })?.asset
 
   const memo = buildCreateReferralMemo({
     name,
     thorAliasAddress: sender,
-    preferredAsset: validNameDetails?.preferred_asset ?? '',
+    preferredAsset: preferredAsset || undefined,
   })
-  const { chain, ticker } = coin
+
+  const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)
+  const { chain, ticker } = thorchainCoin
 
   const { keysignPayload } = useReferralKeysignPayload({
-    coin,
+    coin: thorchainCoin,
     memo,
     amount: referralAmount,
   })
 
   const chainSpecific = useChainSpecificQuery({
-    coin,
+    coin: thorchainCoin,
     isDeposit: true,
   })
 
@@ -80,7 +95,7 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
               {t('you_are_sending')}
             </Text>
             <HStack alignItems="center" gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+              <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
               <Text size={17}>
                 {formatTokenAmount(referralAmount)}
                 <Text as="span" color="shy">
