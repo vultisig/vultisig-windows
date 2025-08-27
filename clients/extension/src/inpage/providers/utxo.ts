@@ -73,11 +73,14 @@ export class UTXO extends EventEmitter {
     )
   }
 
-  async signPSBT(_psbt: string | Buffer) {
+  async signPSBT(psbt: Buffer) {
     return await this.request({
       method: RequestMethod.CTRL.SIGN_PSBT,
-      params: [],
-      context: { provider: this.providerId },
+      params: [
+        {
+          psbt: Uint8Array.from(psbt),
+        },
+      ],
     })
   }
 

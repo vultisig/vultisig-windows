@@ -8,6 +8,7 @@ import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getParsedSolanaTransaction } from '@clients/extension/src/utils/tx/solana/parseSolanaTransaction'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -45,10 +46,13 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
+import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
+
+import { getPsbtKeysignPayload } from '../../utils/tx/utxo/getPsbtKeysignPayload'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -148,20 +152,35 @@ export const TransactionPage = () => {
               }),
             }
           },
-          serialized: async ({ data: serialized, skipBroadcast }) => {
-            const parsed = await getParsedSolanaTransaction(
-              walletCore,
-              serialized
-            )
+          serialized: async ({ data: serialized, chain, skipBroadcast }) => {
+            if (chain === Chain.Bitcoin) {
+              const txInputDataArray = Object.values(serialized)
+              const dataBuffer = Buffer.from(txInputDataArray)
+              const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
+              const gasSettings: FeeSettings | null = { priority: 'fast' }
+              return {
+                keysign: await getPsbtKeysignPayload(
+                  psbt,
+                  walletCore,
+                  vault,
+                  gasSettings
+                ),
+              }
+            } else {
+              const parsed = await getParsedSolanaTransaction(
+                walletCore,
+                serialized
+              )
 
-            const keysignPayload = await getSolanaKeysignPayload(
-              parsed,
-              serialized,
-              vault,
-              walletCore,
-              skipBroadcast
-            )
-            return { keysign: keysignPayload }
+              const keysignPayload = await getSolanaKeysignPayload(
+                parsed,
+                serialized,
+                vault,
+                walletCore,
+                skipBroadcast
+              )
+              return { keysign: keysignPayload }
+            }
           },
         })
 

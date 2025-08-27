@@ -128,6 +128,7 @@ export const handleRequest = (
               serialized: {
                 data: _transaction.serializedTx,
                 skipBroadcast: _transaction.skipBroadcast,
+                chain,
               },
             },
             status: 'default',
@@ -762,6 +763,23 @@ export const handleRequest = (
             status: 'default',
           }).then(result => {
             resolve(shouldBePresent(result.hash))
+          })
+        }
+        break
+      }
+      case RequestMethod.CTRL.SIGN_PSBT: {
+        if (Array.isArray(params)) {
+          const [{ psbt }] = params
+          handleSendTransaction({
+            transactionPayload: {
+              serialized: {
+                data: psbt,
+                chain,
+              },
+            },
+            status: 'default',
+          }).then(result => {
+            resolve(shouldBePresent(result))
           })
         }
         break

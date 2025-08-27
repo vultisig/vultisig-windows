@@ -1,8 +1,10 @@
 import { OtherChain, UtxoBasedChain, UtxoChain } from '@core/chain/Chain'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { getChainKind } from '../../../ChainKind'
 import { getBlockchairBaseUrl } from '../../../chains/utxo/client/getBlockchairBaseUrl'
 import { DecodedTx } from '../../decode'
 import { BroadcastTxResolver } from '../resolver'
@@ -27,10 +29,11 @@ export const broadcastUtxoTx: BroadcastTxResolver<UtxoBasedChain> = async ({
   tx,
 }) => {
   const url = `${getBlockchairBaseUrl(chain)}/push/transaction`
+  const encodedBytes = selectEncodedBytes(chain, tx as UtxoBasedDecodedTx)
 
   const response = await queryUrl<BlockchairBroadcastResponse>(url, {
     body: {
-      data: Buffer.from((tx as UtxoBasedDecodedTx).encoded).toString('hex'),
+      data: Buffer.from(encodedBytes).toString('hex'),
     },
   })
 
@@ -54,4 +57,28 @@ export const broadcastUtxoTx: BroadcastTxResolver<UtxoBasedChain> = async ({
   }
 
   throw new Error(`Failed to broadcast transaction: ${extractErrorMsg(error)}`)
+}
+
+const hasSigningResultV2 = (
+  tx: DecodedTx<UtxoChain | OtherChain.Cardano>
+): tx is DecodedTx<UtxoChain> & {
+  signingResultV2: { encoded?: Uint8Array | null }
+} =>
+  tx != null &&
+  typeof tx === 'object' &&
+  'signingResultV2' in tx &&
+  !!(tx as any).signingResultV2
+
+const selectEncodedBytes = (
+  chain: UtxoBasedChain,
+  tx: UtxoBasedDecodedTx
+): Uint8Array => {
+  if (
+    getChainKind(chain) === 'utxo' &&
+    hasSigningResultV2(tx) &&
+    tx.signingResultV2.encoded
+  ) {
+    return shouldBePresent(tx.signingResultV2.encoded)
+  }
+  return shouldBePresent(tx.encoded)
 }
