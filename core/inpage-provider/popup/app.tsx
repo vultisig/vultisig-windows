@@ -1,17 +1,78 @@
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { PopupMethod } from '@core/inpage-provider/popup/interface'
+import { Center } from '@lib/ui/layout/Center'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
-import { PopupView } from './view'
-import { useCancelPopupCall } from './view/core/call'
+import {
+  useCancelPopupCall,
+  usePopupCallId,
+  useResolvePopupCall,
+} from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
+import { PopupResolvers } from './view/resolvers'
+import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
 
 export const PopupApp = () => {
   const cancelPopupCall = useCancelPopupCall()
+  const callId = usePopupCallId()
+  const resolvePopupCall = useResolvePopupCall()
+
+  const { mutate, ...mutationState } = useMutation({
+    mutationFn: async () => {
+      const entry = await getPopupViewCall(callId)
+      if (!entry) {
+        throw new Error(`No call found in the storage for ${callId}`)
+      }
+
+      return entry
+    },
+    onSuccess: async () => {
+      await removePopupViewCall(callId)
+    },
+    onError: error => {
+      resolvePopupCall({ error })
+      window.close()
+    },
+  })
+
+  useEffect(() => {
+    mutate()
+  }, [mutate])
 
   return (
-    <ExtensionCoreApp goBack={cancelPopupCall}>
-      <VaultsOnly>
-        <PopupView />
-      </VaultsOnly>
-    </ExtensionCoreApp>
+    <MatchQuery
+      value={mutationState}
+      success={({ call, context }) => {
+        const method = getRecordUnionKey(call) as PopupMethod
+        const input = getRecordUnionValue(call)
+
+        const Resolver = PopupResolvers[method]
+
+        return (
+          <ExtensionCoreApp
+            goBack={cancelPopupCall}
+            targetVaultId={context?.appSession?.vaultId}
+          >
+            <VaultsOnly>
+              <Resolver
+                input={input}
+                context={context as any}
+                onFinish={resolvePopupCall}
+              />
+            </VaultsOnly>
+          </ExtensionCoreApp>
+        )
+      }}
+      pending={() => (
+        <Center>
+          <Spinner />
+        </Center>
+      )}
+    />
   )
 }

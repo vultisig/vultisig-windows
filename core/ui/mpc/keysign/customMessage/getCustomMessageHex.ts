@@ -19,7 +19,7 @@ export const getCustomMessageHex = ({
     : new TextEncoder().encode(message)
 
   return match(getChainKind(chain), {
-    evm: () => keccak256(bytes),
+    evm: () => stripHexPrefix(keccak256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
   })
 }

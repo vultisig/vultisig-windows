@@ -9,10 +9,25 @@ type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
   ChainOfKind<K>
 >
 
+export type SetAppChainInput = {
+  [K in ActiveChainKind]: { [P in K]: ChainOfKind<P> }
+}[ActiveChainKind]
+
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
+  setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
   getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
+  signOut: Method<{}>
+  evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
+
+export const authorizedBackgroundMethods = [
+  'getAccount',
+  'setAppChain',
+] as const satisfies readonly BackgroundMethod[]
+
+export type AuthorizedBackgroundMethod =
+  (typeof authorizedBackgroundMethods)[number]

@@ -1,6 +1,7 @@
 import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -15,6 +16,7 @@ import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
+import { useMutation } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -25,7 +27,22 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const vaults = useVaults()
-  const { mutate: addAppSession } = useAddVaultAppSessionMutation({
+
+  const { mutateAsync: addAppSession } = useAddVaultAppSessionMutation()
+  const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
+  const { mutate: sumbit, isPending } = useMutation({
+    mutationFn: async (vaultId: string) => {
+      const [appSession] = await Promise.all([
+        addAppSession({
+          vaultId,
+          host: getUrlBaseDomain(requestOrigin),
+          url: getUrlHost(requestOrigin),
+        }),
+        setCurrentVaultId(vaultId),
+      ])
+
+      return appSession
+    },
     onSuccess: appSession => {
       onFinish({ data: { appSession } })
     },
@@ -33,19 +50,20 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const { requestOrigin } = shouldBePresent(context)
 
   const submitButtonProps = useMemo(() => {
+    if (isPending) {
+      return { loading: true }
+    }
+
     if (!vaultId) {
       return { disabled: true }
     }
 
     return {
-      onClick: () =>
-        addAppSession({
-          vaultId,
-          host: getUrlBaseDomain(requestOrigin),
-          url: getUrlHost(requestOrigin),
-        }),
+      onClick: () => {
+        sumbit(vaultId)
+      },
     }
-  }, [addAppSession, requestOrigin, vaultId])
+  }, [isPending, sumbit, vaultId])
 
   return (
     <VStack fullHeight>

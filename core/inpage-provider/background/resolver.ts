@@ -1,9 +1,11 @@
 import {
+  AuthorizedBackgroundMethod,
   BackgroundInterface,
   BackgroundMethod,
 } from '@core/inpage-provider/background/interface'
-import { BridgeContext } from '@lib/extension/bridge/context'
 import { Resolver } from '@lib/utils/types/Resolver'
+
+import { AuthorizedCallContext, UnauthorizedCallContext } from '../call/context'
 
 export type BackgroundCall<M extends BackgroundMethod> = {
   [K in M]: BackgroundInterface[K]['input']
@@ -11,15 +13,15 @@ export type BackgroundCall<M extends BackgroundMethod> = {
 
 export type BackgroundMessage<M extends BackgroundMethod = BackgroundMethod> = {
   call: BackgroundCall<M>
+  options?: { account?: string }
 }
 
-export type BackgroundResolver<
-  K extends BackgroundMethod,
-  Ctx extends BridgeContext = BridgeContext,
-> = Resolver<
+export type BackgroundResolver<K extends BackgroundMethod> = Resolver<
   {
     input: BackgroundInterface[K]['input']
-    context: Ctx
+    context: K extends AuthorizedBackgroundMethod
+      ? AuthorizedCallContext
+      : UnauthorizedCallContext
   },
   Promise<BackgroundInterface[K]['output']>
 >

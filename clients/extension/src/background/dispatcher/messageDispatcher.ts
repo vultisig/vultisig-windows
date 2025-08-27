@@ -58,17 +58,13 @@ export const dispatchMessage = async (
   ] as const
 
   for (const [key, chain] of basicRequests) {
-    if (type === key) return handleRequest(message, chain, safeOrigin)
+    if (type === key) return handleRequest(message, chain)
   }
   if (type in chainSelectors) {
     const selector = chainSelectors[type as keyof typeof chainSelectors]
     const chain = await selector?.()
     if (!chain) return
-    const response = await handleRequest(
-      message,
-      shouldBePresent(chain),
-      safeOrigin
-    )
+    const response = await handleRequest(message, shouldBePresent(chain))
 
     return response
   }

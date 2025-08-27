@@ -28,9 +28,9 @@ export async function callInpageProviderBridgeBackgroundAgent(
 ): Promise<unknown> {
   const { error, data } = await sendToBackground<Result<unknown>>(message)
 
-  if (data) {
-    return data
+  if (error) {
+    throw error
   }
 
-  throw error
+  return data
 }
