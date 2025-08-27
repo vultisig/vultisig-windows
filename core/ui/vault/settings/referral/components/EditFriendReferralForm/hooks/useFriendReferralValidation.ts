@@ -1,19 +1,15 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultAddress } from '../../../../../state/currentVaultCoins'
 import { useUserValidThorchainNameQuery } from '../../../queries/useUserValidThorchainNameQuery'
 import { ValidThorchainNameDetails } from '../../../services/getUserValidThorchainName'
 
 export const useFriendReferralValidation = (input: string) => {
-  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
-
   const {
     data: {
       name: lookedUpName = '',
       aliases = [],
     } = {} as ValidThorchainNameDetails,
-  } = useUserValidThorchainNameQuery(address)
+  } = useUserValidThorchainNameQuery()
 
   const { t } = useTranslation()
   const tooLong = input.length > 4

@@ -25,6 +25,7 @@ import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
+import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
 import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
 import { ReferralPageWrapper } from '../Referrals.styled'
 
@@ -37,10 +38,12 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const referralAmount = watch('referralFeeAmount')
   const name = watch('referralName')
 
+  const { data: validNameDetails } = useUserValidThorchainNameQuery()
+
   const memo = buildCreateReferralMemo({
     name,
-    payoutAddress: sender,
-    ownerThorAddr: sender,
+    thorAliasAddress: sender,
+    preferredAsset: validNameDetails?.preferred_asset ?? '',
   })
   const { chain, ticker } = coin
 
