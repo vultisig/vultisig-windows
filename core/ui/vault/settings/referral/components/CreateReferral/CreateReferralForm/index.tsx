@@ -11,7 +11,7 @@ import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCanAffordReferral } from '../../../hooks/useIsBalanceEnoughForReferral'
+import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
 import {
   DecorationLine,

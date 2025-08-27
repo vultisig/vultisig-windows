@@ -10,7 +10,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
-import { useCanAffordReferral } from '../../../hooks/useIsBalanceEnoughForReferral'
+import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../../providers/ReferralPayoutAssetProvider'
 import { ValidThorchainNameDetails } from '../../../services/getUserValidThorchainName'
