@@ -63,7 +63,7 @@ export const ManageReferralsForm = ({
             flexDirection: 'column',
           }}
         >
-          <VStack fullWidth flexGrow gap={20}>
+          <VStack justifyContent="center" fullWidth flexGrow gap={20}>
             <DecorationImage src="/core/images/crypto-natives.png" alt="" />
             <VStack gap={16}>
               <VStack gap={8}>
@@ -95,15 +95,14 @@ export const ManageReferralsForm = ({
 }
 
 const DecorationImage = styled.img`
-  flex: 1;
   width: 365px;
   height: 365px;
   object-fit: cover;
   align-self: center;
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
-    width: 450px;
-    height: 450px;
+    width: 500px;
+    height: 500px;
   }
 `
 
