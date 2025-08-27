@@ -14,7 +14,6 @@ import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../../../../../chain/coin/price/queries/useCoinPriceQuery'
 import { useFiatCurrency } from '../../../../../../../storage/fiatCurrency'
-import { useReferralSender } from '../../../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../../../providers/EditReferralFormProvider'
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
@@ -22,8 +21,7 @@ import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValid
 export const Fees = () => {
   const { t } = useTranslation()
   const { watch, setValue } = useEditReferralFormData()
-  const address = useReferralSender()
-  const existing = useUserValidThorchainNameQuery(address)
+  const existing = useUserValidThorchainNameQuery()
   const runeCoin = chainFeeCoin.THORChain
   const runePrice = useCoinPriceQuery({ coin: runeCoin })
   const currency = useFiatCurrency()

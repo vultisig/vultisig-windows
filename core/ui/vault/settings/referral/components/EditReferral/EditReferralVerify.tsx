@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -23,14 +22,16 @@ import styled from 'styled-components'
 
 import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { useCurrentVaultAddress } from '../../../../state/currentVaultCoins'
 import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
-import { buildEditReferralMemo } from '../../utils/buildReferralMemos'
+import {
+  buildRenewalMemo,
+  buildSetPreferredAssetMemo,
+} from '../../utils/buildReferralMemos'
 import { ReferralPageWrapper } from '../Referrals.styled'
 import { normaliseChainToMatchPoolChain } from './EditReferralForm/config'
 
@@ -42,11 +43,9 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
 
-  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
-
   const { data: allowedPools = [] } = useActivePoolsQuery()
 
-  const { data: validNameDetails } = useUserValidThorchainNameQuery(address)
+  const { data: validNameDetails } = useUserValidThorchainNameQuery()
   const thorAliasAddress = validNameDetails?.aliases.find(
     a => a.chain.toUpperCase() === 'THOR'
   )?.address
@@ -66,11 +65,17 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
     )
   })?.asset
 
-  const memo = buildEditReferralMemo({
-    name: shouldBePresent(validNameDetails?.name),
-    thorAliasAddress,
-    preferredAsset,
-  })
+  const name = shouldBePresent(validNameDetails?.name)
+  const memo = preferredAsset
+    ? buildSetPreferredAssetMemo({
+        name,
+        thorAliasAddress,
+        preferredAsset,
+      })
+    : buildRenewalMemo({
+        name,
+        thorAliasAddress,
+      })
 
   const { chain, ticker } = coin
 
