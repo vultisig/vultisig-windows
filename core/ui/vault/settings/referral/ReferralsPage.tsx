@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -14,7 +13,6 @@ import {
   useHasFinishedReferralsOnboardingQuery,
   useSetHasFinishedReferralsOnboardingMutation,
 } from '../../../storage/referrals'
-import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { ManageReferrals } from './components/ManageReferrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
@@ -36,10 +34,8 @@ export const ReferralPage = () => {
     initialStep: isOnboarded ? 'manage' : 'landing',
   })
 
-  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
-
   // Hard refetch in case the user just created/edited a referral and is coming back from Keysign
-  const { refetch } = useUserValidThorchainNameQuery(address)
+  const { refetch } = useUserValidThorchainNameQuery()
 
   useEffect(() => {
     if (isOnboarded) {

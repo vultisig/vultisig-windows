@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
@@ -11,7 +10,6 @@ import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
 } from '../../../../storage/referrals'
-import { useCurrentVaultAddress } from '../../../state/currentVaultCoins'
 import { CreateReferralFormProvider } from '../providers/CreateReferralFormProvider'
 import { EditReferralFormProvider } from '../providers/EditReferralFormProvider'
 import { ReferralPayoutAssetProvider } from '../providers/ReferralPayoutAssetProvider'
@@ -42,10 +40,7 @@ export const ManageReferrals = () => {
   const { mutateAsync: setFriendReferral } =
     useSetFriendReferralMutation(vaultId)
 
-  const address = useCurrentVaultAddress(chainFeeCoin.THORChain.chain)
-
-  const { data: validNameDetails, status } =
-    useUserValidThorchainNameQuery(address)
+  const { data: validNameDetails, status } = useUserValidThorchainNameQuery()
 
   useEffect(() => {
     if (status === 'pending') return
