@@ -81,7 +81,9 @@ export const ManageReferrals = () => {
         }
         default={() => (
           <ManageReferralsForm
-            onSaveReferral={newFriendReferral => {
+            onSaveReferral={(value = '') => {
+              const newFriendReferral = value.trim()
+
               if (isFriendReferralLoading) return
 
               if (friendReferral) {
