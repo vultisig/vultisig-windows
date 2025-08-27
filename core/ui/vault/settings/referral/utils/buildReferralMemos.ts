@@ -4,7 +4,6 @@ type CreateArgs = {
   preferredAsset?: string
 }
 
-// ~:name:THOR:<thor-alias-address>:<owner-thor-addr>:?preferredAsset
 export function buildCreateReferralMemo({
   name,
   thorAliasAddress,
@@ -16,7 +15,6 @@ export function buildCreateReferralMemo({
 }
 
 type RenewArgs = { name: string; thorAliasAddress: string }
-// ~:name:THOR:<thor-alias-address>
 export function buildRenewalMemo({ name, thorAliasAddress }: RenewArgs) {
   return ['~', name, 'THOR', thorAliasAddress].join(':')
 }
@@ -27,7 +25,6 @@ type EditArgs = {
   preferredAsset: string
 }
 
-// (Set preferred asset + keep THOR alias explicit)
 export function buildSetPreferredAssetMemo({
   name,
   thorAliasAddress,
