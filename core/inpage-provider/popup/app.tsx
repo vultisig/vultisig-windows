@@ -16,6 +16,7 @@ import {
 import { VaultsOnly } from './view/flow/VaultsOnly'
 import { PopupResolvers } from './view/resolvers'
 import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
+import { PopupInputProvider } from './view/state/input'
 
 export const PopupApp = () => {
   const cancelPopupCall = useCancelPopupCall()
@@ -59,11 +60,13 @@ export const PopupApp = () => {
             targetVaultId={context?.appSession?.vaultId}
           >
             <VaultsOnly>
-              <Resolver
-                input={input}
-                context={context as any}
-                onFinish={resolvePopupCall}
-              />
+              <PopupInputProvider value={input}>
+                <Resolver
+                  input={input}
+                  context={context as any}
+                  onFinish={resolvePopupCall}
+                />
+              </PopupInputProvider>
             </VaultsOnly>
           </ExtensionCoreApp>
         )

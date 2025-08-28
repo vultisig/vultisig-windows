@@ -2,6 +2,7 @@ import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
+import { callPopup } from '@core/inpage-provider/popup'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import {
@@ -273,10 +274,20 @@ export class Solana implements Wallet {
     if (!this.account) throw new Error('not connected')
     const messageBuffer = Buffer.from(message)
     const decodedString = new TextDecoder().decode(messageBuffer)
-    const signature = await this.request({
-      method: RequestMethod.CTRL.SIGN_MESSAGE,
-      params: [{ message: decodedString }],
-    })
+
+    const signature = await callPopup(
+      {
+        signMessage: {
+          sign_message: {
+            message: decodedString,
+            chain: Chain.Solana,
+          },
+        },
+      },
+      {
+        closeOnFinish: false,
+      }
+    )
 
     return {
       signature: Uint8Array.from(Buffer.from(String(signature), 'hex')),
@@ -295,15 +306,25 @@ export class Solana implements Wallet {
       ...input,
       address: account.address,
     })
-    const sig = await this.request({
-      method: RequestMethod.CTRL.SIGN_MESSAGE,
-      params: [{ message }],
-    })
+
+    const signature = await callPopup(
+      {
+        signMessage: {
+          sign_message: {
+            message,
+            chain: Chain.Solana,
+          },
+        },
+      },
+      {
+        closeOnFinish: false,
+      }
+    )
 
     return {
       account: account,
       signedMessage: Buffer.from(message),
-      signature: Uint8Array.from(Buffer.from(String(sig), 'hex')),
+      signature: Uint8Array.from(Buffer.from(String(signature), 'hex')),
       signatureType: 'ed25519',
     }
   }

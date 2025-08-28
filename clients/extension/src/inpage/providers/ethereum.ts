@@ -5,9 +5,13 @@ import {
   getEvmChainId,
 } from '@core/chain/chains/evm/chainInfo'
 import { callBackground } from '@core/inpage-provider/background'
+import { callPopup } from '@core/inpage-provider/popup'
+import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { attempt, withFallback } from '@lib/utils/attempt'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
+import { getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
 import { v4 as uuidv4 } from 'uuid'
 import { BlockTag } from 'viem'
@@ -17,6 +21,19 @@ import { processBackgroundResponse } from '../../utils/functions'
 import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
+
+const processSignature = (signature: string) => {
+  let result = Signature.from(ensureHexPrefix(signature))
+  if (result.v < 27) {
+    result = Signature.from({
+      r: result.r,
+      s: result.s,
+      v: result.v + 27,
+    })
+  }
+
+  return ensureHexPrefix(result.serialized)
+}
 
 export class Ethereum extends EventEmitter {
   public chainId: string
@@ -252,6 +269,57 @@ export class Ethereum extends EventEmitter {
             params,
           },
         }),
+      eth_signTypedData_v4: async ([account, input]: [
+        string,
+        string | Eip712V4Payload,
+      ]) => {
+        const chain = await getChain()
+
+        const result = await callPopup(
+          {
+            signMessage: {
+              eth_signTypedData_v4: {
+                chain,
+                message:
+                  typeof input === 'string'
+                    ? (JSON.parse(input) as Eip712V4Payload)
+                    : input,
+              },
+            },
+          },
+          {
+            account,
+            closeOnFinish: false,
+          }
+        )
+
+        return processSignature(result)
+      },
+      personal_sign: async ([rawMessage, account]: [string, string]) => {
+        const chain = await getChain()
+
+        const message = isHexString(rawMessage)
+          ? getBytes(rawMessage)
+          : new TextEncoder().encode(rawMessage)
+
+        const result = await callPopup(
+          {
+            signMessage: {
+              personal_sign: {
+                chain,
+                message: new TextDecoder().decode(message),
+                bytesCount: message.length,
+              },
+            },
+          },
+          {
+            account,
+            closeOnFinish: false,
+          }
+        )
+
+        return processSignature(result)
+      },
     } as const
 
     if (data.method in handlers) {

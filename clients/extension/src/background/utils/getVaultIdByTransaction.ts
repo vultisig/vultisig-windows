@@ -19,9 +19,6 @@ export const getVaultIdByTransaction = async ({
       return from ? await getVaultIdByAddress(from) : undefined
     },
 
-    custom: async custom =>
-      custom.address ? await getVaultIdByAddress(custom.address) : undefined,
-
     serialized: async serialized => {
       const authority = getTransactionAuthority(serialized.data)
       return authority ? await getVaultIdByAddress(authority) : undefined
