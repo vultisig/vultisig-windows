@@ -1,4 +1,4 @@
 export const featureFlags = {
-  referrals: true,
+  referrals: false,
   mintAndRedeem: false,
 } as const
