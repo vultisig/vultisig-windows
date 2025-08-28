@@ -19,7 +19,7 @@ import { getUtxoTxInputData } from './resolvers/utxo'
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  publicKey?: PublicKey
+  publicKey: PublicKey
 }
 
 const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {

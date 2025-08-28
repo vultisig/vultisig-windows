@@ -8,7 +8,7 @@ export type GetTxInputDataInput<T extends ChainKind> = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   chain: ChainOfKind<T>
-  publicKey?: PublicKey
+  publicKey: PublicKey
 }
 
 export type TxInputDataResolver<T extends ChainKind> = Resolver<
