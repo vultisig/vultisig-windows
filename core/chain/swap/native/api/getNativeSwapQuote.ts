@@ -21,7 +21,7 @@ type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
   destination: string
   amount: number
-  isAffiliate: boolean
+  affiliateBps: number
 }
 
 type NativeSwapQuoteErrorResponse = {
@@ -36,7 +36,7 @@ export const getNativeSwapQuote = async ({
   from,
   to,
   amount,
-  isAffiliate,
+  affiliateBps,
 }: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
   const [fromAsset, toAsset] = [from, to].map(asset => toNativeSwapAsset(asset))
 
@@ -52,9 +52,7 @@ export const getNativeSwapQuote = async ({
     destination,
     streaming_interval: nativeSwapStreamingInterval[swapChain],
     affiliate: nativeSwapAffiliateConfig.affiliateFeeAddress,
-    affiliate_bps: isAffiliate
-      ? nativeSwapAffiliateConfig.affiliateFeeRateBps
-      : 0,
+    affiliate_bps: affiliateBps,
   }
 
   const url = addQueryParams(swapBaseUrl, params)
