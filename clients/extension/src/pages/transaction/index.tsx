@@ -103,6 +103,7 @@ export const TransactionPage = () => {
                     updatedGasLimit ||
                     (await estimateEvmGasWithFallback({
                       chain: keysign.chain,
+                      from: keysign.transactionDetails.from,
                       to: shouldBePresent(keysign.transactionDetails.to),
                       data: keysign.transactionDetails.data,
                       value: keysign.transactionDetails.amount?.amount,

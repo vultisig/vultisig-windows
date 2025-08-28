@@ -4,11 +4,13 @@ import { defaultEvmSwapGasLimit } from './evmGasLimit'
 
 export const estimateEvmGasWithFallback = async ({
   chain,
+  from,
   to,
   data,
   value,
 }: {
   chain: Chain
+  from: string
   to: string
   data?: string
   value?: string
@@ -18,7 +20,8 @@ export const estimateEvmGasWithFallback = async ({
     const gasLimit = await client.estimateGas({
       to: to as `0x${string}`,
       data: data as `0x${string}`,
-      value: value ? BigInt(value) : undefined,
+      value: value && Number(value) !== 0 ? BigInt(value) : undefined,
+      account: from as `0x${string}`,
     })
     const gasLimitNumber = Number(gasLimit)
     return gasLimitNumber === 0 ? defaultEvmSwapGasLimit : gasLimitNumber
