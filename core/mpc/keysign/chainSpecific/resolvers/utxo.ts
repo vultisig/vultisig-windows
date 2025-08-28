@@ -26,7 +26,7 @@ const getByteFee = async (chain: UtxoChain) => {
 export const getUtxoSpecific: ChainSpecificResolver<
   UTXOSpecific,
   UtxoFeeSettings
-> = async ({ coin, feeSettings, amount }) => {
+> = async ({ coin, feeSettings, amount, psbt }) => {
   const chain = coin.chain as UtxoChain
 
   let byteFee = await getByteFee(chain)
@@ -36,6 +36,7 @@ export const getUtxoSpecific: ChainSpecificResolver<
 
   const result = create(UTXOSpecificSchema, {
     byteFee: byteFee.toString(),
+    psbt: psbt?.toBase64(),
   })
 
   if (amount) {

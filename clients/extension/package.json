@@ -36,6 +36,7 @@
     "@wallet-standard/features": "^1.1.0",
     "axios": "^1.8.3",
     "bech32": "^2.0.0",
+    "bitcoinjs-lib": "^6.1.7",
     "mipd": "^0.0.7",
     "styled-components": "^6.1.16",
     "ua-parser-js": "^2.0.3"

@@ -6,6 +6,7 @@ import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -50,12 +51,14 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMutation } from '@tanstack/react-query'
+import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 
 import { parseSolanaTx } from '../../utils/tx/solana/parser'
+import { getPsbtKeysignPayload } from '../../utils/tx/utxo/getPsbtKeysignPayload'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -146,22 +149,35 @@ export const TransactionPage = () => {
 
             return keysignPayload
           },
-          serialized: async ({ data: serialized, skipBroadcast }) => {
-            const parsed = await parseSolanaTx({
-              walletCore,
-              inputTx: serialized,
-            })
-            if (!parsed) {
-              throw new Error('Could not parse transaction')
+          serialized: async ({ data: serialized, chain, skipBroadcast }) => {
+            if (chain === Chain.Bitcoin) {
+              const txInputDataArray = Object.values(serialized)
+              const dataBuffer = Buffer.from(txInputDataArray)
+              const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
+              const gasSettings: FeeSettings | null = { priority: 'fast' }
+              return await getPsbtKeysignPayload(
+                psbt,
+                walletCore,
+                vault,
+                gasSettings
+              )
+            } else {
+              const parsed = await parseSolanaTx({
+                walletCore,
+                inputTx: serialized,
+              })
+
+              if (!parsed) {
+                throw new Error('Could not parse transaction')
+              }
+              return await getSolanaKeysignPayload(
+                parsed,
+                serialized,
+                vault,
+                walletCore,
+                skipBroadcast
+              )
             }
-            const keysignPayload = await getSolanaKeysignPayload(
-              parsed,
-              serialized,
-              vault,
-              walletCore,
-              skipBroadcast
-            )
-            return keysignPayload
           },
         }
       )

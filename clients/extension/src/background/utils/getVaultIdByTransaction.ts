@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { storage } from '@core/extension/storage'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -20,8 +21,14 @@ export const getVaultIdByTransaction = async ({
     },
 
     serialized: async serialized => {
-      const authority = getTransactionAuthority(serialized.data)
-      return authority ? await getVaultIdByAddress(authority) : undefined
+      try {
+        if (serialized.chain === Chain.Solana) {
+          const authority = getTransactionAuthority(serialized.data)
+          return authority ? await getVaultIdByAddress(authority) : undefined
+        }
+      } catch {
+        return undefined
+      }
     },
   })
   return vaultId

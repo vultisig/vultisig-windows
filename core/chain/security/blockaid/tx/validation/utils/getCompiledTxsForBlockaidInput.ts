@@ -37,6 +37,7 @@ export const getCompiledTxsForBlockaidInput = ({
   return getTxInputData({
     keysignPayload: payload,
     walletCore,
+    publicKey,
   }).map(txInputData => {
     const preHashes = getPreSigningHashes({
       walletCore,

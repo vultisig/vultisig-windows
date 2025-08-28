@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { without } from '@lib/utils/array/without'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -53,6 +54,16 @@ export const getPreSigningHashes = ({
   const output = decoder(preHashes)
 
   assertErrorMessage(output.errorMessage)
+
+  if ('preSigningResultV2' in output && output.preSigningResultV2 !== null) {
+    const preSigningResultV2 = shouldBePresent(output.preSigningResultV2)
+    const sighashes = shouldBePresent(preSigningResultV2.sighashes)
+    return without(
+      sighashes.map(hash => hash?.sighash),
+      null,
+      undefined
+    )
+  }
 
   if ('hashPublicKeys' in output) {
     return without(

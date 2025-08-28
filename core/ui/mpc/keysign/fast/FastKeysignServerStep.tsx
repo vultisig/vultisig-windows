@@ -1,5 +1,6 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
@@ -39,7 +40,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const { publicKeys } = useCurrentVault()
+  const { publicKeys, hexChainCode } = useCurrentVault()
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -51,13 +52,19 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
     mutationFn: async () => {
       return matchRecordUnion(keysignPayload, {
         keysign: async keysignPayload => {
+          const coin = assertField(keysignPayload, 'coin')
+          const { chain } = assertChainField(coin)
+          const publicKey = getPublicKey({
+            chain,
+            walletCore,
+            hexChainCode,
+            publicKeys,
+          })
           const inputs = getTxInputData({
             keysignPayload,
             walletCore,
+            publicKey,
           })
-
-          const coin = assertField(keysignPayload, 'coin')
-          const { chain } = assertChainField(coin)
 
           const messages = inputs.flatMap(txInputData =>
             getPreSigningHashes({

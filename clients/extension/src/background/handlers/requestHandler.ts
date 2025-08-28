@@ -17,6 +17,7 @@ import {
 } from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { safeJsonStringify } from '../utils/bigIntUtils'
 
@@ -38,6 +39,7 @@ export const handleRequest = (
               serialized: {
                 data: _transaction.serializedTx,
                 skipBroadcast: _transaction.skipBroadcast,
+                chain,
               },
             },
             status: 'default',
@@ -256,6 +258,23 @@ export const handleRequest = (
           reject()
         }
 
+        break
+      }
+      case RequestMethod.CTRL.SIGN_PSBT: {
+        if (Array.isArray(params)) {
+          const [{ psbt }] = params
+          handleSendTransaction({
+            transactionPayload: {
+              serialized: {
+                data: psbt,
+                chain,
+              },
+            },
+            status: 'default',
+          }).then(result => {
+            resolve(shouldBePresent(result))
+          })
+        }
         break
       }
       default: {

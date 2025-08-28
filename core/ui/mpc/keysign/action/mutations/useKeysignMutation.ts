@@ -44,10 +44,17 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         {
           keysign: async payload => {
             const chain = getKeysignChain(payload)
+            const publicKey = getPublicKey({
+              chain,
+              walletCore,
+              hexChainCode: vault.hexChainCode,
+              publicKeys: vault.publicKeys,
+            })
 
             const inputs = getTxInputData({
               keysignPayload: payload,
               walletCore,
+              publicKey,
             })
 
             const groupedMsgs = inputs.map(txInputData =>
@@ -71,13 +78,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
               Buffer.from(msg, 'base64').toString('hex')
             )
-
-            const publicKey = getPublicKey({
-              chain,
-              walletCore,
-              hexChainCode: vault.hexChainCode,
-              publicKeys: vault.publicKeys,
-            })
 
             const compiledTxs = inputs.map(txInputData =>
               compileTx({
