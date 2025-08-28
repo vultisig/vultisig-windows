@@ -6,7 +6,7 @@ import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -59,6 +59,7 @@ import { Trans } from 'react-i18next'
 
 import { parseSolanaTx } from '../../utils/tx/solana/parser'
 import { getPsbtKeysignPayload } from '../../utils/tx/utxo/getPsbtKeysignPayload'
+import { estimateEvmGasWithFallback } from '@core/chain/tx/fee/evm/estimateGasWithFallback'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
@@ -93,14 +94,21 @@ export const TransactionPage = () => {
         transaction.transactionPayload,
         {
           keysign: async keysign => {
-            const gasSettings: FeeSettings | null = match(
+            const gasSettings: FeeSettings | null = await match(
               getChainKind(keysign.chain),
               {
-                evm: () => ({
+                evm: async () => ({
                   priority: 'fast',
-                  gasLimit: updatedGasLimit || defaultEvmSwapGasLimit,
+                  gasLimit:
+                    updatedGasLimit ||
+                    (await estimateEvmGasWithFallback({
+                      chain: keysign.chain,
+                      to: shouldBePresent(keysign.transactionDetails.to),
+                      data: keysign.transactionDetails.data,
+                      value: keysign.transactionDetails.amount?.amount,
+                    })),
                 }),
-                utxo: () => ({ priority: 'fast' }),
+                utxo: async () => ({ priority: 'fast' }),
                 cosmos: () => null,
                 sui: () => null,
                 solana: () => null,
