@@ -52,3 +52,16 @@ export function getChainKind<T extends Chain>(chain: T): DeriveChainKind<T> {
 export type ChainOfKind<K extends ChainKind> = {
   [C in Chain]: (typeof chainKindRecord)[C] extends K ? C : never
 }[Chain]
+
+export type ChainKindRecordUnion<K extends ChainKind = ChainKind> = {
+  [Kind in K]: Record<Kind, ChainOfKind<Kind>>
+}[K]
+
+export function toChainKindRecordUnion<T extends Chain>(
+  chain: T
+): ChainKindRecordUnion<DeriveChainKind<T>> {
+  const kind = getChainKind(chain)
+  return { [kind]: chain } as unknown as ChainKindRecordUnion<
+    DeriveChainKind<T>
+  >
+}

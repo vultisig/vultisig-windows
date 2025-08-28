@@ -1,26 +1,13 @@
-import api from '@clients/extension/src/utils/api'
 import { OtherChain } from '@core/chain/Chain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt, withFallback } from '@lib/utils/attempt'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { VersionedTransaction } from '@solana/web3.js'
 
 import { MessageKey, RequestMethod } from './constants'
 import { ITransaction, Messaging } from './interfaces'
-
-const isArray = (arr: any): arr is any[] => {
-  return Array.isArray(arr)
-}
-
-const isObject = (obj: any): obj is Record<string, any> => {
-  return obj === Object(obj) && !isArray(obj) && typeof obj !== 'function'
-}
-
-const toCamel = (value: string): string => {
-  return value.replace(/([-_][a-z])/gi, $1 =>
-    $1.toUpperCase().replace('-', '').replace('_', '')
-  )
-}
 
 export const calculateWindowPosition = (
   currentWindow: chrome.windows.Window
@@ -51,7 +38,13 @@ export const checkERC20Function = async (
 
   const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
 
-  return await api.getIsFunctionSelector(functionSelector)
+  const url = `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${functionSelector}&ordering=created_at`
+  const { count } = await withFallback(
+    attempt(() => queryUrl<{ count: number }>(url)),
+    { count: 0 }
+  )
+
+  return count > 0
 }
 
 export const isPopupView = () => {
@@ -66,24 +59,6 @@ export const splitString = (str: string, size: number): string[] => {
   }
 
   return result
-}
-
-export const toCamelCase = (obj: any): any => {
-  if (isObject(obj)) {
-    const n: Record<string, any> = {}
-
-    Object.keys(obj).forEach(k => {
-      n[toCamel(k)] = toCamelCase(obj[k])
-    })
-
-    return n
-  } else if (isArray(obj)) {
-    return obj.map(i => {
-      return toCamelCase(i)
-    })
-  }
-
-  return obj
 }
 
 export const processBackgroundResponse = (

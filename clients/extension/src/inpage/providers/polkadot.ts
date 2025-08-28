@@ -25,7 +25,7 @@ export class Polkadot extends EventEmitter {
     const handlers = getSharedHandlers(OtherChain.Polkadot)
 
     if (data.method in handlers) {
-      return handlers[data.method as keyof typeof handlers]()
+      return handlers[data.method as keyof typeof handlers](data.params as any)
     }
     const response = await messengers.background.send<
       any,
