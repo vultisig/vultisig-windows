@@ -1,7 +1,7 @@
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useVaults } from '@core/ui/storage/vaults'
-import { getVaultExportUid } from '@core/ui/vault/export/core/uid'
+import { toVaultExport } from '@core/ui/vault/export/core/toVaultExport'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -28,13 +28,7 @@ export const ExportVaults: PopupResolver<'exportVaults'> = ({ onFinish }) => {
           vaults.find(vault => getVaultId(vault) === vaultId)
         )
 
-        return {
-          name: vault.name,
-          uid: getVaultExportUid(vault),
-          hexChainCode: vault.hexChainCode,
-          publicKeyEcdsa: vault.publicKeys.ecdsa,
-          publicKeyEddsa: vault.publicKeys.eddsa,
-        }
+        return toVaultExport(vault)
       }),
     })
   }, [onFinish, vaultIds, vaults])

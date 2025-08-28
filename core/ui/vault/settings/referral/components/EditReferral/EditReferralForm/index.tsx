@@ -10,10 +10,15 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
+import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../../providers/ReferralPayoutAssetProvider'
 import { ValidThorchainNameDetails } from '../../../services/getUserValidThorchainName'
-import { DecorationLine, ReferralPageWrapper } from '../../Referrals.styled'
+import {
+  DecorationLine,
+  FormFieldErrorText,
+  ReferralPageWrapper,
+} from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { PayoutAssetField } from './Fields/PayoutAssetField'
@@ -39,6 +44,11 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     () => Math.ceil(nameDetails.remainingYears),
     [nameDetails.remainingYears]
   )
+
+  const feeAmount = watch('referralFeeAmount')
+
+  const canAfford = useCanAffordReferral(feeAmount)
+  const error = canAfford ? undefined : t('insufficient_balance')
 
   const coins = useCurrentVaultCoins()
   const prefCoin = useMemo(() => {
@@ -77,10 +87,17 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   const isDisabled = useMemo(() => {
     if (currentExpiration <= initialExpiration) {
       return `Expiration must be greater than ${initialExpiration}`
-    } else if (!isValid || isSubmitting || !hasChanges) {
+    } else if (!isValid || isSubmitting || !hasChanges || error) {
       return true
     }
-  }, [currentExpiration, hasChanges, initialExpiration, isSubmitting, isValid])
+  }, [
+    currentExpiration,
+    error,
+    hasChanges,
+    initialExpiration,
+    isSubmitting,
+    isValid,
+  ])
 
   return (
     <VStack flexGrow gap={40}>
@@ -106,9 +123,12 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
             <ExpirationField initialExpiration={initialExpiration} />
             <Fees />
           </StackSeparatedBy>
-          <Button disabled={isDisabled} type="submit">
-            {t('edit_referral')}
-          </Button>
+          <VStack gap={4}>
+            <Button disabled={isDisabled} type="submit">
+              {t('edit_referral')}
+            </Button>
+            {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+          </VStack>
         </VStack>
       </ReferralPageWrapper>
     </VStack>

@@ -1,13 +1,41 @@
-import { Chain } from '@core/chain/Chain'
+import { EvmChain, OtherChain } from '@core/chain/Chain'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
+import { TypedDataDomain, TypedDataField } from 'ethers'
+
+export type Eip712V4Payload = {
+  domain: TypedDataDomain
+  types: Record<string, Array<TypedDataField>>
+  message: Record<string, unknown>
+}
+
+export type SignMessageInput =
+  | {
+      eth_signTypedData_v4: {
+        chain: EvmChain
+        message: Eip712V4Payload
+      }
+    }
+  | {
+      personal_sign: {
+        chain: EvmChain
+        message: string
+        bytesCount: number
+      }
+    }
+  | {
+      sign_message: {
+        chain: OtherChain.Solana
+        message: string
+      }
+    }
 
 export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
-  signMessage: Method<{ message: string; chain: Chain }, string>
+  signMessage: Method<SignMessageInput, string>
 }
 
 export type PopupMethod = keyof PopupInterface

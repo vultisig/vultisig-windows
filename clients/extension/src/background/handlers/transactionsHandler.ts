@@ -24,6 +24,7 @@ export const handleSendTransaction = async (
     const currentVaultId =
       (await getVaultIdByTransaction(transaction)) ??
       shouldBePresent(await storage.getCurrentVaultId())
+    await storage.setCurrentVaultId(currentVaultId)
 
     await addTransactionToVault(currentVaultId, {
       ...transaction,

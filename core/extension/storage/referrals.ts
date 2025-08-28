@@ -4,6 +4,8 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 
+const friendKey = (vaultId: string) => `${StorageKey.friendReferral}:${vaultId}`
+
 export const referralsStorage: ReferralsStorage = {
   getHasFinishedReferralsOnboarding: async () => {
     return getStorageValue(
@@ -11,19 +13,20 @@ export const referralsStorage: ReferralsStorage = {
       isHasFinishedOnboardingInitially
     )
   },
-  setHasFinishedReferralsOnboarding: async hasFinishedReferralsOnboarding => {
-    await setStorageValue(
-      StorageKey.hasFinishedReferralsOnboarding,
-      hasFinishedReferralsOnboarding
-    )
+
+  setHasFinishedReferralsOnboarding: async value => {
+    await setStorageValue(StorageKey.hasFinishedReferralsOnboarding, value)
   },
-  getFriendReferral: async () => {
-    return getStorageValue(StorageKey.hasAddedFriendReferral, null)
+
+  getFriendReferral: async (vaultId: string) => {
+    const key = friendKey(vaultId)
+    const current = await getStorageValue<string | null>(key, null)
+    if (current !== null) return current
+    return null
   },
-  setFriendReferral: async hasAddedFriendReferral => {
-    await setStorageValue(
-      StorageKey.hasAddedFriendReferral,
-      hasAddedFriendReferral
-    )
+
+  setFriendReferral: async (vaultId: string, input: string) => {
+    const key = friendKey(vaultId)
+    await setStorageValue(key, (input || '').trim())
   },
 }

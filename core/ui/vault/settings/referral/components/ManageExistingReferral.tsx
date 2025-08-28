@@ -1,12 +1,10 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -19,6 +17,7 @@ import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
@@ -42,7 +41,8 @@ export const ManageExistingReferral = ({
   const { colors } = useTheme()
   const [, copyToClipboard] = useCopyToClipboard()
   const { t } = useTranslation()
-  const { data: friendsReferralCode } = useFriendReferralQuery()
+  const vaultId = useAssertCurrentVaultId()
+  const { data: friendsReferralCode } = useFriendReferralQuery(vaultId)
   const navigate = useCoreNavigate()
 
   return (
@@ -56,11 +56,6 @@ export const ManageExistingReferral = ({
               })
             }
           />
-        }
-        secondaryControls={
-          <IconButton size="sm" onClick={onEditReferral}>
-            <PencilIcon />
-          </IconButton>
         }
         title={t('title_1')}
       />
