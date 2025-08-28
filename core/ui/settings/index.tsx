@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
-import { featureFlags } from '@core/ui/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -83,8 +82,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const addresses = useCurrentVaultAddresses()
-  const thorchainAddressExists = Boolean(addresses[Chain.THORChain])
-  const areReferralEnabled = thorchainAddressExists && featureFlags.referrals
+  const areReferralEnabled = Boolean(addresses[Chain.THORChain])
 
   return (
     <>
