@@ -6,7 +6,7 @@ import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -14,7 +14,7 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { estimateEvmGasWithFallback } from '@core/chain/tx/fee/evm/estimateGasWithFallback'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -59,7 +59,6 @@ import { Trans } from 'react-i18next'
 
 import { parseSolanaTx } from '../../utils/tx/solana/parser'
 import { getPsbtKeysignPayload } from '../../utils/tx/utxo/getPsbtKeysignPayload'
-import { estimateEvmGasWithFallback } from '@core/chain/tx/fee/evm/estimateGasWithFallback'
 
 export const TransactionPage = () => {
   const vault = useCurrentVault()
