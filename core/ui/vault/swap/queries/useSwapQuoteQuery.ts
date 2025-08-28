@@ -7,6 +7,7 @@ import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQue
 import { without } from '@lib/utils/array/without'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useActiveReferral } from '../../settings/referral/hooks/useActiveReferral'
 import { useFromAmount } from '../state/fromAmount'
 import { useToCoin } from '../state/toCoin'
 
@@ -27,6 +28,7 @@ export const useSwapQuoteQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
+  const { viBp } = useActiveReferral()
 
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
@@ -56,7 +58,7 @@ export const useSwapQuoteQuery = () => {
           from: fromCoin,
           to: toCoin,
           amount: fromAmount,
-          isAffiliate,
+          affiliateBps: isAffiliate ? viBp : 0,
         })
       },
       retry: false,
