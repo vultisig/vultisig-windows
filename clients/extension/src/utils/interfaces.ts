@@ -39,14 +39,6 @@ export namespace Messaging {
   }
 }
 
-type ICustomTransactionPayload = {
-  method: string
-  address: string
-  message: string
-  chain?: Chain
-  prefix?: string
-}
-
 export type ProviderId =
   | 'vultisig'
   | 'phantom-override'
@@ -244,9 +236,6 @@ type ISerializedTransactionPayload = {
 type ITransactionPayload =
   | {
       keysign: IKeysignTransactionPayload
-    }
-  | {
-      custom: ICustomTransactionPayload
     }
   | { serialized: ISerializedTransactionPayload }
 

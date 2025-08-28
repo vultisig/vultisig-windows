@@ -17,9 +17,6 @@ import {
 } from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
-import { getBytes, isHexString, Signature, TypedDataEncoder } from 'ethers'
 
 import { safeJsonStringify } from '../utils/bigIntUtils'
 
@@ -198,106 +195,6 @@ export const handleRequest = (
         break
       }
 
-      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
-        if (Array.isArray(params)) {
-          try {
-            const [address, rawMsgParams] = params
-            let msgParams: any
-            try {
-              msgParams = JSON.parse(String(rawMsgParams))
-            } catch {
-              msgParams = rawMsgParams
-            }
-
-            const { domain, types, message } = msgParams
-
-            // Remove EIP712Domain if present — ethers handles it internally
-            if (types?.EIP712Domain) {
-              delete types.EIP712Domain
-            }
-
-            const hashMessage = TypedDataEncoder.encode(domain, types, message)
-            handleSendTransaction({
-              transactionPayload: {
-                custom: {
-                  method,
-                  address: String(address),
-                  message: hashMessage,
-                },
-              },
-              status: 'default',
-            })
-              .then(result => {
-                let sig = Signature.from(
-                  ensureHexPrefix(shouldBePresent(result.hash))
-                )
-                if (sig.v < 27) {
-                  sig = Signature.from({
-                    r: sig.r,
-                    s: sig.s,
-                    v: sig.v + 27,
-                  })
-                }
-                resolve(ensureHexPrefix(sig.serialized))
-              })
-              .catch(error => {
-                reject(error)
-              })
-          } catch (error) {
-            reject(error)
-          }
-        } else {
-          reject(new Error('Invalid parameters'))
-        }
-        break
-      }
-
-      case RequestMethod.METAMASK.PERSONAL_SIGN: {
-        if (Array.isArray(params)) {
-          const [message, address] = params
-
-          let messageBytes: Uint8Array
-          if (typeof message === 'string' && isHexString(message)) {
-            messageBytes = getBytes(message)
-          } else {
-            messageBytes = new TextEncoder().encode(String(message))
-          }
-
-          const prefix = `\x19Ethereum Signed Message:\n${messageBytes.length}`
-          const fullMessage = prefix + new TextDecoder().decode(messageBytes)
-
-          handleSendTransaction({
-            transactionPayload: {
-              custom: {
-                method,
-                address: String(address),
-                message: fullMessage,
-                chain: chain,
-                prefix,
-              },
-            },
-            status: 'default',
-          })
-            .then(result => {
-              let sig = Signature.from(
-                ensureHexPrefix(shouldBePresent(result.hash))
-              )
-              if (sig.v < 27) {
-                sig = Signature.from({
-                  r: sig.r,
-                  s: sig.s,
-                  v: sig.v + 27,
-                })
-              }
-              resolve(ensureHexPrefix(sig.serialized))
-            })
-            .catch(reject)
-        } else {
-          reject()
-        }
-
-        break
-      }
       case RequestMethod.CTRL.DEPOSIT: {
         if (Array.isArray(params)) {
           const [_transaction] = params as TransactionType.Ctrl[]
@@ -359,25 +256,6 @@ export const handleRequest = (
           reject()
         }
 
-        break
-      }
-      case RequestMethod.CTRL.SIGN_MESSAGE: {
-        if (Array.isArray(params)) {
-          const [{ message }] = params
-          handleSendTransaction({
-            transactionPayload: {
-              custom: {
-                method,
-                address: '',
-                message: message,
-                chain: chain,
-              },
-            },
-            status: 'default',
-          }).then(result => {
-            resolve(shouldBePresent(result.hash))
-          })
-        }
         break
       }
       default: {

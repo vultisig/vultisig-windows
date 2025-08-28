@@ -1,4 +1,3 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -39,9 +38,7 @@ export const RootErrorFallback = ({
 }: ErrorBoundaryFallbackProps) => {
   const { t } = useTranslation()
 
-  const { openUrl } = useCore()
-
-  const navigate = useCoreNavigate()
+  const { openUrl, goBack } = useCore()
 
   return (
     <VStack fullSize>
@@ -67,7 +64,7 @@ export const RootErrorFallback = ({
           </Button>
           <Button
             onClick={() => {
-              navigate({ id: 'vault' })
+              goBack()
               clearError()
             }}
           >
