@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
+import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -14,6 +15,7 @@ import { pick } from '@lib/utils/record/pick'
 import { useErc20ApprovePayloadQuery } from '../../../mpc/keysign/evm/queries/erc20ApprovePayload'
 import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useActiveReferral } from '../../settings/referral/hooks/useActiveReferral'
 import { useFromAmount } from '../state/fromAmount'
 import { useToCoin } from '../state/toCoin'
 import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
@@ -27,7 +29,7 @@ export const useSwapKeysignPayloadQuery = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
   const [fromAmount] = useFromAmount()
-
+  const { referralName, viBp, referralBp } = useActiveReferral()
   const swapQuoteQuery = useSwapQuoteQuery()
 
   const vault = useCurrentVault()
@@ -76,6 +78,10 @@ export const useSwapKeysignPayloadQuery = () => {
 
       const toCoinHexPublicKey = Buffer.from(toPublicKey.data()).toString('hex')
 
+      const affiliateMemoSuffix = referralName
+        ? `::${nativeSwapAffiliateConfig.affiliateFeeAddress}/${referralName}:${viBp}/${referralBp}`
+        : ''
+
       const swapSpecificFields = getSwapKeysignPayloadFields({
         amount,
         quote: swapQuote,
@@ -87,6 +93,7 @@ export const useSwapKeysignPayloadQuery = () => {
           ...toCoin,
           hexPublicKey: toCoinHexPublicKey,
         },
+        affiliateMemoSuffix,
       })
 
       return create(KeysignPayloadSchema, {
