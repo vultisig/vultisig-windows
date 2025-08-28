@@ -1,4 +1,3 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
@@ -6,11 +5,11 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useEffect, useState } from 'react'
 
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
 } from '../../../../storage/referrals'
-import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 import { CreateReferralFormProvider } from '../providers/CreateReferralFormProvider'
 import { EditReferralFormProvider } from '../providers/EditReferralFormProvider'
 import { ReferralPayoutAssetProvider } from '../providers/ReferralPayoutAssetProvider'
@@ -34,17 +33,14 @@ type ManageReferralUIState =
 export const ManageReferrals = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
 
+  const vaultId = useAssertCurrentVaultId()
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
-    useFriendReferralQuery()
-  const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
+    useFriendReferralQuery(vaultId)
 
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
+  const { mutateAsync: setFriendReferral } =
+    useSetFriendReferralMutation(vaultId)
 
-  const { data: validNameDetails, status } =
-    useUserValidThorchainNameQuery(address)
+  const { data: validNameDetails, status } = useUserValidThorchainNameQuery()
 
   useEffect(() => {
     if (status === 'pending') return
@@ -63,7 +59,6 @@ export const ManageReferrals = () => {
         value={uiState}
         editFriendReferral={() => (
           <EditFriendReferralForm
-            userReferralName={validNameDetails?.name}
             onFinish={() =>
               validNameDetails
                 ? setUiState('existingReferral')
@@ -86,7 +81,10 @@ export const ManageReferrals = () => {
         }
         default={() => (
           <ManageReferralsForm
-            onSaveReferral={newFriendReferral => {
+            onEditFriendReferral={() => setUiState('editFriendReferral')}
+            onSaveReferral={(value = '') => {
+              const newFriendReferral = value.trim()
+
               if (isFriendReferralLoading) return
 
               if (friendReferral) {

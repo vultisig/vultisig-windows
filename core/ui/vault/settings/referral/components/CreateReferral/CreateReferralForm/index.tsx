@@ -11,8 +11,13 @@ import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useCreateReferralForm } from '../../../providers/CreateReferralFormProvider'
-import { DecorationLine, ReferralPageWrapper } from '../../Referrals.styled'
+import {
+  DecorationLine,
+  FormFieldErrorText,
+  ReferralPageWrapper,
+} from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
@@ -21,8 +26,13 @@ export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
   const {
+    watch,
     formState: { isValid, isSubmitting },
   } = useCreateReferralForm()
+  const feeAmount = watch('referralFeeAmount')
+
+  const canAfford = useCanAffordReferral(feeAmount)
+  const error = canAfford ? undefined : t('insufficient_balance')
 
   return (
     <VStack flexGrow gap={40}>
@@ -66,9 +76,15 @@ export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
             <ExpirationField />
             <Fees />
           </StackSeparatedBy>
-          <Button disabled={!isValid || isSubmitting} type="submit">
-            {t('create_referral_form')}
-          </Button>
+          <VStack gap={4}>
+            <Button
+              disabled={!isValid || isSubmitting || Boolean(error)}
+              type="submit"
+            >
+              {t('create_referral_form')}
+            </Button>
+            {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+          </VStack>
         </VStack>
       </ReferralPageWrapper>
     </VStack>

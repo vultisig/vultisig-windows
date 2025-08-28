@@ -6,39 +6,29 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { persistentStorage } from '../state/persistentState'
 
+const friendKey = (vaultId: string) => `${StorageKey.friendReferral}:${vaultId}`
+
 export const referralsStorage: ReferralsStorage = {
   getHasFinishedReferralsOnboarding: async () => {
-    const value = persistentStorage.getItem<boolean>(
+    const v = persistentStorage.getItem<boolean>(
       StorageKey.hasFinishedReferralsOnboarding
     )
-
-    if (value === undefined) {
-      return isHasFinishedReferralsOnboardingInitially
-    }
-
-    return value
+    return v === undefined ? isHasFinishedReferralsOnboardingInitially : v
   },
-  setHasFinishedReferralsOnboarding: async hasFinishedReferralsOnboarding => {
-    persistentStorage.setItem(
-      StorageKey.hasFinishedReferralsOnboarding,
-      hasFinishedReferralsOnboarding
-    )
-  },
-  getFriendReferral: async () => {
-    const value = persistentStorage.getItem<string>(
-      StorageKey.hasAddedFriendReferral
-    )
 
-    if (value === undefined) {
-      return null
-    }
-
-    return value
+  setHasFinishedReferralsOnboarding: async value => {
+    persistentStorage.setItem(StorageKey.hasFinishedReferralsOnboarding, value)
   },
-  setFriendReferral: async hasAddedFriendReferral => {
-    persistentStorage.setItem(
-      StorageKey.hasAddedFriendReferral,
-      hasAddedFriendReferral
-    )
+
+  getFriendReferral: async (vaultId: string) => {
+    const key = friendKey(vaultId)
+    const v = persistentStorage.getItem<string | undefined>(key)
+    if (v !== undefined) return v ?? null
+    return null
+  },
+
+  setFriendReferral: async (vaultId: string, input: string) => {
+    const key = friendKey(vaultId)
+    persistentStorage.setItem(key, (input || '').trim())
   },
 }

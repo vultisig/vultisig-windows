@@ -30,7 +30,10 @@ import { useEditReferralFormData } from '../../providers/EditReferralFormProvide
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
-import { buildEditReferralMemo } from '../../utils/buildReferralMemos'
+import {
+  buildRenewalMemo,
+  buildSetPreferredAssetMemo,
+} from '../../utils/buildReferralMemos'
 import { ReferralPageWrapper } from '../Referrals.styled'
 import { normaliseChainToMatchPoolChain } from './EditReferralForm/config'
 
@@ -42,14 +45,9 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const { watch } = useEditReferralFormData()
   const referralAmount = watch('referralFeeAmount')
 
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
-
   const { data: allowedPools = [] } = useActivePoolsQuery()
+  const { data: validNameDetails } = useUserValidThorchainNameQuery()
 
-  const { data: validNameDetails } = useUserValidThorchainNameQuery(address)
   const thorAliasAddress = validNameDetails?.aliases.find(
     a => a.chain.toUpperCase() === 'THOR'
   )?.address
@@ -61,7 +59,6 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const preferredAsset = allowedPools.find(pool => {
     const [poolChain, tail] = pool.asset.split('.')
     const poolTicker = tail.split('-')[0]
-
     return (
       normaliseChainToMatchPoolChain(poolChain) ===
         normaliseChainToMatchPoolChain(coin.chain) &&
@@ -69,22 +66,30 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
     )
   })?.asset
 
-  const memo = buildEditReferralMemo({
-    name: shouldBePresent(validNameDetails?.name),
-    thorAliasAddress,
-    preferredAsset,
-  })
+  const name = shouldBePresent(validNameDetails?.name)
+  const wantsAssetChange =
+    !!preferredAsset && preferredAsset !== validNameDetails?.preferred_asset
 
-  const { chain, ticker } = coin
+  const memo = wantsAssetChange
+    ? buildSetPreferredAssetMemo({
+        name,
+        thorAliasAddress,
+        preferredAsset: shouldBePresent(preferredAsset),
+      })
+    : buildRenewalMemo({ name, thorAliasAddress })
+
+  const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)
+
+  const { chain, ticker } = thorchainCoin
 
   const { keysignPayload } = useReferralKeysignPayload({
-    coin,
+    coin: thorchainCoin,
     memo,
     amount: referralAmount,
   })
 
   const chainSpecific = useChainSpecificQuery({
-    coin,
+    coin: thorchainCoin,
     isDeposit: true,
   })
 
@@ -110,7 +115,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
               {t('you_are_sending')}
             </Text>
             <HStack alignItems="center" gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+              <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
               <Text size={17}>
                 {formatTokenAmount(referralAmount)}
                 <Text as="span" color="shy">

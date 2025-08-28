@@ -10,30 +10,26 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAssertCurrentVaultId } from '../../../../../storage/currentVaultId'
 import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
 } from '../../../../../storage/referrals'
 import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
-type Props = {
-  userReferralName?: string
-} & OnFinishProp
+import { useFriendReferralValidation } from './hooks/useFriendReferralValidation'
 
-export const EditFriendReferralForm = ({
-  onFinish,
-  userReferralName,
-}: Props) => {
+export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
   const [referralName, setReferralName] = useState('')
-  const { mutateAsync: setFriendReferral } = useSetFriendReferralMutation()
-  const { data: friendReferral, isLoading } = useFriendReferralQuery()
+  const currentVaultId = useAssertCurrentVaultId()
+  const { mutateAsync: setFriendReferral } =
+    useSetFriendReferralMutation(currentVaultId)
+  const { data: friendReferral, isLoading } =
+    useFriendReferralQuery(currentVaultId)
 
   const { t } = useTranslation()
 
-  const error =
-    referralName.toLowerCase() === userReferralName?.toLocaleLowerCase()
-      ? t('used_referral_error')
-      : undefined
+  const error = useFriendReferralValidation(referralName)
 
   useEffect(() => {
     if (friendReferral) {
