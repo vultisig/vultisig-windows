@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
+import { omit } from '@lib/utils/record/omit'
 import { TW } from '@trustwallet/wallet-core'
 
 type DecodeTxInput<T extends Chain = Chain> = {
@@ -40,5 +41,9 @@ export const decodeTx = <T extends Chain>({
 
   assertErrorMessage(errorMessage)
 
-  return output as unknown as DecodedTx<T>
+  return omit(
+    output as Record<string, unknown>,
+    'error',
+    'toJSON'
+  ) as DecodedTx<T>
 }
