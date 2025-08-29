@@ -5,23 +5,22 @@ import { useFriendReferralQuery } from '../../../../storage/referrals'
 
 export const useActiveReferral = () => {
   const vaultId = useAssertCurrentVaultId()
-  const { data: potentialFriendReferral = '' } = useFriendReferralQuery(vaultId)
+  const { data: savedReferralName = '' } = useFriendReferralQuery(vaultId)
 
-  const storedFriendReferral = potentialFriendReferral ?? ''
+  const hasReferral = !!savedReferralName
 
-  // Spec: with referral → vi=35bp + referral=10bp (total 45).
-  // Without → vi=50bp.
-  const viBp = storedFriendReferral
+  const appAffiliateBps = hasReferral
     ? nativeSwapAffiliateConfig.referralDiscountAffiliateFeeRateBps
     : nativeSwapAffiliateConfig.affiliateFeeRateBps
 
-  const referralBp = storedFriendReferral ? 10 : 0
-  const totalBp = viBp + referralBp
+  const referrerBps = hasReferral ? 10 : 0
+  const combinedAffiliateBps = appAffiliateBps + referrerBps
 
   return {
-    referralName: storedFriendReferral,
-    viBp,
-    referralBp,
-    totalBp,
+    savedReferralName,
+    hasReferral,
+    appAffiliateBps,
+    referrerBps,
+    combinedAffiliateBps,
   }
 }
