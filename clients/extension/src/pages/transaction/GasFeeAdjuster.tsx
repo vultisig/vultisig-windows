@@ -1,5 +1,6 @@
 import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { EvmChain } from '@core/chain/Chain'
+import { estimateEvmGasWithFallback } from '@core/chain/tx/fee/evm/estimateGasWithFallback'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -11,8 +12,9 @@ import {
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { formatUnits } from 'viem'
 
 type GasFeeAdjusterProps = {
@@ -28,20 +30,22 @@ export const GasFeeAdjuster = ({
   gasLimit,
   baseFee,
 }: GasFeeAdjusterProps) => {
+  const chain = useMemo(() => {
+    return matchRecordUnion(keysignPayload, {
+      keysign: payload => getKeysignChain(payload) as EvmChain,
+      custom: custom => {
+        if (custom.chain) return custom.chain as EvmChain
+        return EvmChain.Ethereum
+      },
+    })
+  }, [keysignPayload])
   const [isOpen, setIsOpen] = useState(false)
-  // Initialize gas settings state with values from transaction payload or fallback to defaults
-  // For custom messages: uses Ethereum defaults
-  // For regular transactions: uses values from transaction payload with fallbacks
+
   const [value, setValue] = useState<EvmFeeSettingsFormValue>(() => {
     return matchRecordUnion(keysignPayload, {
       keysign: payload => {
         const transactionPayload =
           payload as unknown as IKeysignTransactionPayload
-        const isNative = payload.coin?.isNativeToken ?? false
-        const defaultGasLimit = getEvmGasLimit({
-          chain: transactionPayload.chain as EvmChain,
-          isNativeToken: isNative,
-        })
 
         return {
           priorityFee: Number(
@@ -53,7 +57,12 @@ export const GasFeeAdjuster = ({
               gwei.decimals
             )
           ),
-          gasLimit: gasLimit || defaultGasLimit,
+          gasLimit:
+            gasLimit ||
+            getEvmGasLimit({
+              chain: chain as EvmChain,
+              isNativeToken: payload.coin?.isNativeToken ?? false,
+            }),
         }
       },
       custom: () => ({
@@ -66,17 +75,35 @@ export const GasFeeAdjuster = ({
     })
   })
 
+  useEffect(() => {
+    const updateGasLimit = async () =>
+      matchRecordUnion(keysignPayload, {
+        keysign: async payload => {
+          const estimatedGasLimit = await estimateEvmGasWithFallback({
+            chain: getKeysignChain(payload),
+            from: shouldBePresent(payload.coin).address,
+            to: shouldBePresent(payload.toAddress),
+            data: payload.memo,
+            value: payload.toAmount,
+          })
+
+          setValue(prev => ({
+            ...prev,
+            gasLimit: gasLimit || estimatedGasLimit,
+          }))
+        },
+        custom: async () => {},
+      })
+
+    updateGasLimit()
+  }, [keysignPayload, gasLimit])
+
   const handleSave = () => {
     if ('keysign' in keysignPayload) {
       onFeeChange(value.priorityFee, value.gasLimit)
       setIsOpen(false)
     }
   }
-
-  const chain = matchRecordUnion(keysignPayload, {
-    keysign: payload => getKeysignChain(payload) as Chain,
-    custom: () => EvmChain.Ethereum,
-  })
 
   return (
     <>
