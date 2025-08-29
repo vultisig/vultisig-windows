@@ -1,8 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultExport } from '@core/ui/vault/export/core'
-import { Serialized } from '@lib/extension/serialization'
 import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
@@ -25,7 +23,6 @@ export type BackgroundInterface = {
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
   getTx: Method<{ chain: Chain; hash: string }, unknown>
-  getKeysignPayload: Method<{}, Serialized<KeysignPayload>>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
