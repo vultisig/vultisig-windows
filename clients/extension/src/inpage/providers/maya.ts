@@ -25,12 +25,14 @@ export class MAYAChain extends BaseCosmosChain {
   async request(
     data: Messaging.Chain.Request,
     callback?: Callback
-  ): Promise<Messaging.Chain.Response> {
+  ): Promise<unknown> {
     const processRequest = async () => {
       const handlers = getSharedHandlers(CosmosChain.MayaChain)
 
       if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers]()
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
       }
       return messengers.background.send<any, Messaging.Chain.Response>(
         'providerRequest',

@@ -27,7 +27,7 @@ export class Cosmos extends BaseCosmosChain {
   async request(
     data: Messaging.Chain.Request,
     callback?: Callback
-  ): Promise<Messaging.Chain.Response | void> {
+  ): Promise<unknown> {
     const handleSwitchChain = async ([{ chainId }]: [{ chainId: string }]) => {
       const chain = getCosmosChainByChainId(chainId)
       if (!chain) {

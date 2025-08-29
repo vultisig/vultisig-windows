@@ -26,12 +26,14 @@ export class THORChain extends BaseCosmosChain {
   async request(
     data: Messaging.Chain.Request,
     callback?: Callback
-  ): Promise<Messaging.Chain.Response> {
+  ): Promise<unknown> {
     const processRequest = async () => {
       const handlers = getSharedHandlers(CosmosChain.THORChain)
 
       if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers]()
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
       }
 
       const response = await messengers.background.send<
