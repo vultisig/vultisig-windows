@@ -1,9 +1,5 @@
 import { handleSendTransaction } from '@clients/extension/src/background/handlers/transactionsHandler'
-import {
-  ThorchainProviderMethod,
-  ThorchainProviderResponse,
-} from '@clients/extension/src/types/thorchain'
-import api from '@clients/extension/src/utils/api'
+import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { RequestMethod } from '@clients/extension/src/utils/constants'
 import {
   ITransaction,
@@ -16,17 +12,12 @@ import {
   isBasicTransaction,
 } from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
-import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-
-import { safeJsonStringify } from '../utils/bigIntUtils'
 
 export const handleRequest = (
   body: Messaging.Chain.Request,
   chain: Chain
-): Promise<
-  Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
-> => {
+): Promise<Messaging.Chain.Response | ThorchainProviderResponse> => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
 
@@ -145,58 +136,6 @@ export const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH: {
-        if (Array.isArray(params)) {
-          const [hash] = params
-
-          if (hash) {
-            switch (chain) {
-              // Thor
-              case Chain.THORChain: {
-                api.thorchain
-                  .getTransactionByHash(String(hash))
-                  .then(resolve)
-                  .catch(reject)
-
-                break
-              }
-              // Cosmos
-              case Chain.Dydx:
-              case Chain.Cosmos:
-              case Chain.Kujira:
-              case Chain.MayaChain:
-              case Chain.Osmosis: {
-                getCosmosClient(chain)
-                  .then(client => {
-                    client
-                      .getTx(String(hash))
-                      .then(result => resolve(safeJsonStringify(result)))
-                  })
-                  .catch(error =>
-                    reject(`Could not initialize Tendermint Client: ${error}`)
-                  )
-
-                break
-              }
-              default: {
-                api.utxo
-                  .blockchairGetTx(chain, String(hash))
-                  .then(res => resolve(safeJsonStringify(res)))
-                  .catch(reject)
-
-                break
-              }
-            }
-          } else {
-            reject()
-          }
-        } else {
-          reject()
-        }
-
-        break
-      }
-
       case RequestMethod.CTRL.DEPOSIT: {
         if (Array.isArray(params)) {
           const [_transaction] = params as TransactionType.Ctrl[]

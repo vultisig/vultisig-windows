@@ -22,6 +22,7 @@ export type BackgroundInterface = {
   signOut: Method<{}>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
+  getTx: Method<{ chain: Chain; hash: string }, unknown>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

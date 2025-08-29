@@ -1,4 +1,3 @@
-import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
@@ -18,7 +17,7 @@ export namespace Messaging {
     export type Response =
       | string
       | string[]
-      | ThorchainProviderResponse<ThorchainProviderMethod>
+      | ThorchainProviderResponse
       | TransactionResponse
       | ITransaction
   }

@@ -23,5 +23,9 @@ export const getSharedHandlers = (chain: Chain) => {
 
       return [address]
     },
+    get_transaction_by_hash: async ([hash]: [string]) =>
+      callBackground({
+        getTx: { chain, hash },
+      }),
   } as const
 }

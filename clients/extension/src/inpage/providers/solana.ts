@@ -235,7 +235,9 @@ export class Solana implements Wallet {
       const handlers = getSharedHandlers(Chain.Solana)
 
       if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers]()
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
       }
       const response = await messengers.background.send<
         any,
