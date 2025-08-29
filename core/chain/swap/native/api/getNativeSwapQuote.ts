@@ -7,6 +7,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
+import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
   nativeSwapApiBaseUrl,
   NativeSwapChain,
@@ -58,10 +59,15 @@ export const getNativeSwapQuote = async ({
       params.append('affiliate_bps', String(a.bps))
     }
   } else {
-    const primary = affiliates.find(a => a.name !== '') ?? affiliates[0]
-    if (primary) {
-      params.append('affiliate', primary.name)
-      params.append('affiliate_bps', String(primary.bps))
+    const app = affiliates.find(
+      a => a.name === nativeSwapAffiliateConfig.affiliateFeeAddress
+    )
+    if (app) {
+      params.append('affiliate', app.name)
+      params.append('affiliate_bps', String(app.bps))
+    } else if (affiliates.length) {
+      params.append('affiliate', affiliates[0].name)
+      params.append('affiliate_bps', String(affiliates[0].bps))
     }
   }
 

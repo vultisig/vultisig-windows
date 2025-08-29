@@ -58,11 +58,11 @@ export const useSwapQuoteQuery = () => {
 
         const affiliates: AffiliateParam[] = hasReferral
           ? [
-              { name: savedReferralName!, bps: isAffiliate ? referrerBps : 0 },
               {
                 name: nativeSwapAffiliateConfig.affiliateFeeAddress,
                 bps: isAffiliate ? appAffiliateBps : 0,
               },
+              { name: savedReferralName!, bps: isAffiliate ? referrerBps : 0 },
             ]
           : [
               {
