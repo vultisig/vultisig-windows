@@ -149,7 +149,7 @@ export const getSwapKeysignPayloadFields = ({
       return {
         toAddress,
         swapPayload,
-        memo: 'native' in quote ? quote.memo : undefined,
+        memo: quote.memo,
       }
     },
   })
