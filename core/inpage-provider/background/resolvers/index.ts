@@ -6,6 +6,7 @@ import { exportVault } from './exportVault'
 import { getAccount } from './getAccount'
 import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
+import { getTx } from './getTx'
 import { setAppChain } from './setAppChain'
 import { signOut } from './signOut'
 type BackgroundResolvers = {
@@ -20,4 +21,5 @@ export const backgroundResolvers: BackgroundResolvers = {
   signOut,
   evmClientRequest,
   exportVault,
+  getTx,
 }

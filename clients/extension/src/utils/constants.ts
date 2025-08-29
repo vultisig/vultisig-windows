@@ -81,7 +81,6 @@ export namespace RequestMethod {
 
   export enum VULTISIG {
     DEPOSIT_TRANSACTION = 'deposit_transaction',
-    GET_TRANSACTION_BY_HASH = 'get_transaction_by_hash',
     SEND_TRANSACTION = 'send_transaction',
     PLUGIN_REQUEST_RESHARE = 'plugin_request_reshare',
   }
