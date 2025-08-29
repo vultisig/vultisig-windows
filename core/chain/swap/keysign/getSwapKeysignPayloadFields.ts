@@ -25,7 +25,6 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { EvmChain } from '../../Chain'
 import { isFeeCoin } from '../../coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
-import { affiliateMemoBuilder } from '../memo/affiliateMemoBuilder'
 import { nativeSwapQuoteToSwapPayload } from '../native/utils/nativeSwapQuoteToSwapPayload'
 
 type Input = {
@@ -33,7 +32,6 @@ type Input = {
   quote: SwapQuote
   fromCoin: AccountCoin & { hexPublicKey: string }
   toCoin: AccountCoin & { hexPublicKey: string }
-  affiliateMemoSuffix?: string
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
@@ -44,7 +42,6 @@ export const getSwapKeysignPayloadFields = ({
   quote,
   fromCoin,
   toCoin,
-  affiliateMemoSuffix = '',
 }: Input): Output => {
   const result = matchRecordUnion<SwapQuote, Output>(quote, {
     general: quote => {
@@ -149,14 +146,10 @@ export const getSwapKeysignPayloadFields = ({
       const toAddress =
         (isErc20 ? quote.router : quote.inbound_address) || fromCoin.address
 
-      const isThorNative = quote.swapChain === 'THORChain'
-
       return {
         toAddress,
         swapPayload,
-        memo: isThorNative
-          ? affiliateMemoBuilder(quote.memo, affiliateMemoSuffix)
-          : quote.memo,
+        memo: 'native' in quote ? quote.memo : undefined,
       }
     },
   })
