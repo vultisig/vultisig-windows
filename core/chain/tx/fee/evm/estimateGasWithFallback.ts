@@ -4,6 +4,8 @@ import { Chain, EvmChain } from '../../../Chain'
 import { getEvmClient } from '../../../chains/evm/client'
 import { defaultEvmSwapGasLimit } from './evmGasLimit'
 
+const evmGasLimitMultiplier = 1.5
+
 export const estimateEvmGasWithFallback = async ({
   chain,
   from,
@@ -28,7 +30,7 @@ export const estimateEvmGasWithFallback = async ({
     })
     const gasLimitNumber = Number(gasLimit)
     if (gasLimitNumber === 0) return defaultEvmSwapGasLimit
-    return Math.ceil(gasLimitNumber * 1.5)
+    return Math.ceil(gasLimitNumber * evmGasLimitMultiplier)
   })
   return withFallback(result, defaultEvmSwapGasLimit)
 }
