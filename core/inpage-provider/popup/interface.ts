@@ -1,8 +1,8 @@
 import { EvmChain, OtherChain } from '@core/chain/Chain'
 import { Tx } from '@core/chain/tx'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
+import { Serialized } from '@core/inpage-provider/serialization'
 import { VaultExport } from '@core/ui/vault/export/core'
-import { Serialized } from '@lib/extension/serialization'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
 

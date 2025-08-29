@@ -28,7 +28,7 @@ type ChainKindToDecodedOutput = {
 
 export type DecodedTx<T extends Chain = Chain> = Omit<
   ChainKindToDecodedOutput[DeriveChainKind<T>],
-  'errorMessage' | 'error'
+  'errorMessage' | 'error' | 'toJSON'
 >
 
 export const decodeTx = <T extends Chain>({
@@ -41,5 +41,9 @@ export const decodeTx = <T extends Chain>({
 
   assertErrorMessage(errorMessage)
 
-  return omit(output as Record<string, unknown>, 'error') as DecodedTx<T>
+  return omit(
+    output as Record<string, unknown>,
+    'error',
+    'toJSON'
+  ) as DecodedTx<T>
 }

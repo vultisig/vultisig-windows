@@ -2,7 +2,8 @@ import {
   deserialize,
   serialize,
   type Serialized,
-} from '@lib/extension/serialization'
+} from '@core/inpage-provider/serialization'
+import Long from 'long'
 import { describe, expect, it } from 'vitest'
 
 describe('serialization', () => {
@@ -40,5 +41,22 @@ describe('serialization', () => {
     expect(restored.list[2]).toEqual(new Uint8Array([9, 8, 7]))
     expect(restored.nested.b).toEqual(3n)
     expect(restored.nested.u).toEqual(new Uint8Array([10]))
+  })
+
+  it('roundtrips signed Long values', () => {
+    const input = { l: Long.fromString('81985529216486895', false) }
+    const s = serialize(input)
+    const restored = deserialize<typeof input>(s)
+    expect(Long.isLong(restored.l)).toBe(true)
+    expect((restored.l as Long).equals(input.l)).toBe(true)
+  })
+
+  it('roundtrips unsigned Long values', () => {
+    const input = { l: Long.fromString('18446744073709551615', true) }
+    const s = serialize(input)
+    const restored = deserialize<typeof input>(s)
+    expect(Long.isLong(restored.l)).toBe(true)
+    expect((restored.l as Long).equals(input.l)).toBe(true)
+    expect((restored.l as Long).unsigned).toBe(true)
   })
 })
