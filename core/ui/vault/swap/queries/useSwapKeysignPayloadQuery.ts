@@ -2,8 +2,6 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
-import { buildNestedAffiliateMemo } from '@core/chain/swap/memo/buildNestedAffiliateMemo'
-import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -16,7 +14,6 @@ import { pick } from '@lib/utils/record/pick'
 import { useErc20ApprovePayloadQuery } from '../../../mpc/keysign/evm/queries/erc20ApprovePayload'
 import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useActiveReferral } from '../../settings/referral/hooks/useActiveReferral'
 import { useFromAmount } from '../state/fromAmount'
 import { useToCoin } from '../state/toCoin'
 import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
@@ -30,8 +27,6 @@ export const useSwapKeysignPayloadQuery = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
   const [fromAmount] = useFromAmount()
-  const { savedReferralName, appAffiliateBps, referrerBps, hasReferral } =
-    useActiveReferral()
 
   const swapQuoteQuery = useSwapQuoteQuery()
 
@@ -94,19 +89,6 @@ export const useSwapKeysignPayloadQuery = () => {
         },
       })
 
-      const isThorNative =
-        'native' in swapQuote && swapQuote.native.swapChain === 'THORChain'
-      const finalMemo = isThorNative
-        ? buildNestedAffiliateMemo(
-            swapSpecificFields.memo,
-            nativeSwapAffiliateConfig.affiliateFeeAddress,
-            appAffiliateBps,
-            hasReferral
-              ? { name: savedReferralName!, bps: referrerBps }
-              : undefined
-          )
-        : swapSpecificFields.memo
-
       return create(KeysignPayloadSchema, {
         coin: toCommCoin({
           ...fromCoin,
@@ -120,7 +102,6 @@ export const useSwapKeysignPayloadQuery = () => {
         erc20ApprovePayload: erc20ApprovePayload ?? undefined,
         utxoInfo: utxoInfo ?? undefined,
         ...swapSpecificFields,
-        memo: finalMemo,
       })
     }
   )

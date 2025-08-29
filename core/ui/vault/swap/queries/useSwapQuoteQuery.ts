@@ -1,5 +1,7 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { swapConfig } from '@core/chain/swap/config'
+import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
+import { AffiliateParam } from '@core/chain/swap/native/NativeSwapQuote'
 import { findSwapQuote } from '@core/chain/swap/quote/findSwapQuote'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -28,7 +30,8 @@ export const useSwapQuoteQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
-  const { appAffiliateBps } = useActiveReferral()
+  const { savedReferralName, hasReferral, appAffiliateBps, referrerBps } =
+    useActiveReferral()
 
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
@@ -51,14 +54,28 @@ export const useSwapQuoteQuery = () => {
       }),
       queryFn: async () => {
         const usdAmount = fromAmount * fromCoinUsdPrice
-
         const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount
+
+        const affiliates: AffiliateParam[] = hasReferral
+          ? [
+              { name: savedReferralName!, bps: isAffiliate ? referrerBps : 0 },
+              {
+                name: nativeSwapAffiliateConfig.affiliateFeeAddress,
+                bps: isAffiliate ? appAffiliateBps : 0,
+              },
+            ]
+          : [
+              {
+                name: nativeSwapAffiliateConfig.affiliateFeeAddress,
+                bps: isAffiliate ? appAffiliateBps : 0,
+              },
+            ]
 
         return findSwapQuote({
           from: fromCoin,
           to: toCoin,
           amount: fromAmount,
-          affiliateBps: isAffiliate ? appAffiliateBps : 0,
+          affiliates,
         })
       },
       retry: false,

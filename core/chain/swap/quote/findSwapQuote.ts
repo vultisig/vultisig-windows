@@ -18,21 +18,22 @@ import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
 } from '../native/NativeSwapChain'
+import { AffiliateParam } from '../native/NativeSwapQuote'
 import { SwapQuote } from './SwapQuote'
 
 type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   amount: number
-  affiliateBps: number
+  affiliates: AffiliateParam[]
 }
 
 export const findSwapQuote = ({
   from,
   to,
   amount,
-  affiliateBps,
+  affiliates,
 }: FindSwapQuoteInput): Promise<SwapQuote> => {
   const involvedChains = [from.chain, to.chain]
-  const isAffiliate = affiliateBps > 0
+  const isAffiliate = affiliates.some(a => a.bps > 0)
 
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
     involvedChains.every(chain =>
@@ -48,7 +49,7 @@ export const findSwapQuote = ({
         from,
         to,
         amount,
-        affiliateBps,
+        affiliates,
       })
 
       return { native }
