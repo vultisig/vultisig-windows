@@ -28,7 +28,7 @@ export const useSwapQuoteQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
-  const { viBp } = useActiveReferral()
+  const { appAffiliateBps } = useActiveReferral()
 
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
@@ -58,7 +58,7 @@ export const useSwapQuoteQuery = () => {
           from: fromCoin,
           to: toCoin,
           amount: fromAmount,
-          affiliateBps: isAffiliate ? viBp : 0,
+          affiliateBps: isAffiliate ? appAffiliateBps : 0,
         })
       },
       retry: false,
