@@ -22,9 +22,9 @@ export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
 
   const hasVerifier = peers.some(p => p.startsWith('verifier'))
   // Detect if there is at least one plugin in the peers list
-  // Plugin local party format is expected to be: {developer}-{plugin}-{collision prevention random number}-{random number}
+  // Plugin local party format is expected to be: {developer}-{plugin}-{collision prevention random hex}-{random number}
   // Example: vultisig-payroll-0000-1234 or raghav-personal-4567-13332
-  const pluginIdPattern = /^[^-]+-[^-]+-[0-9]{4}-[0-9]+$/ // {dev}-{plugin}-{4d}-{n}
+  const pluginIdPattern = /^[^-]+-[^-]+-[0-9a-f]{4}-[0-9]+$/ // {dev}-{plugin}-{4hex}-{n}
   const hasPlugin = peers.some(p => pluginIdPattern.test(p))
   const enoughPeers = peers.length >= pluginPeersConfig.minimumJoinedParties
 
