@@ -14,7 +14,7 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { estimateEvmGasWithFallback } from '@core/chain/tx/fee/evm/estimateGasWithFallback'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -93,14 +93,22 @@ export const TransactionPage = () => {
         transaction.transactionPayload,
         {
           keysign: async keysign => {
-            const gasSettings: FeeSettings | null = match(
+            const gasSettings: FeeSettings | null = await match(
               getChainKind(keysign.chain),
               {
-                evm: () => ({
+                evm: async () => ({
                   priority: 'fast',
-                  gasLimit: updatedGasLimit || defaultEvmSwapGasLimit,
+                  gasLimit:
+                    updatedGasLimit ||
+                    (await estimateEvmGasWithFallback({
+                      chain: keysign.chain,
+                      from: keysign.transactionDetails.from,
+                      to: shouldBePresent(keysign.transactionDetails.to),
+                      data: keysign.transactionDetails.data,
+                      value: keysign.transactionDetails.amount?.amount,
+                    })),
                 }),
-                utxo: () => ({ priority: 'fast' }),
+                utxo: async () => ({ priority: 'fast' }),
                 cosmos: () => null,
                 sui: () => null,
                 solana: () => null,
