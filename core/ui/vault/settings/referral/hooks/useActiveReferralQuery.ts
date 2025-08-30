@@ -4,15 +4,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 
-export type ActiveReferral = {
-  savedReferralName: string
-  hasReferral: boolean
-  appAffiliateBps: number
-  referrerBps: number
-  combinedAffiliateBps: number
-}
-
-export const useActiveReferralQuery = () => {
+  export const useActiveReferralQuery = () => {
   const vaultId = useAssertCurrentVaultId()
   const referralQuery = useFriendReferralQuery(vaultId)
 
