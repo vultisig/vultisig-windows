@@ -1,7 +1,7 @@
 import { assertField } from '@lib/utils/record/assertField'
 
 import { OtherChain } from '../../../../../../Chain'
-import { decodeTx } from '../../../../../../tx/decode'
+import { decodeSigningOutput } from '../../../../../../tw/signingOutput'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
@@ -13,13 +13,7 @@ export const getSolanaBlockaidTxValidationInput: BlockaidTxValidationInputResolv
   const transactions = getCompiledTxsForBlockaidInput({
     payload,
     walletCore,
-  }).map(
-    tx =>
-      decodeTx({
-        chain,
-        compiledTx: tx,
-      }).encoded
-  )
+  }).map(tx => decodeSigningOutput(chain, tx).encoded)
 
   return {
     chain: 'mainnet',

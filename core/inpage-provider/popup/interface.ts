@@ -1,7 +1,7 @@
 import { EvmChain, OtherChain } from '@core/chain/Chain'
+import { SerializedSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
-import { Serialized } from '@core/inpage-provider/serialization'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
@@ -40,7 +40,7 @@ export type PopupInterface = {
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
   signMessage: Method<SignMessageInput, string>
-  sendTx: Method<ITransactionPayload, Serialized<Tx>[]>
+  sendTx: Method<ITransactionPayload, Tx & { data: SerializedSigningOutput }>
 }
 
 export type PopupMethod = keyof PopupInterface

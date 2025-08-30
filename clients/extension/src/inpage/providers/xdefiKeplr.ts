@@ -11,7 +11,6 @@ import {
 import {
   AccountData,
   AminoSignResponse,
-  BroadcastMode,
   DirectSignResponse,
   KeplrMode,
   KeplrSignOptions,
@@ -19,10 +18,10 @@ import {
   OfflineAminoSigner,
   OfflineDirectSigner,
   StdSignDoc,
-  StdTx,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { hexToBytes } from '@lib/utils/hexToBytes'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
@@ -179,20 +178,9 @@ export class XDEFIKeplrProvider extends Keplr {
     return cosmSigner as OfflineAminoSigner
   }
 
-  async sendTx(
-    chainId: string,
-    tx: StdTx | Uint8Array,
-    _mode: BroadcastMode
-  ): Promise<Uint8Array> {
-    return this.runWithChain(chainId, async () => {
-      const result = (await this.cosmosProvider.request({
-        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-        params: [{ ...tx, txType: 'Keplr' }],
-      })) as ITransaction<CosmosChain>
-      const parsed = JSON.parse(result.serialized)
-
-      return new Uint8Array(Buffer.from(parsed.tx_bytes, 'base64'))
-    })
+  async sendTx(): Promise<Uint8Array> {
+    // This method accepts a transaction of type StdTx | Uint8Array; however, the previous implementation did not support handling this type.
+    throw new NotImplementedError('Keplr sendTx method')
   }
   async sendMessage() {}
 

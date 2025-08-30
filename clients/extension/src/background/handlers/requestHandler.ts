@@ -37,31 +37,28 @@ export const handleRequest = (
           })
             .then(result => resolve(result))
             .catch(reject)
-        } else {
-          const isBasic = isBasicTransaction(_transaction)
-          getStandardTransactionDetails(
-            {
-              ..._transaction,
-              txType: isBasic
-                ? 'MetaMask'
-                : (_transaction.txType ?? 'Vultisig'),
-            } as TransactionType.WalletTransaction,
-            chain
-          ).then(standardTx => {
-            const modifiedTransaction: ITransaction = {
-              transactionPayload: {
-                keysign: {
-                  transactionDetails: standardTx as TransactionDetails,
-                  chain,
-                },
-              },
-              status: 'default',
-            }
-            handleSendTransaction(modifiedTransaction)
-              .then(result => resolve(result))
-              .catch(reject)
-          })
         }
+        const isBasic = isBasicTransaction(_transaction)
+        getStandardTransactionDetails(
+          {
+            ..._transaction,
+            txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
+          } as TransactionType.WalletTransaction,
+          chain
+        ).then(standardTx => {
+          const modifiedTransaction: ITransaction = {
+            transactionPayload: {
+              keysign: {
+                transactionDetails: standardTx as TransactionDetails,
+                chain,
+              },
+            },
+            status: 'default',
+          }
+          handleSendTransaction(modifiedTransaction)
+            .then(result => resolve(result))
+            .catch(reject)
+        })
         break
       }
       case RequestMethod.METAMASK.ETH_SEND_TRANSACTION: {

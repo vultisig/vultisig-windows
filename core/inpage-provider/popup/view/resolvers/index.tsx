@@ -15,4 +15,5 @@ export const PopupResolvers: PopupApiImplementation = {
   exportVaults: ExportVaults,
   pluginReshare: PluginReshare,
   signMessage: SignMessage,
+  sendTx: () => <div>Coming soon</div>,
 }
