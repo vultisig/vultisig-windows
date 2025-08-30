@@ -1,4 +1,9 @@
 export const en = {
+  app_store: 'App Store',
+  install_app: 'Install app',
+  accept_continue: 'Accept & continue',
+  permissions: 'Permissions',
+  allow_app_access: 'Allow app access to',
   connecting_to_verifier: 'Connecting to Verifier',
   connecting_to_plugin: 'Connecting to Plugin',
   confirm: 'Confirm',
