@@ -1,6 +1,7 @@
 import { Chain } from '../Chain'
-import { DecodedTx } from './decode'
+import { SigningOutput } from '../tw/signingOutput'
 
-export type Tx<T extends Chain = Chain> = DecodedTx<T> & {
+export type Tx<T extends Chain = Chain> = {
   hash: string
+  data: SigningOutput<T>
 }

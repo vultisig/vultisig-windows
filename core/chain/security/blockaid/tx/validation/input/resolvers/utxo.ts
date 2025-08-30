@@ -1,7 +1,7 @@
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 
 import { UtxoChain } from '../../../../../../Chain'
-import { decodeTx } from '../../../../../../tx/decode'
+import { decodeSigningOutput } from '../../../../../../tw/signingOutput'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
@@ -16,11 +16,7 @@ export const getUtxoBlockaidTxValidationInput: BlockaidTxValidationInputResolver
   })
 
   const [transaction] = compiledTxs.map(
-    compiledTx =>
-      decodeTx({
-        chain,
-        compiledTx,
-      }).encoded
+    compiledTx => decodeSigningOutput(chain, compiledTx).encoded
   )
 
   return {

@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { DecodedTx } from '../decode'
+import { SigningOutput } from '../../tw/signingOutput'
 import { TxHashResolver } from './resolver'
 import { getCardanoTxHash } from './resolvers/cardano'
 import { getCosmosTxHash } from './resolvers/cosmos'
@@ -29,7 +29,7 @@ const hashHandlers: Record<ChainKind, TxHashResolver<any>> = {
 
 type GetTxHashInput = {
   chain: Chain
-  tx: DecodedTx<Chain>
+  tx: SigningOutput<Chain>
 }
 
 export const getTxHash = (input: GetTxHashInput) => {

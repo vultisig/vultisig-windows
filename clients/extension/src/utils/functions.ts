@@ -1,13 +1,6 @@
-import { OtherChain } from '@core/chain/Chain'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { VersionedTransaction } from '@solana/web3.js'
-
-import { MessageKey, RequestMethod } from './constants'
-import { ITransaction, Messaging } from './interfaces'
 
 export const calculateWindowPosition = (
   currentWindow: chrome.windows.Window
@@ -56,37 +49,6 @@ export const splitString = (str: string, size: number): string[] => {
 
   for (let i = 0; i < str.length; i += size) {
     result.push(str.slice(i, i + size))
-  }
-
-  return result
-}
-
-export const processBackgroundResponse = (
-  data: Messaging.Chain.Request,
-  messageKey: MessageKey,
-  result: Messaging.Chain.Response
-): Messaging.Chain.Response => {
-  const handledMethods = [
-    RequestMethod.CTRL.TRANSFER,
-    RequestMethod.METAMASK.ETH_SEND_TRANSACTION,
-    RequestMethod.VULTISIG.SEND_TRANSACTION,
-    RequestMethod.CTRL.DEPOSIT,
-    RequestMethod.VULTISIG.DEPOSIT_TRANSACTION,
-  ]
-
-  if (isOneOf(data.method, handledMethods)) {
-    if (messageKey === MessageKey.SOLANA_REQUEST) {
-      return shouldBeDefined(
-        (result as ITransaction<OtherChain.Solana>).encoded
-      )
-    } else if (
-      messageKey === MessageKey.COSMOS_REQUEST &&
-      (data.params[0].txType === 'Vultisig' ||
-        data.params[0].txType === 'Keplr')
-    ) {
-      return result
-    }
-    return shouldBePresent((result as ITransaction<OtherChain.Solana>).hash)
   }
 
   return result

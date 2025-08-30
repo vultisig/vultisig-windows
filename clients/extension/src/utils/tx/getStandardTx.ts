@@ -385,7 +385,7 @@ export const isBasicTransaction = (
   )
 }
 
-const extractKeplrMessages = (
+export const extractKeplrMessages = (
   tx: TransactionType.Keplr
 ): {
   messages: any[]

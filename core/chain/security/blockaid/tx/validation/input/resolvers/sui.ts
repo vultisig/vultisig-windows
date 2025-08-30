@@ -1,7 +1,7 @@
 import { assertField } from '@lib/utils/record/assertField'
 
 import { OtherChain } from '../../../../../../Chain'
-import { decodeTx } from '../../../../../../tx/decode'
+import { decodeSigningOutput } from '../../../../../../tw/signingOutput'
 import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
@@ -16,11 +16,7 @@ export const getSuiBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
   })
 
   const [transaction] = compiledTxs.map(
-    compiledTx =>
-      decodeTx({
-        chain: OtherChain.Sui,
-        compiledTx,
-      }).unsignedTx
+    compiledTx => decodeSigningOutput(OtherChain.Sui, compiledTx).unsignedTx
   )
 
   return {
