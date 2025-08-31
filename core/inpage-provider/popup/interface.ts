@@ -52,6 +52,7 @@ export const mergeableInFlightPopupMethods: PopupMethod[] = ['grantVaultAccess']
 
 export const authorizedPopupMethods = [
   'signMessage',
+  'sendTx',
   'pluginReshare',
 ] as const satisfies readonly PopupMethod[]
 
