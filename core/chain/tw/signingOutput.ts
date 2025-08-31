@@ -25,13 +25,11 @@ export type SigningOutput<T extends Chain = Chain> = Omit<
   'errorMessage' | 'error'
 >
 
-const assertSigningOutput = <T extends Chain = Chain>({
-  error: _,
-  errorMessage,
-  ...output
-}: PotentialSigningOutput<T>): SigningOutput<T> => {
-  if (errorMessage) {
-    throw new Error(`Invalid signing output: ${errorMessage}`)
+const assertSigningOutput = <T extends Chain = Chain>(
+  output: PotentialSigningOutput<T>
+): SigningOutput<T> => {
+  if (output.errorMessage) {
+    throw new Error(`Invalid signing output: ${output.errorMessage}`)
   }
 
   return output
