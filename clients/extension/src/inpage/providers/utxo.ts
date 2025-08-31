@@ -1,12 +1,15 @@
 import { UtxoChain } from '@core/chain/Chain'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  BitcoinAccount,
+  ProviderId,
+  RequestInput,
+} from '@core/inpage-provider/tx/temp/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 
-import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { BitcoinAccount, Messaging, ProviderId } from '../../utils/interfaces'
+import { EventMethod } from '../../utils/constants'
 import { Callback } from '../constants'
-import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
 
@@ -19,36 +22,23 @@ type SupportedUtxoChain =
 
 export class UTXO extends EventEmitter {
   public chain: UtxoChain
-  private providerType: MessageKey
   public static instances: Map<string, UTXO>
   private providerId: ProviderId
-  constructor(
-    providerType: string,
-    chain: SupportedUtxoChain,
-    providerId: ProviderId = 'vultisig'
-  ) {
+  constructor(chain: SupportedUtxoChain, providerId: ProviderId = 'vultisig') {
     super()
-    this.providerType = providerType as MessageKey
     this.chain = chain
     this.providerId = providerId
   }
 
-  static getInstance(
-    providerType: string,
-    chain: SupportedUtxoChain,
-    providerId: ProviderId
-  ): UTXO {
+  static getInstance(chain: SupportedUtxoChain, providerId: ProviderId): UTXO {
     if (!UTXO.instances) {
       UTXO.instances = new Map<string, UTXO>()
     }
 
-    if (!UTXO.instances.has(providerType)) {
-      UTXO.instances.set(
-        providerType,
-        new UTXO(providerType, chain, providerId)
-      )
+    if (!UTXO.instances.has(chain)) {
+      UTXO.instances.set(chain, new UTXO(chain, providerId))
     }
-    return UTXO.instances.get(providerType)!
+    return UTXO.instances.get(chain)!
   }
 
   async requestAccounts(): Promise<BitcoinAccount[] | string[]> {
@@ -63,21 +53,23 @@ export class UTXO extends EventEmitter {
   }
 
   async signPSBT(psbt: Buffer) {
-    return await this.request({
-      method: RequestMethod.CTRL.SIGN_PSBT,
-      params: [
-        {
-          psbt: Uint8Array.from(psbt),
+    const { hash } = await callPopup({
+      sendTx: {
+        serialized: {
+          data: Uint8Array.from(psbt),
+          chain: this.chain,
         },
-      ],
+      },
     })
+
+    return hash
   }
 
   emitAccountsChanged() {
     this.emit(EventMethod.ACCOUNTS_CHANGED, {})
   }
 
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
+  async request(data: RequestInput, callback?: Callback) {
     const processRequest = async () => {
       const handlers = getSharedHandlers(this.chain)
 
@@ -86,19 +78,8 @@ export class UTXO extends EventEmitter {
           data.params as any
         )
       }
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: this.providerType,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
 
-      return processBackgroundResponse(data, this.providerType, response)
+      throw new NotImplementedError(`UTXO method ${data.method}`)
     }
 
     try {

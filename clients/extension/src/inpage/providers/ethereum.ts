@@ -1,4 +1,4 @@
-import { EventMethod, MessageKey } from '@clients/extension/src/utils/constants'
+import { EventMethod } from '@clients/extension/src/utils/constants'
 import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmChainByChainId,
@@ -7,18 +7,17 @@ import {
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
+import { RequestInput } from '@core/inpage-provider/tx/temp/interfaces'
 import { attempt, withFallback } from '@lib/utils/attempt'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import { getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 import { BlockTag } from 'viem'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
 
@@ -136,7 +135,7 @@ export class Ethereum extends EventEmitter {
     return this
   }
 
-  async request(data: Messaging.Chain.Request) {
+  async request(data: RequestInput) {
     const getChain = async () => {
       const chain = await callBackground({
         getAppChain: { chainKind: 'evm' },
@@ -326,23 +325,7 @@ export class Ethereum extends EventEmitter {
       return handlers[data.method as keyof typeof handlers](data.params as any)
     }
 
-    const response = await messengers.background.send<
-      any,
-      Messaging.Chain.Response
-    >(
-      'providerRequest',
-      {
-        type: MessageKey.ETHEREUM_REQUEST,
-        message: data,
-      },
-      { id: uuidv4() }
-    )
-
-    return processBackgroundResponse(
-      data,
-      MessageKey.ETHEREUM_REQUEST,
-      response
-    )
+    throw new NotImplementedError(`Ethereum method ${data.method}`)
   }
 
   _connect = (): void => {
