@@ -501,18 +501,18 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const tx = keplrHandler(signDoc, chain)
+      const transactionDetails = keplrHandler(signDoc, chain)
 
       const { data } = await callPopup(
         {
           sendTx: {
             keysign: {
-              transactionDetails: tx,
-              chain: Chain.Cosmos,
+              transactionDetails,
+              chain,
             },
           },
         },
-        { account: tx.from, closeOnFinish: false }
+        { account: transactionDetails.from, closeOnFinish: false }
       )
 
       const { serialized } = deserializeSigningOutput(Chain.Cosmos, data)
@@ -593,7 +593,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const tx = keplrHandler(
+      const transactionDetails = keplrHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
@@ -608,12 +608,12 @@ export class XDEFIKeplrProvider extends Keplr {
         {
           sendTx: {
             keysign: {
-              transactionDetails: tx,
-              chain: Chain.Cosmos,
+              transactionDetails,
+              chain,
             },
           },
         },
-        { account: tx.from, closeOnFinish: false }
+        { account: transactionDetails.from, closeOnFinish: false }
       )
 
       const { serialized } = deserializeSigningOutput(Chain.Cosmos, data)
