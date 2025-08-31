@@ -27,5 +27,8 @@ export const getSharedHandlers = (chain: Chain) => {
       callBackground({
         getTx: { chain, hash },
       }),
+    send_transaction: async ([tx]: unknown[]) => {
+      console.log('TODO: send_transaction', tx)
+    },
   } as const
 }

@@ -332,21 +332,25 @@ export class Ethereum extends EventEmitter {
       eth_sendTransaction: async ([tx]: [RpcTransactionRequest]) => {
         const chain = await getChain()
 
+        const from = shouldBePresent(tx.from, 'tx.from')
+
+        const { decimals, ticker } = chainFeeCoin[chain]
+
         const { hash } = await callPopup(
           {
             sendTx: {
               keysign: {
                 transactionDetails: {
-                  from: shouldBePresent(tx.from, 'tx.from'),
+                  from,
                   to: tx.to ?? undefined,
                   asset: {
                     chain: chain,
-                    ticker: chainFeeCoin[chain].ticker,
+                    ticker,
                   },
                   amount: tx.value
                     ? {
                         amount: ethers.toBigInt(tx.value).toString(),
-                        decimals: chainFeeCoin[chain].decimals,
+                        decimals,
                       }
                     : undefined,
                   data: tx.data,
@@ -371,7 +375,7 @@ export class Ethereum extends EventEmitter {
             },
           },
           {
-            account: typeof tx.from === 'string' ? tx.from : undefined,
+            account: from,
             closeOnFinish: false,
           }
         )
