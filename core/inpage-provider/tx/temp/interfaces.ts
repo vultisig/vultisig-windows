@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { Tx } from '@core/chain/tx'
 import { StdSignDoc } from '@keplr-wallet/types'
 
 export enum CosmosMsgType {
@@ -11,6 +12,11 @@ export enum CosmosMsgType {
   MSG_SEND_URL = '/cosmos.bank.v1beta1.MsgSend',
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
+}
+
+export type RequestInput = {
+  method: string
+  params: Record<string, any>[]
 }
 
 export type ProviderId =
@@ -208,8 +214,16 @@ type ISerializedTransactionPayload = {
   chain: Chain
 }
 
-export type ITransactionPayload =
+type ITransactionPayload =
   | {
       keysign: IKeysignTransactionPayload
     }
   | { serialized: ISerializedTransactionPayload }
+
+export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
+  Partial<Pick<Tx<T>, 'hash'>> & {
+    id?: string
+    status: 'default' | 'error' | 'pending' | 'success'
+    transactionPayload: ITransactionPayload
+    windowId?: number
+  }

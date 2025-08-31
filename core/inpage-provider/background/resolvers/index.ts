@@ -1,3 +1,4 @@
+import { getTokenMetadata } from '@core/chain/coin/token/metadata'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
@@ -22,4 +23,5 @@ export const backgroundResolvers: BackgroundResolvers = {
   evmClientRequest,
   exportVault,
   getTx,
+  getTokenMetadata: ({ input }) => getTokenMetadata(input),
 }

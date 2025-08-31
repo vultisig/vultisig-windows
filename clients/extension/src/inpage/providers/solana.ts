@@ -3,8 +3,14 @@ import { Chain, OtherChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
+import {
+  ITransaction,
+  RequestInput,
+  TransactionType,
+} from '@core/inpage-provider/tx/temp/interfaces'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
@@ -52,22 +58,10 @@ import {
   type StandardEventsNames,
   type StandardEventsOnMethod,
 } from '@wallet-standard/features'
-import { v4 as uuidv4 } from 'uuid'
 
-import { MessageKey, RequestMethod } from '../../utils/constants'
-import {
-  bytesEqual,
-  isVersionedTransaction,
-  processBackgroundResponse,
-} from '../../utils/functions'
-import {
-  ITransaction,
-  Messaging,
-  TransactionType,
-} from '../../utils/interfaces'
+import { bytesEqual, isVersionedTransaction } from '../../utils/functions'
 import { Callback } from '../constants'
 import icon from '../icon'
-import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
 import { VultisigSolanaWalletAccount } from './solana/account'
@@ -230,7 +224,7 @@ export class Solana implements Wallet {
     await Promise.resolve()
   }
 
-  request = async (data: Messaging.Chain.Request, callback?: Callback) => {
+  request = async (data: RequestInput, callback?: Callback) => {
     const processRequest = async () => {
       const handlers = getSharedHandlers(Chain.Solana)
 
@@ -239,23 +233,8 @@ export class Solana implements Wallet {
           data.params as any
         )
       }
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.SOLANA_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
 
-      return processBackgroundResponse(
-        data,
-        MessageKey.SOLANA_REQUEST,
-        response
-      )
+      throw new NotImplementedError(`Solana request method ${data.method}`)
     }
 
     try {
