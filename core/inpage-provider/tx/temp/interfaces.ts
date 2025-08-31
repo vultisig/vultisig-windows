@@ -207,7 +207,7 @@ export type IKeysignTransactionPayload = {
 }
 
 type ISerializedTransactionPayload = {
-  data: Uint8Array
+  data: string
   skipBroadcast?: boolean
   chain: Chain
 }

@@ -318,11 +318,14 @@ export class Solana implements Wallet {
   ) => {
     if (isVersionedTransaction(transaction)) {
       const serializedTransaction = transaction.serialize()
+      const serializedBase64 = Buffer.from(serializedTransaction).toString(
+        'base64'
+      )
       const { data } = await callPopup(
         {
           sendTx: {
             serialized: {
-              data: serializedTransaction,
+              data: serializedBase64,
               skipBroadcast,
               chain: Chain.Solana,
             },

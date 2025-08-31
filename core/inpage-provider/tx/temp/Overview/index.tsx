@@ -157,10 +157,9 @@ export const SendTxOverview = () => {
 
             return keysignPayload
           },
-          serialized: async ({ data: serialized, chain, skipBroadcast }) => {
+          serialized: async ({ data, chain, skipBroadcast }) => {
             if (chain === Chain.Bitcoin) {
-              const txInputDataArray = Object.values(serialized)
-              const dataBuffer = Buffer.from(txInputDataArray)
+              const dataBuffer = Buffer.from(data, 'base64')
               const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
               const gasSettings: FeeSettings | null = { priority: 'fast' }
               return await getPsbtKeysignPayload(
@@ -170,6 +169,7 @@ export const SendTxOverview = () => {
                 gasSettings
               )
             } else {
+              const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
               const parsed = await parseSolanaTx({
                 walletCore,
                 inputTx: serialized,
