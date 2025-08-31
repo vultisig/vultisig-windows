@@ -28,6 +28,7 @@ import {
   StdSignDoc,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
+import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { hexToBytes } from '@lib/utils/hexToBytes'
@@ -436,7 +437,22 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async enable(_chainIds: string | string[]): Promise<void> {
-    await requestAccount(Chain.Cosmos)
+    const chains = without(
+      (Array.isArray(_chainIds) ? _chainIds : [_chainIds]).map(
+        getCosmosChainByChainId
+      ),
+      undefined
+    )
+
+    await Promise.all(
+      chains.map(chain =>
+        callBackground({
+          getAccount: {
+            chain,
+          },
+        })
+      )
+    )
   }
 
   getOfflineSigner(
@@ -515,7 +531,7 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from, closeOnFinish: false }
       )
 
-      const { serialized } = deserializeSigningOutput(Chain.Cosmos, data)
+      const { serialized } = deserializeSigningOutput(chain, data)
 
       const parsed = JSON.parse(serialized)
       const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
@@ -616,7 +632,7 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from, closeOnFinish: false }
       )
 
-      const { serialized } = deserializeSigningOutput(Chain.Cosmos, data)
+      const { serialized } = deserializeSigningOutput(chain, data)
       const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
         'base64'
       )
