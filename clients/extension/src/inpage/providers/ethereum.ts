@@ -355,19 +355,15 @@ export class Ethereum extends EventEmitter {
                     : undefined,
                   data: tx.data,
                   gasSettings: {
-                    maxFeePerGas:
-                      tx.maxFeePerGas !== undefined && tx.maxFeePerGas !== null
-                        ? ethers.toBigInt(tx.maxFeePerGas).toString()
-                        : undefined,
-                    maxPriorityFeePerGas:
-                      tx.maxPriorityFeePerGas !== undefined &&
-                      tx.maxPriorityFeePerGas !== null
-                        ? ethers.toBigInt(tx.maxPriorityFeePerGas).toString()
-                        : undefined,
-                    gasLimit:
-                      tx.gas !== undefined && tx.gas !== null
-                        ? ethers.toBigInt(tx.gas).toString()
-                        : undefined,
+                    maxFeePerGas: tx.maxFeePerGas
+                      ? ethers.toBigInt(tx.maxFeePerGas).toString()
+                      : undefined,
+                    maxPriorityFeePerGas: tx.maxPriorityFeePerGas
+                      ? ethers.toBigInt(tx.maxPriorityFeePerGas).toString()
+                      : undefined,
+                    gasLimit: tx.gas
+                      ? ethers.toBigInt(tx.gas).toString()
+                      : undefined,
                   },
                 },
                 chain,
