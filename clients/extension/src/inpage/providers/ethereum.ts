@@ -4,18 +4,20 @@ import {
   getEvmChainByChainId,
   getEvmChainId,
 } from '@core/chain/chains/evm/chainInfo'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/tx/temp/interfaces'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
-import { getBytes, isHexString, Signature } from 'ethers'
+import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
-import { BlockTag } from 'viem'
+import { BlockTag, type RpcTransactionRequest } from 'viem'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { messengers } from '../messenger'
@@ -231,7 +233,9 @@ export class Ethereum extends EventEmitter {
         callBackground({
           evmClientRequest: { method: 'eth_blockNumber' },
         }),
-      eth_getBlockByNumber: async (params: unknown[]) =>
+      eth_getBlockByNumber: async (
+        params: [BlockTag | `0x${string}`, boolean]
+      ) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getBlockByNumber',
@@ -246,22 +250,28 @@ export class Ethereum extends EventEmitter {
         callBackground({
           evmClientRequest: { method: 'eth_maxPriorityFeePerGas' },
         }),
-      eth_estimateGas: async (params: unknown[]) =>
+      eth_estimateGas: async (
+        params: [RpcTransactionRequest, BlockTag | `0x${string}` | undefined]
+      ) =>
         callBackground({
           evmClientRequest: { method: 'eth_estimateGas', params },
         }),
-      eth_call: async (params: unknown[]) =>
+      eth_call: async (
+        params: [RpcTransactionRequest, BlockTag | `0x${string}` | undefined]
+      ) =>
         callBackground({
           evmClientRequest: { method: 'eth_call', params },
         }),
-      eth_getTransactionReceipt: async (params: unknown[]) =>
+      eth_getTransactionReceipt: async (
+        params: [`0x${string}`] | [`0x${string}`, ...unknown[]]
+      ) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getTransactionReceipt',
             params,
           },
         }),
-      eth_getTransactionByHash: async (params: unknown[]) =>
+      eth_getTransactionByHash: async (params: [`0x${string}`]) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getTransactionByHash',
@@ -318,6 +328,55 @@ export class Ethereum extends EventEmitter {
         )
 
         return processSignature(result)
+      },
+      eth_sendTransaction: async ([tx]: [RpcTransactionRequest]) => {
+        const chain = await getChain()
+
+        const { hash } = await callPopup(
+          {
+            sendTx: {
+              keysign: {
+                transactionDetails: {
+                  from: shouldBePresent(tx.from, 'tx.from'),
+                  to: tx.to ?? undefined,
+                  asset: {
+                    chain: chain,
+                    ticker: chainFeeCoin[chain].ticker,
+                  },
+                  amount: tx.value
+                    ? {
+                        amount: ethers.toBigInt(tx.value).toString(),
+                        decimals: chainFeeCoin[chain].decimals,
+                      }
+                    : undefined,
+                  data: tx.data,
+                  gasSettings: {
+                    maxFeePerGas:
+                      tx.maxFeePerGas !== undefined && tx.maxFeePerGas !== null
+                        ? ethers.toBigInt(tx.maxFeePerGas).toString()
+                        : undefined,
+                    maxPriorityFeePerGas:
+                      tx.maxPriorityFeePerGas !== undefined &&
+                      tx.maxPriorityFeePerGas !== null
+                        ? ethers.toBigInt(tx.maxPriorityFeePerGas).toString()
+                        : undefined,
+                    gasLimit:
+                      tx.gas !== undefined && tx.gas !== null
+                        ? ethers.toBigInt(tx.gas).toString()
+                        : undefined,
+                  },
+                },
+                chain,
+              },
+            },
+          },
+          {
+            account: typeof tx.from === 'string' ? tx.from : undefined,
+            closeOnFinish: false,
+          }
+        )
+
+        return hash
       },
     } as const
 
