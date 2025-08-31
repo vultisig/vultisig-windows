@@ -1,5 +1,9 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { RequestInput } from '@core/inpage-provider/tx/temp/interfaces'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  RequestInput,
+  TransactionDetails,
+} from '@core/inpage-provider/tx/temp/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
 import { Callback } from '../constants'
@@ -21,7 +25,27 @@ export class THORChain extends BaseCosmosChain {
 
   async request(data: RequestInput, callback?: Callback): Promise<unknown> {
     const processRequest = async () => {
-      const handlers = getSharedHandlers(CosmosChain.THORChain)
+      const handlers = {
+        ...getSharedHandlers(CosmosChain.THORChain),
+        deposit_transaction: async ([tx]: [TransactionDetails]) => {
+          const { hash } = await callPopup(
+            {
+              sendTx: {
+                keysign: {
+                  transactionDetails: tx,
+                  chain: CosmosChain.THORChain,
+                },
+              },
+            },
+            {
+              account: tx.from,
+              closeOnFinish: false,
+            }
+          )
+
+          return hash
+        },
+      }
 
       if (data.method in handlers) {
         return handlers[data.method as keyof typeof handlers](

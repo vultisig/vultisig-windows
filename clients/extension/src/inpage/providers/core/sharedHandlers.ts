@@ -1,5 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
+import { callPopup } from '@core/inpage-provider/popup'
+import { TransactionDetails } from '@core/inpage-provider/tx/temp/interfaces'
 import { attempt, withFallback } from '@lib/utils/attempt'
 
 import { requestAccount } from './requestAccount'
@@ -27,8 +29,23 @@ export const getSharedHandlers = (chain: Chain) => {
       callBackground({
         getTx: { chain, hash },
       }),
-    send_transaction: async ([tx]: unknown[]) => {
-      console.log('TODO: send_transaction', tx)
+    send_transaction: async ([tx]: [TransactionDetails]) => {
+      const { hash } = await callPopup(
+        {
+          sendTx: {
+            keysign: {
+              transactionDetails: tx,
+              chain,
+            },
+          },
+        },
+        {
+          account: tx.from,
+          closeOnFinish: false,
+        }
+      )
+
+      return hash
     },
   } as const
 }
