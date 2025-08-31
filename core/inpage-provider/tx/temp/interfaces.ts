@@ -36,8 +36,7 @@ export type BitcoinAccount = {
 export namespace TransactionType {
   export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
 
-  type BaseTransaction<T extends TxType> = {
-    txType: T
+  type BaseTransaction = {
     skipBroadcast?: boolean
   }
 
@@ -53,7 +52,7 @@ export namespace TransactionType {
     nonce?: string
     chainId?: string
     type?: string
-  } & BaseTransaction<'MetaMask'>
+  } & BaseTransaction
 
   export type Ctrl = {
     amount: {
@@ -69,7 +68,7 @@ export namespace TransactionType {
     gasLimit?: string
     memo: string
     recipient: string
-  } & BaseTransaction<'Ctrl'>
+  } & BaseTransaction
 
   export type Vultisig = {
     asset: {
@@ -82,7 +81,7 @@ export namespace TransactionType {
     amount?: { amount: string; decimals: number }
     data?: string
     gasLimit?: string
-  } & BaseTransaction<'Vultisig'>
+  } & BaseTransaction
 
   export type Keplr = (
     | StdSignDoc
@@ -93,7 +92,7 @@ export namespace TransactionType {
         accountNumber: string // stringified Long
       }
   ) &
-    BaseTransaction<'Keplr'>
+    BaseTransaction
 
   export type Phantom = {
     asset: {
@@ -105,7 +104,7 @@ export namespace TransactionType {
     from: string
     to?: string
     amount: string
-  } & BaseTransaction<'Phantom'>
+  } & BaseTransaction
 
   export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
 }

@@ -3,7 +3,7 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { Chain } from '../Chain'
 
-export const signingOutputs = {
+const signingOutputs = {
   evm: TW.Ethereum.Proto.SigningOutput,
   utxo: TW.Bitcoin.Proto.SigningOutput,
   solana: TW.Solana.Proto.SigningOutput,

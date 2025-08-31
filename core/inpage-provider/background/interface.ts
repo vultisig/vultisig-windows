@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
 import { CoinKey, CoinMetadata, Token } from '@core/chain/coin/Coin'
+import { ChainWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
@@ -24,7 +25,10 @@ export type BackgroundInterface = {
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
   getTx: Method<{ chain: Chain; hash: string }, unknown>
-  getTokenMetadata: Method<Token<CoinKey>, CoinMetadata>
+  getTokenMetadata: Method<
+    Token<CoinKey<ChainWithTokenMetadataDiscovery>>,
+    CoinMetadata
+  >
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

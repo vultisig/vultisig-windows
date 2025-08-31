@@ -5,6 +5,7 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
+import { getTransactionAuthority } from '@core/inpage-provider/tx/temp/core/solana/utils'
 import {
   RequestInput,
   TransactionDetails,
@@ -316,17 +317,21 @@ export class Solana implements Wallet {
     skipBroadcast: boolean = true
   ) => {
     if (isVersionedTransaction(transaction)) {
+      const serializedTransaction = transaction.serialize()
       const { data } = await callPopup(
         {
           sendTx: {
             serialized: {
-              data: transaction.serialize(),
+              data: serializedTransaction,
               skipBroadcast,
               chain: Chain.Solana,
             },
           },
         },
-        { closeOnFinish: false }
+        {
+          closeOnFinish: false,
+          account: getTransactionAuthority(serializedTransaction),
+        }
       )
 
       const { encoded } = deserializeSigningOutput(Chain.Solana, data)
@@ -424,14 +429,19 @@ export class Solana implements Wallet {
 
         const transactionDetails = await getTransactionDetails()
 
-        const { data } = await callPopup({
-          sendTx: {
-            keysign: {
-              transactionDetails,
-              chain: Chain.Solana,
+        const { data } = await callPopup(
+          {
+            sendTx: {
+              keysign: {
+                transactionDetails,
+                chain: Chain.Solana,
+              },
             },
           },
-        })
+          {
+            account: transactionDetails.from,
+          }
+        )
 
         const { encoded } = deserializeSigningOutput(Chain.Solana, data)
 

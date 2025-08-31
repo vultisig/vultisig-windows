@@ -1,4 +1,3 @@
-import { IKeysignTransactionPayload } from '@clients/extension/src/utils/interfaces'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
@@ -14,6 +13,8 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useState } from 'react'
 import { formatUnits } from 'viem'
+
+import { IKeysignTransactionPayload } from '../interfaces'
 
 type GasFeeAdjusterProps = {
   keysignPayload: KeysignMessagePayload

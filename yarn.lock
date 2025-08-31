@@ -802,7 +802,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@clients/extension@workspace:clients/extension"
   dependencies:
-    "@bufbuild/protobuf": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
     "@core/extension": "workspace:*"
@@ -830,7 +829,6 @@ __metadata:
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/features": "npm:^1.1.0"
     bech32: "npm:^2.0.0"
-    bitcoinjs-lib: "npm:^6.1.7"
     chokidar: "npm:^4.0.3"
     cross-env: "npm:^7.0.3"
     eslint: "npm:^9.22.0"
@@ -941,9 +939,13 @@ __metadata:
     "@core/extension": "workspace:*"
     "@core/mpc": "workspace:*"
     "@core/ui": "workspace:*"
+    "@keplr-wallet/types": "npm:^0.12.202"
     "@lib/extension": "workspace:*"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
+    "@solana/spl-token": "npm:^0.4.13"
+    "@solana/web3.js": "npm:^1.98.0"
+    bitcoinjs-lib: "npm:^6.1.7"
   languageName: unknown
   linkType: soft
 

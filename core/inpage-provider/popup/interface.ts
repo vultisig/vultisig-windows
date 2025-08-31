@@ -40,7 +40,10 @@ export type PopupInterface = {
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
   signMessage: Method<SignMessageInput, string>
-  sendTx: Method<ITransactionPayload, Tx & { data: SerializedSigningOutput }>
+  sendTx: Method<
+    ITransactionPayload,
+    Omit<Tx, 'data'> & { data: SerializedSigningOutput }
+  >
 }
 
 export type PopupMethod = keyof PopupInterface
