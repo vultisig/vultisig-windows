@@ -9,7 +9,6 @@ import {
   CosmosMsgPayload,
   CosmosMsgType,
   TransactionDetails,
-  TransactionType,
 } from '@core/inpage-provider/tx/temp/interfaces'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
@@ -50,8 +49,20 @@ import { Cosmos } from './cosmos'
 const formatContractMessage = (msgString: string): string =>
   msgString.replace(/^({)/, '$1 ').replace(/(})$/, ' $1').replace(/:/g, ': ')
 
+type KeplrTransaction = (
+  | StdSignDoc
+  | {
+      bodyBytes: string // base64 encoded
+      authInfoBytes: string // base64 encoded
+      chainId: string
+      accountNumber: string // stringified Long
+    }
+) & {
+  skipBroadcast?: boolean
+}
+
 const extractKeplrMessages = (
-  tx: TransactionType.Keplr
+  tx: KeplrTransaction
 ): {
   messages: any[]
   memo: string
@@ -78,7 +89,7 @@ const extractKeplrMessages = (
 }
 
 const keplrHandler = (
-  tx: TransactionType.Keplr,
+  tx: KeplrTransaction,
   chain: Chain
 ): TransactionDetails => {
   const { messages, memo, chainId, skipBroadcast } = extractKeplrMessages(tx)

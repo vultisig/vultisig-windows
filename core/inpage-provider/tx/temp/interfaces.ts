@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { StdSignDoc } from '@keplr-wallet/types'
 
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
@@ -31,82 +30,6 @@ export type BitcoinAccount = {
   publicKey: string
   addressType: string
   purpose: BitcoinAccountPurpose
-}
-
-export namespace TransactionType {
-  export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
-
-  type BaseTransaction = {
-    skipBroadcast?: boolean
-  }
-
-  export type MetaMask = {
-    from: string
-    to: string
-    value?: string
-    data: string
-    gas?: string
-    gasPrice?: string
-    maxFeePerGas?: string
-    maxPriorityFeePerGas?: string
-    nonce?: string
-    chainId?: string
-    type?: string
-  } & BaseTransaction
-
-  export type Ctrl = {
-    amount: {
-      amount: string
-      decimals: number
-    }
-    asset: {
-      chain: string
-      symbol: string
-      ticker: string
-    }
-    from: string
-    gasLimit?: string
-    memo: string
-    recipient: string
-  } & BaseTransaction
-
-  export type Vultisig = {
-    asset: {
-      chain: string
-      ticker: string
-      symbol?: string
-    }
-    from: string
-    to?: string
-    amount?: { amount: string; decimals: number }
-    data?: string
-    gasLimit?: string
-  } & BaseTransaction
-
-  export type Keplr = (
-    | StdSignDoc
-    | {
-        bodyBytes: string // base64 encoded
-        authInfoBytes: string // base64 encoded
-        chainId: string
-        accountNumber: string // stringified Long
-      }
-  ) &
-    BaseTransaction
-
-  export type Phantom = {
-    asset: {
-      chain: string
-      ticker?: string
-      symbol?: string
-      mint?: string
-    }
-    from: string
-    to?: string
-    amount: string
-  } & BaseTransaction
-
-  export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
 }
 
 type IMsgTransfer = {
