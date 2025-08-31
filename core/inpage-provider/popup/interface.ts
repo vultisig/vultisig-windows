@@ -6,7 +6,7 @@ import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
 
-import { ITransactionPayload } from '../tx/temp/interfaces'
+import { ITransactionPayload } from './view/resolvers/sendTx/interfaces'
 
 export type Eip712V4Payload = {
   domain: TypedDataDomain

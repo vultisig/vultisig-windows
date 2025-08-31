@@ -4,7 +4,7 @@ import {
   BitcoinAccount,
   ProviderId,
   RequestInput,
-} from '@core/inpage-provider/tx/temp/interfaces'
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
 

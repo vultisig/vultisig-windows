@@ -9,7 +9,7 @@ import {
   CosmosMsgPayload,
   CosmosMsgType,
   TransactionDetails,
-} from '@core/inpage-provider/tx/temp/interfaces'
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -675,11 +675,15 @@ export class XDEFIKeplrProvider extends Keplr {
   async getKey(chainId: string): Promise<Key> {
     const [{ pubkey, address, algo }] = await getAccounts(chainId)
 
+    const addressBytes = new Uint8Array(
+      bech32.fromWords(bech32.decode(address).words)
+    )
+
     return {
       pubKey: pubkey,
       bech32Address: address,
       ethereumHexAddress: address,
-      address: hexToBytes(address),
+      address: addressBytes,
       isNanoLedger: false,
       isKeystone: false,
       name: '',

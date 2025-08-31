@@ -14,7 +14,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useState } from 'react'
 import { formatUnits } from 'viem'
 
-import { IKeysignTransactionPayload } from '../interfaces'
+import { IKeysignTransactionPayload } from './interfaces'
 
 type GasFeeAdjusterProps = {
   keysignPayload: KeysignMessagePayload

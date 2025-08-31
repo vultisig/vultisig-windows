@@ -19,7 +19,7 @@ import {
   CosmosMsgType,
   IKeysignTransactionPayload,
   TransactionDetailsAsset,
-} from '@core/inpage-provider/tx/temp/interfaces'
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   CosmosIbcDenomTraceSchema,

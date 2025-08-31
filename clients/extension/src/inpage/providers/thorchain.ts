@@ -3,12 +3,13 @@ import { callPopup } from '@core/inpage-provider/popup'
 import {
   RequestInput,
   TransactionDetails,
-} from '@core/inpage-provider/tx/temp/interfaces'
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
 import { Callback } from '../constants'
 import { BaseCosmosChain } from './baseCosmos'
 import { getSharedHandlers } from './core/sharedHandlers'
+
 export class THORChain extends BaseCosmosChain {
   public static instance: THORChain | null = null
 

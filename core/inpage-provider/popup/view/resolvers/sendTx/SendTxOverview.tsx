@@ -47,13 +47,13 @@ import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { usePopupInput } from '../../../popup/view/state/input'
-import { getKeysignPayload } from '../core/getKeySignPayload'
-import { parseSolanaTx } from '../core/solana/parser'
-import { getSolanaKeysignPayload } from '../core/solana/solanaKeysignPayload'
-import { getPsbtKeysignPayload } from '../core/utxo/getPsbtKeysignPayload'
-import { CosmosMsgType, ITransactionPayload } from '../interfaces'
+import { usePopupInput } from '../../state/input'
+import { getKeysignPayload } from './core/getKeySignPayload'
+import { parseSolanaTx } from './core/solana/parser'
+import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
+import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
 import { GasFeeAdjuster } from './GasFeeAdjuster'
+import { CosmosMsgType, ITransactionPayload } from './interfaces'
 
 const splitString = (str: string, size: number): string[] => {
   const result: string[] = []

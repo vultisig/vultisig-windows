@@ -5,11 +5,11 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
-import { getTransactionAuthority } from '@core/inpage-provider/tx/temp/core/solana/utils'
+import { getTransactionAuthority } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils'
 import {
   RequestInput,
   TransactionDetails,
-} from '@core/inpage-provider/tx/temp/interfaces'
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'

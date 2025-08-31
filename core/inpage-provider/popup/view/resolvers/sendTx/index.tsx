@@ -11,7 +11,7 @@ import { Views } from '@lib/ui/navigation/Views'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { SendTxOverview } from '../../../../tx/temp/Overview'
+import { SendTxOverview } from './SendTxOverview'
 
 type SendTxView =
   | {

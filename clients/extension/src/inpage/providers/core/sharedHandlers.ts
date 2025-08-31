@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
-import { TransactionDetails } from '@core/inpage-provider/tx/temp/interfaces'
+import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { attempt, withFallback } from '@lib/utils/attempt'
 
 import { requestAccount } from './requestAccount'
@@ -30,6 +30,7 @@ export const getSharedHandlers = (chain: Chain) => {
         getTx: { chain, hash },
       }),
     send_transaction: async ([tx]: [TransactionDetails]) => {
+      console.log('send_transaction', tx)
       const { hash } = await callPopup(
         {
           sendTx: {
