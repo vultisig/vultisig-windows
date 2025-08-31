@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { Tx } from '@core/chain/tx'
 import { StdSignDoc } from '@keplr-wallet/types'
 
 export enum CosmosMsgType {
@@ -214,16 +213,8 @@ type ISerializedTransactionPayload = {
   chain: Chain
 }
 
-type ITransactionPayload =
+export type ITransactionPayload =
   | {
       keysign: IKeysignTransactionPayload
     }
   | { serialized: ISerializedTransactionPayload }
-
-export type ITransaction<T extends Chain = Chain> = Omit<Tx<T>, 'hash'> &
-  Partial<Pick<Tx<T>, 'hash'>> & {
-    id?: string
-    status: 'default' | 'error' | 'pending' | 'success'
-    transactionPayload: ITransactionPayload
-    windowId?: number
-  }

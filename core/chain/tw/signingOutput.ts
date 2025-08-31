@@ -51,3 +51,16 @@ export const decodeSigningOutput = <T extends Chain = Chain>(
 }
 
 export type SerializedSigningOutput = Record<string, unknown>
+
+export const deserializeSigningOutput = <T extends Chain = Chain>(
+  chain: T,
+  data: SerializedSigningOutput
+): SigningOutput<T> => {
+  const chainKind = getChainKind(chain)
+
+  const output = signingOutputs[chainKind].fromObject(
+    data
+  ) as PotentialSigningOutput<T>
+
+  return assertSigningOutput(output)
+}

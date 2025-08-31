@@ -1,12 +1,13 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
-import { Chain, OtherChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
-  ITransaction,
   RequestInput,
-  TransactionType,
+  TransactionDetails,
 } from '@core/inpage-provider/tx/temp/interfaces'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
@@ -315,90 +316,128 @@ export class Solana implements Wallet {
     skipBroadcast: boolean = true
   ) => {
     if (isVersionedTransaction(transaction)) {
-      const result = (await this.request({
-        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-        params: [
-          {
-            serializedTx: transaction.serialize(),
-            skipBroadcast,
+      const { data } = await callPopup(
+        {
+          sendTx: {
+            serialized: {
+              data: transaction.serialize(),
+              skipBroadcast,
+              chain: Chain.Solana,
+            },
           },
-        ],
-      })) as ITransaction<OtherChain.Solana>
-      const rawData = bs58.decode(String(result))
+        },
+        { closeOnFinish: false }
+      )
+
+      const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+
+      const rawData = bs58.decode(String(encoded))
       return VersionedTransaction.deserialize(rawData)
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
       for (const instruction of transaction.instructions) {
-        let modifiedTransfer: TransactionType.Phantom
+        const getTransactionDetails = async (): Promise<TransactionDetails> => {
+          if (instruction.programId.equals(SystemProgram.programId)) {
+            // Handle Native SOL Transfers
+            const decodedTransfer =
+              SystemInstruction.decodeTransfer(instruction)
 
-        if (instruction.programId.equals(SystemProgram.programId)) {
-          // Handle Native SOL Transfers
-          const decodedTransfer = SystemInstruction.decodeTransfer(instruction)
-          modifiedTransfer = {
-            txType: 'Phantom',
-            asset: { chain: Chain.Solana, ticker: 'SOL' },
-            amount: decodedTransfer.lamports.toString(),
-            from: decodedTransfer.fromPubkey.toString(),
-            to: decodedTransfer.toPubkey.toString(),
-            skipBroadcast,
-          }
-        } else if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
-          //  Handle SPL Token Transfers
-          const senderTokenAccountInfo = await getAccount(
-            connection,
-            new PublicKey(instruction.keys[0].pubkey)
-          )
-          let recipient: string
-          try {
-            // Try fetching receiver account
-            const receiverTokenAccountInfo = await getAccount(
-              connection,
-              new PublicKey(instruction.keys[2].pubkey)
-            )
-            recipient = receiverTokenAccountInfo.owner.toString()
-          } catch {
-            console.warn(
-              'Receiver token account not found. Checking for ATA...'
-            )
-            const ataInstruction = transaction.instructions.find(instr =>
-              instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
-            )
-            if (ataInstruction) {
-              // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
-              recipient = ataInstruction.keys[2].pubkey.toString()
-            } else {
-              throw new Error(
-                'Unable to determine recipient address. No direct token account or ATA instruction found.'
-              )
+            const amount = decodedTransfer.lamports.toString()
+            return {
+              asset: { chain: Chain.Solana, ticker: 'SOL' },
+              amount: {
+                amount: amount,
+                decimals: chainFeeCoin[Chain.Solana].decimals,
+              },
+              from: decodedTransfer.fromPubkey.toString(),
+              to: decodedTransfer.toPubkey.toString(),
+              skipBroadcast,
             }
           }
 
-          const amountBytes = instruction.data.slice(1, 9)
-          const amount = new DataView(
-            Uint8Array.from(amountBytes).buffer
-          ).getBigUint64(0, true)
+          if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
+            //  Handle SPL Token Transfers
+            const senderTokenAccountInfo = await getAccount(
+              connection,
+              new PublicKey(instruction.keys[0].pubkey)
+            )
+            let recipient: string
+            try {
+              // Try fetching receiver account
+              const receiverTokenAccountInfo = await getAccount(
+                connection,
+                new PublicKey(instruction.keys[2].pubkey)
+              )
+              recipient = receiverTokenAccountInfo.owner.toString()
+            } catch {
+              console.warn(
+                'Receiver token account not found. Checking for ATA...'
+              )
+              const ataInstruction = transaction.instructions.find(instr =>
+                instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
+              )
+              if (ataInstruction) {
+                // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
+                recipient = ataInstruction.keys[2].pubkey.toString()
+              } else {
+                throw new Error(
+                  'Unable to determine recipient address. No direct token account or ATA instruction found.'
+                )
+              }
+            }
 
-          modifiedTransfer = {
-            txType: 'Phantom',
-            amount: amount.toString(),
-            asset: {
-              chain: Chain.Solana,
-              mint: senderTokenAccountInfo.mint.toString(),
-            },
-            from: senderTokenAccountInfo.owner.toString(),
-            to: recipient,
-            skipBroadcast,
+            const amountBytes = instruction.data.slice(1, 9)
+            const amount = new DataView(
+              Uint8Array.from(amountBytes).buffer
+            ).getBigUint64(0, true)
+
+            const mint = senderTokenAccountInfo.mint.toString()
+
+            const metadata = await callBackground({
+              getTokenMetadata: {
+                chain: Chain.Solana,
+                id: mint,
+              },
+            })
+
+            return {
+              amount: {
+                amount: amount.toString(),
+                decimals: metadata.decimals,
+              },
+              asset: {
+                chain: Chain.Solana,
+                mint: mint,
+                ticker: metadata.ticker,
+                symbol: metadata.ticker,
+              },
+              from: senderTokenAccountInfo.owner.toString(),
+              to: recipient,
+              skipBroadcast,
+            }
           }
-        } else {
-          continue
+
+          throw new NotImplementedError(
+            `Solana transaction details not implemented for instruction ${instruction.programId.toString()}`
+          )
         }
-        return await this.request({
-          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [modifiedTransfer],
-        }).then(result => {
-          const rawData = bs58.decode(String(result))
-          return Transaction.from(rawData)
+
+        const transactionDetails = await getTransactionDetails()
+
+        const { data } = await callPopup({
+          sendTx: {
+            keysign: {
+              transactionDetails,
+              chain: Chain.Solana,
+            },
+          },
         })
+
+        const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+
+        const rawData = bs58.decode(encoded)
+
+        return Transaction.from(rawData)
       }
     }
   }
