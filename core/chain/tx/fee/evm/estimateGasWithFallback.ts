@@ -1,6 +1,6 @@
 import { attempt, withFallback } from '@lib/utils/attempt'
 
-import { Chain, EvmChain } from '../../../Chain'
+import { EvmChain } from '../../../Chain'
 import { getEvmClient } from '../../../chains/evm/client'
 import { defaultEvmSwapGasLimit } from './evmGasLimit'
 
@@ -13,14 +13,14 @@ export const estimateEvmGasWithFallback = async ({
   data,
   value,
 }: {
-  chain: Chain
+  chain: EvmChain
   from: string
   to: string
   data?: string
   value?: string
 }): Promise<number> => {
   const result = await attempt(async () => {
-    const client = getEvmClient(chain as EvmChain)
+    const client = getEvmClient(chain)
     const parsedValue = value ? BigInt(value) : undefined
     const gasLimit = await client.estimateGas({
       to: to as `0x${string}`,

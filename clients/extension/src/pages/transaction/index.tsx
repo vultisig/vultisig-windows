@@ -6,7 +6,7 @@ import { splitString } from '@clients/extension/src/utils/functions'
 import { ITransaction } from '@clients/extension/src/utils/interfaces'
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
   getParsedMemo,
@@ -101,7 +101,7 @@ export const TransactionPage = () => {
                   gasLimit:
                     updatedGasLimit ||
                     (await estimateEvmGasWithFallback({
-                      chain: keysign.chain,
+                      chain: keysign.chain as EvmChain,
                       from: keysign.transactionDetails.from,
                       to: shouldBePresent(keysign.transactionDetails.to),
                       data: keysign.transactionDetails.data,
@@ -353,58 +353,63 @@ export const TransactionPage = () => {
                                 <ListItem
                                   description={`${updatedTxFee || transactionPayload.txFee} ${chainFeeCoin[getKeysignChain(keysignPayload)].ticker}`}
                                   extra={
-                                    <GasFeeAdjuster
-                                      keysignPayload={{
-                                        keysign: keysignPayload,
-                                      }}
-                                      gasLimit={Number(
-                                        transactionPayload.transactionDetails
-                                          ?.gasSettings?.gasLimit
-                                      )}
-                                      baseFee={Number(transactionPayload.txFee)}
-                                      onFeeChange={async (fee, gasLimit) => {
-                                        const priorityFeeInBaseUnit =
-                                          shouldBePresent(
-                                            formatUnits(
-                                              BigInt(fee),
-                                              keysignPayload.coin?.decimals
+                                    getChainKind(
+                                      getKeysignChain(keysignPayload)
+                                    ) === 'evm' ? (
+                                      <GasFeeAdjuster
+                                        keysignPayload={keysignPayload}
+                                        gasLimit={Number(
+                                          transactionPayload.transactionDetails
+                                            ?.gasSettings?.gasLimit
+                                        )}
+                                        baseFee={Number(
+                                          transactionPayload.txFee
+                                        )}
+                                        onFeeChange={async (fee, gasLimit) => {
+                                          const priorityFeeInBaseUnit =
+                                            shouldBePresent(
+                                              formatUnits(
+                                                BigInt(fee),
+                                                keysignPayload.coin?.decimals
+                                              )
                                             )
-                                          )
-                                        const totalFee =
-                                          Number(transactionPayload.txFee) +
-                                          Number(priorityFeeInBaseUnit)
-                                        setUpdatedTxFee(totalFee.toString())
-                                        setUpdatedGasLimit(gasLimit)
+                                          const totalFee =
+                                            Number(transactionPayload.txFee) +
+                                            Number(priorityFeeInBaseUnit)
+                                          setUpdatedTxFee(totalFee.toString())
+                                          setUpdatedGasLimit(gasLimit)
 
-                                        // Update the stored transaction with new gas limit
-                                        const updatedTransaction = {
-                                          ...transaction,
-                                          transactionPayload: {
-                                            ...transaction.transactionPayload,
-                                            keysign: {
-                                              ...transactionPayload,
-                                              transactionDetails: {
-                                                ...transactionPayload.transactionDetails,
-                                                gasSettings: {
-                                                  ...transactionPayload
-                                                    .transactionDetails
-                                                    .gasSettings,
-                                                  gasLimit: gasLimit.toString(),
+                                          // Update the stored transaction with new gas limit
+                                          const updatedTransaction = {
+                                            ...transaction,
+                                            transactionPayload: {
+                                              ...transaction.transactionPayload,
+                                              keysign: {
+                                                ...transactionPayload,
+                                                transactionDetails: {
+                                                  ...transactionPayload.transactionDetails,
+                                                  gasSettings: {
+                                                    ...transactionPayload
+                                                      .transactionDetails
+                                                      .gasSettings,
+                                                    gasLimit:
+                                                      gasLimit.toString(),
+                                                  },
                                                 },
                                               },
                                             },
-                                          },
-                                        }
+                                          }
 
-                                        await updateTransaction(
-                                          getVaultId(vault),
-                                          updatedTransaction
-                                        )
+                                          await updateTransaction(
+                                            getVaultId(vault),
+                                            updatedTransaction
+                                          )
 
-                                        // Re-process transaction with updated gas settings
-                                        processTransaction()
-                                      }}
-                                    />
+                                          // Re-process transaction with updated gas settings
+                                          processTransaction()
+                                        }}
+                                      />
+                                    ) : null
                                   }
                                   title={t('est_network_fee')}
                                 />
