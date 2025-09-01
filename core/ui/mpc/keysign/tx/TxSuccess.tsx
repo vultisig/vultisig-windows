@@ -10,6 +10,7 @@ import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -75,11 +76,15 @@ export const TxSuccess = ({
                 </TxRowIconButton>
               </HStack>
             }
-            title={'Transaction Hash'}
+            title={
+              <Text size={14} color="shy">
+                {t('tx_hash')}
+              </Text>
+            }
           />
           <ListItem
             onClick={onSeeTxDetails}
-            title={t('transaction_details')}
+            title={<Text size={14}>{t('transaction_details')}</Text>}
             hoverable
             showArrow
           />
