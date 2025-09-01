@@ -4,6 +4,7 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 
 import { callIdQueryParam } from '../../config'
+import { PopupError } from '../../error'
 import {
   isPopupMessage,
   PopupCallResolver,
@@ -21,7 +22,7 @@ export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
       url: chrome.runtime.getURL(
         addQueryParams('popup.html', { [callIdQueryParam]: callId })
       ),
-      execute: abortSignal =>
+      execute: ({ abortSignal, close }) =>
         new Promise<any>((resolve, reject) => {
           const handleMessage = (response: any) => {
             if (!isPopupMessage<PopupResponse<any>>(response, 'popup')) return
@@ -37,11 +38,15 @@ export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
             } else {
               resolve(data)
             }
+
+            if (response.shouldClosePopup) {
+              close()
+            }
           }
 
           const handleAbort = () => {
             chrome.runtime.onMessage.removeListener(handleMessage)
-            reject(new Error('Popup window was closed'))
+            reject(PopupError.RejectedByUser)
           }
 
           chrome.runtime.onMessage.addListener(handleMessage)

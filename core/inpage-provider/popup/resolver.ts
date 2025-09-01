@@ -27,6 +27,7 @@ export type PopupCall<M extends PopupMethod> = {
 
 export type PopupResponse<M extends PopupMethod> = PopupMessageKey & {
   result: Result<PopupInterface[M]['output']>
+  shouldClosePopup: boolean
 }
 
 export const isPopupMessage = <T extends PopupMessageKey>(
@@ -44,7 +45,6 @@ export type PopupMessage<M extends PopupMethod = PopupMethod> = {
 }
 
 export type PopupOptions = {
-  closeOnFinish?: boolean
   account?: string
 }
 

@@ -298,7 +298,6 @@ export class Ethereum extends EventEmitter {
           },
           {
             account,
-            closeOnFinish: false,
           }
         )
 
@@ -323,7 +322,6 @@ export class Ethereum extends EventEmitter {
           },
           {
             account,
-            closeOnFinish: false,
           }
         )
 
@@ -372,7 +370,6 @@ export class Ethereum extends EventEmitter {
           },
           {
             account: from,
-            closeOnFinish: false,
           }
         )
 

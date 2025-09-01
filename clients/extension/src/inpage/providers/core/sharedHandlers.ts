@@ -42,7 +42,6 @@ export const getSharedHandlers = (chain: Chain) => {
         },
         {
           account: tx.from,
-          closeOnFinish: false,
         }
       )
 

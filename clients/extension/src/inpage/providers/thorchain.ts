@@ -40,7 +40,6 @@ export class THORChain extends BaseCosmosChain {
             },
             {
               account: tx.from,
-              closeOnFinish: false,
             }
           )
 

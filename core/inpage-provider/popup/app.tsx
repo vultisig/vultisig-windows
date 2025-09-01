@@ -8,20 +8,15 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import {
-  useCancelPopupCall,
-  usePopupCallId,
-  useResolvePopupCall,
-} from './view/core/call'
+import { usePopupCallId, useResolvePopupCallMutation } from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
 import { PopupResolvers } from './view/resolvers'
 import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
 import { PopupInputProvider } from './view/state/input'
 
 export const PopupApp = () => {
-  const cancelPopupCall = useCancelPopupCall()
+  const { mutateAsync: resolvePopupCall } = useResolvePopupCallMutation()
   const callId = usePopupCallId()
-  const resolvePopupCall = useResolvePopupCall()
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
@@ -30,14 +25,12 @@ export const PopupApp = () => {
         throw new Error(`No call found in the storage for ${callId}`)
       }
 
+      await removePopupViewCall(callId)
+
       return entry
     },
-    onSuccess: async () => {
-      await removePopupViewCall(callId)
-    },
     onError: error => {
-      resolvePopupCall({ error })
-      window.close()
+      resolvePopupCall({ result: { error }, shouldClosePopup: true })
     },
   })
 
@@ -56,8 +49,8 @@ export const PopupApp = () => {
 
         return (
           <ExtensionCoreApp
-            goBack={cancelPopupCall}
-            goHome={cancelPopupCall}
+            goBack={() => window.close()}
+            goHome={() => window.close()}
             targetVaultId={context?.appSession?.vaultId}
           >
             <VaultsOnly>
