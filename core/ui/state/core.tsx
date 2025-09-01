@@ -33,6 +33,7 @@ export type CoreState = CoreStorage & {
   processError?: ErrorBoundaryProcessError
   targetVaultId?: string
   goBack: () => void
+  goHome: () => void
 }
 
 export const { useValue: useCore, provider: CoreProvider } =

@@ -4,7 +4,9 @@ import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
+import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { createGlobalStyle, css } from 'styled-components'
 
@@ -30,9 +32,14 @@ const ExtensionGlobalStyle = createGlobalStyle`
 const App = () => {
   const processError = useProcessAppError()
   const goBack = useNavigateBack()
+  const navigate = useNavigate()
 
   return (
-    <ExtensionCoreApp processError={processError} goBack={goBack}>
+    <ExtensionCoreApp
+      processError={processError}
+      goBack={goBack}
+      goHome={() => navigate(initialCoreView)}
+    >
       <ActiveView views={views} />
     </ExtensionCoreApp>
   )

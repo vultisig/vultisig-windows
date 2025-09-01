@@ -57,6 +57,7 @@ export const PopupApp = () => {
         return (
           <ExtensionCoreApp
             goBack={cancelPopupCall}
+            goHome={cancelPopupCall}
             targetVaultId={context?.appSession?.vaultId}
           >
             <VaultsOnly>
