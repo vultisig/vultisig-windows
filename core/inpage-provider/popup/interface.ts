@@ -1,8 +1,12 @@
 import { EvmChain, OtherChain } from '@core/chain/Chain'
+import { SerializedSigningOutput } from '@core/chain/tw/signingOutput'
+import { Tx } from '@core/chain/tx'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
+
+import { ITransactionPayload } from './view/resolvers/sendTx/interfaces'
 
 export type Eip712V4Payload = {
   domain: TypedDataDomain
@@ -36,6 +40,10 @@ export type PopupInterface = {
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
   signMessage: Method<SignMessageInput, string>
+  sendTx: Method<
+    ITransactionPayload,
+    Omit<Tx, 'data'> & { data: SerializedSigningOutput }
+  >
 }
 
 export type PopupMethod = keyof PopupInterface
@@ -44,6 +52,7 @@ export const mergeableInFlightPopupMethods: PopupMethod[] = ['grantVaultAccess']
 
 export const authorizedPopupMethods = [
   'signMessage',
+  'sendTx',
   'pluginReshare',
 ] as const satisfies readonly PopupMethod[]
 

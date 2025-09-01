@@ -1,11 +1,3 @@
-import { GasFeeAdjuster } from '@clients/extension/src/pages/transaction/GasFeeAdjuster'
-import { getVaultTransactions } from '@clients/extension/src/transactions/state/transactions'
-import { updateTransaction } from '@clients/extension/src/transactions/state/transactions'
-import { CosmosMsgType } from '@clients/extension/src/utils/constants'
-import { splitString } from '@clients/extension/src/utils/functions'
-import { ITransaction } from '@clients/extension/src/utils/interfaces'
-import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
-import { getSolanaKeysignPayload } from '@clients/extension/src/utils/tx/solana/solanaKeysignPayload'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
@@ -31,7 +23,6 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
@@ -46,21 +37,35 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { parseSolanaTx } from '../../utils/tx/solana/parser'
-import { getPsbtKeysignPayload } from '../../utils/tx/utxo/getPsbtKeysignPayload'
+import { usePopupInput } from '../../state/input'
+import { getKeysignPayload } from './core/getKeySignPayload'
+import { parseSolanaTx } from './core/solana/parser'
+import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
+import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
+import { GasFeeAdjuster } from './GasFeeAdjuster'
+import { CosmosMsgType, ITransactionPayload } from './interfaces'
 
-export const TransactionPage = () => {
+const splitString = (str: string, size: number): string[] => {
+  const result: string[] = []
+
+  for (let i = 0; i < str.length; i += size) {
+    result.push(str.slice(i, i + size))
+  }
+
+  return result
+}
+
+export const SendTxOverview = () => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const [updatedTxFee, setUpdatedTxFee] = useState<string | null>(null)
@@ -69,28 +74,31 @@ export const TransactionPage = () => {
     window.close()
   }
 
-  const shouldPreventIBCTx = (transaction: ITransaction): boolean => {
-    return matchRecordUnion(transaction.transactionPayload, {
-      keysign: (payload): boolean => {
-        const msgCase = payload.transactionDetails?.cosmosMsgPayload?.case
-        return (
-          msgCase === CosmosMsgType.MSG_TRANSFER_URL &&
-          !!payload.transactionDetails?.cosmosMsgPayload?.value.memo
-        )
-      },
-      serialized: () => false,
-    })
-  }
+  const initialTransactionPayload = usePopupInput<'sendTx'>()
 
-  const { mutate: processTransaction, ...mutationStatus } = useMutation({
-    mutationFn: async () => {
-      const transactions = await getVaultTransactions(getVaultId(vault))
-      const transaction = getLastItem(transactions)
-      if (!transaction) {
-        throw new Error('No current transaction present')
-      }
-      const keysignPayload: KeysignPayload = await matchRecordUnion(
-        transaction.transactionPayload,
+  const [transactionPayload, setTransactionPayload] =
+    useState<ITransactionPayload>(initialTransactionPayload)
+
+  const shouldPreventIBCTx = useMemo(
+    () =>
+      matchRecordUnion(transactionPayload, {
+        keysign: (payload): boolean => {
+          const msgCase = payload.transactionDetails?.cosmosMsgPayload?.case
+          return (
+            msgCase === CosmosMsgType.MSG_TRANSFER_URL &&
+            !!payload.transactionDetails?.cosmosMsgPayload?.value.memo
+          )
+        },
+        serialized: () => false,
+      }),
+    [transactionPayload]
+  )
+
+  const keysignPayloadQuery = useQuery({
+    queryKey: ['inpage-provider-keysignPayload', transactionPayload],
+    queryFn: () =>
+      matchRecordUnion<ITransactionPayload, Promise<KeysignPayload>>(
+        transactionPayload,
         {
           keysign: async keysign => {
             const gasSettings: FeeSettings | null = await match(
@@ -157,10 +165,9 @@ export const TransactionPage = () => {
 
             return keysignPayload
           },
-          serialized: async ({ data: serialized, chain, skipBroadcast }) => {
+          serialized: async ({ data, chain, skipBroadcast }) => {
             if (chain === Chain.Bitcoin) {
-              const txInputDataArray = Object.values(serialized)
-              const dataBuffer = Buffer.from(txInputDataArray)
+              const dataBuffer = Buffer.from(data, 'base64')
               const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
               const gasSettings: FeeSettings | null = { priority: 'fast' }
               return await getPsbtKeysignPayload(
@@ -170,6 +177,7 @@ export const TransactionPage = () => {
                 gasSettings
               )
             } else {
+              const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
               const parsed = await parseSolanaTx({
                 walletCore,
                 inputTx: serialized,
@@ -188,19 +196,12 @@ export const TransactionPage = () => {
             }
           },
         }
-      )
-
-      return { transaction, keysignPayload }
-    },
+      ),
   })
-
-  useEffect(() => {
-    processTransaction()
-  }, [processTransaction])
 
   return (
     <MatchQuery
-      value={mutationStatus}
+      value={keysignPayloadQuery}
       pending={() => <ProductLogoBlock />}
       error={error => (
         <FlowErrorPageContent
@@ -208,7 +209,7 @@ export const TransactionPage = () => {
           error={error}
         />
       )}
-      success={({ transaction, keysignPayload }) => {
+      success={keysignPayload => {
         return (
           <VStack fullHeight>
             <PageHeader
@@ -220,7 +221,7 @@ export const TransactionPage = () => {
               title={t('sign_transaction')}
               hasBorder
             />
-            {shouldPreventIBCTx(transaction) ? (
+            {shouldPreventIBCTx ? (
               <PageContent
                 alignItems="center"
                 gap={12}
@@ -346,7 +347,7 @@ export const TransactionPage = () => {
                           title={t('network')}
                         />
                         <MatchRecordUnion
-                          value={transaction.transactionPayload}
+                          value={transactionPayload}
                           handlers={{
                             keysign: transactionPayload => (
                               <>
@@ -380,33 +381,21 @@ export const TransactionPage = () => {
                                           setUpdatedGasLimit(gasLimit)
 
                                           // Update the stored transaction with new gas limit
-                                          const updatedTransaction = {
-                                            ...transaction,
-                                            transactionPayload: {
-                                              ...transaction.transactionPayload,
-                                              keysign: {
-                                                ...transactionPayload,
-                                                transactionDetails: {
-                                                  ...transactionPayload.transactionDetails,
-                                                  gasSettings: {
-                                                    ...transactionPayload
-                                                      .transactionDetails
-                                                      .gasSettings,
-                                                    gasLimit:
-                                                      gasLimit.toString(),
-                                                  },
+                                          setTransactionPayload({
+                                            ...transactionPayload,
+                                            keysign: {
+                                              ...transactionPayload,
+                                              transactionDetails: {
+                                                ...transactionPayload.transactionDetails,
+                                                gasSettings: {
+                                                  ...transactionPayload
+                                                    .transactionDetails
+                                                    .gasSettings,
+                                                  gasLimit: gasLimit.toString(),
                                                 },
                                               },
                                             },
-                                          }
-
-                                          await updateTransaction(
-                                            getVaultId(vault),
-                                            updatedTransaction
-                                          )
-
-                                          // Re-process transaction with updated gas settings
-                                          processTransaction()
+                                          })
                                         }}
                                       />
                                     ) : null
