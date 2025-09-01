@@ -23,7 +23,9 @@ export const mergedKeys = (staticKeys: PublicKey[], loaded: PublicKey[]) => {
   return [...staticKeys, ...loaded]
 }
 
-export const getTransactionAuthority = (inputTx: Uint8Array): string | null => {
+export const getTransactionAuthority = (
+  inputTx: Uint8Array
+): string | undefined => {
   try {
     const txInputDataArray = Object.values(inputTx)
     const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
@@ -31,10 +33,10 @@ export const getTransactionAuthority = (inputTx: Uint8Array): string | null => {
     const versionedTx = VersionedTransaction.deserialize(buffer)
     const msg = versionedTx.message
     const n = msg.header.numRequiredSignatures
-    if (n === 0) return null
+    if (n === 0) return
     const authorityKey: PublicKey | undefined = msg.staticAccountKeys[0]
-    return authorityKey ? authorityKey.toBase58() : null
+    return authorityKey ? authorityKey.toBase58() : undefined
   } catch {
-    return null
+    return undefined
   }
 }
