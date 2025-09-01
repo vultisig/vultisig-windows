@@ -36,7 +36,7 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
               data: data.toJSON(),
             },
           },
-          shouldClosePopup: true,
+          shouldClosePopup: false,
         })
       },
     }),

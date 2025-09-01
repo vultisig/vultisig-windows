@@ -32,7 +32,7 @@ export const SignMessage: PopupResolver<'signMessage'> = ({ onFinish }) => {
           result: {
             data: getRecordUnionValue(result, 'signature'),
           },
-          shouldClosePopup: true,
+          shouldClosePopup: false,
         })
       },
     }),

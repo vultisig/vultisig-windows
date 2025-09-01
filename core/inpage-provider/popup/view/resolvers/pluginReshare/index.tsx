@@ -34,7 +34,7 @@ export const PluginReshare: PopupResolver<'pluginReshare'> = ({
                     onFinish={joinUrl => {
                       onFinish({
                         result: { data: { joinUrl } },
-                        shouldClosePopup: true,
+                        shouldClosePopup: false,
                       })
                       onNextStep()
                     }}
