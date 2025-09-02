@@ -94,11 +94,19 @@ export const TxSuccess = ({
   )
 }
 
-const TxRowIconButton = styled(IconWrapper)`
+const TxRowIconButton = styled(IconWrapper).attrs({
+  role: 'button',
+  tabIndex: 0,
+})`
   cursor: pointer;
   font-size: 16px;
+  outline: none;
 
   &:hover {
+    color: ${getColor('textShy')};
+  }
+
+  &:focus-visible {
     color: ${getColor('textShy')};
   }
 `
