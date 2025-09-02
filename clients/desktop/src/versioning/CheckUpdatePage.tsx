@@ -1,3 +1,4 @@
+import { desktopDownloadUrl } from '@core/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
@@ -50,9 +51,7 @@ export const CheckUpdatePage = () => {
                     </VStack>
                     <DownloadButton
                       kind="primary"
-                      onClick={() =>
-                        openUrl('https://vultisig.com/download/vultisig')
-                      }
+                      onClick={() => openUrl(desktopDownloadUrl)}
                     >
                       {t('vaultCheckUpdatePage.downloadButton')}
                     </DownloadButton>
