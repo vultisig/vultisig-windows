@@ -74,6 +74,7 @@ export const getSwapKeysignPayloadFields = ({
             dstAmount: quote.dstAmount,
             tx,
           }),
+          provider: quote.provider,
         }),
       }
 
