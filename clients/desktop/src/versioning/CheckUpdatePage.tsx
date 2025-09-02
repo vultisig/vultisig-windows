@@ -22,11 +22,11 @@ export const CheckUpdatePage = () => {
 
   return (
     <PageSlice>
-      <PageHeader
+      <Overlay />
+      <HeaderWrapper
         primaryControls={<PageHeaderBackButton />}
         title={t('vaultCheckUpdatePage.title')}
       />
-      <Overlay />
       <FixedWrapper>
         <ProductLogo fontSize={72} />
         <Content>
@@ -92,10 +92,13 @@ export const CheckUpdatePage = () => {
   )
 }
 
+const HeaderWrapper = styled(PageHeader)``
+
 const FixedWrapper = styled.div`
   position: fixed;
   inset: 0;
   margin: auto;
+  z-index: -1;
 
   display: flex;
   flex-direction: column;
@@ -107,6 +110,7 @@ const FixedWrapper = styled.div`
 const Overlay = styled(VStack)`
   position: fixed;
   inset: 0;
+  z-index: -1;
 
   &::before {
     content: '';
