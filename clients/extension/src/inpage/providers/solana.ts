@@ -258,19 +258,14 @@ export class Solana implements Wallet {
     const messageBuffer = Buffer.from(message)
     const decodedString = new TextDecoder().decode(messageBuffer)
 
-    const signature = await callPopup(
-      {
-        signMessage: {
-          sign_message: {
-            message: decodedString,
-            chain: Chain.Solana,
-          },
+    const signature = await callPopup({
+      signMessage: {
+        sign_message: {
+          message: decodedString,
+          chain: Chain.Solana,
         },
       },
-      {
-        closeOnFinish: false,
-      }
-    )
+    })
 
     return {
       signature: Uint8Array.from(Buffer.from(String(signature), 'hex')),
@@ -290,19 +285,14 @@ export class Solana implements Wallet {
       address: account.address,
     })
 
-    const signature = await callPopup(
-      {
-        signMessage: {
-          sign_message: {
-            message,
-            chain: Chain.Solana,
-          },
+    const signature = await callPopup({
+      signMessage: {
+        sign_message: {
+          message,
+          chain: Chain.Solana,
         },
       },
-      {
-        closeOnFinish: false,
-      }
-    )
+    })
 
     return {
       account: account,
@@ -332,7 +322,6 @@ export class Solana implements Wallet {
           },
         },
         {
-          closeOnFinish: false,
           account: getTransactionAuthority(serializedTransaction),
         }
       )

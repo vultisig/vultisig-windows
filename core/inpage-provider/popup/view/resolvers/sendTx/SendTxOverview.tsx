@@ -461,7 +461,6 @@ export const SendTxOverview = () => {
                     keysignPayload={{
                       keysign: keysignPayload,
                     }}
-                    isDAppSigning={true}
                   />
                 </PageFooter>
               </>

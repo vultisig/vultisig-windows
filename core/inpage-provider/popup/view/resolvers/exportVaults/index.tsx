@@ -23,13 +23,16 @@ export const ExportVaults: PopupResolver<'exportVaults'> = ({ onFinish }) => {
 
   const onSubmit = useCallback(() => {
     onFinish({
-      data: vaultIds.map(vaultId => {
-        const vault = shouldBePresent(
-          vaults.find(vault => getVaultId(vault) === vaultId)
-        )
+      result: {
+        data: vaultIds.map(vaultId => {
+          const vault = shouldBePresent(
+            vaults.find(vault => getVaultId(vault) === vaultId)
+          )
 
-        return toVaultExport(vault)
-      }),
+          return toVaultExport(vault)
+        }),
+      },
+      shouldClosePopup: true,
     })
   }, [onFinish, vaultIds, vaults])
 

@@ -528,7 +528,7 @@ export class XDEFIKeplrProvider extends Keplr {
             },
           },
         },
-        { account: transactionDetails.from, closeOnFinish: false }
+        { account: transactionDetails.from }
       )
 
       const { serialized } = deserializeSigningOutput(chain, data)
@@ -629,7 +629,7 @@ export class XDEFIKeplrProvider extends Keplr {
             },
           },
         },
-        { account: transactionDetails.from, closeOnFinish: false }
+        { account: transactionDetails.from }
       )
 
       const { serialized } = deserializeSigningOutput(chain, data)

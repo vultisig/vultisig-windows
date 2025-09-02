@@ -31,12 +31,9 @@ export const createProviders = () => {
     plugin: {
       request: async ({ params }: { params: [{ id: string }] }) => {
         const [{ id }] = params
-        const { joinUrl } = await callPopup(
-          {
-            pluginReshare: { pluginId: id },
-          },
-          { closeOnFinish: false }
-        )
+        const { joinUrl } = await callPopup({
+          pluginReshare: { pluginId: id },
+        })
 
         return joinUrl
       },
