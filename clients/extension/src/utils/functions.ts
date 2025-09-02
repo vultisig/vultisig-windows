@@ -118,13 +118,7 @@ export const processBackgroundResponse = (
 }
 
 export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
-  return (
-    typeof tx === 'object' &&
-    'version' in tx &&
-    typeof tx.version === 'number' &&
-    'message' in tx &&
-    'addressTableLookups' in tx.message
-  )
+  return typeof tx === 'object' && 'version' in tx && 'message' in tx
 }
 
 export const bytesEqual = (a: Uint8Array, b: Uint8Array): boolean => {

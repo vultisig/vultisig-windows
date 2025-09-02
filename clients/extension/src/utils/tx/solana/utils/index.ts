@@ -2,6 +2,8 @@ import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 
 import { AddressTableLookup } from '../types/types'
 
+export const readU32LE = (buf: Buffer, off: number) => buf.readUInt32LE(off)
+
 export const resolveAddressTableKeys = async (
   lookups: AddressTableLookup[],
   connection: Connection
