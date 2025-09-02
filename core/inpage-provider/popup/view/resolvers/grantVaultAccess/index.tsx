@@ -1,6 +1,11 @@
 import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
+import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
+import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
+import { getBlockaidSiteScanQuery } from '@core/ui/chain/security/blockaid/site/queries/blockaidSiteScan'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -12,8 +17,9 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
 import { useMutation } from '@tanstack/react-query'
@@ -22,11 +28,12 @@ import { useTranslation } from 'react-i18next'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
-  context,
+  context: { requestOrigin },
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const vaults = useVaults()
+  const isBlockaidEnabled = useIsBlockaidEnabled()
 
   const { mutateAsync: addAppSession } = useAddVaultAppSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
@@ -47,14 +54,18 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       onFinish({ result: { data: { appSession } }, shouldClosePopup: true })
     },
   })
-  const { requestOrigin } = shouldBePresent(context)
+
+  const siteScanQuery = usePotentialQuery(
+    isBlockaidEnabled ? requestOrigin : undefined,
+    getBlockaidSiteScanQuery
+  )
 
   const submitButtonProps = useMemo(() => {
     if (isPending) {
       return { loading: true }
     }
 
-    if (!vaultId) {
+    if (siteScanQuery.isPending || !vaultId) {
       return { disabled: true }
     }
 
@@ -63,7 +74,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         sumbit(vaultId)
       },
     }
-  }, [isPending, sumbit, vaultId])
+  }, [isPending, sumbit, vaultId, siteScanQuery.isPending])
 
   return (
     <VStack fullHeight>
@@ -77,6 +88,15 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
+        {isBlockaidEnabled && (
+          <MatchQuery
+            value={siteScanQuery}
+            success={() => <p>todo</p>}
+            pending={() => <BlockaidScanning />}
+            error={() => <BlockaidNoScanStatus entity="site" />}
+            inactive={() => <BlockaidScanStatusContainer />}
+          />
+        )}
         <List>
           {vaults.map(item => {
             const itemId = getVaultId(item)

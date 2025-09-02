@@ -451,6 +451,7 @@ export const en = {
   serverTookTooLong:
     'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
+  site: 'Site',
   transaction_hash_copied: 'Transaction hash copied',
   tx_hash: 'Transaction hash',
   asset: 'Asset',
@@ -1000,7 +1001,7 @@ export const en = {
   enter_new_passcode: 'Enter new passcode',
   hold_for_paired_sign: 'Hold for paired sign',
   blockaid_security_scan: 'Blockaid Security Scan',
-  transaction_not_scanned: 'Transaction not scanned by <provider></provider>',
+  entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   transaction_scanned: 'Transaction scanned by <provider></provider>',
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   powered_by: 'Powered by <provider></provider>',

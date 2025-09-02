@@ -7,8 +7,8 @@ import { Trans } from 'react-i18next'
 import { useTheme } from 'styled-components'
 
 import { BlockaidLogo } from '../BlockaidLogo'
+import { BlockaidScanStatusContainer } from '../scan/BlockaidScanStatusContainer'
 import { BlockaidRiskyTxOverlay } from './BlockaidRiskyTxOverlay'
-import { BlockaidTxStatusContainer } from './BlockaidTxStatusContainer'
 import { txRiskLevelIcon } from './TxRiskLevelIcon'
 import { getRiskyTxColor } from './utils/color'
 
@@ -28,7 +28,7 @@ export const BlockaidTxScanResult = ({
         <Tooltip
           content={value.description}
           renderOpener={props => (
-            <BlockaidTxStatusContainer
+            <BlockaidScanStatusContainer
               {...props}
               style={{
                 color,
@@ -40,7 +40,7 @@ export const BlockaidTxScanResult = ({
                 components={{ provider: <BlockaidLogo /> }}
                 values={{ riskLevel: capitalizeFirstLetter(value.level) }}
               />
-            </BlockaidTxStatusContainer>
+            </BlockaidScanStatusContainer>
           )}
         />
       </>
@@ -48,12 +48,12 @@ export const BlockaidTxScanResult = ({
   }
 
   return (
-    <BlockaidTxStatusContainer>
+    <BlockaidScanStatusContainer>
       <CheckIcon color={colors.success.toCssValue()} />
       <Trans
         i18nKey="transaction_scanned"
         components={{ provider: <BlockaidLogo /> }}
       />
-    </BlockaidTxStatusContainer>
+    </BlockaidScanStatusContainer>
   )
 }
