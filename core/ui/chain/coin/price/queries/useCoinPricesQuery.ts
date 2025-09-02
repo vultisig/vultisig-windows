@@ -1,4 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
@@ -6,7 +7,6 @@ import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
@@ -44,7 +44,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   input.coins.forEach(({ id, priceProviderId, chain }) => {
     if (priceProviderId) {
       coinsWithPriceProviderId.push({ id, priceProviderId, chain })
-    } else if (isOneOf(chain, Object.values(EvmChain)) && id) {
+    } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
     }
   })

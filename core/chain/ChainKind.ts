@@ -65,3 +65,8 @@ export function toChainKindRecordUnion<T extends Chain>(
     DeriveChainKind<T>
   >
 }
+
+export const isChainOfKind = <K extends ChainKind>(
+  chain: Chain,
+  kind: K
+): chain is ChainOfKind<K> => getChainKind(chain) === kind
