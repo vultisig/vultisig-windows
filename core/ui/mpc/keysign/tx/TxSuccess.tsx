@@ -65,9 +65,9 @@ export const TxSuccess = ({
                 gap={8}
                 justifyContent="flex-end"
               >
-                <TrunctedTextWrapper>
+                <TruncatedTextWrapper>
                   <MiddleTruncate text={txHash} />
-                </TrunctedTextWrapper>
+                </TruncatedTextWrapper>
                 <TxRowIconButton onClick={() => copyToClipboard(txHash)}>
                   <ClipboardCopyIcon />
                 </TxRowIconButton>
@@ -103,7 +103,7 @@ const TxRowIconButton = styled(IconWrapper)`
   }
 `
 
-const TrunctedTextWrapper = styled.div`
+const TruncatedTextWrapper = styled.div`
   ${hStack({
     justifyContent: 'flex-end',
   })}
