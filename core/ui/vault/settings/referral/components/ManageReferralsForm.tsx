@@ -12,22 +12,33 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
+import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
-import { ReferralPageWrapper } from './Referrals.styled'
+import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
+import { FormFieldErrorText, ReferralPageWrapper } from './Referrals.styled'
 
 type Props = {
   onSaveReferral: (friendReferral: string) => void
   onCreateReferral: () => void
+  onEditFriendReferral: () => void
 }
 
 export const ManageReferralsForm = ({
   onSaveReferral,
   onCreateReferral,
+  onEditFriendReferral,
 }: Props) => {
+  const [value, setValue] = useState('')
+
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { data: friendReferral } = useFriendReferralQuery()
-  const [value, setValue] = useState('')
+  const vaultId = useAssertCurrentVaultId()
+  const { data: friendReferral } = useFriendReferralQuery(vaultId)
+
+  const error = useFriendReferralValidation(value)
+  const disabled = friendReferral
+    ? false
+    : Boolean(error) || value.trim().length === 0
 
   useEffect(() => {
     if (friendReferral) {
@@ -60,19 +71,31 @@ export const ManageReferralsForm = ({
             flexDirection: 'column',
           }}
         >
-          <VStack fullWidth flexGrow gap={20}>
+          <VStack justifyContent="center" fullWidth flexGrow gap={20}>
             <DecorationImage src="/core/images/crypto-natives.png" alt="" />
             <VStack gap={16}>
               <VStack gap={8}>
                 <Text size={14}>{t('use_referral_code')}</Text>
-                <TextInput
-                  value={value}
-                  disabled={Boolean(friendReferral)}
-                  onValueChange={val => setValue(val)}
-                  placeholder={t('enter_referral_code_placeholder')}
-                />
+                <VStack gap={2}>
+                  <TextInput
+                    value={value}
+                    disabled={Boolean(friendReferral)}
+                    onValueChange={val => setValue(val)}
+                    placeholder={t('enter_referral_code_placeholder')}
+                  />
+                  {!friendReferral && error && (
+                    <FormFieldErrorText>{error}</FormFieldErrorText>
+                  )}
+                </VStack>
               </VStack>
-              <SaveReferralButton onClick={() => onSaveReferral(value)}>
+              <SaveReferralButton
+                disabled={disabled}
+                onClick={() =>
+                  friendReferral
+                    ? onEditFriendReferral()
+                    : onSaveReferral(value)
+                }
+              >
                 {friendReferral
                   ? t('edit_friends_referral')
                   : t('add_referral_code')}
@@ -92,15 +115,14 @@ export const ManageReferralsForm = ({
 }
 
 const DecorationImage = styled.img`
-  flex: 1;
   width: 365px;
   height: 365px;
   object-fit: cover;
   align-self: center;
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
-    width: 450px;
-    height: 450px;
+    width: 500px;
+    height: 500px;
   }
 `
 

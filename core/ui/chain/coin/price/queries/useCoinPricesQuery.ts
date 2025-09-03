@@ -1,17 +1,16 @@
 import { EvmChain } from '@core/chain/Chain'
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { isChainOfKind } from '@core/chain/ChainKind'
+import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { splitBy } from '@lib/utils/array/splitBy'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
+import { toEntries } from '@lib/utils/record/toEntries'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { useQueries } from '@tanstack/react-query'
 
@@ -39,14 +38,24 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
   const queries = []
 
-  const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
-    isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
-  )
+  const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
+  const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
 
-  if (!isEmpty(erc20Coins)) {
-    const groupedByChain = groupItems(erc20Coins, coin => coin.chain)
+  input.coins.forEach(({ id, priceProviderId, chain }) => {
+    if (priceProviderId) {
+      coinsWithPriceProviderId.push({ id, priceProviderId, chain })
+    } else if (isChainOfKind(chain, 'evm') && id) {
+      erc20sWithoutPriceProviderId.push({ id, chain })
+    }
+  })
 
-    Object.entries(groupedByChain).forEach(([chain, coins]) => {
+  if (!isEmpty(erc20sWithoutPriceProviderId)) {
+    const groupedByChain = groupItems(
+      erc20sWithoutPriceProviderId,
+      coin => coin.chain
+    )
+
+    toEntries(groupedByChain).forEach(({ key: chain, value: coins }) => {
       queries.push({
         queryKey: getCoinPricesQueryKeys({
           coins,
@@ -54,8 +63,8 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
         }),
         queryFn: async () => {
           const prices = await getErc20Prices({
-            ids: coins.map(coin => shouldBePresent(coin.id)),
-            chain: chain as EvmChain,
+            ids: coins.map(({ id }) => id),
+            chain,
             fiatCurrency,
           })
 
@@ -77,16 +86,16 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
     })
   }
 
-  if (!isEmpty(regularCoins)) {
+  if (!isEmpty(coinsWithPriceProviderId)) {
     queries.push({
       queryKey: getCoinPricesQueryKeys({
-        coins: regularCoins,
+        coins: coinsWithPriceProviderId,
         fiatCurrency,
       }),
       queryFn: async () => {
         const prices = await getCoinPrices({
           ids: without(
-            regularCoins.map(coin => coin.priceProviderId),
+            coinsWithPriceProviderId.map(coin => coin.priceProviderId),
             undefined
           ),
           fiatCurrency,
@@ -99,7 +108,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
           // so we need to find all coins with the same price provider
           // for example: ETH.ETH, ARBITRUM.ETH, OPTIMISM.ETH there are all ETH , so they have the same price provider
           const matchedCoins = shouldBePresent(
-            regularCoins.filter(coin => coin.priceProviderId == priceProviderId)
+            coinsWithPriceProviderId.filter(
+              coin => coin.priceProviderId == priceProviderId
+            )
           )
           matchedCoins.forEach(coin => {
             result[coinKeyToString(coin)] = price

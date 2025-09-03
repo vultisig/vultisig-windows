@@ -1,6 +1,7 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
 import { TxInputDataResolver } from './resolver'
@@ -18,6 +19,7 @@ import { getUtxoTxInputData } from './resolvers/utxo'
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
+  publicKey?: PublicKey
 }
 
 const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {
@@ -31,7 +33,7 @@ const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {
   ton: getTonTxInputData,
   utxo: getUtxoTxInputData,
   tron: getTronTxInputData,
-}
+} as Record<ChainKind, TxInputDataResolver<any>>
 
 export const getTxInputData = (input: Input) => {
   const { blockchainSpecific } = input.keysignPayload

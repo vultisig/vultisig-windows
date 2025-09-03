@@ -1,25 +1,16 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
-import { useCurrentVaultCoin } from '../../../../../../state/currentVaultCoins'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
 export const ReferralCodeField = () => {
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
-
-  const { data: nameDetails } = useUserValidThorchainNameQuery(address)
-  const name = shouldBePresent(nameDetails?.name)
+  const { data: nameDetails } = useUserValidThorchainNameQuery()
   const [, copyToClipboard] = useCopyToClipboard()
 
   return (
@@ -30,9 +21,11 @@ export const ReferralCodeField = () => {
         alignItems: 'center',
       }}
     >
-      <Text>{name}</Text>
+      <Text>{nameDetails?.name}</Text>
       <FieldIconWrapper>
-        <UnstyledButton onClick={() => copyToClipboard(name)}>
+        <UnstyledButton
+          onClick={() => copyToClipboard(nameDetails?.name || '')}
+        >
           <CopyIcon />
         </UnstyledButton>
       </FieldIconWrapper>

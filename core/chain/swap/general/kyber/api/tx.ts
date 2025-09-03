@@ -47,6 +47,7 @@ const gasMultiplier: Record<EvmChain, number> = {
   [EvmChain.CronosChain]: 1.6,
   [EvmChain.Zksync]: 1.6,
   [EvmChain.Blast]: 1.6,
+  [EvmChain.Mantle]: 1.6,
 }
 
 export const getKyberSwapTx = async ({

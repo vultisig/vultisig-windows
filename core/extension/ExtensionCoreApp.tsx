@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 import { storage } from './storage'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
 
-const baseCoreState: Omit<CoreState, 'goBack'> = {
+const baseCoreState: Omit<CoreState, 'goBack' | 'goHome'> = {
   ...storage,
   client: 'extension',
   openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
@@ -33,20 +33,26 @@ const baseCoreState: Omit<CoreState, 'goBack'> = {
 type ExtensionCoreAppProps = ChildrenProp & {
   processError?: ErrorBoundaryProcessError
   goBack: () => void
+  goHome: () => void
+  targetVaultId?: string
 }
 
 export const ExtensionCoreApp = ({
   children,
   processError,
   goBack,
+  targetVaultId,
+  goHome,
 }: ExtensionCoreAppProps) => {
   const coreState = useMemo(
     () => ({
       ...baseCoreState,
       processError,
+      targetVaultId,
       goBack,
+      goHome,
     }),
-    [processError, goBack]
+    [processError, targetVaultId, goBack, goHome]
   )
 
   return (

@@ -10,8 +10,8 @@ import { StorageKey } from './StorageKey'
 
 export const isHasFinishedReferralsOnboardingInitially = false
 
-type GetHasAddedFriendReferralFunction = () => Promise<string | null>
-type SetHasAddedFriendReferralFunction = (input: string) => Promise<void>
+type GetFriendReferralFn = (vaultId: string) => Promise<string | null>
+type SetFriendReferralFn = (vaultId: string, input: string) => Promise<void>
 
 type SetHasFinishedReferralsOnboardingFunction = (
   hasFinishedOnboarding: boolean
@@ -22,16 +22,15 @@ type GetHasFinishedReferralsOnboardingFunction = () => Promise<boolean>
 export type ReferralsStorage = {
   getHasFinishedReferralsOnboarding: GetHasFinishedReferralsOnboardingFunction
   setHasFinishedReferralsOnboarding: SetHasFinishedReferralsOnboardingFunction
-  getFriendReferral: GetHasAddedFriendReferralFunction
-  setFriendReferral: SetHasAddedFriendReferralFunction
+  getFriendReferral: GetFriendReferralFn
+  setFriendReferral: SetFriendReferralFn
 }
 
-export const useFriendReferralQuery = () => {
+export const useFriendReferralQuery = (vaultId: string) => {
   const { getFriendReferral } = useCore()
-
   return useQuery({
-    queryKey: [StorageKey.hasAddedFriendReferral],
-    queryFn: getFriendReferral,
+    queryKey: [StorageKey.friendReferral, vaultId],
+    queryFn: () => getFriendReferral(vaultId),
     ...noRefetchQueryOptions,
     ...noPersistQueryOptions,
   })
@@ -48,19 +47,17 @@ export const useHasFinishedReferralsOnboardingQuery = () => {
   })
 }
 
-export const useSetFriendReferralMutation = () => {
+export const useSetFriendReferralMutation = (vaultId: string) => {
   const { setFriendReferral } = useCore()
-  const invalidateQueries = useInvalidateQueries()
-
-  const mutationFn: SetHasAddedFriendReferralFunction = async input => {
-    await setFriendReferral(input)
-    await invalidateQueries([StorageKey.hasAddedFriendReferral])
-  }
-
+  const invalidate = useInvalidateQueries()
   return useMutation({
-    mutationFn,
+    mutationFn: async (input: string) => {
+      await setFriendReferral(vaultId, input)
+      await invalidate([StorageKey.friendReferral, vaultId])
+    },
   })
 }
+
 export const useSetHasFinishedReferralsOnboardingMutation = () => {
   const { setHasFinishedReferralsOnboarding } = useCore()
   const invalidateQueries = useInvalidateQueries()

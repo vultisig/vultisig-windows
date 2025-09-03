@@ -12,11 +12,9 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
-
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const toCoin = useCurrentVaultCoin(toCoinKey)
-
   const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return useTransformQueriesData(
@@ -29,22 +27,21 @@ export const useSwapFeesQuery = () => {
 
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const feeAmount = getFeeAmount(chainSpecific)
+          const networkFeeAmount = getFeeAmount(chainSpecific)
+          const swapAmount = BigInt(fees.total)
 
-          const result: SwapFees = {
+          return {
             swap: {
               ...toCoinKey,
-              amount: BigInt(fees.total),
+              amount: swapAmount,
               decimals: toCoin.decimals,
             },
             network: {
               ...fromFeeCoin,
-              amount: feeAmount,
+              amount: networkFeeAmount,
               decimals: fromFeeCoin.decimals,
             },
           }
-
-          return result
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {

@@ -1,5 +1,5 @@
+import { Chain } from '@core/chain/Chain'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
-import { featureFlags } from '@core/ui/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -40,6 +40,8 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentVaultAddresses } from '../vault/state/currentVaultCoins'
+
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
@@ -79,6 +81,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const addresses = useCurrentVaultAddresses()
+  const areReferralEnabled = Boolean(addresses[Chain.THORChain])
 
   return (
     <>
@@ -140,7 +144,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-            {featureFlags.referrals && (
+            {areReferralEnabled && (
               <ListItem
                 icon={<MegaphoneIcon fontSize={iconSize} />}
                 onClick={() => navigate({ id: 'referral' })}

@@ -12,7 +12,7 @@ export const editReferralSchema = z.object({
     .number()
     .min(1, 'Minimum 1 year')
     .max(1000, 'Maximum 1000 years'),
-  referralFeeAmount: z.number().min(0.1, 'Minimum 0.1 RUNE'),
+  referralFeeAmount: z.number().min(0, 'Minimum 0 RUNE'),
   payoutAsset: accountCoinSchema.optional(),
 })
 

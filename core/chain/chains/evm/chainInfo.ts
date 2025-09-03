@@ -1,4 +1,4 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { EvmChain } from '@core/chain/Chain'
 import { rootApiUrl } from '@core/config'
 import { numberToHex } from '@lib/utils/hex/numberToHex'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
@@ -12,12 +12,13 @@ import {
   bsc,
   cronos,
   mainnet,
+  mantle,
   optimism,
   polygon,
   zksync,
 } from 'viem/chains'
 
-export const evmChainRpcUrls: Record<EvmChain, string> = {
+const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,
   [EvmChain.Base]: `${rootApiUrl}/base/`,
   [EvmChain.Arbitrum]: `${rootApiUrl}/arb/`,
@@ -28,6 +29,7 @@ export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.BSC]: `${rootApiUrl}/bsc/`,
   [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
   [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
+  [EvmChain.Mantle]: `${rootApiUrl}/mantle/`,
 }
 
 const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
@@ -41,6 +43,7 @@ const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.BSC]: bsc,
   [EvmChain.Zksync]: zksync,
   [EvmChain.Avalanche]: avalanche,
+  [EvmChain.Mantle]: mantle,
 }
 
 const evmChainId: Record<EvmChain, string> = recordMap(
@@ -67,6 +70,6 @@ export const getEvmChainId = (chain: EvmChain): string => {
   return evmChainId[chain]
 }
 
-export const getEvmChainByChainId = (chainId: string): Chain | undefined => {
+export const getEvmChainByChainId = (chainId: string): EvmChain | undefined => {
   return mirrorRecord(evmChainId)[chainId]
 }

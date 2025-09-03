@@ -32,7 +32,10 @@ export const PluginReshare: PopupResolver<'pluginReshare'> = ({
                 from={({ onFinish: onNextStep }) => (
                   <PluginJoinKeygenUrl
                     onFinish={joinUrl => {
-                      onFinish({ data: { joinUrl } })
+                      onFinish({
+                        result: { data: { joinUrl } },
+                        shouldClosePopup: false,
+                      })
                       onNextStep()
                     }}
                   />

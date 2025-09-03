@@ -1,14 +1,17 @@
 import { UtxoChain } from '@core/chain/Chain'
-import { callBackground } from '@core/inpage-provider/background'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  BitcoinAccount,
+  ProviderId,
+  RequestInput,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 
-import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
+import { EventMethod } from '../../utils/constants'
 import { Callback } from '../constants'
-import { messengers } from '../messenger'
+import { requestAccount } from './core/requestAccount'
+import { getSharedHandlers } from './core/sharedHandlers'
 
 type SupportedUtxoChain =
   | UtxoChain.Bitcoin
@@ -19,78 +22,74 @@ type SupportedUtxoChain =
 
 export class UTXO extends EventEmitter {
   public chain: UtxoChain
-  private providerType: MessageKey
   public static instances: Map<string, UTXO>
-  constructor(providerType: string, chain: SupportedUtxoChain) {
+  private providerId: ProviderId
+  constructor(chain: SupportedUtxoChain, providerId: ProviderId = 'vultisig') {
     super()
-    this.providerType = providerType as MessageKey
     this.chain = chain
+    this.providerId = providerId
   }
 
-  static getInstance(providerType: string, chain: SupportedUtxoChain): UTXO {
+  static getInstance(chain: SupportedUtxoChain, providerId: ProviderId): UTXO {
     if (!UTXO.instances) {
       UTXO.instances = new Map<string, UTXO>()
     }
 
-    if (!UTXO.instances.has(providerType)) {
-      UTXO.instances.set(providerType, new UTXO(providerType, chain))
+    if (!UTXO.instances.has(chain)) {
+      UTXO.instances.set(chain, new UTXO(chain, providerId))
     }
-    return UTXO.instances.get(providerType)!
+    return UTXO.instances.get(chain)!
   }
 
-  async requestAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
+  async requestAccounts(): Promise<BitcoinAccount[] | string[]> {
+    const { address, publicKey } = await requestAccount(this.chain)
+    if (this.providerId === 'phantom-override') {
+      return [
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'payment' },
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'ordinals' },
+      ]
+    }
+    return [address]
+  }
+
+  async signPSBT(psbt: Buffer) {
+    const { hash } = await callPopup({
+      sendTx: {
+        serialized: {
+          data: Buffer.from(psbt).toString('base64'),
+          chain: this.chain,
+        },
+      },
     })
-  }
 
-  async getAccounts() {
-    return withFallback(
-      attempt(async () => [
-        await callBackground({
-          getAddress: { chain: this.chain },
-        }),
-      ]),
-      []
-    )
-  }
-
-  async signPSBT(_psbt: string | Buffer) {
-    return await this.request({
-      method: RequestMethod.CTRL.SIGN_PSBT,
-      params: [],
-    })
+    return hash
   }
 
   emitAccountsChanged() {
     this.emit(EventMethod.ACCOUNTS_CHANGED, {})
   }
 
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
+  async request(data: RequestInput, callback?: Callback) {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(this.chain)
+
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
+      }
+
+      throw new NotImplementedError(`UTXO method ${data.method}`)
+    }
+
     try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: this.providerType,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
+      const result = await processRequest()
 
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
+      callback?.(null, result)
 
-      if (callback) callback(null, result)
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

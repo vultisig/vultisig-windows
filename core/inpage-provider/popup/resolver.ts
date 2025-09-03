@@ -1,10 +1,13 @@
 import { productName } from '@core/config'
 import {
+  AuthorizedPopupMethod,
   PopupInterface,
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { Resolver } from '@lib/utils/types/Resolver'
 import { Result } from '@lib/utils/types/Result'
+
+import { AuthorizedCallContext, UnauthorizedCallContext } from '../call/context'
 
 type PopupMessageSource = 'popup'
 
@@ -24,6 +27,7 @@ export type PopupCall<M extends PopupMethod> = {
 
 export type PopupResponse<M extends PopupMethod> = PopupMessageKey & {
   result: Result<PopupInterface[M]['output']>
+  shouldClosePopup: boolean
 }
 
 export const isPopupMessage = <T extends PopupMessageKey>(
@@ -41,15 +45,16 @@ export type PopupMessage<M extends PopupMethod = PopupMethod> = {
 }
 
 export type PopupOptions = {
-  closeOnFinish?: boolean
-}
-
-export type PopupCallResolverInput<M extends PopupMethod> = {
-  call: PopupCall<M>
-  options: PopupOptions
+  account?: string
 }
 
 export type PopupCallResolver<M extends PopupMethod = PopupMethod> = Resolver<
-  PopupCallResolverInput<M>,
+  {
+    call: PopupCall<M>
+    options: PopupOptions
+    context: M extends AuthorizedPopupMethod
+      ? AuthorizedCallContext
+      : UnauthorizedCallContext
+  },
   Promise<PopupInterface[M]['output']>
 >

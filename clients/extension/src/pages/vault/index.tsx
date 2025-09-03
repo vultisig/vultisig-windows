@@ -1,7 +1,7 @@
 import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
-import { useCurrentVaultAppSessionsQuery } from '@clients/extension/src/sessions/state/useAppSessions'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { useCurrentVaultAppSessionsQuery } from '@core/extension/storage/hooks/appSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'

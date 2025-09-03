@@ -1,3 +1,5 @@
+import { VaultAppSession } from '@core/extension/storage/appSessions'
+import { BridgeContext } from '@lib/extension/bridge/context'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { omit } from '@lib/utils/record/omit'
@@ -6,19 +8,24 @@ import { PopupCall } from '../../resolver'
 
 const popupViewCallsKey = 'popupViewCalls'
 
-type PopupViewCalls = Record<string, PopupCall<any>>
+type PopupViewCallEntry = {
+  call: PopupCall<any>
+  context?: BridgeContext & { appSession?: VaultAppSession }
+}
+
+type PopupViewCalls = Record<string, PopupViewCallEntry>
 
 const getPopupViewCalls = async () =>
   getStorageValue<PopupViewCalls>(popupViewCallsKey, {})
 
-export const addPopupViewCall = async (call: PopupCall<any>) => {
+export const addPopupViewCall = async (input: PopupViewCallEntry) => {
   const calls = await getPopupViewCalls()
 
   const id = crypto.randomUUID()
 
   await setStorageValue(popupViewCallsKey, {
     ...calls,
-    [id]: call,
+    [id]: input,
   })
 
   return id

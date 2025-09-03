@@ -7,13 +7,11 @@ import { SetupFastVaultPage } from '@clients/extension/src/components/setup/Setu
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
-import { StartKeysignPage } from '@clients/extension/src/mpc/keysign/start/StartKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
-import { ConnectDAppPage } from '@clients/extension/src/pages/connect-dapp'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
-import { TransactionPage } from '@clients/extension/src/pages/transaction'
 import { VaultPage } from '@clients/extension/src/pages/vault'
+import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
@@ -24,7 +22,6 @@ import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
-  connectTab: ConnectDAppPage,
   importVault: () => (
     <ExpandViewGuard>
       <ImportVaultPage />
@@ -32,7 +29,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
-  keysign: StartKeysignPage,
+  keysign: StartKeysignView,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -56,7 +53,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       </ResponsivenessProvider>
     </ExpandViewGuard>
   ),
-  transactionTab: TransactionPage,
   vault: VaultPage,
 }
 
