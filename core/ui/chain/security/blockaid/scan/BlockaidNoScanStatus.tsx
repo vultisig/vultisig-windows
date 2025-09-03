@@ -1,8 +1,9 @@
+import { BlockaidScanEntity } from '@core/chain/security/blockaid/core/entity'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { BlockaidLogo } from '../BlockaidLogo'
-import { BlockaidScanEntity, getBlockaidScanEntityName } from '../core/entity'
+import { getBlockaidScanEntityName } from '../utils/entity'
 import { BlockaidScanStatusContainer } from './BlockaidScanStatusContainer'
 
 type BlockaidNoScanStatusProps = {

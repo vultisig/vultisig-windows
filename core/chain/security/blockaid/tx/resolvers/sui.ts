@@ -1,7 +1,7 @@
 import { OtherChain } from '@core/chain/Chain'
 
-import { BlockaidValidation } from '../api/core'
 import { queryBlockaid } from '../../core/query'
+import { BlockaidValidation } from '../api/core'
 import { BlockaidTxValidationResolver } from '../resolver'
 
 type SuiBlockaidScanResponse = {
