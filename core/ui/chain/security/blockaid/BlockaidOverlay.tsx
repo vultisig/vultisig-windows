@@ -1,20 +1,19 @@
-import { RiskyTxInfo } from '@core/chain/security/blockaid/tx/core'
+import { RiskLevel } from '@core/chain/security/blockaid/core/riskLevel'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { ValueProp } from '@lib/ui/props'
+import { TitleProp } from '@lib/ui/props'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { useCore } from '../../../../state/core'
-import { BlockaidLogo } from '../BlockaidLogo'
-import { txRiskLevelIcon } from './TxRiskLevelIcon'
-import { getRiskyTxColor } from './utils/color'
+import { useCore } from '../../../state/core'
+import { BlockaidLogo } from './BlockaidLogo'
+import { riskLevelIcon } from './riskLevelIcon'
+import { getRiskyTxColor } from './tx/utils/color'
 
 const DismissButton = styled(UnstyledButton)`
   ${text({
@@ -27,14 +26,23 @@ const DismissButton = styled(UnstyledButton)`
   }
 `
 
-export const BlockaidRiskyTxOverlay = ({ value }: ValueProp<RiskyTxInfo>) => {
+type BlockaidOverlayProps = TitleProp & {
+  riskLevel: RiskLevel
+  description?: string
+}
+
+export const BlockaidOverlay = ({
+  riskLevel,
+  description,
+  title,
+}: BlockaidOverlayProps) => {
   const [isDismissed, { set: dismiss }] = useBoolean(false)
 
-  const Icon = txRiskLevelIcon[value.level]
+  const Icon = riskLevelIcon[riskLevel]
 
   const { colors } = useTheme()
 
-  const color = getRiskyTxColor(value.level, colors)
+  const color = getRiskyTxColor(riskLevel, colors)
 
   const { t } = useTranslation()
 
@@ -58,13 +66,11 @@ export const BlockaidRiskyTxOverlay = ({ value }: ValueProp<RiskyTxInfo>) => {
           <Icon fontSize={24} style={{ color }} />
           <VStack alignItems="center" gap={12}>
             <Text centerHorizontally size={22} style={{ color }}>
-              {t('risky_transaction_detected', {
-                riskLevel: capitalizeFirstLetter(value.level),
-              })}
+              {title}
             </Text>
-            {value.description && (
+            {description && (
               <Text centerHorizontally size={14} color="supporting">
-                {value.description}
+                {description}
               </Text>
             )}
           </VStack>

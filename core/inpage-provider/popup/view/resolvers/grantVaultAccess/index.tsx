@@ -3,6 +3,7 @@ import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
 import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
+import { BlockaidSiteScanResult } from '@core/ui/chain/security/blockaid/site/BlockaidSiteScanResult'
 import { getBlockaidSiteScanQuery } from '@core/ui/chain/security/blockaid/site/queries/blockaidSiteScan'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
@@ -82,7 +83,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         secondaryControls={<PageHeaderBackButton />}
         title={
           <Text color="contrast" size={18} weight={500}>
-            {t('connect_with_vultisig')}
+            {t('connect_to_site', { site: getUrlBaseDomain(requestOrigin) })}
           </Text>
         }
         hasBorder
@@ -91,7 +92,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         {isBlockaidEnabled && (
           <MatchQuery
             value={siteScanQuery}
-            success={() => <p>todo</p>}
+            success={value => <BlockaidSiteScanResult value={value} />}
             pending={() => <BlockaidScanning />}
             error={() => <BlockaidNoScanStatus entity="site" />}
             inactive={() => <BlockaidScanStatusContainer />}

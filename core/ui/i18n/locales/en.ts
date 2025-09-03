@@ -887,7 +887,7 @@ export const en = {
   get_vault_failed: 'Failed to Get Vaults',
   get_vault_failed_description:
     'Make you sure you have already imported your vaults in VultiConnect',
-  connect_with_vultisig: 'Connect with Vultisig',
+  connect_to_site: 'Connect to {{site}}',
   select_vault: 'Select a Vault',
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',
@@ -1002,11 +1002,13 @@ export const en = {
   hold_for_paired_sign: 'Hold for paired sign',
   blockaid_security_scan: 'Blockaid Security Scan',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
-  transaction_scanned: 'Transaction scanned by <provider></provider>',
+  entity_scanned: '{{entity}} scanned by <provider></provider>',
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   powered_by: 'Powered by <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
+  site_has_risk: 'Malicious site detected by <provider></provider>',
+  risky_site_detected: 'Malicious site detected',
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transaction_not_supporting_memo_desc:

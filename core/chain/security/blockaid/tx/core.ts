@@ -1,7 +1,7 @@
-export type TxRiskLevel = 'medium' | 'high'
+import { RiskLevel } from '../core/riskLevel'
 
-export type RiskyTxInfo = {
-  level: TxRiskLevel
+type RiskyTxInfo = {
+  level: RiskLevel
   description: string
 }
 
