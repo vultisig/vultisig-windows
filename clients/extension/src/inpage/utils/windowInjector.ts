@@ -8,7 +8,6 @@ import { callPopup } from '@core/inpage-provider/popup'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
-import { MessageKey } from '../../utils/constants'
 import { UTXO } from '../providers/utxo'
 
 export const injectToWindow = () => {
@@ -55,11 +54,7 @@ function setupContentScriptMessenger(
 ) {
   const ethereumProvider = providers.ethereum
   const phantomProvider = {
-    bitcoin: new UTXO(
-      MessageKey.BITCOIN_REQUEST,
-      UtxoChain.Bitcoin,
-      'phantom-override'
-    ),
+    bitcoin: new UTXO(UtxoChain.Bitcoin, 'phantom-override'),
     ethereum: ethereumProvider,
     solana: providers.solana,
   }

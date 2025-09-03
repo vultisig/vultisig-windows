@@ -37,6 +37,7 @@ export const darkTheme: DefaultTheme = {
     buttonPrimary: new HSLA(224, 75, 50),
     buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
+    primaryAccentTwo: new HSLA(224, 96, 40),
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),

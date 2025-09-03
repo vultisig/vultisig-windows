@@ -71,10 +71,7 @@ export const Overview = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt
-          keysignPayload={keysignMessagePayload}
-          isDAppSigning={true}
-        />
+        <StartKeysignPrompt keysignPayload={keysignMessagePayload} />
       </PageFooter>
     </VStack>
   )

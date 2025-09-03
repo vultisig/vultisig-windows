@@ -11,26 +11,30 @@ import { Views } from '@lib/ui/navigation/Views'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { Overview } from './Overview'
+import { SendTxOverview } from './SendTxOverview'
 
-type SignMessageView =
+type SendTxView =
   | {
       id: 'overview'
     }
   | Extract<CoreView, { id: 'keysign' }>
 
-const views: Views<SignMessageView['id']> = {
-  overview: Overview,
+const views: Views<SendTxView['id']> = {
+  overview: SendTxOverview,
   keysign: StartKeysignView,
 }
 
-export const SignMessage: PopupResolver<'signMessage'> = ({ onFinish }) => {
+export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
       onSuccess: result => {
+        const [{ hash, data }] = getRecordUnionValue(result, 'txs')
         onFinish({
           result: {
-            data: getRecordUnionValue(result, 'signature'),
+            data: {
+              hash,
+              data: data.toJSON(),
+            },
           },
           shouldClosePopup: false,
         })

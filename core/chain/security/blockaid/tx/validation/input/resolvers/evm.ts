@@ -1,3 +1,4 @@
+import { productRootDomain } from '@core/config'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
@@ -28,7 +29,9 @@ export const getEvmBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
       params: [{ from: coin.address, to, value, data }],
     },
     chain: chain.toLowerCase(),
-    metadata: {},
+    metadata: {
+      domain: productRootDomain,
+    },
   })
 
   const swapPayload = getKeysignSwapPayload(payload)

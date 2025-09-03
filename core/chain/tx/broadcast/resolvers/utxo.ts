@@ -6,10 +6,12 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { getChainKind } from '../../../ChainKind'
 import { getBlockchairBaseUrl } from '../../../chains/utxo/client/getBlockchairBaseUrl'
-import { DecodedTx } from '../../decode'
+import { SigningOutput } from '../../../tw/signingOutput'
 import { BroadcastTxResolver } from '../resolver'
 
-type UtxoBasedDecodedTx = DecodedTx<UtxoChain> | DecodedTx<OtherChain.Cardano>
+type UtxoBasedDecodedTx =
+  | SigningOutput<UtxoChain>
+  | SigningOutput<OtherChain.Cardano>
 
 type BlockchairBroadcastResponse =
   | {
@@ -60,8 +62,8 @@ export const broadcastUtxoTx: BroadcastTxResolver<UtxoBasedChain> = async ({
 }
 
 const hasSigningResultV2 = (
-  tx: DecodedTx<UtxoChain | OtherChain.Cardano>
-): tx is DecodedTx<UtxoChain> & {
+  tx: UtxoBasedDecodedTx
+): tx is SigningOutput<UtxoChain> & {
   signingResultV2: { encoded?: Uint8Array | null }
 } =>
   tx != null &&

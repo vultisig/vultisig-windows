@@ -1,9 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { checkERC20Function } from '@clients/extension/src/utils/functions'
-import {
-  IKeysignTransactionPayload,
-  TransactionDetailsAsset,
-} from '@clients/extension/src/utils/interfaces'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, CosmosChain, OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
@@ -20,6 +15,11 @@ import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolver
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
+import {
+  CosmosMsgType,
+  IKeysignTransactionPayload,
+  TransactionDetailsAsset,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   CosmosIbcDenomTraceSchema,
@@ -35,12 +35,27 @@ import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
-import { CosmosMsgType } from '../constants'
+const checkERC20Function = async (inputHex: string): Promise<boolean> => {
+  if (!inputHex || inputHex === '0x')
+    return new Promise(resolve => resolve(false))
+
+  const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
+
+  const url = `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${functionSelector}&ordering=created_at`
+  const { count } = await withFallback(
+    attempt(() => queryUrl<{ count: number }>(url)),
+    { count: 0 }
+  )
+
+  return count > 0
+}
 
 const getCoin = async (
   asset: TransactionDetailsAsset,

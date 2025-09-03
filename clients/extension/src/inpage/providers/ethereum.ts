@@ -1,24 +1,25 @@
-import { EventMethod, MessageKey } from '@clients/extension/src/utils/constants'
+import { EventMethod } from '@clients/extension/src/utils/constants'
 import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmChainByChainId,
   getEvmChainId,
 } from '@core/chain/chains/evm/chainInfo'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
+import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
-import { getBytes, isHexString, Signature } from 'ethers'
+import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
-import { BlockTag } from 'viem'
+import { BlockTag, type RpcTransactionRequest } from 'viem'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
 import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
 
@@ -136,7 +137,7 @@ export class Ethereum extends EventEmitter {
     return this
   }
 
-  async request(data: Messaging.Chain.Request) {
+  async request(data: RequestInput) {
     const getChain = async () => {
       const chain = await callBackground({
         getAppChain: { chainKind: 'evm' },
@@ -232,7 +233,9 @@ export class Ethereum extends EventEmitter {
         callBackground({
           evmClientRequest: { method: 'eth_blockNumber' },
         }),
-      eth_getBlockByNumber: async (params: unknown[]) =>
+      eth_getBlockByNumber: async (
+        params: [BlockTag | `0x${string}`, boolean]
+      ) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getBlockByNumber',
@@ -247,22 +250,28 @@ export class Ethereum extends EventEmitter {
         callBackground({
           evmClientRequest: { method: 'eth_maxPriorityFeePerGas' },
         }),
-      eth_estimateGas: async (params: unknown[]) =>
+      eth_estimateGas: async (
+        params: [RpcTransactionRequest, BlockTag | `0x${string}` | undefined]
+      ) =>
         callBackground({
           evmClientRequest: { method: 'eth_estimateGas', params },
         }),
-      eth_call: async (params: unknown[]) =>
+      eth_call: async (
+        params: [RpcTransactionRequest, BlockTag | `0x${string}` | undefined]
+      ) =>
         callBackground({
           evmClientRequest: { method: 'eth_call', params },
         }),
-      eth_getTransactionReceipt: async (params: unknown[]) =>
+      eth_getTransactionReceipt: async (
+        params: [`0x${string}`] | [`0x${string}`, ...unknown[]]
+      ) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getTransactionReceipt',
             params,
           },
         }),
-      eth_getTransactionByHash: async (params: unknown[]) =>
+      eth_getTransactionByHash: async (params: [`0x${string}`]) =>
         callBackground({
           evmClientRequest: {
             method: 'eth_getTransactionByHash',
@@ -289,7 +298,6 @@ export class Ethereum extends EventEmitter {
           },
           {
             account,
-            closeOnFinish: false,
           }
         )
 
@@ -314,11 +322,58 @@ export class Ethereum extends EventEmitter {
           },
           {
             account,
-            closeOnFinish: false,
           }
         )
 
         return processSignature(result)
+      },
+      eth_sendTransaction: async ([tx]: [RpcTransactionRequest]) => {
+        const chain = await getChain()
+
+        const from = shouldBePresent(tx.from, 'tx.from')
+
+        const { decimals, ticker } = chainFeeCoin[chain]
+
+        const { hash } = await callPopup(
+          {
+            sendTx: {
+              keysign: {
+                transactionDetails: {
+                  from,
+                  to: tx.to ?? undefined,
+                  asset: {
+                    chain: chain,
+                    ticker,
+                  },
+                  amount: tx.value
+                    ? {
+                        amount: ethers.toBigInt(tx.value).toString(),
+                        decimals,
+                      }
+                    : undefined,
+                  data: tx.data,
+                  gasSettings: {
+                    maxFeePerGas: tx.maxFeePerGas
+                      ? ethers.toBigInt(tx.maxFeePerGas).toString()
+                      : undefined,
+                    maxPriorityFeePerGas: tx.maxPriorityFeePerGas
+                      ? ethers.toBigInt(tx.maxPriorityFeePerGas).toString()
+                      : undefined,
+                    gasLimit: tx.gas
+                      ? ethers.toBigInt(tx.gas).toString()
+                      : undefined,
+                  },
+                },
+                chain,
+              },
+            },
+          },
+          {
+            account: from,
+          }
+        )
+
+        return hash
       },
     } as const
 
@@ -326,23 +381,7 @@ export class Ethereum extends EventEmitter {
       return handlers[data.method as keyof typeof handlers](data.params as any)
     }
 
-    const response = await messengers.background.send<
-      any,
-      Messaging.Chain.Response
-    >(
-      'providerRequest',
-      {
-        type: MessageKey.ETHEREUM_REQUEST,
-        message: data,
-      },
-      { id: uuidv4() }
-    )
-
-    return processBackgroundResponse(
-      data,
-      MessageKey.ETHEREUM_REQUEST,
-      response
-    )
+    throw new NotImplementedError(`Ethereum method ${data.method}`)
   }
 
   _connect = (): void => {

@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { desktopDownloadUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
@@ -66,7 +67,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   const language = useLanguage()
   const shareURL =
     props.client === 'desktop'
-      ? 'https://vultisig.com/download/vultisig'
+      ? desktopDownloadUrl
       : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
   const handleCopy = () => {

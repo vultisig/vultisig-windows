@@ -8,7 +8,6 @@ import { Solana } from '@clients/extension/src/inpage/providers/solana'
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
-import { MessageKey } from '@clients/extension/src/utils/constants'
 import { UtxoChain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 
@@ -19,14 +18,11 @@ export const createProviders = () => {
   const solanaProvider = new Solana()
   registerWallet(solanaProvider)
   return {
-    bitcoin: new UTXO(MessageKey.BITCOIN_REQUEST, UtxoChain.Bitcoin),
-    bitcoincash: new UTXO(
-      MessageKey.BITCOIN_CASH_REQUEST,
-      UtxoChain.BitcoinCash
-    ),
-    dogecoin: new UTXO(MessageKey.DOGECOIN_REQUEST, UtxoChain.Dogecoin),
-    litecoin: new UTXO(MessageKey.LITECOIN_REQUEST, UtxoChain.Litecoin),
-    zcash: new UTXO(MessageKey.ZCASH_REQUEST, UtxoChain.Zcash),
+    bitcoin: new UTXO(UtxoChain.Bitcoin),
+    bitcoincash: new UTXO(UtxoChain.BitcoinCash),
+    dogecoin: new UTXO(UtxoChain.Dogecoin),
+    litecoin: new UTXO(UtxoChain.Litecoin),
+    zcash: new UTXO(UtxoChain.Zcash),
     cosmos: cosmosProvider,
     dash: new Dash(),
     ethereum: new Ethereum(),
@@ -35,12 +31,9 @@ export const createProviders = () => {
     plugin: {
       request: async ({ params }: { params: [{ id: string }] }) => {
         const [{ id }] = params
-        const { joinUrl } = await callPopup(
-          {
-            pluginReshare: { pluginId: id },
-          },
-          { closeOnFinish: false }
-        )
+        const { joinUrl } = await callPopup({
+          pluginReshare: { pluginId: id },
+        })
 
         return joinUrl
       },

@@ -1,16 +1,17 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { v4 as uuidv4 } from 'uuid'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  RequestInput,
+  TransactionDetails,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
-import { MessageKey } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
-import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
 import { getSharedHandlers } from './core/sharedHandlers'
+
 export class THORChain extends BaseCosmosChain {
   public static instance: THORChain | null = null
-  public messageKey = MessageKey.THOR_REQUEST
 
   private constructor() {
     super('Thorchain_thorchain')
@@ -23,12 +24,28 @@ export class THORChain extends BaseCosmosChain {
     return THORChain.instance
   }
 
-  async request(
-    data: Messaging.Chain.Request,
-    callback?: Callback
-  ): Promise<unknown> {
+  async request(data: RequestInput, callback?: Callback): Promise<unknown> {
     const processRequest = async () => {
-      const handlers = getSharedHandlers(CosmosChain.THORChain)
+      const handlers = {
+        ...getSharedHandlers(CosmosChain.THORChain),
+        deposit_transaction: async ([tx]: [TransactionDetails]) => {
+          const { hash } = await callPopup(
+            {
+              sendTx: {
+                keysign: {
+                  transactionDetails: tx,
+                  chain: CosmosChain.THORChain,
+                },
+              },
+            },
+            {
+              account: tx.from,
+            }
+          )
+
+          return hash
+        },
+      }
 
       if (data.method in handlers) {
         return handlers[data.method as keyof typeof handlers](
@@ -36,19 +53,7 @@ export class THORChain extends BaseCosmosChain {
         )
       }
 
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: this.messageKey,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
-
-      return processBackgroundResponse(data, this.messageKey, response)
+      throw new NotImplementedError(`THORChain method ${data.method}`)
     }
 
     try {
