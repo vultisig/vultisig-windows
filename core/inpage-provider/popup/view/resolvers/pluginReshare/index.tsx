@@ -1,4 +1,6 @@
+import { PopupDeadEnd } from '@core/inpage-provider/popup/view/flow/PopupDeadEnd'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { PluginJoinKeygenUrl } from '@core/inpage-provider/popup/view/resolvers/pluginReshare/PluginJoinKeygenUrl'
 import { PluginReshareFlow } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
 import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
@@ -10,9 +12,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { PopupDeadEnd } from '../../flow/PopupDeadEnd'
-import { PluginJoinKeygenUrl } from './PluginJoinKeygenUrl'
 
 export const PluginReshare: PopupResolver<'pluginReshare'> = ({
   onFinish,

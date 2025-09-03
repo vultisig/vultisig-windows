@@ -1,3 +1,4 @@
+import { DeveloperOptions } from '@clients/extension/src/components/developer-options'
 import { ExpandView } from '@clients/extension/src/components/expand-view'
 import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-guard'
 import { Prioritize } from '@clients/extension/src/components/prioritize'
@@ -40,6 +41,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   settings: () => (
     <SettingsPage
       client="extension"
+      developerOptions={<DeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
     />
