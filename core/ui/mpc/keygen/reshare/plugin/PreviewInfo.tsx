@@ -77,7 +77,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
       </PageFooter>
     </>
   ) : (
-    <>
+    <Layout fullHeight>
       <PageHeader
         title={
           <HStack gap={10} alignItems="center" position="relative">
@@ -132,7 +132,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
           </Button>
         </VStack>
       </PageFooter>
-    </>
+    </Layout>
   )
 }
 
@@ -150,6 +150,12 @@ const Divider = styled.div`
   background-color: ${getColor('foregroundExtra')};
   height: 3px;
   width: 3px;
+`
+
+const Layout = styled(VStack)`
+  background-image: url('assets/plugin_flow_bg.jpg');
+  background-position: top center;
+  background-repeat: repeat-x;
 `
 
 const LogoIcon = styled(VultisigLogoIcon)`
