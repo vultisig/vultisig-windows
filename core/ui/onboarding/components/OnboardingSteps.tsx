@@ -7,6 +7,7 @@ import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { pageConfig } from '@lib/ui/page/config'
 import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
@@ -31,7 +32,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
   return (
     <StyledLayout fullSize justifyContent="space-between">
       <VStack flexGrow>
-        <Header gap={16}>
+        <VStack gap={16}>
           <HStack justifyContent="space-between">
             <StyledButton
               icon={<ChevronLeftIcon fontSize={18} />}
@@ -51,14 +52,14 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
             value={animations.indexOf(currentAnimation) + 1}
             variant="bars"
           />
-        </Header>
+        </VStack>
         <VStack justifyContent="center" flexGrow alignItems="center">
           <AnimationWrapper>
             <AnimationComponent />
           </AnimationWrapper>
         </VStack>
       </VStack>
-      <Footer alignItems="center" gap={32}>
+      <VStack alignItems="center" gap={32}>
         <AnimatedVisibility>
           {match(currentAnimation, {
             0: () => (
@@ -136,7 +137,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
         >
           <ChevronRightIcon />
         </IconButton>
-      </Footer>
+      </VStack>
     </StyledLayout>
   )
 }
@@ -164,20 +165,13 @@ const AnimationWrapper = styled.div`
   }
 `
 
-const Footer = styled(VStack)`
-  padding: 0 24px 36px;
-`
-
-const Header = styled(VStack)`
-  padding: 36px 24px 0;
-`
-
 const StyledLayout = styled(VStack)`
   margin: 0 auto;
   position: relative;
+  padding-block: ${pageConfig.verticalPadding}px;
 
   @media ${mediaQuery.mobileDeviceAndDown} {
-    width: calc(100% - 48px);
+    width: calc(100% - ${pageConfig.horizontalPadding * 2}px);
   }
 
   @media ${mediaQuery.tabletDeviceAndUp} {

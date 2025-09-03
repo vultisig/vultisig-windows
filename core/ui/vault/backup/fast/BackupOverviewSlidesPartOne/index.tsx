@@ -7,6 +7,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
@@ -26,7 +27,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
   const fontSize = 28
 
   return (
-    <StyledLayout maxWidth={400} fullSize>
+    <StyledLayout fullSize>
       <StyledHeader gap={16}>
         <HStack justifyContent="space-between">
           <StyledButton
@@ -104,8 +105,12 @@ const StyledButton = styled(Button)`
 `
 
 const StyledContent = styled(VStack)`
-  height: 400px;
   padding: 0;
+  height: 100%;
+
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    height: 400px;
+  }
 `
 
 const StyledFooter = styled(VStack)`
