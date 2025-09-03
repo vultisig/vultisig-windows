@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { WalletCoreProvider } from './chain/providers/WalletCoreProvider'
 import { PasscodeGuard } from './passcodeEncryption/guard/PasscodeGuard'
-import { ResponsivenessProvider } from './providers/ResponsivenessProivder'
+import { ResponsivenessProvider } from './providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from './state/core'
 import { StorageDependant } from './storage/StorageDependant'
 import { ActiveVaultOnly } from './vault/ActiveVaultOnly'

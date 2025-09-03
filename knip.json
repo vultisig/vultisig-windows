@@ -1,12 +1,10 @@
 {
   "ignore": [
     "core/mpc/types/**",
-    "clients/desktop/wailsjs/**"
+    "clients/desktop/wailsjs/**",
+    "core/ui/providers/ResponsivenessProivder.tsx"
   ],
-  "ignoreBinaries": [
-    "tsx",
-    "wails"
-  ],
+  "ignoreBinaries": ["tsx", "wails"],
   "entry": [
     "clients/extension/src/background/index.ts",
     "clients/extension/src/content/index.ts",
