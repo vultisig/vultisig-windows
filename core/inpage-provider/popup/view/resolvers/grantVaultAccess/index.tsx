@@ -44,7 +44,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       return appSession
     },
     onSuccess: appSession => {
-      onFinish({ data: { appSession } })
+      onFinish({ result: { data: { appSession } }, shouldClosePopup: true })
     },
   })
   const { requestOrigin } = shouldBePresent(context)

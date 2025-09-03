@@ -1,15 +1,18 @@
-import { ignorePromiseOutcome } from '@lib/utils/promise/ignorePromiseOutcome'
 import { pick } from '@lib/utils/record/pick'
 
 import { PopupOptions } from '../../resolver'
 
+type ExecuteInput = {
+  abortSignal: AbortSignal
+  close: () => void
+}
+
 type Input<T> = PopupOptions & {
   url: string
-  execute: (signal: AbortSignal) => Promise<T>
+  execute: (input: ExecuteInput) => Promise<T>
 }
 
 export const inNewWindow = async <T>({
-  closeOnFinish,
   url,
   execute,
 }: Input<T>): Promise<T> => {
@@ -25,13 +28,14 @@ export const inNewWindow = async <T>({
         resolve
       )
   )
-  if (!newWindow?.id) {
+  const windowId = newWindow?.id
+  if (!windowId) {
     throw new Error('Failed to create new window')
   }
 
   const controller = new AbortController()
   const handleRemoved = (removedId: number) => {
-    if (removedId === newWindow.id) {
+    if (removedId === windowId) {
       chrome.windows.onRemoved.removeListener(handleRemoved)
       controller.abort()
     }
@@ -39,11 +43,14 @@ export const inNewWindow = async <T>({
   chrome.windows.onRemoved.addListener(handleRemoved)
 
   try {
-    return await execute(controller.signal)
+    return await execute({
+      abortSignal: controller.signal,
+      close: () => {
+        chrome.windows.onRemoved.removeListener(handleRemoved)
+        chrome.windows.remove(windowId)
+      },
+    })
   } finally {
     chrome.windows.onRemoved.removeListener(handleRemoved)
-    if (closeOnFinish) {
-      await ignorePromiseOutcome(chrome.windows.remove(newWindow.id))
-    }
   }
 }

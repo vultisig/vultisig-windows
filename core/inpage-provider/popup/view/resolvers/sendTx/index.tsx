@@ -30,10 +30,13 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
       onSuccess: result => {
         const [{ hash, data }] = getRecordUnionValue(result, 'txs')
         onFinish({
-          data: {
-            hash,
-            data: data.toJSON(),
+          result: {
+            data: {
+              hash,
+              data: data.toJSON(),
+            },
           },
+          shouldClosePopup: false,
         })
       },
     }),
