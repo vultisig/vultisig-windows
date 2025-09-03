@@ -32,7 +32,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
         <>
           <AnimatedVisibility>
             {match(currentAnimation, {
-              0: () => (
+              1: () => (
                 <Text size={28} centerHorizontally>
                   {t('fastVaultSetup.backup.vaultShares')}{' '}
                   <GradientText as="span">
@@ -40,7 +40,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
                   </GradientText>
                 </Text>
               ),
-              1: () => (
+              2: () => (
                 <Text size={28} centerHorizontally>
                   {t('fastVaultSetup.backup.part1')}{' '}
                   <GradientText as="span">
@@ -48,7 +48,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
                   </GradientText>
                 </Text>
               ),
-              2: () => (
+              3: () => (
                 <Text size={28} centerHorizontally>
                   {t('fastVaultSetup.backup.completeCustody')}{' '}
                   <GradientText as="span">
@@ -62,7 +62,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
             disabled={isLoading}
             kind="primary"
             onClick={
-              currentAnimation < animations.length - 1
+              currentAnimation < animations.length
                 ? handleNextAnimation
                 : onFinish
             }
@@ -90,8 +90,8 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
           </HStack>
           <MultistepProgressIndicator
             markPreviousStepsAsCompleted
-            steps={animations.length + 1}
-            value={currentAnimation + 1}
+            steps={animations.length}
+            value={currentAnimation}
             variant="bars"
           />
         </>

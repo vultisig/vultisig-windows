@@ -60,7 +60,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
             disabled={isLoading}
             kind="primary"
             onClick={
-              currentAnimation !== animations[animations.length - 1]
+              currentAnimation < animations.length
                 ? handleNextAnimation
                 : onFinish
             }
@@ -88,8 +88,8 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
           </HStack>
           <MultistepProgressIndicator
             markPreviousStepsAsCompleted
-            steps={animations.length + 1}
-            value={currentAnimation + 1}
+            steps={animations.length}
+            value={currentAnimation}
             variant="bars"
           />
         </>

@@ -1,6 +1,6 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
-import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'

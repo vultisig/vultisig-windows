@@ -65,8 +65,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<OnFinishProp> = ({
             disabled={isLoading}
             kind="primary"
             onClick={
-              vault.signers.length >= 5 &&
-              currentAnimation !== animations[animations.length - 1]
+              vault.signers.length >= 5 && currentAnimation < animations.length
                 ? handleNextAnimation
                 : onFinish
             }
@@ -94,8 +93,8 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<OnFinishProp> = ({
           </HStack>
           <MultistepProgressIndicator
             markPreviousStepsAsCompleted
-            steps={animations.length + 1}
-            value={currentAnimation + 1}
+            steps={animations.length}
+            value={currentAnimation}
             variant="bars"
           />
         </>

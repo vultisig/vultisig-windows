@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
-const animations = [0, 1, 2, 3, 4, 5] as const
+const animations = [1, 2, 3, 4, 5, 6] as const
 
 export const useOnboardingStepsAnimations = () => {
   const {
@@ -31,7 +31,7 @@ export const useOnboardingStepsAnimations = () => {
   const handleNextAnimation = useCallback(() => {
     if (
       typeof stateMachineInput?.value === 'number' &&
-      stateMachineInput.value < animations.length - 1
+      stateMachineInput.value < animations.length
     ) {
       stateMachineInput.value += 1
       toNextAnimation()
