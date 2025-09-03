@@ -1,4 +1,4 @@
-import { RiskyTxInfo } from '@core/chain/security/blockaid/tx/validation/core'
+import { RiskyTxInfo } from '@core/chain/security/blockaid/tx/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'

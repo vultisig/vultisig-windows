@@ -1,4 +1,4 @@
-import { BlockaidTxScanResult as BlockaidTxScanResultType } from '@core/chain/security/blockaid/tx/validation/core'
+import { BlockaidTxScanResult as BlockaidTxScanResultType } from '@core/chain/security/blockaid/tx/core'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ValueProp } from '@lib/ui/props'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'

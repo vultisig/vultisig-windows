@@ -1,4 +1,4 @@
-import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/validation/input'
+import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockaidTxScanQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxScan'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
