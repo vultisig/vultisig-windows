@@ -2,7 +2,7 @@
   "ignore": [
     "core/mpc/types/**",
     "clients/desktop/wailsjs/**",
-    "core/ui/providers/ResponsivenessProivder.tsx"
+    "core/ui/providers/ResponsivenessProvider.tsx"
   ],
   "ignoreBinaries": ["tsx", "wails"],
   "entry": [
