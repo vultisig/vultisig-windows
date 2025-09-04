@@ -4,7 +4,7 @@ import { without } from '@lib/utils/array/without'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 import { BackgroundEventMessage, backgroundEventMsgType } from './core'
-import { backgroundEventSubscriptions } from './subscriptions'
+import { getAppSubscriptions } from './subscriptions'
 
 export const runBackgroundEventsAgent = () => {
   chrome.storage.onChanged.addListener(async (changes, areaName) => {
@@ -27,10 +27,8 @@ export const runBackgroundEventsAgent = () => {
 
     const removedApps = without(prevApps, ...nextApps)
 
-    removedApps.forEach(appId => {
-      if (!(appId in backgroundEventSubscriptions)) return
-
-      const subscriptions = backgroundEventSubscriptions[appId]
+    removedApps.forEach(async appId => {
+      const subscriptions = await getAppSubscriptions(appId)
 
       const subscriptionId = subscriptions.disconnect
 
