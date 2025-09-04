@@ -43,15 +43,15 @@ import { useTranslation } from 'react-i18next'
 
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
-  developerOptions: ReactNode
   expandView: ReactNode
+  insiderOptions: ReactNode
   prioritize: ReactNode
 }
 
 type DesktopSettings = {
   client: Extract<Client, 'desktop'>
   checkUpdate: ReactNode
-  manageMpcLib: ReactNode
+  insiderOptions: ReactNode
 }
 
 const iconSize = 20
@@ -234,8 +234,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          {props.client === 'extension' && props.developerOptions}
-          {props.client === 'desktop' && props.manageMpcLib}
+          {props.insiderOptions}
         </PageFooter>
       </VStack>
       {visible && (

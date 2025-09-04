@@ -1,3 +1,4 @@
+import { DeveloperOptions } from '@clients/extension/src/components/developer-options'
 import { pluginMarketplaceBaseUrl } from '@core/ui/plugins/config'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
@@ -8,32 +9,28 @@ import {
   useQuery,
 } from '@tanstack/react-query'
 
-export type DeveloperOptionsProps = {
-  pluginMarketplaceBaseUrl: string
+const developerOptionsQueryKey = ['developerOptions']
+const [key] = developerOptionsQueryKey
+
+const setDeveloperOptions = async (options: DeveloperOptions) => {
+  await setStorageValue<DeveloperOptions>(key, options)
 }
 
-const isDeveloperOptionsQueryKey = ['developerOptions']
-const [key] = isDeveloperOptionsQueryKey
-
-const setDeveloperOptions = async (options: DeveloperOptionsProps) => {
-  await setStorageValue<DeveloperOptionsProps>(key, options)
-}
-
-export const getDeveloperOptions = async () => {
-  return getStorageValue<DeveloperOptionsProps>(key, {
+const getDeveloperOptions = async () => {
+  return getStorageValue<DeveloperOptions>(key, {
     pluginMarketplaceBaseUrl,
   })
 }
 
 export const useDeveloperOptionsQuery = () => {
   return useQuery({
-    queryKey: isDeveloperOptionsQueryKey,
+    queryKey: developerOptionsQueryKey,
     queryFn: getDeveloperOptions,
   })
 }
 
 export const useSetDeveloperOptionsMutation = (
-  options?: UseMutationOptions<any, any, DeveloperOptionsProps, unknown>
+  options?: UseMutationOptions<any, any, DeveloperOptions, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
 
@@ -43,7 +40,7 @@ export const useSetDeveloperOptionsMutation = (
       return options
     },
     onSuccess: async () => {
-      await invalidate(isDeveloperOptionsQueryKey)
+      await invalidate(developerOptionsQueryKey)
     },
     ...options,
   })

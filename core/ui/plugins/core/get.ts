@@ -1,3 +1,4 @@
+import { pluginMarketplaceBaseUrl } from '@core/ui/plugins/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 type Plugin = {
@@ -11,5 +12,5 @@ type Plugin = {
   updated_at: string
 }
 
-export const getPlugin = async (baseURL: string, id: string) =>
-  queryUrl<Plugin>(`${baseURL}/plugins/${id}`)
+export const getPlugin = async (id: string) =>
+  queryUrl<Plugin>(`${pluginMarketplaceBaseUrl}/plugins/${id}`)

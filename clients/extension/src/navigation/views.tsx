@@ -41,7 +41,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   settings: () => (
     <SettingsPage
       client="extension"
-      developerOptions={<DeveloperOptions />}
+      insiderOptions={<DeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
     />

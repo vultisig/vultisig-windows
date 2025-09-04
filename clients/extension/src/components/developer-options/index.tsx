@@ -1,5 +1,4 @@
 import {
-  DeveloperOptionsProps,
   useDeveloperOptionsQuery,
   useSetDeveloperOptionsMutation,
 } from '@clients/extension/src/state/developerOptions'
@@ -22,6 +21,8 @@ const getSchema = (t: TFunction) =>
     pluginMarketplaceBaseUrl: z.string().url({ message: t('incorrect_url') }),
   })
 
+export type DeveloperOptions = z.infer<ReturnType<typeof getSchema>>
+
 export const DeveloperOptions = () => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
@@ -35,13 +36,13 @@ export const DeveloperOptions = () => {
     handleSubmit,
     setValue,
     formState: { errors, isValid },
-  } = useForm<DeveloperOptionsProps>({
+  } = useForm<DeveloperOptions>({
     defaultValues: options,
     mode: 'all',
     resolver: zodResolver(getSchema(t)),
   })
 
-  const onSubmit = (data: DeveloperOptionsProps) => {
+  const onSubmit = (data: DeveloperOptions) => {
     setOptions(data)
     setVisible(false)
   }
