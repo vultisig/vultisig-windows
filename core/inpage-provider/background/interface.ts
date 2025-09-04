@@ -6,6 +6,7 @@ import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
+import { BackgroundEvent } from './events/interface'
 
 type GetAppChainMethod<K extends ActiveChainKind = ActiveChainKind> = Method<
   { chainKind: K },
@@ -29,6 +30,7 @@ export type BackgroundInterface = {
     Token<CoinKey<ChainWithTokenMetadataDiscovery>>,
     CoinMetadata
   >
+  addEventListener: Method<{ event: BackgroundEvent }, string>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
