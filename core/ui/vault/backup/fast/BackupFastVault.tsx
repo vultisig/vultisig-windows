@@ -56,7 +56,7 @@ export const BackupFastVault = ({
       )}
       emailVerification={() => <EmailConfirmation onFinish={toNextStep} />}
       backupSlideshowPartTwo={() => (
-        <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
+        <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
       )}
       backupConfirmation={() => (
         <BackupConfirmation
