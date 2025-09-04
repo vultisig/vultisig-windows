@@ -1,6 +1,7 @@
 import { storage } from '@core/extension/storage'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@lib/utils/array/without'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 import { backgroundEventSubscriptions } from './subscriptions'
 
@@ -35,17 +36,25 @@ export const runBackgroundEventsEmitter = () => {
       if (!subscriptionId) return
 
       chrome.tabs?.query({ url: '*://*/*' }, tabs => {
-        for (const tab of tabs) {
-          if (!tab.id) continue
+        const targetTabs = without(
+          tabs.map(({ url, id }) => {
+            if (!url || getUrlBaseDomain(url) !== appId) return
+
+            return id
+          }),
+          undefined
+        )
+
+        targetTabs.forEach(tabId => {
           chrome.tabs.sendMessage(
-            tab.id,
+            tabId,
             {
               topic: '> backgroundEvents:emit',
               payload: { id: subscriptionId, value: undefined, host: appId },
             },
             () => {}
           )
-        }
+        })
       })
     })
   })
