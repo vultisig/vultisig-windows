@@ -19,6 +19,7 @@ import { FC } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
 import { useSendFormFieldState } from '../state/formFields'
 import { ChainOption } from './ChainOption'
 import { SendCoinInputField } from './SendCoinInputField'
@@ -32,6 +33,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
+  const sortedSwapCoinsForChain = useSortedByBalanceCoins(value)
 
   const handleAutoAdvance = () => {
     setFormFieldState(state => ({
@@ -85,9 +87,11 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                   </HStack>
                 </HStack>
               )}
-              filterFunction={(option, query) =>
-                option.ticker.toLowerCase().startsWith(query.toLowerCase())
-              }
+              filterFunction={(option, query) => {
+                return option.ticker
+                  .toLowerCase()
+                  .startsWith(query.toLowerCase())
+              }}
               title={t('select_asset')}
               optionComponent={CoinOption}
               onFinish={(newValue: CoinKey | undefined) => {
@@ -100,7 +104,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 }
                 setIsCoinModalOpen(false)
               }}
-              options={coins.filter(c => c.chain === coin?.chain)}
+              options={sortedSwapCoinsForChain}
             />
           )}
           {isChainModalOpen && (

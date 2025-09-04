@@ -2,7 +2,6 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'
@@ -11,9 +10,9 @@ import {
   useCurrentVaultCoins,
 } from '../../../state/currentVaultCoins'
 
-export const useSortedSwapCoins = (value: CoinKey) => {
+export const useSortedByBalanceCoins = (value: CoinKey) => {
   const coins = useCurrentVaultCoins()
-  const coin = shouldBePresent(useCurrentVaultCoin(value))
+  const coin = useCurrentVaultCoin(value)
 
   const coinsInSelectedChain = useMemo(
     () => coins.filter(c => c.chain === coin.chain),

@@ -28,7 +28,6 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
     isLoading,
   } = useOnboardingStepsAnimations()
   const { goBack } = useCore()
-  const fontSize = 28
 
   return (
     <StyledLayout fullSize justifyContent="space-between">
@@ -65,7 +64,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
           {match(currentAnimation, {
             0: () => (
               <>
-                <Text as="div" size={fontSize} centerHorizontally>
+                <Text as="div" size={28} centerHorizontally>
                   {t('sayHelloTo')}{' '}
                   <GradientText as="span">{`${t('vaultShares')},`}</GradientText>{' '}
                   {t('yourNewRecoveryMethod')}
@@ -74,7 +73,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
             ),
             1: () => (
               <>
-                <Text as="div" size={fontSize} centerHorizontally>
+                <Text as="div" size={28} centerHorizontally>
                   {t('theyRe')}{' '}
                   <GradientText as="span">{t('splitIntoParts')}</GradientText>{' '}
                   {`${t('toIncreaseSecurity')},`}{' '}
@@ -86,7 +85,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
             ),
             2: () => (
               <>
-                <Text as="div" size={fontSize} centerHorizontally>
+                <Text as="div" size={28} centerHorizontally>
                   <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
                   {t('inYourVaultHolds')}{' '}
                   <GradientText as="span">{t('oneVaultShare')}</GradientText>
@@ -95,7 +94,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
             ),
             3: () => (
               <>
-                <Text as="div" size={fontSize} centerHorizontally>
+                <Text as="div" size={28} centerHorizontally>
                   {t('recoverYourVault')}{' '}
                   <GradientText as="span">
                     {t('deviceLostOrDamaged')}
