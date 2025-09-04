@@ -56,7 +56,7 @@ export const getOneInchSwapQuote = async ({
 
   return {
     dstAmount,
-    provider: 'oneinch',
+    provider: '1inch',
     tx: {
       evm: {
         ...tx,

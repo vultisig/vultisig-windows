@@ -50,6 +50,7 @@ export const mapSwapPayload = (
                 : undefined,
             }
           : undefined,
+        provider: '1inch',
       },
     }
 
