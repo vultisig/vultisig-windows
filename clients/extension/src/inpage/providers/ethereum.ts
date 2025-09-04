@@ -6,6 +6,7 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -76,18 +77,11 @@ export class Ethereum extends EventEmitter {
           this.emit(EventMethod.CHAIN_CHANGED, chainId)
         }
       )
-      messengers.popup?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
+      addBackgroundEventListener('disconnect', () => {
         this.connected = false
         this.emit(EventMethod.ACCOUNTS_CHANGED, [])
         this.emit(EventMethod.DISCONNECT, [])
       })
-      messengers.popup?.reply(
-        `${EventMethod.CONNECT}:${host}`,
-        async connectionInfo => {
-          this.connected = true
-          this.emit(EventMethod.CONNECT, connectionInfo)
-        }
-      )
     }
   }
 
