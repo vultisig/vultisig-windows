@@ -643,7 +643,6 @@ export const de = {
       'Fehler beim Abrufen der neuesten Version: {{error}}',
     fetchingLatestVersion: 'Neueste Version wird abgerufen...',
     applicationUpToDate: 'Anwendung ist auf dem neuesten Stand.',
-    newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
     currentVersion: '{{localVersion}}',
     title: 'Update prüfen',
     version: 'Version {{latestVersion}}',
@@ -831,7 +830,6 @@ export const de = {
   get_vault_failed: 'Tresore konnten nicht abgerufen werden',
   get_vault_failed_description:
     'Stellen Sie sicher, dass Sie Ihre Tresore bereits in VultiConnect importiert haben',
-  connect_with_vultisig: 'Verbinden Sie sich mit Vultisig',
   select_vault: 'Wählen Sie einen Tresor aus',
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
@@ -1036,9 +1034,6 @@ export const de = {
   search: 'Suchen',
   create_referral_form: 'Empfehlung erstellen',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
-  transaction_not_scanned:
-    'Transaktion nicht von <provider></provider> gescannt',
-  transaction_scanned: 'Transaktion gescannt von <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
   scanning: 'Scannen...',
@@ -1053,4 +1048,21 @@ export const de = {
     'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Das Fortsetzen dieser Transaktion kann zu einem <b>irreversiblen Verlust von Geldern</b> führen.',
   go_back: 'Geh zurück',
   continue_anyway: 'Trotzdem fortfahren',
+  stake_ruji: 'Pfahl RUJI',
+  unstake_ruji: 'Lösen Sie RUJI',
+  withdraw_ruji_rewards: 'RUJI-Prämien abheben',
+  tns_max_4_chars: 'Der Empfehlungscode darf nicht länger als 4 Zeichen sein',
+  tns_alnum_only:
+    'Der Empfehlungscode darf nur alphanumerische Zeichen enthalten',
+  tns_not_found: 'Empfehlungscode nicht gefunden',
+  tns_missing_thor_alias:
+    'Der Empfehlungscode muss einen THOR-Kettenalias haben',
+  site: 'Website',
+  send_receiver_address_same_as_sender:
+    'Empfängeradresse darf nicht mit Absenderadresse identisch sein',
+  connect_to_site: 'Verbinden Sie sich mit {{site}}',
+  entity_not_scanned: '{{entity}} nicht von <provider></provider> gescannt',
+  entity_scanned: '{{entity}} gescannt von <provider></provider>',
+  site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
+  risky_site_detected: 'Schädliche Site erkannt',
 }

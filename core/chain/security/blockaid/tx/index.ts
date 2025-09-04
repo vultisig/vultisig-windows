@@ -1,6 +1,6 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { BlockaidSupportedChain } from '../../chains'
+import { BlockaidSupportedChain } from '../chains'
 import { BlockaidValidation } from './api/core'
 import {
   BlockaidTxValidationInput,

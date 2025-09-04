@@ -1,14 +1,14 @@
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useTranslation } from 'react-i18next'
 
-import { BlockaidTxStatusContainer } from './BlockaidTxStatusContainer'
+import { BlockaidScanStatusContainer } from './BlockaidScanStatusContainer'
 
-export const BlockaidTxScanning = () => {
+export const BlockaidScanning = () => {
   const { t } = useTranslation()
   return (
-    <BlockaidTxStatusContainer>
+    <BlockaidScanStatusContainer>
       <Spinner kind="secondary" />
       {t('scanning')}
-    </BlockaidTxStatusContainer>
+    </BlockaidScanStatusContainer>
   )
 }

@@ -2,7 +2,7 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { Resolver } from '@lib/utils/types/Resolver'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { BlockaidSupportedChain } from '../../../chains'
+import { BlockaidSupportedChain } from '../../chains'
 import { BlockaidTxValidationInput } from '../resolver'
 
 export type BlockaidTxValidationInputResolverInput<

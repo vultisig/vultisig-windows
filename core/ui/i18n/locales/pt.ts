@@ -640,7 +640,6 @@ export const pt = {
       'Erro ao buscar a versão mais recente: {{error}}',
     fetchingLatestVersion: 'Buscando a versão mais recente...',
     applicationUpToDate: 'O aplicativo está atualizado.',
-    newVersionAvailable: 'Uma nova versão ({{latestVersion}}) está disponível!',
     currentVersion: '{{localVersion}}',
     title: 'Verificar atualização',
     version: 'Versão {{latestVersion}}',
@@ -819,7 +818,6 @@ export const pt = {
   get_vault_failed: 'Falha ao obter os cofres',
   get_vault_failed_description:
     'Certifique-se de que já importou seus cofres no VultiConnect',
-  connect_with_vultisig: 'Conecte-se com Vultisig',
   select_vault: 'Selecione um cofre',
   connect: 'Conectar',
   link_copied: 'Link copiado para a área de transferência',
@@ -1021,8 +1019,6 @@ export const pt = {
   search: 'Procurar',
   create_referral_form: 'Criar referência',
   blockaid_security_scan: 'Verificação de segurança Blockaid',
-  transaction_not_scanned: 'Transação não escaneada por <provider></provider>',
-  transaction_scanned: 'Transação escaneada por <provider></provider>',
   transaction_has_risk:
     'Transação de risco {{riskLevel}} detectada por <provider></provider>',
   scanning: 'escaneando...',
@@ -1037,4 +1033,21 @@ export const pt = {
     'Esta transação IBC inclui um memorando, mas o Vultisig atualmente não suporta a incorporação de memorandos dentro de mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
   go_back: 'Volte',
   continue_anyway: 'Continue assim mesmo',
+  stake_ruji: 'Estaca RUJI',
+  unstake_ruji: 'Desencaixar RUJI',
+  withdraw_ruji_rewards: 'Saque Recompensas RUJI',
+  tns_max_4_chars: 'O código de referência não deve ter mais de 4 caracteres',
+  tns_alnum_only:
+    'O código de referência deve conter apenas caracteres alfanuméricos',
+  tns_not_found: 'Código de referência não encontrado',
+  tns_missing_thor_alias:
+    'O código de referência deve ter um alias da cadeia THOR',
+  site: 'Site',
+  send_receiver_address_same_as_sender:
+    'O endereço do destinatário não pode ser o mesmo que o endereço do remetente',
+  connect_to_site: 'Conectar ao {{site}}',
+  entity_not_scanned: '{{entity}} não escaneado por <provider></provider>',
+  entity_scanned: '{{entity}} escaneado por <provider></provider>',
+  site_has_risk: 'Site malicioso detectado por <provider></provider>',
+  risky_site_detected: 'Site malicioso detectado',
 }

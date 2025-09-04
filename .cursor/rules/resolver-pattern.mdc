@@ -138,7 +138,7 @@ export type DoXResolver<T extends Chain = Chain> = Resolver<
 - Supported subset validation:
   - `@find/`: `core/chain/coin/find/index.ts` with `chains.ts`-like constraints
 - Optional return contract:
-  - `@validation/input/`: `core/chain/security/blockaid/tx/validation/input/index.ts` returns `null` when unsupported
+  - `@validation/input/`: `core/chain/security/blockaid/tx/input/index.ts` returns `null` when unsupported
 - Complex per-chain specifics and unions:
   - `@chainSpecific/`: `core/mpc/keysign/chainSpecific/index.ts`
   - `@txInputData/`: `core/mpc/keysign/txInputData/index.ts`

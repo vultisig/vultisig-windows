@@ -9,7 +9,7 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { signatureFormats } from '../../../../../signing/SignatureFormat'
+import { signatureFormats } from '../../../../signing/SignatureFormat'
 
 type Input = {
   payload: KeysignPayload

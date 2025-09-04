@@ -1,7 +1,7 @@
 import { text } from '@lib/ui/text'
 import styled from 'styled-components'
 
-export const BlockaidTxStatusContainer = styled.p`
+export const BlockaidScanStatusContainer = styled.p`
   ${text({
     centerVertically: {
       gap: 2,
