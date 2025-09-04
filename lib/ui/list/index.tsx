@@ -10,11 +10,12 @@ const StyledList = styled.div<{ bordered?: boolean }>`
   gap: 1px;
   overflow: hidden;
   ${({ bordered }) => {
-    return bordered
-      ? css`
-          border: solid 1px ${getColor('foregroundExtra')};
-        `
-      : css``
+    return (
+      bordered &&
+      css`
+        border: solid 1px ${getColor('foregroundExtra')};
+      `
+    )
   }}
 `
 
