@@ -10,3 +10,5 @@ export const addBackgroundEventListener = async <T extends BackgroundEvent>(
   const subscriptionId = await callBackground({ addEventListener: { event } })
   subscriptions[subscriptionId] = handler
 }
+
+export const runBackgroundEventsInpageRouter = () => {}
