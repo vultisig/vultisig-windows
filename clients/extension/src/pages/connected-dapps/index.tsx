@@ -18,6 +18,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { useTranslation } from 'react-i18next'
 
 export const ConnectedDappsPage = () => {
@@ -59,7 +60,7 @@ export const ConnectedDappsPage = () => {
                       onClick={() =>
                         removeSession({
                           vaultId,
-                          host: session.url,
+                          host: getUrlBaseDomain(session.url),
                         })
                       }
                       status="danger"
