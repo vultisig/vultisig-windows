@@ -1,5 +1,5 @@
-import { getPrioritizeWallet } from '@clients/extension/src/state/currentSettings/isPrioritized'
 import { getTokenMetadata } from '@core/chain/coin/token/metadata'
+import { getIsWalletPrioritized } from '@core/extension/storage/isWalletPrioritized'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
@@ -26,5 +26,5 @@ export const backgroundResolvers: BackgroundResolvers = {
   exportVault,
   getTx,
   getTokenMetadata: ({ input }) => getTokenMetadata(input),
-  getIsPrioritizedWallet: () => getPrioritizeWallet(),
+  getIsWalletPrioritized: () => getIsWalletPrioritized(),
 }

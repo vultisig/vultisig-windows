@@ -29,7 +29,7 @@ export type BackgroundInterface = {
     Token<CoinKey<ChainWithTokenMetadataDiscovery>>,
     CoinMetadata
   >
-  getIsPrioritizedWallet: Method<{}, boolean>
+  getIsWalletPrioritized: Method<{}, boolean>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

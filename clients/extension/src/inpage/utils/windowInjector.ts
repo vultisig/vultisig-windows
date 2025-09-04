@@ -57,7 +57,7 @@ async function setupContentScriptMessenger(
   }
 
   const vultisigDefaultProvider = await callBackground({
-    getIsPrioritizedWallet: {},
+    getIsWalletPrioritized: {},
   })
 
   if (vultisigDefaultProvider) {
