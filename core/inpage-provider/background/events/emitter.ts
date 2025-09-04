@@ -25,10 +25,10 @@ export const runBackgroundEventsEmitter = () => {
 
     const removedApps = without(prevApps, ...nextApps)
 
-    removedApps.forEach(app => {
-      if (!(app in backgroundEventSubscriptions)) return
+    removedApps.forEach(appId => {
+      if (!(appId in backgroundEventSubscriptions)) return
 
-      const subscriptions = backgroundEventSubscriptions[app]
+      const subscriptions = backgroundEventSubscriptions[appId]
 
       const subscriptionId = subscriptions.disconnect
 
@@ -41,7 +41,7 @@ export const runBackgroundEventsEmitter = () => {
             tab.id,
             {
               topic: '> backgroundEvents:emit',
-              payload: { id: subscriptionId, value: undefined, host: app },
+              payload: { id: subscriptionId, value: undefined, host: appId },
             },
             () => {}
           )
