@@ -12,10 +12,8 @@ const getAllSubscriptions = async (): Promise<BackgroundEventSubscriptions> =>
 
 export const getAppSubscriptions = async (
   appId: string
-): Promise<Partial<Record<BackgroundEvent, string>>> => {
-  const all = (await chrome.storage.session.get(key)) ?? {}
-  return all[appId] ?? {}
-}
+): Promise<Partial<Record<BackgroundEvent, string>>> =>
+  (await getAllSubscriptions())[appId] ?? {}
 
 type AddAppSubscriptionInput = {
   appId: string
@@ -26,20 +24,20 @@ export const addAppSubscription = async ({
   appId,
   event,
 }: AddAppSubscriptionInput): Promise<string> => {
-  const all = await getAllSubscriptions()
-  const appSubs = all[appId] ?? {}
+  const allSubscriptions = await getAllSubscriptions()
+  const appSubscriptions = allSubscriptions[appId] ?? {}
 
-  const existing = appSubs[event]
+  const existing = appSubscriptions[event]
   if (existing) return existing
 
   const id = crypto.randomUUID()
 
   await chrome.storage.session.set({
     [key]: {
-      ...all,
+      ...allSubscriptions,
       [appId]: {
-        ...appSubs,
-        [event]: crypto.randomUUID(),
+        ...appSubscriptions,
+        [event]: id,
       },
     },
   })
