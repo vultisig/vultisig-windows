@@ -6,7 +6,7 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
-import { addBackgroundEventListener } from '@core/inpage-provider/background/events'
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
