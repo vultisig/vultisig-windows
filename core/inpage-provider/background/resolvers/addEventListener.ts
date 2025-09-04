@@ -8,6 +8,9 @@ export const addEventListener: BackgroundResolver<'addEventListener'> = async ({
   input: { event },
 }) => {
   const appId = getUrlBaseDomain(requestOrigin)
+  if (!backgroundEventSubscriptions[appId]) {
+    backgroundEventSubscriptions[appId] = {}
+  }
   if (!backgroundEventSubscriptions[appId][event]) {
     backgroundEventSubscriptions[appId][event] = crypto.randomUUID()
   }
