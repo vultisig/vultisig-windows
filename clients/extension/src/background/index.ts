@@ -1,4 +1,4 @@
-import { runBackgroundEventsEmitter } from '@core/inpage-provider/background/events/emitter'
+import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
 import { keepAliveHandler } from './handlers/keepAliveHandler'
@@ -24,4 +24,4 @@ keepAliveHandler()
 
 runInpageProviderBridgeBackgroundAgent()
 
-runBackgroundEventsEmitter()
+runBackgroundEventsAgent()

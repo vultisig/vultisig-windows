@@ -6,7 +6,7 @@ import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { BackgroundEventMessage, backgroundEventMsgType } from './core'
 import { backgroundEventSubscriptions } from './subscriptions'
 
-export const runBackgroundEventsEmitter = () => {
+export const runBackgroundEventsAgent = () => {
   chrome.storage.onChanged.addListener(async (changes, areaName) => {
     if (areaName !== 'local') return
 

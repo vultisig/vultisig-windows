@@ -12,7 +12,7 @@ export const addBackgroundEventListener = async <T extends BackgroundEvent>(
   subscriptions[subscriptionId] = handler
 }
 
-export const runBackgroundEventsInpageRouter = () => {
+export const runBackgroundEventsInpageAgent = () => {
   window.addEventListener('message', ({ source, origin, data }) => {
     if (source !== window || origin !== window.origin) return
 

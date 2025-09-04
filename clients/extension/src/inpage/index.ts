@@ -1,4 +1,4 @@
-import { runBackgroundEventsInpageRouter } from '@core/inpage-provider/background/events/inpage'
+import { runBackgroundEventsInpageAgent } from '@core/inpage-provider/background/events/inpage'
 import { runBridgeInpageAgent } from '@lib/extension/bridge/inpage'
 
 import { messengers } from './messenger'
@@ -14,7 +14,7 @@ const keepAlive = () => {
 if (shouldInjectProvider()) {
   runBridgeInpageAgent()
 
-  runBackgroundEventsInpageRouter()
+  runBackgroundEventsInpageAgent()
 
   injectToWindow()
   keepAlive()
