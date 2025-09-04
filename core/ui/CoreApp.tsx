@@ -1,3 +1,11 @@
+import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
+import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
+import { CoreProvider, CoreState } from '@core/ui/state/core'
+import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
+import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
+import { CoinsMetadataManager } from '@core/ui/vault/chain/coin/metadata/CoinsMetadataManager'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -8,22 +16,13 @@ import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import React from 'react'
 import styled from 'styled-components'
 
-import { WalletCoreProvider } from './chain/providers/WalletCoreProvider'
-import { PasscodeGuard } from './passcodeEncryption/guard/PasscodeGuard'
-import { ResponsivenessProvider } from './providers/ResponsivenessProivder'
-import { CoreProvider, CoreState } from './state/core'
-import { StorageDependant } from './storage/StorageDependant'
-import { ActiveVaultOnly } from './vault/ActiveVaultOnly'
-import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
-import { CoinsMetadataManager } from './vault/chain/coin/metadata/CoinsMetadataManager'
-
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
 }
 
 const Container = styled.div`
-  ${vStack({ fullSize: true, scrollable: true })}
+  ${vStack({ fullSize: true, position: 'relative', scrollable: true })}
   isolation: isolate;
 `
 
