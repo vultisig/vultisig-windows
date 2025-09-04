@@ -1,3 +1,4 @@
+import { runBackgroundEventsContentAgent } from '@core/inpage-provider/background/events/content'
 import { runBridgeContentAgent } from '@lib/extension/bridge/content'
 
 import { setupBridgeMessengerRelay } from '../messengers/bridge'
@@ -19,6 +20,7 @@ const insertInpageScript = () => {
 }
 try {
   runBridgeContentAgent()
+  runBackgroundEventsContentAgent()
 
   insertInpageScript()
   setupBridgeMessengerRelay()

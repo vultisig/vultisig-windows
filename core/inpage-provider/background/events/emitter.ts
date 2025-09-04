@@ -3,6 +3,7 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@lib/utils/array/without'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
+import { BackgroundEventMessage, backgroundEventMsgType } from './core'
 import { backgroundEventSubscriptions } from './subscriptions'
 
 export const runBackgroundEventsEmitter = () => {
@@ -46,14 +47,11 @@ export const runBackgroundEventsEmitter = () => {
         )
 
         targetTabs.forEach(tabId => {
-          chrome.tabs.sendMessage(
-            tabId,
-            {
-              topic: '> backgroundEvents:emit',
-              payload: { id: subscriptionId, value: undefined, host: appId },
-            },
-            () => {}
-          )
+          const message: BackgroundEventMessage = {
+            type: backgroundEventMsgType,
+            subscriptionId,
+          }
+          chrome.tabs.sendMessage(tabId, message)
         })
       })
     })
