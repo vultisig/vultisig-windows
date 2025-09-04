@@ -27,7 +27,7 @@ export const runBackgroundEventsAgent = () => {
 
     const removedApps = without(prevApps, ...nextApps)
 
-    removedApps.forEach(async appId => {
+    for (const appId of removedApps) {
       const subscriptions = await getAppSubscriptions(appId)
 
       const subscriptionId = subscriptions.disconnect
@@ -52,6 +52,6 @@ export const runBackgroundEventsAgent = () => {
           chrome.tabs.sendMessage(tabId, message)
         })
       })
-    })
+    }
   })
 }

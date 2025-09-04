@@ -7,8 +7,16 @@ type BackgroundEventSubscriptions = Record<
 
 const key = 'backgroundEventSubscriptions'
 
-const getAllSubscriptions = async (): Promise<BackgroundEventSubscriptions> =>
-  (await chrome.storage.session.get(key)) ?? {}
+const getAllSubscriptions = async (): Promise<BackgroundEventSubscriptions> => {
+  const result = await chrome.storage.session.get(key)
+
+  const value = result[key]
+  if (value === undefined) {
+    return {}
+  }
+
+  return value
+}
 
 export const getAppSubscriptions = async (
   appId: string
