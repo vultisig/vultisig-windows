@@ -17,10 +17,10 @@ import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
 import { useAutoDiscoverTokens } from '../../../chain/hooks/useAutoDiscoverTokens'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
+import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { useToCoin } from '../state/toCoin'
 import { useScrollSelectedChainIntoView } from './hooks/useScrollSelectedChainIntoView'
-import { useSortedSwapCoins } from './hooks/useSortedSwapCoins'
 
 export const SwapCoinsExplorer = ({
   onChange,
@@ -44,7 +44,7 @@ export const SwapCoinsExplorer = ({
       chain: currentChain,
     })
 
-  const sortedSwapCoins = useSortedSwapCoins(value)
+  const sortedSwapCoins = useSortedByBalanceCoins(value)
   const { discoveredCoins, ensureSaved } = useAutoDiscoverTokens({
     chain: currentChain,
   })
