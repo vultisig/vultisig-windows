@@ -47,6 +47,7 @@ import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 
+import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
 import { getKeysignPayload } from './core/getKeySignPayload'
 import { parseSolanaTx } from './core/solana/parser'
@@ -68,6 +69,7 @@ const splitString = (str: string, size: number): string[] => {
 export const SendTxOverview = () => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+  const { requestOrigin } = usePopupContext()
   const [updatedTxFee, setUpdatedTxFee] = useState<string | null>(null)
   const [updatedGasLimit, setUpdatedGasLimit] = useState<number | null>(null)
   const handleClose = (): void => {
@@ -178,13 +180,14 @@ export const SendTxOverview = () => {
               if (!parsed) {
                 throw new Error('Could not parse transaction')
               }
-              return await getSolanaKeysignPayload(
+              return await getSolanaKeysignPayload({
                 parsed,
                 serialized,
                 vault,
                 walletCore,
-                skipBroadcast
-              )
+                skipBroadcast,
+                requestOrigin,
+              })
             }
           },
         }

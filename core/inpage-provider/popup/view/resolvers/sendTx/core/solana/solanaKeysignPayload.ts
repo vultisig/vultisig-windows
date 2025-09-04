@@ -15,6 +15,7 @@ import {
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
@@ -41,13 +42,23 @@ const resolveTokenFromMint = async (mint: string): Promise<Coin> => {
   }
 }
 
-export const getSolanaKeysignPayload = (
-  parsed: ParsedResult,
-  serialized: Uint8Array,
-  vault: Vault,
-  walletCore: WalletCore,
+type GetSolanaKeysignPayloadInput = {
+  parsed: ParsedResult
+  serialized: Uint8Array
+  vault: Vault
+  walletCore: WalletCore
   skipBroadcast?: boolean
-): Promise<KeysignPayload> => {
+  requestOrigin: string
+}
+
+export const getSolanaKeysignPayload = ({
+  parsed,
+  serialized,
+  vault,
+  walletCore,
+  skipBroadcast,
+  requestOrigin,
+}: GetSolanaKeysignPayloadInput): Promise<KeysignPayload> => {
   return new Promise((resolve, reject) => {
     ;(async () => {
       try {
@@ -104,6 +115,7 @@ export const getSolanaKeysignPayload = (
           const outputToken = await resolveTokenFromMint(parsed.outputMint)
 
           swapPayload = create(OneInchSwapPayloadSchema, {
+            provider: getUrlBaseDomain(requestOrigin),
             fromCoin: {
               address: parsed.authority,
               chain: Chain.Solana,

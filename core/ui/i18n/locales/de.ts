@@ -19,6 +19,7 @@ export const de = {
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
   save_code: 'Code speichern',
+  sent: 'Gesendet',
   used_referral_error:
     'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
   your_referral_code: 'Dein Empfehlungscode',

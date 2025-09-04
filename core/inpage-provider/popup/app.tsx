@@ -12,6 +12,7 @@ import { usePopupCallId, useResolvePopupCallMutation } from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
 import { PopupResolvers } from './view/resolvers'
 import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
+import { PopupContextProvider } from './view/state/context'
 import { PopupInputProvider } from './view/state/input'
 
 export const PopupApp = () => {
@@ -54,13 +55,15 @@ export const PopupApp = () => {
             targetVaultId={context?.appSession?.vaultId}
           >
             <VaultsOnly>
-              <PopupInputProvider value={input}>
-                <Resolver
-                  input={input}
-                  context={context as any}
-                  onFinish={resolvePopupCall}
-                />
-              </PopupInputProvider>
+              <PopupContextProvider value={context}>
+                <PopupInputProvider value={input}>
+                  <Resolver
+                    input={input}
+                    context={context as any}
+                    onFinish={resolvePopupCall}
+                  />
+                </PopupInputProvider>
+              </PopupContextProvider>
             </VaultsOnly>
           </ExtensionCoreApp>
         )
