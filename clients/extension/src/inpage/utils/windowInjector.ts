@@ -7,7 +7,6 @@ import { callPopup } from '@core/inpage-provider/popup'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getPrioritizeWallet } from '../../state/currentSettings/isPrioritized'
 import { UTXO } from '../providers/utxo'
 
 export const injectToWindow = () => {
@@ -57,7 +56,9 @@ async function setupContentScriptMessenger(
     solana: providers.solana,
   }
 
-  const vultisigDefaultProvider = await getPrioritizeWallet()
+  const vultisigDefaultProvider = await callBackground({
+    getIsPrioritizedWallet: {},
+  })
 
   if (vultisigDefaultProvider) {
     const providerCopy = Object.create(

@@ -31,6 +31,7 @@ export type BackgroundInterface = {
     CoinMetadata
   >
   addEventListener: Method<{ event: BackgroundEvent }, string>
+  getIsPrioritizedWallet: Method<{}, boolean>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
