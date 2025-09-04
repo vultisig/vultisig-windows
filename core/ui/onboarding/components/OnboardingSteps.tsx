@@ -62,7 +62,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
       <Footer alignItems="center" gap={32}>
         <AnimatedVisibility>
           {match(currentAnimation, {
-            0: () => (
+            1: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   {t('sayHelloTo')}{' '}
@@ -71,7 +71,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
                 </Text>
               </>
             ),
-            1: () => (
+            2: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   {t('theyRe')}{' '}
@@ -83,7 +83,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
                 </Text>
               </>
             ),
-            2: () => (
+            3: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
@@ -92,7 +92,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
                 </Text>
               </>
             ),
-            3: () => (
+            4: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   {t('recoverYourVault')}{' '}
@@ -102,7 +102,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
                 </Text>
               </>
             ),
-            4: () => (
+            5: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   <GradientText as="span">
@@ -115,7 +115,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
                 </Text>
               </>
             ),
-            5: () => (
+            6: () => (
               <>
                 <Text as="div" size={28} centerHorizontally>
                   {t('theseSharesCollaborate')}{' '}
