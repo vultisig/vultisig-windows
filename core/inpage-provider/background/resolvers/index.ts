@@ -3,7 +3,6 @@ import { getTokenMetadata } from '@core/chain/coin/token/metadata'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
-import { addEventListener } from './addEventListener'
 import { evmClientRequest } from './evmClientRequest'
 import { exportVault } from './exportVault'
 import { getAccount } from './getAccount'
@@ -28,5 +27,4 @@ export const backgroundResolvers: BackgroundResolvers = {
   getTx,
   getTokenMetadata: ({ input }) => getTokenMetadata(input),
   getIsPrioritizedWallet: () => getPrioritizeWallet(),
-  addEventListener,
 }

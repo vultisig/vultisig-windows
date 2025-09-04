@@ -1,4 +1,3 @@
-import { callBackground } from '..'
 import { isBackgroundEventMessage } from './core'
 import { BackgroundEvent, BackgroundEventsInterface } from './interface'
 
@@ -8,11 +7,7 @@ export const addBackgroundEventListener = async <T extends BackgroundEvent>(
   event: T,
   handler: (value: BackgroundEventsInterface[T]) => void
 ) => {
-  const subscriptionId = await callBackground({ addEventListener: { event } })
-  subscriptions[subscriptionId] = [
-    ...(subscriptions[subscriptionId] ?? []),
-    handler,
-  ]
+  subscriptions[event] = [...(subscriptions[event] ?? []), handler]
 }
 
 export const runBackgroundEventsInpageAgent = () => {
@@ -21,7 +16,7 @@ export const runBackgroundEventsInpageAgent = () => {
 
     if (!isBackgroundEventMessage(data)) return
 
-    const handlers = subscriptions[data.subscriptionId]
+    const handlers = subscriptions[data.event]
     if (handlers) {
       handlers.forEach(handler => handler(data.value as any))
     }

@@ -1,8 +1,10 @@
+import { BackgroundEvent } from './interface'
+
 export const backgroundEventMsgType = 'backgroundEvent'
 
 export type BackgroundEventMessage = {
   type: typeof backgroundEventMsgType
-  subscriptionId: string
+  event: BackgroundEvent
   value?: unknown
 }
 

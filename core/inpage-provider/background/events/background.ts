@@ -4,7 +4,6 @@ import { without } from '@lib/utils/array/without'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
 import { BackgroundEventMessage, backgroundEventMsgType } from './core'
-import { getAppSubscriptions } from './subscriptions'
 
 export const runBackgroundEventsAgent = () => {
   chrome.storage.onChanged.addListener(async (changes, areaName) => {
@@ -28,12 +27,6 @@ export const runBackgroundEventsAgent = () => {
     const removedApps = without(prevApps, ...nextApps)
 
     for (const appId of removedApps) {
-      const subscriptions = await getAppSubscriptions(appId)
-
-      const subscriptionId = subscriptions.disconnect
-
-      if (!subscriptionId) return
-
       chrome.tabs?.query({ url: '*://*/*' }, tabs => {
         const targetTabs = without(
           tabs.map(({ url, id }) => {
@@ -47,7 +40,7 @@ export const runBackgroundEventsAgent = () => {
         targetTabs.forEach(tabId => {
           const message: BackgroundEventMessage = {
             type: backgroundEventMsgType,
-            subscriptionId,
+            event: 'disconnect',
           }
           chrome.tabs.sendMessage(tabId, message)
         })
