@@ -1,3 +1,4 @@
+import { runBackgroundEventsEmitter } from '@core/inpage-provider/background/events/emitter'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
 import { keepAliveHandler } from './handlers/keepAliveHandler'
@@ -22,3 +23,5 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
 keepAliveHandler()
 
 runInpageProviderBridgeBackgroundAgent()
+
+runBackgroundEventsEmitter()
