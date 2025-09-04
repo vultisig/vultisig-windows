@@ -3,7 +3,6 @@ import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
-import { EventMethod } from '../../utils/constants'
 import { Callback } from '../constants'
 import { getSharedHandlers } from './core/sharedHandlers'
 
@@ -20,10 +19,6 @@ export class Dash extends EventEmitter {
       Dash.instance = new Dash()
     }
     return Dash.instance
-  }
-
-  emitAccountsChanged() {
-    this.emit(EventMethod.ACCOUNTS_CHANGED, {})
   }
 
   async request(data: RequestInput, callback?: Callback) {
