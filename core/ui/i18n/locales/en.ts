@@ -455,6 +455,7 @@ export const en = {
   tx_hash: 'Transaction hash',
   asset: 'Asset',
   balance: 'Balance',
+  sent: 'Sent',
   staked: 'Staked',
   failed_to_load: 'Failed to load',
   enter_address: 'Enter Address',

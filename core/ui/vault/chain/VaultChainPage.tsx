@@ -175,9 +175,9 @@ export const VaultChainPage = () => {
                 (one, another) => one.ticker === another.ticker
               ).map(adjustVaultChainCoinsLogos)
 
-              return orderedCoins.map(coin => (
+              return orderedCoins.map((coin, idx) => (
                 <UnstyledButton
-                  key={coin.id}
+                  key={`${idx}-${coin.id}`}
                   onClick={() =>
                     navigate({
                       id: 'vaultChainCoinDetail',

@@ -2,54 +2,50 @@
 // @generated from file vultisig/keysign/v1/custom_message_payload.proto (package vultisig.keysign.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
-import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
-import type { Message } from '@bufbuild/protobuf'
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file vultisig/keysign/v1/custom_message_payload.proto.
  */
-export const file_vultisig_keysign_v1_custom_message_payload: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    'CjB2dWx0aXNpZy9rZXlzaWduL3YxL2N1c3RvbV9tZXNzYWdlX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEikwEKFEN1c3RvbU1lc3NhZ2VQYXlsb2FkEg4KBm1ldGhvZBgBIAEoCRIPCgdtZXNzYWdlGAIgASgJEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYAyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYBCABKAkSEgoFY2hhaW4YBSABKAlIAIgBAUIICgZfY2hhaW5CVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z'
-  )
+export const file_vultisig_keysign_v1_custom_message_payload: GenFile = /*@__PURE__*/
+  fileDesc("CjB2dWx0aXNpZy9rZXlzaWduL3YxL2N1c3RvbV9tZXNzYWdlX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEikwEKFEN1c3RvbU1lc3NhZ2VQYXlsb2FkEg4KBm1ldGhvZBgBIAEoCRIPCgdtZXNzYWdlGAIgASgJEh4KFnZhdWx0X3B1YmxpY19rZXlfZWNkc2EYAyABKAkSHAoUdmF1bHRfbG9jYWxfcGFydHlfaWQYBCABKAkSEgoFY2hhaW4YBSABKAlIAIgBAUIICgZfY2hhaW5CVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z");
 
 /**
  * @generated from message vultisig.keysign.v1.CustomMessagePayload
  */
-export type CustomMessagePayload =
-  Message<'vultisig.keysign.v1.CustomMessagePayload'> & {
-    /**
-     * @generated from field: string method = 1;
-     */
-    method: string
+export type CustomMessagePayload = Message<"vultisig.keysign.v1.CustomMessagePayload"> & {
+  /**
+   * @generated from field: string method = 1;
+   */
+  method: string;
 
-    /**
-     * @generated from field: string message = 2;
-     */
-    message: string
+  /**
+   * @generated from field: string message = 2;
+   */
+  message: string;
 
-    /**
-     * @generated from field: string vault_public_key_ecdsa = 3;
-     */
-    vaultPublicKeyEcdsa: string
+  /**
+   * @generated from field: string vault_public_key_ecdsa = 3;
+   */
+  vaultPublicKeyEcdsa: string;
 
-    /**
-     * @generated from field: string vault_local_party_id = 4;
-     */
-    vaultLocalPartyId: string
+  /**
+   * @generated from field: string vault_local_party_id = 4;
+   */
+  vaultLocalPartyId: string;
 
-    /**
-     * @generated from field: optional string chain = 5;
-     */
-    chain?: string
-  }
+  /**
+   * @generated from field: optional string chain = 5;
+   */
+  chain?: string;
+};
 
 /**
  * Describes the message vultisig.keysign.v1.CustomMessagePayload.
  * Use `create(CustomMessagePayloadSchema)` to create a new message.
  */
-export const CustomMessagePayloadSchema: GenMessage<CustomMessagePayload> =
-  /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_custom_message_payload, 0)
+export const CustomMessagePayloadSchema: GenMessage<CustomMessagePayload> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_custom_message_payload, 0);
+
