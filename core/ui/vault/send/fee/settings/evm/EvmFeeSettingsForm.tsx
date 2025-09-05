@@ -100,7 +100,6 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
                 gasLimit ??
                 getEvmGasLimit({
                   chain,
-                  isNativeToken: true,
                 }),
             })
           }

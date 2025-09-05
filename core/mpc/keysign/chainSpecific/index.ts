@@ -17,7 +17,7 @@ import { getTonSpecific } from './resolvers/ton'
 import { getTronSpecific } from './resolvers/tron'
 import { getUtxoSpecific } from './resolvers/utxo'
 
-const resolvers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
+const resolvers: Record<KeysignChainSpecificKey, ChainSpecificResolver<any>> = {
   ethereumSpecific: getEthereumSpecific,
   utxoSpecific: getUtxoSpecific,
   thorchainSpecific: getThorchainSpecific,
