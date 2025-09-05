@@ -8,6 +8,8 @@ import {
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { getEvmDefaultPriorityFee } from '@core/chain/tx/fee/evm/getEvmDefaultPriorityFee'
+import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -36,10 +38,12 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits, toUtf8String } from 'ethers'
@@ -67,13 +71,70 @@ const splitString = (str: string, size: number): string[] => {
 }
 
 export const SendTxOverview = () => {
+  const transactionPayload = usePopupInput<'sendTx'>()
+
+  const query = useQuery({
+    queryKey: ['inpage-provider-sendTxOverview'],
+    queryFn: async (): Promise<FeeSettings | null> => {
+      const { chain } = getRecordUnionValue(transactionPayload)
+      if (isChainOfKind(chain, 'utxo')) {
+        return { priority: 'fast' }
+      }
+
+      return matchRecordUnion(transactionPayload, {
+        keysign: async transaction => {
+          if (!isChainOfKind(chain, 'evm')) {
+            return null
+          }
+
+          const gasLimit =
+            Number(transaction.transactionDetails.gasSettings?.gasLimit) ||
+            getEvmGasLimit({ chain })
+
+          const priorityFee =
+            Number(
+              transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas
+            ) || (await getEvmDefaultPriorityFee(chain))
+
+          return { gasLimit, priorityFee }
+        },
+        serialized: () => null,
+      })
+    },
+    ...noPersistQueryOptions,
+  })
+
+  return (
+    <MatchQuery
+      value={query}
+      pending={() => <ProductLogoBlock />}
+      error={error => (
+        <FlowErrorPageContent
+          title="Failed to process transaction"
+          error={error}
+        />
+      )}
+      success={feeSettings => (
+        <SendTxOverviewContent initialFeeSettings={feeSettings} />
+      )}
+    />
+  )
+}
+
+const SendTxOverviewContent = ({
+  initialFeeSettings,
+}: {
+  initialFeeSettings: FeeSettings | null
+}) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const { requestOrigin } = usePopupContext()
 
   const transactionPayload = usePopupInput<'sendTx'>()
 
-  const [feeSettings, setFeeSettings] = useState<FeeSettings | null>(null)
+  const [feeSettings, setFeeSettings] = useState<FeeSettings | null>(
+    initialFeeSettings
+  )
 
   const shouldPreventIBCTx = useMemo(
     () =>
@@ -100,30 +161,30 @@ export const SendTxOverview = () => {
       matchRecordUnion<ITransactionPayload, Promise<KeysignPayload>>(
         transactionPayload,
         {
-          keysign: async keysign => {
+          keysign: async transaction => {
             const keysignPayload = await getKeysignPayload({
-              transaction: keysign,
+              transaction,
               vault,
               walletCore,
               feeSettings,
             })
 
-            keysign.memo = { isParsed: false, value: undefined }
+            transaction.memo = { isParsed: false, value: undefined }
 
-            if (getChainKind(keysign.chain) === 'evm') {
+            if (getChainKind(transaction.chain) === 'evm') {
               const parsedMemo = await getParsedMemo(keysignPayload.memo)
               if (parsedMemo) {
-                keysign.memo = { isParsed: true, value: parsedMemo }
+                transaction.memo = { isParsed: true, value: parsedMemo }
               }
             }
 
-            if (!keysign.memo.isParsed) {
+            if (!transaction.memo.isParsed) {
               try {
-                keysign.memo.value = toUtf8String(
-                  keysign.transactionDetails.data!
+                transaction.memo.value = toUtf8String(
+                  transaction.transactionDetails.data!
                 )
               } catch {
-                keysign.memo.value = keysign.transactionDetails.data
+                transaction.memo.value = transaction.transactionDetails.data
               }
             }
 
@@ -133,12 +194,11 @@ export const SendTxOverview = () => {
             if (chain === Chain.Bitcoin) {
               const dataBuffer = Buffer.from(data, 'base64')
               const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
-              const gasSettings: FeeSettings | null = { priority: 'fast' }
               return await getPsbtKeysignPayload(
                 psbt,
                 walletCore,
                 vault,
-                gasSettings
+                feeSettings
               )
             } else {
               const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
@@ -162,6 +222,7 @@ export const SendTxOverview = () => {
           },
         }
       ),
+    ...noPersistQueryOptions,
   })
 
   return (
