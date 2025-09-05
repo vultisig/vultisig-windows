@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
@@ -21,12 +22,7 @@ import styled from 'styled-components'
 
 import { FeeContainer } from '../FeeContainer'
 
-export type EvmFeeSettingsFormValue = {
-  priorityFee: number
-  gasLimit: number
-}
-
-type EvmFeeSettingsFormProps = InputProps<EvmFeeSettingsFormValue> &
+type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &
   OnCloseProp &
   OnFinishProp & {
     baseFee: number
@@ -41,11 +37,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   onClose,
   baseFee,
   chain,
-  coinKey,
 }) => {
   const { t } = useTranslation()
-  const feeChain = coinKey?.chain || chain
-  const { ticker } = chainFeeCoin[feeChain]
+  const { ticker } = chainFeeCoin[chain]
   const priorityFeeInGwei = fromChainAmount(
     BigInt(value.priorityFee),
     gwei.decimals
@@ -105,7 +99,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
               gasLimit:
                 gasLimit ??
                 getEvmGasLimit({
-                  chain: feeChain as EvmChain,
+                  chain,
                   isNativeToken: true,
                 }),
             })
