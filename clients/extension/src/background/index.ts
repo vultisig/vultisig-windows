@@ -1,6 +1,5 @@
+import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
-
-import { keepAliveHandler } from './handlers/keepAliveHandler'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
@@ -19,6 +18,6 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ].forEach(Object.freeze)
 }
 
-keepAliveHandler()
-
 runInpageProviderBridgeBackgroundAgent()
+
+runBackgroundEventsAgent()

@@ -7,36 +7,38 @@ import {
   useQuery,
 } from '@tanstack/react-query'
 
-const isPrioritizedQueryKey = ['isPrioritized']
-const [key] = isPrioritizedQueryKey
+const key = 'isPrioritized'
+const queryKey = [key]
 
-const setPrioritizeWallet = async (isPrioritized: boolean): Promise<void> => {
+const setIsWalletPrioritized = async (
+  isPrioritized: boolean
+): Promise<void> => {
   await setStorageValue<boolean>(key, isPrioritized)
 }
 
-export const getPrioritizeWallet = async (): Promise<boolean> => {
+export const getIsWalletPrioritized = async (): Promise<boolean> => {
   return getStorageValue<boolean>(key, true)
 }
 
-export const useIsPrioritizedWalletQuery = () => {
+export const useIsWalletPrioritizedQuery = () => {
   return useQuery({
-    queryKey: isPrioritizedQueryKey,
-    queryFn: getPrioritizeWallet,
+    queryKey: queryKey,
+    queryFn: getIsWalletPrioritized,
   })
 }
 
-export const useSetPrioritizeWalletMutation = (
+export const useSetIsWalletPrioritizedMutation = (
   options?: UseMutationOptions<any, any, boolean, unknown>
 ) => {
   const invalidate = useInvalidateQueries()
 
   return useMutation({
     mutationFn: async isPrioritized => {
-      await setPrioritizeWallet(isPrioritized)
+      await setIsWalletPrioritized(isPrioritized)
       return isPrioritized
     },
     onSuccess: async () => {
-      await invalidate(isPrioritizedQueryKey)
+      await invalidate(queryKey)
     },
     ...options,
   })
