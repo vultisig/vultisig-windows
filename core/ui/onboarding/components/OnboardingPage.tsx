@@ -20,7 +20,7 @@ export const OnboardingPage = () => {
   const lastStep = steps.length
 
   return (
-    <VStack fullHeight>
+    <VStack flexGrow fullHeight justifyContent="flex-end">
       <PageContent
         alignItems="center"
         gap={60}

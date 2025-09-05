@@ -1,6 +1,6 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { mediaBreakPoints } from '@lib/ui/responsive/mediaQuery'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 type Size = 's' | 'm' | 'l'
 
@@ -31,12 +31,12 @@ export const ResponsivenessProvider = ({ children }: ChildrenProp) => {
   )
 }
 
-// export const useResponsiveness = () => {
-//   const size = useContext(ResponsivenessContext)
-//   return {
-//     current: size,
-//     isSmall: size === 's',
-//     isMedium: size === 'm',
-//     isLarge: size === 'l',
-//   }
-// }
+export const useResponsiveness = () => {
+  const size = useContext(ResponsivenessContext)
+  return {
+    current: size,
+    isSmall: size === 's',
+    isMedium: size === 'm',
+    isLarge: size === 'l',
+  }
+}
