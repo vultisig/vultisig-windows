@@ -42,10 +42,7 @@ import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
-const checkERC20Function = async (inputHex: string): Promise<boolean> => {
-  if (!inputHex || inputHex === '0x')
-    return new Promise(resolve => resolve(false))
-
+const isErc20Function = async (inputHex: string): Promise<boolean> => {
   const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
 
   const url = `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${functionSelector}&ordering=created_at`
@@ -224,20 +221,21 @@ export const getKeysignPayload = async ({
     contractAddress: accountCoin.id,
   })
 
-  let modifiedMemo = null
-  if (getChainKind(transaction.chain) === 'evm') {
-    try {
-      const isMemoFunction = await checkERC20Function(
-        transaction.transactionDetails.data!
-      )
-      modifiedMemo =
-        isMemoFunction || transaction.transactionDetails.data === '0x'
-          ? (transaction.transactionDetails.data ?? '')
-          : toUtf8String(transaction.transactionDetails.data!)
-    } catch {
-      modifiedMemo = transaction.transactionDetails.data!
+  const getMemo = async () => {
+    const txData = transaction.transactionDetails.data
+
+    if (
+      txData &&
+      getChainKind(transaction.chain) === 'evm' &&
+      txData !== '0x' &&
+      (!txData.startsWith('0x') || !(await isErc20Function(txData)))
+    ) {
+      return toUtf8String(txData)
     }
+
+    return txData
   }
+
   let contractPayload = null
   if (
     transaction.transactionDetails.cosmosMsgPayload?.case ===
@@ -257,9 +255,7 @@ export const getKeysignPayload = async ({
     toAmount: BigInt(
       parseInt(transaction.transactionDetails.amount?.amount ?? '0')
     ).toString(),
-    memo: contractPayload
-      ? transaction.transactionDetails.data
-      : (modifiedMemo ?? transaction.transactionDetails.data),
+    memo: await getMemo(),
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     vaultLocalPartyId: 'VultiConnect',
     coin,
