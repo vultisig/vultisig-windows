@@ -5,7 +5,6 @@ import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
-import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import {
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
@@ -21,6 +20,7 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +31,8 @@ import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { toStakeKind } from '../../staking/kinds'
+import { pickStakeProvider } from '../../staking/resolvers'
+import type { StakeInput } from '../../staking/types'
 import { transactionConfig } from '../config'
 
 type DepositKeysignPayloadProps = {
@@ -45,19 +47,33 @@ export function useDepositKeysignPayload({
   const { t } = useTranslation()
 
   const isUnmerge = action === 'unmerge'
-  const stakeVerb = toStakeKind(action)
-
-  // If provider yields 'wasm' => GENERIC_CONTRACT, else leave undefined
-  let txType: TransactionType | undefined
-  if (action === 'ibc_transfer') txType = TransactionType.IBC_TRANSFER
-  else if (action === 'merge') txType = TransactionType.THOR_MERGE
-  else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
-  else txType = undefined
+  const stakeKind = toStakeKind(action)
 
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+
+  // Heuristic: decide txType early (IBC/MERGE/UNMERGE always known).
+  // For staking, if we *know* it's a contract flow (RUJI or TCY auto-compound),
+  // we set GENERIC_CONTRACT so chain-specific query is ready for wasm execute.
+  const autocompound = Boolean(depositFormData['autoCompound'])
+  const upperTicker = (coin.ticker || '').toUpperCase()
+  const isStakeContractFlow =
+    !!stakeKind &&
+    (upperTicker === 'RUJI' ||
+      upperTicker === 'STCY' ||
+      coin.id === 'x/staking-tcy' ||
+      (upperTicker === 'TCY' && autocompound))
+
+  let txType: TransactionType | undefined
+  if (action === 'ibc_transfer') txType = TransactionType.IBC_TRANSFER
+  else if (action === 'merge') txType = TransactionType.THOR_MERGE
+  else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
+  else if (isStakeContractFlow) txType = TransactionType.GENERIC_CONTRACT
+  else txType = undefined
+
   const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
+
   const isTonFunction = coin.chain === Chain.Ton
   const cfg = transactionConfig(coin.chain)[action] || {}
   const amount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
@@ -66,10 +82,6 @@ export function useDepositKeysignPayload({
   const invalid = cfg.requiresAmount && (!Number.isFinite(amount) || amount < 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
   const validatorAddress = depositFormData['validatorAddress'] as string
-  const isRujiAction =
-    action === 'stake_ruji' ||
-    action === 'unstake_ruji' ||
-    action === 'withdraw_ruji_rewards'
   const receiver = cfg.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : ''
@@ -98,53 +110,70 @@ export function useDepositKeysignPayload({
           libType: vault.libType,
         }
 
-        if (
-          isOneOf(action, [
-            'stake_ruji',
-            'unstake_ruji',
-            'withdraw_ruji_rewards',
-          ])
-        ) {
-          const amount = Number(depositFormData['amount'] ?? 0)
-          const amountUnits =
-            action === 'stake_ruji'
-              ? toChainAmount(amount, coin.decimals).toString()
-              : action === 'unstake_ruji'
-                ? toChainAmount(amount, coin.decimals).toString()
-                : '0'
+        // ─────────────────────────────────────────────────────────────
+        // NEW: unified staking path (RUJI, native TCY, sTCY auto-compound)
+        // ─────────────────────────────────────────────────────────────
+        if (stakeKind) {
+          // Pick a provider based on coin and the "autoCompound" toggle
+          const provider = pickStakeProvider(coin, { autocompound })
 
-          const executeInnerObj =
-            action === 'stake_ruji'
-              ? { account: { bond: {} } }
-              : action === 'unstake_ruji'
-                ? { account: { withdraw: { amount: amountUnits } } }
-                : { account: { claim: {} } }
+          // Build StakeInput from the form (provider will read what it needs)
+          let stakeInput: StakeInput
 
-          const executeInner = JSON.stringify(executeInnerObj)
-
-          basePayload.contractPayload = {
-            case: 'wasmExecuteContractPayload',
-            value: {
-              senderAddress: coin.address,
-              contractAddress: rujiraStakingConfig.contract,
-              executeMsg: executeInner,
-              coins:
-                action === 'stake_ruji'
-                  ? [
-                      {
-                        denom: rujiraStakingConfig.bondDenom,
-                        amount: amountUnits,
-                      },
-                    ]
-                  : [],
+          match(stakeKind, {
+            stake: () => {
+              stakeInput = {
+                kind: 'stake',
+                amount: Number(depositFormData['amount']),
+              }
             },
-          }
-          basePayload.toAddress = rujiraStakingConfig.contract
-          basePayload.toAmount = action === 'stake_ruji' ? amountUnits : '0'
+            unstake: () => {
+              // Native TCY expects "percentage"; sTCY expects "amount".
+              // We pass both; provider will read the correct one.
+              const amt = Number(depositFormData['amount'])
+              const pct = Number(depositFormData['percentage'])
+              stakeInput = {
+                kind: 'unstake',
+                amount: Number.isFinite(amt) ? amt : undefined,
+                percentage: Number.isFinite(pct) ? pct : undefined,
+              }
+            },
+            claim: () => {
+              stakeInput = { kind: 'claim' }
+            },
+          })
 
+          const intent = provider.buildIntent(stakeKind, stakeInput, { coin })
+
+          if (intent.kind === 'wasm') {
+            // Contract execute (RUJI or sTCY auto-compounder)
+            basePayload.contractPayload = {
+              case: 'wasmExecuteContractPayload',
+              value: {
+                senderAddress: coin.address,
+                contractAddress: intent.contract,
+                executeMsg:
+                  typeof intent.executeMsg === 'string'
+                    ? intent.executeMsg
+                    : JSON.stringify(intent.executeMsg),
+                coins: intent.funds,
+              },
+            }
+            basePayload.toAddress = intent.contract
+            basePayload.toAmount = intent.funds?.[0]?.amount ?? '0'
+            return { keysign: create(KeysignPayloadSchema, basePayload) }
+          }
+
+          // Native THOR memo staking (TCY)
+          basePayload.memo = intent.memo
+          if (intent.toAddress) basePayload.toAddress = intent.toAddress
+          basePayload.toAmount = intent.toAmount ?? '0'
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Mint / Redeem (unchanged)
+        // ─────────────────────────────────────────────────────────────
         if (action === 'mint' || action === 'redeem') {
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
@@ -216,10 +245,12 @@ export function useDepositKeysignPayload({
 
           basePayload.toAmount = amountUnits
           basePayload.memo = memo
-
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Other THOR/Cosmos actions (unchanged)
+        // ─────────────────────────────────────────────────────────────
         if (
           isOneOf(action, [
             'unstake',
@@ -234,11 +265,7 @@ export function useDepositKeysignPayload({
           ])
         ) {
           basePayload.toAddress = shouldBePresent(
-            isRujiAction
-              ? rujiraStakingConfig.contract
-              : isTonFunction
-                ? validatorAddress
-                : receiver
+            isTonFunction ? validatorAddress : receiver
           )
           basePayload.toAmount = toChainAmount(
             shouldBePresent(amount),
@@ -276,14 +303,15 @@ export function useDepositKeysignPayload({
       [
         action,
         amount,
+        autocompound,
         coin,
         depositFormData,
-        isRujiAction,
         isTonFunction,
         isUnmerge,
         memo,
         receiver,
         slippage,
+        stakeKind,
         validatorAddress,
         vault.hexChainCode,
         vault.libType,
