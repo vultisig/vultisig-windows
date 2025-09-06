@@ -30,6 +30,7 @@ import { useCurrentVault } from '../../../state/currentVault'
 import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
+import { toStakeKind } from '../../staking/kinds'
 import { transactionConfig } from '../config'
 
 type DepositKeysignPayloadProps = {
@@ -44,20 +45,14 @@ export function useDepositKeysignPayload({
   const { t } = useTranslation()
 
   const isUnmerge = action === 'unmerge'
-  const txType =
-    action === 'ibc_transfer'
-      ? TransactionType.IBC_TRANSFER
-      : isUnmerge
-        ? TransactionType.THOR_UNMERGE
-        : action === 'merge'
-          ? TransactionType.THOR_MERGE
-          : action === 'stake_ruji' ||
-              action === 'unstake_ruji' ||
-              action === 'withdraw_ruji_rewards' ||
-              action === 'mint' ||
-              action === 'redeem'
-            ? TransactionType.GENERIC_CONTRACT
-            : undefined
+  const stakeVerb = toStakeKind(action)
+
+  // If provider yields 'wasm' => GENERIC_CONTRACT, else leave undefined
+  let txType: TransactionType | undefined
+  if (action === 'ibc_transfer') txType = TransactionType.IBC_TRANSFER
+  else if (action === 'merge') txType = TransactionType.THOR_MERGE
+  else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
+  else txType = undefined
 
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
