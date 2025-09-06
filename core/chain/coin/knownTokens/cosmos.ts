@@ -42,6 +42,12 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'rujira',
     },
+    'x/staking-tcy': {
+      ticker: 'sTCY',
+      logo: 'stcy.png',
+      decimals: 0,
+      priceProviderId: 'tcy',
+    },
     ...kujiraCoinsOnThorChain,
     ...yieldBearingThorChainTokens,
   },
