@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import {
   useCurrentVaultAddress,
@@ -19,7 +20,7 @@ import { useUnstakableTcyQuery } from './hooks/useUnstakableTcyQuery'
 const suggestions = [0.25, 0.5, 0.75]
 
 export const UnstakeTCYSpecific = () => {
-  const [{ setValue, getValues }] = useDepositFormHandlers()
+  const [{ setValue, getValues, register }] = useDepositFormHandlers()
 
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
@@ -88,6 +89,19 @@ export const UnstakeTCYSpecific = () => {
             bottom: maxButtonOffset,
           }}
         />
+      </InputContainer>
+      <InputContainer>
+        <label
+          style={{
+            display: 'flex',
+            gap: 8,
+            alignItems: 'center',
+            marginTop: 8,
+          }}
+        >
+          <input type="checkbox" {...register('autoCompound')} />
+          <Text>Unstake {tcyAutoCompounderConfig.shareTicker}</Text>
+        </label>
       </InputContainer>
     </VStack>
   )

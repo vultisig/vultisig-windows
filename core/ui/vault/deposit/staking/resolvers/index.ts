@@ -2,9 +2,14 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 
 import { StakeResolver } from '../types'
 import { rujiSpecific } from './ruji'
+import { stcyAutoSpecific } from './stcy-auto'
 import { nativeTcySpecific } from './tcy-native'
 
-const resolvers: StakeResolver[] = [rujiSpecific, nativeTcySpecific]
+const resolvers: StakeResolver[] = [
+  rujiSpecific,
+  nativeTcySpecific,
+  stcyAutoSpecific,
+]
 
 export function pickStakeResolver(
   coin: AccountCoin,

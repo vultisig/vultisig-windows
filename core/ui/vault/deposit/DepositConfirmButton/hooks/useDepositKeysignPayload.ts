@@ -143,7 +143,7 @@ export function useDepositKeysignPayload({
             },
           })
 
-          const intent = provider.buildIntent(stakeKind, stakeInput, { coin })
+          const intent = provider.buildIntent(stakeKind, stakeInput!, { coin })
 
           if (intent.kind === 'wasm') {
             // Contract execute (RUJI or sTCY auto-compounder)
