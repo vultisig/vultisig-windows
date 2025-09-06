@@ -1,16 +1,9 @@
 import { EvmChain } from '@core/chain/Chain'
 
+import { CoinKey } from '../../../coin/Coin'
 import { evmNativeTokenGasLimit, evmTokenGasLimit } from './evmGasLimit'
 
-type GetEvmGasLimitInput = {
-  chain: EvmChain
-  isNativeToken: boolean
-}
-
-export const getEvmGasLimit = ({
-  chain,
-  isNativeToken,
-}: GetEvmGasLimitInput) => {
-  const record = isNativeToken ? evmNativeTokenGasLimit : evmTokenGasLimit
+export const getEvmGasLimit = ({ chain, id }: CoinKey<EvmChain>) => {
+  const record = id ? evmTokenGasLimit : evmNativeTokenGasLimit
   return record[chain]
 }
