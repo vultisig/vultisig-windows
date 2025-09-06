@@ -92,12 +92,6 @@ export const stcyAutoSpecific: StakeResolver = {
       }
     }
 
-    // We don't expose "claim" for the auto-compounder. If ever needed:
-    return {
-      kind: 'wasm',
-      contract: tcyAutoCompounderConfig.contract,
-      executeMsg: { status: {} },
-      funds: [],
-    }
+    throw new Error(`Unknown stake kind for sTCY: ${kind}`)
   },
 }
