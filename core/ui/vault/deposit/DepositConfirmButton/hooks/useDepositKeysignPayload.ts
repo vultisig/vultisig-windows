@@ -31,7 +31,7 @@ import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { toStakeKind } from '../../staking/kinds'
-import { pickStakeProvider } from '../../staking/resolvers'
+import { pickStakeResolver } from '../../staking/resolvers'
 import type { StakeInput } from '../../staking/types'
 import { transactionConfig } from '../config'
 
@@ -115,7 +115,7 @@ export function useDepositKeysignPayload({
         // ─────────────────────────────────────────────────────────────
         if (stakeKind) {
           // Pick a provider based on coin and the "autoCompound" toggle
-          const provider = pickStakeProvider(coin, { autocompound })
+          const provider = pickStakeResolver(coin, { autocompound })
 
           // Build StakeInput from the form (provider will read what it needs)
           let stakeInput: StakeInput
