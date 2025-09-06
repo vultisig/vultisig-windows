@@ -43,7 +43,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
     <SettingsPage
       client="desktop"
       checkUpdate={<CheckUpdate />}
-      manageMpcLib={<ManageMpcLib />}
+      insiderOptions={<ManageMpcLib />}
     />
   ),
   setupFastVault: SetupFastVaultPage,

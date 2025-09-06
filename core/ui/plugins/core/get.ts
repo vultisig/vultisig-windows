@@ -1,6 +1,5 @@
+import { pluginMarketplaceBaseUrl } from '@core/ui/plugins/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-
-import { pluginMarketplaceBaseUrl } from '../config'
 
 type Plugin = {
   id: string

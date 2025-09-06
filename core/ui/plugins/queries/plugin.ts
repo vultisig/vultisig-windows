@@ -1,6 +1,5 @@
+import { getPlugin } from '@core/ui/plugins/core/get'
 import { useQuery } from '@tanstack/react-query'
-
-import { getPlugin } from '../core/get'
 
 export const usePluginQuery = (id: string) => {
   return useQuery({
