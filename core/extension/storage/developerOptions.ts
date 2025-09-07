@@ -1,17 +1,16 @@
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-
-const storageKey = 'developerOptions'
 
 const initialValues: DeveloperOptions = {
   pluginMarketplaceBaseUrl: 'https://store.vultisigplugin.app/api',
 }
 
 export const getDeveloperOptions = () =>
-  getStorageValue<DeveloperOptions>(storageKey, initialValues)
+  getStorageValue<DeveloperOptions>(StorageKey.developerOptions, initialValues)
 
 export const setDeveloperOptions = async (options: DeveloperOptions) => {
-  await setStorageValue(storageKey, options)
+  await setStorageValue(StorageKey.developerOptions, options)
 }
 
 export type DeveloperOptions = {
