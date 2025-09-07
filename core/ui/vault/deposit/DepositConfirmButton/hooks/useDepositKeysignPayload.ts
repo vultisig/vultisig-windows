@@ -33,7 +33,6 @@ import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpeci
 import { toStakeKind } from '../../staking/kinds'
 import { pickStakeResolver } from '../../staking/resolvers'
 import type { StakeInput } from '../../staking/types'
-import { transactionConfig } from '../config'
 
 type DepositKeysignPayloadProps = {
   depositFormData: Record<string, unknown>
@@ -75,16 +74,19 @@ export function useDepositKeysignPayload({
   const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
 
   const isTonFunction = coin.chain === Chain.Ton
-  const cfg = transactionConfig(coin.chain)[action] || {}
-  const amount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
   const slippage = Number(depositFormData['slippage'] ?? 0)
   const memo = (depositFormData['memo'] as string) ?? ''
-  const invalid = cfg.requiresAmount && (!Number.isFinite(amount) || amount < 0)
-  const invalidMessage = invalid ? t('required_field_missing') : undefined
   const validatorAddress = depositFormData['validatorAddress'] as string
-  const receiver = cfg.requiresNodeAddress
-    ? (depositFormData['nodeAddress'] as string)
-    : ''
+
+  const hasAmount = 'amount' in depositFormData
+  const amount = hasAmount ? Number(depositFormData['amount']) : undefined
+  const hasNodeAddress = 'nodeAddress' in depositFormData
+  const receiver = hasNodeAddress
+    ? String(depositFormData['nodeAddress'] || '')
+    : undefined
+
+  const invalid = hasAmount && (!Number.isFinite(amount!) || amount! <= 0)
+  const invalidMessage = invalid ? t('required_field_missing') : undefined
 
   const keysignPayloadQuery = useTransformQueryData(
     chainSpecificQuery,
@@ -108,6 +110,14 @@ export function useDepositKeysignPayload({
           vaultLocalPartyId: vault.localPartyId,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           libType: vault.libType,
+        }
+
+        if (receiver) basePayload.toAddress = receiver
+        if (hasAmount && Number.isFinite(amount)) {
+          basePayload.toAmount = toChainAmount(
+            amount!,
+            coin.decimals
+          ).toString()
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -306,6 +316,7 @@ export function useDepositKeysignPayload({
         autocompound,
         coin,
         depositFormData,
+        hasAmount,
         isTonFunction,
         isUnmerge,
         memo,
