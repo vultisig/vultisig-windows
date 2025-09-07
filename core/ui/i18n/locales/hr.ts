@@ -521,6 +521,7 @@ export const hr = {
       agreementText: 'Elolvastam és megértettem, mit kell tenni',
       ctaText: 'Hozza létre a tárolóját',
       start_using_vault: 'Počnite koristiti svoj trezor',
+      select_preferred_chains: 'Odaberite svoje omiljene lance',
     },
     preparingVault: 'Tárca előkészítése',
     createVault: {

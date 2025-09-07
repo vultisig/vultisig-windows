@@ -536,6 +536,7 @@ export const de = {
       agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
       ctaText: 'Erstellen Sie Ihren Tresor',
       start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors',
+      select_preferred_chains: 'Wählen Sie Ihre bevorzugten Ketten',
     },
     preparingVault: 'Tresor wird vorbereitet',
     createVault: {

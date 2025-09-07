@@ -539,6 +539,7 @@ export const es = {
       agreementText: 'He leído y entiendo qué hacer',
       ctaText: 'Cree su bóveda',
       start_using_vault: 'Comienza a usar tu bóveda',
+      select_preferred_chains: 'Elige tus cadenas preferidas',
     },
     preparingVault: 'Preparando Bóveda',
     createVault: {
