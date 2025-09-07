@@ -12,8 +12,6 @@ export const en = {
   plugin_info: 'Plugin Info',
   plugin_info_desc: 'You are installing {{name}} Plugin',
   plugin_success_desc: 'Installation of {{name}} is completed',
-  stake_ruji: 'Stake RUJI',
-  unstake_ruji: 'Unstake RUJI',
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
   mint: 'Mint',
   redeem: 'Redeem',
