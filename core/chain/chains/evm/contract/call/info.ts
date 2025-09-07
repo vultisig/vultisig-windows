@@ -9,23 +9,6 @@ type EvmContractCallInfo = {
   functionArguments: string
 }
 
-const processDecodedData = (data: any): any => {
-  if (Array.isArray(data)) {
-    return data.map(item => processDecodedData(item))
-  } else if (typeof data === 'bigint') {
-    return data.toString()
-  } else if (typeof data === 'object' && data !== null) {
-    if (data.toString && (data._isBigNumber || typeof data === 'bigint')) {
-      return data.toString()
-    }
-    return Object.keys(data).reduce((acc, key) => {
-      acc[key] = processDecodedData(data[key])
-      return acc
-    }, {} as any)
-  }
-  return data
-}
-
 export const getEvmContractCallInfo = async (
   value: string
 ): Promise<EvmContractCallInfo | null> => {
@@ -53,10 +36,27 @@ export const getEvmContractCallInfo = async (
   const [fragment] = text_signature.split('(')
 
   const decodedData = abi.decodeFunctionData(fragment, value)
-  const processedData = processDecodedData(decodedData)
 
   return {
-    functionArguments: JSON.stringify(processedData, null, 2),
+    functionArguments: JSON.stringify(
+      decodedData,
+      (_, value) => {
+        if (typeof value === 'bigint') {
+          return value.toString()
+        }
+        if (value && typeof value === 'object') {
+          const maybe = value as {
+            _isBigNumber?: boolean
+            toString?: () => string
+          }
+          if (maybe._isBigNumber && typeof maybe.toString === 'function') {
+            return maybe.toString()
+          }
+        }
+        return value
+      },
+      2
+    ),
     functionSignature: text_signature,
   }
 }
