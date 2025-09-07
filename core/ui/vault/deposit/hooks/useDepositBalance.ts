@@ -1,3 +1,4 @@
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { useMemo } from 'react'
@@ -20,6 +21,7 @@ const getPrecisionForAction = (action: ChainAction) =>
 
 export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const [selectedCoin] = useDepositCoin()
+  console.log('🚀 ~ useDepositBalance ~ selectedCoin:', selectedCoin)
   const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
@@ -29,13 +31,18 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     action: selectedChainAction,
     chain,
   })
-
-  const isTCYAction =
-    selectedChainAction === 'stake' || selectedChainAction === 'unstake'
+  console.log(
+    '🚀 ~ useDepositBalance ~ selectedChainAction:',
+    selectedChainAction
+  )
 
   const totalTokenAmount = useMemo(() => {
-    if (selectedChainAction === 'unstake_ruji')
+    if (
+      selectedChainAction === 'unstake' &&
+      selectedCoin.ticker === knownCosmosTokens['THORChain']['x/ruji'].ticker
+    ) {
       return stakeAndRewards?.bonded ?? 0
+    }
     if (selectedChainAction === 'withdraw_ruji_rewards')
       return stakeAndRewards?.rewardsUSDC ?? 0
     if (selectedCoin) return selectedCoinBalance
@@ -49,14 +56,9 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     totalAmountAvailableForChainData?.totalTokenAmount,
   ])
 
-  const balance = useMemo(() => {
-    if (isTCYAction) return 0
-    return totalTokenAmount
-  }, [isTCYAction, totalTokenAmount])
-
   return {
-    balance,
-    balanceFormatted: balance.toFixed(
+    balance: totalTokenAmount,
+    balanceFormatted: totalTokenAmount.toFixed(
       getPrecisionForAction(selectedChainAction)
     ),
   }
