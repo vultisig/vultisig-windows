@@ -24,7 +24,7 @@ export const UnstakeTCYSpecific = () => {
 
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
-  const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address!)
+  const { data: unstakableTcy = 0n } = useUnstakableTcyQuery(address)
   const coins = useCurrentVaultCoins()
   const percentage = getValues('percentage')
 

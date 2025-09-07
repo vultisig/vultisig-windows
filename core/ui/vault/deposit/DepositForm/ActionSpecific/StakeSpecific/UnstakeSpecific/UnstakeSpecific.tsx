@@ -15,7 +15,7 @@ import { UnstakeTCYSpecific } from './UnstakeTCYSpecific'
 
 export const UnstakeSpecific = () => {
   const [{ ticker: selectedCoinTicker }] = useDepositCoin()
-  const [{ chain, register }] = useDepositFormHandlers()
+  const [{ chain }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const [selectedCoin, setSelectedCoin] = useDepositCoin()
 
@@ -65,6 +65,7 @@ export const UnstakeSpecific = () => {
             <Match
               value={selectedCoinTicker as StakeableAssetTicker}
               TCY={() => <UnstakeTCYSpecific />}
+              RUJI={() => null}
             />
           </>
         )}
