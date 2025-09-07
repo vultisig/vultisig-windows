@@ -1,15 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
-import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
@@ -32,145 +28,57 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
+import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useQuery } from '@tanstack/react-query'
-import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits } from 'ethers'
-import { t } from 'i18next'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
-import { getKeysignPayload } from './core/getKeySignPayload'
-import { parseSolanaTx } from './core/solana/parser'
-import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
-import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
-import { CosmosMsgType, ITransactionPayload } from './interfaces'
+import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
+import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
+import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
 export const SendTxOverview = () => {
-  const transactionPayload = usePopupInput<'sendTx'>()
-
-  const query = useQuery({
-    queryKey: ['inpage-provider-sendTxOverview'],
-    queryFn: async (): Promise<FeeSettings | null> => {
-      const { chain } = getRecordUnionValue(transactionPayload)
-      if (isChainOfKind(chain, 'utxo')) {
-        return { priority: 'fast' }
-      }
-
-      return matchRecordUnion(transactionPayload, {
-        keysign: async transaction => {
-          if (!isChainOfKind(chain, 'evm')) {
-            return null
-          }
-          const { gasSettings } = transaction.transactionDetails
-
-          const gasLimit = gasSettings?.gasLimit
-            ? BigInt(gasSettings.gasLimit)
-            : getEvmGasLimit({ chain })
-
-          const priorityFee = BigInt(
-            gasSettings?.maxPriorityFeePerGas ||
-              (await getEvmMaxPriorityFeePerGas(chain))
-          )
-
-          return { gasLimit, priorityFee }
-        },
-        serialized: () => null,
-      })
-    },
-    ...noPersistQueryOptions,
-  })
-
-  return (
-    <MatchQuery
-      value={query}
-      pending={() => <ProductLogoBlock />}
-      error={error => (
-        <FlowErrorPageContent
-          title="Failed to process transaction"
-          error={error}
-        />
-      )}
-      success={feeSettings => (
-        <SendTxOverviewContent initialFeeSettings={feeSettings} />
-      )}
-    />
-  )
-}
-
-const SendTxOverviewContent = ({
-  initialFeeSettings,
-}: {
-  initialFeeSettings: FeeSettings | null
-}) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const { requestOrigin } = usePopupContext()
+  const { t } = useTranslation()
 
   const transactionPayload = usePopupInput<'sendTx'>()
 
-  const [feeSettings, setFeeSettings] = useState<FeeSettings | null>(
-    initialFeeSettings
+  const initialFeeSettingsQuery = useTxInitialFeeSettings()
+
+  const [feeSettings, setFeeSettings] = useStateCorrector(
+    useState<FeeSettings | undefined | null>(undefined),
+    useCallback(
+      state => {
+        const { data } = initialFeeSettingsQuery
+        if (data && state === undefined) {
+          return data
+        }
+
+        return state
+      },
+      [initialFeeSettingsQuery]
+    )
   )
 
-  const keysignPayloadQuery = useQuery({
-    queryKey: [
-      'inpage-provider-keysignPayload',
-      transactionPayload,
+  const keysignPayloadQuery = useStateDependentQuery(
+    {
       feeSettings,
-    ],
-    queryFn: () =>
-      matchRecordUnion<ITransactionPayload, Promise<KeysignPayload>>(
-        transactionPayload,
-        {
-          keysign: async transaction =>
-            getKeysignPayload({
-              transaction,
-              vault,
-              walletCore,
-              feeSettings,
-            }),
-          serialized: async ({ data, chain, skipBroadcast }) => {
-            if (chain === Chain.Bitcoin) {
-              const dataBuffer = Buffer.from(data, 'base64')
-              const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
-              return await getPsbtKeysignPayload(
-                psbt,
-                walletCore,
-                vault,
-                feeSettings
-              )
-            } else {
-              const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
-              const parsed = await parseSolanaTx({
-                walletCore,
-                inputTx: serialized,
-              })
-
-              if (!parsed) {
-                throw new Error('Could not parse transaction')
-              }
-              return await getSolanaKeysignPayload({
-                parsed,
-                serialized,
-                vault,
-                walletCore,
-                skipBroadcast,
-                requestOrigin,
-              })
-            }
-          },
-        }
-      ),
-    ...noPersistQueryOptions,
-  })
+      transactionPayload,
+      walletCore,
+      vault,
+      requestOrigin,
+    },
+    getTxKeysignPayloadQuery
+  )
 
   return (
     <MatchQuery
@@ -292,6 +200,10 @@ const SendTxOverviewContent = ({
                                         ) as EvmFeeSettings
                                       }
                                       chain={chain}
+                                      baseFee={fromChainAmount(
+                                        feeAmount,
+                                        chainFeeCoin[chain].decimals
+                                      )}
                                       onChange={setFeeSettings}
                                     />
                                   ) : null
