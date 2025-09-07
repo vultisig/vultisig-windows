@@ -14,7 +14,7 @@ type PopupViewContext =
   | (BridgeContext & { appSession?: VaultAppSession })
   | undefined
 
-export type PopupContextFor<M extends PopupMethod = PopupMethod> =
+type PopupContextFor<M extends PopupMethod = PopupMethod> =
   M extends AuthorizedPopupMethod
     ? AuthorizedCallContext
     : UnauthorizedCallContext

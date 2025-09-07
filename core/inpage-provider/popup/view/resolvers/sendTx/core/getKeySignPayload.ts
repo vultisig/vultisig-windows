@@ -5,6 +5,8 @@ import { getChainKind } from '@core/chain/ChainKind'
 import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
+import { getEvmContractCallHexSignature } from '@core/chain/chains/evm/contract/call/hexSignature'
+import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
@@ -35,23 +37,22 @@ import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
-const isErc20Function = async (inputHex: string): Promise<boolean> => {
-  const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
+const isEvmContractCall = async (inputHex: string): Promise<boolean> => {
+  const hexSignature = getEvmContractCallHexSignature(inputHex)
 
-  const url = `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${functionSelector}&ordering=created_at`
-  const { count } = await withFallback(
-    attempt(() => queryUrl<{ count: number }>(url)),
-    { count: 0 }
-  )
+  const { data } = await attempt(getEvmContractCallSignatures(hexSignature))
 
-  return count > 0
+  if (data) {
+    return data.count > 0
+  }
+
+  return false
 }
 
 const getCoin = async (
@@ -228,7 +229,7 @@ export const getKeysignPayload = async ({
       txData &&
       getChainKind(transaction.chain) === 'evm' &&
       txData !== '0x' &&
-      (!txData.startsWith('0x') || !(await isErc20Function(txData)))
+      (!txData.startsWith('0x') || !(await isEvmContractCall(txData)))
     ) {
       return toUtf8String(txData)
     }

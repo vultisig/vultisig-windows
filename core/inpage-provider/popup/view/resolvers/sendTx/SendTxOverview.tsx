@@ -1,10 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
-import {
-  getParsedMemo,
-  ParsedMemoParams,
-} from '@core/chain/chains/evm/tx/getParsedMemo'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
@@ -16,6 +12,7 @@ import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
@@ -46,7 +43,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
-import { formatUnits, toUtf8String } from 'ethers'
+import { formatUnits } from 'ethers'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
@@ -59,16 +56,6 @@ import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
 import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
 import { CosmosMsgType, ITransactionPayload } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
-
-const splitString = (str: string, size: number): string[] => {
-  const result: string[] = []
-
-  for (let i = 0; i < str.length; i += size) {
-    result.push(str.slice(i, i + size))
-  }
-
-  return result
-}
 
 export const SendTxOverview = () => {
   const transactionPayload = usePopupInput<'sendTx'>()
@@ -162,35 +149,13 @@ const SendTxOverviewContent = ({
       matchRecordUnion<ITransactionPayload, Promise<KeysignPayload>>(
         transactionPayload,
         {
-          keysign: async transaction => {
-            const keysignPayload = await getKeysignPayload({
+          keysign: async transaction =>
+            getKeysignPayload({
               transaction,
               vault,
               walletCore,
               feeSettings,
-            })
-
-            transaction.memo = { isParsed: false, value: undefined }
-
-            if (getChainKind(transaction.chain) === 'evm') {
-              const parsedMemo = await getParsedMemo(keysignPayload.memo)
-              if (parsedMemo) {
-                transaction.memo = { isParsed: true, value: parsedMemo }
-              }
-            }
-
-            if (!transaction.memo.isParsed) {
-              try {
-                transaction.memo.value = toUtf8String(
-                  transaction.transactionDetails.data!
-                )
-              } catch {
-                transaction.memo.value = transaction.transactionDetails.data
-              }
-            }
-
-            return keysignPayload
-          },
+            }),
           serialized: async ({ data, chain, skipBroadcast }) => {
             if (chain === Chain.Bitcoin) {
               const dataBuffer = Buffer.from(data, 'base64')
@@ -402,52 +367,13 @@ const SendTxOverviewContent = ({
                                     }
                                     title={t('est_network_fee')}
                                   />
-                                  {transactionPayload.memo?.isParsed ? (
-                                    <>
-                                      <ListItem
-                                        description={
-                                          <VStack as="pre" scrollable>
-                                            <Text as="code" family="mono">
-                                              {
-                                                (
-                                                  transactionPayload.memo
-                                                    .value as ParsedMemoParams
-                                                ).functionSignature
-                                              }
-                                            </Text>
-                                          </VStack>
-                                        }
-                                        title={t('function_signature')}
+                                  {keysignPayload.memo && (
+                                    <Panel>
+                                      <TxOverviewMemo
+                                        value={keysignPayload.memo}
+                                        chain={chain}
                                       />
-                                      <ListItem
-                                        description={
-                                          <VStack as="pre" scrollable>
-                                            <Text as="code" family="mono">
-                                              {
-                                                (
-                                                  transactionPayload.memo
-                                                    .value as ParsedMemoParams
-                                                ).functionArguments
-                                              }
-                                            </Text>
-                                          </VStack>
-                                        }
-                                        title={t('function_inputs')}
-                                      />
-                                    </>
-                                  ) : (
-                                    transactionPayload.memo?.value && (
-                                      <ListItem
-                                        description={splitString(
-                                          transactionPayload.memo
-                                            .value as string,
-                                          32
-                                        ).map((str, index) => (
-                                          <span key={index}>{str}</span>
-                                        ))}
-                                        title={t('memo')}
-                                      />
-                                    )
+                                    </Panel>
                                   )}
                                   {transactionPayload.transactionDetails
                                     .cosmosMsgPayload?.case ===
