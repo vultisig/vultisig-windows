@@ -186,6 +186,7 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
           <Divider text={t('or').toUpperCase()} />
           <Button
             disabled={!isAgreed}
+            kind="secondary"
             onClick={() => {
               navigate({ id: 'manageVaultChains' })
             }}
