@@ -5,7 +5,7 @@ export type StakeKind = 'stake' | 'unstake' | 'claim'
 
 export type StakeInput =
   | { kind: 'stake'; amount: number }
-  | { kind: 'unstake'; amount?: number; percentage?: number } // RUJI uses amount, TCY uses percentage
+  | ({ kind: 'unstake' } & ({ amount: number } | { percentage: number }))
   | { kind: 'claim' }
 
 export type StakeSpecific =

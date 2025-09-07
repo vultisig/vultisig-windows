@@ -40,7 +40,7 @@ export const StakeSpecific = () => {
                   <ChevronRightIcon />
                 </IconWrapper>
               </Container>
-              {selectedCoin?.ticker?.toUpperCase() === 'TCY' && (
+              {selectedCoin?.id === tcyAutoCompounderConfig.depositDenom && (
                 <label
                   style={{
                     display: 'flex',
@@ -51,8 +51,9 @@ export const StakeSpecific = () => {
                 >
                   <input type="checkbox" {...register('autoCompound')} />
                   <Text>
-                    {/* {t('auto_compound_with')}{' '} */}
-                    {tcyAutoCompounderConfig.shareTicker}
+                    {t('auto_compound_into_label', {
+                      ticker: tcyAutoCompounderConfig.shareTicker,
+                    })}
                   </Text>
                 </label>
               )}

@@ -19,6 +19,8 @@ export const en = {
     'Enter your password to unlock your Server Share and start the plugin installation',
   plugin_policy: 'Policy Review',
   current_expiry: 'Current expiry',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   referral_annual_fee: 'Referral annual fee',
   referral_extension_fee: 'Referral extension fee',
   digit_input_success_validation: 'Verification succesful',

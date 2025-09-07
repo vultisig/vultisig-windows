@@ -43,24 +43,12 @@ export const stcyAutoSpecific: StakeResolver = {
   },
 
   schema(kind, { balance }) {
-    // Keep validation simple; min/max will be enforced by wallet anyway
+    const max = Number.isFinite(balance) ? balance : Number.MAX_SAFE_INTEGER
     return z.object({
-      amount: z
-        .string()
-        .optional()
-        .transform(v => (v == null || v === '' ? undefined : Number(v)))
-        .pipe(
-          kind === 'stake'
-            ? z.number().positive().min(0.00000001).max(balance)
-            : z
-                .number()
-                .positive()
-                .min(1)
-                .max(
-                  Number.isFinite(balance) ? balance : Number.MAX_SAFE_INTEGER
-                )
-        )
-        .optional(),
+      amount:
+        kind === 'stake'
+          ? z.coerce.number().positive().min(0.00000001).max(max)
+          : z.coerce.number().int().positive().min(1).max(max),
     })
   },
 

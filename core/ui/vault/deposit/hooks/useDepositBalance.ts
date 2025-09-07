@@ -21,7 +21,6 @@ const getPrecisionForAction = (action: ChainAction) =>
 
 export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const [selectedCoin] = useDepositCoin()
-  console.log('🚀 ~ useDepositBalance ~ selectedCoin:', selectedCoin)
   const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
@@ -31,10 +30,6 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     action: selectedChainAction,
     chain,
   })
-  console.log(
-    '🚀 ~ useDepositBalance ~ selectedChainAction:',
-    selectedChainAction
-  )
 
   const totalTokenAmount = useMemo(() => {
     if (
