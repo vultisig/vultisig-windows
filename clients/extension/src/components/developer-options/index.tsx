@@ -1,7 +1,8 @@
 import {
-  useDeveloperOptionsQuery,
-  useSetDeveloperOptionsMutation,
-} from '@clients/extension/src/state/developerOptions'
+  DeveloperOptions,
+  getDeveloperOptions,
+  setDeveloperOptions,
+} from '@core/extension/storage/developerOptions'
 import { useCore } from '@core/ui/state/core'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -21,14 +22,10 @@ const getSchema = (t: TFunction) =>
     pluginMarketplaceBaseUrl: z.string().url({ message: t('incorrect_url') }),
   })
 
-export type DeveloperOptions = z.infer<ReturnType<typeof getSchema>>
-
-export const DeveloperOptions = () => {
+export const ExtensionDeveloperOptions = () => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { version } = useCore()
-  const { data: options } = useDeveloperOptionsQuery()
-  const { mutate: setOptions } = useSetDeveloperOptionsMutation()
   const clickCount = useRef(0)
 
   const {
@@ -37,13 +34,13 @@ export const DeveloperOptions = () => {
     setValue,
     formState: { errors, isValid },
   } = useForm<DeveloperOptions>({
-    defaultValues: options,
+    defaultValues: async () => await getDeveloperOptions(),
     mode: 'all',
     resolver: zodResolver(getSchema(t)),
   })
 
-  const onSubmit = (data: DeveloperOptions) => {
-    setOptions(data)
+  const onSubmit = async (data: DeveloperOptions) => {
+    await setDeveloperOptions(data)
     setVisible(false)
   }
 
