@@ -13,6 +13,7 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
+import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
@@ -368,12 +369,12 @@ const SendTxOverviewContent = ({
                                     title={t('est_network_fee')}
                                   />
                                   {keysignPayload.memo && (
-                                    <Panel>
+                                    <TxOverviewPanel>
                                       <TxOverviewMemo
                                         value={keysignPayload.memo}
                                         chain={chain}
                                       />
-                                    </Panel>
+                                    </TxOverviewPanel>
                                   )}
                                   {transactionPayload.transactionDetails
                                     .cosmosMsgPayload?.case ===
