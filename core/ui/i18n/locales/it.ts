@@ -21,6 +21,7 @@ export const it = {
   expires_on: 'Scade il',
   edit_referral: 'Modifica referral',
   edit_friends_referral: "Modifica referral dell'amico",
+  sent: 'Inviato',
   add_referral_code: 'Aggiungi codice referral',
   your_friends_referral_code: 'Codice referral del tuo amico',
   change_your_friends_referral:

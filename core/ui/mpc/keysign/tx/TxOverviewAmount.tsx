@@ -8,6 +8,7 @@ import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 
 export const TxOverviewAmount = ({
   amount,
@@ -17,10 +18,14 @@ export const TxOverviewAmount = ({
 }) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
   const fiatCurrency = useFiatCurrency()
+  const { t } = useTranslation()
 
   return (
     <Panel>
       <VStack alignItems="center" gap={12}>
+        <Text size={10} color="supporting">
+          {t('sent')}
+        </Text>
         {value && <CoinIcon coin={value} style={{ fontSize: 32 }} />}
         <Text size={18}>{`${amount} ${value.ticker}`}</Text>
         <MatchQuery

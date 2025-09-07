@@ -22,6 +22,7 @@ export const hr = {
   edit_friends_referral: 'Uredi prijateljevu preporuku',
   add_referral_code: 'Dodaj kod preporuke',
   mint: 'Primi',
+  sent: 'Poslano',
   redeem: 'Prodaj',
   your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
   change_your_friends_referral:

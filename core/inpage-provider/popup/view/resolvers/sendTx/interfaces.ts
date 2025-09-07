@@ -123,7 +123,6 @@ export type IKeysignTransactionPayload = {
   }
   gas?: string
   gasLimit?: string
-  txFee?: string
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
   isDeposit?: boolean

@@ -119,25 +119,24 @@ const getCoin = async (
   throw new Error(`Failed to get coin info for asset: ${JSON.stringify(asset)}`)
 }
 
-export const getKeysignPayload = async (
-  transaction: IKeysignTransactionPayload,
-  vault: Vault,
-  walletCore: WalletCore,
+type GetKeysignPayloadProps = {
+  transaction: IKeysignTransactionPayload
+  vault: Vault
+  walletCore: WalletCore
   feeSettings: FeeSettings | null
-): Promise<KeysignPayload> => {
+}
+
+export const getKeysignPayload = async ({
+  transaction,
+  vault,
+  walletCore,
+  feeSettings,
+}: GetKeysignPayloadProps): Promise<KeysignPayload> => {
   const accountCoin = {
     ...(await getCoin(transaction.transactionDetails.asset, transaction.chain)),
     address: transaction.transactionDetails.from,
   }
 
-  // Create fee settings with gas limit from transaction details if available
-  const effectiveFeeSettings = transaction.transactionDetails.gasSettings
-    ?.gasLimit
-    ? {
-        ...feeSettings,
-        gasLimit: Number(transaction.transactionDetails.gasSettings.gasLimit),
-      }
-    : feeSettings
   const txType = getTxType(transaction)
 
   const isDeposit =
@@ -154,7 +153,7 @@ export const getKeysignPayload = async (
     isDeposit,
     receiver: transaction.transactionDetails.to,
     transactionType: txType,
-    feeSettings: effectiveFeeSettings,
+    feeSettings,
     data: transaction.transactionDetails.data as `0x${string}` | undefined,
   })
   switch (chainSpecific.case) {

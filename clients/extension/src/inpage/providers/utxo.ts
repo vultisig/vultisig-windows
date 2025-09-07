@@ -8,7 +8,6 @@ import {
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
-import { EventMethod } from '../../utils/constants'
 import { Callback } from '../constants'
 import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
@@ -63,10 +62,6 @@ export class UTXO extends EventEmitter {
     })
 
     return hash
-  }
-
-  emitAccountsChanged() {
-    this.emit(EventMethod.ACCOUNTS_CHANGED, {})
   }
 
   async request(data: RequestInput, callback?: Callback) {

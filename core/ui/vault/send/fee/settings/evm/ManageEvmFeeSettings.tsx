@@ -11,10 +11,7 @@ import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValu
 import { FC, useEffect, useState } from 'react'
 
 import { useCurrentSendCoin } from '../../../state/sendCoin'
-import {
-  EvmFeeSettingsForm,
-  EvmFeeSettingsFormValue,
-} from './EvmFeeSettingsForm'
+import { EvmFeeSettingsForm } from './EvmFeeSettingsForm'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const coin = useCurrentSendCoin()
@@ -39,7 +36,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
     'ethereumSpecific'
   )
 
-  const [value, setValue] = useState<EvmFeeSettingsFormValue>(
+  const [value, setValue] = useState<EvmFeeSettings>(
     () =>
       persistentValue ?? {
         priorityFee: defaultFeePriority,

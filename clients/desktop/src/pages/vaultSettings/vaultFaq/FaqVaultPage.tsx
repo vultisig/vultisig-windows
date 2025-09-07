@@ -23,7 +23,7 @@ type RowsOpenState = {
   [key: number]: boolean
 }
 
-const FaqVaultPage = () => {
+export const FaqVaultPage = () => {
   const { t } = useTranslation()
 
   const faqData = getFaqData(t)
@@ -85,5 +85,3 @@ const FaqVaultPage = () => {
     </VStack>
   )
 }
-
-export default FaqVaultPage

@@ -21,6 +21,7 @@ export const es = {
   create_referral_title: 'Crear referido',
   use_referral_code: 'Usar código de referido',
   save_code: 'Guardar código',
+  sent: 'Enviado',
   used_referral_error:
     'El código de referido usado no puede ser el mismo que tu código de referido',
   your_referral_code: 'Tu código de referido',

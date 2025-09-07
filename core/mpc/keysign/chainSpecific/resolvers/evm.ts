@@ -3,7 +3,6 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getEvmBaseFee } from '@core/chain/tx/fee/evm/getEvmBaseFee'
 import { getEvmDefaultPriorityFee } from '@core/chain/tx/fee/evm/getEvmDefaultPriorityFee'
@@ -52,12 +51,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
     })
   }
 
-  const gasLimit =
-    feeSettings?.gasLimit ??
-    getEvmGasLimit({
-      chain,
-      isNativeToken: isFeeCoin(coin),
-    })
+  const gasLimit = feeSettings?.gasLimit ?? getEvmGasLimit(coin)
 
   const baseFee = await getEvmBaseFee(chain)
   const defaultPriorityFee = await getEvmDefaultPriorityFee(chain)

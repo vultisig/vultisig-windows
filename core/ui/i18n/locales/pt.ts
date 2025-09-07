@@ -21,6 +21,7 @@ export const pt = {
   expires_on: 'Expira em',
   edit_referral: 'Editar indicação',
   mint: 'Receber',
+  sent: 'Enviado',
   redeem: 'Vender',
   edit_friends_referral: 'Editar indicação de amigo',
   add_referral_code: 'Adicionar código de indicação',
