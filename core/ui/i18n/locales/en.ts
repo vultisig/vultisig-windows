@@ -933,7 +933,7 @@ export const en = {
   vault_overview: 'Vault Overview',
   tap: 'Tap',
   took_too_long_to_respond: 'Took too long to respond',
-  vultiserver_password: 'Vultiserver Password',
+  backup_password: 'Backup Password',
   backup_without_password: 'Backup without password',
   use_password: 'Use password',
   upgrade_vault: 'Upgrade your vault',

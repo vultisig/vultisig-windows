@@ -875,7 +875,7 @@ export const de = {
   vault_overview: 'Vault-Übersicht',
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
-  vultiserver_password: 'Vultiserver-Passwort',
+  backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
   use_password: 'Passwort verwenden',

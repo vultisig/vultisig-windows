@@ -870,7 +870,7 @@ export const it = {
   vault_overview: 'Panoramica del Vault',
   tap: 'Rubinetto',
   took_too_long_to_respond: 'Ci è voluto troppo tempo per rispondere',
-  vultiserver_password: 'Password del server Vulti',
+  backup_password: 'Password di backup',
   backup_without_password: 'Backup senza password',
   use_password: 'Usa la password',
   backup_password_prompt:
