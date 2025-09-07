@@ -2,9 +2,8 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
 import type { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
-import { z } from 'zod'
 
-import type { FieldSpec, StakeInput, StakeKind, StakeResolver } from '../types'
+import type { StakeInput, StakeKind, StakeResolver } from '../types'
 
 const isSTCY = (c: AccountCoin) =>
   c.ticker.toUpperCase() ===
@@ -25,31 +24,6 @@ export const stcyAutoSpecific: StakeResolver = {
       return true
     if (isSTCY(coin)) return true
     return false
-  },
-
-  fields(kind, t): FieldSpec[] {
-    if (kind === 'stake') {
-      return [
-        { name: 'amount', type: 'number', label: t('amount'), required: true },
-      ]
-    }
-    if (kind === 'unstake') {
-      // For sTCY we unbond by *amount of sTCY*, not percentage
-      return [
-        { name: 'amount', type: 'number', label: t('amount'), required: true },
-      ]
-    }
-    return []
-  },
-
-  schema(kind, { balance }) {
-    const max = Number.isFinite(balance) ? balance : Number.MAX_SAFE_INTEGER
-    return z.object({
-      amount:
-        kind === 'stake'
-          ? z.coerce.number().positive().min(0.00000001).max(max)
-          : z.coerce.number().int().positive().min(1).max(max),
-    })
   },
 
   buildIntent(kind: StakeKind, input: StakeInput) {

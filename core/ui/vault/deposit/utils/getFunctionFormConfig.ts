@@ -617,16 +617,7 @@ export const getFunctionFormConfig = ({
                       required: true,
                     },
                   ]
-                : coin.ticker === 'TCY'
-                  ? [
-                      {
-                        name: 'percentage',
-                        type: 'number',
-                        label: t('percentage'),
-                        required: true,
-                      },
-                    ]
-                  : [],
+                : [],
           })
         : [],
       schema: !isStakeableChain(chain)

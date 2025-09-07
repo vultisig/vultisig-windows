@@ -30,7 +30,7 @@ import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { toStakeKind } from '../../staking/kinds'
-import { pickStakeResolver } from '../../staking/resolvers'
+import { getStakeSpecific } from '../../staking/resolvers'
 import type { StakeInput } from '../../staking/types'
 
 type DepositKeysignPayloadProps = {
@@ -56,7 +56,7 @@ export function useDepositKeysignPayload({
   let isStakeContractFlow = false
   if (stakeKind) {
     try {
-      const resolver = pickStakeResolver(coin, { autocompound })
+      const resolver = getStakeSpecific(coin, { autocompound })
       isStakeContractFlow = resolver.id !== 'native-tcy'
     } catch {
       isStakeContractFlow = false
@@ -123,7 +123,7 @@ export function useDepositKeysignPayload({
         }
 
         if (stakeKind) {
-          const provider = pickStakeResolver(coin, { autocompound })
+          const stakeSpecific = getStakeSpecific(coin, { autocompound })
 
           let stakeInput: StakeInput
           if (stakeKind === 'stake') {
@@ -140,7 +140,10 @@ export function useDepositKeysignPayload({
             stakeInput = { kind: 'claim' }
           }
 
-          const intent = provider.buildIntent(stakeKind, stakeInput!, { coin })
+          console.log('🚀 ~ useDepositKeysignPayload ~ stakeInput:', stakeInput)
+          const intent = stakeSpecific.buildIntent(stakeKind, stakeInput, {
+            coin,
+          })
 
           if (intent.kind === 'wasm') {
             basePayload.contractPayload = {
@@ -160,16 +163,12 @@ export function useDepositKeysignPayload({
             return { keysign: create(KeysignPayloadSchema, basePayload) }
           }
 
-          // Native TCY memo path
           basePayload.memo = intent.memo
           if (intent.toAddress) basePayload.toAddress = intent.toAddress
           basePayload.toAmount = intent.toAmount ?? '0'
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // Mint / Redeem (unchanged)
-        // ─────────────────────────────────────────────────────────────
         if (action === 'mint' || action === 'redeem') {
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
@@ -244,12 +243,8 @@ export function useDepositKeysignPayload({
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // Other THOR/Cosmos actions (unchanged)
-        // ─────────────────────────────────────────────────────────────
         if (
           isOneOf(action, [
-            // NOTE: stake/unstake handled earlier
             'leave',
             'unbound',
             'bond',

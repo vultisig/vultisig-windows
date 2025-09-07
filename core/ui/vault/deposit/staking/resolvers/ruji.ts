@@ -4,15 +4,8 @@ import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/confi
 import { CoinKey } from '@core/chain/coin/Coin'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
-import { z } from 'zod'
 
-import {
-  FieldSpec,
-  StakeInput,
-  StakeKind,
-  StakeResolver,
-  StakeSpecific,
-} from '../types'
+import { StakeInput, StakeKind, StakeResolver, StakeSpecific } from '../types'
 
 export const rujiSpecific: StakeResolver = {
   id: 'ruji',
@@ -23,26 +16,6 @@ export const rujiSpecific: StakeResolver = {
       coin.ticker?.toUpperCase() ===
       knownCosmosTokens['THORChain']['x/ruji'].ticker.toUpperCase()
     )
-  },
-
-  fields(verb, t): FieldSpec[] {
-    if (verb === 'claim') return []
-    return [
-      { name: 'amount', type: 'number', label: t('amount'), required: true },
-    ]
-  },
-
-  schema(verb, { balance }) {
-    if (verb === 'claim') {
-      // Optional: block if no rewards; keep simple here.
-      return z.object({})
-    }
-    return z.object({
-      amount: z
-        .string()
-        .transform(Number)
-        .pipe(z.number().positive().min(0.001).max(balance)),
-    })
   },
 
   buildIntent(verb: StakeKind, input: StakeInput, { coin }): StakeSpecific {

@@ -126,10 +126,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'merge',
                     'stake',
                     'unmerge',
+                    'unstake',
                     'mint',
                     'redeem',
-                    'stake_ruji',
-                    'unstake_ruji',
                     'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
 

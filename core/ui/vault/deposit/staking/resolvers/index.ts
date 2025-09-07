@@ -11,7 +11,7 @@ const resolvers: StakeResolver[] = [
   stcyAutoSpecific,
 ]
 
-export function pickStakeResolver(
+export function getStakeSpecific(
   coin: AccountCoin,
   ctx?: { autocompound?: boolean }
 ): StakeResolver {
@@ -21,5 +21,6 @@ export function pickStakeResolver(
     throw new Error(
       `No staking provider found for ${coin.chain}:${coin.ticker}`
     )
+
   return p
 }
