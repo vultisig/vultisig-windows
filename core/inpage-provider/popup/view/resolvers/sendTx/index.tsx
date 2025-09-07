@@ -11,7 +11,7 @@ import { Views } from '@lib/ui/navigation/Views'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { SendTxOverview } from './SendTxOverview'
+import { VerifyTx } from './VerifyTx'
 
 type SendTxView =
   | {
@@ -20,7 +20,7 @@ type SendTxView =
   | Extract<CoreView, { id: 'keysign' }>
 
 const views: Views<SendTxView['id']> = {
-  overview: SendTxOverview,
+  overview: VerifyTx,
   keysign: StartKeysignView,
 }
 

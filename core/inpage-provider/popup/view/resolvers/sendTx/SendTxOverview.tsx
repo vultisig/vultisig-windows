@@ -15,7 +15,6 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
@@ -27,14 +26,11 @@ import {
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { Text } from '@lib/ui/text'
@@ -46,8 +42,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits } from 'ethers'
 import { t } from 'i18next'
-import { useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
+import { useState } from 'react'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
@@ -125,21 +120,6 @@ const SendTxOverviewContent = ({
     initialFeeSettings
   )
 
-  const shouldPreventIBCTx = useMemo(
-    () =>
-      matchRecordUnion(transactionPayload, {
-        keysign: (payload): boolean => {
-          const msgCase = payload.transactionDetails?.cosmosMsgPayload?.case
-          return (
-            msgCase === CosmosMsgType.MSG_TRANSFER_URL &&
-            !!payload.transactionDetails?.cosmosMsgPayload?.value.memo
-          )
-        },
-        serialized: () => false,
-      }),
-    [transactionPayload]
-  )
-
   const keysignPayloadQuery = useQuery({
     queryKey: [
       'inpage-provider-keysignPayload',
@@ -204,209 +184,157 @@ const SendTxOverviewContent = ({
       )}
       success={keysignPayload => {
         return (
-          <VStack fullHeight>
-            <PageHeader
-              primaryControls={<PageHeaderBackButton />}
-              title={t('sign_transaction')}
-              hasBorder
-            />
-            {shouldPreventIBCTx ? (
-              <PageContent
-                alignItems="center"
-                gap={12}
-                justifyContent="center"
-                flexGrow
-                scrollable
-              >
-                <Panel>
-                  <VStack alignItems="center" gap={24} justifyContent="center">
-                    <Text as={TriangleAlertIcon} color="danger" fontSize={36} />
-                    <VStack
-                      alignItems="center"
-                      gap={16}
-                      justifyContent="center"
-                      fullWidth
-                    >
-                      <Text
-                        size={17}
-                        weight={500}
-                        centerHorizontally
-                        color="danger"
-                      >
-                        {t('ibc_transaction_not_supporting_memo_title')}
+          <>
+            <PageContent flexGrow scrollable>
+              <List>
+                {keysignPayload.swapPayload &&
+                keysignPayload.swapPayload.value ? (
+                  <>
+                    <ContentWrapper gap={24}>
+                      <Text color="supporting" size={15}>
+                        {t('youre_swapping')}
                       </Text>
-                      <Text
-                        color="light"
-                        size={14}
-                        weight={500}
-                        centerHorizontally
-                      >
-                        <Trans
-                          i18nKey="ibc_transaction_not_supporting_memo_desc"
-                          components={{ b: <b />, br: <br /> }}
-                        />
-                      </Text>
-                    </VStack>
-                  </VStack>
-                </Panel>
-              </PageContent>
-            ) : (
-              <>
-                <PageContent flexGrow scrollable>
-                  <List>
-                    {keysignPayload.swapPayload &&
-                    keysignPayload.swapPayload.value ? (
-                      <>
-                        <ContentWrapper gap={24}>
-                          <Text color="supporting" size={15}>
-                            {t('youre_swapping')}
+                      <VStack gap={16}>
+                        <HStack gap={8}>
+                          <CoinIcon
+                            coin={
+                              keysignPayload.swapPayload.value
+                                .fromCoin as AccountCoin
+                            }
+                            style={{ fontSize: 24 }}
+                          />
+                          <Text weight="500" size={17} color="contrast">
+                            {Number(
+                              formatUnits(
+                                keysignPayload.swapPayload.value.fromAmount,
+                                keysignPayload.swapPayload.value.fromCoin
+                                  ?.decimals
+                              )
+                            )}{' '}
+                            <Text as="span" color="shy" size={17}>
+                              {keysignPayload.swapPayload.value.fromCoin?.ticker.toUpperCase()}
+                            </Text>
                           </Text>
-                          <VStack gap={16}>
-                            <HStack gap={8}>
-                              <CoinIcon
-                                coin={
-                                  keysignPayload.swapPayload.value
-                                    .fromCoin as AccountCoin
-                                }
-                                style={{ fontSize: 24 }}
-                              />
-                              <Text weight="500" size={17} color="contrast">
-                                {Number(
-                                  formatUnits(
-                                    keysignPayload.swapPayload.value.fromAmount,
-                                    keysignPayload.swapPayload.value.fromCoin
-                                      ?.decimals
-                                  )
-                                )}{' '}
-                                <Text as="span" color="shy" size={17}>
-                                  {keysignPayload.swapPayload.value.fromCoin?.ticker.toUpperCase()}
-                                </Text>
-                              </Text>
-                            </HStack>
-                            <HStack alignItems="center" gap={21}>
-                              <IconWrapper>
-                                <ArrowDownIcon />
-                              </IconWrapper>
-                              <HorizontalLine />
-                            </HStack>
-                            <HStack gap={8}>
-                              <CoinIcon
-                                coin={
-                                  keysignPayload.swapPayload.value
-                                    .toCoin as AccountCoin
-                                }
-                                style={{ fontSize: 24 }}
-                              />
-                              <Text weight="500" size={17} color="contrast">
-                                {
-                                  keysignPayload.swapPayload.value
-                                    .toAmountDecimal
-                                }{' '}
-                                <Text as="span" color="shy" size={17}>
-                                  {keysignPayload.swapPayload.value.toCoin?.ticker.toUpperCase()}
-                                </Text>
-                              </Text>
-                            </HStack>
-                          </VStack>
-                        </ContentWrapper>
-                      </>
-                    ) : (
-                      <>
-                        <ListItem
-                          description={keysignPayload.coin!.address}
-                          title={t('from')}
-                        />
-                        {keysignPayload.toAddress && (
-                          <ListItem
-                            description={keysignPayload.toAddress}
-                            title={t('to')}
+                        </HStack>
+                        <HStack alignItems="center" gap={21}>
+                          <IconWrapper>
+                            <ArrowDownIcon />
+                          </IconWrapper>
+                          <HorizontalLine />
+                        </HStack>
+                        <HStack gap={8}>
+                          <CoinIcon
+                            coin={
+                              keysignPayload.swapPayload.value
+                                .toCoin as AccountCoin
+                            }
+                            style={{ fontSize: 24 }}
                           />
-                        )}
-                        {keysignPayload.toAmount && (
-                          <ListItem
-                            description={`${formatUnits(
-                              keysignPayload.toAmount,
-                              keysignPayload.coin?.decimals
-                            )} ${keysignPayload.coin?.ticker}`}
-                            title={t('amount')}
-                          />
-                        )}
-                        <ListItem
-                          description={getKeysignChain(keysignPayload)}
-                          title={t('network')}
-                        />
-                        <MatchRecordUnion
-                          value={transactionPayload}
-                          handlers={{
-                            keysign: transactionPayload => {
-                              const chain = getKeysignChain(keysignPayload)
-                              const feeAmount = getFeeAmount(
-                                keysignPayload.blockchainSpecific as KeysignChainSpecific
-                              )
-                              return (
-                                <>
-                                  <ListItem
-                                    description={formatAmount(
-                                      fromChainAmount(
-                                        feeAmount,
-                                        chainFeeCoin[chain].decimals
-                                      ),
-                                      chainFeeCoin[chain].ticker
-                                    )}
-                                    extra={
-                                      isChainOfKind(chain, 'evm') ? (
-                                        <ManageEvmFee
-                                          value={
-                                            shouldBePresent(
-                                              feeSettings
-                                            ) as EvmFeeSettings
-                                          }
-                                          chain={chain}
-                                          onChange={setFeeSettings}
-                                        />
-                                      ) : null
-                                    }
-                                    title={t('est_network_fee')}
-                                  />
-                                  {keysignPayload.memo && (
-                                    <TxOverviewPanel>
-                                      <TxOverviewMemo
-                                        value={keysignPayload.memo}
-                                        chain={chain}
-                                      />
-                                    </TxOverviewPanel>
-                                  )}
-                                  {transactionPayload.transactionDetails
-                                    .cosmosMsgPayload?.case ===
-                                    CosmosMsgType.MSG_EXECUTE_CONTRACT && (
-                                    <ListItem
-                                      description={
-                                        transactionPayload.transactionDetails
-                                          .cosmosMsgPayload.value.msg
-                                      }
-                                      title={t('message')}
-                                    />
-                                  )}
-                                </>
-                              )
-                            },
-                            serialized: () => null,
-                          }}
-                        />
-                      </>
+                          <Text weight="500" size={17} color="contrast">
+                            {keysignPayload.swapPayload.value.toAmountDecimal}{' '}
+                            <Text as="span" color="shy" size={17}>
+                              {keysignPayload.swapPayload.value.toCoin?.ticker.toUpperCase()}
+                            </Text>
+                          </Text>
+                        </HStack>
+                      </VStack>
+                    </ContentWrapper>
+                  </>
+                ) : (
+                  <>
+                    <ListItem
+                      description={keysignPayload.coin!.address}
+                      title={t('from')}
+                    />
+                    {keysignPayload.toAddress && (
+                      <ListItem
+                        description={keysignPayload.toAddress}
+                        title={t('to')}
+                      />
                     )}
-                  </List>
-                </PageContent>
-                <PageFooter>
-                  <StartKeysignPrompt
-                    keysignPayload={{
-                      keysign: keysignPayload,
-                    }}
-                  />
-                </PageFooter>
-              </>
-            )}
-          </VStack>
+                    {keysignPayload.toAmount && (
+                      <ListItem
+                        description={`${formatUnits(
+                          keysignPayload.toAmount,
+                          keysignPayload.coin?.decimals
+                        )} ${keysignPayload.coin?.ticker}`}
+                        title={t('amount')}
+                      />
+                    )}
+                    <ListItem
+                      description={getKeysignChain(keysignPayload)}
+                      title={t('network')}
+                    />
+                    <MatchRecordUnion
+                      value={transactionPayload}
+                      handlers={{
+                        keysign: transactionPayload => {
+                          const chain = getKeysignChain(keysignPayload)
+                          const feeAmount = getFeeAmount(
+                            keysignPayload.blockchainSpecific as KeysignChainSpecific
+                          )
+                          return (
+                            <>
+                              <ListItem
+                                description={formatAmount(
+                                  fromChainAmount(
+                                    feeAmount,
+                                    chainFeeCoin[chain].decimals
+                                  ),
+                                  chainFeeCoin[chain].ticker
+                                )}
+                                extra={
+                                  isChainOfKind(chain, 'evm') ? (
+                                    <ManageEvmFee
+                                      value={
+                                        shouldBePresent(
+                                          feeSettings
+                                        ) as EvmFeeSettings
+                                      }
+                                      chain={chain}
+                                      onChange={setFeeSettings}
+                                    />
+                                  ) : null
+                                }
+                                title={t('est_network_fee')}
+                              />
+                              {keysignPayload.memo && (
+                                <TxOverviewPanel>
+                                  <TxOverviewMemo
+                                    value={keysignPayload.memo}
+                                    chain={chain}
+                                  />
+                                </TxOverviewPanel>
+                              )}
+                              {transactionPayload.transactionDetails
+                                .cosmosMsgPayload?.case ===
+                                CosmosMsgType.MSG_EXECUTE_CONTRACT && (
+                                <ListItem
+                                  description={
+                                    transactionPayload.transactionDetails
+                                      .cosmosMsgPayload.value.msg
+                                  }
+                                  title={t('message')}
+                                />
+                              )}
+                            </>
+                          )
+                        },
+                        serialized: () => null,
+                      }}
+                    />
+                  </>
+                )}
+              </List>
+            </PageContent>
+            <PageFooter>
+              <StartKeysignPrompt
+                keysignPayload={{
+                  keysign: keysignPayload,
+                }}
+              />
+            </PageFooter>
+          </>
         )
       }}
     />
