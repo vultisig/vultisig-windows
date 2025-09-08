@@ -57,6 +57,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     watch,
     setValue,
     getValues,
+    control,
     formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -70,7 +71,7 @@ export const DepositForm: FC<DepositFormProps> = ({
 
   return (
     <DepositFormHandlersProvider
-      initialValue={{ setValue, getValues, watch, chain, register }}
+      initialValue={{ setValue, getValues, watch, chain, register, control }}
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
