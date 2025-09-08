@@ -170,6 +170,8 @@ export function useDepositKeysignPayload({
 
           if (intent.kind === 'wasm') {
             basePayload.memo = ''
+            basePayload.toAddress = ''
+            basePayload.toAmount = '0'
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -182,14 +184,12 @@ export function useDepositKeysignPayload({
                 coins: intent.funds,
               },
             }
-            basePayload.toAddress = intent.contract
-            basePayload.toAmount = '0'
             return { keysign: create(KeysignPayloadSchema, basePayload) }
           }
 
           delete basePayload.contractPayload
           basePayload.memo = intent.memo
-          basePayload.toAddress = intent.toAddress ?? coin.address
+          basePayload.toAddress = ''
           basePayload.toAmount = intent.toAmount ?? '0'
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
