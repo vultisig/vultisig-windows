@@ -31,7 +31,7 @@ export type RujiPayload = { coin: AccountCoin; input: RujiInput }
 export type NativeTcyPayload = { coin: AccountCoin; input: NativeTcyInput }
 export type StcyPayload = { input: StcyInput }
 
-export type StakePayloadById = {
+type StakePayloadById = {
   ruji: RujiPayload
   'native-tcy': NativeTcyPayload
   stcy: StcyPayload
