@@ -63,7 +63,7 @@ type ChainActionConfig = {
   schema: z.ZodTypeAny
 }
 
-export const getFunctionFormConfig = ({
+export const getDepositFormConfig = ({
   t,
   coin,
   walletCore,
@@ -565,21 +565,38 @@ export const getFunctionFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              z.object({
-                amount: z
-                  .string()
-                  .transform(Number)
-                  .pipe(
-                    z
-                      .number()
-                      .positive()
-                      .min(0.0001, t('amount'))
-                      .max(
-                        totalAmountAvailable,
-                        t('chainFunctions.amountExceeded')
-                      )
-                  ),
-              }),
+              coin.ticker === 'RUJI'
+                ? z.object({
+                    amount: z
+                      .string()
+                      .transform(Number)
+                      .pipe(
+                        z
+                          .number()
+                          .positive()
+                          .min(0.0001, t('amount'))
+                          .max(
+                            totalAmountAvailable,
+                            t('chainFunctions.amountExceeded')
+                          )
+                      ),
+                  })
+                : z.object({
+                    amount: z
+                      .string()
+                      .transform(Number)
+                      .pipe(
+                        z
+                          .number()
+                          .positive()
+                          .min(0.0001, t('amount'))
+                          .max(
+                            totalAmountAvailable,
+                            t('chainFunctions.amountExceeded')
+                          )
+                      ),
+                    autoCompound: z.boolean().optional(),
+                  }),
             Ton: () =>
               z.object({
                 amount: z

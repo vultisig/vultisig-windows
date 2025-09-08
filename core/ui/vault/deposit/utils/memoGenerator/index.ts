@@ -12,7 +12,7 @@ import { FieldValues } from 'react-hook-form'
 import { ChainAction } from '../../ChainAction'
 import { StakeableChain } from '../../config'
 import { MayaChainPool } from '../../types/mayaChain'
-import { sourceChannelByChain } from '../getFunctionFormConfig'
+import { sourceChannelByChain } from '../getDepositFormConfig'
 
 type MemoParams = {
   selectedChainAction: ChainAction
