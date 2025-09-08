@@ -9369,7 +9369,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knip@npm:^5.46.0":
+"knip@npm:^5.63.1":
   version: 5.63.1
   resolution: "knip@npm:5.63.1"
   dependencies:
@@ -13745,7 +13745,7 @@ __metadata:
     i18next: "npm:^24.2.3"
     i18next-http-backend: "npm:^3.0.2"
     jsqr: "npm:^1.4.0"
-    knip: "npm:^5.46.0"
+    knip: "npm:^5.63.1"
     long: "npm:^5.3.1"
     lottie-react: "npm:^2.4.1"
     prettier: "npm:^3.6.2"

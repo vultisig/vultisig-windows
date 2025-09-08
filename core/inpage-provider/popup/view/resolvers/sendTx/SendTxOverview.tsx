@@ -86,13 +86,14 @@ export const SendTxOverview = () => {
           if (!isChainOfKind(chain, 'evm')) {
             return null
           }
+          const { gasSettings } = transaction.transactionDetails
 
-          const gasLimit =
-            Number(transaction.transactionDetails.gasSettings?.gasLimit) ||
-            getEvmGasLimit({ chain })
+          const gasLimit = gasSettings?.gasLimit
+            ? BigInt(gasSettings.gasLimit)
+            : getEvmGasLimit({ chain })
 
-          const priorityFee = Number(
-            transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas ||
+          const priorityFee = BigInt(
+            gasSettings?.maxPriorityFeePerGas ||
               (await getEvmMaxPriorityFeePerGas(chain))
           )
 

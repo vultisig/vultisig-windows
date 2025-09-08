@@ -4,21 +4,17 @@ import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificP
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { OnCloseProp } from '@lib/ui/props'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 
-import { useEvmMaxPriorityFeePerGasQuery } from '../../../../../chain/evm/queries/maxPriorityFeePerGas'
 import { useCurrentSendCoin } from '../../../state/sendCoin'
 import { EvmFeeSettingsForm } from './EvmFeeSettingsForm'
 
 export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const coin = useCurrentSendCoin()
-
-  const { data: defaultFeePriority = 0, isSuccess } =
-    useEvmMaxPriorityFeePerGasQuery(coin.chain as EvmChain)
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
   const sendChainSpecific = useSendChainSpecific()
-  const { gasLimit: defaultGasLimit } = getDiscriminatedUnionValue(
+  const { gasLimit, priorityFee } = getDiscriminatedUnionValue(
     sendChainSpecific,
     'case',
     'value',
@@ -28,16 +24,10 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const [value, setValue] = useState<EvmFeeSettings>(
     () =>
       persistentValue ?? {
-        priorityFee: Number(defaultFeePriority),
-        gasLimit: Number(defaultGasLimit),
+        priorityFee: BigInt(priorityFee),
+        gasLimit: BigInt(gasLimit),
       }
   )
-
-  useEffect(() => {
-    if (isSuccess && persistentValue?.priorityFee == null) {
-      setValue(prev => ({ ...prev, priorityFee: Number(defaultFeePriority) }))
-    }
-  }, [defaultFeePriority, isSuccess, persistentValue?.priorityFee])
 
   const handleSave = () => {
     setPersistentValue(value)
@@ -50,7 +40,6 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
       onChange={setValue}
       onFinish={handleSave}
       onClose={onClose}
-      coinKey={coin}
       chain={coin.chain as EvmChain}
     />
   )

@@ -2,9 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { CoinKey } from '@core/chain/coin/Coin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
@@ -30,7 +28,6 @@ type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &
   OnCloseProp &
   OnFinishProp & {
     chain: EvmChain
-    coinKey?: CoinKey
   }
 
 export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
@@ -89,10 +86,8 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
               onChange({
                 ...value,
                 priorityFee: priorityFee
-                  ? Math.floor(
-                      Number(toChainAmount(priorityFee, gwei.decimals))
-                    )
-                  : 0,
+                  ? toChainAmount(priorityFee, gwei.decimals)
+                  : 0n,
               })
             }
           />
@@ -109,15 +104,11 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
               )}
             />
           }
-          value={value.gasLimit}
+          value={Number(value.gasLimit)}
           onValueChange={gasLimit =>
             onChange({
               ...value,
-              gasLimit:
-                gasLimit ??
-                getEvmGasLimit({
-                  chain,
-                }),
+              gasLimit: gasLimit ? BigInt(gasLimit) : 0n,
             })
           }
         />
