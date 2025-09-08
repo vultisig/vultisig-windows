@@ -533,6 +533,7 @@ export const pt = {
       agreementText: 'Eu li e entendo o que fazer',
       ctaText: 'Crie seu cofre',
       start_using_vault: 'Comece a usar seu cofre',
+      select_preferred_chains: 'Selecione suas correntes preferidas',
     },
     preparingVault: 'Preparando Cofre',
     createVault: {

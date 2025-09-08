@@ -541,6 +541,7 @@ export const it = {
       agreementText: 'Ho letto e capisco cosa fare',
       ctaText: 'Crea il tuo vault',
       start_using_vault: 'Inizia a usare la tua cassaforte',
+      select_preferred_chains: 'Seleziona le tue catene preferite',
     },
     preparingVault: 'Preparazione della Cassaforte',
     createVault: {
