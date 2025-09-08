@@ -1,3 +1,4 @@
+import { numberToEvenHex } from '@lib/utils/hex/numberToHex'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
@@ -28,7 +29,7 @@ export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
 
   const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
-    amount,
+    amount: Buffer.from(numberToEvenHex(amount), 'hex'),
     bounceable: shouldBounce,
     comment: keysignPayload.memo ?? undefined,
     mode,
