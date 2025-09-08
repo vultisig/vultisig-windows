@@ -1,44 +1,46 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
+import { match } from '@lib/utils/match'
 
-import type { StakeInput, StakeKind, StakeResolver } from '../types'
+import type { StakeSpecific, StcyPayload } from '../types'
 
-export const stcyAutoSpecific: StakeResolver = {
-  id: 'stcy',
+export const getStcySpecific = ({ input }: StcyPayload): StakeSpecific => {
+  return match<StcyPayload['input']['kind'], StakeSpecific>(input.kind, {
+    stake: () => {
+      if (!('amount' in input)) {
+        throw new Error('Invalid amount')
+      }
 
-  supports(coin, ctx) {
-    if (ctx?.autocompound) return false
-    return coin.ticker.toUpperCase() === 'TCY'
-  },
-
-  buildIntent(kind: StakeKind, input: StakeInput) {
-    if (kind === 'stake') {
       const units = toChainAmount(
-        (input as any).amount,
+        input.amount,
         tcyAutoCompounderConfig.depositDecimals
       ).toString()
+
       return {
         kind: 'wasm',
         contract: tcyAutoCompounderConfig.contract,
         executeMsg: { liquid: { bond: {} } },
-        funds: [{ denom: tcyAutoCompounderConfig.depositDenom, amount: units }],
+        funds: [{ denom: tcyAutoCompounderConfig.shareDenom, amount: units }],
       }
-    }
+    },
+    unstake: () => {
+      if (!('amount' in input)) {
+        throw new Error('Invalid amount')
+      }
 
-    if (kind === 'unstake') {
+      if (!('amount' in input)) throw new Error('Invalid amount')
+
       const units = toChainAmount(
-        (input as any).amount,
+        input.amount,
         tcyAutoCompounderConfig.shareDecimals
       ).toString()
+
       return {
         kind: 'wasm',
         contract: tcyAutoCompounderConfig.contract,
         executeMsg: { liquid: { unbond: {} } },
-        // Note: funds are sTCY (the share token)
         funds: [{ denom: tcyAutoCompounderConfig.shareDenom, amount: units }],
       }
-    }
-
-    throw new Error(`Unknown stake kind for sTCY: ${kind}`)
-  },
+    },
+  })
 }
