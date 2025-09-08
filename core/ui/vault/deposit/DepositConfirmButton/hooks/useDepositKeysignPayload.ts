@@ -58,6 +58,7 @@ export function useDepositKeysignPayload({
   const walletCore = useAssertWalletCore()
 
   const autocompound = Boolean(depositFormData['autoCompound'])
+  console.log('🚀 ~ useDepositKeysignPayload ~ autocompound:', autocompound)
 
   let stakeId: ReturnType<typeof selectStakeId> | null = null
   let isStakeContractFlow = false
@@ -65,6 +66,7 @@ export function useDepositKeysignPayload({
   if (isStake) {
     try {
       stakeId = selectStakeId(coin, { autocompound })
+      console.log('🚀 ~ useDepositKeysignPayload ~ stakeId:', stakeId)
       isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
     } catch {
       stakeId = null
