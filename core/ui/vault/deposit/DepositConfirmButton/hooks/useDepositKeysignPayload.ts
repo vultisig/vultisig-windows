@@ -20,6 +20,7 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -29,9 +30,14 @@ import { useCurrentVault } from '../../../state/currentVault'
 import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
-import { toStakeKind } from '../../staking/kinds'
-import { getStakeSpecific } from '../../staking/resolvers'
-import type { StakeInput } from '../../staking/types'
+import { stakeModeById } from '../../staking/config'
+import { resolvers, selectStakeId } from '../../staking/resolvers'
+import {
+  NativeTcyInput,
+  RujiInput,
+  StakeKind,
+  StcyInput,
+} from '../../staking/types'
 
 type DepositKeysignPayloadProps = {
   depositFormData: Record<string, unknown>
@@ -45,7 +51,7 @@ export function useDepositKeysignPayload({
   const { t } = useTranslation()
 
   const isUnmerge = action === 'unmerge'
-  const stakeKind = toStakeKind(action)
+  const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
 
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
@@ -53,12 +59,15 @@ export function useDepositKeysignPayload({
 
   const autocompound = Boolean(depositFormData['autoCompound'])
 
+  let stakeId: ReturnType<typeof selectStakeId> | null = null
   let isStakeContractFlow = false
-  if (stakeKind) {
+
+  if (isStake) {
     try {
-      const resolver = getStakeSpecific(coin, { autocompound })
-      isStakeContractFlow = resolver.id !== 'native-tcy'
+      stakeId = selectStakeId(coin, { autocompound })
+      isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
     } catch {
+      stakeId = null
       isStakeContractFlow = false
     }
   }
@@ -125,26 +134,34 @@ export function useDepositKeysignPayload({
           ).toString()
         }
 
-        if (stakeKind) {
-          const stakeSpecific = getStakeSpecific(coin, { autocompound })
+        if (isStake && stakeId) {
+          const actionAsStakeAction = action as StakeKind
+          const stakeSpecific = resolvers[stakeId]
 
-          let stakeInput: StakeInput
-          if (stakeKind === 'stake') {
-            stakeInput = { kind: 'stake', amount: shouldBePresent(amount) }
-          } else if (stakeKind === 'unstake') {
-            const percentage = depositFormData['percentage'] as
-              | number
-              | undefined
-            // Native TCY expects percentage; sTCY expects amount. We pass whichever is present.
-            stakeInput = Number.isFinite(amount as number)
-              ? { kind: 'unstake', amount: amount as number }
-              : { kind: 'unstake', percentage: shouldBePresent(percentage) }
-          } else {
-            stakeInput = { kind: 'claim' }
-          }
+          let input: RujiInput | NativeTcyInput | StcyInput | null = null
 
-          const intent = stakeSpecific.buildIntent(stakeKind, stakeInput, {
+          match(actionAsStakeAction, {
+            stake: () => {
+              input = { kind: 'stake', amount: shouldBePresent(amount) }
+            },
+            unstake: () => {
+              const percentage = depositFormData['percentage'] as
+                | number
+                | undefined
+
+              input = percentage
+                ? { kind: 'unstake', percentage }
+                : { kind: 'unstake', amount: shouldBePresent(amount) }
+            },
+            claim: () => {
+              input = { kind: 'claim' }
+            },
+          })
+
+          // Typescript doesn't know that input can't be null as match is exhaustive
+          const intent = stakeSpecific({
             coin,
+            input: input as any,
           })
 
           if (intent.kind === 'wasm') {
@@ -304,16 +321,16 @@ export function useDepositKeysignPayload({
       [
         action,
         amount,
-        autocompound,
         coin,
         depositFormData,
         hasAmount,
+        isStake,
         isTonFunction,
         isUnmerge,
         memo,
         receiver,
         slippage,
-        stakeKind,
+        stakeId,
         validatorAddress,
         vault.hexChainCode,
         vault.libType,
