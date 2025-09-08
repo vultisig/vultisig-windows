@@ -1,4 +1,7 @@
 export const en = {
+  incorrect_url: 'Incorrect URL',
+  developer_options: 'Developer Options',
+  plugin_server_url: 'Plugin Server URL',
   connecting_to_verifier: 'Connecting to Verifier',
   connecting_to_plugin: 'Connecting to Plugin',
   confirm: 'Confirm',
@@ -627,6 +630,7 @@ export const en = {
       agreementText: 'I have read and understand what to do',
       ctaText: 'Create your vault',
       start_using_vault: 'Start using your vault',
+      select_preferred_chains: 'Select your preferred chains',
     },
     preparingVault: 'Preparing Vault',
     createVault: {
