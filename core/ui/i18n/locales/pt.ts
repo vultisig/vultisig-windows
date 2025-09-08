@@ -510,7 +510,6 @@ export const pt = {
         'Este código confirmará que você recebeu sua ação do cofre 1 por e-mail',
       verifyingCode: 'Verificando código, por favor aguarde',
       backupVault: 'Fazer backup do cofre',
-      shareOnlineBackup: 'preferencialmente online.',
       shareSecurely: 'para garantir o acesso,',
       securely: 'com segurança, de preferência',
       online: 'online',
@@ -710,7 +709,7 @@ export const pt = {
   normal: 'Normal',
   priority: 'Prioridade',
   gas_limit: 'Limite de gás',
-  current_base_fee: 'Taxa base atual',
+  base_fee: 'Taxa base atual',
   gwei: 'GWEI',
   total_fee: 'Taxa total',
   network_rate: 'Taxa de rede',
@@ -1051,4 +1050,5 @@ export const pt = {
   entity_scanned: '{{entity}} escaneado por <provider></provider>',
   site_has_risk: 'Site malicioso detectado por <provider></provider>',
   risky_site_detected: 'Site malicioso detectado',
+  backupShare2: 'Compartilhamento de backup 2',
 }

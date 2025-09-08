@@ -8,8 +8,8 @@ import {
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { getEvmDefaultPriorityFee } from '@core/chain/tx/fee/evm/getEvmDefaultPriorityFee'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
+import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -91,10 +91,10 @@ export const SendTxOverview = () => {
             Number(transaction.transactionDetails.gasSettings?.gasLimit) ||
             getEvmGasLimit({ chain })
 
-          const priorityFee =
-            Number(
-              transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas
-            ) || (await getEvmDefaultPriorityFee(chain))
+          const priorityFee = Number(
+            transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas ||
+              (await getEvmMaxPriorityFeePerGas(chain))
+          )
 
           return { gasLimit, priorityFee }
         },
@@ -395,10 +395,6 @@ const SendTxOverviewContent = ({
                                             ) as EvmFeeSettings
                                           }
                                           chain={chain}
-                                          baseFee={fromChainAmount(
-                                            feeAmount,
-                                            chainFeeCoin[chain].decimals
-                                          )}
                                           onChange={setFeeSettings}
                                         />
                                       ) : null

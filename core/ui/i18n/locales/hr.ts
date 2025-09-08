@@ -498,7 +498,6 @@ export const hr = {
         'Ez a kód megerősíti, hogy megkaptad az 1. trezor megosztásodat e-mailben',
       verifyingCode: 'Kód ellenőrzése, kérlek várj',
       backupVault: 'Trezor biztonsági mentése',
-      shareOnlineBackup: 'lehetőleg online.',
       shareSecurely: 'a hozzáférés biztosítása érdekében,',
       securely: 'biztonságosan, lehetőleg',
       online: 'online',
@@ -696,7 +695,7 @@ export const hr = {
   normal: 'Normalan',
   priority: 'Prioritet',
   gas_limit: 'Ograničenje plina',
-  current_base_fee: 'Trenutna osnovna naknada',
+  base_fee: 'Trenutna osnovna naknada',
   gwei: 'GWEI',
   total_fee: 'Ukupna naknada',
   network_rate: 'Mrežna stopa',
@@ -1036,4 +1035,5 @@ export const hr = {
   entity_scanned: '{{entitet}} skeniran od strane <provider></provider>',
   site_has_risk: 'Zlonamjernu stranicu otkrio je <provider></provider>',
   risky_site_detected: 'Otkrivena je zlonamjerna web-lokacija',
+  backupShare2: 'Sigurnosna kopija dijeljenja 2',
 }

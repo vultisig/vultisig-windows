@@ -518,7 +518,6 @@ export const it = {
         'Questo codice confermerà che hai ricevuto la tua quota del vault 1 via e-mail',
       verifyingCode: 'Verifica del codice in corso, attendere',
       backupVault: 'Esegui il backup del vault',
-      shareOnlineBackup: 'preferibilmente online.',
       shareSecurely: "per garantire l'accesso,",
       securely: 'in modo sicuro, preferibilmente',
       online: 'online',
@@ -716,7 +715,7 @@ export const it = {
   normal: 'Normale',
   priority: 'Priorità',
   gas_limit: 'Limite del gas',
-  current_base_fee: 'Tariffa base attuale',
+  base_fee: 'Tariffa base attuale',
   gwei: 'Ciao',
   total_fee: 'Tariffa totale',
   network_rate: 'Tasso di rete',
@@ -1060,4 +1059,5 @@ export const it = {
   entity_scanned: '{{entity}} scansionata da <provider></provider>',
   site_has_risk: 'Sito dannoso rilevato da <provider></provider>',
   risky_site_detected: 'Sito dannoso rilevato',
+  backupShare2: 'Condivisione di backup 2',
 }

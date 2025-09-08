@@ -12,8 +12,10 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
@@ -21,12 +23,12 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useEvmBaseFeeQuery } from '../../../../../chain/evm/queries/baseFee'
 import { FeeContainer } from '../FeeContainer'
 
 type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &
   OnCloseProp &
   OnFinishProp & {
-    baseFee: number
     chain: EvmChain
     coinKey?: CoinKey
   }
@@ -36,7 +38,6 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   onChange,
   onFinish,
   onClose,
-  baseFee,
   chain,
 }) => {
   const { t } = useTranslation()
@@ -45,6 +46,8 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
     BigInt(value.priorityFee),
     gwei.decimals
   )
+
+  const baseFeeQuery = useEvmBaseFeeQuery(chain)
 
   return (
     <Modal
@@ -63,9 +66,18 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
         </LineWrapper>
         <InputContainer>
           <Text size={14} color="supporting">
-            {t('current_base_fee')} ({ticker})
+            {t('base_fee')} ({ticker})
           </Text>
-          <FeeContainer>{formatTokenAmount(baseFee)}</FeeContainer>
+          <FeeContainer>
+            <MatchQuery
+              value={baseFeeQuery}
+              success={baseFee =>
+                formatTokenAmount(fromChainAmount(baseFee, gwei.decimals))
+              }
+              pending={() => <Spinner />}
+              error={() => t('failed_to_load')}
+            />
+          </FeeContainer>
         </InputContainer>
         <InputContainer>
           <Text size={14} color="supporting">

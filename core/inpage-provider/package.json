@@ -14,6 +14,7 @@
     "@lib/utils": "workspace:*",
     "@solana/spl-token": "^0.4.13",
     "@solana/web3.js": "^1.98.0",
+    "@tanstack/react-query": "^5.87.1",
     "bitcoinjs-lib": "^6.1.7"
   }
 }

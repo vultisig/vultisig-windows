@@ -514,7 +514,6 @@ export const de = {
         'Dieser Code bestätigt, dass Sie Ihren Tresoranteil 1 per E-Mail erhalten haben',
       verifyingCode: 'Code wird überprüft, bitte warten',
       backupVault: 'Tresor sichern',
-      shareOnlineBackup: 'vorzugsweise online.',
       shareSecurely: 'um den Zugriff zu gewährleisten,',
       securely: 'sicher, vorzugsweise',
       online: 'online',
@@ -716,7 +715,7 @@ export const de = {
   normal: 'Normal',
   priority: 'Priorität',
   gas_limit: 'Gasgrenze',
-  current_base_fee: 'Aktuelle Grundgebühr',
+  base_fee: 'Aktuelle Grundgebühr',
   gwei: 'GWEI',
   gas_limit_tooltip_content:
     'Der maximale Gasbetrag, den Sie bezahlen. Kann erhöht werden, wenn das Gaslimit nicht ausreicht, um Transaktionen zu senden.',
@@ -1066,4 +1065,5 @@ export const de = {
   entity_scanned: '{{entity}} gescannt von <provider></provider>',
   site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
   risky_site_detected: 'Schädliche Site erkannt',
+  backupShare2: 'Sicherungsfreigabe 2',
 }

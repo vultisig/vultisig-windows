@@ -32,8 +32,6 @@
     "@lifi/sdk": "^3.6.2",
     "@react-spring/web": "^9.7.5",
     "@rive-app/react-canvas": "^4.18.3",
-    "@tanstack/react-query": "^5.68.0",
-    "@tanstack/react-query-persist-client": "^5.68.0",
     "@trustwallet/wallet-core": "^4.3.6",
     "bs58": "^6.0.0",
     "cosmjs-types": "^0.9.0",

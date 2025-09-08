@@ -9,6 +9,8 @@
     "@core/ui": "workspace:*",
     "@lib/extension": "workspace:*",
     "@lib/ui": "workspace:*",
-    "@lib/utils": "workspace:*"
+    "@lib/utils": "workspace:*",
+    "@tanstack/react-query": "^5.87.1",
+    "@tanstack/react-query-persist-client": "^5.87.1"
   }
 }

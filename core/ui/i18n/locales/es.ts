@@ -515,7 +515,6 @@ export const es = {
         'Este código confirmará que has recibido tu acción del monedero 1 por correo electrónico',
       verifyingCode: 'Verificando código, por favor espera',
       backupVault: 'Hacer copia de seguridad del monedero',
-      shareOnlineBackup: 'preferiblemente en línea.',
       shareSecurely: 'para garantizar el acceso,',
       securely: 'de forma segura, preferiblemente',
       online: 'en línea',
@@ -721,7 +720,7 @@ export const es = {
   normal: 'Normal',
   priority: 'Prioridad',
   gas_limit: 'Límite de gas',
-  current_base_fee: 'Tarifa base actual',
+  base_fee: 'Tarifa base actual',
   gwei: 'GWEI',
   total_fee: 'Tarifa total',
   network_rate: 'Tasa de red',
@@ -1063,4 +1062,5 @@ export const es = {
   entity_scanned: '{{entity}} escaneado por <provider></provider>',
   site_has_risk: 'Sitio malicioso detectado por <provider></provider>',
   risky_site_detected: 'Sitio malicioso detectado',
+  backupShare2: 'Copia de seguridad compartida 2',
 }
