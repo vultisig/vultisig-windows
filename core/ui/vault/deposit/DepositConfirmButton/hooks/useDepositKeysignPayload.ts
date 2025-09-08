@@ -20,6 +20,7 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
@@ -58,18 +59,16 @@ export function useDepositKeysignPayload({
   const walletCore = useAssertWalletCore()
 
   const autocompound = Boolean(depositFormData['autoCompound'])
-  console.log('🚀 ~ useDepositKeysignPayload ~ autocompound:', autocompound)
 
-  let stakeId: ReturnType<typeof selectStakeId> | null = null
+  let stakeId: ReturnType<typeof selectStakeId> | undefined = undefined
   let isStakeContractFlow = false
 
   if (isStake) {
-    try {
-      stakeId = selectStakeId(coin, { autocompound })
-      console.log('🚀 ~ useDepositKeysignPayload ~ stakeId:', stakeId)
+    const result = attempt(() => selectStakeId(coin, { autocompound }))
+    if ('data' in result) {
+      stakeId = shouldBePresent(result.data)
       isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
-    } catch {
-      stakeId = null
+    } else {
       isStakeContractFlow = false
     }
   }
@@ -160,10 +159,13 @@ export function useDepositKeysignPayload({
             },
           })
 
-          // Typescript doesn't know that input can't be null as match is exhaustive
+          if (!input) {
+            throw new Error('Failed to construct stake input')
+          }
+
           const intent = stakeSpecific({
             coin,
-            input: input as any,
+            input,
           })
 
           if (intent.kind === 'wasm') {
@@ -181,13 +183,13 @@ export function useDepositKeysignPayload({
               },
             }
             basePayload.toAddress = intent.contract
-            basePayload.toAmount = intent.funds?.[0]?.amount ?? '0'
+            basePayload.toAmount = '0'
             return { keysign: create(KeysignPayloadSchema, basePayload) }
           }
 
           delete basePayload.contractPayload
           basePayload.memo = intent.memo
-          if (intent.toAddress) basePayload.toAddress = intent.toAddress
+          basePayload.toAddress = intent.toAddress ?? coin.address
           basePayload.toAmount = intent.toAmount ?? '0'
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
@@ -289,7 +291,7 @@ export function useDepositKeysignPayload({
               coin.decimals
             ).toString()
           }
-        } else if (isUnmerge || action === 'unmerge_ruji') {
+        } else if (isUnmerge) {
           let contractAddress: string
 
           const reverseLookup = mirrorRecord(
