@@ -7,8 +7,8 @@ import { nativeTcySpecific } from './tcy-native'
 
 const resolvers: StakeResolver[] = [
   rujiSpecific,
-  nativeTcySpecific,
   stcyAutoSpecific,
+  nativeTcySpecific,
 ]
 
 export function getStakeSpecific(
