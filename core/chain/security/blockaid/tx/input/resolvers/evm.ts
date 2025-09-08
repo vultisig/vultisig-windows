@@ -6,7 +6,7 @@ import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
 
-import { EvmChain } from '../../../../../../Chain'
+import { EvmChain } from '../../../../../Chain'
 import { BlockaidTxValidationInput } from '../../resolver'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 

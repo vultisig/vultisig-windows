@@ -647,8 +647,6 @@ export const it = {
       "Errore durante il recupero dell'ultima versione: {{error}}",
     fetchingLatestVersion: "Recupero dell'ultima versione...",
     applicationUpToDate: "L'applicazione è aggiornata.",
-    newVersionAvailable:
-      'È disponibile una nuova versione ({{latestVersion}})!',
     currentVersion: '{{localVersion}}',
     title: 'Controlla aggiornamento',
     version: 'Versione {{latestVersion}}',
@@ -826,7 +824,6 @@ export const it = {
   get_vault_failed: 'Impossibile ottenere i Vault',
   get_vault_failed_description:
     'Assicurati di aver già importato i tuoi vault in VultiConnect',
-  connect_with_vultisig: 'Connettiti con Vultisig',
   select_vault: 'Seleziona un Vault',
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
@@ -1030,9 +1027,6 @@ export const it = {
   search: 'Ricerca',
   create_referral_form: 'Crea referral',
   blockaid_security_scan: 'Scansione di sicurezza Blockaid',
-  transaction_not_scanned:
-    'Transazione non scansionata da <provider></provider>',
-  transaction_scanned: 'Transazione scansionata da <provider></provider>',
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
   scanning: 'scansione...',
@@ -1047,4 +1041,22 @@ export const it = {
     "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
   go_back: 'Torna indietro',
   continue_anyway: 'Continua comunque',
+  stake_ruji: 'Palo RUJI',
+  unstake_ruji: 'Togliere RUJI',
+  withdraw_ruji_rewards: 'Ritira i premi RUJI',
+  tns_max_4_chars:
+    'Il codice di riferimento non deve contenere più di 4 caratteri',
+  tns_alnum_only:
+    'Il codice di riferimento deve contenere solo caratteri alfanumerici',
+  tns_not_found: 'Codice di riferimento non trovato',
+  tns_missing_thor_alias:
+    'Il codice di riferimento deve avere un alias della catena THOR',
+  site: 'Sito',
+  send_receiver_address_same_as_sender:
+    "L'indirizzo del destinatario non può essere uguale all'indirizzo del mittente",
+  connect_to_site: 'Connettiti a {{site}}',
+  entity_not_scanned: '{{entity}} non scansionato da <provider></provider>',
+  entity_scanned: '{{entity}} scansionata da <provider></provider>',
+  site_has_risk: 'Sito dannoso rilevato da <provider></provider>',
+  risky_site_detected: 'Sito dannoso rilevato',
 }

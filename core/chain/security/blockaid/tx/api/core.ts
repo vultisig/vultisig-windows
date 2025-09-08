@@ -1,13 +1,14 @@
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { BlockaidTxScanResult, TxRiskLevel } from '../core'
+import { RiskLevel } from '../../core/riskLevel'
+import { BlockaidTxScanResult } from '../core'
 
 const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
 
 type BlockaidRiskLevel = (typeof blockaidRiskyTxLevels)[number]
 
-const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, TxRiskLevel> = {
+const blockaidRiskLevelToTxRiskLevel: Record<BlockaidRiskLevel, RiskLevel> = {
   Warning: 'medium',
   Malicious: 'high',
   Spam: 'high',
@@ -27,7 +28,7 @@ export type BlockaidValidation = {
 
 const getRiskLevelFromBlockaidValidation = ({
   result_type,
-}: BlockaidValidation): TxRiskLevel | null => {
+}: BlockaidValidation): RiskLevel | null => {
   if (!isOneOf(result_type, blockaidRiskyTxLevels)) {
     return null
   }
