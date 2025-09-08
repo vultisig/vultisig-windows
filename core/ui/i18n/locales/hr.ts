@@ -521,6 +521,7 @@ export const hr = {
       agreementText: 'Elolvastam és megértettem, mit kell tenni',
       ctaText: 'Hozza létre a tárolóját',
       start_using_vault: 'Počnite koristiti svoj trezor',
+      select_preferred_chains: 'Odaberite svoje omiljene lance',
     },
     preparingVault: 'Tárca előkészítése',
     createVault: {
@@ -624,7 +625,6 @@ export const hr = {
       'Pogreška pri dohvaćanju najnovije verzije: {{error}}',
     fetchingLatestVersion: 'Dohvaćanje najnovije verzije...',
     applicationUpToDate: 'Aplikacija je ažurirana.',
-    newVersionAvailable: 'Nova verzija ({{latestVersion}}) je dostupna!',
     downloadButton: 'Preuzmi sada.',
     currentVersion: '{{localVersion}}',
     title: 'Provjeri ažuriranje',
@@ -809,7 +809,6 @@ export const hr = {
   get_vault_failed: 'Dohvaćanje trezora nije uspjelo',
   get_vault_failed_description:
     'Provjerite jeste li već uvezli svoje trezore u VultiConnect',
-  connect_with_vultisig: 'Povežite se s Vultisigom',
   select_vault: 'Odaberite trezor',
   connect: 'Poveži se',
   link_copied: 'Veza je kopirana u međuspremnik',
@@ -1007,8 +1006,6 @@ export const hr = {
   search: 'Pretraživanje',
   create_referral_form: 'Izradi preporuku',
   blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
-  transaction_not_scanned: 'Transakciju nije skenirao <provider></provider>',
-  transaction_scanned: 'Transakciju skenira <provider></provider>',
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
   scanning: 'skeniranje...',
@@ -1023,4 +1020,20 @@ export const hr = {
     'Ova IBC transakcija uključuje memorandum, ali Vultisig trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
   go_back: 'Natrag',
   continue_anyway: 'Nastavi svejedno',
+  stake_ruji: 'Kolac RUJI',
+  unstake_ruji: 'Ukloni RUJI',
+  withdraw_ruji_rewards: 'Isplata RUJI nagrada',
+  tns_max_4_chars: 'Referral kod ne smije biti duži od 4 znaka',
+  tns_alnum_only: 'Referral kod mora sadržavati samo alfanumeričke znakove',
+  tns_not_found: 'Referral kod nije pronađen',
+  tns_missing_thor_alias: 'Referalni kod mora imati THOR-chain alias',
+  site: 'Stranica',
+  send_receiver_address_same_as_sender:
+    'Adresa primatelja ne može biti ista kao adresa pošiljatelja',
+  connect_to_site: 'Poveži se s {{site}}',
+  entity_not_scanned:
+    '{{entitet}} nije skeniran od strane <provider></provider>',
+  entity_scanned: '{{entitet}} skeniran od strane <provider></provider>',
+  site_has_risk: 'Zlonamjernu stranicu otkrio je <provider></provider>',
+  risky_site_detected: 'Otkrivena je zlonamjerna web-lokacija',
 }

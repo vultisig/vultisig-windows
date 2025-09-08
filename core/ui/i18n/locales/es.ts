@@ -539,6 +539,7 @@ export const es = {
       agreementText: 'He leído y entiendo qué hacer',
       ctaText: 'Cree su bóveda',
       start_using_vault: 'Comienza a usar tu bóveda',
+      select_preferred_chains: 'Elige tus cadenas preferidas',
     },
     preparingVault: 'Preparando Bóveda',
     createVault: {
@@ -648,8 +649,6 @@ export const es = {
     errorFetchingLatestVersion: 'Error al obtener la última versión: {{error}}',
     fetchingLatestVersion: 'Obteniendo la última versión...',
     applicationUpToDate: 'La aplicación está actualizada.',
-    newVersionAvailable:
-      '¡Hay una nueva versión ({{latestVersion}}) disponible!',
     currentVersion: '{{localVersion}}',
     title: 'Comprobar actualización',
     version: 'Versión {{latestVersion}}',
@@ -831,7 +830,6 @@ export const es = {
   get_vault_failed: 'No se pudieron obtener las bóvedas',
   get_vault_failed_description:
     'Asegúrese de que ya haya importado sus bóvedas en VultiConnect',
-  connect_with_vultisig: 'Conéctate con Vultisig',
   select_vault: 'Seleccione una bóveda',
   connect: 'Conectar',
   link_copied: 'Enlace copiado al portapapeles',
@@ -1034,8 +1032,6 @@ export const es = {
   search: 'Buscar',
   create_referral_form: 'Crear referencia',
   blockaid_security_scan: 'Análisis de seguridad de Blockaid',
-  transaction_not_scanned: 'Transacción no escaneada por <provider></provider>',
-  transaction_scanned: 'Transacción escaneada por <provider></provider>',
   transaction_has_risk:
     'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
   scanning: 'exploración...',
@@ -1050,4 +1046,21 @@ export const es = {
     'Esta transacción de IBC incluye una nota, pero Vultisig actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
   go_back: 'Volver',
   continue_anyway: 'Continuar de todos modos',
+  stake_ruji: 'Estaca RUJI',
+  unstake_ruji: 'Desapuesta RUJI',
+  withdraw_ruji_rewards: 'Retirar recompensas RUJI',
+  tns_max_4_chars: 'El código de referencia no debe tener más de 4 caracteres',
+  tns_alnum_only:
+    'El código de referencia debe contener únicamente caracteres alfanuméricos',
+  tns_not_found: 'Código de referencia no encontrado',
+  tns_missing_thor_alias:
+    'El código de referencia debe tener un alias de cadena THOR',
+  site: 'Sitio',
+  send_receiver_address_same_as_sender:
+    'La dirección del receptor no puede ser la misma que la dirección del remitente',
+  connect_to_site: 'Conectarse a {{site}}',
+  entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
+  entity_scanned: '{{entity}} escaneado por <provider></provider>',
+  site_has_risk: 'Sitio malicioso detectado por <provider></provider>',
+  risky_site_detected: 'Sitio malicioso detectado',
 }
