@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import {
+  Control,
   UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
@@ -15,6 +16,7 @@ type DepositFormHandlers = {
   watch: UseFormWatch<FormData>
   chain: Chain
   register: UseFormRegister<FormData>
+  control: Control<FormData, any>
 }
 
 export const {
