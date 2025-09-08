@@ -76,15 +76,18 @@ export function useDepositKeysignPayload({
   const isTonFunction = coin.chain === Chain.Ton
   const slippage = Number(depositFormData['slippage'] ?? 0)
   const memo = (depositFormData['memo'] as string) ?? ''
-  const validatorAddress = depositFormData['validatorAddress'] as string
+  const validatorAddress = depositFormData['validatorAddress'] as
+    | string
+    | undefined
 
   const hasAmount = 'amount' in depositFormData
   const amount = hasAmount ? Number(depositFormData['amount']) : undefined
 
-  const hasNodeAddress = 'nodeAddress' in depositFormData
-  const receiver = hasNodeAddress
-    ? String(depositFormData['nodeAddress'] || '')
-    : undefined
+  const nodeAddressRaw = depositFormData['nodeAddress']
+  const receiver =
+    typeof nodeAddressRaw === 'string' && nodeAddressRaw.length > 0
+      ? nodeAddressRaw
+      : undefined
 
   const invalid =
     hasAmount && (amount == null || !Number.isFinite(amount) || amount <= 0)
@@ -132,20 +135,20 @@ export function useDepositKeysignPayload({
             const percentage = depositFormData['percentage'] as
               | number
               | undefined
-
-            stakeInput = amount
-              ? { kind: 'unstake', amount }
+            // Native TCY expects percentage; sTCY expects amount. We pass whichever is present.
+            stakeInput = Number.isFinite(amount as number)
+              ? { kind: 'unstake', amount: amount as number }
               : { kind: 'unstake', percentage: shouldBePresent(percentage) }
           } else {
             stakeInput = { kind: 'claim' }
           }
 
-          console.log('🚀 ~ useDepositKeysignPayload ~ stakeInput:', stakeInput)
           const intent = stakeSpecific.buildIntent(stakeKind, stakeInput, {
             coin,
           })
 
           if (intent.kind === 'wasm') {
+            basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -163,6 +166,7 @@ export function useDepositKeysignPayload({
             return { keysign: create(KeysignPayloadSchema, basePayload) }
           }
 
+          delete basePayload.contractPayload
           basePayload.memo = intent.memo
           if (intent.toAddress) basePayload.toAddress = intent.toAddress
           basePayload.toAmount = intent.toAmount ?? '0'
@@ -202,6 +206,7 @@ export function useDepositKeysignPayload({
 
             funds = [{ denom: baseDenom, amount: amountUnits }]
 
+            basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -227,6 +232,7 @@ export function useDepositKeysignPayload({
               },
             ]
 
+            basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -239,7 +245,6 @@ export function useDepositKeysignPayload({
           }
 
           basePayload.toAmount = amountUnits
-          basePayload.memo = memo
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
@@ -253,6 +258,7 @@ export function useDepositKeysignPayload({
             'merge',
           ])
         ) {
+          delete basePayload.contractPayload
           if (isTonFunction) {
             basePayload.toAddress = shouldBePresent(validatorAddress)
           } else if (receiver) {
