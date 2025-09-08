@@ -2,6 +2,7 @@ import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { Divider } from '@lib/ui/divider'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -19,6 +20,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 
 const StyledCheckbox = styled(Checkbox)`
   pointer-events: none;
@@ -102,7 +105,7 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
   const { t } = useTranslation()
   const [isAgreed, { toggle }] = useBoolean(false)
   const { signers } = useCurrentVault()
-
+  const navigate = useCoreNavigate()
   const isFastVault = hasServer(signers)
 
   const summaryItems = [
@@ -179,6 +182,16 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
           </HStack>
           <Button disabled={!isAgreed} onClick={onFinish}>
             {t('fastVaultSetup.summary.start_using_vault')}
+          </Button>
+          <Divider text={t('or').toUpperCase()} />
+          <Button
+            disabled={!isAgreed}
+            kind="secondary"
+            onClick={() => {
+              navigate({ id: 'manageVaultChains' })
+            }}
+          >
+            {t('fastVaultSetup.summary.select_preferred_chains')}
           </Button>
         </VStack>
       </Wrapper>
