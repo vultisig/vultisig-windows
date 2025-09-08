@@ -1,4 +1,16 @@
 export const en = {
+  onboarding_greeting: 'Say goodbye to <g>seed phrases<g>',
+  onboarding_step_one:
+    'Say hello to <g>vault shares,<g> your new <g>recovery method<g>',
+  onboarding_step_two:
+    "They're <g>split into parts<g> to increase security, remove <g>single point-of-failure<g>",
+  onboarding_step_three:
+    '<g>Each device<g> in your vault holds <g>one vault share<g>',
+  onboarding_step_four:
+    'Recover your vault even <g>if a device is lost or damaged<g>',
+  onboarding_step_five:
+    '<g>Always backup each vault share<g> separately in a <g>different location<g>',
+  onboarding_step_six: 'These shares collaborate to <g>unlock your vault<g>',
   incorrect_url: 'Incorrect URL',
   developer_options: 'Developer Options',
   plugin_server_url: 'Plugin Server URL',

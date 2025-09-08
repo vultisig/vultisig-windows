@@ -11,7 +11,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { GradientText, Text } from '@lib/ui/text'
+import { RichText } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -63,65 +63,52 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
         <AnimatedVisibility>
           {match(currentAnimation, {
             1: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('sayHelloTo')}{' '}
-                  <GradientText as="span">{`${t('vaultShares')},`}</GradientText>{' '}
-                  {t('yourNewRecoveryMethod')}
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_one')}
+                size={28}
+                centerHorizontally
+              />
             ),
             2: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('theyRe')}{' '}
-                  <GradientText as="span">{t('splitIntoParts')}</GradientText>{' '}
-                  {`${t('toIncreaseSecurity')},`}{' '}
-                  <GradientText as="span">
-                    {t('removeSinglePointOfFailure')}
-                  </GradientText>
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_two')}
+                size={28}
+                centerHorizontally
+              />
             ),
             3: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
-                  {t('inYourVaultHolds')}{' '}
-                  <GradientText as="span">{t('oneVaultShare')}</GradientText>
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_three')}
+                size={28}
+                centerHorizontally
+              />
             ),
             4: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('recoverYourVault')}{' '}
-                  <GradientText as="span">
-                    {t('deviceLostOrDamaged')}
-                  </GradientText>
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_four')}
+                size={28}
+                centerHorizontally
+              />
             ),
             5: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  <GradientText as="span">
-                    {t('alwaysBackUpEachVaultShare')}
-                  </GradientText>{' '}
-                  {t('separatelyIna')}{' '}
-                  <GradientText as="span">
-                    {t('differentLocation')}
-                  </GradientText>
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_five')}
+                size={28}
+                centerHorizontally
+              />
             ),
             6: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('theseSharesCollaborate')}{' '}
-                  <GradientText as="span">{t('unlockYourVault')}</GradientText>
-                </Text>
-              </>
+              <RichText
+                as="div"
+                content={t('onboarding_step_six')}
+                size={28}
+                centerHorizontally
+              />
             ),
           })}
         </AnimatedVisibility>
@@ -129,7 +116,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
           disabled={isLoading}
           kind="primary"
           onClick={
-            currentAnimation < animations.length - 1
+            currentAnimation < animations.length
               ? handleNextAnimation
               : onFinish
           }
