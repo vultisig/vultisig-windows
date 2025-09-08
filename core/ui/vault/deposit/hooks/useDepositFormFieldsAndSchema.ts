@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
-import { getFunctionFormConfig } from '../utils/getFunctionFormConfig'
+import { getDepositFormConfig } from '../utils/getDepositFormConfig'
 import { useDepositBalance } from './useDepositBalance'
 
 export const useDepositFormFieldsAndSchema = () => {
@@ -16,7 +16,7 @@ export const useDepositFormFieldsAndSchema = () => {
     selectedChainAction,
   })
 
-  return getFunctionFormConfig({
+  return getDepositFormConfig({
     coin,
     selectedChainAction,
     t,

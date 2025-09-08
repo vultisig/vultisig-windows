@@ -7,9 +7,7 @@ import type { StakeSpecific, StcyPayload } from '../types'
 export const getStcySpecific = ({ input }: StcyPayload): StakeSpecific => {
   return match<StcyPayload['input']['kind'], StakeSpecific>(input.kind, {
     stake: () => {
-      if (!('amount' in input)) {
-        throw new Error('Invalid amount')
-      }
+      if (!('amount' in input)) throw new Error('Invalid amount')
 
       const units = toChainAmount(
         input.amount,
@@ -20,14 +18,10 @@ export const getStcySpecific = ({ input }: StcyPayload): StakeSpecific => {
         kind: 'wasm',
         contract: tcyAutoCompounderConfig.contract,
         executeMsg: { liquid: { bond: {} } },
-        funds: [{ denom: tcyAutoCompounderConfig.shareDenom, amount: units }],
+        funds: [{ denom: tcyAutoCompounderConfig.depositDenom, amount: units }],
       }
     },
     unstake: () => {
-      if (!('amount' in input)) {
-        throw new Error('Invalid amount')
-      }
-
       if (!('amount' in input)) throw new Error('Invalid amount')
 
       const units = toChainAmount(
