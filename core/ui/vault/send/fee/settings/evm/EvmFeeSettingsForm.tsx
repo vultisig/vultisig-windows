@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
@@ -75,7 +76,11 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             onValueChange={priorityFee =>
               onChange({
                 ...value,
-                priorityFee: priorityFee ? Math.floor(priorityFee * 1e9) : 0,
+                priorityFee: priorityFee
+                  ? Math.floor(
+                      Number(toChainAmount(priorityFee, gwei.decimals))
+                    )
+                  : 0,
               })
             }
           />
