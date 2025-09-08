@@ -1,46 +1,31 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
 
-import { StakeInput, StakeKind, StakeResolver, StakeSpecific } from '../types'
+import { NativeTcyPayload, StakeSpecific } from '../types'
 
-export const nativeTcySpecific: StakeResolver = {
-  id: 'native-tcy',
+export const getNativeTcySpecific = ({
+  coin,
+  input,
+}: NativeTcyPayload): StakeSpecific => {
+  return match(input.kind, {
+    stake: () => {
+      if (!('amount' in input)) throw new Error('Invalid amount')
+      const units = toChainAmount(
+        shouldBePresent(input.amount),
+        coin.decimals
+      ).toString()
 
-  supports(coin) {
-    return (
-      coin.ticker.toUpperCase() ===
-      knownCosmosTokens['THORChain']['tcy'].ticker.toUpperCase()
-    )
-  },
-
-  buildIntent(verb: StakeKind, input: StakeInput, { coin }): StakeSpecific {
-    if (verb === 'stake') {
-      if ('amount' in input) {
-        const units = toChainAmount(
-          shouldBePresent(input.amount),
-          coin.decimals
-        ).toString()
-
-        return {
-          kind: 'memo',
-          memo: 'tcy+',
-          toAmount: units,
-        }
-      } else {
-        throw new Error('Invalid amount')
+      return { kind: 'memo', memo: 'tcy+', toAmount: units }
+    },
+    unstake: () => {
+      if (!('percentage' in input) || !Number.isFinite(input.percentage)) {
+        throw new Error('unstake_requires_percentage')
       }
-    }
-
-    if (verb === 'unstake') {
-      const bps = Math.floor((input as any).percentage * 100)
-      return {
-        kind: 'memo',
-        memo: `tcy-:${bps}`,
-        toAmount: '0',
-      }
-    }
-
-    return { kind: 'memo', memo: '', toAmount: '0' }
-  },
+      const pct = Math.min(100, Math.max(0, input.percentage))
+      const bps = Math.round(pct * 100)
+      return { kind: 'memo', memo: `tcy-:${bps}`, toAmount: '0' }
+    },
+    claim: () => ({ kind: 'memo', memo: '', toAmount: '0' }),
+  })
 }
