@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
@@ -24,6 +25,7 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
+
   const { data: stakeAndRewards } = useRujiraStakeQuery()
 
   const selectedCoinBalance = useDepositCoinBalance({
@@ -34,7 +36,8 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const totalTokenAmount = useMemo(() => {
     if (
       selectedChainAction === 'unstake' &&
-      selectedCoin.ticker === knownCosmosTokens['THORChain']['x/ruji'].ticker
+      selectedCoin.ticker ===
+        knownCosmosTokens[Chain.THORChain]['x/ruji'].ticker
     ) {
       return stakeAndRewards?.bonded ?? 0
     }
