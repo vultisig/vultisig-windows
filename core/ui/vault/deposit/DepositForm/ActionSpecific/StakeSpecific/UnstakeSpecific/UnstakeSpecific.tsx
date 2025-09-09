@@ -11,7 +11,7 @@ import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../../DepositForm.styled'
 import { StakeTokenExplorer } from '../StakeTokenExplorer'
-import { UnstakeTCYSpecific } from './UnstakeTCYSpecific'
+import { UnstakeTCYSpecific } from './components/UnstakeTCYSpecific'
 
 export const UnstakeSpecific = () => {
   const [{ ticker: selectedCoinTicker }] = useDepositCoin()
