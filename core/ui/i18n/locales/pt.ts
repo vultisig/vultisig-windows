@@ -3,7 +3,7 @@ export const pt = {
   onboarding_step_1:
     'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
   onboarding_step_2:
-    'Eles estão <g>divididos em partes</g> para aumentar a segurança e, remover <g>um único ponto de falha</g>',
+    'Eles estão <g>divididos em partes</g> para aumentar a segurança e, <g>remover um único ponto de falha</g>',
   onboarding_step_3:
     '<g>Cada dispositivo</g> no seu cofre contém <g>uma parte do cofre</g>',
   onboarding_step_4:

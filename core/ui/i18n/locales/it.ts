@@ -3,7 +3,7 @@ export const it = {
   onboarding_step_1:
     'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
   onboarding_step_2:
-    'Sono <g>divisi in parti</g> per aumentare la sicurezza e, eliminare <g>il singolo punto di guasto</g>',
+    'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
   onboarding_step_4:

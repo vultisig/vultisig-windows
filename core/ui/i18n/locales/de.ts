@@ -3,7 +3,7 @@ export const de = {
   onboarding_step_1:
     'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
   onboarding_step_2:
-    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, den <g>Single Point of Failure zu entfernen</g>',
+    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
   onboarding_step_3:
     '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
   onboarding_step_4:

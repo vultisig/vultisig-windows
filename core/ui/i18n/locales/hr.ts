@@ -3,7 +3,7 @@ export const hr = {
   onboarding_step_1:
     'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
   onboarding_step_2:
-    'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, az egyetlen <g>meghibásodási pont eltávolítása érdekében</g>',
+    'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, <g>az egyetlen meghibásodási pont eltávolítása érdekében</g>',
   onboarding_step_3:
     '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
   onboarding_step_4:

@@ -3,7 +3,7 @@ export const es = {
   onboarding_step_1:
     'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
   onboarding_step_2:
-    'Están <g>divididos en partes</g> para aumentar la seguridad y, eliminar <g>un único punto de fallo</g>',
+    'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
   onboarding_step_3:
     '<g>Cada dispositivo</g> en su depósito contiene <g>una parte del depósito</g>',
   onboarding_step_4:

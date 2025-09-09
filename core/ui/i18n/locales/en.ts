@@ -3,7 +3,7 @@ export const en = {
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
   onboarding_step_2:
-    "They're <g>split into parts</g> to increase security, remove <g>single point-of-failure</g>",
+    "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
   onboarding_step_3:
     '<g>Each device</g> in your vault holds <g>one vault share</g>',
   onboarding_step_4:
