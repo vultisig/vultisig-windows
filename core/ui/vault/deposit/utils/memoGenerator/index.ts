@@ -88,19 +88,25 @@ export const generateMemo = ({
         Ton: () => 'w',
         THORChain: () => {
           if (coin.ticker === 'TCY') {
-            const pct = shouldBePresent(
-              depositFormData.percentage,
-              'Percentage'
-            )
+            if (depositFormData.autoCompound) return ''
+
+            const raw = (depositFormData as any).percentage
+
+            const pct = typeof raw === 'string' ? Number(raw) : Number(raw)
+            if (!Number.isFinite(pct) || pct <= 0 || pct > 100) {
+              throw new Error('Percentage must be 0-100')
+            }
             const basisPoints = Math.floor(pct * 100)
             return `tcy-:${basisPoints}`
           }
 
           if (coin.ticker === 'RUJI') {
-            const chainAmount = toChainAmount(
-              shouldBePresent(Number(amount)),
-              coin.decimals
-            ).toString()
+            const amt = shouldBePresent(amount, 'Amount')
+            const amtNum = typeof amt === 'string' ? Number(amt) : amt
+            if (!Number.isFinite(amtNum) || amtNum <= 0) {
+              throw new Error('Amount is required for RUJI unstake')
+            }
+            const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
             return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
           }
 
@@ -201,5 +207,6 @@ function extractFormValues(formData: FieldValues) {
     destinationChannel: formData.destinationChannel as string | null,
     coin: formData.coin as Coin | null,
     thorchainAddress: formData.thorchainAddress as string | null,
+    autoCompound: Boolean(formData.autoCompound),
   }
 }
