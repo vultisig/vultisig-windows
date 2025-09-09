@@ -855,7 +855,7 @@ export const pt = {
   vault_overview: 'Visão geral do Vault',
   tap: 'Tocar',
   took_too_long_to_respond: 'Demorou muito para responder',
-  vultiserver_password: 'Senha do Vultiserver',
+  backup_password: 'Senha de backup',
   backup_without_password: 'Backup sem senha',
   use_password: 'Usar senha',
   backup_password_prompt:

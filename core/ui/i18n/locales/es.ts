@@ -866,7 +866,7 @@ export const es = {
   vault_overview: 'Descripción general de la bóveda',
   tap: 'Grifo',
   took_too_long_to_respond: 'Tardó demasiado en responder',
-  vultiserver_password: 'Contraseña de Vultiserver',
+  backup_password: 'Contraseña de respaldo',
   backup_without_password: 'Copia de seguridad sin contraseña',
   use_password: 'Usar contraseña',
   backup_password_prompt:
