@@ -38,7 +38,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   chain,
 }) => {
   const { t } = useTranslation()
-  const { ticker } = chainFeeCoin[chain]
+  const { ticker, decimals } = chainFeeCoin[chain]
   const priorityFeeInGwei = fromChainAmount(
     BigInt(value.priorityFee),
     gwei.decimals
@@ -69,7 +69,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             <MatchQuery
               value={baseFeeQuery}
               success={baseFee =>
-                formatTokenAmount(fromChainAmount(baseFee, gwei.decimals))
+                formatTokenAmount(fromChainAmount(baseFee, decimals))
               }
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}
