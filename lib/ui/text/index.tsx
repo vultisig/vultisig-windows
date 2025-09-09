@@ -2,7 +2,6 @@ import { cropText } from '@lib/ui/css/cropText'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
-import { FC } from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
 
 type TextVariant = 'h1Hero' | 'h1Regular'
@@ -172,29 +171,7 @@ export const gradientText = css`
   text-fill-color: transparent;
 `
 
-export const GradientText = styled(Text)`
+export const GradientText = styled.span<TextProps>`
+  ${text}
   ${gradientText}
 `
-
-export const RichText: FC<TextProps & { content: string }> = ({
-  content,
-  ...textProps
-}) => {
-  const segments = content.split(/(<g>.*?<g>)/)
-
-  return (
-    <Text {...textProps}>
-      {segments.map((segment, index) => {
-        const match = segment.match(/^<g>(.*?)<g>$/)
-
-        return match ? (
-          <GradientText as="span" key={index}>
-            {match[1]}
-          </GradientText>
-        ) : (
-          <span key={index}>{segment}</span>
-        )
-      })}
-    </Text>
-  )
-}

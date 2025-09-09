@@ -1,4 +1,16 @@
 export const pt = {
+  onboarding_greeting: 'Adeus às <g>frases semente</g>',
+  onboarding_step_1:
+    'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
+  onboarding_step_2:
+    'Eles estão <g>divididos em partes</g> para aumentar a segurança e, remover <g>um único ponto de falha</g>',
+  onboarding_step_3:
+    '<g>Cada dispositivo</g> no seu cofre contém <g>uma parte do cofre</g>',
+  onboarding_step_4:
+    'Recupere seu cofre mesmo <g>se um dispositivo for perdido ou danificado</g>',
+  onboarding_step_5:
+    '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
+  onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   onboarding_description_1:
@@ -140,31 +152,12 @@ export const pt = {
   missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
   missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
-  alwaysBackUpEachVaultShare: 'Sempre faça backup de cada parte do cofre',
   serverTimedOut: 'O servidor demorou muito',
   serverTookTooLong:
     'O servidor demorou muito para responder. Verifique sua conexão com a internet e tente novamente.',
-  separatelyIna: 'separadamente em um',
-  differentLocation: 'local diferente',
-  eachDevice: 'Cada dispositivo',
   supported_file_types: 'Tipos de arquivo suportados: .bak & .vult',
-  inYourVaultHolds: 'no seu cofre contém',
   chooseSetup: 'Escolher configuração',
   introOnboarding: 'Intro',
-  oneVaultShare: 'uma parte do cofre',
-  theyRe: 'Eles estão',
-  splitIntoParts: 'divididos em partes',
-  toIncreaseSecurity: 'para aumentar a segurança e',
-  removeSinglePointOfFailure: 'remover um único ponto de falha',
-  theseSharesCollaborate: 'Essas partes colaboram para',
-  unlockYourVault: 'desbloquear seu cofre',
-  recoverYourVault: 'Recupere seu cofre mesmo',
-  deviceLostOrDamaged: 'se um dispositivo for perdido ou danificado',
-  sayGoodbyeTo: 'Adeus às',
-  seedPhrases: 'frases semente',
-  sayHelloTo: 'Diga olá para',
-  vaultShares: 'ações do cofre',
-  yourNewRecoveryMethod: 'seu novo método de recuperação',
   tokens: 'tokens',
   selected: 'selecionado',
   required_field_missing: 'Campo obrigatório em falta',

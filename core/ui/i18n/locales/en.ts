@@ -1,16 +1,16 @@
 export const en = {
-  onboarding_greeting: 'Say goodbye to <g>seed phrases<g>',
-  onboarding_step_one:
-    'Say hello to <g>vault shares,<g> your new <g>recovery method<g>',
-  onboarding_step_two:
-    "They're <g>split into parts<g> to increase security, remove <g>single point-of-failure<g>",
-  onboarding_step_three:
-    '<g>Each device<g> in your vault holds <g>one vault share<g>',
-  onboarding_step_four:
-    'Recover your vault even <g>if a device is lost or damaged<g>',
-  onboarding_step_five:
-    '<g>Always backup each vault share<g> separately in a <g>different location<g>',
-  onboarding_step_six: 'These shares collaborate to <g>unlock your vault<g>',
+  onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+  onboarding_step_1:
+    'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  onboarding_step_2:
+    "They're <g>split into parts</g> to increase security, remove <g>single point-of-failure</g>",
+  onboarding_step_3:
+    '<g>Each device</g> in your vault holds <g>one vault share</g>',
+  onboarding_step_4:
+    'Recover your vault even <g>if a device is lost or damaged</g>',
+  onboarding_step_5:
+    '<g>Always backup each vault share</g> separately in a <g>different location</g>',
+  onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   incorrect_url: 'Incorrect URL',
   developer_options: 'Developer Options',
   plugin_server_url: 'Plugin Server URL',
@@ -573,13 +573,6 @@ export const en = {
   create_referral_form: 'Create referral',
   secureVault: 'Secure Vault',
   active: 'Active',
-  sayGoodbyeTo: 'Say goodbye to',
-  seedPhrases: 'seed phrases',
-  sayHelloTo: 'Say hello to',
-  recoverYourVault: 'Recover your vault even',
-  deviceLostOrDamaged: 'if a device is lost or damaged',
-  vaultShares: 'vault shares',
-  yourNewRecoveryMethod: 'your new recovery method',
   sign: 'Sign',
   sign_custom_message: 'Sign custom message',
   sign_message: 'Sign message',
@@ -725,18 +718,6 @@ export const en = {
   introOnboarding: 'Intro',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
-  alwaysBackUpEachVaultShare: 'Always backup each vault share',
-  separatelyIna: 'separately in a',
-  differentLocation: 'different location',
-  eachDevice: 'Each device',
-  inYourVaultHolds: 'in your vault holds',
-  oneVaultShare: 'one vault share',
-  theyRe: "They're",
-  splitIntoParts: 'split into parts',
-  toIncreaseSecurity: 'to increase security',
-  removeSinglePointOfFailure: 'remove single point-of-failure',
-  theseSharesCollaborate: 'These shares collaborate to',
-  unlockYourVault: 'unlock your vault',
   vault_missing_public_key_message:
     'Vault file is corrupted or missing a public key. Please try again or select a different vault.',
   min_signers_disclaimer:

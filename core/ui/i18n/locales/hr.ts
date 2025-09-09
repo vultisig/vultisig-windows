@@ -1,4 +1,17 @@
 export const hr = {
+  onboarding_greeting: 'Búcsúzz el a <g>seed kívána</g>',
+  onboarding_step_1:
+    'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
+  onboarding_step_2:
+    'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, az egyetlen <g>meghibásodási pont eltávolítása érdekében</g>',
+  onboarding_step_3:
+    '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
+  onboarding_step_4:
+    'Állítsd helyre a széfet még akkor is <g>ha egy eszköz elveszik vagy megsérül</g>',
+  onboarding_step_5:
+    '<g>Mindig készíts biztonsági másolatot minden tárhelyrészről</g> külön egy <g>másik helyszínen</g>',
+  onboarding_step_6:
+    'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   secure_crypto_vault: 'Sigurni kripto trezor',
   vultisig: 'Vultisig',
   onboarding_description_1:
@@ -136,34 +149,13 @@ export const hr = {
     'Töltse le a Vultisig alkalmazást más eszközeire, és válassza a "QR-kód beolvasása" lehetőséget',
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
-  sayHelloTo: 'Mondd, hogy helló',
-  vaultShares: 'széf részvények',
   serverTimedOut: 'A szerver időtúllépés miatt megszakadt',
   serverTookTooLong:
     'A szerver túl sokáig tartott a válaszadással. Kérlek, ellenőrizd az internetkapcsolatodat, és próbáld újra.',
-  alwaysBackUpEachVaultShare:
-    'Mindig készíts biztonsági másolatot minden tárhelyrészről',
-  separatelyIna: 'külön egy',
-  differentLocation: 'másik helyszínen',
-  eachDevice: 'Minden eszköz',
-  inYourVaultHolds: 'a tárhelyedben tartalmaz',
-  oneVaultShare: 'egy tárhelyrészt',
-  theyRe: 'Ezek',
   moreInfo: 'További információ',
   secureVaultSetupPasswordTooltipContent:
     'Ez azért történik, mert a jelszót a biztonsági mentési fájl helyi titkosítására használják, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetősége van egy tippet hozzáadni.',
-  splitIntoParts: 'részekre vannak osztva',
-  toIncreaseSecurity: 'a biztonság növelése érdekében és',
-  removeSinglePointOfFailure:
-    'az egyetlen meghibásodási pont eltávolítása érdekében',
-  theseSharesCollaborate: 'Ezek a részek együttműködnek, hogy',
-  unlockYourVault: 'feloldják a tárhelyed zárolását',
-  recoverYourVault: 'Állítsd helyre a széfet még akkor is',
-  deviceLostOrDamaged: 'ha egy eszköz elveszik vagy megsérül',
-  yourNewRecoveryMethod: 'az új helyreállítási módszered',
   tokens: 'tokenek',
-  sayGoodbyeTo: 'Búcsúzz el a',
-  seedPhrases: 'seed kívána',
   selected: 'kiválasztott',
   required_field_missing: 'Hiányzó kötelező mező',
   import_existing_vault: 'Uvezi postojeći trezor',

@@ -2,16 +2,14 @@ import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { RichText } from '@lib/ui/text'
+import { GradientText, Text } from '@lib/ui/text'
 import { Milliseconds } from '@lib/utils/time'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 const delayBeforeNextStep: Milliseconds = 500
 
 export const OnboardingGreeting: FC<OnFinishProp> = ({ onFinish }) => {
-  const { t } = useTranslation()
-
   return (
     <PageContent
       alignItems="center"
@@ -26,12 +24,12 @@ export const OnboardingGreeting: FC<OnFinishProp> = ({ onFinish }) => {
         onAnimationComplete={() => setTimeout(onFinish, delayBeforeNextStep)}
       >
         <VStack alignItems="center">
-          <RichText
-            as="div"
-            content={t('onboarding_greeting')}
-            size={28}
-            centerHorizontally
-          />
+          <Text as="div" size={28} centerHorizontally>
+            <Trans
+              i18nKey="onboarding_greeting"
+              components={{ g: <GradientText as="span" /> }}
+            />
+          </Text>
         </VStack>
       </AnimatedVisibility>
     </PageContent>

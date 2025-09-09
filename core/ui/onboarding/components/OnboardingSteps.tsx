@@ -11,10 +11,9 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { RichText } from '@lib/ui/text'
-import { match } from '@lib/utils/match'
+import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
@@ -61,56 +60,12 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
       </VStack>
       <Footer alignItems="center" gap={32}>
         <AnimatedVisibility>
-          {match(currentAnimation, {
-            1: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_one')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-            2: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_two')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-            3: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_three')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-            4: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_four')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-            5: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_five')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-            6: () => (
-              <RichText
-                as="div"
-                content={t('onboarding_step_six')}
-                size={28}
-                centerHorizontally
-              />
-            ),
-          })}
+          <Text as="div" size={28} centerHorizontally>
+            <Trans
+              i18nKey={`onboarding_step_${currentAnimation}`}
+              components={{ g: <GradientText /> }}
+            />
+          </Text>
         </AnimatedVisibility>
         <IconButton
           disabled={isLoading}
