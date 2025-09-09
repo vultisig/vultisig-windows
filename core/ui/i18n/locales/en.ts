@@ -409,7 +409,7 @@ export const en = {
   price_impact_average: 'Average',
   price_impact_high: 'High Impact',
   gas_limit: 'Gas limit',
-  current_base_fee: 'Max Base Fee',
+  base_fee: 'Base Fee',
   gwei: 'GWEI',
   total_fee: 'Total Fees',
   network_fee: 'Network fee',
