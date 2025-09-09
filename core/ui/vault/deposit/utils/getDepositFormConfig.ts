@@ -228,7 +228,7 @@ export const getDepositFormConfig = ({
             message: t('required_node_address'),
           })
           .refine(
-            async address => {
+            address => {
               return isValidAddress({
                 chain: chain as Chain,
                 address,
@@ -287,7 +287,7 @@ export const getDepositFormConfig = ({
             message: t('required_node_address'),
           })
           .refine(
-            async address => {
+            address => {
               return isValidAddress({
                 chain: chain as Chain,
                 address,
@@ -359,7 +359,7 @@ export const getDepositFormConfig = ({
             message: t('required_node_address'),
           })
           .refine(
-            async address => {
+            address => {
               return isValidAddress({
                 chain: chain as Chain,
                 address,
@@ -402,7 +402,7 @@ export const getDepositFormConfig = ({
             message: t('required_node_address'),
           })
           .refine(
-            async address => {
+            address => {
               return isValidAddress({
                 chain: chain as Chain,
                 address,
@@ -462,7 +462,7 @@ export const getDepositFormConfig = ({
             message: t('required_node_address'),
           })
           .refine(
-            async address => {
+            address => {
               return isValidAddress({
                 chain: chain as Chain,
                 address,
