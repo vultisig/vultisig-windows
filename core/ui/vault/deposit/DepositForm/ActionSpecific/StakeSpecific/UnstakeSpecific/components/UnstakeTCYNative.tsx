@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { AmountSuggestion } from '../../../../../../send/amount/AmountSuggestion'
 import {
   useCurrentVaultAddress,
-  useCurrentVaultCoins,
+  useCurrentVaultCoin,
 } from '../../../../../../state/currentVaultCoins'
 import { useDepositFormHandlers } from '../../../../../providers/DepositFormHandlersProvider'
 import { useUnstakableTcyQuery } from '../hooks/useUnstakableTcyQuery'
@@ -24,15 +24,18 @@ export const UnstakeTCYNative = () => {
     address,
     options: { enabled: !!address },
   })
-  const coins = useCurrentVaultCoins()
-  const tcy = coins.find(c => c.id === 'tcy')
-  const maxDisplay = fromChainAmount(tcyBalance, tcy?.decimals ?? 8)
+
+  const { decimals, ticker } = useCurrentVaultCoin({
+    id: 'tcy',
+    chain: Chain.THORChain,
+  })
+  const maxDisplay = fromChainAmount(tcyBalance, decimals)
 
   return (
     <InputContainer>
       <Text size={15}>
         {t('percentage_to_unstake')} ({t('staked_amount')}: {maxDisplay}{' '}
-        {tcy?.ticker ?? 'TCY'})
+        {ticker}
       </Text>
       <ActionInsideInteractiveElement
         render={() => (
