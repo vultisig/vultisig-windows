@@ -16,13 +16,18 @@ import {
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
+
+import { restrictPsbtToInputs } from './restrictPsbt'
 export const getPsbtKeysignPayload = async (
-  psbt: Psbt,
+  psbtB64: string,
   walletCore: WalletCore,
   vault: Vault,
-  gasSettings: FeeSettings | null
+  gasSettings: FeeSettings | null,
+  skipBroadcast?: boolean,
+  params?: Record<string, any>[]
 ): Promise<KeysignPayload> => {
   const vaultsCoins = await storage.getCoins()
   const accountCoin = shouldBePresent(
@@ -30,6 +35,29 @@ export const getPsbtKeysignPayload = async (
       account => isFeeCoin(account) && account.chain === Chain.Bitcoin
     )
   )
+  const publicKey = getPublicKey({
+    chain: Chain.Bitcoin,
+    walletCore,
+    hexChainCode: vault.hexChainCode,
+    publicKeys: vault.publicKeys,
+  })
+
+  if (params && params.length > 0) {
+    const [{ signingIndexes, sigHash, address }] = params
+    console.log({ signingIndexes, sigHash, address })
+
+    if (!areLowerCaseEqual(address, accountCoin.address)) {
+      throw new Error('PSBT Address does not match account address')
+    }
+    const limitedPsbtB64 = restrictPsbtToInputs(
+      psbtB64,
+      signingIndexes,
+      Buffer.from(publicKey.data()),
+      sigHash
+    )
+    psbtB64 = limitedPsbtB64
+  }
+  const psbt = Psbt.fromBase64(psbtB64)
 
   const { recipient, sendAmount } = getPsbtTransferInfo(
     psbt,
@@ -40,14 +68,7 @@ export const getPsbtKeysignPayload = async (
     coin: accountCoin,
     amount: fromChainAmount(Number(sendAmount) || 0, accountCoin.decimals),
     feeSettings: gasSettings,
-    psbt: psbt,
-  })
-
-  const publicKey = getPublicKey({
-    chain: Chain.Bitcoin,
-    walletCore,
-    hexChainCode: vault.hexChainCode,
-    publicKeys: vault.publicKeys,
+    psbt,
   })
 
   const coin = create(CoinSchema, {
@@ -71,6 +92,7 @@ export const getPsbtKeysignPayload = async (
     blockchainSpecific: chainSpecific,
     utxoInfo: await getUtxos(assertChainField(coin)),
     memo: '',
+    skipBroadcast,
   })
 
   return keysignPayload

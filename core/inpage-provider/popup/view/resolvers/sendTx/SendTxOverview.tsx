@@ -45,7 +45,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
-import { Psbt } from 'bitcoinjs-lib'
 import { formatUnits, toUtf8String } from 'ethers'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
@@ -190,15 +189,15 @@ const SendTxOverviewContent = ({
 
             return keysignPayload
           },
-          serialized: async ({ data, chain, skipBroadcast }) => {
+          serialized: async ({ data, chain, skipBroadcast, params }) => {
             if (chain === Chain.Bitcoin) {
-              const dataBuffer = Buffer.from(data, 'base64')
-              const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
               return await getPsbtKeysignPayload(
-                psbt,
+                data,
                 walletCore,
                 vault,
-                feeSettings
+                feeSettings,
+                skipBroadcast,
+                params
               )
             } else {
               const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
