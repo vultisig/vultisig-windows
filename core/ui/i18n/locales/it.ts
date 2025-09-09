@@ -18,6 +18,7 @@ export const it = {
   used_referral_error:
     'Il codice referral utilizzato non può essere lo stesso del tuo codice referral',
   your_referral_code: 'Il tuo codice referral',
+  amount_to_unstake: 'Importo da rimuovere',
   collected_rewards: 'Ricompense raccolte',
   unstake_share_token_label: 'Unstake {{ticker}}',
   expires_on: 'Scade il',

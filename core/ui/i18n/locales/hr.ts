@@ -13,6 +13,7 @@ export const hr = {
   create_referral_title: 'Stvori preporuku',
   use_referral_code: 'Upotrijebi kod preporuke',
   save_code: 'Spremi kod',
+  amount_to_unstake: 'Iznos za uklanjanje',
   auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Iskorišteni kod preporuke ne može biti isti kao vaš kod preporuke',
