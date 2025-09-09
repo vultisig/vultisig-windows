@@ -139,9 +139,8 @@ export const DepositForm: FC<DepositFormProps> = ({
                   !(
                     selectedChainAction === 'stake' ||
                     selectedChainAction === 'unstake'
-                  )
-                    ? coin?.ticker
-                    : ''
+                  ) &&
+                  coin.ticker
 
                 return (
                   <InputContainer key={field.name}>
