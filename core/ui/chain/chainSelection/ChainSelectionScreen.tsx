@@ -13,25 +13,27 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { InputProps } from '@lib/ui/props'
+import { OptionsProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const ChainSelectionScreen = ({
+export const ChainSelectionScreen = <T extends Chain>({
   value: chain,
   onChange,
-}: InputProps<Chain>) => {
+  options,
+}: InputProps<T> & OptionsProp<T>) => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
 
   const filteredChains = useMemo(() => {
-    if (!search) return Object.values(Chain)
+    if (!search) return options
 
     const normalizedSearch = search.toLowerCase()
-    return Object.values(Chain).filter(chain =>
+    return options.filter(chain =>
       chain.toLowerCase().includes(normalizedSearch)
     )
-  }, [search])
+  }, [options, search])
 
   return (
     <FullScreenContainer>
