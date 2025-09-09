@@ -18,6 +18,7 @@ export const de = {
   moreInfo: 'Mehr Info',
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
+  amount_to_unstake: 'Menge zur Aufhebung',
   save_code: 'Code speichern',
   unstake_share_token_label: 'Unstake {{ticker}}',
   sent: 'Gesendet',

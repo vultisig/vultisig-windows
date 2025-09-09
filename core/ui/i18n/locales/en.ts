@@ -23,6 +23,7 @@ export const en = {
   unstake_share_token_label: 'Unstake {{ticker}}',
   referral_annual_fee: 'Referral annual fee',
   referral_extension_fee: 'Referral extension fee',
+  amount_to_unstake: 'Amount to unstake',
   digit_input_success_validation: 'Verification succesful',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
