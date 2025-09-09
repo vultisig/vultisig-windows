@@ -200,10 +200,6 @@ export const SendTxOverview = () => {
                                         ) as EvmFeeSettings
                                       }
                                       chain={chain}
-                                      baseFee={fromChainAmount(
-                                        feeAmount,
-                                        chainFeeCoin[chain].decimals
-                                      )}
                                       onChange={setFeeSettings}
                                     />
                                   ) : null
