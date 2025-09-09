@@ -79,7 +79,6 @@ export function useDepositKeysignPayload({
   else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
   else if (action === 'mint' || action === 'redeem' || isStakeContractFlow)
     txType = TransactionType.GENERIC_CONTRACT
-  else txType = undefined
 
   const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
 
@@ -136,7 +135,9 @@ export function useDepositKeysignPayload({
         }
 
         if (isStake && stakeId) {
-          const actionAsStakeAction = action as StakeKind
+          const actionAsStakeAction =
+            action === 'withdraw_ruji_rewards' ? 'claim' : (action as StakeKind)
+
           const stakeSpecific = resolvers[stakeId]
 
           let input: RujiInput | NativeTcyInput | StcyInput | null = null
@@ -146,13 +147,21 @@ export function useDepositKeysignPayload({
               input = { kind: 'stake', amount: shouldBePresent(amount) }
             },
             unstake: () => {
-              const percentage = depositFormData['percentage'] as
-                | number
-                | undefined
+              if (stakeId === 'stcy') {
+                input = { kind: 'unstake', amount: shouldBePresent(amount) }
+              } else if (stakeId === 'native-tcy') {
+                const raw = depositFormData['percentage']
 
-              input = percentage
-                ? { kind: 'unstake', percentage }
-                : { kind: 'unstake', amount: shouldBePresent(amount) }
+                const pct =
+                  typeof raw === 'string' && raw.trim() === ''
+                    ? NaN
+                    : Number(raw)
+
+                const pctValid = Number.isFinite(pct) && pct > 0 && pct <= 100
+                input = pctValid
+                  ? { kind: 'unstake', percentage: pct }
+                  : { kind: 'unstake', amount: shouldBePresent(amount) }
+              }
             },
             claim: () => {
               input = { kind: 'claim' }

@@ -113,7 +113,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           />
 
-          <DepositActionSpecific action={selectedChainAction} />
+          <DepositActionSpecific value={selectedChainAction} />
 
           {selectedChainAction && fields.length > 0 && (
             <VStack gap={12}>
