@@ -44,7 +44,7 @@ export const knownCosmosTokens: Record<
     },
     'x/staking-tcy': {
       ticker: 'sTCY',
-      logo: 'stcy.png',
+      logo: 'tcy.png',
       decimals: 0,
       priceProviderId: 'tcy',
     },
