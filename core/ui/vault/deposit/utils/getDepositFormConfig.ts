@@ -581,22 +581,24 @@ export const getDepositFormConfig = ({
                           )
                       ),
                   })
-                : z.object({
-                    amount: z
-                      .string()
-                      .transform(Number)
-                      .pipe(
-                        z
-                          .number()
-                          .positive()
-                          .min(0.0001, t('amount'))
-                          .max(
-                            totalAmountAvailable,
-                            t('chainFunctions.amountExceeded')
-                          )
-                      ),
-                    autoCompound: z.boolean().optional(),
-                  }),
+                : coin.ticker === 'TCY'
+                  ? z.object({
+                      amount: z
+                        .string()
+                        .transform(Number)
+                        .pipe(
+                          z
+                            .number()
+                            .positive()
+                            .min(0.0001, t('amount'))
+                            .max(
+                              totalAmountAvailable,
+                              t('chainFunctions.amountExceeded')
+                            )
+                        ),
+                      autoCompound: z.boolean().optional(),
+                    })
+                  : z.never(),
             Ton: () =>
               z.object({
                 amount: z
@@ -655,17 +657,27 @@ export const getDepositFormConfig = ({
                       ),
                   })
                 : coin.ticker === 'TCY'
-                  ? z.object({
-                      percentage: z
-                        .string()
-                        .transform(Number)
-                        .pipe(
-                          z
-                            .number()
-                            .positive()
-                            .max(100, 'Percentage must be 0-100')
-                        ),
-                    })
+                  ? z.discriminatedUnion('autoCompound', [
+                      z.object({
+                        autoCompound: z.literal(true),
+                        amount: z
+                          .string()
+                          .transform(Number)
+                          .pipe(z.number().positive()),
+                      }),
+                      z.object({
+                        autoCompound: z.literal(false),
+                        percentage: z
+                          .string()
+                          .transform(Number)
+                          .pipe(
+                            z
+                              .number()
+                              .positive()
+                              .max(100, 'Percentage must be 0-100')
+                          ),
+                      }),
+                    ])
                   : z.never(),
             Ton: () =>
               z.object({

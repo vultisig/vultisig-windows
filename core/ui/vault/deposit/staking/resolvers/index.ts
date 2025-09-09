@@ -16,10 +16,10 @@ export const resolvers = {
   stcy: getStcySpecific,
 } as const satisfies StakeResolverMap
 
-export function selectStakeId(
+export const selectStakeId = (
   coin: AccountCoin,
   ctx?: { autocompound?: boolean }
-): StakeId {
+): StakeId => {
   const tcy = knownCosmosTokens['THORChain']['tcy'].ticker.toUpperCase()
 
   if (ctx?.autocompound && coin.ticker.toUpperCase() === tcy) return 'stcy'
