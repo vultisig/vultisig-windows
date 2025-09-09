@@ -18,7 +18,6 @@ export const useUnstakableStcyQuery = ({
 }) =>
   useQuery({
     queryKey: ['unstakable-stcy', address],
-    staleTime: 30_000,
     queryFn: async () => {
       const denom = encodeURIComponent(tcyAutoCompounderConfig.shareDenom)
       const url = `${bankApiBase}/balances/${address}/by_denom?denom=${denom}`
