@@ -1,5 +1,6 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { EvmChain } from '@core/chain/Chain'
 import { getTwChainId } from '@core/mpc/keysign/tw/getTwChainId'
+import { numberToEvenHex } from '@lib/utils/hex/numberToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -11,10 +12,8 @@ type Input = {
 export const getEvmTwChainId = (input: Input) => {
   const chainId = BigInt(getTwChainId(input))
 
-  return Buffer.from(
-    stripHexPrefix(
-      chainId.toString(16).padStart(input.chain === Chain.Zksync ? 4 : 2, '0')
-    ),
-    'hex'
-  )
+  const evenHex = numberToEvenHex(chainId)
+  const hex = stripHexPrefix(evenHex)
+
+  return Buffer.from(hex, 'hex')
 }
