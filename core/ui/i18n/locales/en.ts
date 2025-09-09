@@ -671,7 +671,7 @@ export const en = {
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     confirmPasswordIsRequired: 'Confirm password is required',
     hintEmpty: 'Hint is empty',
-    addOptionalHint: 'Add optional hint',
+    addOptionalHint: 'Add an optional hint',
     hintDescription: 'This will be shown in case you forget your password',
     enterHint: 'Enter hint',
   },
