@@ -7,13 +7,14 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { t } from 'i18next'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSwapFormStates } from './hooks/useSwapFormStates'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
+  const { t } = useTranslation()
   const { isDisabled } = useSwapFormStates()
 
   return (

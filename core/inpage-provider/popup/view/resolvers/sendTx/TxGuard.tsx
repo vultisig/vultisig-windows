@@ -5,15 +5,15 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { t } from 'i18next'
 import { useMemo } from 'react'
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { usePopupInput } from '../../state/input'
 import { CosmosMsgType } from './interfaces'
 
 export const TxGuard = ({ children }: ChildrenProp) => {
   const transactionPayload = usePopupInput<'sendTx'>()
+  const { t } = useTranslation()
 
   const isUnsupportedIbcTx = useMemo(
     () =>

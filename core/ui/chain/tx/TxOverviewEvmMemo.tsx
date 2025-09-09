@@ -6,7 +6,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 import { TxOverviewPlainMemo } from './TxOverviewPlainMemo'
 
@@ -16,6 +16,7 @@ export const TxOverviewEvmMemo = ({ value }: ValueProp<string>) => {
     queryFn: () => getEvmContractCallInfo(value),
     ...noPersistQueryOptions,
   })
+  const { t } = useTranslation()
 
   return (
     <MatchQuery
