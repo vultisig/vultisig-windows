@@ -851,7 +851,7 @@ export const hr = {
   vault_overview: 'Pregled trezora',
   tap: 'Dodirnite',
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
-  vultiserver_password: 'Lozinka Vultiservera',
+  backup_password: 'Lozinka sigurnosne kopije',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
   use_password: 'Koristi lozinku',
   backup_password_prompt:
