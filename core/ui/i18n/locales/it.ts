@@ -14,10 +14,13 @@ export const it = {
   create_referral_title: 'Crea referral',
   use_referral_code: 'Usa codice referral',
   save_code: 'Salva codice',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Il codice referral utilizzato non può essere lo stesso del tuo codice referral',
   your_referral_code: 'Il tuo codice referral',
+  amount_to_unstake: 'Importo da rimuovere',
   collected_rewards: 'Ricompense raccolte',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   expires_on: 'Scade il',
   edit_referral: 'Modifica referral',
   edit_friends_referral: "Modifica referral dell'amico",
