@@ -161,6 +161,11 @@ export function useDepositKeysignPayload({
                 input = pctValid
                   ? { kind: 'unstake', percentage: pct }
                   : { kind: 'unstake', amount: shouldBePresent(amount) }
+              } else {
+                input = {
+                  kind: 'unstake',
+                  amount: shouldBePresent(amount),
+                }
               }
             },
             claim: () => {

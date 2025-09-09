@@ -200,13 +200,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
           ? (keysignPayload.toAmount ?? '0')
           : swapPayload!.fromAmount
 
-        const isPositive = (() => {
-          try {
-            return BigInt(amountStr) > 0n
-          } catch {
-            return false
-          }
-        })()
+        const isPositive = +/^[0-9]+$/.test(amountStr) && BigInt(amountStr) > 0n
 
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
