@@ -1,6 +1,6 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
-import { getEvmDefaultPriorityFee } from '@core/chain/tx/fee/evm/getEvmDefaultPriorityFee'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
+import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -26,14 +26,14 @@ export const useTxInitialFeeSettings = () => {
             return null
           }
 
+          const { gasSettings } = transaction.transactionDetails
+
           const gasLimit =
-            Number(transaction.transactionDetails.gasSettings?.gasLimit) ||
-            getEvmGasLimit({ chain })
+            BigInt(gasSettings?.gasLimit ?? '') || getEvmGasLimit({ chain })
 
           const priorityFee =
-            Number(
-              transaction.transactionDetails.gasSettings?.maxPriorityFeePerGas
-            ) || (await getEvmDefaultPriorityFee(chain))
+            BigInt(gasSettings?.maxPriorityFeePerGas ?? '') ||
+            (await getEvmMaxPriorityFeePerGas(chain))
 
           return { gasLimit, priorityFee }
         },
