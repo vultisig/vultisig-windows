@@ -2,7 +2,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 
-import { readU32LE } from '../../utils'
+import { readU64LE } from '../../utils'
 
 const oneInchSwapInstructionAccountsIndexes = {
   srcMint: 2,
@@ -16,8 +16,8 @@ export const parseOneInchSwapInstruction = async (
 ) => {
   if (!instruction.accounts || !instruction.programData)
     throw new Error('invalid 1inch instruction')
-  const inputAmount = readU32LE(Buffer.from(instruction.programData), 12)
-  const outputAmount = readU32LE(Buffer.from(instruction.programData), 20)
+  const inputAmount = readU64LE(Buffer.from(instruction.programData), 12)
+  const outputAmount = readU64LE(Buffer.from(instruction.programData), 20)
   const srcMint =
     keys[
       shouldBePresent(
