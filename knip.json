@@ -4,19 +4,71 @@
     "clients/desktop/wailsjs/**",
     "core/ui/providers/ResponsivenessProvider.tsx"
   ],
-  "ignoreBinaries": ["tsx", "wails"],
-  "entry": [
-    "clients/extension/src/background/index.ts",
-    "clients/extension/src/content/index.ts",
-    "clients/extension/src/inpage/index.ts",
-    "clients/extension/src/pages/index.tsx",
-    "clients/extension/src/pages/popup.tsx"
+  "ignoreBinaries": [
+    "tsx",
+    "wails"
   ],
   "ignoreDependencies": [
     "@bufbuild/buf",
-    "@bufbuild/protoc-gen-es",
-    "@types/chrome",
-    "@fontsource/montserrat",
-    "@fontsource/roboto-mono"
-  ]
+    "@bufbuild/protoc-gen-es"
+  ],
+  "workspaces": {
+    "clients/desktop": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "clients/extension": {
+      "entry": [
+        "src/background/index.ts",
+        "src/content/index.ts",
+        "src/inpage/index.ts",
+        "src/pages/index.tsx",
+        "src/pages/popup.tsx"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "@types/chrome",
+        "@fontsource/montserrat",
+        "@fontsource/roboto-mono"
+      ]
+    },
+    "core/inpage-provider": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "core/extension": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "lib/extension": {
+      "project": [
+        "**/*.{ts,tsx,js}"
+      ]
+    },
+    "core/ui": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "lib/utils": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "lib/ui": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    },
+    "core/chain": {
+      "project": [
+        "**/*.{ts,tsx}"
+      ]
+    }
+  }
 }

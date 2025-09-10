@@ -31,8 +31,11 @@ export const de = {
   moreInfo: 'Mehr Info',
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
+  amount_to_unstake: 'Menge zur Aufhebung',
   save_code: 'Code speichern',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   sent: 'Gesendet',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
   your_referral_code: 'Dein Empfehlungscode',

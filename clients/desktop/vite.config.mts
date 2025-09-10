@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { defineConfig, normalizePath } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser'
@@ -7,6 +8,9 @@ import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
 import * as buildInfo from './build.json'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default defineConfig(async () => {
   const { viteStaticCopy } = await import('vite-plugin-static-copy')
@@ -54,17 +58,18 @@ export default defineConfig(async () => {
         ],
       }),
       circleDependency({
-        // Exclude node_modules from the check to focus on your code
         exclude: /node_modules/,
-        // Do not fail the build on error, so we can see all circular dependencies
         circleImportThrowErr: false,
-        // This function is called when a circular dependency is detected
         formatOutModulePath(path) {
           const str = 'Circular dependency detected:'
           return str + path
         },
       }),
     ],
+    server: {
+      port: 5173,
+      strictPort: true,
+    },
     build: {
       outDir: 'dist',
       assetsDir: 'assets',

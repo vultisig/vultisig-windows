@@ -1,6 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
-import { getRequiredFieldsPerChainAction } from '@core/ui/vault/deposit/DepositForm/chainOptionsConfig'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
 import { DepositFeeValue } from '@core/ui/vault/deposit/fee/DepositFeeValue'
 import { DepositFiatFeeValue } from '@core/ui/vault/deposit/fee/DepositFiatFeeValue'
@@ -18,6 +17,7 @@ import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositFormFieldsAndSchema } from '../hooks/useDepositFormFieldsAndSchema'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
@@ -48,10 +48,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
 
   const sender = useSender()
   const { t } = useTranslation()
-  const actionFields = selectedChainAction
-    ? getRequiredFieldsPerChainAction(t, coin.chain)[selectedChainAction]
-        ?.fields
-    : []
+  const { fields: actionFields } = useDepositFormFieldsAndSchema()
 
   return (
     <>

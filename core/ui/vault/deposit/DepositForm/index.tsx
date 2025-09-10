@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
@@ -10,11 +9,6 @@ import {
   InputFieldWrapper,
 } from '@core/ui/vault/deposit/DepositForm/DepositForm.styled'
 import { DepositFormHandlersProvider } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
-import {
-  getChainActionSchema,
-  getFieldsForChainAction,
-  resolveSchema,
-} from '@core/ui/vault/deposit/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
@@ -31,6 +25,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositBalance } from '../hooks/useDepositBalance'
+import { useDepositFormFieldsAndSchema } from '../hooks/useDepositFormFieldsAndSchema'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
@@ -47,29 +42,14 @@ export const DepositForm: FC<DepositFormProps> = ({
   chain,
 }) => {
   const [selectedChainAction, setSelectedChainAction] = useDepositAction()
-  const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
+  const [coin] = useDepositCoin()
 
-  const isTCYAction =
-    selectedChainAction === 'stake' || selectedChainAction === 'unstake'
-
-  const { balance, balanceFormatted } = useDepositBalance({
+  const { balanceFormatted } = useDepositBalance({
     selectedChainAction,
   })
 
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
-  const fieldsForChainAction = getFieldsForChainAction(
-    chain,
-    selectedChainAction,
-    t
-  )
-
-  const schemaForChainAction = resolveSchema(
-    chainActionSchema,
-    chain,
-    walletCore,
-    balance
-  )
+  const { fields, schema } = useDepositFormFieldsAndSchema()
 
   const {
     register,
@@ -77,15 +57,13 @@ export const DepositForm: FC<DepositFormProps> = ({
     watch,
     setValue,
     getValues,
+    control,
     formState: { errors, isValid },
   } = useForm<FormData>({
-    resolver: schemaForChainAction
-      ? zodResolver(schemaForChainAction)
-      : undefined,
+    resolver: zodResolver(schema as any),
     mode: 'onSubmit',
+    defaultValues: { autoCompound: false },
   })
-
-  const [coin] = useDepositCoin()
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction)
@@ -93,7 +71,7 @@ export const DepositForm: FC<DepositFormProps> = ({
 
   return (
     <DepositFormHandlersProvider
-      initialValue={{ setValue, getValues, watch, chain, register }}
+      initialValue={{ setValue, getValues, watch, chain, register, control }}
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
@@ -135,11 +113,11 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           />
 
-          <DepositActionSpecific action={selectedChainAction} />
+          <DepositActionSpecific value={selectedChainAction} />
 
-          {selectedChainAction && fieldsForChainAction.length > 0 && (
+          {selectedChainAction && fields.length > 0 && (
             <VStack gap={12}>
-              {fieldsForChainAction.map(field => {
+              {fields.map(field => {
                 const showBalance =
                   field.name === 'amount' &&
                   [
@@ -149,19 +127,20 @@ export const DepositForm: FC<DepositFormProps> = ({
                     'merge',
                     'stake',
                     'unmerge',
+                    'unstake',
                     'mint',
                     'redeem',
-                    'stake_ruji',
-                    'unstake_ruji',
                     'withdraw_ruji_rewards',
                   ].includes(selectedChainAction)
 
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge' &&
-                  !isTCYAction
-                    ? coin?.ticker
-                    : ''
+                  !(
+                    selectedChainAction === 'stake' ||
+                    selectedChainAction === 'unstake'
+                  ) &&
+                  coin.ticker
 
                 return (
                   <InputContainer key={field.name}>
