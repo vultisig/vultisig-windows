@@ -1,39 +1,69 @@
 import { Psbt } from 'bitcoinjs-lib'
 
-export function restrictPsbtToInputs(
+type InputsToSign = Array<{
+  signingIndexes: number[]
+  sigHash: number
+}>
+
+export const restrictPsbtToInputs = (
   psbtBase64: string,
-  targetIndexes: number[],
-  ourPubkey: Buffer,
-  sighashType?: number
-) {
+  entries: InputsToSign,
+  ourPubkey: Buffer
+): string => {
   const psbt = Psbt.fromBase64(psbtBase64)
 
-  for (let i = 0; i < psbt.data.inputs.length; i++) {
-    const input = psbt.data.inputs[i]
+  const perIndex: Map<number, { sigHash?: number }> = new Map()
+  for (const e of entries) {
+    for (const idx of e.signingIndexes || []) {
+      perIndex.set(idx, { sigHash: e.sigHash })
+    }
+  }
 
-    const isTarget = targetIndexes.includes(i)
+  psbt.data.inputs.forEach((input, i) => {
+    const target = perIndex.get(i)
+    const isTarget = !!target
 
-    // Remove our keypaths from non-target inputs so WC won’t sign them.
     if (!isTarget) {
+      // Strip our keypaths so WalletCore skips
       if (input.bip32Derivation) {
         input.bip32Derivation = input.bip32Derivation.filter(
           d => !d.pubkey.equals(ourPubkey)
         )
       }
-      if (input.tapBip32Derivation) {
-        input.tapBip32Derivation = input.tapBip32Derivation.filter(
-          d => !d.pubkey.equals(ourPubkey)
+      if ((input as any).tapBip32Derivation) {
+        ;(input as any).tapBip32Derivation = (
+          input as any
+        ).tapBip32Derivation.filter((d: any) => !d.pubkey.equals(ourPubkey))
+      }
+      return
+    }
+
+    // Apply per-input sighash if provided
+    const sigHash = target.sigHash
+    if (typeof sigHash === 'number') {
+      const isTaproot =
+        !!(input as any).tapInternalKey ||
+        (!!(input as any).tapBip32Derivation &&
+          (input as any).tapBip32Derivation.length > 0)
+
+      if (sigHash === 0 && !isTaproot) {
+        throw new Error(
+          `SIGHASH_DEFAULT (0x00) only valid for Taproot input #${i}`
         )
       }
-      // If input had ONLY our pubkey paths, it’s fine to leave it empty; WC will skip it.
-    } else {
-      // enforce a specific sighash like Phantom’s `sigHash`
-      if (typeof sighashType === 'number') {
-        // bitcoinjs stores it as unsigned 32-bit
-        ;(input as any).sighashType = sighashType >>> 0
+
+      // If SINGLE, ensure corresponding output exists
+      if ((sigHash & 0x03) === 0x03 /* SIGHASH_SINGLE */) {
+        if (!psbt.data.outputs || typeof psbt.data.outputs[i] === 'undefined') {
+          throw new Error(
+            `SIGHASH_SINGLE requires output #${i}, but it is missing`
+          )
+        }
       }
+
+      ;(input as any).sighashType = sigHash >>> 0
     }
-  }
+  })
 
   return psbt.toBase64()
 }

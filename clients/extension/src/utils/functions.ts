@@ -37,15 +37,16 @@ const arraysEqual = <T>(a: Indexed<T>, b: Indexed<T>): boolean => {
   return true
 }
 
-function unfinalizeInput(psbt: Psbt, i: number) {
+const unfinalizeInput = (psbt: Psbt, i: number) => {
   const inp = psbt.data.inputs[i]
   if ('finalScriptSig' in inp) delete (inp as any).finalScriptSig
   if ('finalScriptWitness' in inp) delete (inp as any).finalScriptWitness
 }
-export function rebuildPsbtWithPartialSigsFromWC(
+
+export const rebuildPsbtWithPartialSigsFromWC = (
   wcData: any,
   originalPsbtBytes: Buffer
-): Buffer {
+): Buffer => {
   const sr = wcData?.signingResultV2
   if (!sr) throw new Error('Missing signingResultV2')
 
@@ -61,7 +62,6 @@ export function rebuildPsbtWithPartialSigsFromWC(
     if (!wit || wit.length === 0) return
 
     // P2WPKH: [DER+1B sighash, 33B pubkey]
-    // Taproot key path: [64/65B sig] (no pubkey item)
     const sig = Buffer.from(wit[0], 'base64')
     const pub = wit[1] ? Buffer.from(wit[1], 'base64') : undefined
 
@@ -69,17 +69,9 @@ export function rebuildPsbtWithPartialSigsFromWC(
     unfinalizeInput(psbt, i)
 
     if (pub && (pub.length === 33 || pub.length === 65)) {
-      // SegWit v0 (P2WPKH / maybe P2WSH)
-      // Put partialSig (DER+hashType) — do NOT set final* fields
       psbt.updateInput(i, {
         partialSig: [{ pubkey: pub, signature: sig }],
       })
-    } else {
-      // Taproot key-path (pubkey not in witness stack)
-      // Put Schnorr sig into tapKeySig (PSBTv2 key-path sig)
-      psbt.updateInput(i, {
-        tapKeySig: sig,
-      } as any)
     }
   })
 

@@ -43,17 +43,19 @@ export const getPsbtKeysignPayload = async (
   })
 
   if (params && params.length > 0) {
-    const [{ signingIndexes, sigHash, address }] = params
-    console.log({ signingIndexes, sigHash, address })
-
-    if (!areLowerCaseEqual(address, accountCoin.address)) {
-      throw new Error('PSBT Address does not match account address')
+    const currentWalletEntries = params.filter(e =>
+      areLowerCaseEqual(e.address, accountCoin.address)
+    )
+    if (currentWalletEntries.length === 0) {
+      throw new Error('No entries for wallet address')
     }
     const limitedPsbtB64 = restrictPsbtToInputs(
       psbtB64,
-      signingIndexes,
-      Buffer.from(publicKey.data()),
-      sigHash
+      currentWalletEntries.map(p => ({
+        signingIndexes: p.signingIndexes,
+        sigHash: p.sigHash,
+      })),
+      Buffer.from(publicKey.data())
     )
     psbtB64 = limitedPsbtB64
   }
