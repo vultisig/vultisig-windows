@@ -101,7 +101,7 @@ export const getLifiSwapQuote = async ({
             data: shouldBePresent(data),
             value: BigInt(shouldBePresent(value)).toString(),
             gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-            gas: Number(shouldBePresent(gasLimit)),
+            gas: BigInt(shouldBePresent(gasLimit)),
           },
         }),
       }

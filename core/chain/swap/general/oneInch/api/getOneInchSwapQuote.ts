@@ -60,7 +60,7 @@ export const getOneInchSwapQuote = async ({
     tx: {
       evm: {
         ...tx,
-        gas: tx.gas || defaultEvmSwapGasLimit,
+        gas: tx.gas ? BigInt(tx.gas) : defaultEvmSwapGasLimit,
       },
     },
   }

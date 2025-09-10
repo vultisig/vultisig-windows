@@ -14,18 +14,20 @@ export const evmNativeTokenGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Mantle]: 90_000_000n,
 }
 
+const defaultEvmTokenGasLimit = 120000n
+
 export const evmTokenGasLimit: Record<EvmChain, bigint> = {
-  [EvmChain.Ethereum]: 120000n,
-  [EvmChain.Base]: 120000n,
-  [EvmChain.Arbitrum]: 120000n,
-  [EvmChain.Polygon]: 120000n,
-  [EvmChain.Optimism]: 120000n,
-  [EvmChain.CronosChain]: 120000n,
-  [EvmChain.Blast]: 120000n,
-  [EvmChain.BSC]: 120000n,
-  [EvmChain.Avalanche]: 120000n,
-  [EvmChain.Zksync]: 200000n,
-  [EvmChain.Mantle]: 90_000_000n,
+  [EvmChain.Ethereum]: defaultEvmTokenGasLimit,
+  [EvmChain.Base]: defaultEvmTokenGasLimit,
+  [EvmChain.Arbitrum]: defaultEvmTokenGasLimit,
+  [EvmChain.Polygon]: defaultEvmTokenGasLimit,
+  [EvmChain.Optimism]: defaultEvmTokenGasLimit,
+  [EvmChain.CronosChain]: defaultEvmTokenGasLimit,
+  [EvmChain.Blast]: defaultEvmTokenGasLimit,
+  [EvmChain.BSC]: defaultEvmTokenGasLimit,
+  [EvmChain.Avalanche]: defaultEvmTokenGasLimit,
+  [EvmChain.Zksync]: evmNativeTokenGasLimit[EvmChain.Zksync],
+  [EvmChain.Mantle]: evmNativeTokenGasLimit[EvmChain.Mantle],
 }
 
-export const defaultEvmSwapGasLimit = 600000
+export const defaultEvmSwapGasLimit = 600000n

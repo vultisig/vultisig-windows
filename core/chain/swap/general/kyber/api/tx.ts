@@ -3,7 +3,6 @@ import { isInError } from '@lib/utils/error/isInError'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { EvmChain } from '../../../../Chain'
 import { AccountCoin } from '../../../../coin/AccountCoin'
 import { isFeeCoin } from '../../../../coin/utils/isFeeCoin'
 import { defaultEvmSwapGasLimit } from '../../../../tx/fee/evm/evmGasLimit'
@@ -34,20 +33,6 @@ type KyberSwapBuildResponse = {
     routerAddress: string
     gasPrice?: string
   }
-}
-
-const gasMultiplier: Record<EvmChain, number> = {
-  [EvmChain.Ethereum]: 1.4,
-  [EvmChain.Arbitrum]: 2,
-  [EvmChain.Optimism]: 2,
-  [EvmChain.Base]: 2,
-  [EvmChain.Polygon]: 2,
-  [EvmChain.Avalanche]: 2,
-  [EvmChain.BSC]: 2,
-  [EvmChain.CronosChain]: 1.6,
-  [EvmChain.Zksync]: 1.6,
-  [EvmChain.Blast]: 1.6,
-  [EvmChain.Mantle]: 1.6,
 }
 
 export const getKyberSwapTx = async ({
@@ -109,8 +94,6 @@ export const getKyberSwapTx = async ({
 
   const { amountOut, data, gas } = buildResponse.data
 
-  const baseGas = parseInt(gas) || defaultEvmSwapGasLimit
-
   return {
     dstAmount: amountOut,
     provider: 'kyber',
@@ -121,7 +104,7 @@ export const getKyberSwapTx = async ({
         data,
         value: isFeeCoin(from) ? amount.toString() : '0',
         gasPrice: routeSummary?.gasPrice || '0',
-        gas: Math.round(baseGas * gasMultiplier[from.chain]),
+        gas: gas ? BigInt(gas) : defaultEvmSwapGasLimit,
       },
     },
   }
