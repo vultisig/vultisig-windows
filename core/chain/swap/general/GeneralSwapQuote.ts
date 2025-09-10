@@ -10,7 +10,7 @@ export type GeneralSwapTx =
         data: string
         value: string
         gasPrice: string
-        gas: number
+        gas: bigint
       }
     }
   | {
