@@ -1,10 +1,16 @@
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 const tcyStakerApiUrl = `${cosmosRpcUrl.THORChain}/thorchain/tcy_staker`
 
-export const useUnstakableTcyQuery = (address: string) =>
+export const useUnstakableTcyQuery = ({
+  address,
+  options,
+}: {
+  address: string
+  options?: Partial<UseQueryOptions<bigint>>
+}) =>
   useQuery({
     queryKey: ['unstakable-tcy', address],
     queryFn: async () => {
@@ -13,4 +19,5 @@ export const useUnstakableTcyQuery = (address: string) =>
       )
       return BigInt(amount ?? '0')
     },
+    ...options,
   })

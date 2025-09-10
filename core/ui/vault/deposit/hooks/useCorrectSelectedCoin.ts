@@ -4,7 +4,7 @@ import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { useMemo } from 'react'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableCoin } from '../config'
+import { isStakeableCoin, stakeableAssetsTickers } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
@@ -57,14 +57,6 @@ export const useCorrectSelectedCoin = ({
 
     const currentTicker = selected.ticker
 
-    if (
-      action === 'stake_ruji' ||
-      action === 'unstake_ruji' ||
-      action === 'withdraw_ruji_rewards'
-    ) {
-      return findByTicker({ coins, ticker: 'RUJI' }) ?? selected
-    }
-
     if (action === 'mint') {
       const ok = findByTicker({ coins: mintOptions, ticker: currentTicker })
       return ok ?? mintOptions[0] ?? selected
@@ -96,7 +88,8 @@ export const useCorrectSelectedCoin = ({
       if (chain !== Chain.THORChain) return selected
       return currentTicker && isStakeableCoin(currentTicker)
         ? selected
-        : (findByTicker({ coins, ticker: 'TCY' }) ?? selected)
+        : (findByTicker({ coins, ticker: stakeableAssetsTickers[0] }) ??
+            selected)
     }
 
     return selected

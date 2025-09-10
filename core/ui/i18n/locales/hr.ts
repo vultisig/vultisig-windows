@@ -13,11 +13,14 @@ export const hr = {
   create_referral_title: 'Stvori preporuku',
   use_referral_code: 'Upotrijebi kod preporuke',
   save_code: 'Spremi kod',
+  amount_to_unstake: 'Iznos za uklanjanje',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Iskorišteni kod preporuke ne može biti isti kao vaš kod preporuke',
   your_referral_code: 'Vaš kod preporuke',
   collected_rewards: 'Prikupljene nagrade',
   expires_on: 'Istječe',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   edit_referral: 'Uredi preporuku',
   edit_friends_referral: 'Uredi prijateljevu preporuku',
   add_referral_code: 'Dodaj kod preporuke',
@@ -851,7 +854,7 @@ export const hr = {
   vault_overview: 'Pregled trezora',
   tap: 'Dodirnite',
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
-  vultiserver_password: 'Lozinka Vultiservera',
+  backup_password: 'Lozinka sigurnosne kopije',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
   use_password: 'Koristi lozinku',
   backup_password_prompt:
