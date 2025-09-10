@@ -3,6 +3,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { InputProps } from '@lib/ui/props'
+import { OptionsProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,11 +24,15 @@ const ChainSelector = styled(HStack)`
   justify-content: space-between;
 `
 
-export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
+export const ChainInput = <T extends Chain>({
+  value,
+  onChange,
+  options,
+}: InputProps<T> & OptionsProp<T>) => {
   const { t } = useTranslation()
   const [showChainSelection, setShowChainSelection] = useState(false)
 
-  const handleChainSelect = (chain: Chain) => {
+  const handleChainSelect = (chain: T) => {
     onChange?.(chain)
     setShowChainSelection(false)
   }
@@ -56,7 +61,11 @@ export const ChainInput = ({ value, onChange }: InputProps<Chain>) => {
         <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
       </ChainSelector>
       {showChainSelection && (
-        <ChainSelectionScreen value={value} onChange={handleChainSelect} />
+        <ChainSelectionScreen
+          value={value}
+          onChange={handleChainSelect}
+          options={options}
+        />
       )}
     </VStack>
   )

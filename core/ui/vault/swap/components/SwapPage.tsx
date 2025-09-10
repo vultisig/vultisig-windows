@@ -5,6 +5,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
+import { useCore } from '../../../state/core'
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'
 import { ToCoinProvider } from '../state/toCoin'
@@ -15,6 +16,8 @@ const sendSteps = ['form', 'verify'] as const
 
 export const SwapPage = () => {
   const { t } = useTranslation()
+  const { goBack } = useCore()
+
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: sendSteps,
     onExit: goBack,
@@ -48,7 +51,4 @@ export const SwapPage = () => {
       </ToCoinProvider>
     </FromAmountProvider>
   )
-}
-function goBack(): void {
-  throw new Error('Function not implemented.')
 }

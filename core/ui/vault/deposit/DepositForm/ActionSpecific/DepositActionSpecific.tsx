@@ -1,4 +1,5 @@
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
+import { ValueProp } from '@lib/ui/props'
 
 import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
@@ -14,18 +15,14 @@ import { SwitchSpecific } from './SwitchSpecific'
 import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
 import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
-type Props = {
-  action: ChainAction
-}
-
-export const DepositActionSpecific = ({ action }: Props) => {
+export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
 
   return (
     <PartialMatch
-      value={action}
+      value={value}
       if={{
         bond_with_lp: () => (
           <BondUnbondLPSpecific

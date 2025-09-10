@@ -78,22 +78,27 @@ export const SwapKeysignTxOverview = ({
     <>
       <TransactionSuccessAnimation />
       <VStack alignItems="center" gap={8}>
-        <HStack gap={8} style={{ position: 'relative' }}>
-          {fromCoin && (
-            <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
-          )}
-          {toCoin && (
-            <SwapCoinItem
-              coin={toCoin}
-              tokenAmount={parseFloat(toAmountDecimal)}
-            />
-          )}
-          <IconWrapper alignItems="center" justifyContent="center">
-            <IconInternalWrapper>
-              <ChevronRightIcon />
-            </IconInternalWrapper>
-          </IconWrapper>
-        </HStack>
+        <VStack gap={8}>
+          <Text centerHorizontally color="shy" size={10} height="large">
+            {t('swap')}
+          </Text>
+          <HStack gap={8} style={{ position: 'relative' }}>
+            {fromCoin && (
+              <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
+            )}
+            {toCoin && (
+              <SwapCoinItem
+                coin={toCoin}
+                tokenAmount={parseFloat(toAmountDecimal)}
+              />
+            )}
+            <IconWrapper alignItems="center" justifyContent="center">
+              <IconInternalWrapper>
+                <ChevronRightIcon />
+              </IconInternalWrapper>
+            </IconWrapper>
+          </HStack>
+        </VStack>
         <SwapInfoWrapper gap={16} fullWidth>
           <TrackTxPrompt
             title={t('transaction')}

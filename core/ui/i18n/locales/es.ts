@@ -1,4 +1,17 @@
 export const es = {
+  onboarding_greeting: 'Adiós a <g>frases semilla</g>',
+  onboarding_step_1:
+    'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
+  onboarding_step_2:
+    'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
+  onboarding_step_3:
+    '<g>Cada dispositivo</g> en su depósito contiene <g>una parte del depósito</g>',
+  onboarding_step_4:
+    'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
+  onboarding_step_5:
+    '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
+  onboarding_step_6:
+    'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
   digit_input_success_validation: 'Verificación exitosa',
@@ -17,6 +30,9 @@ export const es = {
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
   incorrect_passcode: 'Código incorrecto',
+  amount_to_unstake: 'Cantidad para desapuestar',
+  auto_compound_into_label: 'Auto-compundo en {{ticker}}',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   referral_reg_fee: 'Cuota de registro',
   create_referral_title: 'Crear referido',
   use_referral_code: 'Usar código de referido',
@@ -140,35 +156,15 @@ export const es = {
   qrCode: 'el código QR',
   downloadVultisig:
     'Descarga Vultisig en tus otros dispositivos y selecciona "Escanear código QR"',
-  alwaysBackUpEachVaultShare:
-    'Siempre haga una copia de seguridad de cada parte del depósito',
-  separatelyIna: 'separadamente en una',
-  differentLocation: 'ubicación diferente',
   serverTimedOut: 'El servidor agotó el tiempo de espera',
   serverTookTooLong:
     'El servidor tardó demasiado en responder. Por favor, verifica tu conexión a internet e inténtalo de nuevo.',
-  eachDevice: 'Cada dispositivo',
-  inYourVaultHolds: 'en su depósito contiene',
   chooseSetup: 'Elegir configuración',
   introOnboarding: 'Intro',
-  oneVaultShare: 'una parte del depósito',
-  theyRe: 'Están',
-  splitIntoParts: 'divididos en partes',
-  toIncreaseSecurity: 'para aumentar la seguridad y',
-  removeSinglePointOfFailure: 'eliminar un único punto de fallo',
-  theseSharesCollaborate: 'Estas partes colaboran para',
-  unlockYourVault: 'desbloquear su depósito',
   import_existing_vault: 'Importar bóveda existente',
-  sayHelloTo: 'Di hola a',
-  recoverYourVault: 'Recupera tu bóveda incluso',
-  deviceLostOrDamaged: 'si un dispositivo se pierde o se daña',
-  vaultShares: 'acciones de la bóveda',
-  yourNewRecoveryMethod: 'tu nuevo método de recuperación',
   next: 'Siguiente',
   skip: 'Omitir',
   tokens: 'tokens',
-  sayGoodbyeTo: 'Adiós a',
-  seedPhrases: 'frases semilla',
   selected: 'seleccionado',
   required_field_missing: 'Campo requerido faltante',
   enter_password: 'Ingrese la contraseña',
@@ -873,7 +869,7 @@ export const es = {
   vault_overview: 'Descripción general de la bóveda',
   tap: 'Grifo',
   took_too_long_to_respond: 'Tardó demasiado en responder',
-  vultiserver_password: 'Contraseña de Vultiserver',
+  backup_password: 'Contraseña de respaldo',
   backup_without_password: 'Copia de seguridad sin contraseña',
   use_password: 'Usar contraseña',
   backup_password_prompt:
