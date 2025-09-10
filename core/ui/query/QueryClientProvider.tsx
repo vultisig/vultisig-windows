@@ -43,7 +43,7 @@ export const QueryClientProvider = ({
             return defaultShouldDehydrateQuery(query)
           },
         },
-        buster: 'v2',
+        buster: 'v3',
       }
     }, [persister])
 
