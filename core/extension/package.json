@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@core/chain": "workspace:*",
-    "@core/config": "workspace:*",
-    "@core/mpc": "workspace:*",
-    "@core/ui": "workspace:*",
-    "@lib/extension": "workspace:*",
-    "@lib/ui": "workspace:*",
-    "@lib/utils": "workspace:*"
+    "@core/chain": "workspace:^",
+    "@core/config": "workspace:^",
+    "@core/mpc": "workspace:^",
+    "@core/ui": "workspace:^",
+    "@lib/extension": "workspace:^",
+    "@lib/ui": "workspace:^",
+    "@lib/utils": "workspace:^"
   }
 }
