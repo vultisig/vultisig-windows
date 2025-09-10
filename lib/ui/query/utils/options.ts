@@ -19,8 +19,8 @@ export const noRefetchQueryOptions: UseQueryGenericOptions = {
   refetchOnReconnect: false,
 }
 
-export const noPersistQueryOptions: UseQueryGenericOptions = {
-  meta: { disablePersist: true },
+export const persistQueryOptions: UseQueryGenericOptions = {
+  meta: { shouldPersist: true },
 }
 
 export const pollingQueryOptions = (

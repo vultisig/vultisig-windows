@@ -36,7 +36,7 @@ export const QueryClientProvider = ({
         maxAge: queryClientGcTime,
         dehydrateOptions: {
           shouldDehydrateQuery: query => {
-            if (query.meta?.disablePersist) {
+            if (!query.meta?.shouldPersist) {
               return false
             }
 
