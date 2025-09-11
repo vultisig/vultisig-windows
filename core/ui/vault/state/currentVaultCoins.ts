@@ -59,9 +59,7 @@ export const useCurrentVaultChainCoins = (chain: string) => {
 }
 
 export const useCurrentVaultCoin = (coinKey: CoinKey) => {
-  console.log('🚀 ~ useCurrentVaultCoin ~ coinKey:', coinKey)
   const coins = useCurrentVaultCoins()
-  console.log('🚀 ~ useCurrentVaultCoin ~ coins:', coins)
 
   return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)))
 }
