@@ -8,6 +8,7 @@ import {
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
+import { rebuildPsbtWithPartialSigsFromWC } from '../../utils/functions'
 import { Callback } from '../constants'
 import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
@@ -51,17 +52,31 @@ export class UTXO extends EventEmitter {
     return [address]
   }
 
-  async signPSBT(psbt: Buffer) {
-    const { hash } = await callPopup({
+  async signPSBT(
+    psbt: Buffer,
+    {
+      inputsToSign,
+    }: {
+      inputsToSign: {
+        address: string
+        signingIndexes: number[]
+        sigHash?: number
+      }[]
+    },
+    broadcast: boolean = false
+  ) {
+    const { data } = await callPopup({
       sendTx: {
         serialized: {
           data: Buffer.from(psbt).toString('base64'),
           chain: this.chain,
+          skipBroadcast: !broadcast,
+          params: inputsToSign,
         },
       },
     })
-
-    return hash
+    const rebuiltPsbt = rebuildPsbtWithPartialSigsFromWC(data, psbt)
+    return rebuiltPsbt
   }
 
   async request(data: RequestInput, callback?: Callback) {
@@ -73,7 +88,6 @@ export class UTXO extends EventEmitter {
           data.params as any
         )
       }
-
       throw new NotImplementedError(`UTXO method ${data.method}`)
     }
 
