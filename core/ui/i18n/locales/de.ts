@@ -1,4 +1,17 @@
 export const de = {
+  onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
+  onboarding_step_1:
+    'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  onboarding_step_2:
+    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
+  onboarding_step_3:
+    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
+  onboarding_step_4:
+    'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
+  onboarding_step_5:
+    '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  onboarding_step_6:
+    'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
@@ -140,29 +153,10 @@ export const de = {
   qrCode: 'den QR-Code',
   downloadVultisig:
     'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie "QR-Code scannen"',
-  sayHelloTo: 'Sag hallo zu',
-  alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
-  separatelyIna: 'separat in einer',
-  differentLocation: 'anderen Location',
-  eachDevice: 'Jedes Gerät',
   chooseSetup: 'Setup wählen',
   introOnboarding: 'Intro',
-  inYourVaultHolds: 'in Ihrem Tresor enthält',
-  oneVaultShare: 'eine Tresorfreigabe',
-  theyRe: 'Sie sind',
-  splitIntoParts: 'in Teile aufgeteilt',
-  toIncreaseSecurity: 'um die Sicherheit zu erhöhen und',
-  removeSinglePointOfFailure: 'den Single Point of Failure zu entfernen',
-  theseSharesCollaborate: 'Diese Freigaben arbeiten zusammen, um',
-  unlockYourVault: 'Ihren Tresor zu entsperren',
-  recoverYourVault: 'Stelle deinen Tresor wieder her, sogar',
-  deviceLostOrDamaged: 'wenn ein Gerät verloren geht oder beschädigt wird',
-  vaultShares: 'Tresoranteile',
-  yourNewRecoveryMethod: 'deine neue Wiederherstellungsmethode',
   tokens: 'Token',
   selected: 'ausgewählt',
-  sayGoodbyeTo: 'Auf Wiedersehen zu',
-  seedPhrases: 'Seed-Wörter',
   required_field_missing: 'Erforderliches Feld fehlt',
   email_confirmation_code_label:
     'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',

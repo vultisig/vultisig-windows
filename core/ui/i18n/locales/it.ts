@@ -1,4 +1,17 @@
 export const it = {
+  onboarding_greeting: 'Addio a <g>frasi semina</g>',
+  onboarding_step_1:
+    'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  onboarding_step_2:
+    'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
+  onboarding_step_3:
+    '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
+  onboarding_step_4:
+    'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
+  onboarding_step_5:
+    '<g>Esegui sempre il backup di ogni quota del caveau</g> separatamente in una <g>posizione diversa</g>',
+  onboarding_step_6:
+    'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   onboarding_description_1:
@@ -141,31 +154,11 @@ export const it = {
   qrCode: 'il codice QR',
   downloadVultisig:
     'Scarica Vultisig sugli altri dispositivi e seleziona "Scansiona codice QR"',
-  alwaysBackUpEachVaultShare:
-    'Esegui sempre il backup di ogni quota del caveau',
-  separatelyIna: 'separatamente in una',
-  differentLocation: 'posizione diversa',
-  eachDevice: 'Ogni dispositivo',
-  inYourVaultHolds: 'nel tuo caveau contiene',
-  oneVaultShare: 'una quota del caveau',
   serverTimedOut: 'Il server ha impiegato troppo tempo',
   serverTookTooLong:
     'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
-  theyRe: 'Sono',
-  splitIntoParts: 'divisi in parti',
-  toIncreaseSecurity: 'per aumentare la sicurezza e',
-  removeSinglePointOfFailure: 'eliminare il singolo punto di guasto',
-  theseSharesCollaborate: 'Queste quote collaborano per',
-  unlockYourVault: 'sbloccare il tuo caveau',
   chooseSetup: 'Scegli configurazione',
   introOnboarding: 'Bevezető',
-  sayHelloTo: 'Dì ciao a',
-  recoverYourVault: 'Recupera la tua cassaforte anche',
-  deviceLostOrDamaged: 'se un dispositivo è perso o danneggiato',
-  vaultShares: 'azioni della cassaforte',
-  yourNewRecoveryMethod: 'il tuo nuovo metodo di recupero',
-  sayGoodbyeTo: 'Addio a',
-  seedPhrases: 'frasi semina',
   selected: 'selezionato',
   create_new_vault: 'Crea nuova cassaforte',
   import_existing_vault: 'Importa cassaforte esistente',
