@@ -1,4 +1,4 @@
-import { CoinKey } from '@core/chain/coin/Coin'
+import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -9,7 +9,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useQueryClient } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -64,12 +64,16 @@ export const SwapCoinsExplorer = ({
       },
     })
 
+  const filterByTicker = useCallback(
+    (option: Coin, query: string) =>
+      option.ticker.toLowerCase().startsWith(query.toLowerCase()),
+    []
+  )
+
   return (
     <SelectItemModal
       virtualizePageSize={20}
-      filterFunction={(option, query) =>
-        option.ticker.toLowerCase().startsWith(query.toLowerCase())
-      }
+      filterFunction={filterByTicker}
       title={t('select_asset')}
       optionComponent={CoinOption}
       onFinish={async (newValue: CoinKey | undefined) => {
@@ -88,7 +92,7 @@ export const SwapCoinsExplorer = ({
           onClose()
         }
       }}
-      getKey={(v, i) => `${v}-${i}`}
+      getKey={v => coinKeyToString(v)}
       options={mergedOptions}
       renderFooter={() => (
         <VStack gap={11}>
