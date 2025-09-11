@@ -8,6 +8,7 @@ import { InputProps, IsActiveProp, OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -17,6 +18,7 @@ import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
 import { useAutoDiscoverTokens } from '../../../chain/hooks/useAutoDiscoverTokens'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
+import { StorageKey } from '../../../storage/StorageKey'
 import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
@@ -32,6 +34,8 @@ export const SwapCoinsExplorer = ({
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
+  const queryClient = useQueryClient()
+
   const { t } = useTranslation()
 
   const coinOptions = useMemo(
@@ -72,6 +76,12 @@ export const SwapCoinsExplorer = ({
         try {
           if (newValue) {
             await ensureSaved(newValue)
+
+            await queryClient.refetchQueries({
+              queryKey: [StorageKey.vaultsCoins],
+              type: 'active',
+            })
+
             onChange(newValue)
           }
         } finally {
