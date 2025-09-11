@@ -1,3 +1,5 @@
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
+import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
 import { EventMethod } from '@clients/extension/src/utils/constants'
 import { EvmChain } from '@core/chain/Chain'
 import {
@@ -19,11 +21,9 @@ import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
 import { BlockTag, type RpcTransactionRequest } from 'viem'
 
-import { EIP1193Error } from '../../background/handlers/errorHandler'
-import { requestAccount } from './core/requestAccount'
-
-const processSignature = (signature: string) => {
+export const processSignature = (signature: string) => {
   let result = Signature.from(ensureHexPrefix(signature))
+
   if (result.v < 27) {
     result = Signature.from({
       r: result.r,

@@ -39,6 +39,7 @@ export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
+  policySign: Method<{ message: string }, string>
   signMessage: Method<SignMessageInput, string>
   sendTx: Method<
     ITransactionPayload,
@@ -54,6 +55,7 @@ export const authorizedPopupMethods = [
   'signMessage',
   'sendTx',
   'pluginReshare',
+  'policySign',
 ] as const satisfies readonly PopupMethod[]
 
 export type AuthorizedPopupMethod = (typeof authorizedPopupMethods)[number]
