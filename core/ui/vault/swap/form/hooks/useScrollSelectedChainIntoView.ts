@@ -1,13 +1,15 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
 type Props = {
   chain: string
+  onSelect?: (key: string) => void // called when scroll settles on a different chain
 }
 
-export const useScrollSelectedChainIntoView = ({ chain }: Props) => {
+export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const footerRef = useRef<HTMLDivElement | null>(null)
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const prevChain = useRef<string | undefined>(undefined)
+  const strokeRef = useRef<HTMLDivElement | null>(null)
 
   const computeCenteredLeft = (
     container: HTMLDivElement,
@@ -24,39 +26,86 @@ export const useScrollSelectedChainIntoView = ({ chain }: Props) => {
     return left
   }
 
-  const scrollChainIntoView = useCallback(
+  const scrollToKey = useCallback(
     (key: string, behavior: ScrollBehavior = 'auto') => {
       const container = footerRef.current
       const el = itemRefs.current[key]
       if (!container || !el) return
-
-      const cLeft = container.scrollLeft
-      const cRight = cLeft + container.clientWidth
-      const eLeft = el.offsetLeft
-      const eRight = eLeft + el.offsetWidth
-      if (eLeft >= cLeft && eRight <= cRight) return
-
       const left = computeCenteredLeft(container, el)
-      container.scrollTo({ left, behavior })
+      if (Math.abs(container.scrollLeft - left) > 1) {
+        container.scrollTo({ left, behavior })
+      }
     },
     []
   )
 
+  const selectNearest = useCallback(() => {
+    const container = footerRef.current
+    if (!container) return
+    const target = strokeRef.current ?? container
+    const tRect = target.getBoundingClientRect()
+    const centerX = tRect.left + tRect.width / 2
+
+    let bestKey: string | null = null
+    let bestDist = Infinity
+
+    for (const [key, el] of Object.entries(itemRefs.current)) {
+      if (!el) continue
+      const r = el.getBoundingClientRect()
+      const cx = r.left + r.width / 2
+      const d = Math.abs(cx - centerX)
+      if (d < bestDist) {
+        bestDist = d
+        bestKey = key
+      }
+    }
+
+    if (bestKey && bestKey !== chain) {
+      onSelect?.(bestKey)
+      // snap precisely (CSS snap will usually do this; this is a safe nudge)
+      scrollToKey(bestKey, 'smooth')
+    }
+  }, [chain, onSelect, scrollToKey])
+
+  // Keep selected chain centered when prop changes
   useLayoutEffect(() => {
     if (!chain) return
-
     const id = requestAnimationFrame(() => {
       const behavior: ScrollBehavior =
         prevChain.current && prevChain.current !== chain ? 'smooth' : 'auto'
-      scrollChainIntoView(chain, behavior)
+      scrollToKey(chain, behavior)
       prevChain.current = chain
     })
     return () => cancelAnimationFrame(id)
-  }, [chain, scrollChainIntoView])
+  }, [chain, scrollToKey])
 
-  return {
-    footerRef,
-    itemRefs,
-    scrollChainIntoView,
-  }
+  // Detect scroll end → pick nearest chip
+  useEffect(() => {
+    const el = footerRef.current
+    if (!el) return
+
+    let t: number | null = null
+    const onScroll = () => {
+      if (t) window.clearTimeout(t)
+      t = window.setTimeout(selectNearest, 120) // fallback if 'scrollend' isn’t supported
+    }
+
+    const onScrollEnd = () => {
+      if (t) window.clearTimeout(t)
+      selectNearest()
+    }
+
+    el.addEventListener('scroll', onScroll, { passive: true })
+    // @ts-ignore: 'scrollend' is widely supported; ignore TS typing
+    el.addEventListener('scrollend', onScrollEnd)
+
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      // @ts-ignore
+      el.removeEventListener('scrollend', onScrollEnd)
+      if (t) window.clearTimeout(t)
+    }
+  }, [selectNearest])
+
+  return { footerRef, itemRefs, scrollToKey, strokeRef }
 }
