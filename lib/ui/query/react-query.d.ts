@@ -1,7 +1,7 @@
 import '@tanstack/react-query'
 
 type Meta = {
-  disablePersist?: boolean
+  shouldPersist?: boolean
 } & Record<string, unknown>
 
 declare module '@tanstack/react-query' {

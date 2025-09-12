@@ -6,7 +6,7 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { getDepositFormConfig } from '../utils/getDepositFormConfig'
 import { useDepositBalance } from './useDepositBalance'
 
-export const useDepositFormFieldsAndSchema = () => {
+export const useDepositFormConfig = () => {
   const [selectedChainAction] = useDepositAction()
   const walletCore = useAssertWalletCore()
   const [coin] = useDepositCoin()
