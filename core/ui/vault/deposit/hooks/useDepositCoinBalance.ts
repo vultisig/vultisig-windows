@@ -26,7 +26,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     id: selectedCoin.id,
   })
 
-  const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(
+  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery(
     thorAddr ?? ''
   )
 
@@ -35,7 +35,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
 
     if (action === 'unmerge') {
       const shares =
-        mergeBalances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
+        balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
       return fromChainAmount(shares, 8)
     }
 
@@ -44,5 +44,5 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     }
 
     return fromChainAmount(vaultEntry.amount, vaultEntry.decimals)
-  }, [action, mergeBalances, selectedCoin, vaultEntry, yTokenRawBalance])
+  }, [action, balances, selectedCoin, vaultEntry, yTokenRawBalance])
 }
