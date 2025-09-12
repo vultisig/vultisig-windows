@@ -5,6 +5,7 @@ import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
@@ -82,6 +83,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
           return result
         },
+        ...persistQueryOptions,
       })
     })
   }
@@ -119,6 +121,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
         return result
       },
+      ...persistQueryOptions,
     })
   }
 

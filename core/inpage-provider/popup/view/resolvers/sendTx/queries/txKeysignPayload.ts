@@ -2,7 +2,6 @@ import { Chain } from '@core/chain/Chain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
-import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
@@ -68,5 +67,4 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
       }
     )
   },
-  ...noPersistQueryOptions,
 })
