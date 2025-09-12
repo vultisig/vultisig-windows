@@ -19,7 +19,7 @@ export const useWhitelistedCoinsQuery = (chain: Chain, enabled?: boolean) => {
     enabled,
     queryFn: async () => {
       if (chain === Chain.Solana) {
-        const url = 'https://tokens.jup.ag/tokens?tags=verified'
+        const url = 'https://lite-api.jup.ag/tokens/v2/tag?query=verified'
         const data = await queryUrl<SolanaJupiterToken[]>(url)
 
         return fromSolanaJupiterTokens({

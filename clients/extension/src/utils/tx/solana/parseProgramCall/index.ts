@@ -4,6 +4,8 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapInstruction'
 import { oneInchSwapProgram } from './programs'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
 
 const parseProgramCall = async (
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy,
@@ -17,6 +19,8 @@ const parseProgramCall = async (
     // parse 1inch swap instruction
     if (program.toBase58() === oneInchSwapProgram) {
       return await parseOneInchSwapInstruction(instruction, keys)
+    } else if (program.toBase58() === TOKEN_PROGRAM_ID.toBase58()) {
+      return await parseTokenInstruction(tx, instruction, keys)
     }
   }
 }
