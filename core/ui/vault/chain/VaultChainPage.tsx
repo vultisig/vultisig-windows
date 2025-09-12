@@ -24,6 +24,7 @@ import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { VaultChainPositionsSection } from './positions/VaultChainPositionsSection'
 import { VaultChainBalancesSection } from './VaultChainBalancesSection'
 
 export const VaultChainPage = () => {
@@ -65,6 +66,7 @@ export const VaultChainPage = () => {
       <PageContent gap={16} scrollable>
         <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
         <VaultChainBalancesSection />
+        <VaultChainPositionsSection />
       </PageContent>
       <PageFooter>
         {hasMultipleCoinsSupport && (
