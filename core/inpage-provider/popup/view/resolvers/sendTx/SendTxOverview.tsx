@@ -21,9 +21,11 @@ import {
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { Center } from '@lib/ui/layout/Center'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
@@ -38,6 +40,7 @@ import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
+import { useParsedTxQuery } from './queries/parsedTx'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
 import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
@@ -52,11 +55,11 @@ export const SendTxOverview = () => {
   const initialFeeSettingsQuery = useTxInitialFeeSettings()
 
   const [feeSettings, setFeeSettings] = useStateCorrector(
-    useState<FeeSettings | undefined | null>(undefined),
+    useState<FeeSettings | undefined | null>(null),
     useCallback(
       state => {
         const { data } = initialFeeSettingsQuery
-        if (data && state === undefined) {
+        if (data !== undefined && state === undefined) {
           return data
         }
 
@@ -66,6 +69,8 @@ export const SendTxOverview = () => {
     )
   )
 
+  const parsedTxQuery = useParsedTxQuery()
+
   const keysignPayloadQuery = useStateDependentQuery(
     {
       feeSettings,
@@ -73,15 +78,22 @@ export const SendTxOverview = () => {
       walletCore,
       vault,
       requestOrigin,
+      parsedTx: parsedTxQuery.data,
     },
     getTxKeysignPayloadQuery
   )
+
+  console.log('keysignPayloadQuery', keysignPayloadQuery)
 
   return (
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
       <MatchQuery
         value={keysignPayloadQuery}
-        pending={() => null}
+        pending={() => (
+          <Center>
+            <Spinner />
+          </Center>
+        )}
         error={() => (
           <FlowErrorPageContent title="Failed to process transaction" />
         )}

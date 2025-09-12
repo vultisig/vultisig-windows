@@ -89,7 +89,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} scrollable>
-        <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
+        <VaultPrimaryActions fromChain={chain} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
