@@ -18,6 +18,7 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
       )
 
       const decimals = chainFeeCoin['THORChain'].decimals
+      const totalShares = fromChainAmount(totalSharesChain.toString(), decimals)
 
       return {
         balances: items.map(i => ({
@@ -26,6 +27,7 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
         })),
         totalSharesChain,
         totalShares: fromChainAmount(totalSharesChain.toString(), decimals),
+        totalSharesFormatted: totalShares.toFixed(8),
       }
     },
   })
