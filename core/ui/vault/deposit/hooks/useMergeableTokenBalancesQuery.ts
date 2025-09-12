@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { fetchMergeableTokenBalances } from '@core/chain/chains/thorchain/ruji/services/fetchMergeableTokenBalances'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { bigIntSum } from '@lib/utils/bigint/bigIntSum'
 import { useQuery } from '@tanstack/react-query'
 
 const staleTime = 30_000
@@ -12,20 +13,19 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
     queryFn: () => fetchMergeableTokenBalances(address),
     enabled: !!address,
     select: items => {
-      const totalSharesChain = items.reduce<bigint>(
-        (acc, i) => acc + BigInt(i.sharesChain),
-        0n
+      const decimals = chainFeeCoin['THORChain'].decimals
+
+      const totalSharesBI = bigIntSum(
+        items.map(i => BigInt(i.sharesChain || '0'))
       )
 
-      const decimals = chainFeeCoin['THORChain'].decimals
-      const totalShares = fromChainAmount(totalSharesChain.toString(), decimals)
+      const totalShares = fromChainAmount(totalSharesBI.toString(), decimals)
 
       return {
         balances: items.map(i => ({
           ...i,
           shares: fromChainAmount(i.sharesChain, decimals),
         })),
-        totalSharesChain,
         totalShares,
         totalSharesFormatted: totalShares.toFixed(8),
       }
