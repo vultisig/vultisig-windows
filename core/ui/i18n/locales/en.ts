@@ -16,6 +16,7 @@ export const en = {
   plugin_server_url: 'Plugin Server URL',
   connecting_to_verifier: 'Connecting to Verifier',
   connecting_to_plugin: 'Connecting to Plugin',
+  positions: 'Positions',
   confirm: 'Confirm',
   enter_your_password: 'Enter your password',
   go_to_wallet: 'Go to wallet',
