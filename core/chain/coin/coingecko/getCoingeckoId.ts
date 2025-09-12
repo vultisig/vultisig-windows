@@ -8,5 +8,5 @@ export const getSolanaCoingeckoId = async ({ id }: { id: string }) => {
     `${rootApiUrl}/coingeicko/api/v3/onchain/networks/solana/tokens/${id}`
   )
 
-  return data.attributes.coingecko_coin_id ?? ''
+  return data.attributes.coingecko_coin_id ?? undefined
 }
