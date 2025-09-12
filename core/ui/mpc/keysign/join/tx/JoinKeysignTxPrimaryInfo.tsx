@@ -57,7 +57,7 @@ export const JoinKeysignTxPrimaryInfo = ({
         <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
         <span>{toAddress}</span>
       </TxOverviewChainDataRow>
-      {memo && <TxOverviewMemo value={memo} />}
+      {memo && <TxOverviewMemo value={memo} chain={coin.chain} />}
       <TxOverviewAmount
         value={fromChainAmount(BigInt(toAmount), decimals)}
         ticker={ticker}

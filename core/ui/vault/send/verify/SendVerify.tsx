@@ -101,7 +101,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               <Text size={14}>{chain}</Text>
             </HStack>
           </TxOverviewRow>
-          {memo && <TxOverviewMemo value={memo} />}
+          {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <TxOverviewRow>
             <SendFiatFee />
           </TxOverviewRow>

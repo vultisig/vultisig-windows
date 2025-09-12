@@ -4,6 +4,7 @@ import { PopupResolver } from '../resolver'
 import { ExportVaults } from './exportVaults'
 import { GrantVaultAccess } from './grantVaultAccess'
 import { PluginReshare } from './pluginReshare'
+import { SendTx } from './sendTx'
 import { SignMessage } from './signMessage'
 
 type PopupApiImplementation = {
@@ -15,4 +16,5 @@ export const PopupResolvers: PopupApiImplementation = {
   exportVaults: ExportVaults,
   pluginReshare: PluginReshare,
   signMessage: SignMessage,
+  sendTx: SendTx,
 }

@@ -1,12 +1,10 @@
-import { initializeMessenger } from '@clients/extension/src/messengers/initializeMessenger'
-import { EventMethod } from '@clients/extension/src/utils/constants'
 import {
   useCurrentVaultAppSessionsQuery,
   useRemoveAllVaultAppSessionsMutation,
   useRemoveVaultAppSessionMutation,
 } from '@core/extension/storage/hooks/appSessions'
 import { useCore } from '@core/ui/state/core'
-import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
+import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -20,44 +18,16 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
-
-const inpageMessenger = initializeMessenger({ connect: 'inpage' })
 
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
-  const { mutateAsync: removeSession } = useRemoveVaultAppSessionMutation()
-  const { mutateAsync: clearSessions } = useRemoveAllVaultAppSessionsMutation()
+  const { mutate: removeSession } = useRemoveVaultAppSessionMutation()
+  const { mutate: removeAllSessions } = useRemoveAllVaultAppSessionsMutation()
   const sessionsArray = Object.entries(sessions)
-  const currentVaultId = useCurrentVaultId()
+  const vaultId = useAssertCurrentVaultId()
   const { goBack } = useCore()
-
-  const handleDisconnect = async (host: string, url: string) => {
-    try {
-      await removeSession({ vaultId: shouldBePresent(currentVaultId), host })
-      await inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
-    } catch (error) {
-      console.error(`Failed to disconnect session for ${host}:`, error)
-    }
-  }
-
-  const handleDisconnectAll = async () => {
-    try {
-      await clearSessions(shouldBePresent(currentVaultId))
-      const uniqueUrls = new Set(
-        Object.values(sessions).map(session => session.url)
-      )
-      await Promise.allSettled(
-        [...uniqueUrls].map(url =>
-          inpageMessenger.send(`${EventMethod.DISCONNECT}:${url}`, {})
-        )
-      )
-    } catch (error) {
-      console.error('Failed to disconnect all sessions:', error)
-    }
-  }
 
   return (
     <VStack fullHeight>
@@ -86,7 +56,12 @@ export const ConnectedDappsPage = () => {
                   key={host}
                   extra={
                     <IconButton
-                      onClick={() => handleDisconnect(host, session.url)}
+                      onClick={() =>
+                        removeSession({
+                          vaultId,
+                          host: session.host,
+                        })
+                      }
                       status="danger"
                     >
                       <LinkTwoOffIcon />
@@ -102,7 +77,9 @@ export const ConnectedDappsPage = () => {
             </List>
           </PageContent>
           <PageFooter alignItems="center">
-            <Button onClick={handleDisconnectAll}>{t('disconnect_all')}</Button>
+            <Button onClick={() => removeAllSessions(vaultId)}>
+              {t('disconnect_all')}
+            </Button>
           </PageFooter>
         </>
       ) : (

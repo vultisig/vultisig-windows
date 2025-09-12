@@ -37,15 +37,9 @@ export const darkTheme: DefaultTheme = {
     buttonPrimary: new HSLA(224, 75, 50),
     buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
+    primaryAccentTwo: new HSLA(224, 96, 40),
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),
-  },
-
-  gradients: {
-    primary: `linear-gradient(135deg, #0339C7, #2155DF)`,
-    button: `linear-gradient(90deg,  #11C89C, #FFC25C)`,
-    alert: `linear-gradient(45deg,  #FF5C5C, #5CA7FF)`,
-    overlay: `linear-gradient(0deg,   rgba(0,0,0,.6), rgba(0,0,0,.8))`,
   },
 }

@@ -7,20 +7,20 @@
     "printKnownTokens": "npx tsx scripts/printKnownTokens.ts"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.2.4",
-    "@cardano-sdk/core": "^0.46.1",
-    "@core/config": "workspace:*",
-    "@core/mpc": "workspace:*",
-    "@cosmjs/stargate": "^0.33.1",
-    "@lib/utils": "workspace:*",
-    "@mysten/sui": "^1.24.0",
-    "@polkadot/api": "^16.4.3",
+    "@bufbuild/protobuf": "^2.7.0",
+    "@cardano-sdk/core": "^0.46.9",
+    "@core/config": "workspace:^",
+    "@core/mpc": "workspace:^",
+    "@cosmjs/stargate": "^0.36.0",
+    "@lib/utils": "workspace:^",
+    "@mysten/sui": "^1.37.6",
+    "@polkadot/api": "^16.4.6",
     "@solana/web3.js": "^2.0.0",
-    "@trustwallet/wallet-core": "^4.3.3",
+    "@trustwallet/wallet-core": "^4.3.6",
     "bip32": "^5.0.0-rc.0",
     "bitcoinjs-lib": "^6.1.7",
-    "tiny-secp256k1": "^2.2.3",
-    "viem": "^2.23.12",
-    "xrpl": "^4.2.0"
+    "tiny-secp256k1": "^2.2.4",
+    "viem": "^2.37.4",
+    "xrpl": "^4.4.1"
   }
 }

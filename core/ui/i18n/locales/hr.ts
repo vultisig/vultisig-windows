@@ -1,4 +1,17 @@
 export const hr = {
+  onboarding_greeting: 'Búcsúzz el a <g>seed kívána</g>',
+  onboarding_step_1:
+    'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
+  onboarding_step_2:
+    'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, <g>az egyetlen meghibásodási pont eltávolítása érdekében</g>',
+  onboarding_step_3:
+    '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
+  onboarding_step_4:
+    'Állítsd helyre a széfet még akkor is <g>ha egy eszköz elveszik vagy megsérül</g>',
+  onboarding_step_5:
+    '<g>Mindig készíts biztonsági másolatot minden tárhelyrészről</g> külön egy <g>másik helyszínen</g>',
+  onboarding_step_6:
+    'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   secure_crypto_vault: 'Sigurni kripto trezor',
   vultisig: 'Vultisig',
   onboarding_description_1:
@@ -13,15 +26,19 @@ export const hr = {
   create_referral_title: 'Stvori preporuku',
   use_referral_code: 'Upotrijebi kod preporuke',
   save_code: 'Spremi kod',
+  amount_to_unstake: 'Iznos za uklanjanje',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Iskorišteni kod preporuke ne može biti isti kao vaš kod preporuke',
   your_referral_code: 'Vaš kod preporuke',
   collected_rewards: 'Prikupljene nagrade',
   expires_on: 'Istječe',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   edit_referral: 'Uredi preporuku',
   edit_friends_referral: 'Uredi prijateljevu preporuku',
   add_referral_code: 'Dodaj kod preporuke',
   mint: 'Primi',
+  sent: 'Poslano',
   redeem: 'Prodaj',
   your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
   change_your_friends_referral:
@@ -135,34 +152,13 @@ export const hr = {
     'Töltse le a Vultisig alkalmazást más eszközeire, és válassza a "QR-kód beolvasása" lehetőséget',
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
-  sayHelloTo: 'Mondd, hogy helló',
-  vaultShares: 'széf részvények',
   serverTimedOut: 'A szerver időtúllépés miatt megszakadt',
   serverTookTooLong:
     'A szerver túl sokáig tartott a válaszadással. Kérlek, ellenőrizd az internetkapcsolatodat, és próbáld újra.',
-  alwaysBackUpEachVaultShare:
-    'Mindig készíts biztonsági másolatot minden tárhelyrészről',
-  separatelyIna: 'külön egy',
-  differentLocation: 'másik helyszínen',
-  eachDevice: 'Minden eszköz',
-  inYourVaultHolds: 'a tárhelyedben tartalmaz',
-  oneVaultShare: 'egy tárhelyrészt',
-  theyRe: 'Ezek',
   moreInfo: 'További információ',
   secureVaultSetupPasswordTooltipContent:
     'Ez azért történik, mert a jelszót a biztonsági mentési fájl helyi titkosítására használják, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetősége van egy tippet hozzáadni.',
-  splitIntoParts: 'részekre vannak osztva',
-  toIncreaseSecurity: 'a biztonság növelése érdekében és',
-  removeSinglePointOfFailure:
-    'az egyetlen meghibásodási pont eltávolítása érdekében',
-  theseSharesCollaborate: 'Ezek a részek együttműködnek, hogy',
-  unlockYourVault: 'feloldják a tárhelyed zárolását',
-  recoverYourVault: 'Állítsd helyre a széfet még akkor is',
-  deviceLostOrDamaged: 'ha egy eszköz elveszik vagy megsérül',
-  yourNewRecoveryMethod: 'az új helyreállítási módszered',
   tokens: 'tokenek',
-  sayGoodbyeTo: 'Búcsúzz el a',
-  seedPhrases: 'seed kívána',
   selected: 'kiválasztott',
   required_field_missing: 'Hiányzó kötelező mező',
   import_existing_vault: 'Uvezi postojeći trezor',
@@ -520,6 +516,7 @@ export const hr = {
       agreementText: 'Elolvastam és megértettem, mit kell tenni',
       ctaText: 'Hozza létre a tárolóját',
       start_using_vault: 'Počnite koristiti svoj trezor',
+      select_preferred_chains: 'Odaberite svoje omiljene lance',
     },
     preparingVault: 'Tárca előkészítése',
     createVault: {
@@ -623,7 +620,6 @@ export const hr = {
       'Pogreška pri dohvaćanju najnovije verzije: {{error}}',
     fetchingLatestVersion: 'Dohvaćanje najnovije verzije...',
     applicationUpToDate: 'Aplikacija je ažurirana.',
-    newVersionAvailable: 'Nova verzija ({{latestVersion}}) je dostupna!',
     downloadButton: 'Preuzmi sada.',
     currentVersion: '{{localVersion}}',
     title: 'Provjeri ažuriranje',
@@ -808,7 +804,6 @@ export const hr = {
   get_vault_failed: 'Dohvaćanje trezora nije uspjelo',
   get_vault_failed_description:
     'Provjerite jeste li već uvezli svoje trezore u VultiConnect',
-  connect_with_vultisig: 'Povežite se s Vultisigom',
   select_vault: 'Odaberite trezor',
   connect: 'Poveži se',
   link_copied: 'Veza je kopirana u međuspremnik',
@@ -851,7 +846,7 @@ export const hr = {
   vault_overview: 'Pregled trezora',
   tap: 'Dodirnite',
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
-  vultiserver_password: 'Lozinka Vultiservera',
+  backup_password: 'Lozinka sigurnosne kopije',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
   use_password: 'Koristi lozinku',
   backup_password_prompt:
@@ -1006,8 +1001,6 @@ export const hr = {
   search: 'Pretraživanje',
   create_referral_form: 'Izradi preporuku',
   blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
-  transaction_not_scanned: 'Transakciju nije skenirao <provider></provider>',
-  transaction_scanned: 'Transakciju skenira <provider></provider>',
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
   scanning: 'skeniranje...',
@@ -1022,4 +1015,20 @@ export const hr = {
     'Ova IBC transakcija uključuje memorandum, ali Vultisig trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
   go_back: 'Natrag',
   continue_anyway: 'Nastavi svejedno',
+  stake_ruji: 'Kolac RUJI',
+  unstake_ruji: 'Ukloni RUJI',
+  withdraw_ruji_rewards: 'Isplata RUJI nagrada',
+  tns_max_4_chars: 'Referral kod ne smije biti duži od 4 znaka',
+  tns_alnum_only: 'Referral kod mora sadržavati samo alfanumeričke znakove',
+  tns_not_found: 'Referral kod nije pronađen',
+  tns_missing_thor_alias: 'Referalni kod mora imati THOR-chain alias',
+  site: 'Stranica',
+  send_receiver_address_same_as_sender:
+    'Adresa primatelja ne može biti ista kao adresa pošiljatelja',
+  connect_to_site: 'Poveži se s {{site}}',
+  entity_not_scanned:
+    '{{entitet}} nije skeniran od strane <provider></provider>',
+  entity_scanned: '{{entitet}} skeniran od strane <provider></provider>',
+  site_has_risk: 'Zlonamjernu stranicu otkrio je <provider></provider>',
+  risky_site_detected: 'Otkrivena je zlonamjerna web-lokacija',
 }

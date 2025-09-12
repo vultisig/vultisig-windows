@@ -89,7 +89,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} scrollable>
-        <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
+        <VaultPrimaryActions fromChain={chain} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -175,9 +175,9 @@ export const VaultChainPage = () => {
                 (one, another) => one.ticker === another.ticker
               ).map(adjustVaultChainCoinsLogos)
 
-              return orderedCoins.map(coin => (
+              return orderedCoins.map((coin, idx) => (
                 <UnstyledButton
-                  key={coin.id}
+                  key={`${idx}-${coin.id}`}
                   onClick={() =>
                     navigate({
                       id: 'vaultChainCoinDetail',

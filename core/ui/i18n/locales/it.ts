@@ -1,4 +1,17 @@
 export const it = {
+  onboarding_greeting: 'Addio a <g>frasi semina</g>',
+  onboarding_step_1:
+    'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  onboarding_step_2:
+    'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
+  onboarding_step_3:
+    '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
+  onboarding_step_4:
+    'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
+  onboarding_step_5:
+    '<g>Esegui sempre il backup di ogni quota del caveau</g> separatamente in una <g>posizione diversa</g>',
+  onboarding_step_6:
+    'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   onboarding_description_1:
@@ -14,13 +27,17 @@ export const it = {
   create_referral_title: 'Crea referral',
   use_referral_code: 'Usa codice referral',
   save_code: 'Salva codice',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Il codice referral utilizzato non può essere lo stesso del tuo codice referral',
   your_referral_code: 'Il tuo codice referral',
+  amount_to_unstake: 'Importo da rimuovere',
   collected_rewards: 'Ricompense raccolte',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   expires_on: 'Scade il',
   edit_referral: 'Modifica referral',
   edit_friends_referral: "Modifica referral dell'amico",
+  sent: 'Inviato',
   add_referral_code: 'Aggiungi codice referral',
   your_friends_referral_code: 'Codice referral del tuo amico',
   change_your_friends_referral:
@@ -137,31 +154,11 @@ export const it = {
   qrCode: 'il codice QR',
   downloadVultisig:
     'Scarica Vultisig sugli altri dispositivi e seleziona "Scansiona codice QR"',
-  alwaysBackUpEachVaultShare:
-    'Esegui sempre il backup di ogni quota del caveau',
-  separatelyIna: 'separatamente in una',
-  differentLocation: 'posizione diversa',
-  eachDevice: 'Ogni dispositivo',
-  inYourVaultHolds: 'nel tuo caveau contiene',
-  oneVaultShare: 'una quota del caveau',
   serverTimedOut: 'Il server ha impiegato troppo tempo',
   serverTookTooLong:
     'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
-  theyRe: 'Sono',
-  splitIntoParts: 'divisi in parti',
-  toIncreaseSecurity: 'per aumentare la sicurezza e',
-  removeSinglePointOfFailure: 'eliminare il singolo punto di guasto',
-  theseSharesCollaborate: 'Queste quote collaborano per',
-  unlockYourVault: 'sbloccare il tuo caveau',
   chooseSetup: 'Scegli configurazione',
   introOnboarding: 'Bevezető',
-  sayHelloTo: 'Dì ciao a',
-  recoverYourVault: 'Recupera la tua cassaforte anche',
-  deviceLostOrDamaged: 'se un dispositivo è perso o danneggiato',
-  vaultShares: 'azioni della cassaforte',
-  yourNewRecoveryMethod: 'il tuo nuovo metodo di recupero',
-  sayGoodbyeTo: 'Addio a',
-  seedPhrases: 'frasi semina',
   selected: 'selezionato',
   create_new_vault: 'Crea nuova cassaforte',
   import_existing_vault: 'Importa cassaforte esistente',
@@ -540,6 +537,7 @@ export const it = {
       agreementText: 'Ho letto e capisco cosa fare',
       ctaText: 'Crea il tuo vault',
       start_using_vault: 'Inizia a usare la tua cassaforte',
+      select_preferred_chains: 'Seleziona le tue catene preferite',
     },
     preparingVault: 'Preparazione della Cassaforte',
     createVault: {
@@ -646,8 +644,6 @@ export const it = {
       "Errore durante il recupero dell'ultima versione: {{error}}",
     fetchingLatestVersion: "Recupero dell'ultima versione...",
     applicationUpToDate: "L'applicazione è aggiornata.",
-    newVersionAvailable:
-      'È disponibile una nuova versione ({{latestVersion}})!',
     currentVersion: '{{localVersion}}',
     title: 'Controlla aggiornamento',
     version: 'Versione {{latestVersion}}',
@@ -825,7 +821,6 @@ export const it = {
   get_vault_failed: 'Impossibile ottenere i Vault',
   get_vault_failed_description:
     'Assicurati di aver già importato i tuoi vault in VultiConnect',
-  connect_with_vultisig: 'Connettiti con Vultisig',
   select_vault: 'Seleziona un Vault',
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
@@ -869,7 +864,7 @@ export const it = {
   vault_overview: 'Panoramica del Vault',
   tap: 'Rubinetto',
   took_too_long_to_respond: 'Ci è voluto troppo tempo per rispondere',
-  vultiserver_password: 'Password del server Vulti',
+  backup_password: 'Password di backup',
   backup_without_password: 'Backup senza password',
   use_password: 'Usa la password',
   backup_password_prompt:
@@ -1029,9 +1024,6 @@ export const it = {
   search: 'Ricerca',
   create_referral_form: 'Crea referral',
   blockaid_security_scan: 'Scansione di sicurezza Blockaid',
-  transaction_not_scanned:
-    'Transazione non scansionata da <provider></provider>',
-  transaction_scanned: 'Transazione scansionata da <provider></provider>',
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
   scanning: 'scansione...',
@@ -1046,4 +1038,22 @@ export const it = {
     "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
   go_back: 'Torna indietro',
   continue_anyway: 'Continua comunque',
+  stake_ruji: 'Palo RUJI',
+  unstake_ruji: 'Togliere RUJI',
+  withdraw_ruji_rewards: 'Ritira i premi RUJI',
+  tns_max_4_chars:
+    'Il codice di riferimento non deve contenere più di 4 caratteri',
+  tns_alnum_only:
+    'Il codice di riferimento deve contenere solo caratteri alfanumerici',
+  tns_not_found: 'Codice di riferimento non trovato',
+  tns_missing_thor_alias:
+    'Il codice di riferimento deve avere un alias della catena THOR',
+  site: 'Sito',
+  send_receiver_address_same_as_sender:
+    "L'indirizzo del destinatario non può essere uguale all'indirizzo del mittente",
+  connect_to_site: 'Connettiti a {{site}}',
+  entity_not_scanned: '{{entity}} non scansionato da <provider></provider>',
+  entity_scanned: '{{entity}} scansionata da <provider></provider>',
+  site_has_risk: 'Sito dannoso rilevato da <provider></provider>',
+  risky_site_detected: 'Sito dannoso rilevato',
 }

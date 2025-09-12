@@ -1,9 +1,5 @@
-import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/validation/input'
+import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { BlockaidNoTxScanStatus } from '@core/ui/chain/security/blockaid/tx/BlockaidNoTxScanStatus'
-import { BlockaidTxScanning } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanning'
-import { BlockaidTxScanResult } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScanResult'
-import { BlockaidTxStatusContainer } from '@core/ui/chain/security/blockaid/tx/BlockaidTxStatusContainer'
 import { getBlockaidTxScanQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxScan'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
@@ -23,11 +19,15 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
+import { BlockaidNoScanStatus } from '../../../chain/security/blockaid/scan/BlockaidNoScanStatus'
+import { BlockaidScanning } from '../../../chain/security/blockaid/scan/BlockaidScanning'
+import { BlockaidScanStatusContainer } from '../../../chain/security/blockaid/scan/BlockaidScanStatusContainer'
+import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/BlockaidTxScanResult'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
   keysignPayloadQuery: Query<KeysignPayload>
-  terms: string[]
+  terms?: string[]
 }
 
 const TermItem = styled(Checkbox)`
@@ -39,7 +39,7 @@ const TermItem = styled(Checkbox)`
 export const VerifyKeysignStart = ({
   children,
   keysignPayloadQuery,
-  terms,
+  terms = [],
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -120,26 +120,28 @@ export const VerifyKeysignStart = ({
           <MatchQuery
             value={txScanQuery}
             success={value => <BlockaidTxScanResult value={value} />}
-            pending={() => <BlockaidTxScanning />}
-            error={() => <BlockaidNoTxScanStatus />}
-            inactive={() => <BlockaidTxStatusContainer />}
+            pending={() => <BlockaidScanning />}
+            error={() => <BlockaidNoScanStatus entity="tx" />}
+            inactive={() => <BlockaidScanStatusContainer />}
           />
         )}
 
         {children}
 
-        <VStack>
-          {terms.map((term, index) => (
-            <TermItem
-              key={index}
-              label={<Text size={14}>{term}</Text>}
-              value={termsAccepted[index]}
-              onChange={v =>
-                setTermsAccepted(prev => updateAtIndex(prev, index, () => v))
-              }
-            />
-          ))}
-        </VStack>
+        {terms.length > 0 && (
+          <VStack>
+            {terms.map((term, index) => (
+              <TermItem
+                key={index}
+                label={<Text size={14}>{term}</Text>}
+                value={termsAccepted[index]}
+                onChange={v =>
+                  setTermsAccepted(prev => updateAtIndex(prev, index, () => v))
+                }
+              />
+            ))}
+          </VStack>
+        )}
 
         <VStack
           style={{

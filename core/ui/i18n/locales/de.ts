@@ -1,4 +1,17 @@
 export const de = {
+  onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
+  onboarding_step_1:
+    'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  onboarding_step_2:
+    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
+  onboarding_step_3:
+    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
+  onboarding_step_4:
+    'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
+  onboarding_step_5:
+    '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  onboarding_step_6:
+    'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
@@ -18,7 +31,11 @@ export const de = {
   moreInfo: 'Mehr Info',
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
+  amount_to_unstake: 'Menge zur Aufhebung',
   save_code: 'Code speichern',
+  unstake_share_token_label: 'Unstake {{ticker}}',
+  sent: 'Gesendet',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
   your_referral_code: 'Dein Empfehlungscode',
@@ -136,29 +153,10 @@ export const de = {
   qrCode: 'den QR-Code',
   downloadVultisig:
     'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie "QR-Code scannen"',
-  sayHelloTo: 'Sag hallo zu',
-  alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
-  separatelyIna: 'separat in einer',
-  differentLocation: 'anderen Location',
-  eachDevice: 'Jedes Gerät',
   chooseSetup: 'Setup wählen',
   introOnboarding: 'Intro',
-  inYourVaultHolds: 'in Ihrem Tresor enthält',
-  oneVaultShare: 'eine Tresorfreigabe',
-  theyRe: 'Sie sind',
-  splitIntoParts: 'in Teile aufgeteilt',
-  toIncreaseSecurity: 'um die Sicherheit zu erhöhen und',
-  removeSinglePointOfFailure: 'den Single Point of Failure zu entfernen',
-  theseSharesCollaborate: 'Diese Freigaben arbeiten zusammen, um',
-  unlockYourVault: 'Ihren Tresor zu entsperren',
-  recoverYourVault: 'Stelle deinen Tresor wieder her, sogar',
-  deviceLostOrDamaged: 'wenn ein Gerät verloren geht oder beschädigt wird',
-  vaultShares: 'Tresoranteile',
-  yourNewRecoveryMethod: 'deine neue Wiederherstellungsmethode',
   tokens: 'Token',
   selected: 'ausgewählt',
-  sayGoodbyeTo: 'Auf Wiedersehen zu',
-  seedPhrases: 'Seed-Wörter',
   required_field_missing: 'Erforderliches Feld fehlt',
   email_confirmation_code_label:
     'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',
@@ -535,6 +533,7 @@ export const de = {
       agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
       ctaText: 'Erstellen Sie Ihren Tresor',
       start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors',
+      select_preferred_chains: 'Wählen Sie Ihre bevorzugten Ketten',
     },
     preparingVault: 'Tresor wird vorbereitet',
     createVault: {
@@ -642,7 +641,6 @@ export const de = {
       'Fehler beim Abrufen der neuesten Version: {{error}}',
     fetchingLatestVersion: 'Neueste Version wird abgerufen...',
     applicationUpToDate: 'Anwendung ist auf dem neuesten Stand.',
-    newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
     currentVersion: '{{localVersion}}',
     title: 'Update prüfen',
     version: 'Version {{latestVersion}}',
@@ -830,7 +828,6 @@ export const de = {
   get_vault_failed: 'Tresore konnten nicht abgerufen werden',
   get_vault_failed_description:
     'Stellen Sie sicher, dass Sie Ihre Tresore bereits in VultiConnect importiert haben',
-  connect_with_vultisig: 'Verbinden Sie sich mit Vultisig',
   select_vault: 'Wählen Sie einen Tresor aus',
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
@@ -874,7 +871,7 @@ export const de = {
   vault_overview: 'Vault-Übersicht',
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
-  vultiserver_password: 'Vultiserver-Passwort',
+  backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
   use_password: 'Passwort verwenden',
@@ -1035,9 +1032,6 @@ export const de = {
   search: 'Suchen',
   create_referral_form: 'Empfehlung erstellen',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
-  transaction_not_scanned:
-    'Transaktion nicht von <provider></provider> gescannt',
-  transaction_scanned: 'Transaktion gescannt von <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
   scanning: 'Scannen...',
@@ -1052,4 +1046,21 @@ export const de = {
     'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Das Fortsetzen dieser Transaktion kann zu einem <b>irreversiblen Verlust von Geldern</b> führen.',
   go_back: 'Geh zurück',
   continue_anyway: 'Trotzdem fortfahren',
+  stake_ruji: 'Pfahl RUJI',
+  unstake_ruji: 'Lösen Sie RUJI',
+  withdraw_ruji_rewards: 'RUJI-Prämien abheben',
+  tns_max_4_chars: 'Der Empfehlungscode darf nicht länger als 4 Zeichen sein',
+  tns_alnum_only:
+    'Der Empfehlungscode darf nur alphanumerische Zeichen enthalten',
+  tns_not_found: 'Empfehlungscode nicht gefunden',
+  tns_missing_thor_alias:
+    'Der Empfehlungscode muss einen THOR-Kettenalias haben',
+  site: 'Website',
+  send_receiver_address_same_as_sender:
+    'Empfängeradresse darf nicht mit Absenderadresse identisch sein',
+  connect_to_site: 'Verbinden Sie sich mit {{site}}',
+  entity_not_scanned: '{{entity}} nicht von <provider></provider> gescannt',
+  entity_scanned: '{{entity}} gescannt von <provider></provider>',
+  site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
+  risky_site_detected: 'Schädliche Site erkannt',
 }

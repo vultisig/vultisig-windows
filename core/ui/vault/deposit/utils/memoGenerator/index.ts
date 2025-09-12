@@ -11,8 +11,8 @@ import { FieldValues } from 'react-hook-form'
 
 import { ChainAction } from '../../ChainAction'
 import { StakeableChain } from '../../config'
-import { sourceChannelByChain } from '../../DepositForm/chainOptionsConfig'
 import { MayaChainPool } from '../../types/mayaChain'
+import { sourceChannelByChain } from '../getDepositFormConfig'
 
 type MemoParams = {
   selectedChainAction: ChainAction
@@ -28,7 +28,7 @@ export const generateMemo = ({
   bondableAsset,
   chain,
   coin,
-}: MemoParams): string => {
+}: MemoParams) => {
   const {
     nodeAddress,
     amount,
@@ -41,20 +41,6 @@ export const generateMemo = ({
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
-    stake_ruji: () => {
-      const chainAmount = toChainAmount(
-        shouldBePresent(Number(amount)),
-        coin.decimals
-      ).toString()
-      return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
-    },
-    unstake_ruji: () => {
-      const chainAmount = toChainAmount(
-        shouldBePresent(Number(amount)),
-        coin.decimals
-      ).toString()
-      return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
-    },
     withdraw_ruji_rewards: () => `claim:${rujiraStakingConfig.bondDenom}`,
     mint: () => {
       const token = shouldBePresent(coin, 'Selected coin')
@@ -83,6 +69,15 @@ export const generateMemo = ({
           if (coin.ticker === 'TCY') {
             return 'tcy+'
           }
+
+          if (coin.ticker === 'RUJI') {
+            const chainAmount = toChainAmount(
+              shouldBePresent(Number(amount)),
+              coin.decimals
+            ).toString()
+            return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
           throw new Error(
             `Unsupported chain and token for staking memo: ${chain}`
           )
@@ -93,13 +88,28 @@ export const generateMemo = ({
         Ton: () => 'w',
         THORChain: () => {
           if (coin.ticker === 'TCY') {
-            const pct = shouldBePresent(
-              depositFormData.percentage,
-              'Percentage'
-            )
+            if (depositFormData.autoCompound) return ''
+
+            const raw = (depositFormData as any).percentage
+
+            const pct = typeof raw === 'string' ? Number(raw) : Number(raw)
+            if (!Number.isFinite(pct) || pct <= 0 || pct > 100) {
+              throw new Error('Percentage must be 0-100')
+            }
             const basisPoints = Math.floor(pct * 100)
             return `tcy-:${basisPoints}`
           }
+
+          if (coin.ticker === 'RUJI') {
+            const amt = shouldBePresent(amount, 'Amount')
+            const amtNum = typeof amt === 'string' ? Number(amt) : amt
+            if (!Number.isFinite(amtNum) || amtNum <= 0) {
+              throw new Error('Amount is required for RUJI unstake')
+            }
+            const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
+            return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
           throw new Error(
             `Unsupported chain and token for staking memo: ${chain}`
           )
@@ -197,5 +207,6 @@ function extractFormValues(formData: FieldValues) {
     destinationChannel: formData.destinationChannel as string | null,
     coin: formData.coin as Coin | null,
     thorchainAddress: formData.thorchainAddress as string | null,
+    autoCompound: Boolean(formData.autoCompound),
   }
 }

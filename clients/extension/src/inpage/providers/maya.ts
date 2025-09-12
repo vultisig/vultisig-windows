@@ -1,15 +1,12 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { v4 as uuidv4 } from 'uuid'
+import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
-import { MessageKey } from '../../utils/constants'
-import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
-import { messengers } from '../messenger'
 import { BaseCosmosChain } from './baseCosmos'
 import { getSharedHandlers } from './core/sharedHandlers'
 export class MAYAChain extends BaseCosmosChain {
   public static instance: MAYAChain | null = null
-  public messageKey = MessageKey.MAYA_REQUEST
 
   private constructor() {
     super('Thorchain_mayachain')
@@ -22,24 +19,17 @@ export class MAYAChain extends BaseCosmosChain {
     return MAYAChain.instance
   }
 
-  async request(
-    data: Messaging.Chain.Request,
-    callback?: Callback
-  ): Promise<Messaging.Chain.Response> {
+  async request(data: RequestInput, callback?: Callback): Promise<unknown> {
     const processRequest = async () => {
       const handlers = getSharedHandlers(CosmosChain.MayaChain)
 
       if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers]()
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
       }
-      return messengers.background.send<any, Messaging.Chain.Response>(
-        'providerRequest',
-        {
-          type: this.messageKey,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
+
+      throw new NotImplementedError(`Maya method ${data.method}`)
     }
 
     try {

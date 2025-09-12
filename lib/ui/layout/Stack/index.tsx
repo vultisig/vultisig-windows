@@ -13,6 +13,8 @@ type FixedDirectionStackProps = {
   flexGrow?: boolean
   children?: React.ReactNode
   maxWidth?: React.CSSProperties['maxWidth']
+  padding?: React.CSSProperties['padding']
+  position?: React.CSSProperties['position']
   scrollable?: boolean
 }
 
@@ -43,6 +45,8 @@ const stack = ({
   direction,
   flexGrow,
   maxWidth,
+  padding,
+  position,
   scrollable,
 }: StackProps) => css`
   display: flex;
@@ -76,13 +80,21 @@ const stack = ({
     width: 100%;
     height: 100%;
   `}
-    ${flexGrow &&
+  ${flexGrow &&
   css`
     flex: 1;
   `}
-    ${!!maxWidth &&
+  ${!!maxWidth &&
   css`
     max-width: ${toSizeUnit(maxWidth)};
+  `}
+  ${padding &&
+  css`
+    padding: ${toSizeUnit(padding)};
+  `}
+  ${position &&
+  css`
+    position: ${position};
   `}
   ${scrollable &&
   css`

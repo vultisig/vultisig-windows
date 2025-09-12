@@ -1,11 +1,8 @@
 import { OtherChain } from '@core/chain/Chain'
+import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 
-import { MessageKey } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
-import { messengers } from '../messenger'
 import { getSharedHandlers } from './core/sharedHandlers'
 
 export class Ripple extends EventEmitter {
@@ -21,23 +18,13 @@ export class Ripple extends EventEmitter {
     return Ripple.instance
   }
 
-  async request(data: Messaging.Chain.Request) {
+  async request(data: RequestInput) {
     const handlers = getSharedHandlers(OtherChain.Ripple)
 
     if (data.method in handlers) {
-      return handlers[data.method as keyof typeof handlers]()
+      return handlers[data.method as keyof typeof handlers](data.params as any)
     }
-    const response = await messengers.background.send<
-      any,
-      Messaging.Chain.Response
-    >(
-      'providerRequest',
-      {
-        type: MessageKey.RIPPLE_REQUEST,
-        message: data,
-      },
-      { id: uuidv4() }
-    )
-    return processBackgroundResponse(data, MessageKey.RIPPLE_REQUEST, response)
+
+    throw new NotImplementedError(`Ripple method ${data.method}`)
   }
 }

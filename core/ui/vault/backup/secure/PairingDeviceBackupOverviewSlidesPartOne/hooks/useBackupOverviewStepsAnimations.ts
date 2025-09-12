@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
-const backupVaultAnimations = [1, 2] as const
+const animations = [1, 2] as const
 
 export const useBackupOverviewStepsAnimations = (
   numberOfShares: number,
@@ -14,10 +14,8 @@ export const useBackupOverviewStepsAnimations = (
   const {
     step: currentAnimation,
     toNextStep: toNextAnimation,
-    toFirstStep: toFirstAnimation,
-  } = useStepNavigation({
-    steps: backupVaultAnimations,
-  })
+    toPreviousStep: toPreviousAnimation,
+  } = useStepNavigation({ steps: animations })
 
   const extensionBasedOnNumOfDevices = useMemo(() => {
     return numberOfShares === 2 || numberOfShares === 3
@@ -40,7 +38,10 @@ export const useBackupOverviewStepsAnimations = (
   )
 
   const handleNextAnimation = useCallback(() => {
-    if (stateMachineInput && typeof stateMachineInput.value === 'number') {
+    if (
+      typeof stateMachineInput?.value === 'number' &&
+      stateMachineInput.value < animations.length
+    ) {
       stateMachineInput.value += 1
       toNextAnimation()
     }
@@ -49,17 +50,16 @@ export const useBackupOverviewStepsAnimations = (
   // TODO: tony to refactor when the designer gives us the animations that work backwards
   const handlePrevAnimation = useCallback(() => {
     if (
-      stateMachineInput &&
-      typeof stateMachineInput.value === 'number' &&
-      stateMachineInput.value - 1 >= 0
+      typeof stateMachineInput?.value === 'number' &&
+      stateMachineInput.value > 0
     ) {
       stateMachineInput.value -= 1
-      toFirstAnimation()
+      toPreviousAnimation()
     }
-  }, [stateMachineInput, toFirstAnimation])
+  }, [stateMachineInput, toPreviousAnimation])
 
   return {
-    animations: backupVaultAnimations,
+    animations,
     animationComponent: RiveComponent,
     currentAnimation,
     handlePrevAnimation,

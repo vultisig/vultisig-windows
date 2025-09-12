@@ -1,5 +1,6 @@
 import { cropText } from '@lib/ui/css/cropText'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import styled, { css, DefaultTheme } from 'styled-components'
 
@@ -159,13 +160,18 @@ export const StrictText = styled(Text)`
 `
 
 export const gradientText = css`
-  background: linear-gradient(90deg, #33e6bf, #0439c7);
+  background: linear-gradient(
+    82deg,
+    ${getColor('primary')} 8%,
+    ${getColor('primaryAccentTwo')} 134%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
 `
 
-export const GradientText = styled(Text)`
+export const GradientText = styled.span<TextProps>`
+  ${text}
   ${gradientText}
 `

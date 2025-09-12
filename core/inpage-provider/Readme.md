@@ -12,3 +12,7 @@ Install a plugin at https://store.vultisigplugin.app/
 
 - Rango: https://app.rango.exchange/bridge
 - ThorSwap: https://app.thorswap.finance/swap
+
+## Solana Swaps
+
+https://raydium.io/

@@ -1,4 +1,17 @@
 export const es = {
+  onboarding_greeting: 'Adiós a <g>frases semilla</g>',
+  onboarding_step_1:
+    'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
+  onboarding_step_2:
+    'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
+  onboarding_step_3:
+    '<g>Cada dispositivo</g> en su depósito contiene <g>una parte del depósito</g>',
+  onboarding_step_4:
+    'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
+  onboarding_step_5:
+    '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
+  onboarding_step_6:
+    'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
   digit_input_success_validation: 'Verificación exitosa',
@@ -17,10 +30,14 @@ export const es = {
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   select_asset: 'Seleccionar activo',
   incorrect_passcode: 'Código incorrecto',
+  amount_to_unstake: 'Cantidad para desapuestar',
+  auto_compound_into_label: 'Auto-compundo en {{ticker}}',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   referral_reg_fee: 'Cuota de registro',
   create_referral_title: 'Crear referido',
   use_referral_code: 'Usar código de referido',
   save_code: 'Guardar código',
+  sent: 'Enviado',
   used_referral_error:
     'El código de referido usado no puede ser el mismo que tu código de referido',
   your_referral_code: 'Tu código de referido',
@@ -139,35 +156,15 @@ export const es = {
   qrCode: 'el código QR',
   downloadVultisig:
     'Descarga Vultisig en tus otros dispositivos y selecciona "Escanear código QR"',
-  alwaysBackUpEachVaultShare:
-    'Siempre haga una copia de seguridad de cada parte del depósito',
-  separatelyIna: 'separadamente en una',
-  differentLocation: 'ubicación diferente',
   serverTimedOut: 'El servidor agotó el tiempo de espera',
   serverTookTooLong:
     'El servidor tardó demasiado en responder. Por favor, verifica tu conexión a internet e inténtalo de nuevo.',
-  eachDevice: 'Cada dispositivo',
-  inYourVaultHolds: 'en su depósito contiene',
   chooseSetup: 'Elegir configuración',
   introOnboarding: 'Intro',
-  oneVaultShare: 'una parte del depósito',
-  theyRe: 'Están',
-  splitIntoParts: 'divididos en partes',
-  toIncreaseSecurity: 'para aumentar la seguridad y',
-  removeSinglePointOfFailure: 'eliminar un único punto de fallo',
-  theseSharesCollaborate: 'Estas partes colaboran para',
-  unlockYourVault: 'desbloquear su depósito',
   import_existing_vault: 'Importar bóveda existente',
-  sayHelloTo: 'Di hola a',
-  recoverYourVault: 'Recupera tu bóveda incluso',
-  deviceLostOrDamaged: 'si un dispositivo se pierde o se daña',
-  vaultShares: 'acciones de la bóveda',
-  yourNewRecoveryMethod: 'tu nuevo método de recuperación',
   next: 'Siguiente',
   skip: 'Omitir',
   tokens: 'tokens',
-  sayGoodbyeTo: 'Adiós a',
-  seedPhrases: 'frases semilla',
   selected: 'seleccionado',
   required_field_missing: 'Campo requerido faltante',
   enter_password: 'Ingrese la contraseña',
@@ -538,6 +535,7 @@ export const es = {
       agreementText: 'He leído y entiendo qué hacer',
       ctaText: 'Cree su bóveda',
       start_using_vault: 'Comienza a usar tu bóveda',
+      select_preferred_chains: 'Elige tus cadenas preferidas',
     },
     preparingVault: 'Preparando Bóveda',
     createVault: {
@@ -647,8 +645,6 @@ export const es = {
     errorFetchingLatestVersion: 'Error al obtener la última versión: {{error}}',
     fetchingLatestVersion: 'Obteniendo la última versión...',
     applicationUpToDate: 'La aplicación está actualizada.',
-    newVersionAvailable:
-      '¡Hay una nueva versión ({{latestVersion}}) disponible!',
     currentVersion: '{{localVersion}}',
     title: 'Comprobar actualización',
     version: 'Versión {{latestVersion}}',
@@ -830,7 +826,6 @@ export const es = {
   get_vault_failed: 'No se pudieron obtener las bóvedas',
   get_vault_failed_description:
     'Asegúrese de que ya haya importado sus bóvedas en VultiConnect',
-  connect_with_vultisig: 'Conéctate con Vultisig',
   select_vault: 'Seleccione una bóveda',
   connect: 'Conectar',
   link_copied: 'Enlace copiado al portapapeles',
@@ -874,7 +869,7 @@ export const es = {
   vault_overview: 'Descripción general de la bóveda',
   tap: 'Grifo',
   took_too_long_to_respond: 'Tardó demasiado en responder',
-  vultiserver_password: 'Contraseña de Vultiserver',
+  backup_password: 'Contraseña de respaldo',
   backup_without_password: 'Copia de seguridad sin contraseña',
   use_password: 'Usar contraseña',
   backup_password_prompt:
@@ -1033,8 +1028,6 @@ export const es = {
   search: 'Buscar',
   create_referral_form: 'Crear referencia',
   blockaid_security_scan: 'Análisis de seguridad de Blockaid',
-  transaction_not_scanned: 'Transacción no escaneada por <provider></provider>',
-  transaction_scanned: 'Transacción escaneada por <provider></provider>',
   transaction_has_risk:
     'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
   scanning: 'exploración...',
@@ -1049,4 +1042,21 @@ export const es = {
     'Esta transacción de IBC incluye una nota, pero Vultisig actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
   go_back: 'Volver',
   continue_anyway: 'Continuar de todos modos',
+  stake_ruji: 'Estaca RUJI',
+  unstake_ruji: 'Desapuesta RUJI',
+  withdraw_ruji_rewards: 'Retirar recompensas RUJI',
+  tns_max_4_chars: 'El código de referencia no debe tener más de 4 caracteres',
+  tns_alnum_only:
+    'El código de referencia debe contener únicamente caracteres alfanuméricos',
+  tns_not_found: 'Código de referencia no encontrado',
+  tns_missing_thor_alias:
+    'El código de referencia debe tener un alias de cadena THOR',
+  site: 'Sitio',
+  send_receiver_address_same_as_sender:
+    'La dirección del receptor no puede ser la misma que la dirección del remitente',
+  connect_to_site: 'Conectarse a {{site}}',
+  entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
+  entity_scanned: '{{entity}} escaneado por <provider></provider>',
+  site_has_risk: 'Sitio malicioso detectado por <provider></provider>',
+  risky_site_detected: 'Sitio malicioso detectado',
 }

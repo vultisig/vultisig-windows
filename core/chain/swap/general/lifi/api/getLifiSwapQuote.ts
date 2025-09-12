@@ -62,7 +62,7 @@ export const getLifiSwapQuote = async ({
 
   return {
     dstAmount: estimate.toAmount,
-    provider: 'lifi',
+    provider: 'li.fi',
     tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
       chainKind,
       {

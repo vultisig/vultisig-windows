@@ -1,3 +1,4 @@
+import { desktopDownloadUrl } from '@core/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
@@ -22,11 +23,11 @@ export const CheckUpdatePage = () => {
 
   return (
     <PageSlice>
-      <PageHeader
+      <Overlay />
+      <HeaderWrapper
         primaryControls={<PageHeaderBackButton />}
         title={t('vaultCheckUpdatePage.title')}
       />
-      <Overlay />
       <FixedWrapper>
         <ProductLogo fontSize={72} />
         <Content>
@@ -50,9 +51,7 @@ export const CheckUpdatePage = () => {
                     </VStack>
                     <DownloadButton
                       kind="primary"
-                      onClick={() =>
-                        openUrl('https://vultisig.com/download/vultisig')
-                      }
+                      onClick={() => openUrl(desktopDownloadUrl)}
                     >
                       {t('vaultCheckUpdatePage.downloadButton')}
                     </DownloadButton>
@@ -92,10 +91,13 @@ export const CheckUpdatePage = () => {
   )
 }
 
+const HeaderWrapper = styled(PageHeader)``
+
 const FixedWrapper = styled.div`
   position: fixed;
   inset: 0;
   margin: auto;
+  z-index: -1;
 
   display: flex;
   flex-direction: column;
@@ -107,6 +109,7 @@ const FixedWrapper = styled.div`
 const Overlay = styled(VStack)`
   position: fixed;
   inset: 0;
+  z-index: -1;
 
   &::before {
     content: '';

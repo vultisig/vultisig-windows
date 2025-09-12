@@ -1,7 +1,7 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
@@ -9,6 +9,7 @@ import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecific
 export const DepositFeeValue = () => {
   const [coin] = useDepositCoin()
   const query = useDepositChainSpecificQuery(coin)
+  const { t } = useTranslation()
 
   return (
     <MatchQuery

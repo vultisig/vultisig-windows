@@ -14,13 +14,14 @@ import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { TypedDataEncoder } from 'ethers'
-import { t } from 'i18next'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { SignMessageInput } from '../../../interface'
 
 export const Overview = () => {
   const input = usePopupInput<'signMessage'>()
+  const { t } = useTranslation()
 
   const method = getRecordUnionKey(input)
   const { chain } = getRecordUnionValue(input)
@@ -71,10 +72,7 @@ export const Overview = () => {
         </List>
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt
-          keysignPayload={keysignMessagePayload}
-          isDAppSigning={true}
-        />
+        <StartKeysignPrompt keysignPayload={keysignMessagePayload} />
       </PageFooter>
     </VStack>
   )

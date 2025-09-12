@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useIBCAcceptedTokens } from '../../../hooks/useIBCAcceptedTokens'
 import { useDepositCoin } from '../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { getIbcDropdownOptions } from '../../chainOptionsConfig'
+import { getIbcDropdownOptions } from '../../../utils/getDepositFormConfig'
 import {
   AssetRequiredLabel,
   Container,

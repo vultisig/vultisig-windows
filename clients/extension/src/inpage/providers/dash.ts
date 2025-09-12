@@ -1,12 +1,9 @@
 import { UtxoChain } from '@core/chain/Chain'
+import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 
-import { EventMethod, MessageKey } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
 import { Callback } from '../constants'
-import { messengers } from '../messenger'
 import { getSharedHandlers } from './core/sharedHandlers'
 
 export class Dash extends EventEmitter {
@@ -24,36 +21,17 @@ export class Dash extends EventEmitter {
     return Dash.instance
   }
 
-  emitAccountsChanged() {
-    this.emit(EventMethod.ACCOUNTS_CHANGED, {})
-  }
-
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
+  async request(data: RequestInput, callback?: Callback) {
     const processRequest = async () => {
       const handlers = getSharedHandlers(UtxoChain.Dash)
 
       if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers]()
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
       }
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: MessageKey.DASH_REQUEST,
-          message: data,
-        },
-        { id: uuidv4() }
-      )
 
-      const result = processBackgroundResponse(
-        data,
-        MessageKey.DASH_REQUEST,
-        response
-      )
-
-      return result
+      throw new NotImplementedError(`Dash method ${data.method}`)
     }
 
     try {

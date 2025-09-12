@@ -16,7 +16,7 @@ const StyledMiddleTruncate = styled.span<{ width?: number }>`
           width: ${width}px;
         `
       : css``
-  }}
+  }};
 `
 
 type MiddleTruncateProps = {
@@ -52,7 +52,9 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
   const ellipsisDidUpdate = (): void => {
     if (elmRef.current) {
       const [child] = elmRef.current.children
+      if (!elmRef.current) return
       const parentWidth = elmRef.current.clientWidth
+      if (!parentWidth) return
       const childWidth = child?.clientWidth ?? 0
 
       if (childWidth > parentWidth) {
