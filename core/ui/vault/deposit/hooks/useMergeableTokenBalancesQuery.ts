@@ -26,7 +26,7 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
           shares: fromChainAmount(i.sharesChain, decimals),
         })),
         totalSharesChain,
-        totalShares: fromChainAmount(totalSharesChain.toString(), decimals),
+        totalShares,
         totalSharesFormatted: totalShares.toFixed(8),
       }
     },
