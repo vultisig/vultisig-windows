@@ -16,7 +16,7 @@ export const makeUnmergeSpecificPlaceholderCoin = (
 })
 
 export const formatUnmergeShares = (shares: number) =>
-  (shares / 1e8).toLocaleString(undefined, {
+  shares.toLocaleString(undefined, {
     maximumFractionDigits: 4,
     minimumFractionDigits: 0,
   })

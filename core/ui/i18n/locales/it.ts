@@ -6,6 +6,7 @@ export const it = {
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
+  positions: 'Posizioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   onboarding_step_5:
@@ -23,6 +24,7 @@ export const it = {
   onboarding_description_4:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
+  merged: 'Combinato',
   incorrect_passcode: 'Codice errato',
   create_referral_title: 'Crea referral',
   use_referral_code: 'Usa codice referral',
