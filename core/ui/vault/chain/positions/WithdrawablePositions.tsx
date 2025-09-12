@@ -52,7 +52,7 @@ export const WithdrawablePositions = ({ value }: ValueProp<AccountCoin>) => {
                 <HStack alignItems="center" justifyContent="space-between">
                   <HStack alignItems="center" gap={12}>
                     <CoinIcon style={{ fontSize: 32 }} coin={value} />
-                    <Text weight="700" color="contrast">
+                    <Text weight="700" color="contrast" size={20}>
                       {value.ticker}
                     </Text>
                   </HStack>
