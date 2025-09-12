@@ -38,6 +38,7 @@ import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
+import { useParsedTxQuery } from './queries/parsedTx'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
 import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
@@ -66,6 +67,8 @@ export const SendTxOverview = () => {
     )
   )
 
+  const parsedTxQuery = useParsedTxQuery()
+
   const keysignPayloadQuery = useStateDependentQuery(
     {
       feeSettings,
@@ -73,6 +76,7 @@ export const SendTxOverview = () => {
       walletCore,
       vault,
       requestOrigin,
+      parsedTx: parsedTxQuery.data,
     },
     getTxKeysignPayloadQuery
   )
