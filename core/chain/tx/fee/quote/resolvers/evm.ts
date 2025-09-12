@@ -1,47 +1,57 @@
-import { EvmChain } from '../../../../Chain'
-import { evmChainInfo } from '../../../../chains/evm/chainInfo'
-import { getEvmClient } from '../../../../chains/evm/client'
-import { getEvmBaseFee } from '../../evm/baseFee'
-import { getEvmGasLimit } from '../../evm/getEvmGasLimit'
-import { getEvmMaxPriorityFeePerGas } from '../../evm/maxPriorityFeePerGas'
-import { FeeQuote } from '../core'
-import { FeeQuoteInput, FeeQuoteResolver } from '../resolver'
-import { toChainAmount } from '../../../../amount/toChainAmount'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { Chain, EvmChain } from '@core/chain/Chain'
+import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
+import { getEvmClient } from '@core/chain/chains/evm/client'
+import { getEvmBaseFee } from '@core/chain/tx/fee/evm/baseFee'
+import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
+import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
+import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
 import { publicActionsL2 } from 'viem/zksync'
 
-export const getEvmFeeQuote: FeeQuoteResolver<EvmChain> = async (
-  input: FeeQuoteInput<EvmChain>
-): Promise<FeeQuote<'evm'>> => {
-  const chain = input.coin.chain as EvmChain
-  if (chain === 'Zksync') {
+import { AccountCoinKey } from '../../../../coin/AccountCoin'
+import { EvmFeeQuote } from '../core'
+
+export type EvmFeeQuoteInput = {
+  coin: AccountCoinKey<EvmChain>
+  amount?: number | bigint
+  data?: string
+  receiver?: string
+}
+
+const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
+
+export const getEvmFeeQuote = async ({
+  coin,
+  amount,
+  data,
+  receiver,
+}: EvmFeeQuoteInput): Promise<EvmFeeQuote> => {
+  const { chain } = coin
+
+  if (chain === Chain.Zksync) {
     const client = getEvmClient(chain).extend(publicActionsL2())
-    const value = toChainAmount(
-      shouldBePresent(input.amount),
-      input.coin.decimals
-    )
-    const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } =
-      await client.estimateFee({
-        chain: evmChainInfo[chain],
-        account: input.coin.address as `0x${string}`,
-        to: shouldBePresent(input.receiver) as `0x${string}`,
-        value,
-        data: input.data,
-      })
-    const baseFee = maxFeePerGas - maxPriorityFeePerGas
-    return {
-      gasLimit: BigInt(gasLimit),
-      maxPriorityFeePerGas: BigInt(maxPriorityFeePerGas),
-      baseFee: BigInt(baseFee),
-    }
+
+    return client.estimateFee({
+      chain: evmChainInfo[chain],
+      account: coin.address as `0x${string}`,
+      to: (receiver ?? coin.address) as `0x${string}`,
+      value: BigInt(amount ?? 0),
+      data: data as `0x${string}` | undefined,
+    })
   }
 
-  const gasLimit = getEvmGasLimit(input.coin as any)
+  const gasLimit = getEvmGasLimit(coin)
+
   const baseFee = await getEvmBaseFee(chain)
-  const priorityFee = await getEvmMaxPriorityFeePerGas(chain)
+  const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+
+  const maxFeePerGas = bigIntMax(
+    baseFeeMultiplier(baseFee) + maxPriorityFeePerGas,
+    1n
+  )
+
   return {
     gasLimit,
-    maxPriorityFeePerGas: priorityFee,
-    baseFee,
+    maxPriorityFeePerGas,
+    maxFeePerGas,
   }
 }
