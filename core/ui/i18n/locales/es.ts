@@ -21,6 +21,7 @@ export const es = {
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
   redeem: 'Vender',
+  merged: 'Combinado',
   onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
   onboarding_description_2:

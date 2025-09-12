@@ -17,6 +17,7 @@ export const en = {
   connecting_to_verifier: 'Connecting to Verifier',
   connecting_to_plugin: 'Connecting to Plugin',
   positions: 'Positions',
+  merged: 'Merged',
   confirm: 'Confirm',
   enter_your_password: 'Enter your password',
   go_to_wallet: 'Go to wallet',

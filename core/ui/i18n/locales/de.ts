@@ -19,6 +19,7 @@ export const de = {
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
+  merged: 'Zusammengeführt',
   mint: 'Erhalten',
   redeem: 'Verkaufen',
   onboarding_description_1:
