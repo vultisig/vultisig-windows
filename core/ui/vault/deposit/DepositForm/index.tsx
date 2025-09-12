@@ -25,7 +25,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositBalance } from '../hooks/useDepositBalance'
-import { useDepositFormFieldsAndSchema } from '../hooks/useDepositFormFieldsAndSchema'
+import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 
@@ -49,7 +49,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     selectedChainAction,
   })
 
-  const { fields, schema } = useDepositFormFieldsAndSchema()
+  const { fields, schema } = useDepositFormConfig()
 
   const {
     register,
