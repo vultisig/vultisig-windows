@@ -1,9 +1,9 @@
 import { ChainKind } from '../../../ChainKind'
 
-type EvmFeeQuote = {
+export type EvmFeeQuote = {
   gasLimit: bigint
   maxPriorityFeePerGas: bigint
-  baseFee: bigint
+  maxFeePerGas: bigint
 }
 
 export type FeeQuote<T extends ChainKind = ChainKind> = T extends 'evm'

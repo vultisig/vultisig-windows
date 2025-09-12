@@ -1,24 +1,25 @@
-import { getSolanaClient } from '../../../../chains/solana/client'
-import { solanaConfig } from '../../../../chains/solana/solanaConfig'
-import { FeeQuote } from '../core'
-import { FeeQuoteInput, FeeQuoteResolver } from '../resolver'
+import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
 import { address as solAddress } from '@solana/web3.js'
 
-export const getSolanaFeeQuote: FeeQuoteResolver<'Solana'> = async (
-  input: FeeQuoteInput<'Solana'>
-): Promise<FeeQuote<'solana'>> => {
+import { getSolanaClient } from '../../../../chains/solana/client'
+import { solanaConfig } from '../../../../chains/solana/solanaConfig'
+
+export type GetSolanaFeeQuoteInput = {
+  sender: string
+}
+
+export const getSolanaFeeQuote = async ({ sender }: GetSolanaFeeQuoteInput) => {
   const client = getSolanaClient()
   const prioritizationFees = await client
-    .getRecentPrioritizationFees([solAddress(input.coin.address)])
+    .getRecentPrioritizationFees([solAddress(sender)])
     .send()
 
-  const highPriorityFee =
-    Math.max(
-      ...prioritizationFees.map((f: any) =>
-        Number(f.prioritizationFee.valueOf())
+  return (
+    bigIntMax(
+      ...prioritizationFees.map(({ prioritizationFee }) =>
+        BigInt(prioritizationFee.valueOf())
       ),
       solanaConfig.priorityFeeLimit
     ) + solanaConfig.baseFee
-
-  return BigInt(highPriorityFee)
+  )
 }
