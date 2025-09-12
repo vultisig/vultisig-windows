@@ -1,9 +1,6 @@
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
@@ -31,6 +28,5 @@ export const useMpcSignersQuery = () => {
     retry: true,
     retryDelay: 1000,
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }

@@ -2,7 +2,6 @@ import { isChainOfKind } from '@core/chain/ChainKind'
 import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
 import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
-import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
@@ -40,6 +39,5 @@ export const useTxInitialFeeSettings = () => {
         serialized: () => null,
       })
     },
-    ...noPersistQueryOptions,
   })
 }

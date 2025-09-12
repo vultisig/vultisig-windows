@@ -1,8 +1,5 @@
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 
 export const useSevenZipQuery = () => {
@@ -10,6 +7,5 @@ export const useSevenZipQuery = () => {
     queryKey: ['seven-zip'],
     queryFn: getSevenZip,
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }

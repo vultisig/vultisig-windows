@@ -3,7 +3,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { noPersistQueryOptions } from '@lib/ui/query/utils/options'
 import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +13,6 @@ export const TxOverviewEvmMemo = ({ value }: ValueProp<string>) => {
   const query = useQuery({
     queryKey: ['evmContractCallInfo', value],
     queryFn: () => getEvmContractCallInfo(value),
-    ...noPersistQueryOptions,
   })
   const { t } = useTranslation()
 
