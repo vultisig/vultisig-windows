@@ -55,11 +55,11 @@ export const SendTxOverview = () => {
   const initialFeeSettingsQuery = useTxInitialFeeSettings()
 
   const [feeSettings, setFeeSettings] = useStateCorrector(
-    useState<FeeSettings | undefined | null>(undefined),
+    useState<FeeSettings | undefined | null>(null),
     useCallback(
       state => {
         const { data } = initialFeeSettingsQuery
-        if (data && state === undefined) {
+        if (data !== undefined && state === undefined) {
           return data
         }
 
@@ -82,6 +82,8 @@ export const SendTxOverview = () => {
     },
     getTxKeysignPayloadQuery
   )
+
+  console.log('keysignPayloadQuery', keysignPayloadQuery)
 
   return (
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
