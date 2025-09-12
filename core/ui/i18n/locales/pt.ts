@@ -37,6 +37,7 @@ export const pt = {
   edit_referral: 'Editar indicação',
   mint: 'Receber',
   sent: 'Enviado',
+  posiciones: 'Posiciones',
   redeem: 'Vender',
   edit_friends_referral: 'Editar indicação de amigo',
   add_referral_code: 'Adicionar código de indicação',
