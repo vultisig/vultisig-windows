@@ -34,9 +34,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     if (!selectedCoin) return 0
 
     if (action === 'unmerge') {
-      const shares =
-        balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
-      return fromChainAmount(shares, 8)
+      return balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
     }
 
     if (!vaultEntry) {
