@@ -21,9 +21,11 @@ import {
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { Center } from '@lib/ui/layout/Center'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
@@ -85,7 +87,11 @@ export const SendTxOverview = () => {
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
       <MatchQuery
         value={keysignPayloadQuery}
-        pending={() => null}
+        pending={() => (
+          <Center>
+            <Spinner />
+          </Center>
+        )}
         error={() => (
           <FlowErrorPageContent title="Failed to process transaction" />
         )}
