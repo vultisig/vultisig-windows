@@ -1,11 +1,11 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 
 import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapInstruction'
-import { oneInchSwapProgram } from './programs'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
+import { oneInchSwapProgram } from './programs'
 
 const parseProgramCall = async (
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy,

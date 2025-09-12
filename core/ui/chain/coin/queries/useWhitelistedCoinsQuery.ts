@@ -8,6 +8,7 @@ import {
   fromOneInchTokens,
   OneInchTokensResponse,
 } from '@core/chain/coin/oneInch/token'
+import { baseJupiterTokensUrl } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { rootApiUrl } from '@core/config'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { queryUrl } from '@lib/utils/query/queryUrl'
@@ -19,7 +20,7 @@ export const useWhitelistedCoinsQuery = (chain: Chain, enabled?: boolean) => {
     enabled,
     queryFn: async () => {
       if (chain === Chain.Solana) {
-        const url = 'https://lite-api.jup.ag/tokens/v2/tag?query=verified'
+        const url = `${baseJupiterTokensUrl}/tag?query=verified`
         const data = await queryUrl<SolanaJupiterToken[]>(url)
 
         return fromSolanaJupiterTokens({

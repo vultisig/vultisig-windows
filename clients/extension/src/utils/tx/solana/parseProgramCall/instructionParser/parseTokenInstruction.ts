@@ -59,10 +59,7 @@ export const parseTokenInstruction = async (
     throw new Error('Program data is missing.')
   }
   const amountBytes = instruction.programData.slice(1, 9)
-  const toHex = (bytes: number[] | Uint8Array) =>
-    Array.from(bytes)
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('')
+
   const amount = new DataView(Uint8Array.from(amountBytes).buffer).getBigUint64(
     0,
     true
