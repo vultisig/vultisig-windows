@@ -21,9 +21,8 @@ type Gql = {
 
 type TokenBalance = {
   symbol: string
-  shares: number
-  amount: number
-  price: number
+  sharesChain: string
+  sizeAmountChain: string
 }
 
 export const fetchMergeableTokenBalances = async (
@@ -57,15 +56,11 @@ export const fetchMergeableTokenBalances = async (
   const accounts = data?.node?.merge?.accounts ?? []
 
   return accounts.map(account => {
-    const shares = Number(account.shares)
-    const amount = Number(account.size.amount)
-    const price = shares ? amount / shares : 0
-
     return {
       symbol: account.pool.mergeAsset.metadata.symbol,
-      shares,
-      amount,
-      price,
+
+      sharesChain: account.shares,
+      sizeAmountChain: account.size.amount,
     }
   })
 }

@@ -12,12 +12,14 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   onboarding_step_6:
     'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
+  positions: 'Positionen',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
+  merged: 'Zusammengeführt',
   mint: 'Erhalten',
   redeem: 'Verkaufen',
   onboarding_description_1:

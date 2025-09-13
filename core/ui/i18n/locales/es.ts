@@ -8,6 +8,7 @@ export const es = {
     '<g>Cada dispositivo</g> en su depósito contiene <g>una parte del depósito</g>',
   onboarding_step_4:
     'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
+  positions: 'Posiciones',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:
@@ -20,6 +21,7 @@ export const es = {
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
   redeem: 'Vender',
+  merged: 'Combinado',
   onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
   onboarding_description_2:
