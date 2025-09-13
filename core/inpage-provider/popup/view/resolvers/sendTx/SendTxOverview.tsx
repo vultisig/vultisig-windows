@@ -2,6 +2,8 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
@@ -28,6 +30,7 @@ import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -38,8 +41,10 @@ import { useTranslation } from 'react-i18next'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
+import { extractCoinKeyFromParsedTx } from './core/parsedTx'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
+import { useGetCoinQuery } from './queries/coin'
 import { useParsedTxQuery } from './queries/parsedTx'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
 import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
@@ -71,6 +76,35 @@ export const SendTxOverview = () => {
 
   const parsedTxQuery = useParsedTxQuery()
 
+  const coinKeyQuery = useTransformQueryData(
+    parsedTxQuery,
+    extractCoinKeyFromParsedTx
+  )
+
+  const getCoinQuery = useGetCoinQuery()
+
+  const coinQuery = useTransformQueryData(coinKeyQuery, getCoinQuery)
+
+  const accountCoinQuery = useTransformQueryData(coinQuery, coin => {
+    const publicKey = getPublicKey({
+      chain: coin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
+
+    const address = deriveAddress({
+      chain: coin.chain,
+      publicKey,
+      walletCore,
+    })
+
+    return {
+      ...coin,
+      address,
+    }
+  })
+
   const keysignPayloadQuery = useStateDependentQuery(
     {
       feeSettings,
@@ -79,11 +113,10 @@ export const SendTxOverview = () => {
       vault,
       requestOrigin,
       parsedTx: parsedTxQuery.data,
+      coin: accountCoinQuery.data,
     },
     getTxKeysignPayloadQuery
   )
-
-  console.log('keysignPayloadQuery', keysignPayloadQuery)
 
   return (
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
