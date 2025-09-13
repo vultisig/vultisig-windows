@@ -320,7 +320,6 @@ export class Ethereum extends EventEmitter {
                   from,
                   to: tx.to ?? undefined,
                   asset: {
-                    chain: chain,
                     ticker,
                   },
                   amount: tx.value
