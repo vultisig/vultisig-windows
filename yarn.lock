@@ -691,6 +691,7 @@ __metadata:
     "@cosmjs/stargate": "npm:^0.36.0"
     "@lib/utils": "workspace:^"
     "@mysten/sui": "npm:^1.37.6"
+    "@noble/hashes": "npm:^2.0.0"
     "@polkadot/api": "npm:^16.4.6"
     "@solana/web3.js": "npm:^2.0.0"
     "@trustwallet/wallet-core": "npm:^4.3.6"
@@ -1964,6 +1965,13 @@ __metadata:
   version: 1.8.0
   resolution: "@noble/hashes@npm:1.8.0"
   checksum: 10c0/06a0b52c81a6fa7f04d67762e08b2c476a00285858150caeaaff4037356dd5e119f45b2a530f638b77a5eeca013168ec1b655db41bae3236cb2e9d511484fc77
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@noble/hashes@npm:2.0.0"
+  checksum: 10c0/4c619df392164ea8655c630e753e791e1afb5f38cb746463d36509f684a197c3c653858b6a78135a0b54c80270a66f28003d5999ec1ad06cec0d658bf720a03f
   languageName: node
   linkType: hard
 

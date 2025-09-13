@@ -14,6 +14,7 @@
     "@cosmjs/stargate": "^0.36.0",
     "@lib/utils": "workspace:^",
     "@mysten/sui": "^1.37.6",
+    "@noble/hashes": "^2.0.0",
     "@polkadot/api": "^16.4.6",
     "@solana/web3.js": "^2.0.0",
     "@trustwallet/wallet-core": "^4.3.6",
