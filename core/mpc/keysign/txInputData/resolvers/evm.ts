@@ -172,7 +172,9 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
       input.maxFeePerGasWei = BigInt(gasPrice)
-      input.gasLimit = BigInt(gas)
+      if (BigInt(gas) > input.gasLimit) {
+        input.gasLimit = BigInt(gas)
+      }
     }
 
     return getEvmTwFeeFields(input)

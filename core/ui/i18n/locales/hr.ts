@@ -23,6 +23,7 @@ export const hr = {
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
+  merged: 'Spojeno',
   create_referral_title: 'Stvori preporuku',
   use_referral_code: 'Upotrijebi kod preporuke',
   save_code: 'Spremi kod',
@@ -33,6 +34,7 @@ export const hr = {
   your_referral_code: 'Vaš kod preporuke',
   collected_rewards: 'Prikupljene nagrade',
   expires_on: 'Istječe',
+  positions: 'Pozicije',
   unstake_share_token_label: 'Unstake {{ticker}}',
   edit_referral: 'Uredi preporuku',
   edit_friends_referral: 'Uredi prijateljevu preporuku',

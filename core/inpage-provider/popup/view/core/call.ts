@@ -15,12 +15,14 @@ export const usePopupCallId = () => {
   )
 }
 
-export const useResolvePopupCallMutation = () => {
+export const useResolvePopupCallMutation = <
+  M extends PopupMethod = PopupMethod,
+>() => {
   const callId = usePopupCallId()
 
   return useMutation({
-    mutationFn: async (input: ResolvePopupInput<PopupMethod>) => {
-      const message: PopupResponse<PopupMethod> = {
+    mutationFn: async (input: ResolvePopupInput<M>) => {
+      const message: PopupResponse<M> = {
         ...input,
         sourceId: getPopupMessageSourceId('popup'),
         callId,
