@@ -89,10 +89,8 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
-export type TransactionDetailsAsset = {
-  chain: string
+type TransactionDetailsAsset = {
   ticker: string
-  symbol?: string
   mint?: string
 }
 
