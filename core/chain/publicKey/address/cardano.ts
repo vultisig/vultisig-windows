@@ -1,3 +1,4 @@
+import { blake2b } from '@noble/hashes/blake2'
 import {
   PublicKey,
   WalletCore,
@@ -12,7 +13,7 @@ export const deriveCardanoAddress = ({ publicKey, walletCore }: Input) => {
   const extendedKeyData = publicKey.data()
   const spendingKeyData = extendedKeyData.slice(0, 32)
 
-  const hash = walletCore.Hash.blake2b(spendingKeyData, 28)
+  const hash = blake2b(spendingKeyData, { dkLen: 28 })
 
   const addressData = new Uint8Array(29)
   addressData[0] = 0x61
