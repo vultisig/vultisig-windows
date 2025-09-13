@@ -12,7 +12,7 @@ import { registerWallet } from '@clients/extension/src/inpage/providers/solana/r
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
-import { Chain, UtxoChain } from '@core/chain/Chain'
+import { UtxoChain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'

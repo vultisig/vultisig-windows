@@ -35,6 +35,7 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     contrast: colors.contrast,
     danger: colors.danger,
     idle: colors.idle,
+    info: colors.info,
     light: colors.textShy,
     warning: colors.idle,
     success: colors.primary,
