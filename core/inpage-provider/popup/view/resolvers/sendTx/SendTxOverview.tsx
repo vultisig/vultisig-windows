@@ -83,27 +83,33 @@ export const SendTxOverview = () => {
 
   const getCoinQuery = useGetCoinQuery()
 
-  const coinQuery = useTransformQueryData(coinKeyQuery, getCoinQuery)
+  const coinQuery = useStateDependentQuery(
+    { coinKey: coinKeyQuery.data },
+    ({ coinKey }) => getCoinQuery(coinKey)
+  )
 
-  const accountCoinQuery = useTransformQueryData(coinQuery, coin => {
-    const publicKey = getPublicKey({
-      chain: coin.chain,
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-    })
+  const accountCoinQuery = useTransformQueryData(
+    coinQuery,
+    (coin): AccountCoin => {
+      const publicKey = getPublicKey({
+        chain: coin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+      })
 
-    const address = deriveAddress({
-      chain: coin.chain,
-      publicKey,
-      walletCore,
-    })
+      const address = deriveAddress({
+        chain: coin.chain,
+        publicKey,
+        walletCore,
+      })
 
-    return {
-      ...coin,
-      address,
+      return {
+        ...coin,
+        address,
+      }
     }
-  })
+  )
 
   const keysignPayloadQuery = useStateDependentQuery(
     {
