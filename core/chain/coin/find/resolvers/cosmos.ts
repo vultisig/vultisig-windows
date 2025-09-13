@@ -26,9 +26,11 @@ export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
 
   return without(
     denoms.map(denom => {
-      const tickerAttempt = attempt(() =>
-        shouldBePresent(denom.split(/[-./]/).at(1)?.toUpperCase())
-      )
+      const tickerAttempt = attempt(() => {
+        const parts = denom.split(/[-./]/)
+        const token = parts.length > 1 ? parts[1].toUpperCase() : undefined
+        return shouldBePresent(token)
+      })
 
       if ('error' in tickerAttempt) {
         console.error(`Failed to extract ticker from ${denom}`)
