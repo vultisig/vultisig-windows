@@ -112,7 +112,10 @@ const DigitInputWrapper = styled(HStack)`
   max-width: fit-content;
 `
 
-const DigitInput = styled.input.attrs({ autoComplete: 'off' })<{
+const DigitInput = styled.input.attrs({
+  autoComplete: 'one-time-code',
+  name: 'one-time-code',
+})<{
   validation: DigitGroupInputValidationState
 }>`
   flex: 1;
