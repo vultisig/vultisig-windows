@@ -12,7 +12,8 @@ import { registerWallet } from '@clients/extension/src/inpage/providers/solana/r
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
-import { UtxoChain } from '@core/chain/Chain'
+import { EvmChain, UtxoChain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
@@ -35,15 +36,29 @@ export const createProviders = () => {
     mayachain: MAYAChain.getInstance(),
     plugin: {
       request: async (data: RequestInput) => {
+        const getChain = async () => {
+          const chain = await callBackground({
+            getAppChain: { chainKind: 'evm' },
+          })
+
+          return chain as EvmChain
+        }
+
         const handlers = {
           policy_sign: async ([rawMessage, account]: [string, string]) => {
+            const chain = await getChain()
+
             const message = isHexString(rawMessage)
               ? getBytes(rawMessage)
               : new TextEncoder().encode(rawMessage)
 
             const result = await callPopup(
               {
-                policySign: { message: new TextDecoder().decode(message) },
+                policySign: {
+                  bytesCount: message.length,
+                  chain,
+                  message: new TextDecoder().decode(message),
+                },
               },
               { account }
             )
