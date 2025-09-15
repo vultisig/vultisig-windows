@@ -2,13 +2,13 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 
 type Props = {
   chain: string
-  onSelect?: (key: string) => void // called when scroll settles on a different chain
+  onSelect?: (key: string) => void
 }
 
-const scrollStillFrames = 8 // ~8 RAF frames “still” before snapping
-const velocityEpsilon = 0.5 // px/frame considered motionless
-const strokeExtra = 12 // px padding around chip inside stroke
-const minStroke = 44 // don’t let stroke get too tiny
+const scrollStillFrames = 8
+const velocityEpsilon = 0.5
+const strokeExtra = 12
+const minStroke = 44
 
 export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const footerRef = useRef<HTMLDivElement | null>(null)
@@ -69,7 +69,7 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
 
       const r = el.getBoundingClientRect()
       const width = Math.max(minStroke, Math.ceil(r.width + strokeExtra))
-      // Stroke remains horizontally centered in the viewport via CSS; we resize only.
+
       stroke.style.width = `${width}px`
     },
     [chain]
@@ -99,7 +99,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     if (bestKey && bestKey !== chain) {
       onSelect?.(bestKey)
     }
-    // Regardless of whether key changed, ensure precise snap + stroke size.
     if (bestKey) {
       setStrokeToKey(bestKey)
       scrollToKey(bestKey)
@@ -109,7 +108,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
   }, [chain, onSelect, scrollToKey, setStrokeToKey])
 
-  // Keep selected chain centered when prop changes
   useLayoutEffect(() => {
     if (!chain) return
     const id = requestAnimationFrame(() => {
@@ -124,7 +122,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     return () => cancelAnimationFrame(id)
   }, [chain, scrollToKey, setStrokeToKey, getBehavior])
 
-  // Robust scroll settle detection (covers mouse wheel, touchpad momentum)
   useEffect(() => {
     const el = footerRef.current
     if (!el) return
@@ -154,7 +151,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     return () => cancelAnimationFrame(raf)
   }, [selectNearest])
 
-  // Resize-aware: keep stroke sizing correct on layout changes
   useEffect(() => {
     const container = footerRef.current
     if (!container) return
@@ -166,17 +162,14 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     return () => ro.disconnect()
   }, [scrollToKey, setStrokeToKey])
 
-  // Observe chip size changes (fonts, i18n changes, etc.)
   useEffect(() => {
     const stroke = strokeRef.current
     if (!stroke) return
     const ro = new ResizeObserver(() => setStrokeToKey())
-    // Observe current chips
     Object.values(itemRefs.current).forEach(el => el && ro.observe(el))
     return () => ro.disconnect()
   }, [setStrokeToKey])
 
-  // Optional: keyboard navigation (left/right)
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
