@@ -5,8 +5,6 @@ type Props = {
   onSelect?: (key: string) => void
 }
 
-const scrollStillFrames = 8
-const velocityEpsilon = 0.5
 const strokeExtra = 12
 const minStroke = 44
 
@@ -126,59 +124,43 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     const el = footerRef.current
     if (!el) return
 
-    let raf = 0
-    let running = false
-    let last = el.scrollLeft
-    let still = 0
-
-    const stop = () => {
-      if (raf) cancelAnimationFrame(raf)
-      raf = 0
-      running = false
+    const onSnapChange = (e: any) => {
+      const snapped: HTMLElement | null =
+        e.snapTargetInline ?? e.snapTargetBlock ?? null
+      if (!snapped) return
+      const entry = Object.entries(itemRefs.current).find(
+        ([, n]) => n === snapped
+      )
+      const key = entry?.[0]
+      if (!key) return
+      if (key !== chain) onSelect?.(key)
+      setStrokeToKey(key)
     }
 
-    const tick = () => {
-      const now = el.scrollLeft
-      const delta = Math.abs(now - last)
-      last = now
-
-      if (delta < velocityEpsilon) {
-        still++
-        if (still >= scrollStillFrames) {
-          still = 0
-          selectNearest()
-          stop()
-          return
-        }
-      } else {
-        still = 0
-      }
-      raf = requestAnimationFrame(tick)
+    const onScrollEnd = () => {
+      selectNearest()
     }
 
-    const start = () => {
-      if (running) return
-      running = true
-      last = el.scrollLeft
-      still = 0
-      raf = requestAnimationFrame(tick)
+    const supportsSnapChange = 'onscrollsnapchange' in el
+    const supportsScrollEnd = 'onscrollend' in el
+
+    const t: number | null = null
+
+    if (supportsSnapChange) {
+      el.addEventListener('scrollsnapchange', onSnapChange)
+    } else if (supportsScrollEnd) {
+      el.addEventListener('scrollend', onScrollEnd)
     }
-
-    const onScroll = () => start()
-    el.addEventListener('scroll', onScroll, { passive: true })
-
-    const onVisibility = () => {
-      if (document.hidden) stop()
-    }
-
-    document.addEventListener('visibilitychange', onVisibility)
 
     return () => {
-      el.removeEventListener('scroll', onScroll)
-      document.removeEventListener('visibilitychange', onVisibility)
-      stop()
+      if (supportsSnapChange)
+        el.removeEventListener('scrollsnapchange', onSnapChange)
+      else if (supportsScrollEnd)
+        el.removeEventListener('scrollend', onScrollEnd)
+
+      if (t) clearTimeout(t)
     }
-  }, [selectNearest])
+  }, [chain, selectNearest, setStrokeToKey, onSelect])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {

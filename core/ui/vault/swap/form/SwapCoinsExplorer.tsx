@@ -157,16 +157,12 @@ const CarouselWrapper = styled.div`
   overflow-x: auto;
   ${hideScrollbars};
   -webkit-overflow-scrolling: touch;
-  contain: content; /* perf hint */
+  contain: content;
 
-  /* Snap config */
-  scroll-snap-type: x mandatory; /* mandatory keeps center selection crisp */
+  scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
   scroll-padding: 0 50%;
-  /* Do NOT force smooth here; programmatic scrolling sets behavior. */
-  /* scroll-behavior: smooth;  <-- remove; prevents double-smoothing hitches */
 
-  /* Ensure first/last items can reach the center */
   &::before,
   &::after {
     content: '';
