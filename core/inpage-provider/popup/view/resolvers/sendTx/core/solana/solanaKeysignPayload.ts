@@ -69,6 +69,11 @@ export const getSolanaKeysignPayload = async ({
         : (chainSpecific.value as SolanaSpecific).priorityFee,
   }
 
+  const fromCoin = toCommCoin({
+    ...coin,
+    hexPublicKey,
+  })
+
   let swapPayload = null
   if (parsed.kind === 'swap') {
     const getToCoin = async () => {
@@ -93,10 +98,7 @@ export const getSolanaKeysignPayload = async ({
 
     swapPayload = create(OneInchSwapPayloadSchema, {
       provider: getUrlBaseDomain(requestOrigin),
-      fromCoin: toCommCoin({
-        ...coin,
-        hexPublicKey,
-      }),
+      fromCoin: fromCoin,
       toCoin: toCommCoin({
         ...toCoin,
         address: parsed.authority,
@@ -123,7 +125,7 @@ export const getSolanaKeysignPayload = async ({
     toAmount: String(parsed.inAmount),
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     vaultLocalPartyId: 'VultiConnect',
-    coin,
+    coin: fromCoin,
     blockchainSpecific: chainSpecific,
     swapPayload: swapPayload
       ? { case: 'oneinchSwapPayload', value: swapPayload }
