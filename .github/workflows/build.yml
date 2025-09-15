@@ -66,7 +66,7 @@ jobs:
       - name: run typecheck
         run: yarn typecheck
   extension:
-    needs: [setup, lint]
+    needs: [setup]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
