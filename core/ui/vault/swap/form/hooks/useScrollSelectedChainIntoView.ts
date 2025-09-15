@@ -180,25 +180,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
   }, [selectNearest])
 
-  useEffect(() => {
-    const container = footerRef.current
-    if (!container) return
-    const ro = new ResizeObserver(() => {
-      setStrokeToKey()
-      if (prevChain.current) scrollToKey(prevChain.current)
-    })
-    ro.observe(container)
-    return () => ro.disconnect()
-  }, [scrollToKey, setStrokeToKey])
-
-  useEffect(() => {
-    const stroke = strokeRef.current
-    if (!stroke) return
-    const ro = new ResizeObserver(() => setStrokeToKey())
-    Object.values(itemRefs.current).forEach(el => el && ro.observe(el))
-    return () => ro.disconnect()
-  }, [setStrokeToKey])
-
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
