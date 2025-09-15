@@ -17,7 +17,7 @@ export const VaultChainPositionsSection = () => {
     coin => coin.ticker === knownCosmosTokens.THORChain['x/ruji'].ticker
   )
 
-  if (currentChain !== Chain.THORChain) return null
+  if (currentChain !== Chain.THORChain || !rujiCoin) return null
 
   return (
     <Panel withSections>
