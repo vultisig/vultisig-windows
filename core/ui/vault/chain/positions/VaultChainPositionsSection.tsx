@@ -24,7 +24,7 @@ export const VaultChainPositionsSection = () => {
       <Text size={20} weight={600}>
         {t('positions')}
       </Text>
-      {rujiCoin && <WithdrawablePositions value={rujiCoin} />}
+      <WithdrawablePositions value={rujiCoin} />
     </Panel>
   )
 }
