@@ -127,8 +127,15 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     if (!el) return
 
     let raf = 0
+    let running = false
     let last = el.scrollLeft
-    let stillFrames = 0
+    let still = 0
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf)
+      raf = 0
+      running = false
+    }
 
     const tick = () => {
       const now = el.scrollLeft
@@ -136,19 +143,41 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       last = now
 
       if (delta < velocityEpsilon) {
-        stillFrames++
-        if (stillFrames >= scrollStillFrames) {
-          stillFrames = 0
+        still++
+        if (still >= scrollStillFrames) {
+          still = 0
           selectNearest()
+          stop()
+          return
         }
       } else {
-        stillFrames = 0
+        still = 0
       }
       raf = requestAnimationFrame(tick)
     }
 
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+    const start = () => {
+      if (running) return
+      running = true
+      last = el.scrollLeft
+      still = 0
+      raf = requestAnimationFrame(tick)
+    }
+
+    const onScroll = () => start()
+    el.addEventListener('scroll', onScroll, { passive: true })
+
+    const onVisibility = () => {
+      if (document.hidden) stop()
+    }
+
+    document.addEventListener('visibilitychange', onVisibility)
+
+    return () => {
+      el.removeEventListener('scroll', onScroll)
+      document.removeEventListener('visibilitychange', onVisibility)
+      stop()
+    }
   }, [selectNearest])
 
   useEffect(() => {
