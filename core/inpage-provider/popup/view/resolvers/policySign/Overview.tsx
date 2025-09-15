@@ -27,9 +27,8 @@ import { useTranslation } from 'react-i18next'
 
 export const Overview = () => {
   const { t } = useTranslation()
-  const [address, setAddress] = useState<string>('')
   const [policy, setPolicy] = useState<Policy | undefined>(undefined)
-  const { bytesCount, chain, message } = usePopupInput<'policySign'>()
+  const { address, bytesCount, chain, message } = usePopupInput<'policySign'>()
   const { requestFavicon, requestOrigin } = usePopupContext<'policySign'>()
 
   const keysignMessagePayload = useMemo(
@@ -44,12 +43,11 @@ export const Overview = () => {
   )
 
   useEffect(() => {
-    const [address, recipe] = message.split('*#*')
+    const [recipe] = message.split('*#*')
 
     const decoded = base64Decode(recipe)
     const policy = fromBinary(PolicySchema, decoded)
 
-    setAddress(address)
     setPolicy(policy)
   }, [message])
 

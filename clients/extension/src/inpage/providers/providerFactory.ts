@@ -45,7 +45,11 @@ export const createProviders = () => {
         }
 
         const handlers = {
-          policy_sign: async ([rawMessage, account]: [string, string]) => {
+          policy_sign: async ([rawMessage, account, address]: [
+            string,
+            string,
+            string,
+          ]) => {
             const chain = await getChain()
 
             const message = isHexString(rawMessage)
@@ -55,6 +59,7 @@ export const createProviders = () => {
             const result = await callPopup(
               {
                 policySign: {
+                  address,
                   bytesCount: message.length,
                   chain,
                   message: new TextDecoder().decode(message),

@@ -24,7 +24,7 @@ export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
-  policySign: Method<PersonalSign, string>
+  policySign: Method<PersonalSign & { address: string }, string>
   signMessage: Method<SignMessageInput, string>
   sendTx: Method<
     ITransactionPayload,
