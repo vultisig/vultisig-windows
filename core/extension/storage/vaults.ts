@@ -15,7 +15,7 @@ export const updateVaults = async (vaults: Vault[]) => {
 
 export const getVault = async (vaultId: string) => {
   const vaults = await getVaults()
-  return shouldBePresent(vaults.find(v => getVaultId(v) === vaultId))
+  return shouldBePresent(vaults.find(v => getVaultId(v) === vaultId), 'vault')
 }
 
 export const vaultsStorage: VaultsStorage = {
@@ -27,7 +27,8 @@ export const vaultsStorage: VaultsStorage = {
   updateVault: async ({ vaultId, fields }) => {
     const vaults = await getVaults()
     const vaultIndex = shouldBePresent(
-      vaults.findIndex(vault => getVaultId(vault) === vaultId)
+      vaults.findIndex(vault => getVaultId(vault) === vaultId),
+      'vaultIndex'
     )
 
     const updatedVaults = updateAtIndex(vaults, vaultIndex, vault => ({

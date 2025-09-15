@@ -55,7 +55,7 @@ export const SaveAsImage = ({
       </Wrapper>
       {node &&
         renderTrigger({
-          onClick: () => saveImage(shouldBePresent(node)),
+          onClick: () => saveImage(shouldBePresent(node, 'node')),
         })}
     </>
   )

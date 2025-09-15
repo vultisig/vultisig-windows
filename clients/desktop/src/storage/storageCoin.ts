@@ -28,7 +28,7 @@ export const toStorageCoin = (coin: AccountCoin): storage.Coin => {
     chain: coin.chain,
     address: coin.address,
     ticker: coin.ticker,
-    contract_address: isNativeToken ? '' : shouldBePresent(coin.id),
+    contract_address: isNativeToken ? '' : shouldBePresent(coin.id, 'coin.id'),
     is_native_token: isNativeToken,
     logo: coin.logo ?? '',
     price_provider_id: coin.priceProviderId ?? '',

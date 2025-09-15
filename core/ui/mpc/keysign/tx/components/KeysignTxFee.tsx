@@ -16,8 +16,8 @@ import { TxFeeRow } from './TxFeeRow'
 export const KeysignTxFee = () => {
   const payload = useKeysignMessagePayload()
   const { coin: potentialCoin } = getRecordUnionValue(payload, 'keysign')
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { chain, decimals, ticker } = shouldBePresent(coin)
+  const coin = fromCommCoin(shouldBePresent(potentialCoin, 'potentialCoin'))
+  const { chain, decimals, ticker } = shouldBePresent(coin, 'coin')
 
   const txHash = useTxHash()
   const query = useTxFeeQuery({ txHash, chain })

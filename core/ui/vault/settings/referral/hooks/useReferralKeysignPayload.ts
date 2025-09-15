@@ -44,7 +44,7 @@ export const useReferralKeysignPayload = ({
     }),
     memo,
     toAmount: toChainAmount(amount, coin.decimals).toString(),
-    blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
+    blockchainSpecific: shouldBePresent(chainSpecificQuery.data, 'chainSpecificQuery.data'),
     vaultLocalPartyId: vault.localPartyId,
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     libType: vault.libType,

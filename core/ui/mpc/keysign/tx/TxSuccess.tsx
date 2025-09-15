@@ -31,7 +31,7 @@ export const TxSuccess = ({
 }) => {
   const { t } = useTranslation()
   const { coin: potentialCoin, toAmount } = value
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
+  const coin = fromCommCoin(shouldBePresent(potentialCoin, 'potentialCoin'))
   const txHash = useTxHash()
   const [, copyToClipboard] = useCopyToClipboard()
   const { openUrl } = useCore()
@@ -115,6 +115,6 @@ const TxRowIconButton = styled(IconWrapper).attrs({
 
 const TruncatedTextWrapper = styled.div`
   ${hStack({
-    justifyContent: 'flex-end',
-  })};
+  justifyContent: 'flex-end',
+})};
 `

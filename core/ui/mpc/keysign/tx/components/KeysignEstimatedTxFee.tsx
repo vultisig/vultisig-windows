@@ -16,8 +16,8 @@ export const KeysignEstimatedFee = () => {
     payload,
     'keysign'
   )
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { chain } = shouldBePresent(coin)
+  const coin = fromCommCoin(shouldBePresent(potentialCoin, 'potentialCoin'))
+  const { chain } = shouldBePresent(coin, 'coin')
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) {

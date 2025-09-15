@@ -12,7 +12,7 @@ export const getNativeTcySpecific = ({
     stake: () => {
       if (!('amount' in input)) throw new Error('Invalid amount')
       const units = toChainAmount(
-        shouldBePresent(input.amount),
+        shouldBePresent(input.amount, 'input.amount'),
         coin.decimals
       ).toString()
 

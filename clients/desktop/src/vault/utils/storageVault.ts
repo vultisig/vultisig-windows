@@ -57,7 +57,8 @@ export const fromStorageVault = (
       shouldBePresent(
         vault.keyshares.find(
           keyShare => keyShare.public_key === publicKeys[algorithm]
-        )
+        ),
+        'keyShare'
       ).keyshare
   )
   return {

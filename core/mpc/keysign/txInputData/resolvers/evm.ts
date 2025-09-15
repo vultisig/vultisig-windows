@@ -62,8 +62,8 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     if (swapPayload) {
       return matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: ({ vaultAddress, routerAddress }) =>
-          coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress),
-        general: ({ quote }) => shouldBePresent(quote?.tx?.to),
+          coin.isNativeToken ? vaultAddress : shouldBePresent(routerAddress, 'routerAddress'),
+        general: ({ quote }) => shouldBePresent(quote?.tx?.to, 'quote.tx.to'),
       })
     }
 
@@ -81,9 +81,9 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
         TW.Ethereum.Proto.ITransaction
       >(swapPayload, {
         native: ({ fromCoin, fromAmount, vaultAddress, expirationTime }) => {
-          const { isNativeToken } = shouldBePresent(fromCoin)
+          const { isNativeToken } = shouldBePresent(fromCoin, 'fromCoin')
 
-          const memo = shouldBePresent(keysignPayload.memo)
+          const memo = shouldBePresent(keysignPayload.memo, 'memo')
 
           if (isNativeToken) {
             return {
@@ -107,7 +107,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
           )
           abiFunction.addParamAddress(
             toTwAddress({
-              address: shouldBePresent(fromCoin?.contractAddress),
+              address: shouldBePresent(fromCoin?.contractAddress, 'fromCoin.contractAddress'),
               walletCore,
               chain,
             }),
@@ -128,7 +128,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
           }
         },
         general: ({ quote }) => {
-          const { data, value } = shouldBePresent(quote?.tx)
+          const { data, value } = shouldBePresent(quote?.tx, 'quote.tx')
 
           return {
             contractGeneric:
@@ -148,7 +148,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
         transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
           amount,
           data: keysignPayload.memo
-            ? memoToTxData(shouldBePresent(keysignPayload.memo))
+            ? memoToTxData(shouldBePresent(keysignPayload.memo, 'memo'))
             : undefined,
         }),
       }
@@ -170,7 +170,7 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
       gasLimit: BigInt(evmSpecific.gasLimit),
     }
     if (swapPayload && 'general' in swapPayload) {
-      const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
+      const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx, 'quote.tx')
       input.maxFeePerGasWei = BigInt(gasPrice)
       if (BigInt(gas) > input.gasLimit) {
         input.gasLimit = BigInt(gas)

@@ -26,7 +26,7 @@ export const sortCoinsByBalance = <
       itemsWithPrice,
       ({ price, amount, decimals }) =>
         getCoinValue({
-          price: shouldBePresent(price),
+          price: shouldBePresent(price, 'price'),
           amount,
           decimals,
         }),

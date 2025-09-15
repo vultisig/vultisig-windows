@@ -56,7 +56,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         id: 'keysign',
         state: {
           ...props,
-          keysignPayload: shouldBePresent(keysignPayload),
+          keysignPayload: shouldBePresent(keysignPayload, 'keysignPayload'),
           securityType,
         },
       })

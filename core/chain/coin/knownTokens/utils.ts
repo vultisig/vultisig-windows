@@ -14,4 +14,4 @@ const getKnownToken = <C extends Chain>(
 
 export const assertKnownToken = <C extends Chain>(
   key: Token<CoinKey<C>>
-): KnownCoin & { chain: C } => shouldBePresent(getKnownToken(key))
+): KnownCoin & { chain: C } => shouldBePresent(getKnownToken(key), 'getKnownToken(key)')

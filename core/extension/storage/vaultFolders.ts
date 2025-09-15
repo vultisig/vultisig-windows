@@ -41,7 +41,8 @@ export const vaultFoldersStorage: VaultFoldersStorage = {
   updateVaultFolder: async ({ id, fields }) => {
     const vaultFolders = await getVaultFolders()
     const vaultFolderIndex = shouldBePresent(
-      vaultFolders.findIndex(vaultFolder => vaultFolder.id === id)
+      vaultFolders.findIndex(vaultFolder => vaultFolder.id === id),
+      'vaultFolderIndex'
     )
 
     const updatedVaultFolders = updateAtIndex(

@@ -26,7 +26,7 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
         throw new Error('Native swap not supported')
       },
       general: swapPayload => {
-        const tx = shouldBePresent(swapPayload.quote?.tx)
+        const tx = shouldBePresent(swapPayload.quote?.tx, 'quote.tx')
         const { data } = tx
 
         const decodedData = walletCore.TransactionDecoder.decode(

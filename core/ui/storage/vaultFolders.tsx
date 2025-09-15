@@ -52,7 +52,7 @@ export const useVaultFoldersQuery = () => {
 export const useVaultFolders = () => {
   const { data } = useVaultFoldersQuery()
 
-  return shouldBePresent(data)
+  return shouldBePresent(data, 'vaultFoldersData')
 }
 
 export const useVaultFolder = (id: string) => {

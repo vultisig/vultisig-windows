@@ -46,8 +46,8 @@ export const parseSolanaTx = async ({
     throw new Error('Could not simulate transaction')
   }
   const { inputs, outputs, authority } = simulationParams
-  const primaryIn = shouldBePresent(inputs[0])
-  const primaryOut = shouldBePresent(outputs[0])
+  const primaryIn = shouldBePresent(inputs[0], 'primaryIn')
+  const primaryOut = shouldBePresent(outputs[0], 'primaryOut')
   return {
     authority,
     inAmount: primaryIn.amount.toString(),

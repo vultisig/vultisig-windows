@@ -25,7 +25,7 @@ export const getUtxoTxInputData = ({
     'utxoSpecific'
   )
 
-  const coin = shouldBePresent(keysignPayload.coin)
+  const coin = shouldBePresent(keysignPayload.coin, 'coin')
 
   const coinType = getCoinType({
     walletCore,

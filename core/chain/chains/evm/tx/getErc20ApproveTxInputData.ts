@@ -19,7 +19,8 @@ export const getErc20ApproveTxInputData = ({
   walletCore,
 }: Input) => {
   const { amount, spender } = shouldBePresent(
-    keysignPayload.erc20ApprovePayload
+    keysignPayload.erc20ApprovePayload,
+    'erc20ApprovePayload'
   )
 
   const amountHex = Buffer.from(
@@ -27,7 +28,7 @@ export const getErc20ApproveTxInputData = ({
     'hex'
   )
 
-  const coin = shouldBePresent(keysignPayload.coin)
+  const coin = shouldBePresent(keysignPayload.coin, 'coin')
   const chain = coin.chain as EvmChain
 
   const { blockchainSpecific } = keysignPayload
@@ -48,7 +49,7 @@ export const getErc20ApproveTxInputData = ({
       chain,
     }),
     nonce: getEvmTwNonce(nonce),
-    toAddress: shouldBePresent(keysignPayload.coin).contractAddress,
+    toAddress: shouldBePresent(keysignPayload.coin, 'coin').contractAddress,
     ...getEvmTwFeeFields({
       chain,
       maxFeePerGasWei: BigInt(maxFeePerGasWei),

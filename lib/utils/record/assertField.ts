@@ -8,5 +8,5 @@ export function assertField<
     throw new Error(`Missing field '${String(key)}' in the object.`)
   }
 
-  return shouldBePresent(obj[key]) as NonNullable<T[K]>
+  return shouldBePresent(obj[key], String(key)) as NonNullable<T[K]>
 }

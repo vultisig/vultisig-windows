@@ -29,7 +29,7 @@ export const useSendCappedAmountQuery = () => {
         return {
           decimals: coin.decimals,
           amount: capSendAmountToMax({
-            amount: shouldBePresent(amount),
+            amount: shouldBePresent(amount, 'amount'),
             coin: coin,
             fee: feeAmount,
             balance,
