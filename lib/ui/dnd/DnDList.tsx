@@ -61,7 +61,7 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
 
   const handleDragEnd = useCallback(
     ({ active, over }: DragEndEvent) => {
-      const itemId = shouldBePresent(activeItemId)
+      const itemId = shouldBePresent(activeItemId, 'activeItemId')
 
       setActiveItemId(null)
 
@@ -119,11 +119,12 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
         <DragOverlay>
           {activeItemId
             ? renderItem({
-                item: shouldBePresent(
-                  items.find(item => getItemId(item) === activeItemId)
-                ),
-                status: 'overlay',
-              })
+              item: shouldBePresent(
+                items.find(item => getItemId(item) === activeItemId),
+                'activeItem'
+              ),
+              status: 'overlay',
+            })
             : null}
         </DragOverlay>
       </SortableContext>

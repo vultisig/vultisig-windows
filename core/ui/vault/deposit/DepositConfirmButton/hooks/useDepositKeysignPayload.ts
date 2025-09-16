@@ -66,7 +66,7 @@ export function useDepositKeysignPayload({
   if (isStake) {
     const result = attempt(() => selectStakeId(coin, { autocompound }))
     if ('data' in result) {
-      stakeId = shouldBePresent(result.data)
+      stakeId = shouldBePresent(result.data, 'stakeId')
       isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
     } else {
       isStakeContractFlow = false
@@ -144,11 +144,11 @@ export function useDepositKeysignPayload({
 
           match(actionAsStakeAction, {
             stake: () => {
-              input = { kind: 'stake', amount: shouldBePresent(amount) }
+              input = { kind: 'stake', amount: shouldBePresent(amount, 'amount') }
             },
             unstake: () => {
               if (stakeId === 'stcy') {
-                input = { kind: 'unstake', amount: shouldBePresent(amount) }
+                input = { kind: 'unstake', amount: shouldBePresent(amount, 'amount') }
               } else if (stakeId === 'native-tcy') {
                 const raw = depositFormData['percentage']
 
@@ -160,11 +160,11 @@ export function useDepositKeysignPayload({
                 const pctValid = Number.isFinite(pct) && pct > 0 && pct <= 100
                 input = pctValid
                   ? { kind: 'unstake', percentage: pct }
-                  : { kind: 'unstake', amount: shouldBePresent(amount) }
+                  : { kind: 'unstake', amount: shouldBePresent(amount, 'amount') }
               } else {
                 input = {
                   kind: 'unstake',
-                  amount: shouldBePresent(amount),
+                  amount: shouldBePresent(amount, 'amount'),
                 }
               }
             },
@@ -211,7 +211,7 @@ export function useDepositKeysignPayload({
         if (action === 'mint' || action === 'redeem') {
           const isDeposit = action === 'mint'
           const amountUnits = toChainAmount(
-            shouldBePresent(amount),
+            shouldBePresent(amount, 'amount'),
             coin.decimals
           ).toString()
 
@@ -226,7 +226,7 @@ export function useDepositKeysignPayload({
             contractAddress = yieldBearingAssetsAffiliateContract
             const targetYContract =
               yieldBearingAssetsContracts[
-                baseDenom === 'rune' ? 'yRUNE' : 'yTCY'
+              baseDenom === 'rune' ? 'yRUNE' : 'yTCY'
               ]
 
             const executeInner = {
@@ -295,13 +295,13 @@ export function useDepositKeysignPayload({
         ) {
           delete basePayload.contractPayload
           if (isTonFunction) {
-            basePayload.toAddress = shouldBePresent(validatorAddress)
+            basePayload.toAddress = shouldBePresent(validatorAddress, 'validatorAddress')
           } else if (receiver) {
             basePayload.toAddress = receiver
           }
           if (hasAmount && Number.isFinite(amount)) {
             basePayload.toAmount = toChainAmount(
-              shouldBePresent(amount),
+              shouldBePresent(amount, 'amount'),
               coin.decimals
             ).toString()
           }
@@ -311,7 +311,7 @@ export function useDepositKeysignPayload({
           const reverseLookup = mirrorRecord(
             kujiraCoinMigratedToThorChainDestinationId
           )
-          const tokenKey = reverseLookup[shouldBePresent(coin.id)]
+          const tokenKey = reverseLookup[shouldBePresent(coin.id, 'coin.id')]
           if (tokenKey) {
             contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
           } else {
@@ -322,13 +322,13 @@ export function useDepositKeysignPayload({
 
           basePayload.toAddress = contractAddress
           basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
+            shouldBePresent(amount, 'amount'),
             coin.decimals
           ).toString()
         } else if (!isOneOf(action, ['vote'])) {
           if (hasAmount && Number.isFinite(amount)) {
             basePayload.toAmount = toChainAmount(
-              shouldBePresent(amount),
+              shouldBePresent(amount, 'amount'),
               coin.decimals
             ).toString()
           }

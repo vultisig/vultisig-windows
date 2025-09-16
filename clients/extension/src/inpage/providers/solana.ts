@@ -212,7 +212,7 @@ export class Solana implements Wallet {
 
   connect = async () => {
     const { address } = await requestAccount(Chain.Solana)
-    this._publicKey = new PublicKey(shouldBePresent(address))
+    this._publicKey = new PublicKey(shouldBePresent(address, 'address'))
     this._isConnected = true
     return { publicKey: this.publicKey }
   }
@@ -496,11 +496,11 @@ export class Solana implements Wallet {
       const serializedTransaction = isVersionedTransaction(signedTransaction)
         ? signedTransaction.serialize()
         : new Uint8Array(
-            (signedTransaction as Transaction).serialize({
-              requireAllSignatures: false,
-              verifySignatures: false,
-            })
-          )
+          (signedTransaction as Transaction).serialize({
+            requireAllSignatures: false,
+            verifySignatures: false,
+          })
+        )
 
       outputs.push({ signedTransaction: serializedTransaction })
     } else if (inputs.length > 1) {
@@ -530,11 +530,11 @@ export class Solana implements Wallet {
           )
             ? signedTransaction.serialize()
             : new Uint8Array(
-                (signedTransaction as Transaction).serialize({
-                  requireAllSignatures: false,
-                  verifySignatures: false,
-                })
-              )
+              (signedTransaction as Transaction).serialize({
+                requireAllSignatures: false,
+                verifySignatures: false,
+              })
+            )
 
           return { signedTransaction: serializedTransaction }
         })

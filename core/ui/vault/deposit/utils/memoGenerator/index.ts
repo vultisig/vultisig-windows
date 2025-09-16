@@ -45,7 +45,7 @@ export const generateMemo = ({
     mint: () => {
       const token = shouldBePresent(coin, 'Selected coin')
       const amountInUnits = toChainAmount(
-        shouldBePresent(amount),
+        shouldBePresent(amount, 'amount'),
         token.decimals
       ).toString()
       const base = token.ticker.toLowerCase()
@@ -56,10 +56,10 @@ export const generateMemo = ({
     redeem: () => {
       const token = shouldBePresent(coin, 'Selected coin')
       const amountInUnits = toChainAmount(
-        shouldBePresent(amount),
+        shouldBePresent(amount, 'amount'),
         token.decimals
       ).toString()
-      const denom = shouldBePresent(token.id)
+      const denom = shouldBePresent(token.id, 'token.id')
       return `sell:${denom}:${amountInUnits}`
     },
     stake: () =>
@@ -72,7 +72,7 @@ export const generateMemo = ({
 
           if (coin.ticker === 'RUJI') {
             const chainAmount = toChainAmount(
-              shouldBePresent(Number(amount)),
+              shouldBePresent(Number(amount), 'amount'),
               coin.decimals
             ).toString()
             return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
@@ -101,7 +101,7 @@ export const generateMemo = ({
           }
 
           if (coin.ticker === 'RUJI') {
-            const amt = shouldBePresent(amount, 'Amount')
+            const amt = shouldBePresent(amount, 'amount')
             const amtNum = typeof amt === 'string' ? Number(amt) : amt
             if (!Number.isFinite(amtNum) || amtNum <= 0) {
               throw new Error('Amount is required for RUJI unstake')
@@ -144,7 +144,7 @@ export const generateMemo = ({
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
         : `UNBOND:${nodeAddress}:${amountInUnits}`
     },
-    custom: () => shouldBePresent(customMemo, 'Custom memo'),
+    custom: () => shouldBePresent(customMemo, 'customMemo'),
     leave: () => `LEAVE:${nodeAddress}`,
     vote: () => 'VOTE',
     ibc_transfer: () => {
@@ -185,7 +185,7 @@ export const generateMemo = ({
 
       const sharesRaw = toChainAmount(amount, coin.decimals)
       // For unmerge, use the full coin ID (e.g., "thor.kuji")
-      const denom = shouldBePresent(coin.id)
+      const denom = shouldBePresent(coin.id, 'coin.id')
       const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
 
       return memo

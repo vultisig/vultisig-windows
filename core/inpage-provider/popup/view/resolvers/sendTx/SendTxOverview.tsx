@@ -233,7 +233,8 @@ export const SendTxOverview = () => {
                                 <ManageEvmFee
                                   value={
                                     shouldBePresent(
-                                      feeSettings
+                                      feeSettings,
+                                      'feeSettings'
                                     ) as EvmFeeSettings
                                   }
                                   chain={chain}

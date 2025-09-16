@@ -7,4 +7,4 @@ import { fromCommCoin } from '../../types/utils/commCoin'
 
 export const getKeysignCoin = <T extends Chain = Chain>({
   coin,
-}: KeysignPayload): AccountCoin<T> => fromCommCoin<T>(shouldBePresent(coin))
+}: KeysignPayload): AccountCoin<T> => fromCommCoin<T>(shouldBePresent(coin, 'coin'))

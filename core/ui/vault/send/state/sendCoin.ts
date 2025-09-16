@@ -17,6 +17,6 @@ export const useCurrentSendCoin = () => {
     const coinKey =
       'coin' in state ? state.coin : { chain, id: chainFeeCoin[chain].id }
 
-    return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)))
+    return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)), 'sendCoin')
   }, [chain, coins, state])
 }

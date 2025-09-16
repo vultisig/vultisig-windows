@@ -6,5 +6,5 @@ export const getEvmBaseFee = async (chain: EvmChain) => {
   const client = getEvmClient(chain)
   const { baseFeePerGas } = await client.getBlock()
 
-  return shouldBePresent(baseFeePerGas)
+  return shouldBePresent(baseFeePerGas, 'baseFeePerGas')
 }

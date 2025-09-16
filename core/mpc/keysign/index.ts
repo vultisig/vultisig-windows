@@ -76,7 +76,7 @@ export const keysign = async ({
 
   const setupMessageHash = shouldBePresent(
     SignSession[signatureAlgorithm].setupMessageHash(setupMessage),
-    'Setup message hash'
+    'setupMessageHash'
   )
 
   if (message != Buffer.from(setupMessageHash).toString('hex')) {

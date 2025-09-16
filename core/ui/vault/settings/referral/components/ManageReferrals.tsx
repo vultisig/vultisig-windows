@@ -71,7 +71,7 @@ export const ManageReferrals = () => {
             <ManageExistingReferral
               onEditFriendReferral={() => setUiState('editFriendReferral')}
               onEditReferral={() => setUiState('editReferral')}
-              nameDetails={shouldBePresent(validNameDetails)}
+              nameDetails={shouldBePresent(validNameDetails, 'validNameDetails')}
             />
           ) : (
             <CenterAbsolutely>
@@ -114,7 +114,7 @@ export const ManageReferrals = () => {
             <StepTransition
               from={({ onFinish }) => (
                 <EditReferralForm
-                  nameDetails={shouldBePresent(validNameDetails)}
+                  nameDetails={shouldBePresent(validNameDetails, 'validNameDetails')}
                   onFinish={onFinish}
                 />
               )}

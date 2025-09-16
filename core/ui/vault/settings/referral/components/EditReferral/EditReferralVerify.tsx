@@ -61,21 +61,21 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
     const poolTicker = tail.split('-')[0]
     return (
       normaliseChainToMatchPoolChain(poolChain) ===
-        normaliseChainToMatchPoolChain(coin.chain) &&
+      normaliseChainToMatchPoolChain(coin.chain) &&
       poolTicker.toUpperCase() === coin.ticker.toUpperCase()
     )
   })?.asset
 
-  const name = shouldBePresent(validNameDetails?.name)
+  const name = shouldBePresent(validNameDetails?.name, 'validNameDetails?.name')
   const wantsAssetChange =
     !!preferredAsset && preferredAsset !== validNameDetails?.preferred_asset
 
   const memo = wantsAssetChange
     ? buildSetPreferredAssetMemo({
-        name,
-        thorAliasAddress,
-        preferredAsset: shouldBePresent(preferredAsset),
-      })
+      name,
+      thorAliasAddress,
+      preferredAsset: shouldBePresent(preferredAsset, 'preferredAsset'),
+    })
     : buildRenewalMemo({ name, thorAliasAddress })
 
   const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)

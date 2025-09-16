@@ -53,11 +53,11 @@ const formatContractMessage = (msgString: string): string =>
 type KeplrTransaction = (
   | StdSignDoc
   | {
-      bodyBytes: string // base64 encoded
-      authInfoBytes: string // base64 encoded
-      chainId: string
-      accountNumber: string // stringified Long
-    }
+    bodyBytes: string // base64 encoded
+    authInfoBytes: string // base64 encoded
+    chainId: string
+    accountNumber: string // stringified Long
+  }
 ) & {
   skipBroadcast?: boolean
 }
@@ -338,7 +338,7 @@ const keplrHandler = (
 
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const { publicKey, address } = await requestAccount(
-    shouldBePresent(getCosmosChainByChainId(chainId))
+    shouldBePresent(getCosmosChainByChainId(chainId), 'chainId')
   )
 
   return [
@@ -463,7 +463,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
       const { publicKey, address } = await requestAccount(
-        shouldBePresent(getCosmosChainByChainId(chainId))
+        shouldBePresent(getCosmosChainByChainId(chainId), 'chainId')
       )
 
       return [
@@ -501,7 +501,7 @@ export class XDEFIKeplrProvider extends Keplr {
     // This method accepts a transaction of type StdTx | Uint8Array; however, the previous implementation did not support handling this type.
     throw new NotImplementedError('Keplr sendTx method')
   }
-  async sendMessage() {}
+  async sendMessage() { }
 
   async signAmino(
     chainId: string,
@@ -515,7 +515,7 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
-      const chain = shouldBePresent(getCosmosChainByChainId(chainId))
+      const chain = shouldBePresent(getCosmosChainByChainId(chainId), 'chainId')
 
       const transactionDetails = keplrHandler(signDoc, chain)
 
@@ -607,7 +607,7 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
-      const chain = shouldBePresent(getCosmosChainByChainId(chainId))
+      const chain = shouldBePresent(getCosmosChainByChainId(chainId), 'chainId')
 
       const transactionDetails = keplrHandler(
         {

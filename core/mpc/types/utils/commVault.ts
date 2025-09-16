@@ -61,7 +61,8 @@ export const fromCommVault = (vault: CommVault): Vault => {
       shouldBePresent(
         vault.keyShares.find(
           keyShare => keyShare.publicKey === publicKeys[algorithm]
-        )
+        ),
+        'keyShare'
       ).keyshare
   )
 

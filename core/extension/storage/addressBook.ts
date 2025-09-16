@@ -21,7 +21,7 @@ const updateAddressBookItems = async (items: AddressBookItem[]) => {
 export const addressBookStorage: AddressBookStorage = {
   updateAddressBookItem: async ({ id, fields }) => {
     const items = await getAddressBookItems()
-    const itemIndex = shouldBePresent(items.findIndex(item => item.id === id))
+    const itemIndex = shouldBePresent(items.findIndex(item => item.id === id), 'itemIndex')
 
     const updatedAddressBookItems = updateAtIndex(items, itemIndex, item => ({
       ...item,

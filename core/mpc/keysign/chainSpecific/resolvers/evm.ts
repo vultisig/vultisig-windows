@@ -32,13 +32,13 @@ export const getEthereumSpecific: ChainSpecificResolver<
 
   if (chain === Chain.Zksync) {
     const client = getEvmClient(chain).extend(publicActionsL2())
-    const value = toChainAmount(shouldBePresent(amount), coin.decimals)
+    const value = toChainAmount(shouldBePresent(amount, 'amount'), coin.decimals)
 
     const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } =
       await client.estimateFee({
         chain: evmChainInfo[chain],
         account: coin.address as `0x${string}`,
-        to: shouldBePresent(receiver) as `0x${string}`,
+        to: shouldBePresent(receiver, 'receiver') as `0x${string}`,
         value,
         data,
       })

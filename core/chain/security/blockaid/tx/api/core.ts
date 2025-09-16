@@ -54,7 +54,7 @@ const getDescriptionFromBlockaidValidation = ({
     return features.map(f => f.description).join('\n')
   }
 
-  return shouldBePresent(reason)
+  return shouldBePresent(reason, 'reason')
 }
 
 export const parseBlockaidValidation = (

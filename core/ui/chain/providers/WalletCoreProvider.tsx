@@ -42,4 +42,4 @@ export const WalletCoreProvider = ({ children }: ChildrenProp) => {
 
 export const useWalletCore = () => useContext(WalletCoreContext)
 
-export const useAssertWalletCore = () => shouldBePresent(useWalletCore())
+export const useAssertWalletCore = () => shouldBePresent(useWalletCore(), 'walletCore')

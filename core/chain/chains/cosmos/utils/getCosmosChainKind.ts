@@ -7,7 +7,8 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 export function getCosmosChainKind(chain: CosmosChain): CosmosChainKind {
   const [key] = shouldBePresent(
-    Object.entries(cosmosChainsByKind).find(([_, value]) => chain in value)
+    Object.entries(cosmosChainsByKind).find(([_, value]) => chain in value),
+    'cosmosChainKind'
   )
 
   return key as CosmosChainKind

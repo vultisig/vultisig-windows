@@ -36,7 +36,7 @@ export const useCoinFinderIgnoreQuery = () => {
 export const useCoinFinderIgnore = () => {
   const { data } = useCoinFinderIgnoreQuery()
 
-  return shouldBePresent(data)
+  return shouldBePresent(data, 'coinFinderIgnoreData')
 }
 
 export const useAddToCoinFinderIgnoreMutation = () => {

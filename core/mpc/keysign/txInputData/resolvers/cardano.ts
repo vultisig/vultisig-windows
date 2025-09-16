@@ -15,7 +15,7 @@ export const getCardanoTxInputData: TxInputDataResolver<'cardano'> = ({
     'cardano'
   )
 
-  const coin = shouldBePresent(keysignPayload.coin)
+  const coin = shouldBePresent(keysignPayload.coin, 'coin')
 
   const input = TW.Cardano.Proto.SigningInput.create({
     transferMessage: TW.Cardano.Proto.Transfer.create({

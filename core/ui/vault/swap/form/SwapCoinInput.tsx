@@ -29,7 +29,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
 
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
-  const coin = shouldBePresent(useCurrentVaultCoin(value))
+  const coin = shouldBePresent(useCurrentVaultCoin(value), 'coin')
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()

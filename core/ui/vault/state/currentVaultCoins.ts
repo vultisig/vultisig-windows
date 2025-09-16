@@ -46,7 +46,7 @@ export const useCurrentVaultAddresses = () => {
 export const useCurrentVaultAddress = (chain: string) => {
   const addresses = useCurrentVaultAddresses()
 
-  return shouldBePresent(addresses[chain as Chain])
+  return shouldBePresent(addresses[chain as Chain], 'addresses[chain as Chain]')
 }
 
 export const useCurrentVaultChainCoins = (chain: string) => {
@@ -61,5 +61,5 @@ export const useCurrentVaultChainCoins = (chain: string) => {
 export const useCurrentVaultCoin = (coinKey: CoinKey) => {
   const coins = useCurrentVaultCoins()
 
-  return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)))
+  return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)), 'coins.find(coin => areEqualCoins(coin, coinKey))')
 }

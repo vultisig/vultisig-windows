@@ -53,7 +53,7 @@ export const useAddressBookItemsQuery = () => {
 export const useAddressBookItems = () => {
   const { data } = useAddressBookItemsQuery()
 
-  return shouldBePresent(data)
+  return shouldBePresent(data, 'addressBookData')
 }
 
 export const useAddressBookItemOrders = () => {

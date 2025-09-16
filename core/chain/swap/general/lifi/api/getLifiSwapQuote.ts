@@ -58,7 +58,7 @@ export const getLifiSwapQuote = async ({
   const chainKind = getChainKind(transfer.from.chain)
 
   const { value, gasPrice, gasLimit, data, from, to } =
-    shouldBePresent(transactionRequest)
+    shouldBePresent(transactionRequest, 'transactionRequest')
 
   return {
     dstAmount: estimate.toAmount,
@@ -68,12 +68,13 @@ export const getLifiSwapQuote = async ({
       {
         solana: () => {
           const { gasCosts, feeCosts } = estimate
-          const [networkFee] = shouldBePresent(gasCosts)
+          const [networkFee] = shouldBePresent(gasCosts, 'gasCosts')
 
-          const fees = shouldBePresent(feeCosts)
+          const fees = shouldBePresent(feeCosts, 'feeCosts')
 
           const swapFee = shouldBePresent(
-            fees.find(fee => fee.name === 'LIFI Fixed Fee') || fees[0]
+            fees.find(fee => fee.name === 'LIFI Fixed Fee') || fees[0],
+            'swapFee'
           )
 
           const swapFeeAssetId =
@@ -83,7 +84,7 @@ export const getLifiSwapQuote = async ({
 
           return {
             solana: {
-              data: shouldBePresent(data),
+              data: shouldBePresent(data, 'data'),
               networkFee: BigInt(networkFee.amount),
               swapFee: {
                 amount: BigInt(swapFee.amount),
@@ -96,12 +97,12 @@ export const getLifiSwapQuote = async ({
         },
         evm: () => ({
           evm: {
-            from: shouldBePresent(from),
-            to: shouldBePresent(to),
-            data: shouldBePresent(data),
-            value: BigInt(shouldBePresent(value)).toString(),
-            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-            gas: Number(shouldBePresent(gasLimit)),
+            from: shouldBePresent(from, 'from'),
+            to: shouldBePresent(to, 'to'),
+            data: shouldBePresent(data, 'data'),
+            value: BigInt(shouldBePresent(value, 'value')).toString(),
+            gasPrice: BigInt(shouldBePresent(gasPrice, 'gasPrice')).toString(),
+            gas: Number(shouldBePresent(gasLimit, 'gasLimit')),
           },
         }),
       }

@@ -15,16 +15,16 @@ type UtxoBasedDecodedTx =
 
 type BlockchairBroadcastResponse =
   | {
-      data: {
-        transaction_hash: string
-      } | null
-    }
+    data: {
+      transaction_hash: string
+    } | null
+  }
   | {
-      data: null
-      context: {
-        error: string
-      }
+    data: null
+    context: {
+      error: string
     }
+  }
 
 export const broadcastUtxoTx: BroadcastTxResolver<UtxoBasedChain> = async ({
   chain,
@@ -80,7 +80,7 @@ const selectEncodedBytes = (
     hasSigningResultV2(tx) &&
     tx.signingResultV2.encoded
   ) {
-    return shouldBePresent(tx.signingResultV2.encoded)
+    return shouldBePresent(tx.signingResultV2.encoded, 'tx.signingResultV2.encoded')
   }
-  return shouldBePresent(tx.encoded)
+  return shouldBePresent(tx.encoded, 'tx.encoded')
 }

@@ -36,7 +36,7 @@ export const AmountInReverseCurrencyDisplay = ({
             {match(value, {
               base: () =>
                 formatAmount(
-                  shouldBePresent(priceQuery.data) *
+                  shouldBePresent(priceQuery.data, 'price') *
                     fromChainAmount(sendAmount, coin.decimals),
                   fiatCurrency
                 ),

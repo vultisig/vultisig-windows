@@ -33,8 +33,8 @@ export const KeysignTxOverview = () => {
     toAmount,
     coin: potentialCoin,
   } = getRecordUnionValue(payload, 'keysign')
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { address, chain, decimals } = shouldBePresent(coin)
+  const coin = fromCommCoin(shouldBePresent(potentialCoin, 'potentialCoin'))
+  const { address, chain, decimals } = shouldBePresent(coin, 'coin')
 
   const formattedToAmount = useMemo(() => {
     if (!toAmount) return null

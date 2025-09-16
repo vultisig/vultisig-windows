@@ -56,8 +56,8 @@ export const getPreSigningHashes = ({
   assertErrorMessage(output.errorMessage)
 
   if ('preSigningResultV2' in output && output.preSigningResultV2 !== null) {
-    const preSigningResultV2 = shouldBePresent(output.preSigningResultV2)
-    const sighashes = shouldBePresent(preSigningResultV2.sighashes)
+    const preSigningResultV2 = shouldBePresent(output.preSigningResultV2, 'output.preSigningResultV2')
+    const sighashes = shouldBePresent(preSigningResultV2.sighashes, 'preSigningResultV2.sighashes')
     return without(
       sighashes.map(hash => hash?.sighash),
       null,

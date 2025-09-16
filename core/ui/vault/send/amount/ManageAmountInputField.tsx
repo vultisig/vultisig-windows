@@ -142,7 +142,7 @@ export const ManageAmountInputField = () => {
                             value={value}
                             onChange={setValue}
                             decimals={coin.decimals}
-                            price={shouldBePresent(coinPriceQuery.data)}
+                            price={shouldBePresent(coinPriceQuery.data, 'coinPrice')}
                           />
                         )}
                         base={() => (

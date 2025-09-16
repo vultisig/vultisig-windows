@@ -46,9 +46,9 @@ export const MergeTokenExplorer: FC<Props> = ({
                   onOptionClick(token)
                   const selectedMergeAddress =
                     kujiraCoinThorChainMergeContracts[
-                      mirrorRecord(kujiraCoinMigratedToThorChainDestinationId)[
-                        shouldBePresent(token.id)
-                      ]
+                    mirrorRecord(kujiraCoinMigratedToThorChainDestinationId)[
+                    shouldBePresent(token.id, 'token.id')
+                    ]
                     ]
 
                   setDepositCoin(token)
