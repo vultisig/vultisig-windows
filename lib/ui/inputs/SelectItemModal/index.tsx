@@ -6,9 +6,11 @@ import React, {
   FC,
   ReactNode,
   useCallback,
+  useDeferredValue,
   useEffect,
   useMemo,
   useState,
+  useTransition,
 } from 'react'
 import styled from 'styled-components'
 
@@ -41,9 +43,10 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   } = props
 
   const [searchQuery, setSearchQuery] = useState('')
+  const deferredQuery = useDeferredValue(searchQuery)
   const filtered = useMemo(
-    () => options.filter(o => filterFunction(o, searchQuery)),
-    [options, filterFunction, searchQuery]
+    () => options.filter(o => filterFunction(o, deferredQuery)),
+    [options, filterFunction, deferredQuery]
   )
 
   const pageSize = virtualizePageSize ?? filtered.length
@@ -58,8 +61,12 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   const [rootEl, setRootEl] = useState<HTMLDivElement | null>(null)
   const [sentinelEl, setSentinelEl] = useState<HTMLDivElement | null>(null)
 
+  const [, startTransition] = useTransition()
+
   const loadMore = useCallback(() => {
-    setVisibleCount(c => Math.min(c + pageSize, filtered.length))
+    startTransition(() =>
+      setVisibleCount(c => Math.min(c + pageSize, filtered.length))
+    )
   }, [pageSize, filtered.length])
 
   const intersection = useIntersection({

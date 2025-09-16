@@ -3,12 +3,13 @@ import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from './PopupDeadEnd'
 
 export const VaultsOnly = ({ children }: ChildrenProp) => {
   const vaults = useVaults()
+  const { t } = useTranslation()
 
   if (vaults.length === 0) {
     return (

@@ -37,7 +37,7 @@ export const TxSuccess = ({
   const { openUrl } = useCore()
 
   const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null
+    if (!toAmount) return 0
 
     return fromChainAmount(BigInt(toAmount), coin.decimals)
   }, [toAmount, coin.decimals])
@@ -52,7 +52,7 @@ export const TxSuccess = ({
     <>
       <TransactionSuccessAnimation />
       <VStack gap={8}>
-        {formattedToAmount && (
+        {formattedToAmount > 0 && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />
         )}
         <List>

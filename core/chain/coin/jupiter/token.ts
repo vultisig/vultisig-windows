@@ -2,14 +2,11 @@ import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 
 export type SolanaJupiterToken = {
-  address: string
+  id: string
   name: string
   symbol: string
   decimals: number
-  logoURI?: string
-  extensions?: {
-    coingeckoId?: string
-  }
+  icon?: string
 }
 
 type FromSolanaJupiterTokensInput = {
@@ -22,13 +19,12 @@ export const fromSolanaJupiterTokens = ({
   chain,
 }: FromSolanaJupiterTokensInput): Coin[] => {
   return tokens
-    .filter(token => !!token.logoURI) // Ensure only tokens with logos are included
+    .filter(token => !!token.icon) // Ensure only tokens with logos are included
     .map(token => ({
       chain,
-      id: token.address,
+      id: token.id,
       decimals: token.decimals,
-      logo: token.logoURI || '',
+      logo: token.icon || '',
       ticker: token.symbol,
-      priceProviderId: token.extensions?.coingeckoId || '',
     }))
 }

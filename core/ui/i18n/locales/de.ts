@@ -1,10 +1,25 @@
 export const de = {
+  onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
+  onboarding_step_1:
+    'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  onboarding_step_2:
+    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
+  onboarding_step_3:
+    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
+  onboarding_step_4:
+    'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
+  onboarding_step_5:
+    '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  onboarding_step_6:
+    'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
+  positions: 'Positionen',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
+  merged: 'Zusammengeführt',
   mint: 'Erhalten',
   redeem: 'Verkaufen',
   onboarding_description_1:
@@ -18,8 +33,11 @@ export const de = {
   moreInfo: 'Mehr Info',
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
+  amount_to_unstake: 'Menge zur Aufhebung',
   save_code: 'Code speichern',
+  unstake_share_token_label: 'Unstake {{ticker}}',
   sent: 'Gesendet',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
   your_referral_code: 'Dein Empfehlungscode',
@@ -137,29 +155,10 @@ export const de = {
   qrCode: 'den QR-Code',
   downloadVultisig:
     'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie "QR-Code scannen"',
-  sayHelloTo: 'Sag hallo zu',
-  alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
-  separatelyIna: 'separat in einer',
-  differentLocation: 'anderen Location',
-  eachDevice: 'Jedes Gerät',
   chooseSetup: 'Setup wählen',
   introOnboarding: 'Intro',
-  inYourVaultHolds: 'in Ihrem Tresor enthält',
-  oneVaultShare: 'eine Tresorfreigabe',
-  theyRe: 'Sie sind',
-  splitIntoParts: 'in Teile aufgeteilt',
-  toIncreaseSecurity: 'um die Sicherheit zu erhöhen und',
-  removeSinglePointOfFailure: 'den Single Point of Failure zu entfernen',
-  theseSharesCollaborate: 'Diese Freigaben arbeiten zusammen, um',
-  unlockYourVault: 'Ihren Tresor zu entsperren',
-  recoverYourVault: 'Stelle deinen Tresor wieder her, sogar',
-  deviceLostOrDamaged: 'wenn ein Gerät verloren geht oder beschädigt wird',
-  vaultShares: 'Tresoranteile',
-  yourNewRecoveryMethod: 'deine neue Wiederherstellungsmethode',
   tokens: 'Token',
   selected: 'ausgewählt',
-  sayGoodbyeTo: 'Auf Wiedersehen zu',
-  seedPhrases: 'Seed-Wörter',
   required_field_missing: 'Erforderliches Feld fehlt',
   email_confirmation_code_label:
     'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',
@@ -874,7 +873,7 @@ export const de = {
   vault_overview: 'Vault-Übersicht',
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
-  vultiserver_password: 'Vultiserver-Passwort',
+  backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
   use_password: 'Passwort verwenden',
