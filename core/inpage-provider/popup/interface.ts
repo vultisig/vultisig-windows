@@ -2,11 +2,12 @@ import { EvmChain, OtherChain } from '@core/chain/Chain'
 import { SerializedSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
+import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
 
-import { ITransactionPayload } from './view/resolvers/sendTx/interfaces'
+type PersonalSign = { chain: EvmChain; message: string; bytesCount: number }
 
 export type Eip712V4Payload = {
   domain: TypedDataDomain
@@ -15,30 +16,15 @@ export type Eip712V4Payload = {
 }
 
 export type SignMessageInput =
-  | {
-      eth_signTypedData_v4: {
-        chain: EvmChain
-        message: Eip712V4Payload
-      }
-    }
-  | {
-      personal_sign: {
-        chain: EvmChain
-        message: string
-        bytesCount: number
-      }
-    }
-  | {
-      sign_message: {
-        chain: OtherChain.Solana
-        message: string
-      }
-    }
+  | { eth_signTypedData_v4: { chain: EvmChain; message: Eip712V4Payload } }
+  | { personal_sign: PersonalSign }
+  | { sign_message: { chain: OtherChain.Solana; message: string } }
 
 export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
+  policySign: Method<PersonalSign & { address: string }, string>
   signMessage: Method<SignMessageInput, string>
   sendTx: Method<
     ITransactionPayload,
@@ -54,6 +40,7 @@ export const authorizedPopupMethods = [
   'signMessage',
   'sendTx',
   'pluginReshare',
+  'policySign',
 ] as const satisfies readonly PopupMethod[]
 
 export type AuthorizedPopupMethod = (typeof authorizedPopupMethods)[number]
