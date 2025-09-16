@@ -117,7 +117,7 @@ export const SendTxOverview = () => {
     initialFeeSettingsQuery,
     useCallback(
       initialFeeSettings => {
-        if (feeSettings) {
+        if (feeSettings !== undefined) {
           return feeSettings
         }
 
@@ -128,20 +128,21 @@ export const SendTxOverview = () => {
   )
 
   const keysignPayloadQuery = useQueriesDependentQuery(
-    [adjustedFeeSettingsQuery, parsedTxQuery, accountCoinQuery],
-    useCallback(
-      (feeSettings, parsedTx, coin) =>
-        getTxKeysignPayloadQuery({
-          feeSettings,
-          transactionPayload,
-          walletCore,
-          vault,
-          requestOrigin,
-          parsedTx,
-          coin,
-        }),
-      [requestOrigin, transactionPayload, vault, walletCore]
-    )
+    {
+      feeSettings: adjustedFeeSettingsQuery,
+      parsedTx: parsedTxQuery,
+      coin: accountCoinQuery,
+    },
+    ({ feeSettings, parsedTx, coin }) =>
+      getTxKeysignPayloadQuery({
+        feeSettings,
+        transactionPayload,
+        walletCore,
+        vault,
+        requestOrigin,
+        parsedTx,
+        coin,
+      })
   )
 
   return (

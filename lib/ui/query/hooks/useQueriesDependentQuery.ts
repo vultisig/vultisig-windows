@@ -1,3 +1,7 @@
+import { getRecordSize } from '@lib/utils/record/getRecordSize'
+import { recordMap } from '@lib/utils/record/recordMap'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { Defined } from '@lib/utils/types/Defined'
 import {
   useQueries,
   UseQueryOptions,
@@ -6,34 +10,45 @@ import {
 
 import { inactiveQuery, Query } from '../Query'
 
-export const useQueriesDependentQuery = <
-  TDeps extends any[],
-  TQueryFnData,
-  TError,
+type QueryErrors<T extends Record<string, Query<unknown, unknown>>> =
+  T[keyof T] extends Query<any, infer E> ? E : never
+
+export function useQueriesDependentQuery<
+  T extends Record<string, Query<unknown, unknown>>,
+  TQueryFnData = unknown,
+  TError = unknown,
   TData = TQueryFnData,
   TQueryKey extends readonly unknown[] = readonly unknown[],
 >(
-  depQueries: { [K in keyof TDeps]: Query<TDeps[K], unknown> },
-  getQuery: (
-    ...deps: TDeps
-  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-): Query<TData, unknown | TError> => {
-  const somePending = depQueries.some(q => q.isPending)
-  const firstError = depQueries.find(q => q.error !== null)?.error ?? null
-  const allHaveData = depQueries.every(q => q.data !== undefined)
+  queriesRecord: T,
+  getQuery: (data: {
+    [K in keyof T]: Defined<T[K]['data']>
+  }) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+): Query<TData, QueryErrors<T> | TError> {
+  const dataRecord = withoutUndefinedFields(
+    recordMap(queriesRecord, ({ data }) => data)
+  )
 
+  const queries = Object.values(queriesRecord)
+
+  const firstError = queries.find(({ error }) => error !== null)?.error ?? null
+  const somePending = queries.some(({ isPending }) => isPending)
+
+  const allHaveData = getRecordSize(dataRecord) === getRecordSize(queriesRecord)
   const shouldRunDependent = allHaveData && !somePending && firstError === null
 
-  const depData = depQueries.map(q => q.data) as unknown as TDeps
-
   const [query] = useQueries({
-    queries: [...(shouldRunDependent ? [getQuery(...depData)] : [])],
+    queries: [
+      ...(shouldRunDependent
+        ? [getQuery(dataRecord as { [K in keyof T]: Defined<T[K]['data']> })]
+        : []),
+    ],
   }) as UseQueryResult<TData, TError>[]
 
   if (somePending) {
     return {
       data: undefined,
-      error: firstError as unknown as TError | unknown,
+      error: firstError as unknown as QueryErrors<T> | TError,
       isPending: true,
     }
   }
@@ -41,18 +56,18 @@ export const useQueriesDependentQuery = <
   if (firstError !== null) {
     return {
       data: undefined,
-      error: firstError as unknown as TError | unknown,
+      error: firstError as unknown as QueryErrors<T> | TError,
       isPending: false,
     }
   }
 
   if (!shouldRunDependent) {
-    return inactiveQuery as Query<TData, unknown | TError>
+    return inactiveQuery as Query<TData, QueryErrors<T> | TError>
   }
 
   return {
     data: query.data,
-    error: query.error as unknown as TError | unknown,
+    error: query.error as unknown as QueryErrors<T> | TError,
     isPending: query.isPending,
   }
 }
