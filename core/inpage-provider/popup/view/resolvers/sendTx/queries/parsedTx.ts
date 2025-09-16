@@ -52,5 +52,6 @@ export const useParsedTxQuery = () => {
         }
       )
     },
+    retry: false,
   })
 }
