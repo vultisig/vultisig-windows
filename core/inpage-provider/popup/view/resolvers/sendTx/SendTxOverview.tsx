@@ -29,6 +29,7 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
@@ -83,32 +84,34 @@ export const SendTxOverview = () => {
 
   const getCoinQuery = useGetCoinQuery()
 
-  const coinQuery = useStateDependentQuery(
-    { coinKey: coinKeyQuery.data },
-    ({ coinKey }) => getCoinQuery(coinKey)
+  const coinQuery = useQueryDependentQuery(coinKeyQuery, coinKey =>
+    getCoinQuery(coinKey)
   )
 
   const accountCoinQuery = useTransformQueryData(
     coinQuery,
-    (coin): AccountCoin => {
-      const publicKey = getPublicKey({
-        chain: coin.chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
+    useCallback(
+      (coin): AccountCoin => {
+        const publicKey = getPublicKey({
+          chain: coin.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
 
-      const address = deriveAddress({
-        chain: coin.chain,
-        publicKey,
-        walletCore,
-      })
+        const address = deriveAddress({
+          chain: coin.chain,
+          publicKey,
+          walletCore,
+        })
 
-      return {
-        ...coin,
-        address,
-      }
-    }
+        return {
+          ...coin,
+          address,
+        }
+      },
+      [vault.hexChainCode, vault.publicKeys, walletCore]
+    )
   )
 
   const keysignPayloadQuery = useStateDependentQuery(
@@ -229,7 +232,7 @@ export const SendTxOverview = () => {
                               chainFeeCoin[chain].ticker
                             )}
                             extra={
-                              isChainOfKind(chain, 'evm') ? (
+                              isChainOfKind(chain, 'evm') && feeSettings ? (
                                 <ManageEvmFee
                                   value={
                                     shouldBePresent(
