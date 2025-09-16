@@ -5,7 +5,10 @@ import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { FindCoinsResolverInput } from '@core/chain/coin/find/resolver'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
-import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noRefetchQueryOptions,
+  persistQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { convertDuration } from '@lib/utils/time/convertDuration'
@@ -39,6 +42,7 @@ export const useCoinFinderQuery = () => {
       queryFn: () => findCoins(input),
       staleTime: convertDuration(1, 'h', 'ms'),
       ...noRefetchQueryOptions,
+      ...persistQueryOptions,
     })),
   })
 

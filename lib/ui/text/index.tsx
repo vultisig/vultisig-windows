@@ -171,6 +171,7 @@ export const gradientText = css`
   text-fill-color: transparent;
 `
 
-export const GradientText = styled(Text)`
+export const GradientText = styled.span<TextProps>`
+  ${text}
   ${gradientText}
 `

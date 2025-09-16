@@ -1,9 +1,6 @@
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { Entry } from '@lib/utils/entities/Entry'
@@ -49,7 +46,6 @@ export const useVaultFoldersQuery = () => {
     queryKey: [StorageKey.vaultFolders],
     queryFn: getVaultFolders,
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }
 

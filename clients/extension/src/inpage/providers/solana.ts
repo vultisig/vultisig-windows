@@ -341,7 +341,7 @@ export class Solana implements Wallet {
 
             const amount = decodedTransfer.lamports.toString()
             return {
-              asset: { chain: Chain.Solana, ticker: 'SOL' },
+              asset: { ticker: 'SOL' },
               amount: {
                 amount: amount,
                 decimals: chainFeeCoin[Chain.Solana].decimals,
@@ -403,10 +403,8 @@ export class Solana implements Wallet {
                 decimals: metadata.decimals,
               },
               asset: {
-                chain: Chain.Solana,
                 mint: mint,
                 ticker: metadata.ticker,
-                symbol: metadata.ticker,
               },
               from: senderTokenAccountInfo.owner.toString(),
               to: recipient,

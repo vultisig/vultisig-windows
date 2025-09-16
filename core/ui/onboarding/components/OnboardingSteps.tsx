@@ -12,9 +12,8 @@ import { pageConfig } from '@lib/ui/page/config'
 import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
-import { match } from '@lib/utils/match'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
@@ -61,75 +60,18 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
       </VStack>
       <Footer alignItems="center" gap={32}>
         <AnimatedVisibility>
-          {match(currentAnimation, {
-            1: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('sayHelloTo')}{' '}
-                  <GradientText as="span">{`${t('vaultShares')},`}</GradientText>{' '}
-                  {t('yourNewRecoveryMethod')}
-                </Text>
-              </>
-            ),
-            2: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('theyRe')}{' '}
-                  <GradientText as="span">{t('splitIntoParts')}</GradientText>{' '}
-                  {`${t('toIncreaseSecurity')},`}{' '}
-                  <GradientText as="span">
-                    {t('removeSinglePointOfFailure')}
-                  </GradientText>
-                </Text>
-              </>
-            ),
-            3: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
-                  {t('inYourVaultHolds')}{' '}
-                  <GradientText as="span">{t('oneVaultShare')}</GradientText>
-                </Text>
-              </>
-            ),
-            4: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('recoverYourVault')}{' '}
-                  <GradientText as="span">
-                    {t('deviceLostOrDamaged')}
-                  </GradientText>
-                </Text>
-              </>
-            ),
-            5: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  <GradientText as="span">
-                    {t('alwaysBackUpEachVaultShare')}
-                  </GradientText>{' '}
-                  {t('separatelyIna')}{' '}
-                  <GradientText as="span">
-                    {t('differentLocation')}
-                  </GradientText>
-                </Text>
-              </>
-            ),
-            6: () => (
-              <>
-                <Text as="div" size={28} centerHorizontally>
-                  {t('theseSharesCollaborate')}{' '}
-                  <GradientText as="span">{t('unlockYourVault')}</GradientText>
-                </Text>
-              </>
-            ),
-          })}
+          <Text as="div" size={28} centerHorizontally>
+            <Trans
+              i18nKey={`onboarding_step_${currentAnimation}`}
+              components={{ g: <GradientText /> }}
+            />
+          </Text>
         </AnimatedVisibility>
         <IconButton
           disabled={isLoading}
           kind="primary"
           onClick={
-            currentAnimation < animations.length - 1
+            currentAnimation < animations.length
               ? handleNextAnimation
               : onFinish
           }

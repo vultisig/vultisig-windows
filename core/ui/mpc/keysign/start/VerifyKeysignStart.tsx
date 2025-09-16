@@ -27,7 +27,7 @@ import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/Blocka
 type VerifyKeysignStartInput = {
   children: ReactNode
   keysignPayloadQuery: Query<KeysignPayload>
-  terms: string[]
+  terms?: string[]
 }
 
 const TermItem = styled(Checkbox)`
@@ -39,7 +39,7 @@ const TermItem = styled(Checkbox)`
 export const VerifyKeysignStart = ({
   children,
   keysignPayloadQuery,
-  terms,
+  terms = [],
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -128,18 +128,20 @@ export const VerifyKeysignStart = ({
 
         {children}
 
-        <VStack>
-          {terms.map((term, index) => (
-            <TermItem
-              key={index}
-              label={<Text size={14}>{term}</Text>}
-              value={termsAccepted[index]}
-              onChange={v =>
-                setTermsAccepted(prev => updateAtIndex(prev, index, () => v))
-              }
-            />
-          ))}
-        </VStack>
+        {terms.length > 0 && (
+          <VStack>
+            {terms.map((term, index) => (
+              <TermItem
+                key={index}
+                label={<Text size={14}>{term}</Text>}
+                value={termsAccepted[index]}
+                onChange={v =>
+                  setTermsAccepted(prev => updateAtIndex(prev, index, () => v))
+                }
+              />
+            ))}
+          </VStack>
+        )}
 
         <VStack
           style={{

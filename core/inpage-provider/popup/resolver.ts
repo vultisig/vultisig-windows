@@ -7,7 +7,7 @@ import {
 import { Resolver } from '@lib/utils/types/Resolver'
 import { Result } from '@lib/utils/types/Result'
 
-import { AuthorizedCallContext, UnauthorizedCallContext } from '../call/context'
+import { MethodBasedContext } from '../call/context'
 
 type PopupMessageSource = 'popup'
 
@@ -52,9 +52,7 @@ export type PopupCallResolver<M extends PopupMethod = PopupMethod> = Resolver<
   {
     call: PopupCall<M>
     options: PopupOptions
-    context: M extends AuthorizedPopupMethod
-      ? AuthorizedCallContext
-      : UnauthorizedCallContext
+    context: MethodBasedContext<M, AuthorizedPopupMethod>
   },
   Promise<PopupInterface[M]['output']>
 >
