@@ -29,8 +29,8 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useQueriesDependentQuery } from '@lib/ui/query/hooks/useQueriesDependentQuery'
 import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
@@ -128,17 +128,21 @@ export const SendTxOverview = () => {
     )
   )
 
-  const keysignPayloadQuery = useStateDependentQuery(
-    {
-      feeSettings: adjustedFeeSettingsQuery.data,
-      transactionPayload,
-      walletCore,
-      vault,
-      requestOrigin,
-      parsedTx: parsedTxQuery.data,
-      coin: accountCoinQuery.data,
-    },
-    getTxKeysignPayloadQuery
+  const keysignPayloadQuery = useQueriesDependentQuery(
+    [adjustedFeeSettingsQuery, parsedTxQuery, accountCoinQuery],
+    useCallback(
+      (feeSettings, parsedTx, coin) =>
+        getTxKeysignPayloadQuery({
+          feeSettings,
+          transactionPayload,
+          walletCore,
+          vault,
+          requestOrigin,
+          parsedTx,
+          coin,
+        }),
+      [requestOrigin, transactionPayload, vault, walletCore]
+    )
   )
 
   return (
