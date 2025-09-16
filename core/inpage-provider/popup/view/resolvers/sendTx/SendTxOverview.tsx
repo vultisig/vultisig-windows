@@ -33,7 +33,6 @@ import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQue
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
@@ -255,11 +254,7 @@ export const SendTxOverview = () => {
                             extra={
                               isChainOfKind(chain, 'evm') && feeSettings ? (
                                 <ManageEvmFee
-                                  value={
-                                    shouldBePresent(
-                                      feeSettings
-                                    ) as EvmFeeSettings
-                                  }
+                                  value={feeSettings as EvmFeeSettings}
                                   chain={chain}
                                   onChange={setFeeSettings}
                                 />
